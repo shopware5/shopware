@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHan
 
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfCategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
@@ -38,12 +38,12 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
     private $categoryId;
 
     /**
-     * @var Article
+     * @var ProductModel
      */
     private $sw1;
 
     /**
-     * @var Article
+     * @var ProductModel
      */
     private $sw2;
 
@@ -91,7 +91,7 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '1',
                             'status' => 2,
                             'details' => [
-                                ['articleordernumber' => 'SW1', 'modus' => 0, 'articleID' => $this->sw1->getId()],
+                                ['articleordernumber' => 'SW1', 'modus' => ProductModel::MODE_PRODUCT, 'articleID' => $this->sw1->getId()],
                             ],
                         ],
                     ],
@@ -104,7 +104,7 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '2',
                             'status' => 2,
                             'details' => [
-                                ['articleordernumber' => 'SW2', 'modus' => 0, 'articleID' => $this->sw2->getId()],
+                                ['articleordernumber' => 'SW2', 'modus' => ProductModel::MODE_PRODUCT, 'articleID' => $this->sw2->getId()],
                             ],
                         ],
                     ],
@@ -117,8 +117,8 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '3',
                             'status' => 2,
                             'details' => [
-                                ['articleordernumber' => 'SW200', 'modus' => 0],
-                                ['articleordernumber' => 'SW100', 'modus' => 1],
+                                ['articleordernumber' => 'SW200', 'modus' => ProductModel::MODE_PRODUCT],
+                                ['articleordernumber' => 'SW100', 'modus' => ProductModel::MODE_PREMIUM_PRODUCT],
                             ],
                         ],
                     ],

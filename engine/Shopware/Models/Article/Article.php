@@ -43,6 +43,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Article extends ModelEntity
 {
     /**
+     * Consts defining the article mode
+     */
+    const MODE_PRODUCT = 0;
+    const MODE_PREMIUM_PRODUCT = 1;
+    const MODE_VOUCHER = 2;
+    const MODE_CUSTOMER_GROUP_DISCOUNT = 3;
+    const MODE_PAYMENT_SURCHARGE_DISCOUNT = 4;
+    const MODE_BUNDLE_DISCOUNT = 10;
+    const MODE_TRUSTED_SHOPS_ARTICLE = 12;
+
+    /**
      * OWNING SIDE
      *
      * @Assert\NotBlank

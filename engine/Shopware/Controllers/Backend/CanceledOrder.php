@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Order\Order;
 
 /**
@@ -44,7 +45,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Get user, shipping and billing
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['orders', 'customer', 'billing', 'payment', 'shipping'])
-            ->from(\Shopware\Models\Order\Order::class, 'orders')
+            ->from(Order::class, 'orders')
             ->leftJoin('orders.customer', 'customer')
             ->leftJoin('orders.payment', 'payment')
             ->leftJoin('customer.defaultBillingAddress', 'billing')
@@ -81,7 +82,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $numberModel->setNumber($newOrderNumber);
 
         // Set new ordernumber to the order and its details
-        $orderModel = Shopware()->Models()->find(\Shopware\Models\Order\Order::class, $orderId);
+        $orderModel = Shopware()->Models()->find(Order::class, $orderId);
         $orderModel->setNumber($newOrderNumber);
         foreach ($orderModel->getDetails() as $detailModel) {
             $detailModel->setNumber($newOrderNumber);
@@ -166,11 +167,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $params = [
             'endDate' => $endDate,
             'startDate' => $startDate,
+            'articleModeProduct' => ProductModel::MODE_PRODUCT,
         ];
 
         $sql = 'SELECT id
             FROM s_order_basket
-            WHERE modus = 0
+            WHERE modus = :articleModeProduct
             AND datum >= :startDate AND datum <= DATE_ADD(:endDate, INTERVAL 1 DAY)
             GROUP BY sessionID';
         $result = Shopware()->Db()->query($sql, $params);
@@ -216,7 +218,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             (
                 SELECT lastviewport, sessionID
                 FROM s_order_basket
-                WHERE modus = 0
+                WHERE modus = :articleModeProduct
                 AND datum >= :startDate AND datum <= DATE_ADD(:endDate,INTERVAL 1 DAY)
                 $filter
                 GROUP BY sessionID
@@ -525,6 +527,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $params = [
             'endDate' => $endDate,
             'startDate' => $startDate,
+            'articleModeProduct' => ProductModel::MODE_PRODUCT,
         ];
 
         if (is_array($filter) && isset($filter[0]['value'])) {
@@ -571,7 +574,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         SELECT DATE_FORMAT(datum, '%Y-%m-%d') as date, sum(price) as price, AVG(price) as average,
                   COUNT(DiSTINCT sessionID) as number, YEAR(datum) as year, MONTH(datum) as month
                 FROM `s_order_basket`
-                WHERE s_order_basket.modus = 0
+                WHERE s_order_basket.modus = :articleModeProduct
                     AND datum >= :startDate AND datum <= DATE_ADD(:endDate,INTERVAL 1 DAY)
                     $filter
                 GROUP BY DAY(datum), MONTH(datum), YEAR(datum)
@@ -661,8 +664,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 continue;
             }
 
-            $model = Shopware()->Models()->find(\Shopware\Models\Order\Order::class, $order['id']);
-            if (!$model instanceof \Shopware\Models\Order\Order) {
+            $model = Shopware()->Models()->find(Order::class, $order['id']);
+            if (!$model instanceof Order) {
                 continue;
             }
             Shopware()->Models()->remove($model);
@@ -856,7 +859,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function isProductPosition(Shopware\Models\Order\Detail $orderDetailModel)
     {
-        return $orderDetailModel->getMode() === 0;
+        return $orderDetailModel->getMode() === ProductModel::MODE_PRODUCT;
     }
 
     /**

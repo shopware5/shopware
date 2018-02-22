@@ -1,4 +1,7 @@
 <?php
+
+use Shopware\Models\Article\Article as ProductModel;
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -1008,7 +1011,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'shipped' => '0',
             'shippedgroup' => '0',
             'releasedate' => '0000-00-00',
-            'modus' => '0',
+            'modus' => ProductModel::MODE_PRODUCT,
             'esdarticle' => '1',
             'taxID' => '1',
             'tax_rate' => '19',

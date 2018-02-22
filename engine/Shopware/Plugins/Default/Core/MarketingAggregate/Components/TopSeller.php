@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article as ProductModel;
+
 /**
  * Top seller component which contains all logic about the shopware
  * top seller functions.
@@ -85,7 +87,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
             FROM s_articles articles
                 LEFT JOIN s_order_details details
                     ON  articles.id = details.articleID
-                    AND details.modus = 0
+                    AND details.modus = :articleModeProduct
                 LEFT JOIN s_order
                     ON  s_order.status >= 0
                     AND s_order.id = details.orderID
@@ -96,6 +98,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         Shopware()->Db()->query($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
             'articleId' => (int) $articleId,
+            'articleModeProduct' => ProductModel::MODE_PRODUCT,
         ]);
     }
 
@@ -116,7 +119,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
             FROM s_articles articles
                 LEFT JOIN s_order_details details
                     ON  articles.id = details.articleID
-                    AND details.modus = 0
+                    AND details.modus = :articleModeProduct
                 LEFT JOIN s_order
                     ON  s_order.status >= 0
                     AND s_order.id = details.orderID
@@ -132,6 +135,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         $articles = Shopware()->Db()->fetchAll($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
+            'articleModeProduct' => ProductModel::MODE_PRODUCT,
         ]);
 
         $prepared = Shopware()->Db()->prepare(
@@ -165,7 +169,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
                     FROM s_articles articles
                         LEFT JOIN s_order_details details
                             ON  articles.id = details.articleID
-                            AND details.modus = 0
+                            AND details.modus = :articleModeProduct
                         LEFT JOIN s_order
                             ON  s_order.status >= 0
                             AND s_order.id = details.orderID
@@ -182,6 +186,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         Shopware()->Db()->query($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
             'validationTime' => $validationTime->format('Y-m-d 00:00:00'),
+            'articleModeProduct' => ProductModel::MODE_PRODUCT,
         ]);
     }
 

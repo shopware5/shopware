@@ -29,6 +29,7 @@ use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Models\Article\Article as ProductModel;
 
 class TestCase extends \Enlight_Components_Test_TestCase
 {
@@ -152,7 +153,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
                 if (!array_key_exists('details', $order)) {
                     $order['details'] = [
-                        ['ordernumber' => 'SW10235', 'modus' => 0],
+                        ['ordernumber' => 'SW10235', 'modus' => ProductModel::MODE_PRODUCT],
                     ];
                 }
                 $order['userID'] = $userId;

@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article as ProductModel;
+
 /**
  * Order model for document generation
  * @property int id;
@@ -347,7 +349,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         LEFT JOIN s_articles_details d
         ON  d.ordernumber=od.articleordernumber
         AND d.articleID=od.articleID
-        AND od.modus=0
+        AND od.modus=?
 
         LEFT JOIN s_articles_attributes at
         ON at.articledetailsID=d.id
@@ -357,7 +359,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
         WHERE od.orderID=?
         ORDER BY od.id ASC
-        ', [$this->_id]), ArrayObject::ARRAY_AS_PROPS);
+        ', [ProductModel::MODE_PRODUCT, $this->_id]), ArrayObject::ARRAY_AS_PROPS);
 
         foreach ($this->_positions as $key => $dummy) {
             $position = $this->_positions->offsetGet($key);
@@ -412,20 +414,11 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 continue;
             }
 
-            /*
-            modus 0 = default article
-            modus 1 = premium articles
-            modus 2 = voucher
-            modus 3 = customergroup discount
-            modus 4 = payment surcharge / discount
-            modus 10 = bundle discount
-            modus 12 = trusted shops article
-            */
-            if ($position['modus'] == 0 || $position['modus'] == 4 || $position['modus'] == 3 || $position['modus'] == 10 || $position['modus'] == 12) {
+            if (in_array($position['modus'], [ProductModel::MODE_PRODUCT,ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT, ProductModel::MODE_CUSTOMER_GROUP_DISCOUNT, ProductModel::MODE_BUNDLE_DISCOUNT, ProductModel::MODE_TRUSTED_SHOPS_ARTICLE])) {
                 /*
                 Read tax for each order position
                 */
-                if ($position['modus'] == 4 || $position['modus'] == 3) {
+                if ($position['modus'] == ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT || $position['modus'] == ProductModel::MODE_CUSTOMER_GROUP_DISCOUNT) {
                     if (empty($position['tax_rate'])) {
                         // Discounts get tax from configuration
                         if (!empty(Shopware()->Config()->sTAXAUTOMODE)) {
@@ -471,7 +464,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 } else {
                     $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
-            } elseif ($position['modus'] == 2) {
+            } elseif ($position['modus'] == ProductModel::MODE_VOUCHER) {
                 $ticketResult = Shopware()->Db()->fetchRow('
                 SELECT * FROM s_emarketing_vouchers WHERE ordercode=?
                 ', [$position['articleordernumber']]);
@@ -502,7 +495,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 } else {
                     $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
-            } elseif ($position['modus'] == 1) {
+            } elseif ($position['modus'] == ProductModel::MODE_PREMIUM_PRODUCT) {
                 $position['tax'] = 0;
                 $position['netto'] = 0;
             }

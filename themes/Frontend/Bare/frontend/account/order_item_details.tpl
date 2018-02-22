@@ -41,8 +41,7 @@
                             {* Name *}
                             {block name="frontend_account_order_item_name"}
                                 <p class="order--name is--strong">
-                                    {* Mode 10 = Bundle Product *}
-                                    {if $article.modus == 10}
+                                    {if $article.modus == constant('Shopware\Models\Article\Article::MODE_BUNDLE_ARTICLE')}
                                         {s name="OrderItemInfoBundle"}{/s}
                                     {else}
                                         {$article.name}
@@ -111,7 +110,7 @@
 
                             {* availability warning*}
                             {block name='frontend_account_order_item_availability'}
-                                {if $article.modus == 0 && ($article.active == 0 || !$article.article.isAvailable)}
+                                {if $article.modus == constant('Shopware\Models\Article\Article::MODE_PRODUCT') && ($article.active == 0 || !$article.article.isAvailable)}
                                     {* show warning if article is not active or not available *}
                                     {include file="frontend/_includes/messages.tpl" type="error" content="{s name='OrderItemInfoNotAvailable'}{/s}"}
                                 {/if}
@@ -357,7 +356,7 @@
         {if $offerPosition.activeBuyButton}
             <div class="order--repeat panel--tr">
                 <form method="post" action="{url controller='checkout' action='add_accessories'}">
-                    {foreach $offerPosition.details as $article}{if $article.modus == 0}
+                    {foreach $offerPosition.details as $article}{if $article.modus == constant('Shopware\Models\Article\Article::MODE_PRODUCT')}
                         <input name="sAddAccessories[]" type="hidden" value="{$article.articleordernumber|escape}" />
                         <input name="sAddAccessoriesQuantity[]" type="hidden" value="{$article.quantity|escape}" />
                     {/if}{/foreach}

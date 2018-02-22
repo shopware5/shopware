@@ -1,4 +1,7 @@
 <?php
+
+use Shopware\Models\Article\Article as ProductModel;
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -261,14 +264,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('This is a very fancy article name', $processedBasketRowOne['articlename']);
         $this->assertEquals('0,00', $processedBasketRowOne['price']);
         $this->assertEquals('0', $processedBasketRowOne['esdarticle']);
-        $this->assertEquals('0', $processedBasketRowOne['modus']);
+        $this->assertEquals(ProductModel::MODE_PRODUCT, $processedBasketRowOne['modus']);
         $this->assertEquals('0', $processedBasketRowOne['taxID']);
 
         $rawBasketRowTwo = [
             'articlename' => 'This is a very &lt;tag&gt;fancy&lt;/tag&gt; <br /> article name',
             'price' => '1,00',
             'esdarticle' => '3',
-            'modus' => '2',
+            'modus' => ProductModel::MODE_VOUCHER,
             'taxID' => '4',
         ];
 
@@ -287,7 +290,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('This is a very fancy article name', $processedBasketRowTwo['articlename']);
         $this->assertEquals('1,00', $processedBasketRowTwo['price']);
         $this->assertEquals('3', $processedBasketRowTwo['esdarticle']);
-        $this->assertEquals('2', $processedBasketRowTwo['modus']);
+        $this->assertEquals(ProductModel::MODE_VOUCHER, $processedBasketRowTwo['modus']);
         $this->assertEquals('4', $processedBasketRowTwo['taxID']);
     }
 
@@ -727,7 +730,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             'price' => $quantity * $price->getPrice(),
             'quantity' => $quantity,
             'name' => $article->getName(),
-            'modus' => '0',
+            'modus' => ProductModel::MODE_PRODUCT,
             'taxID' => $article->getTax()->getId(),
             'tax_rate' => $article->getTax()->getTax(),
         ]);
@@ -907,7 +910,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'id' => 1,
                     'articlename' => 'Strandtuch "Ibiza"',
                     'articleID' => '178',
-                    'modus' => '0',
+                    'modus' => ProductModel::MODE_PRODUCT,
                     'tax_rate' => '19',
                     'price' => '19,95',
                     'priceNumeric' => '19.95',

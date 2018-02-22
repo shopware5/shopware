@@ -1,9 +1,9 @@
 {* Constants for the different basket item types *}
-{$IS_PRODUCT = 0}
-{$IS_PREMIUM_PRODUCT = 1}
-{$IS_VOUCHER = 2}
-{$IS_REBATE = 3}
-{$IS_SURCHARGE_DISCOUNT = 4}
+{$IS_PRODUCT = constant('Shopware\Models\Article\Article::MODE_PRODUCT')}
+{$IS_PREMIUM_PRODUCT = constant('Shopware\Models\Article\Article::MODE_PREMIUM_PRODUCT')}
+{$IS_VOUCHER = constant('Shopware\Models\Article\Article::MODE_VOUCHER')}
+{$IS_REBATE = constant('Shopware\Models\Article\Article::MODE_CUSTOMER_GROUP_DISCOUNT')}
+{$IS_SURCHARGE_DISCOUNT = constant('Shopware\Models\Article\Article::MODE_PAYMENT_SURCHARGE_DISCOUNT')}
 
 {if $sBasketItem.modus == $IS_PRODUCT}
 

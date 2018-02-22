@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHan
 
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
 class OrderedProductConditionHandlerTest extends TestCase
@@ -49,7 +50,7 @@ class OrderedProductConditionHandlerTest extends TestCase
                             'ordernumber' => '1',
                             'status' => 2,
                             'details' => [
-                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => 0],
+                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],
@@ -62,7 +63,7 @@ class OrderedProductConditionHandlerTest extends TestCase
                             'ordernumber' => '2',
                             'status' => 2,
                             'details' => [
-                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => 0],
+                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],
@@ -75,8 +76,8 @@ class OrderedProductConditionHandlerTest extends TestCase
                             'ordernumber' => '3',
                             'status' => 2,
                             'details' => [
-                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => 0],
-                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => 1],
+                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => ProductModel::MODE_PRODUCT],
+                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => ProductModel::MODE_PREMIUM_PRODUCT],
                             ],
                         ],
                     ],
@@ -104,7 +105,7 @@ class OrderedProductConditionHandlerTest extends TestCase
                             'ordernumber' => '1',
                             'status' => 2,
                             'details' => [
-                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => 0],
+                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],
@@ -117,7 +118,7 @@ class OrderedProductConditionHandlerTest extends TestCase
                             'ordernumber' => '2',
                             'status' => 2,
                             'details' => [
-                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => 0],
+                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],
@@ -130,8 +131,8 @@ class OrderedProductConditionHandlerTest extends TestCase
                             'ordernumber' => '3',
                             'status' => 2,
                             'details' => [
-                                ['articleordernumber' => 'SW10235', 'modus' => 0],
-                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => 1],
+                                ['articleordernumber' => 'SW10235', 'modus' => ProductModel::MODE_PRODUCT],
+                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => ProductModel::MODE_PREMIUM_PRODUCT],
                             ],
                         ],
                     ],

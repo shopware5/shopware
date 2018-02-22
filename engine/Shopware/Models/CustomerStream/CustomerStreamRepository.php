@@ -29,6 +29,7 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+use Shopware\Models\Article\Article as ProductModel;
 
 class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 {
@@ -366,7 +367,8 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
             'ROUND(AVG(details.price / orders.currencyFactor), 2) as product_avg',
         ]);
         $query->from('s_order', 'orders');
-        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
+        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = :articleModeProduct');
+        $query->setParameter(':articleModeProduct', ProductModel::MODE_PRODUCT);
         $query->andWhere('orders.status != :cancelStatus');
         $query->andWhere('orders.ordernumber IS NOT NULL');
         $query->andWhere('orders.ordertime >= :orderTime');

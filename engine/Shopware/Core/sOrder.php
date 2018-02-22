@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -481,7 +482,7 @@ class sOrder
                 $basketRow['esdarticle'] = '0';
             }
             if (!$basketRow['modus']) {
-                $basketRow['modus'] = '0';
+                $basketRow['modus'] = ProductModel::MODE_PRODUCT;
             }
             if (!$basketRow['taxID']) {
                 $basketRow['taxID'] = '0';
@@ -711,7 +712,7 @@ class sOrder
             $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, ['subject' => $this, 'row' => $basketRow, 'user' => $this->sUserData, 'order' => ['id' => $orderID, 'number' => $orderNumber]]);
 
             // Check for individual voucher - code
-            if ($basketRow['modus'] == 2) {
+            if ($basketRow['modus'] == ProductModel::MODE_VOUCHER) {
                 //reserve the basket voucher for the current user.
                 $this->reserveVoucher(
                     $basketRow['ordernumber'],
@@ -1961,7 +1962,7 @@ EOT;
             $basketRow['esdarticle'] = '0';
         }
         if (!$basketRow['modus']) {
-            $basketRow['modus'] = '0';
+            $basketRow['modus'] = ProductModel::MODE_PRODUCT;
         }
         if (!$basketRow['taxID']) {
             $basketRow['taxID'] = '0';

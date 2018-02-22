@@ -1,11 +1,11 @@
 {namespace name="frontend/checkout/ajax_cart"}
 
 {* Constants for the different basket item types *}
-{$IS_PRODUCT = 0}
-{$IS_PREMIUM_PRODUCT = 1}
-{$IS_VOUCHER = 2}
-{$IS_REBATE = 3}
-{$IS_SURCHARGE_DISCOUNT = 4}
+{$IS_PRODUCT = constant('Shopware\Models\Article\Article::MODE_PRODUCT')}
+{$IS_PREMIUM_PRODUCT = constant('Shopware\Models\Article\Article::MODE_PREMIUM_PRODUCT')}
+{$IS_VOUCHER = constant('Shopware\Models\Article\Article::MODE_VOUCHER')}
+{$IS_REBATE = constant('Shopware\Models\Article\Article::MODE_CUSTOMER_GROUP_DISCOUNT')}
+{$IS_SURCHARGE_DISCOUNT = constant('Shopware\Models\Article\Article::MODE_PAYMENT_SURCHARGE_DISCOUNT')}
 
 {if $sBasketItem.additional_details.sConfigurator}
     {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
@@ -13,7 +13,7 @@
     {$detailLink=$sBasketItem.linkDetails}
 {/if}
 
-<div class="cart--item{if $basketItem.modus == 1} is--premium-article{elseif $basketItem.modus == 10} is--bundle-article{/if}">
+<div class="cart--item{if $basketItem.modus == $IS_PREMIUM_PRODUCT} is--premium-article{/if}">
     {* Article image *}
     {block name='frontend_checkout_ajax_cart_articleimage'}
         <div class="thumbnail--container{if $basketItem.image.thumbnails[0]} has--image{/if}">
@@ -85,11 +85,11 @@
         <div class="action--container">
             {$deleteUrl = {url controller="checkout" action="ajaxDeleteArticleCart" sDelete=$basketItem.id}}
 
-            {if $basketItem.modus == 2}
+            {if $basketItem.modus == $IS_VOUCHER}
                 {$deleteUrl = {url controller="checkout" action="ajaxDeleteArticleCart" sDelete="voucher"}}
             {/if}
 
-            {if $basketItem.modus != 4}
+            {if $basketItem.modus != $IS_SURCHARGE_DISCOUNT}
                 <form action="{$deleteUrl}" method="post">
                     <button type="submit" class="btn is--small action--remove" title="{s name="AjaxCartRemoveArticle"}{/s}">
                         <i class="icon--cross"></i>
@@ -101,7 +101,7 @@
 
     {* Article name *}
     {block name='frontend_checkout_ajax_cart_articlename'}
-        {$useAnchor = ($basketItem.modus != 4 && $basketItem.modus != 2)}
+        {$useAnchor = ($basketItem.modus != $IS_SURCHARGE_DISCOUNT && $basketItem.modus != $IS_VOUCHER)}
         {if $useAnchor}
             <a class="item--link" href="{$detailLink}" title="{$basketItem.articlename|escapeHtml}">
         {else}
@@ -112,14 +112,10 @@
             {/block}
             {block name="frontend_checkout_ajax_cart_articlename_name"}
                 <span class="item--name">
-                    {if $basketItem.modus == 10}
-                        {s name='AjaxCartInfoBundle'}{/s}
+                    {if $theme.offcanvasCart}
+                        {$basketItem.articlename|escapeHtml}
                     {else}
-                        {if $theme.offcanvasCart}
-                            {$basketItem.articlename|escapeHtml}
-                        {else}
-                            {$basketItem.articlename|truncate:28:"...":true|escapeHtml}
-                        {/if}
+                        {$basketItem.articlename|truncate:28:"...":true|escapeHtml}
                     {/if}
                 </span>
             {/block}

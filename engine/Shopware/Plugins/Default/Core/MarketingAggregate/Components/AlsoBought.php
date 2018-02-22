@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article as ProductModel;
+
 /**
  * Also bought component which contains all logic about the shopware
  * Also bought functions.
@@ -59,8 +61,8 @@ class Shopware_Components_AlsoBought extends Enlight_Class
                INNER JOIN s_order_details detail2
                   ON detail1.orderID = detail2.orderID
                   AND detail1.articleID != detail2.articleID
-                  AND detail1.modus = 0
-                  AND detail2.modus = 0
+                  AND detail1.modus = :articleModeProduct
+                  AND detail2.modus = :articleModeProduct
                   AND detail2.articleID > 0
                   AND detail1.articleID = :articleId
             GROUP BY detail2.articleID
@@ -74,7 +76,7 @@ class Shopware_Components_AlsoBought extends Enlight_Class
         //iterate all selected articles which has to be initialed
         foreach ($articles as $articleId) {
             //now we select all bought articles for the current article id
-            $preparedSelect->execute(['articleId' => $articleId]);
+            $preparedSelect->execute(['articleId' => $articleId, 'articleModeProduct' => ProductModel::MODE_PRODUCT]);
             $combinations = $preparedSelect->fetchAll();
 
             //at least we have to insert each combination in the aggregate s_articles_also_bought_ro table.

@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\Random;
+use Shopware\Models\Article\Article as ProductModel;
 
 class sBasketTest extends PHPUnit\Framework\TestCase
 {
@@ -475,7 +476,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => $normalArticle['ordernumber'],
                 'articleID' => $normalArticle['articleID'],
-                'modus' => 0,
+                'modus' => ProductModel::MODE_PRODUCT,
             ]
         );
         $this->assertTrue($this->module->sInsertPremium());
@@ -497,7 +498,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => $premiumArticleOne['ordernumber'],
                 'articleID' => $premiumArticleOne['id'],
-                'modus' => 1,
+                'modus' => ProductModel::MODE_PREMIUM_PRODUCT,
             ]
         );
         $this->db->insert(
@@ -508,7 +509,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => $premiumArticleTwo['ordernumber'],
                 'articleID' => $premiumArticleTwo['id'],
-                'modus' => 1,
+                'modus' => ProductModel::MODE_PREMIUM_PRODUCT,
             ]
         );
         $this->assertTrue($this->module->sInsertPremium());
@@ -534,7 +535,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => $normalArticle['ordernumber'],
                 'articleID' => $normalArticle['articleID'],
-                'modus' => 0,
+                'modus' => ProductModel::MODE_PRODUCT,
             ]
         );
         // Will still get false due to cache

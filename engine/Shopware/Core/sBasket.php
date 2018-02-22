@@ -21,10 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Random;
+use Shopware\Models\Article\Article as ProductModel;
 
 /**
  * Shopware Class that handles cart operations
@@ -207,9 +207,9 @@ class sBasket
             LEFT JOIN s_articles a
               ON a.id = d.articleID
             WHERE b.sessionID = ?
-              AND b.modus = 0
+              AND b.modus = ?
             GROUP BY b.ordernumber',
-            [$this->session->get('sessionId')]
+            [$this->session->get('sessionId'), ProductModel::MODE_PRODUCT]
         );
         $hideBasket = false;
         foreach ($result as $article) {
@@ -242,7 +242,7 @@ class sBasket
         }
 
         $extraConditions = [];
-        if (is_array($articles)) {
+        if (!empty($articles) && is_array($articles)) {
             $extraConditions[] = $this->db->quoteInto('ordernumber IN (?) ', $articles);
         }
         if (!empty($supplier)) {
@@ -390,7 +390,7 @@ class sBasket
             'netprice' => $discountNet,
             'tax_rate' => $tax,
             'datum' => date('Y-m-d H:i:s'),
-            'modus' => 3,
+            'modus' => ProductModel::MODE_CUSTOMER_GROUP_DISCOUNT,
             'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
         ];
 
@@ -454,10 +454,10 @@ class sBasket
                    premium.ordernumber = d.ordernumber
                 )
                 AND premium.startprice <= ?
-                WHERE basket.modus = 1
+                WHERE basket.modus = ?
                 AND premium.id IS NULL
                 AND basket.sessionID = ?',
-                [$sBasketAmount, $this->session->get('sessionId')]
+                [$sBasketAmount, ProductModel::MODE_PREMIUM_PRODUCT ,$this->session->get('sessionId')]
             );
             if (empty($deletePremium)) {
                 return true;
@@ -561,7 +561,7 @@ class sBasket
                 'netprice' => 0,
                 'tax_rate' => 0,
                 'datum' => new Zend_Date(),
-                'modus' => 1,
+                'modus' => ProductModel::MODE_PREMIUM_PRODUCT,
                 'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
             ]
         );
@@ -580,9 +580,9 @@ class sBasket
         return $this->db->fetchOne(
             'SELECT MAX(tax_rate) as max_tax
                 FROM s_order_basket b
-                WHERE b.sessionID = ? AND b.modus = 0
+                WHERE b.sessionID = ? AND b.modus = ?
                 GROUP BY b.sessionID',
-            [empty($sessionId) ? session_id() : $sessionId]
+            [empty($sessionId) ? session_id() : $sessionId, ProductModel::MODE_PRODUCT]
         );
     }
 
@@ -946,7 +946,7 @@ class sBasket
             'netprice' => $discountNet,
             'tax_rate' => $tax,
             'datum' => new Zend_Date(),
-            'modus' => 4,
+            'modus' => ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT,
             'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
         ];
 
@@ -1051,7 +1051,7 @@ class sBasket
             'netprice' => $discountNet,
             'tax_rate' => $tax,
             'datum' => new Zend_Date(),
-            'modus' => 4,
+            'modus' => ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT,
             'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
         ];
 
@@ -1327,8 +1327,8 @@ class sBasket
     {
         $responseCookies = $this->front->Response()->getCookies();
 
-        if (isset($responseCookies['sUniqueID']['value']) && $responseCookies['sUniqueID']['value']) {
-            $uniqueId = $responseCookies['sUniqueID']['value'];
+        if (!empty($responseCookies['sUniqueID-/']['value']) && $responseCookies['sUniqueID-/']['value']) {
+            $uniqueId = $responseCookies['sUniqueID-/']['value'];
         } else {
             $uniqueId = $this->front->Request()->getCookie('sUniqueID');
         }
@@ -1740,10 +1740,10 @@ class sBasket
             LEFT JOIN s_order_details details ON vouchers.ordercode = details.articleordernumber
             LEFT JOIN s_order AS orders ON details.orderID = orders.id
             WHERE orders.temporaryID = :sessionId
-            AND details.modus = 2
+            AND details.modus = :articleModeVoucher
         ';
 
-        $voucherData = $this->db->fetchRow($sql, ['sessionId' => $sessionId]);
+        $voucherData = $this->db->fetchRow($sql, ['sessionId' => $sessionId, 'articleModeVoucher' => ProductModel::MODE_VOUCHER]);
 
         if (!$voucherData) {
             return true;
@@ -2148,7 +2148,7 @@ class sBasket
             if ($voucherDetails['taxconfig'] === 'default' || empty($voucherDetails['taxconfig'])) {
                 $tax = round($voucherDetails['value'] / (100 + $this->config->get('sVOUCHERTAX')) * 100, 3) * -1;
                 $taxRate = $this->config->get('sVOUCHERTAX');
-                // Pre 3.5.4 behaviour
+            // Pre 3.5.4 behaviour
             } elseif ($voucherDetails['taxconfig'] === 'auto') {
                 // Check max. used tax-rate from basket
                 $tax = $this->getMaxTax();
@@ -2327,7 +2327,7 @@ class sBasket
             }
 
             // Get additional basket meta data for each product
-            if ($getArticles[$key]['modus'] == 0) {
+            if ($getArticles[$key]['modus'] == ProductModel::MODE_PRODUCT) {
                 $getArticles[$key]['additional_details'] = $additionalDetails[$getArticles[$key]['ordernumber']];
             }
 
@@ -2390,16 +2390,16 @@ class sBasket
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);
                     }
-                } elseif ($getArticles[$key]['modus'] == 3) {
+                } elseif ($getArticles[$key]['modus'] == ProductModel::MODE_CUSTOMER_GROUP_DISCOUNT) {
                     $getArticles[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
-                    // Basket discount
-                } elseif ($getArticles[$key]['modus'] == 2) {
+                // Basket discount
+                } elseif ($getArticles[$key]['modus'] == ProductModel::MODE_VOUCHER) {
                     $getArticles[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
 
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]['amountWithTax'] / 100 * ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount']));
                     }
-                } elseif ($getArticles[$key]['modus'] == 4 || $getArticles[$key]['modus'] == 10) {
+                } elseif ($getArticles[$key]['modus'] == ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT || $getArticles[$key]['modus'] == ProductModel::MODE_BUNDLE_DISCOUNT) {
                     $getArticles[$key]['amountWithTax'] = round(1 * ($price / 100 * (100 + $tax)), 2);
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);
@@ -2424,7 +2424,7 @@ class sBasket
                 $getArticles[$key]['itemInfoArray']['price'] = $this->moduleManager->Articles()->sFormatPrice($getArticles[$key]['amount'] / $quantity * $getArticles[$key]['purchaseunit']);
             }
 
-            if ($getArticles[$key]['modus'] == 2) {
+            if ($getArticles[$key]['modus'] == ProductModel::MODE_VOUCHER) {
                 // Gutscheine
                 if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
                     $getArticles[$key]['amountnet'] = $quantity * round($price, 2);
@@ -2477,7 +2477,7 @@ class sBasket
 
             // Links to details, basket
             $getArticles[$key]['linkDetails'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sArticle=' . $getArticles[$key]['articleID'];
-            if ($getArticles[$key]['modus'] == 2) {
+            if ($getArticles[$key]['modus'] == ProductModel::MODE_VOUCHER) {
                 $getArticles[$key]['linkDelete'] = $this->config->get('sBASEFILE') . '?sViewport=basket&sDelete=voucher';
             } else {
                 $getArticles[$key]['linkDelete'] = $this->config->get('sBASEFILE') . '?sViewport=basket&sDelete=' . $getArticles[$key]['id'];

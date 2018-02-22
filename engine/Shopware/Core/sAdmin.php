@@ -28,6 +28,7 @@ use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
@@ -1872,7 +1873,7 @@ class sAdmin
                     SELECT s_articles_attributes.id
                     FROM s_order_basket, s_articles_attributes, s_articles_details
                     WHERE s_order_basket.sessionID = ?
-                    AND s_order_basket.modus = 0
+                    AND s_order_basket.modus = ?
                     AND (
                         s_order_basket.ordernumber = s_articles_details.ordernumber
                         OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
@@ -1884,7 +1885,7 @@ class sAdmin
 
                 $checkArticle = $this->db->fetchOne(
                     $sql,
-                    [$this->session->offsetGet('sessionId'), $value[1]]
+                    [$this->session->offsetGet('sessionId'), ProductModel::MODE_PRODUCT, $value[1]]
                 );
 
                 return (bool) $checkArticle;
@@ -1915,7 +1916,7 @@ class sAdmin
                 FROM s_order_basket, s_articles_attributes, s_articles_details
                 WHERE
                 s_order_basket.sessionID=?
-                AND s_order_basket.modus=0
+                AND s_order_basket.modus=?
                 AND (
                 s_order_basket.ordernumber = s_articles_details.ordernumber
                 OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
@@ -1928,6 +1929,7 @@ class sAdmin
                     $sql,
                     [
                         $this->session->offsetGet('sessionId'),
+                        ProductModel::MODE_PRODUCT,
                         $value[1],
                     ]
                 );
@@ -2046,8 +2048,8 @@ class sAdmin
             WHERE s_order_basket.articleID = s_articles_categories_ro.articleID
             AND s_articles_categories_ro.categoryID = ?
             AND s_order_basket.sessionID = ?
-            AND s_order_basket.modus = 0
-        ', [$value, $this->session->offsetGet('sessionId')]);
+            AND s_order_basket.modus = ?
+        ', [$value, $this->session->offsetGet('sessionId'), ProductModel::MODE_PRODUCT]);
 
         return !empty($checkArticle);
     }
@@ -2488,8 +2490,8 @@ class sAdmin
                 SUM(d.weight*b.quantity) as weight,
                 SUM(IF(a.id,b.quantity,0)) as count_article,
                 MAX(b.shippingfree) as shippingfree,
-                SUM(IF(b.modus=0,$amount/b.currencyFactor,0)) as amount,
-                SUM(IF(b.modus=0,$amount_net/b.currencyFactor,0)) as amount_net,
+                SUM(IF(b.modus=:articleModeProduct,$amount/b.currencyFactor,0)) as amount,
+                SUM(IF(b.modus=:articleModeProduct,$amount_net/b.currencyFactor,0)) as amount_net,
                 SUM(CAST(b.price as DECIMAL(10,2))*b.quantity) as amount_display,
                 MAX(d.length) as `length`,
                 MAX(d.height) as height,
@@ -2500,7 +2502,7 @@ class sAdmin
 
             LEFT JOIN s_articles a
             ON b.articleID = a.id
-            AND b.modus = 0
+            AND b.modus = :articleModeProduct
             AND b.esdarticle = 0
 
             LEFT JOIN s_articles_details d
@@ -2539,6 +2541,7 @@ class sAdmin
                 'sessionId' => empty($sessionId) ? session_id() : $sessionId,
                 'billingAddressId' => $this->getBillingAddressId(),
                 'shippingAddressId' => $this->getShippingAddressId(),
+                'articleModeProduct' => ProductModel::MODE_PRODUCT,
             ]
         );
         if ($basket === false) {
@@ -2692,7 +2695,7 @@ class sAdmin
                 ON ac.articleID=b.articleID
                 JOIN s_premium_dispatch_categories dc
                 ON dc.categoryID=ac.categoryID
-                WHERE b.modus=0
+                WHERE b.modus=:articleModeProduct
                 AND b.sessionID='{$this->session->offsetGet('sessionId')}'
                 GROUP BY dc.dispatchID
             ) as dk
@@ -2747,6 +2750,7 @@ class sAdmin
             [
                 'billingAddressId' => $this->getBillingAddressId(),
                 'shippingAddressId' => $this->getShippingAddressId(),
+                'articleModeProduct' => ProductModel::MODE_PRODUCT,
             ]
         );
 
@@ -2867,7 +2871,7 @@ class sAdmin
                 ON ac.articleID=b.articleID
                 JOIN s_premium_dispatch_categories dc
                 ON dc.categoryID=ac.categoryID
-                WHERE b.modus=0
+                WHERE b.modus=:articleModeProduct
                 AND b.sessionID='{$this->session->offsetGet('sessionId')}'
                 GROUP BY dc.dispatchID
             ) as dk
@@ -2924,6 +2928,7 @@ class sAdmin
                 [
                     'billingAddressId' => $this->getBillingAddressId(),
                     'shippingAddressId' => $this->getShippingAddressId(),
+                    'articleModeProduct' => ProductModel::MODE_PRODUCT,
                 ]
             )
         );
@@ -3852,7 +3857,7 @@ SQL;
                     'netprice' => $basket_discount_net,
                     'tax_rate' => $tax_rate,
                     'datum' => new Zend_Date(),
-                    'modus' => 3,
+                    'modus' => ProductModel::MODE_CUSTOMER_GROUP_DISCOUNT,
                     'currencyFactor' => $currencyFactor,
                 ]
             );
@@ -3898,7 +3903,7 @@ SQL;
                     'netprice' => $discount_net,
                     'tax_rate' => $tax_rate,
                     'datum' => new Zend_Date(),
-                    'modus' => 4,
+                    'modus' => ProductModel::MODE_CUSTOMER_GROUP_DISCOUNT,
                     'currencyFactor' => $currencyFactor,
                 ]
             );
@@ -3953,7 +3958,7 @@ SQL;
                     'netprice' => $surcharge_net,
                     'tax_rate' => $tax_rate,
                     'datum' => new Zend_Date(),
-                    'modus' => 4,
+                    'modus' => ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT,
                     'currencyFactor' => $currencyFactor,
                 ]
             );
@@ -3999,7 +4004,7 @@ SQL;
                     'netprice' => $percent_net,
                     'tax_rate' => $tax_rate,
                     'datum' => new Zend_Date(),
-                    'modus' => 4,
+                    'modus' => ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT,
                     'currencyFactor' => $currencyFactor,
                 ]
             );

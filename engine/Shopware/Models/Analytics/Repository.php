@@ -27,6 +27,7 @@ namespace Shopware\Models\Analytics;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Shopware\Components\Model\DBAL\Result;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -1280,7 +1281,8 @@ class Repository
             'SUM((details.price * details.quantity)/currencyFactor) AS turnover',
         ])
             ->from('s_order', 'orders')
-            ->innerJoin('orders', 's_order_details', 'details', 'orders.id = details.orderID AND details.modus=0')
+            ->innerJoin('orders', 's_order_details', 'details', 'orders.id = details.orderID AND details.modus=:articleModeProduct')
+            ->setParameter(':articleModeProduct', ProductModel::MODE_PRODUCT)
             ->innerJoin('details', 's_articles', 'articles', 'details.articleID = articles.id')
             ->where('orders.status NOT IN (4, -1)')
             ->orderBy('name');

@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHan
 
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
 class SearchTermConditionHandlerTest extends TestCase
@@ -165,7 +166,7 @@ class SearchTermConditionHandlerTest extends TestCase
                             'ordernumber' => '1',
                             'status' => 2,
                             'details' => [
-                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => 0],
+                                ['articleID' => 272, 'articleordernumber' => 'SW10239', 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],
@@ -178,7 +179,7 @@ class SearchTermConditionHandlerTest extends TestCase
                             'ordernumber' => '2',
                             'status' => 2,
                             'details' => [
-                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => 0],
+                                ['articleID' => 246, 'articleordernumber' => 'SW10237', 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],

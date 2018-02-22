@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Shop\Shop;
+use Shopware\Models\Article\Article as ProductModel;
 
 /**
  * Shopware Cron for article ratings
@@ -358,10 +358,10 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             ON d.orderID = o.id
             WHERE d.orderID IN ($orderIds)
             AND ad.active = 1
-            AND d.modus = 0
+            AND d.modus = ?
             ORDER BY orderdetailsID ASC
         ";
-        $result = Shopware()->Db()->fetchAll($sql);
+        $result = Shopware()->Db()->fetchAll($sql, [ProductModel::MODE_PRODUCT]);
         $rows = [];
         foreach ($result as $row) {
             $rows[$row['orderID']][$row['orderdetailsID']] = $row;

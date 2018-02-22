@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article as ProductModel;
+
 /**
  * Shopware Compare Plugin - Bootstrap
  * The plugin bootstrap of the marketing data plugin registers all events
@@ -336,12 +338,13 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
                INNER JOIN s_order_basket basket2
                   ON basket1.sessionID = basket2.sessionID
                   AND basket1.articleID != basket2.articleID
-                  AND basket1.modus = 0
-                  AND basket2.modus = 0
+                  AND basket1.modus = :articleModeProduct
+                  AND basket2.modus = :articleModeProduct
             WHERE basket1.sessionID = :sessionId
         ';
         $combinations = Shopware()->Db()->fetchAll($sql, [
             'sessionId' => Shopware()->Session()->get('sessionId'),
+            'articleModeProduct' => ProductModel::MODE_PRODUCT,
         ]);
 
         $this->AlsoBought()->refreshMultipleBoughtArticles($combinations);
@@ -399,7 +402,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
 
         $details = $arguments->getDetails();
         foreach ($details as $article) {
-            if ($article['modus'] != 0 || empty($article['articleID'])) {
+            if ($article['modus'] != ProductModel::MODE_PRODUCT || empty($article['articleID'])) {
                 continue;
             }
 
@@ -476,9 +479,9 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             return;
         }
 
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var $article ProductModel */
         $article = $arguments->getEntity();
-        if (!($article instanceof \Shopware\Models\Article\Article)) {
+        if (!($article instanceof ProductModel)) {
             return;
         }
         if (!($article->getId()) > 0) {

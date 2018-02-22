@@ -27,6 +27,7 @@ use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Components\CSRFGetProtectionAware;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Customer\Address;
 
 /**
@@ -941,12 +942,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             LEFT JOIN s_order_basket ob
             ON ob.sessionID=?
             AND ob.ordernumber=ad.ordernumber
-            AND ob.modus=0
+            AND ob.modus=?
             WHERE a.id=ad.articleID
         ';
         $row = Shopware()->Db()->fetchRow($sql, [
                 $ordernumber,
                 Shopware()->Session()->get('sessionId'),
+                ProductModel::MODE_PRODUCT,
             ]);
 
         return $row;
@@ -1046,7 +1048,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             if (!empty($item['tax_rate'])) {
             } elseif (!empty($item['taxPercent'])) {
                 $item['tax_rate'] = $item['taxPercent'];
-            } elseif ($item['modus'] == 2) {
+            } elseif ($item['modus'] == ProductModel::MODE_VOUCHER) {
                 // Ticket 4842 - dynamic tax-rates
                 $resultVoucherTaxMode = Shopware()->Db()->fetchOne(
                     'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?
@@ -1736,7 +1738,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         foreach ($basket['content'] as $article) {
-            if ($article['modus'] == 4 || $article['esd']) {
+            if ($article['modus'] == ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT || $article['esd']) {
                 continue;
             }
 
@@ -1905,9 +1907,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
         $query->select(['id', 'quantity']);
         $query->from('s_order_basket', 'basket');
-        $query->where('basket.modus = 0');
+        $query->where('basket.modus = :articleModeProduct');
         $query->andWhere('basket.sessionID = :sessionId');
         $query->setParameter(':sessionId', Shopware()->Session()->get('sessionId'));
+        $query->setParameter(':articleModeProduct', ProductModel::MODE_PRODUCT);
 
         $articles = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
         foreach ($articles as $id => $quantity) {

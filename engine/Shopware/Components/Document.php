@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Models\Article\Article as ProductModel;
 
 /**
  * Shopware document generator
@@ -427,7 +428,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $articleModule = Shopware()->Modules()->Articles();
         foreach ($positions as &$position) {
-            if ($position['modus'] == 0) {
+            if ($position['modus'] ==  ProductModel::MODE_PRODUCT) {
                 $position['meta'] = $articleModule->sGetPromotionById('fix', 0, $position['articleordernumber']);
             }
         }

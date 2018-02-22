@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Models\Article\Article as ProductModel;
 
 class CustomerOrderGateway
 {
@@ -140,7 +141,8 @@ class CustomerOrderGateway
         $query->andWhere('orders.status != :cancelStatus');
         $query->andWhere('orders.ordernumber IS NOT NULL');
         $query->andWhere("orders.ordernumber != '0'");
-        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
+        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = :articleModeProduct');
+        $query->setParameter(':articleModeProduct',  ProductModel::MODE_PRODUCT);
         $query->andWhere('orders.userID IN (:ids)');
         $query->setParameter(':cancelStatus', -1);
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
@@ -179,7 +181,8 @@ class CustomerOrderGateway
         ]);
         $query->from('s_order', 'orders');
         $query->innerJoin('orders', 's_core_shops', 'shops', 'shops.id = orders.subshopID');
-        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
+        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = :articleModeProduct');
+        $query->setParameter(':articleModeProduct',  ProductModel::MODE_PRODUCT);
         $query->innerJoin('details', 's_articles', 'product', 'product.id = details.articleID');
         $query->innerJoin('details', 's_articles_categories_ro', 'mapping', 'mapping.articleID = details.articleID AND shops.category_id = mapping.categoryID');
         $query->innerJoin('mapping', 's_articles_categories_ro', 'categories', 'categories.articleID = mapping.articleID AND categories.parentCategoryID = mapping.parentCategoryID');

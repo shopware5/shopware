@@ -23,6 +23,7 @@
  */
 
 use Shopware\Models\Analytics\Repository;
+use Shopware\Models\Article\Article as ProductModel;
 
 /**
  * @category  Shopware
@@ -946,7 +947,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'articleordernumber' => $this->orderNumber,
                 'price' => 1000,
                 'quantity' => 1,
-                'modus' => 0,
+                'modus' => ProductModel::MODE_PRODUCT,
                 'taxID' => 1,
                 'tax_rate' => 19,
             ],
@@ -956,7 +957,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'articleordernumber' => $this->orderNumber,
                 'price' => 1000,
                 'quantity' => 1,
-                'modus' => 0,
+                'modus' => ProductModel::MODE_PRODUCT,
                 'taxID' => 1,
                 'tax_rate' => 19,
             ],

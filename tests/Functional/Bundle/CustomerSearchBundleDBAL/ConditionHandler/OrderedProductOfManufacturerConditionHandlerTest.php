@@ -26,7 +26,8 @@ namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHan
 
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Article as ProductModel;
+use Shopware\Models\Order\Status;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
@@ -38,12 +39,12 @@ class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
     private $manufacturerId;
 
     /**
-     * @var Article
+     * @var ProductModel
      */
     private $sw1;
 
     /**
-     * @var Article
+     * @var ProductModel
      */
     private $sw2;
 
@@ -91,9 +92,9 @@ class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '1',
-                            'status' => 2,
+                            'status' => Status::ORDER_STATE_COMPLETED,
                             'details' => [
-                                ['articleID' => $this->sw1->getId(), 'articleordernumber' => $this->sw1->getMainDetail()->getNumber(), 'modus' => 0],
+                                ['articleID' => $this->sw1->getId(), 'articleordernumber' => $this->sw1->getMainDetail()->getNumber(), 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],
@@ -104,9 +105,9 @@ class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '2',
-                            'status' => 2,
+                            'status' => Status::ORDER_STATE_COMPLETED,
                             'details' => [
-                                ['articleID' => $this->sw2->getId(), 'articleordernumber' => $this->sw2->getMainDetail()->getNumber(), 'modus' => 0],
+                                ['articleID' => $this->sw2->getId(), 'articleordernumber' => $this->sw2->getMainDetail()->getNumber(), 'modus' => ProductModel::MODE_PRODUCT],
                             ],
                         ],
                     ],
@@ -117,9 +118,9 @@ class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
                     'orders' => [
                         [
                             'ordernumber' => '3',
-                            'status' => 2,
+                            'status' => Status::ORDER_STATE_COMPLETED,
                             'details' => [
-                                ['articleordernumber' => $this->sw2->getMainDetail()->getNumber(), 'modus' => 1, 'articleID' => $this->sw2->getId()],
+                                ['articleordernumber' => $this->sw2->getMainDetail()->getNumber(), 'modus' => ProductModel::MODE_PREMIUM_PRODUCT, 'articleID' => $this->sw2->getId()],
                             ],
                         ],
                     ],

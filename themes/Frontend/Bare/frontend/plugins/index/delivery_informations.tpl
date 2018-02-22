@@ -33,7 +33,7 @@
                     {s name="DetailDataInfoInstantDownload"}{/s}
                 </span>
             </p>
-        {elseif {config name="instockinfo"} && $sArticle.modus == 0 && $sArticle.instock > 0 && $sArticle.quantity > $sArticle.instock}
+        {elseif {config name="instockinfo"} && $sArticle.modus == constant('Shopware\Models\Article\Article::MODE_PRODUCT') && $sArticle.instock > 0 && $sArticle.quantity > $sArticle.instock}
             <link itemprop="availability" href="http://schema.org/LimitedAvailability" />
             <p class="delivery--information">
                 <span class="delivery--text delivery--text-more-is-coming">

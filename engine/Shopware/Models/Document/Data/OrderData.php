@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article as ProductModel;
+
 /**
  * Order demo data
  */
@@ -87,7 +89,7 @@ return [
                     'shipped' => '0',
                     'shippedgroup' => '0',
                     'releasedate' => '0000-00-00',
-                    'modus' => '0',
+                    'modus' => ProductModel::MODE_PRODUCT,
                     'esdarticle' => '0',
                     'taxID' => '1',
                     'tax_rate' => '19',
@@ -141,7 +143,7 @@ return [
                     'shipped' => '0',
                     'shippedgroup' => '0',
                     'releasedate' => '0000-00-00',
-                    'modus' => '0',
+                    'modus' => ProductModel::MODE_PRODUCT,
                     'esdarticle' => '0',
                     'taxID' => '1',
                     'tax_rate' => '19',
@@ -195,7 +197,7 @@ return [
                     'shipped' => '0',
                     'shippedgroup' => '0',
                     'releasedate' => '0000-00-00',
-                    'modus' => '4',
+                    'modus' => ProductModel::MODE_PAYMENT_SURCHARGE_DISCOUNT,
                     'esdarticle' => '0',
                     'taxID' => '0',
                     'tax_rate' => '19',
@@ -242,7 +244,7 @@ return [
                     'tax' => 19,
                     'price' => '3.9',
                     'amount' => '3.9',
-                    'modus' => 1,
+                    'modus' => ProductModel::MODE_PREMIUM_PRODUCT,
                     'amount_netto' => 3.2773109243697482,
                     'articleordernumber' => '',
                     'name' => 'Versandkosten',
