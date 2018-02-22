@@ -149,7 +149,8 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $this->fieldHelper->addVariantTranslation($mainQuery, $context);
         $this->fieldHelper->addPriceTranslation($mainQuery, $context);
 
-        $mainQuery->setParameter(':customerGroup', $customerGroup->getKey())
+        $mainQuery->setParameter(':customerGroup', $context->getCurrentCustomerGroup()->getKey())
+            ->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey())
             ->setParameter(':variants', $variantIds, Connection::PARAM_INT_ARRAY)
             ->setParameter(':priceGroupCustomerGroup', $customerGroup->getId());
 
@@ -242,18 +243,27 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
          */
         $cheapestPriceQuery = $this->connection->createQueryBuilder();
 
-        $cheapestPriceQuery->select('prices.id, prices.articleID, prices.price, variant.minpurchase')
-            ->from('s_articles_prices', 'prices');
+        $cheapestPriceQuery->select(
+            'IF (prices.id IS NULL, defaultPrices.id, prices.id) as id,
+             IF (prices.articleID IS NULL, defaultPrices.articleID, prices.articleID) as articleID,
+             IF (prices.price IS NULL, defaultPrices.price, prices.price) as price,
+            
+            variant.minpurchase'
+        )
+            ->from('s_articles_details', 'variant');
 
-        /*
-         * joins the product variants for the min purchase calculation.
-         * The cheapest price is defined by prices.price * variant.minpurchase (the real basket price)
-         */
-        $cheapestPriceQuery->innerJoin(
-            'prices',
-            's_articles_details',
+        $cheapestPriceQuery->leftJoin(
             'variant',
-            'variant.id = prices.articledetailsID'
+            's_articles_prices',
+            'prices',
+            'variant.id = prices.articledetailsID AND prices.pricegroup = :customerGroup'
+        );
+
+        $cheapestPriceQuery->leftJoin(
+            'variant',
+            's_articles_prices',
+            'defaultPrices',
+            'variant.id = defaultPrices.articledetailsID AND defaultPrices.pricegroup = :fallbackCustomerGroup'
         );
 
         /*
@@ -277,8 +287,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
              AND product.pricegroupActive = 1'
         );
 
-        $cheapestPriceQuery->where('prices.pricegroup = :customerGroup')
-            ->andWhere('variant.active = 1');
+        $cheapestPriceQuery->where('variant.active = 1');
 
         /*
          * This part of the query handles the closeout products.
@@ -308,12 +317,17 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         }
 
         /*
-         * Last graduation configuration only needs to use for the cheapest price, not for the different price count
+         * Last graduation configuration only needs to use for the cheapest price, not for the different price count.
+         * Get the cheapest price of the fallback customer group, if no price of the current customer group is available.
          */
         $countSubQuery = clone $cheapestPriceQuery;
-        $graduation = 'prices.from = 1';
+        $graduation = 'IF(prices.id IS NOT NULL, prices.from = 1, defaultPrices.to = 1)';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')";
+            $graduation = "CASE WHEN prices.id IS NOT NULL THEN
+                                (IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig'))
+                           ELSE
+                                (IF(priceGroup.id IS NOT NULL, defaultPrices.from = 1, defaultPrices.to = 'beliebig'))
+                           END";
         }
         $cheapestPriceQuery->andWhere($graduation);
 
