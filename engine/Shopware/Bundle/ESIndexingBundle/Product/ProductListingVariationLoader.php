@@ -30,13 +30,11 @@ use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceHelper;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class ProductListingVariationLoader
 {
@@ -44,11 +42,6 @@ class ProductListingVariationLoader
      * @var Connection
      */
     private $connection;
-
-    /**
-     * @var PriceCalculatorInterface
-     */
-    private $calculator;
 
     /**
      * @var IdentifierSelector
@@ -67,13 +60,11 @@ class ProductListingVariationLoader
 
     public function __construct(
         Connection $connection,
-        PriceCalculatorInterface $calculationService,
         IdentifierSelector $identifierSelector,
         ContextServiceInterface $contextService,
         ListingPriceHelper $listingPriceHelper
     ) {
         $this->connection = $connection;
-        $this->calculator = $calculationService;
         $this->identifierSelector = $identifierSelector;
         $this->contextService = $contextService;
         $this->listingPriceHelper = $listingPriceHelper;
@@ -137,10 +128,7 @@ class ProductListingVariationLoader
             /** @var array[] $customerPrices */
             foreach ($customerPrices as $number => $productPrices) {
                 foreach ($productPrices as &$price) {
-                    // Don't use a tax, because the tax is calculated before in the fetchPrices method
-                    $tax = new Tax();
-                    $tax->setTax(0);
-                    $price = $this->calculator->calculatePrice($price, $tax, $context);
+                    $price = $price * $context->getCurrency()->getFactor();
                 }
 
                 $calculated[$number][$key] = $productPrices;
