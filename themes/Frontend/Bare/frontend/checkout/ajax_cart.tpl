@@ -93,8 +93,8 @@
                         {/if}
                         {block name='frontend_checkout_ajax_cart_open_basket'}
                             <a href="{url controller='checkout' action='cart'}" class="btn button--open-basket is--icon-right" title="{"{s name='AjaxCartLinkBasket'}{/s}"|escape}">
-                                <i class="icon--arrow-right"></i>
                                 {s name='AjaxCartLinkBasket'}{/s}
+                                <i class="icon--arrow-right"></i>
                             </a>
                         {/block}
                     {/block}
