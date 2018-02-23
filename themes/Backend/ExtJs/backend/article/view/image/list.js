@@ -241,8 +241,8 @@ Ext.define('Shopware.apps.Article.view.image.List', {
             me.fireEvent('mediaSelect', dataViewModel, media, me.previewButton, me.removeButton, me.configButton, me.downloadButton);
         });
 
-        me.dataView.on('openSettingsForm', function() {
-            me.fireEvent('openImageMapping');
+        me.dataView.on('openSettingsForm', function(record) {
+            me.fireEvent('openImageMapping', record);
         });
 
         me.dataView.getSelectionModel().on('deselect', function (dataViewModel, media) {

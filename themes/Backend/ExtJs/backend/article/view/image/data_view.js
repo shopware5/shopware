@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Article.view.image.DataView', {
             return;
         }
 
-        this.fireEvent('openSettingsForm');
+        this.fireEvent('openSettingsForm', record);
     }
 });
 //{/block}
