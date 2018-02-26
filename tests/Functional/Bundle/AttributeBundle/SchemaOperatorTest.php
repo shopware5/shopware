@@ -84,6 +84,24 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @covers CrudService::parseDefaultValue
+     * @throws \Exception
+     */
+    public function testDefaultValuesBoolean()
+    {
+        $this->iterateTypeArray(['boolean' => 1]);
+        $this->iterateTypeArray(['boolean' => 0]);
+        $this->iterateTypeArray(['boolean' => true]);
+        $this->iterateTypeArray(['boolean' => false]);
+        $this->iterateTypeArray(['boolean' => null]);
+        $this->iterateTypeArray(['boolean' => '1']);
+        $this->iterateTypeArray(['boolean' => '0']);
+        $this->iterateTypeArray(['boolean' => 'true']);
+        $this->iterateTypeArray(['boolean' => 'false']);
+        $this->iterateTypeArray(['boolean' => 'null']);
+    }
+
+    /**
      * @param $types
      *
      * @throws \Exception
