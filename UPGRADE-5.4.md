@@ -10,6 +10,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added new optional parameter `$filterGroupIds` to `PropertyGatewayInterface.php` for proper property sorting in a listing
 
+### Changes
+
+* Changed Smarty to improve error message when a template extends a parent template and said parent does not exist
+
 ## 5.4.0
 
 [View all changes from v5.3.7...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.7...v5.4.0)
