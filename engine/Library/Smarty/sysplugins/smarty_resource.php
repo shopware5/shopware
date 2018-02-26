@@ -224,6 +224,26 @@ abstract class Smarty_Resource {
             }
         }
 
+        if ($source->type === 'parent') {
+            $pathIsValid = false;
+
+            $validPaths = substr($source->unique_resource, strpos($source->unique_resource, '#') + 1);
+            $validPaths = substr($validPaths, 0, strrpos($validPaths, '#'));
+
+            foreach (explode('///', $validPaths) as $path) {
+                $fullPath = sprintf('%s%s%s%s', DS, trim($path, DS), DS, $file);
+                if (file_exists($fullPath)) {
+                    $pathIsValid = true;
+                    break;
+                }
+            }
+
+            if (!$pathIsValid) {
+                throw new \SmartyException(sprintf('Unknown path %s in file %s', $fullPath, $file));
+            }
+        }
+
+
         // resolve relative path
         if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $file)) {
             $_was_relative_prefix = $file[0] === '.' ? substr($file, 0, strpos($file, '|')) : null;
