@@ -105,6 +105,10 @@ class CustomListingHydrator extends Hydrator
             sprintf('Serialization error in custom facet %s', $customFacet->getName())
         );
 
+        if (empty($facets)) {
+            return null;
+        }
+
         $customFacet->setFacet(array_shift($facets));
 
         return $customFacet;
