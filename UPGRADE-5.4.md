@@ -2,6 +2,16 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
+## 5.4.1
+
+[View all changes from v5.4.0...v5.4.1](https://github.com/shopware/shopware/compare/v5.4.0...v5.4.1)
+
+### Additions
+
+* Added new optional parameter `$filterGroupIds` to `PropertyGatewayInterface.php` for proper property sorting in a listing
+
+## 5.4.0
+
 [View all changes from v5.3.7...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.7...v5.4.0)
 
 ### Additions
