@@ -77,7 +77,8 @@ class LessDefinition
     /**
      * The corresponding theme
      *
-     * @var Theme */
+     * @var Theme
+     */
     private $theme;
 
     /**
@@ -107,9 +108,9 @@ class LessDefinition
      * @param array $config          contains the less variables, has to be a key value array
      * @param array $files           contains the full file name paths
      * @param null  $importDirectory Full path to the import directory for less @import commands
-     * @param null  $theme           the corresponding theme
+     * @param Theme $theme           the corresponding theme
      */
-    public function __construct(array $config = [], array $files = [], $importDirectory = null, $theme = null)
+    public function __construct(array $config = [], array $files = [], $importDirectory = null, Theme $theme = null)
     {
         $this->config = $config;
         $this->files = $files;
@@ -176,7 +177,7 @@ class LessDefinition
     /**
      * @param Theme $theme
      */
-    public function setTheme($theme)
+    public function setTheme(Theme $theme)
     {
         $this->theme = $theme;
     }
