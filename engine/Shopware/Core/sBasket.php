@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Random;
@@ -242,7 +241,7 @@ class sBasket
         }
 
         $extraConditions = [];
-        if (is_array($articles)) {
+        if (!empty($articles) && is_array($articles)) {
             $extraConditions[] = $this->db->quoteInto('ordernumber IN (?) ', $articles);
         }
         if (!empty($supplier)) {
@@ -2148,7 +2147,7 @@ class sBasket
             if ($voucherDetails['taxconfig'] === 'default' || empty($voucherDetails['taxconfig'])) {
                 $tax = round($voucherDetails['value'] / (100 + $this->config->get('sVOUCHERTAX')) * 100, 3) * -1;
                 $taxRate = $this->config->get('sVOUCHERTAX');
-                // Pre 3.5.4 behaviour
+            // Pre 3.5.4 behaviour
             } elseif ($voucherDetails['taxconfig'] === 'auto') {
                 // Check max. used tax-rate from basket
                 $tax = $this->getMaxTax();
@@ -2392,7 +2391,7 @@ class sBasket
                     }
                 } elseif ($getArticles[$key]['modus'] == 3) {
                     $getArticles[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
-                    // Basket discount
+                // Basket discount
                 } elseif ($getArticles[$key]['modus'] == 2) {
                     $getArticles[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
 
