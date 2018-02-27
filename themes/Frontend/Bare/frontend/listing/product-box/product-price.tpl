@@ -5,7 +5,7 @@
     {* Default price *}
     {block name='frontend_listing_box_article_price_default'}
         <span class="price--default is--nowrap{if $sArticle.has_pseudoprice} is--discount{/if}">
-            {if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}
+            {if $sArticle.priceStartingFrom}{s name='ListingBoxArticleStartsAt'}{/s} {/if}
             {$sArticle.price|currency}
             {s name="Star"}{/s}
         </span>
