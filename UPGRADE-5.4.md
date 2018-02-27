@@ -11,11 +11,37 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new optional parameter `$filterGroupIds` to `PropertyGatewayInterface.php` for proper property sorting in a listing
 * Added variant filtering to selection product streams
 * Added `queryMode` option to select- and comboboxes in `engine/Shopware/Controllers/Backend/Config.php`
+* Added theme configuration information to newsletter templates
+* Added Smarty blocks to `newsletter/index/index.tpl`:
+  * `newsletter_index_start`
+  * `newsletter_index_doctype`
+  * `newsletter_index_html_attributes`
+  * `newsletter_index_index_head`
+  * `newsletter_index_body_attributes`
+  * `newsletter_index_table`
+  * `newsletter_index_table_inner`
+  * `newsletter_index_table_inner_header`
+  * `newsletter_index_table_inner_content`
+  * `newsletter_index_table_inner_footer`
+  * `newsletter_index_log`
+* Added Smarty blocks to `newsletter/index/footer.tpl`:
+  * `newsletter_footer_table_upper`
+  * `newsletter_footer_table_navigation`
+  * `newsletter_footer_table_tax_notice`
+  * `newsletter_footer_table_lower`
+  * `newsletter_footer_table_lower_links`
+* Added Smarty blocks to `newsletter/index/header.tpl`:
+  * `newsletter_header`
+  * `newsletter_header_content`
+  * `newsletter_header_content_logo`
+  * `newsletter_header_content_title`
+
 
 ### Changes
 
 * Changed Smarty to improve error message when a template extends a parent template and said parent does not exist
 * Changed cloning of `Enlight_Template_Manager` object to preserve reference of the security policy to the instance  
+* Changed newsletter logo from a static file to the active themes logo
 * Changed condition in `sBasket::sGetAmountRestrictedArticles`, it now also checks for an empty `$articles` array
 
 ### Removals
