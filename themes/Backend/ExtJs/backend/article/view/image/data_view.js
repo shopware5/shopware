@@ -43,6 +43,11 @@ Ext.define('Shopware.apps.Article.view.image.DataView', {
         this.dragViewSelectorPlugin = Ext.create('Ext.ux.DataView.DragSelector', {});
         this.plugins = [ this.dragViewSelectorPlugin ];
 
+        this.listeners = {
+            scope: this,
+            itemclick: this.onItemClick
+        };
+
         this.callParent(arguments);
     },
 
@@ -56,6 +61,27 @@ Ext.define('Shopware.apps.Article.view.image.DataView', {
         // Fixes an ExtJS issue, have a look at https://www.sencha.com/forum/showthread.php?226676-4-1-1-rc2-Ext-ux-DataView-DragSelector-bugs
         this.dragViewSelectorPlugin.proxy.destroy();
         delete this.dragViewSelectorPlugin.proxy;
+    },
+
+    /**
+     * Event handler which will be fired when the user clicks an image in the media grid component. If the user clicks on the
+     * gear icon, it will open up the assignment configuration window.
+     *
+     * @param { Ext.data.Record } record
+     * @param { HTMLElement } el
+     * @param { Number } index
+     * @param { Event } event
+     */
+    onItemClick: function(record, el, index, event) {
+        var target = event.target,
+            $target = Ext.get(target);
+
+        // Check if the user clicked on the actual settings gear, otherwise just select the media
+        if (!$target || !$target.hasCls('mapping-config')) {
+            return;
+        }
+
+        this.fireEvent('openSettingsForm', record);
     }
 });
 //{/block}

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\EmotionExporter;
@@ -179,7 +178,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
             foreach ($componentData as $entry) {
                 $filterResult = $this->container->get('events')->filter(
-                    'Shopware_Plugin_Emotion_Handle_Preview_Media_Value',
+                    'Shopware_Controllers_Backend_Emotion_Detail_Filter_Values',
                     $entry,
                     ['subject' => $this]
                 );

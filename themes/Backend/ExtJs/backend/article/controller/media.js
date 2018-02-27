@@ -402,7 +402,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      *
      * @return Boolean
      */
-    onOpenImageMapping: function() {
+    onOpenImageMapping: function(record) {
         var me = this,
             selected,
             mediaList = me.getMediaList(),
@@ -410,6 +410,10 @@ Ext.define('Shopware.apps.Article.controller.Media', {
 
         if (!selModel || !selModel.getSelection()) {
             return false;
+        }
+
+        if (record instanceof Ext.data.Model) {
+            selModel.select([record]);
         }
 
         // Will be used for multi select
