@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Random;
 
 class sBasketTest extends PHPUnit\Framework\TestCase
@@ -2478,17 +2477,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
      */
     private function deleteDummyCustomer(\Shopware\Models\Customer\Customer $customer)
     {
-        $billingId = $this->db->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', [$customer->getId()]);
-        $shippingId = $this->db->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', [$customer->getId()]);
-
-        if ($billingId) {
-            $this->db->delete('s_user_billingaddress_attributes', 'billingID = ' . $billingId);
-            $this->db->delete('s_user_billingaddress', 'id = ' . $billingId);
-        }
-        if ($shippingId) {
-            $this->db->delete('s_user_shippingaddress_attributes', 'shippingID = ' . $shippingId);
-            $this->db->delete('s_user_shippingaddress', 'id = ' . $shippingId);
-        }
+        $this->db->delete('s_user_addresses', 'user_id = ' . $customer->getId());
         $this->db->delete('s_core_payment_data', 'user_id = ' . $customer->getId());
         $this->db->delete('s_user_attributes', 'userID = ' . $customer->getId());
         $this->db->delete('s_user', 'id = ' . $customer->getId());

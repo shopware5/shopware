@@ -79,9 +79,7 @@ use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 class Kernel implements HttpKernelInterface
 {
     /**
-     * @Deprecated
-     *
-     * Will be removed in Shopware v5.6
+     * @Deprecated Since 5.4, to be removed in 5.6
      *
      * Use the following parameters from the DIC instead:
      *      'shopware.release.version'
@@ -202,7 +200,7 @@ class Kernel implements HttpKernelInterface
      */
     public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
-        if (false === $this->booted) {
+        if ($this->booted === false) {
             $this->boot();
         }
 
@@ -211,7 +209,7 @@ class Kernel implements HttpKernelInterface
 
         $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
 
-        if (null === $front->Request()) {
+        if ($front->Request() === null) {
             $front->setRequest($enlightRequest);
             $response = $front->dispatch();
         } else {
@@ -618,7 +616,7 @@ class Kernel implements HttpKernelInterface
 
         foreach ($runtimeDirectories as $name => $dir) {
             if (!is_dir($dir)) {
-                if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                     throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
                 }
             } elseif (!is_writable($dir)) {
@@ -785,7 +783,7 @@ class Kernel implements HttpKernelInterface
      */
     private function loadPlugins(ContainerBuilder $container)
     {
-        if (0 === count($this->plugins)) {
+        if (count($this->plugins) === 0) {
             return;
         }
 

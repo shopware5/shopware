@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
@@ -79,28 +78,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('categoryId', (int) $this->Request()->getParam('categoryId'));
         $this->View()->assign('Controller', (string) $this->Request()->getParam('controllerName'));
         $this->View()->assign('sEmotions', $emotions, true);
-    }
-
-    /**
-     * Action that will be triggered by product slider type top seller
-     *
-     * @deprecated use emotionArticleSliderAction instead
-     */
-    public function emotionTopSellerAction()
-    {
-        $this->Request()->setParam('sort', 'topseller');
-        $this->emotionArticleSliderAction();
-    }
-
-    /**
-     * Action that will be triggered by product slider type newcomer
-     *
-     * @deprecated use emotionArticleSliderAction instead
-     */
-    public function emotionNewcomerAction()
-    {
-        $this->Request()->setParam('sort', 'newcomer');
-        $this->emotionArticleSliderAction();
     }
 
     /**

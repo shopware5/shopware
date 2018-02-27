@@ -48,16 +48,6 @@ class sExport
     public $sCustomergroup;
 
     /**
-     * @deprecated Use $shopData instead
-     */
-    public $sLanguage;
-
-    /**
-     * @deprecated Use $shopData instead
-     */
-    public $sMultishop;
-
-    /**
      * @var \Shopware\Models\Shop\Shop
      */
     public $shop;
@@ -173,9 +163,11 @@ class sExport
     public function sGetCustomergroup($customerGroup)
     {
         static $cache = [];
+
         if (empty($customerGroup)) {
-            $customerGroup = $this->sMultishop['defaultcustomergroup'];
+            $customerGroup = $this->shopData['customer_group_id'];
         }
+
         if (isset($cache[$customerGroup])) {
             return $cache[$customerGroup];
         }
@@ -194,52 +186,6 @@ class sExport
         ");
 
         return $cache[$customerGroup];
-    }
-
-    /**
-     * @deprecated Use getShopData
-     *
-     * @param $language
-     *
-     * @return mixed
-     */
-    public function sGetMultishop($language)
-    {
-        static $cache = [];
-
-        if (isset($cache[$language])) {
-            return $cache[$language];
-        }
-        if (empty($language)) {
-            $sql = 's.`default`=1';
-        } elseif (is_numeric($language)) {
-            $sql = 's.id=' . $language;
-        } elseif (is_string($language)) {
-            $sql = 's.name=' . $this->db->quote(trim($language));
-        }
-
-        $cache[$language] = $this->db->fetchRow("
-            SELECT
-              s.id AS id, s.id AS isocode, s.locale_id AS locale,
-              s.category_id AS parentID, s.default AS skipbackend, s.name,
-              (SELECT groupkey FROM s_core_customergroups WHERE id=s.customer_group_id) as defaultcustomergroup,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.template_id) as template,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.document_template_id) as doc_template,
-              CONCAT(s.host, '\n', s.hosts) as domainaliase,
-              GROUP_CONCAT(d.currency_id SEPARATOR '|') as switchCurrencies,
-              (SELECT GROUP_CONCAT(id SEPARATOR '|') FROM s_core_shops WHERE id=m.id OR main_id=m.id)  as switchLanguages,
-              s.currency_id AS defaultcurrency, s.default, s.fallback_id AS fallback
-            FROM s_core_shops s
-            LEFT JOIN s_core_shops m
-            ON m.id=s.main_id
-            OR (s.main_id IS NULL AND m.id=s.id)
-            LEFT JOIN s_core_shop_currencies d
-            ON d.shop_id=m.id
-            WHERE s.active=1 AND $sql
-            GROUP BY s.id
-        ");
-
-        return $cache[$language];
     }
 
     public function sInitSettings()
@@ -318,9 +264,6 @@ class sExport
         $shop = $shopRepository->getActiveById($this->sSettings['languageID']);
         $this->shopData = $this->getShopData($this->sSettings['languageID']);
 
-        $this->sLanguage = $this->sGetMultishop($this->sSettings['languageID']);
-        $this->sMultishop = $this->sLanguage;
-
         if (empty($this->sSettings['categoryID'])) {
             $this->sSettings['categoryID'] = $this->shopData['category_id'];
         }
@@ -373,10 +316,6 @@ class sExport
         $this->sSmarty->assign('sCurrency', $this->sCurrency);
         $this->sSmarty->assign('sCustomergroup', $this->sCustomergroup);
         $this->sSmarty->assign('sSettings', $this->sSettings);
-
-        // Deprecated: use shopData instead
-        $this->sSmarty->assign('sLanguage', $this->sLanguage);
-        $this->sSmarty->assign('sMultishop', $this->sMultishop);
 
         $this->sSmarty->config_vars['F'] = $this->sSettings['fieldmark'];
         $this->sSmarty->config_vars['EF'] = $this->sSettings['escaped_separator'];
@@ -567,7 +506,7 @@ class sExport
         $imageDir = 'media/image/';
 
         // If no imageSize was set, return the full image
-        if (null === $imageSize) {
+        if ($imageSize === null) {
             return $this->fixShopHost($mediaService->getUrl($imageDir . $hash), $mediaService->getAdapterType());
         }
 

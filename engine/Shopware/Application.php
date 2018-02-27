@@ -33,9 +33,7 @@ use Shopware\Components\DependencyInjection\Container;
 class Shopware extends Enlight_Application
 {
     /**
-     * @Deprecated
-     *
-     * Will be removed in Shopware v5.6
+     * @Deprecated to be removed in 5.6
      *
      * Use the following parameters from the DIC instead:
      *      'shopware.release.version'

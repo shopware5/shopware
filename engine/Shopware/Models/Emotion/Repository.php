@@ -48,7 +48,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions', 'categories'])
-            ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+            ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions')
             ->leftJoin('emotions.categories', 'categories');
 
         //filter the displayed columns with the passed filter string
@@ -98,60 +98,60 @@ class Repository extends ModelRepository
             ->addOrderBy('emotions.position')
             ->addOrderBy('emotions.id');
 
-        // filter by search
-        if (!empty($filter) && $filter[0]['property'] == 'filter' && !empty($filter[0]['value'])) {
+        // Filter by search
+        if (!empty($filter) && $filter[0]['property'] === 'filter' && !empty($filter[0]['value'])) {
             $builder->andWhere('emotions.name LIKE :search OR categories.description LIKE :search')
                 ->setParameter(':search', '%' . $filter[0]['value'] . '%');
         }
 
-        // filter by desktop devices
-        if (isset($filterBy) && $filterBy == 'onlyDesktop') {
+        // Filter by desktop devices
+        if (isset($filterBy) && $filterBy === 'onlyDesktop') {
             $builder->andWhere("emotions.device LIKE '%0%'");
         }
 
-        // filter by tablet landscape devices
-        if (isset($filterBy) && $filterBy == 'onlyTabletLandscape') {
+        // Filter by tablet landscape devices
+        if (isset($filterBy) && $filterBy === 'onlyTabletLandscape') {
             $builder->andWhere("emotions.device LIKE '%1%'");
         }
 
-        // filter by tablet devices
-        if (isset($filterBy) && $filterBy == 'onlyTablet') {
+        // Filter by tablet devices
+        if (isset($filterBy) && $filterBy === 'onlyTablet') {
             $builder->andWhere("emotions.device LIKE '%2%'");
         }
 
-        // filter by mobile landscape devices
-        if (isset($filterBy) && $filterBy == 'onlyMobileLandscape') {
+        // Filter by mobile landscape devices
+        if (isset($filterBy) && $filterBy === 'onlyMobileLandscape') {
             $builder->andWhere("emotions.device LIKE '%3%'");
         }
 
-        // filter by mobile devices
-        if (isset($filterBy) && $filterBy == 'onlyMobile') {
+        // Filter by mobile devices
+        if (isset($filterBy) && $filterBy === 'onlyMobile') {
             $builder->andWhere("emotions.device LIKE '%4%'");
         }
 
-        // filter by active emotion worlds
-        if (isset($filterBy) && $filterBy == 'active') {
+        // Filter by active emotion worlds
+        if (isset($filterBy) && $filterBy === 'active') {
             $builder->andWhere('emotions.active = 1');
         }
 
-        // filter by landingpages
-        if (isset($filterBy) && $filterBy == 'onlyLandingpage') {
+        // Filter by landingpages
+        if (isset($filterBy) && $filterBy === 'onlyLandingpage') {
             $builder->andWhere('emotions.is_landingpage = 1');
         }
 
-        // filter by landing page masters
-        if (isset($filterBy) && $filterBy == 'onlyLandingPageMasters') {
+        // Filter by landing page masters
+        if (isset($filterBy) && $filterBy === 'onlyLandingPageMasters') {
             $builder->andWhere('emotions.is_landingpage = 1')
                 ->andWhere('emotions.parent_id IS NULL');
         }
 
-        // filter by shopping worlds
-        if (isset($filterBy) && $filterBy == 'onlyWorld') {
+        // Filter by shopping worlds
+        if (isset($filterBy) && $filterBy === 'onlyWorld') {
             $builder->andWhere('emotions.is_landingpage = 0');
         }
 
-        // filter by categoryId
-        if (!empty($categoryId) && $categoryId != 'NaN') {
+        // Filter by categoryId
+        if (!empty($categoryId) && $categoryId !== 'NaN') {
             $path = '%|' . $categoryId . '|%';
 
             $builder
@@ -222,7 +222,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions.id', 'emotions.name'])
-            ->from('Shopware\Models\Emotion\Emotion', 'emotions');
+            ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions');
 
         if ($filter === true) {
             $builder->where('emotions.isLandingPage = :isLandingPage')
@@ -266,7 +266,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions', 'elements', 'component', 'fields', 'attribute', 'categories', 'shops', 'template'])
-            ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+            ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions')
             ->leftJoin('emotions.template', 'template')
             ->leftJoin('emotions.elements', 'elements')
             ->leftJoin('emotions.attribute', 'attribute')
@@ -373,36 +373,6 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @deprecated since 5.3, to be removed with 5.4, use \Shopware\Bundle\EmotionBundle\Service\EmotionService instead
-     *
-     * @param int $categoryId
-     *
-     * @return \Doctrine\ORM\Query
-     */
-    public function getCategoryEmotionsQuery($categoryId)
-    {
-        $builder = $this->getCategoryEmotionsQueryBuilder($categoryId);
-
-        return $builder->getQuery();
-    }
-
-    /**
-     * @deprecated since 5.3, to be removed with 5.4, use \Shopware\Bundle\EmotionBundle\Service\EmotionService instead
-     *
-     * @param int $categoryId
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getCategoryEmotionsQueryBuilder($categoryId)
-    {
-        $builder = $this->getCategoryBaseEmotionsQueryBuilder($categoryId);
-        $builder->select(['emotions', 'template'])
-                ->leftJoin('emotions.template', 'template');
-
-        return $builder;
-    }
-
-    /**
      * @param int $categoryId
      *
      * @return \Doctrine\ORM\Query
@@ -451,7 +421,7 @@ class Repository extends ModelRepository
         $builder->where('elements.emotionId = :emotionId');
         $builder->addOrderBy([['property' => 'elements.startRow', 'direction' => 'ASC']]);
         $builder->addOrderBy([['property' => 'elements.startCol', 'direction' => 'ASC']]);
-        $builder->setParameters(['emotionId' => $emotionId]);
+        $builder->setParameter('emotionId', $emotionId);
 
         return $builder;
     }

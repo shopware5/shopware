@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Model\QueryBuilder;
 
 /**
@@ -1248,7 +1247,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         }
 
         $builder->where($association . '.' . $column . ' = :id')
-            ->setParameters(['id' => $id])
+            ->setParameter('id', $id)
             ->setFirstResult(0)
             ->setMaxResults(1);
     }

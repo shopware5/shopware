@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class sOrderTest extends PHPUnit\Framework\TestCase
 {
     public static $sessionId;
@@ -32,7 +31,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$sessionId = rand(111111111, 999999999);
+        self::$sessionId = mt_rand(111111111, 999999999);
     }
 
     public function setUp()
@@ -116,7 +115,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     public function testTransactionExistFalse()
     {
         $this->assertFalse(
-            $this->invokeMethod($this->module, 'isTransactionExist', [uniqid('TRANS-')])
+            $this->invokeMethod($this->module, 'isTransactionExist', [uniqid('TRANS-', true)])
         );
     }
 
@@ -295,12 +294,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     {
         $user = $this->getRandomUser();
         $originalBillingAddress = $user['billingaddress'];
-
-        $orderNumber = rand(111111111, 999999999);
+        $orderNumber = mt_rand(111111111, 999999999);
 
         $this->assertEquals(1, $this->module->sSaveBillingAddress($originalBillingAddress, $orderNumber));
 
-        $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->findOneBy(['order' => $orderNumber]);
+        $billing = Shopware()->Models()->getRepository(\Shopware\Models\Order\Billing::class)->findOneBy(['order' => $orderNumber]);
 
         $this->assertEquals($originalBillingAddress['userID'], $billing->getCustomer()->getId());
         $this->assertEquals($originalBillingAddress['company'], $billing->getCompany());
@@ -328,11 +326,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $user = $this->getRandomUser();
         $originalBillingAddress = $user['shippingaddress'];
 
-        $orderNumber = rand(111111111, 999999999);
+        $orderNumber = mt_rand(111111111, 999999999);
 
         $this->assertEquals(1, $this->module->sSaveShippingAddress($originalBillingAddress, $orderNumber));
 
-        $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->findOneBy(['order' => $orderNumber]);
+        $shipping = Shopware()->Models()->getRepository(\Shopware\Models\Order\Shipping::class)->findOneBy(['order' => $orderNumber]);
 
         $this->assertEquals($originalBillingAddress['userID'], $shipping->getCustomer()->getId());
         $this->assertEquals($originalBillingAddress['company'], $shipping->getCompany());
@@ -376,7 +374,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testSCreateTemporaryOrder()
     {
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
+        $order = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class)->findOneBy(['temporaryId' => self::$sessionId]);
 
         $this->assertNull($order);
 
@@ -384,7 +382,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sCreateTemporaryOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
+        $order = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class)->findOneBy(['temporaryId' => self::$sessionId]);
 
         $this->assertNotNull($order);
         $this->assertNotNull($order->getAttribute());
@@ -672,7 +670,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     protected function createDummyOrder()
     {
-        $number = 'SW-' . uniqid(rand());
+        $number = 'SW-' . uniqid(mt_rand(), true);
         Shopware()->Db()->insert('s_order', [
             'id' => null,
             'userID' => 1,
@@ -717,7 +715,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         /** @var $price \Shopware\Models\Article\Price */
         $price = $mainDetail->getPrices()->first();
 
-        $quantity = rand(1, 10);
+        $quantity = mt_rand(1, 10);
 
         Shopware()->Db()->insert('s_order_details', [
             'orderID' => $orderId,
@@ -736,12 +734,12 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         Shopware()->Db()->insert('s_order_details_attributes', [
             'detailID' => $detailId,
-            'attribute1' => uniqid('SW-'),
-            'attribute2' => uniqid('SW-'),
-            'attribute3' => uniqid('SW-'),
-            'attribute4' => uniqid('SW-'),
-            'attribute5' => uniqid('SW-'),
-            'attribute6' => uniqid('SW-'),
+            'attribute1' => uniqid('SW-', true),
+            'attribute2' => uniqid('SW-', true),
+            'attribute3' => uniqid('SW-', true),
+            'attribute4' => uniqid('SW-', true),
+            'attribute5' => uniqid('SW-', true),
+            'attribute6' => uniqid('SW-', true),
         ]);
 
         return $detailId;
@@ -836,15 +834,19 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $user = Shopware()->Db()->fetchRow('SELECT * FROM s_user WHERE id = 1 LIMIT 1');
 
         $billing = Shopware()->Db()->fetchRow(
-            'SELECT * FROM s_user_billingaddress WHERE userID = :id',
+            'SELECT * FROM s_user_addresses WHERE user_id = :id',
             [':id' => $user['id']]
         );
-        $billing['stateID'] = isset($billing['stateId']) ? $billing['stateID'] : '1';
+
+        $billing = $this->convertToLegacyAddressArray($billing);
+
         $shipping = Shopware()->Db()->fetchRow(
-            'SELECT * FROM s_user_shippingaddress WHERE userID = :id',
+            'SELECT * FROM s_user_addresses WHERE user_id = :id',
             [':id' => $user['id']]
         );
-        $shipping['stateID'] = isset($shipping['stateId']) ? $shipping['stateID'] : '1';
+
+        $shipping = $this->convertToLegacyAddressArray($shipping);
+
         $country = Shopware()->Db()->fetchRow(
             'SELECT * FROM s_core_countries WHERE id = :id',
             [':id' => $billing['countryID']]
@@ -894,6 +896,24 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                 'charge_vat' => !$taxFree,
             ],
         ];
+    }
+
+    /**
+     * Converts an address to the array key structure of a legacy billing or shipping address
+     *
+     * @param $address
+     *
+     * @return array
+     */
+    private function convertToLegacyAddressArray($address)
+    {
+        $output = array_merge($address, [
+            'userID' => $address['user_id'],
+            'countryID' => $address['country_id'],
+            'stateID' => $address['state_id'],
+        ]);
+
+        return $output;
     }
 
     private function getBasketRows()

@@ -313,16 +313,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * @deprecated
-     *
-     * @return Form
-     */
-    public function save()
-    {
-        return $this;
-    }
-
-    /**
      * @param int $pluginId
      */
     public function setPluginId($pluginId)

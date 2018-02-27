@@ -842,21 +842,6 @@ WHERE
 `email` = 'checkout@adressmanagement.localhost';
 EOD;
         $dbal->query($sql);
-
-        $sql = <<<EOD
-INSERT INTO `s_user_billingaddress`
-(`userID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `countryID`, `stateID`, `ustid`, `additional_address_line1`, `additional_address_line2`, `title`)
-VALUES
-('$userId','Muster GmbH','','mr','Max','Mustermann','Musterstr. 55','55555','Musterhausen','05555 / 555555','2','3','',NULL,NULL,NULL);
-EOD;
-        $dbal->query($sql);
-        $sql = <<<EOD
-INSERT INTO `s_user_shippingaddress`
-(`userID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `countryID`, `stateID`, `additional_address_line1`, `additional_address_line2`, `title`)
-VALUES
-('$userId','shopware AG','','mr','Max','Mustermann','Mustermannstraße 92','48624','Schöppingen','2',NULL,'','',NULL);
-EOD;
-        $dbal->query($sql);
     }
 
     /**

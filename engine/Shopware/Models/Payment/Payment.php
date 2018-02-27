@@ -83,12 +83,14 @@ class Payment extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
      */
     protected $paymentInstances;
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="paymentMean")
      */
     protected $paymentData;
+
     /**
      * @var int
      *
@@ -160,13 +162,6 @@ class Payment extends ModelEntity
      * @ORM\Column(name="surcharge", type="float", nullable=false)
      */
     private $surcharge = 0;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="surchargestring", type="string", length=255, nullable=false)
-     */
-    private $surchargeString = '';
 
     /**
      * @var int
@@ -336,62 +331,6 @@ class Payment extends ModelEntity
     }
 
     /**
-     * Sets the class of a payment
-     *
-     * @deprecated
-     *
-     * @param string $class
-     *
-     * @return Payment
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-
-        return $this;
-    }
-
-    /**
-     * Gets the class of a payment
-     *
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * Set the special table of a payment
-     *
-     * @deprecated
-     *
-     * @param string $table
-     *
-     * @return Payment
-     */
-    public function setTable($table)
-    {
-        $this->table = $table;
-
-        return $this;
-    }
-
-    /**
-     * Gets the table of a payment
-     *
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getTable()
-    {
-        return $this->table;
-    }
-
-    /**
      * Sets the hide-mode of a payment
      *
      * @param bool $hide
@@ -488,32 +427,6 @@ class Payment extends ModelEntity
     }
 
     /**
-     * Sets the country-surcharge as a string of a payment
-     *
-     * @param string $surchargeString
-     *
-     * @return Payment
-     */
-    public function setSurchargeString($surchargeString)
-    {
-        $this->surchargeString = $surchargeString;
-
-        return $this;
-    }
-
-    /**
-     * Gets the country-surcharge-string of a payment
-     *
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getSurchargeString()
-    {
-        return $this->surchargeString;
-    }
-
-    /**
      * Sets the position of a payment
      *
      * @param int $position
@@ -607,34 +520,6 @@ class Payment extends ModelEntity
     public function getMobileInactive()
     {
         return $this->mobileInactive;
-    }
-
-    /**
-     * Sets the embed-IFrame of a payment
-     *
-     * @deprecated
-     *
-     * @param string $embedIFrame
-     *
-     * @return Payment
-     */
-    public function setEmbedIFrame($embedIFrame)
-    {
-        $this->embedIFrame = $embedIFrame;
-
-        return $this;
-    }
-
-    /**
-     * Gets the embed-IFrame of a payment
-     *
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getEmbedIFrame()
-    {
-        return $this->embedIFrame;
     }
 
     /**

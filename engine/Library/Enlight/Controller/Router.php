@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Controller
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -27,19 +28,19 @@
  * The Enlight_Controller is the basic class for the routing.
  *
  * @category   Enlight
- * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 abstract class Enlight_Controller_Router extends Enlight_Class
 {
     /**
-     * @var Enlight_Controller_Front Contains an instance of the Enlight_Controller_Front.
+     * @var Enlight_Controller_Front contains an instance of the Enlight_Controller_Front
      */
     protected $front;
 
     /**
-     * @var array Contains all global parameters for the routing process.
+     * @var array contains all global parameters for the routing process
      */
     protected $globalParams = [];
 
@@ -47,11 +48,13 @@ abstract class Enlight_Controller_Router extends Enlight_Class
      * Setter method for the front controller.
      *
      * @param Enlight_Controller_Front $front
+     *
      * @return self
      */
     public function setFront(Enlight_Controller_Front $front)
     {
         $this->front = $front;
+
         return $this;
     }
 
@@ -67,28 +70,36 @@ abstract class Enlight_Controller_Router extends Enlight_Class
 
     /**
      * Starts the routing-process.
-     * @throws Enlight_Controller_Exception
+     *
      * @param Enlight_Controller_Request_Request $request
+     *
+     * @throws Enlight_Controller_Exception
+     *
      * @return Enlight_Controller_Request_Request
      */
     abstract public function route(Enlight_Controller_Request_Request $request);
 
     /**
      * Assembles the given parameters.
+     *
      * @param array $userParams
+     *
      * @return mixed|string
      */
-    abstract public function assemble($userParams = array());
+    abstract public function assemble($userParams = []);
 
     /**
      * Sets a global parameter.
+     *
      * @param $name
      * @param $value
+     *
      * @return self
      */
     public function setGlobalParam($name, $value)
     {
         $this->globalParams[$name] = $value;
+
         return $this;
     }
 }

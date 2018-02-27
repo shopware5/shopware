@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Address;
@@ -686,26 +685,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         /** @var $birthday \DateTime */
         if ($birthday instanceof \DateTime) {
             $data['birthday'] = $birthday->format('d.m.Y');
-        }
-
-        if (empty($data['billing'])) {
-            $billingAddress = $this->fetchAddress($data['default_billing_address_id']);
-
-            if ($billingAddress) {
-                $data['billing'] = new \Shopware\Models\Customer\Billing();
-                $data['billing']->fromAddress($billingAddress);
-                $data['billing'] = $this->container->get('models')->toArray($data['billing']);
-            }
-        }
-
-        if (empty($data['shipping'])) {
-            $shippingAddress = $this->fetchAddress($data['default_shipping_address_id']);
-
-            if ($shippingAddress) {
-                $data['shipping'] = new \Shopware\Models\Customer\Shipping();
-                $data['shipping']->fromAddress($shippingAddress);
-                $data['shipping'] = $this->container->get('models')->toArray($data['shipping']);
-            }
         }
 
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');

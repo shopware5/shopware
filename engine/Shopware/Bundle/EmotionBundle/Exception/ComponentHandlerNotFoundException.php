@@ -22,26 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Config\Element;
+namespace Shopware\Bundle\EmotionBundle\Exception;
 
-/**
- * @deprecated Use the \Shopware\Models\Config\Element
- */
-final class Shopware_Components_Form
+class ComponentHandlerNotFoundException extends \Exception
 {
-    const SCOPE_SHOP = Element::SCOPE_SHOP;
-    const SCOPE_LOCALE = Element::SCOPE_LOCALE;
-
-    /**
-     * Private constructor to simulate Final Abstract Class.
-     */
-    private function __construct()
-    {
-        // this class should not be instantiated or extended
-    }
-
-    private function __clone()
-    {
-        // this class should not be instantiated or extended
-    }
 }

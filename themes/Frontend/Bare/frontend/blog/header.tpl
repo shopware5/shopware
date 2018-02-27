@@ -62,7 +62,7 @@
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
     {elseif !{config name=seoIndexPaginationLinks}}
-        <link rel="canonical" href="{if $sCategoryContent.canonicalParams}{url params = $sCategoryContent.canonicalParams}{elseif $sCategoryContent.sSelfCanonical}{$sCategoryContent.sSelfCanonical}{/if}" />
+        <link rel="canonical" href="{if $sCategoryContent.canonicalParams}{url params = $sCategoryContent.canonicalParams}{/if}" />
     {/if}
 {/block}
 

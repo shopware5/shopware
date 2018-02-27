@@ -81,8 +81,6 @@ class Status extends ModelEntity
     const PAYMENT_STATE_THE_CREDIT_HAS_BEEN_PRELIMINARILY_ACCEPTED = 31;
     const PAYMENT_STATE_THE_CREDIT_HAS_BEEN_ACCEPTED = 32;
     const PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED = 33;
-    /** @deprecated use PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED instead */
-    const PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED_BY_HANSEATIC_BANK = self::PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED;
     const PAYMENT_STATE_A_TIME_EXTENSION_HAS_BEEN_REGISTERED = 34;
     const PAYMENT_STATE_THE_PROCESS_HAS_BEEN_CANCELLED = 35;
 
@@ -110,15 +108,6 @@ class Status extends ModelEntity
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
-
-    /**
-     * @var string
-     *
-     * @deprecated Use 'name' in conjunction with the 'backend/static/*' snippet namespaces instead
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
-     */
-    private $description = '';
 
     /**
      * @var int
@@ -165,34 +154,6 @@ class Status extends ModelEntity
     public function setName($name)
     {
         $this->name = $name;
-    }
-
-    /**
-     * Set description
-     *
-     * @deprecated Use getName() + snippets instead
-     *
-     * @param string $description
-     *
-     * @return Status
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @deprecated Use getName() + snippets instead
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**

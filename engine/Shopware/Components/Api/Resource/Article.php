@@ -277,7 +277,7 @@ class Article extends Resource implements BatchInterface
         $totalResult = $paginator->count();
 
         /**
-         * @Deprecated
+         * @Deprecated Since 5.4, to be removed in 5.6
          *
          * To support Shopware <= 5.3 we make sure the lastStock-column of the main variant is being used instead of the
          * one on the product itself.
@@ -345,7 +345,7 @@ class Article extends Resource implements BatchInterface
         }
 
         /*
-         * @Deprecated
+         * @Deprecated Since 5.4, to be removed in 5.6
          *
          * Necessary for backward compatibility with < 5.4, will be removed in 5.6
          *
@@ -781,7 +781,7 @@ class Article extends Resource implements BatchInterface
             ->leftJoin('configuratorSet.groups', 'groups')
             ->addOrderBy('groups.position', 'ASC')
             ->where('article.id = :articleId')
-            ->setParameters(['articleId' => $articleId]);
+            ->setParameter(':articleId', $articleId);
 
         return $this->getSingleResult($builder);
     }
@@ -803,7 +803,7 @@ class Article extends Resource implements BatchInterface
             ->where('article.id = :articleId')
             ->orderBy('images.position', 'ASC')
             ->andWhere('images.parentId IS NULL')
-            ->setParameters(['articleId' => $articleId]);
+            ->setParameter('articleId', $articleId);
 
         return $this->getFullResult($builder);
     }
@@ -1069,7 +1069,7 @@ class Article extends Resource implements BatchInterface
 
         foreach ($data['variants'] as $variantData) {
             /*
-             * @Deprecated
+             * @Deprecated Since 5.4, to be removed in 5.6
              *
              * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
              *

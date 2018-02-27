@@ -33,7 +33,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\Query\SqlWalker;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -292,79 +291,6 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * Shopware helper function to extend an attribute table.
-     *
-     * @param string $table    Full table name. Example: "s_user_attributes"
-     * @param string $prefix   Column prefix. The prefix and column parameter will be the column name. Example: "swag".
-     * @param string $column   The column name
-     * @param string $type     Full type declaration. Example: "VARCHAR( 5 )" / "DECIMAL( 10, 2 )"
-     * @param bool   $nullable Deprecated and unused
-     * @param null   $default  Default value of the column
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @deprecated since version 5.2.2, to be removed in 5.4 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead
-     */
-    public function addAttribute($table, $prefix, $column, $type, $nullable = true, $default = null)
-    {
-        if (empty($table)) {
-            throw new \InvalidArgumentException('No table name passed');
-        }
-        if (strpos($table, '_attributes') === false) {
-            throw new \InvalidArgumentException('The passed table name is no attribute table');
-        }
-        if (empty($prefix)) {
-            throw new \InvalidArgumentException('No column prefix passed');
-        }
-        if (empty($column)) {
-            throw new \InvalidArgumentException('No column name passed');
-        }
-        if (empty($type)) {
-            throw new \InvalidArgumentException('No column type passed');
-        }
-
-        $type = $this->convertColumnType($type);
-        $prefixedColumn = $prefix . '_' . $column;
-
-        /** @var CrudService $crudService */
-        $crudService = Shopware()->Container()->get('shopware_attribute.crud_service');
-        $crudService->update($table, $prefixedColumn, $type, [], null, false, $default);
-    }
-
-    /**
-     * Shopware Helper function to remove an attribute column.
-     *
-     * @param string $table
-     * @param string $prefix
-     * @param string $column
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @deprecated since version 5.2.2, to be removed in 5.4 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::delete instead
-     */
-    public function removeAttribute($table, $prefix, $column)
-    {
-        if (empty($table)) {
-            throw new \InvalidArgumentException('No table name passed');
-        }
-        if (strpos($table, '_attributes') === false) {
-            throw new \InvalidArgumentException('The passed table name is no attribute table');
-        }
-        if (empty($prefix)) {
-            throw new \InvalidArgumentException('No column prefix passed');
-        }
-        if (empty($column)) {
-            throw new \InvalidArgumentException('No column name passed');
-        }
-
-        $prefixedColumn = $prefix . '_' . $column;
-
-        /** @var CrudService $crudService */
-        $crudService = Shopware()->Container()->get('shopware_attribute.crud_service');
-        $crudService->delete($table, $prefixedColumn, false);
-    }
-
-    /**
      * Serialize an entity to an array
      *
      * @author      Boris Guéry <guery.b@gmail.com>
@@ -401,11 +327,11 @@ class ModelManager extends EntityManager
             $key = Inflector::tableize($field);
             if ($mapping['isCascadeDetach']) {
                 $data[$key] = $metadata->reflFields[$field]->getValue($entity);
-                if (null !== $data[$key]) {
+                if ($data[$key] !== null) {
                     $data[$key] = $this->serializeEntity($data[$key]);
                 }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
-                if (null !== $metadata->reflFields[$field]->getValue($entity)) {
+                if ($metadata->reflFields[$field]->getValue($entity) !== null) {
                     $data[$key] = $this->getUnitOfWork()
                         ->getEntityIdentifier(
                             $metadata->reflFields[$field]

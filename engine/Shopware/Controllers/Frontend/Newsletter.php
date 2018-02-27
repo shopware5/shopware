@@ -28,20 +28,6 @@
 class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 {
     /**
-     * Transition method
-     * Confirm action method
-     *
-     * @deprecated
-     */
-    public function confirmAction()
-    {
-        // todo@all maybe this method can be deleted once all references are removed
-        // transition method
-        // confirm check is done via helper method isConfirmed()
-        return $this->forward('index');
-    }
-
-    /**
      * Index action method
      */
     public function indexAction()

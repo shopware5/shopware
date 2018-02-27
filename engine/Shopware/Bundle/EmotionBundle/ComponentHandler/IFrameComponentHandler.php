@@ -29,13 +29,10 @@ use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * Class EventComponentHandler
- *
- * @deprecated since 5.3, removed in 5.5. This is a legacy layer which supports an deprecated event. Implement a ComponentHandler instead.
- */
-class EventComponentHandler implements ComponentHandlerInterface
+class IFrameComponentHandler implements ComponentHandlerInterface
 {
+    const COMPONENT_NAME = 'emotion-components-iframe';
+
     /**
      * @var \Enlight_Event_EventManager
      */
@@ -56,7 +53,7 @@ class EventComponentHandler implements ComponentHandlerInterface
      */
     public function supports(Element $element)
     {
-        return false;
+        return $element->getComponent()->getType() === self::COMPONENT_NAME;
     }
 
     /**
@@ -81,8 +78,6 @@ class EventComponentHandler implements ComponentHandlerInterface
 
         $data = array_merge($element->getConfig()->getAll(), $element->getData()->getAll());
         $data['objectId'] = md5($element->getId());
-
-        $data = $this->eventManager->filter('Shopware_Controllers_Widgets_Emotion_AddElement', $data, ['element' => $elementData]);
 
         foreach ($data as $key => $value) {
             $element->getData()->set($key, $value);

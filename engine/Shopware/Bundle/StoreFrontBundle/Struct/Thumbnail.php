@@ -90,22 +90,6 @@ class Thumbnail extends Extendable
     }
 
     /**
-     * @deprecated deprecated since version 5.1, please build the sourceSet in a hydrator or view
-     *
-     * @param string $imageDir
-     *
-     * @return string
-     */
-    public function getSourceSet($imageDir)
-    {
-        if ($this->retinaSource !== null) {
-            return sprintf('%s%s, %s%s 2x', $imageDir, $this->source, $imageDir, $this->retinaSource);
-        }
-
-        return $imageDir . $this->source;
-    }
-
-    /**
      * @return int
      */
     public function getMaxWidth()

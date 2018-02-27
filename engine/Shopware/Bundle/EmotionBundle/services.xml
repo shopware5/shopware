@@ -44,7 +44,6 @@
         <service id="shopware_emotion.emotion_element_service" class="Shopware\Bundle\EmotionBundle\Service\EmotionElementService">
             <argument type="collection" />
             <argument type="service" id="shopware_emotion.emotion_element_gateway" />
-            <argument type="service" id="shopware_emotion.component_handler.event_fallback" />
             <argument type="service" id="shopware_emotion.data_collection_resolver" />
         </service>
 
@@ -57,11 +56,6 @@
 
 
         <!-- ComponentHandler -->
-        <service id="shopware_emotion.component_handler.event_fallback" class="Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler">
-            <argument type="service" id="events" />
-            <tag name="shopware_emotion.component_handler"/>
-        </service>
-
         <service id="shopware_emotion.component_handler.article" class="Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler">
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="config" />
@@ -108,6 +102,26 @@
 
         <service id="shopware_emotion.component_handler.banner_slider" class="Shopware\Bundle\EmotionBundle\ComponentHandler\BannerSliderComponentHandler">
             <argument type="service" id="shopware_media.media_service" />
+            <tag name="shopware_emotion.component_handler"/>
+        </service>
+
+        <service id="shopware_emotion.component_handler.youtube" class="Shopware\Bundle\EmotionBundle\ComponentHandler\YoutubeComponentHandler">
+            <argument type="service" id="events" />
+            <tag name="shopware_emotion.component_handler"/>
+        </service>
+
+        <service id="shopware_emotion.component_handler.html_element" class="Shopware\Bundle\EmotionBundle\ComponentHandler\HtmlElementComponentHandler">
+            <argument type="service" id="events" />
+            <tag name="shopware_emotion.component_handler"/>
+        </service>
+
+        <service id="shopware_emotion.component_handler.iframe" class="Shopware\Bundle\EmotionBundle\ComponentHandler\IFrameComponentHandler">
+            <argument type="service" id="events" />
+            <tag name="shopware_emotion.component_handler"/>
+        </service>
+
+        <service id="shopware_emotion.component_handler.html_code" class="Shopware\Bundle\EmotionBundle\ComponentHandler\HtmlCodeComponentHandler">
+            <argument type="service" id="events" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
