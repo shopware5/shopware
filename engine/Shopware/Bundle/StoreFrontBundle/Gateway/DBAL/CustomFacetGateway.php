@@ -165,7 +165,13 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $facets = [];
         foreach ($data as $row) {
             $id = (int) $row['__customFacet_id'];
-            $facets[$id] = $this->hydrator->hydrateFacet($row, $streams);
+
+            $hydratedFacet = $this->hydrator->hydrateFacet($row, $streams);
+
+            if ($hydratedFacet === null) {
+                continue;
+            }
+            $facets[$id] = $hydratedFacet;
         }
 
         return $facets;

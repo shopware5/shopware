@@ -206,9 +206,12 @@ class ProductProvider implements ProductProviderInterface
                             $product->getFullConfiguration()
                         )
                     );
-                    $product->setListingVariationPrices(
-                        $listingPrices[$product->getNumber()]
-                    );
+
+                    if (array_key_exists($product->getNumber(), $listingPrices)) {
+                        $product->setListingVariationPrices(
+                            $listingPrices[$product->getNumber()]
+                        );
+                    }
                 }
             } else {
                 if (!$product->isMainVariant()) {

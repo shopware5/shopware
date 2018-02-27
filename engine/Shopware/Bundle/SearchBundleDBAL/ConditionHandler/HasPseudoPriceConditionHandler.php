@@ -28,6 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\CriteriaAwareInterface;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -37,7 +38,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
+class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
     /**
      * @var ListingPriceSwitcher
@@ -73,5 +74,10 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
         $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
 
         $query->andWhere('listing_price.pseudoprice > 0');
+    }
+
+    public function setCriteria(Criteria $criteria)
+    {
+        $this->criteria = $criteria;
     }
 }

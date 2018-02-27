@@ -181,8 +181,7 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
     createGrid: function () {
         var me = this;
 
-        me.mappingGrid = {
-            xtype: 'grid',
+        me.mappingGrid = Ext.create('Ext.grid.Panel', {
             name: 'mapping-grid',
             store: me.store,
             selModel: me.getGridSelModel(),
@@ -195,7 +194,7 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
                 },
                 me.createActionColumn()
             ]
-        };
+        });
         return me.mappingGrid;
     },
 

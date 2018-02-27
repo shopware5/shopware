@@ -210,11 +210,11 @@
             {$lastSeenProductsConfig.currentArticle = $sLastArticlesConfig}
             {$lastSeenProductsConfig.currentArticle.articleId = $sArticle.articleID}
             {$lastSeenProductsConfig.currentArticle.linkDetailsRewritten = $sArticle.linkDetailsRewrited}
-            {$lastSeenProductsConfig.currentArticle.articleName = $sArticle.articleName|escape:"javascript"}
+            {$lastSeenProductsConfig.currentArticle.articleName = $sArticle.articleName}
             {if $sArticle.additionaltext}
-                {$lastSeenProductsConfig.currentArticle.articleName = $lastSeenProductsConfig.currentArticle.articleName|cat:' ':$sArticle.additionaltext|escape:"javascript"}
+                {$lastSeenProductsConfig.currentArticle.articleName = $lastSeenProductsConfig.currentArticle.articleName|cat:' ':$sArticle.additionaltext}
             {/if}
-            {$lastSeenProductsConfig.currentArticle.imageTitle = $sArticle.image.description|escape:"javascript"}
+            {$lastSeenProductsConfig.currentArticle.imageTitle = $sArticle.image.description}
             {$lastSeenProductsConfig.currentArticle.images = []}
 
             {foreach $sArticle.image.thumbnails as $key => $image}
@@ -248,7 +248,7 @@
                 var controller = controller || JSON.parse('{$controllerData|json_encode}');
                 var snippets = snippets || JSON.parse('{$snippetsData|json_encode}');
                 var themeConfig = themeConfig || JSON.parse('{$themeConfig|json_encode}');
-                var lastSeenProductsConfig = lastSeenProductsConfig || JSON.parse('{$lastSeenProductsConfig|json_encode}');
+                var lastSeenProductsConfig = lastSeenProductsConfig || {$lastSeenProductsConfig|json_encode};
                 var csrfConfig = csrfConfig || JSON.parse('{$csrfConfig|json_encode}');
                 var statisticDevices = [
                     { device: 'mobile', enter: 0, exit: 767 },
