@@ -21,27 +21,26 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-class Migrations_Migration966 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1402 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        // Add the standard document keys as well as a fallback naming for documents
-        // added by plugins.
+        // Add the standard document keys as well as a fallback naming for documents added by plugins.
         $sql = <<<'EOF'
 ALTER TABLE `s_core_documents`
     ADD COLUMN `key` varchar(255) COLLATE utf8_unicode_ci;
 UPDATE s_core_documents as doc
-	SET `key` = (CASE	WHEN id = 1 THEN 'invoice'
-					 	WHEN id = 2 THEN 'delivery_note'
-					 	WHEN id = 3 THEN 'credit'
-					 	WHEN id = 4 THEN 'cancellation'
-					 	ELSE CONCAT(doc.name, "_", doc.id)
-					END
+	SET `key` = (CASE WHEN id = 1 THEN 'invoice'
+					  WHEN id = 2 THEN 'delivery_note'
+					  WHEN id = 3 THEN 'credit'
+					  WHEN id = 4 THEN 'cancellation'
+					  ELSE CONCAT(doc.name, "_", doc.id)
+                 END
 	);
 ALTER TABLE `s_core_documents`
-    MODIFY COLUMN `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL UNIQUE;
+    MODIFY COLUMN `key` varchar(255) COLLATE utf8_unicode_ci NULL UNIQUE;
 EOF;
+        // Column `key` can initially be null due to blue/green deployment concerns
 
         $this->addSql($sql);
     }

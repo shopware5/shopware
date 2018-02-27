@@ -60,7 +60,7 @@ class Document extends ModelEntity
      * from its id or name, because these values may have been changed by the user.
      *
      * @var string
-     * @ORM\Column(name="`key`", type="string", nullable=false, unique=true)
+     * @ORM\Column(name="`key`", type="string", nullable=true, unique=true)
      */
     private $key;
 
@@ -346,8 +346,6 @@ class Document extends ModelEntity
     }
 
     /**
-     * Gets the top-value of the document.
-     *
      * Gets the top-value of the document.
      *
      * @return int
