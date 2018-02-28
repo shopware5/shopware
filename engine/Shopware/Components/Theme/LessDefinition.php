@@ -107,7 +107,7 @@ class LessDefinition
     /**
      * @param array $config          contains the less variables, has to be a key value array
      * @param array $files           contains the full file name paths
-     * @param null  $importDirectory Full path to the import directory for less @import commands
+     * @param string|null  $importDirectory Full path to the import directory for less @import commands
      * @param Theme|null $theme           the corresponding theme
      */
     public function __construct(array $config = [], array $files = [], $importDirectory = null, Theme $theme = null)
