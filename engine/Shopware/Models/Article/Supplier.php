@@ -119,7 +119,7 @@ class Supplier extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="img", type="string", nullable=true)
+     * @ORM\Column(name="img", type="string", nullable=false)
      */
     private $image = '';
 
@@ -128,7 +128,7 @@ class Supplier extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="link", type="string", nullable=true)
+     * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link = '';
 
