@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added new optional parameter `$filterGroupIds` to `PropertyGatewayInterface.php` for proper property sorting in a listing
+* Added variant filtering to selection product streams
 
 ### Changes
 
