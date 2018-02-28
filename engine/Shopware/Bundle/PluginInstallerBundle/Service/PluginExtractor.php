@@ -102,8 +102,8 @@ class PluginExtractor
         }
 
         $prefix = $this->getPluginPrefix($archive);
-        $this->validatePluginRequirements($prefix, $archive);
         $this->validatePluginZip($prefix, $archive);
+        $this->validatePluginRequirements($prefix, $archive);
 
         $oldFile = $this->findOldFile($prefix);
         $backupFile = $this->createBackupFile($oldFile);
