@@ -30,11 +30,11 @@ use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\MetaStruct;
+use Shopware\Components\ShopwareReleaseStruct;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
-use Symfony\Component\Filesystem\Filesystem;
 
 class DownloadService
 {
@@ -59,21 +59,29 @@ class DownloadService
     private $downloadsDir;
 
     /**
-     * @param string      $rootDir
-     * @param array       $pluginDirectories
+     * @var PluginExtractor
+     */
+    private $pluginExtractor;
+
+    /**
+     * @param string $rootDir
+     * @param array $pluginDirectories
      * @param StoreClient $storeClient
-     * @param Connection  $connection
+     * @param Connection $connection
+     * @param PluginExtractor $pluginExtractor
      */
     public function __construct(
         $rootDir,
         array $pluginDirectories,
         StoreClient $storeClient,
-        Connection $connection
+        Connection $connection,
+        PluginExtractor $pluginExtractor
     ) {
         $this->pluginDirectories = $pluginDirectories;
         $this->storeClient = $storeClient;
         $this->connection = $connection;
         $this->downloadsDir = $rootDir;
+        $this->pluginExtractor = $pluginExtractor;
     }
 
     /**
@@ -117,9 +125,7 @@ class DownloadService
             $extractor = new LegacyPluginExtractor();
             $extractor->extract($archive, $destination);
         } elseif ($pluginZipDetector->isPlugin($archive)) {
-            $pluginDir = $this->pluginDirectories['ShopwarePlugins'];
-            $extractor = new PluginExtractor($pluginDir, new Filesystem(), $this->pluginDirectories);
-            $extractor->extract($archive);
+            $this->pluginExtractor->extract($archive);
         } else {
             throw new \RuntimeException('No Plugin found in archive.');
         }
