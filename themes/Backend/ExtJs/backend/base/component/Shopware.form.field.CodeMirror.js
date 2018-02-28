@@ -178,6 +178,15 @@ Ext.define('Shopware.form.field.CodeMirror',
 
         me.config = config;
 
+        if (me.config.mode === 'smarty') {
+            me.config.mode = {
+                name: 'smarty',
+                version: 3
+            }
+        } else if(me.config.mode.name === 'smarty') {
+            me.config.mode.version = 3;
+        }
+
         if (!Ext.isDefined(CodeMirror.loadedModes)) {
             CodeMirror.loadedModes = {}
         }
