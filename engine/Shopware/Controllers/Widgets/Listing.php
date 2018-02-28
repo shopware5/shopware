@@ -21,13 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 
 /**
@@ -63,9 +60,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($ordernumber, $categoryId, $this->Request());
 
-        $linkRewriter = function ($link) {
-            return Shopware()->Modules()->Core()->sRewriteLink($link);
-        };
+            $linkRewriter = function ($link) {
+                return Shopware()->Modules()->Core()->sRewriteLink($link);
+            };
 
             if (isset($navigation['previousProduct'])) {
                 $navigation['previousProduct']['href'] = $linkRewriter($navigation['previousProduct']['link']);
@@ -528,6 +525,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'pageIndex' => (int) $this->Request()->getParam('sPage'),
             'productBoxLayout' => $boxLayout,
             'sCategoryCurrent' => $categoryId,
+            'sCategoryContent' => Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId),
         ]);
 
         return $this->View()->fetch('frontend/listing/listing_ajax.tpl');
