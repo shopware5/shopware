@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Shopware\Components\Plugin\RequirementValidator;
+use Shopware\Components\ShopwareReleaseStruct;
 use Symfony\Component\Filesystem\Filesystem;
 
 class PluginExtractor
@@ -41,18 +43,37 @@ class PluginExtractor
     /**
      * @var string[]
      */
-    private $pluginDirectories = [];
+    private $pluginDirectories;
 
     /**
-     * @param string     $pluginDir
-     * @param Filesystem $filesystem
-     * @param string[]   $pluginDirectories
+     * @var ShopwareReleaseStruct
      */
-    public function __construct($pluginDir, Filesystem $filesystem, array $pluginDirectories = [])
-    {
+    private $release;
+
+    /**
+     * @var RequirementValidator
+     */
+    private $requirementsValidator;
+
+    /**
+     * @param string                $pluginDir
+     * @param Filesystem            $filesystem
+     * @param string[]              $pluginDirectories
+     * @param ShopwareReleaseStruct $release
+     * @param RequirementValidator  $requirementValidator
+     */
+    public function __construct(
+        $pluginDir,
+        Filesystem $filesystem,
+        array $pluginDirectories = [],
+        ShopwareReleaseStruct $release,
+        RequirementValidator $requirementValidator
+    ) {
         $this->pluginDir = $pluginDir;
         $this->filesystem = $filesystem;
         $this->pluginDirectories = $pluginDirectories;
+        $this->release = $release;
+        $this->requirementsValidator = $requirementValidator;
     }
 
     /**
@@ -72,6 +93,7 @@ class PluginExtractor
 
         $prefix = $this->getPluginPrefix($archive);
         $this->validatePluginZip($prefix, $archive);
+        $this->validatePluginRequirements($prefix, $archive);
 
         $oldFile = $this->findOldFile($prefix);
         $backupFile = $this->createBackupFile($oldFile);
@@ -207,5 +229,22 @@ class PluginExtractor
         $this->filesystem->rename($oldFile, $backupFile);
 
         return $backupFile;
+    }
+
+    /**
+     * @param string      $prefix
+     * @param \ZipArchive $archive
+     */
+    private function validatePluginRequirements($prefix, \ZipArchive $archive)
+    {
+        if ($xml = $archive->getFromName($prefix . '/plugin.xml')) {
+            $tmpFile = tempnam(sys_get_temp_dir(), uniqid()) . '.xml';
+            file_put_contents($tmpFile, $xml);
+            try {
+                $this->requirementsValidator->validate($tmpFile, $this->release->getVersion());
+            } finally {
+                unlink($tmpFile);
+            }
+        }
     }
 }
