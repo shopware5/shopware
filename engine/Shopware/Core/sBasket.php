@@ -1031,7 +1031,7 @@ class sBasket
             $tax = $this->config->get('sDISCOUNTTAX');
         }
 
-        if (!$tax) {
+        if (!$tax && $tax != 0) {
             $tax = 19;
         }
 
