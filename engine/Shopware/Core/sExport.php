@@ -880,6 +880,14 @@ class sExport
             $sql_add_group_by = '';
         }
 
+        $attributeColumns = 'at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20';
+
+        // Workaround to fetch all attribute columns without also fetching possible NULL articleIDs
+        $attributeColumnNames = $this->db->fetchRow('SELECT * FROM s_articles_attributes LIMIT 1');
+        if (!empty($attributeColumnNames)) {
+            unset($attributeColumnNames['id'], $attributeColumnNames['articleID'], $attributeColumnNames['articledetailsID']);
+            $attributeColumns = trim('at.' . implode(',at.', array_keys($attributeColumnNames)), ',');
+        }
         $sql = "
             SELECT
                 a.id as `articleID`,
@@ -936,7 +944,9 @@ class sExport
                 d.stockmin,
                 d.weight,
                 d.position,
-                `at`.*,
+
+                {$attributeColumns},
+
                 s.name as supplier,
                 u.unit,
                 u.description as unit_description,
