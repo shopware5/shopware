@@ -38,6 +38,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added the following arguments to `notify` event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable`: 
     * `shopContext` – The context of the shop being processed
     * `cachedTime` – `\DateTime` instance used for the new entries
+* Added Smarty block `frontend_register_back_to_shop_button` to `themes/Frontend/Bare/frontend/register/index.tpl`
 * Added Smarty blocks to `themes/Frontend/Bare/frontend/listing/actions/action-filter-facets.tpl`:
   * `frontend_listing_actions`
   * `frontend_listing_actions_facet`
