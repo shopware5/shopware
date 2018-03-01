@@ -30,6 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CloseoutConditionHandler;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -172,6 +173,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
                  AND product.active = 1'
             );
         }
+        $query->addState(CloseoutConditionHandler::STATE_INCLUDES_VARIANT_TABLE);
         $query->innerJoin(
             'variant',
             's_articles_attributes',
