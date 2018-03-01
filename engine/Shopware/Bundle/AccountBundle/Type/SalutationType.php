@@ -49,7 +49,7 @@ class SalutationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $salutations = explode(',', $this->config->get('shopsalutations'));
-        $resolver->setDefaults(['choices' => array_flip($salutations)]);
+        $resolver->setDefaults(['choices' => $salutations]);
     }
 
     /**
