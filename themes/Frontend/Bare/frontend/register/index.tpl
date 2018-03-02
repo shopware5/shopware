@@ -13,7 +13,7 @@
 {* Back to the shop button *}
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
-    {block name='frontend_register_back_to_shop_button'}
+    {block name='frontend_register_index_back_to_shop_button'}
         {if $theme.checkoutHeader && !$toAccount}
             <a href="{url controller='index'}"
                class="btn is--small btn--back-top-shop is--icon-left"
