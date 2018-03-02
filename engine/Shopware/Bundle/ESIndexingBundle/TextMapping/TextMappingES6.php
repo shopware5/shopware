@@ -22,37 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
+namespace Shopware\Bundle\ESIndexingBundle\TextMapping;
 
-use Elasticsearch\Client;
-use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2;
-use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5;
-use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 
-class TextMappingFactory
+class TextMappingES6 implements TextMappingInterface
 {
     /**
-     * @param Client $client
-     *
-     * @return TextMappingInterface
+     * {@inheritdoc}
      */
-    public static function factory(Client $client)
+    public function getTextField()
     {
-        try {
-            $info = $client->info([]);
-        } catch (\Exception $e) {
-            return new TextMappingES2();
-        }
+        return ['type' => 'text', 'fielddata' => true];
+    }
 
-        if (version_compare($info['version']['number'], '6', '>=')) {
-            return new TextMappingES6();
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function getNotAnalyzedField()
+    {
+        return ['type' => 'keyword'];
+    }
 
-        if (version_compare($info['version']['number'], '5', '>=')) {
-            return new TextMappingES5();
-        }
-
-        return new TextMappingES2();
+    /**
+     * {@inheritdoc}
+     */
+    public function getKeywordField()
+    {
+        return ['type' => 'keyword'];
     }
 }
