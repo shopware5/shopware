@@ -254,7 +254,11 @@ class PluginExtractor
         if ($xml = $archive->getFromName($prefix . '/plugin.xml')) {
             $tmpFile = $this->downloadDir . '/' . uniqid() . '.xml';
             file_put_contents($tmpFile, $xml);
-            $this->requirementsValidator->validate($tmpFile, $this->release->getVersion());
+            try {
+                $this->requirementsValidator->validate($tmpFile, $this->release->getVersion());
+            } finally {
+                unlink($tmpFile);
+            }
             unlink($tmpFile);
         }
     }
