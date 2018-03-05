@@ -259,7 +259,6 @@ class PluginExtractor
             } finally {
                 unlink($tmpFile);
             }
-            unlink($tmpFile);
         }
     }
 }
