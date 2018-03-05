@@ -107,12 +107,15 @@ class VariantListingPriceService
         foreach ($result->getProducts() as $product) {
             $number = $product->getNumber();
 
+            /* @var $cheapestPriceRule PriceRule */
             if (!array_key_exists($number, $cheapestPriceData)) {
-                continue;
+                $cheapestPriceRule = $product->getPriceRules()[0];
+                $displayFromPrice = $product->displayFromPrice();
+            } else {
+                $cheapestPriceRule = $cheapestPriceData[$number]['price'];
+                $displayFromPrice = $cheapestPriceData[$number]['different_price_count'] > 1;
             }
 
-            /** @var $cheapestPriceRule PriceRule */
-            $cheapestPriceRule = $cheapestPriceData[$number]['price'];
             if ($product->isPriceGroupActive()) {
                 $cheapestPriceRule = $this->calculatePriceGroupDiscounts($product, $cheapestPriceRule, $context);
             }
@@ -125,7 +128,7 @@ class VariantListingPriceService
                 $product->setListingPrice($product->getCheapestPrice());
             }
 
-            $product->setDisplayFromPrice($cheapestPriceData[$number]['different_price_count'] > 1);
+            $product->setDisplayFromPrice($displayFromPrice);
         }
     }
 
