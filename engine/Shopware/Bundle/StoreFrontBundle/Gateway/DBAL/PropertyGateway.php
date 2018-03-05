@@ -101,7 +101,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $valueIds, Struct\ShopContextInterface $context)
+    public function getList(array $valueIds, Struct\ShopContextInterface $context, array $filterGroupIds = [])
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -127,6 +127,11 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             ->groupBy('propertyOption.id')
             ->orderBy('propertySet.position')
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
+
+        if ($filterGroupIds) {
+            $query->andWhere('propertySet.id IN (:filterSetIds)')
+                ->setParameter(':filterSetIds', $filterGroupIds, Connection::PARAM_INT_ARRAY);
+        }
 
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addPropertySetTranslation($query, $context);
