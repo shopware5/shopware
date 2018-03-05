@@ -17,6 +17,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed Smarty to improve error message when a template extends a parent template and said parent does not exist
 * Changed cloning of `Enlight_Template_Manager` object to preserve reference of the security policy to the instance  
 
+### Removals
+
+* Removed deprecated blocks `frontend_detail_data_liveshopping` and `frontend_detail_data_price_info` from `frontend/detail/data.tpl`
+
 ## 5.4.0
 
 [View all changes from v5.3.7...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.7...v5.4.0)
