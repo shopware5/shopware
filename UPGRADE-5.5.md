@@ -51,6 +51,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added new config parameters `write_backlog`, `enabled` and `backend` to `es` parameter
 * Added ability to translate shop forms
 * Added attributes to shop forms page
+* Added the following arguments to `notify` event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable`: `shopContext` – The context of the shop being processed; `cachedTime` – `\DateTime` instance used for the new entries
 
 ### Changes
 
