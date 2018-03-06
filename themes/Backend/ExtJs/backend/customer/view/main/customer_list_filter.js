@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
         var customerGroupStore = factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group");
         var shopStore = factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop");
         var salutationStore = Ext.create('Shopware.apps.Base.store.Salutation');
+        var countryStore = factory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
         var modeStore = Ext.create('Ext.data.Store', {
             fields: ['key', 'label'],
             data: [
@@ -94,6 +95,13 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                 city: {
                     fieldLabel: '{s name="city"}{/s}',
                     expression: 'LIKE'
+                },
+                countryId: {
+                    xtype: 'combobox',
+                    displayField: 'name',
+                    valueField: 'id',
+                    store: countryStore,
+                    fieldLabel: '{s name="column/country"}{/s}'
                 },
                 active: {
                     fieldLabel: '{s name="active"}{/s}'
