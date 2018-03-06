@@ -396,6 +396,14 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     public function initTemplate($mailing)
     {
         $template = clone Shopware()->Template();
+        $shop = Shopware()->Shop();
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $config = $inheritance->buildConfig(
+            $shop->getTemplate(),
+            $shop,
+            false
+        );
 
         $user = $this->getMailingUserByEmail(Shopware()->Config()->Mail);
         $template->assign('sUser', $user, true);
@@ -406,8 +414,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $template->assign('sCampaign', $this->getMailingDetails($mailing['id']), true);
         $template->assign('sConfig', Shopware()->Config());
         $template->assign('sBasefile', Shopware()->Config()->BaseFile);
-
-        $shop = Shopware()->Shop();
+        $template->assign('theme', $config);
 
         if (!$template->isCached($mailing['template'])) {
             $template->assign('sMailing', $mailing);
