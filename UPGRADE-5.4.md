@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Changed Smarty to improve error message when a template extends a parent template and said parent does not exist
 * Changed cloning of `Enlight_Template_Manager` object to preserve reference of the security policy to the instance  
+* Changed condition in `sBasket::sGetAmountRestrictedArticles`, it now also checks for an empty `$articles` array
 
 ### Removals
 
