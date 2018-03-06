@@ -27,11 +27,12 @@ namespace Shopware\Commands;
 use Shopware\Components\Theme\Generator;
 use Shopware\Components\Theme\Installer;
 use Shopware\Models\Shop\Template;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @category  Shopware
@@ -177,9 +178,10 @@ EOF
         $optionValue = $input->getOption($optionKey);
 
         if (empty($optionValue)) {
-            $helper = $this->getHelper('dialog');
-            $question = sprintf('Please enter the %s: ', $optionKey);
-            $optionValue = $helper->ask($output, $question);
+            /** @var QuestionHelper $questionHelper */
+            $questionHelper = $this->getHelper('question');
+            $question = new Question(sprintf('Please enter the %s: ', $optionKey));
+            $optionValue = $questionHelper->ask($input, $output, $question);
         }
 
         return $optionValue;
