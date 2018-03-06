@@ -60,6 +60,8 @@ Ext.define('Shopware.apps.Customer.model.QuickView', {
         { name: 'lastname', type: 'string' },
         { name: 'zipcode', type: 'string' },
         { name: 'city', type: 'string' },
+        { name: 'countryId', type: 'int' },
+        { name: 'countryName', type: 'string' },
         { name: 'company', type: 'string' },
         { name: 'birthday', type: 'date', useNull: true }
     ],
