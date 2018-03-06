@@ -292,7 +292,9 @@ class Media extends Resource
      */
     public function load($url, $baseFilename = null)
     {
-        $destPath = Shopware()->DocPath('media_' . 'temp');
+        $projectDir = $this->getContainer()->getParameter('shopware.app.rootdir');
+        $destPath = $projectDir . 'media' . DIRECTORY_SEPARATOR . 'temp';
+
         if (!is_dir($destPath)) {
             mkdir($destPath, 0777, true);
         }
@@ -303,7 +305,9 @@ class Media extends Resource
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not exist.", $destPath)
             );
-        } elseif (!is_writable($destPath)) {
+        }
+
+        if (!is_writable($destPath)) {
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not have write permissions.", $destPath)
             );
@@ -327,11 +331,11 @@ class Media extends Resource
             case 'file':
                 $filename = $this->getUniqueFileName($destPath, $baseFilename);
 
-                if (!$put_handle = fopen("$destPath/$filename", 'w+')) {
+                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
                     throw new \Exception("Could not open $destPath/$filename for writing");
                 }
 
-                if (!$get_handle = fopen($url, 'r')) {
+                if (!$get_handle = fopen($url, 'rb')) {
                     throw new \Exception("Could not open $url for reading");
                 }
                 while (!feof($get_handle)) {
@@ -350,8 +354,8 @@ class Media extends Resource
     /**
      * Helper function to get a unique file name for the passed destination path.
      *
-     * @param $destPath
-     * @param null $baseFileName
+     * @param string      $destPath
+     * @param string|null $baseFileName
      *
      * @return null|string
      */

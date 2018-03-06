@@ -166,7 +166,7 @@ class sExport
     }
 
     /**
-     * @param int $customerGroup
+     * @param int|string $customerGroup
      *
      * @return bool
      */
@@ -247,7 +247,7 @@ class sExport
         $hash = $this->db->quote($this->sHash);
 
         /** @var $shopRepository \Shopware\Models\Shop\Repository */
-        $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $sql = "
             SELECT
@@ -341,7 +341,7 @@ class sExport
             ->getAlbumWithSettingsQuery(-1)
             ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
         $shop->setCurrency($repository->find($this->sCurrency['id']));
         $shop->registerResources();
 
@@ -1037,7 +1037,7 @@ class sExport
     }
 
     /**
-     * executes the current product export
+     * Executes the current product export
      *
      * @param resource $handleResource used as a file or the stdout to fetch the smarty output
      */
@@ -1236,7 +1236,7 @@ class sExport
     }
 
     /**
-     * @param string $country
+     * @param int|string $country
      *
      * @return bool|array
      */
@@ -1304,7 +1304,6 @@ class sExport
                 }
             }
         }
-        $cache[$payment]['surcharge'] = $cache[$payment]['surcharge'];
 
         return $cache[$payment];
     }

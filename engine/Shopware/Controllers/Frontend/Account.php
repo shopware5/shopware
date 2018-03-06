@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\ProfileUpdateFormType;
@@ -157,7 +156,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->sNumberPages = $orderData['numberOfPages'];
         $this->View()->sPages = $orderData['pages'];
 
-        //this has to be assigned here because the config method in smarty can't handle array structures
+        // This has to be assigned here because the config method in smarty can't handle array structures
         $this->View()->sDownloadAvailablePaymentStatus = Shopware()->Config()->get('downloadAvailablePaymentStatus');
     }
 
@@ -385,7 +384,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $file = 'files/' . Shopware()->Config()->get('sESDKEY') . '/' . $download['file'];
 
-        $filePath = Shopware()->DocPath() . $file;
+        $filePath = $this->container->getParameter('shopware.app.rootdir') . $file;
 
         if (!file_exists($filePath)) {
             $this->View()->sErrorCode = 2;
