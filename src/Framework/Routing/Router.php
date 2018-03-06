@@ -26,7 +26,6 @@ namespace Shopware\Framework\Routing;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Defaults;
 use Shopware\Kernel;
@@ -219,7 +218,6 @@ class Router implements RouterInterface, RequestMatcherInterface
             (float) $shop['currency_factor']
         );
 
-
         $seoUrl = $this->urlResolver->getUrl($shop['id'], $pathInfo, $shopContext);
 
         //generate new url with shop base path/url
@@ -287,22 +285,6 @@ class Router implements RouterInterface, RequestMatcherInterface
         $pathInfo = preg_replace('#^' . $stripBaseUrl . '#i', '', $pathInfo);
         $pathInfo = '/' . trim($pathInfo, '/');
 
-        $fallbackTranslationId = null;
-        if ($shop['fallback_translation_id']) {
-            $fallbackTranslationId = $shop['fallback_translation_id'];
-        }
-
-        $shopContext = new ShopContext(
-            $shop['id'],
-            [Defaults::CATALOGUE],
-            [],
-            $shop['currency_id'],
-            $shop['locale_id'],
-            $fallbackTranslationId,
-            Defaults::LIVE_VERSION,
-            (float) $shop['currency_factor']
-        );
-
         if (strpos($pathInfo, '/widgets/') !== false) {
             return $this->match($pathInfo);
         }
@@ -311,11 +293,29 @@ class Router implements RouterInterface, RequestMatcherInterface
             return $this->match($pathInfo);
         }
 
+        $shopContext = new ShopContext(
+            $shop['id'],
+            [Defaults::CATALOGUE],
+            [],
+            $shop['currency_id'],
+            $shop['locale_id'],
+            $shop['fallback_translation_id'] ?? null,
+            Defaults::LIVE_VERSION,
+            (float) $shop['currency_factor']
+        );
+
         //resolve seo urls to use symfony url matcher for route detection
         $seoUrl = $this->urlResolver->getPathInfo($shop['id'], $pathInfo, $shopContext);
 
         if (!$seoUrl) {
-            return $this->match($pathInfo);
+            try {
+                return $this->match($pathInfo);
+            } catch (\Exception $e) {
+                if ($requestType === self::REQUEST_TYPE_STOREFRONT) {
+                    return $this->match('/');
+                }
+                throw $e;
+            }
         }
 
         $pathInfo = $seoUrl->getPathInfo();
@@ -324,7 +324,14 @@ class Router implements RouterInterface, RequestMatcherInterface
             $request->attributes->set(self::SEO_REDIRECT_URL, $redirectUrl);
         }
 
-        return $this->match($pathInfo);
+        try {
+            return $this->match($pathInfo);
+        } catch (\Exception $e) {
+            if ($requestType === self::REQUEST_TYPE_STOREFRONT) {
+                return $this->match('/');
+            }
+            throw $e;
+        }
     }
 
     public function assemble(string $url): string

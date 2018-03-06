@@ -902,7 +902,7 @@ CREATE TABLE `product` (
   `unit_join_id` binary(16) DEFAULT NULL,
   `category_join_id` binary(16) DEFAULT NULL,
   `category_tree` json DEFAULT NULL,
-  `prices` json DEFAULT NULL,
+  `context_prices` json DEFAULT NULL,
   `supplier_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ean` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
@@ -1505,6 +1505,15 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`, `version_id`),
   UNIQUE KEY `username` (`username`, `version_id`),
   CONSTRAINT `fk_user.locale_id` FOREIGN KEY (`locale_id`, `locale_version_id`) REFERENCES `locale` (`id`, `version_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `context_rule`;
+CREATE TABLE `context_rule` (
+  `id` binary(16) NOT NULL,
+  `name` varchar(500) NOT NULL,
+  `payload` longtext NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `version`;

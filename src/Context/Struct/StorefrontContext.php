@@ -32,6 +32,8 @@ use Shopware\Api\Shipping\Struct\ShippingMethodBasicStruct;
 use Shopware\Api\Shop\Struct\ShopDetailStruct;
 use Shopware\Api\Tax\Collection\TaxBasicCollection;
 use Shopware\Cart\Delivery\Struct\ShippingLocation;
+use Shopware\Context\Exception\ContextRulesLockedException;
+use Shopware\Defaults;
 use Shopware\Framework\Struct\Struct;
 
 /**
@@ -86,6 +88,16 @@ class StorefrontContext extends Struct
      */
     protected $shippingLocation;
 
+    /**
+     * @var array
+     */
+    protected $contextRulesIds;
+
+    /**
+     * @var bool
+     */
+    protected $rulesLocked = false;
+
     public function __construct(
         ShopDetailStruct $shop,
         CurrencyBasicStruct $currency,
@@ -95,7 +107,8 @@ class StorefrontContext extends Struct
         PaymentMethodBasicStruct $paymentMethod,
         ShippingMethodBasicStruct $shippingMethod,
         ShippingLocation $shippingLocation,
-        ?CustomerBasicStruct $customer
+        ?CustomerBasicStruct $customer,
+        array $contextRulesIds = []
     ) {
         $this->currentCustomerGroup = $currentCustomerGroup;
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
@@ -106,6 +119,7 @@ class StorefrontContext extends Struct
         $this->paymentMethod = $paymentMethod;
         $this->shippingMethod = $shippingMethod;
         $this->shippingLocation = $shippingLocation;
+        $this->contextRulesIds = $contextRulesIds;
     }
 
     public function getCurrentCustomerGroup(): CustomerGroupBasicStruct
@@ -155,6 +169,34 @@ class StorefrontContext extends Struct
 
     public function getShopContext(): ShopContext
     {
-        return ShopContext::createFromShop($this->shop);
+        return new ShopContext(
+            $this->shop->getId(),
+            [Defaults::CATALOGUE],
+            $this->contextRulesIds,
+            $this->currency->getId(),
+            $this->shop->getId(),
+            $this->shop->getFallbackTranslationId(),
+            Defaults::LIVE_VERSION,
+            $this->currency->getFactor()
+        );
+    }
+
+    public function getContextRulesIds(): array
+    {
+        return $this->contextRulesIds;
+    }
+
+    public function setContextRulesIds(array $ruleIds): void
+    {
+        if ($this->rulesLocked) {
+            throw new ContextRulesLockedException();
+        }
+
+        $this->contextRulesIds = array_values($ruleIds);
+    }
+
+    public function lockRules()
+    {
+        $this->rulesLocked = true;
     }
 }

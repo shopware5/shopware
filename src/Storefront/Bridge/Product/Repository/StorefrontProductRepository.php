@@ -11,9 +11,6 @@ use Shopware\Api\Product\Repository\ProductRepository;
 use Shopware\Api\Product\Struct\ProductMediaSearchResult;
 use Shopware\Api\Product\Struct\ProductSearchResult;
 use Shopware\Cart\Price\PriceCalculator;
-use Shopware\Cart\Price\Struct\PriceDefinition;
-use Shopware\Cart\Tax\Struct\PercentageTaxRule;
-use Shopware\Cart\Tax\Struct\TaxRuleCollection;
 use Shopware\Context\Struct\StorefrontContext;
 use Shopware\Storefront\Bridge\Product\Struct\ProductBasicStruct;
 
@@ -82,21 +79,24 @@ class StorefrontProductRepository
         foreach ($products as $base) {
             /** @var ProductBasicStruct $product */
             $product = ProductBasicStruct::createFrom($base);
-
-            $taxRules = new TaxRuleCollection([
-                new PercentageTaxRule($product->getTax()->getRate(), 100),
-            ]);
-
-            $definition = new PriceDefinition($product->getPrice(), $taxRules, 1, true);
-            $product->setCalculatedPrice(
-                $this->priceCalculator->calculate($definition, $context)
-            );
-
-            $product->setMedia(
-                $media->filterByProductId($product->getId())
-            );
-
             $listingProducts->add($product);
+
+            //calculate listing price
+            $listingPriceDefinition = $product->getListingPriceDefinition($context->getShopContext());
+            $listingPrice = $this->priceCalculator->calculate($listingPriceDefinition, $context);
+            $product->setCalculatedListingPrice($listingPrice);
+
+            //calculate context prices
+            $contextPriceDefinitions = $product->getContextPriceDefinitions($context->getShopContext());
+            $contextPrices = $this->priceCalculator->calculateCollection($contextPriceDefinitions, $context);
+            $product->setCalculatedContextPrices($contextPrices);
+
+            //calculate simple price
+            $priceDefinition = $product->getPriceDefinition($context->getShopContext());
+            $price = $this->priceCalculator->calculate($priceDefinition, $context);
+            $product->setCalculatedPrice($price);
+
+            $product->setMedia($media->filterByProductId($product->getId()));
         }
 
         return $listingProducts;

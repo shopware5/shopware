@@ -25,11 +25,14 @@
 namespace Shopware\Storefront\Context;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
+use Shopware\CartBridge\Service\StoreFrontCartService;
 use Shopware\Context\Service\ContextFactoryInterface;
+use Shopware\Context\Service\ContextRuleLoader;
 use Shopware\Context\Struct\CheckoutScope;
 use Shopware\Context\Struct\CustomerScope;
-use Shopware\Context\Struct\StorefrontContext;
 use Shopware\Context\Struct\ShopScope;
+use Shopware\Context\Struct\StorefrontContext;
 use Shopware\Storefront\Firewall\CustomerUser;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -72,18 +75,32 @@ class StorefrontContextService implements StorefrontContextServiceInterface
      */
     private $context;
 
+    /**
+     * @var ContextRuleLoader
+     */
+    private $contextRuleLoader;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         RequestStack $requestStack,
         ContextFactoryInterface $factory,
         CacheItemPoolInterface $cache,
         SerializerInterface $serializer,
-        TokenStorageInterface $securityTokenStorage
+        TokenStorageInterface $securityTokenStorage,
+        ContextRuleLoader $contextRuleLoader,
+        LoggerInterface $logger
     ) {
         $this->requestStack = $requestStack;
         $this->factory = $factory;
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->securityTokenStorage = $securityTokenStorage;
+        $this->contextRuleLoader = $contextRuleLoader;
+        $this->logger = $logger;
     }
 
     public function getStorefrontContext(): StorefrontContext
@@ -99,6 +116,10 @@ class StorefrontContextService implements StorefrontContextServiceInterface
 
     private function load(bool $useCache): StorefrontContext
     {
+        if ($this->context) {
+            return $this->context;
+        }
+
         $shopScope = new ShopScope(
             $this->getStorefrontShopId(),
             $this->getStorefrontCurrencyId()
@@ -115,21 +136,29 @@ class StorefrontContextService implements StorefrontContextServiceInterface
             $this->getStorefrontPaymentMethodId(),
             $this->getStorefrontShippingMethodId(),
             $this->getStorefrontCountryId(),
-            $this->getStorefrontStateId()
+            $this->getStorefrontStateId(),
+            $this->getStorefrontCartToken()
         );
 
-        if ($this->context) {
-            return $this->context;
-        }
-
         $inputKey = $this->getCacheKey($shopScope, $customerScope, $checkoutScope);
-
         $cacheItem = $this->cache->getItem($inputKey);
         if ($useCache && $context = $cacheItem->get()) {
-            return $this->context = $this->serializer->deserialize($context, '', 'json');
+            try {
+                $context = $this->serializer->deserialize($context, '', 'json');
+                $this->context = $context;
+
+                $rules = $this->contextRuleLoader->loadMatchingRules($context, $checkoutScope->getCartToken());
+                $this->context->setContextRulesIds($rules->getIds());
+                $this->context->lockRules();
+
+                return $this->context;
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+            }
         }
 
         $context = $this->factory->create($shopScope, $customerScope, $checkoutScope);
+        $this->context = $context;
 
         $outputKey = $this->getCacheKey(
             ShopScope::createFromContext($context),
@@ -138,7 +167,6 @@ class StorefrontContextService implements StorefrontContextServiceInterface
         );
 
         $data = $this->serializer->serialize($context, 'json');
-
         $outputCacheItem = $this->cache->getItem($outputKey);
 
         $cacheItem->set($data);
@@ -147,7 +175,11 @@ class StorefrontContextService implements StorefrontContextServiceInterface
         $this->cache->save($cacheItem);
         $this->cache->save($outputCacheItem);
 
-        return $this->context = $context;
+        $rules = $this->contextRuleLoader->loadMatchingRules($context, $checkoutScope->getCartToken());
+        $this->context->setContextRulesIds($rules->getIds());
+        $this->context->lockRules();
+
+        return $context;
     }
 
     private function getCacheKey(
@@ -243,6 +275,10 @@ class StorefrontContextService implements StorefrontContextServiceInterface
     private function getSessionValueOrNull(string $key)
     {
         $request = $this->requestStack->getCurrentRequest();
+        if (!$request) {
+            return null;
+        }
+
         if (!$session = $request->getSession()) {
             return null;
         }
@@ -252,5 +288,10 @@ class StorefrontContextService implements StorefrontContextServiceInterface
         }
 
         return $session->get($key);
+    }
+
+    private function getStorefrontCartToken(): ?string
+    {
+        return $this->getSessionValueOrNull(StoreFrontCartService::CART_TOKEN_KEY);
     }
 }

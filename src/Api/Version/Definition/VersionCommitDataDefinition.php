@@ -4,11 +4,11 @@ namespace Shopware\Api\Version\Definition;
 
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\EntityExtensionInterface;
-use Shopware\Api\Entity\Field\ArrayField;
 use Shopware\Api\Entity\Field\DateField;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\IdField;
 use Shopware\Api\Entity\Field\IntField;
+use Shopware\Api\Entity\Field\JsonArrayField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\StringField;
@@ -62,7 +62,7 @@ class VersionCommitDataDefinition extends EntityDefinition
             new IdField('user_id', 'userId'),
             new IntField('ai', 'ai'),
             (new StringField('entity_name', 'entityName'))->setFlags(new Required(), new SearchRanking(self::HIGH_SEARCH_RANKING)),
-            (new ArrayField('entity_id', 'entityId'))->setFlags(new Required()),
+            (new JsonArrayField('entity_id', 'entityId'))->setFlags(new Required()),
             (new StringField('action', 'action'))->setFlags(new Required(), new SearchRanking(self::LOW_SEARCH_RAKING)),
             (new LongTextField('payload', 'payload'))->setFlags(new Required(), new SearchRanking(self::LOW_SEARCH_RAKING)),
             (new DateField('created_at', 'createdAt'))->setFlags(new Required()),

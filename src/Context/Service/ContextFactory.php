@@ -46,9 +46,9 @@ use Shopware\Api\Tax\Repository\TaxRepository;
 use Shopware\Cart\Delivery\Struct\ShippingLocation;
 use Shopware\Context\Struct\CheckoutScope;
 use Shopware\Context\Struct\CustomerScope;
-use Shopware\Context\Struct\StorefrontContext;
-use Shopware\Context\Struct\ShopScope;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Context\Struct\ShopScope;
+use Shopware\Context\Struct\StorefrontContext;
 use Shopware\Defaults;
 
 class ContextFactory implements ContextFactoryInterface
@@ -141,7 +141,6 @@ class ContextFactory implements ContextFactoryInterface
     ): StorefrontContext {
         $shopContext = $this->getShopContext($shopScope->getShopId());
 
-        //select shop with all fallbacks
         /** @var ShopDetailStruct $shop */
         $shop = $this->shopRepository->readDetail([$shopScope->getShopId()], $shopContext)
             ->get($shopScope->getShopId());
@@ -202,7 +201,8 @@ class ContextFactory implements ContextFactoryInterface
             $payment,
             $delivery,
             $shippingLocation,
-            $customer
+            $customer,
+            []
         );
 
         return $context;

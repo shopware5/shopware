@@ -32,8 +32,6 @@ use Shopware\Cart\LineItem\LineItemCollection;
 use Shopware\Cart\LineItem\LineItemInterface;
 use Shopware\Cart\Price\PriceCalculator;
 use Shopware\Cart\Price\Struct\PriceDefinition;
-use Shopware\Cart\Tax\Struct\TaxRule;
-use Shopware\Cart\Tax\Struct\TaxRuleCollection;
 use Shopware\CartBridge\Product\Struct\CalculatedProduct;
 use Shopware\Context\Struct\StorefrontContext;
 use Shopware\Framework\Struct\StructCollection;
@@ -71,7 +69,10 @@ class ProductCalculator
 
             $priceDefinition = $lineItem->getPriceDefinition();
             if (!$priceDefinition) {
-                $priceDefinition = $this->getQuantityPrice($lineItem->getQuantity(), $product);
+                $priceDefinition = $product->getPriceDefinitionForQuantity(
+                    $context->getShopContext(),
+                    $lineItem->getQuantity()
+                );
             }
 
             $priceDefinition = new PriceDefinition(
@@ -121,18 +122,6 @@ class ProductCalculator
                 ->add(new \DateInterval('P10D'))
                 ->add(new \DateInterval('P1D'))
                 ->add(new \DateInterval('P3D'))
-        );
-    }
-
-    private function getQuantityPrice(int $quantity, ProductBasicStruct $product): PriceDefinition
-    {
-        return new PriceDefinition(
-            $product->getPrice(),
-            new TaxRuleCollection([
-                new TaxRule($product->getTax()->getRate()),
-            ]),
-            $quantity,
-            true
         );
     }
 }

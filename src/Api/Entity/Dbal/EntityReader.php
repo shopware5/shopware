@@ -40,10 +40,19 @@ class EntityReader implements EntityReaderInterface
      */
     private $searcher;
 
-    public function __construct(Connection $connection, EntitySearcherInterface $searcher)
-    {
+    /**
+     * @var EntityHydrator
+     */
+    private $hydrator;
+
+    public function __construct(
+        Connection $connection,
+        EntitySearcherInterface $searcher,
+        EntityHydrator $hydrator
+    ) {
         $this->connection = $connection;
         $this->searcher = $searcher;
+        $this->hydrator = $hydrator;
     }
 
     public function readDetail(string $definition, array $ids, ShopContext $context): EntityCollection
@@ -112,7 +121,7 @@ class EntityReader implements EntityReaderInterface
         $rows = $this->fetch($ids, $definition, $context, $fields, $raw);
         foreach ($rows as $row) {
             $collection->add(
-                EntityHydrator::hydrate(clone $entity, $definition, $row, $definition::getEntityName())
+                $this->hydrator->hydrate(clone $entity, $definition, $row, $definition::getEntityName())
             );
         }
 
@@ -243,7 +252,7 @@ class EntityReader implements EntityReaderInterface
     /**
      * @param array                   $ids
      * @param string|EntityDefinition $definition
-     * @param ShopContext      $context
+     * @param ShopContext             $context
      * @param FieldCollection         $fields
      *
      * @return array
@@ -265,7 +274,7 @@ class EntityReader implements EntityReaderInterface
     /**
      * @param string|EntityDefinition   $definition
      * @param ManyToOneAssociationField $association
-     * @param ShopContext        $context
+     * @param ShopContext               $context
      * @param EntityCollection          $collection
      */
     private function loadManyToOne(string $definition, ManyToOneAssociationField $association, ShopContext $context, EntityCollection $collection)

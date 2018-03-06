@@ -4,12 +4,20 @@ namespace Shopware\Framework\Command;
 
 use Faker\Factory;
 use Faker\Generator;
+use Ramsey\Uuid\Uuid;
 use Shopware\Api\Category\Definition\CategoryDefinition;
+use Shopware\Api\Context\Definition\ContextRuleDefinition;
 use Shopware\Api\Customer\Definition\CustomerDefinition;
 use Shopware\Api\Entity\Write\EntityWriterInterface;
 use Shopware\Api\Entity\Write\WriteContext;
+use Shopware\Api\Product\Collection\ContextPriceCollection;
 use Shopware\Api\Product\Definition\ProductDefinition;
 use Shopware\Api\Product\Definition\ProductManufacturerDefinition;
+use Shopware\Api\Product\Struct\ContextPriceStruct;
+use Shopware\Context\Rule\Container\AndRule;
+use Shopware\Context\Rule\Container\NotRule;
+use Shopware\Context\Rule\CurrencyRule;
+use Shopware\Context\Rule\OrderAmountRule;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Defaults;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -57,10 +65,16 @@ class DemodataCommand extends ContainerAwareCommand
 
         $this->io->title('Demodata Generator');
 
+        $contextRuleIds = $this->createContextRules();
         $this->createCustomer($input->getOption('customers'));
         $categories = $this->createCategory($input->getOption('categories'));
         $manufacturer = $this->createManufacturer($input->getOption('manufacturers'));
-        $this->createProduct($categories, $manufacturer, $input->getOption('products'));
+        $this->createProduct(
+            $categories,
+            $manufacturer,
+            $contextRuleIds,
+            $input->getOption('products')
+        );
 
         $this->io->newLine();
 
@@ -171,7 +185,7 @@ class DemodataCommand extends ContainerAwareCommand
         $this->io->comment('Writing to database...');
     }
 
-    private function createProduct(array $categories, array $manufacturer, $count = 500)
+    private function createProduct(array $categories, array $manufacturer, array $contextRules, $count = 500)
     {
         $categoryCount = count($categories) - 1;
         $manufacturerCount = count($manufacturer) - 1;
@@ -199,6 +213,7 @@ class DemodataCommand extends ContainerAwareCommand
                     ['id' => $categories[random_int(0, $categoryCount)]],
                 ],
                 'stock' => $this->faker->randomNumber(),
+                'contextPrices' => $this->createPrices($contextRules),
             ];
 
             if ($i % $size === 0) {
@@ -235,5 +250,60 @@ class DemodataCommand extends ContainerAwareCommand
         $this->io->progressFinish();
 
         return array_column($payload, 'id');
+    }
+
+    private function createContextRules(): array
+    {
+        $payload = [
+            [
+                'id' => Uuid::uuid4()->toString(),
+                'name' => 'High cart value',
+                'payload' => new AndRule([
+                    new OrderAmountRule(5000, OrderAmountRule::OPERATOR_GTE),
+                ]),
+            ],
+            [
+                'id' => Uuid::uuid4()->toString(),
+                'name' => 'Other currency',
+                'payload' => new NotRule([
+                    new CurrencyRule([Defaults::CURRENCY]),
+                ]),
+            ],
+        ];
+
+        $this->writer->insert(ContextRuleDefinition::class, $payload, $this->getContext());
+
+        return array_column($payload, 'id');
+    }
+
+    private function createPrices(array $contextRules)
+    {
+        $prices = new ContextPriceCollection();
+
+        foreach ($contextRules as $ruleId) {
+            $gross = random_int(500, 1000);
+
+            $prices->add(new ContextPriceStruct(
+                Defaults::CURRENCY,
+                1,
+                10,
+                $ruleId,
+                $gross,
+                $gross / 1.19
+            ));
+
+            $gross = random_int(1, 499);
+
+            $prices->add(new ContextPriceStruct(
+                Defaults::CURRENCY,
+                11,
+                null,
+                $ruleId,
+                $gross,
+                $gross / 1.19
+            ));
+        }
+
+        return $prices->toArray();
     }
 }
