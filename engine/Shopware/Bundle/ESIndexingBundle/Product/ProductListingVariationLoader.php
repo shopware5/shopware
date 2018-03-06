@@ -139,6 +139,44 @@ class ProductListingVariationLoader
     }
 
     /**
+     * @param ListProduct[]     $products
+     * @param array             $configurations
+     * @param null|VariantFacet $variantFacet
+     *
+     * @return array
+     */
+    public function getAvailability(
+        array $products,
+        array $configurations,
+        VariantFacet $variantFacet = null
+    ) {
+        $combinationAvailability = [];
+        $availability = $this->fetchAvailability($products);
+
+        foreach ($products as $product) {
+            if (!isset($configurations[$product->getNumber()]) || !isset($availability[$product->getId()])) {
+                continue;
+            }
+
+            $configuration = $configurations[$product->getNumber()];
+            $groups = array_map(function (Group $group) {
+                return $group->getId();
+            }, $configuration);
+
+            $combinations = $this->arrayCombinations($groups);
+
+            $combinationAvailability[$product->getNumber()] = $this->getCombinationAvailability(
+                $configuration,
+                $availability[$product->getId()],
+                $combinations,
+                $variantFacet
+            );
+        }
+
+        return $combinationAvailability;
+    }
+
+    /**
      * Builds the visibility for the variant listings
      *
      * @param Product      $product
@@ -386,6 +424,53 @@ class ProductListingVariationLoader
         return $prices;
     }
 
+    private function fetchAvailability(array $products)
+    {
+        $variantIds = array_map(function (ListProduct $product) {
+            return $product->getVariantId();
+        }, $products);
+
+        $query = $this->connection->createQueryBuilder();
+        $query->setParameter('variants', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        $query->addSelect([
+            'availableVariant.articleID',
+            'relations.article_id as variant_id',
+            'instock >= minpurchase as availability',
+            'relations.option_id',
+            'options.group_id',
+        ]);
+
+        $query->from('s_articles_details', 'availableVariant');
+        $query->innerJoin('availableVariant', 's_article_configurator_option_relations', 'relations', 'relations.article_id = availableVariant.id');
+        $query->innerJoin('relations', 's_article_configurator_options', 'options', 'relations.option_id = options.id');
+        $query->andWhere('availableVariant.active = 1');
+
+        $availability = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
+
+        /** @var array[] $availability */
+        foreach ($availability as &$productAvailability) {
+            $availabilityResult = [];
+            foreach ($productAvailability as &$currentAvailability) {
+                $availabilityResult[$currentAvailability['variant_id']]['variant_id'] = (int) $currentAvailability['variant_id'];
+                $availabilityResult[$currentAvailability['variant_id']]['availability'] = $currentAvailability['availability'];
+
+                $availabilityResult[$currentAvailability['variant_id']]['options'][] = (int) $currentAvailability['option_id'];
+                $availabilityResult[$currentAvailability['variant_id']]['groups'][] = (int) $currentAvailability['group_id'];
+            }
+            $productAvailability = array_values($availabilityResult);
+        }
+
+        foreach ($availability as &$productAvailability) {
+            foreach ($productAvailability as &$currentAvailability) {
+                sort($currentAvailability['options']);
+                sort($currentAvailability['groups']);
+            }
+        }
+
+        return $availability;
+    }
+
     private function buildListingVisibility(array $splitting, array $configuration)
     {
         $key = [];
@@ -472,6 +557,59 @@ class ProductListingVariationLoader
         }
 
         return $cheapestPrices;
+    }
+
+    /**
+     * @param array             $configuration
+     * @param array             $availabilities
+     * @param array             $combinations
+     * @param VariantFacet|null $variantFacet
+     *
+     * @return array
+     */
+    private function getCombinationAvailability(array $configuration, array $availabilities, array $combinations, VariantFacet $variantFacet = null)
+    {
+        $availabilityList = [];
+
+        if (null !== $variantFacet) {
+            $expandGroupIds = $variantFacet->getExpandGroupIds();
+        } else {
+            $expandGroupIds = [];
+        }
+
+        $options = [];
+        foreach ($configuration as $group) {
+            $options[$group->getId()] = $group->getOptions()[0]->getId();
+        }
+
+        foreach ($combinations as $combination) {
+            sort($combination, SORT_NUMERIC);
+
+            $tmp = array_values(array_keys(
+                array_intersect(array_intersect(array_flip($options), $combination), $expandGroupIds)
+            ));
+            sort($tmp, SORT_NUMERIC);
+
+            $excludedOptions = array_values(array_keys(
+                array_diff(array_intersect(array_flip($options), $combination), $expandGroupIds)
+            ));
+
+            $affected = array_filter($availabilities, function (array $price) use ($tmp, $excludedOptions) {
+                $diff = array_values(array_intersect(array_diff($price['options'], $excludedOptions), $tmp));
+
+                return $diff === $tmp;
+            });
+
+            $availability = array_column($affected, 'availability');
+
+            $key = 'g' . implode('-', $combination);
+
+            if (!empty($availability)) {
+                $availabilityList[$key] = max($availability);
+            }
+        }
+
+        return $availabilityList;
     }
 
     /**

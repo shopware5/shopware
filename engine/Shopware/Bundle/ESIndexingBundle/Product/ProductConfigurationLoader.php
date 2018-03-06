@@ -47,11 +47,17 @@ class ProductConfigurationLoader
      */
     private $fieldHelper;
 
-    public function __construct(Connection $connection, ConfiguratorHydrator $hydrator, FieldHelper $fieldHelper)
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    public function __construct(Connection $connection, ConfiguratorHydrator $hydrator, FieldHelper $fieldHelper, \Shopware_Components_Config $config)
     {
         $this->connection = $connection;
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;
+        $this->config = $config;
     }
 
     /**
@@ -72,9 +78,13 @@ class ProductConfigurationLoader
 
         $query->from('s_article_configurator_option_relations', 'relations');
         $query->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.articleId IN (:articleIds) AND variant.active = 1');
-        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
+        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
         $query->addGroupBy('variant.articleID');
         $query->addGroupBy('variant.id');
+
+        if ($this->config->get('hideNoInstock')) {
+            $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
+        }
 
         $query->setParameter(':articleIds', $articleIds, Connection::PARAM_STR_ARRAY);
 

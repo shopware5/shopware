@@ -175,6 +175,8 @@ class ProductProvider implements ProductProviderInterface
             $combinations = $this->configurationLoader->getCombinations($articleIds);
 
             $listingPrices = $this->listingVariationLoader->getListingPrices($shop, $products, $variantConfiguration, $variantFacet);
+
+            $availability = $this->listingVariationLoader->getAvailability($products, $variantConfiguration, $variantFacet);
         }
 
         $result = [];
@@ -211,6 +213,10 @@ class ProductProvider implements ProductProviderInterface
                         $product->setListingVariationPrices(
                             $listingPrices[$product->getNumber()]
                         );
+                    }
+
+                    if (array_key_exists($number, $availability)) {
+                        $product->setAvailability($availability[$number]);
                     }
                 }
             } else {
