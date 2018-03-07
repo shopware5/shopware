@@ -74,7 +74,7 @@ class ConfigLoader
      */
     public function __construct($documentRoot, $cacheDir, $environment, $applicationName)
     {
-        $this->documentRoot = rtrim($documentRoot, '/') . '/';
+        $this->documentRoot = rtrim($documentRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $this->cacheDir = $cacheDir;
         $this->environment = $environment;
         $this->applicationName = $applicationName;

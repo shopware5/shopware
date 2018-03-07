@@ -49,12 +49,12 @@ class Container extends BaseContainer
      */
     public function setup(\Pimple\Container $container)
     {
-        $backupDir = SW_PATH . '/files/backup/auto_update';
+        $backupDir = SW_PATH . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR . 'auto_update';
 
         $me = $this;
 
         $container['shopware.version'] = function () use ($me) {
-            $version = trim(file_get_contents(UPDATE_ASSET_PATH . '/version'));
+            $version = trim(file_get_contents(UPDATE_ASSET_PATH . DIRECTORY_SEPARATOR . 'version'));
 
             return $version;
         };
@@ -80,7 +80,7 @@ class Container extends BaseContainer
         };
 
         $container['migration.manager'] = function () use ($me) {
-            $migrationPath = UPDATE_ASSET_PATH . '/migrations/';
+            $migrationPath = UPDATE_ASSET_PATH . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR;
             $db = $me->get('db');
 
             $migrationManger = new MigrationManager($db, $migrationPath);
@@ -89,7 +89,7 @@ class Container extends BaseContainer
         };
 
         $container['dump'] = function () use ($me) {
-            $snippetsSql = UPDATE_ASSET_PATH . '/snippets.sql';
+            $snippetsSql = UPDATE_ASSET_PATH . DIRECTORY_SEPARATOR . 'snippets.sql';
             $snippetsSql = file_exists($snippetsSql) ? $snippetsSql : null;
 
             if (!$snippetsSql) {
@@ -138,7 +138,7 @@ class Container extends BaseContainer
 
         $container['system.locker'] = function () {
             return new SystemLocker(
-                SW_PATH . '/recovery/install/data/install.lock'
+                SW_PATH . DIRECTORY_SEPARATOR . 'recovery' . DIRECTORY_SEPARATOR . 'install' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'install.lock'
             );
         };
 
@@ -174,7 +174,7 @@ class Container extends BaseContainer
         };
 
         $container['shopware.container'] = function () use ($me) {
-            require_once SW_PATH . '/autoload.php';
+            require_once SW_PATH . DIRECTORY_SEPARATOR . 'autoload.php';
 
             $kernel = new \Shopware\Kernel('production', false);
             $kernel->boot();
