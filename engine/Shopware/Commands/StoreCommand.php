@@ -25,9 +25,11 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @category  Shopware
@@ -92,7 +94,7 @@ abstract class StoreCommand extends ShopwareCommand
      */
     protected function handleError(array $input)
     {
-        if (OutputInterface::VERBOSITY_VERBOSE <= $this->output->getVerbosity()) {
+        if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
             $this->output->writeln(print_r($input, true));
         }
 
@@ -131,19 +133,25 @@ abstract class StoreCommand extends ShopwareCommand
         $password = $input->getOption('password');
 
         if ($input->isInteractive()) {
-            $dialog = $this->getHelper('dialog');
+            /** @var QuestionHelper $questionHelper */
+            $questionHelper = $this->getHelper('question');
 
             if (empty($username)) {
-                $username = $dialog->ask(
+                $username = $questionHelper->ask(
+                    $input,
                     $output,
-                    'Please enter the username'
+                    new Question('Please enter the username')
                 );
             }
 
             if (empty($password)) {
-                $password = $dialog->askHiddenResponse(
+                $passwordQuestion = new Question('Please enter the password');
+                $passwordQuestion->setHidden(true);
+                $passwordQuestion->setHiddenFallback(false);
+                $password = $questionHelper->ask(
+                    $input,
                     $output,
-                    'Please enter the password'
+                    $passwordQuestion
                 );
             }
         }
