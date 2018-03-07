@@ -1810,6 +1810,17 @@ class Article extends Resource implements BatchInterface
                 if (isset($valueData['position'])) {
                     $value->setPosition($valueData['position']);
                 }
+                if (isset($valueData['relationPosition'])) {
+                    // Relation positions controls the order of property values if the group is configured for position
+                    $filters = [
+                        ['property' => 'options.id', 'expression' => '=', 'value' => $value->getOption()->getId()],
+                        ['property' => 'groups.id', 'expression' => '=', 'value' => $propertyGroup->getId()],
+                    ];
+                    $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
+                    /** @var \Shopware\Models\Property\Relation $relation */
+                    $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
+                    $relation->setPosition($valueData['relationPosition']);
+                }
                 $this->getManager()->persist($value);
             } else {
                 throw new ApiException\CustomValidationException('Name or id for property value required');
