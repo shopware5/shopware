@@ -44,6 +44,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed cloning of `Enlight_Template_Manager` object to preserve reference of the security policy to the instance  
 * Changed newsletter logo from a static file to the active themes logo
 * Changed condition in `sBasket::sGetAmountRestrictedArticles`, it now also checks for an empty `$articles` array
+* Changed `ImmediateDeliveryConditionHandler` (DBAL and ES) and product indexing to improve variant filtering  
 
 ### Removals
 
