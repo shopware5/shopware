@@ -5635,7 +5635,8 @@ INSERT INTO `s_order_number` (`id`, `number`, `name`, `desc`) VALUES
 (925, 10000, 'articleordernumber', 'Artikelbestellnummer  '),
 (926, 10000, 'sSERVICE1', 'Service - 1'),
 (927, 10000, 'sSERVICE2', 'Service - 2'),
-(928, 110, 'blogordernumber', 'Blog - ID');
+(928, 110, 'blogordernumber', 'Blog - ID'),
+(929, 20000, 'doc_3', 'Stornorechnungen');
 
 -- --------------------------------------------------------
 

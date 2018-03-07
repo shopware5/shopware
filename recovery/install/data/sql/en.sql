@@ -1705,6 +1705,7 @@ UPDATE s_order_number SET `desc` = 'Packing list' WHERE id = 921;
 UPDATE s_order_number SET `desc` = 'Credits' WHERE id = 922;
 UPDATE s_order_number SET `desc` = 'Invoices' WHERE id = 924;
 UPDATE s_order_number SET `desc` = 'Article order number' WHERE id = 925;
+UPDATE s_order_number SET `desc` = 'Storno bill' WHERE id = 929;
 
 -- s_crontab --
 UPDATE s_crontab SET `name` = 'Birthday wishes' WHERE id = 1;
