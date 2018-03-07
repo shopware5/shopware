@@ -86,8 +86,13 @@ class PluginLicenceService
         $info = \Shopware_Components_License::readLicenseInfo($licenceKey);
 
         if ($info == false) {
-            throw new \RuntimeException();
+            throw new \RuntimeException('Could not read license key');
         }
+
+        $this->connection->delete('s_core_licenses', [
+            'module' => $info['module'],
+            'host' => $info['host'],
+        ]);
 
         return $persister->saveLicense($info, true);
     }
