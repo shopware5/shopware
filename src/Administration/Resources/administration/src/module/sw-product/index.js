@@ -7,7 +7,7 @@ Module.register('sw-product', {
     description: 'The module for managing products.',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: '#7AD5C8',
+    color: '#57D9A3',
     icon: 'default-symbol-products',
 
     routes: {
@@ -38,14 +38,14 @@ Module.register('sw-product', {
 
     navigation: [{
         path: 'sw.product.index',
-        label: 'Produktübersicht',
-        color: '#7AD5C8',
+        label: 'Produkte',
+        color: '#57D9A3',
         icon: 'default-symbol-products'
     }, {
         path: 'sw.product.create',
         label: 'Produkt anlegen',
         parent: 'sw.product.index',
-        icon: 'box'
+        color: '#57D9A3'
     }],
 
     commands: [{
