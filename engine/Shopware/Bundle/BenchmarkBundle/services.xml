@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware.benchmark_bundle.collector" class="Shopware\Bundle\BenchmarkBundle\BenchmarkCollector">
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.shop" class="Shopware\Bundle\BenchmarkBundle\Provider\ShopProvider">
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.shopware" class="Shopware\Bundle\BenchmarkBundle\Provider\ShopwareProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.release"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.manufacturers" class="Shopware\Bundle\BenchmarkBundle\Provider\ManufacturerProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.products" class="Shopware\Bundle\BenchmarkBundle\Provider\ProductsProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.emotions" class="Shopware\Bundle\BenchmarkBundle\Provider\EmotionsProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.categories" class="Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.analytics" class="Shopware\Bundle\BenchmarkBundle\Provider\AnalyticsProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.plugins" class="Shopware\Bundle\BenchmarkBundle\Provider\PluginsProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.payments" class="Shopware\Bundle\BenchmarkBundle\Provider\PaymentsProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.customers" class="Shopware\Bundle\BenchmarkBundle\Provider\CustomersProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.shipments" class="Shopware\Bundle\BenchmarkBundle\Provider\ShipmentsProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.providers.orders" class="Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+    </services>
+</container>
