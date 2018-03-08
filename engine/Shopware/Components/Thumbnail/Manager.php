@@ -94,8 +94,6 @@ class Manager
      * @param bool  $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
      *
      * @throws \Exception
-     *
-     * @return bool
      */
     public function createMediaThumbnail(Media $media, $thumbnailSizes = [], $keepProportions = false)
     {
@@ -178,10 +176,10 @@ class Manager
      * Helper function which returns the thumbnail paths of a single
      * media object.
      *
-     * @param $name
-     * @param $type
-     * @param $extension
-     * @param array $sizes
+     * @param string $name
+     * @param string $type
+     * @param string $extension
+     * @param array  $sizes
      *
      * @return array
      */
@@ -231,8 +229,8 @@ class Manager
     /**
      * Returns an array with a jpg and original extension path if its not a jpg
      *
-     * @param Media $media
-     * @param $suffix
+     * @param Media  $media
+     * @param string $suffix
      *
      * @throws \Exception
      *
@@ -252,7 +250,7 @@ class Manager
             'jpg' => $thumbnailDir . $fileName,
         ];
 
-        // create native extension thumbnail
+        // Create native extension thumbnail
         if ($media->getExtension() !== 'jpg') {
             $fileName = str_replace(
                 '.' . $media->getExtension(),
@@ -270,7 +268,7 @@ class Manager
      * Returns the full path of a thumbnail dir according to the media type
      * The default path for images after the root dir would be media/image/thumbnail/
      *
-     * @param $media
+     * @param Media $media
      *
      * @return string
      */
@@ -321,6 +319,11 @@ class Manager
         return $thumbnailSizes;
     }
 
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
     private function getPathOfType($type)
     {
         return 'media/' . strtolower($type);
@@ -364,7 +367,7 @@ class Manager
 
         $thumbnailSizes = $settings->getThumbnailSize();
 
-        //when no sizes are defined in the album
+        // When no sizes are defined in the album
         if (empty($thumbnailSizes) || empty($thumbnailSizes[0])) {
             $thumbnailSizes = [];
         }

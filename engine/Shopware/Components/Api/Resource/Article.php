@@ -347,13 +347,13 @@ class Article extends Resource implements BatchInterface
         /*
          * @Deprecated
          *
-         * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
+         * Necessary for backward compatibility with < 5.4, will be removed in 5.6
          *
          * If `lastStock` was only defined on the main product, apply it to all it's variants
          */
         if (!array_key_exists('mainDetail', $params) && array_key_exists('lastStock', $params)) {
-            $db = $this->container->get('dbal_connection');
-            $db->executeQuery('UPDATE `s_articles_details` SET (lastStock) VALUES (:lastStock) WHERE `articleID`=:articleId', [
+            $db = $this->getContainer()->get('dbal_connection');
+            $db->executeQuery('UPDATE `s_articles_details` SET lastStock=:lastStock WHERE `articleID`=:articleId', [
                 'lastStock' => $article->getLastStock(),
                 'articleId' => $article->getId(),
             ]);
@@ -563,7 +563,8 @@ class Article extends Resource implements BatchInterface
         foreach ($article->getImages() as $image) {
             $media = $image->getMedia();
 
-            if (!$force && $mediaService->has(Shopware()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath())) {
+            $projectDir = $this->getContainer()->getParameter('shopware.app.rootdir');
+            if (!$force && $mediaService->has($projectDir . $media->getPath())) {
                 continue;
             }
 
@@ -2364,7 +2365,7 @@ class Article extends Resource implements BatchInterface
             $download = $this->getOneToManySubElement(
                 $downloads,
                 $downloadData,
-                '\Shopware\Models\Article\Download'
+                \Shopware\Models\Article\Download::class
             );
 
             if (isset($downloadData['link'])) {
