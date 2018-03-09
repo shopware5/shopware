@@ -4,8 +4,8 @@ Feature: Checkout articles with voucher
     @registration
     Scenario: I can use vouchers in my basket and pay as new customer via prepayment
         Given the cart contains the following products:
-            | number  | name                 | quantity |
-            | SW10137 | Fahrerbrille Chronos | 1        |
+            | articleId | number  | name                 | quantity |
+            | 137       | SW10137 | Fahrerbrille Chronos | 1        |
         Then  the aggregations should look like this:
             | label | value   |
             | total | 61,89 € |
@@ -65,8 +65,8 @@ Feature: Checkout articles with voucher
     Scenario: I can use a free-shipping voucher and put articles with 7% tax in my basket
         Given the articles from "The Deli Garage" have tax id 4
         And   the cart contains the following products:
-            | number  | name            | quantity |
-            | SW10038 | Mehrzwecknudeln | 1        |
+            | articleId | number  | name            | quantity |
+            | 39        | SW10038 | Mehrzwecknudeln | 1        |
         Then  the aggregations should look like this:
             | label | value   |
             | total | 15,38 € |
@@ -78,12 +78,12 @@ Feature: Checkout articles with voucher
         Then  the aggregations should look like this:
             | label | value   |
             | total | 34,35 € |
-            | 7 %   | 1,46 €  |
+            | 7 %   | 1,47 €  |
             | 19 %  | 1,90 €  |
 
         When  I add the voucher "kostenfrei" to my basket
         Then  the aggregations should look like this:
             | label | value   |
             | total | 32,45 € |
-            | 7 %   | 1,46 €  |
+            | 7 %   | 1,47 €  |
             | 19 %  | 1,60 €  |

@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_View
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -31,7 +32,7 @@
  * Instead to access the template class directly, this manager will be used so the template can be modified afterwards.
  *
  * @category   Enlight
- * @package    Enlight_View
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -40,28 +41,28 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * The template manager instance.
      *
-     * @var     Enlight_Template_Manager
+     * @var Enlight_Template_Manager
      */
     protected $engine;
 
     /**
      * The loaded template instance.
      *
-     * @var     Enlight_Template_Default
+     * @var Enlight_Template_Default
      */
     protected $template;
 
     /**
      * Default nocache flag.
      *
-     * @var     bool
+     * @var bool
      */
     protected $nocache;
 
     /**
      * Default assign scope
      *
-     * @var     int
+     * @var int
      */
     protected $scope;
 
@@ -69,7 +70,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * The Enlight_View_Default constructor expects an instance of the Enlight_Template_Manager and set it
      * into the internal property.
      *
-     * @param   Enlight_Template_Manager $engine
+     * @param Enlight_Template_Manager $engine
      */
     public function __construct(Enlight_Template_Manager $engine)
     {
@@ -79,7 +80,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Returns the instance of the Enlight_Template_Manager which has been set in the class constructor.
      *
-     * @return  Enlight_Template_Manager
+     * @return Enlight_Template_Manager
      */
     public function Engine()
     {
@@ -91,57 +92,65 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * function.
      *
      * @throws Enlight_Exception
-     * @return  Enlight_Template_Default
+     *
+     * @return Enlight_Template_Default
      */
     public function Template()
     {
         if ($this->template === null) {
             throw new Enlight_Exception('Template was not loaded failure');
         }
+
         return $this->template;
     }
 
     /**
      * This function sets the default template directory into the internal instance of the Enlight_Template_Manager
      *
-     * @param   string|array $path
-     * @return  Enlight_View_Default
+     * @param string|array $path
+     *
+     * @return Enlight_View_Default
      */
     public function setTemplateDir($path)
     {
         $this->engine->setTemplateDir($path);
+
         return $this;
     }
 
     /**
      * This function adds a template directory into the internal instance of the Enlight_Template_Manager
      *
-     * @param   $templateDir
-     * @param   null $key
-     * @return  Enlight_View_Default
+     * @param string|string $templateDir
+     * @param null|string   $key
+     *
+     * @return Enlight_View_Default
      */
     public function addTemplateDir($templateDir, $key = null)
     {
         $this->engine->addTemplateDir($templateDir, $key);
+
         return $this;
     }
 
     /**
      * Sets the current template instance into the internal property.
      *
-     * @param   Enlight_Template_Default $template
-     * @return  Enlight_View_Default
+     * @param Enlight_Template_Default $template
+     *
+     * @return Enlight_View_Default
      */
     public function setTemplate(Enlight_Template_Default $template = null)
     {
         $this->template = $template;
+
         return $this;
     }
 
     /**
      * Checks if a template is stored.
      *
-     * @return  bool
+     * @return bool
      */
     public function hasTemplate()
     {
@@ -151,20 +160,23 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Loads a template by name over the Enlight_Template_Manager.
      *
-     * @param   string $template_name
-     * @return  Enlight_View_Default
+     * @param string $template_name
+     *
+     * @return Enlight_View_Default
      */
     public function loadTemplate($template_name)
     {
         $this->template = $this->engine->createTemplate($template_name, null, null, $this->engine, false);
+
         return $this;
     }
 
     /**
      * Creates a new template by name over the Enlight_Template_Manager.
      *
-     * @param   $template_name
-     * @return  Enlight_Template_Default
+     * @param string $template_name
+     *
+     * @return Enlight_Template_Default
      */
     public function createTemplate($template_name)
     {
@@ -174,37 +186,43 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * This function extends the internal array with the given template.
      *
-     * @param   $template_name
-     * @return  Enlight_View_Default
+     * @param string $template_name
+     *
+     * @return Enlight_View_Default
      */
     public function extendsTemplate($template_name)
     {
         if ($this->template !== null) {
             $this->template->extendsTemplate($template_name);
         }
+
         return $this;
     }
 
     /**
      * Extends a template block by name.
      *
-     * @param          $spec
-     * @param          $content
-     * @param   string $mode
-     * @return  Enlight_View_Default
+     * @param        $spec
+     * @param        $content
+     * @param string $mode
+     *
+     * @return Enlight_View_Default
      */
     public function extendsBlock($spec, $content, $mode)
     {
         if ($this->template !== null) {
             $this->Template()->extendsBlock($spec, $content, $mode);
         }
+
         return $this;
     }
 
     /**
      * Checks if the Enlight_Template_Manager stored the given template.
-     * @param   $template_name
-     * @return  bool
+     *
+     * @param string $template_name
+     *
+     * @return bool
      */
     public function templateExists($template_name)
     {
@@ -215,10 +233,11 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * Assigns a specified value to the template.
      * If no cache or scope given, the default settings for this property will be used.
      *
-     * @param   array|string    $spec
-     * @param   mixed           $value
-     * @param   bool            $nocache
-     * @param   int             $scope
+     * @param array|string $spec
+     * @param mixed        $value
+     * @param bool         $nocache
+     * @param int          $scope
+     *
      * @return \Enlight_View|\Enlight_View_Default
      */
     public function assign($spec, $value = null, $nocache = null, $scope = null)
@@ -234,42 +253,47 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
         } else {
             $this->engine->assign($spec, $value, $nocache);
         }
+
         return $this;
     }
 
     /**
      * Resets a specified value or all values.
      *
-     * @param   string $spec
-     * @param   int $scope
-     * @return  Enlight_View_Default
+     * @param string $spec
+     * @param int    $scope
+     *
+     * @return Enlight_Template_Default
      */
     public function clearAssign($spec = null, $scope = null)
     {
         if ($this->scope !== null && $scope === null) {
             $scope = $this->scope;
         }
+
         return $this->Template()->clearAssign($spec, $scope);
     }
 
     /**
      * Returns a specified value or all values.
      *
-     * @param   string|null $spec
-     * @return  mixed|array
+     * @param string|null $spec
+     *
+     * @return mixed|array
      */
     public function getAssign($spec = null)
     {
         if ($this->template !== null) {
             return $this->template->getTemplateVars($spec);
         }
+
         return $this->engine->getTemplateVars($spec);
     }
 
     /**
      * Renders the current template.
      *
-     * @return  string
+     * @return string
      */
     public function render()
     {
@@ -279,8 +303,9 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Fetch an template by name over the Enlight_Template_Manager.
      *
-     * @param   $template_name
-     * @return  string
+     * @param string $template_name
+     *
+     * @return string
      */
     public function fetch($template_name)
     {
@@ -290,36 +315,42 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Setter method for the nocache property. Used as default if the parameter is not given in the assign method.
      *
-     * @param   bool $value
-     * @return  Enlight_View_Default
+     * @param bool $value
+     *
+     * @return Enlight_View_Default
      */
     public function setNocache($value = true)
     {
         $this->nocache = (bool) $value;
+
         return $this;
     }
 
     /**
      * Setter method for the scope property. Used as default if the parameter is not given in the assign method.
      *
-     * @param   int|null $scope
-     * @return  Enlight_View_Default
+     * @param int|null $scope
+     *
+     * @return Enlight_View_Default
      */
     public function setScope($scope = null)
     {
         $this->scope = $scope;
+
         return $this;
     }
 
     /**
      * Enable or disable the caching within the template.
      *
-     * @param   bool $value
-     * @return  Enlight_View_Default
+     * @param bool $value
+     *
+     * @return Enlight_View_Default
      */
     public function setCaching($value = true)
     {
         $this->Template()->caching = (bool) $value;
+
         return $this;
     }
 
@@ -327,6 +358,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * Checks if the template is already cached.
      *
      * @deprecated 4.2
+     *
      * @return false
      */
     public function isCached()
@@ -337,31 +369,35 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Sets the cache id into the internal template object.
      *
-     * @param   string|array $cache_id
-     * @return  Enlight_View_Default
+     * @param string|array $cache_id
+     *
+     * @return Enlight_View_Default
      */
     public function setCacheId($cache_id = null)
     {
         $this->Template()->setCacheId($cache_id);
+
         return $this;
     }
 
     /**
      * Adds a cache id into the internal template object.
      *
-     * @param   string|array $cache_id
-     * @return  Enlight_View_Default
+     * @param string|array $cache_id
+     *
+     * @return Enlight_View_Default
      */
     public function addCacheId($cache_id)
     {
         $this->Template()->addCacheId($cache_id);
+
         return $this;
     }
 
     /**
      * Returns the cache id of the internal template object.
      *
-     * @return  string
+     * @return string
      */
     public function getCacheId()
     {

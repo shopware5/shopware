@@ -36,15 +36,24 @@
         {/block}
 
         {block name='frontend_detail_buy_laststock'}
-            {if !$sArticle.isAvailable && ($sArticle.isSelectionSpecified || !$sArticle.sConfigurator)}
+            {if !$sArticle.isAvailable && !$sArticle.sConfigurator}
+                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
+
+            {elseif !$sArticle.isAvailable && $sArticle.isSelectionSpecified}
+                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
+
+            {elseif !$sArticle.isAvailable && !$sArticle.hasAvailableVariant}
                 {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
             {/if}
         {/block}
 
         {* Product email notification *}
         {block name="frontend_detail_index_notification"}
-            {if $sArticle.notification && $sArticle.instock <= 0 && $ShowNotification}
-                {include file="frontend/plugins/notification/index.tpl"}
+            {if $ShowNotification && $sArticle.notification && !$sArticle.isAvailable}
+                {* Support products with or without variants *}
+                {if ($sArticle.hasAvailableVariant && $sArticle.isSelectionSpecified) || !$sArticle.hasAvailableVariant}
+                    {include file="frontend/plugins/notification/index.tpl"}
+                {/if}
             {/if}
         {/block}
 

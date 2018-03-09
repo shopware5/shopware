@@ -25,9 +25,10 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Symfony\Component\Console\Command\Command;
+use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -44,11 +45,17 @@ class PluginUpdateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:plugin:update')
-            ->setDescription('Updates a plugin.')
+            ->setDescription('Updates specified plugins.')
             ->addArgument(
                 'plugin',
-                InputArgument::REQUIRED,
-                'Name of the plugin to be updated.'
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
+                'Space separated list of plugins to be updated. Ignored if --batch option is used'
+            )
+            ->addOption(
+                'batch',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Batch update several plugins. Possible values are all, inactive, active, installed, uninstalled'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> updates a plugin.
@@ -63,8 +70,93 @@ EOF
     {
         /** @var InstallerService $pluginManager */
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
-        $pluginName = $input->getArgument('plugin');
 
+        $pluginNames = $input->getArgument('plugin');
+
+        $batchUpdate = $input->getOption('batch');
+        if (!empty($batchUpdate)) {
+            return $this->batchUpdate($pluginManager, $batchUpdate, $output);
+        }
+
+        if (!empty($pluginNames)) {
+            foreach ($pluginNames as $pluginName) {
+                $this->updatePlugin($pluginManager, $pluginName, $output);
+            }
+
+            return 0;
+        }
+
+        $output->writeln(sprintf('Specify either a plugin name or use the --batch option to update several plugins at once'));
+
+        return 1;
+    }
+
+    /**
+     * @param InstallerService $pluginManager
+     * @param string           $batchUpdate
+     * @param OutputInterface  $output
+     *
+     * @return int 0 if everything went fine, or an error code
+     */
+    private function batchUpdate(InstallerService $pluginManager, $batchUpdate, OutputInterface $output)
+    {
+        /** @var ModelManager $em */
+        $em = $this->container->get('models');
+
+        $repository = $em->getRepository(\Shopware\Models\Plugin\Plugin::class);
+        $builder = $repository->createQueryBuilder('plugin');
+        $builder->andWhere('plugin.capabilityEnable = true');
+        $builder->addOrderBy('plugin.active', 'desc');
+        $builder->addOrderBy('plugin.name');
+
+        if ($batchUpdate === 'active') {
+            $builder->andWhere('plugin.active = true');
+        }
+        if ($batchUpdate === 'inactive') {
+            $builder->andWhere('plugin.active = false');
+        }
+        if ($batchUpdate === 'installed') {
+            $builder->andWhere('plugin.installed is not NULL');
+        }
+        if ($batchUpdate === 'uninstalled') {
+            $builder->andWhere('plugin.installed is NULL');
+        }
+
+        $plugins = $builder->getQuery()->execute();
+
+        if (empty($plugins)) {
+            $output->writeln(sprintf('No plugin(s) found'));
+
+            return 1;
+        }
+
+        $allPluginsUpToDate = true;
+        /** @var \Shopware\Models\Plugin\Plugin[] $plugins */
+        foreach ($plugins as $plugin) {
+            if (!$plugin->getUpdateVersion()) {
+                continue;
+            }
+            $pluginManager->updatePlugin($plugin);
+            $output->writeln(sprintf('Plugin %s has been updated successfully.', $plugin->getName()));
+            $allPluginsUpToDate = false;
+        }
+
+        if ($allPluginsUpToDate) {
+            $output->writeln(sprintf('No update needed. Plugin(s) are up to date'));
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param InstallerService $pluginManager
+     * @param string           $pluginName
+     * @param OutputInterface  $output
+     *
+     * @return int 0 if everything went fine, or an error code
+     */
+    private function updatePlugin(InstallerService $pluginManager, $pluginName, OutputInterface $output)
+    {
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
@@ -82,5 +174,7 @@ EOF
         $pluginManager->updatePlugin($plugin);
 
         $output->writeln(sprintf('Plugin %s has been updated successfully.', $pluginName));
+
+        return 0;
     }
 }

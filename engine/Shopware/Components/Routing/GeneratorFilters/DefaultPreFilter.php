@@ -46,7 +46,7 @@ class DefaultPreFilter implements PreFilterInterface
             parse_str($params, $params);
         }
 
-        $globalParams = $context->getGlobalParams();
+        $globalParams = $context ? $context->getGlobalParams() : [];
 
         if (isset($params['sViewport'])) {
             $params['controller'] = $params['sViewport'];
@@ -69,16 +69,18 @@ class DefaultPreFilter implements PreFilterInterface
             unset($params['sDetails']);
         }
         /* @see \Shopware_Controllers_Backend_Customer::performOrderAction */
-        if (!isset($params['controller']) && isset($params['action']) && $params['action'] == 'performOrderRedirect') {
+        if (!isset($params['controller']) && isset($params['action']) && $params['action'] === 'performOrderRedirect') {
             $params['module'] = 'backend';
             $params['controller'] = 'customer';
         }
         /* @see \Shopware_Controllers_Widgets_Emotion */
-        if (!isset($params['module']) && isset($globalParams['module']) && $globalParams['module'] == 'widgets') {
+        if (!isset($params['module']) && isset($globalParams['module']) && $globalParams['module'] === 'widgets') {
             $params['module'] = 'frontend';
         }
         $params = array_merge($globalParams, $params);
-        $context->setParams($params);
+        if ($context) {
+            $context->setParams($params);
+        }
 
         return $params;
     }

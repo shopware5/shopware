@@ -21,13 +21,13 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/swag_update/main}
-//{block name="backend/swag_update/view/window"}
+// {namespace name=backend/swag_update/main}
+// {block name="backend/swag_update/view/window"}
 Ext.define('Shopware.apps.SwagUpdate.view.Window', {
 
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
 
-    alias:'widget.update-main-window',
+    alias: 'widget.update-main-window',
 
     cls: Ext.baseCSSPrefix + 'swag-update-window',
 
@@ -49,19 +49,19 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
 
     pluginsStore: null,
 
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = [
             me.createTabPanel(),
-            /*{if {acl_is_allowed privilege=update resource=swagupdate}}*/
+            /* {if {acl_is_allowed privilege=update resource=swagupdate}} */
             me.createBackupContainer()
-            /*{/if}*/
+            /* {/if} */
         ];
 
-        /*{if {acl_is_allowed privilege=update resource=swagupdate}}*/
+        /* {if {acl_is_allowed privilege=update resource=swagupdate}} */
         me.dockedItems = [ me.createToolbar() ];
-        /*{/if}*/
+        /* {/if} */
 
         me.callParent(arguments);
     },
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
         });
 
         return Ext.create('Ext.container.Container', {
-            style:{
+            style: {
                 background: '#EBEDEF'
             },
             layout: 'vbox',
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
                 me.backupField,
                 me.createHintContainer()
             ]
-        })
+        });
     },
 
     /**
@@ -138,8 +138,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
      * @return { Ext.XTemplate }
      */
     createHintContainerTemplate: function(pluginCount) {
-        var title = '{s name="plugin/update/message/title"}{/s}',
-            message = Ext.String.format('{s name="plugin/update/message"}{/s}', pluginCount);
+        var message = Ext.String.format('{s name="plugin/update/message"}{/s}', pluginCount);
 
         return new Ext.XTemplate(
             '<div class="shopware-ui block-message notice">' +
@@ -164,7 +163,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
             ],
             listeners: {
                 tabchange: function(panel, tab) {
-                    if(tab.isPluginTab) {
+                    if (tab.isPluginTab) {
                         me.fireEvent('addPluginTooltips', me);
                     }
                 }
@@ -207,13 +206,13 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
             border: false,
             store: me.requirementsStore,
             columns: [
-            me.createErrorLevelColumn(),
-            {
-                header: '{s name="columns/message"}Message{/s}',
-                dataIndex: 'message',
-                flex: 2,
-                allowHtml: true
-            }],
+                me.createErrorLevelColumn(),
+                {
+                    header: '{s name="columns/message"}Message{/s}',
+                    dataIndex: 'message',
+                    flex: 2,
+                    allowHtml: true
+                }],
             dockedItems: [{
                 xtype: 'pagingtoolbar',
                 store: me.requirementsStore,
@@ -225,7 +224,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
             layout: 'fit',
             title: '{s name="tabs/requirements"}Requirements{/s}',
             items: [me.requirementsGrid]
-        })
+        });
     },
 
     /**
@@ -251,7 +250,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
             layout: 'fit',
             title: 'Plugins',
             items: [me.pluginsGrid]
-        })
+        });
     },
 
     /**
@@ -285,7 +284,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
                 handler: Ext.bind(me.onClickShowPluginUpdateDetails, me),
                 getClass: Ext.bind(me.onGetClass, me)
             }]
-        }]
+        }];
     },
 
     /**
@@ -333,7 +332,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
 
         if (value == 20) {
             divClass = 'class="sprite-cross"';
-        } else if (value === true || value == 10){
+        } else if (value === true || value == 10) {
             divClass = 'class="sprite-exclamation"';
         } else {
             divClass = 'class="sprite-tick"';
@@ -365,7 +364,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
         var me = this;
 
         me.cancelButton = Ext.create('Ext.button.Button', {
-            cls:'secondary',
+            cls: 'secondary',
             name: 'save-article-button',
             text: '{s name="cancel"}Cancel{/s}',
             handler: function() {
@@ -374,7 +373,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
         });
 
         me.updateButton = Ext.create('Ext.button.Button', {
-            cls:'primary',
+            cls: 'primary',
             name: 'save-article-button',
             text: '{s name="start_update"}Start update{/s}',
             disabled: true,
@@ -391,4 +390,4 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
         });
     }
 });
-//{/block}
+// {/block}

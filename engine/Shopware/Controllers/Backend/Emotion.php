@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\EmotionExporter;
@@ -178,6 +177,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data = [];
 
             foreach ($componentData as $entry) {
+                $filterResult = $this->container->get('events')->filter(
+                    'Shopware_Controllers_Backend_Emotion_Detail_Filter_Values',
+                    $entry,
+                    ['subject' => $this]
+                );
+
+                $entry = $filterResult;
+
                 switch (strtolower($entry['valueType'])) {
                     case 'json':
                         if ($entry['value'] != '') {
@@ -763,7 +770,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $this->View()->assign(
             $this->getTemplates(
                 $this->Request()->getParam('start', null),
-                $this->Request()->getParam('limit', null)
+                $this->Request()->getParam('limit', null),
+                $this->Request()->getParam('id', null)
             )
         );
     }
@@ -864,13 +872,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *
      * @param null $offset
      * @param null $limit
+     * @param null $id
      *
      * @return array
      */
-    protected function getTemplates($offset = null, $limit = null)
+    protected function getTemplates($offset = null, $limit = null, $id = null)
     {
         try {
-            $query = $this->getTemplatesQuery($offset, $limit);
+            $query = $this->getTemplatesQuery($offset, $limit, $id);
             $paginator = $this->getQueryPaginator($query->getQuery());
 
             $result = [
@@ -888,14 +897,22 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * @param null $offset
      * @param null $limit
+     * @param null $id
      *
      * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
      */
-    protected function getTemplatesQuery($offset = null, $limit = null)
+    protected function getTemplatesQuery($offset = null, $limit = null, $id = null)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['templates'])
             ->from('Shopware\Models\Emotion\Template', 'templates');
+
+        if ($id !== null) {
+            $builder->where('templates.id = :id')
+                ->setParameter(':id', $id);
+            $offset = 0;
+            $limit = 1;
+        }
 
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)

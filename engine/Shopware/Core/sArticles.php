@@ -23,12 +23,14 @@
  */
 
 use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
@@ -178,6 +180,8 @@ class sArticles
      */
     private $productNumberService;
 
+    private $listingLinkRewriteService;
+
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
@@ -208,6 +212,7 @@ class sArticles
         $this->session = $container->get('session');
         $this->storeFrontCriteriaFactory = $container->get('shopware_search.store_front_criteria_factory');
         $this->productNumberService = $container->get('shopware_storefront.product_number_service');
+        $this->listingLinkRewriteService = $container->get('shopware_storefront.listing_link_rewrite_service');
 
         $this->articleComparisons = new sArticlesComparisons($this, $container);
     }
@@ -691,9 +696,9 @@ class sArticles
             }
         } else {
             if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $price = round($price, 3);
+                $price = round($price, 2);
             } else {
-                $price = round($price * (100 + $tax) / 100, 3);
+                $price = round($price * (100 + $tax) / 100, 2);
             }
         }
 
@@ -1119,12 +1124,12 @@ class sArticles
         }
 
         $product = $this->productService->get($productNumber, $context);
+
         if (!$product) {
             return [];
         }
 
-        $hideNoInStock = $this->config->get('hideNoInStock');
-        if ($hideNoInStock && !$product->isAvailable()) {
+        if ($this->config->get('hideNoInStock') && !$product->isAvailable()) {
             return [];
         }
 
@@ -1149,13 +1154,13 @@ class sArticles
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
-        $product = $this->getLegacyProduct(
+        $legacyProduct = $this->getLegacyProduct(
             $product,
             $categoryId,
             $selection
         );
 
-        return $product;
+        return $legacyProduct;
     }
 
     /**
@@ -2379,14 +2384,20 @@ class sArticles
         Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
-        $searchResult = $this->searchService->search(
-            $criteria,
-            $context
-        );
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
+
+        if (count($conditions) > 0) {
+            $this->config->offsetSet('forceArticleMainImageInListing', 0);
+            $searchResult = $this->searchService->search($criteria, $context);
+            $this->config->offsetSet('forceArticleMainImageInListing', 1);
+        } else {
+            $searchResult = $this->searchService->search($criteria, $context);
+        }
 
         $articles = [];
-
-        /** @var $product StoreFrontBundle\Struct\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertListProductStruct($product);
 
@@ -2401,6 +2412,8 @@ class sArticles
 
             $articles[$article['ordernumber']] = $article;
         }
+
+        $articles = $this->listingLinkRewriteService->rewriteLinks($criteria, $articles, $context);
 
         $pageSizes = explode('|', $this->config->get('numberArticlesToShow'));
         $sPage = (int) $request->getParam('sPage', 1);
@@ -2481,6 +2494,42 @@ class sArticles
         $data['sDescriptionKeywords'] = $this->getDescriptionKeywords(
             $data['description_long']
         );
+
+        $isSelectionSpecified = false;
+        if (isset($data['isSelectionSpecified']) || array_key_exists('isSelectionSpecified', $data)) {
+            $isSelectionSpecified = $data['isSelectionSpecified'];
+        }
+
+        if ($isSelectionSpecified === true || !$product->hasConfigurator()) {
+            $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
+
+            return $data;
+        }
+
+        $criteria = new SearchBundle\Criteria();
+        foreach ($selection as $groupId => $optionId) {
+            $criteria->addBaseCondition(
+                new VariantCondition([(int) $optionId], true, (int) $groupId)
+            );
+        }
+
+        $service = Shopware()->Container()->get('shopware_storefront.variant_listing_price_service');
+
+        $result = new SearchBundle\ProductSearchResult(
+            [$product->getNumber() => $product],
+            1,
+            [],
+            $criteria,
+            $this->contextService->getShopContext()
+        );
+
+        $service->updatePrices($criteria, $result, $this->contextService->getShopContext());
+
+        if ($product->displayFromPrice()) {
+            $data['priceStartingFrom'] = $product->getListingPrice()->getCalculatedPrice();
+        }
+
+        $data['price'] = $product->getListingPrice()->getCalculatedPrice();
 
         $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
 
@@ -2577,7 +2626,10 @@ class sArticles
         }
 
         foreach ($selection as $groupId => $optionId) {
-            if (!$groupId || !$optionId) {
+            $groupId = (int) $groupId;
+            $optionId = (int) $optionId;
+
+            if ($groupId <= 0 || $optionId <= 0) {
                 unset($selection[$groupId]);
             }
         }

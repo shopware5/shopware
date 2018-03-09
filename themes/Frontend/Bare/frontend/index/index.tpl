@@ -155,103 +155,131 @@
         {/if}
     {/block}
 
-{block name="frontend_index_header_javascript"}
-    <script type="text/javascript" id="footer--js-inline">
-        //<![CDATA[
-        {block name="frontend_index_header_javascript_inline"}
-            var timeNow = {time() nocache};
+    {block name="frontend_index_ajax_seo_optimized"}
+        {*
+            @deprecated
 
-            var asyncCallbacks = [];
+            SEO support for AJAX routes is deprecated in 5.4.
 
-            document.asyncReady = function (callback) {
-                asyncCallbacks.push(callback);
-            };
+            You can disable the check for AJAX routes in Shopware 5.4 by overriding this block and setting the variable
+            to false.
 
-            var statisticDevices = [
-                { device: 'mobile', enter: 0, exit: 767 },
-                { device: 'tablet', enter: 768, exit: 1259 },
-                { device: 'desktop', enter: 1260, exit: 5160 }
-            ];
+            This block will be removed in Shopware 5.5 and all affected AJAX routes below will have SEO support disabled.
+        *}
+        {$ajaxSeoSupport = true}
+    {/block}
 
-            var controller = controller || {ldelim}
-                'vat_check_enabled': '{config name='vatcheckendabled'}',
-                'vat_check_required': '{config name='vatcheckrequired'}',
-                'ajax_cart': '{url controller='checkout' action='ajaxCart'}',
-                'ajax_search': '{url controller="ajax_search" _seo=false}',
-                'register': '{url controller="register"}',
-                'checkout': '{url controller="checkout"}',
-                'ajax_validate': '{url controller="register"}',
-                'ajax_add_article': '{url controller="checkout" action="addArticle"}',
-                'ajax_listing': '{url module="widgets" controller="Listing" action="ajaxListing"}',
-                'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}',
-                'ajax_address_selection': '{url controller="address" action="ajaxSelection" fullPath forceSecure}',
-                'ajax_address_editor': '{url controller="address" action="ajaxEditor" fullPath forceSecure}'
-            {rdelim};
+    {block name="frontend_index_header_javascript"}
+        {$controllerData = [
+            'vat_check_enabled' => {config name='vatcheckendabled'},
+            'vat_check_required' => {config name='vatcheckrequired'},
+            'register' => {url controller="register"},
+            'checkout' => {url controller="checkout"},
+            'ajax_search' => {url controller="ajax_search" _seo=false},
+            'ajax_cart' => {url controller='checkout' action='ajaxCart' _seo=$ajaxSeoSupport},
+            'ajax_validate' => {url controller="register" _seo=$ajaxSeoSupport},
+            'ajax_add_article' => {url controller="checkout" action="addArticle" _seo=$ajaxSeoSupport},
+            'ajax_listing' => {url module="widgets" controller="Listing" action="ajaxListing" _seo=$ajaxSeoSupport},
+            'ajax_cart_refresh' => {url controller="checkout" action="ajaxAmount" _seo=$ajaxSeoSupport},
+            'ajax_address_selection' => {url controller="address" action="ajaxSelection" fullPath _seo=$ajaxSeoSupport},
+            'ajax_address_editor' => {url controller="address" action="ajaxEditor" fullPath _seo=$ajaxSeoSupport}
+        ]}
 
-            var snippets = snippets || {ldelim}
-                'noCookiesNotice': '{"{s name='IndexNoCookiesNotice'}{/s}"|escape}'
-            {rdelim};
+        {$snippetsData = [
+            'noCookiesNotice' => {"{s name='IndexNoCookiesNotice'}{/s}"|escape:'javascript'}
+        ]}
 
-            var themeConfig = themeConfig || {ldelim}
-                'offcanvasOverlayPage': '{$theme.offcanvasOverlayPage}'
-            {rdelim};
+        {$themeConfig = [
+            'offcanvasOverlayPage' => $theme.offcanvasOverlayPage
+        ]}
 
-            var lastSeenProductsConfig = lastSeenProductsConfig || {ldelim}
-                'baseUrl': '{$Shop->getBaseUrl()}',
-                'shopId': '{$Shop->getId()}',
-                'noPicture': '{link file="frontend/_public/src/img/no-picture.jpg"}',
-                'productLimit': ~~('{config name="lastarticlestoshow"}'),
-                'currentArticle': {ldelim}{if $sArticle}
-                    {foreach $sLastArticlesConfig as $key => $value}
-                        '{$key}': '{$value}',
-                    {/foreach}
-                    'articleId': ~~('{$sArticle.articleID}'),
-                    'orderNumber': '{$sArticle.ordernumber}',
-                    'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
-                    'articleName': '{$sArticle.articleName|escape:"javascript"}{if $sArticle.additionaltext} {$sArticle.additionaltext|escape:"javascript"}{/if}',
-                    'imageTitle': '{$sArticle.image.description|escape:"javascript"}',
-                    'images': {ldelim}
-                        {foreach $sArticle.image.thumbnails as $key => $image}
-                            '{$key}': {ldelim}
-                                'source': '{$image.source}',
-                                'retinaSource': '{$image.retinaSource}',
-                                'sourceSet': '{$image.sourceSet}'
-                            {rdelim},
-                        {/foreach}
-                    {rdelim}
-                {/if}{rdelim}
-            {rdelim};
+        {$lastSeenProductsKeys = []}
+        {foreach $sLastArticlesConfig as $key => $value}
+            {$lastSeenProductsKeys[$key] = $value}
+        {/foreach}
 
-            var csrfConfig = csrfConfig || {ldelim}
-                'generateUrl': '{url controller="csrftoken" fullPath=false}',
-                'basePath': '{$Shop->getBasePath()}',
-                'shopId': '{$Shop->getId()}'
-            {rdelim};
-        {/block}
-        //]]>
-    </script>
+        {$lastSeenProductsConfig = [
+            'baseUrl' => $Shop->getBaseUrl(),
+            'shopId' => $Shop->getId(),
+            'noPicture' => {link file="frontend/_public/src/img/no-picture.jpg"},
+            'productLimit' => {"{config name=lastarticlestoshow}"|floor},
+            'currentArticle' => ""
+        ]}
 
-    {include file="frontend/index/datepicker-config.tpl"}
+        {if $sArticle}
+            {$lastSeenProductsConfig.currentArticle = $sLastArticlesConfig}
+            {$lastSeenProductsConfig.currentArticle.articleId = $sArticle.articleID}
+            {$lastSeenProductsConfig.currentArticle.linkDetailsRewritten = $sArticle.linkDetailsRewrited}
+            {$lastSeenProductsConfig.currentArticle.articleName = $sArticle.articleName}
+            {if $sArticle.additionaltext}
+                {$lastSeenProductsConfig.currentArticle.articleName = $lastSeenProductsConfig.currentArticle.articleName|cat:' ':$sArticle.additionaltext}
+            {/if}
+            {$lastSeenProductsConfig.currentArticle.imageTitle = $sArticle.image.description}
+            {$lastSeenProductsConfig.currentArticle.images = []}
 
-    {if $theme.additionalJsLibraries}
-        {$theme.additionalJsLibraries}
-    {/if}
-{/block}
+            {foreach $sArticle.image.thumbnails as $key => $image}
+                {$lastSeenProductsConfig.currentArticle.images[$key] = [
+                    'source' => $image.source,
+                    'retinaSource' => $image.retinaSource,
+                    'sourceSet' => $image.sourceSet
+                ]}
+            {/foreach}
+        {/if}
 
-{block name="frontend_index_header_javascript_jquery"}
-    {* Add the partner statistics widget, if configured *}
-    {if !{config name=disableShopwareStatistics} }
-        {include file='widgets/index/statistic_include.tpl'}
-    {/if}
-{/block}
+        {$csrfConfig = [
+            'generateUrl' => {url controller="csrftoken" fullPath=false},
+            'basePath' => $Shop->getBasePath(),
+            'shopId' => $Shop->getId()
+        ]}
 
-{*Include jQuery and all other javascript files at the bottom of the page*}
-{block name="frontend_index_header_javascript_jquery_lib"}
-    {compileJavascript timestamp={themeTimestamp} output="javascriptFiles"}
-    {foreach $javascriptFiles as $file}
-        <script{if $theme.asyncJavascriptLoading} async{/if} src="{$file}" id="main-script"></script>
-    {/foreach}
-{/block}
+        {* let the user modify the data here *}
+        {block name="frontend_index_header_javascript_data"}{/block}
+
+        <script type="text/javascript" id="footer--js-inline">
+            {block name="frontend_index_header_javascript_inline"}
+                var timeNow = {time() nocache};
+
+                var asyncCallbacks = [];
+
+                document.asyncReady = function (callback) {
+                    asyncCallbacks.push(callback);
+                };
+
+                var controller = controller || JSON.parse('{$controllerData|json_encode}');
+                var snippets = snippets || JSON.parse('{$snippetsData|json_encode}');
+                var themeConfig = themeConfig || JSON.parse('{$themeConfig|json_encode}');
+                var lastSeenProductsConfig = lastSeenProductsConfig || {$lastSeenProductsConfig|json_encode};
+                var csrfConfig = csrfConfig || JSON.parse('{$csrfConfig|json_encode}');
+                var statisticDevices = [
+                    { device: 'mobile', enter: 0, exit: 767 },
+                    { device: 'tablet', enter: 768, exit: 1259 },
+                    { device: 'desktop', enter: 1260, exit: 5160 }
+                ];
+
+            {/block}
+        </script>
+
+        {include file="frontend/index/datepicker-config.tpl"}
+
+        {if $theme.additionalJsLibraries}
+            {$theme.additionalJsLibraries}
+        {/if}
+    {/block}
+
+    {block name="frontend_index_header_javascript_jquery"}
+        {* Add the partner statistics widget, if configured *}
+        {if !{config name=disableShopwareStatistics} }
+            {include file='widgets/index/statistic_include.tpl'}
+        {/if}
+    {/block}
+
+    {* Include jQuery and all other javascript files at the bottom of the page *}
+    {block name="frontend_index_header_javascript_jquery_lib"}
+        {compileJavascript timestamp={themeTimestamp} output="javascriptFiles"}
+        {foreach $javascriptFiles as $file}
+            <script{if $theme.asyncJavascriptLoading} async{/if} src="{$file}" id="main-script"></script>
+        {/foreach}
+    {/block}
 
 {block name="frontend_index_javascript_async_ready"}
     {include file="frontend/index/script-async-ready.tpl"}

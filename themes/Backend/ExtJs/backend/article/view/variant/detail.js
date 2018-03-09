@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
      * Define window width
      * @integer
      */
-    width:900,
+    width:920,
     /**
      * Define window height
      * @integer
@@ -114,7 +114,9 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             title:'{s name=detail/base/title_new}Head data{/s}',
             number: '{s name=detail/base/number}Article number{/s}',
             active: '{s name=detail/base/active}Active{/s}',
-            activeBox: '{s name=detail/base/active_box}Product can be purchases{/s}',
+            activeBox: '{s name=detail/base/active_box}Product can be purchased{/s}',
+            inStock: '{s name=detail/settings/on_sale_field}Disable when no stock{/s}',
+            inStockBox: '{s name=detail/settings/on_sale_box}Do not display if stock <= 0{/s}',
             numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
             additionalText: '{s name=detail/base/additional_text}Additional text{/s}',
             additionalTextSupport: '{s name=detail/base/additional_text_support}If left empty, an automatic text will be generated using the configurator options. This behaviour can be configured.{/s}',
@@ -612,6 +614,13 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 inputValue: true,
                 uncheckedValue:false
             } , {
+                xtype: 'checkbox',
+                name: 'lastStock',
+                fieldLabel: me.snippets.baseFieldSet.inStock,
+                boxLabel: me.snippets.baseFieldSet.inStockBox,
+                inputValue: true,
+                uncheckedValue:false
+            }, {
                 xtype: 'textfield',
                 name: 'ean',
                 fieldLabel: me.snippets.settings.ean

@@ -26,6 +26,7 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
+use Shopware\Components\CSRFGetProtectionAware;
 use Shopware\Models\Customer\Address;
 
 /**
@@ -33,7 +34,7 @@ use Shopware\Models\Customer\Address;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action implements CSRFGetProtectionAware
 {
     /**
      * Reference to sAdmin object (core/class/sAdmin.php)
@@ -66,6 +67,25 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->admin = Shopware()->Modules()->Admin();
         $this->basket = Shopware()->Modules()->Basket();
         $this->session = Shopware()->Session();
+    }
+
+    /**
+     * @return array
+     */
+    public function getCSRFProtectedActions()
+    {
+        return [
+            'ajaxAddArticle',
+            'addArticle',
+            'ajaxAddArticleCart',
+            'ajaxDeleteArticle',
+            'ajaxDeleteArticleCart',
+            'deleteArticle',
+            'addAccessories',
+            'changeQuantity',
+            'addPremium',
+            'setAddress',
+        ];
     }
 
     /**
@@ -247,11 +267,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->View()->assign('sVoucherError', $voucherErrors);
         }
 
-        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
+        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
             $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
         }
 
-        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
+        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
             $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
         }
 
@@ -277,7 +297,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             ';
 
             $order = Shopware()->Db()->fetchRow($sql, [$this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId]);
-            if (!empty($order)) {
+
+            if (empty($order)) {
+                if ($this->Request()->isGet()) {
+                    return $this->forward('confirm');
+                }
+            } else {
                 $this->View()->assign($order);
                 $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
@@ -354,11 +379,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             );
         }
 
-        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
+        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
             $activeBillingAddressId = $this->View()->sUserData['additional']['user']['default_billing_address_id'];
         }
 
-        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
+        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
             $activeShippingAddressId = $this->View()->sUserData['additional']['user']['default_shipping_address_id'];
         }
 
@@ -370,6 +395,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         if (!empty($this->session['sNewsletter'])) {
             $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
+        }
+
+        if ($this->Request()->isGet()) {
+            return $this->forward('confirm');
         }
 
         $this->saveOrder();
@@ -452,7 +481,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->redirect([
                 'controller' => $action[0],
                 'action' => empty($action[1]) ? 'index' : $action[1],
-                'forceSecure' => true,
             ]);
         }
     }
@@ -462,9 +490,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      *
      * @param sAdd = ordernumber
      * @param sQuantity = quantity
+     *
+     * @throws LogicException
      */
     public function addArticleAction()
     {
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $ordernumber = trim($this->Request()->getParam('sAdd'));
         $quantity = $this->Request()->getParam('sQuantity');
         $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
@@ -985,7 +1019,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * Returns tax rates for all basket positions
      *
-     * @param unknown_type $basket array returned from this->getBasket
+     * @param array $basket array returned from this->getBasket
      *
      * @return array
      */
@@ -1018,12 +1052,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                     'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?
                 ', [$item['ordernumber']]);
                 // Old behaviour
-                if (empty($resultVoucherTaxMode) || $resultVoucherTaxMode == 'default') {
+                if (empty($resultVoucherTaxMode) || $resultVoucherTaxMode === 'default') {
                     $tax = Shopware()->Config()->get('sVOUCHERTAX');
-                } elseif ($resultVoucherTaxMode == 'auto') {
+                } elseif ($resultVoucherTaxMode === 'auto') {
                     // Automatically determinate tax
                     $tax = $this->basket->getMaxTax();
-                } elseif ($resultVoucherTaxMode == 'none') {
+                } elseif ($resultVoucherTaxMode === 'none') {
                     // No tax
                     $tax = '0';
                 } elseif ((int) $resultVoucherTaxMode) {
@@ -1360,7 +1394,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * Set the provided dispatch method
      *
-     * @param $dispatchId ID of the dispatch method to set
+     * @param $dispatchId $dispatchId ID of the dispatch method to set
      * @param int|null $paymentId Payment id to validate
      *
      * @return int set dispatch method id
@@ -1390,13 +1424,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      *
      * This action will get redirected from the default addArticleAction
      * when the request was an AJAX request.
-     *
-     * The json padding will be set so that the content type will get to
-     * 'text/javascript' so the template can be returned via jsonp
      */
     public function ajaxAddArticleAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        // Empty but can't be removed for legacy reasons
     }
 
     /**
@@ -1409,9 +1440,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * This quantity is expected to get passed by the 'sQuantity' parameter.
      *
      * After the article was added to the basket, the whole cart content will be returned.
+     *
+     * @throws \LogicException
      */
     public function ajaxAddArticleCartAction()
     {
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $orderNumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
 
@@ -1444,6 +1481,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxDeleteArticleCartAction()
     {
+        if (strtolower($this->Request()->getMethod()) !== 'post') {
+            throw new \LogicException('This action only admits post requests');
+        }
+
         $itemId = $this->Request()->getParam('sDelete');
 
         if ($itemId) {
@@ -1457,13 +1498,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * Ajax cart action
      *
      * This action loads the cart content and returns it.
-     * Its purpose is to return all necessary informations in a minimal template
+     * Its purpose is to return all necessary information in a minimal template
      * for a good performance so e.g. ajax requests are finished more quickly.
      */
     public function ajaxCartAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-
         $view = $this->View();
         $basket = $this->getBasket();
 
@@ -1484,7 +1523,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxAmountAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        $this->Response()->setHeader('Content-Type', 'application/json');
 
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
@@ -1495,12 +1534,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $this->Response()->setBody(
-            json_encode(
-                [
+            json_encode([
                     'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
                     'quantity' => $quantity,
-                ]
-            )
+            ])
         );
     }
 
@@ -1511,13 +1548,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
         $target = $this->Request()->getParam('target', 'shipping');
-        $sessionKey = $target == 'shipping' ? 'checkoutShippingAddressId' : 'checkoutBillingAddressId';
+        $sessionKey = $target === 'shipping' ? 'checkoutShippingAddressId' : 'checkoutBillingAddressId';
 
-        $this->session->offsetSet($sessionKey, $this->Request()->getParam('addressId', null));
+        $this->session->offsetSet($sessionKey, $this->Request()->getParam('addressId'));
 
         if ($target === 'both') {
-            $this->session->offsetSet('checkoutShippingAddressId', $this->Request()->getParam('addressId', null));
-            $this->session->offsetSet('checkoutBillingAddressId', $this->Request()->getParam('addressId', null));
+            $this->session->offsetSet('checkoutShippingAddressId', $this->Request()->getParam('addressId'));
+            $this->session->offsetSet('checkoutBillingAddressId', $this->Request()->getParam('addressId'));
         }
     }
 
@@ -1802,7 +1839,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * Validates the given address id with current shop configuration
      *
-     * @param $addressId
+     * @param int $addressId
      *
      * @return bool
      */
@@ -1857,7 +1894,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             unset($addressA[$key], $addressB[$key]);
         }
 
-        return count(array_diff($addressA, $addressB)) == 0;
+        return count(array_diff($addressA, $addressB)) === 0;
     }
 
     /**

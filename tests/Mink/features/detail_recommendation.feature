@@ -5,11 +5,9 @@ Feature: Recommendation tabs on detail page
     Given I am on the page "Account"
     And I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
     And the cart contains the following products:
-      | number  | name                 | quantity |
-      # ArticleID 101
-      | SW10100 | Fliegenklatsche gelb | 1        |
-      # ArticleID 98
-      | SW10101 | Fliegenklatsche grün | 1        |
+      | articleId | number  | name                 | quantity |
+      | 101       | SW10100 | Fliegenklatsche gelb | 1        |
+      | 98        | SW10101 | Fliegenklatsche grün | 1        |
 
   @recommendations @javascript
   Scenario: I can not see recommendations

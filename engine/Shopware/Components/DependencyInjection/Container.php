@@ -79,7 +79,6 @@ class Container extends BaseContainer
 
     /**
      * Checks if the given resource name is already registered. If not the resource is loaded.
-     *t
      *
      * @param string $name
      *
@@ -108,7 +107,7 @@ class Container extends BaseContainer
     }
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return string
      */
@@ -131,8 +130,6 @@ class Container extends BaseContainer
      * @param string $name
      * @param int    $invalidBehavior
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function get($name, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
@@ -150,9 +147,6 @@ class Container extends BaseContainer
      * Loads the given resource.
      *
      * @param string $name
-     *
-     * @throws \Exception
-     * @throws \Enlight_Exception
      *
      * @return bool
      */

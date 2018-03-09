@@ -277,7 +277,12 @@
             /**
              * selector for the jquery.add-article plugin to enable support for the off canvas cart
              */
-            addArticleSelector: '*[data-add-article="true"]'
+            addArticleSelector: '*[data-add-article="true"]',
+
+            /**
+             * Threshold for the scroll position when the user switches pages (in both modes e.g. infinite scrolling & page change)
+             */
+            listingScrollThreshold: -10
         },
 
         /**
@@ -1150,6 +1155,28 @@
                 $.publish('plugin/swListingActions/updateInfiniteScrolling', [this, html, pages]);
             } else {
                 this.updatePagination(response);
+                this.scrollToTopPagination();
+            }
+        },
+
+        /**
+         * Scrolls to the top paging bar
+         */
+        scrollToTopPagination: function () {
+            var $htmlBodyCt = $('html, body'),
+                listingScrollThreshold = this.opts.listingScrollThreshold,
+                listingActionPos = this.$el.offset().top + listingScrollThreshold,
+                scrollTop = $htmlBodyCt.scrollTop();
+
+            // Browser compatibility
+            if (scrollTop === 0) {
+                scrollTop = $('body').scrollTop();
+            }
+
+            if (scrollTop > listingActionPos) {
+                $htmlBodyCt.animate({
+                    scrollTop: listingActionPos
+                }, this.opts.animationSpeed);
             }
         },
 

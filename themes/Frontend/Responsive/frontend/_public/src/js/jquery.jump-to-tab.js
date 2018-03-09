@@ -14,7 +14,11 @@
         defaults: {
             contentCls: 'has--content',
             tabDetail: '.tab-menu--product',
-            tabCrossSelling: '.tab-menu--cross-selling'
+            tabCrossSelling: '.tab-menu--cross-selling',
+            btnJumpSelectors: [
+                '.product--rating-link',
+                '.link--publish-comment'
+            ]
         },
 
         init: function () {
@@ -56,7 +60,7 @@
         registerEvents: function () {
             var me = this;
 
-            me.$el.on('click touchstart', '.product--rating-link, .link--publish-comment', $.proxy(me.onJumpToTab, me));
+            me.$el.on(me.getEventName('click touchstart'), me.opts.btnJumpSelectors.join(', '), $.proxy(me.onJumpToTab, me));
 
             $.publish('plugin/swJumpToTab/onRegisterEvents', [ me ]);
         },
@@ -97,6 +101,16 @@
             }, 0);
 
             $.publish('plugin/swJumpToTab/onJumpToTab', [ me, tabIndex, jumpTo ]);
+        },
+
+        /**
+         * Destroys the plugin by removing all events of the plugin.
+         */
+        destroy: function() {
+            var me = this;
+
+            me.$el.off(this.getEventName('click'), me.opts.btnJumpSelectors.join(', '));
+            me._destroy();
         }
     });
 })(jQuery, window);

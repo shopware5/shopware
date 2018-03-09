@@ -71,7 +71,9 @@ class ProductSearch implements ProductSearchInterface
         $result = new ProductSearchResult(
             $products,
             $numberResult->getTotalCount(),
-            $numberResult->getFacets()
+            $numberResult->getFacets(),
+            $criteria,
+            $context
         );
 
         $result->addAttributes($numberResult->getAttributes());

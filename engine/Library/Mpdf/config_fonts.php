@@ -38,19 +38,19 @@ Generic substitutions (i.e. to a sans-serif or serif font) are set
 by including the font-family in e.g. $this->sans_fonts below
 */
 $this->fonttrans = array(
-	'helvetica' => 'arial',
-	'verdana' => 'arial',
-	'times' => 'timesnewroman',
-	'courier' => 'couriernew',
-	'trebuchet' => 'arial',
-	'comic' => 'arial',
-	'franklin' => 'arial',
-	'albertus' => 'arial',
-	'arialuni' => 'arial',
-	'zn_hannom_a' => 'arial',
-	'ocr-b' => 'ocrb',
-	'ocr-b10bt' => 'ocrb',
-	'damase' => 'mph2bdamase',
+    'helvetica' => 'arial',
+    'verdana' => 'arial',
+    'times' => 'timesnewroman',
+    'courier' => 'couriernew',
+    'trebuchet' => 'arial',
+    'comic' => 'arial',
+    'franklin' => 'arial',
+    'albertus' => 'arial',
+    'arialuni' => 'arial',
+    'zn_hannom_a' => 'arial',
+    'ocr-b' => 'ocrb',
+    'ocr-b10bt' => 'ocrb',
+    'damase' => 'mph2bdamase',
 );
 
 /*
@@ -88,47 +88,47 @@ starting at 1, as they appear in the .ttc file e.g.
 */
 
 $this->fontdata = array(
-	"arial" => array(
-		'R' => "arial.ttf",
-		'B' => "arialbd.ttf",
-		'I' => "ariali.ttf",
-		'BI' => "arialbi.ttf",
-	),
-	"couriernew" => array(
-		'R' => "cour.ttf",
-		'B' => "courbd.ttf",
-		'I' => "couri.ttf",
-		'BI' => "courbi.ttf",
-	),
-	"georgia" => array(
-		'R' => "georgia.ttf",
-		'B' => "georgiab.ttf",
-		'I' => "georgiai.ttf",
-		'BI' => "georgiaz.ttf",
-	),
-	"timesnewroman" => array(
-		'R' => "times.ttf",
-		'B' => "timesbd.ttf",
-		'I' => "timesi.ttf",
-		'BI' => "timesbi.ttf",
-	),
-	"verdana" => array(
-		'R' => "verdana.ttf",
-		'B' => "verdanab.ttf",
-		'I' => "verdanai.ttf",
-		'BI' => "verdanaz.ttf",
-	)
+    "arial" => array(
+        'R' => "arial.ttf",
+        'B' => "arialbd.ttf",
+        'I' => "ariali.ttf",
+        'BI' => "arialbi.ttf",
+    ),
+    "couriernew" => array(
+        'R' => "cour.ttf",
+        'B' => "courbd.ttf",
+        'I' => "couri.ttf",
+        'BI' => "courbi.ttf",
+    ),
+    "georgia" => array(
+        'R' => "georgia.ttf",
+        'B' => "georgiab.ttf",
+        'I' => "georgiai.ttf",
+        'BI' => "georgiaz.ttf",
+    ),
+    "timesnewroman" => array(
+        'R' => "times.ttf",
+        'B' => "timesbd.ttf",
+        'I' => "timesi.ttf",
+        'BI' => "timesbi.ttf",
+    ),
+    "verdana" => array(
+        'R' => "verdana.ttf",
+        'B' => "verdanab.ttf",
+        'I' => "verdanai.ttf",
+        'BI' => "verdanaz.ttf",
+    )
 );
 
 
 // Add fonts to this array if they contain characters in the SIP or SMP Unicode planes
 // but you do not require them. This allows a more efficient form of subsetting to be used.
 $this->BMPonly = array(
-	"dejavusanscondensed",
-	"dejavusans",
-	"dejavuserifcondensed",
-	"dejavuserif",
-	"dejavusansmono",
+    "dejavusanscondensed",
+    "dejavusans",
+    "dejavuserifcondensed",
+    "dejavuserif",
+    "dejavusansmono",
 );
 
 // These next 3 arrays do two things:
@@ -139,21 +139,19 @@ $this->BMPonly = array(
 // Use the mPDF font-family names i.e. lowercase and no spaces (after any translations in $fonttrans)
 // Always include "sans-serif", "serif" and "monospace" etc.
 $this->sans_fonts = array('dejavusanscondensed','sans','sans-serif','cursive','fantasy','dejavusans','freesans','liberationsans',
-	'arial','helvetica','verdana','geneva','lucida','arialnarrow','arialblack','arialunicodems',
-	'franklin','franklingothicbook','tahoma','garuda','calibri','trebuchet','lucidagrande','microsoftsansserif',
-	'trebuchetms','lucidasansunicode','franklingothicmedium','albertusmedium','xbriyaz','albasuper','quillscript',
-	'humanist777','humanist777black','humanist777light','futura','hobo','segoeprint'
+    'arial','helvetica','verdana','geneva','lucida','arialnarrow','arialblack','arialunicodems',
+    'franklin','franklingothicbook','tahoma','garuda','calibri','trebuchet','lucidagrande','microsoftsansserif',
+    'trebuchetms','lucidasansunicode','franklingothicmedium','albertusmedium','xbriyaz','albasuper','quillscript',
+    'humanist777','humanist777black','humanist777light','futura','hobo','segoeprint'
 
 );
 
 $this->serif_fonts = array('dejavuserifcondensed','serif','dejavuserif','freeserif','liberationserif',
-	'timesnewroman','times','centuryschoolbookl','palatinolinotype','centurygothic',
-	'bookmanoldstyle','bookantiqua','cyberbit','cambria',
-	'norasi','charis','palatino','constantia','georgia','albertus','xbzar','algerian','garamond',
+    'timesnewroman','times','centuryschoolbookl','palatinolinotype','centurygothic',
+    'bookmanoldstyle','bookantiqua','cyberbit','cambria',
+    'norasi','charis','palatino','constantia','georgia','albertus','xbzar','algerian','garamond',
 );
 
 $this->mono_fonts = array('dejavusansmono','mono','monospace','freemono','liberationmono','courier', 'ocrb','ocr-b','lucidaconsole',
-	'couriernew','monotypecorsiva'
+    'couriernew','monotypecorsiva'
 );
-
-?>

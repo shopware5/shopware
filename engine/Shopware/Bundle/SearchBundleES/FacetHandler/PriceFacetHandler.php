@@ -34,6 +34,7 @@ use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\PriceFieldMapper;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -51,23 +52,18 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
     private $queryAliasMapper;
 
     /**
-     * @var FieldMappingInterface
+     * @var PriceFieldMapper
      */
-    private $fieldMapping;
+    private $priceFieldMapper;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     * @param FieldMappingInterface                $fieldMapping
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper,
-        FieldMappingInterface $fieldMapping
+        PriceFieldMapper $priceFieldMapper
     ) {
         $this->snippetManager = $snippetManager;
         $this->queryAliasMapper = $queryAliasMapper;
-        $this->fieldMapping = $fieldMapping;
+        $this->priceFieldMapper = $priceFieldMapper;
     }
 
     /**
@@ -88,7 +84,7 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
         ShopContextInterface $context
     ) {
         $aggregation = new StatsAggregation('price');
-        $field = $this->fieldMapping->getPriceField($context);
+        $field = $this->priceFieldMapper->getPriceField($criteria, $context);
         $aggregation->setField($field);
         $search->addAggregation($aggregation);
     }

@@ -396,6 +396,14 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     public function initTemplate($mailing)
     {
         $template = clone Shopware()->Template();
+        $shop = Shopware()->Shop();
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $config = $inheritance->buildConfig(
+            $shop->getTemplate(),
+            $shop,
+            false
+        );
 
         $user = $this->getMailingUserByEmail(Shopware()->Config()->Mail);
         $template->assign('sUser', $user, true);
@@ -406,14 +414,11 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $template->assign('sCampaign', $this->getMailingDetails($mailing['id']), true);
         $template->assign('sConfig', Shopware()->Config());
         $template->assign('sBasefile', Shopware()->Config()->BaseFile);
-
-        $shop = Shopware()->Shop();
+        $template->assign('theme', $config);
 
         if (!$template->isCached($mailing['template'])) {
             $template->assign('sMailing', $mailing);
-            $template->assign('sStart', ($shop->getAlwaysSecure() ?
-                'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() :
-                'http://' . $shop->getHost() . $shop->getBasePath()));
+            $template->assign('sStart', ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBasePath());
             $template->assign('sUserGroup', Shopware()->System()->sUSERGROUP);
             $template->assign('sUserGroupData', Shopware()->System()->sUSERGROUPDATA);
             $template->assign('sMainCategories', Shopware()->Modules()->Categories()->sGetMainCategories());
@@ -458,13 +463,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $details = Shopware()->Modules()->Marketing()->sMailCampaignsGetDetail((int) $id);
 
         foreach ($details['containers'] as $key => $container) {
-            if ($container['type'] == 'ctVoucher') {
+            if ($container['type'] === 'ctVoucher') {
                 if (!empty($container['value'])) {
                     $details['voucher'] = $container['value'];
                 }
                 $details['containers'][$key]['type'] = 'ctText';
             }
-            if ($container['type'] == 'ctSuggest') {
+            if ($container['type'] === 'ctSuggest') {
                 $details['suggest'] = true;
             }
         }
@@ -708,26 +713,24 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         $source = preg_replace('#(src|background)="([^:"./][^:"]+)"#Umsi', '$1="../../campaigns/$2"', $source);
         $callback = [Shopware()->Plugins()->Core()->PostFilter(), 'rewriteSrc'];
-        $source = preg_replace_callback('#<(link|img|script|input|a|form|iframe|td)[^<>]*(href|src|action|background)="([^"]*)".*>#Umsi', $callback, $source);
 
-        return $source;
+        return preg_replace_callback('#<(link|img|script|input|a|form|iframe|td)[^<>]*(href|src|action|background)="([^"]*)".*>#Umsi', $callback, $source);
     }
 
     /**
      * Removes the unneeded metadata in the alternative view.
      *
-     * @param unknown_type $source
+     * @param string $source
      *
-     * @return unknown
+     * @return string
      */
     public function altFilter($source)
     {
         $source = preg_replace('#<a.+href="(.*)".*>#Umsi', '$1', $source);
         $source = str_replace(['<br />', '</p>', '&nbsp;'], ["\n", "\n", ' '], $source);
         $source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $source)));
-        $source = html_entity_decode($source);
 
-        return $source;
+        return html_entity_decode($source);
     }
 
     /**
@@ -745,15 +748,12 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $pattern = '#href="(https?://' . $host . '[^<]*[?][^<]+)"#Umsi';
         $source = preg_replace($pattern, 'href="$1&' . $track . '"', $source);
         $pattern = '#href="(https?://' . $host . '[^?<]*)"#Umsi';
-        $source = preg_replace($pattern, 'href="$1?' . $track . '"', $source);
 
-        return $source;
+        return preg_replace($pattern, 'href="$1?' . $track . '"', $source);
     }
 
     /**
      * Creates a hash based on the passed data.
-     *
-     * @param array $parts
      *
      * @return string
      */

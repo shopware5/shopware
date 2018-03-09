@@ -77,9 +77,31 @@ use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
  */
 class Kernel implements HttpKernelInterface
 {
+    /**
+     * @Deprecated
+     *
+     * Will be removed in Shopware v5.6
+     *
+     * Use the following parameters from the DIC instead:
+     *      'shopware.release.version'
+     *      'shopware.release.revision'
+     *      'shopware.release.version_text'
+     *      'shopware.release' (a Struct containing all the parameters below)
+     */
     const VERSION = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
     const REVISION = \Shopware::REVISION;
+
+    /**
+     * Shopware Version definition. Is being replaced by the correct release information in release packages.
+     * Is available in the DIC as parameter 'shopware.release.*' or a Struct containing all the parameters below.
+     */
+    protected $release = [
+        'version' => self::VERSION,
+        'version_text' => self::VERSION_TEXT,
+        'revision' => self::REVISION,
+    ];
+
     /**
      * @var \Shopware
      */
@@ -146,6 +168,8 @@ class Kernel implements HttpKernelInterface
     /**
      * @param string $environment
      * @param bool   $debug
+     *
+     * @throws \Exception
      */
     public function __construct($environment, $debug)
     {
@@ -231,6 +255,8 @@ class Kernel implements HttpKernelInterface
     /**
      * @param EnlightResponse $response
      *
+     * @throws \InvalidArgumentException
+     *
      * @return SymfonyResponse
      */
     public function transformEnlightResponseToSymfonyResponse(EnlightResponse $response)
@@ -273,6 +299,8 @@ class Kernel implements HttpKernelInterface
      * Boots the shopware and symfony di container
      *
      * @param bool $skipDatabase
+     *
+     * @throws \Exception
      */
     public function boot($skipDatabase = false)
     {
@@ -384,7 +412,7 @@ class Kernel implements HttpKernelInterface
      */
     public function getCacheDir()
     {
-        return $this->getRootDir() . '/var/cache/' . $this->environment . '_' . \Shopware::REVISION;
+        return $this->getRootDir() . '/var/cache/' . $this->environment . '_' . $this->release['revision'];
     }
 
     /**
@@ -449,11 +477,22 @@ class Kernel implements HttpKernelInterface
         return is_array($this->config['es']) ? $this->config['es'] : [];
     }
 
+    /**
+     * @return array
+     */
+    public function getRelease()
+    {
+        return $this->release;
+    }
+
     protected function initializePlugins()
     {
         $initializer = new PluginInitializer(
             $this->connection,
-            $this->config['plugin_directories']['ShopwarePlugins']
+            [
+                $this->config['plugin_directories']['ShopwarePlugins'],
+                $this->config['plugin_directories']['ProjectPlugins'],
+            ]
         );
 
         $this->plugins = $initializer->initializePlugins();
@@ -468,6 +507,8 @@ class Kernel implements HttpKernelInterface
      * the Shopware_Application.
      * The shopware configuration is required before the shopware application booted,
      * to pass the configuration to the Symfony di container.
+     *
+     * @throws \Exception
      */
     protected function initializeConfig()
     {
@@ -490,6 +531,15 @@ class Kernel implements HttpKernelInterface
         if (!defined('_MPDF_TTFONTDATAPATH')) {
             define('_MPDF_TTFONTDATAPATH', $this->getCacheDir() . '/mpdf/ttfontdata/');
         }
+
+        // Set up custom mPDF fonts
+        if (!defined('_MPDF_SYSTEM_TTFONTS_CONFIG')) {
+            define('_MPDF_SYSTEM_TTFONTS_CONFIG', $this->getRootDir() . '/engine/Library/Mpdf/config_fonts.php');
+        }
+
+        if (!defined('_MPDF_SYSTEM_TTFONTS')) {
+            define('_MPDF_SYSTEM_TTFONTS', $this->getRootDir() . '/engine/Library/Mpdf/ttfonts/');
+        }
     }
 
     /**
@@ -506,6 +556,9 @@ class Kernel implements HttpKernelInterface
      *
      * The cached version of the service container is used when fresh, otherwise the
      * container is built.
+     *
+     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function initializeContainer()
     {
@@ -520,7 +573,7 @@ class Kernel implements HttpKernelInterface
             $container = $this->buildContainer();
             $container->compile();
 
-            $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
+            $this->dumpContainer($cache, $container, $class, Container::class);
         }
 
         require_once $cache->getPath();
@@ -545,6 +598,8 @@ class Kernel implements HttpKernelInterface
      * @param ContainerBuilder $container The service container
      * @param string           $class     The name of the class to generate
      * @param string           $baseClass The name of the container's base class
+     *
+     * @throws \RuntimeException
      */
     protected function dumpContainer(ConfigCache $cache, ContainerBuilder $container, $class, $baseClass)
     {
@@ -563,6 +618,7 @@ class Kernel implements HttpKernelInterface
     /**
      * Builds the service container.
      *
+     * @throws \Exception
      * @throws \RuntimeException
      *
      * @return ContainerBuilder The compiled service container
@@ -598,6 +654,8 @@ class Kernel implements HttpKernelInterface
      * Prepares the ContainerBuilder before it is compiled.
      *
      * @param ContainerBuilder $container A ContainerBuilder instance
+     *
+     * @throws \Exception
      */
     protected function prepareContainer(ContainerBuilder $container)
     {
@@ -661,7 +719,7 @@ class Kernel implements HttpKernelInterface
      *
      * @param \Shopware\Components\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string                                                                                                     $alias
-     * @param array|string                                                                                               $options
+     * @param array                                                                                                      $options
      */
     protected function addShopwareConfig(ContainerBuilder $container, $alias, $options)
     {
@@ -704,6 +762,9 @@ class Kernel implements HttpKernelInterface
             'kernel.logs_dir' => $this->getLogDir(),
             'kernel.charset' => 'UTF-8',
             'kernel.container_class' => $this->getContainerClass(),
+            'shopware.release.version' => $this->release['version'],
+            'shopware.release.version_text' => $this->release['version_text'],
+            'shopware.release.revision' => $this->release['revision'],
         ];
     }
 

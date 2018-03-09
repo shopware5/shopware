@@ -29,15 +29,22 @@ Feature: Detail page
 
 
     @plugin @notification
-    Scenario: I can let me notify, when an article is available
-        Given I am on the detail page for article 243
+    Scenario: I can let me notify, when an article is not available
+        Given The notification plugin is activated
+        And   I am on the detail page for article 243
         Then  I should see "Benachrichtigen Sie mich, wenn der Artikel lieferbar ist"
 
-        When  I submit the notification form with "test@example.de"
+        When  I submit the notification form with "test-notification@example.de"
         Then  I should see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
 
         When  I click the link in my latest email
         Then  I should see "Vielen Dank! Wir haben Ihre Anfrage gespeichert! Sie werden benachrichtigt sobald der Artikel wieder verfügbar ist."
+
+    @plugin @notification
+    Scenario: I should not see the notification box, when the notification plugin is disabled
+        Given The notification plugin is deactivated
+        And   I am on the detail page for article 243
+        Then  I should not see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
 
     @language @javascript
     Scenario: I can change the language
@@ -126,9 +133,9 @@ Feature: Detail page
         Examples:
             | id  | price    | pseudoprice | discount |
             | 36  | 24,99    | 29,99       | 16,67    |
-            | 81  | 7,99     | 9,98        | 19,97    |
-            | 113 | 599,00   | 698,99      | 14,31    |
-            | 208 | 500,00   | 1.000,01    | 50       |
+            | 81  | 7,99     | 9,98        | 19,94    |
+            | 113 | 599,00   | 698,99      | 14,3     |
+            | 208 | 500,00   | 1.000,00    | 50       |
             | 239 | 2.499,00 | 2.799,00    | 10,72    |
 
     @javascript

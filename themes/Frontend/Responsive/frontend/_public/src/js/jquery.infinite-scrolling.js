@@ -86,6 +86,9 @@
             /** @string ajaxUrl - this string will be used as url for the ajax-call to load the articles */
             ajaxUrl: window.controller.ajax_listing || null,
 
+            /** @string productBoxLayout - this string determines the layout of the loaded product boxes */
+            productBoxLayout: null,
+
             /** @string delegateConSelector - selector for delegate container, used for reload buttons */
             delegateConSelector: '.listing--wrapper',
 
@@ -162,6 +165,10 @@
             me.params = parseQueryString(window.location.href);
             me.upperParams = $.extend({}, me.params);
             me.historyParams = $.extend({}, me.params);
+
+            if (me.opts.productBoxLayout) {
+                me.params.productBoxLayout = me.opts.productBoxLayout || null;
+            }
 
             me.urlBasicMode = false;
 

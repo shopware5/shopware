@@ -249,8 +249,6 @@ class StoreDownloadCommand extends StoreCommand
      * @param string            $domain
      * @param string            $version
      * @param AccessTokenStruct $token
-     *
-     * @throws \Exception
      */
     private function handleLicenceInstall(PluginStruct $plugin, $domain, $version, AccessTokenStruct $token = null)
     {
@@ -271,7 +269,7 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param $technicalName
+     * @param string $technicalName
      *
      * @return Plugin|null
      */
@@ -282,6 +280,9 @@ class StoreDownloadCommand extends StoreCommand
         return $repo->findOneBy(['name' => $technicalName]);
     }
 
+    /**
+     * @return string
+     */
     private function checkDomain()
     {
         $domain = $this->input->getOption('domain');
@@ -292,11 +293,14 @@ class StoreDownloadCommand extends StoreCommand
         return $domain;
     }
 
+    /**
+     * @return string
+     */
     private function checkVersion()
     {
         $version = $this->input->getOption('shopware-version');
         if (empty($version)) {
-            $version = \Shopware::VERSION;
+            $version = $this->container->getParameter('shopware.release.version');
         }
 
         return $version;
@@ -304,8 +308,6 @@ class StoreDownloadCommand extends StoreCommand
 
     /**
      * @param PluginStruct $struct
-     *
-     * @throws \Exception
      */
     private function checkLicenceManager(PluginStruct $struct)
     {
@@ -333,8 +335,6 @@ class StoreDownloadCommand extends StoreCommand
 
     /**
      * @param PluginStruct $plugin
-     *
-     * @throws \Exception
      */
     private function checkIonCubeLoader(PluginStruct $plugin)
     {
@@ -352,8 +352,6 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @throws \Exception
-     *
      * @return AccessTokenStruct
      */
     private function checkAuthentication()
@@ -404,7 +402,9 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param $plugin
+     * @param PluginStruct|LicenceStruct $plugin
+     *
+     * @throws \RuntimeException
      *
      * @return PluginStruct
      */

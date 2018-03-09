@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Class
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -28,17 +29,18 @@
  * an exception if this is the case.
  *
  * @category   Enlight
- * @package    Enlight_Class
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 abstract class Enlight_Class
 {
     /**
-     * Contains all initialed enlight instances.
+     * Contains all initialized Enlight instances.
+     *
      * @var array
      */
-    protected static $instances = array();
+    protected static $instances = [];
 
     /**
      * Constructor method.
@@ -47,6 +49,8 @@ abstract class Enlight_Class
      * as singleton and has already initialed.
      * If an hook proxy exist for the class, the constructor will prevent the initialization and throw an exception
      * that the instance method should be used.
+     *
+     * @throws \Enlight_Exception
      */
     public function __construct()
     {
@@ -56,7 +60,7 @@ abstract class Enlight_Class
                 self::$instances[$class] = $this;
             } else {
                 throw new Enlight_Exception(
-                    'Class "'.get_class($this).'" is singleton, please use the instance method'
+                    'Class "' . get_class($this) . '" is singleton, please use the instance method'
                 );
             }
         }
@@ -64,12 +68,12 @@ abstract class Enlight_Class
           && !$this instanceof Enlight_Hook_Proxy
           && Shopware()->Hooks()->hasProxy($class)) {
             throw new Enlight_Exception(
-                'Class "'.get_class($this).'" has hooks, please use the instance method'
+                'Class "' . get_class($this) . '" has hooks, please use the instance method'
             );
         }
         if (method_exists($this, 'init')) {
             if (func_num_args()) {
-                call_user_func_array(array($this, 'init'), func_get_args());
+                call_user_func_array([$this, 'init'], func_get_args());
             } else {
                 $this->init();
             }
@@ -77,13 +81,73 @@ abstract class Enlight_Class
     }
 
     /**
+     * Magic caller
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @throws \Enlight_Exception
+     */
+    public function __call($name, $args = null)
+    {
+        throw new Enlight_Exception(
+            'Method "' . get_class($this) . '::' . $name . '" not found failure',
+            Enlight_Exception::METHOD_NOT_FOUND
+        );
+    }
+
+    /**
+     * Magic static caller
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @throws \Enlight_Exception
+     */
+    public static function __callStatic($name, $args = null)
+    {
+        throw new Enlight_Exception(
+            'Method "' . get_called_class() . '::' . $name . '" not found failure',
+            Enlight_Exception::METHOD_NOT_FOUND
+        );
+    }
+
+    /**
+     * Magic getter
+     *
+     * @param string $name
+     *
+     * @throws \Enlight_Exception
+     */
+    public function __get($name)
+    {
+        throw new Enlight_Exception('Property "' . $name . '" not found failure', Enlight_Exception::PROPERTY_NOT_FOUND);
+    }
+
+    /**
+     * Magic setter
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @throws \Enlight_Exception
+     */
+    public function __set($name, $value = null)
+    {
+        throw new Enlight_Exception('Property "' . $name . '" not found failure', Enlight_Exception::PROPERTY_NOT_FOUND);
+    }
+
+    /**
      * Returns the class name of the given class. If no class is given, the class will drawn by
      * get_called_class(). If the given class has an hook proxy the function will return the proxy class.
      *
      * @param mixed $class
+     *
+     * @throws \Enlight_Exception
+     *
      * @return string
      */
-    public static function getClassName($class=null)
+    public static function getClassName($class = null)
     {
         if (empty($class)) {
             $class = get_called_class();
@@ -96,6 +160,7 @@ abstract class Enlight_Class
         if (in_array('Enlight_Hook', class_implements($class))) {
             $class = Shopware()->Hooks()->getProxy($class);
         }
+
         return $class;
     }
 
@@ -103,11 +168,14 @@ abstract class Enlight_Class
      * Returns a class instance. If the class is already initialed the existing instance will returned.
      * Otherwise the class will be initialed with the given arguments.
      *
-     * @param   string $class
-     * @param   array $args
-     * @return  Enlight_Class
+     * @param string $class
+     * @param array  $args
+     *
+     * @throws \ReflectionException
+     *
+     * @return Enlight_Class
      */
-    public static function Instance($class=null, $args=null)
+    public static function Instance($class = null, $args = null)
     {
         $class = self::getClassName($class);
         if (isset(self::$instances[$class])) {
@@ -121,66 +189,18 @@ abstract class Enlight_Class
         } else {
             $instance = $rc->newInstance();
         }
+
         return $instance;
     }
 
     /**
      * Reset the instance of the given class.
      *
-     * @param   mixed $class
+     * @param mixed $class
      */
-    public static function resetInstance($class=null)
+    public static function resetInstance($class = null)
     {
         $class = self::getClassName($class);
         unset(self::$instances[$class]);
-    }
-
-    /**
-     * Magic caller
-     *
-     * @param   string $name
-     * @param   array $args
-     */
-    public function __call($name, $args=null)
-    {
-        throw new Enlight_Exception(
-            'Method "'.get_class($this).'::'.$name.'" not found failure',
-            Enlight_Exception::METHOD_NOT_FOUND
-        );
-    }
-
-    /**
-     * Magic static caller
-     *
-     * @param   string $name
-     * @param   array $args
-     */
-    public static function __callStatic($name, $args=null)
-    {
-        throw new Enlight_Exception(
-            'Method "'.get_called_class().'::'.$name.'" not found failure',
-            Enlight_Exception::METHOD_NOT_FOUND
-        );
-    }
-
-    /**
-     * Magic getter
-     *
-     * @param   string $name
-     */
-    public function __get($name)
-    {
-        throw new Enlight_Exception('Property "'.$name.'" not found failure', Enlight_Exception::PROPERTY_NOT_FOUND);
-    }
-
-    /**
-     * Magic setter
-     *
-     * @param   string $name
-     * @param   mixed $value
-     */
-    public function __set($name, $value=null)
-    {
-        throw new Enlight_Exception('Property "'.$name.'" not found failure', Enlight_Exception::PROPERTY_NOT_FOUND);
     }
 }

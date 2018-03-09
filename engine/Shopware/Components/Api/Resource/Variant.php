@@ -526,6 +526,17 @@ class Variant extends Resource implements BatchInterface
             $data['purchasePrice'] = (float) str_replace(',', '.', $data['purchasePrice']);
         }
 
+        /*
+         * @Deprecated
+         *
+         * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
+         *
+         * If `lastStock` was only defined on the main product, apply it to all it's variants
+         */
+        if (empty($data['lastStock'])) {
+            $data['lastStock'] = $article->getLastStock();
+        }
+
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
 
         if (isset($data['configuratorOptions'])) {
@@ -830,15 +841,15 @@ class Variant extends Resource implements BatchInterface
      */
     protected function prepareUnitAssociation($data)
     {
-        //if unit id passed, assign existing unit.
+        // If unit id passed, assign existing unit.
         if (!empty($data['unitId'])) {
-            $data['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $data['unitId']);
+            $data['unit'] = $this->getManager()->find(\Shopware\Models\Article\Unit::class, $data['unitId']);
 
             if (empty($data['unit'])) {
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['unitId']));
             }
 
-        //new unit data send? create new unit for this variant
+            // New unit data send? create new unit for this variant
         } elseif (!empty($data['unit'])) {
             $data['unit'] = $this->updateUnitReference($data['unit']);
         }
@@ -859,7 +870,7 @@ class Variant extends Resource implements BatchInterface
      */
     protected function updateUnitReference($unitData)
     {
-        $unitRepository = $this->getManager()->getRepository('\Shopware\Models\Article\Unit');
+        $unitRepository = $this->getManager()->getRepository(\Shopware\Models\Article\Unit::class);
 
         //try to find an existing unit by the passed conditions "id", "name" or "unit"
         $unit = $unitRepository->findOneBy(

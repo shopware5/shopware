@@ -25,8 +25,11 @@
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\CriteriaAwareInterface;
 use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -36,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class IsAvailableConditionHandler implements ConditionHandlerInterface
+class IsAvailableConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
     /**
      * @var PriceHelperInterface
@@ -44,11 +47,21 @@ class IsAvailableConditionHandler implements ConditionHandlerInterface
     private $priceHelper;
 
     /**
+     * @var Criteria
+     */
+    private $criteria;
+
+    /**
      * @param PriceHelperInterface $priceHelper
      */
     public function __construct(PriceHelperInterface $priceHelper)
     {
         $this->priceHelper = $priceHelper;
+    }
+
+    public function setCriteria(Criteria $criteria)
+    {
+        $this->criteria = $criteria;
     }
 
     /**
@@ -67,6 +80,20 @@ class IsAvailableConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $this->priceHelper->joinAvailableVariant($query);
+        $conditions = $this->criteria->getConditionsByClass(VariantCondition::class);
+
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
+
+        if (empty($conditions)) {
+            //variants will ne be splitted => only check if product has an available variant
+            $this->priceHelper->joinAvailableVariant($query);
+
+            return;
+        }
+
+        //variants will be displayed => add stock condition
+        $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
     }
 }

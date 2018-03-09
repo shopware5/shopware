@@ -2,27 +2,6 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
-## 5.3.8
-
-[View all changes from v5.3.7...v5.3.8](https://github.com/shopware/shopware/compare/v5.3.7...v5.3.8)
-
-### Additions 
-
-* Added new column `garbage_collectable TINYINT(1) DEFAULT 1` to table `s_media_album` to define if an album is to be considered by the `sw:media:cleanup` command. The flag can be toggled in the album settings.
-* Added all additional article columns to product import/export
-* Added compatibility of the media garbage collector with the smarty function 'media'
-
-### Changes
-
-* Changed loading of the themes/_private folder to be always executed
-* Changed the `checkOrderStatus` method in `Shopware_Controllers_Backend_Order` to only send e-mails when necessary
-* Changed `themes/Backend/ExtJs/backend/order/controller/batch.js` to inform the user about configuration errors
-* Changed `themes/Backend/ExtJs/backend/order/view/batch/form.js` to allow for more precise form validation and better feedback to the user
-
-### Removals
-
-* Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
-
 ## 5.3.7
 
 [View all changes from v5.3.6...v5.3.7](https://github.com/shopware/shopware/compare/v5.3.6...v5.3.7)
@@ -367,7 +346,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
 * Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
 * Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
-* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 
 ### Removals
 

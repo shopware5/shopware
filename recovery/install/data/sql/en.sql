@@ -1829,3 +1829,7 @@ UPDATE s_search_custom_facet SET `name` = 'Weight', `facet` = '{"Shopware\\\\Bun
 UPDATE s_search_custom_facet SET `name` = 'Width', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\WidthFacet":{"label":"Width","suffix":"cm","digits":2}}' WHERE id = 9;
 UPDATE s_search_custom_facet SET `name` = 'Height', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\HeightFacet":{"label":"Height","suffix":"cm","digits":2}}' WHERE id = 10;
 UPDATE s_search_custom_facet SET `name` = 'Length', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\LengthFacet":{"label":"Length","suffix":"cm","digits":2}}' WHERE id = 11;
+UPDATE s_search_custom_facet SET `name` = 'Variants', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\VariantFacet":{"groupIds":{}, "expandGroupIds":{}}}' WHERE id = 12;
+
+-- s_core_translations --
+UPDATE `s_core_translations` SET objectdata = 'a:1:{s:5:\"label\";s:8:\"Variants\";}' WHERE objecttype = 'custom_facet' AND objectlanguage = 1 AND dirty != 1;

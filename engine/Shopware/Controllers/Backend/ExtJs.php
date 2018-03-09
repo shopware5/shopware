@@ -68,7 +68,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 
     /**
      * Enable json renderer for index / load action
-     * Check acl rules
+     * Checks acl rules
      */
     public function preDispatch()
     {
@@ -95,7 +95,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $identity = Shopware()->Container()->get('Auth')->getIdentity();
         $this->View()->assign('user', $identity, true);
 
-        if ($this->Request()->get('file') == 'bootstrap') {
+        if ($this->Request()->get('file') === 'bootstrap') {
             $this->View()->assign('tinymceLang', $this->getTinyMceLang($identity), true);
         }
     }
@@ -193,9 +193,9 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      * Add an acl permission rule to $this->aclPermissions array
      * Permissions will be checked automatically.
      *
-     * @param $action string Name of action with action prefix
-     * @param $privilege string Name of privilege as you have set in s_core_acl_privileges
-     * @param $errorMessage string Optionally error message to show if permission denied
+     * @param string $action       Name of action with action prefix
+     * @param string $privilege    Name of privilege as you have set in s_core_acl_privileges
+     * @param string $errorMessage Optionally error message to show if permission denied
      */
     protected function addAclPermission($action, $privilege, $errorMessage = '')
     {
@@ -227,6 +227,11 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         ]);
     }
 
+    /**
+     * @param $identity
+     *
+     * @return bool|string
+     */
     protected function getTinyMceLang($identity)
     {
         if (!$identity || !$identity->locale) {

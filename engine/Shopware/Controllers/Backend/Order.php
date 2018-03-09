@@ -777,7 +777,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $models = $query->getResult();
         foreach ($models as $model) {
             foreach ($model->getDocuments() as $document) {
-                $files[] = Shopware()->DocPath('files/documents') . $document->getHash() . '.pdf';
+                $files[] = Shopware()->Container()->getParameter('shopware.app.documentsdir') . '/' . $document->getHash() . '.pdf';
             }
         }
         $this->mergeDocuments($files);
@@ -834,7 +834,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function deleteDocumentAction()
     {
         $documentId = $this->request->getParam('documentId');
-        $documentPath = $this->container->getParameter('kernel.root_dir') . '/files/documents/';
+        $documentPath = rtrim($this->container->getParameter('shopware.app.documentsdir'), '/') . DIRECTORY_SEPARATOR;
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->container->get('dbal_connection');
         $queryBuilder = $connection->createQueryBuilder();
@@ -928,7 +928,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function openPdfAction()
     {
         $name = basename($this->Request()->getParam('id')) . '.pdf';
-        $file = Shopware()->DocPath('files/documents') . $name;
+        $file = Shopware()->Container()->getParameter('shopware.app.documentsdir') . '/' . $name;
         if (!file_exists($file)) {
             $this->View()->assign([
                 'success' => false,
@@ -1444,8 +1444,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function addAttachments(Enlight_Components_Mail $mail, $orderId, array $attachments = [])
     {
-        $rootDirectory = $this->container->getParameter('kernel.root_dir');
-        $documentDirectory = $rootDirectory . '/files/documents';
+        $documentDirectory = rtrim($this->get('service_container')->getParameter('shopware.app.documentsdir'), '/');
 
         foreach ($attachments as $attachment) {
             $filePath = $documentDirectory . '/' . $attachment['hash'] . '.pdf';

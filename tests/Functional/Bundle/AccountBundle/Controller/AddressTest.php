@@ -29,7 +29,6 @@ use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
-use Shopware\Models\Shop\Shop;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -159,27 +158,27 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param $addressId
+     * @param int $addressId
      * @depends testCreation
      */
     public function testEditPage($addressId)
     {
         $this->ensureLogin();
 
-        // edit page
+        // Edit page
         $crawler = $this->doRequest('GET', '/address/edit/id/' . $addressId);
         $this->assertEquals('Fasanenstrasse 99', $crawler->filter('input[name="address[street]"]')->attr('value'));
     }
 
     /**
-     * @param $addressId
+     * @param int $addressId
      * @depends testCreation
      */
     public function testEdit($addressId)
     {
         $this->ensureLogin();
 
-        // edit operation
+        // Edit operation
         $crawler = $this->doRequest(
             'POST',
             '/address/edit/id/' . $addressId,
@@ -211,11 +210,11 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $this->ensureLogin();
 
-        // delete confirm page
+        // Delete confirm page
         $crawler = $this->doRequest('GET', '/address/delete/id/' . $addressId);
         $this->assertEquals(1, $crawler->filter('html:contains("Fasanenstrasse 99")')->count());
 
-        // delete operation
+        // Delete operation
         $crawler = $this->doRequest('POST', '/address/delete/id/' . $addressId, ['id' => $addressId]);
         $this->assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich gelöscht")')->count());
         $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
@@ -224,6 +223,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage The address is defined as default billing or shipping address and cannot be removed.
+     * @depends testCreation
      */
     public function testDeletionOfDefaultAddressesShouldFail()
     {
@@ -245,18 +245,21 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
     }
 
+    /**
+     * @depends testCreation
+     */
     public function testChangeOfBillingAddressReflectsInAccount()
     {
         $this->ensureLogin();
 
-        // crawl original data
+        // Crawl original data
         $crawler = $this->doRequest('GET', '/account');
         $originalText = trim($crawler->filter('.account--billing .panel--body p')->last()->text());
         $addressId = (int) $crawler->filter('.account--billing .panel--actions a:contains("oder andere Adresse wählen")')->attr('data-id');
 
         $this->assertGreaterThan(0, $addressId);
 
-        // edit the entry
+        // Edit the entry
         $expectedText = 'Herr
 Shop ManMusterstr. 5555555 Musterhausen
 Nordrhein-WestfalenDeutschland';
@@ -294,7 +297,7 @@ Nordrhein-WestfalenDeutschland';
      *
      * @return Crawler
      */
-    private function doRequest($method, $url, $data = [])
+    private function doRequest($method, $url, array $data = [])
     {
         $this->reset();
 
@@ -309,6 +312,10 @@ Nordrhein-WestfalenDeutschland';
         if ($this->Response()->isRedirect()) {
             $parts = parse_url($this->Response()->getHeaders()[0]['value']);
             $followUrl = $parts['path'];
+
+            if (isset($parts['query'])) {
+                $followUrl .= '?' . $parts['query'];
+            }
 
             return $this->doRequest('GET', $followUrl);
         }

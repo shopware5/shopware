@@ -61,6 +61,8 @@ class PluginLocalService
     /**
      * @param ListingRequest $context
      *
+     * @throws \Exception
+     *
      * @return ListingResultStruct
      */
     public function getListing(ListingRequest $context)
@@ -104,6 +106,8 @@ class PluginLocalService
 
     /**
      * @param PluginsByTechnicalNameRequest $context
+     *
+     * @throws \Exception
      *
      * @return PluginStruct[]
      */
@@ -164,6 +168,8 @@ class PluginLocalService
      * @param array       $plugins
      * @param BaseRequest $context
      *
+     * @throws \Exception
+     *
      * @return PluginStruct[]
      */
     private function iteratePlugins(array $plugins, BaseRequest $context)
@@ -215,11 +221,13 @@ class PluginLocalService
     /**
      * @param string $name
      *
+     * @throws \Exception
+     *
      * @return bool|string
      */
     private function getIconOfPlugin($name)
     {
-        $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
+        $rootDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
 
         $path = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginPath($name);
         $path .= '/plugin.png';
@@ -228,7 +236,7 @@ class PluginLocalService
         $front = Shopware()->Container()->get('front');
 
         if (file_exists($path) && $front && $front->Request()) {
-            return $front->Request()->getBasePath() . $relativePath;
+            return $front->Request()->getBasePath() . '/' . ltrim($relativePath, '/');
         }
 
         return false;

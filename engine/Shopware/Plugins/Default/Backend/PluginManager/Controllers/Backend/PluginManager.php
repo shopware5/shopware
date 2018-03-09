@@ -88,13 +88,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     public function rangeDownloadAction()
     {
         $url = $this->Request()->getParam('uri');
-        $offset = $this->Request()->getParam('offset');
+        $offset = (int) $this->Request()->getParam('offset');
         $size = $this->Request()->getParam('size');
         $sha1 = $this->Request()->getParam('sha1');
         $name = $this->Request()->getParam('fileName', 'download.zip');
 
-        $destination = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/' . $name;
-        if ($offset == 0) {
+        $downloadsDir = $this->container->getParameter('shopware.app.downloadsdir');
+        $destination = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $name;
+        if ($offset === 0) {
             unlink($destination);
         }
 
@@ -625,9 +626,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign('success', true);
     }
 
-    /**
-     * @throws Exception
-     */
     public function importPluginLicenceAction()
     {
         $technicalName = $this->Request()->getParam('technicalName');
@@ -783,11 +781,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return null;
         }
 
-        /** @var $token AccessTokenStruct */
-        $token = $this->get('BackendSession')->offsetGet('store_token');
-        $token = unserialize($token);
-
-        return $token;
+        return unserialize($this->get('BackendSession')->offsetGet('store_token'));
     }
 
     /**
@@ -811,7 +805,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     private function getVersion()
     {
-        return Shopware::VERSION;
+        return $this->container->getParameter('shopware.release.version');
     }
 
     /**
@@ -828,8 +822,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param StoreException $exception
-     *
-     * @throws Exception
      *
      * @return mixed|string
      */
@@ -892,8 +884,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @throws Exception
-     *
      * @return PluginCategoryService
      */
     private function getCategoryService()
@@ -907,9 +897,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param BasketStruct $basket
-     * @param $positions
+     * @param array        $positions
      */
-    private function loadBasketPlugins(BasketStruct $basket, $positions)
+    private function loadBasketPlugins(BasketStruct $basket, array $positions)
     {
         $context = new PluginsByTechnicalNameRequest(
             $this->getLocale(),
@@ -933,7 +923,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
     }
 
-    private function getTechnicalNameOfOrderNumber($orderNumber, $positions)
+    /**
+     * @param string $orderNumber
+     * @param array  $positions
+     */
+    private function getTechnicalNameOfOrderNumber($orderNumber, array $positions)
     {
         foreach ($positions as $requestPosition) {
             if ($requestPosition['orderNumber'] != $orderNumber) {
@@ -946,6 +940,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         return null;
     }
 
+    /**
+     * @param Exception $e
+     */
     private function handleException(Exception $e)
     {
         if (!($e instanceof StoreException)) {
@@ -959,7 +956,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => false,
             'message' => $message,
-            'authentication' => ($e instanceof AuthenticationException),
+            'authentication' => $e instanceof AuthenticationException,
         ]);
     }
 

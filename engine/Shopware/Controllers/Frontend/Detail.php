@@ -72,7 +72,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     {
         $id = (int) $this->Request()->sArticle;
         $tpl = (string) $this->Request()->template;
-        if (empty($id)) {
+
+        if ($id <= 0) {
             return $this->forward('error');
         }
 
@@ -105,15 +106,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 $number,
                 $selection
             );
-        } catch (RuntimeException $e) {
+        } catch (\Exception $e) {
             $article = null;
         }
-
-        $this->Request()->setQuery('sCategory', $article['categoryID']);
 
         if (empty($article) || empty($article['articleName'])) {
             return $this->forward('error');
         }
+
+        $this->Request()->setQuery('sCategory', $article['categoryID']);
 
         $template = trim($article['template']);
         if (!empty($template)) {
@@ -125,10 +126,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-
-        // Was:
-        // $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
-        // But sGetArticleBundlesByArticleID() always returned false.
         $article['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryID)) {
@@ -206,9 +203,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             }
         }
 
-        if (empty(Shopware()->System()->_POST['sVoteName'])) {
-            $sErrorFlag['sVoteName'] = true;
-        }
         if (empty(Shopware()->System()->_POST['sVoteSummary'])) {
             $sErrorFlag['sVoteSummary'] = true;
         }

@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Defines the search result of the search gateway.
@@ -41,15 +42,29 @@ class ProductSearchResult extends ProductNumberSearchResult
     protected $products;
 
     /**
+     * @var Criteria
+     */
+    protected $criteria;
+
+    /**
+     * @var ShopContextInterface
+     */
+    protected $context;
+
+    /**
      * @param ListProduct[]          $products   Indexed by the product order number
      * @param int                    $totalCount
      * @param FacetResultInterface[] $facets
+     * @param Criteria               $criteria
+     * @param ShopContextInterface   $context
      */
-    public function __construct($products, $totalCount, $facets)
+    public function __construct($products, $totalCount, $facets, Criteria $criteria, ShopContextInterface $context)
     {
         $this->products = $products;
         $this->totalCount = $totalCount;
         $this->facets = $facets;
+        $this->criteria = $criteria;
+        $this->context = $context;
     }
 
     /**
@@ -66,5 +81,15 @@ class ProductSearchResult extends ProductNumberSearchResult
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    public function getCriteria()
+    {
+        return $this->criteria;
     }
 }

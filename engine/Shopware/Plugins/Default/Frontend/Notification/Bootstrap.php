@@ -276,53 +276,92 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
     {
         $modelManager = Shopware()->Container()->get('models');
 
-        $sql = 'SELECT * FROM `s_articles_notification` WHERE send = 0';
+        $conn = Shopware()->Container()->get('dbal_connection');
 
-        $getNotifications = Shopware()->Db()->fetchAll($sql);
+        $notifications = $conn->createQueryBuilder()
+            ->select(
+                'n.ordernumber',
+                'n.mail',
+                'n.language'
+            )
+            ->from('s_articles_notification n')
+            ->where('send=:send')
+            ->setParameter('send', 0)
+            ->execute()
+            ->fetchAll();
 
-        foreach ($getNotifications as $data) {
-            $ordernumber = $data['ordernumber'];
+        foreach ($notifications as $notify) {
+            $product = $conn->createQueryBuilder()
+                ->select(
+                    'a.id AS articleID',
+                    'a.active',
+                    'a.notification',
+                    'd.ordernumber',
+                    'd.minpurchase',
+                    'd.instock',
+                    'd.laststock'
+                )
+                ->from('s_articles_details', 'd')
+                ->innerJoin('d', 's_articles', 'a', 'd.articleID = a.id')
+                ->where('d.ordernumber = :number')
+                ->setParameter('number', $notify['ordernumber'])
+                ->execute()
+                ->fetch(\PDO::FETCH_ASSOC);
 
-            $sArticle = Shopware()->Db()->fetchRow('SELECT a.id as articleID, d.ordernumber, d.instock, a.active FROM s_articles_details d, s_articles a WHERE d.articleID=a.id AND d.ordernumber=?', [$ordernumber]);
-
-            $sArticleID = $sArticle['articleID'];
-            if (empty($sArticleID)) {
+            if (
+                empty($product) || //No product associated with the specified order number (empty result set)
+                empty($product['articleID']) || // or empty articleID
+                empty($product['notification']) || // or notification disabled on product
+                empty($product['active']) // or product is not active
+            ) {
                 continue;
             }
 
-            $instock = $sArticle['instock'];
+            $inStock = (int) $product['instock'];
+            $minPurchase = (int) $product['minpurchase'];
+            $lastStock = $product['laststock'];
 
-            $sql = 'SELECT notification from s_articles WHERE ID = ?';
-
-            $notificationActive = (bool) Shopware()->Db()->fetchOne($sql, [$sArticleID]);
-            if ((int) $instock > 0 && $notificationActive === true && !empty($sArticle['active'])) {
-                /* @var $shop \Shopware\Models\Shop\Shop */
-                $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($data['language']);
-                $shop->registerResources();
-
-                $shopContext = Context::createFromShop($shop, Shopware()->Container()->get('config'));
-                Shopware()->Container()->get('router')->setContext($shopContext);
-
-                $link = Shopware()->Front()->Router()->assemble([
-                    'sViewport' => 'detail',
-                    'sArticle' => $sArticleID,
-                ]);
-
-                $context = [
-                    'sArticleLink' => $link,
-                    'sOrdernumber' => $ordernumber,
-                    'sData' => $job['data'],
-                ];
-
-                $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
-                $mail->addTo($data['mail']);
-                $mail->send();
-
-                //set notification to already send
-                $sql = "UPDATE `s_articles_notification` SET `send` = '1' WHERE `ordernumber` =?";
-                Shopware()->Db()->query($sql, [$data['ordernumber']]);
-                // doing update on s_articles_notification
+            /*
+             * Consider the last stock option, for the following scenario:
+             *
+             * We have a product in our store which has the on sale (laststock) option enabled with notifications
+             * A costumer enters his email for getting notified about said product
+             * The store owner removes the laststock flag at a later time for that product.
+             * In this case the customer should be also notified since the product is considered to be available.
+             */
+            if ($lastStock && (($minPurchase > 0 && $inStock < $minPurchase) || $inStock <= 0)) {
+                continue;
             }
+
+            /* @var $shop \Shopware\Models\Shop\Shop */
+            $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($notify['language']);
+            $shop->registerResources();
+
+            $shopContext = Context::createFromShop($shop, Shopware()->Container()->get('config'));
+            Shopware()->Container()->get('router')->setContext($shopContext);
+
+            $link = Shopware()->Front()->Router()->assemble([
+                'sViewport' => 'detail',
+                'sArticle' => $product['articleID'],
+                'number' => $product['ordernumber'],
+            ]);
+
+            $context = [
+                'sArticleLink' => $link,
+                'sOrdernumber' => $notify['ordernumber'],
+                'sData' => $job['data'],
+            ];
+
+            $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
+            $mail->addTo($notify['mail']);
+            $mail->send();
+
+            //Set notification to already sent
+            $conn->update(
+                's_articles_notification',
+                ['send' => 1],
+                ['orderNumber' => $notify['ordernumber']]
+            );
         }
     }
 }

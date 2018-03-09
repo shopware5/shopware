@@ -57,7 +57,16 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
             fieldLabel: me.snippets.albumName,
             labelWidth: 200,
             name: 'text',
-            allowBlank: false
+            allowBlank: false,
+            enableKeyEvents: true,
+            listeners: {
+                scope: me,
+                keypress: function(textfield, e) {
+                    if (e.getKey() === Ext.EventObject.ENTER && textfield.isValid()) {
+                        me.down('#savebtn').fireEvent('click', me.down('#savebtn'));
+                    }
+                }
+            }
         });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
@@ -107,6 +116,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
 
         this.addBtn = Ext.create('Ext.button.Button', {
             text: me.snippets.add,
+            itemId: 'savebtn',
             action: 'mediamanager-album-add-add',
             cls: 'primary'
         });

@@ -50,7 +50,17 @@
         {$pages = ceil($sNumberArticles / $criteria->getLimit())}
     {/if}
 
-    {if {config name=seoIndexPaginationLinks} && $showListing && $pages > 1}
+    {if empty($sPage) || ($SeoMetaRobots|strpos:'noindex' === false && $sPage == 1)}
+        {* Remove sPage-parameter *}
+        {assign var='canonical' value='?'|explode:{url params = $sCategoryContent.canonicalParams|array_unset:'sPage'}}
+        <link rel="canonical" href="{$canonical[0]}"/>
+    {/if}
+
+    {if {config name=seoIndexPaginationLinks}}
+        {if empty($sPage)}
+            {$sPage = 0}
+        {/if}
+
         {* Previous rel tag *}
         {if $sPage > 1}
             {$sCategoryContent.canonicalParams.sPage = $sPage - 1}
@@ -62,8 +72,6 @@
             {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
-    {elseif (!{config name=seoIndexPaginationLinks} || !$showListing) && !$metaRobots|strpos:'noindex' === false}
-        <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}" />
     {/if}
 {/block}
 
