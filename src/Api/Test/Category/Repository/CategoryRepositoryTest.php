@@ -9,7 +9,6 @@ use Shopware\Api\Category\Event\Category\CategoryDeletedEvent;
 use Shopware\Api\Category\Repository\CategoryRepository;
 use Shopware\Api\Entity\RepositoryInterface;
 use Shopware\Api\Entity\Search\Criteria;
-use Shopware\Api\Entity\Search\Query\MatchQuery;
 use Shopware\Api\Entity\Search\Query\TermQuery;
 use Shopware\Api\Entity\Search\Term\EntityScoreQueryBuilder;
 use Shopware\Api\Entity\Search\Term\SearchTermInterpreter;
@@ -213,7 +212,7 @@ class CategoryRepositoryTest extends KernelTestCase
 
         $this->container->get(EntityWriter::class)->insert(
             ShopTemplateDefinition::class,
-            [['id' => $shopId->toString(), 'template' => 'Test', 'name' => 'test']],
+            [['id' => $shopId->toString(), 'catalogId' => Defaults::CATALOG, 'template' => 'Test', 'name' => 'test']],
             TestWriteContext::create()
         );
 
@@ -221,6 +220,7 @@ class CategoryRepositoryTest extends KernelTestCase
         $shopRepo->create([
             [
                 'id' => $shopId->toString(),
+                'catalogIds' => [Defaults::CATALOG],
                 'categoryId' => $categoryId->toString(),
                 'templateId' => $shopId->toString(),
                 'documentTemplateId' => $shopId->toString(),

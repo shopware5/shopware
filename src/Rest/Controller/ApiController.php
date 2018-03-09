@@ -335,12 +335,13 @@ class ApiController extends Controller
             $repository = $this->get($definition::getRepositoryClass());
 
             $events = $this->executeWriteOperation($definition, $payload, $context, $type);
+            $event = $events->getEventByDefinition($definition);
+            $eventIds = $event->getIds();
+            $entityId = array_shift($eventIds);
 
             if (!$responseDataType) {
-                return $this->responseFactory->createRedirectResponse($definition, $payload['id'], $context);
+                return $this->responseFactory->createRedirectResponse($definition, $entityId, $context);
             }
-
-            $event = $events->getEventByDefinition($definition);
 
             if ($responseDataType === self::RESPONSE_DETAIL) {
                 $entities = $repository->readDetail($event->getIds(), $context->getShopContext());
@@ -743,7 +744,7 @@ class ApiController extends Controller
             $root = $definition::getEntityName();
 
             if ($subParts[0] !== $root) {
-                $part = $definition::getEntityName().'.'.$part;
+                $part = $definition::getEntityName() . '.' . $part;
             }
 
             $sortings[] = new FieldSorting($part, $direction);
