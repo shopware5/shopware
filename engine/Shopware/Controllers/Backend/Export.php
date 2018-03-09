@@ -61,8 +61,10 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
     {
         $this->prepareExport();
         $this->sendHeaders();
-
-        $productFeed = Shopware()->Models()->getRepository('\Shopware\Models\ProductFeed\ProductFeed')->find((int) $this->Request()->feedID);
+        /** @var \Shopware\Components\Model\ModelManager $em */
+        $em = $this->container->get('models');
+        /** @var \Shopware\Models\ProductFeed\ProductFeed $productFeed */
+        $productFeed = $em->getRepository('\Shopware\Models\ProductFeed\ProductFeed')->find((int) $this->Request()->feedID);
 
         // Live generation
         if ($productFeed->getInterval() === 0) {
@@ -91,8 +93,9 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
 
             // update last refresh
             $productFeed->setCacheRefreshed('now');
-            Shopware()->Models()->persist($productFeed);
-            Shopware()->Models()->flush($productFeed);
+            $productFeed->setLastExport('now');
+            $productFeed = $em->merge($productFeed);
+            $em->flush($productFeed);
         }
 
         if (!file_exists($filePath)) {
