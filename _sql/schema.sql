@@ -183,6 +183,110 @@ CREATE TABLE `config_form_translation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+DROP TABLE IF EXISTS `configuration_group`;
+CREATE TABLE `configuration_group` (
+  `id` binary(16) NOT NULL,
+  `version_id` binary(16) NOT NULL,
+  `filterable` tinyint(1) NOT NULL DEFAULT '0',
+  `comparable` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`, `version_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `configuration_group_translation`;
+CREATE TABLE `configuration_group_translation` (
+  `configuration_group_id` binary(16) NOT NULL,
+  `language_id` binary(16) NOT NULL,
+  `language_version_id` binary(16) NOT NULL,
+  `version_id` binary(16) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`configuration_group_id`, `language_id`, `language_version_id`, `version_id`),
+  CONSTRAINT `configuration_group_translation_ibfk_1` FOREIGN KEY (`language_id`, `language_version_id`) REFERENCES `shop` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `configuration_group_translation_ibfk_2` FOREIGN KEY (`configuration_group_id`, `version_id`) REFERENCES `configuration_group` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+DROP TABLE IF EXISTS `configuration_group_option`;
+CREATE TABLE `configuration_group_option` (
+  `id` binary(16) NOT NULL,
+  `version_id` binary(16) NOT NULL,
+  `configuration_group_id` binary(16) NOT NULL,
+  `configuration_group_version_id` binary(16) NOT NULL,
+  `color` VARCHAR(20) NULL DEFAULT NULL,
+  `media_id` binary(16) NULL DEFAULT NULL,
+  `media_version_id` binary(16) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `version_id`),
+  CONSTRAINT `fk_configuration_group_option.configuration_group_id` FOREIGN KEY (`configuration_group_id`, `configuration_group_version_id`) REFERENCES `configuration_group` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_configuration_group_option.media_id` FOREIGN KEY (`media_id`, `media_version_id`) REFERENCES `media` (`id`, `version_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+DROP TABLE IF EXISTS `configuration_group_option_translation`;
+CREATE TABLE `configuration_group_option_translation` (
+  `configuration_group_option_id` binary(16) NOT NULL,
+  `language_id` binary(16) NOT NULL,
+  `language_version_id` binary(16) NOT NULL,
+  `version_id` binary(16) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`configuration_group_option_id`, `language_id`, `language_version_id`, `version_id`),
+  CONSTRAINT `configuration_group_option_translation_ibfk_1` FOREIGN KEY (`language_id`, `language_version_id`) REFERENCES `shop` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `configuration_group_option_translation_ibfk_2` FOREIGN KEY (`configuration_group_option_id`, `version_id`) REFERENCES `configuration_group_option` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `product_datasheet`;
+CREATE TABLE `product_datasheet` (
+  `product_id` binary(16) NOT NULL,
+  `product_version_id` binary(16) NOT NULL,
+  `configuration_group_option_id` binary(16) NOT NULL,
+  `configuration_group_option_version_id` binary(16) NOT NULL,
+  PRIMARY KEY (`product_id`, `product_version_id`, `configuration_group_option_id`, `configuration_group_option_version_id`),
+  CONSTRAINT `fk_product_datasheet.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_datasheet.configuration_option_id` FOREIGN KEY (`configuration_group_option_id`, `configuration_group_option_version_id`) REFERENCES `configuration_group_option` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS `product_variation`;
+CREATE TABLE `product_variation` (
+  `product_id` binary(16) NOT NULL,
+  `product_version_id` binary(16) NOT NULL,
+  `configuration_group_option_id` binary(16) NOT NULL,
+  `configuration_group_option_version_id` binary(16) NOT NULL,
+  PRIMARY KEY (`product_id`, `product_version_id`, `configuration_group_option_id`, `configuration_group_option_version_id`),
+  CONSTRAINT `fk_product_variation.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_variation.configuration_group_option_id` FOREIGN KEY (`configuration_group_option_id`, `configuration_group_option_version_id`) REFERENCES `configuration_group_option` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS `product_configurator`;
+CREATE TABLE `product_configurator` (
+  `id` binary(16) NOT NULL,
+  `version_id` binary(16) NOT NULL,
+  `product_id` binary(16) NOT NULL,
+  `product_version_id` binary(16) NOT NULL,
+  `configuration_group_option_id` binary(16) NOT NULL,
+  `configuration_group_option_version_id` binary(16) NOT NULL,
+  `price` LONGTEXT NULL,
+  `prices` LONGTEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `version_id`),
+  CONSTRAINT `fk_product_configurator.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_configurator.configuration_group_option_id` FOREIGN KEY (`configuration_group_option_id`, `configuration_group_option_version_id`) REFERENCES `configuration_group_option` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS `product_service`;
+CREATE TABLE `product_service` (
+  `id` binary(16) NOT NULL,
+  `version_id` binary(16) NOT NULL,
+  `product_id` binary(16) NOT NULL,
+  `product_version_id` binary(16) NOT NULL,
+  `configuration_group_option_id` binary(16) NOT NULL,
+  `configuration_group_option_version_id` binary(16) NOT NULL,
+  `tax_id` binary(16) NOT NULL,
+  `tax_version_id` binary(16) NOT NULL,
+  `price` LONGTEXT NULL,
+  `prices` LONGTEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `version_id`),
+  CONSTRAINT `fk_product_service.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_service.configuration_group_option_id` FOREIGN KEY (`configuration_group_option_id`, `configuration_group_option_version_id`) REFERENCES `configuration_group_option` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_service.tax_id` FOREIGN KEY (`tax_id`, `tax_version_id`) REFERENCES `tax` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 DROP TABLE IF EXISTS `country`;
 CREATE TABLE `country` (
   `id` binary(16) NOT NULL,
@@ -204,7 +308,6 @@ CREATE TABLE `country` (
   PRIMARY KEY (`id`, `version_id`),
   CONSTRAINT `fk_area_country.country_area_id` FOREIGN KEY (`country_area_id`, `country_area_version_id`) REFERENCES `country_area` (`id`, `version_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 DROP TABLE IF EXISTS `country_area`;
 CREATE TABLE `country_area` (
@@ -571,7 +674,6 @@ CREATE TABLE `mail_attachment` (
   CONSTRAINT `fk_mail_attachment.shop_id` FOREIGN KEY (`shop_id`, `shop_version_id`) REFERENCES `shop` (`id`, `version_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 DROP TABLE IF EXISTS `mail_translation`;
 CREATE TABLE `mail_translation` (
   `mail_id` binary(16) NOT NULL,
@@ -907,7 +1009,6 @@ CREATE TABLE `product` (
   `catalog_id` binary(16) NOT NULL,
   `version_id` binary(16) NOT NULL,
   `active` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `price` decimal(10,3) DEFAULT NULL,
   `parent_id` binary(16) DEFAULT NULL,
   `parent_version_id` binary(16) DEFAULT NULL,
   `tax_id` binary(16) DEFAULT NULL,
@@ -922,8 +1023,10 @@ CREATE TABLE `product` (
   `tax_join_id` binary(16) DEFAULT NULL,
   `unit_join_id` binary(16) DEFAULT NULL,
   `category_join_id` binary(16) DEFAULT NULL,
+  `context_price_join_id` binary(16) DEFAULT NULL,
   `category_tree` LONGTEXT DEFAULT NULL,
-  `context_prices` LONGTEXT DEFAULT NULL,
+  `price` LONGTEXT DEFAULT NULL,
+  `listing_prices` LONGTEXT DEFAULT NULL,
   `supplier_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ean` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
@@ -950,7 +1053,8 @@ CREATE TABLE `product` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   CHECK (JSON_VALID(`category_tree`)),
-  CHECK (JSON_VALID(`context_prices`)),
+  CHECK (JSON_VALID(`listing_prices`)),
+  CHECK (JSON_VALID(`price`)),
   PRIMARY KEY (`id`, `version_id`),
   KEY (`catalog_id`),
   CONSTRAINT `fk_product.product_manufacturer_id` FOREIGN KEY (`product_manufacturer_id`, `product_manufacturer_version_id`) REFERENCES `product_manufacturer` (`id`, `version_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -960,6 +1064,25 @@ CREATE TABLE `product` (
   CONSTRAINT `fk_product.catalog_id` FOREIGN KEY (`catalog_id`) REFERENCES `catalog` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `product_context_price`;
+CREATE TABLE `product_context_price` (
+  `id` binary(16) NOT NULL,
+  `version_id` binary(16) NOT NULL,
+  `context_rule_id` binary(16) NOT NULL,
+  `product_id` binary(16) NOT NULL,
+  `product_version_id` binary(16) NOT NULL,
+  `currency_id` binary(16) NOT NULL,
+  `currency_version_id` binary(16) NOT NULL,
+  `price` LONGTEXT NOT NULL,
+  `quantity_start` INT(11) NOT NULL,
+  `quantity_end` INT(11) NULL DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `version_id`),
+  CONSTRAINT `fk_product_context_price.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_context_price.currency_id` FOREIGN KEY (`currency_id`, `currency_version_id`) REFERENCES `currency` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_product_context_price.context_rule_id` FOREIGN KEY (`context_rule_id`) REFERENCES `context_rule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `product_category`;
 CREATE TABLE `product_category` (
@@ -1556,7 +1679,8 @@ CREATE TABLE `context_rule` (
   `name` varchar(500) NOT NULL,
   `payload` longtext NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NULL DEFAULT NULL
+  `updated_at` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `version`;

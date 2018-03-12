@@ -3,10 +3,12 @@
 namespace Shopware\Api\Product\Definition;
 
 use Shopware\Api\Category\Definition\CategoryDefinition;
+use Shopware\Api\Configuration\Definition\ConfigurationGroupOptionDefinition;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\EntityExtensionInterface;
 use Shopware\Api\Entity\Field\BoolField;
 use Shopware\Api\Entity\Field\CatalogField;
+use Shopware\Api\Entity\Field\ContextPricesJsonField;
 use Shopware\Api\Entity\Field\DateField;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\FloatField;
@@ -18,7 +20,7 @@ use Shopware\Api\Entity\Field\LongTextWithHtmlField;
 use Shopware\Api\Entity\Field\ManyToManyAssociationField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
 use Shopware\Api\Entity\Field\OneToManyAssociationField;
-use Shopware\Api\Entity\Field\PriceRulesField;
+use Shopware\Api\Entity\Field\PriceField;
 use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
@@ -31,6 +33,7 @@ use Shopware\Api\Entity\Write\Flag\Inherited;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
 use Shopware\Api\Entity\Write\Flag\SearchRanking;
+use Shopware\Api\Entity\Write\Flag\WriteOnly;
 use Shopware\Api\Product\Collection\ProductBasicCollection;
 use Shopware\Api\Product\Collection\ProductDetailCollection;
 use Shopware\Api\Product\Event\Product\ProductDeletedEvent;
@@ -99,7 +102,8 @@ class ProductDefinition extends EntityDefinition
             (new ReferenceVersionField(TaxDefinition::class))->setFlags(new Inherited(), new Required()),
 
             //inherited data fields
-            (new FloatField('price', 'price'))->setFlags(new Inherited(), new Required()),
+            (new PriceField('price', 'price'))->setFlags(new Inherited(), new Required()),
+            (new ContextPricesJsonField('listing_prices', 'listingPrices'))->setFlags(new Inherited()),
             (new StringField('supplier_number', 'supplierNumber'))->setFlags(new Inherited(), new SearchRanking(self::LOW_SEARCH_RAKING)),
             (new StringField('ean', 'ean'))->setFlags(new Inherited(), new SearchRanking(self::LOW_SEARCH_RAKING)),
             (new BoolField('is_closeout', 'isCloseout'))->setFlags(new Inherited()),
@@ -124,7 +128,6 @@ class ProductDefinition extends EntityDefinition
             (new DateField('release_date', 'releaseDate'))->setFlags(new Inherited()),
             (new IdField('price_group_id', 'priceGroupId'))->setFlags(new Inherited()),
             (new JsonArrayField('category_tree', 'categoryTree'))->setFlags(new Inherited()),
-            (new PriceRulesField('context_prices', 'contextPrices'))->setFlags(new Inherited()),
 
             //Read only join ids for inheritance
             new IdField('media_join_id', 'mediaJoinId'),
@@ -132,6 +135,7 @@ class ProductDefinition extends EntityDefinition
             new IdField('manufacturer_join_id', 'manufacturerJoinId'),
             new IdField('tax_join_id', 'taxJoinId'),
             new IdField('unit_join_id', 'unitJoinId'),
+            new IdField('context_price_join_id', 'contextPriceJoinId'),
 
             (new TranslatedField(new StringField('additional_text', 'additionalText')))->setFlags(new Inherited()),
             (new TranslatedField(new StringField('name', 'name')))->setFlags(new Inherited(), new SearchRanking(self::HIGH_SEARCH_RANKING)),
@@ -142,7 +146,7 @@ class ProductDefinition extends EntityDefinition
             (new TranslatedField(new StringField('pack_unit', 'packUnit')))->setFlags(new Inherited()),
 
             //parent - child inheritance
-            new ManyToOneAssociationField('parent', 'parent_id', self::class, true),
+            (new ManyToOneAssociationField('parent', 'parent_id', self::class, false))->setFlags(new WriteOnly()),
             (new OneToManyAssociationField('children', self::class, 'parent_id', false, 'id'))->setFlags(new CascadeDelete()),
 
             //inherited associations
@@ -150,6 +154,7 @@ class ProductDefinition extends EntityDefinition
             (new ManyToOneAssociationField('manufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, true, 'id', 'manufacturer_join_id'))->setFlags(new Inherited(), new SearchRanking(self::ASSOCIATION_SEARCH_RANKING)),
             (new ManyToOneAssociationField('unit', 'unit_id', UnitDefinition::class, true, 'id', 'unit_join_id'))->setFlags(new Inherited()),
             (new OneToManyAssociationField('media', ProductMediaDefinition::class, 'product_id', false, 'media_join_id'))->setFlags(new CascadeDelete(), new Inherited()),
+            (new OneToManyAssociationField('contextPrices', ProductContextPriceDefinition::class, 'product_id', true, 'context_price_join_id'))->setFlags(new CascadeDelete(), new Inherited()),
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, ProductCategoryDefinition::class, false, 'product_id', 'category_id', 'category_join_id'))->setFlags(new CascadeDelete(), new Inherited()),
 
             //not inherited associations
@@ -158,6 +163,11 @@ class ProductDefinition extends EntityDefinition
             (new ManyToManyAssociationField('streams', ProductStreamDefinition::class, ProductStreamAssignmentDefinition::class, false, 'product_id', 'product_stream_id'))->setFlags(new CascadeDelete()),
             (new OneToManyAssociationField('searchKeywords', ProductSearchKeywordDefinition::class, 'product_id', false, 'id'))->setFlags(new CascadeDelete(), new SearchRanking(self::ASSOCIATION_SEARCH_RANKING)),
             (new TranslationsAssociationField('translations', ProductTranslationDefinition::class, 'product_id', false, 'id'))->setFlags(new Inherited(), new CascadeDelete(), new Required()),
+
+            (new OneToManyAssociationField('configurators', ProductConfiguratorDefinition::class, 'product_id', false, 'id'))->setFlags(new CascadeDelete()),
+            (new OneToManyAssociationField('services', ProductServiceDefinition::class, 'product_id', false, 'id'))->setFlags(new CascadeDelete()),
+            (new ManyToManyAssociationField('datasheet', ConfigurationGroupOptionDefinition::class, ProductDatasheetDefinition::class, false, 'product_id', 'configuration_group_option_id'))->setFlags(new CascadeDelete()),
+            (new ManyToManyAssociationField('variations', ConfigurationGroupOptionDefinition::class, ProductVariationDefinition::class, false, 'product_id', 'configuration_group_option_id'))->setFlags(new CascadeDelete()),
         ]);
 
         foreach (self::$extensions as $extension) {

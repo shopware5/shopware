@@ -3,6 +3,7 @@
 namespace Shopware\Api\Product\Collection;
 
 use Shopware\Api\Category\Collection\CategoryBasicCollection;
+use Shopware\Api\Configuration\Collection\ConfigurationGroupOptionBasicCollection;
 use Shopware\Api\Product\Struct\ProductDetailStruct;
 
 class ProductDetailCollection extends ProductBasicCollection
@@ -144,6 +145,94 @@ class ProductDetailCollection extends ProductBasicCollection
         $collection = new ProductStreamBasicCollection();
         foreach ($this->elements as $element) {
             $collection->fill($element->getStreams()->getElements());
+        }
+
+        return $collection;
+    }
+
+    public function getConfiguratorIds(): array
+    {
+        $ids = [];
+        foreach ($this->elements as $element) {
+            foreach ($element->getConfigurators()->getIds() as $id) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    }
+
+    public function getConfigurators(): ProductConfiguratorBasicCollection
+    {
+        $collection = new ProductConfiguratorBasicCollection();
+        foreach ($this->elements as $element) {
+            $collection->fill($element->getConfigurators()->getElements());
+        }
+
+        return $collection;
+    }
+
+    public function getServiceIds(): array
+    {
+        $ids = [];
+        foreach ($this->elements as $element) {
+            foreach ($element->getServices()->getIds() as $id) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    }
+
+    public function getServices(): ProductServiceBasicCollection
+    {
+        $collection = new ProductServiceBasicCollection();
+        foreach ($this->elements as $element) {
+            $collection->fill($element->getServices()->getElements());
+        }
+
+        return $collection;
+    }
+
+    public function getAllDatasheetIds(): array
+    {
+        $ids = [];
+        foreach ($this->elements as $element) {
+            foreach ($element->getDatasheet()->getIds() as $id) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    }
+
+    public function getAllDatasheets(): ConfigurationGroupOptionBasicCollection
+    {
+        $collection = new ConfigurationGroupOptionBasicCollection();
+        foreach ($this->elements as $element) {
+            $collection->fill($element->getDatasheet()->getElements());
+        }
+
+        return $collection;
+    }
+
+    public function getAllVariationIds(): array
+    {
+        $ids = [];
+        foreach ($this->elements as $element) {
+            foreach ($element->getVariations()->getIds() as $id) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    }
+
+    public function getAllVariations(): ConfigurationGroupOptionBasicCollection
+    {
+        $collection = new ConfigurationGroupOptionBasicCollection();
+        foreach ($this->elements as $element) {
+            $collection->fill($element->getVariations()->getElements());
         }
 
         return $collection;
