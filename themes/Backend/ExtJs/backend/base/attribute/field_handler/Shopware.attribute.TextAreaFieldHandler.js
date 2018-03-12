@@ -31,12 +31,18 @@ Ext.define('Shopware.attribute.TextAreaFieldHandler', {
     extend: 'Shopware.attribute.FieldHandlerInterface',
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'text');
+        return (attribute.get('columnType') === 'text');
     },
 
     create: function(field, attribute) {
         field.xtype = 'textarea';
         field.height = 90;
+
+        if (attribute.get('defaultValue') !== null) {
+            field.value = attribute.get('defaultValue');
+            field.defaultValue = field.value;
+        }
+
         return field;
     }
 });
