@@ -31,12 +31,18 @@ Ext.define('Shopware.attribute.HtmlFieldHandler', {
     extend: 'Shopware.attribute.FieldHandlerInterface',
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'html');
+        return (attribute.get('columnType') === 'html');
     },
 
     create: function(field, attribute) {
         field.xtype = 'tinymce';
         field.height = 150;
+
+        if (attribute.get('defaultValue') !== null) {
+            field.value = attribute.get('defaultValue');
+            field.defaultValue = field.value;
+        }
+
         return field;
     }
 });

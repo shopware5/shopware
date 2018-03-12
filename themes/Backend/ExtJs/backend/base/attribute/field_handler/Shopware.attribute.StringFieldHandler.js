@@ -31,11 +31,17 @@ Ext.define('Shopware.attribute.StringFieldHandler', {
     extend: 'Shopware.attribute.FieldHandlerInterface',
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'string');
+        return (attribute.get('columnType') === 'string');
     },
 
     create: function(field, attribute) {
         field.xtype = 'textfield';
+
+        if (attribute.get('defaultValue') !== null) {
+            field.value = attribute.get('defaultValue');
+            field.defaultValue = field.value;
+        }
+
         return field;
     }
 });

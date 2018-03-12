@@ -31,12 +31,18 @@ Ext.define('Shopware.attribute.IntegerFieldHandler', {
     extend: 'Shopware.attribute.FieldHandlerInterface',
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'integer');
+        return (attribute.get('columnType') === 'integer');
     },
 
     create: function(field, attribute) {
         field.xtype = 'numberfield';
         field.align = 'right';
+
+        if (attribute.get('defaultValue') !== null) {
+            field.value = parseInt(attribute.get('defaultValue'));
+            field.defaultValue = field.value;
+        }
+
         return field;
     }
 });
