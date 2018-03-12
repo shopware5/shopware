@@ -12,6 +12,11 @@ use Shopware\Api\Entity\Search\Parser\SqlQueryParser;
 use Shopware\Api\Entity\Search\Query\ScoreQuery;
 use Shopware\Context\Struct\ShopContext;
 
+/**
+ * Used for all search operations in the system.
+ * The dbal entity searcher only joins and select fields which defined in sorting, filter or query classes.
+ * Fields which are not necessary to determines which ids are affected are not fetched.
+ */
 class EntitySearcher implements EntitySearcherInterface
 {
     /**
@@ -78,7 +83,7 @@ class EntitySearcher implements EntitySearcherInterface
 
         if ($criteria->fetchCount() === Criteria::FETCH_COUNT_TOTAL) {
             $total = (int) $this->connection->fetchColumn('SELECT FOUND_ROWS()');
-        } else if ($criteria->fetchCount() === Criteria::FETCH_COUNT_NEXT_PAGES) {
+        } elseif ($criteria->fetchCount() === Criteria::FETCH_COUNT_NEXT_PAGES) {
             $total = count($data) - $criteria->getLimit();
             $data = array_slice($data, 0, $criteria->getLimit());
         } else {
@@ -169,6 +174,7 @@ class EntitySearcher implements EntitySearcherInterface
         }
         if ($criteria->fetchCount() === Criteria::FETCH_COUNT_NEXT_PAGES) {
             $query->setMaxResults($criteria->getLimit() * 6 + 1);
+
             return;
         }
 

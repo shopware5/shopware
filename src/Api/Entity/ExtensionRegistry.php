@@ -2,6 +2,9 @@
 
 namespace Shopware\Api\Entity;
 
+/**
+ * Contains all registered entity extensions in the system
+ */
 class ExtensionRegistry
 {
     /**

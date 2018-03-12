@@ -26,7 +26,7 @@ namespace Shopware\Api\Entity\Write;
 
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
-use Shopware\Api\Shop\Definition\ShopDefinition;
+use Shopware\Api\Language\Definition\LanguageDefinition;
 use Shopware\Context\Struct\ShopContext;
 
 class WriteContext
@@ -75,7 +75,7 @@ class WriteContext
     public static function createFromShopContext(ShopContext $context): self
     {
         $self = new self($context);
-        $self->set(ShopDefinition::class, 'id', $context->getApplicationId());
+        $self->set(LanguageDefinition::class, 'id', $context->getLanguageId());
 
         return $self;
     }
@@ -162,7 +162,7 @@ class WriteContext
     public function resetPaths(): void
     {
         $this->paths = [];
-        $this->set(ShopDefinition::class, 'id', $this->shopContext->getApplicationId());
+        $this->set(LanguageDefinition::class, 'id', $this->shopContext->getLanguageId());
     }
 
     public function createWithVersionId(string $versionId): self

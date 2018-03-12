@@ -7,12 +7,12 @@ use Shopware\Api\Entity\EntityExtensionInterface;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
-use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\VersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
+use Shopware\Api\Language\Definition\LanguageDefinition;
 use Shopware\Api\Payment\Collection\PaymentMethodTranslationBasicCollection;
 use Shopware\Api\Payment\Collection\PaymentMethodTranslationDetailCollection;
 use Shopware\Api\Payment\Event\PaymentMethodTranslation\PaymentMethodTranslationDeletedEvent;
@@ -20,7 +20,6 @@ use Shopware\Api\Payment\Event\PaymentMethodTranslation\PaymentMethodTranslation
 use Shopware\Api\Payment\Repository\PaymentMethodTranslationRepository;
 use Shopware\Api\Payment\Struct\PaymentMethodTranslationBasicStruct;
 use Shopware\Api\Payment\Struct\PaymentMethodTranslationDetailStruct;
-use Shopware\Api\Shop\Definition\ShopDefinition;
 
 class PaymentMethodTranslationDefinition extends EntityDefinition
 {
@@ -53,12 +52,11 @@ class PaymentMethodTranslationDefinition extends EntityDefinition
         self::$fields = new FieldCollection([
             (new FkField('payment_method_id', 'paymentMethodId', PaymentMethodDefinition::class))->setFlags(new PrimaryKey(), new Required()),
             new VersionField(),
-            (new FkField('language_id', 'languageId', ShopDefinition::class))->setFlags(new PrimaryKey(), new Required()),
-            (new ReferenceVersionField(ShopDefinition::class, 'language_version_id'))->setFlags(new PrimaryKey(), new Required()),
+            (new FkField('language_id', 'languageId', LanguageDefinition::class))->setFlags(new PrimaryKey(), new Required()),
             (new StringField('name', 'name'))->setFlags(new Required()),
             (new LongTextField('additional_description', 'additionalDescription'))->setFlags(new Required()),
             new ManyToOneAssociationField('paymentMethod', 'payment_method_id', PaymentMethodDefinition::class, false),
-            new ManyToOneAssociationField('language', 'language_id', ShopDefinition::class, false),
+            new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, false),
         ]);
 
         foreach (self::$extensions as $extension) {

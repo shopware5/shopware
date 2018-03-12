@@ -8,12 +8,12 @@ use Shopware\Api\Entity\Field\CatalogField;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
-use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\VersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
+use Shopware\Api\Language\Definition\LanguageDefinition;
 use Shopware\Api\Product\Collection\ProductManufacturerTranslationBasicCollection;
 use Shopware\Api\Product\Collection\ProductManufacturerTranslationDetailCollection;
 use Shopware\Api\Product\Event\ProductManufacturerTranslation\ProductManufacturerTranslationDeletedEvent;
@@ -21,7 +21,6 @@ use Shopware\Api\Product\Event\ProductManufacturerTranslation\ProductManufacture
 use Shopware\Api\Product\Repository\ProductManufacturerTranslationRepository;
 use Shopware\Api\Product\Struct\ProductManufacturerTranslationBasicStruct;
 use Shopware\Api\Product\Struct\ProductManufacturerTranslationDetailStruct;
-use Shopware\Api\Shop\Definition\ShopDefinition;
 
 class ProductManufacturerTranslationDefinition extends EntityDefinition
 {
@@ -56,15 +55,14 @@ class ProductManufacturerTranslationDefinition extends EntityDefinition
             new VersionField(),
             new CatalogField(),
 
-            (new FkField('language_id', 'languageId', ShopDefinition::class))->setFlags(new PrimaryKey(), new Required()),
-            (new ReferenceVersionField(ShopDefinition::class, 'language_version_id'))->setFlags(new PrimaryKey(), new Required()),
+            (new FkField('language_id', 'languageId', LanguageDefinition::class))->setFlags(new PrimaryKey(), new Required()),
             (new StringField('name', 'name'))->setFlags(new Required()),
             new LongTextField('description', 'description'),
             new StringField('meta_title', 'metaTitle'),
             new StringField('meta_description', 'metaDescription'),
             new StringField('meta_keywords', 'metaKeywords'),
             new ManyToOneAssociationField('productManufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, false),
-            new ManyToOneAssociationField('language', 'language_id', ShopDefinition::class, false),
+            new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, false),
         ]);
 
         foreach (self::$extensions as $extension) {

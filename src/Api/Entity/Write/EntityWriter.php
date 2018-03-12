@@ -46,6 +46,11 @@ use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Validation\RestrictDeleteViolation;
 use Shopware\Api\Entity\Write\Validation\RestrictDeleteViolationException;
 
+/**
+ * Handles all write operations in the system.
+ * Builds first a command queue over the WriteCommandExtractor and let execute this queue
+ * over the EntityWriteGateway (sql implementation in default).
+ */
 class EntityWriter implements EntityWriterInterface
 {
     /**
@@ -98,7 +103,6 @@ class EntityWriter implements EntityWriterInterface
         $this->validateWriteInput($rawData);
 
         $commandQueue = $this->buildCommandQueue($definition, $rawData, $writeContext);
-
         $writeIdentifiers = $this->getWriteIdentifiers($commandQueue);
 
         $commandQueue->ensureIs($definition, InsertCommand::class);

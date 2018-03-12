@@ -7,12 +7,12 @@ use Shopware\Api\Entity\EntityExtensionInterface;
 use Shopware\Api\Entity\Field\FkField;
 use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
-use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\VersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\PrimaryKey;
 use Shopware\Api\Entity\Write\Flag\Required;
+use Shopware\Api\Language\Definition\LanguageDefinition;
 use Shopware\Api\Mail\Collection\MailTranslationBasicCollection;
 use Shopware\Api\Mail\Collection\MailTranslationDetailCollection;
 use Shopware\Api\Mail\Event\MailTranslation\MailTranslationDeletedEvent;
@@ -20,7 +20,6 @@ use Shopware\Api\Mail\Event\MailTranslation\MailTranslationWrittenEvent;
 use Shopware\Api\Mail\Repository\MailTranslationRepository;
 use Shopware\Api\Mail\Struct\MailTranslationBasicStruct;
 use Shopware\Api\Mail\Struct\MailTranslationDetailStruct;
-use Shopware\Api\Shop\Definition\ShopDefinition;
 
 class MailTranslationDefinition extends EntityDefinition
 {
@@ -53,15 +52,14 @@ class MailTranslationDefinition extends EntityDefinition
         self::$fields = new FieldCollection([
             (new FkField('mail_id', 'mailId', MailDefinition::class))->setFlags(new PrimaryKey(), new Required()),
             new VersionField(),
-            (new FkField('language_id', 'languageId', ShopDefinition::class))->setFlags(new PrimaryKey(), new Required()),
-            (new ReferenceVersionField(ShopDefinition::class, 'language_version_id'))->setFlags(new PrimaryKey(), new Required()),
+            (new FkField('language_id', 'languageId', LanguageDefinition::class))->setFlags(new PrimaryKey(), new Required()),
             (new StringField('from_mail', 'fromMail'))->setFlags(new Required()),
             (new StringField('from_name', 'fromName'))->setFlags(new Required()),
             (new StringField('subject', 'subject'))->setFlags(new Required()),
             (new LongTextField('content', 'content'))->setFlags(new Required()),
             (new LongTextField('content_html', 'contentHtml'))->setFlags(new Required()),
             new ManyToOneAssociationField('mail', 'mail_id', MailDefinition::class, false),
-            new ManyToOneAssociationField('language', 'language_id', ShopDefinition::class, false),
+            new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, false),
         ]);
 
         foreach (self::$extensions as $extension) {
