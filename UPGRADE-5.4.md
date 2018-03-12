@@ -9,6 +9,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added possibility to enable/disable forms without having to delete them
+* Added `json` attribute for snippets in `Enlight_Components_Snippet_Resource`
+  * You may now set the attribute `json='true'` on smarty snippets, the content of the snippet will then be encoded via `json_encode()`
+    * Example: ```{s json='true' name='foo'}é"'#-_*+`{/s}``` will render as ```"\u00e9\"'#-_*+`"```
+    * Safely constructing a JS object: ```{ "someProp": {s json='true' name='your/snippet'}{/s} }```
 
 ### Changes
 
@@ -51,7 +55,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `newsletter_header_content_logo`
   * `newsletter_header_content_title`
 * Added view variable `sCategoryContent` to the `listingCountAction` of the controller `Shopware_Controllers_Widgets_Listing`
-
 
 ### Changes
 
