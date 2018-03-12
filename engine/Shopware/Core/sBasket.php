@@ -242,7 +242,7 @@ class sBasket
         }
 
         $extraConditions = [];
-        if (is_array($articles)) {
+        if (is_array($articles) && !empty($articles)) {
             $extraConditions[] = $this->db->quoteInto('ordernumber IN (?) ', $articles);
         }
         if (!empty($supplier)) {
