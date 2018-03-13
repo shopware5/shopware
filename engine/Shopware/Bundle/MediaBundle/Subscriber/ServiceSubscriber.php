@@ -29,7 +29,7 @@ use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand;
 use Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand;
 use Shopware\Bundle\MediaBundle\Commands\MediaOptimizeCommand;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ServiceSubscriber
@@ -37,14 +37,14 @@ use Shopware\Components\DependencyInjection\Container;
 class ServiceSubscriber implements SubscriberInterface
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @param Container $container
+     * @param ContainerInterface $container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

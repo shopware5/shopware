@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
@@ -65,7 +65,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
      * @param \Enlight_Event_EventManager $eventManager
      * @param ConditionHandlerInterface[] $conditionHandlers
      * @param SortingHandlerInterface[]   $sortingHandlers
-     * @param Container                   $container
+     * @param ContainerInterface          $container
      *
      * @throws \RuntimeException
      * @throws \Enlight_Event_Exception
@@ -75,7 +75,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         \Enlight_Event_EventManager $eventManager,
         $conditionHandlers,
         $sortingHandlers,
-        Container $container
+        ContainerInterface $container
     ) {
         $this->connection = $connection;
         $this->conditionHandlers = $conditionHandlers;
