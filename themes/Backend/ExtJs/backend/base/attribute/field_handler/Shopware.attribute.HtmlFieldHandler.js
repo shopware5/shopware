@@ -37,12 +37,6 @@ Ext.define('Shopware.attribute.HtmlFieldHandler', {
     create: function(field, attribute) {
         field.xtype = 'tinymce';
         field.height = 150;
-
-        if (attribute.get('defaultValue') !== null) {
-            field.value = attribute.get('defaultValue');
-            field.defaultValue = field.value;
-        }
-
         return field;
     }
 });

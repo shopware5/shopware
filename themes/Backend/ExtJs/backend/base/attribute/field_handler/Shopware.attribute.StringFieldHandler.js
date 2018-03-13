@@ -36,12 +36,6 @@ Ext.define('Shopware.attribute.StringFieldHandler', {
 
     create: function(field, attribute) {
         field.xtype = 'textfield';
-
-        if (attribute.get('defaultValue') !== null) {
-            field.value = attribute.get('defaultValue');
-            field.defaultValue = field.value;
-        }
-
         return field;
     }
 });
