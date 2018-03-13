@@ -37,12 +37,6 @@ Ext.define('Shopware.attribute.TextAreaFieldHandler', {
     create: function(field, attribute) {
         field.xtype = 'textarea';
         field.height = 90;
-
-        if (attribute.get('defaultValue') !== null) {
-            field.value = attribute.get('defaultValue');
-            field.defaultValue = field.value;
-        }
-
         return field;
     }
 });
