@@ -285,7 +285,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
     },
 
     /**
-     *
+     * Returns the rendered fileSize
      * @param integer bytes
      */
     fileSizeRenderer: function(bytes) {
