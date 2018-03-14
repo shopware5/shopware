@@ -26,16 +26,18 @@ namespace Shopware\Framework\Routing;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Defaults;
 use Shopware\Kernel;
-use Shopware\Rest\Routing\RouteCollector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -98,11 +100,6 @@ class Router implements RouterInterface, RequestMatcherInterface
      */
     private $container;
 
-    /**
-     * @var RouteCollector
-     */
-    private $apiCollector;
-
     public function __construct(
         ContainerInterface $container,
         $resource,
@@ -111,8 +108,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         LoggerInterface $logger = null,
         UrlResolverInterface $urlResolver,
         ShopFinder $shopFinder,
-        CacheItemPoolInterface $cache,
-        RouteCollector $apiCollector
+        CacheItemPoolInterface $cache
     ) {
         $this->resource = $resource;
         $this->context = $context;
@@ -123,7 +119,6 @@ class Router implements RouterInterface, RequestMatcherInterface
         $this->shopFinder = $shopFinder;
         $this->cache = $cache;
         $this->container = $container;
-        $this->apiCollector = $apiCollector;
     }
 
     public function setContext(RequestContext $context): void
@@ -285,7 +280,13 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
 
         if ($request->attributes->get(self::IS_API_REQUEST_ATTRIBUTE)) {
-            return $this->match($pathInfo);
+            try {
+                $match = $this->match($pathInfo);
+            } catch (ResourceNotFoundException $e) {
+                return $this->matchDynamicApi($pathInfo);
+            }
+
+            return $match;
         }
 
         $shopContext = new ShopContext(
@@ -379,10 +380,6 @@ class Router implements RouterInterface, RequestMatcherInterface
             );
         }
 
-        $routeCollection->addCollection(
-            $this->apiCollector->collect()
-        );
-
         return $routeCollection;
     }
 
@@ -410,5 +407,65 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
 
         return self::REQUEST_TYPE_STOREFRONT;
+    }
+
+    private function matchDynamicApi(string $path)
+    {
+        $apiRoutes = $this->createApiRouteCollection();
+
+        if (Uuid::isValid(basename($path))) {
+            $apiRoutes->remove('api_controller.list');
+        } else {
+            $apiRoutes->remove('api_controller.detail');
+        }
+
+        $matcher = new UrlMatcher($apiRoutes, $this->getContext());
+
+        return $matcher->match($path);
+    }
+
+    private function createApiRouteCollection(): RouteCollection
+    {
+        $collection = new RouteCollection();
+
+        $class = 'Shopware\Rest\Controller\ApiController';
+
+        $route = new Route('/api/{path}');
+        $route->setMethods(['GET']);
+        $route->setDefault('_controller', $class . ':listAction');
+        $route->addRequirements(['path' => '.*']);
+        $collection->add('api_controller.list', $route);
+
+        $route = new Route('/api/{path}');
+        $route->setMethods(['GET']);
+        $route->setDefault('_controller', $class . '::detailAction');
+        $route->addRequirements(['path' => '.*']);
+        $collection->add('api_controller.detail', $route);
+
+        $route = new Route('/api/search/{path}');
+        $route->setMethods(['POST']);
+        $route->setDefault('_controller', $class . '::searchAction');
+        $route->addRequirements(['path' => '.*']);
+        $collection->add('api_controller.search', $route);
+
+        $route = new Route('/api/{path}');
+        $route->setMethods(['POST']);
+        $route->setDefault('_controller', $class . '::createAction');
+        $route->addRequirements(['path' => '.*']);
+        $collection->add('api_controller.create', $route);
+
+        $route = new Route('/api/{path}');
+        $route->setMethods(['PATCH']);
+        $route->setDefault('_controller', $class . '::updateAction');
+        $route->addRequirements(['path' => '.*']);
+        $collection->add('api_controller.update', $route);
+
+        $route = new Route('/api/{path}');
+        $route->setMethods(['DELETE']);
+        $route->setDefault('_controller', $class . '::deleteAction');
+        $route->addRequirements(['path' => '.*']);
+        $collection->add('api_controller.delete', $route);
+
+        return $collection;
     }
 }
