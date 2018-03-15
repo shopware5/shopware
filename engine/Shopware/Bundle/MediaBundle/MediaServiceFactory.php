@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 use Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class MediaServiceFactory
@@ -41,21 +41,21 @@ class MediaServiceFactory
     private $cdnConfig;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
      * @var AdapterFactoryInterface[]
      */
-    private $adapterFactories = [];
+    private $adapterFactories;
 
     /**
-     * @param Container $container
-     * @param array     $adapterFactories
-     * @param array     $cdnConfig
+     * @param ContainerInterface $container
+     * @param array              $adapterFactories
+     * @param array              $cdnConfig
      */
-    public function __construct(Container $container, array $adapterFactories, array $cdnConfig)
+    public function __construct(ContainerInterface $container, array $adapterFactories, array $cdnConfig)
     {
         $this->container = $container;
         $this->adapterFactories = $adapterFactories;
