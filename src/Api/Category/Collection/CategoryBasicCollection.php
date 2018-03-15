@@ -6,6 +6,7 @@ use Shopware\Api\Category\Struct\CategoryBasicStruct;
 use Shopware\Api\Entity\EntityCollection;
 use Shopware\Api\Media\Collection\MediaBasicCollection;
 use Shopware\Api\Product\Collection\ProductStreamBasicCollection;
+use Shopware\Api\Seo\Collection\SeoUrlBasicCollection;
 
 class CategoryBasicCollection extends EntityCollection
 {
@@ -94,24 +95,6 @@ class CategoryBasicCollection extends EntityCollection
         });
     }
 
-    public function getMedia(): MediaBasicCollection
-    {
-        return new MediaBasicCollection(
-            $this->fmap(function (CategoryBasicStruct $category) {
-                return $category->getMedia();
-            })
-        );
-    }
-
-    public function getProductStreams(): ProductStreamBasicCollection
-    {
-        return new ProductStreamBasicCollection(
-            $this->fmap(function (CategoryBasicStruct $category) {
-                return $category->getProductStream();
-            })
-        );
-    }
-
     public function sortByPosition(): self
     {
         $this->sort(function (CategoryBasicStruct $a, CategoryBasicStruct $b) {
@@ -128,6 +111,15 @@ class CategoryBasicCollection extends EntityCollection
         });
 
         return $this;
+    }
+
+    public function getCanonicalUrls(): SeoUrlBasicCollection
+    {
+        return new SeoUrlBasicCollection(
+            $this->fmap(function(CategoryBasicStruct $category) {
+                return $category->getExtension('canonicalUrl');
+            })
+        );
     }
 
     protected function getExpectedClass(): string

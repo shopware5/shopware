@@ -73,6 +73,11 @@ class StoreFrontCartService
      */
     private $cart;
 
+    /**
+     * @var CalculatedCart|null
+     */
+    private $calculated;
+
     public function __construct(
         CircularCartCalculation $calculation,
         CartPersisterInterface $persister,
@@ -87,6 +92,12 @@ class StoreFrontCartService
         $this->orderPersister = $orderPersister;
     }
 
+    public function setCalculated(CalculatedCart $calculatedCart): void
+    {
+        $this->cart = $calculatedCart->getCart();
+        $this->calculated = $calculatedCart;
+    }
+
     public function createNew(): CalculatedCart
     {
         $this->createNewCart();
@@ -96,6 +107,10 @@ class StoreFrontCartService
 
     public function getCalculatedCart(): CalculatedCart
     {
+        if ($this->calculated) {
+            return $this->calculated;
+        }
+
         $container = $this->getCart();
 
         return $this->calculate($container);
@@ -182,6 +197,8 @@ class StoreFrontCartService
 
         $this->save($calculated, $context);
 
+        $this->calculated = $calculated;
+
         return $calculated;
     }
 
@@ -198,7 +215,8 @@ class StoreFrontCartService
             $this->persister->delete($token);
         }
 
-        $this->cart = Cart::createNew(self::CART_NAME);
+        $this->cart = Cart::createNew(self::CART_NAME,  $this->getCartToken());
+        $this->calculated = null;
         $this->session->set(self::CART_TOKEN_KEY, $this->cart->getToken());
 
         return $this->cart;

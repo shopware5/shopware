@@ -19,6 +19,7 @@
             <argument id="shopware.cache" type="service"/>
             <argument id="Shopware\Api\Context\Repository\ContextRuleRepository" type="service"/>
             <argument id="serializer" type="service"/>
+            <argument type="service" id="service_container"/>
         </service>
 
         <service class="Shopware\Storefront\Context\StorefrontContextService" id="Shopware\Storefront\Context\StorefrontContextService" public="true">
@@ -128,6 +129,7 @@
 
         <service class="Shopware\Storefront\Controller\Widgets\IndexController" public="true" id="Shopware\Storefront\Controller\Widgets\IndexController">
             <argument type="service" id="Shopware\Api\Shop\Repository\ShopRepository" />
+            <argument type="service" id="Shopware\Api\Currency\Repository\CurrencyRepository"/>
         </service>
 
         <service class="Shopware\Storefront\Controller\Widgets\CheckoutController" public="true" id="Shopware\Storefront\Controller\Widgets\CheckoutController">
