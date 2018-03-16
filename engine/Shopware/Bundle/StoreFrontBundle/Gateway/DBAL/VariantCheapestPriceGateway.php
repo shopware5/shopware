@@ -176,7 +176,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         /** @var VariantCondition $condition */
         $tableKey = $condition->getName();
 
-        $suffix = crc32(json_encode($condition));
+        $suffix = dechex(crc32(json_encode($condition)));
 
         $where = [];
 
