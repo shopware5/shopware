@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
@@ -1110,10 +1109,10 @@ class sAdmin
 
         /** @var Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop */
         $shop = $this->contextService->getShopContext()->getShop();
-        $shopUrl = 'http://' . $shop->getHost() . $shop->getPath();
+        $shopUrl = 'http://' . $shop->getHost() . $shop->getUrl();
 
         if ($shop->getSecure()) {
-            $shopUrl = 'https://' . $shop->getHost() . $shop->getPath();
+            $shopUrl = 'https://' . $shop->getHost() . $shop->getUrl();
         }
 
         $context = [
@@ -3935,7 +3934,7 @@ SQL;
             $payment['surcharge'] = 0;
             if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
                 $surcharge_net = $surcharge;
-                //$tax_rate = 0;
+            //$tax_rate = 0;
             } else {
                 $surcharge_net = round($surcharge / (100 + $discount_tax) * 100, 2);
             }

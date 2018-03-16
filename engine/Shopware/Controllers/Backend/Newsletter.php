@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -256,7 +255,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $validator = $this->container->get('validator.email');
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
-                // SW-4526
+            // SW-4526
                 // Don't `continue` with next iteration without setting user's lastmailing
                 // else the mailing.status will never be set to 2
                 // and sending the mail will block
@@ -418,7 +417,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
 
         if (!$template->isCached($mailing['template'])) {
             $template->assign('sMailing', $mailing);
-            $template->assign('sStart', ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBasePath());
+            $template->assign('sStart', ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBaseUrl());
             $template->assign('sUserGroup', Shopware()->System()->sUSERGROUP);
             $template->assign('sUserGroupData', Shopware()->System()->sUSERGROUPDATA);
             $template->assign('sMainCategories', Shopware()->Modules()->Categories()->sGetMainCategories());
