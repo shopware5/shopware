@@ -1,0 +1,16 @@
+<transition name="sw-notifications-slide-fade">
+    <div v-if="notifications.length" class="sw-notifications" :style="notificationsStyle">
+        <transition-group name="sw-notifications-slide-fade">
+            <sw-alert v-for="notification in notifications"
+                      :key="notification.uuid"
+                      :title="notification.title"
+                      :variant="notification.variant"
+                      :system="notification.system"
+                      :notificationIndex="notification.uuid"
+                      :closable="true"
+                      @swAlertClose="onClose">
+                {{ notification.message }}
+            </sw-alert>
+        </transition-group>
+    </div>
+</transition>

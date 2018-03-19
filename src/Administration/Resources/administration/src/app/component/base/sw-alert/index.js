@@ -1,8 +1,10 @@
 import { Component } from 'src/core/shopware';
-import './sw-alert.less';
 import template from './sw-alert.html.twig';
+import './sw-alert.less';
 
 Component.register('sw-alert', {
+    template,
+
     props: {
         variant: {
             type: String,
@@ -17,11 +19,31 @@ Component.register('sw-alert', {
         title: {
             type: String,
             required: false
+        },
+        system: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        closable: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        notificationIndex: {
+            type: String,
+            required: false
         }
     },
     computed: {
         alertClasses() {
-            return `sw-alert--${this.variant}`;
+            return [
+                `sw-alert--${this.variant}`,
+                {
+                    'sw-alert--system': this.system,
+                    'sw-alert--closable': this.closable
+                }
+            ];
         },
 
         alertIcon() {
@@ -46,7 +68,5 @@ Component.register('sw-alert', {
 
             return alertIcon;
         }
-    },
-
-    template
+    }
 });

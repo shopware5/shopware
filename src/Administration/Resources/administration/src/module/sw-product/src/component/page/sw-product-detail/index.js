@@ -6,7 +6,8 @@ Component.register('sw-product-detail', {
     inject: ['categoryService', 'productManufacturerService', 'taxService', 'customerGroupService'],
 
     mixins: [
-        Mixin.getByName('product')
+        Mixin.getByName('product'),
+        Mixin.getByName('notification')
     ],
 
     data() {
@@ -75,6 +76,11 @@ Component.register('sw-product-detail', {
 
         onSave() {
             this.saveProduct();
+
+            this.createNotificationSuccess({
+                title: 'Produktdetails',
+                message: 'Das Produkt wurde erfolgreich gespeichert.'
+            });
         }
     },
 
