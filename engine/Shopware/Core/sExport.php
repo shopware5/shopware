@@ -1399,6 +1399,7 @@ class sExport
                 , b.articleID
             FROM (
                 SELECT
+                    NULL as id,
                     NULL as sessionID,
                     ? as articleID,
                     ? as ordernumber,
