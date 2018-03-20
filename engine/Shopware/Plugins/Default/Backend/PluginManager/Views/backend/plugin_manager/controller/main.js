@@ -92,10 +92,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             'plugin-manager-listing-window': {
                 'plugin-manager-loaded': me.afterPluginManagerLoaded
             },
-            'plugin-manager-connect-introduction-page{ isVisible(true) }': {
-                'connect-introduction-remove': me.removeConnectIntroduction,
-                'connect-introduction-install': me.installConnectIntroduction
-            },
             'plugin-manager-importexport-teaser-page{ isVisible(true) }': {
                 'install-import-export-plugin': me.installImportExportPlugin,
                 'install-migration-plugin': me.installMigrationPlugin
@@ -106,7 +102,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             'load-update-listing': me.loadUpdateListing,
             'enable-premium-plugins-mode': me.enablePremiumPluginsMode,
             'enable-expired-plugins-mode': me.enableExpiredPluginsMode,
-            'enable-connect-introduction-mode': me.enableConnectIntroductionMode,
             'enable-importexport-teaser-mode': me.enableImportExportTeaserMode,
             scope: me
         });
@@ -128,16 +123,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
 
         listingWindow.setWidth(1028);
         listingWindow.setTitle('{s name="expired_plugins/title"}Expired plugins{/s}');
-        me.getNavigation().hide();
-    },
-
-    enableConnectIntroductionMode: function() {
-        var me = this,
-            listingWindow = me.getListingWindow();
-
-        listingWindow.setWidth(1130);
-        listingWindow.setHeight(695);
-        listingWindow.setTitle('{s name="connect_introduction/title"}{/s}');
         me.getNavigation().hide();
     },
 
@@ -209,11 +194,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         if (me.subApplication.action === 'ExpiredPlugins') {
             Shopware.app.Application.fireEvent('display-expired-plugins');
         }
-        if (me.subApplication.action === 'ShopwareConnect') {
-            Shopware.app.Application.fireEvent('display-connect-introduction');
-
-            return;
-        }
         if (me.subApplication.action === 'ImportExport') {
             Shopware.app.Application.fireEvent('display-importexport-teaser');
             var plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
@@ -239,41 +219,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                 }
             });
         }, 1000);
-    },
-
-    removeConnectIntroduction: function() {
-        var me = this;
-
-        Ext.Ajax.request({
-            url: '{url controller="PluginManager" action="disableConnectMenu"}',
-            callback: function(options, success, response) {
-                if (success) {
-                    me.getListingWindow().close();
-                    var connectMenu = Ext.ComponentQuery.query('mainmenu [iconCls=shopware-connect]')[0];
-                    if (connectMenu) {
-                        connectMenu.previousSibling().destroy();
-                        connectMenu.nextSibling().nextSibling().destroy();
-                        connectMenu.destroy();
-                    }
-                }
-            }
-        }, me);
-    },
-
-    installConnectIntroduction: function() {
-        var me = this,
-            plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
-                technicalName: 'SwagConnect',
-                iconPath: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/shopware_connect.png"}'
-            });
-
-        me.doInstallPlugin(plugin, function(response) {
-            me.getListingWindow().close();
-            Shopware.app.Application.addSubApplication({
-                name: 'Shopware.apps.Connect',
-                action: 'Register'
-            });
-        });
     },
 
     installImportExportPlugin: function() {
