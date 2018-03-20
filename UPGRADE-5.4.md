@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Changed behaviour of search indexer to allow product attribute search
 * Changed hashing algorithm for product variant search join table aliases to prevent errors on 32bit systems
+* Changed `QueryBuilder::addFilter` to enable compatibility with php7 on cygwin
 
 ## 5.4.1
 
