@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
+## 5.4.2
+
+[View all changes from v5.4.1...v5.4.2](https://github.com/shopware/shopware/compare/v5.4.1...v5.4.2)
+
+### Changes
+
+* Changed behaviour of search indexer to allow product attribute search
+
 ## 5.4.1
 
 [View all changes from v5.4.0...v5.4.1](https://github.com/shopware/shopware/compare/v5.4.0...v5.4.1)
@@ -36,7 +44,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `newsletter_header_content_logo`
   * `newsletter_header_content_title`
 * Added view variable `sCategoryContent` to the `listingCountAction` of the controller `Shopware_Controllers_Widgets_Listing`
-
 
 ### Changes
 
