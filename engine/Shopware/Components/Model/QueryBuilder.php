@@ -187,7 +187,9 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $parameterKey = str_replace(['.'], ['_'], $exprKey) . uniqid();
+            // The return value of uniqid, even w/o parameters, may contain dots in some environments
+            // so we make sure to strip those as well
+            $parameterKey = str_replace(['.'], ['_'], $exprKey . uniqid());
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
