@@ -26,7 +26,7 @@ namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class CSRFTokenValidator
@@ -34,7 +34,7 @@ use Shopware\Components\DependencyInjection\Container;
 class CSRFTokenValidator implements SubscriberInterface
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -56,11 +56,11 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * CSRFTokenValidator constructor.
      *
-     * @param Container $container
-     * @param bool      $isEnabledFrontend
-     * @param bool      $isEnabledBackend
+     * @param ContainerInterface $container
+     * @param bool               $isEnabledFrontend
+     * @param bool               $isEnabledBackend
      */
-    public function __construct(Container $container, $isEnabledFrontend = true, $isEnabledBackend = true)
+    public function __construct(ContainerInterface $container, $isEnabledFrontend = true, $isEnabledBackend = true)
     {
         $this->container = $container;
         $this->isEnabledFrontend = (bool) $isEnabledFrontend;
@@ -132,7 +132,7 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        if($request->isGet() && !$this->isProtected($controller)){
+        if ($request->isGet() && !$this->isProtected($controller)) {
             return;
         }
 

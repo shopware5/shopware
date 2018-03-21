@@ -40,6 +40,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.productid_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\ProductIdConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.customer_group_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CustomerGroupConditionHandler" >
             <tag name="shopware_search_es.search_handler" />
         </service>

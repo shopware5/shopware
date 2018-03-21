@@ -45,6 +45,64 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     protected $userRepository = null;
 
     /**
+     * Some actions from this controller must be password verified before being able to execute them,
+     * this means that the administrator password must be entered again into a dialog box in order to execute
+     * the requested action.
+     *
+     * @see Shopware_Controllers_Backend_Login::validatePasswordAction()
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        $calledAction = $this->Request()->getActionName();
+
+        if (
+            Shopware()->Plugins()->Backend()->Auth()->shouldAuth() &&
+            $this->isPasswordConfirmProtectedAction($calledAction) &&
+            !$this->container->get('backendsession')->offsetGet('passwordVerified')
+        ) {
+            return $this->forward('passwordConfirmationRequired');
+        }
+    }
+
+    /**
+     * Displays a JSON string indicating failure for password confirmation
+     */
+    public function passwordConfirmationRequiredAction()
+    {
+        $this->Front()->Plugins()->Json()->setRenderer();
+
+        $this->View()->assign([
+            'success' => false,
+            'data' => [],
+        ]);
+    }
+
+    /**
+     * If the requested action is meant to be password verified, unset the session flag in order
+     * for it not to persist in other requests. In this way, the password verification process will be triggered
+     * again.
+     *
+     * @see Shopware_Controllers_Backend_Login::validatePasswordAction()
+     */
+    public function postDispatch()
+    {
+        parent::postDispatch();
+
+        $calledAction = $this->Request()->getActionName();
+        $backendSession = $this->container->get('backendsession');
+
+        if (
+            Shopware()->Plugins()->Backend()->Auth()->shouldAuth() &&
+            $this->isPasswordConfirmProtectedAction($calledAction) &&
+            $backendSession->offsetGet('passwordVerified')
+        ) {
+            $backendSession->offsetUnset('passwordVerified');
+        }
+    }
+
+    /**
      * Get data for the user identified by request["id"]
      *
      * @throws Enlight_Exception
@@ -455,7 +513,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
     /**
      * Event listener method of the user manager backend module, which is fired
-     * when the user want to create a new resource.
+     * when the user wants to create a new resource.
      */
     public function saveResourceAction()
     {
@@ -476,7 +534,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
     /**
      * Event listener method of the user manager backend module, which is fired
-     * when the user want to create a new resource.
+     * when the user wants to create a new resource.
      */
     public function savePrivilegeAction()
     {
@@ -497,7 +555,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
     /**
      * Event listener method of the user manager backend module, which is fired
-     * when the user change the checkboxes of the rules tree and want to assign the selected
+     * when the user changes the checkboxes of the rules tree and wants to assign the selected
      * privileges to the selected role.
      */
     public function updateRolePrivilegesAction()
@@ -581,6 +639,37 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $this->addAclPermission('saveResource', 'update', 'Insufficient Permissions');
         $this->addAclPermission('savePrivilege', 'update', 'Insufficient Permissions');
         $this->addAclPermission('updateRolePrivileges', 'update', 'Insufficient Permissions');
+    }
+
+    /**
+     * Verifies if an action name must be password confirm protected
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    private function isPasswordConfirmProtectedAction($name)
+    {
+        return in_array(strtolower($name), $this->getPasswordConfirmProtectedActions(), true);
+    }
+
+    /**
+     * Returns an array of actions which must be password confirmed.
+     *
+     * @return array
+     */
+    private function getPasswordConfirmProtectedActions()
+    {
+        return [
+            'deleterole',
+            'updaterole',
+            'updateuser',
+            'deleteuser',
+            'deleteresource',
+            'deleteprivilege',
+            'updateroleprivilege',
+            'saveprivilege',
+        ];
     }
 
     /**

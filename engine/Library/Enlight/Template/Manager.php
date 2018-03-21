@@ -287,4 +287,26 @@ class Enlight_Template_Manager extends Smarty
         }
         return array_merge($after, $pluginDirs, $before);
     }
+
+    /**
+     * Technically smarty security is enabled, if a security policy is set for the template manager instance. The
+     * security policy holds a reference to the template manager instance. When cloning the template manager, the
+     * reference of the security_policy to the Smarty instance has be updated to the new cloned Smarty instance.
+     *
+     * Without doing this, every self::fetch() after a directory was added with self::addTemplateDir(), would lead to a
+     * SmartyException with message 'directory [...] not allowed by security setting'. This is because
+     * the security_policy still holds a reference to the old Smarty instance that does not know this new directories
+     * as template sources.
+     *
+     * The security_policy is also cloned so other instances of the Enlight_Template_Manager do not get affected.
+     */
+    public function __clone()
+    {
+        parent::__clone();
+
+        if ($this->security_policy !== null) {
+            $this->security_policy = clone $this->security_policy;
+            $this->security_policy->smarty = $this;
+        }
+    }
 }

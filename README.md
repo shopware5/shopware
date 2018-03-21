@@ -22,7 +22,7 @@ Visit the forum at <http://forum.shopware.com/>
 
 ### Shopware Server Requirements
 
-- PHP 5.6.4 or above
+- PHP 5.6.4 or above, PHP 7.1 or above strongly recommended
 - [Apache 2.2 or 2.4](https://httpd.apache.org/)
 - Apache's `mod_rewrite` module
 - MySQL 5.5.0 or above

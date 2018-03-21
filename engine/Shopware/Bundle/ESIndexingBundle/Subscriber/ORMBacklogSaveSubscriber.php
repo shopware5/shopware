@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ORMBacklogSaveSubscriber implements SubscriberInterface
 {
@@ -35,17 +35,17 @@ class ORMBacklogSaveSubscriber implements SubscriberInterface
     private $backlog;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
      * @param ORMBacklogSubscriber $backlog
-     * @param Container            $container
+     * @param ContainerInterface   $container
      */
     public function __construct(
         ORMBacklogSubscriber $backlog,
-        Container $container
+        ContainerInterface $container
     ) {
         $this->backlog = $backlog;
         $this->container = $container;

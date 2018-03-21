@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Psr\Log\LoggerInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
@@ -35,8 +34,10 @@ use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
+use ShopwarePlugins\SwagUpdate\Components\Steps\ErrorResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\UnpackStep;
+use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 use ShopwarePlugins\SwagUpdate\Components\UpdateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
@@ -315,7 +316,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         }
 
         $payload = json_encode($payload);
-        if (!file_put_contents(Shopware()->DocPath() . '/files/update/update.json', $payload)) {
+        $projectDir = $this->container->getParameter('shopware.app.rootdir');
+
+        if (!file_put_contents($projectDir . 'files/update/update.json', $payload)) {
             throw new \Exception('Could not write update.json');
         }
 
@@ -546,13 +549,13 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         $filename = 'update_' . $version->sha1 . '.zip';
 
-        return Shopware()->DocPath('files') . $filename;
+        return $this->container->getParameter('shopware.app.rootdir') . $filename;
     }
 
     /**
      * Map result object to extjs array format
      *
-     * @param $result
+     * @param ValidResult|FinishResult|ErrorResult $result
      *
      * @return array
      */

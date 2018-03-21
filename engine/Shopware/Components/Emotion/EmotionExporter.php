@@ -25,7 +25,7 @@
 namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface;
@@ -50,7 +50,7 @@ class EmotionExporter implements EmotionExporterInterface
     private $presetResource;
 
     /**
-     * @var MediaService
+     * @var MediaServiceInterface
      */
     private $mediaService;
 
@@ -70,16 +70,19 @@ class EmotionExporter implements EmotionExporterInterface
     private $slug;
 
     /**
-     * @param EmotionToPresetDataTransformerInterface $emotionToPresetDataTransformer
+     * @param EmotionToPresetDataTransformerInterface $transformer
      * @param PresetDataSynchronizerInterface         $synchronizer
      * @param EmotionPreset                           $emotionPresetResource
+     * @param MediaServiceInterface                   $mediaService
      * @param string                                  $rootDirectory
+     * @param Connection                              $connection
+     * @param SlugInterface                           $slug
      */
     public function __construct(
         EmotionToPresetDataTransformerInterface $transformer,
         PresetDataSynchronizerInterface $synchronizer,
         EmotionPreset $emotionPresetResource,
-        MediaService $mediaService,
+        MediaServiceInterface $mediaService,
         $rootDirectory,
         Connection $connection,
         SlugInterface $slug

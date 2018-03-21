@@ -70,6 +70,11 @@ class Product extends ListProduct
     protected $visibility = [];
 
     /**
+     * @var array
+     */
+    protected $availability = [];
+
+    /**
      * @var Group[]
      */
     protected $fullConfiguration;
@@ -258,5 +263,21 @@ class Product extends ListProduct
     public function getFilterConfiguration()
     {
         return $this->filterConfiguration;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailability()
+    {
+        return $this->availability;
+    }
+
+    /**
+     * @param array $availability
+     */
+    public function setAvailability($availability)
+    {
+        $this->availability = $availability;
     }
 }

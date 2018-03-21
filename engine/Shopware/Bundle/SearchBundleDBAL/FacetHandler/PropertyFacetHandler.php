@@ -127,8 +127,10 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        /** @var $facet Facet\PropertyFacet */
-        $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        $propertyData = $statement->fetchAll();
+
+        $valueIds = array_column($propertyData, 'id');
+        $filterGroupIds = array_keys(array_flip(array_column($propertyData, 'filterGroupId')));
 
         if (empty($valueIds)) {
             return null;
@@ -136,7 +138,8 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
         $properties = $this->propertyGateway->getList(
             $valueIds,
-            $context
+            $context,
+            $filterGroupIds
         );
 
         return $properties;
@@ -150,8 +153,12 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
         $query->innerJoin('product', 's_filter_articles', 'productProperty', 'productProperty.articleID = product.id');
+        $query->innerJoin('product', 's_filter', 'propertySet', 'propertySet.id = product.filtergroupID');
         $query->groupBy('productProperty.valueID');
         $query->select('productProperty.valueID as id');
+
+        $query->addSelect('product.filtergroupID as filterGroupId');
+        $query->orderBy('propertySet.position');
     }
 
     /**

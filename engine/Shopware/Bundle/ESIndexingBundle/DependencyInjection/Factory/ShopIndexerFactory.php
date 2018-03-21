@@ -30,12 +30,12 @@ use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\ESIndexingBundle\SettingsInterface;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexer;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ShopIndexerFactory
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -67,13 +67,13 @@ class ShopIndexerFactory
     }
 
     /**
-     * @param Container $container
+     * @param ContainerInterface $container
      *
      * @throws \Exception
      *
      * @return ShopIndexerInterface
      */
-    public function factory(Container $container)
+    public function factory(ContainerInterface $container)
     {
         $this->container = $container;
 

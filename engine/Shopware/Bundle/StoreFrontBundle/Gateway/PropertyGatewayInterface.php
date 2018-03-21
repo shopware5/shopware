@@ -54,8 +54,9 @@ interface PropertyGatewayInterface
      *
      * @param array                       $valueIds
      * @param Struct\ShopContextInterface $context
+     * @param array                       $filterGroupIds
      *
      * @return Struct\Property\Set[] Each array element (set, group, option) is indexed by his id
      */
-    public function getList(array $valueIds, Struct\ShopContextInterface $context);
+    public function getList(array $valueIds, Struct\ShopContextInterface $context, array $filterGroupIds = []);
 }

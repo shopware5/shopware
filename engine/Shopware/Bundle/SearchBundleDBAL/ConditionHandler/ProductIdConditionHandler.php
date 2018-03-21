@@ -24,34 +24,26 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Condition\ProductIdCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class CombinedConditionHandler implements ConditionHandlerInterface
+/**
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.com)
+ */
+class ProductIdConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return $condition instanceof CombinedCondition;
+        return $condition instanceof ProductIdCondition;
     }
 
     /**
@@ -62,35 +54,15 @@ class CombinedConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $query->addState($condition->getName());
+        $key = ':productIds' . md5(json_encode($condition));
 
-        /** @var CombinedCondition $condition */
-        foreach ($condition->getConditions() as $innerCondition) {
-            $handler = $this->getConditionHandler($innerCondition);
-            $handler->generateCondition($innerCondition, $query, $context);
-        }
-    }
+        $query->andWhere('variant.articleId IN (' . $key . ')');
 
-    /**
-     * @param ConditionInterface $condition
-     *
-     * @throws \Exception
-     *
-     * @return ConditionHandlerInterface
-     */
-    private function getConditionHandler(ConditionInterface $condition)
-    {
-        //initialize the condition handler collection service
-        $this->container->get('shopware_searchdbal.dbal_query_builder_factory');
-
-        $handlers = $this->container->get('shopware_searchdbal.condition_handlers');
-
-        foreach ($handlers as $handler) {
-            if ($handler->supportsCondition($condition)) {
-                return $handler;
-            }
-        }
-
-        throw new \Exception(sprintf('Condition %s not supported', get_class($condition)));
+        /* @var ProductIdCondition $condition */
+        $query->setParameter(
+            $key,
+            $condition->getProductIds(),
+            Connection::PARAM_INT_ARRAY
+        );
     }
 }

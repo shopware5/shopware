@@ -27,7 +27,7 @@ namespace Shopware\Components\CustomerStream;
 use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
 use Ramsey\Uuid\Uuid;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CookieSubscriber implements SubscriberInterface
 {
@@ -37,15 +37,15 @@ class CookieSubscriber implements SubscriberInterface
     private $connection;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @param Connection $connection
-     * @param Container  $container
+     * @param Connection         $connection
+     * @param ContainerInterface $container
      */
-    public function __construct(Connection $connection, Container $container)
+    public function __construct(Connection $connection, ContainerInterface $container)
     {
         $this->connection = $connection;
         $this->container = $container;

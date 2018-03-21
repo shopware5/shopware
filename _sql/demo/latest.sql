@@ -10665,7 +10665,8 @@ INSERT INTO `s_search_tables` (`id`, `table`, `referenz_table`, `foreign_key`, `
 (2, 's_categories', 's_articles_categories', 'categoryID', NULL),
 (3, 's_articles_supplier', NULL, 'supplierID', NULL),
 (4, 's_articles_details', 's_articles_details', 'id', NULL),
-(5, 's_articles_translations', NULL, NULL, NULL);
+(5, 's_articles_translations', NULL, NULL, NULL),
+(6, 's_articles_attributes', NULL, NULL, NULL);
 
 TRUNCATE TABLE `s_statistics_currentusers`;
 TRUNCATE TABLE `s_statistics_pool`;

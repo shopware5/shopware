@@ -166,6 +166,7 @@
             <argument id="dbal_connection" type="service"/>
             <argument id="shopware_storefront.configurator_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument type="service" id="config"/>
         </service>
 
     </services>
