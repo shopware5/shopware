@@ -103,6 +103,11 @@ class Db
         $options['user'] = $options['username'];
 
         unset($options['username'], $options['adapter']);
+        
+        $options['defaultTableOptions'] = [
+            'charset' => 'utf8',
+            'collate' => 'utf8_unicode_ci'
+        ];
 
         return DriverManager::getConnection($options, $config, $eventManager);
     }
