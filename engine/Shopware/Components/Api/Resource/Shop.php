@@ -216,7 +216,7 @@ class Shop extends Resource
                 }
             } else {
                 if (isset($params[$param]) && empty($params[$param])) {
-                    throw new \Exception('param $param may not be empty');
+                    throw new \Exception("param $param may not be empty");
                 }
             }
         }
