@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Shopware\Storefront\Bridge\Product\Repository;
+namespace Shopware\StorefrontApi\Product;
 
 use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Search\Query\TermsQuery;
 use Shopware\Api\Entity\Search\Sorting\FieldSorting;
 use Shopware\Api\Product\Collection\ProductBasicCollection;
+use Shopware\Api\Product\Collection\ProductMediaBasicCollection;
 use Shopware\Api\Product\Repository\ProductMediaRepository;
 use Shopware\Api\Product\Repository\ProductRepository;
 use Shopware\Api\Product\Repository\ProductServiceRepository;
@@ -13,8 +14,6 @@ use Shopware\Api\Product\Struct\ProductMediaSearchResult;
 use Shopware\Api\Product\Struct\ProductSearchResult;
 use Shopware\Cart\Price\PriceCalculator;
 use Shopware\Context\Struct\StorefrontContext;
-use Shopware\Storefront\Bridge\Product\Struct\ProductBasicStruct;
-use Shopware\Storefront\Bridge\Product\Struct\ProductDetailStruct;
 
 class StorefrontProductRepository
 {
@@ -71,6 +70,7 @@ class StorefrontProductRepository
     public function search(Criteria $criteria, StorefrontContext $context): ProductSearchResult
     {
         $basics = $this->repository->search($criteria, $context->getShopContext());
+
         $listProducts = $this->loadListProducts($basics, $context);
 
         $basics->clear();
@@ -116,7 +116,8 @@ class StorefrontProductRepository
             $price = $this->priceCalculator->calculate($priceDefinition, $context);
             $product->setCalculatedPrice($price);
 
-            $product->setMedia($media->filterByProductId($product->getId()));
+            $productMedia = $media->filterByProductId($product->getId())->getElements();
+            $product->setMedia(new ProductMediaBasicCollection($productMedia));
         }
 
         return $listingProducts;

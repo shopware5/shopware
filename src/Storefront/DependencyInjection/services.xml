@@ -9,7 +9,6 @@
     </parameters>
 
     <services>
-
         <service class="Shopware\Context\Service\ContextRuleLoader" id="Shopware\Context\Service\ContextRuleLoader">
             <argument id="Shopware\CartBridge\Cart\CartPersister" type="service"/>
             <argument id="Shopware\Cart\Tax\TaxDetector" type="service"/>
@@ -20,16 +19,6 @@
             <argument id="Shopware\Api\Context\Repository\ContextRuleRepository" type="service"/>
             <argument id="serializer" type="service"/>
             <argument type="service" id="service_container"/>
-        </service>
-
-        <service class="Shopware\Storefront\Context\StorefrontContextService" id="Shopware\Storefront\Context\StorefrontContextService" public="true">
-            <argument id="request_stack" type="service"/>
-            <argument id="Shopware\Context\Service\ContextFactory" type="service"/>
-            <argument id="shopware.cache" type="service"/>
-            <argument id="serializer" type="service"/>
-            <argument id="security.token_storage" type="service"/>
-            <argument type="service" id="Shopware\Context\Service\ContextRuleLoader"/>
-            <argument type="service" id="logger"/>
         </service>
 
         <service class="Shopware\Storefront\Twig\TemplateDataExtension" id="Shopware\Storefront\Twig\TemplateDataExtension">
@@ -78,20 +67,10 @@
         </service>
 
         <service class="Shopware\Storefront\Session\ShopSubscriber" id="Shopware\Storefront\Session\ShopSubscriber">
-            <argument type="service" id="Shopware\Storefront\Context\StorefrontContextService" />
             <tag name="kernel.event_subscriber" />
-        </service>
-
-        <service class="Shopware\Storefront\Context\StorefrontContextValueResolver" id="Shopware\Storefront\Context\StorefrontContextValueResolver">
-            <argument type="service" id="Shopware\Storefront\Context\StorefrontContextService" />
-            <tag name="controller.argument_value_resolver"/>
-        </service>
-
-
-
-        <service class="Shopware\Storefront\Context\StorefrontContextSwitcher" id="Shopware\Storefront\Context\StorefrontContextSwitcher">
-            <argument id="session" type="service"/>
-            <argument id="Shopware\Storefront\Context\StorefrontContextService" type="service"/>
+            <argument type="service" id="Shopware\StorefrontApi\Context\StorefrontContextPersister"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="Shopware\StorefrontApi\Context\ContextTokenResolver"/>
         </service>
 
         <service class="Shopware\Storefront\Navigation\NavigationService" id="Shopware\Storefront\Navigation\NavigationService" public="true">
@@ -103,32 +82,24 @@
         </service>
 
         <service class="Shopware\Storefront\Page\Detail\DetailPageLoader" id="Shopware\Storefront\Page\Detail\DetailPageLoader">
-            <argument id="Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository" type="service"/>
+            <argument id="Shopware\StorefrontApi\Product\StorefrontProductRepository" type="service"/>
         </service>
 
         <service class="Shopware\Storefront\Page\Listing\ListingPageLoader" id="Shopware\Storefront\Page\Listing\ListingPageLoader">
-            <argument id="Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository" type="service"/>
+            <argument id="Shopware\StorefrontApi\Product\StorefrontProductRepository" type="service"/>
         </service>
 
         <service class="Shopware\Storefront\Page\Search\SearchPageLoader" id="Shopware\Storefront\Page\Search\SearchPageLoader">
             <argument type="service" id="Shopware\Framework\Config\ConfigService" />
-            <argument id="Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository" type="service"/>
-            <argument type="service" id="Shopware\Storefront\Page\Search\KeywordSearchTermInterpreter"/>
+            <argument id="Shopware\StorefrontApi\Product\StorefrontProductRepository" type="service"/>
+            <argument type="service" id="Shopware\StorefrontApi\Search\KeywordSearchTermInterpreter"/>
         </service>
 
-        <service class="Shopware\Storefront\Firewall\CustomerProvider" id="Shopware\Storefront\Firewall\CustomerProvider">
-            <argument type="service" id="Shopware\Api\Customer\Repository\CustomerRepository"/>
-        </service>
 
         <service class="Shopware\Storefront\Controller\AccountController" public="true" id="Shopware\Storefront\Controller\AccountController">
             <argument type="service" id="security.authentication_utils" />
-        </service>
-
-        <service class="Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository" id="Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository">
-            <argument type="service" id="Shopware\Api\Product\Repository\ProductRepository"/>
-            <argument type="service" id="Shopware\Cart\Price\PriceCalculator"/>
-            <argument type="service" id="Shopware\Api\Product\Repository\ProductMediaRepository"/>
-            <argument type="service" id="Shopware\Api\Product\Repository\ProductServiceRepository"/>
+            <argument type="service" id="security.token_storage"/>
+            <argument type="service" id="Shopware\StorefrontApi\Context\StorefrontContextPersister"/>
         </service>
 
         <service class="Shopware\Storefront\Controller\Widgets\IndexController" public="true" id="Shopware\Storefront\Controller\Widgets\IndexController">
@@ -155,6 +126,7 @@
             <argument type="service" id="Shopware\Payment\PaymentProcessor"/>
             <argument type="service" id="Shopware\Payment\Token\PaymentTransactionTokenFactory"/>
             <argument type="service" id="Shopware\Api\Payment\Repository\PaymentMethodRepository"/>
+            <argument type="service" id="Shopware\StorefrontApi\Context\StorefrontContextPersister"/>
         </service>
 
         <service class="Shopware\Storefront\Controller\SearchController" public="true" id="Shopware\Storefront\Controller\SearchController">
@@ -162,10 +134,11 @@
             <argument id="Shopware\Storefront\Page\Search\SearchPageLoader" type="service"/>
         </service>
 
-        <service class="Shopware\Storefront\Page\Search\KeywordSearchTermInterpreter" id="Shopware\Storefront\Page\Search\KeywordSearchTermInterpreter">
-            <argument type="service" id="Doctrine\DBAL\Connection"/>
-            <argument type="service" id="Shopware\Api\Entity\Search\Term\Tokenizer"/>
-            <argument type="service" id="logger"/>
+        <service class="Shopware\Storefront\Session\SessionContextTokenResolver"
+                 id="Shopware\Storefront\Session\SessionContextTokenResolver"
+                 decorates="Shopware\StorefrontApi\Context\ContextTokenResolver">
+
+            <argument id="Shopware\Storefront\Session\SessionContextTokenResolver.inner" type="service" />
         </service>
 
     </services>

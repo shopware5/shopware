@@ -25,52 +25,128 @@ declare(strict_types=1);
 
 namespace Shopware\Storefront\Session;
 
+use Ramsey\Uuid\Uuid;
 use Shopware\Api\Seo\Struct\SeoUrlBasicStruct;
 use Shopware\Context\Struct\StorefrontContext;
 use Shopware\DbalIndexing\SeoUrl\DetailPageSeoUrlIndexer;
 use Shopware\DbalIndexing\SeoUrl\ListingPageSeoUrlIndexer;
 use Shopware\Framework\Routing\Router;
-use Shopware\Storefront\Context\StorefrontContextServiceInterface;
+use Shopware\StorefrontApi\Context\ContextSubscriber;
+use Shopware\StorefrontApi\Context\ContextTokenResolverInterface;
+use Shopware\StorefrontApi\Context\StorefrontContextPersister;
+use Shopware\StorefrontApi\Context\StorefrontContextService;
+use Shopware\StorefrontApi\Context\StorefrontContextServiceInterface;
+use Shopware\StorefrontApi\Context\StorefrontContextValueResolver;
+use Shopware\StorefrontApi\Firewall\CustomerUser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\AuthenticationEvents;
+use Symfony\Component\Security\Core\Event\AuthenticationEvent;
+use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ShopSubscriber implements EventSubscriberInterface
 {
-    public const SHOP_CONTEXT_PROPERTY = 'shop_context';
+    /**
+     * @var StorefrontContextPersister
+     */
+    private $contextPersister;
 
     /**
-     * @var StorefrontContextServiceInterface
+     * @var RequestStack
      */
-    private $contextService;
+    private $requestStack;
 
-    public function __construct(StorefrontContextServiceInterface $contextService)
-    {
-        $this->contextService = $contextService;
+    /**
+     * @var ContextTokenResolverInterface
+     */
+    private $tokenResolver;
+
+    public function __construct(
+        StorefrontContextPersister $contextPersister,
+        RequestStack $requestStack,
+        ContextTokenResolverInterface $tokenResolver
+    ) {
+        $this->contextPersister = $contextPersister;
+        $this->requestStack = $requestStack;
+        $this->tokenResolver = $tokenResolver;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => [
-                ['startSession', 7],
-                ['setSeoRedirect', 6],
-                ['loadContext', 5],
-                ['setActiveCategory', 4],
+                ['startSession', 20],
+                ['setSeoRedirect', 10],
+                ['setActiveCategory', 0],
             ],
             KernelEvents::RESPONSE => [
                 ['setShopCookie', 10],
             ],
+            AuthenticationEvents::AUTHENTICATION_SUCCESS => [
+                ['login', 0]
+            ],
+            AuthenticationEvents::AUTHENTICATION_FAILURE => [
+                ['logout', 0]
+            ]
         ];
+    }
+
+    public function logout()
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request || !$request->getSession()) {
+            return;
+        }
+
+        if (!$this->isStorefrontRequest($request)) {
+            return;
+        }
+
+        $this->contextPersister->save(
+            $this->tokenResolver->resolve($request),
+            [StorefrontContextService::CUSTOMER_ID => null]
+        );
+    }
+
+    public function login(AuthenticationEvent $event)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request || !$request->getSession()) {
+            return;
+        }
+
+        if (!$this->isStorefrontRequest($request)) {
+            return;
+        }
+
+        $token = $event->getAuthenticationToken();
+
+        if (!($token->getUser() instanceof CustomerUser)) {
+            return;
+        }
+
+        $this->contextPersister->save(
+            $this->tokenResolver->resolve($request),
+            [StorefrontContextService::CUSTOMER_ID => $token->getUser()->getId()]
+        );
     }
 
     public function setSeoRedirect(GetResponseEvent $event): void
     {
         $request = $event->getRequest();
+
+        if (!$this->isStorefrontRequest($request)) {
+            return;
+        }
 
         if (!$request->attributes->has(Router::SEO_REDIRECT_URL)) {
             return;
@@ -89,7 +165,8 @@ class ShopSubscriber implements EventSubscriberInterface
     public function startSession(GetResponseEvent $event): void
     {
         $request = $event->getRequest();
-        if ($request->attributes->get(Router::IS_API_REQUEST_ATTRIBUTE)) {
+
+        if (!$this->isStorefrontRequest($request)) {
             return;
         }
 
@@ -115,30 +192,15 @@ class ShopSubscriber implements EventSubscriberInterface
         $request->getSession()->set('sessionId', $request->getSession()->getId());
     }
 
-    public function loadContext(GetResponseEvent $event)
-    {
-        $request = $event->getRequest();
-        $shopId = $request->attributes->get('_shop_id');
-
-        if (empty($shopId)) {
-            return;
-        }
-        if ($request->attributes->has(self::SHOP_CONTEXT_PROPERTY)) {
-            return;
-        }
-
-        $context = $this->contextService->getStorefrontContext();
-        $request->attributes->set(self::SHOP_CONTEXT_PROPERTY, $context);
-    }
-
     public function setActiveCategory(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        $context = $request->attributes->get(self::SHOP_CONTEXT_PROPERTY);
 
-        if (!$context) {
+        if (!$this->isStorefrontRequest($request)) {
             return;
         }
+
+        $context = $request->attributes->get(ContextSubscriber::SHOP_CONTEXT_PROPERTY);
 
         $request->attributes->set('active_category_id', $this->getActiveCategoryId($request, $context));
     }
@@ -147,6 +209,9 @@ class ShopSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
+        if (!$this->isStorefrontRequest($request)) {
+            return;
+        }
         if (!$request->attributes->has('_shop_id')) {
             return;
         }
@@ -167,5 +232,12 @@ class ShopSubscriber implements EventSubscriberInterface
             default:
                 return $context->getShop()->getCategoryId();
         }
+    }
+
+    private function isStorefrontRequest(Request $request): bool
+    {
+        $type = $request->attributes->get(Router::REQUEST_TYPE_ATTRIBUTE);
+
+        return $type === Router::REQUEST_TYPE_STOREFRONT;
     }
 }

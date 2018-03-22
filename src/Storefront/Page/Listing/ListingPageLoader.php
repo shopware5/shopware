@@ -6,7 +6,7 @@ use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Search\Query\TermQuery;
 use Shopware\Api\Product\Struct\ProductSearchResult;
 use Shopware\Context\Struct\StorefrontContext;
-use Shopware\Storefront\Bridge\Product\Repository\StorefrontProductRepository;
+use Shopware\StorefrontApi\Product\StorefrontProductRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class ListingPageLoader
@@ -23,7 +23,7 @@ class ListingPageLoader
 
     public function load(string $categoryId, Request $request, StorefrontContext $context): ListingPageStruct
     {
-        $criteria = $this->createCriteria($categoryId, $request, $context);
+        $criteria = $this->createCriteria($categoryId, $request);
         $products = $this->productRepository->search($criteria, $context);
 
         $currentPage = $request->query->getInt('p', 1);
@@ -41,11 +41,8 @@ class ListingPageLoader
         return $listingPageStruct;
     }
 
-    private function createCriteria(
-        string $categoryId,
-        Request $request,
-        StorefrontContext $context
-    ): Criteria {
+    private function createCriteria(string $categoryId, Request $request): Criteria
+    {
         $limit = $request->query->getInt('limit', 20);
         $page = $request->query->getInt('p', 1);
 
@@ -59,14 +56,7 @@ class ListingPageLoader
         return $criteria;
     }
 
-    /**
-     * @param $products
-     * @param $criteria
-     * @param $currentPage
-     *
-     * @return int|mixed
-     */
-    private function getPageCount(ProductSearchResult $products, Criteria  $criteria, int $currentPage)
+    private function getPageCount(ProductSearchResult $products, Criteria  $criteria, int $currentPage): int
     {
         $pageCount = (int) round($products->getTotal() / $criteria->getLimit());
         $pageCount = max(1, $pageCount);

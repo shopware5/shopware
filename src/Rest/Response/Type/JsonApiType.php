@@ -6,10 +6,10 @@ use Shopware\Api\Entity\Entity;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\Search\SearchResultInterface;
 use Shopware\Api\Entity\Write\FieldException\InvalidFieldException;
+use Shopware\Rest\Context\RestContext;
 use Shopware\Rest\Exception\WriteStackHttpException;
 use Shopware\Rest\Response\JsonApiResponse;
 use Shopware\Rest\Response\ResponseTypeInterface;
-use Shopware\Rest\RestContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -32,20 +32,13 @@ class JsonApiType implements ResponseTypeInterface
         return $contentType === 'application/vnd.api+json';
     }
 
-    /**
-     * @param Entity                  $entity
-     * @param string|EntityDefinition $definition
-     * @param RestContext             $context
-     * @param bool                    $setLocationHeader
-     *
-     * @return Response
-     */
     public function createDetailResponse(Entity $entity, string $definition, RestContext $context, bool $setLocationHeader = false): Response
     {
         $headers = [];
         $baseUrl = $this->getBaseUrl($context);
 
         if ($setLocationHeader) {
+            /** @var string|EntityDefinition $definition */
             $headers['Location'] = $baseUrl . '/api/' . $this->camelCaseToSnailCase($definition::getEntityName()) . '/' . $entity->getId();
         }
 
@@ -110,15 +103,9 @@ class JsonApiType implements ResponseTypeInterface
         return new JsonApiResponse($errorData, $statusCode);
     }
 
-    /**
-     * @param string|EntityDefinition $definition
-     * @param string                  $id
-     * @param RestContext             $context
-     *
-     * @return Response
-     */
     public function createRedirectResponse(string $definition, string $id, RestContext $context): Response
     {
+        /** @var string|EntityDefinition $definition */
         $headers = [
             'Location' => $this->getBaseUrl($context) . '/api/' . $this->camelCaseToSnailCase($definition::getEntityName()) . '/' . $id,
         ];

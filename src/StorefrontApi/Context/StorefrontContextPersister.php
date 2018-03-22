@@ -1,0 +1,52 @@
+<?php declare(strict_types=1);
+
+namespace Shopware\StorefrontApi\Context;
+
+use Doctrine\DBAL\Connection;
+use Ramsey\Uuid\Uuid;
+
+class StorefrontContextPersister
+{
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    public function save(string $token, array $parameters): void
+    {
+        $existing = $this->load($token);
+
+        $parameters = array_replace_recursive($existing, $parameters);
+
+        $this->connection->executeUpdate(
+            'REPLACE INTO storefront_api_context (`token`, `payload`) VALUES (:token, :payload)',
+            [
+                'token' => Uuid::fromString($token)->getBytes(),
+                'payload' => json_encode($parameters),
+            ]
+        );
+    }
+
+    public function load(string $token): array
+    {
+        if (!Uuid::isValid($token)) {
+            return [];
+        }
+
+        $parameter = $this->connection->fetchColumn(
+            'SELECT `payload` FROM storefront_api_context WHERE token = :token',
+            ['token' => Uuid::fromString($token)->getBytes()]
+        );
+
+        if (!$parameter) {
+            return [];
+        }
+
+        return json_decode($parameter, true);
+    }
+}

@@ -7,13 +7,13 @@ use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\Search\Term\SearchTerm;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Defaults;
-use Shopware\Storefront\Page\Search\KeywordSearchTermInterpreter;
+use Shopware\StorefrontApi\Search\KeywordSearchTermInterpreter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class KeywordSearchTermInterpreterTest extends KernelTestCase
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $connection;
 
