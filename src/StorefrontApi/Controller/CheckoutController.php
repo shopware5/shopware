@@ -142,10 +142,10 @@ class CheckoutController extends Controller
             throw new InvalidParameterException('Parameter type missing');
         }
         if (!isset($post['quantity'])) {
-            throw new InvalidParameterException('Parameter type missing');
+            throw new InvalidParameterException('Parameter quantity missing');
         }
         if (!isset($post['payload'])) {
-            throw new InvalidParameterException('Parameter type missing');
+            throw new InvalidParameterException('Parameter payload missing');
         }
 
         $identifier = $post['identifier'];
@@ -246,7 +246,7 @@ class CheckoutController extends Controller
         if (!$token) {
             $token = Uuid::uuid4()->toString();
         }
-        
+
         try {
             $cart = $this->persister->load($token, self::CART_NAME);
         } catch (CartTokenNotFoundException $e) {
