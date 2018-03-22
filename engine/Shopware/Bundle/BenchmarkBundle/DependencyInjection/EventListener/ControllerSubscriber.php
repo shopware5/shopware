@@ -22,18 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\DependencyInjection\EventListener;
 
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Enlight\Event\SubscriberInterface;
 
-class ProviderCompilerPass implements CompilerPassInterface
+/**
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.com)
+ */
+class ControllerSubscriber implements SubscriberInterface
 {
-    use TagReplaceTrait;
-
-    public function process(ContainerBuilder $container)
+    public static function getSubscribedEvents()
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.provider', 'shopware.benchmark_provider', 0);
+        return [
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_Benchmark' => 'registerBenchmarkController',
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function registerBenchmarkController()
+    {
+        return __DIR__ . '/../../Controllers/Backend/Benchmark.php';
     }
 }

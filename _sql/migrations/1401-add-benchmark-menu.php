@@ -21,25 +21,17 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1400 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1401 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSQL('CREATE TABLE `s_benchmark_config` (
-             `active` tinyint(4) DEFAULT NULL,
-             `last_sent` datetime NOT NULL,
-             `last_order_id` int(11) NOT NULL,
-             `orders_batch_size` int(11) NOT NULL,
-             `business` int(11) DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-            ');
+        $this->addSQL("INSERT IGNORE INTO `s_core_menu` (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`) VALUES
+            (30, 'Benchmark', NULL, 'sprite-chart marketing--analyses', 1, 1, NULL, 'BenchmarkMenu', NULL, NULL);");
 
-        // Only inserts this row, when table is empty - we have no unique key for 'Insert ignore'
-        $this->addSql(
-            'INSERT INTO `s_benchmark_config` (`active`, `last_sent`, `last_order_id`, `orders_batch_size`, `business`)
-                SELECT NULL, "1990-01-01 00:00:00", 0, 1000, NULL
-                FROM dual
-                WHERE NOT EXISTS (SELECT * FROM `s_benchmark_config`);'
-        );
+        $this->addSQL('SET @parentId = (SELECT `id` FROM `s_core_menu` WHERE name="Benchmark");');
+
+        $this->addSQL("INSERT IGNORE INTO `s_core_menu` (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`) VALUES
+            (@parentId, 'Einstellungen', NULL, 'sprite-wrench-screwdriver settings--basic-settings', 1, 1, NULL, 'Benchmark', NULL, 'Settings'),
+            (@parentId, 'Übersicht', NULL, 'sprite-report-paper marketing--analyses--overview', 0, 1, NULL, 'Benchmark', NULL, 'Index');");
     }
 }
