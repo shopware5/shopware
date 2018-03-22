@@ -76,11 +76,6 @@ Component.register('sw-product-detail', {
 
         onSave() {
             this.saveProduct();
-
-            this.createNotificationSuccess({
-                title: 'Produktdetails',
-                message: 'Das Produkt wurde erfolgreich gespeichert.'
-            });
         }
     },
 

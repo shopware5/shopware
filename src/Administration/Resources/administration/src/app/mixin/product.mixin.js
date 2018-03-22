@@ -84,8 +84,8 @@ Mixin.register('product', {
 
         createEmptyProduct(productId) {
             return this.$store.dispatch('product/createEmptyProduct', productId).then(() => {
-                this.product = this.productState;
                 this.isLoaded = true;
+                this.product = this.productState;
             });
         },
 
@@ -98,6 +98,8 @@ Mixin.register('product', {
                 if (this.$route.name === 'sw.product.create') {
                     this.$router.push({ name: 'sw.product.detail', params: { id: product.id } });
                 }
+            }).catch(() => {
+                this.isLoading = false;
             });
         },
 
