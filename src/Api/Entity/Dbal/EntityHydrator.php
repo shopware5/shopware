@@ -2,7 +2,6 @@
 
 namespace Shopware\Api\Entity\Dbal;
 
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Context\Collection\ContextPriceCollection;
 use Shopware\Api\Entity\Entity;
 use Shopware\Api\Entity\EntityDefinition;
@@ -31,6 +30,7 @@ use Shopware\Api\Entity\Write\Flag\Extension;
 use Shopware\Api\Entity\Write\Flag\Serialized;
 use Shopware\Api\Product\Struct\PriceStruct;
 use Shopware\Framework\Struct\ArrayStruct;
+use Shopware\Framework\Struct\Uuid;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -45,15 +45,41 @@ class EntityHydrator
 
     private $fieldCache = [];
 
+    private $objects = [];
+
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
     }
 
-    public function hydrate(Entity $entity, string $definition, array $row, string $root): Entity
+    public function hydrate(Entity $entity, string $definition, array $rows, string $root): array
+    {
+        /** @var EntityDefinition|string $definition */
+        $collection = [];
+        $this->objects = [];
+
+        foreach ($rows as $row) {
+            $collection[] = $this->hydrateEntity(clone $entity, $definition, $row, $root);
+        }
+
+        return $collection;
+    }
+
+    private function hydrateEntity(Entity $entity, string $definition, array $row, string $root): Entity
     {
         /** @var EntityDefinition $definition */
         $fields = $definition::getFields();
+
+        $idProperty = $root . '.id';
+
+        $objectCacheKey = null;
+
+        if (array_key_exists($idProperty, $row)) {
+            $objectCacheKey = $definition::getEntityName() . '::' . bin2hex($row[$idProperty]);
+            if (array_key_exists($objectCacheKey, $this->objects)) {
+                return $this->objects[$objectCacheKey];
+            }
+        }
 
         $data = [];
         $toOneAssociations = [];
@@ -81,10 +107,9 @@ class EntityHydrator
             if ($field instanceof ManyToManyAssociationField) {
                 $property = implode('.', [$root, $field->getPropertyName()]);
 
-                $ids = array_filter(explode('||', (string) $row[$property]));
-                $ids = array_map(function (string $bytes) {
-                    return Uuid::fromString($bytes)->toString();
-                }, $ids);
+                $ids = explode('||', (string) $row[$property]);
+                $ids = array_filter($ids);
+                $ids = array_map('strtolower', $ids);
 
                 $extension = $entity->getExtension(EntityReader::MANY_TO_MANY_EXTENSION_STORAGE);
                 if (!$extension) {
@@ -104,7 +129,7 @@ class EntityHydrator
             /** @var EntityDefinition $reference */
             $structClass = $reference::getBasicStructClass();
 
-            $hydrated = $this->hydrate(
+            $hydrated = $this->hydrateEntity(
                 new $structClass(),
                 $field->getReferenceClass(),
                 $row,
@@ -119,7 +144,13 @@ class EntityHydrator
             }
         }
 
-        return $entity->assign($data);
+        $entity->assign($data);
+
+        if ($objectCacheKey) {
+            $this->objects[$objectCacheKey] = $entity;
+        }
+
+        return $entity;
     }
 
     private function findField(FieldCollection $fields, string $fieldName, string $root): ?Field
@@ -186,7 +217,7 @@ class EntityHydrator
                     return null;
                 }
 
-                return Uuid::fromBytes($value)->toString();
+                return Uuid::fromBytesToHex($value);
             case $field instanceof FloatField:
                 return $value === null ? null : (float) $value;
             case $field instanceof IntField:

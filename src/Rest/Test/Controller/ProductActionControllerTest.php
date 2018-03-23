@@ -2,11 +2,11 @@
 
 namespace Shopware\Rest\Test\Controller;
 
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Product\Repository\ProductRepository;
 use Shopware\Api\Product\Struct\PriceStruct;
 use Shopware\Api\Product\Struct\ProductDetailStruct;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\Uuid;
 use Shopware\Rest\Test\ApiTestCase;
 use Symfony\Component\BrowserKit\Client;
 
@@ -26,10 +26,10 @@ class ProductActionControllerTest extends ApiTestCase
 
     public function testGenerateVariant(): void
     {
-        $id = Uuid::uuid4()->toString();
-        $redId = Uuid::uuid4()->toString();
-        $blueId = Uuid::uuid4()->toString();
-        $colorId = Uuid::uuid4()->toString();
+        $id = Uuid::uuid4()->getHex();
+        $redId = Uuid::uuid4()->getHex();
+        $blueId = Uuid::uuid4()->getHex();
+        $colorId = Uuid::uuid4()->getHex();
 
         $data = [
             'id' => $id,
@@ -90,7 +90,7 @@ class ProductActionControllerTest extends ApiTestCase
 
         /** @var Client $client */
         $client = $this->getClient();
-        $client->request('POST', '/api/product/'. $id . '/actions/generate-variants');
+        $client->request('POST', '/api/product/' . $id . '/actions/generate-variants');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $ids = $client->getResponse()->getContent();

@@ -24,12 +24,12 @@
 
 namespace Shopware\Api\Entity\Field;
 
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\Write\DataStack\KeyValuePair;
 use Shopware\Api\Entity\Write\EntityExistence;
 use Shopware\Api\Entity\Write\FieldException\InvalidFieldException;
 use Shopware\Api\Entity\Write\Flag\Inherited;
 use Shopware\Api\Entity\Write\Flag\Required;
+use Shopware\Framework\Struct\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -71,7 +71,7 @@ class ParentField extends FkField
             return;
         }
 
-        yield $this->storageName => Uuid::fromString($value)->getBytes();
+        yield $this->storageName => Uuid::fromStringToBytes($value);
     }
 
     public function getStorageName(): string

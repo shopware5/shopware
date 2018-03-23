@@ -4,12 +4,11 @@ namespace Shopware\Payment\Token;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\InvalidArgumentException;
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Order\Struct\OrderTransactionBasicStruct;
+use Shopware\Framework\Struct\Uuid;
 use Shopware\Framework\Util\Random;
 use Shopware\Payment\Exception\InvalidTokenException;
 use Shopware\Payment\Exception\TokenExpiredException;
-use Shopware\Payment\Struct\PaymentTransaction;
 
 class PaymentTransactionTokenFactory implements PaymentTransactionTokenFactoryInterface
 {
@@ -34,8 +33,8 @@ class PaymentTransactionTokenFactory implements PaymentTransactionTokenFactoryIn
             [
                 'id' => Uuid::uuid4()->getBytes(),
                 'token' => $token,
-                'payment_method_id' => Uuid::fromString($transaction->getPaymentMethodId())->getBytes(),
-                'transaction_id' => Uuid::fromString($transaction->getId())->getBytes(),
+                'payment_method_id' => Uuid::fromStringToBytes($transaction->getPaymentMethodId()),
+                'transaction_id' => Uuid::fromStringToBytes($transaction->getId()),
                 'expires' => $expires->format('Y-m-d H:i:s'),
             ]
         );
@@ -58,8 +57,8 @@ class PaymentTransactionTokenFactory implements PaymentTransactionTokenFactoryIn
         $tokenStruct = new TokenStruct(
             $row['id'],
             $row['token'],
-            Uuid::fromBytes($row['payment_method_id'])->toString(),
-            Uuid::fromBytes($row['transaction_id'])->toString(),
+            Uuid::fromBytesToHex($row['payment_method_id']),
+            Uuid::fromBytesToHex($row['transaction_id']),
             new \DateTime($row['expires'])
         );
 

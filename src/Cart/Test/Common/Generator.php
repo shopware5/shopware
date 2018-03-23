@@ -25,7 +25,6 @@
 namespace Shopware\Cart\Test\Common;
 
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Country\Struct\CountryAreaBasicStruct;
 use Shopware\Api\Country\Struct\CountryBasicStruct;
 use Shopware\Api\Country\Struct\CountryStateBasicStruct;
@@ -42,6 +41,7 @@ use Shopware\Cart\Delivery\Struct\ShippingLocation;
 use Shopware\Cart\Tax\TaxDetector;
 use Shopware\Context\Struct\StorefrontContext;
 use Shopware\Defaults;
+use Shopware\Framework\Struct\Uuid;
 
 class Generator extends TestCase
 {
@@ -111,7 +111,7 @@ class Generator extends TestCase
 
         $paymentMethod = (new PaymentMethodBasicStruct())->assign(['id' => '19d144ff-e15f-4772-860d-59fca7f207c1']);
         $shippingMethod = (new ShippingMethodBasicStruct())->assign(['id' => '8beeb66e-9dda-46b1-8891-a059257a590e']);
-        $customer = (new CustomerBasicStruct())->assign(['id' => Uuid::uuid4()->toString()]);
+        $customer = (new CustomerBasicStruct())->assign(['id' => Uuid::uuid4()->getHex()]);
 
         return new StorefrontContext(
             Uuid::uuid4()->toString(),

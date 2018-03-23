@@ -3,7 +3,6 @@
 namespace Shopware\Api\Test\Currency\Repository;
 
 use Doctrine\DBAL\Connection;
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Currency\Definition\CurrencyDefinition;
 use Shopware\Api\Currency\Repository\CurrencyRepository;
 use Shopware\Api\Entity\RepositoryInterface;
@@ -11,6 +10,7 @@ use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Search\Term\EntityScoreQueryBuilder;
 use Shopware\Api\Entity\Search\Term\SearchTermInterpreter;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -48,8 +48,8 @@ class CurrencyRepositoryTest extends KernelTestCase
 
     public function testSearchRanking()
     {
-        $recordA = Uuid::uuid4()->toString();
-        $recordB = Uuid::uuid4()->toString();
+        $recordA = Uuid::uuid4()->getHex();
+        $recordB = Uuid::uuid4()->getHex();
 
         $records = [
             ['id' => $recordA, 'name' => 'match', 'shortName' => 'test', 'factor' => 1, 'symbol' => 'A'],

@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\StorefrontApi\Context;
 
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -34,7 +32,7 @@ class ContextSubscriber implements EventSubscriberInterface
             KernelEvents::REQUEST => [
                 ['setContextToken', 15],
                 ['loadContext', 5],
-            ]
+            ],
         ];
     }
 

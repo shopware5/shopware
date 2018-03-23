@@ -3,12 +3,12 @@
 namespace Shopware\Api\Test\Context\Repository;
 
 use Doctrine\DBAL\Connection;
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Context\Repository\ContextRuleRepository;
 use Shopware\Api\Entity\RepositoryInterface;
 use Shopware\Context\Rule\Container\AndRule;
 use Shopware\Context\Rule\Container\OrRule;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -52,7 +52,7 @@ class ContextRepositoryTest extends KernelTestCase
 
     public function testWriteContextRuleWithObject()
     {
-        $id = Uuid::uuid4()->toString();
+        $id = Uuid::uuid4()->getHex();
 
         $data = [
             'id' => $id,

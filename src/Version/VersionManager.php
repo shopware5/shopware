@@ -2,7 +2,6 @@
 
 namespace Shopware\Version;
 
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\DefinitionRegistry;
 use Shopware\Api\Entity\Entity;
 use Shopware\Api\Entity\EntityDefinition;
@@ -32,6 +31,7 @@ use Shopware\Context\Struct\ShopContext;
 use Shopware\Defaults;
 use Shopware\Framework\Struct\Collection;
 use Shopware\Framework\Struct\Struct;
+use Shopware\Framework\Struct\Uuid;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -131,7 +131,7 @@ class VersionManager
             'versionId' => Defaults::LIVE_VERSION,
         ];
 
-        $versionId = $versionId ?? Uuid::uuid4()->toString();
+        $versionId = $versionId ?? Uuid::uuid4()->getHex();
         $versionData = ['id' => $versionId];
 
         if ($name) {
@@ -369,7 +369,7 @@ class VersionManager
     {
         $userId = $this->getUserId();
 
-        $userId = $userId ? Uuid::fromString($userId)->getBytes() : null;
+        $userId = $userId ? Uuid::fromStringToBytes($userId) : null;
 
         $versionId = $versionId ?? $writeContext->getShopContext()->getVersionId();
 
@@ -382,7 +382,7 @@ class VersionManager
             [
                 'id' => $commitId->getBytes(),
                 'user_id' => $userId,
-                'version_id' => Uuid::fromString($versionId)->getBytes(),
+                'version_id' => Uuid::fromStringToBytes($versionId),
                 'created_at' => $date,
             ],
             ['id' => $commitId->getBytes()]

@@ -3,7 +3,6 @@
 namespace Shopware\Api\Entity\Dbal;
 
 use Doctrine\DBAL\Connection;
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\Field\AssociationInterface;
 use Shopware\Api\Entity\Field\ManyToManyAssociationField;
@@ -14,6 +13,7 @@ use Shopware\Api\Entity\Write\Flag\CascadeDelete;
 use Shopware\Api\Entity\Write\Flag\RestrictDelete;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Defaults;
+use Shopware\Framework\Struct\Uuid;
 
 /**
  * Determines all associated data for a definition.
@@ -117,8 +117,8 @@ class EntityForeignKeyResolver
 
         $this->addWhere($ids, $rootAlias, $query);
 
-        $query->setParameter('version', Uuid::fromString($context->getVersionId())->getBytes());
-        $query->setParameter('liveVersion', Uuid::fromString(Defaults::LIVE_VERSION)->getBytes());
+        $query->setParameter('version', Uuid::fromStringToBytes($context->getVersionId()));
+        $query->setParameter('liveVersion', Uuid::fromStringToBytes(Defaults::LIVE_VERSION));
 
         $result = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
 
@@ -190,7 +190,7 @@ class EntityForeignKeyResolver
                     $param
                 );
 
-                $query->setParameter($param, Uuid::fromString($value)->getBytes());
+                $query->setParameter($param, Uuid::fromStringToBytes($value));
                 ++$counter;
             }
             $query->orWhere(implode(' AND ', $part));
@@ -206,7 +206,7 @@ class EntityForeignKeyResolver
         $mapped = [];
 
         foreach ($result as $pk => $row) {
-            $pk = Uuid::fromBytes($pk)->toString();
+            $pk = Uuid::fromBytesToHex($pk);
 
             $restrictions = [];
 
@@ -216,12 +216,7 @@ class EntityForeignKeyResolver
                     continue;
                 }
 
-                $value = array_map(
-                    function ($id) {
-                        return Uuid::fromString($id)->toString();
-                    },
-                    $value
-                );
+                $value = array_map('strtolower', $value);
 
                 $field = EntityDefinitionQueryHelper::getField($key, $definition, $root);
 

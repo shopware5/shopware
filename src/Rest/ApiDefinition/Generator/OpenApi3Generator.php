@@ -2,7 +2,6 @@
 
 namespace Shopware\Rest\ApiDefinition\Generator;
 
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\DefinitionRegistry;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\Field\AssociationInterface;
@@ -23,6 +22,7 @@ use Shopware\Api\Entity\Field\StringField;
 use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\VersionField;
 use Shopware\Api\Entity\Write\Flag\Required;
+use Shopware\Framework\Struct\Uuid;
 use Shopware\Rest\ApiDefinition\ApiDefinitionGeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -281,7 +281,7 @@ class OpenApi3Generator implements ApiDefinitionGeneratorInterface
         $requiredAttributes = [];
         $relationships = [];
 
-        $uuid = Uuid::uuid4()->toString();
+        $uuid = Uuid::uuid4()->getHex();
         $schemaName = $definition::getEntityName() . '_' . ($detailSchema ? 'detail' : 'basic');
         $detailPath = $this->getResourceUri($definition) . '/' . $uuid;
 
@@ -608,7 +608,7 @@ class OpenApi3Generator implements ApiDefinitionGeneratorInterface
                         'id' => [
                             'type' => 'string',
                             'format' => 'uuid',
-                            'example' => Uuid::uuid4()->toString(),
+                            'example' => Uuid::uuid4()->getHex(),
                         ],
                     ],
                 ],
@@ -654,7 +654,7 @@ class OpenApi3Generator implements ApiDefinitionGeneratorInterface
                             ],
                             'id' => [
                                 'type' => 'string',
-                                'example' => Uuid::uuid4()->toString(),
+                                'example' => Uuid::uuid4()->getHex(),
                             ],
                         ],
                     ],

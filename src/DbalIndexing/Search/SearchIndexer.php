@@ -3,7 +3,6 @@
 namespace Shopware\DbalIndexing\Search;
 
 use Doctrine\DBAL\Connection;
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Catalog\Repository\CatalogRepository;
 use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Write\GenericWrittenEvent;
@@ -20,6 +19,7 @@ use Shopware\DbalIndexing\Event\ProgressStartedEvent;
 use Shopware\DbalIndexing\Indexer\IndexerInterface;
 use Shopware\Defaults;
 use Shopware\Framework\Doctrine\MultiInsertQueryQueue;
+use Shopware\Framework\Struct\Uuid;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SearchIndexer implements IndexerInterface
@@ -179,9 +179,9 @@ class SearchIndexer implements IndexerInterface
         string $table,
         string $documentTable
     ) {
-        $languageId = Uuid::fromString($context->getLanguageId())->getBytes();
-        $productId = Uuid::fromString($productId)->getBytes();
-        $versionId = Uuid::fromString($context->getVersionId())->getBytes();
+        $languageId = Uuid::fromStringToBytes($context->getLanguageId());
+        $productId = Uuid::fromStringToBytes($productId);
+        $versionId = Uuid::fromStringToBytes($context->getVersionId());
 
         foreach ($keywords as $keyword => $ranking) {
             $queue->addInsert($table, [

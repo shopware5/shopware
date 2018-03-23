@@ -3,7 +3,6 @@
 namespace Shopware\Api\Entity\Search\Parser;
 
 use Doctrine\DBAL\Connection;
-use Ramsey\Uuid\Uuid;
 use Shopware\Api\Entity\Dbal\EntityDefinitionQueryHelper;
 use Shopware\Api\Entity\EntityDefinition;
 use Shopware\Api\Entity\Field\FkField;
@@ -18,6 +17,7 @@ use Shopware\Api\Entity\Search\Query\ScoreQuery;
 use Shopware\Api\Entity\Search\Query\TermQuery;
 use Shopware\Api\Entity\Search\Query\TermsQuery;
 use Shopware\Context\Struct\ShopContext;
+use Shopware\Framework\Struct\Uuid;
 
 class SqlQueryParser
 {
@@ -149,7 +149,7 @@ class SqlQueryParser
         $value = array_values($query->getValue());
         if ($field instanceof IdField || $field instanceof FkField) {
             $value = array_map(function (string $id) {
-                return Uuid::fromString($id)->getBytes();
+                return Uuid::fromStringToBytes($id);
             }, $value);
         }
         $result->addParameter($key, $value, Connection::PARAM_STR_ARRAY);
@@ -181,7 +181,7 @@ class SqlQueryParser
 
         $value = $query->getValue();
         if ($field instanceof IdField || $field instanceof FkField) {
-            $value = Uuid::fromString($value)->getBytes();
+            $value = Uuid::fromStringToBytes($value);
         }
 
         $result->addParameter($key, $value);
@@ -235,6 +235,6 @@ class SqlQueryParser
 
     private static function getKey(): string
     {
-        return 'param_' . str_replace('-', '', Uuid::uuid4()->toString());
+        return 'param_' . str_replace('-', '', Uuid::uuid4()->getHex());
     }
 }
