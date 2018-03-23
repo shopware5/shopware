@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added possibility to enable/disable forms without having to delete them
+* Added pagination to the attribute filter of the product stream configurator 
 * Added `json` attribute for snippets in `Enlight_Components_Snippet_Resource`
   * You may now set the attribute `json='true'` on smarty snippets, the content of the snippet will then be encoded via `json_encode()`
     * Example: ```{s json='true' name='foo'}é"'#-_*+`{/s}``` will render as ```"\u00e9\"'#-_*+`"```
