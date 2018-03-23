@@ -536,13 +536,13 @@ class sAdmin
     /**
      * Add or remove an email address from the mailing list
      *
-     * @param bool   $status   True if insert, false if remove
      * @param string $email    Email address
+     * @param bool   $status   True if insert, false if remove
      * @param bool   $customer If email address belongs to a customer
      *
      * @return bool If operation was successful
      */
-    public function sUpdateNewsletter($status, $email, $customer = false)
+    public function sUpdateNewsletter($email, $status, $customer = false)
     {
         if (!$status) {
             // Delete email address from database
