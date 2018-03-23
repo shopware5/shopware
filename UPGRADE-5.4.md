@@ -22,6 +22,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed hashing algorithm for product variant search join table aliases to prevent errors on 32bit systems
 * Changed SMTP password input type in base config from plaintext to password
 * Changed detail page behaviour with preselection variants which onsale-flag is active
+* Changed note counting to fix an error which displays 0 notes when adding the first note
 
 ## 5.4.1
 
