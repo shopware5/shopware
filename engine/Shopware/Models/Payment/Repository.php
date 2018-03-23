@@ -36,7 +36,7 @@ class Repository extends ModelRepository
     /**
      * Returns a query-object for all known and active payments
      *
-     * @deprecated use getActivePaymentsQuery instead
+     * @deprecated Will be removed in 5.5. Use getActivePaymentsQuery instead.
      *
      * @param null $filter
      * @param null $order
@@ -47,6 +47,8 @@ class Repository extends ModelRepository
      */
     public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5. Use Shopware\Models\Payment\Repository::getActivePaymentsQuery() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->getActivePaymentsQuery($filter, $order, $offset, $limit);
     }
 
@@ -54,7 +56,7 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getPaymentsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @deprecated use getActivePaymentsQueryBuilder instead
+     * @deprecated Will be removed in 5.5. Use getActivePaymentsQueryBuilder instead.
      *
      * @param null $filter
      * @param null $order
@@ -63,6 +65,8 @@ class Repository extends ModelRepository
      */
     public function getPaymentsQueryBuilder($filter = null, $order = null)
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5. Use Shopware\Models\Payment\Repository::getActivePaymentsQueryBuilder() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->getActivePaymentsQueryBuilder($filter, $order);
     }
 

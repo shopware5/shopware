@@ -106,6 +106,8 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
      */
     public function getByCategory(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since version 5.1.4 and will be removed in 5.5. Use SimilarProductCondition instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $products = $this->getListByCategory([$product], $context);
 
         return array_shift($products);
@@ -116,6 +118,8 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
      */
     public function getListByCategory($products, Struct\ShopContextInterface $context)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since version 5.1.4 and will be removed in 5.5. Use SimilarProductCondition instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (!$this->config->offsetExists('similarLimit') || $this->config->get('similarLimit') <= 0) {
             return [];
         }

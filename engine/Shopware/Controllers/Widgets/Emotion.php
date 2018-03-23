@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
@@ -84,10 +83,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     /**
      * Action that will be triggered by product slider type top seller
      *
-     * @deprecated use emotionArticleSliderAction instead
+     * @deprecated Will be removed in 5.5. Use emotionArticleSliderAction instead.
      */
     public function emotionTopSellerAction()
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5. Use emotionArticleSliderAction instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
         $this->Request()->setParam('sort', 'topseller');
         $this->emotionArticleSliderAction();
     }
@@ -95,10 +95,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     /**
      * Action that will be triggered by product slider type newcomer
      *
-     * @deprecated use emotionArticleSliderAction instead
+     * @deprecated Will be removed in 5.5. Use emotionArticleSliderAction instead.
      */
     public function emotionNewcomerAction()
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5. Use emotionArticleSliderAction instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
         $this->Request()->setParam('sort', 'newcomer');
         $this->emotionArticleSliderAction();
     }

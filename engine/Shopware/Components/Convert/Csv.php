@@ -23,7 +23,7 @@
  */
 
 /**
- * @deprecated since 5.3, to be removed in 5.4
+ * @deprecated Since 5.3, will be removed in 5.5.
  */
 class Shopware_Components_Convert_Csv
 {
@@ -34,6 +34,11 @@ class Shopware_Components_Convert_Csv
         'escaped_separator' => '',
         'escaped_fieldmark' => '""', 'newline' => "\n", 'escaped_newline' => '',
     ];
+
+    public function __construct()
+    {
+        trigger_error(sprintf('%s is deprecated since 5.3 and will be removed in 5.5.', __CLASS__), E_USER_DEPRECATED);
+    }
 
     public function encode($array, $keys = [])
     {

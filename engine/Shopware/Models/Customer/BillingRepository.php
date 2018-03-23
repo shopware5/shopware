@@ -24,10 +24,12 @@
 
 namespace   Shopware\Models\Customer;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping;
 use Shopware\Components\Model\ModelRepository;
 
 /**
- * @deprecated Since 5.2 removed in 5.4 use \Shopware\Models\Customer\Address
+ * @deprecated Since 5.2, will be removed in 5.5. Use \Shopware\Models\Customer\Address instead.
  * Repository for the billing model (Shopware\Models\Customer\Billing).
  *
  * The billing model repository is responsible to load all billing data.
@@ -36,6 +38,13 @@ use Shopware\Components\Model\ModelRepository;
  */
 class BillingRepository extends ModelRepository
 {
+    public function __construct(EntityManager $em, Mapping\ClassMetadata $class)
+    {
+        trigger_error(sprintf('%s is deprecated since 5.2 and will be removed in 5.5. Use Shopware\Models\Customer\AddressRepository instead.', __CLASS__), E_USER_DEPRECATED);
+
+        parent::__construct($em, $class);
+    }
+
     /**
      * Returns a query-object for the billing address for a specified user
      *

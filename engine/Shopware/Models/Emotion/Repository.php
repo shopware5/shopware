@@ -373,7 +373,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @deprecated since 5.3, to be removed with 5.4, use \Shopware\Bundle\EmotionBundle\Service\EmotionService instead
+     * @deprecated Since 5.3, will be removed with 5.5. Use \Shopware\Bundle\EmotionBundle\Service\EmotionService instead.
      *
      * @param int $categoryId
      *
@@ -381,13 +381,15 @@ class Repository extends ModelRepository
      */
     public function getCategoryEmotionsQuery($categoryId)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.3 and will be removed in 5.5. Use Shopware\Bundle\EmotionBundle\Service\EmotionService instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $builder = $this->getCategoryEmotionsQueryBuilder($categoryId);
 
         return $builder->getQuery();
     }
 
     /**
-     * @deprecated since 5.3, to be removed with 5.4, use \Shopware\Bundle\EmotionBundle\Service\EmotionService instead
+     * @deprecated Since 5.3, will be removed with 5.5. Use \Shopware\Bundle\EmotionBundle\Service\EmotionService instead.
      *
      * @param int $categoryId
      *
@@ -395,6 +397,8 @@ class Repository extends ModelRepository
      */
     public function getCategoryEmotionsQueryBuilder($categoryId)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.3 and will be removed in 5.5. Use Shopware\Bundle\EmotionBundle\Service\EmotionService instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $builder = $this->getCategoryBaseEmotionsQueryBuilder($categoryId);
         $builder->select(['emotions', 'template'])
                 ->leftJoin('emotions.template', 'template');

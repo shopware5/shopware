@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
@@ -552,7 +551,7 @@ class sRewriteTable
     }
 
     /**
-     * @deprecated since 5.2 will be removed in 5.3, use \sRewriteTable::createManufacturerUrls
+     * @deprecated Since 5.2, will be removed in 5.5. Use sRewriteTable::createManufacturerUrls instead.
      *
      * @param int|null             $offset
      * @param int|null             $limit
@@ -562,6 +561,8 @@ class sRewriteTable
      */
     public function sCreateRewriteTableSuppliers($offset = null, $limit = null, ShopContextInterface $context = null)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.2 and will be removed in 5.5. Use sRewriteTable::createManufacturerUrls() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $context = $this->createFallbackContext($context);
         $this->createManufacturerUrls($context, $offset, $limit);
     }

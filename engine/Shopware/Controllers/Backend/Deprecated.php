@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Shopware Backend Controller
  *
  * Display backend / administration
+ *
+ * @deprecated This controller is deprecated and will be removed in 5.6.
  */
 class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
@@ -76,7 +77,7 @@ class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action 
 
         $module = basename($this->Request()->getParam('includeDir'));
         $module = preg_replace('/[^a-z0-9_.:-]/i', '', $module);
-        if ($module !== '') {
+        if ('' !== $module) {
             $module .= '/';
         }
         $include = (string) $this->Request()->getParam('include', 'skeleton.php');

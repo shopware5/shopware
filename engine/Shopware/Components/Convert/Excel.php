@@ -23,7 +23,7 @@
  */
 
 /**
- * @deprecated since 5.3, to be removed in 5.4
+ * @deprecated Since 5.3, will be removed in 5.5.
  */
 class Shopware_Components_Convert_Excel
 {
@@ -38,6 +38,11 @@ class Shopware_Components_Convert_Excel
     private $lines = [];
 
     private $worksheet_title = 'Table1';
+
+    public function __construct()
+    {
+        trigger_error(sprintf('%s is deprecated since 5.3 and will be removed in 5.5.', __CLASS__), E_USER_DEPRECATED);
+    }
 
     public function encodeRow($array)
     {

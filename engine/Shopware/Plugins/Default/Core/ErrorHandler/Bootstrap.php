@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Monolog\Handler\BufferHandler;
 use Shopware\Components\Log\Formatter\HtmlFormatter;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
@@ -215,12 +214,14 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
             case E_WARNING:
             case E_STRICT:
             case E_USER_NOTICE:
-            case E_USER_DEPRECATED:
             case E_CORE_WARNING:
             case E_USER_WARNING:
             case E_ERROR:
             case E_USER_ERROR:
             case E_CORE_ERROR:
+                break;
+            case E_USER_DEPRECATED:
+                $this->get('corelogger')->debug($errstr);
                 break;
             case E_RECOVERABLE_ERROR:
                 if ($this->throwOnRecoverableError) {

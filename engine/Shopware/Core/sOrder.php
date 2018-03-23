@@ -139,7 +139,7 @@ class sOrder
      *
      * @var string
      *
-     * @deprecated since 5.2, remove in 5.3. Use orderAttributes instead
+     * @deprecated Since 5.2, will be removed in 5.5. Use orderAttributes instead.
      */
     public $o_attr_1;
     public $o_attr_2;

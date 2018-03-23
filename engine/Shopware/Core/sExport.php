@@ -48,12 +48,12 @@ class sExport
     public $sCustomergroup;
 
     /**
-     * @deprecated Use $shopData instead
+     * @deprecated Will be removed in 5.5. Use $shopData instead.
      */
     public $sLanguage;
 
     /**
-     * @deprecated Use $shopData instead
+     * @deprecated Will be removed in 5.5. Use $shopData instead.
      */
     public $sMultishop;
 
@@ -197,7 +197,7 @@ class sExport
     }
 
     /**
-     * @deprecated Use getShopData
+     * @deprecated Will be removed in 5.5. Use getShopData instead.
      *
      * @param $language
      *
@@ -205,6 +205,8 @@ class sExport
      */
     public function sGetMultishop($language)
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5. Use sExport::getShopData() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         static $cache = [];
 
         if (isset($cache[$language])) {
