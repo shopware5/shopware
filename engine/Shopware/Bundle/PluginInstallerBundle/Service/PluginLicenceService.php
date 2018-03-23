@@ -89,11 +89,6 @@ class PluginLicenceService
             throw new \RuntimeException('Could not read license key');
         }
 
-        $this->connection->delete('s_core_licenses', [
-            'module' => $info['module'],
-            'host' => $info['host'],
-        ]);
-
         return $persister->saveLicense($info, true);
     }
 
