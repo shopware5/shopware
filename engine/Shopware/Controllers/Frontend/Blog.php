@@ -232,6 +232,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        
+        if (!empty($categoryContent['external'])) {
+            return $this->redirect($categoryContent['external'], array('code' => 301));
+        }
+        
         $assigningData = [
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getCategoryBreadcrumb($categoryId),
