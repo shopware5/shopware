@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed behaviour of search indexer to allow product attribute search
 * Changed hashing algorithm for product variant search join table aliases to prevent errors on 32bit systems
 * Changed SMTP password input type in base config from plaintext to password
+* Changed detail page behaviour with preselection variants which onsale-flag is active
 
 ## 5.4.1
 
@@ -51,7 +52,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `newsletter_header_content_logo`
   * `newsletter_header_content_title`
 * Added view variable `sCategoryContent` to the `listingCountAction` of the controller `Shopware_Controllers_Widgets_Listing`
-
 
 ### Changes
 
