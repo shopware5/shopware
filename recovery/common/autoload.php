@@ -21,7 +21,21 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
+    $template = '%s: ';
+    if (PHP_SAPI !== 'cli') {
+        $template = '<h2>%s</h2>';
+        header('Content-type: text/html; charset=utf-8', true, 503);
+    }
 
+    echo sprintf($template, 'Error');
+    echo "Please execute \"composer install\" from the command line to install the required dependencies for Shopware 5\n";
+
+    echo sprintf($template, 'Fehler');
+    echo "Bitte führen Sie zuerst \"composer install\" aus um alle von Shopware 5 benötigten Abhängigkeiten zu installieren.\n";
+
+    exit(1);
+}
 date_default_timezone_set(@date_default_timezone_get());
 
 define('SW_PATH', realpath(__DIR__ . '/../../'));
