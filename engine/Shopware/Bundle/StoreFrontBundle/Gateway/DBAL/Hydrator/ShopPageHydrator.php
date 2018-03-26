@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopPageHydrator extends Hydrator
@@ -48,18 +48,20 @@ class ShopPageHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\ShopPage
      */
     public function hydrate(array $data)
     {
         $page = new Struct\ShopPage();
         $this->assignData($page, $data);
+
         return $page;
     }
 
     /**
      * @param Struct\ShopPage $shopPage
-     * @param array $data
+     * @param array           $data
      */
     private function assignData(Struct\ShopPage $shopPage, array $data)
     {
@@ -72,7 +74,7 @@ class ShopPageHydrator extends Hydrator
         $shopPage->setTpl3Path($data['__page_tpl3path']);
         $shopPage->setDescription($data['__page_description']);
         $shopPage->setHtml($data['__page_html']);
-        $shopPage->setGrouping(explode("|", $data['__page_grouping']));
+        $shopPage->setGrouping(explode('|', $data['__page_grouping']));
         $shopPage->setPosition((int) $data['__page_position']);
         $shopPage->setLink($data['__page_link']);
         $shopPage->setTarget($data['__page_target']);
@@ -88,13 +90,16 @@ class ShopPageHydrator extends Hydrator
             $shopPage->setChanged(\DateTime::createFromFormat('Y-m-d H:i:s', $data['__page_changed']));
         }
 
+        $shopIds = [];
+
         if (isset($data['__page_shop_ids'])) {
-            $shopIds = explode("|", $data['__page_shop_ids']);
+            $shopIds = explode('|', $data['__page_shop_ids']);
             $shopIds = array_keys(array_flip($shopIds));
             $shopIds = array_filter($shopIds);
             $shopIds = array_map('intval', $shopIds);
-            $shopPage->setShopIds($shopIds);
         }
+
+        $shopPage->setShopIds($shopIds);
 
         $this->attributeHydrator->addAttribute($shopPage, $data, 'pageAttribute');
     }

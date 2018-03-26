@@ -33,6 +33,7 @@ use Shopware\Models\Tax\Tax;
 
 /**
  * @covers \Shopware\Components\Model\ModelEntity
+ *
  * @uses \Shopware\Models\Article\Article
  * @uses \Shopware\Models\Article\Link
  * @uses \Shopware\Models\Article\Supplier
@@ -40,7 +41,7 @@ use Shopware\Models\Tax\Tax;
  * @uses \Shopware\Models\Tax\Tax
  *
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ModelEntityTest extends TestCase
@@ -49,10 +50,10 @@ class ModelEntityTest extends TestCase
     {
         $article = new Article();
 
-        $data = array(
-            'name'        => 'foo',
+        $data = [
+            'name' => 'foo',
             'description' => 'bar',
-        );
+        ];
 
         $article->fromArray($data);
 
@@ -66,9 +67,9 @@ class ModelEntityTest extends TestCase
         $article->setName('lorem');
         $article->setDescription('bar');
 
-        $data = array(
+        $data = [
             'name' => 'foo',
-        );
+        ];
 
         $article->fromArray($data);
 
@@ -80,12 +81,12 @@ class ModelEntityTest extends TestCase
     {
         $article = new Article();
 
-        $data = array(
-            'configuratorTemplate' => array(
+        $data = [
+            'configuratorTemplate' => [
                 'active' => true,
-                'ean'    => 'baz',
-            ),
-        );
+                'ean' => 'baz',
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -100,15 +101,15 @@ class ModelEntityTest extends TestCase
     {
         $article = new Article();
 
-        $data = array(
+        $data = [
             'name' => 'foo',
-            'configuratorTemplate' => array(
+            'configuratorTemplate' => [
                 'ean' => 'foo',
-                'article' => array(
+                'article' => [
                     'name' => 'bar',
-                )
-            ),
-        );
+                ],
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -125,10 +126,10 @@ class ModelEntityTest extends TestCase
         $template = new Template();
         $template->setEan('foo');
 
-        $data = array(
-            'tax'                 => $tax,
+        $data = [
+            'tax' => $tax,
             'configuratorTemplate' => $template,
-        );
+        ];
 
         $article->fromArray($data);
 
@@ -145,11 +146,11 @@ class ModelEntityTest extends TestCase
 
         $article->setConfiguratorTemplate($template);
 
-        $data = array(
-            'configuratorTemplate' => array(
+        $data = [
+            'configuratorTemplate' => [
                 'active' => true,
-            ),
-        );
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -167,9 +168,9 @@ class ModelEntityTest extends TestCase
 
         $article->setConfiguratorTemplate($template);
 
-        $data = array(
-            'configuratorTemplate' => array(),
-        );
+        $data = [
+            'configuratorTemplate' => [],
+        ];
 
         $article->fromArray($data);
 
@@ -188,9 +189,9 @@ class ModelEntityTest extends TestCase
         $article->setConfiguratorTemplate($template);
         $template->setArticle($article);
 
-        $data = array(
+        $data = [
             'configuratorTemplate' => null,
-        );
+        ];
 
         $article->fromArray($data);
 
@@ -202,11 +203,11 @@ class ModelEntityTest extends TestCase
     {
         $article = new Article();
 
-        $data = array(
-            'supplier' => array(
+        $data = [
+            'supplier' => [
                 'name' => 'foo',
-            ),
-        );
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -220,9 +221,9 @@ class ModelEntityTest extends TestCase
         $supplier = new Supplier();
         $supplier->setName('test');
 
-        $data = array(
+        $data = [
             'supplier' => $supplier,
-        );
+        ];
 
         $article->fromArray($data);
 
@@ -241,11 +242,11 @@ class ModelEntityTest extends TestCase
 
         $this->assertSame($supplier, $article->getSupplier());
 
-        $data = array(
-            'supplier' => array(
+        $data = [
+            'supplier' => [
                 'name' => 'foo',
-            ),
-        );
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -267,9 +268,9 @@ class ModelEntityTest extends TestCase
 
         $this->assertSame($supplier, $article->getSupplier());
 
-        $data = array(
-            'supplier' => array(),
-        );
+        $data = [
+            'supplier' => [],
+        ];
 
         $article->fromArray($data);
 
@@ -289,9 +290,9 @@ class ModelEntityTest extends TestCase
 
         $this->assertSame($supplier, $article->getSupplier());
 
-        $data = array(
+        $data = [
             'supplier' => null,
-        );
+        ];
 
         $article->fromArray($data);
 
@@ -311,12 +312,12 @@ class ModelEntityTest extends TestCase
 
         $this->assertSame($supplier, $article->getSupplier());
 
-        $data = array(
-            'supplier' => array(
+        $data = [
+            'supplier' => [
                 'id' => '2',
                 'name' => 'foo',
-            ),
-        );
+            ],
+        ];
 
         $this->expectException(\InvalidArgumentException::class);
         $article->fromArray($data);
@@ -326,17 +327,17 @@ class ModelEntityTest extends TestCase
     {
         $article = new Article();
 
-        $data = array(
-            'links' => array(
-                array(
+        $data = [
+            'links' => [
+                [
                     'id' => 4,
-                    'name' => 'batz'
-                ),
-                array(
+                    'name' => 'batz',
+                ],
+                [
                     'name' => 'foobar',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -350,15 +351,14 @@ class ModelEntityTest extends TestCase
         $link0 = new Link();
         $link0->setName('dummy');
 
-
-        $data = array(
-            'links' => array(
+        $data = [
+            'links' => [
                 $link0,
-                array(
-                    'name' => 'batz'
-                )
-            ),
-        );
+                [
+                    'name' => 'batz',
+                ],
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -366,7 +366,6 @@ class ModelEntityTest extends TestCase
 
         $this->assertContains($link0, $article->getLinks());
     }
-
 
     public function testCanOverWriteAssignOneToMany()
     {
@@ -380,13 +379,13 @@ class ModelEntityTest extends TestCase
 
         $this->assertContains($link0, $article->getLinks());
 
-        $data = array(
-            'links' => array(
-                array(
-                    'name' => 'batz'
-                )
-            )
-        );
+        $data = [
+            'links' => [
+                [
+                    'name' => 'batz',
+                ],
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -408,9 +407,9 @@ class ModelEntityTest extends TestCase
 
         $this->assertContains($link0, $article->getLinks());
 
-        $data = array(
+        $data = [
             'links' => null,
-        );
+        ];
 
         $article->fromArray($data);
 
@@ -430,17 +429,17 @@ class ModelEntityTest extends TestCase
 
         $this->assertContains($link0, $article->getLinks());
 
-        $data = array(
-            'links' => array(
-                array(
-                    'id'   => 1,
-                    'name' => 'batz'
-                ),
-                array(
-                    'name' => 'foo'
-                )
-            )
-        );
+        $data = [
+            'links' => [
+                [
+                    'id' => 1,
+                    'name' => 'batz',
+                ],
+                [
+                    'name' => 'foo',
+                ],
+            ],
+        ];
 
         $article->fromArray($data);
 
@@ -450,7 +449,6 @@ class ModelEntityTest extends TestCase
         $this->assertEquals('batz', $article->getLinks()->first()->getName());
         $this->assertEquals('foo', $article->getLinks()->next()->getName());
     }
-
 
     public function testCanUpdateOneToMany()
     {
@@ -465,14 +463,14 @@ class ModelEntityTest extends TestCase
 
         $this->assertContains($link0, $article->getLinks());
 
-        $data = array(
-            'links' => array(
-                array(
-                    'id'   => 2,
-                    'name' => 'batz'
-                ),
-            )
-        );
+        $data = [
+            'links' => [
+                [
+                    'id' => 2,
+                    'name' => 'batz',
+                ],
+            ],
+        ];
 
         $article->fromArray($data);
 

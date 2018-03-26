@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Models\Tracking;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Article Impression Statistics
@@ -47,7 +48,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Autoincrement Identifier
      *
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -55,7 +56,7 @@ class ArticleImpression extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTime $date
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -64,7 +65,7 @@ class ArticleImpression extends ModelEntity
     /**
      * ID of the article which should be tracked
      *
-     * @var integer $articleId
+     * @var int
      *
      * @ORM\Column(name="articleId", type="integer", nullable=false)
      */
@@ -73,7 +74,7 @@ class ArticleImpression extends ModelEntity
     /**
      * id of the shop which should be tracked
      *
-     * @var integer $shopId
+     * @var int
      *
      * @ORM\Column(name="shopId", type="integer", nullable=false)
      */
@@ -82,14 +83,14 @@ class ArticleImpression extends ModelEntity
     /**
      * Accumulated number of impressions
      *
-     * @var integer $impressions
+     * @var int
      *
      * @ORM\Column(name="impressions", type="integer", nullable=false)
      */
     private $impressions;
 
     /**
-     * @var string $deviceType
+     * @var string
      *
      * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
      */
@@ -101,7 +102,7 @@ class ArticleImpression extends ModelEntity
      * @param $articleId
      * @param $shopId
      * @param $date
-     * @param int $impressions
+     * @param int    $impressions
      * @param string $deviceType
      */
     public function __construct($articleId, $shopId, $date = null, $impressions = 1, $deviceType = null)
@@ -166,9 +167,9 @@ class ArticleImpression extends ModelEntity
         return $this->articleId;
     }
 
-
     /**
      * set the shopId
+     *
      * @param int $shopId
      */
     public function setShopId($shopId)
@@ -178,6 +179,7 @@ class ArticleImpression extends ModelEntity
 
     /**
      * get the shopId
+     *
      * @return int
      */
     public function getShopId()
@@ -212,7 +214,8 @@ class ArticleImpression extends ModelEntity
      */
     public function increaseImpressions()
     {
-        $this->impressions++;
+        ++$this->impressions;
+
         return $this;
     }
 

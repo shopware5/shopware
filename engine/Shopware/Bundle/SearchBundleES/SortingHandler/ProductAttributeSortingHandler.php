@@ -26,10 +26,10 @@ namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Sorting\ProductAttributeSorting;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Sorting\ProductAttributeSorting;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductAttributeSortingHandler implements HandlerInterface
@@ -39,7 +39,7 @@ class ProductAttributeSortingHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ProductAttributeSorting);
+        return $criteriaPart instanceof ProductAttributeSorting;
     }
 
     /**

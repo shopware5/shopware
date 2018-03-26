@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter\ContainerType;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware text model represents a text container type.
@@ -36,9 +36,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Text extends ModelEntity
 {
     /**
+     * OWNING SIDE
+     * Owning side of relation between container type 'text' and parent container
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="text")
+     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
+     *
+     * @var \Shopware\Models\Newsletter\Container
+     */
+    protected $container;
+    /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -49,26 +59,16 @@ class Text extends ModelEntity
     /**
      * ID of the container this model belongs to
      *
-     * @var integer $containerId
+     * @var int
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
     private $containerId = null;
 
     /**
-     * OWNING SIDE
-     * Owning side of relation between container type 'text' and parent container
-     *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="text")
-     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     * @var \Shopware\Models\Newsletter\Container
-     */
-    protected $container;
-
-    /**
      * Headline of the element
      *
-     * @var string $headline
+     * @var string
      * @ORM\Column(name="headline", type="string", length=255, nullable=false)
      */
     private $headline;
@@ -76,25 +76,25 @@ class Text extends ModelEntity
     /**
      * (HTML) content of the model
      *
-     * @var string $content
+     * @var string
      * @ORM\Column(name="html", type="string", length=16777215 , nullable=false)
      */
     private $content;
 
     /**
-     * @var string $image
+     * @var string
      * @ORM\Column(name="image", type="string", length=255 , nullable=false)
      */
     private $image;
 
     /**
-     * @var string $link
+     * @var string
      * @ORM\Column(name="link", type="string", length=255 , nullable=false)
      */
     private $link;
 
     /**
-     * @var string $alignment
+     * @var string
      * @ORM\Column(name="alignment", type="string", length=255 , nullable=false)
      */
     private $alignment;
@@ -117,10 +117,11 @@ class Text extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
-     * @param string $type
+     * @param string                                $type
+     *
      * @return \Shopware\Models\Newsletter\Container
      */
-    public function setContainer($container, $type='ctText')
+    public function setContainer($container, $type = 'ctText')
     {
         $this->container = $container;
         $container->setType($type);
@@ -134,7 +135,6 @@ class Text extends ModelEntity
     {
         return $this->container;
     }
-
 
     /**
      * @param string $content

@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AttributeSubscriber implements SubscriberInterface
@@ -43,23 +43,23 @@ class AttributeSubscriber implements SubscriberInterface
     private $container;
 
     /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Enlight_Controller_Front_RouteShutdown'        => ['onDispatchEvent', 100],
-            'Enlight_Controller_Front_PostDispatch'         => ['onDispatchEvent', 100],
-            'Enlight_Controller_Front_DispatchLoopShutdown' => ['onDispatchEvent', 100],
-        ];
-    }
-
-    /**
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'Enlight_Controller_Front_RouteShutdown' => ['onDispatchEvent', 100],
+            'Enlight_Controller_Front_PostDispatch' => ['onDispatchEvent', 100],
+            'Enlight_Controller_Front_DispatchLoopShutdown' => ['onDispatchEvent', 100],
+        ];
     }
 
     /**
@@ -76,11 +76,9 @@ class AttributeSubscriber implements SubscriberInterface
     }
 
     /**
-     *
      * @param $exception \Exception
      *
      * @throws \Exception
-     * @return void
      */
     private function handleException($exception)
     {
@@ -98,9 +96,8 @@ class AttributeSubscriber implements SubscriberInterface
                 setcookie(self::redirectCookieString, true, time() + 5);
                 $response->sendResponse();
                 exit();
-            } else {
-                die(sprintf("Failed to create the attribute models, please check the permissions of the '%s' directory", $generator->getPath()));
             }
+            die(sprintf("Failed to create the attribute models, please check the permissions of the '%s' directory", $generator->getPath()));
         }
     }
 
@@ -117,28 +114,28 @@ class AttributeSubscriber implements SubscriberInterface
             return false;
         }
 
-        /**
+        /*
          * This case matches, when a query selects a doctrine association, which isn't defined in the doctrine model
          */
         if ($exception instanceof \Doctrine\ORM\Query\QueryException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
             return true;
         }
 
-        /**
+        /*
          * This case matches, when a doctrine attribute model don't exist
          */
         if ($exception instanceof \ReflectionException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
             return true;
         }
 
-        /**
+        /*
          * This case matches, when a doctrine model field defined which not exist in the database
          */
         if ($exception instanceof \PDOException && strpos($exception->getFile(), '/Doctrine/DBAL/')) {
             return true;
         }
 
-        /**
+        /*
          * This case matches, when a parent model selected and the child model loaded the attribute over the lazy loading process.
          */
         if ($exception instanceof \Doctrine\ORM\Mapping\MappingException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {

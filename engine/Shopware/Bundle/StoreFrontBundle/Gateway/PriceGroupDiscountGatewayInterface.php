@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface PriceGroupDiscountGatewayInterface
@@ -37,8 +38,9 @@ interface PriceGroupDiscountGatewayInterface
      * - Price group base data
      * - Price group discounts for the provided customer group
      *
-     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Customer\Group       $customerGroup
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Product\PriceGroup[] Indexed by the price group id
      */
     public function getPriceGroups(

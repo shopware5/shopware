@@ -1,19 +1,42 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace  Shopware\Tests\Mink\Page;
 
-use Shopware\Tests\Mink\Element\CartPosition;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Element\CartPosition;
 use Shopware\Tests\Mink\Helper;
 
 class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
-     * @var string $path
+     * @var string
      */
     protected $path = '/checkout/cart';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -33,12 +56,12 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             'aggregationLabels' => 'ul.aggregation--list .entry--label',
             'aggregationValues' => 'ul.aggregation--list .entry--value',
             'shippingPaymentForm' => 'form.payment',
-            'articleDeleteButtons' => '.column--actions-link[title="Löschen"]'
+            'articleDeleteButtons' => '.column--actions-link[title="Löschen"]',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -48,14 +71,16 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             'shipping' => ['de' => 'Versandkosten:', 'en' => 'Proceed to checkout'],
             'total' => ['de' => 'Gesamtsumme:', 'en' => 'Proceed to checkout'],
             'sumWithoutVat' => ['de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'],
-            'tax' => ['de' => 'zzgl. %d'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'],
-            'changePaymentButton'   => ['de' => 'Weiter', 'en' => 'Next'],
+            'tax' => ['de' => 'zzgl. %d' . html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'],
+            'changePaymentButton' => ['de' => 'Weiter', 'en' => 'Next'],
         ];
     }
 
     /**
      * Checks the aggregation
+     *
      * @param $aggregation
+     *
      * @throws \Exception
      */
     public function checkAggregation($aggregation)
@@ -69,7 +94,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
             $check[$property['label']] = Helper::floatArray([
                 $property['value'],
-                $elements['aggregationValues'][$key]->getText()
+                $elements['aggregationValues'][$key]->getText(),
             ]);
 
             unset($elements['aggregationLabels'][$key]);
@@ -91,59 +116,8 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     }
 
     /**
-     * @param string $key
-     * @param string $language
-     * @return string
-     */
-    private function getLabel($key, $language)
-    {
-        $labels = $this->getNamedSelectors();
-
-        if (strpos($key, '%') !== false) {
-            $taxRate = intval($key);
-            return sprintf($labels['tax'][$language], $taxRate);
-        }
-
-        if (isset($labels[$key][$language])) {
-            return $labels[$key][$language];
-        }
-
-        $message = sprintf('Label "%s" is not defined for language key "%s"', $key, $language);
-        Helper::throwException($message, Helper::EXCEPTION_PENDING);
-    }
-
-    /**
-     * @param array $labels
-     * @param string $labelKey
-     * @param string $language
-     * @return int
-     * @throws \Exception
-     */
-    private function getAggregationPosition(array $labels, $labelKey, $language)
-    {
-        $givenLabel = $this->getLabel($labelKey, $language);
-
-        $key = 0;
-        $lastKey = max(array_keys($labels));
-
-        do {
-            if (array_key_exists($key, $labels)) {
-                $readLabel = $labels[$key]->getText();
-
-                if ($givenLabel === $readLabel) {
-                    return $key;
-                }
-            }
-
-            $key++;
-        } while ($key <= $lastKey);
-
-        $message = sprintf('Label "%s" does not exist on the page! ("%s")', $labelKey, $givenLabel);
-        Helper::throwException($message);
-    }
-
-    /**
      * Adds a voucher to the cart
+     *
      * @param string $voucher
      */
     public function addVoucher($voucher)
@@ -156,6 +130,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Adds an article to the cart
+     *
      * @param string $article
      */
     public function addArticle($article)
@@ -168,6 +143,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Remove a product from the cart
+     *
      * @param CartPosition $item
      */
     public function removeProduct(CartPosition $item)
@@ -177,6 +153,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Remove the voucher from the cart
+     *
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function removeVoucher()
@@ -187,6 +164,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Removes all products from the cart
+     *
      * @param CartPosition $items
      */
     public function emptyCart(CartPosition $items)
@@ -199,6 +177,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Fills the cart with products
+     *
      * @param array $items
      */
     public function fillCartWithProducts(array $items)
@@ -213,17 +192,12 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $this->path = $originalPath;
     }
 
-    protected function verify(array $urlParameters)
-    {
-        $this->verifyResponse();
-        $this->verifyPage();
-    }
-
     /**
      * Checks the cart positions
      * Available properties are: number (required), name (required), quantity, itemPrice, sum
+     *
      * @param CartPosition $cartPositions
-     * @param array $items
+     * @param array        $items
      */
     public function checkCartProducts(CartPosition $cartPositions, array $items)
     {
@@ -249,9 +223,12 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
+     *
      * @param string $language
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function verifyPage($language = '')
     {
@@ -281,6 +258,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Proceeds to the confirmation page with login
+     *
      * @param string $eMail
      * @param string $password
      */
@@ -296,6 +274,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Proceeds to the confirmation page with registration
+     *
      * @param array $data
      */
     public function proceedToOrderConfirmationWithRegistration(array $data)
@@ -309,7 +288,8 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Changes the payment method
-     * @param array   $data
+     *
+     * @param array $data
      */
     public function changePaymentMethod($data = [])
     {
@@ -319,6 +299,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Changes the shipping method
+     *
      * @param array $data
      */
     public function changeShippingMethod($data = [])
@@ -343,5 +324,67 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
         $this->path = $originalPath;
         $this->open();
+    }
+
+    protected function verify(array $urlParameters)
+    {
+        $this->verifyResponse();
+        $this->verifyPage();
+    }
+
+    /**
+     * @param string $key
+     * @param string $language
+     *
+     * @return string
+     */
+    private function getLabel($key, $language)
+    {
+        $labels = $this->getNamedSelectors();
+
+        if (strpos($key, '%') !== false) {
+            $taxRate = intval($key);
+
+            return sprintf($labels['tax'][$language], $taxRate);
+        }
+
+        if (isset($labels[$key][$language])) {
+            return $labels[$key][$language];
+        }
+
+        $message = sprintf('Label "%s" is not defined for language key "%s"', $key, $language);
+        Helper::throwException($message, Helper::EXCEPTION_PENDING);
+    }
+
+    /**
+     * @param array  $labels
+     * @param string $labelKey
+     * @param string $language
+     *
+     * @throws \Exception
+     *
+     * @return int
+     */
+    private function getAggregationPosition(array $labels, $labelKey, $language)
+    {
+        $givenLabel = $this->getLabel($labelKey, $language);
+
+        $key = 0;
+        $lastKey = max(array_keys($labels));
+
+        do {
+            if (array_key_exists($key, $labels)) {
+                $readLabel = $labels[$key]->getText();
+
+                if ($givenLabel === $readLabel) {
+                    return $key;
+                }
+            }
+
+            ++$key;
+        } while ($key <= $lastKey);
+
+        $message = sprintf('Label "%s" does not exist on the page! ("%s")', $labelKey, $givenLabel);
+        Helper::throwException($message);
     }
 }

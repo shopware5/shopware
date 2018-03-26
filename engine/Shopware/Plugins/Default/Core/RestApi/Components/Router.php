@@ -29,7 +29,7 @@ use Enlight_Controller_Response_Response as Response;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\RestApi\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Router
@@ -43,7 +43,7 @@ class Router
 
         array_shift($path);
         $tmp = array_shift($path);
-        $matches = array();
+        $matches = [];
         if (preg_match('/^v([1-9])$/', $tmp, $matches) === 1) {
             $version = (int) $matches[1];
             $type = array_shift($path);
@@ -52,9 +52,9 @@ class Router
             $type = $tmp;
         }
 
-        $id       = !empty($path[0]) ? $path[0] : false;
-        $subType  = !empty($path[1]) ? $path[1] : false;
-        $subId    = !empty($path[2]) ? $path[2] : false;
+        $id = !empty($path[0]) ? $path[0] : false;
+        $subType = !empty($path[1]) ? $path[1] : false;
+        $subId = !empty($path[2]) ? $path[2] : false;
 
         $request->setControllerName($type);
         $request->setParam('id', $id);
@@ -96,6 +96,7 @@ class Router
 
         if (!$subType) {
             $request->setActionName($action);
+
             return;
         }
 

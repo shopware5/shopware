@@ -42,8 +42,9 @@ class EntityTransformer implements DataTransformerInterface
 
     /**
      * CustomerEntityTransformer constructor.
+     *
      * @param ModelManager $models
-     * @param string $entityName
+     * @param string       $entityName
      */
     public function __construct(ModelManager $models, $entityName)
     {
@@ -74,9 +75,9 @@ class EntityTransformer implements DataTransformerInterface
      *
      * @param mixed $entity The value in the original representation
      *
-     * @return mixed The value in the transformed representation
+     * @throws TransformationFailedException when the transformation fails
      *
-     * @throws TransformationFailedException When the transformation fails.
+     * @return mixed The value in the transformed representation
      */
     public function transform($entity)
     {
@@ -107,9 +108,9 @@ class EntityTransformer implements DataTransformerInterface
      *
      * @param mixed $entityId The value in the transformed representation
      *
-     * @return mixed The value in the original representation
+     * @throws TransformationFailedException when the transformation fails
      *
-     * @throws TransformationFailedException When the transformation fails.
+     * @return mixed The value in the original representation
      */
     public function reverseTransform($entityId)
     {

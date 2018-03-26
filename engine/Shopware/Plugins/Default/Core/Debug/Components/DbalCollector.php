@@ -30,7 +30,7 @@ use Shopware\Components\Model\Configuration;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DbalCollector implements CollectorInterface
@@ -52,9 +52,6 @@ class DbalCollector implements CollectorInterface
         $this->modelConfig = $modelConfig;
     }
 
-    /**
-     *
-     */
     public function start()
     {
         $this->modelLogger = new DebugStack();
@@ -68,8 +65,8 @@ class DbalCollector implements CollectorInterface
      */
     public function logResults(Logger $log)
     {
-        $rows = array(array('time', 'count', 'sql', 'params'));
-        $counts = array(10000);
+        $rows = [['time', 'count', 'sql', 'params']];
+        $counts = [10000];
         $totalTime = 0;
         $queries = $this->modelLogger->queries;
 
@@ -82,15 +79,15 @@ class DbalCollector implements CollectorInterface
             $id = md5($query['sql']);
             $totalTime += $query['executionMS'];
             if (!isset($rows[$id])) {
-                $rows[$id] = array(
+                $rows[$id] = [
                         number_format($query['executionMS'], 5, '.', ''),
                         1,
                         $query['sql'],
-                        $query['params']
-                );
+                        $query['params'],
+                ];
                 $counts[$id] = $query['executionMS'];
             } else {
-                $rows[$id][1]++;
+                ++$rows[$id][1];
                 $counts[$id] += $query['executionMS'];
                 $rows[$id][0] = number_format($counts[$id], 5, '.', '');
             }
@@ -102,7 +99,7 @@ class DbalCollector implements CollectorInterface
         $totalCount = count($queries);
 
         $label = "Model Querys ($totalCount @ $totalTime sec)";
-        $table = array($label, $rows);
+        $table = [$label, $rows];
 
         $log->table($table);
     }

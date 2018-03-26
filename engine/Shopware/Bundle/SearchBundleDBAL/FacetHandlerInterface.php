@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface FacetHandlerInterface
@@ -39,9 +39,10 @@ interface FacetHandlerInterface
     /**
      * Generates the facet data for the passed query, criteria and context object.
      *
-     * @param FacetInterface $facet
-     * @param Criteria $criteria
+     * @param FacetInterface              $facet
+     * @param Criteria                    $criteria
      * @param Struct\ShopContextInterface $context
+     *
      * @return null|FacetResultInterface|FacetResultInterface[]
      */
     public function generateFacet(
@@ -52,7 +53,9 @@ interface FacetHandlerInterface
 
     /**
      * Checks if the passed facet can be handled by this class.
+     *
      * @param FacetInterface $facet
+     *
      * @return bool
      */
     public function supportsFacet(FacetInterface $facet);

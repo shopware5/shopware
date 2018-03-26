@@ -24,13 +24,13 @@
 
 namespace Shopware\Components\Routing\Matchers;
 
-use Shopware\Components\Routing\MatcherInterface;
-use Shopware\Components\Routing\Context;
 use Enlight_Controller_Dispatcher_Default as EnlightDispatcher;
+use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\MatcherInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DefaultMatcher implements MatcherInterface
@@ -47,7 +47,7 @@ class DefaultMatcher implements MatcherInterface
 
     /**
      * @param EnlightDispatcher $dispatcher
-     * @param string $separator
+     * @param string            $separator
      */
     public function __construct(EnlightDispatcher $dispatcher, $separator = '/')
     {
@@ -101,15 +101,16 @@ class DefaultMatcher implements MatcherInterface
      * Fills up default values for module, controller and action
      *
      * @param Context $context
-     * @param array $query
+     * @param array   $query
+     *
      * @return array
      */
     private function fillDefaults(Context $context, $query)
     {
         $defaults = [
-            $context->getModuleKey()     => $this->dispatcher->getDefaultModule(),
+            $context->getModuleKey() => $this->dispatcher->getDefaultModule(),
             $context->getControllerKey() => $this->dispatcher->getDefaultControllerName(),
-            $context->getActionKey()     => $this->dispatcher->getDefaultAction(),
+            $context->getActionKey() => $this->dispatcher->getDefaultAction(),
         ];
 
         $query = array_merge($defaults, $query);

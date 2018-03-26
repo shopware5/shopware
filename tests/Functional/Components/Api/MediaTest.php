@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Media;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaTest extends TestCase
@@ -96,12 +96,11 @@ class MediaTest extends TestCase
         $mediaService->delete($path);
     }
 
-
     protected function getSimpleTestData()
     {
-        return array(
+        return [
             'album' => -1,
-            'description' => 'Test description'
-        );
+            'description' => 'Test description',
+        ];
     }
 }

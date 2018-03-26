@@ -32,7 +32,7 @@ namespace Shopware\Bundle\SearchBundle;
  * which defined in the specify gateway engines.
  *
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface SortingInterface extends CriteriaPartInterface

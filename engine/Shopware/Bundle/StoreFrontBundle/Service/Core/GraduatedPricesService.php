@@ -21,15 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
@@ -49,7 +50,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
@@ -59,7 +60,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ProductContextInterface $context)
     {
@@ -104,7 +105,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 
         $priceGroups = $context->getPriceGroups();
 
-        /**
+        /*
          * If one of the products has a configured price group,
          * the graduated prices has to be build over the defined price group graduations.
          *
@@ -127,7 +128,6 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 
             $priceGroup = $priceGroups[$priceGroupId];
 
-
             $firstGraduation = array_shift($prices[$product->getNumber()]);
 
             $prices[$product->getNumber()] = $this->buildDiscountGraduations(
@@ -147,9 +147,10 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
      * This function is used to override the normal graduated prices
      * with a definition of the product price group discounts.
      *
-     * @param Struct\Product\PriceRule $reference
-     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Product\PriceRule       $reference
+     * @param Struct\Customer\Group          $customerGroup
      * @param Struct\Product\PriceDiscount[] $discounts
+     *
      * @return array
      */
     private function buildDiscountGraduations(
@@ -161,7 +162,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 
         $firstDiscount = $discounts[0];
 
-        /**@var $previous Struct\Product\PriceRule*/
+        /** @var $previous Struct\Product\PriceRule */
         $previous = null;
         if ($firstDiscount->getQuantity() > 1) {
             $firstGraduation = clone $reference;
@@ -203,9 +204,10 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
      * Helper function which iterates the products and builds a price array which indexed
      * with the product order number.
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\ListProduct[]       $products
      * @param Struct\Product\PriceRule[] $priceRules
-     * @param Struct\Customer\Group $group
+     * @param Struct\Customer\Group      $group
+     *
      * @return array
      */
     private function buildPrices($products, array $priceRules, Struct\Customer\Group $group)
@@ -219,7 +221,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
                 continue;
             }
 
-            /**@var $productPrices Struct\Product\PriceRule[] */
+            /** @var $productPrices Struct\Product\PriceRule[] */
             $productPrices = $priceRules[$key];
 
             foreach ($productPrices as $price) {

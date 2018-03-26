@@ -46,7 +46,7 @@ class OptimizerServiceTest extends TestCase
         $this->optimizers = [
             new RunnableUnitOptimizer(),
             new NotRunnableUnitOptimizer(),
-            new SingleRunnableUnitOptimizer()
+            new SingleRunnableUnitOptimizer(),
         ];
 
         $this->optimizerService = new OptimizerService($this->optimizers);
@@ -132,7 +132,7 @@ abstract class UnitOptimizer implements OptimizerInterface
      */
     public function run($filepath)
     {
-        $this->runCount++;
+        ++$this->runCount;
     }
 
     /**
@@ -148,7 +148,8 @@ abstract class UnitOptimizer implements OptimizerInterface
      */
     public function isRunnable()
     {
-        $this->callCount++;
+        ++$this->callCount;
+
         return true;
     }
 }
@@ -179,7 +180,8 @@ class NotRunnableUnitOptimizer extends UnitOptimizer
      */
     public function isRunnable()
     {
-        $this->callCount++;
+        ++$this->callCount;
+
         return false;
     }
 }

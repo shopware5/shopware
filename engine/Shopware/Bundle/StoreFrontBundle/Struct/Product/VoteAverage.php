@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteAverage extends Extendable implements \JsonSerializable
@@ -97,7 +97,7 @@ class VoteAverage extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

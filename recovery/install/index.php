@@ -25,8 +25,8 @@
 $lockFile = __DIR__ . '/data/' . 'install.lock';
 if (is_file($lockFile)) {
     header('Content-type: text/html; charset=utf-8', true, 503);
-    echo "<h4>Der Installer wurde bereits ausgeführt.</h4><br />Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie die Datei recovery/install/data/install.lock!";
-    echo "<h4>The installation process has already been finished.</h4> <br/>If you want to run the installation process again, delete the file recovery/install/data/install.lock!";
+    echo '<h4>Der Installer wurde bereits ausgeführt.</h4><br />Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie die Datei recovery/install/data/install.lock!';
+    echo '<h4>The installation process has already been finished.</h4> <br/>If you want to run the installation process again, delete the file recovery/install/data/install.lock!';
     exit;
 }
 
@@ -55,6 +55,7 @@ if (PHP_SAPI === 'cli') {
     $env = $input->getParameterOption(['--env', '-e'], 'production');
 
     $application = new Application($env);
+
     return $application->run($input);
 }
 

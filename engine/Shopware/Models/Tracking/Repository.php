@@ -37,22 +37,24 @@ class Repository extends ModelRepository
      *
      * @param $bannerId
      * @param \DateTime $date
+     *
      * @return Banner
      */
-    public function getOrCreateBannerStatsModel($bannerId, \DateTime $date=null)
+    public function getOrCreateBannerStatsModel($bannerId, \DateTime $date = null)
     {
         if (is_null($date)) {
             $date = new \DateTime();
         }
-        $bannerStatistics = $this->findOneBy(array('bannerId'=>$bannerId, 'displayDate'=>$date ));
+        $bannerStatistics = $this->findOneBy(['bannerId' => $bannerId, 'displayDate' => $date]);
 
         // If no Entry for this day exists - create a new one
-        if (! $bannerStatistics) {
+        if (!$bannerStatistics) {
             $bannerStatistics = new \Shopware\Models\Tracking\Banner($bannerId, $date);
 
             $bannerStatistics->setClicks(0);
             $bannerStatistics->setViews(0);
         }
+
         return $bannerStatistics;
     }
 
@@ -63,6 +65,7 @@ class Repository extends ModelRepository
      * @param $shopId
      * @param null $date
      * @param null $deviceType
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getArticleImpressionQuery($articleId, $shopId, $date = null, $deviceType = null)
@@ -71,6 +74,7 @@ class Repository extends ModelRepository
             $date = new \DateTime();
         }
         $builder = $this->getArticleImpressionQueryBuilder($articleId, $shopId, $date, $deviceType);
+
         return $builder->getQuery();
     }
 
@@ -82,6 +86,7 @@ class Repository extends ModelRepository
      * @param $shopId
      * @param $date
      * @param $deviceType
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getArticleImpressionQueryBuilder($articleId, $shopId, $date, $deviceType = null)
@@ -92,11 +97,11 @@ class Repository extends ModelRepository
                 ->where('articleImpression.articleId = :articleId')
                 ->andWhere('articleImpression.shopId = :shopId')
                 ->andWhere('articleImpression.date = :fromDate')
-                ->setParameters(array(
+                ->setParameters([
                     'articleId' => $articleId,
                     'shopId' => $shopId,
-                    'fromDate' => $date->format("Y-m-d")
-            ));
+                    'fromDate' => $date->format('Y-m-d'),
+            ]);
 
         if ($deviceType) {
             $builder->andWhere('articleImpression.deviceType = :deviceType')

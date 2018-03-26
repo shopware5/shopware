@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
  * Defines the search result of the search gateway.
  *
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductSearchResult extends ProductNumberSearchResult implements \JsonSerializable
@@ -41,8 +41,8 @@ class ProductSearchResult extends ProductNumberSearchResult implements \JsonSeri
     protected $products;
 
     /**
-     * @param ListProduct[] $products Indexed by the product order number
-     * @param int $totalCount
+     * @param ListProduct[]          $products   Indexed by the product order number
+     * @param int                    $totalCount
      * @param FacetResultInterface[] $facets
      */
     public function __construct($products, $totalCount, $facets)
@@ -61,7 +61,7 @@ class ProductSearchResult extends ProductNumberSearchResult implements \JsonSeri
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

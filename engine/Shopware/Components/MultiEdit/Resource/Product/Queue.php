@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
-use \Shopware\Models\MultiEdit\QueueArticle;
+use Shopware\Models\MultiEdit\QueueArticle;
 
 /**
  * The queue class will handle the queues
@@ -47,6 +47,21 @@ class Queue
      * @var Backup
      */
     protected $backupResource;
+
+    /**
+     * @param $dqlHelper DqlHelper
+     * @param $filter Filter
+     * @param $backup Backup
+     */
+    public function __construct(
+        DqlHelper $dqlHelper,
+        Filter $filter,
+        Backup $backup)
+    {
+        $this->dqlHelper = $dqlHelper;
+        $this->filterResource = $filter;
+        $this->backupResource = $backup;
+    }
 
     /**
      * @return DqlHelper
@@ -73,25 +88,11 @@ class Queue
     }
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $filter Filter
-     * @param $backup Backup
-     */
-    public function __construct(
-        DqlHelper $dqlHelper,
-        Filter $filter,
-        Backup $backup)
-    {
-        $this->dqlHelper = $dqlHelper;
-        $this->filterResource = $filter;
-        $this->backupResource = $backup;
-    }
-
-    /**
      * Pops a number of entries from the queue
      *
      * @param $queueId
      * @param $number
+     *
      * @return mixed
      */
     public function pop($queueId, $number)
@@ -134,8 +135,10 @@ class Queue
      * @param $offset
      * @param $limit
      * @param $queueId
-     * @return Array
+     *
      * @throws \RuntimeException
+     *
+     * @return array
      */
     public function create($filterArray, $operations, $offset, $limit, $queueId)
     {
@@ -153,7 +156,7 @@ class Queue
                 throw new \RuntimeException("Queue with id {$queueId} not found");
             }
         } else {
-            $newBackup= true;
+            $newBackup = true;
             $queue = new \Shopware\Models\MultiEdit\Queue('product');
             $queue->setFilterString($filterString);
             $queue->setOperations(json_encode($operations));
@@ -200,11 +203,11 @@ class Queue
         $entityManager->flush();
         $entityManager->clear();
 
-        return array(
+        return [
             'totalCount' => $totalCount,
             'offset' => $offset + $limit,
             'queueId' => $queueId,
-            'done' => $done
-        );
+            'done' => $done,
+        ];
     }
 }

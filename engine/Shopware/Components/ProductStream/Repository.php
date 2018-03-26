@@ -54,7 +54,7 @@ class Repository implements RepositoryInterface
 
     /**
      * @param Criteria $criteria
-     * @param int $productStreamId
+     * @param int      $productStreamId
      */
     public function prepareCriteria(Criteria $criteria, $productStreamId)
     {
@@ -62,47 +62,20 @@ class Repository implements RepositoryInterface
 
         if ($productStream['type'] == 1) {
             $this->prepareConditionStream($productStream, $criteria);
+
             return;
         }
 
         if ($productStream['type'] == 2) {
             $this->prepareSelectionStream($productStream, $criteria);
+
             return;
         }
     }
 
     /**
-     * @param array $productStream
-     * @param Criteria $criteria
-     */
-    private function prepareConditionStream(array $productStream, Criteria $criteria)
-    {
-        $this->assignConditions($productStream, $criteria);
-
-        $sortings = $criteria->getSortings();
-        if (empty($sortings)) {
-            $this->assignSortings($productStream, $criteria);
-        }
-    }
-
-    /**
-     * @param array $productStream
-     * @param Criteria $criteria
-     */
-    private function prepareSelectionStream(array $productStream, Criteria $criteria)
-    {
-        $ordernumbers = $this->getOrdernumbers($productStream['id']);
-
-        $criteria->addBaseCondition(new OrdernumberCondition($ordernumbers));
-
-        $sortings = $criteria->getSortings();
-        if (empty($sortings)) {
-            $this->assignSortings($productStream, $criteria);
-        }
-    }
-
-    /**
      * @param array $serializedConditions
+     *
      * @return object[]
      */
     public function unserialize($serializedConditions)
@@ -119,7 +92,38 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @param array    $productStream
+     * @param Criteria $criteria
+     */
+    private function prepareConditionStream(array $productStream, Criteria $criteria)
+    {
+        $this->assignConditions($productStream, $criteria);
+
+        $sortings = $criteria->getSortings();
+        if (empty($sortings)) {
+            $this->assignSortings($productStream, $criteria);
+        }
+    }
+
+    /**
+     * @param array    $productStream
+     * @param Criteria $criteria
+     */
+    private function prepareSelectionStream(array $productStream, Criteria $criteria)
+    {
+        $ordernumbers = $this->getOrdernumbers($productStream['id']);
+
+        $criteria->addBaseCondition(new OrdernumberCondition($ordernumbers));
+
+        $sortings = $criteria->getSortings();
+        if (empty($sortings)) {
+            $this->assignSortings($productStream, $criteria);
+        }
+    }
+
+    /**
      * @param int $productStreamId
+     *
      * @return string[]
      */
     private function getOrdernumbers($productStreamId)
@@ -143,12 +147,13 @@ SQL;
 
     /**
      * @param int $productStreamId
+     *
      * @return array
      */
     private function getStreamById($productStreamId)
     {
         $row = $this->conn->fetchAssoc(
-            "SELECT * FROM s_product_streams WHERE id = :productStreamId LIMIT 1",
+            'SELECT * FROM s_product_streams WHERE id = :productStreamId LIMIT 1',
             ['productStreamId' => $productStreamId]
         );
 
@@ -156,7 +161,7 @@ SQL;
     }
 
     /**
-     * @param array $productStream
+     * @param array    $productStream
      * @param Criteria $criteria
      */
     private function assignSortings(array $productStream, Criteria $criteria)
@@ -171,7 +176,7 @@ SQL;
     }
 
     /**
-     * @param array $productStream
+     * @param array    $productStream
      * @param Criteria $criteria
      */
     private function assignConditions(array $productStream, Criteria $criteria)

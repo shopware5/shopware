@@ -29,7 +29,7 @@ use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryAliasMapperTest extends TestCase
@@ -79,7 +79,7 @@ class QueryAliasMapperTest extends TestCase
     {
         $mapping = [
             'sSearch' => 'q',
-            'sPage'   => 'p',
+            'sPage' => 'p',
         ];
 
         $mapper = new QueryAliasMapper($mapping);
@@ -101,7 +101,7 @@ class QueryAliasMapperTest extends TestCase
         $params = [
             'longParam0' => 'someValue',
             'longParam1' => 'someOtherValue',
-            'someParam'  => 'someValue'
+            'someParam' => 'someValue',
         ];
 
         $result = $mapper->replaceLongParams($params);
@@ -109,7 +109,7 @@ class QueryAliasMapperTest extends TestCase
         $expected = [
             'shortParam0' => 'someValue',
             'shortParam1' => 'someOtherValue',
-            'someParam'   => 'someValue'
+            'someParam' => 'someValue',
         ];
 
         $this->assertEquals($expected, $result);
@@ -127,7 +127,7 @@ class QueryAliasMapperTest extends TestCase
         $params = [
             'shortParam0' => 'someValue',
             'shortParam1' => 'someOtherValue',
-            'someParam'   => 'someValue'
+            'someParam' => 'someValue',
         ];
 
         $result = $mapper->replaceShortParams($params);
@@ -135,7 +135,7 @@ class QueryAliasMapperTest extends TestCase
         $expected = [
             'longParam0' => 'someValue',
             'longParam1' => 'someOtherValue',
-            'someParam'  => 'someValue'
+            'someParam' => 'someValue',
         ];
 
         $this->assertEquals($expected, $result);
@@ -158,9 +158,9 @@ class QueryAliasMapperTest extends TestCase
         $mapper->replaceShortRequestQueries($request);
 
         $expected = [
-            'someParam'  => 'someValue',
-            'sSearch'    => 'someValue',
-            'sPage'      => 'someOtherValue',
+            'someParam' => 'someValue',
+            'sSearch' => 'someValue',
+            'sPage' => 'someOtherValue',
         ];
 
         $this->assertEquals($expected, $request->getParams());

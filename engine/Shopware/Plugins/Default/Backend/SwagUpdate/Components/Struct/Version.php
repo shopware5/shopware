@@ -26,7 +26,7 @@ namespace ShopwarePlugins\SwagUpdate\Components\Struct;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Struct;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Version extends Struct
@@ -37,7 +37,7 @@ class Version extends Struct
     public $version;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $isNewer;
 
@@ -52,7 +52,7 @@ class Version extends Struct
     public $uri;
 
     /**
-     * @var integer
+     * @var int
      */
     public $size;
 

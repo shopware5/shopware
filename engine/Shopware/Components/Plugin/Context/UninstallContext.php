@@ -29,7 +29,7 @@ use Shopware\Models\Plugin\Plugin;
 class UninstallContext extends InstallContext
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $keepUserData;
 
@@ -37,7 +37,7 @@ class UninstallContext extends InstallContext
      * @param Plugin $plugin
      * @param string $shopwareVersion
      * @param string $currentVersion
-     * @param boolean $keepUserData
+     * @param bool   $keepUserData
      */
     public function __construct(
         Plugin $plugin,
@@ -50,7 +50,7 @@ class UninstallContext extends InstallContext
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function keepUserData()
     {

@@ -55,10 +55,10 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
      */
     public function indexAction()
     {
-        $limit  = $this->Request()->getParam('limit', 1000);
+        $limit = $this->Request()->getParam('limit', 1000);
         $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', array());
-        $filter = $this->Request()->getParam('filter', array());
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort);
 
@@ -73,7 +73,7 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
      */
     public function postAction()
     {
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
         $params = $this->Request()->getPost();
 
         if ($useNumberAsId) {
@@ -83,12 +83,12 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
         }
 
         $location = $this->apiBaseUrl . 'translations/' . $translation->getId();
-        $data = array(
-            'id'       => $translation->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $translation->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
         $this->Response()->setHeader('Location', $location);
     }
 
@@ -99,7 +99,7 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
      */
     public function putAction()
     {
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -111,12 +111,12 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
         }
 
         $location = $this->apiBaseUrl . 'translations/' . $translation->getId();
-        $data = array(
-            'id'       => $translation->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $translation->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -128,7 +128,7 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
     {
         $id = $this->Request()->getParam('id');
         $data = $this->Request()->getParams();
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $this->resource->deleteByNumber($id, $data);
@@ -136,6 +136,6 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
             $this->resource->delete($id, $data);
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

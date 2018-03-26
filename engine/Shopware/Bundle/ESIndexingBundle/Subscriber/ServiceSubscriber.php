@@ -41,7 +41,7 @@ class ServiceSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Shopware_Console_Add_Command' => ['addCommands']
+            'Shopware_Console_Add_Command' => ['addCommands'],
         ];
     }
 

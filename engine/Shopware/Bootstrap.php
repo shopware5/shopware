@@ -28,7 +28,7 @@ use Shopware\Components\DependencyInjection\Container;
  * @deprecated since 5.2 will be removed in 5.3
  *
  * @category  Shopware
- * @package   Shopware\Bootstrap
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Bootstrap extends Enlight_Bootstrap
@@ -44,6 +44,25 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     public function __construct(Container $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * Returns called resource
+     *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
+     * @param string $name
+     * @param array  $arguments
+     *
+     * @deprecated 4.2
+     *
+     * @return Enlight_Class Resource
+     */
+    public function __call($name, $arguments = null)
+    {
+        trigger_error('Shopware()->Bootstrap()->__call() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
+        return $this->container->get($name);
     }
 
     /**
@@ -67,7 +86,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * @deprecated since 5.2 will be removed in 5.3
      *
      * @param string $name
-     * @param mixed $resource
+     * @param mixed  $resource
+     *
      * @return Enlight_Bootstrap
      */
     public function registerResource($name, $resource)
@@ -85,6 +105,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * @deprecated since 5.2 will be removed in 5.3
      *
      * @param string $name
+     *
      * @return bool
      */
     public function hasResource($name)
@@ -101,6 +122,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * @deprecated since 5.2 will be removed in 5.3
      *
      * @param string $name
+     *
      * @return bool
      */
     public function issetResource($name)
@@ -118,6 +140,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * @deprecated since 5.2 will be removed in 5.3
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function getResource($name)
@@ -141,6 +164,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * @deprecated since 5.2 will be removed in 5.3
      *
      * @param string $name
+     *
      * @return bool
      */
     public function loadResource($name)
@@ -157,6 +181,7 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * @deprecated since 5.2 will be removed in 5.3
      *
      * @param string $name
+     *
      * @return Enlight_Bootstrap
      */
     public function resetResource($name)
@@ -166,22 +191,5 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $this->container->reset($name);
 
         return $this;
-    }
-
-    /**
-     * Returns called resource
-     *
-     * @deprecated since 5.2 will be removed in 5.3
-     *
-     * @param string $name
-     * @param array $arguments
-     * @deprecated 4.2
-     * @return Enlight_Class Resource
-     */
-    public function __call($name, $arguments = null)
-    {
-        trigger_error('Shopware()->Bootstrap()->__call() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
-
-        return $this->container->get($name);
     }
 }

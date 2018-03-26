@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_TestCase
@@ -66,14 +66,14 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $this->assertCount(0, $history);
 
         $paymentStatusInProgress = $this->em->getReference('\Shopware\Models\Order\Status', 1);
-        $orderStatusReserved     = $this->em->getReference('\Shopware\Models\Order\Status', 18);
+        $orderStatusReserved = $this->em->getReference('\Shopware\Models\Order\Status', 18);
 
         $order->setPaymentStatus($paymentStatusInProgress);
         $order->setOrderStatus($orderStatusReserved);
         $this->em->flush($order);
 
         /** @var \Shopware\Models\Order\History[] $history */
-        $history = $this->em->getRepository('\Shopware\Models\Order\History')->findBy(array('order' => $order->getId()));
+        $history = $this->em->getRepository('\Shopware\Models\Order\History')->findBy(['order' => $order->getId()]);
 
         $this->assertCount(1, $history);
 
@@ -84,28 +84,17 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $this->assertSame($previousOrderStatus, $history[0]->getPreviousOrderStatus());
     }
 
-    private function orderIsSaved($order)
-    {
-        $this->em->persist($order);
-        $this->em->flush($order);
-    }
-
-    private function thenRetrieveHistoryOf($order)
-    {
-        return $this->em->getRepository('\Shopware\Models\Order\History')->findBy(array('order' => $order->getId()));
-    }
-
     public function createOrder()
     {
         $paymentStatusOpen = $this->em->getReference('\Shopware\Models\Order\Status', 17);
-        $orderStatusOpen   = $this->em->getReference('\Shopware\Models\Order\Status', 0);
-        $paymentDebit      = $this->em->getReference('\Shopware\Models\Payment\Payment', 2);
-        $dispatchDefault   = $this->em->getReference('\Shopware\Models\Dispatch\Dispatch', 9);
-        $defaultShop       = $this->em->getReference('\Shopware\Models\Shop\Shop', 1);
+        $orderStatusOpen = $this->em->getReference('\Shopware\Models\Order\Status', 0);
+        $paymentDebit = $this->em->getReference('\Shopware\Models\Payment\Payment', 2);
+        $dispatchDefault = $this->em->getReference('\Shopware\Models\Dispatch\Dispatch', 9);
+        $defaultShop = $this->em->getReference('\Shopware\Models\Shop\Shop', 1);
 
         $partner = new \Shopware\Models\Partner\Partner();
-        $partner->setCompany("Dummy");
-        $partner->setIdCode("Dummy");
+        $partner->setCompany('Dummy');
+        $partner->setIdCode('Dummy');
         $partner->setDate(new \DateTime());
         $partner->setContact('Dummy');
         $partner->setStreet('Dummy');
@@ -140,13 +129,24 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $order->setTaxFree(false);
         $order->setTemporaryId(5);
         $order->setReferer('Dummy');
-        $order->setTrackingCode("Dummy");
-        $order->setLanguageIso("Dummy");
-        $order->setCurrency("EUR");
+        $order->setTrackingCode('Dummy');
+        $order->setLanguageIso('Dummy');
+        $order->setCurrency('EUR');
         $order->setCurrencyFactor(5);
-        $order->setRemoteAddress("127.0.0.1");
+        $order->setRemoteAddress('127.0.0.1');
 
         return $order;
+    }
+
+    private function orderIsSaved($order)
+    {
+        $this->em->persist($order);
+        $this->em->flush($order);
+    }
+
+    private function thenRetrieveHistoryOf($order)
+    {
+        return $this->em->getRepository('\Shopware\Models\Order\History')->findBy(['order' => $order->getId()]);
     }
 }
 

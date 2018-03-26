@@ -27,7 +27,7 @@ namespace Shopware\Components;
 class MemoryLimit
 {
     /**
-     * @param integer $bytes
+     * @param int $bytes
      */
     public static function setMinimumMemoryLimit($bytes)
     {
@@ -43,6 +43,7 @@ class MemoryLimit
 
     /**
      * @param $memoryLimit
+     *
      * @return int|string
      */
     public static function convertToBytes($memoryLimit)

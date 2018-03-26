@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
 class OrderRequest
 {
     /**
@@ -58,7 +55,7 @@ class OrderRequest
      * @param string $licenceShop
      * @param string $bookingShop
      * @param string $orderNumber
-     * @param float $price
+     * @param float  $price
      * @param string $priceType
      */
     public function __construct(

@@ -53,7 +53,6 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundleDBAL\CriteriaRequestHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
@@ -82,8 +81,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $searchTermPreProcessor;
 
     /**
-     * @param \Shopware_Components_Config $config
-     * @param Connection $connection
+     * @param \Shopware_Components_Config     $config
+     * @param Connection                      $connection
      * @param SearchTermPreProcessorInterface $searchTermPreProcessor
      */
     public function __construct(
@@ -97,8 +96,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
-     * @param Criteria $criteria
+     * @param Request              $request
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      */
     public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
@@ -150,9 +149,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addFacet(new CategoryFacet());
     }
 
-
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addCategoryCondition(Request $request, Criteria $criteria)
@@ -167,7 +165,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addManufacturerCondition(Request $request, Criteria $criteria)
@@ -187,7 +185,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addShippingFreeCondition(Request $request, Criteria $criteria)
@@ -201,7 +199,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addImmediateDeliveryCondition(Request $request, Criteria $criteria)
@@ -215,7 +213,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addRatingCondition(Request $request, Criteria $criteria)
@@ -229,7 +227,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addPriceCondition(Request $request, Criteria $criteria)
@@ -241,12 +239,12 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             return;
         }
 
-        $condition = new PriceCondition((float)$min, (float)$max);
+        $condition = new PriceCondition((float) $min, (float) $max);
         $criteria->addCondition($condition);
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addSearchCondition(Request $request, Criteria $criteria)
@@ -260,7 +258,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addSorting(Request $request, Criteria $criteria)
@@ -308,7 +306,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      */
     private function addCustomerGroupCondition(Criteria $criteria, ShopContextInterface $context)
@@ -320,7 +318,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addOffset(Request $request, Criteria $criteria)
@@ -335,7 +333,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addLimit(Request $request, Criteria $criteria)
@@ -345,7 +343,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         if ($max) {
             $limit = min($limit, $max);
         }
-        $limit = $limit >= 1 ? $limit: 1;
+        $limit = $limit >= 1 ? $limit : 1;
         $criteria->limit($limit);
     }
 

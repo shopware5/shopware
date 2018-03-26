@@ -8,7 +8,7 @@
             cur = document.location.protocol + '//' + document.location.host,
             ref = document.referrer.indexOf(cur) === -1 ? document.referrer : null,
             url = "{url module=widgets controller=index action=refreshStatistic forceSecure}",
-            pth = document.location.pathname.replace("{url controller=index fullPath=false}", "/");
+            pth = document.location.pathname.replace("{url controller=index}", "/");
 
         url = url.replace('https:', '');
         url = url.replace('http:', '');

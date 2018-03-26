@@ -25,7 +25,6 @@
 namespace   Shopware\Models\Payment;
 
 use Shopware\Components\Model\ModelRepository;
-use Doctrine\ORM\Query\Expr;
 
 /**
  * Shopware Payment Instance Repository

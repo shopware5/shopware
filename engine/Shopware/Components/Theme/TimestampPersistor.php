@@ -21,12 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 interface TimestampPersistor
 {
     /**
      * @param int $shopId
+     *
      * @return int
      */
     public function getCurrentTimestamp($shopId);

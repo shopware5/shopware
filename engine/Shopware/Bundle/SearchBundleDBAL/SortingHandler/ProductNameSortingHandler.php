@@ -24,15 +24,15 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SortingHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductNameSortingHandler implements SortingHandlerInterface
@@ -42,7 +42,7 @@ class ProductNameSortingHandler implements SortingHandlerInterface
      */
     public function supportsSorting(SortingInterface $sorting)
     {
-        return ($sorting instanceof ProductNameSorting);
+        return $sorting instanceof ProductNameSorting;
     }
 
     /**
@@ -53,7 +53,7 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /** @var ProductNameSorting $sorting */
+        /* @var ProductNameSorting $sorting */
         $query->addOrderBy('product.name', $sorting->getDirection())
             ->addOrderBy('product.id', $sorting->getDirection());
     }

@@ -65,12 +65,13 @@ class DummyPluginFinder
 
     /**
      * @param string $path
+     *
      * @return bool
      */
     private function isDummyPlugin($path)
     {
-        $bootstrapFile = $path.'/Bootstrap.php';
-        $dummyBootstrapFile = $path.'/BootstrapDummy.php';
+        $bootstrapFile = $path . '/Bootstrap.php';
+        $dummyBootstrapFile = $path . '/BootstrapDummy.php';
 
         if (is_file($dummyBootstrapFile) && !is_file($bootstrapFile)) {
             return true;

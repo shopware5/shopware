@@ -68,6 +68,7 @@
                 });
             }
 
+            $.publish('plugin/swAutoSubmit/onChangeSelection', [ me ]);
             me.$form.submit();
         }
     });

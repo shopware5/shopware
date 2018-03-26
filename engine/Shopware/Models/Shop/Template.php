@@ -25,8 +25,8 @@
 namespace Shopware\Models\Shop;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
@@ -38,7 +38,55 @@ use Shopware\Models\Shop\TemplateConfig\Set;
 class Template extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var \Shopware\Models\Shop\Template
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    protected $parent = null;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\Shop",
+     *      mappedBy="template"
+     * )
+     */
+    protected $shops;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $elements;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $layouts;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $configSets;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -49,7 +97,7 @@ class Template extends ModelEntity
     /**
      * Name of template in filesystem
      *
-     * @var string $template
+     * @var string
      * @ORM\Column(name="template", type="string", length=255, nullable=false)
      */
     private $template;
@@ -57,7 +105,7 @@ class Template extends ModelEntity
     /**
      * Human readable name of the template
      *
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -65,7 +113,7 @@ class Template extends ModelEntity
     /**
      * Description of the template
      *
-     * @var string $description
+     * @var string
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description;
@@ -73,7 +121,7 @@ class Template extends ModelEntity
     /**
      * Author of the template
      *
-     * @var string $author
+     * @var string
      * @ORM\Column(name="author", type="string", length=255, nullable=true)
      */
     private $author;
@@ -81,7 +129,7 @@ class Template extends ModelEntity
     /**
      * License of the template e.G. BSD / MIT / GPL
      *
-     * @var string $license
+     * @var string
      * @ORM\Column(name="license", type="string", length=255, nullable=true)
      */
     private $license;
@@ -89,7 +137,7 @@ class Template extends ModelEntity
     /**
      * Whether or not this template support Edge Side Includes (ESI)
      *
-     * @var boolean $esi
+     * @var bool
      * @ORM\Column(name="esi", type="boolean")
      */
     private $esi = false;
@@ -97,7 +145,7 @@ class Template extends ModelEntity
     /**
      * Whether or not this template is Style Assist compatible
      *
-     * @var boolean $style
+     * @var bool
      * @ORM\Column(name="style_support", type="boolean")
      */
     private $style = false;
@@ -105,19 +153,19 @@ class Template extends ModelEntity
     /**
      * Whether or not this template is EMOTIONS compatible
      *
-     * @var boolean $emotion
+     * @var bool
      * @ORM\Column(name="emotion", type="boolean")
      */
     private $emotion = false;
 
     /**
-     * @var string $version
+     * @var string
      * @ORM\Column(name="version", type="integer")
      */
     private $version = 1;
 
     /**
-     * @var integer $pluginId
+     * @var int
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
@@ -130,60 +178,10 @@ class Template extends ModelEntity
     private $plugin;
 
     /**
-     * @var integer $parentId
+     * @var int
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId = null;
-
-    /**
-     * @var \Shopware\Models\Shop\Template
-     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
-    protected $parent = null;
-
-    /**
-     * @var ArrayCollection $shops
-     * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\Shop",
-     *      mappedBy="template"
-     * )
-     */
-    protected $shops;
-
-    /**
-     * @var $config ArrayCollection
-     * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
-     * )
-     */
-    protected $elements;
-
-    /**
-     * @var $config ArrayCollection
-     * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
-     * )
-     */
-    protected $layouts;
-
-    /**
-     * @var $configSets ArrayCollection
-     * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
-     * )
-     */
-    protected $configSets;
-
 
     public function __construct()
     {
@@ -193,11 +191,10 @@ class Template extends ModelEntity
         $this->configSets = new ArrayCollection();
     }
 
-
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -208,11 +205,13 @@ class Template extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -244,6 +243,7 @@ class Template extends ModelEntity
 
     /**
      * @param string $template
+     *
      * @return Template
      */
     public function setTemplate($template)
@@ -263,6 +263,7 @@ class Template extends ModelEntity
 
     /**
      * @param string $description
+     *
      * @return Template
      */
     public function setDescription($description)
@@ -282,6 +283,7 @@ class Template extends ModelEntity
 
     /**
      * @param string $license
+     *
      * @return Template
      */
     public function setLicense($license)
@@ -300,17 +302,19 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param boolean $esi
+     * @param bool $esi
+     *
      * @return Template
      */
     public function setEsi($esi)
     {
-        $this->esi = (bool)$esi;
+        $this->esi = (bool) $esi;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getEsi()
     {
@@ -318,17 +322,20 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param boolean $emotion
+     * @param bool $emotion
+     *
      * @return Template
      */
     public function setEmotion($emotion)
     {
-        $this->emotion = (bool)$emotion;
+        $this->emotion = (bool) $emotion;
+
         return $this;
     }
 
     /**
-     * @param boolean $emotion
+     * @param bool $emotion
+     *
      * @return Template
      */
     public function getEmotion($emotion)
@@ -337,12 +344,13 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param boolean $style
+     * @param bool $style
+     *
      * @return Template
      */
     public function setStyle($style)
     {
-        $this->style = (bool)$style;
+        $this->style = (bool) $style;
 
         return $this;
     }
@@ -350,7 +358,7 @@ class Template extends ModelEntity
     /**
      * Returns whether or not this template is Style Assist compatible
      *
-     * @return boolean
+     * @return bool
      */
     public function getStyle()
     {

@@ -24,13 +24,13 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware_Components_Acl $acl
+     * @var \Shopware_Components_Acl
      */
     private $acl;
 
@@ -65,7 +65,8 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
 
     /**
      * Test case
-     * @expectedException Zend_Acl_Exception
+     *
+     * @expectedException \Zend_Acl_Exception
      */
     public function testTestNotExistingRoleShouldThrowException()
     {
@@ -78,7 +79,8 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
 
     /**
      * Test case
-     * @expectedException Zend_Acl_Exception
+     *
+     * @expectedException \Zend_Acl_Exception
      */
     public function testTestNotExistingResourceShouldThrowException()
     {

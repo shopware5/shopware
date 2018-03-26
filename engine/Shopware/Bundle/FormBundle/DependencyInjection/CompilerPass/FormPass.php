@@ -24,16 +24,16 @@
 
 namespace Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Adds all services with the tags "form.type" and "form.type_guesser" as
  * arguments of the "form.extension" service.
  *
- * @package Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass
  *
- * @link    https://github.com/symfony/framework-bundle/blob/master/DependencyInjection/Compiler/FormPass.php
+ * @see    https://github.com/symfony/framework-bundle/blob/master/DependencyInjection/Compiler/FormPass.php
+ *
  * @license https://opensource.org/licenses/MIT MIT License
  */
 class FormPass implements CompilerPassInterface
@@ -47,7 +47,7 @@ class FormPass implements CompilerPassInterface
         $definition = $container->getDefinition('form.extension');
 
         // Builds an array with fully-qualified type class names as keys and service IDs as values
-        $types = array();
+        $types = [];
 
         foreach ($container->findTaggedServiceIds('form.type') as $serviceId => $tag) {
             $serviceDefinition = $container->getDefinition($serviceId);
@@ -61,7 +61,7 @@ class FormPass implements CompilerPassInterface
 
         $definition->replaceArgument(1, $types);
 
-        $typeExtensions = array();
+        $typeExtensions = [];
 
         foreach ($container->findTaggedServiceIds('form.type_extension') as $serviceId => $tag) {
             $serviceDefinition = $container->getDefinition($serviceId);

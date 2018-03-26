@@ -30,20 +30,11 @@ use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backend_ExtJs
 {
-    protected function addAclPermission($action, $privilege, $errorMessage = '')
-    {
-        $this->addAclPermission("create", "update", "Insufficient Permissions");
-        $this->addAclPermission("update", "update", "Insufficient Permissions");
-        $this->addAclPermission("delete", "update", "Insufficient Permissions");
-        $this->addAclPermission("generateModels", "update", "Insufficient Permissions");
-        $this->addAclPermission("resetData", "update", "Insufficient Permissions");
-    }
-
     public function getTablesAction()
     {
         /** @var TableMapping $mapping */
@@ -64,7 +55,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_values($mapping->getTypes())
+            'data' => array_values($mapping->getTypes()),
         ]);
     }
 
@@ -75,7 +66,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
         $this->View()->assign([
             'success' => true,
-            'data' => $mapping->getEntities()
+            'data' => $mapping->getEntities(),
         ]);
     }
 
@@ -85,7 +76,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         $column = $this->Request()->getParam('columnName');
 
         if (!$table || !$column) {
-            throw new Exception("Required parameter not found");
+            throw new Exception('Required parameter not found');
         }
 
         /** @var SchemaOperator $schemaOperator */
@@ -95,6 +86,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             $schemaOperator->resetColumn($table, $column);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
         $this->View()->assign('success', true);
@@ -113,6 +105,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
@@ -136,6 +129,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
@@ -154,6 +148,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
@@ -179,6 +174,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
@@ -194,11 +190,13 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
         if (!$mapping->isAttributeTable($table) || !$table) {
             $this->View()->assign(['success' => false, 'message' => 'Table not supported']);
+
             return;
         }
 
         if (!$model = $mapping->getTableModel($table)) {
             $this->View()->assign(['success' => false, 'message' => 'Table has no model']);
+
             return;
         }
 
@@ -208,6 +206,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             $entityManager->generateAttributeModels([$table]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
@@ -234,7 +233,16 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
         $this->View()->assign([
             'exists' => ($table !== null),
-            'table' => $table
+            'table' => $table,
         ]);
+    }
+
+    protected function addAclPermission($action, $privilege, $errorMessage = '')
+    {
+        $this->addAclPermission('create', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('update', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('delete', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('generateModels', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('resetData', 'update', 'Insufficient Permissions');
     }
 }

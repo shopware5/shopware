@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Sorting
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SimpleSorting extends Sorting
@@ -54,7 +54,7 @@ class SimpleSorting extends Sorting
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {

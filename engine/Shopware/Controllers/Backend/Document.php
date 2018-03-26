@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -30,13 +31,12 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
 {
     /**
      * Generate pdf invoice
-     * @access public
      */
     public function indexAction()
     {
         $id = $this->Request()->id;
         $netto = $this->Request()->ust_free;
-        if ($netto == "false") {
+        if ($netto == 'false') {
             $netto = false;
         }
         $typ = $this->Request()->typ;
@@ -48,20 +48,20 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
         $document = Shopware_Components_Document::initDocument(
             $id,
             $typ,
-            array(
-                "netto" => $netto,
-                "bid" => $bid,
-                "voucher" => $voucher,
-                "date" => $date,
-                "delivery_date" => $delivery_date,
-                "shippingCostsAsPosition"=>true,
-                "_renderer"=>"pdf",
-                "_preview" => $this->Request()->preview,
-                "_previewForcePagebreak" => $this->Request()->pagebreak,
-                "_previewSample" => $this->Request()->sampleData,
-                "docComment" => utf8_decode($this->Request()->docComment),
-                "forceTaxCheck" => $this->Request()->forceTaxCheck
-            )
+            [
+                'netto' => $netto,
+                'bid' => $bid,
+                'voucher' => $voucher,
+                'date' => $date,
+                'delivery_date' => $delivery_date,
+                'shippingCostsAsPosition' => true,
+                '_renderer' => 'pdf',
+                '_preview' => $this->Request()->preview,
+                '_previewForcePagebreak' => $this->Request()->pagebreak,
+                '_previewSample' => $this->Request()->sampleData,
+                'docComment' => utf8_decode($this->Request()->docComment),
+                'forceTaxCheck' => $this->Request()->forceTaxCheck,
+            ]
         );
 
         $document->render();
@@ -77,19 +77,19 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
 
         // Update statement
         $getDocumentTypes = Shopware()->Db()->fetchAll(
-            "SELECT DISTINCT id FROM s_core_documents WHERE id != ?",
-            array($id)
+            'SELECT DISTINCT id FROM s_core_documents WHERE id != ?',
+            [$id]
         );
         foreach ($getDocumentTypes as $targetID) {
             $deleteOldRows = Shopware()->Db()->query(
-                "DELETE FROM s_core_documents_box WHERE documentID = ?",
-                array($targetID["id"])
+                'DELETE FROM s_core_documents_box WHERE documentID = ?',
+                [$targetID['id']]
             );
-            $sqlDuplicate = "INSERT IGNORE INTO s_core_documents_box
+            $sqlDuplicate = 'INSERT IGNORE INTO s_core_documents_box
                 SELECT NULL AS id, ? AS documentID , name, style, value
                 FROM s_core_documents_box WHERE `documentID` = ?;
-            ";
-            Shopware()->Db()->query($sqlDuplicate, array($targetID["id"], $id));
+            ';
+            Shopware()->Db()->query($sqlDuplicate, [$targetID['id'], $id]);
         }
     }
 
@@ -101,7 +101,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
     public function getWhitelistedCSRFActions()
     {
         return [
-            'index'
+            'index',
         ];
     }
 }

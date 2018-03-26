@@ -1,23 +1,45 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace  Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
-use Shopware\Tests\Mink\Element\CheckoutModalAddressEditor;
-use Shopware\Tests\Mink\Element\CheckoutPayment;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Element\CheckoutPayment;
 use Shopware\Tests\Mink\Helper;
 
 class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
-     * @var string $path
+     * @var string
      */
     protected $path = '/checkout/confirm';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -43,7 +65,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -78,6 +100,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Returns the order number from finish page
+     *
      * @return int
      */
     public function getOrderNumber()
@@ -103,6 +126,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the payment method
+     *
      * @param array $data
      */
     public function changePaymentMethod(array $data = [])
@@ -113,6 +137,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the billing address
+     *
      * @param array $data
      */
     public function changeBillingAddress(array $data = [])
@@ -127,6 +152,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the shipping address
+     *
      * @param array $data
      */
     public function changeShippingAddress(array $data = [])
@@ -141,6 +167,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the shipping method
+     *
      * @param array $data
      */
     public function changeShippingMethod(array $data = [])
@@ -154,7 +181,9 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Checks the name of the current payment method
+     *
      * @param string $paymentMethod
+     *
      * @throws \Exception
      */
     public function checkPaymentMethod($paymentMethod)
@@ -163,7 +192,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
         $element = $this->getElement('CheckoutPayment');
 
         $properties = [
-            'paymentMethod' => $paymentMethod
+            'paymentMethod' => $paymentMethod,
         ];
 
         $result = Helper::assertElementProperties($element, $properties);
@@ -183,6 +212,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Creates a new address and saves it
+     *
      * @param $values
      */
     public function createArbitraryAddress($values)
@@ -194,6 +224,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the values in a modal address form and saves the form
+     *
      * @param $values
      */
     public function changeModalAddress($values)

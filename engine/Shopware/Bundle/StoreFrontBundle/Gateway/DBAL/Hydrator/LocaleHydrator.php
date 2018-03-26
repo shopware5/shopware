@@ -31,10 +31,11 @@ class LocaleHydrator extends Hydrator
     public function hydrate($data)
     {
         $locale = new Locale();
-        $locale->setId((int)$data['__locale_id']);
+        $locale->setId((int) $data['__locale_id']);
         $locale->setLocale($data['__locale_locale']);
         $locale->setLanguage($data['__locale_language']);
         $locale->setTerritory($data['__locale_territory']);
+
         return $locale;
     }
 }

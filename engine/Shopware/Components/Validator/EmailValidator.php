@@ -28,7 +28,7 @@ namespace Shopware\Components\Validator;
  * The Validator\EmailValidator class is used to validate emails addresses consistently across the system
  *
  * @category  Shopware
- * @package   Shopware\Components\Validator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EmailValidator implements EmailValidatorInterface
@@ -40,6 +40,6 @@ class EmailValidator implements EmailValidatorInterface
     {
         // Inspired by the regex used in symfony/validator
         // See: https://github.com/symfony/validator/blob/dae70b74fe173461395cfd61a5c5245e05e511f5/Constraints/EmailValidator.php#L72
-        return (boolean)preg_match('/^\S+\@\S+\.\S+$/', $emailAddress);
+        return (bool) preg_match('/^\S+\@\S+\.\S+$/', $emailAddress);
     }
 }

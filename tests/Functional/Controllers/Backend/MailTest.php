@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Test_Controller_TestCase
@@ -32,15 +32,15 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
     /**
      * @var array
      */
-    public $testData = array(
-        'name'        => 'Testmail123',
-        'fromMail'    => 'Shopware Demoshop',
-        'fromName'    => 'info@example.com',
-        'subject'     => 'Test Email Subject',
-        'content'     => 'Plaintext Content Example',
+    public $testData = [
+        'name' => 'Testmail123',
+        'fromMail' => 'Shopware Demoshop',
+        'fromName' => 'info@example.com',
+        'subject' => 'Test Email Subject',
+        'content' => 'Plaintext Content Example',
         'contentHtml' => 'HTML Context Example',
-        'isHtml'      => true
-    );
+        'isHtml' => true,
+    ];
 
     /**
      * Standard set up for every test - just disable auth
@@ -88,7 +88,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $this->Request()->setMethod('GET');
 
         $response = $this->dispatch('/backend/mail/getMails?&node=NaN&id=' . $id);
-        $body     = $response->getBody();
+        $body = $response->getBody();
         $jsonBody = Zend_Json::decode($body);
 
         $this->assertArrayHasKey('data', $jsonBody);
@@ -113,9 +113,9 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
      */
     public function testUpdateMail($id)
     {
-        $updateTestData = array(
-            'subject' => 'foobar'
-        );
+        $updateTestData = [
+            'subject' => 'foobar',
+        ];
 
         $this->Request()->setMethod('POST')->setPost($updateTestData);
         $response = $this->dispatch('/backend/mail/updateMail?id=' . $id);
@@ -145,7 +145,6 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $this->assertArrayHasKey('success', $jsonBody);
         $this->assertTrue($jsonBody['success']);
     }
-
 
     public function testGetAttachmentsShouldBeSuccessful()
     {

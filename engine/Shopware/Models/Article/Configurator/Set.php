@@ -24,10 +24,9 @@
 
 namespace Shopware\Models\Article\Configurator;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
@@ -35,34 +34,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Set extends ModelEntity
 {
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var integer $public
-     * @ORM\Column(name="public", type="boolean", nullable=false)
-     */
-    private $public = false;
-
-    /**
-     * @var integer $type
-     * @ORM\Column(name="type", type="integer", nullable=false)
-     */
-    private $type = 0;
-
-
     /**
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Group", inversedBy="sets", cascade={"persist"})
@@ -91,9 +62,9 @@ class Set extends ModelEntity
      */
     protected $options;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="configuratorSet")
+     *
      * @var ArrayCollection
      */
     protected $articles;
@@ -109,6 +80,32 @@ class Set extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceVariation", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
      */
     protected $priceVariations;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var int
+     * @ORM\Column(name="public", type="boolean", nullable=false)
+     */
+    private $public = false;
+
+    /**
+     * @var int
+     * @ORM\Column(name="type", type="integer", nullable=false)
+     */
+    private $type = 0;
 
     /**
      * Class constructor, initials the array collections for the associations.
@@ -172,11 +169,13 @@ class Set extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $groups
+     *
      * @return \Shopware\Models\Article\Configurator\Set
      */
     public function setGroups($groups)
     {
         $this->setOneToMany($groups, '\Shopware\Models\Article\Configurator\Group', 'groups');
+
         return $this;
     }
 
@@ -222,11 +221,13 @@ class Set extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $options
+     *
      * @return \Shopware\Models\Article\Configurator\Set
      */
     public function setOptions($options)
     {
         $this->setOneToMany($options, '\Shopware\Models\Article\Configurator\Option', 'options');
+
         return $this;
     }
 

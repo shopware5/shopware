@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\License\Service\Exceptions;
 
 class LicenseProductKeyException extends \RuntimeException

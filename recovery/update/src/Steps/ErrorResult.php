@@ -48,9 +48,9 @@ class ErrorResult
      */
     public function __construct($message, \Exception $exception = null, $args = [])
     {
-        $this->message   = $message;
+        $this->message = $message;
         $this->exception = $exception;
-        $this->args      = $args;
+        $this->args = $args;
     }
 
     /**

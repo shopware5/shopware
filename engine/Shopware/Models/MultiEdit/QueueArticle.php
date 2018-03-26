@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware SwagMultiEdit Plugin - QueueArticle Model
  *
  * @category  Shopware
- * @package   Shopware\Plugins\SwagMultiEdit\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -40,9 +40,24 @@ use Shopware\Components\Model\ModelEntity;
 class QueueArticle extends ModelEntity
 {
     /**
+     * OWNING SIDE
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
+     * @ORM\JoinColumn(name="detail_id", referencedColumnName="id")
+     */
+    protected $detail;
+
+    /**
+     * OWNING SIDE
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\MultiEdit\Queue", inversedBy="articleDetails")
+     * @ORM\JoinColumn(name="queue_id", referencedColumnName="id")
+     */
+    protected $queue;
+    /**
      * Unique identifier
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -51,32 +66,18 @@ class QueueArticle extends ModelEntity
     private $id;
 
     /**
-     * @var integer $detailId
+     * @var int
      *
      * @ORM\Column(name="detail_id", type="integer", nullable=false)
      */
     private $detailId;
 
     /**
-     * @var integer $queueId
+     * @var int
      *
      * @ORM\Column(name="queue_id", type="integer", nullable=false)
      */
     private $queueId;
-
-    /**
-     * OWNING SIDE
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
-     * @ORM\JoinColumn(name="detail_id", referencedColumnName="id")
-     */
-    protected $detail;
-
-    /**
-     * OWNING SIDE
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\MultiEdit\Queue", inversedBy="articleDetails")
-     * @ORM\JoinColumn(name="queue_id", referencedColumnName="id")
-     */
-    protected $queue;
 
     /**
      * @param mixed $detail

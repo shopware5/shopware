@@ -21,18 +21,19 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Form\Field;
 
 use Shopware\Components\Form\Field;
 
 /**
  * Class Boolean
- * @package Shopware\Components\Form\Field
  */
 class Boolean extends Field
 {
     /**
      * Requires to set a name for the field
+     *
      * @param $name
      */
     public function __construct($name)

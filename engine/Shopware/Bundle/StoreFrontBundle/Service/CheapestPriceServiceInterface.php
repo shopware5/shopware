@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface CheapestPriceServiceInterface
@@ -36,8 +36,9 @@ interface CheapestPriceServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceServiceInterface::get()
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\ListProduct[]           $products
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\Product\PriceRule[] Indexed by product number
      */
     public function getList($products, Struct\ProductContextInterface $context);
@@ -53,8 +54,9 @@ interface CheapestPriceServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\ListProduct             $product
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\Product\PriceRule
      */
     public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);

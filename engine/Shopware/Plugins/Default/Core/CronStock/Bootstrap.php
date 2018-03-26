@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- */
 class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -32,6 +30,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
             'Shopware_CronJob_ArticleStock',
             'onRun'
         );
+
         return true;
     }
 
@@ -96,10 +95,10 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         AND stockmin > instock
         ';
         $articles = Shopware()->Db()->fetchAssoc($sql);
-        $data = array(
+        $data = [
             'count' => count($articles),
             'numbers' => array_keys($articles),
-        );
+        ];
 
         if (empty($articles)) {
             return $data;
@@ -107,12 +106,12 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
 
         $job = $args->getJob();
 
-        $context = array(
+        $context = [
             'sData' => $data,
-            'sJob' => array(
-                'articles' => $articles
-            )
-        );
+            'sJob' => [
+                'articles' => $articles,
+            ],
+        ];
 
         $mail = Shopware()->TemplateMail()->createMail(
             $job->get('inform_template'), $context

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
@@ -6,19 +28,6 @@ use Shopware\Models\Article\Detail;
 
 class TranslationTest extends TestCase
 {
-    protected function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop(2);
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     public function testListProductTranslation()
     {
         $number = 'Translation-Test';
@@ -69,7 +78,6 @@ class TranslationTest extends TestCase
         $this->assertEquals('Dummy Translation', $manufacturer->getMetaDescription());
     }
 
-
     public function testUnitTranslation()
     {
         $number = 'Unit-Translation';
@@ -82,7 +90,7 @@ class TranslationTest extends TestCase
             $this->helper->getConfigurator(
                 $context->getCurrentCustomerGroup(),
                 $number,
-                array('Farbe' => array('rot', 'gelb'))
+                ['Farbe' => ['rot', 'gelb']]
             )
         );
 
@@ -91,13 +99,13 @@ class TranslationTest extends TestCase
             $context->getCurrentCustomerGroup()->getKey(),
             -40
         );
-        $variant['unit'] = array('name'  => 'Test-Unit-Variant', 'unit' => 'ABC');
+        $variant['unit'] = ['name' => 'Test-Unit-Variant', 'unit' => 'ABC'];
         $product['variants'][1] = $variant;
 
         $article = $this->helper->createArticle($product);
 
         $unit = null;
-        /**@var $detail Detail*/
+        /** @var $detail Detail */
         foreach ($article->getDetails() as $detail) {
             if ($variant['number'] === $detail->getNumber()) {
                 $unit = $detail->getUnit();
@@ -105,18 +113,18 @@ class TranslationTest extends TestCase
             }
         }
 
-        $data = array(
-            $unit->getId() => array(
+        $data = [
+            $unit->getId() => [
                 'unit' => 'Dummy Translation 2',
-                'description' => 'Dummy Translation 2'
-            )
-        );
+                'description' => 'Dummy Translation 2',
+            ],
+        ];
 
         $this->helper->createUnitTranslations(
-            array(
+            [
                 $article->getMainDetail()->getUnit()->getId(),
-                $unit->getId()
-            ),
+                $unit->getId(),
+            ],
             $context->getShop()->getId(),
             $data
         );
@@ -166,7 +174,6 @@ class TranslationTest extends TestCase
         }
     }
 
-
     public function testConfiguratorTranslation()
     {
         $number = 'Configurator-Translation';
@@ -177,10 +184,10 @@ class TranslationTest extends TestCase
         $configurator = $this->helper->getConfigurator(
             $context->getCurrentCustomerGroup(),
             $number,
-            array(
-                'Farbe' => array('rot', 'gelb'),
-                'Größe' => array('L', 'M')
-            )
+            [
+                'Farbe' => ['rot', 'gelb'],
+                'Größe' => ['L', 'M'],
+            ]
         );
 
         $product = array_merge($product, $configurator);
@@ -211,5 +218,18 @@ class TranslationTest extends TestCase
                 $this->assertEquals($expected, $option->getName());
             }
         }
+    }
+
+    protected function getContext()
+    {
+        $tax = $this->helper->createTax();
+        $customerGroup = $this->helper->createCustomerGroup();
+        $shop = $this->helper->getShop(2);
+
+        return $this->helper->createContext(
+            $customerGroup,
+            $shop,
+            [$tax]
+        );
     }
 }

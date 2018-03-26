@@ -24,199 +24,20 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles_details")
  */
 class Detail extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer $articleId
-     *
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
-     */
-    private $articleId;
-
-    /**
-     * @var integer $unitId
-     *
-     * @ORM\Column(name="unitID", type="integer", nullable=true)
-     */
-    private $unitId = null;
-
-    /**
-     * @var string $number
-     * @Assert\NotBlank
-     * @Assert\Regex("/^[a-zA-Z0-9-_.]+$/")
-     *
-     * @ORM\Column(name="ordernumber", type="string", nullable=false, unique = true)
-     */
-    private $number = '';
-
-    /**
-     * @var string $supplierNumber
-     *
-     * @ORM\Column(name="suppliernumber", type="string", nullable=true)
-     */
-    private $supplierNumber = null;
-
-    /**
-     * @var integer $kind
-     *
-     * @ORM\Column(name="kind", type="integer", nullable=false)
-     */
-    private $kind = 2;
-
-    /**
-     * @var string $additionalText
-     *
-     * @ORM\Column(name="additionaltext", type="string", nullable=true)
-     */
-    private $additionalText = null;
-
-    /**
-     * @var integer $active
-     *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active = false;
-
-    /**
-     * @var integer $inStock
-     *
-     * @ORM\Column(name="instock", type="integer", nullable=true)
-     */
-    private $inStock = 0;
-
-    /**
-     * @var integer $stockMin
-     *
-     * @ORM\Column(name="stockmin", type="integer", nullable=true)
-     */
-    private $stockMin = null;
-
-    /**
-     * @var float $weight
-     *
-     * @ORM\Column(name="weight", type="decimal", nullable=true, precision=3)
-     */
-    private $weight = null;
-
-    /**
-     * @var float $weight
-     *
-     * @ORM\Column(name="width", type="decimal", nullable=true, precision=3)
-     */
-    private $width = null;
-
-    /**
-     * @var float $len
-     * @ORM\Column(name="length", type="decimal", nullable=true, precision=3)
-     */
-    private $len = null;
-
-    /**
-     * @var float $height
-     * @ORM\Column(name="height", type="decimal", nullable=true, precision=3)
-     */
-    private $height = null;
-
-    /**
-     * @var float ean
-     * @ORM\Column(name="ean", type="string", nullable=true)
-     */
-    private $ean = null;
-
-    /**
-     * @var float $purchasePrice
-     *
-     * @ORM\Column(name="purchaseprice", type="decimal", nullable=false)
-     */
-    private $purchasePrice = 0;
-
-    /**
-     * @var integer $position
-     * @ORM\Column(name="position", type="integer", nullable=false)
-     */
-    private $position = 0;
-
-    /**
-     * @var integer $minPurchase
-     * @ORM\Column(name="minpurchase", type="integer", nullable=false)
-     */
-    private $minPurchase = 1;
-
-    /**
-     * @var integer $purchaseSteps
-     * @ORM\Column(name="purchasesteps", type="integer", nullable=true)
-     */
-    private $purchaseSteps = null;
-
-    /**
-     * @var integer $maxPurchase
-     * @ORM\Column(name="maxpurchase", type="integer", nullable=true)
-     */
-    private $maxPurchase = null;
-
-    /**
-     * @var float $purchaseUnit
-     *
-     * @ORM\Column(name="purchaseunit", type="decimal", nullable=true)
-     */
-    private $purchaseUnit = null;
-
-    /**
-     * @var float $referenceUnit
-     *
-     * @ORM\Column(name="referenceunit", type="decimal", nullable=true)
-     */
-    private $referenceUnit = null;
-
-    /**
-     * @var string $packUnit
-     *
-     * @ORM\Column(name="packunit", type="text", nullable=true)
-     */
-    private $packUnit = null;
-
-    /**
-     * @var integer $shippingFree
-     *
-     * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
-     */
-    private $shippingFree = false;
-
-    /**
-     * @var \DateTime $releaseDate
-     *
-     * @ORM\Column(name="releasedate", type="date", nullable=true)
-     */
-    private $releaseDate = null;
-
-    /**
-     * @var string $shippingTime
-     *
-     * @ORM\Column(name="shippingtime", type="string", length=11, nullable=true)
-     */
-    private $shippingTime = null;
-
-    /**
      * OWNING SIDE
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="details")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      * @ORM\OrderBy({"position" = "ASC"})
@@ -225,21 +46,26 @@ class Detail extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Price", mappedBy="detail", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $prices;
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\Article
      */
     protected $attribute;
 
     /**
      * OWNING SIDE
-     * @var \Shopware\Models\Article\Unit $unit
+     *
+     * @var \Shopware\Models\Article\Unit
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Unit", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="unitID", referencedColumnName="id")
@@ -258,6 +84,7 @@ class Detail extends ModelEntity
      *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
      *      }
      * )
+     *
      * @var ArrayCollection
      */
     protected $configuratorOptions;
@@ -266,6 +93,7 @@ class Detail extends ModelEntity
      * INVERSE SIDE
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Esd", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Shopware\Models\Article\Esd
      */
     protected $esd;
@@ -274,17 +102,197 @@ class Detail extends ModelEntity
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Notification", mappedBy="articleDetail")
+     *
      * @var ArrayCollection
      */
     protected $notifications;
 
     /**
      * INVERSE SIDE
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $images;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     */
+    private $articleId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="unitID", type="integer", nullable=true)
+     */
+    private $unitId = null;
+
+    /**
+     * @var string
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[a-zA-Z0-9-_.]+$/")
+     *
+     * @ORM\Column(name="ordernumber", type="string", nullable=false, unique = true)
+     */
+    private $number = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="suppliernumber", type="string", nullable=true)
+     */
+    private $supplierNumber = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="kind", type="integer", nullable=false)
+     */
+    private $kind = 2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="additionaltext", type="string", nullable=true)
+     */
+    private $additionalText = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="instock", type="integer", nullable=true)
+     */
+    private $inStock = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="stockmin", type="integer", nullable=true)
+     */
+    private $stockMin = null;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="weight", type="decimal", nullable=true, precision=3)
+     */
+    private $weight = null;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="width", type="decimal", nullable=true, precision=3)
+     */
+    private $width = null;
+
+    /**
+     * @var float
+     * @ORM\Column(name="length", type="decimal", nullable=true, precision=3)
+     */
+    private $len = null;
+
+    /**
+     * @var float
+     * @ORM\Column(name="height", type="decimal", nullable=true, precision=3)
+     */
+    private $height = null;
+
+    /**
+     * @var float ean
+     * @ORM\Column(name="ean", type="string", nullable=true)
+     */
+    private $ean = null;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="purchaseprice", type="decimal", nullable=false)
+     */
+    private $purchasePrice = 0;
+
+    /**
+     * @var int
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position = 0;
+
+    /**
+     * @var int
+     * @ORM\Column(name="minpurchase", type="integer", nullable=false)
+     */
+    private $minPurchase = 1;
+
+    /**
+     * @var int
+     * @ORM\Column(name="purchasesteps", type="integer", nullable=true)
+     */
+    private $purchaseSteps = null;
+
+    /**
+     * @var int
+     * @ORM\Column(name="maxpurchase", type="integer", nullable=true)
+     */
+    private $maxPurchase = null;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="purchaseunit", type="decimal", nullable=true)
+     */
+    private $purchaseUnit = null;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="referenceunit", type="decimal", nullable=true)
+     */
+    private $referenceUnit = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="packunit", type="text", nullable=true)
+     */
+    private $packUnit = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
+     */
+    private $shippingFree = false;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="releasedate", type="date", nullable=true)
+     */
+    private $releaseDate = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shippingtime", type="string", length=11, nullable=true)
+     */
+    private $shippingTime = null;
 
     /**
      * Class constructor. Initials the array collections.
@@ -300,7 +308,7 @@ class Detail extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -311,11 +319,13 @@ class Detail extends ModelEntity
      * Set number
      *
      * @param string $number
+     *
      * @return Detail
      */
     public function setNumber($number)
     {
         $this->number = $number;
+
         return $this;
     }
 
@@ -333,11 +343,13 @@ class Detail extends ModelEntity
      * Set supplierNumber
      *
      * @param string $supplierNumber
+     *
      * @return Detail
      */
     public function setSupplierNumber($supplierNumber)
     {
         $this->supplierNumber = $supplierNumber;
+
         return $this;
     }
 
@@ -354,21 +366,21 @@ class Detail extends ModelEntity
     /**
      * Set kind
      *
-     * @access private
      * @param $kind
+     *
      * @return Detail
      */
     public function setKind($kind)
     {
         $this->kind = $kind;
+
         return $this;
     }
 
     /**
      * Get kind
      *
-     * @access private
-     * @return integer
+     * @return int
      */
     public function getKind()
     {
@@ -379,11 +391,13 @@ class Detail extends ModelEntity
      * Set additionalText
      *
      * @param string $additionalText
+     *
      * @return Detail
      */
     public function setAdditionalText($additionalText)
     {
         $this->additionalText = $additionalText;
+
         return $this;
     }
 
@@ -400,19 +414,21 @@ class Detail extends ModelEntity
     /**
      * Set active
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return \Shopware\Models\Article\Detail
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -422,19 +438,21 @@ class Detail extends ModelEntity
     /**
      * Set inStock
      *
-     * @param integer $inStock
+     * @param int $inStock
+     *
      * @return \Shopware\Models\Article\Detail
      */
     public function setInStock($inStock)
     {
         $this->inStock = $inStock;
+
         return $this;
     }
 
     /**
      * Get inStock
      *
-     * @return integer
+     * @return int
      */
     public function getInStock()
     {
@@ -444,19 +462,21 @@ class Detail extends ModelEntity
     /**
      * Set stockMin
      *
-     * @param integer $stockMin
+     * @param int $stockMin
+     *
      * @return Detail
      */
     public function setStockMin($stockMin)
     {
         $this->stockMin = $stockMin;
+
         return $this;
     }
 
     /**
      * Get stockMin
      *
-     * @return integer
+     * @return int
      */
     public function getStockMin()
     {
@@ -467,11 +487,13 @@ class Detail extends ModelEntity
      * Set weight
      *
      * @param float $weight
+     *
      * @return Detail
      */
     public function setWeight($weight)
     {
         $this->weight = $weight;
+
         return $this;
     }
 
@@ -488,19 +510,21 @@ class Detail extends ModelEntity
     /**
      * Set position
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Detail
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -508,7 +532,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getArticleId()
     {
@@ -525,11 +549,13 @@ class Detail extends ModelEntity
 
     /**
      * @param Article $article
+     *
      * @return Detail
      */
     public function setArticle(Article $article)
     {
         $this->article = $article;
+
         return $this;
     }
 
@@ -543,6 +569,7 @@ class Detail extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Article|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Article
      */
     public function setAttribute($attribute)
@@ -560,6 +587,7 @@ class Detail extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $prices
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setPrices($prices)
@@ -635,11 +663,13 @@ class Detail extends ModelEntity
      * Set purchase price
      *
      * @param float $purchasePrice
+     *
      * @return Article
      */
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+
         return $this;
     }
 
@@ -657,11 +687,13 @@ class Detail extends ModelEntity
      * Set shipping time
      *
      * @param string $shippingTime
+     *
      * @return Article
      */
     public function setShippingTime($shippingTime)
     {
         $this->shippingTime = $shippingTime;
+
         return $this;
     }
 
@@ -678,19 +710,21 @@ class Detail extends ModelEntity
     /**
      * Set shippingFree
      *
-     * @param integer $shippingFree
+     * @param int $shippingFree
+     *
      * @return Article
      */
     public function setShippingFree($shippingFree)
     {
         $this->shippingFree = $shippingFree;
+
         return $this;
     }
 
     /**
      * Get shippingFree
      *
-     * @return integer
+     * @return int
      */
     public function getShippingFree()
     {
@@ -701,6 +735,7 @@ class Detail extends ModelEntity
      * Set releaseDate
      *
      * @param \DateTime|string|null $releaseDate
+     *
      * @return Article
      */
     public function setReleaseDate($releaseDate = null)
@@ -710,6 +745,7 @@ class Detail extends ModelEntity
         } else {
             $this->releaseDate = $releaseDate;
         }
+
         return $this;
     }
 
@@ -726,7 +762,8 @@ class Detail extends ModelEntity
     /**
      * Set minPurchase
      *
-     * @param integer $minPurchase
+     * @param int $minPurchase
+     *
      * @return Article
      */
     public function setMinPurchase($minPurchase)
@@ -736,13 +773,14 @@ class Detail extends ModelEntity
         }
 
         $this->minPurchase = $minPurchase;
+
         return $this;
     }
 
     /**
      * Get minPurchase
      *
-     * @return integer
+     * @return int
      */
     public function getMinPurchase()
     {
@@ -752,19 +790,21 @@ class Detail extends ModelEntity
     /**
      * Set purchaseSteps
      *
-     * @param integer $purchaseSteps
+     * @param int $purchaseSteps
+     *
      * @return Article
      */
     public function setPurchaseSteps($purchaseSteps)
     {
         $this->purchaseSteps = $purchaseSteps;
+
         return $this;
     }
 
     /**
      * Get purchaseSteps
      *
-     * @return integer
+     * @return int
      */
     public function getPurchaseSteps()
     {
@@ -774,19 +814,21 @@ class Detail extends ModelEntity
     /**
      * Set maxPurchase
      *
-     * @param integer $maxPurchase
+     * @param int $maxPurchase
+     *
      * @return Article
      */
     public function setMaxPurchase($maxPurchase)
     {
         $this->maxPurchase = $maxPurchase;
+
         return $this;
     }
 
     /**
      * Get maxPurchase
      *
-     * @return integer
+     * @return int
      */
     public function getMaxPurchase()
     {
@@ -797,11 +839,13 @@ class Detail extends ModelEntity
      * Set purchaseUnit
      *
      * @param float $purchaseUnit
+     *
      * @return Article
      */
     public function setPurchaseUnit($purchaseUnit)
     {
         $this->purchaseUnit = $purchaseUnit;
+
         return $this;
     }
 
@@ -819,11 +863,13 @@ class Detail extends ModelEntity
      * Set referenceUnit
      *
      * @param float $referenceUnit
+     *
      * @return Article
      */
     public function setReferenceUnit($referenceUnit)
     {
         $this->referenceUnit = $referenceUnit;
+
         return $this;
     }
 
@@ -841,11 +887,13 @@ class Detail extends ModelEntity
      * Set packUnit
      *
      * @param string $packUnit
+     *
      * @return Article
      */
     public function setPackUnit($packUnit)
     {
         $this->packUnit = $packUnit;
+
         return $this;
     }
 
@@ -859,10 +907,10 @@ class Detail extends ModelEntity
         return $this->packUnit;
     }
 
-
     /**
      * OWNING SIDE
      * of the association between articles and unit
+     *
      * @return \Shopware\Models\Article\Unit
      */
     public function getUnit()
@@ -872,6 +920,7 @@ class Detail extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Unit|array|null $unit
+     *
      * @return \Shopware\Models\Article\Article
      */
     public function setUnit($unit)
@@ -921,6 +970,7 @@ class Detail extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $images
+     *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setImages($images)

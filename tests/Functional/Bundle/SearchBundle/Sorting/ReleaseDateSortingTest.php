@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
@@ -9,6 +31,25 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class ReleaseDateSortingTest extends TestCase
 {
+    public function testReleaseDateSorting()
+    {
+        $sorting = new ReleaseDateSorting();
+
+        $this->search(
+            [
+                'first' => '2014-01-01',
+                'second' => '2013-04-03',
+                'third' => '2014-12-12',
+                'fourth' => '2012-01-03',
+            ],
+            ['fourth', 'second', 'first', 'third'],
+            null,
+            [],
+            [],
+            [$sorting]
+        );
+    }
+
     protected function getProduct(
         $number,
         ShopContext $context,
@@ -22,32 +63,13 @@ class ReleaseDateSortingTest extends TestCase
         return $product;
     }
 
-    public function testReleaseDateSorting()
-    {
-        $sorting = new ReleaseDateSorting();
-
-        $this->search(
-            array(
-                'first'  => '2014-01-01',
-                'second' => '2013-04-03',
-                'third'  => '2014-12-12',
-                'fourth' => '2012-01-03'
-            ),
-            array('fourth', 'second', 'first', 'third'),
-            null,
-            array(),
-            array(),
-            array($sorting)
-        );
-    }
-
     protected function search(
         $products,
         $expectedNumbers,
         $category = null,
-        $conditions = array(),
-        $facets = array(),
-        $sortings = array(),
+        $conditions = [],
+        $facets = [],
+        $sortings = [],
         $context = null,
         array $configs = []
     ) {

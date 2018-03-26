@@ -29,6 +29,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ContainerAwareEventManager extends \Enlight_Event_EventManager
 {
     /**
+     * @var array Contains all registered event listeners. A listener can be registered by the
+     *            registerListener(Enlight_Event_Handler $handler) function.
+     */
+    protected $containerListeners = [];
+    /**
      * @var ContainerInterface;
      */
     private $container;
@@ -37,12 +42,6 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      * @var array
      */
     private $listenerIds = [];
-
-    /**
-     * @var array Contains all registered event listeners. A listener can be registered by the
-     * registerListener(Enlight_Event_Handler $handler) function.
-     */
-    protected $containerListeners = [];
 
     /**
      * @param ContainerInterface $container
@@ -71,7 +70,7 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
         }
 
         $eventName = strtolower($eventName);
-        $this->listenerIds[$eventName][] = array($callback[0], $callback[1], $priority);
+        $this->listenerIds[$eventName][] = [$callback[0], $callback[1], $priority];
     }
 
     /**
@@ -86,9 +85,9 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
             $listener = $handler->getListener();
 
             foreach ($this->listenerIds[$eventName] as $i => list($serviceId, $method, $priority)) {
-                $key = $serviceId.'.'.$method;
+                $key = $serviceId . '.' . $method;
 
-                if (isset($this->containerListeners[$eventName][$key]) && $listener === array($this->containerListeners[$eventName][$key], $method)) {
+                if (isset($this->containerListeners[$eventName][$key]) && $listener === [$this->containerListeners[$eventName][$key], $method]) {
                     unset($this->containerListeners[$eventName][$key]);
                     if (empty($this->containerListeners[$eventName])) {
                         unset($this->containerListeners[$eventName]);
@@ -153,12 +152,12 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
             $eventName = strtolower($eventName);
 
             if (is_string($params)) {
-                $this->listenerIds[$eventName][] = array($serviceId, $params, 0);
+                $this->listenerIds[$eventName][] = [$serviceId, $params, 0];
             } elseif (is_string($params[0])) {
-                $this->listenerIds[$eventName][] = array($serviceId, $params[0], isset($params[1]) ? $params[1] : 0);
+                $this->listenerIds[$eventName][] = [$serviceId, $params[0], isset($params[1]) ? $params[1] : 0];
             } else {
                 foreach ($params as $listener) {
-                    $this->listenerIds[$eventName][] = array($serviceId, $listener[0], isset($listener[1]) ? $listener[1] : 0);
+                    $this->listenerIds[$eventName][] = [$serviceId, $listener[0], isset($listener[1]) ? $listener[1] : 0];
                 }
             }
         }
@@ -181,17 +180,17 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
         foreach ($this->listenerIds[$eventName] as list($serviceId, $method, $priority)) {
             $listener = $this->container->get($serviceId);
 
-            $key = $serviceId.'.'.$method;
+            $key = $serviceId . '.' . $method;
             if (!isset($this->containerListeners[$eventName][$key])) {
-                $this->addListener($eventName, array($listener, $method), $priority);
+                $this->addListener($eventName, [$listener, $method], $priority);
             } elseif ($listener !== $this->containerListeners[$eventName][$key]) {
                 $handler = new \Enlight_Event_Handler_Default(
                     $eventName,
-                    array($this->containerListeners[$eventName][$key], $method)
+                    [$this->containerListeners[$eventName][$key], $method]
                 );
 
                 parent::removeListener($handler);
-                $this->addListener($eventName, array($listener, $method), $priority);
+                $this->addListener($eventName, [$listener, $method], $priority);
             }
 
             $this->containerListeners[$eventName][$key] = $listener;

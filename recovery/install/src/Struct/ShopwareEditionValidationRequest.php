@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Install\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopwareEditionValidationRequest
@@ -52,8 +52,9 @@ class ShopwareEditionValidationRequest
     }
 
     /**
-     * @param  ShopwareEdition $edition
-     * @param  string          $host
+     * @param ShopwareEdition $edition
+     * @param string          $host
+     *
      * @return static
      */
     public static function createFromShopwareEditionAndHost(ShopwareEdition $edition, $host)

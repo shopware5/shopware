@@ -29,7 +29,7 @@ use Shopware\Models\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class JavascriptCollector
@@ -45,7 +45,7 @@ class JavascriptCollector
     private $eventManager;
 
     /**
-     * @param Inheritance $inheritance
+     * @param Inheritance                 $inheritance
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
@@ -58,9 +58,11 @@ class JavascriptCollector
 
     /**
      * @param Shop\Template $template
-     * @param Shop\Shop $shop
-     * @return string[] returns array with absolute javascript files paths
+     * @param Shop\Shop     $shop
+     *
      * @throws \Exception
+     *
+     * @return string[] returns array with absolute javascript files paths
      */
     public function collectJavascriptFiles(Shop\Template $template, Shop\Shop $shop)
     {
@@ -83,7 +85,7 @@ class JavascriptCollector
             $files,
             [
                 'shop' => $shop,
-                'template' => $template
+                'template' => $template,
             ]
         );
 
@@ -92,6 +94,7 @@ class JavascriptCollector
 
     /**
      * @param $inheritance
+     *
      * @return string[]
      */
     private function collectInheritanceJavascript($inheritance)
@@ -108,11 +111,13 @@ class JavascriptCollector
     }
 
     /**
-     * @param Shop\Shop $shop
+     * @param Shop\Shop     $shop
      * @param Shop\Template $template
-     * @return string[]
+     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
+     *
+     * @return string[]
      */
     private function collectPluginJavascript(Shop\Shop $shop, Shop\Template $template)
     {

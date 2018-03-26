@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Components_Test_Controller_TestCase
@@ -39,13 +39,12 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        $sql= "INSERT IGNORE INTO `s_articles_notification` (`id`, `ordernumber`, `date`, `mail`, `send`, `language`, `shopLink`) VALUES
+        $sql = "INSERT IGNORE INTO `s_articles_notification` (`id`, `ordernumber`, `date`, `mail`, `send`, `language`, `shopLink`) VALUES
                 (1111111111, 'SW2001', '2010-10-04 10:46:56', 'test@example.de', 0, '1', 'http://example.com/'),
                 (1111111112, 'SW2003', '2010-10-05 10:46:55', 'test@example.com', 1, '1', 'http://example.com/'),
                 (1111111113, 'SW2001', '2010-10-04 10:46:54', 'test@example.org', 1, '1', 'http://example.com/');";
         Shopware()->Db()->query($sql);
     }
-
 
     /**
      * Cleaning up testData
@@ -53,10 +52,9 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
     protected function tearDown()
     {
         parent::tearDown();
-        $sql = "DELETE FROM s_articles_notification WHERE id IN (1111111111, 1111111112, 1111111113)";
+        $sql = 'DELETE FROM s_articles_notification WHERE id IN (1111111111, 1111111112, 1111111113)';
         Shopware()->Db()->query($sql);
     }
-
 
     /**
      * test getList controller action
@@ -71,9 +69,9 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
         $listingFirstEntry = $returnData[0];
 
         // cause of the DataSet you can assert fix values
-        $this->assertEquals(2, $listingFirstEntry["registered"]);
-        $this->assertEquals("SW2001", $listingFirstEntry["number"]);
-        $this->assertEquals(1, $listingFirstEntry["notNotified"]);
+        $this->assertEquals(2, $listingFirstEntry['registered']);
+        $this->assertEquals('SW2001', $listingFirstEntry['number']);
+        $this->assertEquals(1, $listingFirstEntry['notNotified']);
     }
 
     /**
@@ -81,7 +79,7 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
      */
     public function testGetCustomerList()
     {
-        $params["orderNumber"] = "SW2001";
+        $params['orderNumber'] = 'SW2001';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
         $this->assertTrue($this->View()->success);
@@ -92,13 +90,13 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
         $listingSecondEntry = $returnData[1];
 
         // cause of the DataSet you can assert fix values
-        $this->assertEquals("test@example.de", $listingFirstEntry["mail"]);
-        $this->assertEquals(0, $listingFirstEntry["notified"]);
+        $this->assertEquals('test@example.de', $listingFirstEntry['mail']);
+        $this->assertEquals(0, $listingFirstEntry['notified']);
 
-        $this->assertEquals("test@example.org", $listingSecondEntry["mail"]);
-        $this->assertEquals(1, $listingSecondEntry["notified"]);
+        $this->assertEquals('test@example.org', $listingSecondEntry['mail']);
+        $this->assertEquals(1, $listingSecondEntry['notified']);
 
-        $params["orderNumber"] = "SW2003";
+        $params['orderNumber'] = 'SW2003';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
         $this->assertTrue($this->View()->success);
@@ -106,8 +104,8 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
         $returnData = $this->View()->data;
 
         $this->assertCount(1, $returnData);
-        $this->assertEquals("test@example.com", $returnData[0]["mail"]);
-        $this->assertNotEmpty($returnData[0]["name"]);
-        $this->assertNotEmpty($returnData[0]["customerId"]);
+        $this->assertEquals('test@example.com', $returnData[0]['mail']);
+        $this->assertNotEmpty($returnData[0]['name']);
+        $this->assertNotEmpty($returnData[0]['customerId']);
     }
 }

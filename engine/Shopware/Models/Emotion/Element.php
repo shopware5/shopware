@@ -24,12 +24,12 @@
 
 namespace Shopware\Models\Emotion;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -38,78 +38,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Element extends ModelEntity
 {
     /**
-     * Unique identifier field of the element model.
-     *
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * Id of the associated \Shopware\Models\Emotion\Emotion model.
-     * The emotion contains all defined grid elements which defined
-     * over the emotion backend module.
-     *
-     * @var integer $emotionId
-     *
-     * @ORM\Column(name="emotionID", type="integer", nullable=false)
-     */
-    private $emotionId;
-
-    /**
-     * Id of the associated \Shopware\Models\Emotion\Library\Component model.
-     * The library component contains the data configuration for the grid element (article, banner, ...).
-     *
-     * @var integer $componentId
-     *
-     * @ORM\Column(name="componentID", type="integer", nullable=false)
-     */
-    private $componentId;
-
-    /**
-     * Defines on which row the element starts.
-     * @var integer $startRow
-     *
-     * @ORM\Column(name="start_row", type="integer", nullable=false)
-     */
-    private $startRow;
-
-    /**
-     * Defines on which col the element starts.
-     * @var integer $startCol
-     *
-     * @ORM\Column(name="start_col", type="integer", nullable=false)
-     */
-    private $startCol;
-
-    /**
-     * Defines on which row the element ends.
-     * @var integer $endRow
-     *
-     * @ORM\Column(name="end_row", type="integer", nullable=false)
-     */
-    private $endRow;
-
-    /**
-     * Defines on which col the element ends.
-     * @var integer $endCol
-     *
-     * @ORM\Column(name="end_col", type="integer", nullable=false)
-     */
-    private $endCol;
-
-    /**
-     * Defines a custom user CSS class for every element.
-     * @var string $cssClass
-     *
-     * @ORM\Column(name="css_class", type="string", length=255, nullable=true)
-     */
-    private $cssClass;
-
-    /**
      * OWNING SIDE
      * Contains the assigned \Shopware\Models\Emotion\Emotion
      * which can be configured in the backend emotion module.
@@ -117,7 +45,7 @@ class Element extends ModelEntity
      * The element model is the owning side (primary key in this table) of the association between
      * emotion and grid elements.
      *
-     * @var \Shopware\Models\Emotion\Emotion $emotion
+     * @var \Shopware\Models\Emotion\Emotion
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Emotion", inversedBy="elements", cascade={"persist"})
      * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
      */
@@ -136,17 +64,97 @@ class Element extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Data", mappedBy="element", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $data;
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\ElementViewport", mappedBy="element", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $viewports;
+    /**
+     * Unique identifier field of the element model.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * Id of the associated \Shopware\Models\Emotion\Emotion model.
+     * The emotion contains all defined grid elements which defined
+     * over the emotion backend module.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="emotionID", type="integer", nullable=false)
+     */
+    private $emotionId;
+
+    /**
+     * Id of the associated \Shopware\Models\Emotion\Library\Component model.
+     * The library component contains the data configuration for the grid element (article, banner, ...).
+     *
+     * @var int
+     *
+     * @ORM\Column(name="componentID", type="integer", nullable=false)
+     */
+    private $componentId;
+
+    /**
+     * Defines on which row the element starts.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="start_row", type="integer", nullable=false)
+     */
+    private $startRow;
+
+    /**
+     * Defines on which col the element starts.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="start_col", type="integer", nullable=false)
+     */
+    private $startCol;
+
+    /**
+     * Defines on which row the element ends.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="end_row", type="integer", nullable=false)
+     */
+    private $endRow;
+
+    /**
+     * Defines on which col the element ends.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="end_col", type="integer", nullable=false)
+     */
+    private $endCol;
+
+    /**
+     * Defines a custom user CSS class for every element.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="css_class", type="string", length=255, nullable=true)
+     */
+    private $cssClass;
 
     /**
      * Class constructor.
@@ -155,6 +163,35 @@ class Element extends ModelEntity
     {
         $this->data = new \Doctrine\Common\Collections\ArrayCollection();
         $this->viewports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $dataArray = [];
+        foreach ($this->data as $data) {
+            $newData = clone $data;
+
+            $newData->setElement($this);
+
+            $dataArray[] = $newData;
+        }
+
+        $this->data = $dataArray;
+
+        $viewportData = [];
+        foreach ($this->viewports as $viewport) {
+            $newViewport = clone $viewport;
+
+            $newViewport->setElement($this);
+
+            $viewportData[] = $newViewport;
+        }
+
+        $this->viewports = $viewportData;
     }
 
     /**
@@ -293,6 +330,7 @@ class Element extends ModelEntity
 
     /**
      * @param array $data
+     *
      * @return ModelEntity
      */
     public function setData($data)
@@ -310,6 +348,7 @@ class Element extends ModelEntity
 
     /**
      * @param array $viewports
+     *
      * @return ModelEntity
      */
     public function setViewports($viewports)
@@ -339,35 +378,5 @@ class Element extends ModelEntity
     public function setComponent($component)
     {
         $this->component = $component;
-    }
-
-
-    public function __clone()
-    {
-        $this->id = null;
-
-        $this->emotionId = null;
-
-        $dataArray = [];
-        foreach ($this->data as $data) {
-            $newData = clone $data;
-
-            $newData->setElement($this);
-
-            $dataArray[] = $newData;
-        }
-
-        $this->data = $dataArray;
-
-        $viewportData = [];
-        foreach ($this->viewports as $viewport) {
-            $newViewport = clone $viewport;
-
-            $newViewport->setElement($this);
-
-            $viewportData[] = $newViewport;
-        }
-
-        $this->viewports = $viewportData;
     }
 }

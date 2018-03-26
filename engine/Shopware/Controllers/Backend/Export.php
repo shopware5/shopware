@@ -66,7 +66,8 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
 
         // Live generation
         if ($productFeed->getInterval() === 0) {
-            $this->generateExport("php://output");
+            $this->generateExport('php://output');
+
             return;
         }
 
@@ -76,6 +77,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
 
         if ($productFeed->getInterval() === -1 && file_exists($filePath)) {
             readfile($filePath);
+
             return;
         }
 
@@ -97,11 +99,24 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
             $this->Response()
                 ->clearHeaders()
                 ->setHttpResponseCode(204)
-                ->appendBody("Empty feed found.");
+                ->appendBody('Empty feed found.');
+
             return;
         }
 
         readfile($filePath);
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index',
+        ];
     }
 
     /**
@@ -124,7 +139,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
     private function prepareExport()
     {
         $this->export->sSYSTEM = Shopware()->System();
-        $this->export->sFeedID = (int)$this->Request()->feedID;
+        $this->export->sFeedID = (int) $this->Request()->feedID;
         $this->export->sHash = $this->Request()->hash;
 
         $this->export->sInitSettings();
@@ -139,7 +154,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         $encoding = $this->getExportEncoding();
         $contentType = $this->getExportContentType();
 
-        $this->Response()->setHeader('Content-Type', $contentType . ";charset=" . $encoding);
+        $this->Response()->setHeader('Content-Type', $contentType . ';charset=' . $encoding);
         $this->Response()->sendHeaders();
     }
 
@@ -149,10 +164,10 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
     private function getExportEncoding()
     {
         if (!empty($this->export->sSettings['encodingID']) && $this->export->sSettings['encodingID'] == 2) {
-            return "utf-8";
+            return 'utf-8';
         }
 
-        return "iso-8859-1";
+        return 'iso-8859-1';
     }
 
     /**
@@ -161,10 +176,10 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
     private function getExportContentType()
     {
         if (!empty($this->export->sSettings['formatID']) && $this->export->sSettings['formatID'] == 3) {
-            return "text/xml";
+            return 'text/xml';
         }
 
-        return "text/x-comma-separated-values";
+        return 'text/x-comma-separated-values';
     }
 
     /**
@@ -179,17 +194,5 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         }
 
         return $dirName;
-    }
-
-    /**
-     * Returns a list with actions which should not be validated for CSRF protection
-     *
-     * @return string[]
-     */
-    public function getWhitelistedCSRFActions()
-    {
-        return [
-            'index'
-        ];
     }
 }

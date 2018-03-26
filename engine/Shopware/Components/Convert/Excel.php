@@ -30,11 +30,11 @@ class Shopware_Components_Convert_Excel
  xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\"
  xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
 
-    private $footer = "</Workbook>";
+    private $footer = '</Workbook>';
 
-    private $lines = array();
+    private $lines = [];
 
-    private $worksheet_title = "Table1";
+    private $worksheet_title = 'Table1';
 
     public function encodeRow($array)
     {
@@ -43,12 +43,12 @@ class Shopware_Components_Convert_Excel
         // foreach key -> write value into cells
         foreach ($array as $value) {
             $type = 'String';
-            if (preg_match("/^[0-9]{1,11}$/", $value)) {
+            if (preg_match('/^[0-9]{1,11}$/', $value)) {
                 $type = 'Number';
             }
 
             $value = str_replace('&#039;', '&apos;', htmlspecialchars($value, ENT_QUOTES));
-            $value = str_replace(array("\r\n", "\r", "\n"), '&#10;', $value);
+            $value = str_replace(["\r\n", "\r", "\n"], '&#10;', $value);
             $cells .= sprintf("<Cell><Data ss:Type=\"%s\">%s</Data></Cell>\n", $type, $value);
         }
 
@@ -71,7 +71,7 @@ class Shopware_Components_Convert_Excel
     public function setTitle($title)
     {
         // strip out special chars first
-        $title = preg_replace("/[\\\|:|\/|\?|\*|\[|\]]/", "", $title);
+        $title = preg_replace("/[\\\|:|\/|\?|\*|\[|\]]/", '', $title);
 
         // now cut it to the allowed length
         $title = substr($title, 0, 31);
@@ -83,8 +83,8 @@ class Shopware_Components_Convert_Excel
     public function generateXML($filename)
     {
         // deliver header (as recommended in php manual)
-        header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
-        header("Content-Disposition: inline; filename=\"" . $filename . ".xls\"");
+        header('Content-Type: application/vnd.ms-excel; charset=UTF-8');
+        header('Content-Disposition: inline; filename="' . $filename . '.xls"');
 
         // print out document to the browser
         // need to use stripslashes for the damn ">"
@@ -98,6 +98,7 @@ class Shopware_Components_Convert_Excel
         $r = $this->getHeader();
         $r .= implode('', $this->lines);
         $r .= $this->getFooter();
+
         return $r;
     }
 
@@ -106,6 +107,7 @@ class Shopware_Components_Convert_Excel
         $header = stripslashes($this->header);
         $header .= "\n<Worksheet ss:Name=\"" . $this->worksheet_title . "\">\n<Table>\n";
         $header .= "<Column ss:Index=\"1\" ss:AutoFitWidth=\"0\" ss:Width=\"110\"/>\n";
+
         return $header;
     }
 
@@ -113,6 +115,7 @@ class Shopware_Components_Convert_Excel
     {
         $footer = "</Table>\n</Worksheet>\n";
         $footer .= $this->footer;
+
         return $footer;
     }
 }

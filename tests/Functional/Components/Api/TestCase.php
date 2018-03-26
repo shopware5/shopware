@@ -30,7 +30,7 @@ use Shopware\Components\Api\Resource\Resource as APIResource;
  * Abstract TestCase for Resource-Tests
  *
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class TestCase extends \Enlight_Components_Test_TestCase
@@ -39,26 +39,6 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @var APIResource
      */
     protected $resource;
-
-    /**
-     * @return APIResource
-     */
-    abstract public function createResource();
-
-    protected function getAclMock()
-    {
-        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
-
-        $aclMock->expects($this->any())
-                ->method('has')
-                ->willReturn(true);
-
-        $aclMock->expects($this->any())
-                ->method('isAllowed')
-                ->willReturn(false);
-
-        return $aclMock;
-    }
 
     protected function setUp()
     {
@@ -75,7 +55,10 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         Shopware()->Models()->clear();
     }
 
-
+    /**
+     * @return APIResource
+     */
+    abstract public function createResource();
 
     /**
      * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
@@ -102,5 +85,20 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     public function testGetOneWithMissingIdShouldThrowParameterMissingException()
     {
         $this->resource->getOne('');
+    }
+
+    protected function getAclMock()
+    {
+        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
+
+        $aclMock->expects($this->any())
+                ->method('has')
+                ->willReturn(true);
+
+        $aclMock->expects($this->any())
+                ->method('isAllowed')
+                ->willReturn(false);
+
+        return $aclMock;
     }
 }

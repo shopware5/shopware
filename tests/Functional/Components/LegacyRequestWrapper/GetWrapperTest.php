@@ -27,7 +27,7 @@
  */
 class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
 {
-    private static $resources = array(
+    private static $resources = [
         'Admin',
         'Articles',
         'Basket',
@@ -37,8 +37,8 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         'Export',
         'Marketing',
         'Order',
-        'RewriteTable'
-    );
+        'RewriteTable',
+    ];
 
     public function setUp()
     {
@@ -47,7 +47,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         $this->dispatch('/');
     }
 
-     /**
+    /**
      * Tests that setting a value inside any core class is equivalent to setting it in the
      * global $_GET
      *
@@ -58,7 +58,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         $previousGetData = Shopware()->Front()->Request()->getQuery();
 
         foreach (self::$resources as $name) {
-            Shopware()->Front()->Request()->setQuery($name, $name.'Value');
+            Shopware()->Front()->Request()->setQuery($name, $name . 'Value');
         }
 
         $getData = Shopware()->Front()->Request()->getQuery();
@@ -78,6 +78,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
      * global $_GET
      *
      * @param $getData
+     *
      * @return mixed
      * @depends testSetQuery
      */
@@ -89,7 +90,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
             if (property_exists($name, 'sSYSTEM')) {
                 Shopware()->Front()->Request()->setQuery($getData);
                 $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
-                Shopware()->Modules()->getModule($name)->sSYSTEM->_GET = array();
+                Shopware()->Modules()->getModule($name)->sSYSTEM->_GET = [];
                 $this->assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
             }
         }
@@ -108,7 +109,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         $previousGetData = Shopware()->Front()->Request()->getQuery();
 
         foreach (self::$resources as $name) {
-            Shopware()->Modules()->getModule($name)->sSYSTEM->_GET[$name] = $name.'Value';
+            Shopware()->Modules()->getModule($name)->sSYSTEM->_GET[$name] = $name . 'Value';
         }
 
         $getData = Shopware()->Front()->Request()->getQuery();

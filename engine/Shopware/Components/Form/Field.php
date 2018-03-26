@@ -29,24 +29,26 @@ use Shopware\Components\Form\Interfaces\Validate;
 
 /**
  * Class Field
- * @package Shopware\Components\Form
  */
 class Field extends Base implements FieldInterface, Validate
 {
     /**
      * @optional
-     * @var string $label
+     *
+     * @var string
      */
     protected $label = '';
 
     /**
      * @required
-     * @var string $name
+     *
+     * @var string
      */
     protected $name;
 
     /**
      * @optional
+     *
      * @var mixed
      */
     protected $defaultValue;
@@ -56,9 +58,10 @@ class Field extends Base implements FieldInterface, Validate
      * config field.
      *
      * @optional
+     *
      * @var array
      */
-    protected $attributes = array();
+    protected $attributes = [];
 
     /**
      * Help text for the user to explain
@@ -72,7 +75,7 @@ class Field extends Base implements FieldInterface, Validate
      * Defines if the field is
      * required to configured.
      *
-     * @var boolean
+     * @var bool
      */
     protected $required = false;
 
@@ -125,7 +128,7 @@ class Field extends Base implements FieldInterface, Validate
     }
 
     /**
-     * @param boolean $required
+     * @param bool $required
      */
     public function setRequired($required)
     {
@@ -133,7 +136,7 @@ class Field extends Base implements FieldInterface, Validate
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isRequired()
     {
@@ -183,7 +186,7 @@ class Field extends Base implements FieldInterface, Validate
     {
         if (!$this->name) {
             throw new \Exception(sprintf(
-                "Field %s requires a configured name",
+                'Field %s requires a configured name',
                 get_class($this)
             ));
         }

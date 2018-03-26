@@ -28,7 +28,7 @@ use ZipArchive;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Common\Archive\Entry
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Zip

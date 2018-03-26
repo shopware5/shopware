@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\SearchBundleES;
 
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
@@ -31,6 +32,7 @@ interface SearchTermQueryBuilderInterface
     /**
      * @param ShopContextInterface $context
      * @param $term
+     *
      * @return BoolQuery
      */
     public function buildQuery(ShopContextInterface $context, $term);

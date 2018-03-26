@@ -1,12 +1,12 @@
 <?php $app->render('_header.php', ['tab' => 'cleanup']) ?>
 
-<h2><?= $language["cleanup_header"]; ?></h2>
+<h2><?= $language['cleanup_header']; ?></h2>
 
 <span class="help-block">
      <?php if ($error) {
-    echo $language["cleanup_error"];
+    echo $language['cleanup_error'];
 } else {
-    echo $language["cleanup_disclaimer"];
+    echo $language['cleanup_disclaimer'];
 } ?>
 </span>
 
@@ -29,7 +29,7 @@
     <div class="actions clearfix">
         <div class="fileCounterContainer is--left">
             <div class="counter">0</div>
-            <div class="description"><?= $language["deleted_files"] ?></div>
+            <div class="description"><?= $language['deleted_files'] ?></div>
         </div>
 
         <div class="clearCacheSpinner is--right">
@@ -38,7 +38,7 @@
 
         <input type="button" class="btn btn-primary btn-arrow-right is--right startCleanUpProcess"
                data-clearCacheUrl="<?= $app->urlFor('clearCache'); ?>"
-               value="<?= $language["forward"]; ?>"/>
+               value="<?= $language['forward']; ?>"/>
      </div>
 
     <div class="error-message-container alert alert-error">

@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_Customer_ShippingTest extends Enlight_Components_Test_TestCase
@@ -37,7 +37,7 @@ class Shopware_Tests_Models_Customer_ShippingTest extends Enlight_Components_Tes
         $originalStreet = $shipping->getStreet();
         $originalZipCode = $shipping->getZipCode();
 
-        $shipping->setStreet('This is a really really really long city name'); //
+        $shipping->setStreet('This is a really really really long city name');
         $shipping->setZipCode('This is a really really really long zip code');
 
         Shopware()->Models()->persist($shipping);

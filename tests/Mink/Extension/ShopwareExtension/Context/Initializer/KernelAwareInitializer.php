@@ -54,10 +54,10 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            ScenarioTested::BEFORE => array('bootKernel', 15),
-            ExampleTested::BEFORE  => array('bootKernel', 15),
-        );
+        return [
+            ScenarioTested::BEFORE => ['bootKernel', 15],
+            ExampleTested::BEFORE => ['bootKernel', 15],
+        ];
     }
 
     /**

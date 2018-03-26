@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Gateway;
@@ -29,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryService implements Service\CategoryServiceInterface
@@ -48,7 +49,7 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
@@ -58,7 +59,7 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($ids, Struct\ShopContextInterface $context)
     {
@@ -68,7 +69,7 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
     {
@@ -83,8 +84,9 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
-     * @param Struct\Category[] $categories
+     * @param Struct\Category[]           $categories
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Category[] $categories Indexed by the category id
      */
     private function filterValidCategories($categories, Struct\ShopContextInterface $context)

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace ShopwarePlugins\SwagUpdate\Components\Steps;
 
 use ShopwarePlugins\SwagUpdate\Components\Download;
@@ -28,7 +29,7 @@ use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Steps;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DownloadStep

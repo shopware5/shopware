@@ -29,14 +29,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface SortingHandlerInterface
 {
     /**
      * Checks if the passed sorting can be handled by this class
+     *
      * @param SortingInterface $sorting
+     *
      * @return bool
      */
     public function supportsSorting(SortingInterface $sorting);
@@ -46,10 +48,9 @@ interface SortingHandlerInterface
      * Extends the passed query builder with the specify sorting.
      * Should use the addOrderBy function, otherwise other sortings would be overwritten.
      *
-     * @param SortingInterface $sorting
-     * @param QueryBuilder $query
+     * @param SortingInterface     $sorting
+     * @param QueryBuilder         $query
      * @param ShopContextInterface $context
-     * @return void
      */
     public function generateSorting(
         SortingInterface $sorting,

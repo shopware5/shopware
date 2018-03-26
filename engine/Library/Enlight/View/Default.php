@@ -213,7 +213,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * Assigns a specified value to the template.
      * If no cache or scope given, the default settings for this property will be used.
      *
-     * @param   string $spec
+     * @param   array|string $spec
      * @param   mixed  $value
      * @param   bool   $nocache
      * @param   int    $scope

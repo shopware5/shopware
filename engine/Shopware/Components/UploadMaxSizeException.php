@@ -24,11 +24,8 @@
 
 namespace Shopware\Components;
 
-/**
- * @package Shopware\Components
- */
 class UploadMaxSizeException extends \Exception
 {
     protected $code = 413;
-    protected $message = "The uploaded file was too large. Please try to upload a smaller file.";
+    protected $message = 'The uploaded file was too large. Please try to upload a smaller file.';
 }

@@ -26,7 +26,7 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Download
@@ -42,13 +42,14 @@ class Download
     private $haltCallback;
 
     /**
-     * @param  callable   $callback
+     * @param callable $callback
+     *
      * @throws \Exception
      */
     public function setProgressCallback($callback)
     {
         if (!is_callable($callback)) {
-            throw new \Exception("Callback not callable");
+            throw new \Exception('Callback not callable');
         }
 
         $this->progressCallback = $callback;
@@ -56,12 +57,13 @@ class Download
 
     /**
      * @param $callback
+     *
      * @throws \Exception
      */
     public function setHaltCallback($callback)
     {
         if (!is_callable($callback)) {
-            throw new \Exception("Callback not callable");
+            throw new \Exception('Callback not callable');
         }
 
         $this->haltCallback = $callback;
@@ -82,51 +84,13 @@ class Download
     }
 
     /**
-     * @param int $downloadSize
-     * @param int $downloaded
-     * @param int $total
-     */
-    private function progress($downloadSize, $downloaded, $total)
-    {
-        if (!$this->progressCallback) {
-            return;
-        }
-
-        call_user_func_array($this->progressCallback, array($downloadSize, $downloaded, $total));
-    }
-
-    /**
-     * @param  \SplFileObject $partFile
-     * @param  string         $hash
-     * @return bool
-     * @throws \Exception
-     */
-    private function verifyHash($partFile, $hash)
-    {
-        if (sha1_file($partFile->getPathname()) !== $hash) {
-            // try to delete invalid file so a valid one can be downloaded
-            @unlink($partFile->getPathname());
-            throw new \Exception("Hash mismatch");
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $partFilePath
+     * @param string $sourceUri
      * @param string $destinationUri
-     */
-    private function moveFile($partFilePath, $destinationUri)
-    {
-        rename($partFilePath, $destinationUri);
-    }
-
-    /**
-     * @param  string     $sourceUri
-     * @param  string     $destinationUri
-     * @param  int        $totalSize
-     * @param  string     $hash
+     * @param int    $totalSize
+     * @param string $hash
+     *
      * @throws \Exception
+     *
      * @return int
      */
     public function downloadFile($sourceUri, $destinationUri, $totalSize, $hash)
@@ -136,7 +100,7 @@ class Download
         }
 
         if (filesize($destinationUri) > 0) {
-            throw new \Exception(sprintf("File on destination %s does already exist.", $destinationUri));
+            throw new \Exception(sprintf('File on destination %s does already exist.', $destinationUri));
         }
 
         $partFile = $destinationUri . '.part';
@@ -145,7 +109,7 @@ class Download
         $size = $partFile->getSize();
         if ($size >= $totalSize) {
             $this->verifyHash($partFile, $hash);
-            # close local file connections before move for windows
+            // close local file connections before move for windows
             $partFilePath = $partFile->getPathname();
             fclose($destination);
             unset($partFile);
@@ -181,7 +145,7 @@ class Download
         $me = $this;
 
         $isHalted = false;
-        $isError  = false;
+        $isError = false;
         curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $str) use ($me, $partFile, &$isHalted, &$isError) {
             if (curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 206) {
                 $isError = true;
@@ -205,7 +169,7 @@ class Download
         curl_close($ch);
 
         if ($isError && !$isHalted) {
-            throw new \Exception("Wrong http code");
+            throw new \Exception('Wrong http code');
         }
 
         if ($result === false && !$isHalted) {
@@ -217,7 +181,7 @@ class Download
 
         if ($size >= $totalSize) {
             $this->verifyHash($partFile, $hash);
-            # close local file connections before move for windows
+            // close local file connections before move for windows
             $partFilePath = $partFile->getPathname();
             fclose($destination);
             unset($partFile);
@@ -229,5 +193,47 @@ class Download
         unset($partFile);
 
         return $size;
+    }
+
+    /**
+     * @param int $downloadSize
+     * @param int $downloaded
+     * @param int $total
+     */
+    private function progress($downloadSize, $downloaded, $total)
+    {
+        if (!$this->progressCallback) {
+            return;
+        }
+
+        call_user_func_array($this->progressCallback, [$downloadSize, $downloaded, $total]);
+    }
+
+    /**
+     * @param \SplFileObject $partFile
+     * @param string         $hash
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    private function verifyHash($partFile, $hash)
+    {
+        if (sha1_file($partFile->getPathname()) !== $hash) {
+            // try to delete invalid file so a valid one can be downloaded
+            @unlink($partFile->getPathname());
+            throw new \Exception('Hash mismatch');
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $partFilePath
+     * @param string $destinationUri
+     */
+    private function moveFile($partFilePath, $destinationUri)
+    {
+        rename($partFilePath, $destinationUri);
     }
 }

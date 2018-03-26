@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\LegacyRequestWrapper\PostWrapper;
-use Shopware\Components\LegacyRequestWrapper\GetWrapper;
 use Shopware\Components\LegacyRequestWrapper\CookieWrapper;
+use Shopware\Components\LegacyRequestWrapper\GetWrapper;
+use Shopware\Components\LegacyRequestWrapper\PostWrapper;
 
 /**
  * Deprecated Shopware Class
@@ -35,6 +35,7 @@ class sSystem
      * Shopware configuration
      *
      * @var Shopware_Components_Config
+     *
      * @deprecated Use Shopware()->Config()
      */
     public $sCONFIG;
@@ -43,6 +44,7 @@ class sSystem
      * Current session id
      *
      * @var string
+     *
      * @deprecated Use Shopware()->Session()->get('sessionId')
      */
     public $sSESSION_ID;
@@ -51,6 +53,7 @@ class sSystem
      * Pointer to Smarty
      *
      * @var Enlight_Template_Manager
+     *
      * @deprecated Use Shopware()->Template()
      */
     public $sSMARTY;
@@ -59,6 +62,7 @@ class sSystem
      * Pointer to the different modules and its inherits
      *
      * @var Shopware_Components_Modules
+     *
      * @deprecated Use Shopware()->Modules()
      */
     public $sMODULES;
@@ -81,24 +85,10 @@ class sSystem
      * Session data
      *
      * @var Enlight_Components_Session_Namespace Session
+     *
      * @deprecated Use Shopware()->Session()
      */
     public $_SESSION;
-
-    /**
-     * @var \Shopware\Components\LegacyRequestWrapper\PostWrapper Wrapper for _POST
-     */
-    private $postWrapper;
-
-    /**
-     * @var \Shopware\Components\LegacyRequestWrapper\GetWrapper Wrapper for _GET
-     */
-    private $getWrapper;
-
-    /**
-     * @var \Shopware\Components\LegacyRequestWrapper\CookieWrapper Wrapper for _COOKIE
-     */
-    private $cookieWrapper;
 
     /**
      * Path to article images
@@ -125,6 +115,7 @@ class sSystem
      * Current active currency
      *
      * @var array
+     *
      * @deprecated Use Shopware()->Shop()->getCurrency() or Shopware()->Shop()->getCurrency()->toArray()
      */
     public $sCurrency;
@@ -133,6 +124,7 @@ class sSystem
      * Pointer to PHP-Mailer Object
      *
      * @var
+     *
      * @deprecated Use Shopware()->Mail()
      */
     public $sMailer;
@@ -141,6 +133,7 @@ class sSystem
      * True if user is identified as bot
      *
      * @var bool
+     *
      * @deprecated Use Shopware()->Session()->Bot
      */
     public $sBotSession;
@@ -149,16 +142,32 @@ class sSystem
      * Reference to $this, for compability reasons.
      *
      * @var sSystem
+     *
      * @deprecated
      */
     public $sSYSTEM;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\PostWrapper Wrapper for _POST
+     */
+    private $postWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\GetWrapper Wrapper for _GET
+     */
+    private $getWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\CookieWrapper Wrapper for _COOKIE
+     */
+    private $cookieWrapper;
 
     /**
      * @param Enlight_Controller_Request_Request $request The request object
      */
     public function __construct(Enlight_Controller_Request_Request $request = null)
     {
-        $request = $request ? : new Enlight_Controller_Request_RequestHttp();
+        $request = $request ?: new Enlight_Controller_Request_RequestHttp();
         $this->postWrapper = new PostWrapper($request);
         $this->getWrapper = new GetWrapper($request);
         $this->cookieWrapper = new CookieWrapper($request);
@@ -199,10 +208,11 @@ class sSystem
      *
      * @param $name
      * @param null $params
+     *
      * @return mixed
      */
     public function __call($name, $params = null)
     {
-        return call_user_func_array(array(Shopware()->Modules()->Core(), $name), $params);
+        return call_user_func_array([Shopware()->Modules()->Core(), $name], $params);
     }
 }

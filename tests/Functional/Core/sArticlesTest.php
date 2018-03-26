@@ -21,23 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 /**
  * Shopware SwagAboCommerce Plugin - Bootstrap
  *
  * @category  Shopware
- * @package   Shopware\Plugins\SwagAboCommerce
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 {
-    protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
-    {
-        $this->assertInstanceOf('Shopware\Models\Category\Category', $this->readAttribute($sArticles, 'category'));
-        $this->assertEquals($categoryId, $this->readAttribute($sArticles, 'categoryId'));
-        $this->assertEquals($translationId, $this->readAttribute($sArticles, 'translationId'));
-        $this->assertEquals($customerGroupId, $this->readAttribute($sArticles, 'customerGroupId'));
-    }
-
     public function testCanInstanciatesArticles()
     {
         $sArticles = new sArticles();
@@ -75,36 +68,36 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertNotNull($suppliers);
     }
 
-
     /**
      * Checks if price group is taken into account correctly
+     *
      * @ticket SW-4887
      */
     public function testPriceGroupForMainVariant()
     {
         // Add price group
-        $sql = "
+        $sql = '
         UPDATE s_articles SET pricegroupActive = 1 WHERE id = 2;
         INSERT INTO s_core_pricegroups_discounts (`groupID`, `customergroupID`, `discount`, `discountstart`) VALUES (1, 1, 5, 1);
-        ";
+        ';
 
         Shopware()->Db()->query($sql);
 
-        $this->dispatch("/");
+        $this->dispatch('/');
 
         Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
 
-        $correctPrice = "18,99";
+        $correctPrice = '18,99';
         $article = Shopware()->Modules()->Articles()->sGetArticleById(
             2
         );
-        $this->assertEquals($correctPrice, $article["price"]);
+        $this->assertEquals($correctPrice, $article['price']);
 
         // delete price group
-        $sql = "
+        $sql = '
         UPDATE s_articles SET pricegroupActive = 0 WHERE id = 2;
         DELETE FROM s_core_pricegroups_discounts WHERE `customergroupID` = 1 AND `discount` = 5;
-        ";
+        ';
         Shopware()->Db()->query($sql);
     }
 
@@ -117,5 +110,13 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 
         // a query to a not existing article should return 'false' and not throw an exception
         $this->assertFalse($result);
+    }
+
+    protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
+    {
+        $this->assertInstanceOf('Shopware\Models\Category\Category', $this->readAttribute($sArticles, 'category'));
+        $this->assertEquals($categoryId, $this->readAttribute($sArticles, 'categoryId'));
+        $this->assertEquals($translationId, $this->readAttribute($sArticles, 'translationId'));
+        $this->assertEquals($customerGroupId, $this->readAttribute($sArticles, 'customerGroupId'));
     }
 }

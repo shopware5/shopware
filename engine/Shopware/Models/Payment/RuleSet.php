@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Payment;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware ruleSets-model represents a single ruleSet.
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class RuleSet extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,42 +45,42 @@ class RuleSet extends ModelEntity
     private $id;
 
     /**
-     * @var integer $paymentId
+     * @var int
      *
      * @ORM\Column(name="paymentID", type="integer", nullable=false)
      */
     private $paymentId;
 
     /**
-     * @var string $rule1
+     * @var string
      *
      * @ORM\Column(name="rule1", type="string", length=255, nullable=false)
      */
     private $rule1;
 
     /**
-     * @var string $value1
+     * @var string
      *
      * @ORM\Column(name="value1", type="string", length=255, nullable=false)
      */
     private $value1;
 
     /**
-     * @var string $rule2
+     * @var string
      *
      * @ORM\Column(name="rule2", type="string", length=255, nullable=false)
      */
     private $rule2;
 
     /**
-     * @var string $value2
+     * @var string
      *
      * @ORM\Column(name="value2", type="string", length=255, nullable=false)
      */
     private $value2;
 
     /**
-     * @var $payments
+     * @var
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="ruleSets")
      * @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
@@ -90,7 +90,7 @@ class RuleSet extends ModelEntity
     /**
      * Gets the id of the ruleSet.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -100,19 +100,21 @@ class RuleSet extends ModelEntity
     /**
      * Sets the paymentId of a ruleSet for the mapping to s_core_paymentmeans.
      *
-     * @param integer $paymentId
+     * @param int $paymentId
+     *
      * @return RuleSet
      */
     public function setPaymentId($paymentId)
     {
         $this->paymentId = $paymentId;
+
         return $this;
     }
 
     /**
      * Gets the paymentId of a ruleSet, which is the id of the corresponding payment from s_core_paymentmeans.
      *
-     * @return integer
+     * @return int
      */
     public function getPaymentId()
     {
@@ -123,11 +125,13 @@ class RuleSet extends ModelEntity
      * Sets the first rule.
      *
      * @param string $rule1
+     *
      * @return RuleSet
      */
     public function setRule1($rule1)
     {
         $this->rule1 = $rule1;
+
         return $this;
     }
 
@@ -145,11 +149,13 @@ class RuleSet extends ModelEntity
      * Sets the value for the first rule.
      *
      * @param string $value1
+     *
      * @return RuleSet
      */
     public function setValue1($value1)
     {
         $this->value1 = $value1;
+
         return $this;
     }
 
@@ -167,11 +173,13 @@ class RuleSet extends ModelEntity
      * Sets the second rule.
      *
      * @param string $rule2
+     *
      * @return RuleSet
      */
     public function setRule2($rule2)
     {
         $this->rule2 = $rule2;
+
         return $this;
     }
 
@@ -189,11 +197,13 @@ class RuleSet extends ModelEntity
      * Sets the value of the second rule.
      *
      * @param string $value2
+     *
      * @return RuleSet
      */
     public function setValue2($value2)
     {
         $this->value2 = $value2;
+
         return $this;
     }
 
@@ -221,11 +231,13 @@ class RuleSet extends ModelEntity
      * Sets the payment-model.
      *
      * @param  $payment
+     *
      * @return \Shopware\Models\Payment\RuleSet
      */
     public function setPayment($payment)
     {
         $this->payment = $payment;
+
         return $this;
     }
 }

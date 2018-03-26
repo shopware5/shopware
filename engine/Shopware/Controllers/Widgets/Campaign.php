@@ -22,28 +22,28 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- */
 class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets_Emotion
 {
     /**
      * The getEmotion method for the emotion landing page
      *
      * @param \Shopware\Models\Emotion\Repository $repository
+     *
      * @return array
      */
     public function getEmotion($repository)
     {
-        /**@var $repository \Shopware\Models\Emotion\Repository */
+        /** @var $repository \Shopware\Models\Emotion\Repository */
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);
         $emotion = $query->getQuery()->getArrayResult();
+
         return $emotion;
     }
 
     public function indexAction()
     {
-        $this->View()->loadTemplate("widgets/emotion/index.tpl");
+        $this->View()->loadTemplate('widgets/emotion/index.tpl');
         parent::indexAction();
     }
 }

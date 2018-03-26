@@ -24,21 +24,65 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Media\Media;
 
 /**
- *
  * @ORM\Entity
  * @ORM\Table(name="s_articles_img")
  */
 class Image extends ModelEntity
 {
     /**
-     * @var integer $id
+     * OWNING SIDE
+     *
+     * @var Article
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="images")
+     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     */
+    protected $article;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\ArticleImage
+     */
+    protected $attribute;
+
+    /**
+     * INVERSE SIDE
+     * The mapping property contains the configuration for the variant images. One mapping contains one or many
+     * rule sets which contains the configured configurator options.
+     * Based on the image mapping, the variant images will be extended from the main image of the article.
+     *
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Mapping", mappedBy="image", orphanRemoval=true, cascade={"persist"})
+     */
+    protected $mappings;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var Detail
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="images")
+     * @ORM\JoinColumn(name="article_detail_id", referencedColumnName="id")
+     */
+    protected $articleDetail;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="articles")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
+     */
+    protected $media;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -47,19 +91,19 @@ class Image extends ModelEntity
     private $id;
 
     /**
-     * @var integer $articleId
+     * @var int
      * @ORM\Column(name="articleID", type="integer", nullable=true)
      */
     private $articleId = null;
 
     /**
-     * @var integer $articleDetailId
+     * @var int
      * @ORM\Column(name="article_detail_id", type="integer", nullable=true)
      */
     private $articleDetailId = null;
 
     /**
-     * @var string $description
+     * @var string
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description = '';
@@ -71,67 +115,52 @@ class Image extends ModelEntity
     private $path = null;
 
     /**
-     * @var integer $main
+     * @var int
      * @ORM\Column(name="main", type="integer", nullable=false)
      */
     private $main = 0;
 
     /**
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
-     * @var integer $width
+     * @var int
      * @ORM\Column(name="width", type="integer", nullable=false)
      */
     private $width = 0;
 
     /**
-     * @var integer $height
+     * @var int
      * @ORM\Column(name="height", type="integer", nullable=false)
      */
     private $height = 0;
 
     /**
-     * @var string $relations
+     * @var string
      * @ORM\Column(name="relations", type="text", nullable=false)
      */
     private $relations = '';
 
     /**
-     * @var string $extension
+     * @var string
      * @ORM\Column(name="extension", type="string", length=255, nullable=false)
      */
     private $extension = '';
 
     /**
-     * @var int $parentId
+     * @var int
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId = null;
 
     /**
-     * @var int $mediaId
+     * @var int
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
     private $mediaId = null;
-
-    /**
-     * OWNING SIDE
-     * @var Article
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="images")
-     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     */
-    protected $article;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist"})
-     * @var \Shopware\Models\Attribute\ArticleImage
-     */
-    protected $attribute;
 
     /**
      * The parent category
@@ -149,32 +178,6 @@ class Image extends ModelEntity
     private $children;
 
     /**
-     * INVERSE SIDE
-     * The mapping property contains the configuration for the variant images. One mapping contains one or many
-     * rule sets which contains the configured configurator options.
-     * Based on the image mapping, the variant images will be extended from the main image of the article.
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Mapping", mappedBy="image", orphanRemoval=true, cascade={"persist"})
-     */
-    protected $mappings;
-
-    /**
-     * OWNING SIDE
-     * @var Detail
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="images")
-     * @ORM\JoinColumn(name="article_detail_id", referencedColumnName="id")
-     */
-    protected $articleDetail;
-
-    /**
-     * OWNING SIDE
-     * @var
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="articles")
-     * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
-     */
-    protected $media;
-
-    /**
      * Class constructor which initials the array collections.
      */
     public function __construct()
@@ -186,7 +189,7 @@ class Image extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -347,6 +350,7 @@ class Image extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\ArticleImage|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\ArticleImage
      */
     public function setAttribute($attribute)
@@ -364,6 +368,7 @@ class Image extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $mappings
+     *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setMappings($mappings)

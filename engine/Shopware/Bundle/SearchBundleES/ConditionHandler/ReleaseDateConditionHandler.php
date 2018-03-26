@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ReleaseDateCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,7 +39,7 @@ class ReleaseDateConditionHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ReleaseDateCondition);
+        return $criteriaPart instanceof ReleaseDateCondition;
     }
 
     /**
@@ -51,7 +51,7 @@ class ReleaseDateConditionHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /**@var ReleaseDateCondition $criteriaPart */
+        /** @var ReleaseDateCondition $criteriaPart */
         $date = new \DateTime();
         $intervalSpec = 'P' . $criteriaPart->getDays() . 'D';
         $interval = new \DateInterval($intervalSpec);
@@ -63,7 +63,7 @@ class ReleaseDateConditionHandler implements HandlerInterface
                 $date->add($interval);
                 $range = [
                     'lte' => $date->format('Y-m-d'),
-                    'gt' => $dateNow->format('Y-m-d')
+                    'gt' => $dateNow->format('Y-m-d'),
                 ];
                 break;
 

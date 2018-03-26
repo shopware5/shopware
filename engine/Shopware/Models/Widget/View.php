@@ -24,18 +24,17 @@
 
 namespace Shopware\Models\Widget;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Table(name="s_core_widget_views")
  * @ORM\Entity
  */
 class View extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -63,13 +62,13 @@ class View extends ModelEntity
     private $authId = null;
 
     /**
-     * @var integer $column
+     * @var int
      * @ORM\Column(name="`column`", type="integer", nullable=false)
      */
     private $column = 0;
 
     /**
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;

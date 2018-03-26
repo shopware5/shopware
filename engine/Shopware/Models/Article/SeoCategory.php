@@ -18,20 +18,20 @@
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and integererest in
+ * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Article SeoCategory Model
  *
  * @category  Shopware
- * @package   Shopware\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -39,33 +39,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SeoCategory extends ModelEntity
 {
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     * @ORM\Column(name="article_id", type="integer", nullable=false)
-     */
-    private $articleId;
-
-    /**
-     * @var integer
-     * @ORM\Column(name="category_id", type="integer", nullable=false)
-     */
-    private $categoryId;
-
-    /**
-     * @var integer
-     * @ORM\Column(name="shop_id", type="integer", nullable=false)
-     */
-    private $shopId;
-
     /**
      * @var \Shopware\Models\Shop\Shop
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
@@ -86,6 +59,32 @@ class SeoCategory extends ModelEntity
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     * @ORM\Column(name="article_id", type="integer", nullable=false)
+     */
+    private $articleId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="category_id", type="integer", nullable=false)
+     */
+    private $categoryId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="shop_id", type="integer", nullable=false)
+     */
+    private $shopId;
 
     /**
      * @return mixed

@@ -24,14 +24,13 @@
 
 namespace Shopware\Recovery\Install\Service;
 
-use Shopware\Recovery\Install\FileToken;
 use Shopware\Recovery\Common\HttpClient\Client;
 use Shopware\Recovery\Common\HttpClient\ClientException;
 use Shopware\Recovery\Install\Struct\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class WebserverCheck
@@ -59,15 +58,17 @@ class WebserverCheck
      */
     public function __construct($pingUrl, $checkUrl, $tokenPath, Client $httpClient)
     {
-        $this->checkUrl   = $checkUrl;
-        $this->tokenPath  = $tokenPath;
-        $this->pingUrl    = $pingUrl;
+        $this->checkUrl = $checkUrl;
+        $this->tokenPath = $tokenPath;
+        $this->pingUrl = $pingUrl;
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @param  Shop              $shop
+     * @param Shop $shop
+     *
      * @throws \RuntimeException
+     *
      * @return bool
      */
     public function checkPing(Shop $shop)
@@ -77,22 +78,23 @@ class WebserverCheck
         try {
             $response = $this->httpClient->get($pingUrl);
         } catch (ClientException $e) {
-            throw new \RuntimeException("Could not check web server", $e->getCode(), $e);
+            throw new \RuntimeException('Could not check web server', $e->getCode(), $e);
         }
 
         if ($response->getCode() != 200) {
-            throw new \RuntimeException("Wrong http code ". $response->getCode());
+            throw new \RuntimeException('Wrong http code ' . $response->getCode());
         }
 
         if ($response->getBody() != 'pong') {
-            throw new \RuntimeException("Content  ". $response->getBody());
+            throw new \RuntimeException('Content  ' . $response->getBody());
         }
 
         return true;
     }
 
     /**
-     * @param  Shop   $shop
+     * @param Shop $shop
+     *
      * @return string
      */
     public function buildPingUrl(Shop $shop)

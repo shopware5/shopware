@@ -29,7 +29,6 @@ use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 
 /**
  * Class PropertyQueryFactory
- * @package Shopware\Bundle\ESIndexingBundle\Property
  */
 class PropertyQueryFactory
 {
@@ -47,23 +46,32 @@ class PropertyQueryFactory
     }
 
     /**
+     * @param null|int $limit
+     *
      * @return LastIdQuery
      */
-    public function createQuery()
+    public function createQuery($limit = null)
     {
-        return new LastIdQuery($this->createOptionQuery());
+        return new LastIdQuery($this->createOptionQuery($limit));
     }
 
     /**
+     * @param null|int $limit
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createOptionQuery()
+    private function createOptionQuery($limit = null)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['propertyGroups.id', 'propertyGroups.id'])
             ->from('s_filter_options', 'propertyGroups')
             ->where('propertyGroups.id > :lastId')
             ->setParameter(':lastId', 0);
+
+        if ($limit !== null) {
+            $query->setMaxResults($limit);
+        }
+
         return $query;
     }
 }

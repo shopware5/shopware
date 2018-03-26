@@ -25,7 +25,6 @@
 namespace   Shopware\Models\Premium;
 
 use Shopware\Components\Model\ModelRepository;
-use Doctrine\ORM\Query\Expr;
 
 /**
  * Repository for the premium model (Shopware\Models\Premium\Premium).
@@ -38,23 +37,25 @@ class Repository extends ModelRepository
 {
     /**
      * Function to get all premium-articles and the subshop-name and the article-name
+     *
      * @param $start
      * @param $limit
      * @param null $filterValue
+     *
      * @return \Doctrine\ORM\Query
      */
-    public function getBackendPremiumListQuery($start, $limit, $order, $filterValue=null)
+    public function getBackendPremiumListQuery($start, $limit, $order, $filterValue = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
                 'premium.id',
                 'premium.startPrice as startPrice',
                 'premium.orderNumber as orderNumber',
                 'premium.orderNumberExport as orderNumberExport',
                 'premium.shopId as shopId',
                 'subshop.name as subShopName',
-                'article.name as name'
-                    ))
+                'article.name as name',
+                    ])
                 ->from($this->getEntityName(), 'premium')
                 ->leftJoin('premium.shop', 'subshop')
                 ->leftJoin('premium.articleDetail', 'detail')
@@ -62,7 +63,7 @@ class Repository extends ModelRepository
 
         if ($filterValue !== null) {
             $builder->where('article.name LIKE ?1')
-            ->setParameter(1, '%'.$filterValue.'%');
+            ->setParameter(1, '%' . $filterValue . '%');
         }
         if (!empty($order)) {
             $builder->addOrderBy($order);

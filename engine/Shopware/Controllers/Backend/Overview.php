@@ -27,20 +27,12 @@
  */
 class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend_ExtJs
 {
-    /**
-     * Method to define acl dependencies in backend controllers
-     */
-    protected function initAcl()
-    {
-        $this->addAclPermission('getOrderSummary', 'read');
-    }
-
     public function getOrderSummaryAction()
     {
-        $startDate = $this->Request()->getParam('fromDate', date("Y-m-d", mktime(0, 0, 0, date("m"), 1, date("Y"))));
-        $endDate   = $this->Request()->getParam('toDate', date("Y-m-d"));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y'))));
+        $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
 
-        $sql = "
+        $sql = '
             SELECT
                 SUM(visitors.uniquevisits) AS visits,
                 SUM(visitors.uniquevisits)/SUM(order_count.order_count) AS averageUsers,
@@ -88,14 +80,14 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
                 AND visitors.datum >= :startDate
             GROUP BY TO_DAYS(visitors.datum)
             ORDER BY visitors.datum DESC
-        ";
+        ';
 
-        $stmt = Shopware()->Db()->query($sql, array(
-            'endDate'   => $endDate,
+        $stmt = Shopware()->Db()->query($sql, [
+            'endDate' => $endDate,
             'startDate' => $startDate,
-        ));
+        ]);
 
-        $orders = array();
+        $orders = [];
 
         while ($order = $stmt->fetch()) {
             foreach ($order as $key => $value) {
@@ -112,10 +104,18 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
             $orders[] = $order;
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'data'    => $orders,
-            'total'   => count($orders),
-        ));
+            'data' => $orders,
+            'total' => count($orders),
+        ]);
+    }
+
+    /**
+     * Method to define acl dependencies in backend controllers
+     */
+    protected function initAcl()
+    {
+        $this->addAclPermission('getOrderSummary', 'read');
     }
 }

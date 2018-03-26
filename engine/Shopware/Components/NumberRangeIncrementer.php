@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\NumberRangeIncrementer
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class NumberRangeIncrementer implements NumberRangeIncrementerInterface
@@ -47,7 +47,7 @@ class NumberRangeIncrementer implements NumberRangeIncrementerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function increment($name)
     {

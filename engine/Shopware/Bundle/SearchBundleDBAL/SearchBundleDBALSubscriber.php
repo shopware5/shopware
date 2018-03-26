@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchBundleDBALSubscriber implements SubscriberInterface
@@ -84,7 +84,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -153,8 +153,9 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param array $handlers
+     * @param array  $handlers
      * @param string $class
+     *
      * @return ArrayCollection
      */
     private function getHandlersByClass(array $handlers, $class)
@@ -162,7 +163,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
         $elements = array_filter(
             $handlers,
             function ($handler) use ($class) {
-                return ($handler instanceof $class);
+                return $handler instanceof $class;
             }
         );
 

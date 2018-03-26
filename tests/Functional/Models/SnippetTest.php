@@ -26,11 +26,21 @@ use Shopware\Models\Snippet\Snippet;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
 {
+    /**
+     * @var array
+     */
+    public $testData = [
+        'namespace' => 'unit/test/snippettestcase',
+        'name' => 'ErrorIndexTitle',
+        'value' => 'Fehler',
+        'shopid' => '1',
+        'localeId' => '1',
+    ];
     /**
      * @var Shopware\Components\Model\ModelManager
      */
@@ -40,17 +50,6 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
      * @var Shopware\Models\User\Repository
      */
     protected $repo;
-
-    /**
-     * @var array
-     */
-    public $testData = array(
-        'namespace' => 'unit/test/snippettestcase',
-        'name'      => 'ErrorIndexTitle',
-        'value'     => 'Fehler',
-        'shopid'    => '1',
-        'localeId'  => '1',
-    );
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -69,7 +68,7 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
      */
     protected function tearDown()
     {
-        $snippet = $this->repo->findOneBy(array('namespace' => 'unit/test/snippettestcase'));
+        $snippet = $this->repo->findOneBy(['namespace' => 'unit/test/snippettestcase']);
 
         if (!empty($snippet)) {
             $this->em->remove($snippet);

@@ -34,15 +34,16 @@ class SnippetRepository extends ModelRepository
     public function getDistinctNamespacesQuery($locales = null, $limit = null, $offset = null)
     {
         $builder = $this->getDistinctNamespacesQueryBuilder($locales, $limit, $offset);
+
         return $builder->getQuery();
     }
 
     public function getDistinctNamespacesQueryBuilder($locales = null, $limit = null, $offset = null)
     {
         $builder = $this->createQueryBuilder('snippet')
-            ->select(array(
+            ->select([
                 'DISTINCT snippet.namespace as namespace',
-            ));
+            ]);
         if ($locales) {
             $builder
                 ->where('snippet.localeId IN (:locales)')->setParameter('locales', $locales);
@@ -57,15 +58,16 @@ class SnippetRepository extends ModelRepository
     public function getDistinctLocalesQuery()
     {
         $builder = $this->getDistinctLocalesQueryBuilder();
+
         return $builder->getQuery();
     }
 
     public function getDistinctLocalesQueryBuilder()
     {
         $builder = $this->createQueryBuilder('snippet')
-            ->select(array(
+            ->select([
                 'DISTINCT snippet.localeId as localeId',
-            ));
+            ]);
 
         return $builder;
     }

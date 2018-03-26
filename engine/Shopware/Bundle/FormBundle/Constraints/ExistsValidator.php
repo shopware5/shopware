@@ -37,6 +37,7 @@ class ExistsValidator extends ConstraintValidator
 
     /**
      * ExistsValidator constructor.
+     *
      * @param Connection $connection
      */
     public function __construct(Connection $connection)
@@ -47,7 +48,7 @@ class ExistsValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param mixed $value The value that should be validated
+     * @param mixed      $value      The value that should be validated
      * @param Constraint $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint)
@@ -69,8 +70,8 @@ class ExistsValidator extends ConstraintValidator
         if (!empty($constraint->conditions)) {
             foreach ($constraint->conditions as $conditionIndex => $condition) {
                 $operator = !empty($condition['operator']) ? $condition['operator'] : '=';
-                $builder->andWhere($condition['property'] . " ".$operator." :conditionValue".$conditionIndex)
-                    ->setParameter('conditionValue'.$conditionIndex, $condition['value']);
+                $builder->andWhere($condition['property'] . ' ' . $operator . ' :conditionValue' . $conditionIndex)
+                    ->setParameter('conditionValue' . $conditionIndex, $condition['value']);
             }
         }
 

@@ -30,7 +30,7 @@ use Shopware\Components\Api\Exception as ApiException;
  * Shop API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shop extends Resource
@@ -43,12 +43,13 @@ class Shop extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Shop\Shop');
     }
 
-
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Shop\Shop
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Shop\Shop
      */
     public function getOne($id)
     {
@@ -78,13 +79,14 @@ class Shop extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $criteria
      * @param array $orderBy
+     *
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
@@ -105,14 +107,16 @@ class Shop extends Resource
         //returns the category data
         $shops = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $shops, 'total' => $totalResult);
+        return ['data' => $shops, 'total' => $totalResult];
     }
 
     /**
      * @param array $params
-     * @return \Shopware\Models\Shop\Shop
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
+     *
+     * @return \Shopware\Models\Shop\Shop
      */
     public function create(array $params)
     {
@@ -135,13 +139,15 @@ class Shop extends Resource
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
-     * @return \Shopware\Models\Shop\Shop
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
+     * @return \Shopware\Models\Shop\Shop
      */
     public function update($id, array $params)
     {
@@ -173,9 +179,11 @@ class Shop extends Resource
 
     /**
      * @param int $id
-     * @return \Shopware\Models\Shop\Shop
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Shop\Shop
      */
     public function delete($id)
     {
@@ -200,7 +208,7 @@ class Shop extends Resource
 
     private function prepareShopData($params, $shop = null)
     {
-        $requiredParams = array('name', 'localeId', 'currencyId', 'customerGroupId', 'categoryId');
+        $requiredParams = ['name', 'localeId', 'currencyId', 'customerGroupId', 'categoryId'];
         foreach ($requiredParams as $param) {
             if (!$shop) {
                 if (!isset($params[$param]) || empty($params[$param])) {
@@ -275,7 +283,6 @@ class Shop extends Resource
                 throw new \Exception("{$params['categoryId']} is not a valid category id");
             }
         }
-
 
         return $params;
     }

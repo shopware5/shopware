@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Exception;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Exception
- */
 class StoreException extends \RuntimeException
 {
     /**
@@ -35,14 +32,14 @@ class StoreException extends \RuntimeException
     private $sbpCode;
 
     /**
-     * @param string $sbpCode
-     * @param string $message
-     * @param int $code
+     * @param string     $sbpCode
+     * @param string     $message
+     * @param int        $code
      * @param \Exception $previous
      */
     public function __construct(
         $sbpCode,
-        $message = "",
+        $message = '',
         $code = 0,
         \Exception $previous = null
     ) {

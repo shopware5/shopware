@@ -21,9 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
-use \Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Connection;
 
 class DBALTimestampPersistor implements TimestampPersistor
 {
@@ -41,7 +42,7 @@ class DBALTimestampPersistor implements TimestampPersistor
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCurrentTimestamp($shopId)
     {
@@ -66,7 +67,7 @@ sql;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function updateTimestamp($shopId, $timestamp)
     {

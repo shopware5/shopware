@@ -28,18 +28,18 @@ use Symfony\Component\Config\Util\XmlUtils;
 
 /**
  * Class XmlCronjobReader
- * @package Shopware\Components\Plugin
  */
 class XmlCronjobReader
 {
     /**
      * @param string $file
+     *
      * @return array
      */
     public function read($file)
     {
         try {
-            $dom = XmlUtils::loadFile($file, __DIR__.'/schema/cronjob.xsd');
+            $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/cronjob.xsd');
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
@@ -49,6 +49,7 @@ class XmlCronjobReader
 
     /**
      * @param \DOMDocument $xml
+     *
      * @return array
      */
     private function parseInfo(\DOMDocument $xml)
@@ -69,6 +70,7 @@ class XmlCronjobReader
 
     /**
      * @param \DOMElement $entry
+     *
      * @return array
      */
     private function parseEntry(\DOMElement $entry)
@@ -77,9 +79,9 @@ class XmlCronjobReader
 
         $cronjobEntry['name'] = $this->getFirstChild($entry, 'name');
         $cronjobEntry['action'] = $this->getFirstChild($entry, 'action');
-        $cronjobEntry['active'] = $this->toBool($this->getFirstChild($entry, 'active'));
+        $cronjobEntry['active'] = XmlUtils::phpize($this->getFirstChild($entry, 'active'));
         $cronjobEntry['interval'] = $this->getFirstChild($entry, 'interval');
-        $cronjobEntry['disable_on_error'] = $this->toBool($this->getFirstChild($entry, 'disableOnError'));
+        $cronjobEntry['disable_on_error'] = XmlUtils::phpize($this->getFirstChild($entry, 'disableOnError'));
 
         return $cronjobEntry;
     }
@@ -87,6 +89,7 @@ class XmlCronjobReader
     /**
      * @param \DOMNode $node
      * @param $name
+     *
      * @return null|string
      */
     private function getFirstChild(\DOMNode $node, $name)
@@ -108,7 +111,7 @@ class XmlCronjobReader
      */
     private function getChildren(\DOMNode $node, $name)
     {
-        $children = array();
+        $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof \DOMElement && $child->localName === $name) {
                 $children[] = $child;
@@ -116,14 +119,5 @@ class XmlCronjobReader
         }
 
         return $children;
-    }
-
-    /**
-     * @param string $string
-     * @return bool
-     */
-    private function toBool($string)
-    {
-        return $string == 'true' ? true : false;
     }
 }

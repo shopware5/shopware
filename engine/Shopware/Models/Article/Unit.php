@@ -24,20 +24,26 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Entity
  * @ORM\Table(name="s_core_units")
  */
 class Unit extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="unit")
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $articles;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -46,25 +52,18 @@ class Unit extends ModelEntity
     private $id;
 
     /**
-     * @var string $unit
+     * @var string
      *
      * @ORM\Column(name="unit", type="string", nullable=false)
      */
     private $unit;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $name;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="unit")
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $articles;
 
     public function __construct()
     {
@@ -74,7 +73,7 @@ class Unit extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -85,11 +84,13 @@ class Unit extends ModelEntity
      * Set unit
      *
      * @param string $unit
+     *
      * @return Unit
      */
     public function setUnit($unit)
     {
         $this->unit = $unit;
+
         return $this;
     }
 
@@ -107,11 +108,13 @@ class Unit extends ModelEntity
      * Set description
      *
      * @param string $name
+     *
      * @return Unit
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -135,6 +138,7 @@ class Unit extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $articles
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setArticles($articles)

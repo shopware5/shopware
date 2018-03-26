@@ -30,7 +30,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsRemoveCommand extends ShopwareCommand
@@ -56,7 +56,7 @@ class SnippetsRemoveCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $folder = $this->container->getParameter('kernel.root_dir').'/'.$input->getArgument('folder').'/';
+        $folder = $this->container->getParameter('kernel.root_dir') . '/' . $input->getArgument('folder') . '/';
 
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $databaseLoader->setOutput($output);

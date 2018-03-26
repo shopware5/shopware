@@ -70,9 +70,9 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
                 ->addTag(
                     'shopware.event_listener',
                     [
-                        'event'  => $eventName,
+                        'event' => $eventName,
                         'method' => 'getControllerPath',
-                        'priority' => 500
+                        'priority' => 500,
                     ]
                 )
                 ->addMethodCall('addController', [$eventName, $file]);
@@ -82,24 +82,8 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param Plugin[] $actives
-     * @return string[]
-     */
-    private function collectControllerPaths($actives)
-    {
-        $controllerPaths = array_map(function (Plugin $plugin) {
-            if (is_dir($plugin->getPath() . '/Controllers')) {
-                return $plugin->getPath() . '/Controllers';
-            }
-            return null;
-        }, $actives);
-
-        return array_filter($controllerPaths);
-    }
-
-
-    /**
      * @param string[] $paths
+     *
      * @return string[]
      */
     public function getControllers($paths)
@@ -127,8 +111,27 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
     }
 
     /**
+     * @param Plugin[] $actives
+     *
+     * @return string[]
+     */
+    private function collectControllerPaths($actives)
+    {
+        $controllerPaths = array_map(function (Plugin $plugin) {
+            if (is_dir($plugin->getPath() . '/Controllers')) {
+                return $plugin->getPath() . '/Controllers';
+            }
+
+            return null;
+        }, $actives);
+
+        return array_filter($controllerPaths);
+    }
+
+    /**
      * @param string $module
      * @param string $controller
+     *
      * @return string
      */
     private function buildEventName($module, $controller)

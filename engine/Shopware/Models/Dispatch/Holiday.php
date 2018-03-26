@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Dispatch;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * The Shopware Model represents the Holidays stored in the DB.
@@ -51,7 +51,7 @@ class Holiday extends ModelEntity
     /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -62,7 +62,7 @@ class Holiday extends ModelEntity
     /**
      * Name of the Holiday
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -71,7 +71,7 @@ class Holiday extends ModelEntity
     /**
      * SQL Calculation of this holiday
      *
-     * @var string $calculation
+     * @var string
      *
      * @ORM\Column(name="calculation", type="string", length=255, nullable=false)
      */
@@ -80,7 +80,7 @@ class Holiday extends ModelEntity
     /**
      * Next date on which this is due.
      *
-     * @var \DateTime $date
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -89,7 +89,7 @@ class Holiday extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -100,11 +100,13 @@ class Holiday extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Holiday
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -122,11 +124,13 @@ class Holiday extends ModelEntity
      * Set calculation
      *
      * @param string $calculation
+     *
      * @return Holiday
      */
     public function setCalculation($calculation)
     {
         $this->calculation = $calculation;
+
         return $this;
     }
 
@@ -144,11 +148,13 @@ class Holiday extends ModelEntity
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return Holiday
      */
     public function setDate($date)
     {
         $this->date = $date;
+
         return $this;
     }
 

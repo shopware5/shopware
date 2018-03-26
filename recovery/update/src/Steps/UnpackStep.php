@@ -57,25 +57,26 @@ class UnpackStep
      */
     public function __construct(Filesystem $localFilesyste, Filesystem $remoteFilesyste, PathBuilder $pathBuilder, $isDebug = false)
     {
-        $this->localFilesyste  = $localFilesyste;
+        $this->localFilesyste = $localFilesyste;
         $this->remoteFilesyste = $remoteFilesyste;
-        $this->pathBuilder     = $pathBuilder;
-        $this->isDebug         = $isDebug;
+        $this->pathBuilder = $pathBuilder;
+        $this->isDebug = $isDebug;
     }
 
     /**
      * @param int $offset
      * @param int $total
      *
-     * @return FinishResult|ValidResult
      * @throws \RuntimeException
+     *
+     * @return FinishResult|ValidResult
      */
     public function run($offset, $total)
     {
         $inflector = $this->pathBuilder;
 
         $remoteFs = $this->remoteFilesyste;
-        $localFs  = $this->localFilesyste;
+        $localFs = $this->localFilesyste;
 
         $backupDirRelative = $inflector->getBackupDirRelative();
 
@@ -108,10 +109,10 @@ class UnpackStep
             $sourceFile = $inflector->createSourcePath($path);
 
             if (time() - $startTime >= 5 || $count >= $maxCount) {
-                return new ValidResult($offset + $count +1, $total);
+                return new ValidResult($offset + $count + 1, $total);
             }
 
-            $count++;
+            ++$count;
 
             if ($this->isDebug) {
                 // just remove the update file

@@ -25,15 +25,12 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginRefreshCommand extends ShopwareCommand
@@ -54,10 +51,10 @@ class PluginRefreshCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var  InstallerService $pluginManager */
-        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
+        /** @var InstallerService $pluginManager */
+        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginManager->refreshPluginList();
 
-        $output->writeln(sprintf("Successfully refreshed"));
+        $output->writeln(sprintf('Successfully refreshed'));
     }
 }

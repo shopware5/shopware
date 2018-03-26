@@ -21,15 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RelatedProductsService implements Service\RelatedProductsServiceInterface
@@ -46,7 +47,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
 
     /**
      * @param Gateway\RelatedProductsGatewayInterface $gateway
-     * @param Service\ListProductServiceInterface $listProductService
+     * @param Service\ListProductServiceInterface     $listProductService
      */
     public function __construct(
         Gateway\RelatedProductsGatewayInterface $gateway,
@@ -57,7 +58,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
     {
@@ -67,7 +68,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ProductContextInterface $context)
     {
@@ -102,7 +103,8 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
 
     /**
      * @param Struct\BaseProduct[] $products
-     * @param string[] $numbers
+     * @param string[]             $numbers
+     *
      * @return Struct\BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
@@ -120,6 +122,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
 
     /**
      * @param $numbers
+     *
      * @return array
      */
     private function extractNumbers($numbers)

@@ -48,14 +48,13 @@ class ProductNumberSearch implements ProductNumberSearchInterface
      */
     private $handlers;
 
-
     /**
      * @var IndexFactoryInterface
      */
     private $indexFactory;
 
     /**
-     * @param Client $client
+     * @param Client                $client
      * @param IndexFactoryInterface $indexFactory
      * @param $handlers
      */
@@ -75,12 +74,12 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     public function search(Criteria $criteria, ShopContextInterface $context)
     {
         $search = $this->buildSearch($criteria, $context);
-        $index  = $this->indexFactory->createShopIndex($context->getShop());
+        $index = $this->indexFactory->createShopIndex($context->getShop());
 
         $data = $this->client->search([
             'index' => $index->getName(),
-            'type'  => ProductMapping::TYPE,
-            'body'  => $search->toArray()
+            'type' => ProductMapping::TYPE,
+            'body' => $search->toArray(),
         ]);
 
         $products = $this->createProducts($data);
@@ -106,8 +105,9 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
+     *
      * @return Search
      */
     private function buildSearch(Criteria $criteria, ShopContextInterface $context)
@@ -125,9 +125,9 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
-     * @param Search $search
+     * @param Criteria                $criteria
+     * @param ShopContextInterface    $context
+     * @param Search                  $search
      * @param CriteriaPartInterface[] $criteriaParts
      */
     private function addCriteriaParts(
@@ -147,6 +147,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
     /**
      * @param CriteriaPartInterface $criteriaPart
+     *
      * @return null|HandlerInterface
      */
     private function getHandler(CriteriaPartInterface $criteriaPart)
@@ -156,11 +157,12 @@ class ProductNumberSearch implements ProductNumberSearchInterface
                 return $handler;
             }
         }
-        throw new \RuntimeException(sprintf("%s class not supported", get_class($criteriaPart)));
+        throw new \RuntimeException(sprintf('%s class not supported', get_class($criteriaPart)));
     }
 
     /**
      * @param $data
+     *
      * @return BaseProduct[]
      */
     private function createProducts($data)
@@ -170,8 +172,8 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             $source = $data['_source'];
 
             $product = new BaseProduct(
-                (int)$source['id'],
-                (int)$source['variantId'],
+                (int) $source['id'],
+                (int) $source['variantId'],
                 $source['number']
             );
 
@@ -185,6 +187,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
             $products[$product->getNumber()] = $product;
         }
+
         return $products;
     }
 }

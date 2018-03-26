@@ -26,10 +26,10 @@ namespace Shopware\Bundle\SearchBundleES\SortingHandler;
 
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ReleaseDateSortingHandler implements HandlerInterface
@@ -39,7 +39,7 @@ class ReleaseDateSortingHandler implements HandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ReleaseDateSorting);
+        return $criteriaPart instanceof ReleaseDateSorting;
     }
 
     /**
@@ -51,7 +51,7 @@ class ReleaseDateSortingHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var ReleaseDateSorting $criteriaPart */
+        /* @var ReleaseDateSorting $criteriaPart */
         $search->addSort(
             new FieldSort('formattedCreatedAt', strtolower($criteriaPart->getDirection()))
         );

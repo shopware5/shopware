@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Banner;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -38,9 +39,10 @@ class Repository extends ModelRepository
      * be used to narrow the selection down to a category id.
      *
      * @param null $filter
+     *
      * @return \Doctrine\ORM\Query
      */
-    public function getBanners($filter=null)
+    public function getBanners($filter = null)
     {
         $builder = $this->getBannerMainQuery($filter);
 
@@ -53,42 +55,32 @@ class Repository extends ModelRepository
      * The amount of returned banners can be with the $limit parameter.
      *
      *
-     * @param integer $filter Category ID
-     * @param integer $limit Limit
+     * @param int  $filter    Category ID
+     * @param int  $limit     Limit
      * @param bool $randomize
+     *
      * @return mixed
      */
-    public function getAllActiveBanners($filter=null, $limit=0, $randomize=false)
+    public function getAllActiveBanners($filter = null, $limit = 0, $randomize = false)
     {
         $builder = $this->getBannerMainQuery($filter);
         $today = new \DateTime();
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom', '?3'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validFrom', '?4'),
-                    $builder->expr()->isNull('banner.validFrom')
-                )
-            )
-        )->setParameter(3, $today)->setParameter(4, null);
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo', '?5'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validTo', '?6'),
-                    $builder->expr()->isNull('banner.validTo')
-                )
 
-            )
-        )->setParameter(5, $today)
-         ->setParameter(6, null);
+        $builder->andWhere('(banner.validFrom <= ?3 OR (banner.validFrom = ?4 OR banner.validFrom IS NULL))')
+                ->setParameter(3, $today)
+                ->setParameter(4, null);
+
+        $builder->andWhere('(banner.validTo >= ?5 OR (banner.validTo = ?6 OR banner.validTo IS NULL))')
+                ->setParameter(5, $today)
+                ->setParameter(6, null);
+
         $ids = $this->getBannerIds($filter, $limit);
         if (!count($ids)) {
             return false;
         }
 
-        $builder->andWhere($builder->expr()->in('banner.id', '?7'))
-                ->setParameter(7, $ids);
+        $builder->andWhere('banner.id IN (?7)')
+                ->setParameter(7, $ids, Connection::PARAM_INT_ARRAY);
 
         return $builder->getQuery();
     }
@@ -102,13 +94,13 @@ class Repository extends ModelRepository
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getBannerMainQuery($filter=null)
+    public function getBannerMainQuery($filter = null)
     {
         $builder = $this->createQueryBuilder('banner');
-        $builder->select(array('banner'));
+        $builder->select(['banner']);
         if (null !== $filter || !empty($filter)) {
             //filter the displayed columns with the passed filter
-            $builder->andWhere("banner.categoryId = ?1")
+            $builder->andWhere('banner.categoryId = ?1')
                 ->setParameter(1, $filter);
         }
 
@@ -118,36 +110,26 @@ class Repository extends ModelRepository
     /**
      * @param $categoryId
      * @param $limit
+     *
      * @return array
      */
-    public function getBannerIds($categoryId, $limit=0)
+    public function getBannerIds($categoryId, $limit = 0)
     {
         $builder = $this->createQueryBuilder('banner');
         $today = new \DateTime();
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom', '?3'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validFrom', '?4'),
-                    $builder->expr()->isNull('banner.validFrom')
-                )
-            )
-        )->setParameter(3, $today)->setParameter(4, null);
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo', '?5'),
-                $builder->expr()->orX(
-                    $builder->expr()->eq('banner.validTo', '?6'),
-                    $builder->expr()->isNull('banner.validTo')
-                )
 
-            )
-        )->setParameter(5, $today)
-         ->setParameter(6, null);
-        $builder->select(array('banner.id as id'))
-            ->andWhere("banner.categoryId = ?1")
+        $builder->andWhere('(banner.validFrom <= ?3 OR (banner.validFrom = ?4 OR banner.validFrom IS NULL))')
+                ->setParameter(3, $today)
+                ->setParameter(4, null);
+
+        $builder->andWhere('(banner.validTo >= ?5 OR (banner.validTo = ?6 OR banner.validTo IS NULL))')
+                ->setParameter(5, $today)
+                ->setParameter(6, null);
+
+        $builder->select(['banner.id as id'])
+            ->andWhere('banner.categoryId = ?1')
             ->setParameter(1, $categoryId);
-        $retval = array();
+        $retval = [];
         $data = $builder->getQuery()->getArrayResult();
         foreach ($data as $id) {
             $retval[] = $id['id'];
@@ -155,7 +137,7 @@ class Repository extends ModelRepository
         shuffle($retval);
 
         if ($limit > 0) {
-            $retval =   array_slice($retval, 0, $limit);
+            $retval = array_slice($retval, 0, $limit);
         }
 
         return $retval;

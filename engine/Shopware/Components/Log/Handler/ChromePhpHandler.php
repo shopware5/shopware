@@ -32,7 +32,7 @@ use Monolog\Handler\ChromePHPHandler as BaseChromePhpHandler;
  * ChromePhpHandler.
  *
  * @category  Shopware
- * @package   Shopware\Components\Log\Handler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ChromePhpHandler extends BaseChromePhpHandler
@@ -40,12 +40,33 @@ class ChromePhpHandler extends BaseChromePhpHandler
     /**
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * @var \Enlight_Controller_Response_ResponseHttp
      */
     private $response;
+
+    /**
+     * @param Request  $request
+     * @param Response $response
+     */
+    public function setUp(Request $request, Response $response)
+    {
+        if (!$this->acceptsRequest($request)) {
+            $this->sendHeaders = false;
+            $this->headers = [];
+
+            return;
+        }
+
+        $this->response = $response;
+        foreach ($this->headers as $header => $content) {
+            $this->response->setHeader($header, $content, true);
+        }
+
+        $this->headers = [];
+    }
 
     /**
      * Adds the headers to the response once it's created
@@ -60,6 +81,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
 
     /**
      * @param Request $request
+     *
      * @return bool
      */
     public function acceptsRequest(Request $request)
@@ -68,28 +90,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
-     */
-    public function setUp(Request $request, Response $response)
-    {
-        if (!$this->acceptsRequest($request)) {
-            $this->sendHeaders = false;
-            $this->headers = array();
-
-            return;
-        }
-
-        $this->response = $response;
-        foreach ($this->headers as $header => $content) {
-            $this->response->setHeader($header, $content, true);
-        }
-
-        $this->headers = array();
-    }
-
-    /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function sendHeader($header, $content)
     {

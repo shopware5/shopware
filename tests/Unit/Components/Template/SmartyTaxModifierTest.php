@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\tests\Unit\Components\Template;
 
@@ -9,9 +31,9 @@ use PHPUnit\Framework\TestCase;
 class SmartyTaxModifierTest extends TestCase
 {
     /**
-     * @param mixed $tax
+     * @param mixed     $tax
      * @param int|float $expected
-     * @param string $locale
+     * @param string    $locale
      * @dataProvider taxProvider
      */
     public function testTaxModifierWithValid($tax, $expected, $locale)
@@ -23,7 +45,7 @@ class SmartyTaxModifierTest extends TestCase
     }
 
     /**
-     * @param mixed $tax
+     * @param mixed  $tax
      * @param string $locale
      * @dataProvider taxProviderInvalid
      */
@@ -51,7 +73,7 @@ class SmartyTaxModifierTest extends TestCase
             [9999, '9.999', 'de'],
             [9999, '9,999', 'en'],
             [9999.99, '9.999,99', 'de'],
-            [9999.99, '9,999.99', 'en']
+            [9999.99, '9,999.99', 'en'],
         ];
     }
 
@@ -67,7 +89,7 @@ class SmartyTaxModifierTest extends TestCase
             [true, 'en'],
             [false,  'en'],
             [null, 'en'],
-            ['', 'en']
+            ['', 'en'],
         ];
     }
 }

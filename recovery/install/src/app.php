@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 use Pimple\Container;
 use Shopware\Recovery\Common\Utils;
 use Shopware\Recovery\Install\ContainerProvider;
@@ -8,12 +31,12 @@ use Shopware\Recovery\Install\Requirements;
 use Shopware\Recovery\Install\RequirementsPath;
 use Shopware\Recovery\Install\Service\AdminService;
 use Shopware\Recovery\Install\Service\ConfigWriter;
+use Shopware\Recovery\Install\Service\CurrencyService;
 use Shopware\Recovery\Install\Service\DatabaseService;
 use Shopware\Recovery\Install\Service\LicenseInstaller;
 use Shopware\Recovery\Install\Service\LocaleSettingsService;
 use Shopware\Recovery\Install\Service\LocalLicenseUnpackService;
 use Shopware\Recovery\Install\Service\ShopService;
-use Shopware\Recovery\Install\Service\CurrencyService;
 use Shopware\Recovery\Install\Service\ThemeService;
 use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
@@ -36,12 +59,12 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-if (!isset($_SESSION["parameters"])) {
-    $_SESSION["parameters"] = [];
+if (!isset($_SESSION['parameters'])) {
+    $_SESSION['parameters'] = [];
 }
 
-if (isset($_SESSION["databaseConnectionInfo"])) {
-    $connectionInfo = $_SESSION["databaseConnectionInfo"];
+if (isset($_SESSION['databaseConnectionInfo'])) {
+    $connectionInfo = $_SESSION['databaseConnectionInfo'];
 
     try {
         $databaseFactory = new DatabaseFactory();
@@ -62,33 +85,32 @@ function selectLanguage()
     /**
      * Load language file
      */
-    $allowedLanguages = ["de", "en", "nl"];
-    $selectedLanguage = "de";
+    $allowedLanguages = ['de', 'en', 'nl'];
+    $selectedLanguage = 'de';
     if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
         $selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
         $selectedLanguage = substr($selectedLanguage[0], 0, 2);
     }
     if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
-        $selectedLanguage = "de";
+        $selectedLanguage = 'de';
     }
 
-    if (isset($_REQUEST["language"]) && in_array($_REQUEST["language"], $allowedLanguages)) {
-        $selectedLanguage = $_REQUEST["language"];
-        unset($_SESSION["parameters"]["c_config_shop_language"]);
-        unset($_SESSION["parameters"]["c_config_shop_currency"]);
-        unset($_SESSION["parameters"]["c_config_admin_language"]);
-        $_SESSION["language"] = $selectedLanguage;
+    if (isset($_REQUEST['language']) && in_array($_REQUEST['language'], $allowedLanguages)) {
+        $selectedLanguage = $_REQUEST['language'];
+        unset($_SESSION['parameters']['c_config_shop_language']);
+        unset($_SESSION['parameters']['c_config_shop_currency']);
+        unset($_SESSION['parameters']['c_config_admin_language']);
+        $_SESSION['language'] = $selectedLanguage;
 
         return $selectedLanguage;
-    } elseif (isset($_SESSION["language"]) && in_array($_SESSION["language"], $allowedLanguages)) {
-        $selectedLanguage = $_SESSION["language"];
-
-        return $selectedLanguage;
-    } else {
-        $_SESSION["language"] = $selectedLanguage;
+    } elseif (isset($_SESSION['language']) && in_array($_SESSION['language'], $allowedLanguages)) {
+        $selectedLanguage = $_SESSION['language'];
 
         return $selectedLanguage;
     }
+    $_SESSION['language'] = $selectedLanguage;
+
+    return $selectedLanguage;
 }
 
 /**
@@ -99,8 +121,8 @@ function prefixSessionVars(\Slim\Slim $app)
     // Save post parameters starting with "c_" to session
     $params = $app->request()->params();
     foreach ($params as $key => $value) {
-        if (strpos($key, "c_") !== false) {
-            $_SESSION["parameters"][$key] = $value;
+        if (strpos($key, 'c_') !== false) {
+            $_SESSION['parameters'][$key] = $value;
         }
     }
 }
@@ -128,7 +150,7 @@ $app->view()->setData('translations', $translations);
 $app->view()->setData('baseUrl', Utils::getBaseUrl($app));
 $app->view()->setData('app', $app);
 $app->view()->setData('error', false);
-$app->view()->setData('parameters', $_SESSION["parameters"]);
+$app->view()->setData('parameters', $_SESSION['parameters']);
 
 $app->error(function (\Exception $e) use ($app) {
     if (!$app->request()->isAjax()) {
@@ -137,11 +159,11 @@ $app->error(function (\Exception $e) use ($app) {
 
     $response = $app->response();
     $data = [
-        'code'    => $e->getCode(),
+        'code' => $e->getCode(),
         'message' => $e->getMessage(),
-        'file'    => $e->getFile(),
-        'line'    => $e->getLine(),
-        'trace'   => $e->getTraceAsString(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'trace' => $e->getTraceAsString(),
     ];
     $response->header('Content-Type', 'application/json');
     $response->body(json_encode($data));
@@ -176,9 +198,9 @@ $app->map('/license', function () use ($app, $menuHelper, $container) {
         $eula = file_get_contents(SW_PATH . '/eula_en.txt');
     }
 
-    $app->view()->setData("eula", $eula);
-    $app->render("/license.php");
-})->via('GET', 'POST')->name("license");
+    $app->view()->setData('eula', $eula);
+    $app->render('/license.php');
+})->via('GET', 'POST')->name('license');
 
 $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $menuHelper->setCurrent('requirements');
@@ -186,7 +208,7 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     // Check system requirements
     /** @var $shopwareSystemCheck Requirements */
     $shopwareSystemCheck = $container->offsetGet('install.requirements');
-    $systemCheckResults  = $shopwareSystemCheck->toArray();
+    $systemCheckResults = $shopwareSystemCheck->toArray();
 
     $app->view()->setData('warning', (bool) $systemCheckResults['hasWarnings']);
     $app->view()->setData('error', (bool) $systemCheckResults['hasErrors']);
@@ -207,7 +229,7 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
 
     $app->render('/requirements.php', [
         'systemCheckResults' => $systemCheckResults['checks'],
-        'systemCheckResultsWritePermissions' => $shopwareSystemCheckPathResult->toArray()
+        'systemCheckResultsWritePermissions' => $shopwareSystemCheckPathResult->toArray(),
     ]);
 })->name('requirements')->via('GET', 'POST');
 
@@ -222,30 +244,30 @@ $app->map('/database-configuration/', function () use ($app, $container, $menuHe
 
     // Initiate database object
     $databaseParameters = [
-        "user"          => isset($_SESSION["parameters"]["c_database_user"])     ? $_SESSION["parameters"]["c_database_user"] : "",
-        "password"      => isset($_SESSION["parameters"]["c_database_password"]) ? $_SESSION["parameters"]["c_database_password"] : "",
-        "host"          => isset($_SESSION["parameters"]["c_database_host"])     ? $_SESSION["parameters"]["c_database_host"] : "",
-        "port"          => isset($_SESSION["parameters"]["c_database_port"])     ? $_SESSION["parameters"]["c_database_port"] : "",
-        "socket"        => isset($_SESSION["parameters"]["c_database_socket"])   ? $_SESSION["parameters"]["c_database_socket"] : "",
-        "database"      => isset($_SESSION["parameters"]["c_database_schema"])   ? $_SESSION["parameters"]["c_database_schema"] : "",
+        'user' => isset($_SESSION['parameters']['c_database_user']) ? $_SESSION['parameters']['c_database_user'] : '',
+        'password' => isset($_SESSION['parameters']['c_database_password']) ? $_SESSION['parameters']['c_database_password'] : '',
+        'host' => isset($_SESSION['parameters']['c_database_host']) ? $_SESSION['parameters']['c_database_host'] : '',
+        'port' => isset($_SESSION['parameters']['c_database_port']) ? $_SESSION['parameters']['c_database_port'] : '',
+        'socket' => isset($_SESSION['parameters']['c_database_socket']) ? $_SESSION['parameters']['c_database_socket'] : '',
+        'database' => isset($_SESSION['parameters']['c_database_schema']) ? $_SESSION['parameters']['c_database_schema'] : '',
     ];
 
-    if (empty($databaseParameters["user"])
-        || empty($databaseParameters["host"])
-        || empty($databaseParameters["port"])
-        || empty($databaseParameters["database"])
+    if (empty($databaseParameters['user'])
+        || empty($databaseParameters['host'])
+        || empty($databaseParameters['port'])
+        || empty($databaseParameters['database'])
     ) {
-        $app->render('database-configuration.php', ["error" => "Please fill in all fields"]);
+        $app->render('database-configuration.php', ['error' => 'Please fill in all fields']);
 
         return;
     }
 
     $connectionInfo = new DatabaseConnectionInformation();
-    $connectionInfo->username     = $databaseParameters["user"];
-    $connectionInfo->hostname     = $databaseParameters["host"];
-    $connectionInfo->port         = $databaseParameters["port"];
-    $connectionInfo->databaseName = $databaseParameters["database"];
-    $connectionInfo->password     = $databaseParameters["password"];
+    $connectionInfo->username = $databaseParameters['user'];
+    $connectionInfo->hostname = $databaseParameters['host'];
+    $connectionInfo->port = $databaseParameters['port'];
+    $connectionInfo->databaseName = $databaseParameters['database'];
+    $connectionInfo->password = $databaseParameters['password'];
 
     try {
         $databaseFactory = new DatabaseFactory();
@@ -256,7 +278,7 @@ $app->map('/database-configuration/', function () use ($app, $container, $menuHe
         return;
     }
 
-    $_SESSION["databaseConnectionInfo"] = $connectionInfo;
+    $_SESSION['databaseConnectionInfo'] = $connectionInfo;
 
     try {
         /** @var $configWriter ConfigWriter */
@@ -270,7 +292,7 @@ $app->map('/database-configuration/', function () use ($app, $container, $menuHe
 
     // Redirect to next step - (everything seems to be okay)
     $app->redirect($menuHelper->getNextUrl());
-})->name("database-configuration")->via('GET', 'POST');
+})->name('database-configuration')->via('GET', 'POST');
 
 $app->map('/database-import/', function () use ($app, $container, $menuHelper) {
     $menuHelper->setCurrent('database-import');
@@ -286,7 +308,7 @@ $app->map('/database-import/', function () use ($app, $container, $menuHelper) {
         $menuHelper->setCurrent('database-configuration');
         $app->render(
             'database-configuration.php',
-            ["error" => "Please fill in all fields"]
+            ['error' => 'Please fill in all fields']
         );
 
         return;
@@ -300,8 +322,8 @@ $app->map('/database-import/', function () use ($app, $container, $menuHelper) {
     }
 
     $app->view()->set('hasSchema', $hasSchema);
-    $app->render("database-import.php");
-})->name("database-import")->via('GET', 'POST');
+    $app->render('database-import.php');
+})->name('database-import')->via('GET', 'POST');
 
 $app->map('/edition/', function () use ($app, $translations, $container, $menuHelper) {
     $menuHelper->setCurrent('edition');
@@ -310,7 +332,7 @@ $app->map('/edition/', function () use ($app, $translations, $container, $menuHe
         $container->offsetGet('db');
     } catch (\Exception $e) {
         $menuHelper->setCurrent('database-configuration');
-        $app->render('database-configuration.php', ["error" => "Please fill in all fields"]);
+        $app->render('database-configuration.php', ['error' => 'Please fill in all fields']);
 
         return;
     }
@@ -319,25 +341,25 @@ $app->map('/edition/', function () use ($app, $translations, $container, $menuHe
     $licenseUnpackService = $container->offsetGet('license.service');
 
     if ($app->request()->isPost()) {
-        if ($app->request()->post("c_edition") == "ce") {
+        if ($app->request()->post('c_edition') == 'ce') {
             // If ce-edition continue with installation
             $app->redirect($menuHelper->getNextUrl());
         }
 
         // If PE/EE/EEC check license
-        if (!$app->request()->post("c_license")) {
-            $app->view()->setData("error", $translations['edition_license_error']);
+        if (!$app->request()->post('c_license')) {
+            $app->view()->setData('error', $translations['edition_license_error']);
         } else {
             $unpackRequest = new LicenseUnpackRequest(
-                $app->request()->post("c_license"),
-                $_SERVER["HTTP_HOST"]
+                $app->request()->post('c_license'),
+                $_SERVER['HTTP_HOST']
             );
 
             try {
                 $licenseInformation = $licenseUnpackService->evaluateLicense($unpackRequest);
             } catch (\Exception $e) {
-                $app->view()->setData("error", $e->getMessage());
-                $app->render("/edition.php");
+                $app->view()->setData('error', $e->getMessage());
+                $app->render('/edition.php');
 
                 return;
             }
@@ -350,16 +372,16 @@ $app->map('/edition/', function () use ($app, $translations, $container, $menuHe
         }
     }
 
-    if (empty($_SESSION["parameters"]["c_edition"])) {
-        $_SESSION["parameters"]["c_edition"] = "ce";
+    if (empty($_SESSION['parameters']['c_edition'])) {
+        $_SESSION['parameters']['c_edition'] = 'ce';
     }
-    if (empty($_SESSION["parameters"]["c_license"])) {
-        $_SESSION["parameters"]["c_license"] = "";
+    if (empty($_SESSION['parameters']['c_license'])) {
+        $_SESSION['parameters']['c_license'] = '';
     }
 
-    $app->view()->setData("parameters", $_SESSION["parameters"]);
-    $app->render("/edition.php", []);
-})->name("edition")->via('GET', 'POST');
+    $app->view()->setData('parameters', $_SESSION['parameters']);
+    $app->render('/edition.php', []);
+})->name('edition')->via('GET', 'POST');
 
 $app->map('/configuration/', function () use ($app, $translationService, $container, $menuHelper) {
     $menuHelper->setCurrent('configuration');
@@ -368,32 +390,32 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
         $db = $container->offsetGet('db');
     } catch (\Exception $e) {
         $menuHelper->setCurrent('database-configuration');
-        $app->render('database-configuration.php', ["error" => "Please fill in all fields"]);
+        $app->render('database-configuration.php', ['error' => 'Please fill in all fields']);
 
         return;
     }
 
     if ($app->request()->isPost()) {
         $adminUser = new \Shopware\Recovery\Install\Struct\AdminUser([
-            'email'    => $_SESSION["parameters"]['c_config_admin_email'],
-            'username' => $_SESSION["parameters"]['c_config_admin_username'],
-            'locale'   => $_SESSION["parameters"]['c_config_admin_language'],
-            'name'     => $_SESSION["parameters"]['c_config_admin_name'],
-            'password' => $_SESSION["parameters"]['c_config_admin_password'],
+            'email' => $_SESSION['parameters']['c_config_admin_email'],
+            'username' => $_SESSION['parameters']['c_config_admin_username'],
+            'locale' => $_SESSION['parameters']['c_config_admin_language'],
+            'name' => $_SESSION['parameters']['c_config_admin_name'],
+            'password' => $_SESSION['parameters']['c_config_admin_password'],
         ]);
 
         $shop = new \Shopware\Recovery\Install\Struct\Shop([
-            'name'     => $_SESSION["parameters"]['c_config_shopName'],
-            'locale'   => $_SESSION["parameters"]['c_config_shop_language'],
-            'currency' => $_SESSION["parameters"]['c_config_shop_currency'],
-            'email'    => $_SESSION["parameters"]['c_config_mail'],
-            'host'     => $_SERVER["HTTP_HOST"],
-            'basePath' => str_replace("/recovery/install/index.php", "", $_SERVER["SCRIPT_NAME"]),
+            'name' => $_SESSION['parameters']['c_config_shopName'],
+            'locale' => $_SESSION['parameters']['c_config_shop_language'],
+            'currency' => $_SESSION['parameters']['c_config_shop_currency'],
+            'email' => $_SESSION['parameters']['c_config_mail'],
+            'host' => $_SERVER['HTTP_HOST'],
+            'basePath' => str_replace('/recovery/install/index.php', '', $_SERVER['SCRIPT_NAME']),
         ]);
-        $locale = $_SESSION["parameters"]['c_config_shop_language'] ? : 'de_DE';
+        $locale = $_SESSION['parameters']['c_config_shop_language'] ?: 'de_DE';
 
-        $shopService  = new ShopService($db);
-        $currencyService  = new CurrencyService($db);
+        $shopService = new ShopService($db);
+        $currencyService = new CurrencyService($db);
         $adminService = new AdminService($db);
         $localeSettingsService = new LocaleSettingsService($db, $container);
 
@@ -407,7 +429,7 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
             $localeSettingsService->updateLocaleSettings($locale);
         } catch (\Exception $e) {
             $hasErrors = true;
-            $app->view()->setData("error", $e->getMessage());
+            $app->view()->setData('error', $e->getMessage());
         }
 
         if (!$hasErrors) {
@@ -415,24 +437,24 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
         }
     }
 
-    $domain = $_SERVER["HTTP_HOST"];
-    $basepath = str_replace("/recovery/install/index.php", "", $_SERVER["SCRIPT_NAME"]);
+    $domain = $_SERVER['HTTP_HOST'];
+    $basepath = str_replace('/recovery/install/index.php', '', $_SERVER['SCRIPT_NAME']);
     // Load shop-url
-    $app->view()->setData("shop", ["domain" => $domain, "basepath" => $basepath]);
+    $app->view()->setData('shop', ['domain' => $domain, 'basepath' => $basepath]);
 
-    if (empty($_SESSION['parameters']["c_config_shop_language"])) {
-        $_SESSION["parameters"]["c_config_shop_language"] = $translationService->translate('locale');
+    if (empty($_SESSION['parameters']['c_config_shop_language'])) {
+        $_SESSION['parameters']['c_config_shop_language'] = $translationService->translate('locale');
     }
-    if (empty($_SESSION["parameters"]["c_config_shop_currency"])) {
-        $_SESSION["parameters"]["c_config_shop_currency"] = $translationService->translate('currency');
+    if (empty($_SESSION['parameters']['c_config_shop_currency'])) {
+        $_SESSION['parameters']['c_config_shop_currency'] = $translationService->translate('currency');
     }
-    if (empty($_SESSION["parameters"]["c_config_admin_language"])) {
-        $_SESSION["parameters"]["c_config_admin_language"] = $translationService->translate('locale');
+    if (empty($_SESSION['parameters']['c_config_admin_language'])) {
+        $_SESSION['parameters']['c_config_admin_language'] = $translationService->translate('locale');
     }
 
-    $app->view()->setData("parameters", $_SESSION["parameters"]);
-    $app->render("/configuration.php", []);
-})->name("configuration")->via('GET', 'POST');
+    $app->view()->setData('parameters', $_SESSION['parameters']);
+    $app->render('/configuration.php', []);
+})->name('configuration')->via('GET', 'POST');
 
 $app->map('/finalize/', function () use ($app, $container) {
     /** @var ThemeService $themeService */
@@ -440,13 +462,13 @@ $app->map('/finalize/', function () use ($app, $container) {
     $themeService->activateResponsiveTheme();
 
     $app->redirect($app->urlFor('finish'));
-})->name("finalize")->via('GET', 'POST');
+})->name('finalize')->via('GET', 'POST');
 
 $app->map('/finish/', function () use ($app, $menuHelper, $container) {
     $menuHelper->setCurrent('finish');
 
-    $domain   = $_SERVER["HTTP_HOST"];
-    $basepath = str_replace("/recovery/install/index.php", "", $_SERVER["SCRIPT_NAME"]);
+    $domain = $_SERVER['HTTP_HOST'];
+    $basepath = str_replace('/recovery/install/index.php', '', $_SERVER['SCRIPT_NAME']);
 
     /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
     $systemLocker = $container->offsetGet('system.locker');
@@ -456,20 +478,20 @@ $app->map('/finish/', function () use ($app, $menuHelper, $container) {
 
     $additionalInformation = [
         'language' => $container->offsetGet('install.language'),
-        'method' => 'installer'
+        'method' => 'installer',
     ];
 
     $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
 
     $app->render(
-        "finish.php",
-        ["shop" => ["domain" => $domain, "basepath" => $basepath]]
+        'finish.php',
+        ['shop' => ['domain' => $domain, 'basepath' => $basepath]]
     );
-})->name("finish")->via('GET', 'POST');
+})->name('finish')->via('GET', 'POST');
 
 $app->map('/database-import/importDatabase', function () use ($app, $container) {
     $response = $app->response();
-    $request  = $app->request();
+    $request = $app->request();
     $response->header('Content-Type', 'application/json');
     $response->status(200);
 
@@ -479,7 +501,7 @@ $app->map('/database-import/importDatabase', function () use ($app, $container) 
     /** @var $dump \Shopware\Recovery\Common\DumpIterator */
     $dump = $container->offsetGet('database.dump_iterator');
 
-    $offset     = (int) $request->get('offset', 0);
+    $offset = (int) $request->get('offset', 0);
     $totalCount = (int) $request->get('totalCount', 0);
 
     if ($offset == 0) {
@@ -520,10 +542,10 @@ EOD;
             $db->query($sql);
         } catch (PDOException $e) {
             $data = [
-                'query'        => $sql,
-                'success'      => false,
-                'offset'       => $offset,
-                'errorMsg'     => $e->getMessage(),
+                'query' => $sql,
+                'success' => false,
+                'offset' => $offset,
+                'errorMsg' => $e->getMessage(),
             ];
 
             $response->body(json_encode($data));
@@ -535,10 +557,10 @@ EOD;
     }
 
     $data = [
-        'valid'      => $dump->valid(),
-        'offset'     => $dump->key(),
+        'valid' => $dump->valid(),
+        'offset' => $dump->key(),
         'totalCount' => $totalCount,
-        'success'    => true,
+        'success' => true,
     ];
 
     $response->body(json_encode($data));
@@ -551,7 +573,7 @@ $app->map('/database-import/importSnippets', function () use ($app, $container) 
 
     /** @var $dump \Shopware\Recovery\Common\DumpIterator */
     $dump = $container->offsetGet('database.snippet_dump_iterator');
-    $offset     = $app->request()->get('offset');
+    $offset = $app->request()->get('offset');
     $totalCount = (int) $app->request()->get('totalCount', 0);
 
     if ($offset == 0) {
@@ -585,10 +607,10 @@ $app->map('/database-import/importSnippets', function () use ($app, $container) 
             $dump->next();
         } catch (\PDOException $e) {
             $data = [
-                'query'        => $sql,
-                'success'      => false,
-                'offset'       => $offset,
-                'errorMsg'     => $e->getMessage(),
+                'query' => $sql,
+                'success' => false,
+                'offset' => $offset,
+                'errorMsg' => $e->getMessage(),
             ];
 
             $response->body(json_encode($data));
@@ -598,27 +620,25 @@ $app->map('/database-import/importSnippets', function () use ($app, $container) 
     }
 
     $data = [
-        'valid'      => $dump->valid(),
-        'offset'     => $dump->key(),
+        'valid' => $dump->valid(),
+        'offset' => $dump->key(),
         'totalCount' => $totalCount,
-        'success'    => true,
+        'success' => true,
     ];
 
     $response->body(json_encode($data));
-
-    return;
 })->via('GET', 'POST')->name('applySnippets');
 
 $app->post('/check-database-connection', function () use ($container, $app) {
-    $request  = $app->request();
+    $request = $app->request();
     $response = $app->response();
 
     $connectionInfo = new DatabaseConnectionInformation([
-        'username'     => $request->post('c_database_user'),
-        'hostname'     => $request->post('c_database_host'),
-        'port'         => $request->post('c_database_port'),
-        'password'     => $request->post('c_database_password'),
-        'socket'       => $request->post('c_database_socket'),
+        'username' => $request->post('c_database_user'),
+        'hostname' => $request->post('c_database_host'),
+        'port' => $request->post('c_database_port'),
+        'password' => $request->post('c_database_password'),
+        'socket' => $request->post('c_database_socket'),
     ]);
 
     try {
@@ -637,12 +657,12 @@ $app->post('/check-database-connection', function () use ($container, $app) {
 
     /** @var $databaseService DatabaseService */
     $databaseService = $container->offsetGet('database.service');
-    $databaseNames   = $databaseService->getAvailableDatabaseNames();
+    $databaseNames = $databaseService->getAvailableDatabaseNames();
 
     $result = [];
     foreach ($databaseNames as $databaseName) {
         $result[] = [
-            'value'   => $databaseName,
+            'value' => $databaseName,
             'display' => $databaseName,
         ];
     }

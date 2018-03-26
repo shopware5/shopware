@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsToDbCommand extends ShopwareCommand
@@ -111,6 +111,7 @@ class SnippetsToDbCommand extends ShopwareCommand
 
     /**
      * @param $pluginName
+     *
      * @return null|\Shopware\Components\Plugin
      */
     private function getPlugin($pluginName)

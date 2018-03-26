@@ -55,15 +55,15 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function routeGetProvider()
     {
-        return array(
-            array('/api/articles/', 1, 'articles', 'index', false),
-            array('/api/v1/articles/', 1, 'articles', 'index',  false),
-            array('/api/v2/articles/', 2, 'articles', 'index', false),
-            array('/api/articles/5', 1, 'articles', 'get', 5),
-            array('/api/articles/sw123', 1, 'articles', 'get', 'sw123'),
-            array('/api/v1/articles/5', 1, 'articles', 'get', 5),
-            array('/api/v2/articles/5', 2, 'articles', 'get', 5),
-        );
+        return [
+            ['/api/articles/', 1, 'articles', 'index', false],
+            ['/api/v1/articles/', 1, 'articles', 'index',  false],
+            ['/api/v2/articles/', 2, 'articles', 'index', false],
+            ['/api/articles/5', 1, 'articles', 'get', 5],
+            ['/api/articles/sw123', 1, 'articles', 'get', 'sw123'],
+            ['/api/v1/articles/5', 1, 'articles', 'get', 5],
+            ['/api/v2/articles/5', 2, 'articles', 'get', 5],
+        ];
     }
 
     /**
@@ -72,7 +72,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId)
     {
-        $request  = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('GET');
 
         $response = new \Enlight_Controller_Response_ResponseTestCase();
@@ -89,14 +89,14 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function routePostProvider()
     {
-        return array(
-            array('/api/articles/',     1, 'articles', 'post', false),
-            array('/api/v1/articles/',  1, 'articles', 'post', false),
-            array('/api/v2/articles/',  2, 'articles', 'post', false),
-            array('/api/articles/5',    1, 'articles', 'post', 5),
-            array('/api/v1/articles/5', 1, 'articles', 'post', 5),
-            array('/api/v2/articles/5', 2, 'articles', 'post', 5),
-        );
+        return [
+            ['/api/articles/',     1, 'articles', 'post', false],
+            ['/api/v1/articles/',  1, 'articles', 'post', false],
+            ['/api/v2/articles/',  2, 'articles', 'post', false],
+            ['/api/articles/5',    1, 'articles', 'post', 5],
+            ['/api/v1/articles/5', 1, 'articles', 'post', 5],
+            ['/api/v2/articles/5', 2, 'articles', 'post', 5],
+        ];
     }
 
     /**
@@ -105,7 +105,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testPostRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId)
     {
-        $request  = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('POST');
 
         $response = new \Enlight_Controller_Response_ResponseTestCase();
@@ -122,14 +122,14 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function routePutProvider()
     {
-        return array(
-            array('/api/articles/',     1, 'articles', 'batch',  false, 200),
-            array('/api/v1/articles/',  1, 'articles', 'batch',  false, 200),
-            array('/api/v2/articles/',  2, 'articles', 'batch',  false, 200),
-            array('/api/articles/5',    1, 'articles', 'put',      5,     200),
-            array('/api/v1/articles/5', 1, 'articles', 'put',      5,     200),
-            array('/api/v2/articles/5', 2, 'articles', 'put',      5,     200),
-        );
+        return [
+            ['/api/articles/',     1, 'articles', 'batch',  false, 200],
+            ['/api/v1/articles/',  1, 'articles', 'batch',  false, 200],
+            ['/api/v2/articles/',  2, 'articles', 'batch',  false, 200],
+            ['/api/articles/5',    1, 'articles', 'put',      5,     200],
+            ['/api/v1/articles/5', 1, 'articles', 'put',      5,     200],
+            ['/api/v2/articles/5', 2, 'articles', 'put',      5,     200],
+        ];
     }
 
     /**
@@ -138,7 +138,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testPutRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId, $expectedCode)
     {
-        $request  = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('PUT');
 
         $response = new \Enlight_Controller_Response_ResponseTestCase();
@@ -155,15 +155,15 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function routeDeleteProvider()
     {
-        return array(
-            array('/api/articles/',    1, 'articles', 'batchDelete', false, 200),
-            array('/api/v1/articles/', 1, 'articles', 'batchDelete', false, 200),
-            array('/api/v2/articles/', 2, 'articles', 'batchDelete', false, 200),
+        return [
+            ['/api/articles/',    1, 'articles', 'batchDelete', false, 200],
+            ['/api/v1/articles/', 1, 'articles', 'batchDelete', false, 200],
+            ['/api/v2/articles/', 2, 'articles', 'batchDelete', false, 200],
 
-            array('/api/articles/5',    1, 'articles', 'delete', 5, 200),
-            array('/api/v1/articles/5', 1, 'articles', 'delete', 5, 200),
-            array('/api/v2/articles/5', 2, 'articles', 'delete', 5, 200),
-        );
+            ['/api/articles/5',    1, 'articles', 'delete', 5, 200],
+            ['/api/v1/articles/5', 1, 'articles', 'delete', 5, 200],
+            ['/api/v2/articles/5', 2, 'articles', 'delete', 5, 200],
+        ];
     }
 
     /**
@@ -172,7 +172,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteRoutes($uri, $expectedVersion, $expectedController, $expectedAction, $expectedId, $expectedCode)
     {
-        $request  = new \Enlight_Controller_Request_RequestTestCase();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setMethod('DELETE');
 
         $response = new \Enlight_Controller_Response_ResponseTestCase();

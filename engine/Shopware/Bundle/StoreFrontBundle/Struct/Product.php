@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Product extends ListProduct implements \JsonSerializable
@@ -81,6 +81,7 @@ class Product extends ListProduct implements \JsonSerializable
 
     /**
      * @param ListProduct $listProduct
+     *
      * @return Product
      */
     public static function createFromListProduct(ListProduct $listProduct)
@@ -93,6 +94,7 @@ class Product extends ListProduct implements \JsonSerializable
         foreach ($listProduct as $key => $value) {
             $product->$key = $value;
         }
+
         return $product;
     }
 
@@ -114,13 +116,14 @@ class Product extends ListProduct implements \JsonSerializable
 
     /**
      * @param int $index
+     *
      * @return Thumbnail[]
      */
     public function getThumbnailsBySize($index)
     {
-        /**@var $media Media*/
+        /** @var $media Media */
         $result = array_filter($this->media, function (Media $media) {
-            return ($media->getType() === Media::TYPE_IMAGE);
+            return $media->getType() === Media::TYPE_IMAGE;
         });
 
         return array_map(function (Media $media) use ($index) {
@@ -279,7 +282,7 @@ class Product extends ListProduct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

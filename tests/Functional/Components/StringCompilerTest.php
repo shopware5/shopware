@@ -24,13 +24,13 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Components_StringCompilerTest extends Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware_Components_StringCompiler $compiler
+     * @var \Shopware_Components_StringCompiler
      */
     private $compiler;
 
@@ -66,11 +66,11 @@ Benutzer: {$sMail}
 Passwort: {$sPassword}
 EOD;
 
-        $context = array(
-            'sShopURL'  => 'http://demo.shopware.de',
-            'sMail'     => 'info@example.de',
+        $context = [
+            'sShopURL' => 'http://demo.shopware.de',
+            'sMail' => 'info@example.de',
             'sPassword' => '123muster',
-        );
+        ];
 
         $result = $this->compiler->compileCompatibilityMode($template, $context);
 
@@ -100,25 +100,25 @@ Bestellnummer Artikelname Bestand/Mindestbestand
 
 EOD;
 
-        $sJob['articles'] = array(
-            array(
+        $sJob['articles'] = [
+            [
                 'ordernumber' => '111',
-                'name'        => 'test111',
-                'instock'     => '234',
-                'stockmin'    => '255',
-            ),
-            array(
+                'name' => 'test111',
+                'instock' => '234',
+                'stockmin' => '255',
+            ],
+            [
                 'ordernumber' => '123',
-                'name'        => 'test123',
-                'instock'     => '111',
-                'stockmin'    => '123',
-            ),
-        );
+                'name' => 'test123',
+                'instock' => '111',
+                'stockmin' => '123',
+            ],
+        ];
 
-        $context = array(
-            'sConfig' => array('sSHOPNAME' => 'Shopware 3.5 Demo', 'sMAIL' => 'info@example.com'),
-            'sJob'    => $sJob,
-        );
+        $context = [
+            'sConfig' => ['sSHOPNAME' => 'Shopware 3.5 Demo', 'sMAIL' => 'info@example.com'],
+            'sJob' => $sJob,
+        ];
 
         $result = $this->compiler->compileSmartyString($template, $context);
 
@@ -148,12 +148,12 @@ ihre Zugangsdaten zu http://demo.shopware.de lauten wie folgt:
 Benutzer: info@example.de
 Passwort: 123muster
 EOD;
-        $context = array(
-            'sConfig'   => array('sSHOPNAME' => 'Shopware 3.5 Demo', 'sMAIL' => 'info@example.com'),
-            'sShopURL'  => 'http://demo.shopware.de',
-            'sMail'     => 'info@example.de',
+        $context = [
+            'sConfig' => ['sSHOPNAME' => 'Shopware 3.5 Demo', 'sMAIL' => 'info@example.com'],
+            'sShopURL' => 'http://demo.shopware.de',
+            'sMail' => 'info@example.de',
             'sPassword' => '123muster',
-        );
+        ];
 
         $result = $this->compiler->compileString($template, $context);
 
@@ -163,7 +163,7 @@ EOD;
     /**
      * Test case
      *
-     * @expectedException Enlight_Exception
+     * @expectedException \Enlight_Exception
      * @expectedExceptionMessage Syntax Error 74&quot;  on line 1 &quot;Hallo {$user|invalidmodifier}&quot; unknown modifier &quot;invalidmodifier&quot
      */
     public function testInvalidSmartyShouldThrowExceptionAndCustomExceptionMessage()

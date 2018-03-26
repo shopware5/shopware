@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Customer;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 
@@ -62,7 +62,7 @@ class Address extends ModelEntity
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field
      *
-     * @var integer $id
+     * @var int
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -71,28 +71,32 @@ class Address extends ModelEntity
 
     /**
      * Contains the name of the address address company
-     * @var string $company
+     *
+     * @var string
      * @ORM\Column(name="company", type="string", length=255, nullable=true)
      */
     protected $company = null;
 
     /**
      * Contains the department name of the address address company
-     * @var string $department
+     *
+     * @var string
      * @ORM\Column(name="department", type="string", length=35, nullable=true)
      */
     protected $department = null;
 
     /**
      * Contains the customer salutation (Mr, Ms, Company)
-     * @var string $salutation
+     *
+     * @var string
      * @ORM\Column(name="salutation", type="string", length=30, nullable=false)
      */
     protected $salutation = '';
 
     /**
      * Contains the first name of the address
-     * @var string $firstname
+     *
+     * @var string
      * @ORM\Column(name="firstname", type="string", length=50, nullable=false)
      */
     protected $firstname;
@@ -105,42 +109,48 @@ class Address extends ModelEntity
 
     /**
      * Contains the last name of the address
-     * @var string $lastname
+     *
+     * @var string
      * @ORM\Column(name="lastname", type="string", length=60, nullable=false)
      */
     protected $lastname;
 
     /**
      * Contains the street name of the address
-     * @var string $street
+     *
+     * @var string
      * @ORM\Column(name="street", type="string", length=255, nullable=false)
      */
     protected $street;
 
     /**
      * Contains the zip code of the address
-     * @var string $zipcode
+     *
+     * @var string
      * @ORM\Column(name="zipcode", type="string", length=50, nullable=false)
      */
     protected $zipcode;
 
     /**
      * Contains the city name of the address
-     * @var string $city
+     *
+     * @var string
      * @ORM\Column(name="city", type="string", length=70, nullable=false)
      */
     protected $city;
 
     /**
      * Contains the phone number of the address
-     * @var string $phone
+     *
+     * @var string
      * @ORM\Column(name="phone", type="string", length=40, nullable=true)
      */
     protected $phone = null;
 
     /**
      * Contains the vat id of the address
-     * @var string $vatId
+     *
+     * @var string
      * @ORM\Column(name="ustid", type="string", length=50, nullable=true)
      */
     protected $vatId = null;
@@ -148,7 +158,7 @@ class Address extends ModelEntity
     /**
      * Contains the additional address line data
      *
-     * @var string $additionalAddressLine1
+     * @var string
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
     protected $additionalAddressLine1 = null;
@@ -156,21 +166,23 @@ class Address extends ModelEntity
     /**
      * Contains the additional address line data 2
      *
-     * @var string $additionalAddressLine2
+     * @var string
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
     protected $additionalAddressLine2 = null;
 
     /**
      * Contains the id of the country.
-     * @var integer
+     *
+     * @var int
      * @ORM\Column(name="country_id", type="integer", nullable=false)
      */
     protected $countryId;
 
     /**
      * Contains the id of the state.
-     * @var integer
+     *
+     * @var int
      * @ORM\Column(name="state_id", type="integer", nullable=true)
      */
     protected $stateId = null;
@@ -182,13 +194,16 @@ class Address extends ModelEntity
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
      * @var Customer
      */
     protected $customer;
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerAddress", mappedBy="customerAddress", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\CustomerAddress
      */
     protected $attribute;
@@ -196,6 +211,7 @@ class Address extends ModelEntity
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *
      * @var Country
      */
     protected $country;
@@ -203,6 +219,7 @@ class Address extends ModelEntity
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     *
      * @var State
      */
     protected $state;
@@ -215,7 +232,7 @@ class Address extends ModelEntity
     /**
      * Getter function for the unique id identifier property
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -434,6 +451,7 @@ class Address extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\CustomerAddress|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\CustomerAddress
      */
     public function setAttribute($attribute)

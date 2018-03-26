@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface PriceCalculationServiceInterface
@@ -45,7 +45,7 @@ interface PriceCalculationServiceInterface
      * The calculated \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule structs are wrapped into a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price
      * struct which contains only the calculated price values and the reference to his rule.
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\ListProduct             $product
      * @param Struct\ProductContextInterface $context
      */
     public function calculateProduct(Struct\ListProduct $product, Struct\ProductContextInterface $context);

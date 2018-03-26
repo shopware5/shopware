@@ -24,8 +24,6 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
-use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -36,7 +34,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AddressTest extends \Enlight_Components_Test_Controller_TestCase
@@ -65,33 +63,6 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
      * @var Customer
      */
     private static $customer;
-
-    /**
-     * @param string $method
-     * @param string $url
-     * @param array $data
-     * @return Crawler
-     */
-    private function doRequest($method = 'GET', $url, $data = [])
-    {
-        $this->reset();
-
-        $this->Request()->setMethod($method);
-
-        if ($method === 'POST') {
-            $this->Request()->setPost($data);
-        }
-
-        $this->dispatch($url);
-
-        if ($this->Response()->isRedirect()) {
-            $parts = parse_url($this->Response()->getHeaders()[0]['value']);
-            $followUrl = $parts['path'];
-            return $this->doRequest('GET', $followUrl);
-        }
-
-        return new Crawler($this->Response()->getBody());
-    }
 
     /**
      * Create one customer to be used for these tests
@@ -175,8 +146,8 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
                     'street' => 'Fasanenstrasse 99',
                     'zipcode' => '79268',
                     'city' => 'Bötzingen',
-                    'country' => 2
-                ]
+                    'country' => 2,
+                ],
             ]
         );
 
@@ -220,8 +191,8 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
                     'street' => 'Fasanenstrasse 99',
                     'zipcode' => '79268',
                     'city' => 'Bötzingen',
-                    'country' => 2
-                ]
+                    'country' => 2,
+                ],
             ]
         );
 
@@ -233,6 +204,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * @depends testCreation
+     *
      * @param int $addressId
      */
     public function testDeletion($addressId)
@@ -258,7 +230,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->ensureLogin();
         $addressId = self::$customer->getDefaultBillingAddress()->getId();
 
-        $this->doRequest('POST', '/address/delete/id/'.$addressId.'/', ['id' => $addressId]);
+        $this->doRequest('POST', '/address/delete/id/' . $addressId . '/', ['id' => $addressId]);
     }
 
     /**
@@ -285,9 +257,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertGreaterThan(0, $addressId);
 
         // edit the entry
-        $expectedText = "Herr
+        $expectedText = 'Herr
 Shop ManMusterstr. 5555555 Musterhausen
-Nordrhein-WestfalenDeutschland";
+Nordrhein-WestfalenDeutschland';
 
         $this->doRequest(
             'POST',
@@ -302,8 +274,8 @@ Nordrhein-WestfalenDeutschland";
                     'zipcode' => '55555',
                     'city' => 'Musterhausen',
                     'country' => 2,
-                    'state' => 3
-                ]
+                    'state' => 3,
+                ],
             ]
         );
 
@@ -313,6 +285,35 @@ Nordrhein-WestfalenDeutschland";
 
         $this->assertNotEquals($originalText, $currentText);
         $this->assertEquals($expectedText, $currentText);
+    }
+
+    /**
+     * @param string $method
+     * @param string $url
+     * @param array  $data
+     *
+     * @return Crawler
+     */
+    private function doRequest($method = 'GET', $url, $data = [])
+    {
+        $this->reset();
+
+        $this->Request()->setMethod($method);
+
+        if ($method === 'POST') {
+            $this->Request()->setPost($data);
+        }
+
+        $this->dispatch($url);
+
+        if ($this->Response()->isRedirect()) {
+            $parts = parse_url($this->Response()->getHeaders()[0]['value']);
+            $followUrl = $parts['path'];
+
+            return $this->doRequest('GET', $followUrl);
+        }
+
+        return new Crawler($this->Response()->getBody());
     }
 
     /**
@@ -327,18 +328,19 @@ Nordrhein-WestfalenDeutschland";
      * Helper method for creating a valid customer
      *
      * @param bool $randomEmail
+     *
      * @return array
      */
     private static function getCustomerDemoData($randomEmail = false)
     {
-        $emailPrefix = $randomEmail ? uniqid(rand()) : "";
+        $emailPrefix = $randomEmail ? uniqid(rand()) : '';
 
         $data = [
             'salutation' => 'mr',
             'firstname' => 'Albert',
             'lastname' => 'McTaggart',
             'email' => $emailPrefix . 'albert.mctaggart@shopware.test',
-            'password' => uniqid(rand())
+            'password' => uniqid(rand()),
         ];
 
         return $data;
@@ -356,7 +358,7 @@ Nordrhein-WestfalenDeutschland";
             'zipcode' => '78372',
             'city' => 'Orange Grove',
             'country' => $country,
-            'state' => self::createState($country)
+            'state' => self::createState($country),
         ];
 
         return $data;
@@ -371,7 +373,7 @@ Nordrhein-WestfalenDeutschland";
             'street' => '3844 Euclid Avenue',
             'zipcode' => '93101',
             'city' => 'Santa Barbara',
-            'country' => self::createCountry()
+            'country' => self::createCountry(),
         ];
 
         return $data;
@@ -384,7 +386,7 @@ Nordrhein-WestfalenDeutschland";
     {
         $country = new Country();
 
-        $country->setName('ShopwareLand '.uniqid(rand()));
+        $country->setName('ShopwareLand ' . uniqid(rand()));
         $country->setActive(true);
         $country->setDisplayStateInRegistration(1);
         $country->setForceStateInRegistration(0);
@@ -399,13 +401,14 @@ Nordrhein-WestfalenDeutschland";
 
     /**
      * @param Country $country
+     *
      * @return State
      */
     private static function createState(Country $country)
     {
         $state = new State();
 
-        $state->setName('Shopware State '.uniqid(rand()));
+        $state->setName('Shopware State ' . uniqid(rand()));
         $state->setActive(1);
         $state->setCountry($country);
         $state->setShortCode(uniqid(rand()));

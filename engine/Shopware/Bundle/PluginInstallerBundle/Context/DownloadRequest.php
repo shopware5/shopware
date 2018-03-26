@@ -26,9 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
 class DownloadRequest
 {
     /**
@@ -52,9 +49,9 @@ class DownloadRequest
     private $token;
 
     /**
-     * @param string $technicalName
-     * @param string $shopwareVersion
-     * @param string $domain
+     * @param string                 $technicalName
+     * @param string                 $shopwareVersion
+     * @param string                 $domain
      * @param AccessTokenStruct|null $token
      */
     public function __construct($technicalName, $shopwareVersion, $domain, AccessTokenStruct $token = null)

@@ -28,49 +28,11 @@ use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SimilarShownTest extends AbstractMarketing
 {
-    protected function getDemoData()
-    {
-        return require __DIR__ . '/fixtures/similarShown.php';
-    }
-
-    /**
-     * The demo data contains 144 combinations of the similar shown articles for three users.
-     */
-    protected function insertDemoData()
-    {
-        $this->Db()->query("DELETE FROM s_emarketing_lastarticles");
-        $statement = $this->Db()->prepare("
-            INSERT INTO s_emarketing_lastarticles (img, name, articleID, sessionID, time, userID, shopID)
-            VALUES(:img, :name, :articleID, :sessionID, :time, :userID, :shopID)"
-        );
-        foreach ($this->getDemoData() as $data) {
-            $statement->execute($data);
-        }
-    }
-
-    protected function getAllSimilarShown($condition = '')
-    {
-        return $this->Db()->fetchAll('SELECT * FROM s_articles_similar_shown_ro ' . $condition);
-    }
-
-    protected function resetSimilarShown($condition = '')
-    {
-        $this->Db()->query("DELETE FROM s_articles_similar_shown_ro " . $condition);
-    }
-
-    protected function setSimilarShownInvalid($date = '2010-01-01', $condition = '')
-    {
-        $this->Db()->query(" UPDATE s_articles_similar_shown_ro SET init_date = :date " . $condition, array(
-            'date' => $date
-        ));
-    }
-
-
     public function testResetSimilarShown()
     {
         $this->SimilarShown()->resetSimilarShown();
@@ -120,8 +82,8 @@ class SimilarShownTest extends AbstractMarketing
         foreach ($similarShown as $combination) {
             $this->SimilarShown()->refreshSimilarShown($combination['article_id'], $combination['related_article_id']);
             $updated = $this->getAllSimilarShown(
-                " WHERE article_id = " . $combination['article_id'] .
-                " AND related_article_id = " . $combination['related_article_id']
+                ' WHERE article_id = ' . $combination['article_id'] .
+                ' AND related_article_id = ' . $combination['related_article_id']
             );
             $updated = $updated[0];
             $this->assertEquals($combination['viewed'] + 1, $updated['viewed']);
@@ -142,7 +104,7 @@ class SimilarShownTest extends AbstractMarketing
 
         $this->setSimilarShownInvalid('2010-01-01', 'LIMIT 20');
 
-        Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', array());
+        Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', []);
 
         $articles = $this->getAllSimilarShown();
 
@@ -169,12 +131,49 @@ class SimilarShownTest extends AbstractMarketing
         $this->assertNotEmpty($cron);
 
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
-        $this->Plugin()->refreshSimilarShown(new \Enlight_Event_EventArgs(array('subject' => $this)));
+        $this->Plugin()->refreshSimilarShown(new \Enlight_Event_EventArgs(['subject' => $this]));
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
         $this->assertCount(
             count($this->getAllSimilarShown()),
             $articles
         );
+    }
+
+    protected function getDemoData()
+    {
+        return require __DIR__ . '/fixtures/similarShown.php';
+    }
+
+    /**
+     * The demo data contains 144 combinations of the similar shown articles for three users.
+     */
+    protected function insertDemoData()
+    {
+        $this->Db()->query('DELETE FROM s_emarketing_lastarticles');
+        $statement = $this->Db()->prepare('
+            INSERT INTO s_emarketing_lastarticles (img, name, articleID, sessionID, time, userID, shopID)
+            VALUES(:img, :name, :articleID, :sessionID, :time, :userID, :shopID)'
+        );
+        foreach ($this->getDemoData() as $data) {
+            $statement->execute($data);
+        }
+    }
+
+    protected function getAllSimilarShown($condition = '')
+    {
+        return $this->Db()->fetchAll('SELECT * FROM s_articles_similar_shown_ro ' . $condition);
+    }
+
+    protected function resetSimilarShown($condition = '')
+    {
+        $this->Db()->query('DELETE FROM s_articles_similar_shown_ro ' . $condition);
+    }
+
+    protected function setSimilarShownInvalid($date = '2010-01-01', $condition = '')
+    {
+        $this->Db()->query(' UPDATE s_articles_similar_shown_ro SET init_date = :date ' . $condition, [
+            'date' => $date,
+        ]);
     }
 }

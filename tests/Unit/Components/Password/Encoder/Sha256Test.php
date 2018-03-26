@@ -42,10 +42,10 @@ class Sha256Test extends TestCase
     {
         parent::setUp();
 
-        $this->hasher = new Sha256(array(
+        $this->hasher = new Sha256([
             'iterations' => 2,
-            'salt_len' => 22
-        ));
+            'salt_len' => 22,
+        ]);
     }
 
     /**
@@ -116,10 +116,10 @@ class Sha256Test extends TestCase
     public function testRehash2()
     {
         $hash = $this->hasher->encodePassword('foobar');
-        $this->hasher = new Sha256(array(
+        $this->hasher = new Sha256([
             'iterations' => 3,
-            'salt_len'   => 22
-        ));
+            'salt_len' => 22,
+        ]);
 
         $this->assertTrue($this->hasher->isReencodeNeeded($hash));
     }

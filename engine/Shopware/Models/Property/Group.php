@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Property;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Article Property Model
@@ -37,7 +37,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Group extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyGroup", mappedBy="propertyGroup", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\PropertyGroup
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -46,35 +54,35 @@ class Group extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
 
     /**
-     * @var integer $comparable
+     * @var int
      *
      * @ORM\Column(name="comparable", type="boolean")
      */
     private $comparable;
 
     /**
-     * @var integer $sortMode
+     * @var int
      *
      * @ORM\Column(name="sortMode", type="integer", nullable=false)
      */
     private $sortMode;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $options
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Option")
      * @ORM\JoinTable(name="s_filter_relations",
@@ -85,38 +93,31 @@ class Group extends ModelEntity
     private $options;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $relations
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Relation", mappedBy="group")
      */
     private $relations;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $articles
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="propertyGroup", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="id", referencedColumnName="filtergroupID")
      */
     private $articles;
 
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyGroup", mappedBy="propertyGroup", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\PropertyGroup
-     */
-    protected $attribute;
-
     public function __construct()
     {
-        $this->options   = new ArrayCollection();
-        $this->articles  = new ArrayCollection();
+        $this->options = new ArrayCollection();
+        $this->articles = new ArrayCollection();
         $this->relations = new ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -127,11 +128,13 @@ class Group extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Group
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -148,19 +151,21 @@ class Group extends ModelEntity
     /**
      * Set position
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Group
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -170,19 +175,21 @@ class Group extends ModelEntity
     /**
      * Set comparable
      *
-     * @param integer $comparable
+     * @param int $comparable
+     *
      * @return Group
      */
     public function setComparable($comparable)
     {
         $this->comparable = $comparable;
+
         return $this;
     }
 
     /**
      * Get comparable
      *
-     * @return integer
+     * @return int
      */
     public function getComparable()
     {
@@ -192,19 +199,21 @@ class Group extends ModelEntity
     /**
      * Set sort mode
      *
-     * @param integer $sortMode
+     * @param int $sortMode
+     *
      * @return Group
      */
     public function setSortMode($sortMode)
     {
         $this->sortMode = $sortMode;
+
         return $this;
     }
 
     /**
      * Get sortMode
      *
-     * @return integer
+     * @return int
      */
     public function getSortMode()
     {
@@ -223,6 +232,7 @@ class Group extends ModelEntity
 
     /**
      * @param Option $option
+     *
      * @return \Shopware\Models\Property\Group
      */
     public function removeOption(Option $option)
@@ -234,6 +244,7 @@ class Group extends ModelEntity
 
     /**
      * @param Option $option
+     *
      * @return \Shopware\Models\Property\Group
      */
     public function addOption(Option $option)
@@ -245,6 +256,7 @@ class Group extends ModelEntity
 
     /**
      * @param \Shopware\Models\Property\Option[] $options
+     *
      * @return Group
      */
     public function setOptions(array $options)
@@ -278,6 +290,7 @@ class Group extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\PropertyGroup|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\PropertyGroup
      */
     public function setAttribute($attribute)

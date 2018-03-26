@@ -44,6 +44,16 @@ class Grammar
     protected $eventManager;
 
     /**
+     * @param $dqlHelper DqlHelper
+     * @param $eventManager \Enlight_Event_EventManager
+     */
+    public function __construct($dqlHelper, $eventManager)
+    {
+        $this->dqlHelper = $dqlHelper;
+        $this->eventManager = $eventManager;
+    }
+
+    /**
      * @return DqlHelper
      */
     public function getDqlHelper()
@@ -60,39 +70,30 @@ class Grammar
     }
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $eventManager \Enlight_Event_EventManager
-     */
-    public function __construct($dqlHelper, $eventManager)
-    {
-        $this->dqlHelper = $dqlHelper;
-        $this->eventManager = $eventManager;
-    }
-
-    /**
      * Generates attributes from column names. Attributes have a name which is known to the lexer and some
      * rules regarding the supported operators.
      * Most operator rules can be generated from the table definition.
      *
-     * @return array
      * @throws \RuntimeException When the column was not defined
+     *
+     * @return array
      */
     public function generateAttributesFromColumns()
     {
         $columns = $this->getDqlHelper()->getAttributes();
-        $columnInfo = array();
+        $columnInfo = [];
 
         foreach ($this->getDqlHelper()->getEntities() as $entity) {
             list($entity, $prefix) = $entity;
-            $newMapping = array();
+            $newMapping = [];
             $mappings = $this->getDqlHelper()->getEntityManager()->getClassMetadata($entity)->fieldMappings;
             foreach ($mappings as $key => $value) {
-                $newMapping[strtoupper($prefix.'.'.$key)] = $value;
+                $newMapping[strtoupper($prefix . '.' . $key)] = $value;
             }
             $columnInfo = array_merge($columnInfo, $newMapping);
         }
 
-        $attributes = array();
+        $attributes = [];
 
         foreach ($columns as $column) {
             $mapping = $columnInfo[$column];
@@ -103,37 +104,36 @@ class Grammar
                 case 'integer':
                 case 'decimal':
                 case 'float':
-                    $attributes[$formattedColumn] = array('>', '>=', '<', '<=', '=', '!=', 'ISNULL');
+                    $attributes[$formattedColumn] = ['>', '>=', '<', '<=', '=', '!=', 'ISNULL'];
                     break;
                 case 'text':
                 case 'string':
-                    $attributes[$formattedColumn] = array('=', '~', '!~', 'IN', '!=', 'ISNULL');
+                    $attributes[$formattedColumn] = ['=', '~', '!~', 'IN', '!=', 'ISNULL'];
                     break;
                 case 'boolean':
-                    $attributes[$formattedColumn] = array('ISTRUE', 'ISFALSE', 'ISNULL');
+                    $attributes[$formattedColumn] = ['ISTRUE', 'ISFALSE', 'ISNULL'];
                     break;
                 case 'date':
-                    $attributes[$formattedColumn] = array('>', '>=', '<', '<=', '=', 'ISNULL');
+                    $attributes[$formattedColumn] = ['>', '>=', '<', '<=', '=', 'ISNULL'];
                     break;
                 case 'datetime':
-                    $attributes[$formattedColumn] = array('>', '>=', '<', '<=', '=', 'ISNULL');
+                    $attributes[$formattedColumn] = ['>', '>=', '<', '<=', '=', 'ISNULL'];
                     break;
                 default:
                     // Allow custom types. If not event handles the unknown type
                     // an exception will be thrown
                     if ($event = $this->getEventManager()->notifyUntil(
-                        'SwagMultiEdit_Product_Grammar_generateAttributesFromColumns_Type_'.ucfirst(strtolower($type)),
-                        array(
-                            'subject'   => $this,
+                        'SwagMultiEdit_Product_Grammar_generateAttributesFromColumns_Type_' . ucfirst(strtolower($type)),
+                        [
+                            'subject' => $this,
                             'type' => $type,
-                            'mapping'  => $mapping
-                        )
+                            'mapping' => $mapping,
+                        ]
                     )) {
                         $attributes[$formattedColumn] = $event->getReturn();
                     } else {
                         throw new \RuntimeException("Column with type {$type} was not configured, yet");
                     }
-
             }
         }
 
@@ -147,42 +147,42 @@ class Grammar
      */
     public function getGrammar()
     {
-        $grammar = array(
-            'nullaryOperators' => array(
+        $grammar = [
+            'nullaryOperators' => [
                 'HASIMAGE' => '',
                 'HASNOIMAGE' => '',
                 'ISMAIN' => '',
                 'HASPROPERTIES' => '',
                 'HASCONFIGURATOR' => '',
-                'HASBLOCKPRICE' => ''
-            ),
-            'unaryOperators' => array(
+                'HASBLOCKPRICE' => '',
+            ],
+            'unaryOperators' => [
                 'ISTRUE' => '',
                 'ISFALSE' => '',
                 'ISNULL' => '',
-            ),
-            'binaryOperators' => array(
-                'IN' => array('('),
-                '>=' => array('/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'),
-                '=' => array('/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'),
-                '!=' => array('/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'),
-                '!~' => array('/"(.*?)"/'),
-                '~' => array('/"(.*?)"/'),
-                '>' => array('/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'),
-                '<=' => array('/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'),
-                '<' => array('/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/')
-            ),
-            'subOperators' => array( '(', ')' ),
-            'boolOperators' => array( 'AND', 'OR' ),
-            'values' => array( '/"(.*?)"/', '/^-{0,1}[0-9.]+$/'),
+            ],
+            'binaryOperators' => [
+                'IN' => ['('],
+                '>=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
+                '=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
+                '!=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
+                '!~' => ['/"(.*?)"/'],
+                '~' => ['/"(.*?)"/'],
+                '>' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
+                '<=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
+                '<' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
+            ],
+            'subOperators' => ['(', ')'],
+            'boolOperators' => ['AND', 'OR'],
+            'values' => ['/"(.*?)"/', '/^-{0,1}[0-9.]+$/'],
             'attributes' => $this->generateAttributesFromColumns(),
-        );
+        ];
 
         // Allow users to add own operators / rules
         $grammar = $this->getEventManager()->filter(
             'SwagMultiEdit_Product_Grammar_getGrammar_filterGrammar',
             $grammar,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         return $grammar;

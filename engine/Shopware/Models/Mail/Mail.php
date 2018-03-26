@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Mail;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware mail model represents a single mail
@@ -52,12 +52,41 @@ class Mail extends ModelEntity
     /**
      * Consts defining the mailtype
      */
-    const MAILTYPE_USER   = 1;
+    const MAILTYPE_USER = 1;
     const MAILTYPE_SYSTEM = 2;
-    const MAILTYPE_STATE  = 3;
+    const MAILTYPE_STATE = 3;
 
     /**
-     * @var integer $id
+     * OWNING SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Status", inversedBy="mail")
+     * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
+     * @ORM\OrderBy({"position" = "ASC"})
+     *
+     * @var \Shopware\Models\Order\Status
+     */
+    protected $status;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Attachment", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $attachments;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Mail", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Mail
+     */
+    protected $attribute;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -68,56 +97,56 @@ class Mail extends ModelEntity
     /**
      * Name of Mail
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var string $fromMail
+     * @var string
      *
      * @ORM\Column(name="frommail", type="string", length=255, nullable=false)
      */
     private $fromMail = '';
 
     /**
-     * @var string $fromName
+     * @var string
      *
      * @ORM\Column(name="fromname", type="string", length=255, nullable=false)
      */
-    private $fromName  = '';
+    private $fromName = '';
 
     /**
-     * @var string $subject
+     * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255, nullable=false)
      */
     private $subject;
 
     /**
-     * @var string $content
+     * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
     private $content = '';
 
     /**
-     * @var string $contentHtml
+     * @var string
      *
      * @ORM\Column(name="contentHTML", type="text", nullable=false)
      */
     private $contentHtml = '';
 
     /**
-     * @var boolean $isHtml
+     * @var bool
      *
      * @ORM\Column(name="ishtml", type="boolean", nullable=false)
      */
     private $isHtml = false;
 
     /**
-     * @var boolean $dirty
+     * @var bool
      *
      * @ORM\Column(name="dirty", type="boolean", nullable=true)
      */
@@ -129,14 +158,14 @@ class Mail extends ModelEntity
      * 2 - System Mail
      * 3 - State Mail - Can be further differentiated into order-state-mails and payment-state-mails
      *
-     * @var integer $mailtype
+     * @var int
      *
      * @ORM\Column(name="mailtype", type="integer")
      */
     private $mailtype = 1;
 
     /**
-     * @var array $context
+     * @var array
      *
      * @ORM\Column(name="context", type="array")
      */
@@ -145,30 +174,7 @@ class Mail extends ModelEntity
     /**
      * @var array
      */
-    private $translation = array();
-
-    /**
-     * OWNING SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Status", inversedBy="mail")
-     * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
-     * @ORM\OrderBy({"position" = "ASC"})
-     * @var \Shopware\Models\Order\Status
-     */
-    protected $status;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Attachment", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $attachments;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Mail", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\Mail
-     */
-    protected $attribute;
+    private $translation = [];
 
     /**
      * Constructor of Mail
@@ -181,7 +187,7 @@ class Mail extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -192,11 +198,13 @@ class Mail extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -215,11 +223,13 @@ class Mail extends ModelEntity
      *
      *
      * @param string $fromMail
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setFromMail($fromMail)
     {
         $this->fromMail = $fromMail;
+
         return $this;
     }
 
@@ -237,11 +247,13 @@ class Mail extends ModelEntity
      * Set fromName
      *
      * @param string $fromName
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setFromName($fromName)
     {
         $this->fromName = $fromName;
+
         return $this;
     }
 
@@ -259,11 +271,13 @@ class Mail extends ModelEntity
      * Set subject
      *
      * @param string $subject
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
+
         return $this;
     }
 
@@ -281,11 +295,13 @@ class Mail extends ModelEntity
      * Set content
      *
      * @param string $content
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setContent($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -303,11 +319,13 @@ class Mail extends ModelEntity
      * Set contentHtml
      *
      * @param string $contentHtml
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setContentHtml($contentHtml)
     {
         $this->contentHtml = $contentHtml;
+
         return $this;
     }
 
@@ -324,19 +342,21 @@ class Mail extends ModelEntity
     /**
      * Set isHtml
      *
-     * @param boolean $isHtml
+     * @param bool $isHtml
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setIsHtml($isHtml = true)
     {
         $this->isHtml = $isHtml;
+
         return $this;
     }
 
     /**
      * isHtml-Mail
      *
-     * @return integer
+     * @return int
      */
     public function isHtml()
     {
@@ -402,7 +422,8 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @param integer $mailtype
+     * @param int $mailtype
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setMailtype($mailtype)
@@ -424,6 +445,7 @@ class Mail extends ModelEntity
      * Set translation array
      *
      * @param array $translation
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setTranslation($translation)
@@ -437,6 +459,7 @@ class Mail extends ModelEntity
      * Get translated fieldvalue if available
      *
      * @param string $fieldName
+     *
      * @return string
      */
     public function getTranslated($fieldName)
@@ -450,6 +473,7 @@ class Mail extends ModelEntity
 
     /**
      * @param array $context
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setContext($context)
@@ -465,8 +489,9 @@ class Mail extends ModelEntity
     public function getContext()
     {
         if (null === $this->context) {
-            return array();
+            return [];
         }
+
         return $this->context;
     }
 
@@ -491,14 +516,15 @@ class Mail extends ModelEntity
      *
      * @param $array
      * @param string $glue
+     *
      * @return array
      */
     public function arrayGetPath($array, $glue = '.')
     {
-        $result = array();
+        $result = [];
         $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($array));
         foreach ($iterator as $leafValue) {
-            $parts = array();
+            $parts = [];
             foreach (range(0, $iterator->getDepth()) as $depth) {
                 $parts[] = $iterator->getSubIterator($depth)->key();
             }
@@ -507,6 +533,7 @@ class Mail extends ModelEntity
 
             $result[$path] = $leafValue;
         }
+
         return $result;
     }
 
@@ -520,11 +547,13 @@ class Mail extends ModelEntity
 
     /**
      * @param \Shopware\Models\Order\Status|array|null $status
+     *
      * @return \Shopware\Models\Order\Status
      */
     public function setStatus($status)
     {
         $this->mailtype = self::MAILTYPE_STATE;
+
         return $this->setOneToOne($status, '\Shopware\Models\Order\Status', 'status', 'mail');
     }
 
@@ -538,6 +567,7 @@ class Mail extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $attachments
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setAttachments($attachments)
@@ -555,6 +585,7 @@ class Mail extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Mail|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Mail
      */
     public function setAttribute($attribute)
@@ -563,7 +594,7 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDirty()
     {
@@ -571,7 +602,7 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @param boolean $dirty
+     * @param bool $dirty
      */
     public function setDirty($dirty)
     {

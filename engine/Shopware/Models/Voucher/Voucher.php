@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Voucher;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Standard Voucher Model Entity
@@ -36,7 +36,24 @@ use Doctrine\ORM\Mapping as ORM;
 class Voucher extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Voucher\Code", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Voucher\Code Objects
+     */
+    protected $codes;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Voucher", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Voucher
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,149 +62,135 @@ class Voucher extends ModelEntity
     private $id;
 
     /**
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description;
 
     /**
-     * @var string $voucherCode
+     * @var string
      *
      * @ORM\Column(name="vouchercode", type="string", length=100, nullable=false)
      */
     private $voucherCode;
 
     /**
-     * @var integer $numberOfUnits
+     * @var int
      *
      * @ORM\Column(name="numberofunits", type="integer", nullable=false)
      */
     private $numberOfUnits;
 
     /**
-     * @var float $value
+     * @var float
      *
      * @ORM\Column(name="value", type="float", nullable=false)
      */
     private $value;
 
     /**
-     * @var float $minimumCharge
+     * @var float
      *
      * @ORM\Column(name="minimumcharge", type="float", nullable=false)
      */
     private $minimumCharge;
 
     /**
-     * @var integer $shippingFree
+     * @var int
      *
      * @ORM\Column(name="shippingfree", type="integer", nullable=false)
      */
     private $shippingFree;
 
     /**
-     * @var integer $bindToSupplier
+     * @var int
      *
      * @ORM\Column(name="bindtosupplier", type="integer", nullable=true)
      */
     private $bindToSupplier;
 
     /**
-     * @var \DateTime $validFrom
+     * @var \DateTime
      *
      * @ORM\Column(name="valid_from", type="date", nullable=true)
      */
     private $validFrom = null;
 
     /**
-     * @var \DateTime $validTo
+     * @var \DateTime
      *
      * @ORM\Column(name="valid_to", type="date", nullable=true)
      */
     private $validTo = null;
 
     /**
-     * @var string $orderCode
+     * @var string
      *
      * @ORM\Column(name="ordercode", type="string", length=100, nullable=false)
      */
     private $orderCode;
 
     /**
-     * @var integer $modus
+     * @var int
      *
      * @ORM\Column(name="modus", type="integer", nullable=false)
      */
     private $modus;
 
     /**
-     * @var integer $percental
+     * @var int
      *
      * @ORM\Column(name="percental", type="integer", nullable=false)
      */
     private $percental;
 
     /**
-     * @var integer $numOrder
+     * @var int
      *
      * @ORM\Column(name="numorder", type="integer", nullable=false)
      */
     private $numOrder;
 
     /**
-     * @var string $customerGroup
+     * @var string
      *
      * @ORM\Column(name="customergroup", type="integer", nullable=true)
      */
     private $customerGroup;
 
     /**
-     * @var string $restrictArticles
+     * @var string
      *
      * @ORM\Column(name="restrictarticles", type="text", nullable=false)
      */
     private $restrictArticles;
 
     /**
-     * @var integer $strict
+     * @var int
      *
      * @ORM\Column(name="strict", type="integer", nullable=false)
      */
     private $strict;
 
     /**
-     * @var integer $shopId
+     * @var int
      *
      * @ORM\Column(name="subshopID", type="integer", nullable=true)
      */
     private $shopId;
 
     /**
-     * @var string $taxConfig
+     * @var string
      *
      * @ORM\Column(name="taxconfig", type="string", length=15, nullable=false)
      */
     private $taxConfig;
 
     /**
-     * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Voucher\Code", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Voucher\Code Objects
-     */
-    protected $codes;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Voucher", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\Voucher
-     */
-    protected $attribute;
-
-    /**
      * Getter Method to get the Id field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -199,11 +202,13 @@ class Voucher extends ModelEntity
      *
      *
      * @param string $description
+     *
      * @return Voucher
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -221,11 +226,13 @@ class Voucher extends ModelEntity
      * Setter Method to set the voucherCode field from the Model
      *
      * @param string $voucherCode
+     *
      * @return Voucher
      */
     public function setVoucherCode($voucherCode)
     {
         $this->voucherCode = $voucherCode;
+
         return $this;
     }
 
@@ -242,19 +249,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the numberOfUnits field from the Model
      *
-     * @param integer $numberOfUnits
+     * @param int $numberOfUnits
+     *
      * @return Voucher
      */
     public function setNumberOfUnits($numberOfUnits)
     {
         $this->numberOfUnits = $numberOfUnits;
+
         return $this;
     }
 
     /**
      * Getter Method to get the numberOfUnits field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getNumberOfUnits()
     {
@@ -265,11 +274,13 @@ class Voucher extends ModelEntity
      * Setter Method to set the value field from the Model
      *
      * @param float $value
+     *
      * @return Voucher
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -287,11 +298,13 @@ class Voucher extends ModelEntity
      * Setter Method to set the minimumCharge field from the Model
      *
      * @param float $minimumCharge
+     *
      * @return Voucher
      */
     public function setMinimumCharge($minimumCharge)
     {
         $this->minimumCharge = $minimumCharge;
+
         return $this;
     }
 
@@ -308,19 +321,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the shippingFree field from the Model
      *
-     * @param integer $shippingFree
+     * @param int $shippingFree
+     *
      * @return Voucher
      */
     public function setShippingFree($shippingFree)
     {
         $this->shippingFree = $shippingFree;
+
         return $this;
     }
 
     /**
      * Getter Method to get the shippingFreefield from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getShippingFree()
     {
@@ -330,19 +345,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the bindToSupplier field from the Model
      *
-     * @param integer $bindToSupplier
+     * @param int $bindToSupplier
+     *
      * @return Voucher
      */
     public function setBindToSupplier($bindToSupplier)
     {
         $this->bindToSupplier = $bindToSupplier;
+
         return $this;
     }
 
     /**
      * Getter Method to get the bindToSupplier field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getBindToSupplier()
     {
@@ -353,6 +370,7 @@ class Voucher extends ModelEntity
      * Setter Method to set the validFrom field from the Model
      *
      * @param \DateTime|string $validFrom
+     *
      * @return Voucher
      */
     public function setValidFrom($validFrom)
@@ -361,6 +379,7 @@ class Voucher extends ModelEntity
             $validFrom = new \DateTime($validFrom);
         }
         $this->validFrom = $validFrom;
+
         return $this;
     }
 
@@ -378,6 +397,7 @@ class Voucher extends ModelEntity
      * Setter Method to set the validTo field from the Model
      *
      * @param \DateTime|string $validTo
+     *
      * @return Voucher
      */
     public function setValidTo($validTo)
@@ -386,6 +406,7 @@ class Voucher extends ModelEntity
             $validTo = new \DateTime($validTo);
         }
         $this->validTo = $validTo;
+
         return $this;
     }
 
@@ -403,11 +424,13 @@ class Voucher extends ModelEntity
      * Setter Method to set the orderCode field from the Model
      *
      * @param string $orderCode
+     *
      * @return Voucher
      */
     public function setOrderCode($orderCode)
     {
         $this->orderCode = $orderCode;
+
         return $this;
     }
 
@@ -424,19 +447,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the modus field from the Model
      *
-     * @param integer $modus
+     * @param int $modus
+     *
      * @return Voucher
      */
     public function setModus($modus)
     {
         $this->modus = $modus;
+
         return $this;
     }
 
     /**
      * Getter Method to get the Modus field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getModus()
     {
@@ -446,19 +471,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the percental field from the Model
      *
-     * @param integer $percental
+     * @param int $percental
+     *
      * @return Voucher
      */
     public function setPercental($percental)
     {
         $this->percental = $percental;
+
         return $this;
     }
 
     /**
      * Getter Method to get the Percental field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getPercental()
     {
@@ -468,19 +495,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the numOrder field from the Model
      *
-     * @param integer $numOrder
+     * @param int $numOrder
+     *
      * @return Voucher
      */
     public function setNumOrder($numOrder)
     {
         $this->numOrder = $numOrder;
+
         return $this;
     }
 
     /**
      * Getter Method to get the numOrder field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getNumOrder()
     {
@@ -490,19 +519,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the customerGroup field from the Model
      *
-     * @param integer $customerGroup
+     * @param int $customerGroup
+     *
      * @return Voucher
      */
     public function setCustomerGroup($customerGroup)
     {
         $this->customerGroup = $customerGroup;
+
         return $this;
     }
 
     /**
      * Getter Method to get the customerGroup field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getCustomerGroup()
     {
@@ -513,11 +544,13 @@ class Voucher extends ModelEntity
      * Setter Method to set the restrictArticles field from the Model
      *
      * @param string $restrictArticles
+     *
      * @return Voucher
      */
     public function setRestrictArticles($restrictArticles)
     {
         $this->restrictArticles = $restrictArticles;
+
         return $this;
     }
 
@@ -534,19 +567,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the strict field from the Model
      *
-     * @param integer $strict
+     * @param int $strict
+     *
      * @return Voucher
      */
     public function setStrict($strict)
     {
         $this->strict = $strict;
+
         return $this;
     }
 
     /**
      * Getter Method to get the strict field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getStrict()
     {
@@ -556,19 +591,21 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the shopId field from the Model
      *
-     * @param integer $shopId
+     * @param int $shopId
+     *
      * @return Voucher
      */
     public function setShopId($shopId)
     {
         $this->shopId = $shopId;
+
         return $this;
     }
 
     /**
      * Getter Method to get the shopId field from the Model
      *
-     * @return integer
+     * @return int
      */
     public function getShopId()
     {
@@ -579,11 +616,13 @@ class Voucher extends ModelEntity
      * Setter Method to set the taxConfig field from the Model
      *
      * @param string $taxConfig
+     *
      * @return Voucher
      */
     public function setTaxConfig($taxConfig)
     {
         $this->taxConfig = $taxConfig;
+
         return $this;
     }
 
@@ -607,6 +646,7 @@ class Voucher extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $codes
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setCodes($codes)
@@ -624,6 +664,7 @@ class Voucher extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Voucher|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Voucher
      */
     public function setAttribute($attribute)

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
@@ -59,8 +60,9 @@ class FirstRunWizardPluginStoreService
     /**
      * Loads recommended plugins from SBP
      *
-     * @param LocaleStruct $locale Locale in which to translate the information
-     * @param string $shopwareVersion Current Shopware version
+     * @param LocaleStruct $locale          Locale in which to translate the information
+     * @param string       $shopwareVersion Current Shopware version
+     *
      * @return array List of plugins
      */
     public function getRecommendedPlugins($locale, $shopwareVersion)
@@ -69,7 +71,7 @@ class FirstRunWizardPluginStoreService
 
         $data = $this->storeClient->doGetRequest(
             '/firstrunwizard/recommendations',
-            [ 'locale' => $localeName, 'shopwareVersion' => $shopwareVersion ]
+            ['locale' => $localeName, 'shopwareVersion' => $shopwareVersion]
         );
 
         $plugins = $this->hydrator->hydrateStorePlugins($data);
@@ -80,8 +82,9 @@ class FirstRunWizardPluginStoreService
     /**
      * Loads integrated plugins from SBP
      *
-     * @param string $isoCode Two letter iso code indicating for which country to get the plugin list
+     * @param string $isoCode         Two letter iso code indicating for which country to get the plugin list
      * @param string $shopwareVersion Current Shopware version
+     *
      * @return array List of plugins
      */
     public function getIntegratedPlugins($isoCode, $shopwareVersion)
@@ -91,8 +94,8 @@ class FirstRunWizardPluginStoreService
         }
 
         $data = $this->storeClient->doGetRequest(
-            '/firstrunwizard/countries/'.strtolower($isoCode),
-            [ 'shopwareVersion' => $shopwareVersion ]
+            '/firstrunwizard/countries/' . strtolower($isoCode),
+            ['shopwareVersion' => $shopwareVersion]
         );
 
         $plugins = $this->hydrator->hydrateStorePlugins($data);
@@ -103,8 +106,9 @@ class FirstRunWizardPluginStoreService
     /**
      * Loads demo data plugins from SBP
      *
-     * @param LocaleStruct $locale Locale in which to translate the information
-     * @param string $shopwareVersion Current Shopware version
+     * @param LocaleStruct $locale          Locale in which to translate the information
+     * @param string       $shopwareVersion Current Shopware version
+     *
      * @return array List of plugins
      */
     public function getDemoDataPlugins($locale, $shopwareVersion)
@@ -113,7 +117,7 @@ class FirstRunWizardPluginStoreService
 
         $data = $this->storeClient->doGetRequest(
             '/firstrunwizard/demodata',
-            [ 'locale' => $localeName, 'shopwareVersion' => $shopwareVersion ]
+            ['locale' => $localeName, 'shopwareVersion' => $shopwareVersion]
         );
 
         $plugins = $this->hydrator->hydrateStorePlugins($data);
@@ -124,8 +128,9 @@ class FirstRunWizardPluginStoreService
     /**
      * Loads localization options from SBP
      *
-     * @param LocaleStruct $locale Locale in which to translate the information
-     * @param string $shopwareVersion Current Shopware version
+     * @param LocaleStruct $locale          Locale in which to translate the information
+     * @param string       $shopwareVersion Current Shopware version
+     *
      * @return array List of plugins
      */
     public function getLocalizations($locale, $shopwareVersion)
@@ -134,7 +139,7 @@ class FirstRunWizardPluginStoreService
 
         $data = $this->storeClient->doGetRequest(
             '/firstrunwizard/languages',
-            [ 'locale' => $localeName, 'shopwareVersion' => $shopwareVersion ]
+            ['locale' => $localeName, 'shopwareVersion' => $shopwareVersion]
         );
 
         return $data;
@@ -144,6 +149,7 @@ class FirstRunWizardPluginStoreService
      * Loads countries for integrated plugins from SBP
      *
      * @param LocaleStruct $locale Locale in which to translate the information
+     *
      * @return array List of countries
      */
     public function getIntegratedPluginsCountries($locale)
@@ -152,7 +158,7 @@ class FirstRunWizardPluginStoreService
 
         $data = $this->storeClient->doGetRequest(
             '/firstrunwizard/countries',
-            [ 'locale' => $localeName ]
+            ['locale' => $localeName]
         );
 
         return $data;
@@ -161,9 +167,10 @@ class FirstRunWizardPluginStoreService
     /**
      * Loads localization plugins from SBP for the given localization
      *
-     * @param string $localization Localization for which to retrieve the plugins
-     * @param LocaleStruct $locale Locale in which to translate the information
-     * @param string $shopwareVersion Current Shopware version
+     * @param string       $localization    Localization for which to retrieve the plugins
+     * @param LocaleStruct $locale          Locale in which to translate the information
+     * @param string       $shopwareVersion Current Shopware version
+     *
      * @return array List of plugins
      */
     public function getLocalizationPlugins($localization, $locale, $shopwareVersion)
@@ -172,7 +179,7 @@ class FirstRunWizardPluginStoreService
 
         $data = $this->storeClient->doGetRequest(
             '/firstrunwizard/languages/' . $localization,
-            [ 'locale' => $localeName, 'shopwareVersion' => $shopwareVersion ]
+            ['locale' => $localeName, 'shopwareVersion' => $shopwareVersion]
         );
 
         $plugins = $this->hydrator->hydrateStorePlugins($data);
@@ -182,6 +189,7 @@ class FirstRunWizardPluginStoreService
 
     /**
      * @param PluginStruct[] $plugins
+     *
      * @return PluginStruct[]
      */
     private function getAdditionallyLocalData($plugins)

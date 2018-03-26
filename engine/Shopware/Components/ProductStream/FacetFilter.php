@@ -36,12 +36,10 @@ use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
 /**
  * Class FacetFilter
- * @package Shopware\Components\ProductStream
  */
 class FacetFilter implements FacetFilterInterface
 {
@@ -52,13 +50,13 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * FacetFilter constructor.
+     *
      * @param \Shopware_Components_Config $config
      */
     public function __construct(\Shopware_Components_Config $config)
     {
         $this->config = $config;
     }
-
 
     /**
      * @param Criteria $criteria
@@ -92,7 +90,8 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria $criteria
+     * @param Criteria               $criteria
+     *
      * @return FacetResultInterface[]
      */
     public function filter(array $facets, Criteria $criteria)
@@ -110,8 +109,9 @@ class FacetFilter implements FacetFilterInterface
     }
 
     /**
-     * @param string $class
+     * @param string   $class
      * @param Criteria $criteria
+     *
      * @return FacetResultInterface[]
      */
     private function getBaseConditionsByClass($class, Criteria $criteria)
@@ -122,13 +122,14 @@ class FacetFilter implements FacetFilterInterface
                 $conditions[] = $condition;
             }
         }
+
         return $conditions;
     }
 
-
     /**
      * @param FacetResultInterface[] $facets
-     * @param string $name
+     * @param string                 $name
+     *
      * @return FacetResultInterface
      */
     private function getFacetByName(array $facets, $name)
@@ -144,7 +145,7 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria $criteria
+     * @param Criteria               $criteria
      */
     private function switchActivePriceFilter(array $facets, Criteria $criteria)
     {
@@ -155,6 +156,7 @@ class FacetFilter implements FacetFilterInterface
         }
         if (!$criteria->hasUserCondition('price')) {
             $facet->setActive(false);
+
             return;
         }
 
@@ -167,7 +169,7 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria $criteria
+     * @param Criteria               $criteria
      */
     private function switchPriceFilterValues(array $facets, Criteria $criteria)
     {
@@ -187,7 +189,7 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria $criteria
+     * @param Criteria               $criteria
      */
     private function removeStreamPropertyConditions(array $facets, Criteria $criteria)
     {

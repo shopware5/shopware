@@ -34,7 +34,6 @@ use Shopware\Components\Password\Manager;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Config;
-use Symfony\Component\Validator\Constraints\Collection;
 
 class RegisterService implements RegisterServiceInterface
 {
@@ -75,13 +74,14 @@ class RegisterService implements RegisterServiceInterface
 
     /**
      * RegisterService constructor.
-     * @param ModelManager $modelManager
-     * @param CustomerValidatorInterface $validator
-     * @param Shopware_Components_Config $config
-     * @param Manager $passwordManager
+     *
+     * @param ModelManager                    $modelManager
+     * @param CustomerValidatorInterface      $validator
+     * @param Shopware_Components_Config      $config
+     * @param Manager                         $passwordManager
      * @param NumberRangeIncrementerInterface $numberIncrementer
-     * @param Connection $connection
-     * @param AddressServiceInterface $addressService
+     * @param Connection                      $connection
+     * @param AddressServiceInterface         $addressService
      */
     public function __construct(
         ModelManager $modelManager,
@@ -102,10 +102,11 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param Shop $shop
-     * @param Customer $customer
-     * @param Address $billing
+     * @param Shop         $shop
+     * @param Customer     $customer
+     * @param Address      $billing
      * @param Address|null $shipping
+     *
      * @throws \Exception
      */
     public function register(
@@ -150,12 +151,12 @@ class RegisterService implements RegisterServiceInterface
         $this->connection->insert('s_emarketing_referer', [
             'userID' => $customer->getId(),
             'referer' => $customer->getReferer(),
-            'date' => date('Y-m-d H:i:s')
+            'date' => date('Y-m-d H:i:s'),
         ]);
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop     $shop
      * @param Customer $customer
      */
     private function saveCustomer(Shop $shop, Customer $customer)
@@ -196,7 +197,7 @@ class RegisterService implements RegisterServiceInterface
         $customer->setLanguageSubShop(
             $this->modelManager->find('Shopware\Models\Shop\Shop', $shop->getId())
         );
-        
+
         if (is_null($customer->getGroup())) {
             $customer->setGroup(
                 $this->modelManager->find('Shopware\Models\Customer\Group', $shop->getCustomerGroup()->getId())
@@ -221,6 +222,7 @@ class RegisterService implements RegisterServiceInterface
 
     /**
      * @param Customer $customer
+     *
      * @return int
      */
     private function getPartnerId(Customer $customer)

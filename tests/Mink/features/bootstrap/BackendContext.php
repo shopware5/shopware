@@ -29,10 +29,90 @@ use Shopware\Tests\Mink\Page\Backend;
 class BackendContext extends SubContext
 {
     /**
+     * @Given /^I am logged in to the backend as an admin user$/
+     */
+    public function iAmLoggedInToTheBackendAsAnAdminUser()
+    {
+        /** @var Backend $page */
+        $page = $this->getPage('Backend');
+        $page->open();
+
+        // See if we already are logged in
+        if ($this->waitIfThereIsText('Marketing', 5)) {
+            return;
+        }
+
+        $this->waitForText('Shopware Backend Login', 10);
+
+        $page->login('demo', 'demo');
+        $this->waitForText('Marketing');
+    }
+
+    /**
+     * @When /^I open the module "([^"]*)"$/
+     */
+    public function iOpenTheModule($moduleName)
+    {
+        $this->spin(function ($context) use ($moduleName) {
+            $context->getPage('Backend')->openModule($moduleName);
+
+            return true;
+        });
+    }
+
+    /**
+     * @Then /^The module should open a window$/
+     */
+    public function theModuleShouldOpenAWindow()
+    {
+        $page = $this->getPage('Backend');
+
+        $this->spin(function ($context) use ($page) {
+            $context->getPage('Backend')->verifyModule();
+
+            return true;
+        });
+    }
+
+    /**
      * Based on Behat's own example
+     *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     *
      * @param $lambda
      * @param int $wait
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    public function spin($lambda, $wait = 60)
+    {
+        $time = time();
+        $stopTime = $time + $wait;
+        while (time() < $stopTime) {
+            try {
+                if ($lambda($this)) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                // do nothing
+            }
+
+            usleep(250000);
+        }
+
+        throw new \Exception("Spin function timed out after {$wait} seconds");
+    }
+
+    /**
+     * Based on Behat's own example
+     *
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     *
+     * @param $lambda
+     * @param int $wait
+     *
      * @return bool
      */
     protected function spinWithNoException($lambda, $wait = 60)
@@ -56,20 +136,24 @@ class BackendContext extends SubContext
 
     /**
      * Checks via a string exists
-     * @param string $text
+     *
+     * @param string     $text
      * @param SubContext $context
+     *
      * @return bool
      */
     protected function checkIfThereIsText($text, SubContext $context)
     {
         $result = $context->getSession()->getPage()->findAll('xpath', "//*[contains(., '$text')]");
+
         return !empty($result);
     }
 
     /**
      * Checks via spin function if a string exists, with sleep at the beginning (default 2)
+     *
      * @param string $text
-     * @param int $sleep
+     * @param int    $sleep
      */
     protected function waitForText($text, $sleep = 2)
     {
@@ -81,8 +165,10 @@ class BackendContext extends SubContext
 
     /**
      * Checks via spin function if a string exists, with sleep at the beginning (default 2)
+     *
      * @param string $text
-     * @param int $wait
+     * @param int    $wait
+     *
      * @return bool
      */
     protected function waitIfThereIsText($text, $wait = 5)
@@ -90,76 +176,5 @@ class BackendContext extends SubContext
         return $this->spinWithNoException(function (SubContext $context) use ($text) {
             return $this->checkIfThereIsText($text, $context);
         }, $wait);
-    }
-
-    /**
-     * @Given /^I am logged in to the backend as an admin user$/
-     */
-    public function iAmLoggedInToTheBackendAsAnAdminUser()
-    {
-        /** @var Backend $page */
-        $page = $this->getPage('Backend');
-        $page->open();
-
-        // See if we already are logged in
-        if ($this->waitIfThereIsText('Marketing', 5)) {
-            return;
-        }
-        
-        $this->waitForText('Shopware Backend Login', 10);
-
-        $page->login('demo', 'demo');
-        $this->waitForText('Marketing');
-    }
-
-    /**
-     * @When /^I open the module "([^"]*)"$/
-     */
-    public function iOpenTheModule($moduleName)
-    {
-        $this->spin(function ($context) use ($moduleName) {
-            $context->getPage('Backend')->openModule($moduleName);
-            return true;
-        });
-    }
-
-    /**
-     * @Then /^The module should open a window$/
-     */
-    public function theModuleShouldOpenAWindow()
-    {
-        $page = $this->getPage('Backend');
-
-        $this->spin(function ($context) use ($page) {
-            $context->getPage('Backend')->verifyModule();
-            return true;
-        });
-    }
-
-    /**
-     * Based on Behat's own example
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     * @param $lambda
-     * @param int $wait
-     * @return bool
-     * @throws \Exception
-     */
-    public function spin($lambda, $wait = 60)
-    {
-        $time = time();
-        $stopTime = $time + $wait;
-        while (time() < $stopTime) {
-            try {
-                if ($lambda($this)) {
-                    return true;
-                }
-            } catch (\Exception $e) {
-                // do nothing
-            }
-
-            usleep(250000);
-        }
-
-        throw new \Exception("Spin function timed out after {$wait} seconds");
     }
 }

@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class DataLoader
@@ -44,7 +44,7 @@ class DataLoader
     private $mapping;
 
     /**
-     * @param Connection $connection
+     * @param Connection   $connection
      * @param TableMapping $mapping
      */
     public function __construct(Connection $connection, TableMapping $mapping)
@@ -56,17 +56,19 @@ class DataLoader
     /**
      * @param string $table
      * @param string $foreignKey
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function load($table, $foreignKey)
     {
         if (!$this->mapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf("Table %s is no attribute table", $table));
+            throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
 
         if (!$foreignKey) {
-            throw new \Exception("No foreign key provided");
+            throw new \Exception('No foreign key provided');
         }
 
         /** @var TableMapping $mapping */
@@ -85,14 +87,16 @@ class DataLoader
 
     /**
      * @param string $table
-     * @param int $foreignKey
-     * @return array[]
+     * @param int    $foreignKey
+     *
      * @throws \Exception
+     *
+     * @return array[]
      */
     public function loadTranslations($table, $foreignKey)
     {
         if (!$foreignKey) {
-            throw new \Exception("No foreign key provided");
+            throw new \Exception('No foreign key provided');
         }
 
         $query = $this->connection->createQueryBuilder();
@@ -104,6 +108,7 @@ class DataLoader
         $query->setParameter(':key', $foreignKey);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
         return $data;
     }
 }

@@ -26,14 +26,15 @@ namespace Shopware\Components\Routing;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface GeneratorInterface
 {
     /**
      * @param array|string $params
-     * @param Context $context
+     * @param Context      $context
+     *
      * @return array|string
      */
     public function generate(array $params, Context $context);

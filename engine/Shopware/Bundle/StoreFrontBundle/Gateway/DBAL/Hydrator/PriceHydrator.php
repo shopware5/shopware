@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceHydrator extends Hydrator
@@ -55,9 +55,9 @@ class PriceHydrator extends Hydrator
 
     /**
      * @param CustomerGroupHydrator $customerGroupHydrator
-     * @param UnitHydrator $unitHydrator
-     * @param ProductHydrator $productHydrator
-     * @param AttributeHydrator $attributeHydrator
+     * @param UnitHydrator          $unitHydrator
+     * @param ProductHydrator       $productHydrator
+     * @param AttributeHydrator     $attributeHydrator
      */
     public function __construct(
         CustomerGroupHydrator $customerGroupHydrator,
@@ -73,6 +73,7 @@ class PriceHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule
      */
     public function hydratePriceRule(array $data)
@@ -103,6 +104,7 @@ class PriceHydrator extends Hydrator
      * and adds additionally the product unit information to the price.
      *
      * @param array $data
+     *
      * @return Struct\Product\PriceRule
      */
     public function hydrateCheapestPrice(array $data)
@@ -119,6 +121,7 @@ class PriceHydrator extends Hydrator
 
     /**
      * @param $data
+     *
      * @return Struct\Product\PriceGroup
      */
     public function hydratePriceGroup($data)
@@ -142,6 +145,7 @@ class PriceHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\Product\PriceDiscount
      */
     public function hydratePriceDiscount(array $data)
@@ -150,6 +154,7 @@ class PriceHydrator extends Hydrator
         $discount->setId((int) $data['__priceGroupDiscount_id']);
         $discount->setPercent((float) $data['__priceGroupDiscount_discount']);
         $discount->setQuantity((int) $data['__priceGroupDiscount_discountstart']);
+
         return $discount;
     }
 }

@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\CorePaymentMethods
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -47,12 +47,12 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
     public function getInfo()
     {
-        return array(
+        return [
             'version' => $this->getVersion(),
             'label' => $this->getLabel(),
             'name' => $this->getLabel(),
-            'description' => 'Shopware Payment Methods handling. This plugin is required to handle payment methods, and should not be deactivated.'
-        );
+            'description' => 'Shopware Payment Methods handling. This plugin is required to handle payment methods, and should not be deactivated.',
+        ];
     }
 
     public function getCapabilities()
@@ -61,7 +61,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
             'install' => false,
             'update' => false,
             'enable' => false,
-            'secureUninstall' => false
+            'secureUninstall' => false,
         ];
     }
 
@@ -88,6 +88,88 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     }
 
     /**
+     * This method registers shopware's generic payment method handler
+     * and the debit payment method handler
+     *
+     * @param Enlight_Event_EventArgs $args
+     *
+     * @return array
+     */
+    public function addPaymentClass(\Enlight_Event_EventArgs $args)
+    {
+        $dirs = $args->getReturn();
+
+        $this->Application()->Loader()->registerNamespace('ShopwarePlugin\PaymentMethods\Components', __DIR__ . '/Components/');
+
+        $dirs['debit'] = 'ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod';
+        $dirs['sepa'] = 'ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod';
+        $dirs['default'] = 'ShopwarePlugin\PaymentMethods\Components\GenericPaymentMethod';
+
+        return $dirs;
+    }
+
+    /**
+     * Add View path to Smarty
+     *
+     * @param Enlight_Event_EventArgs $arguments
+     *
+     * @return mixed
+     */
+    public function addPaths(Enlight_Event_EventArgs $arguments)
+    {
+        $this->Application()->Template()->addTemplateDir(
+            $this->Path() . 'Views/responsive/',
+            'payment',
+            Enlight_Template_Manager::POSITION_APPEND
+        );
+    }
+
+    /**
+     * Called when the BackendOrderPostDispatch Event is triggered
+     *
+     * @param Enlight_Event_EventArgs $args
+     */
+    public function onBackendOrderPostDispatch(Enlight_Event_EventArgs $args)
+    {
+        /** @var $view Enlight_View_Default */
+        $view = $args->getSubject()->View();
+
+        //if the controller action name equals "load" we have to load all application components
+        if ($args->getRequest()->getActionName() === 'load') {
+            $view->addTemplateDir($this->Path() . 'Views/emotion/');
+            $view->extendsTemplate(
+                'backend/order/payment_methods/controller/detail.js'
+            );
+            $view->extendsTemplate(
+                'backend/order/payment_methods/view/detail/payment_methods.js'
+            );
+        }
+    }
+
+    /**
+     * Called when the BackendCustomerPostDispatch Event is triggered
+     *
+     * @param Enlight_Event_EventArgs $args
+     */
+    public function onBackendCustomerPostDispatch(Enlight_Event_EventArgs $args)
+    {
+        /** @var $view Enlight_View_Default */
+        $view = $args->getSubject()->View();
+
+        //if the controller action name equals "load" we have to load all application components
+        if ($args->getRequest()->getActionName() === 'load') {
+            $view->addTemplateDir($this->Path() . 'Views/emotion/');
+
+            $view->extendsTemplate(
+                'backend/customer/payment_methods/controller/detail.js'
+            );
+            $view->extendsTemplate(
+                'backend/customer/payment_methods/view/detail/payment_methods.js'
+            );
+        }
+    }
+
+    /**
      * Registers all necessary events and hooks.
      */
     private function subscribeEvents()
@@ -111,86 +193,5 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
             'Enlight_Controller_Action_PostDispatchSecure_Backend_Customer',
             'onBackendCustomerPostDispatch'
         );
-    }
-
-    /**
-     * This method registers shopware's generic payment method handler
-     * and the debit payment method handler
-     *
-     * @param Enlight_Event_EventArgs $args
-     * @return array
-     */
-
-    public function addPaymentClass(\Enlight_Event_EventArgs $args)
-    {
-        $dirs = $args->getReturn();
-
-        $this->Application()->Loader()->registerNamespace('ShopwarePlugin\PaymentMethods\Components', __DIR__ . '/Components/');
-
-        $dirs['debit'] = 'ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod';
-        $dirs['sepa'] = 'ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod';
-        $dirs['default'] = 'ShopwarePlugin\PaymentMethods\Components\GenericPaymentMethod';
-
-        return $dirs;
-    }
-
-    /**
-     * Add View path to Smarty
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     * @return mixed
-     */
-    public function addPaths(Enlight_Event_EventArgs $arguments)
-    {
-        $this->Application()->Template()->addTemplateDir(
-            $this->Path() . 'Views/responsive/',
-            'payment',
-            Enlight_Template_Manager::POSITION_APPEND
-        );
-    }
-
-    /**
-     * Called when the BackendOrderPostDispatch Event is triggered
-     *
-     * @param Enlight_Event_EventArgs $args
-     */
-    public function onBackendOrderPostDispatch(Enlight_Event_EventArgs $args)
-    {
-        /**@var $view Enlight_View_Default */
-        $view = $args->getSubject()->View();
-
-        //if the controller action name equals "load" we have to load all application components
-        if ($args->getRequest()->getActionName() === 'load') {
-            $view->addTemplateDir($this->Path() . 'Views/emotion/');
-            $view->extendsTemplate(
-                'backend/order/payment_methods/controller/detail.js'
-            );
-            $view->extendsTemplate(
-                'backend/order/payment_methods/view/detail/payment_methods.js'
-            );
-        }
-    }
-
-    /**
-     * Called when the BackendCustomerPostDispatch Event is triggered
-     *
-     * @param Enlight_Event_EventArgs $args
-     */
-    public function onBackendCustomerPostDispatch(Enlight_Event_EventArgs $args)
-    {
-        /**@var $view Enlight_View_Default */
-        $view = $args->getSubject()->View();
-
-        //if the controller action name equals "load" we have to load all application components
-        if ($args->getRequest()->getActionName() === 'load') {
-            $view->addTemplateDir($this->Path() . 'Views/emotion/');
-
-            $view->extendsTemplate(
-                'backend/customer/payment_methods/controller/detail.js'
-            );
-            $view->extendsTemplate(
-                'backend/customer/payment_methods/view/detail/payment_methods.js'
-            );
-        }
     }
 }

@@ -29,8 +29,9 @@ use Shopware\Models\Shop\Shop;
 interface ConfigReader
 {
     /**
-     * @param string $pluginName
+     * @param string    $pluginName
      * @param Shop|null $shop
+     *
      * @return array
      */
     public function getByPluginName($pluginName, Shop $shop = null);

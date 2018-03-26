@@ -36,6 +36,7 @@ class AddressRepository extends ModelRepository
      * Returns a query-object for the billing address for a specified user
      *
      * @param int $userId
+     *
      * @return array
      */
     public function getListArray($userId)
@@ -48,8 +49,9 @@ class AddressRepository extends ModelRepository
     /**
      * @param array $criteria
      * @param array $orderBy
-     * @param int $limit
-     * @param int $offset
+     * @param int   $limit
+     * @param int   $offset
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery(array $criteria = [], array $orderBy = [], $limit = 25, $offset = 0)
@@ -59,6 +61,7 @@ class AddressRepository extends ModelRepository
 
     /**
      * @param int $addressId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getOne($addressId)
@@ -72,6 +75,7 @@ class AddressRepository extends ModelRepository
      *
      * @param int $addressId
      * @param int $userId
+     *
      * @return Address
      */
     public function getOneByUser($addressId, $userId)
@@ -90,6 +94,7 @@ class AddressRepository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param int $userId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     protected function getByUserQueryBuilder($userId)
@@ -126,7 +131,7 @@ class AddressRepository extends ModelRepository
             'customer',
             'attribute',
             'country',
-            'state'
+            'state',
         ]);
 
         $builder->from('Shopware\Models\Customer\Address', 'address')
@@ -144,23 +149,23 @@ class AddressRepository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param   array $filterBy
-     * @param   array $orderBy
-     * @param   null  $limit
-     * @param   null  $offset
+     * @param array $filterBy
+     * @param array $orderBy
+     * @param null  $limit
+     * @param null  $offset
      *
-     * @return  \Doctrine\ORM\QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     protected function getListQueryBuilder(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
-        /**@var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select([
             'address',
             'attribute',
             'country',
-            'state'
+            'state',
         ]);
 
         $builder->from('Shopware\Models\Customer\Address', 'address')

@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Price;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Price Model
@@ -37,7 +37,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Group extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @ORM\OneToMany(targetEntity="Discount", mappedBy="group", orphanRemoval=true, cascade={"all"})
+     *
+     * @var Discount[]|\Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $discounts;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -46,17 +52,11 @@ class Group extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=30, nullable=false)
      */
     private $name;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Discount", mappedBy="group", orphanRemoval=true, cascade={"all"})
-     * @var Discount[]|\Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $discounts;
 
     /**
      * Class constructor.
@@ -69,7 +69,7 @@ class Group extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -80,11 +80,13 @@ class Group extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return group
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -108,6 +110,7 @@ class Group extends ModelEntity
 
     /**
      * @param Discount[]|\Doctrine\Common\Collections\ArrayCollection $discounts
+     *
      * @return Group
      */
     public function setDiscounts($discounts)

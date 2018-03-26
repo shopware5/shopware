@@ -29,7 +29,7 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CustomerSearcher extends GenericSearcher
@@ -42,11 +42,13 @@ class CustomerSearcher extends GenericSearcher
         $builder->innerJoin('entity.billing', 'billing');
         $builder->innerJoin('entity.group', 'customerGroup');
         $builder->setAlias('entity');
+
         return $builder;
     }
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)
@@ -57,7 +59,7 @@ class CustomerSearcher extends GenericSearcher
             'billing.firstName',
             'billing.lastName',
             'billing.company',
-            'customerGroup.name'
+            'customerGroup.name',
         ];
     }
 }

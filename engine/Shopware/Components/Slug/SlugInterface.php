@@ -26,7 +26,7 @@ namespace Shopware\Components\Slug;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Slug
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface SlugInterface

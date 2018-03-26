@@ -62,6 +62,7 @@ Thumbs.db
 !/media/temp/.htaccess
 /media/unknown/*
 /media/video/*
+/media/vector/*
 
 /files/documents/*
 !/files/documents/.htaccess

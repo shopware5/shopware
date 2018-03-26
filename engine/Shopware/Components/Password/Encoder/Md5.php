@@ -26,7 +26,7 @@ namespace Shopware\Components\Password\Encoder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Password\Encoder
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Md5 implements PasswordEncoderInterface
@@ -40,8 +40,9 @@ class Md5 implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $password
-     * @param  string $hash
+     * @param string $password
+     * @param string $hash
+     *
      * @return bool
      */
     public function isPasswordValid($password, $hash)
@@ -55,7 +56,8 @@ class Md5 implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $password
+     * @param string $password
+     *
      * @return string
      */
     public function encodePassword($password)
@@ -64,7 +66,8 @@ class Md5 implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $hash
+     * @param string $hash
+     *
      * @return bool
      */
     public function isReencodeNeeded($hash)

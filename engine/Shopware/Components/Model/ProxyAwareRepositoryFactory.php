@@ -35,7 +35,7 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
      *
      * @var ObjectRepository[]
      */
-    private $repositoryList = array();
+    private $repositoryList = [];
 
     /**
      * @var \Enlight_Hook_HookManager
@@ -48,7 +48,7 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRepository(EntityManagerInterface $entityManager, $entityName)
     {
@@ -64,7 +64,8 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param string $entityName
+     * @param string                 $entityName
+     *
      * @return ObjectRepository
      */
     private function createRepository(EntityManagerInterface $entityManager, $entityName)

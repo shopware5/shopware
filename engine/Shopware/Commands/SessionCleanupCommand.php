@@ -55,13 +55,14 @@ EOF
         $saveHandler = $this->container->get('session.save_handler');
         if (null === $saveHandler) {
             $io->error('Save handler not available');
+
             return 1;
         }
 
         $options = $this->container->getParameter('shopware.session');
         $maxlifetime = (int) (isset($options['gc_maxlifetime']) ? $options['gc_maxlifetime'] : ini_get('session.gc_maxlifetime'));
 
-        $saveHandler->gc($maxlifetime) ;
+        $saveHandler->gc($maxlifetime);
         $saveHandler->close();
 
         $io->success('Successfully removed expired sessions');

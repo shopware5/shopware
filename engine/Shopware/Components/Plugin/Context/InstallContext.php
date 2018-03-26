@@ -42,7 +42,7 @@ class InstallContext implements \JsonSerializable
         self::CACHE_TAG_TEMPLATE,
         self::CACHE_TAG_CONFIG,
         self::CACHE_TAG_ROUTER,
-        self::CACHE_TAG_PROXY
+        self::CACHE_TAG_PROXY,
     ];
 
     /**
@@ -51,7 +51,7 @@ class InstallContext implements \JsonSerializable
     const CACHE_LIST_FRONTEND = [
         self::CACHE_TAG_TEMPLATE,
         self::CACHE_TAG_THEME,
-        self::CACHE_TAG_HTTP
+        self::CACHE_TAG_HTTP,
     ];
 
     /**
@@ -63,7 +63,7 @@ class InstallContext implements \JsonSerializable
         self::CACHE_TAG_ROUTER,
         self::CACHE_TAG_PROXY,
         self::CACHE_TAG_THEME,
-        self::CACHE_TAG_HTTP
+        self::CACHE_TAG_HTTP,
     ];
 
     /**
@@ -106,9 +106,9 @@ class InstallContext implements \JsonSerializable
         return $this->currentVersion;
     }
 
-
     /**
      * @param string $requiredVersion
+     *
      * @return bool
      */
     public function assertMinimumVersion($requiredVersion)
@@ -116,6 +116,7 @@ class InstallContext implements \JsonSerializable
         if ($this->shopwareVersion === '___VERSION___') {
             return true;
         }
+
         return version_compare($this->shopwareVersion, $requiredVersion, '>=');
     }
 
@@ -129,6 +130,7 @@ class InstallContext implements \JsonSerializable
 
     /**
      * Adds the defer task to clear the frontend cache
+     *
      * @param string[] $caches
      */
     public function scheduleClearCache(array $caches)

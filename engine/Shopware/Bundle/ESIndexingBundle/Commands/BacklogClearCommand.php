@@ -30,7 +30,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class BacklogClearCommand extends ShopwareCommand
@@ -53,6 +53,6 @@ class BacklogClearCommand extends ShopwareCommand
     {
         $lastId = $this->container->get('shopware_elastic_search.backlog_reader')->getLastBacklogId();
 
-        $this->container->get('dbal_connection')->executeUpdate("DELETE FROM s_es_backlog WHERE id <= :id", [':id' => $lastId]);
+        $this->container->get('dbal_connection')->executeUpdate('DELETE FROM s_es_backlog WHERE id <= :id', [':id' => $lastId]);
     }
 }

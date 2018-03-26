@@ -26,14 +26,14 @@ namespace Shopware\Recovery\Common\DependencyInjection;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Common\DependencyInjection
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ContainerInterface
 {
     const EXCEPTION_ON_INVALID_REFERENCE = 1;
-    const NULL_ON_INVALID_REFERENCE      = 2;
-    const IGNORE_ON_INVALID_REFERENCE    = 3;
+    const NULL_ON_INVALID_REFERENCE = 2;
+    const IGNORE_ON_INVALID_REFERENCE = 3;
 
     /**
      * Sets a service.
@@ -51,11 +51,11 @@ interface ContainerInterface
      * @param string $id              The service identifier
      * @param int    $invalidBehavior The behavior when the service does not exist
      *
-     * @return object The associated service
-     *
      * @throws \InvalidArgumentException          if the service is not defined
      * @throws \ServiceCircularReferenceException When a circular reference is detected
      * @throws \ServiceNotFoundException          When the service is not defined
+     *
+     * @return object The associated service
      *
      * @see Reference
      *
@@ -68,7 +68,7 @@ interface ContainerInterface
      *
      * @param string $id The service identifier
      *
-     * @return Boolean true if the service is defined, false otherwise
+     * @return bool true if the service is defined, false otherwise
      *
      * @api
      */
@@ -79,9 +79,9 @@ interface ContainerInterface
      *
      * @param string $name The parameter name
      *
-     * @return mixed The parameter value
-     *
      * @throws \InvalidArgumentException if the parameter is not defined
+     *
+     * @return mixed The parameter value
      *
      * @api
      */
@@ -92,7 +92,7 @@ interface ContainerInterface
      *
      * @param string $name The parameter name
      *
-     * @return Boolean The presence of parameter in container
+     * @return bool The presence of parameter in container
      *
      * @api
      */

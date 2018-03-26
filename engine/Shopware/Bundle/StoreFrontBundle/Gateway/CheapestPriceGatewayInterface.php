@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface CheapestPriceGatewayInterface
@@ -39,9 +39,10 @@ interface CheapestPriceGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Customer\Group       $customerGroup
+     *
      * @return Struct\Product\PriceRule[] Indexed by the product id
      */
     public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);
@@ -66,9 +67,10 @@ interface CheapestPriceGatewayInterface
      *  - The variants has to be active
      *  - Closeout variants can only be selected if the stock > min purchase
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Customer\Group       $customerGroup
+     *
      * @return Struct\Product\PriceRule
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);

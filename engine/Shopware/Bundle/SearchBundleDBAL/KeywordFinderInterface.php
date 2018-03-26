@@ -28,13 +28,14 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTerm\Keyword;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface KeywordFinderInterface
 {
     /**
      * @param $term
+     *
      * @return Keyword[]
      */
     public function getKeywordsOfTerm($term);

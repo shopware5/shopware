@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface VariantCoverServiceInterface
@@ -37,8 +37,9 @@ interface VariantCoverServiceInterface
      * Returns a list of variant specified covers.
      * The list is indexed by the product number.
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media[] indexed by product number
      */
     public function getList($products, Struct\ShopContextInterface $context);

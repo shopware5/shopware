@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\License\Service;
 
 use Shopware\Components\License\Struct\LicenseInformation;
@@ -28,19 +29,21 @@ use Shopware\Components\License\Struct\LicenseUnpackRequest;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\License\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface LicenseUnpackServiceInterface
 {
     /**
-     * @param  LicenseUnpackRequest $request
+     * @param LicenseUnpackRequest $request
+     *
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request);
 
     /**
      * @param string $license
+     *
      * @return array
      */
     public function readLicenseInfo($license);

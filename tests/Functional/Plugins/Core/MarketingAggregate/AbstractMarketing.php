@@ -25,17 +25,22 @@
 namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate;
 
 use Shopware\Models\Config\Element;
-use Shopware\Models\Config\Value;
 use Shopware\Models\Config\Form;
+use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+    }
+
     /**
      * @return \Shopware_Components_SimilarShown
      */
@@ -86,12 +91,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
 
     protected function getAllArticles($condition = '')
     {
-        return $this->Db()->fetchAll("SELECT * FROM s_articles " . $condition);
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
+        return $this->Db()->fetchAll('SELECT * FROM s_articles ' . $condition);
     }
 
     protected function assertArrayEquals(array $expected, array $result, array $properties)
@@ -100,7 +100,6 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
             $this->assertEquals($expected[$property], $result[$property]);
         }
     }
-
 
     /**
      * Helper method to persist a given config value
@@ -118,9 +117,9 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
             list($formName, $name) = explode(':', $name, 2);
         }
 
-        $findBy = array('name' => $name);
+        $findBy = ['name' => $name];
         if (isset($formName)) {
-            $form = $formRepository->findOneBy(array('name' => $formName));
+            $form = $formRepository->findOneBy(['name' => $formName]);
             $findBy['form'] = $form;
         }
 

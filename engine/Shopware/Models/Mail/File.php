@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Mail;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Abstract class to provide proxy methods to the media-model
@@ -35,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class File extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -53,12 +53,13 @@ abstract class File extends ModelEntity
     protected $media;
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
+
     /**
      * @return \Shopware\Models\Media\Media
      */
@@ -69,6 +70,7 @@ abstract class File extends ModelEntity
 
     /**
      * Returns the creation date of the media.
+     *
      * @return \DateTime
      */
     public function getCreated()
@@ -76,23 +78,27 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return null;
         }
+
         return $this->getMedia()->getCreated();
     }
 
     /**
      * Returns the id of the user, who uploaded the file.
-     * @return integer
+     *
+     * @return int
      */
     public function getUserId()
     {
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return null;
         }
+
         return $this->getMedia()->getUserId();
     }
 
     /**
      * Returns the file extension.
+     *
      * @return string
      */
     public function getExtension()
@@ -100,11 +106,13 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return '';
         }
+
         return $this->getMedia()->getExtension();
     }
 
     /**
      * Returns the media type.
+     *
      * @return string
      */
     public function getType()
@@ -112,11 +120,13 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return '';
         }
+
         return $this->getMedia()->getType();
     }
 
     /**
      * Returns the file path of the media
+     *
      * @return string
      */
     public function getPath()
@@ -124,11 +134,13 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return '';
         }
+
         return $this->getMedia()->getPath();
     }
 
     /**
      * Returns the converted file name.
+     *
      * @return bool|string
      */
     public function getFileName()
@@ -136,11 +148,13 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return 'Media not found';
         }
+
         return $this->getMedia()->getFileName();
     }
 
     /**
      * Returns the media description.
+     *
      * @return string
      */
     public function getDescription()
@@ -148,24 +162,27 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return '';
         }
+
         return $this->getMedia()->getDescription();
     }
 
     /**
      * Returns the id of the assigned album.
      *
-     * @return integer
+     * @return int
      */
     public function getAlbumId()
     {
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return null;
         }
+
         return $this->getMedia()->getAlbumId();
     }
 
     /**
      * Returns the name of the media, also used as file name
+     *
      * @return string
      */
     public function getName()
@@ -173,11 +190,13 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return 'Media not found';
         }
+
         return $this->getMedia()->getName();
     }
 
     /**
      * Returns the memory size of the file.
+     *
      * @return float
      */
     public function getFileSize()
@@ -185,11 +204,13 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return '';
         }
+
         return $this->getMedia()->getFileSize();
     }
 
     /**
      * Returns the memory size of the file.
+     *
      * @return float
      */
     public function getFormattedFileSize()
@@ -197,6 +218,7 @@ abstract class File extends ModelEntity
         if (!$this->getMedia() instanceof \Shopware\Models\Media\Media) {
             return 0;
         }
+
         return $this->getMedia()->getFormattedFileSize();
     }
 }

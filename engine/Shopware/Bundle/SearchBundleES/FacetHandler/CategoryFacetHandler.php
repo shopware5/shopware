@@ -27,14 +27,14 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 use Doctrine\DBAL\Connection;
 use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
@@ -66,10 +66,10 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     private $connection;
 
     /**
-     * @param CategoryServiceInterface $categoryService
+     * @param CategoryServiceInterface             $categoryService
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
-     * @param Connection $connection
+     * @param QueryAliasMapper                     $queryAliasMapper
+     * @param Connection                           $connection
      */
     public function __construct(
         CategoryServiceInterface $categoryService,
@@ -88,7 +88,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof CategoryFacet);
+        return $criteriaPart instanceof CategoryFacet;
     }
 
     /**
@@ -127,7 +127,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 
         $active = [];
         if ($criteria->hasCondition('category')) {
-            /**@var $condition CategoryCondition*/
+            /** @var $condition CategoryCondition */
             $condition = $criteria->getCondition('category');
             $active = $condition->getCategoryIds();
         }
@@ -138,7 +138,8 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * @param Category[] $categories
-     * @param int[] $active
+     * @param int[]      $active
+     *
      * @return TreeFacetResult
      */
     private function createTreeFacet($categories, $active)
@@ -172,6 +173,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * @param Category[] $categories
      * @param $parentId
+     *
      * @return array
      */
     private function getCategoriesOfParent($categories, $parentId)
@@ -195,13 +197,15 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
                 $result[] = $category;
             }
         }
+
         return $result;
     }
 
     /**
      * @param Category[] $categories
-     * @param Category $category
-     * @param int[] $active
+     * @param Category   $category
+     * @param int[]      $active
+     *
      * @return \Shopware\Bundle\SearchBundle\FacetResult\TreeItem
      */
     private function createTreeItem($categories, Category $category, $active)
@@ -224,6 +228,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * @param Criteria $criteria
      * @param $data
+     *
      * @return array
      */
     private function getCategoryIds(Criteria $criteria, $data)
@@ -231,7 +236,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         $ids = array_column($data, 'key');
 
         if ($criteria->hasCondition('category')) {
-            /**@var $condition CategoryCondition */
+            /** @var $condition CategoryCondition */
             $condition = $criteria->getCondition('category');
             $parentIds = $condition->getCategoryIds();
         } else {
@@ -256,6 +261,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             $rootPath = explode('|', $plain[0]);
             $rootPath = array_filter(array_unique($rootPath));
             $ids = array_merge($ids, $rootPath);
+
             return $ids;
         }
 

@@ -24,7 +24,7 @@
 
 class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    protected $results = array();
+    protected $results = [];
 
     public function install()
     {
@@ -38,55 +38,6 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         return true;
     }
 
-    private function createForm()
-    {
-        $form = $this->Form();
-        $parent = $this->Forms()->findOneBy(array('name' => 'Other'));
-        $form->setParent($parent);
-        $form->setName('CronSecurity');
-        $form->setLabel('Cron-Sicherheit');
-
-        $form->setElement('text', 'cronSecureAllowedKey', array(
-            'label'    => 'Gültiger Schlüssel',
-            'description' => 'Hinterlegen Sie hier einen Key zum Ausführen der Cronjobs.',
-            'required' => false,
-            'value'    => ''
-        ));
-        $form->setElement('text', 'cronSecureAllowedIp', array(
-            'label' => 'Zulässige IP(s)',
-            'description' => 'Nur angegebene IP-Adressen können die Cron Anfragen auslösen. Mehrere IP-Adressen müssen durch ein \';\' getrennt werden.',
-            'required' => false,
-            'value' => ''
-        ));
-        $form->setElement('boolean', 'cronSecureByAccount', array(
-            'label' => 'Durch Benutzerkonto absichern',
-            'description' => 'Es werden nur Anfragen von authentifizierten Backend Benutzern akzeptiert',
-            'value' => false,
-        ));
-
-        $this->addFormTranslations(
-            array(
-                'en_GB' => array(
-                    'plugin_form' => array(
-                        'label' => 'Cron security'
-                    ),
-                    'cronSecureAllowedKey' => array(
-                        'label'    => 'Allowed key',
-                        'description' => 'If provided, cron requests will be executed if the inserted value is provided as \'key\' in the request'
-                    ),
-                    'cronSecureAllowedIp' => array(
-                        'label' => 'Allowed IP(s)',
-                        'description' => 'If provided, cron requests will be executed if triggered from the given IP address(es). Use \';\' to separate multiple addresses.'
-                    ),
-                    'cronSecureByAccount' => array(
-                        'label' => 'Secure using account',
-                        'description' => 'If set, requests received from authenticated backend users will be accepted'
-                    )
-                )
-            )
-        );
-    }
-
     public function onGetControllerPath(Enlight_Event_EventArgs $args)
     {
         return $this->Path() . 'Cron.php';
@@ -96,6 +47,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
      * Secure cron actions according to system settings
      *
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return bool If cron action is authorized
      */
     public function authorizeCronAction($request)
@@ -142,5 +94,54 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         }
 
         return false;
+    }
+
+    private function createForm()
+    {
+        $form = $this->Form();
+        $parent = $this->Forms()->findOneBy(['name' => 'Other']);
+        $form->setParent($parent);
+        $form->setName('CronSecurity');
+        $form->setLabel('Cron-Sicherheit');
+
+        $form->setElement('text', 'cronSecureAllowedKey', [
+            'label' => 'Gültiger Schlüssel',
+            'description' => 'Hinterlegen Sie hier einen Key zum Ausführen der Cronjobs.',
+            'required' => false,
+            'value' => '',
+        ]);
+        $form->setElement('text', 'cronSecureAllowedIp', [
+            'label' => 'Zulässige IP(s)',
+            'description' => 'Nur angegebene IP-Adressen können die Cron Anfragen auslösen. Mehrere IP-Adressen müssen durch ein \';\' getrennt werden.',
+            'required' => false,
+            'value' => '',
+        ]);
+        $form->setElement('boolean', 'cronSecureByAccount', [
+            'label' => 'Durch Benutzerkonto absichern',
+            'description' => 'Es werden nur Anfragen von authentifizierten Backend Benutzern akzeptiert',
+            'value' => false,
+        ]);
+
+        $this->addFormTranslations(
+            [
+                'en_GB' => [
+                    'plugin_form' => [
+                        'label' => 'Cron security',
+                    ],
+                    'cronSecureAllowedKey' => [
+                        'label' => 'Allowed key',
+                        'description' => 'If provided, cron requests will be executed if the inserted value is provided as \'key\' in the request',
+                    ],
+                    'cronSecureAllowedIp' => [
+                        'label' => 'Allowed IP(s)',
+                        'description' => 'If provided, cron requests will be executed if triggered from the given IP address(es). Use \';\' to separate multiple addresses.',
+                    ],
+                    'cronSecureByAccount' => [
+                        'label' => 'Secure using account',
+                        'description' => 'If set, requests received from authenticated backend users will be accepted',
+                    ],
+                ],
+            ]
+        );
     }
 }

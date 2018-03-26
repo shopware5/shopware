@@ -35,6 +35,7 @@ class DqlHelper
 {
     /**
      * Reference to the PDO object
+     *
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
@@ -53,39 +54,40 @@ class DqlHelper
 
     /**
      * Cached ids of foreign entities
+     *
      * @var array
      */
-    protected $foreignEntityIDs = array();
+    protected $foreignEntityIDs = [];
 
     /**
      * All the entities, the user will be able to access via SwagMultiEdit
      */
-    protected $entities = array(
-        array('Shopware\Models\Article\Article', 'article'),
-        array('Shopware\Models\Article\Detail', 'detail'),
-        array('Shopware\Models\Article\Supplier', 'supplier'),
-        array('Shopware\Models\Category\Category', 'category'),
-        array('Shopware\Models\Article\Unit', 'unit'),
-        array('Shopware\Models\Attribute\Article', 'attribute'),
-        array('Shopware\Models\Tax\Tax', 'tax'),
-        array('Shopware\Models\Article\Vote', 'vote'),
-        array('Shopware\Models\Article\Configurator\Set', 'configuratorSet'),
-        array('Shopware\Models\Article\Configurator\Group', 'configuratorGroup'),
-        array('Shopware\Models\Article\Configurator\Option', 'configuratorOption'),
-        array('Shopware\Models\Property\Group', 'propertySet'),
-        array('Shopware\Models\Property\Option', 'propertyGroup'),
-        array('Shopware\Models\Property\Value', 'propertyOption'),
-        array('Shopware\Models\Article\Price', 'price'),
-        array('Shopware\Models\Article\Vote', 'vote'),
-        array('Shopware\Models\Article\Image', 'image')
-    );
+    protected $entities = [
+        ['Shopware\Models\Article\Article', 'article'],
+        ['Shopware\Models\Article\Detail', 'detail'],
+        ['Shopware\Models\Article\Supplier', 'supplier'],
+        ['Shopware\Models\Category\Category', 'category'],
+        ['Shopware\Models\Article\Unit', 'unit'],
+        ['Shopware\Models\Attribute\Article', 'attribute'],
+        ['Shopware\Models\Tax\Tax', 'tax'],
+        ['Shopware\Models\Article\Vote', 'vote'],
+        ['Shopware\Models\Article\Configurator\Set', 'configuratorSet'],
+        ['Shopware\Models\Article\Configurator\Group', 'configuratorGroup'],
+        ['Shopware\Models\Article\Configurator\Option', 'configuratorOption'],
+        ['Shopware\Models\Property\Group', 'propertySet'],
+        ['Shopware\Models\Property\Option', 'propertyGroup'],
+        ['Shopware\Models\Property\Value', 'propertyOption'],
+        ['Shopware\Models\Article\Price', 'price'],
+        ['Shopware\Models\Article\Vote', 'vote'],
+        ['Shopware\Models\Article\Image', 'image'],
+    ];
 
-    protected $columnsNotToShowInGrid = array(
+    protected $columnsNotToShowInGrid = [
         'Tax_tax',
         'Detail_kind',
         'Detail_articleId',
         'Detail_unitId',
-        'Article_template' ,
+        'Article_template',
         'Article_configuratorSetId',
         'Article_description',
         'Article_descriptionLong',
@@ -106,25 +108,25 @@ class DqlHelper
         'Supplier_description',
         'Supplier_link',
         'Attribute_articleId',
-        'Attribute_articleDetailId'
-    );
+        'Attribute_articleDetailId',
+    ];
 
     /**
      * Some mappings we will need later
      */
-    protected $attributeToEntityMapping = array();
-    protected $attributeToColumn = array();
-    protected $entityToPrefix = array();
-    protected $prefixToEntity = array();
-    protected $columns = array();
-    protected $columnInfo = array();
+    protected $attributeToEntityMapping = [];
+    protected $attributeToColumn = [];
+    protected $entityToPrefix = [];
+    protected $prefixToEntity = [];
+    protected $columns = [];
+    protected $columnInfo = [];
 
     /**
      * Constructor
      *
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param ModelManager $em
-     * @param \Enlight_Event_EventManager $eventManager
+     * @param ModelManager                             $em
+     * @param \Enlight_Event_EventManager              $eventManager
      */
     public function __construct(
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
@@ -181,6 +183,7 @@ class DqlHelper
      * e.g. ARTICLE.ID => id
      *
      * @param $attribute
+     *
      * @return mixed
      */
     public function getColumnForAttribute($attribute)
@@ -195,6 +198,7 @@ class DqlHelper
      * e.g. ARTICLE.ID => \Shopware\Models\Article\Article
      *
      * @param $attribute
+     *
      * @return mixed
      */
     public function getEntityForAttribute($attribute)
@@ -218,6 +222,7 @@ class DqlHelper
      *
      *
      * @param $prefix
+     *
      * @return mixed
      */
     public function getEntityForPrefix($prefix)
@@ -230,25 +235,12 @@ class DqlHelper
      * e.g. \Shopware\Models\Article\Article => article
      *
      * @param $entity
+     *
      * @return mixed
      */
     public function getPrefixForEntity($entity)
     {
         return $this->entityToPrefix[$entity];
-    }
-
-    /**
-     * Returns all columns for a given entity prefixed
-     * eg.g \Shopware\Models\Article\Article => array('id', 'name', …)
-     */
-    protected function getPrefixedColumns($entity)
-    {
-        $columns = array_keys($this->getEntityManager()->getClassMetadata($entity)->columnNames);
-        foreach ($columns as &$column) {
-            $column = $this->entityToPrefix[$entity] . '.' . $column;
-        }
-
-        return $columns;
     }
 
     /**
@@ -258,7 +250,7 @@ class DqlHelper
      */
     public function getDefaultColumns()
     {
-        return array(
+        return [
             'Detail_number',
             'Article_name',
             'Supplier_name',
@@ -266,8 +258,8 @@ class DqlHelper
             'Detail_active',
             'Price_price',
             'Tax_name',
-            'Detail_inStock'
-        );
+            'Detail_inStock',
+        ];
     }
 
     /**
@@ -286,13 +278,14 @@ class DqlHelper
      * Returns a single row with (almost) all possibly relevant information of an article
      *
      * @param $detailId
+     *
      * @return mixed
      */
     public function getProductForListing($detailId)
     {
         $columns = $this->getColumnsForProductListing();
 
-        $select = array();
+        $select = [];
         foreach ($columns as $key => $config) {
             if (!$config['allowInGrid']) {
                 continue;
@@ -334,7 +327,7 @@ class DqlHelper
 
             WHERE s_articles_details.id = ?
         ";
-        $article = $this->getDb()->fetchRow($sql, array($detailId));
+        $article = $this->getDb()->fetchRow($sql, [$detailId]);
         $article = $this->addInfo($article);
 
         return $article;
@@ -352,6 +345,7 @@ class DqlHelper
 
     /**
      * Returns an array of all attributes
+     *
      * @return array
      */
     public function getAttributes()
@@ -392,47 +386,16 @@ class DqlHelper
     }
 
     /**
-     * Decide if a column can be shown in the grid
-     *
-     * Use the filter event SwagMultiEdit_Product_DqlHelper_getColumnsForProductListing_filterColumns
-     * in order to overwrite the selectable columns
-     *
-     * @param $column
-     * @return bool
-     */
-    private function showColumnInGrid($column)
-    {
-        $entitiesToShow = array(
-            'Article',
-            'Tax',
-            'Detail',
-            'Supplier',
-            'Attribute'
-        );
-
-        // By default show the main entities
-        $show = in_array($column['entity'], $entitiesToShow);
-
-        // If column was blacklisted explicitly, set $show = false
-        if (in_array($column['alias'], $this->columnsNotToShowInGrid)) {
-            $show = false;
-        };
-
-        return $show;
-    }
-
-    /**
      * Build a list which holds the configuration for all known columns - e.g. name, data type, associated table…
      *
      * Columns having "allowInGrid" set to true, are selected for the main product listing.
-     *
      */
     public function buildColumnInfo()
     {
         $shownColumns = $this->getDefaultColumns();
         $columnPositions = array_flip($shownColumns);
 
-        $result = array();
+        $result = [];
 
         foreach ($this->getEntities() as $entityArray) {
             list($entity, $prefix) = $entityArray;
@@ -449,26 +412,26 @@ class DqlHelper
                 $alias = $entityShort . '_' . $name;
                 $key = $entityShort . ucfirst($name);
                 $mapping = $metadata->getFieldMapping($name);
-                $result[$key] = array(
+                $result[$key] = [
                     'entity' => $entityShort,
                     'field' => $name,
                     'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax' && $entity != 'Shopware\Models\Article\Supplier',
                     'type' => $config['type'],
                     'precision' => $config['precision'],
-                    'nullable' => (bool)$config['nullable'],
+                    'nullable' => (bool) $config['nullable'],
                     'columnName' => $mapping['columnName'],
                     'table' => $metadata->getTableName(),
                     'alias' => $alias,
                     'show' => in_array($alias, $shownColumns),
                     'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
-                );
+                ];
 
                 $result[$key]['allowInGrid'] = $this->showColumnInGrid($result[$key]);
             }
         }
 
         $alias = 'Price_price';
-        $result['PricePrice'] = array(
+        $result['PricePrice'] = [
             'entity' => 'Price',
             'field' => 'price',
             'editable' => true,
@@ -481,11 +444,11 @@ class DqlHelper
             'alias' => $alias,
             'allowInGrid' => true,
             'show' => in_array($alias, $shownColumns),
-            'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1
-        );
+            'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
+        ];
 
         $alias = 'Price_pseudoPrice';
-        $result['PricePseudoPrice'] = array(
+        $result['PricePseudoPrice'] = [
             'entity' => 'Price',
             'field' => 'pseudoPrice',
             'editable' => true,
@@ -499,10 +462,10 @@ class DqlHelper
             'allowInGrid' => true,
             'show' => in_array($alias, $shownColumns),
             'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
-        );
+        ];
 
         $alias = 'Price_netPrice';
-        $result['PriceNetPrice'] = array(
+        $result['PriceNetPrice'] = [
             'entity' => 'Price',
             'field' => 'price',
             'editable' => false,
@@ -515,7 +478,7 @@ class DqlHelper
             'allowInGrid' => true,
             'show' => in_array($alias, $shownColumns),
             'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
-        );
+        ];
 
         // Sort columns by position
         uasort(
@@ -535,7 +498,7 @@ class DqlHelper
         $result = $this->getEventManager()->filter(
             'SwagMultiEdit_Product_DqlHelper_getColumnsForProductListing_filterColumns',
             $result,
-            array('subject' => $this, 'defaultColumns' => $shownColumns)
+            ['subject' => $this, 'defaultColumns' => $shownColumns]
         );
 
         return $this->columnInfo = $result;
@@ -545,6 +508,7 @@ class DqlHelper
      * Return column info for a given alias
      *
      * @param $alias
+     *
      * @return bool
      */
     public function getColumnInfoByAlias($alias)
@@ -562,6 +526,7 @@ class DqlHelper
      * Returns the association name for a given entity in order to join it automatically
      *
      * @param $entity
+     *
      * @return string
      */
     public function getAssociationForEntity($entity)
@@ -610,11 +575,12 @@ class DqlHelper
      * Returns a list of entities we need to join based on the given tokens
      *
      * @param $tokens
+     *
      * @return array
      */
     public function getJoinColumns($tokens)
     {
-        $join = array();
+        $join = [];
         foreach ($tokens as $token) {
             if ($token['type'] == 'attribute') {
                 $entity = $this->getEntityForAttribute($token['token']);
@@ -647,7 +613,7 @@ class DqlHelper
         $join = $this->getEventManager()->filter(
             'SwagMultiEdit_Product_DqlHelper_getJoinColumns_filterColumns',
             $join,
-            array('subject' => $this, 'tokens' => $tokens)
+            ['subject' => $this, 'tokens' => $tokens]
         );
 
         return $join;
@@ -658,12 +624,13 @@ class DqlHelper
      * convenient operators with proper expressions understood by DQL
      *
      * @param $tokens
+     *
      * @return string
      */
     public function getDqlFromTokens($tokens)
     {
-        $params = array();
-        $newTokens = array();
+        $params = [];
+        $newTokens = [];
         $skipNext = false;
 
         foreach ($tokens as $key => $token) {
@@ -676,12 +643,12 @@ class DqlHelper
             // Also allows you to add own tokens
             if ($event = $this->getEventManager()->notifyUntil(
                 'SwagMultiEdit_Product_DqlHelper_getDqlFromTokens_Token_' . ucfirst(strtolower($token['type'])),
-                array(
+                [
                     'subject' => $this,
                     'currentToken' => $token,
                     'alltokens' => $tokens,
-                    'processedTokens' => $newTokens
-                )
+                    'processedTokens' => $newTokens,
+                ]
             )
             ) {
                 $return = $event->getReturn();
@@ -706,7 +673,7 @@ class DqlHelper
                 $mode = $lastToken == '~' ? 1 : 0;
 
                 // Build the DQL Token - we've registered our own RegExp DoctrineExtension before
-                $newTokens[] = " RegExp (?" . count($params) . ", {$attribute}) = {$mode}";
+                $newTokens[] = ' RegExp (?' . count($params) . ", {$attribute}) = {$mode}";
                 // Consume the next token as param and skip it in the next iteration
                 $params[] = substr($token['token'], 1, -1);
                 continue;
@@ -774,13 +741,13 @@ class DqlHelper
         // Allow users to modify the token array afterwards
         $filteredArray = $this->getEventManager()->filter(
             'SwagMultiEdit_Product_DqlHelper_getDqlFromTokens_filterTokens',
-            array('tokens' => $newTokens, 'params' => $params),
-            array('subject' => $this, 'tokens' => $tokens)
+            ['tokens' => $newTokens, 'params' => $params],
+            ['subject' => $this, 'tokens' => $tokens]
         );
         $newTokens = $filteredArray['tokens'];
         $params = $filteredArray['params'];
 
-        return array(implode(' ', $newTokens), $params);
+        return [implode(' ', $newTokens), $params];
     }
 
     /**
@@ -790,6 +757,7 @@ class DqlHelper
      * @param $prefix
      * @param $field
      * @param $value
+     *
      * @return mixed|null
      */
     public function formatValue($prefix, $field, $value)
@@ -815,6 +783,7 @@ class DqlHelper
      *
      * @param $foreignPrefix
      * @param $detailIds
+     *
      * @return mixed
      */
     public function getIdForForeignEntity($foreignPrefix, $detailIds)
@@ -837,6 +806,7 @@ class DqlHelper
      *
      * @param $foreignPrefix
      * @param $detailIds
+     *
      * @return mixed
      */
     public function getIdForForeignEntityInternal($foreignPrefix, $detailIds)
@@ -956,23 +926,38 @@ class DqlHelper
      * Groups a given list of operations by the entity they operate on
      *
      * @param $operations
+     *
      * @return array
      */
     public function groupOperations($operations)
     {
         // Group operations by prefix and replace the attribute by the corresponding column
-        $outputOperations = array();
+        $outputOperations = [];
         foreach ($operations as $operation) {
             $operation['column'] = $this->getColumnForAttribute($operation['column']);
             list($prefix, $column) = explode('.', $operation['column']);
 
             if (!isset($outputOperations[$prefix])) {
-                $outputOperations[$prefix] = array();
+                $outputOperations[$prefix] = [];
             }
             $outputOperations[$prefix][] = $operation;
         }
 
         return $outputOperations;
+    }
+
+    /**
+     * Returns all columns for a given entity prefixed
+     * eg.g \Shopware\Models\Article\Article => array('id', 'name', …)
+     */
+    protected function getPrefixedColumns($entity)
+    {
+        $columns = array_keys($this->getEntityManager()->getClassMetadata($entity)->columnNames);
+        foreach ($columns as &$column) {
+            $column = $this->entityToPrefix[$entity] . '.' . $column;
+        }
+
+        return $columns;
     }
 
     /**
@@ -984,6 +969,7 @@ class DqlHelper
      *
      *
      * @param $article
+     *
      * @return mixed
      */
     protected function addInfo($article)
@@ -1009,5 +995,36 @@ class DqlHelper
         $article['hasCategories'] = ($hasCategories !== false);
 
         return $article;
+    }
+
+    /**
+     * Decide if a column can be shown in the grid
+     *
+     * Use the filter event SwagMultiEdit_Product_DqlHelper_getColumnsForProductListing_filterColumns
+     * in order to overwrite the selectable columns
+     *
+     * @param $column
+     *
+     * @return bool
+     */
+    private function showColumnInGrid($column)
+    {
+        $entitiesToShow = [
+            'Article',
+            'Tax',
+            'Detail',
+            'Supplier',
+            'Attribute',
+        ];
+
+        // By default show the main entities
+        $show = in_array($column['entity'], $entitiesToShow);
+
+        // If column was blacklisted explicitly, set $show = false
+        if (in_array($column['alias'], $this->columnsNotToShowInGrid)) {
+            $show = false;
+        }
+
+        return $show;
     }
 }

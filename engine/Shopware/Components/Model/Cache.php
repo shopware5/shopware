@@ -47,7 +47,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 
     /**
      * @param \Zend_Cache_Core $cache
-     * @param string $prefix
+     * @param string           $prefix
      */
     public function __construct(\Zend_Cache_Core $cache, $prefix = null)
     {
@@ -62,9 +62,9 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     /**
      * Fetches an entry from the cache.
      *
-     * @param string $id cache id The id of the cache entry to fetch.
+     * @param string $id cache id The id of the cache entry to fetch
      *
-     * @return string The cached data or FALSE, if no cache entry exists for the given id.
+     * @return string the cached data or FALSE, if no cache entry exists for the given id
      */
     protected function doFetch($id)
     {
@@ -74,9 +74,9 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     /**
      * Test if an entry exists in the cache.
      *
-     * @param string $id cache id The cache id of the entry to check for.
+     * @param string $id cache id The cache id of the entry to check for
      *
-     * @return boolean TRUE if a cache entry exists for the given cache id, FALSE otherwise.
+     * @return bool tRUE if a cache entry exists for the given cache id, FALSE otherwise
      */
     protected function doContains($id)
     {
@@ -86,15 +86,15 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     /**
      * Puts data into the cache.
      *
-     * @param string $id       The cache id.
-     * @param string $data     The cache entry/data.
+     * @param string   $id       the cache id
+     * @param string   $data     the cache entry/data
      * @param bool|int $lifeTime The lifetime. If != false, sets a specific lifetime for this cache entry (null => infinite lifeTime).
      *
-     * @return boolean TRUE if the entry was successfully stored in the cache, FALSE otherwise.
+     * @return bool tRUE if the entry was successfully stored in the cache, FALSE otherwise
      */
     protected function doSave($id, $data, $lifeTime = false)
     {
-        return $this->cache->save($data, $this->prefix . md5($id), array('Shopware_Models'), $lifeTime);
+        return $this->cache->save($data, $this->prefix . md5($id), ['Shopware_Models'], $lifeTime);
     }
 
     /**
@@ -102,7 +102,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      *
      * @param string $id cache id
      *
-     * @return boolean TRUE if the cache entry was successfully deleted, FALSE otherwise.
+     * @return bool tRUE if the cache entry was successfully deleted, FALSE otherwise
      */
     protected function doDelete($id)
     {
@@ -112,18 +112,19 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     /**
      * Deletes all cache entries.
      *
-     * @return boolean TRUE if the cache entry was successfully deleted, FALSE otherwise.
+     * @return bool tRUE if the cache entry was successfully deleted, FALSE otherwise
      */
     protected function doFlush()
     {
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('Shopware_Models'));
+        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['Shopware_Models']);
     }
 
     /**
      * Retrieves cached information from data store
      *
      * @since   2.2
-     * @return  array An associative array with server's statistics if available, NULL otherwise.
+     *
+     * @return array an associative array with server's statistics if available, NULL otherwise
      */
     protected function doGetStats()
     {

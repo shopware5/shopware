@@ -21,15 +21,15 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductService implements Service\ProductServiceInterface
@@ -90,17 +90,17 @@ class ProductService implements Service\ProductServiceInterface
     private $listProductService;
 
     /**
-     * @param Service\ListProductServiceInterface $listProductService
-     * @param Service\VoteServiceInterface $voteService
-     * @param Service\MediaServiceInterface $mediaService
-     * @param Service\RelatedProductsServiceInterface $relatedProductsService
+     * @param Service\ListProductServiceInterface           $listProductService
+     * @param Service\VoteServiceInterface                  $voteService
+     * @param Service\MediaServiceInterface                 $mediaService
+     * @param Service\RelatedProductsServiceInterface       $relatedProductsService
      * @param Service\RelatedProductStreamsServiceInterface $relatedProductStreamsService
-     * @param Service\SimilarProductsServiceInterface $similarProductsService
-     * @param Service\ProductDownloadServiceInterface $downloadService
-     * @param Service\ProductLinkServiceInterface $linkService
-     * @param Service\PropertyServiceInterface $propertyService
-     * @param Service\ConfiguratorServiceInterface $configuratorService
-     * @param \Enlight_Event_EventManager $eventManager
+     * @param Service\SimilarProductsServiceInterface       $similarProductsService
+     * @param Service\ProductDownloadServiceInterface       $downloadService
+     * @param Service\ProductLinkServiceInterface           $linkService
+     * @param Service\PropertyServiceInterface              $propertyService
+     * @param Service\ConfiguratorServiceInterface          $configuratorService
+     * @param \Enlight_Event_EventManager                   $eventManager
      */
     public function __construct(
         Service\ListProductServiceInterface $listProductService,
@@ -129,7 +129,7 @@ class ProductService implements Service\ProductServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($number, Struct\ProductContextInterface $context)
     {
@@ -139,18 +139,20 @@ class ProductService implements Service\ProductServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $numbers, Struct\ProductContextInterface $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);
         $products = $this->createFromListProducts($listProducts, $context);
+
         return $products;
     }
 
     /**
-     * @param Struct\ListProduct[] $listProducts
+     * @param Struct\ListProduct[]           $listProducts
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\Product[] indexed by order number
      */
     private function createFromListProducts(array $listProducts, Struct\ProductContextInterface $context)

@@ -55,9 +55,9 @@ class PluginLicenceService
     private $unpackService;
 
     /**
-     * @param Connection $connection
-     * @param InstallerService $installer
-     * @param StoreClient $storeClient
+     * @param Connection                $connection
+     * @param InstallerService          $installer
+     * @param StoreClient               $storeClient
      * @param LocalLicenseUnpackService $unpackService
      */
     public function __construct(
@@ -74,6 +74,7 @@ class PluginLicenceService
 
     /**
      * @param string $licenceKey
+     *
      * @return int
      */
     public function importLicence($licenceKey)
@@ -93,6 +94,7 @@ class PluginLicenceService
 
     /**
      * @param UpdateLicencesRequest $request
+     *
      * @return array
      */
     public function updateLicences(UpdateLicencesRequest $request)
@@ -103,7 +105,7 @@ class PluginLicenceService
             [
                 'domain' => $request->getDomain(),
                 'shopwareVersion' => $request->getShopwareVersion(),
-                'locale' => $request->getLocale()
+                'locale' => $request->getLocale(),
             ]
         );
 
@@ -112,6 +114,7 @@ class PluginLicenceService
 
     /**
      * function to get expired and soon expiring plugins
+     *
      * @return PluginInformationStruct[]
      */
     public function getExpiringLicenses()
@@ -129,11 +132,13 @@ class PluginLicenceService
                 $expiringPluginLicenses[] = $this->createPluginInformationStruct($license);
             }
         }
+
         return $expiringPluginLicenses;
     }
 
     /**
      * function to get only expired plugins
+     *
      * @return PluginInformationStruct[]
      */
     public function getExpiredLicenses()
@@ -151,11 +156,33 @@ class PluginLicenceService
                 $expiredPluginLicenses[] = $this->createPluginInformationStruct($license);
             }
         }
+
         return $expiredPluginLicenses;
     }
 
     /**
+     * @param PluginInformationStruct[] $pluginInformation
+     * @param string                    $domain
+     */
+    public function updateLocalLicenseInformation(array $pluginInformation, $domain)
+    {
+        $this->cleanupLocalLicenseInformation();
+        foreach ($pluginInformation as $plugin) {
+            if ($plugin->getLicenseExpiration() == null && !$plugin->isUnknownLicense()) {
+                continue;
+            }
+            $license = $this->getLocalLicenseByPluginName($plugin->getTechnicalName());
+            if (empty($license)) {
+                $this->createLocalLicenseInformation($plugin, $domain);
+            } elseif (empty($license['license'])) {
+                $this->updateLocalLicenseExpirationInformation($license, $plugin);
+            }
+        }
+    }
+
+    /**
      * @param array $licenses
+     *
      * @return array $expirations
      */
     private function getExpirations(array $licenses)
@@ -181,26 +208,6 @@ class PluginLicenceService
     }
 
     /**
-     * @param PluginInformationStruct[] $pluginInformation
-     * @param string $domain
-     */
-    public function updateLocalLicenseInformation(array $pluginInformation, $domain)
-    {
-        $this->cleanupLocalLicenseInformation();
-        foreach ($pluginInformation as $plugin) {
-            if ($plugin->getLicenseExpiration() == null && !$plugin->isUnknownLicense()) {
-                continue;
-            }
-            $license = $this->getLocalLicenseByPluginName($plugin->getTechnicalName());
-            if (empty($license)) {
-                $this->createLocalLicenseInformation($plugin, $domain);
-            } elseif (empty($license['license'])) {
-                $this->updateLocalLicenseExpirationInformation($license, $plugin);
-            }
-        }
-    }
-
-    /**
      * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
      */
     private function cleanupLocalLicenseInformation()
@@ -210,6 +217,7 @@ class PluginLicenceService
 
     /**
      * @param string $pluginName
+     *
      * @return array
      */
     private function getLocalLicenseByPluginName($pluginName)
@@ -226,7 +234,7 @@ class PluginLicenceService
 
     /**
      * @param PluginInformationStruct $plugin
-     * @param string $domain
+     * @param string                  $domain
      */
     private function createLocalLicenseInformation(PluginInformationStruct $plugin, $domain)
     {
@@ -239,7 +247,7 @@ class PluginLicenceService
             'version' => $plugin->getVersion(),
             'active' => 1,
             'source' => $plugin->getSource(),
-            'added' => $today->format('Y-m-d')
+            'added' => $today->format('Y-m-d'),
         ];
 
         if ($plugin->isUnknownLicense()) {
@@ -257,7 +265,7 @@ class PluginLicenceService
     }
 
     /**
-     * @param array $license
+     * @param array                   $license
      * @param PluginInformationStruct $plugin
      */
     private function updateLocalLicenseExpirationInformation(array $license, PluginInformationStruct $plugin)
@@ -270,11 +278,12 @@ class PluginLicenceService
 
     /**
      * function to get all plugin licenses of active plugins
+     *
      * @return array
      */
     private function getLicences()
     {
-        /**@var $connection Connection */
+        /** @var $connection Connection */
         $connection = $this->connection;
         $builder = $connection->createQueryBuilder();
 
@@ -284,12 +293,14 @@ class PluginLicenceService
             ->where('plugin.active = 1');
 
         $builderExecute = $builder->execute();
+
         return $builderExecute->fetchAll();
     }
 
     /**
      * @param \DateTime $expirationDate
-     * @return boolean
+     *
+     * @return bool
      */
     private function isExpired(\DateTime $expirationDate)
     {
@@ -300,8 +311,9 @@ class PluginLicenceService
 
     /**
      * @param \DateTime $expirationDate
-     * @param int $daysTillExpiration
-     * @return boolean
+     * @param int       $daysTillExpiration
+     *
+     * @return bool
      */
     private function isSoonExpiring(\DateTime $expirationDate, $daysTillExpiration = 14)
     {
@@ -312,6 +324,7 @@ class PluginLicenceService
 
     /**
      * @param array $data
+     *
      * @return PluginInformationStruct
      */
     private function createPluginInformationStruct(array $data)
@@ -319,7 +332,7 @@ class PluginLicenceService
         $information = [
             'label' => $data['label'],
             'name' => $data['module'],
-            'licenseExpiration' => $data['expiration']
+            'licenseExpiration' => $data['expiration'],
         ];
 
         return new PluginInformationStruct($information);

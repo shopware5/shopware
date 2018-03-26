@@ -28,13 +28,14 @@ use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CategoryReader extends GenericReader
 {
     /**
      * @param \int[]|\string[] $identifiers
+     *
      * @return \array[]
      */
     public function getList($identifiers)
@@ -46,12 +47,14 @@ class CategoryReader extends GenericReader
             $path = array_reverse(array_filter(explode('|', $row['path'])));
             $row['parents'] = $this->getPathParents($parents, $path);
         }
+
         return $data;
     }
 
     /**
      * @param string[] $parents
-     * @param int[] $path
+     * @param int[]    $path
+     *
      * @return array
      */
     private function getPathParents($parents, $path)
@@ -60,11 +63,13 @@ class CategoryReader extends GenericReader
         foreach ($path as $id) {
             $categories[] = $parents[$id];
         }
+
         return $categories;
     }
 
     /**
      * @param array[] $data
+     *
      * @return string[]
      */
     private function getParents($data)
@@ -80,6 +85,7 @@ class CategoryReader extends GenericReader
         $query->from('s_categories', 'category');
         $query->where('category.id IN (:ids)');
         $query->setParameter(':ids', $parents, Connection::PARAM_INT_ARRAY);
+
         return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 }

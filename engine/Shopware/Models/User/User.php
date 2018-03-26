@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\User;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware backend user model represents a single backend user.
@@ -48,7 +48,23 @@ use Doctrine\ORM\Mapping as ORM;
 class User extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\User", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\User
+     */
+    protected $attribute;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Blog", mappedBy="author")
+     * @ORM\JoinColumn(name="id", referencedColumnName="author_id")
+     *
+     * @var \Shopware\Models\Blog\Blog
+     */
+    protected $blog;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -57,106 +73,105 @@ class User extends ModelEntity
     private $id;
 
     /**
-     * @var integer $roleId
+     * @var int
      *
      * @ORM\Column(name="roleID", type="integer", nullable=false)
      */
     private $roleId;
 
     /**
-     * @var integer $localeId
+     * @var int
      *
      * @ORM\Column(name="localeID", type="integer", nullable=false)
      */
     private $localeId;
 
     /**
-     * @var string $username
+     * @var string
      *
      * @ORM\Column(name="username", type="string", length=255, nullable=false)
      */
     private $username;
 
     /**
-     * @var string $password
+     * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
     private $password;
 
     /**
-     * @var string $encoder
+     * @var string
      *
      * @ORM\Column(name="encoder", type="string", length=255, nullable=false)
      */
-
     private $encoder;
 
     /**
-     * @var string $apiKey
+     * @var string
      *
      * @ORM\Column(name="apiKey", type="string", length=40, nullable=true)
      */
     private $apiKey;
 
     /**
-     * @var string $sessionId
+     * @var string
      *
      * @ORM\Column(name="sessionID", type="string", length=50, nullable=false)
      */
     private $sessionId = '';
 
     /**
-     * @var \DateTime $lastLogin
+     * @var \DateTime
      *
      * @ORM\Column(name="lastlogin", type="datetime", nullable=false)
      */
     private $lastLogin;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name = '';
 
     /**
-     * @var string $email
+     * @var string
      *
      * @ORM\Column(name="email", type="string", length=120, nullable=false)
      */
     private $email = '';
 
     /**
-     * @var integer $active
+     * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
     private $active = 1;
 
     /**
-     * @var integer $failedLogins
+     * @var int
      *
      * @ORM\Column(name="failedlogins", type="integer", nullable=false)
      */
     private $failedLogins = 0;
 
     /**
-     * @var \DateTime $lockedUntil
+     * @var \DateTime
      *
      * @ORM\Column(name="lockeduntil", type="datetime", nullable=false)
      */
     private $lockedUntil;
 
     /**
-     * @var boolean $extendedEditor
+     * @var bool
      *
      * @ORM\Column(name="extended_editor", type="boolean", nullable=false)
      */
     private $extendedEditor = false;
 
     /**
-     * @var boolean $disabledCache
+     * @var bool
      *
      * @ORM\Column(name="disabled_cache", type="boolean", nullable=false)
      */
@@ -166,25 +181,11 @@ class User extends ModelEntity
      * The role property is the owning side of the association between user and role.
      * The association is joined over the s_core_auth_roles.id field and the s_core_auth.roleID
      *
-     * @var $role \Shopware\Models\User\Role
+     * @var \Shopware\Models\User\Role
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="users")
      * @ORM\JoinColumn(name="roleID", referencedColumnName="id")
      */
     private $role;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\User", mappedBy="user", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\User
-     */
-    protected $attribute;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Blog", mappedBy="author")
-     * @ORM\JoinColumn(name="id", referencedColumnName="author_id")
-     * @var \Shopware\Models\Blog\Blog
-     */
-    protected $blog;
 
     /**
      * Initial the date fields
@@ -198,7 +199,7 @@ class User extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -209,11 +210,13 @@ class User extends ModelEntity
      * Set username
      *
      * @param string $username
+     *
      * @return User
      */
     public function setUsername($username)
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -231,6 +234,7 @@ class User extends ModelEntity
      * Set password
      *
      * @param string $password
+     *
      * @return User
      */
     public function setPassword($password)
@@ -254,6 +258,7 @@ class User extends ModelEntity
      * Set API-Key
      *
      * @param string $apiKey
+     *
      * @return User
      */
     public function setApiKey($apiKey)
@@ -281,11 +286,13 @@ class User extends ModelEntity
      * Set sessionid
      *
      * @param string $sessionId
+     *
      * @return User
      */
     public function setSessionId($sessionId)
     {
         $this->sessionId = $sessionId;
+
         return $this;
     }
 
@@ -303,6 +310,7 @@ class User extends ModelEntity
      * Set lastLogin
      *
      * @param \DateTime|string $lastLogin
+     *
      * @return User
      */
     public function setLastLogin($lastLogin)
@@ -311,6 +319,7 @@ class User extends ModelEntity
             $lastLogin = new \DateTime((string) $lastLogin);
         }
         $this->lastLogin = $lastLogin;
+
         return $this;
     }
 
@@ -328,11 +337,13 @@ class User extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return User
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -350,11 +361,13 @@ class User extends ModelEntity
      * Set email
      *
      * @param string $email
+     *
      * @return User
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -371,19 +384,21 @@ class User extends ModelEntity
     /**
      * Set active
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return User
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -393,19 +408,21 @@ class User extends ModelEntity
     /**
      * Set failedLogins
      *
-     * @param integer $failedLogins
+     * @param int $failedLogins
+     *
      * @return User
      */
     public function setFailedLogins($failedLogins)
     {
         $this->failedLogins = $failedLogins;
+
         return $this;
     }
 
     /**
      * Get failedLogins
      *
-     * @return integer
+     * @return int
      */
     public function getFailedLogins()
     {
@@ -416,6 +433,7 @@ class User extends ModelEntity
      * Set lockedUntil
      *
      * @param \DateTime|string $lockedUntil|
+     *
      * @return User
      */
     public function setLockedUntil($lockedUntil)
@@ -424,6 +442,7 @@ class User extends ModelEntity
             $lockedUntil = new \DateTime((string) $lockedUntil);
         }
         $this->lockedUntil = $lockedUntil;
+
         return $this;
     }
 
@@ -438,7 +457,8 @@ class User extends ModelEntity
     }
 
     /**
-     * @param boolean $extendedEditor
+     * @param bool $extendedEditor
+     *
      * @return User
      */
     public function setExtendedEditor($extendedEditor)
@@ -449,7 +469,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getExtendedEditor()
     {
@@ -457,7 +477,8 @@ class User extends ModelEntity
     }
 
     /**
-     * @param boolean $disabledCache
+     * @param bool $disabledCache
+     *
      * @return User
      */
     public function setDisabledCache($disabledCache)
@@ -468,7 +489,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getDisabledCache()
     {
@@ -477,6 +498,7 @@ class User extends ModelEntity
 
     /**
      * Getter function for the roleId property
+     *
      * @return int
      */
     public function getRoleId()
@@ -486,17 +508,21 @@ class User extends ModelEntity
 
     /**
      * Setter function for the roleId property
+     *
      * @param int $roleId
+     *
      * @return \Shopware\Models\User\User
      */
     public function setRoleId($roleId)
     {
         $this->roleId = $roleId;
+
         return $this;
     }
 
     /**
      * Getter function for the localeId property.
+     *
      * @return int
      */
     public function getLocaleId()
@@ -506,12 +532,15 @@ class User extends ModelEntity
 
     /**
      * Setter function for the localeId property.
+     *
      * @param int $localeId
+     *
      * @return \Shopware\Models\User\User
      */
     public function setLocaleId($localeId)
     {
         $this->localeId = $localeId;
+
         return $this;
     }
 
@@ -535,11 +564,13 @@ class User extends ModelEntity
      * The role data is joined over the s_core_auth.roleID field.
      *
      * @param \Shopware\Models\User\Role $role
+     *
      * @return \Shopware\Models\User\User
      */
     public function setRole($role)
     {
         $this->role = $role;
+
         return $this;
     }
 
@@ -553,6 +584,7 @@ class User extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\User|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\User
      */
     public function setAttribute($attribute)

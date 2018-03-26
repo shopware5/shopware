@@ -50,7 +50,7 @@ class DomainBacklogSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'product_stock_was_changed' => 'onProductStockWasChanged'
+            'product_stock_was_changed' => 'onProductStockWasChanged',
         ];
     }
 

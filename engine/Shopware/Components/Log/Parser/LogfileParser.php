@@ -30,9 +30,10 @@ class LogfileParser
 {
     /**
      * @param $file
-     * @param int $offset
+     * @param int      $offset
      * @param null|int $limit
-     * @param bool $reverse
+     * @param bool     $reverse
+     *
      * @return array
      */
     public function parseLogFile($file, $offset = null, $limit = null, $reverse = false)
@@ -55,6 +56,7 @@ class LogfileParser
 
     /**
      * @param string $filePath
+     *
      * @return int
      */
     public function countLogFile($filePath)
@@ -67,6 +69,7 @@ class LogfileParser
 
     /**
      * @param string $log
+     *
      * @return string[]
      */
     private function parseLine($log)
@@ -77,7 +80,7 @@ class LogfileParser
 
         if (!isset($data['date'])) {
             return [
-                'raw' => $log
+                'raw' => $log,
             ];
         }
 
@@ -88,7 +91,7 @@ class LogfileParser
             'message' => $data['message'],
             'context' => json_decode($data['context'], true),
             'extra' => json_decode($data['extra'], true),
-            'raw' => $log
+            'raw' => $log,
         ];
     }
 }

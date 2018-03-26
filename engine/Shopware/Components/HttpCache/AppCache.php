@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\HttpCache;
 
-use Symfony\Component\HttpKernel\HttpCache\Esi;
-use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpCache\Esi;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Shopware Application
@@ -40,7 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
  * </code>
  *
  * @category  Shopware
- * @package   Shopware\Components\HttpCache
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AppCache extends HttpCache
@@ -58,7 +58,7 @@ class AppCache extends HttpCache
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Constructor.
@@ -74,11 +74,11 @@ class AppCache extends HttpCache
             $this->cacheDir = $options['cache_dir'];
         }
 
-        $this->options = array_merge(array(
-            'purge_allowed_ips' => array('127.0.0.1', '::1'),
-            'debug'             => false,
-            'cache_cookies'     => array('shop', 'currency', 'x-cache-context-hash'),
-        ), $options);
+        $this->options = array_merge([
+            'purge_allowed_ips' => ['127.0.0.1', '::1'],
+            'debug' => false,
+            'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
+        ], $options);
 
         parent::__construct(
             $kernel,
@@ -120,10 +120,18 @@ class AppCache extends HttpCache
     }
 
     /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return $this->cacheDir;
+    }
+
+    /**
      * Invalidates non-safe methods (like POST, PUT, and DELETE).
      *
      * @param Request $request
-     * @param Boolean $catch   Whether to process exceptions
+     * @param bool    $catch   Whether to process exceptions
      *
      * @return Response A Response instance
      */
@@ -167,10 +175,11 @@ class AppCache extends HttpCache
     /**
      * Lookups a Response from the cache for the given Request.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
-     * @param  Request  $request
-     * @param  bool     $catch
+     * @param Request $request
+     * @param bool    $catch
+     *
      * @return Response
      */
     protected function lookup(Request $request, $catch = false)
@@ -192,8 +201,9 @@ class AppCache extends HttpCache
     }
 
     /**
-     * @param  Request  $request
-     * @param  Response $response
+     * @param Request  $request
+     * @param Response $response
+     *
      * @throws \Exception
      */
     protected function store(Request $request, Response $response)
@@ -212,6 +222,7 @@ class AppCache extends HttpCache
      *
      * @param Request  $request
      * @param Response $response
+     *
      * @return bool
      */
     protected function containsNoCacheTag(Request $request, Response $response)
@@ -222,8 +233,8 @@ class AppCache extends HttpCache
             return false;
         }
 
-        $cacheTag      = $response->headers->get('x-shopware-allow-nocache');
-        $cacheTag      = explode(', ', $cacheTag);
+        $cacheTag = $response->headers->get('x-shopware-allow-nocache');
+        $cacheTag = explode(', ', $cacheTag);
         $noCacheCookie = $request->cookies->get('nocache');
 
         foreach ($cacheTag as $cacheTagValue) {
@@ -239,7 +250,7 @@ class AppCache extends HttpCache
      * Forwards the Request to the backend and returns the Response.
      *
      * @param Request  $request A Request instance
-     * @param Boolean  $raw     Whether to catch exceptions or not
+     * @param bool     $raw     Whether to catch exceptions or not
      * @param Response $entry   A Response instance (the stale entry if present, null otherwise)
      *
      * @return Response A Response instance
@@ -268,21 +279,14 @@ class AppCache extends HttpCache
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache', $this->options['cache_cookies'], $this->options['lookup_optimization']);
-    }
-
-    /**
-     * @return string
-     */
-    public function getCacheDir()
-    {
-        return $this->cacheDir;
+        return new Store($this->cacheDir ? $this->cacheDir : $this->kernel->getCacheDir() . '/http_cache', $this->options['cache_cookies'], $this->options['lookup_optimization']);
     }
 
     /**
      * Checks if current purge request is allowed.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return bool
      */
     protected function isPurgeRequestAllowed(Request $request)
@@ -300,6 +304,7 @@ class AppCache extends HttpCache
      * Checks if $ip is allowed for Http PURGE requests
      *
      * @param string $ip
+     *
      * @return bool
      */
     protected function isPurgeIPAllowed($ip)

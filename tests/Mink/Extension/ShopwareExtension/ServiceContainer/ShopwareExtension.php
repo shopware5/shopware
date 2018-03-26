@@ -126,9 +126,9 @@ class ShopwareExtension implements ExtensionInterface
 
         if ($bootstrapPath) {
             if (file_exists($bootstrap = $basePath . '/' . $bootstrapPath)) {
-                require_once($bootstrap);
+                require_once $bootstrap;
             } elseif (file_exists($bootstrapPath)) {
-                require_once($bootstrapPath);
+                require_once $bootstrapPath;
             }
         }
 
@@ -143,20 +143,20 @@ class ShopwareExtension implements ExtensionInterface
 
     private function loadContextInitializer(ContainerBuilder $container)
     {
-        $definition = new Definition('Shopware\Behat\ShopwareExtension\Context\Initializer\KernelAwareInitializer', array(
+        $definition = new Definition('Shopware\Behat\ShopwareExtension\Context\Initializer\KernelAwareInitializer', [
             new Reference(self::KERNEL_ID),
-        ));
-        $definition->addTag(ContextExtension::INITIALIZER_TAG, array('priority' => 0));
-        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
+        ]);
+        $definition->addTag(ContextExtension::INITIALIZER_TAG, ['priority' => 0]);
+        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, ['priority' => 0]);
         $container->setDefinition('shopware_extension.context_initializer.kernel_aware', $definition);
     }
 
     private function loadKernel(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition($config['class'], array(
+        $definition = new Definition($config['class'], [
             $config['env'],
             $config['debug'],
-        ));
+        ]);
         $definition->addMethodCall('boot');
         $container->setDefinition(self::KERNEL_ID, $definition);
         $container->setParameter(self::KERNEL_ID . '.path', $config['path']);

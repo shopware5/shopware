@@ -22,11 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Random;
+
 /**
  * Shopware Payment Controller
  *
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_Action
@@ -41,9 +43,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         if (($user = $this->getUser()) !== null
                 && !empty($user['additional']['payment']['name'])) {
             return $user['additional']['payment']['name'];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -63,7 +65,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function createPaymentUniqueId()
     {
-        return md5(uniqid(mt_rand(), true));
+        return Random::getAlphanumericString(32);
     }
 
     /**
@@ -71,8 +73,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      *
      * @param string $transactionId
      * @param string $paymentUniqueId
-     * @param int $paymentStatusId
-     * @param bool $sendStatusMail
+     * @param int    $paymentStatusId
+     * @param bool   $sendStatusMail
+     *
      * @return int
      */
     public function saveOrder($transactionId, $paymentUniqueId, $paymentStatusId = null, $sendStatusMail = false)
@@ -86,11 +89,11 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             WHERE transactionID=? AND temporaryID=?
             AND status!=-1 AND userID=?
         ';
-        $orderNumber = Shopware()->Db()->fetchOne($sql, array(
+        $orderNumber = Shopware()->Db()->fetchOne($sql, [
                 $transactionId,
                 $paymentUniqueId,
-                Shopware()->Session()->sUserId
-            ));
+                Shopware()->Session()->sUserId,
+            ]);
 
         if (empty($orderNumber)) {
             $user = $this->getUser();
@@ -126,9 +129,8 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      *
      * @param string $transactionId
      * @param string $paymentUniqueId
-     * @param int $paymentStatusId
-     * @param bool $sendStatusMail
-     * @return void
+     * @param int    $paymentStatusId
+     * @param bool   $sendStatusMail
      */
     public function savePaymentStatus($transactionId, $paymentUniqueId, $paymentStatusId, $sendStatusMail = false)
     {
@@ -137,10 +139,10 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             WHERE transactionID=? AND temporaryID=?
             AND status!=-1
         ';
-        $orderId = Shopware()->Db()->fetchOne($sql, array(
+        $orderId = Shopware()->Db()->fetchOne($sql, [
                 $transactionId,
-                $paymentUniqueId
-            ));
+                $paymentUniqueId,
+            ]);
         $order = Shopware()->Modules()->Order();
         $order->setPaymentStatus($orderId, $paymentStatusId, $sendStatusMail);
     }
@@ -156,9 +158,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         $basket = $this->getBasket();
         if (!empty($user['additional']['charge_vat'])) {
             return empty($basket['AmountWithTaxNumeric']) ? $basket['AmountNumeric'] : $basket['AmountWithTaxNumeric'];
-        } else {
-            return $basket['AmountNetNumeric'];
         }
+
+        return $basket['AmountNetNumeric'];
     }
 
     /**
@@ -172,9 +174,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         $basket = $this->getBasket();
         if (!empty($user['additional']['charge_vat'])) {
             return $basket['sShippingcostsWithTax'];
-        } else {
-            return str_replace(',', '.', $basket['sShippingcosts']);
         }
+
+        return str_replace(',', '.', $basket['sShippingcosts']);
     }
 
     /**
@@ -186,9 +188,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     {
         if (!empty(Shopware()->Session()->sOrderVariables['sUserData'])) {
             return Shopware()->Session()->sOrderVariables['sUserData'];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -200,9 +202,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     {
         if (!empty(Shopware()->Session()->sOrderVariables['sBasket'])) {
             return Shopware()->Session()->sOrderVariables['sBasket'];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -212,8 +214,8 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     {
         if (!empty(Shopware()->Session()->sOrderVariables['sOrderNumber'])) {
             return Shopware()->Session()->sOrderVariables['sOrderNumber'];
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

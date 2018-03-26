@@ -24,21 +24,11 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
 {
-    /**
-     * Returns the test dataset
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet(__DIR__.'/testdata/Lock.xml');
-    }
-
     /**
      * @ticket SW-4747
      */
@@ -54,5 +44,15 @@ class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Componen
         $this->dispatch('/backend/newsletter/cron');
         $this->assertRegExp('#Wait [0-9]+ seconds ...#', $this->Response()->getBody());
         $this->reset();
+    }
+
+    /**
+     * Returns the test dataset
+     *
+     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     */
+    protected function getDataSet()
+    {
+        return $this->createXMLDataSet(__DIR__ . '/testdata/Lock.xml');
     }
 }

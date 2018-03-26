@@ -24,13 +24,13 @@
 
 namespace Shopware\Models\Plugin;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @category  Shopware
- * @package   Shopware\Models\Plugin
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Table(name="s_core_plugins")
@@ -39,7 +39,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Plugin extends ModelEntity
 {
     /**
-     * @var integer
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
+     */
+    protected $emotionComponents;
+    /**
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -77,7 +82,7 @@ class Plugin extends ModelEntity
     private $description;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="active", type="boolean")
      */
     private $active = false;
@@ -107,7 +112,7 @@ class Plugin extends ModelEntity
     private $refreshed;
 
     /**
-     * @var string $author
+     * @var string
      * @ORM\Column(name="author", type="string", nullable=true)
      */
     private $author;
@@ -161,25 +166,25 @@ class Plugin extends ModelEntity
     private $updateSource;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="capability_update", type="boolean")
      */
     private $capabilityUpdate = true;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="capability_install", type="boolean")
      */
     private $capabilityInstall = true;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="capability_enable", type="boolean")
      */
     private $capabilityEnable = true;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="capability_secure_uninstall", type="boolean")
      */
     private $capabilitySecureUninstall = false;
@@ -246,12 +251,6 @@ class Plugin extends ModelEntity
      * @ORM\OrderBy({"type" = "ASC"})
      */
     private $licenses;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
-     */
-    protected $emotionComponents;
 
     /**
      * Class constructor.
@@ -357,7 +356,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -365,7 +364,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -677,7 +676,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasCapabilitySecureUninstall()
     {
@@ -685,7 +684,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasCapabilityEnable()
     {
@@ -693,7 +692,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasCapabilityInstall()
     {
@@ -701,7 +700,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasCapabilityUpdate()
     {

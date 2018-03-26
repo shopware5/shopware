@@ -21,15 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteService implements Service\VoteServiceInterface
@@ -45,7 +46,7 @@ class VoteService implements Service\VoteServiceInterface
     private $voteAverageGateway;
 
     /**
-     * @param Gateway\VoteGatewayInterface $voteGateway
+     * @param Gateway\VoteGatewayInterface        $voteGateway
      * @param Gateway\VoteAverageGatewayInterface $voteAverageGateway
      */
     public function __construct(
@@ -57,7 +58,7 @@ class VoteService implements Service\VoteServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -67,7 +68,7 @@ class VoteService implements Service\VoteServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAverage(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -77,7 +78,7 @@ class VoteService implements Service\VoteServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
@@ -85,7 +86,7 @@ class VoteService implements Service\VoteServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAverages($products, Struct\ShopContextInterface $context)
     {

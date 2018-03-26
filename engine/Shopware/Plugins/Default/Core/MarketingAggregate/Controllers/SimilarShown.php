@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\MarketingAggregate\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Backend_ExtJs
@@ -39,17 +39,16 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
         return Shopware()->Container()->get('SimilarShown');
     }
 
-
     /**
      * Controller action which can be access over an ajax request.
      * This function is used to get the similar shown count.
      */
     public function getSimilarShownCountAction()
     {
-        $sql = "SELECT COUNT(id) FROM s_articles";
+        $sql = 'SELECT COUNT(id) FROM s_articles';
         $count = Shopware()->Db()->fetchOne($sql);
 
-        $this->View()->assign(array('success' => true, 'data' => array('count' => $count)));
+        $this->View()->assign(['success' => true, 'data' => ['count' => $count]]);
     }
 
     /**
@@ -64,12 +63,12 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
         @set_time_limit(1200);
 
         if ($offset == 0) {
-            $sql = "DELETE FROM s_articles_similar_shown_ro";
+            $sql = 'DELETE FROM s_articles_similar_shown_ro';
             Shopware()->Db()->query($sql);
         }
 
         $this->SimilarShown()->initSimilarShown($offset, $limit);
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

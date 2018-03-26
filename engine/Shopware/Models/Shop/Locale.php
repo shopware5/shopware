@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Shop;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Locale Model Entity
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Locale extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,21 +45,21 @@ class Locale extends ModelEntity
     private $id;
 
     /**
-     * @var string $locale
+     * @var string
      *
      * @ORM\Column(name="locale", type="string", length=255, nullable=false)
      */
     private $locale;
 
     /**
-     * @var integer $language
+     * @var int
      *
      * @ORM\Column(name="language", type="string", length=255, nullable=false)
      */
     private $language;
 
     /**
-     * @var float $territory
+     * @var float
      *
      * @ORM\Column(name="territory", type="string", length=255, nullable=false)
      */
@@ -68,7 +68,7 @@ class Locale extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -79,11 +79,13 @@ class Locale extends ModelEntity
      * Set locale
      *
      * @param string $locale
+     *
      * @return Locale
      */
     public function setLocale($locale)
     {
         $this->locale = $locale;
+
         return $this;
     }
 
@@ -101,11 +103,13 @@ class Locale extends ModelEntity
      * Set language
      *
      * @param string $language
+     *
      * @return Locale
      */
     public function setLanguage($language)
     {
         $this->language = $language;
+
         return $this;
     }
 
@@ -123,11 +127,13 @@ class Locale extends ModelEntity
      * Set territory
      *
      * @param string $territory
+     *
      * @return Locale
      */
     public function setTerritory($territory)
     {
         $this->territory = $territory;
+
         return $this;
     }
 

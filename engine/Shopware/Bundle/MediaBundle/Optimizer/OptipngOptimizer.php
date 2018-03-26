@@ -27,7 +27,7 @@ namespace Shopware\Bundle\MediaBundle\Optimizer;
 class OptipngOptimizer extends BinaryOptimizer
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCommand()
     {
@@ -35,7 +35,7 @@ class OptipngOptimizer extends BinaryOptimizer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSupportedMimeTypes()
     {
@@ -43,7 +43,7 @@ class OptipngOptimizer extends BinaryOptimizer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCommandArguments($filepath)
     {

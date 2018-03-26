@@ -47,7 +47,7 @@ class ErrorSubscriber implements SubscriberInterface
     private $exceptionCountAtFirstEncounter = 0;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -62,7 +62,7 @@ class ErrorSubscriber implements SubscriberInterface
      */
     public function handleError(\Enlight_Controller_EventArgs $args)
     {
-        $front   = $args->getSubject();
+        $front = $args->getSubject();
         $request = $args->getRequest();
 
         if ($front->getParam('noErrorHandler')) {
@@ -89,9 +89,9 @@ class ErrorSubscriber implements SubscriberInterface
         $this->isInsideErrorHandlerLoop = true;
 
         // Get exception information
-        $error            = new \ArrayObject(array(), \ArrayObject::ARRAY_AS_PROPS);
-        $exceptions       = $response->getException();
-        $exception        = $exceptions[0];
+        $error = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
+        $exceptions = $response->getException();
+        $exception = $exceptions[0];
         $error->exception = $exception;
 
         // Keep a copy of the original request

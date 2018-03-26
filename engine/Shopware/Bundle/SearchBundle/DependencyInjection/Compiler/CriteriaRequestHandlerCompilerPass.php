@@ -25,11 +25,10 @@
 namespace Shopware\Bundle\SearchBundle\DependencyInjection\Compiler;
 
 use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @package Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CriteriaRequestHandlerCompilerPass implements CompilerPassInterface

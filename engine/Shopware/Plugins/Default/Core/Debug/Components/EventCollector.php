@@ -28,7 +28,7 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EventCollector implements CollectorInterface
@@ -36,7 +36,7 @@ class EventCollector implements CollectorInterface
     /**
      * @var array
      */
-    protected $results = array();
+    protected $results = [];
 
     /**
      * @var \Enlight_Event_EventManager
@@ -49,7 +49,7 @@ class EventCollector implements CollectorInterface
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
-     * @param Utils $utils
+     * @param Utils                       $utils
      */
     public function __construct(\Enlight_Event_EventManager $eventManager, Utils $utils)
     {
@@ -57,9 +57,6 @@ class EventCollector implements CollectorInterface
         $this->utils = $utils;
     }
 
-    /**
-     * @return void
-     */
     public function start()
     {
         $this->eventManager->registerSubscriber($this->getListeners());
@@ -67,6 +64,7 @@ class EventCollector implements CollectorInterface
 
     /**
      * @param Logger $log
+     *
      * @return mixed
      */
     public function logResults(Logger $log)
@@ -76,7 +74,7 @@ class EventCollector implements CollectorInterface
                 unset($this->results[$event]);
                 continue;
             }
-            $listeners = array();
+            $listeners = [];
             foreach (Shopware()->Events()->getListeners($event) as $listener) {
                 $listener = $listener->getListener();
                 if ($listener[0] === $this) {
@@ -90,12 +88,12 @@ class EventCollector implements CollectorInterface
                 }
                 $listeners[] = $listener;
             }
-            $this->results[$event] = array(
+            $this->results[$event] = [
                 0 => $event,
                 1 => $this->utils->formatMemory(0 - $this->results[$event][1]),
                 2 => $this->utils->formatTime(0 - $this->results[$event][2]),
-                3 => $listeners
-            );
+                3 => $listeners,
+            ];
         }
 
         $this->results = array_values($this->results);
@@ -105,29 +103,30 @@ class EventCollector implements CollectorInterface
         }
         array_multisort($order, SORT_NUMERIC, SORT_DESC, $this->results);
 
-        array_unshift($this->results, array('name', 'memory', 'time', 'listeners'));
+        array_unshift($this->results, ['name', 'memory', 'time', 'listeners']);
 
         $label = 'Benchmark Events';
-        $table = array($label,
-            $this->results
-        );
+        $table = [$label,
+            $this->results,
+        ];
 
         $log->table($table);
     }
 
     /**
      * @param \Enlight_Event_EventArgs $args
+     *
      * @return mixed
      */
     public function onBenchmarkEvent(\Enlight_Event_EventArgs $args)
     {
         $event = $args->getName();
         if (!isset($this->results[$event])) {
-            $this->results[$event] = array(
+            $this->results[$event] = [
                 0 => true,
                 1 => 0,
-                2 => 0
-            );
+                2 => 0,
+            ];
         }
 
         if (empty($this->results[$event][0])) {
@@ -142,7 +141,6 @@ class EventCollector implements CollectorInterface
 
         return $args->getReturn();
     }
-
 
     /**
      * Monitor execution time and memory on specified event points in application
@@ -160,8 +158,8 @@ class EventCollector implements CollectorInterface
                 continue;
             }
 
-            $listeners->registerListener(new \Enlight_Event_Handler_Default($event, array($this, 'onBenchmarkEvent'), -1000));
-            $listeners->registerListener(new \Enlight_Event_Handler_Default($event, array($this, 'onBenchmarkEvent'), 1000));
+            $listeners->registerListener(new \Enlight_Event_Handler_Default($event, [$this, 'onBenchmarkEvent'], -1000));
+            $listeners->registerListener(new \Enlight_Event_Handler_Default($event, [$this, 'onBenchmarkEvent'], 1000));
         }
 
         return $listeners;

@@ -35,7 +35,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Class PropertyProvider
- * @package Shopware\Bundle\ESIndexingBundle\Property
  */
 class PropertyProvider implements PropertyProviderInterface
 {
@@ -60,10 +59,10 @@ class PropertyProvider implements PropertyProviderInterface
     private $hydrator;
 
     /**
-     * @param Connection $connection
+     * @param Connection              $connection
      * @param ContextServiceInterface $contextService
-     * @param FieldHelper $fieldHelper
-     * @param PropertyHydrator $hydrator
+     * @param FieldHelper             $fieldHelper
+     * @param PropertyHydrator        $hydrator
      */
     public function __construct(
         Connection $connection,
@@ -104,13 +103,14 @@ class PropertyProvider implements PropertyProviderInterface
 
     /**
      * @param array[] $data
+     *
      * @return Group
      */
     private function hydrateGroup($data)
     {
         $group = $this->hydrator->hydrateGroup($data[0]);
 
-        $options= [];
+        $options = [];
         foreach ($data as $row) {
             $options[] = $this->hydrator->hydrateOption($row);
         }
@@ -121,6 +121,7 @@ class PropertyProvider implements PropertyProviderInterface
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery(ShopContextInterface $context)

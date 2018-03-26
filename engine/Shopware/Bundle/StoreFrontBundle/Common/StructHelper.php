@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 
 class StructHelper
 {

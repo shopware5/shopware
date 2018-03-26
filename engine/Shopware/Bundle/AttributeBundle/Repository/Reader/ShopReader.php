@@ -28,7 +28,7 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ShopReader extends GenericReader
@@ -44,10 +44,11 @@ class ShopReader extends GenericReader
             'entity.baseUrl',
             'entity.default',
             'entity.active',
-            'c.name as category'
+            'c.name as category',
         ]);
         $query->from(Shop::class, 'entity', $this->getIdentifierField());
         $query->leftJoin('entity.category', 'c');
+
         return $query;
     }
 }

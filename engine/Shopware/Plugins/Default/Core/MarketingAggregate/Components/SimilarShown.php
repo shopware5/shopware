@@ -29,7 +29,7 @@
  * in the s_articles_similar_shown_ro
  *
  * @category  Shopware
- * @package   Shopware\Plugins\MarketingAggregate\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_SimilarShown extends Enlight_Class
@@ -40,13 +40,13 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     public function resetSimilarShown(DateTime $validationTime = null)
     {
         if ($validationTime) {
-            $sql = "DELETE FROM s_articles_similar_shown_ro WHERE init_date <= :validationTime";
+            $sql = 'DELETE FROM s_articles_similar_shown_ro WHERE init_date <= :validationTime';
             Shopware()->Db()->query(
                 $sql,
-                array('validationTime' => $validationTime->format('Y-m-d 00:00:00'))
+                ['validationTime' => $validationTime->format('Y-m-d 00:00:00')]
             );
         } else {
-            $sql = "DELETE FROM s_articles_similar_shown_ro ";
+            $sql = 'DELETE FROM s_articles_similar_shown_ro ';
             Shopware()->Db()->query($sql);
         }
     }
@@ -60,14 +60,14 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      */
     public function initSimilarShown($offset = null, $limit = null)
     {
-        $sql = "SELECT id FROM s_articles ";
+        $sql = 'SELECT id FROM s_articles ';
 
         if ($limit !== null) {
             $sql = Shopware()->Db()->limit($sql, $limit, $offset);
         }
         $articles = Shopware()->Db()->fetchCol($sql);
 
-        $preparedSelect = Shopware()->Db()->prepare("
+        $preparedSelect = Shopware()->Db()->prepare('
             SELECT
                 article1.articleID as article_id,
                 article2.articleID as related_article_id,
@@ -79,17 +79,17 @@ class Shopware_Components_SimilarShown extends Enlight_Class
                   AND article1.articleID != article2.articleID
             WHERE article1.articleID = :articleId
             GROUP BY article2.articleID
-        ");
+        ');
 
-        $preparedInsert = Shopware()->Db()->prepare("
+        $preparedInsert = Shopware()->Db()->prepare('
             INSERT IGNORE INTO s_articles_similar_shown_ro (article_id, related_article_id, viewed, init_date)
             VALUES (:article_id, :related_article_id, :viewed, :init_date)
-        ");
+        ');
 
         //iterate all selected articles which has to be initialed
         foreach ($articles as $articleId) {
             //now we select all similar articles of the s_emarketing_lastarticles table
-            $preparedSelect->execute(array('articleId' => $articleId));
+            $preparedSelect->execute(['articleId' => $articleId]);
             $combinations = $preparedSelect->fetchAll();
 
             //at least we have to insert each combination in the aggregate s_articles_similar_shown_ro table.
@@ -108,7 +108,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     {
         $validationTime = $this->getSimilarShownValidationTime();
 
-        $sql = "
+        $sql = '
               UPDATE s_articles_similar_shown_ro shown
               SET init_date = now(),
                   viewed = (
@@ -123,13 +123,13 @@ class Shopware_Components_SimilarShown extends Enlight_Class
                       LIMIT 1
               )
             WHERE init_date <= :validationTime
-            ";
+            ';
 
         if ($limit !== null) {
             $sql = Shopware()->Db()->limit($sql, $limit);
         }
 
-        Shopware()->Db()->query($sql, array('validationTime' => $validationTime->format('Y-m-d 00:00:00')));
+        Shopware()->Db()->query($sql, ['validationTime' => $validationTime->format('Y-m-d 00:00:00')]);
     }
 
     /**
@@ -146,7 +146,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
-        $orderTime->sub(new DateInterval('P'. $interval .'D'));
+        $orderTime->sub(new DateInterval('P' . $interval . 'D'));
 
         return $orderTime;
     }
@@ -160,15 +160,15 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      */
     public function refreshSimilarShown($articleId, $relatedArticleId)
     {
-        $sql = "
+        $sql = '
             INSERT INTO s_articles_similar_shown_ro (article_id, related_article_id, viewed, init_date)
             VALUES (:articleId, :relatedArticleId, 1, now())
             ON DUPLICATE KEY UPDATE viewed = viewed + 1;
-        ";
+        ';
 
-        Shopware()->Db()->query($sql, array(
-            'articleId'        => $articleId,
-            'relatedArticleId' => $relatedArticleId
-        ));
+        Shopware()->Db()->query($sql, [
+            'articleId' => $articleId,
+            'relatedArticleId' => $relatedArticleId,
+        ]);
     }
 }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 /**
@@ -49,33 +50,34 @@ namespace Shopware\Components\Theme;
  * </code>
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfigSet
 {
     /**
-     * @var string $name
+     * @var string
      */
     protected $name;
 
     /**
-     * @var string $description
+     * @var string
      */
     protected $description;
 
     /**
-     * @var string $values
+     * @var string
      */
     protected $values;
 
     /**
      * Class constructor which allows to set the internal values in the class construct.
+     *
      * @param string $description
      * @param string $name
-     * @param array $values
+     * @param array  $values
      */
-    public function __construct($name = '', array $values = array(), $description = '')
+    public function __construct($name = '', array $values = [], $description = '')
     {
         $this->description = $description;
         $this->name = $name;
@@ -84,11 +86,13 @@ class ConfigSet
 
     /**
      * @param mixed $description
+     *
      * @return $this
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -102,11 +106,13 @@ class ConfigSet
 
     /**
      * @param mixed $name
+     *
      * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -120,11 +126,13 @@ class ConfigSet
 
     /**
      * @param mixed $values
+     *
      * @return $this
      */
     public function setValues($values)
     {
         $this->values = $values;
+
         return $this;
     }
 
@@ -145,11 +153,11 @@ class ConfigSet
     public function validate()
     {
         if (!$this->name) {
-            throw new \Exception("Each config set requires a configured name!");
+            throw new \Exception('Each config set requires a configured name!');
         }
         if (!$this->values || !is_array($this->values)) {
             throw new \Exception(sprintf(
-                "Config set %s defined without values array.",
+                'Config set %s defined without values array.',
                 $this->name
             ));
         }

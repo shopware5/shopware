@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter\ContainerType;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware text model represents a link container type.
@@ -36,9 +36,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Link extends ModelEntity
 {
     /**
+     * OWNING SIDE
+     * Owning side of relation between container type 'article' and parent container
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="links")
+     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
+     *
+     * @var \Shopware\Models\Newsletter\Container
+     */
+    protected $container;
+    /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -49,25 +59,16 @@ class Link extends ModelEntity
     /**
      * ID of the container this model belongs to
      *
-     * @var integer $containerId
+     * @var int
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
     private $containerId = null;
 
     /**
-     * OWNING SIDE
-     * Owning side of relation between container type 'article' and parent container
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="links")
-     * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     * @var \Shopware\Models\Newsletter\Container
-     */
-    protected $container;
-
-    /**
      * Description of the link / link text
-     * @var string $description
+     *
+     * @var string
      *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
@@ -75,7 +76,8 @@ class Link extends ModelEntity
 
     /**
      * the actual link
-     * @var string $link
+     *
+     * @var string
      *
      * @ORM\Column(name="link", type="string", nullable=false)
      */
@@ -83,14 +85,15 @@ class Link extends ModelEntity
 
     /**
      * Link target, e.g. _blank / _parent
-     * @var string $target
+     *
+     * @var string
      *
      * @ORM\Column(name="target", type="string", nullable=false)
      */
     private $target;
 
     /**
-     * @var integer position
+     * @var int position
      *
      * @ORM\Column(name="position", type="integer", length=255, nullable=false)
      */
@@ -162,6 +165,7 @@ class Link extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
+     *
      * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)

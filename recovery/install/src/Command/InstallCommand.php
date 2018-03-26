@@ -56,7 +56,7 @@ use Symfony\Component\Console\Question\Question;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class InstallCommand extends Command
@@ -82,6 +82,445 @@ class InstallCommand extends Command
         $this->addDbOptions();
         $this->addShopOptions();
         $this->addAdminOptions();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->IOHelper = new IOHelper(
+            $input,
+            $output,
+            $this->getHelper('question')
+        );
+
+        /** @var $container Container */
+        $container = $this->container = $this->getApplication()->getContainer();
+
+        $container->offsetGet('shopware.notify')->doTrackEvent('Installer started');
+
+        if ($this->IOHelper->isInteractive()) {
+            $this->printStartMessage();
+        }
+
+        $connectionInfo = new DatabaseConnectionInformation();
+        $connectionInfo = $this->getConnectionInfoFromConfig(SW_PATH . '/config.php', $connectionInfo);
+        $connectionInfo = $this->getConnectionInfoFromArgs($input, $connectionInfo);
+        $connectionInfo = $this->getConnectionInfoFromInteractiveShell(
+            $this->IOHelper,
+            $connectionInfo
+        );
+
+        /** @var $configWriter ConfigWriter */
+        $configWriter = $this->container->offsetGet('config.writer');
+        $configWriter->writeConfig($connectionInfo);
+
+        $conn = $this->initDatabaseConnection($connectionInfo, $container);
+        $databaseService = new DatabaseService($conn);
+
+        $databaseService->createDatabase($connectionInfo->databaseName);
+        $databaseService->selectDatabase($connectionInfo->databaseName);
+
+        $skipImport = $databaseService->containsShopwareSchema()
+            && $input->getOption('no-skip-import')
+            && $this->shouldSkipImport();
+
+        if (!$skipImport) {
+            $this->importDatabase();
+            $this->importSnippets();
+        }
+
+        $shop = new Shop();
+        $shop = $this->getShopInfoFromArgs($input, $shop);
+        $shop = $this->getShopInfoFromInteractiveShell($shop);
+
+        if ($this->IOHelper->isInteractive() && !$this->webserverCheck($container, $shop)) {
+            $this->IOHelper->writeln('Could not verify');
+            if (!$this->IOHelper->askConfirmation('Continue?')) {
+                return 1;
+            }
+        }
+
+        $adminUser = new AdminUser();
+        if (!$input->getOption('skip-admin-creation')) {
+            $adminUser = $this->getAdminInfoFromArgs($input, $adminUser);
+            $adminUser = $this->getAdminInfoFromInteractiveShell($adminUser);
+        }
+
+        $shopService = new ShopService($conn);
+        $shopService->updateShop($shop);
+        $shopService->updateConfig($shop);
+
+        $currencyService = new CurrencyService($conn);
+        $currencyService->updateCurrency($shop);
+
+        $localeService = new LocaleSettingsService($conn, $container);
+        $localeService->updateLocaleSettings($shop->locale);
+
+        if (!$input->getOption('skip-admin-creation')) {
+            $adminService = new AdminService($conn);
+            $adminService->createAdmin($adminUser);
+            $adminService->addWidgets($adminUser);
+        }
+
+        $this->activateResponsiveTheme();
+
+        if ($this->IOHelper->isInteractive()) {
+            $this->IOHelper->cls();
+            $this->IOHelper->writeln('<info>=== License Information ===</info>');
+
+            /** @var $licenseService LicenseUnpackService */
+            $licenseService = $container->offsetGet('license.service');
+
+            /** @var $licenseInstaller LicenseInstaller */
+            $licenseInstaller = $container->offsetGet('license.installer');
+
+            $this->askShopwareEdition($shop, $licenseService, $licenseInstaller);
+        }
+
+        /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
+        $systemLocker = $this->container->offsetGet('system.locker');
+        $systemLocker();
+
+        $container->offsetGet('uniqueid.persister')->store();
+
+        $additionalInformation = [
+            'method' => 'console',
+        ];
+
+        $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
+
+        if ($this->IOHelper->isInteractive()) {
+            $this->IOHelper->writeln('<info>Shop successfully installed.</info>');
+        }
+    }
+
+    /**
+     * @param Container $container
+     * @param Shop      $shop
+     *
+     * @return bool
+     */
+    protected function webserverCheck(Container $container, Shop $shop)
+    {
+        /** @var $webserverCheck WebserverCheck */
+        $webserverCheck = $container->offsetGet('webserver.check');
+        $pingUrl = $webserverCheck->buildPingUrl($shop);
+        try {
+            $this->IOHelper->writeln('Checking ping to: ' . $pingUrl);
+            $webserverCheck->checkPing($shop);
+        } catch (\Exception $e) {
+            $this->IOHelper->writeln('Could not verify web server' . $e->getMessage());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string[] $locales
+     *
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    protected function askForAdminLocale($locales)
+    {
+        $question = new ChoiceQuestion('Please select your admin locale', $locales);
+        $question->setErrorMessage('Locale %s is invalid.');
+
+        $shopLocale = $this->IOHelper->ask($question);
+
+        return $shopLocale;
+    }
+
+    /**
+     * @param string[] $locales
+     * @param null     $default
+     *
+     * @return string
+     */
+    protected function askForShopShopLocale($locales, $default = null)
+    {
+        $question = new ChoiceQuestion('Please select your shop locale', $locales, $default);
+        $question->setErrorMessage('Locale %s is invalid.');
+
+        $shopLocale = $this->IOHelper->ask($question);
+
+        return $shopLocale;
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param AdminUser      $adminUser
+     *
+     * @return AdminUser
+     */
+    protected function getAdminInfoFromArgs(InputInterface $input, AdminUser $adminUser)
+    {
+        $adminUser->username = $input->getOption('admin-username');
+        $adminUser->email = $input->getOption('admin-email');
+        $adminUser->password = $input->getOption('admin-password');
+        $adminUser->locale = $input->getOption('admin-locale');
+        $adminUser->name = $input->getOption('admin-name');
+
+        if ($adminUser->locale && !in_array($adminUser->locale, Locale::getValidLocales())) {
+            throw new \RuntimeException('Invalid admin-locale provided');
+        }
+
+        return $adminUser;
+    }
+
+    /**
+     * @param AdminUser $adminUser
+     *
+     * @return AdminUser
+     */
+    protected function getAdminInfoFromInteractiveShell(AdminUser $adminUser)
+    {
+        if (!$this->IOHelper->isInteractive()) {
+            return $adminUser;
+        }
+        $this->IOHelper->cls();
+        $this->IOHelper->writeln('<info>=== Admin Information ===</info>');
+
+        $question = new Question('Admin username (demo): ', 'demo');
+        $adminUsername = $this->IOHelper->ask($question);
+
+        $question = new Question('Admin full name (Demo-Admin): ', 'Demo-Admin');
+        $adminName = $this->IOHelper->ask($question);
+
+        $question = new Question('Admin email (your.email@shop.com): ', 'your.email@shop.com');
+        $adminEmail = $this->IOHelper->ask($question);
+
+        $question = new Question('Admin password (demo): ', 'demo');
+        $adminPassword = $this->IOHelper->ask($question);
+
+        $adminLocale = $this->askForAdminLocale(Locale::getValidLocales());
+
+        $adminUser->username = $adminUsername;
+        $adminUser->email = $adminEmail;
+        $adminUser->password = $adminPassword;
+        $adminUser->locale = $adminLocale;
+        $adminUser->name = $adminName;
+
+        return $adminUser;
+    }
+
+    /**
+     * @param Shop $shop
+     *
+     * @return Shop
+     */
+    protected function getShopInfoFromInteractiveShell(Shop $shop)
+    {
+        if (!$this->IOHelper->isInteractive()) {
+            return $shop;
+        }
+
+        $this->IOHelper->cls();
+        $this->IOHelper->writeln('<info>=== Shop Information ===</info>');
+
+        $shop->locale = $this->askForShopShopLocale(Locale::getValidLocales(), $shop->locale);
+        $shop->host = $this->IOHelper->ask(sprintf('Shop host (%s): ', $shop->host), $shop->host);
+        $shop->basePath = $this->IOHelper->ask(sprintf('Shop base path (%s): ', $shop->basePath), $shop->basePath);
+        $shop->name = $this->IOHelper->ask(sprintf('Shop name (%s): ', $shop->name), $shop->name);
+        $shop->email = $this->IOHelper->ask(sprintf('Shop email (%s): ', $shop->email), $shop->email);
+
+        $question = new ChoiceQuestion(
+            sprintf('Shop currency (%s): ', $shop->currency),
+            Currency::getValidCurrencies(),
+            $shop->currency
+        );
+        $question->setErrorMessage('Currency %s is invalid.');
+        $shop->currency = $this->IOHelper->ask($question);
+
+        return $shop;
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param Shop           $shop
+     *
+     * @return Shop
+     */
+    protected function getShopInfoFromArgs(InputInterface $input, Shop $shop)
+    {
+        $shop->name = $input->getOption('shop-name');
+        $shop->email = $input->getOption('shop-email');
+        $shop->host = $input->getOption('shop-host');
+        $shop->basePath = $input->getOption('shop-path');
+        $shop->locale = $input->getOption('shop-locale');
+        $shop->currency = $input->getOption('shop-currency');
+
+        if ($shop->locale && !in_array($shop->locale, Locale::getValidLocales())) {
+            throw new \RuntimeException('Invalid shop-locale provided');
+        }
+
+        return $shop;
+    }
+
+    /**
+     * @param DatabaseConnectionInformation $connectionInfo
+     * @param Container                     $container
+     *
+     * @return \PDO
+     */
+    protected function initDatabaseConnection(DatabaseConnectionInformation $connectionInfo, Container $container)
+    {
+        $databaseFactory = new DatabaseFactory();
+        $conn = $databaseFactory->createPDOConnection($connectionInfo);
+        $container->offsetSet('db', $conn);
+
+        return $conn;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function shouldSkipImport()
+    {
+        if (!$this->IOHelper->isInteractive()) {
+            return true;
+        }
+
+        $question = new ConfirmationQuestion(
+            'The database already contains shopware tables. Skip import? (yes/no) [yes]', true
+        );
+        $skipImport = $this->IOHelper->ask($question);
+
+        return (bool) $skipImport;
+    }
+
+    /**
+     * @param IOHelper                      $IOHelper
+     * @param DatabaseConnectionInformation $connectionInfo
+     *
+     * @return DatabaseConnectionInformation
+     */
+    protected function getConnectionInfoFromInteractiveShell(
+        IOHelper $IOHelper,
+        DatabaseConnectionInformation $connectionInfo
+    ) {
+        if (!$IOHelper->isInteractive()) {
+            return $connectionInfo;
+        }
+
+        $IOHelper->writeln('<info>=== Database configuration ===</info>');
+        $databaseInteractor = new DatabaseInteractor($IOHelper);
+
+        $databaseConnectionInformation = $databaseInteractor->askDatabaseConnectionInformation(
+            $connectionInfo
+        );
+
+        $databaseFactory = new DatabaseFactory();
+
+        do {
+            $pdo = null;
+            try {
+                $pdo = $databaseFactory->createPDOConnection($databaseConnectionInformation);
+            } catch (\PDOException $e) {
+                $IOHelper->writeln('');
+                $IOHelper->writeln(sprintf('Got database error: %s', $e->getMessage()));
+                $IOHelper->writeln('');
+
+                $databaseConnectionInformation = $databaseInteractor->askDatabaseConnectionInformation(
+                    $databaseConnectionInformation
+                );
+            }
+        } while (!$pdo);
+
+        $databaseService = new DatabaseService($pdo);
+
+        $databaseNames = $databaseService->getAvailableDatabaseNames();
+
+        $defaultChoice = null;
+        if ($connectionInfo->databaseName) {
+            if (in_array($connectionInfo->databaseName, $databaseNames)) {
+                $defaultChoice = array_search($connectionInfo->databaseName, $databaseNames);
+            }
+        }
+
+        $choices = $databaseNames;
+        array_unshift($choices, '[create new database]');
+        $question = new ChoiceQuestion('Please select your database', $choices, $defaultChoice);
+        $question->setErrorMessage('Database %s is invalid.');
+        $databaseName = $databaseInteractor->askQuestion($question);
+
+        if ($databaseName === $choices[0]) {
+            $databaseName = $databaseInteractor->createDatabase($pdo);
+        }
+
+        $databaseService->selectDatabase($databaseName);
+
+        if (!$databaseInteractor->continueWithExistingTables($databaseName, $pdo)) {
+            $IOHelper->writeln('Installation aborted.');
+
+            exit;
+        }
+
+        $databaseConnectionInformation->databaseName = $databaseName;
+
+        return $databaseConnectionInformation;
+    }
+
+    /**
+     * @param string                        $configPath
+     * @param DatabaseConnectionInformation $connectionInfo
+     *
+     * @return DatabaseConnectionInformation
+     */
+    protected function getConnectionInfoFromConfig($configPath, DatabaseConnectionInformation $connectionInfo)
+    {
+        if (!$configuration = $this->loadConfiguration($configPath)) {
+            return $connectionInfo;
+        }
+
+        $connectionInfo->username = $configuration['db']['username'];
+        $connectionInfo->hostname = $configuration['db']['host'];
+        $connectionInfo->port = $configuration['db']['port'];
+        $connectionInfo->databaseName = $configuration['db']['dbname'];
+        $connectionInfo->password = $configuration['db']['password'];
+
+        return $connectionInfo;
+    }
+
+    /**
+     * @param InputInterface                $input
+     * @param DatabaseConnectionInformation $connectionInfo
+     *
+     * @return DatabaseConnectionInformation
+     */
+    protected function getConnectionInfoFromArgs(InputInterface $input, DatabaseConnectionInformation $connectionInfo)
+    {
+        $connectionInfo->username = $input->getOption('db-user');
+        $connectionInfo->hostname = $input->getOption('db-host');
+        $connectionInfo->port = $input->getOption('db-port');
+        $connectionInfo->databaseName = $input->getOption('db-name');
+        $connectionInfo->socket = $input->getOption('db-socket');
+        $connectionInfo->password = $input->getOption('db-password');
+
+        return $connectionInfo;
+    }
+
+    /**
+     * Loads config.php content as an array, or false if the file doesn't exist
+     *
+     * @param $configPath
+     *
+     * @return array|bool
+     */
+    protected function loadConfiguration($configPath)
+    {
+        if (!is_file($configPath)) {
+            return false;
+        }
+
+        $content = require $configPath;
+
+        return $content;
     }
 
     private function addDbOptions()
@@ -223,125 +662,12 @@ class InstallCommand extends Command
         ;
     }
 
-
     /**
      * @return Container
      */
     private function getContainer()
     {
         return $this->container;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->IOHelper = new IOHelper(
-            $input,
-            $output,
-            $this->getHelper('question')
-        );
-
-        /** @var $container Container */
-        $container = $this->container = $this->getApplication()->getContainer();
-
-        $container->offsetGet('shopware.notify')->doTrackEvent('Installer started');
-
-        if ($this->IOHelper->isInteractive()) {
-            $this->printStartMessage();
-        }
-
-        $connectionInfo = new DatabaseConnectionInformation();
-        $connectionInfo = $this->getConnectionInfoFromConfig(SW_PATH.'/config.php', $connectionInfo);
-        $connectionInfo = $this->getConnectionInfoFromArgs($input, $connectionInfo);
-        $connectionInfo = $this->getConnectionInfoFromInteractiveShell(
-            $this->IOHelper,
-            $connectionInfo
-        );
-
-        /** @var $configWriter ConfigWriter */
-        $configWriter = $this->container->offsetGet('config.writer');
-        $configWriter->writeConfig($connectionInfo);
-
-        $conn = $this->initDatabaseConnection($connectionInfo, $container);
-        $databaseService = new DatabaseService($conn);
-
-        $databaseService->createDatabase($connectionInfo->databaseName);
-        $databaseService->selectDatabase($connectionInfo->databaseName);
-
-        $skipImport = $databaseService->containsShopwareSchema()
-            && $input->getOption('no-skip-import')
-            && $this->shouldSkipImport();
-
-        if (!$skipImport) {
-            $this->importDatabase();
-            $this->importSnippets();
-        }
-
-        $shop = new Shop();
-        $shop = $this->getShopInfoFromArgs($input, $shop);
-        $shop = $this->getShopInfoFromInteractiveShell($shop);
-
-        if ($this->IOHelper->isInteractive() && !$this->webserverCheck($container, $shop)) {
-            $this->IOHelper->writeln("Could not verify");
-            if (!$this->IOHelper->askConfirmation("Continue?")) {
-                return 1;
-            }
-        }
-
-        $adminUser = new AdminUser();
-        if (!$input->getOption('skip-admin-creation')) {
-            $adminUser = $this->getAdminInfoFromArgs($input, $adminUser);
-            $adminUser = $this->getAdminInfoFromInteractiveShell($adminUser);
-        }
-
-        $shopService = new ShopService($conn);
-        $shopService->updateShop($shop);
-        $shopService->updateConfig($shop);
-
-        $currencyService = new CurrencyService($conn);
-        $currencyService->updateCurrency($shop);
-
-        $localeService = new LocaleSettingsService($conn, $container);
-        $localeService->updateLocaleSettings($shop->locale);
-
-        if (!$input->getOption('skip-admin-creation')) {
-            $adminService = new AdminService($conn);
-            $adminService->createAdmin($adminUser);
-            $adminService->addWidgets($adminUser);
-        }
-
-        $this->activateResponsiveTheme();
-
-        if ($this->IOHelper->isInteractive()) {
-            $this->IOHelper->cls();
-            $this->IOHelper->writeln("<info>=== License Information ===</info>");
-
-            /** @var $licenseService LicenseUnpackService */
-            $licenseService = $container->offsetGet('license.service');
-
-            /** @var $licenseInstaller LicenseInstaller */
-            $licenseInstaller = $container->offsetGet('license.installer');
-
-            $this->askShopwareEdition($shop, $licenseService, $licenseInstaller);
-        }
-
-        /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
-        $systemLocker = $this->container->offsetGet('system.locker');
-        $systemLocker();
-
-        $container->offsetGet('uniqueid.persister')->store();
-
-        $additionalInformation = [
-            'method' => 'console'
-        ];
-
-        $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
-
-        if ($this->IOHelper->isInteractive()) {
-            $this->IOHelper->writeln("<info>Shop successfully installed.</info>");
-        }
     }
 
     /**
@@ -353,7 +679,7 @@ class InstallCommand extends Command
         $conn = $this->getContainer()->offsetGet('db');
 
         $this->IOHelper->cls();
-        $this->IOHelper->writeln("<info>=== Import Database ===</info>");
+        $this->IOHelper->writeln('<info>=== Import Database ===</info>');
 
         $preSql = <<<'EOT'
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -370,7 +696,7 @@ EOT;
 
     private function importSnippets()
     {
-        $this->IOHelper->writeln("<info>=== Import Snippets ===</info>");
+        $this->IOHelper->writeln('<info>=== Import Snippets ===</info>');
 
         /** @var $conn \PDO */
         $conn = $this->getContainer()->offsetGet('db');
@@ -391,7 +717,7 @@ EOT;
     }
 
     /**
-     * @param \PDO $conn
+     * @param \PDO         $conn
      * @param DumpIterator $dump
      */
     private function dumpProgress(\PDO $conn, DumpIterator $dump)
@@ -409,13 +735,13 @@ EOT;
             $progress->advance();
         }
         $progress->finish();
-        $this->IOHelper->writeln("");
+        $this->IOHelper->writeln('');
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop                 $shop
      * @param LicenseUnpackService $licenseService
-     * @param LicenseInstaller $licenseInstaller
+     * @param LicenseInstaller     $licenseInstaller
      */
     private function askShopwareEdition(
         Shop $shop,
@@ -436,7 +762,7 @@ EOT;
             $licenseInformation = $licenseService->evaluateLicense($licenseUnpackRequest);
             $licenseInstaller->installLicense($licenseInformation);
         } catch (\RuntimeException $e) {
-            $this->IOHelper->writeln("<error>Could not validate license</error>");
+            $this->IOHelper->writeln('<error>Could not validate license</error>');
             $this->askShopwareEdition($shop, $licenseService, $licenseInstaller);
         }
     }
@@ -451,8 +777,8 @@ EOT;
             'cm' => 'Shopware Commercial Version (License: Commercial / License key required) e.g. Professional, Professional Plus, Enterprise',
         ];
 
-        $hint = "For PE/EB/EC a Commercial License key is required)";
-        $question = new ChoiceQuestion('Please select your edition'."\n".$hint, $choices);
+        $hint = 'For PE/EB/EC a Commercial License key is required)';
+        $question = new ChoiceQuestion('Please select your edition' . "\n" . $hint, $choices);
         $question->setErrorMessage('Edition %s is invalid.');
         $edition = $this->IOHelper->ask($question);
 
@@ -475,30 +801,8 @@ EOT;
     private function askLicence()
     {
         return $this->IOHelper->askMultiLineQuestion(
-            new Question('Please provide licence. An empty line will exit the input: '."\n")
+            new Question('Please provide licence. An empty line will exit the input: ' . "\n")
         );
-    }
-
-    /**
-     * @param  Container $container
-     * @param  Shop $shop
-     * @return bool
-     */
-    protected function webserverCheck(Container $container, Shop $shop)
-    {
-        /** @var $webserverCheck WebserverCheck */
-        $webserverCheck = $container->offsetGet('webserver.check');
-        $pingUrl = $webserverCheck->buildPingUrl($shop);
-        try {
-            $this->IOHelper->writeln("Checking ping to: ".$pingUrl);
-            $webserverCheck->checkPing($shop);
-        } catch (\Exception $e) {
-            $this->IOHelper->writeln("Could not verify web server".$e->getMessage());
-
-            return false;
-        }
-
-        return true;
     }
 
     private function printStartMessage()
@@ -507,147 +811,10 @@ EOT;
 
         $this->IOHelper->cls();
         $this->IOHelper->printBanner();
-        $this->IOHelper->writeln(sprintf("<info>Welcome to the Shopware %s installer</info>", $version));
-        $this->IOHelper->writeln("");
+        $this->IOHelper->writeln(sprintf('<info>Welcome to the Shopware %s installer</info>', $version));
+        $this->IOHelper->writeln('');
         $this->IOHelper->ask(new Question('Press return to start installation.'));
         $this->IOHelper->cls();
-    }
-
-    /**
-     * @param  string[] $locales
-     * @return string
-     * @throws \RuntimeException
-     */
-    protected function askForAdminLocale($locales)
-    {
-        $question = new ChoiceQuestion('Please select your admin locale', $locales);
-        $question->setErrorMessage('Locale %s is invalid.');
-
-        $shopLocale = $this->IOHelper->ask($question);
-
-        return $shopLocale;
-    }
-
-    /**
-     * @param  string[] $locales
-     * @param null $default
-     * @return string
-     */
-    protected function askForShopShopLocale($locales, $default = null)
-    {
-        $question = new ChoiceQuestion("Please select your shop locale", $locales, $default);
-        $question->setErrorMessage('Locale %s is invalid.');
-
-        $shopLocale = $this->IOHelper->ask($question);
-
-        return $shopLocale;
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param AdminUser $adminUser
-     * @return AdminUser
-     */
-    protected function getAdminInfoFromArgs(InputInterface $input, AdminUser $adminUser)
-    {
-        $adminUser->username = $input->getOption('admin-username');
-        $adminUser->email = $input->getOption('admin-email');
-        $adminUser->password = $input->getOption('admin-password');
-        $adminUser->locale = $input->getOption('admin-locale');
-        $adminUser->name = $input->getOption('admin-name');
-
-        if ($adminUser->locale && !in_array($adminUser->locale, Locale::getValidLocales())) {
-            throw new \RuntimeException('Invalid admin-locale provided');
-        }
-
-        return $adminUser;
-    }
-
-    /**
-     * @param AdminUser $adminUser
-     * @return AdminUser
-     */
-    protected function getAdminInfoFromInteractiveShell(AdminUser $adminUser)
-    {
-        if (!$this->IOHelper->isInteractive()) {
-            return $adminUser;
-        }
-        $this->IOHelper->cls();
-        $this->IOHelper->writeln("<info>=== Admin Information ===</info>");
-
-        $question = new Question('Admin username (demo): ', 'demo');
-        $adminUsername = $this->IOHelper->ask($question);
-
-        $question = new Question('Admin full name (Demo-Admin): ', 'Demo-Admin');
-        $adminName = $this->IOHelper->ask($question);
-
-        $question = new Question('Admin email (your.email@shop.com): ', 'your.email@shop.com');
-        $adminEmail = $this->IOHelper->ask($question);
-
-        $question = new Question('Admin password (demo): ', 'demo');
-        $adminPassword = $this->IOHelper->ask($question);
-
-        $adminLocale = $this->askForAdminLocale(Locale::getValidLocales());
-
-        $adminUser->username = $adminUsername;
-        $adminUser->email = $adminEmail;
-        $adminUser->password = $adminPassword;
-        $adminUser->locale = $adminLocale;
-        $adminUser->name = $adminName;
-
-        return $adminUser;
-    }
-
-    /**
-     * @param Shop $shop
-     * @return Shop
-     */
-    protected function getShopInfoFromInteractiveShell(Shop $shop)
-    {
-        if (!$this->IOHelper->isInteractive()) {
-            return $shop;
-        }
-
-        $this->IOHelper->cls();
-        $this->IOHelper->writeln("<info>=== Shop Information ===</info>");
-
-        $shop->locale = $this->askForShopShopLocale(Locale::getValidLocales(), $shop->locale);
-        $shop->host = $this->IOHelper->ask(sprintf('Shop host (%s): ', $shop->host), $shop->host);
-        $shop->basePath = $this->IOHelper->ask(sprintf('Shop base path (%s): ', $shop->basePath), $shop->basePath);
-        $shop->name = $this->IOHelper->ask(sprintf('Shop name (%s): ', $shop->name), $shop->name);
-        $shop->email = $this->IOHelper->ask(sprintf('Shop email (%s): ', $shop->email), $shop->email);
-
-        $question = new ChoiceQuestion(
-            sprintf('Shop currency (%s): ', $shop->currency),
-            Currency::getValidCurrencies(),
-            $shop->currency
-        );
-        $question->setErrorMessage('Currency %s is invalid.');
-        $shop->currency = $this->IOHelper->ask($question);
-
-        return $shop;
-    }
-
-
-    /**
-     * @param InputInterface $input
-     * @param Shop $shop
-     * @return Shop
-     */
-    protected function getShopInfoFromArgs(InputInterface $input, Shop $shop)
-    {
-        $shop->name = $input->getOption('shop-name');
-        $shop->email = $input->getOption('shop-email');
-        $shop->host = $input->getOption('shop-host');
-        $shop->basePath = $input->getOption('shop-path');
-        $shop->locale = $input->getOption('shop-locale');
-        $shop->currency = $input->getOption('shop-currency');
-
-        if ($shop->locale && !in_array($shop->locale, Locale::getValidLocales())) {
-            throw new \RuntimeException('Invalid shop-locale provided');
-        }
-
-        return $shop;
     }
 
     private function activateResponsiveTheme()
@@ -655,163 +822,5 @@ EOT;
         /** @var ThemeService $themeService */
         $themeService = $this->container->offsetGet('theme.service');
         $themeService->activateResponsiveTheme();
-
-        return;
-    }
-
-    /**
-     * @param DatabaseConnectionInformation $connectionInfo
-     * @param Container $container
-     * @return \PDO
-     */
-    protected function initDatabaseConnection(DatabaseConnectionInformation $connectionInfo, Container $container)
-    {
-        $databaseFactory = new DatabaseFactory();
-        $conn = $databaseFactory->createPDOConnection($connectionInfo);
-        $container->offsetSet('db', $conn);
-
-        return $conn;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function shouldSkipImport()
-    {
-        if (!$this->IOHelper->isInteractive()) {
-            return true;
-        }
-
-        $question = new ConfirmationQuestion(
-            'The database already contains shopware tables. Skip import? (yes/no) [yes]', true
-        );
-        $skipImport = $this->IOHelper->ask($question);
-
-        return (bool)$skipImport;
-    }
-
-    /**
-     * @param IOHelper $IOHelper
-     * @param DatabaseConnectionInformation $connectionInfo
-     * @return DatabaseConnectionInformation
-     */
-    protected function getConnectionInfoFromInteractiveShell(
-        IOHelper $IOHelper,
-        DatabaseConnectionInformation $connectionInfo
-    ) {
-        if (!$IOHelper->isInteractive()) {
-            return $connectionInfo;
-        }
-
-        $IOHelper->writeln("<info>=== Database configuration ===</info>");
-        $databaseInteractor = new DatabaseInteractor($IOHelper);
-
-        $databaseConnectionInformation = $databaseInteractor->askDatabaseConnectionInformation(
-            $connectionInfo
-        );
-
-        $databaseFactory = new DatabaseFactory();
-
-        do {
-            $pdo = null;
-            try {
-                $pdo = $databaseFactory->createPDOConnection($databaseConnectionInformation);
-            } catch (\PDOException $e) {
-                $IOHelper->writeln('');
-                $IOHelper->writeln(sprintf("Got database error: %s", $e->getMessage()));
-                $IOHelper->writeln('');
-
-                $databaseConnectionInformation = $databaseInteractor->askDatabaseConnectionInformation(
-                    $databaseConnectionInformation
-                );
-            }
-        } while (!$pdo);
-
-        $databaseService = new DatabaseService($pdo);
-
-        $databaseNames = $databaseService->getAvailableDatabaseNames();
-
-        $defaultChoice = null;
-        if ($connectionInfo->databaseName) {
-            if (in_array($connectionInfo->databaseName, $databaseNames)) {
-                $defaultChoice = array_search($connectionInfo->databaseName, $databaseNames);
-            }
-        }
-
-        $choices = $databaseNames;
-        array_unshift($choices, '[create new database]');
-        $question = new ChoiceQuestion('Please select your database', $choices, $defaultChoice);
-        $question->setErrorMessage('Database %s is invalid.');
-        $databaseName = $databaseInteractor->askQuestion($question);
-
-        if ($databaseName === $choices[0]) {
-            $databaseName = $databaseInteractor->createDatabase($pdo);
-        }
-
-        $databaseService->selectDatabase($databaseName);
-
-        if (!$databaseInteractor->continueWithExistingTables($databaseName, $pdo)) {
-            $IOHelper->writeln("Installation aborted.");
-
-            exit;
-        }
-
-        $databaseConnectionInformation->databaseName = $databaseName;
-
-        return $databaseConnectionInformation;
-    }
-
-    /**
-     * @param string $configPath
-     * @param DatabaseConnectionInformation $connectionInfo
-     * @return DatabaseConnectionInformation
-     */
-    protected function getConnectionInfoFromConfig($configPath, DatabaseConnectionInformation $connectionInfo)
-    {
-        if (!$configuration = $this->loadConfiguration($configPath)) {
-            return $connectionInfo;
-        }
-
-        $connectionInfo->username = $configuration['db']['username'];
-        $connectionInfo->hostname = $configuration['db']['host'];
-        $connectionInfo->port = $configuration['db']['port'];
-        $connectionInfo->databaseName = $configuration['db']['dbname'];
-        $connectionInfo->password = $configuration['db']['password'];
-
-        return $connectionInfo;
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param DatabaseConnectionInformation $connectionInfo
-     * @return DatabaseConnectionInformation
-     */
-    protected function getConnectionInfoFromArgs(InputInterface $input, DatabaseConnectionInformation $connectionInfo)
-    {
-        $connectionInfo->username = $input->getOption('db-user');
-        $connectionInfo->hostname = $input->getOption('db-host');
-        $connectionInfo->port = $input->getOption('db-port');
-        $connectionInfo->databaseName = $input->getOption('db-name');
-        $connectionInfo->socket = $input->getOption('db-socket');
-        $connectionInfo->password = $input->getOption('db-password');
-
-        return $connectionInfo;
-    }
-
-    /**
-     * Loads config.php content as an array, or false if the file doesn't exist
-     *
-     * @param $configPath
-     * @return array|bool
-     */
-    protected function loadConfiguration($configPath)
-    {
-        if (!is_file($configPath)) {
-            return false;
-        }
-
-        $content = require $configPath;
-
-        return $content;
     }
 }

@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- */
 class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 {
     protected $apiBaseUrl;
@@ -77,7 +75,7 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
         );
         $result = $this->resource->batch($params);
 
-        $this->View()->assign(array('success' => true, 'data' => $result));
+        $this->View()->assign(['success' => true, 'data' => $result]);
     }
 
     /**
@@ -100,6 +98,6 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
         );
         $result = $this->resource->batchDelete($params);
 
-        $this->View()->assign(array('success' => true, 'data' => $result));
+        $this->View()->assign(['success' => true, 'data' => $result]);
     }
 }

@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Order;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware order status model represents the status of an order (payment or order state).
@@ -44,7 +44,7 @@ class Status extends ModelEntity
     /**
      * Consts defining the group
      */
-    const GROUP_STATE   = 'state';
+    const GROUP_STATE = 'state';
     const GROUP_PAYMENT = 'payment';
 
     /**
@@ -85,7 +85,16 @@ class Status extends ModelEntity
     const PAYMENT_STATE_THE_PROCESS_HAS_BEEN_CANCELLED = 35;
 
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Mail\Mail", mappedBy="status")
+     *
+     * @var \Shopware\Models\Mail\Mail
+     */
+    protected $mail;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -94,14 +103,15 @@ class Status extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
-     * @var string $description
+     * @var string
+     *
      * @deprecated Use 'name' in conjunction with the 'backend/static/*' snippet namespaces instead
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
@@ -109,37 +119,30 @@ class Status extends ModelEntity
     private $description;
 
     /**
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
 
     /**
-     * @var string $group
+     * @var string
      *
      * @ORM\Column(name="`group`", type="string", length=25, nullable=false)
      */
     private $group;
 
     /**
-     * @var integer $sendMail
+     * @var int
      *
      * @ORM\Column(name="mail", type="integer", nullable=false)
      */
     private $sendMail;
 
     /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Mail\Mail", mappedBy="status")
-     * @var \Shopware\Models\Mail\Mail
-     */
-    protected $mail;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -164,19 +167,23 @@ class Status extends ModelEntity
 
     /**
      * Set description
+     *
      * @deprecated Use getName() + snippets instead
      *
      * @param string $description
+     *
      * @return Status
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
     /**
      * Get description
+     *
      * @deprecated Use getName() + snippets instead
      *
      * @return string
@@ -189,19 +196,21 @@ class Status extends ModelEntity
     /**
      * Set position
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Status
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -212,11 +221,13 @@ class Status extends ModelEntity
      * Set group
      *
      * @param string $group
+     *
      * @return Status
      */
     public function setGroup($group)
     {
         $this->group = $group;
+
         return $this;
     }
 
@@ -233,19 +244,21 @@ class Status extends ModelEntity
     /**
      * Set sendMail
      *
-     * @param integer $sendMail
+     * @param int $sendMail
+     *
      * @return Status
      */
     public function setSendMail($sendMail)
     {
         $this->sendMail = $sendMail;
+
         return $this;
     }
 
     /**
      * Get sendMail
      *
-     * @return integer
+     * @return int
      */
     public function getSendMail()
     {
@@ -262,11 +275,13 @@ class Status extends ModelEntity
 
     /**
      * @param \Shopware\Models\Mail\Mail|array|null $mail
+     *
      * @return \Shopware\Models\Mail\Mail
      */
     public function setMail($mail)
     {
         $this->mail = $mail;
+
         return $this;
     }
 }

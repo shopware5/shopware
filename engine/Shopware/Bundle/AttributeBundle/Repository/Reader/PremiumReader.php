@@ -28,7 +28,7 @@ use Shopware\Models\Premium\Premium;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PremiumReader extends GenericReader
@@ -41,12 +41,13 @@ class PremiumReader extends GenericReader
             'entity.orderNumberExport',
             'variant.number',
             'article.name',
-            's.name as shop'
+            's.name as shop',
         ]);
         $query->from(Premium::class, 'entity', $this->getIdentifierField());
         $query->innerJoin('entity.articleDetail', 'variant');
         $query->innerJoin('variant.article', 'article');
         $query->leftJoin('entity.shop', 's');
+
         return $query;
     }
 }

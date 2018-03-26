@@ -33,7 +33,6 @@ use Doctrine\ORM\Query\SqlWalker;
  * Custom query extension to allow regex comparison in DQL
  *
  * Class RegExp
- * @package Shopware\Components\Model\Query\Mysql
  */
 class RegExp extends FunctionNode
 {
@@ -42,6 +41,7 @@ class RegExp extends FunctionNode
 
     /**
      * Parse
+     *
      * @param Parser $parser
      */
     public function parse(Parser $parser)
@@ -58,6 +58,7 @@ class RegExp extends FunctionNode
      * Return SQL expression
      *
      * @param SqlWalker $sqlWalker
+     *
      * @return string
      */
     public function getSql(SqlWalker $sqlWalker)

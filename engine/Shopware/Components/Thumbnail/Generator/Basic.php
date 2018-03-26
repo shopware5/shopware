@@ -36,8 +36,9 @@ use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
  * for further manipulation.
  *
  * Class Basic
+ *
  * @category    Shopware
- * @package     Shopware\Component\Thumbnail\Generator
+ *
  * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Basic implements GeneratorInterface
@@ -59,8 +60,8 @@ class Basic implements GeneratorInterface
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param MediaServiceInterface $mediaService
-     * @param OptimizerServiceInterface $optimizerService
+     * @param MediaServiceInterface       $mediaService
+     * @param OptimizerServiceInterface   $optimizerService
      */
     public function __construct(\Shopware_Components_Config $config, MediaServiceInterface $mediaService, OptimizerServiceInterface $optimizerService)
     {
@@ -75,7 +76,7 @@ class Basic implements GeneratorInterface
     public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
     {
         if (!$this->mediaService->has($imagePath)) {
-            throw new \Exception("File not found: " . $imagePath);
+            throw new \Exception('File not found: ' . $imagePath);
         }
 
         $content = $this->mediaService->read($imagePath);
@@ -88,10 +89,10 @@ class Basic implements GeneratorInterface
             $maxHeight = $maxWidth;
         }
 
-        $newSize = array(
-            'width'  => $maxWidth,
-            'height' => $maxHeight
-        );
+        $newSize = [
+            'width' => $maxWidth,
+            'height' => $maxHeight,
+        ];
 
         if ($keepProportions) {
             $newSize = $this->calculateProportionalThumbnailSize($originalSize, $maxWidth, $maxHeight);
@@ -116,14 +117,15 @@ class Basic implements GeneratorInterface
      * according to the passed sizes
      *
      * @param resource $imageResource
+     *
      * @return array
      */
     private function getOriginalImageSize($imageResource)
     {
-        return array(
-            'width'  => imagesx($imageResource),
-            'height' => imagesy($imageResource)
-        );
+        return [
+            'width' => imagesx($imageResource),
+            'height' => imagesy($imageResource),
+        ];
     }
 
     /**
@@ -132,13 +134,15 @@ class Basic implements GeneratorInterface
      * method for the image extension
      *
      * @param string $fileContent
-     * @return resource
+     *
      * @throws \RuntimeException
+     *
+     * @return resource
      */
     private function createImageResource($fileContent, $imagePath)
     {
         if (!$image = @imagecreatefromstring($fileContent)) {
-            throw new \RuntimeException(sprintf("Image is not in a recognized format (%s)", $imagePath));
+            throw new \RuntimeException(sprintf('Image is not in a recognized format (%s)', $imagePath));
         }
 
         return $image;
@@ -148,6 +152,7 @@ class Basic implements GeneratorInterface
      * Returns the extension of the file with passed path
      *
      * @param string
+     *
      * @return string
      */
     private function getImageExtension($path)
@@ -163,6 +168,7 @@ class Basic implements GeneratorInterface
      * @param array $originalSize
      * @param int   $width
      * @param int   $height
+     *
      * @return array
      */
     private function calculateProportionalThumbnailSize(array $originalSize, $width, $height)
@@ -181,27 +187,28 @@ class Basic implements GeneratorInterface
         }
 
         if ($factor >= 1) {
-            $dstWidth  = $srcWidth;
+            $dstWidth = $srcWidth;
             $dstHeight = $srcHeight;
             $factor = 1;
         } else {
             //Get the destination size
-            $dstWidth  = round($srcWidth * $factor);
+            $dstWidth = round($srcWidth * $factor);
             $dstHeight = round($srcHeight * $factor);
         }
 
-        return array(
+        return [
             'width' => $dstWidth,
             'height' => $dstHeight,
-            'proportion' => $factor
-        );
+            'proportion' => $factor,
+        ];
     }
 
     /**
      * @param resource $image
      * @param array    $originalSize
      * @param array    $newSize
-     * @param boolean  $extension
+     * @param bool     $extension
+     *
      * @return resource
      */
     private function createNewImage($image, $originalSize, $newSize, $extension)
@@ -238,7 +245,7 @@ class Basic implements GeneratorInterface
     /**
      * Fix #fefefe in white backgrounds
      *
-     * @param array $newSize
+     * @param array    $newSize
      * @param resource $newImage
      */
     private function fixGdImageBlur($newSize, $newImage)
@@ -260,9 +267,9 @@ class Basic implements GeneratorInterface
     }
 
     /**
-     * @param string $destination
+     * @param string   $destination
      * @param resource $newImage
-     * @param int $quality - JPEG quality
+     * @param int      $quality     - JPEG quality
      */
     private function saveImage($destination, $newImage, $quality)
     {

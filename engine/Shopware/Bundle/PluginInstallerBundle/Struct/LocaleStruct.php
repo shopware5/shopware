@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class LocaleStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class LocaleStruct implements \JsonSerializable
 {
@@ -94,7 +93,7 @@ class LocaleStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

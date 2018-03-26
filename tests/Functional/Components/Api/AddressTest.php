@@ -28,7 +28,6 @@ use Shopware\Components\Api\Resource\Address;
 
 /**
  * Class AddressTest
- * @package Shopware\Tests\Components\Api
  */
 class AddressTest extends TestCase
 {
@@ -47,7 +46,7 @@ class AddressTest extends TestCase
 
     public function testCreateShouldBeSuccessful()
     {
-        $testData = array(
+        $testData = [
             'customer' => 2,
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -55,8 +54,8 @@ class AddressTest extends TestCase
             'street' => 'Musterstr. 55',
             'zipcode' => '12345',
             'city' => 'Musterhausen',
-            'country' => 2
-        );
+            'country' => 2,
+        ];
 
         $address = $this->resource->create($testData);
 
@@ -98,10 +97,10 @@ class AddressTest extends TestCase
      */
     public function testUpdateShouldBeSuccessful($id)
     {
-        $testData = array(
-            'lastname'   => uniqid(rand()) . ' new lastname',
-            'zipcode'   => '98765'
-        );
+        $testData = [
+            'lastname' => uniqid(rand()) . ' new lastname',
+            'zipcode' => '98765',
+        ];
 
         $address = $this->resource->update($id, $testData);
 
@@ -135,7 +134,7 @@ class AddressTest extends TestCase
     {
         $testData = [
             '__options_set_default_billing_address' => 1,
-            '__options_set_default_shipping_address' => 1
+            '__options_set_default_shipping_address' => 1,
         ];
 
         $address = $this->resource->update($id, $testData);
@@ -151,7 +150,7 @@ class AddressTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -159,7 +158,7 @@ class AddressTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
 
     /**

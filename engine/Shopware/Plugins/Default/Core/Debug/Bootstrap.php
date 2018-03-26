@@ -24,20 +24,20 @@
 
 use Monolog\Handler\HandlerInterface;
 use Shopware\Components\Logger;
+use Shopware\Plugin\Debug\Components\CollectorInterface;
 use Shopware\Plugin\Debug\Components\ControllerCollector;
 use Shopware\Plugin\Debug\Components\DatabaseCollector;
 use Shopware\Plugin\Debug\Components\DbalCollector;
 use Shopware\Plugin\Debug\Components\ErrorCollector;
 use Shopware\Plugin\Debug\Components\EventCollector;
 use Shopware\Plugin\Debug\Components\ExceptionCollector;
-use Shopware\Plugin\Debug\Components\CollectorInterface;
 use Shopware\Plugin\Debug\Components\TemplateCollector;
 use Shopware\Plugin\Debug\Components\TemplateVarCollector;
 use Shopware\Plugin\Debug\Components\Utils;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -50,7 +50,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     /**
      * @var CollectorInterface[]
      */
-    protected $collectors = array();
+    protected $collectors = [];
 
     /**
      * @return bool
@@ -62,53 +62,53 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
             'onStartDispatch'
         );
 
-        $form   = $this->Form();
-        $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
+        $form = $this->Form();
+        $parent = $this->Forms()->findOneBy(['name' => 'Core']);
         $form->setParent($parent);
-        $form->setElement('text', 'AllowIP', array('label' => 'Restrict to IP', 'value' => ''));
-        $fields = array(
-            array(
-                'name'        => 'logTemplateVars',
-                'label'       => 'Log template vars',
-                'default'     => true,
-            ),
-            array(
-                'name'        => 'logErrors',
-                'label'       => 'Log errors',
-                'default'     => true,
-            ),
-            array(
-                'name'        => 'logExceptions',
-                'label'       => 'Log exceptions',
-                'default'     => true,
-            ),
-            array(
-                'name'        => 'logDb',
-                'label'       => 'Benchmark Zend_Db queries',
-            ),
-            array(
-                'name'        => 'logModel',
-                'label'       => 'Benchmark DBAL queries',
-            ),
-            array(
-                'name'        => 'logTemplate',
-                'label'       => 'Benchmark template',
-            ),
-            array(
-                'name'        => 'logController',
-                'label'       => 'Benchmark controller events',
-            ),
-            array(
-                'name'        => 'logEvents',
-                'label'       => 'Benchmark events',
-            ),
-        );
+        $form->setElement('text', 'AllowIP', ['label' => 'Restrict to IP', 'value' => '']);
+        $fields = [
+            [
+                'name' => 'logTemplateVars',
+                'label' => 'Log template vars',
+                'default' => true,
+            ],
+            [
+                'name' => 'logErrors',
+                'label' => 'Log errors',
+                'default' => true,
+            ],
+            [
+                'name' => 'logExceptions',
+                'label' => 'Log exceptions',
+                'default' => true,
+            ],
+            [
+                'name' => 'logDb',
+                'label' => 'Benchmark Zend_Db queries',
+            ],
+            [
+                'name' => 'logModel',
+                'label' => 'Benchmark DBAL queries',
+            ],
+            [
+                'name' => 'logTemplate',
+                'label' => 'Benchmark template',
+            ],
+            [
+                'name' => 'logController',
+                'label' => 'Benchmark controller events',
+            ],
+            [
+                'name' => 'logEvents',
+                'label' => 'Benchmark events',
+            ],
+        ];
 
         foreach ($fields as $field) {
-            $form->setElement('boolean', $field['name'], array(
+            $form->setElement('boolean', $field['name'], [
                 'label' => $field['label'],
                 'value' => (isset($field['default'])) ?: false,
-            ));
+            ]);
         }
 
         return true;
@@ -207,17 +207,18 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
 
         $this->get('events')->addListener(
             'Enlight_Controller_Front_DispatchLoopShutdown',
-            array($this, 'onDispatchLoopShutdown')
+            [$this, 'onDispatchLoopShutdown']
         );
     }
 
     /**
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return HandlerInterface[]
      */
     public function getHandlers(\Enlight_Controller_Request_Request $request)
     {
-        $handlers = array();
+        $handlers = [];
         if ($this->get('monolog.handler.firephp')->acceptsRequest($request)) {
             $handlers[] = $this->get('monolog.handler.firephp');
         }
@@ -227,11 +228,12 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
 
     /**
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return bool
      */
     public function isRequestAllowed(\Enlight_Controller_Request_Request $request)
     {
-        $clientIp  = $request->getClientIp();
+        $clientIp = $request->getClientIp();
         $allowedIp = $this->Config()->get('AllowIP');
 
         if (empty($allowedIp)) {
@@ -242,7 +244,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
             return false;
         }
 
-        return (strpos($allowedIp, $clientIp) !== false);
+        return strpos($allowedIp, $clientIp) !== false;
     }
 
     /**

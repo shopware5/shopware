@@ -25,15 +25,13 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class StoreCommand extends ShopwareCommand
@@ -89,6 +87,7 @@ abstract class StoreCommand extends ShopwareCommand
 
     /**
      * @param array $input
+     *
      * @throws \Exception
      */
     protected function handleError(array $input)
@@ -102,6 +101,7 @@ abstract class StoreCommand extends ShopwareCommand
 
     /**
      * @param InputInterface $input
+     *
      * @return string
      */
     protected function setupShopwareVersion(InputInterface $input)
@@ -110,19 +110,22 @@ abstract class StoreCommand extends ShopwareCommand
         if (empty($version)) {
             $version = \Shopware::VERSION;
         }
+
         return $version;
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @throws \Exception
+     *
      * @return AccessTokenStruct
      */
     protected function setupAuth(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $this->input  = $input;
+        $this->input = $input;
 
         $username = $input->getOption('username');
         $password = $input->getOption('password');
@@ -146,10 +149,10 @@ abstract class StoreCommand extends ShopwareCommand
         }
 
         if (empty($username) || empty($password)) {
-            throw new \Exception("Username and password are required");
+            throw new \Exception('Username and password are required');
         }
 
-        $output->writeln(sprintf("Connect to Store with username: %s...", $username));
+        $output->writeln(sprintf('Connect to Store with username: %s...', $username));
 
         return $this->container->get('shopware_plugininstaller.store_client')->getAccessToken(
             $username,
@@ -158,15 +161,17 @@ abstract class StoreCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @throws \Exception
+     *
      * @return string
      */
     protected function setupDomain(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $this->input  = $input;
+        $this->input = $input;
 
         $hostname = $input->getOption('hostname');
         if (empty($hostname)) {
@@ -174,7 +179,7 @@ abstract class StoreCommand extends ShopwareCommand
         }
 
         if (empty($hostname)) {
-            throw new \Exception("Hostname is required");
+            throw new \Exception('Hostname is required');
         }
 
         return $hostname;

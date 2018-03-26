@@ -28,9 +28,9 @@ class Theme extends \Shopware\Components\Theme
 {
     protected $extends = null;
 
-    protected $javascript = array('bare_1.js', 'bare_2.js');
+    protected $javascript = ['bare_1.js', 'bare_2.js'];
 
-    protected $css = array('bare_1.css', 'bare_2.css');
+    protected $css = ['bare_1.css', 'bare_2.css'];
 
     protected $injectBeforePlugins = true;
 

@@ -29,17 +29,17 @@ use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
 use ONGR\ElasticsearchDSL\Query\ExistsQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -57,7 +57,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ProductAttributeFacet);
+        return $criteriaPart instanceof ProductAttributeFacet;
     }
 
     /**
@@ -74,14 +74,14 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $this->criteriaParts[] = $criteriaPart;
 
         switch ($criteriaPart->getMode()) {
-            case (ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
-            case (ProductAttributeFacet::MODE_RADIO_LIST_RESULT):
+            case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
+            case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
                 $aggregation = new TermsAggregation($criteriaPart->getName());
                 $aggregation->setField($field);
                 $aggregation->addParameter('size', self::AGGREGATION_SIZE);
                 break;
 
-            case (ProductAttributeFacet::MODE_BOOLEAN_RESULT):
+            case ProductAttributeFacet::MODE_BOOLEAN_RESULT:
                 $count = new ValueCountAggregation($criteriaPart->getName() . '_count');
                 $count->setField($field);
 
@@ -90,7 +90,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 $aggregation->addAggregation($count);
                 break;
 
-            case (ProductAttributeFacet::MODE_RANGE_RESULT):
+            case ProductAttributeFacet::MODE_RANGE_RESULT:
                 $aggregation = new TermsAggregation($criteriaPart->getName());
                 $aggregation->setField($field);
                 break;
@@ -123,14 +123,14 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
             }
 
             switch ($criteriaPart->getMode()) {
-                case (ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
-                case (ProductAttributeFacet::MODE_RADIO_LIST_RESULT):
+                case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
+                case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
                     $criteriaPartResult = $this->createItemListResult($criteriaPart, $aggregations[$key], $criteria);
                     break;
-                case (ProductAttributeFacet::MODE_BOOLEAN_RESULT):
+                case ProductAttributeFacet::MODE_BOOLEAN_RESULT:
                     $criteriaPartResult = $this->createBooleanResult($criteriaPart, $aggregations[$key], $criteria);
                     break;
-                case (ProductAttributeFacet::MODE_RANGE_RESULT):
+                case ProductAttributeFacet::MODE_RANGE_RESULT:
                     $criteriaPartResult = $this->createRangeResult($criteriaPart, $aggregations[$key], $criteria);
                     break;
                 default:
@@ -147,6 +147,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      * @param ProductAttributeFacet $criteriaPart
      * @param $data
      * @param Criteria $criteria
+     *
      * @return null|RadioFacetResult|ValueListFacetResult
      */
     private function createItemListResult(
@@ -161,7 +162,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
         $actives = [];
 
-        /**@var $condition ProductAttributeCondition*/
+        /** @var $condition ProductAttributeCondition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $actives = $condition->getValue();
         }
@@ -185,13 +186,13 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 [],
                 $template
             );
-        } else {
-            $template = $criteriaPart->getTemplate();
-            if (!$template) {
-                $template = 'frontend/listing/filter/facet-value-list.tpl';
-            }
+        }
+        $template = $criteriaPart->getTemplate();
+        if (!$template) {
+            $template = 'frontend/listing/filter/facet-value-list.tpl';
+        }
 
-            return new ValueListFacetResult(
+        return new ValueListFacetResult(
                 $criteriaPart->getName(),
                 $criteria->hasCondition($criteriaPart->getName()),
                 $criteriaPart->getLabel(),
@@ -200,13 +201,13 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 [],
                 $template
             );
-        }
     }
 
     /**
      * @param ProductAttributeFacet $criteriaPart
      * @param $data
      * @param Criteria $criteria
+     *
      * @return null|BooleanFacetResult
      */
     private function createBooleanResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
@@ -237,6 +238,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      * @param ProductAttributeFacet $criteriaPart
      * @param $data
      * @param Criteria $criteria
+     *
      * @return RangeFacetResult
      */
     private function createRangeResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
@@ -253,7 +255,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $activeMin = $min;
         $activeMax = $max;
 
-        /**@var $condition ProductAttributeCondition*/
+        /** @var $condition ProductAttributeCondition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $data = $condition->getValue();
             $activeMin = $data['min'];

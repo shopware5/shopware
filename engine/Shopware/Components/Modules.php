@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
@@ -36,12 +36,25 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * Container that hold references to all modules already loaded
+     *
      * @var array
      */
-    protected $modules_container = array();
+    protected $modules_container = [];
+
+    /**
+     * @param string $name
+     * @param null   $value
+     *
+     * @return mixed
+     */
+    public function __call($name, $value = null)
+    {
+        return $this->getModule($name);
+    }
 
     /**
      * Set class property
+     *
      * @param $system
      */
     public function setSystem($system)
@@ -50,34 +63,10 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     }
 
     /**
-     * Load a module defined by $name
-     * Possible values for $name - sBasket, sAdmin etc.
-     * @param $name
-     */
-    private function loadModule($name)
-    {
-        if (isset($this->modules_container[$name])) {
-            return;
-        }
-
-        $this->modules_container[$name] = null;
-        $name = basename($name);
-
-        if ($name == 'sSystem') {
-            $this->modules_container[$name] = $this->system;
-            return;
-        }
-
-        Shopware()->Hooks()->setAlias($name, $name);
-        $proxy = Shopware()->Hooks()->getProxy($name);
-        $this->modules_container[$name] = new $proxy;
-        $this->modules_container[$name]->sSYSTEM = $this->system;
-    }
-
-    /**
      * Reformat module name and return reference to module
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function getModule($name)
@@ -85,10 +74,10 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
         if (substr($name, 0, 1) == 's') {
             $name = substr($name, 1);
         }
-        if (!in_array($name, array('RewriteTable'))) {
-            $name = "s" . ucfirst(strtolower($name));
+        if (!in_array($name, ['RewriteTable'])) {
+            $name = 's' . ucfirst(strtolower($name));
         } else {
-            $name = "s" . $name;
+            $name = 's' . $name;
         }
 
         if (!isset($this->modules_container[$name])) {
@@ -108,6 +97,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * @param $offset
+     *
      * @return bool
      */
     public function offsetExists($offset)
@@ -124,6 +114,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * @param $offset
+     *
      * @return mixed
      */
     public function offsetGet($offset)
@@ -132,21 +123,11 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     }
 
     /**
-     * @param string $name
-     * @param null $value
-     * @return mixed
-     */
-    public function __call($name, $value = null)
-    {
-        return $this->getModule($name);
-    }
-
-    /**
      * @return sArticles
      */
     public function Articles()
     {
-        return $this->getModule("Articles");
+        return $this->getModule('Articles');
     }
 
     /**
@@ -154,7 +135,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Categories()
     {
-        return $this->getModule("Categories");
+        return $this->getModule('Categories');
     }
 
     /**
@@ -162,7 +143,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Basket()
     {
-        return $this->getModule("Basket");
+        return $this->getModule('Basket');
     }
 
     /**
@@ -170,7 +151,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Marketing()
     {
-        return $this->getModule("Marketing");
+        return $this->getModule('Marketing');
     }
 
     /**
@@ -178,7 +159,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function System()
     {
-        return $this->getModule("System");
+        return $this->getModule('System');
     }
 
     /**
@@ -186,7 +167,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Admin()
     {
-        return $this->getModule("Admin");
+        return $this->getModule('Admin');
     }
 
     /**
@@ -194,7 +175,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Order()
     {
-        return $this->getModule("Order");
+        return $this->getModule('Order');
     }
 
     /**
@@ -202,7 +183,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Cms()
     {
-        return $this->getModule("Cms");
+        return $this->getModule('Cms');
     }
 
     /**
@@ -210,7 +191,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Core()
     {
-        return $this->getModule("Core");
+        return $this->getModule('Core');
     }
 
     /**
@@ -218,7 +199,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function RewriteTable()
     {
-        return $this->getModule("RewriteTable");
+        return $this->getModule('RewriteTable');
     }
 
     /**
@@ -226,6 +207,33 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function Export()
     {
-        return $this->getModule("Export");
+        return $this->getModule('Export');
+    }
+
+    /**
+     * Load a module defined by $name
+     * Possible values for $name - sBasket, sAdmin etc.
+     *
+     * @param $name
+     */
+    private function loadModule($name)
+    {
+        if (isset($this->modules_container[$name])) {
+            return;
+        }
+
+        $this->modules_container[$name] = null;
+        $name = basename($name);
+
+        if ($name == 'sSystem') {
+            $this->modules_container[$name] = $this->system;
+
+            return;
+        }
+
+        Shopware()->Hooks()->setAlias($name, $name);
+        $proxy = Shopware()->Hooks()->getProxy($name);
+        $this->modules_container[$name] = new $proxy();
+        $this->modules_container[$name]->sSYSTEM = $this->system;
     }
 }

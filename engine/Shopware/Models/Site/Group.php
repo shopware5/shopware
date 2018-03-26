@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Site;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Model Site
@@ -38,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Group extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -47,19 +47,19 @@ class Group extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $key
+     * @var string
      * @ORM\Column(name="`key`", type="string", nullable=false)
      */
     private $key;
 
     /**
-     * @var boolean $active
+     * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = true;
@@ -127,7 +127,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -135,7 +135,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {

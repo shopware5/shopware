@@ -21,15 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaService implements Service\MediaServiceInterface
@@ -61,10 +62,10 @@ class MediaService implements Service\MediaServiceInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
-     * @param Gateway\ProductMediaGatewayInterface $productMedia
-     * @param Gateway\VariantMediaGatewayInterface $variantMedia
-     * @param \Shopware_Components_Config $shopwareConfig
-     * @param Service\VariantCoverServiceInterface $variantCoverService
+     * @param Gateway\ProductMediaGatewayInterface                            $productMedia
+     * @param Gateway\VariantMediaGatewayInterface                            $variantMedia
+     * @param \Shopware_Components_Config                                     $shopwareConfig
+     * @param Service\VariantCoverServiceInterface                            $variantCoverService
      */
     public function __construct(
         Gateway\MediaGatewayInterface $mediaGateway,
@@ -83,6 +84,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @param $id
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media
      */
     public function get($id, Struct\ShopContextInterface $context)
@@ -93,6 +95,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * @param $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media[] Indexed by the media id
      */
     public function getList($ids, Struct\ShopContextInterface $context)
@@ -101,7 +104,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -111,7 +114,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCovers($products, Struct\ShopContextInterface $context)
     {
@@ -126,7 +129,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -136,7 +139,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductsMedia($products, Struct\ShopContextInterface $context)
     {

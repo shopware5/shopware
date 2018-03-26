@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class AccessTokenStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class AccessTokenStruct implements \JsonSerializable
 {
@@ -56,10 +55,10 @@ class AccessTokenStruct implements \JsonSerializable
     private $shopwareId;
 
     /**
-     * @param string $token
+     * @param string    $token
      * @param \DateTime $expire
      * @param $shopwareId
-     * @param int $userId
+     * @param int    $userId
      * @param string $locale
      */
     public function __construct(
@@ -77,7 +76,7 @@ class AccessTokenStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

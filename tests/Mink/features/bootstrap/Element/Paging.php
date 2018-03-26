@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
@@ -15,23 +37,23 @@ use Shopware\Tests\Mink\Helper;
 class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
-     * @var array $selector
+     * @var array
      */
     protected $selector = ['css' => 'div.listing--paging'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
         return [
             'previous' => 'a.paging--link.paging--prev',
-            'next' => 'a.paging--link.paging--next'
+            'next' => 'a.paging--link.paging--next',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -44,15 +66,15 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
      */
     public function moveDirection($direction, $steps = 1)
     {
-        $locator = array(strtolower($direction));
+        $locator = [strtolower($direction)];
         $elements = Helper::findElements($this, $locator);
 
-        for ($i = 0; $i < $steps; $i++) {
+        for ($i = 0; $i < $steps; ++$i) {
             $result = Helper::countElements($this, $direction, 4);
 
             if ($result !== true) {
                 Helper::throwException(
-                    array(sprintf('There is no more "%s" button! (after %d steps)', $direction, $i))
+                    [sprintf('There is no more "%s" button! (after %d steps)', $direction, $i)]
                 );
             }
 
@@ -61,7 +83,7 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
     }
 
     /**
-     * @param integer $page
+     * @param int $page
      */
     public function moveToPage($page)
     {
@@ -69,6 +91,7 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
             if ($this->noElement('next', false)) {
                 $message = sprintf('Page %d was not found!', $page);
                 Helper::throwException($message);
+
                 return;
             }
             $this->moveDirection('next');
@@ -79,7 +102,8 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
 
     /**
      * @param string $locator
-     * @param  bool $throwException
+     * @param bool   $throwException
+     *
      * @return bool
      */
     public function noElement($locator, $throwException = true)

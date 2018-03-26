@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 /**
@@ -58,7 +59,7 @@ namespace Shopware\Components\Theme;
  * </code>
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LessDefinition
@@ -67,20 +68,22 @@ class LessDefinition
      * Array of less files which should be concatenated and compiled.
      * The compiler requires the full file path.
      *
-     * @var array $files
+     * @var array
      */
-    private $files = array();
+    private $files = [];
 
     /**
      * Directory which should be set as import directory.
      * If no `@import` used, the import directory can be ignored
-     * @var string $importDirectory
+     *
+     * @var string
      */
     private $importDirectory = null;
 
     /**
      * Less variables for the compiler.
      * Has to be an key value array.
+     *
      * @example
      * array(
      *    'fontColor' => '#fff',
@@ -88,16 +91,16 @@ class LessDefinition
      *    ...
      * )
      *
-     * @var array $config
+     * @var array
      */
     private $config;
 
     /**
-     * @param array $config Contains the less variables, has to be a key value array.
-     * @param array $files Contains the full file name paths.
-     * @param null $importDirectory Full path to the import directory for less @import commands
+     * @param array $config          contains the less variables, has to be a key value array
+     * @param array $files           contains the full file name paths
+     * @param null  $importDirectory Full path to the import directory for less @import commands
      */
-    public function __construct(array $config = array(), array $files = array(), $importDirectory = null)
+    public function __construct(array $config = [], array $files = [], $importDirectory = null)
     {
         $this->config = $config;
         $this->files = $files;

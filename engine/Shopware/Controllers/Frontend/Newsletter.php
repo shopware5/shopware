@@ -30,6 +30,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     /**
      * Transition method
      * Confirm action method
+     *
      * @deprecated
      */
     public function confirmAction()
@@ -37,19 +38,169 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         // todo@all maybe this method can be deleted once all references are removed
         // transition method
         // confirm check is done via helper method isConfirmed()
-        return $this->forward("index");
+        return $this->forward('index');
+    }
+
+    /**
+     * Index action method
+     */
+    public function indexAction()
+    {
+        $this->View()->voteConfirmed = $this->isConfirmed();
+
+        if (isset($this->Request()->sUnsubscribe)) {
+            $this->View()->sUnsubscribe = true;
+        } else {
+            $this->View()->sUnsubscribe = false;
+        }
+
+        $this->View()->_POST = Shopware()->System()->_POST->toArray();
+
+        if (!isset(Shopware()->System()->_POST['newsletter'])) {
+            return;
+        }
+
+        if (Shopware()->System()->_POST['subscribeToNewsletter'] != 1) {
+            // Unsubscribe user
+            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
+
+            $session = $this->container->get('session');
+            if ($session->offsetExists('sNewsletter')) {
+                $session->offsetSet('sNewsletter', false);
+            }
+
+            return;
+        }
+
+        if (empty(Shopware()->Config()->sOPTINNEWSLETTER) || $this->View()->voteConfirmed) {
+            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+            if ($this->View()->sStatus['code'] == 3) {
+                // Send mail to subscriber
+                $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sNEWSLETTERCONFIRMATION');
+            }
+        } else {
+            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+            if ($this->View()->sStatus['code'] == 3) {
+                Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
+                $hash = \Shopware\Components\Random::getAlphanumericString(32);
+                $data = serialize(Shopware()->System()->_POST->toArray());
+
+                $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash]);
+
+                $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
+
+                // Setting status-code
+                $this->View()->sStatus = ['code' => 3, 'message' => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation')];
+
+                Shopware()->Db()->query('
+                INSERT INTO s_core_optin (datum,hash,data)
+                VALUES (
+                now(),?,?
+                )
+                ', [$hash, $data]);
+            }
+        }
+    }
+
+    /**
+     * Listing action method
+     */
+    public function listingAction()
+    {
+        $customergroups = $this->getCustomerGroups();
+        $customergroups = Shopware()->Db()->quote($customergroups);
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+
+        $page = (int) $this->Request()->getQuery('sPage', 1);
+        $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
+
+        $sql = "
+            SELECT SQL_CALC_FOUND_ROWS id, IF(datum IS NULL,'',datum) as `date`, subject as description, sendermail, sendername
+            FROM `s_campaigns_mailings`
+            WHERE `status`!=0
+            AND plaintext=0
+            AND `publish`!=0
+            AND languageID=?
+            AND customergroup IN ($customergroups)
+            ORDER BY `id` DESC
+        ";
+        $sql = Shopware()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
+        $result = Shopware()->Db()->query($sql, [$context->getShop()->getId()]);
+
+        //$count has to be set before calling Router::assemble() because it removes the FOUND_ROWS()
+        $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
+        $count = Shopware()->Db()->fetchOne($sql);
+        if ($perPage != 0) {
+            $count = ceil($count / $perPage);
+        } else {
+            $count = 0;
+        }
+
+        $content = [];
+        while ($row = $result->fetch()) {
+            $row['link'] = $this->Front()->Router()->assemble(['action' => 'detail', 'sID' => $row['id']]);
+            $content[] = $row;
+        }
+
+        $pages = [];
+        for ($i = 1; $i <= $count; ++$i) {
+            if ($i == $page) {
+                $pages['numbers'][$i]['markup'] = true;
+            } else {
+                $pages['numbers'][$i]['markup'] = false;
+            }
+            $pages['numbers'][$i]['value'] = $i;
+            $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'listing', 'sPage' => $i]);
+        }
+
+        $this->View()->sPage = $page;
+        $this->View()->sNumberPages = $count;
+        $this->View()->sPages = $pages;
+        $this->View()->sContent = $content;
+    }
+
+    /**
+     * Detail action method
+     */
+    public function detailAction()
+    {
+        $customergroups = $this->getCustomerGroups();
+        $customergroups = Shopware()->Db()->quote($customergroups);
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+
+        $sql = "
+            SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername
+            FROM `s_campaigns_mailings`
+            WHERE `status`!=0
+            AND plaintext=0
+            AND publish!=0
+            AND languageID=?
+            AND id=?
+            AND customergroup IN ($customergroups)
+        ";
+        $content = Shopware()->Db()->fetchRow($sql, [$context->getShop()->getId(), $this->Request()->sID]);
+        if (!empty($content)) {
+            // todo@all Hash-Building in rework phase berücksichtigen
+            $license = '';
+            $content['hash'] = [$content['id'], $license];
+            $content['hash'] = md5(implode('|', $content['hash']));
+            $content['link'] = $this->Front()->Router()->assemble(['module' => 'backend', 'controller' => 'newsletter', 'id' => $content['id'], 'hash' => $content['hash'], 'fullPath' => true]);
+        }
+
+        $this->View()->sContentItem = $content;
+        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing']);
     }
 
     /**
      * Send mail method
      *
-     * @param string $recipient
-     * @param string $template
-     * @param boolean|string $optin
+     * @param string      $recipient
+     * @param string      $template
+     * @param bool|string $optin
      */
     protected function sendMail($recipient, $template, $optin = false)
     {
-        $context = array();
+        $context = [];
 
         if (!empty($optin)) {
             $context['sConfirmLink'] = $optin;
@@ -78,24 +229,23 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         $getVote = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_core_optin WHERE hash = ?",
-            array($this->Request()->sConfirmation)
+            'SELECT * FROM s_core_optin WHERE hash = ?',
+            [$this->Request()->sConfirmation]
         );
 
-        if (empty($getVote["data"])) {
+        if (empty($getVote['data'])) {
             return false;
         }
 
-        Shopware()->System()->_POST = unserialize($getVote["data"]);
+        Shopware()->System()->_POST = unserialize($getVote['data']);
 
         Shopware()->Db()->query(
-            "DELETE FROM s_core_optin WHERE hash = ?",
-            array($this->Request()->sConfirmation)
+            'DELETE FROM s_core_optin WHERE hash = ?',
+            [$this->Request()->sConfirmation]
         );
 
         return true;
     }
-
 
     /**
      * Returns customer groups
@@ -104,7 +254,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
      */
     protected function getCustomerGroups()
     {
-        $customergroups = array('EK');
+        $customergroups = ['EK'];
 
         $defaultCustomerGroupKey = Shopware()->Shop()->getCustomerGroup()->getKey();
         if (!empty($defaultCustomerGroupKey)) {
@@ -114,156 +264,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $customergroups[] = Shopware()->System()->sUSERGROUPDATA['groupkey'];
         }
         $customergroups = array_unique($customergroups);
+
         return $customergroups;
-    }
-
-    /**
-     * Index action method
-     */
-    public function indexAction()
-    {
-        $this->View()->voteConfirmed = $this->isConfirmed();
-
-        if (isset($this->Request()->sUnsubscribe)) {
-            $this->View()->sUnsubscribe = true;
-        } else {
-            $this->View()->sUnsubscribe = false;
-        }
-
-        $this->View()->_POST = Shopware()->System()->_POST->toArray();
-
-        if (!isset(Shopware()->System()->_POST["newsletter"])) {
-            return;
-        }
-
-        if (Shopware()->System()->_POST["subscribeToNewsletter"] != 1) {
-            // Unsubscribe user
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
-
-            $session = $this->container->get('session');
-            if ($session->offsetExists('sNewsletter')) {
-                $session->offsetSet('sNewsletter', false);
-            }
-
-            return;
-        }
-
-        if (empty(Shopware()->Config()->sOPTINNEWSLETTER) || $this->View()->voteConfirmed) {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], false);
-            if ($this->View()->sStatus['code'] == 3) {
-                // Send mail to subscriber
-                $this->sendMail(Shopware()->System()->_POST["newsletter"], 'sNEWSLETTERCONFIRMATION');
-            }
-        } else {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], false);
-            if ($this->View()->sStatus["code"] == 3) {
-                Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
-                $hash = \Shopware\Components\Random::getAlphanumericString(32);
-                $data = serialize(Shopware()->System()->_POST->toArray());
-
-                $link = $this->Front()->Router()->assemble(array('sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash));
-
-                $this->sendMail(Shopware()->System()->_POST["newsletter"], 'sOPTINNEWSLETTER', $link);
-
-                // Setting status-code
-                $this->View()->sStatus = array("code" => 3, "message" => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation'));
-
-                Shopware()->Db()->query("
-                INSERT INTO s_core_optin (datum,hash,data)
-                VALUES (
-                now(),?,?
-                )
-                ", array($hash, $data));
-            }
-        }
-    }
-
-    /**
-     * Listing action method
-     */
-    public function listingAction()
-    {
-        $customergroups = $this->getCustomerGroups();
-        $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-
-        $page = (int) $this->Request()->getQuery('sPage', 1);
-        $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
-
-        $sql = "
-            SELECT SQL_CALC_FOUND_ROWS id, IF(datum IS NULL,'',datum) as `date`, subject as description, sendermail, sendername
-            FROM `s_campaigns_mailings`
-            WHERE `status`!=0
-            AND plaintext=0
-            AND `publish`!=0
-            AND languageID=?
-            AND customergroup IN ($customergroups)
-            ORDER BY `id` DESC
-        ";
-        $sql = Shopware()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
-        $result = Shopware()->Db()->query($sql, array($context->getShop()->getId()));
-
-        //$count has to be set before calling Router::assemble() because it removes the FOUND_ROWS()
-        $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
-        $count = Shopware()->Db()->fetchOne($sql);
-        if ($perPage != 0) {
-            $count = ceil($count / $perPage);
-        } else {
-            $count = 0;
-        }
-
-        $content = array();
-        while ($row = $result->fetch()) {
-            $row['link'] = $this->Front()->Router()->assemble(array('action' => 'detail', 'sID' => $row['id']));
-            $content[] = $row;
-        }
-
-        $pages = array();
-        for ($i = 1; $i <= $count; $i++) {
-            if ($i == $page) {
-                $pages['numbers'][$i]['markup'] = true;
-            } else {
-                $pages['numbers'][$i]['markup'] = false;
-            }
-            $pages['numbers'][$i]['value'] = $i;
-            $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble(array('sViewport' => 'newsletter', 'action' => 'listing', 'sPage' => $i));
-        }
-
-        $this->View()->sPage = $page;
-        $this->View()->sNumberPages = $count;
-        $this->View()->sPages = $pages;
-        $this->View()->sContent = $content;
-    }
-
-    /**
-     * Detail action method
-     */
-    public function detailAction()
-    {
-        $customergroups = $this->getCustomerGroups();
-        $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-
-        $sql = "
-            SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername
-            FROM `s_campaigns_mailings`
-            WHERE `status`!=0
-            AND plaintext=0
-            AND publish!=0
-            AND languageID=?
-            AND id=?
-            AND customergroup IN ($customergroups)
-        ";
-        $content = Shopware()->Db()->fetchRow($sql, array($context->getShop()->getId(), $this->Request()->sID));
-        if (!empty($content)) {
-            // todo@all Hash-Building in rework phase berücksichtigen
-            $license = "";
-            $content['hash'] = array($content['id'], $license);
-            $content['hash'] = md5(implode('|', $content['hash']));
-            $content['link'] = $this->Front()->Router()->assemble(array('module' => 'backend', 'controller' => 'newsletter', 'id' => $content['id'], 'hash' => $content['hash'], 'fullPath' => true));
-        }
-
-        $this->View()->sContentItem = $content;
-        $this->View()->sBackLink = $this->Front()->Router()->assemble(array('action' => 'listing'));
     }
 }

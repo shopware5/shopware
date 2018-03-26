@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ContextServiceInterface
@@ -93,15 +93,12 @@ interface ContextServiceInterface
      * @deprecated since version 5.2, to be removed in 6.0 - Use initializeShopContext instead
      * Initials a global context class which contains
      * all information about the current request state.
-     *
-     * @return void
      */
     public function initializeContext();
 
     /**
      * Initials a shop context class which contains
      * the information about the shop state
-     * @return void
      */
     public function initializeShopContext();
 
@@ -109,7 +106,6 @@ interface ContextServiceInterface
      * @deprecated since version 5.2, to be removed in 6.0 - Use initializeShopContext instead
      * Initials a location context class which contains
      * the information about the country state
-     * @return void
      */
     public function initializeLocationContext();
 
@@ -117,23 +113,25 @@ interface ContextServiceInterface
      * @deprecated since version 5.2, to be removed in 6.0 - Use initializeShopContext instead
      * Initials a product context class which contains
      * all required information to calculate a product.
-     * @return void
      */
     public function initializeProductContext();
 
     /**
      * @deprecated since version 5.2, to be removed in 6.0 - Use createShopContext instead
-     * @param int $shopId
-     * @param null|int $currencyId
+     *
+     * @param int         $shopId
+     * @param null|int    $currencyId
      * @param string|null $customerGroupKey
+     *
      * @return Struct\ProductContextInterface
      */
     public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null);
 
     /**
-     * @param int $shopId
-     * @param null|int $currencyId
+     * @param int         $shopId
+     * @param null|int    $currencyId
      * @param string|null $customerGroupKey
+     *
      * @return Struct\ProductContextInterface
      */
     public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null);

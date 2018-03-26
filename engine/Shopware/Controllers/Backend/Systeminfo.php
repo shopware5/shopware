@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -32,22 +33,20 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
 {
     public function initAcl()
     {
-        $this->addAclPermission("getConfigList", "read", "You're not allowed to open the module.");
-        $this->addAclPermission("getPathList", "read", "You're not allowed to open the module.");
-        $this->addAclPermission("getFileList", "read", "You're not allowed to open the module.");
-        $this->addAclPermission("getVersionList", "read", "You're not allowed to open the module.");
-        $this->addAclPermission("getEnconder", "read", "You're not allowed to open the module.");
-        $this->addAclPermission("info", "read", "You're not allowed to open the module.");
+        $this->addAclPermission('getConfigList', 'read', "You're not allowed to open the module.");
+        $this->addAclPermission('getPathList', 'read', "You're not allowed to open the module.");
+        $this->addAclPermission('getFileList', 'read', "You're not allowed to open the module.");
+        $this->addAclPermission('getVersionList', 'read', "You're not allowed to open the module.");
+        $this->addAclPermission('getEnconder', 'read', "You're not allowed to open the module.");
+        $this->addAclPermission('info', 'read', "You're not allowed to open the module.");
     }
 
     /**
      * Disable template engine for all actions
-     *
-     * @return void
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'info'))) {
+        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'info'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
         }
     }
@@ -68,7 +67,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
                 unset($result['checks'][$key]);
             }
         }
-        $this->View()->assign(array('success' => true, 'data' => array_merge($result['checks'])));
+        $this->View()->assign(['success' => true, 'data' => array_merge($result['checks'])]);
     }
 
     /**
@@ -77,7 +76,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     public function getPathListAction()
     {
         $list = new Shopware_Components_Check_Path();
-        $this->View()->assign(array('success' => true, 'data' => $list->toArray()));
+        $this->View()->assign(['success' => true, 'data' => $list->toArray()]);
     }
 
     /**
@@ -87,7 +86,8 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $fileName = __DIR__ . '/../../Components/Check/Data/Files.md5sums';
         if (!is_file($fileName)) {
-            $this->View()->assign(array('success' => true, 'data' => array()));
+            $this->View()->assign(['success' => true, 'data' => []]);
+
             return;
         }
 
@@ -97,7 +97,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
 
         $list = new Shopware_Components_Check_File($fileName, Shopware()->DocPath(), $skipList);
 
-        $this->View()->assign(array('success' => true, 'data' => $list->toArray()));
+        $this->View()->assign(['success' => true, 'data' => $list->toArray()]);
     }
 
     /**
@@ -107,7 +107,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $select = Shopware()->Db()->select()->from(
             's_core_plugins',
-            array('version', 'name', 'namespace', 'source')
+            ['version', 'name', 'namespace', 'source']
         );
 
         $rows = Shopware()->Db()->fetchAll($select);
@@ -116,9 +116,9 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
             $rows[$key]['name'] = $row['namespace'] . '/' . $row['source'] . '/' . $row['name'];
         }
 
-        array_unshift($rows, array('name' => 'Shopware', 'version' => Shopware()->Config()->Version));
+        array_unshift($rows, ['name' => 'Shopware', 'version' => Shopware()->Config()->Version]);
 
-        $this->View()->assign(array('success' => true, 'data' => $rows));
+        $this->View()->assign(['success' => true, 'data' => $rows]);
     }
 
     /**
@@ -139,10 +139,10 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
             }
         }
         if (empty($encoder)) {
-            $encoder = "none";
+            $encoder = 'none';
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $encoder));
+        $this->View()->assign(['success' => true, 'data' => $encoder]);
     }
 
     /**
@@ -151,8 +151,8 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     public function infoAction()
     {
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
-        $_COOKIE = array();
-        $_REQUEST = array();
+        $_COOKIE = [];
+        $_REQUEST = [];
         $_SERVER['HTTP_COOKIE'] = null;
         if (function_exists('apache_setenv')) {
             apache_setenv('HTTP_COOKIE', null);
@@ -168,7 +168,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     public function getWhitelistedCSRFActions()
     {
         return [
-            'info'
+            'info',
         ];
     }
 }

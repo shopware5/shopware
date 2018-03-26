@@ -57,7 +57,8 @@ class Notification
 
     /**
      * @param string $eventName
-     * @param array $additionalInformation
+     * @param array  $additionalInformation
+     *
      * @return array|false
      */
     public function doTrackEvent($eventName, $additionalInformation = [])
@@ -69,7 +70,7 @@ class Notification
         ];
 
         try {
-            $response = $this->client->post($this->apiEndPoint.'/tracking/events', json_encode($payload));
+            $response = $this->client->post($this->apiEndPoint . '/tracking/events', json_encode($payload));
         } catch (\Exception $ex) {
             return false;
         }

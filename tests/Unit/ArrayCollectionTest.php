@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ArrayCollectionTest extends TestCase
@@ -39,10 +39,10 @@ class ArrayCollectionTest extends TestCase
      */
     public function testArrayCollectionGet()
     {
-        $collection = new ArrayCollection(array(
-            'key_one'=>'wert1',
-            'key_two'=>'wert2',
-        ));
+        $collection = new ArrayCollection([
+            'key_one' => 'wert1',
+            'key_two' => 'wert2',
+        ]);
 
         $this->assertEquals('wert1', $collection->key_one);
         $this->assertEquals('wert1', $collection->getKeyOne());

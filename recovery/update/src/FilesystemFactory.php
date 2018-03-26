@@ -24,9 +24,9 @@
 
 namespace Shopware\Recovery\Update;
 
-use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Ftp as FtpAdapter;
 use Gaufrette\Adapter\Local as LocalAdapter;
+use Gaufrette\Filesystem;
 
 class FilesystemFactory
 {

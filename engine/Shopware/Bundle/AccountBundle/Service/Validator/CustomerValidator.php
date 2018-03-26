@@ -36,7 +36,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class CustomerValidator
- * @package Shopware\Bundle\AccountBundle\Service\Validator
  */
 class CustomerValidator implements CustomerValidatorInterface
 {
@@ -62,8 +61,9 @@ class CustomerValidator implements CustomerValidatorInterface
 
     /**
      * CustomerValidator constructor.
-     * @param ValidatorInterface $validator
-     * @param ContextServiceInterface $context
+     *
+     * @param ValidatorInterface          $validator
+     * @param ContextServiceInterface     $context
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -78,6 +78,7 @@ class CustomerValidator implements CustomerValidatorInterface
 
     /**
      * @param Customer $customer
+     *
      * @throws ValidationException
      */
     public function validate(Customer $customer)
@@ -91,8 +92,8 @@ class CustomerValidator implements CustomerValidatorInterface
             new CustomerEmail([
                 'shop' => $this->context->getShopContext()->getShop(),
                 'customerId' => $customer->getId(),
-                'accountMode' => $customer->getAccountMode()
-            ])
+                'accountMode' => $customer->getAccountMode(),
+            ]),
         ]);
 
         if ($this->validationContext->getViolations()->count()) {
@@ -101,7 +102,7 @@ class CustomerValidator implements CustomerValidatorInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isValid(Customer $customer)
     {
@@ -115,8 +116,8 @@ class CustomerValidator implements CustomerValidatorInterface
     }
 
     /**
-     * @param string $property
-     * @param string $value
+     * @param string       $property
+     * @param string       $value
      * @param Constraint[] $constraints
      */
     private function validateField($property, $value, $constraints)
@@ -130,6 +131,7 @@ class CustomerValidator implements CustomerValidatorInterface
     private function getSalutationConstraints()
     {
         $salutations = explode(',', $this->config->get('shopsalutations'));
+
         return [new NotBlank(), new Choice(['choices' => $salutations])];
     }
 }

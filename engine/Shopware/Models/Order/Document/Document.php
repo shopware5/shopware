@@ -24,11 +24,10 @@
 
 namespace Shopware\Models\Order\Document;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware order detail model represents a single detail data of an order .
  * <br>
  * The Shopware order detail model represents a row of the order_details table.
@@ -45,7 +44,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Document extends ModelEntity
 {
     /**
-     * @var integer $id
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Document
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="ID", type="integer", nullable=false)
      * @ORM\Id
@@ -54,49 +61,49 @@ class Document extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTime $date
+     * @var \DateTime
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
     private $date;
 
     /**
-     * @var integer $typeId
+     * @var int
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
     private $typeId;
 
     /**
-     * @var integer $customerId
+     * @var int
      *
      * @ORM\Column(name="userID", type="integer", nullable=false)
      */
     private $customerId;
 
     /**
-     * @var integer $orderId
+     * @var int
      *
      * @ORM\Column(name="orderID", type="integer", nullable=false)
      */
     private $orderId;
 
     /**
-     * @var float $amount
+     * @var float
      *
      * @ORM\Column(name="amount", type="float", nullable=false)
      */
     private $amount;
 
     /**
-     * @var integer $documentId
+     * @var int
      *
      * @ORM\Column(name="docID", type="integer", nullable=false)
      */
     private $documentId;
 
     /**
-     * @var string $hash
+     * @var string
      *
      * @ORM\Column(name="hash", type="string", length=255, nullable=false)
      */
@@ -105,6 +112,7 @@ class Document extends ModelEntity
     /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="documents")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Order\Order
      */
     private $order;
@@ -112,21 +120,15 @@ class Document extends ModelEntity
     /**
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Document\Type")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
+     *
      * @var
      */
     private $type;
 
     /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\Document
-     */
-    protected $attribute;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -137,11 +139,13 @@ class Document extends ModelEntity
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return Document
      */
     public function setDate($date)
     {
         $this->date = $date;
+
         return $this;
     }
 
@@ -158,19 +162,21 @@ class Document extends ModelEntity
     /**
      * Set customerId
      *
-     * @param integer $customerId
+     * @param int $customerId
+     *
      * @return Document
      */
     public function setCustomerId($customerId)
     {
         $this->customerId = $customerId;
+
         return $this;
     }
 
     /**
      * Get customerId
      *
-     * @return integer
+     * @return int
      */
     public function getCustomerId()
     {
@@ -180,19 +186,21 @@ class Document extends ModelEntity
     /**
      * Set orderId
      *
-     * @param integer $orderId
+     * @param int $orderId
+     *
      * @return Document
      */
     public function setOrderId($orderId)
     {
         $this->orderId = $orderId;
+
         return $this;
     }
 
     /**
      * Get orderId
      *
-     * @return integer
+     * @return int
      */
     public function getOrderId()
     {
@@ -203,11 +211,13 @@ class Document extends ModelEntity
      * Set amount
      *
      * @param float $amount
+     *
      * @return Document
      */
     public function setAmount($amount)
     {
         $this->amount = $amount;
+
         return $this;
     }
 
@@ -224,19 +234,21 @@ class Document extends ModelEntity
     /**
      * Set documentId
      *
-     * @param integer $documentId
+     * @param int $documentId
+     *
      * @return Document
      */
     public function setDocumentId($documentId)
     {
         $this->documentId = $documentId;
+
         return $this;
     }
 
     /**
      * Get documentId
      *
-     * @return integer
+     * @return int
      */
     public function getDocumentId()
     {
@@ -247,11 +259,13 @@ class Document extends ModelEntity
      * Set hash
      *
      * @param string $hash
+     *
      * @return Document
      */
     public function setHash($hash)
     {
         $this->hash = $hash;
+
         return $this;
     }
 
@@ -323,6 +337,7 @@ class Document extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Document|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Document
      */
     public function setAttribute($attribute)

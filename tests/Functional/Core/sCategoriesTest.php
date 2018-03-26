@@ -35,13 +35,13 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCategories::sGetCategories
+     * @covers \sCategories::sGetCategories
      */
     public function testGetCategoriesWithShopCategory()
     {
         $categoryTree = $this->module->sGetCategories(Shopware()->Shop()->get('parentID'));
 
-        $ids = Shopware()->Db()->fetchCol("SELECT id from s_categories WHERE path LIKE '|".Shopware()->Shop()->get('parentID')."|'");
+        $ids = Shopware()->Db()->fetchCol("SELECT id from s_categories WHERE path LIKE '|" . Shopware()->Shop()->get('parentID') . "|'");
 
         foreach ($categoryTree as $key => $category) {
             $this->assertContains($key, $ids);
@@ -54,7 +54,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCategories::sGetCategories
+     * @covers \sCategories::sGetCategories
      */
     public function testGetCategoriesWithSubcategory()
     {
@@ -67,9 +67,8 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         }
     }
 
-
     /**
-     * @covers sCategories::sGetCategoryIdByArticleId
+     * @covers \sCategories::sGetCategoryIdByArticleId
      */
     public function testsGetCategoryIdByArticleId()
     {
@@ -99,7 +98,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCategories::sGetCategoriesByParent
+     * @covers \sCategories::sGetCategoriesByParent
      */
     public function testsGetCategoriesByParent()
     {
@@ -130,7 +129,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCategories::sGetWholeCategoryTree
+     * @covers \sCategories::sGetWholeCategoryTree
      */
     public function testsGetWholeCategoryTree()
     {
@@ -153,7 +152,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         }
 
         // Inactive categories are not loaded
-        $inactive = Shopware()->Db()->fetchOne("SELECT parent FROM s_categories WHERE active = 0");
+        $inactive = Shopware()->Db()->fetchOne('SELECT parent FROM s_categories WHERE active = 0');
         $inactiveParentCategory = $this->module->sGetWholeCategoryTree($inactive);
         foreach ($inactiveParentCategory as $category) {
             $this->validateCategory($category, 'sub');
@@ -178,13 +177,13 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCategories::sGetCategoryContent
+     * @covers \sCategories::sGetCategoryContent
      */
     public function testsGetCategoryContent()
     {
         // Call dispatch as we need the Router to be available inside sCore
         $this->dispatch('/');
-        
+
         // Default arguments should work
         $this->assertEquals(
             $this->module->sGetCategoryContent(null),
@@ -205,7 +204,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCategories::sGetCategoryPath
+     * @covers \sCategories::sGetCategoryPath
      */
     public function testsGetCategoryPath()
     {
@@ -225,12 +224,13 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Test the sGetWholeCategoryTree method.
      * This should now only return children when all parents are active
+     *
      * @ticket SW-5098
      */
     public function testGetWholeCategoryTree()
     {
         //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
-        $sql= "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
+        $sql = "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
         Shopware()->Db()->exec($sql);
 
         $allCategories = $this->module->sGetWholeCategoryTree(3, 3);
@@ -238,20 +238,19 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         //get "Genusswelten" this category should not have the inactive category "Tees and Zubehör" as subcategory
         $category = $this->getCategoryById($allCategories, 5);
         //search for Tees und Zubehör
-        $result = $this->getCategoryById($category["sub"], 11);
+        $result = $this->getCategoryById($category['sub'], 11);
         $this->assertEmpty($result);
-
 
         //if the parent category is inactive the child's should not be displayed
         //category = "Genusswelten" the active child "Tees" and "Tees und Zubehör" should not be return because the father ist inactive
-        $result = $this->getCategoryById($category["sub"], 12);
+        $result = $this->getCategoryById($category['sub'], 12);
         $this->assertEmpty($result);
 
-        $result = $this->getCategoryById($category["sub"], 13);
+        $result = $this->getCategoryById($category['sub'], 13);
         $this->assertEmpty($result);
 
         //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
-        $sql= "UPDATE `s_categories` SET `active` = '1' WHERE `id` = 11";
+        $sql = "UPDATE `s_categories` SET `active` = '1' WHERE `id` = 11";
         Shopware()->Db()->exec($sql);
     }
 
@@ -260,15 +259,17 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @param $allCategories
      * @param $categoryId
+     *
      * @return category
      */
     private function getCategoryById($allCategories, $categoryId)
     {
         foreach ($allCategories as $category) {
-            if ($category["id"] == $categoryId) {
+            if ($category['id'] == $categoryId) {
                 return $category;
             }
         }
+
         return null;
     }
 

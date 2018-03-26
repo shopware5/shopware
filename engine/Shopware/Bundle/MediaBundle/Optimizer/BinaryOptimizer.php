@@ -39,7 +39,7 @@ abstract class BinaryOptimizer implements OptimizerInterface
     abstract public function getCommand();
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -48,6 +48,7 @@ abstract class BinaryOptimizer implements OptimizerInterface
 
     /**
      * @param string $filepath
+     *
      * @return array
      */
     public function getCommandArguments($filepath)
@@ -56,7 +57,7 @@ abstract class BinaryOptimizer implements OptimizerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run($filepath)
     {
@@ -82,7 +83,7 @@ abstract class BinaryOptimizer implements OptimizerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isRunnable()
     {

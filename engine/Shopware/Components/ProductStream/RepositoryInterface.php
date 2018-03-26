@@ -30,12 +30,13 @@ interface RepositoryInterface
 {
     /**
      * @param Criteria $criteria
-     * @param int $productStreamId
+     * @param int      $productStreamId
      */
     public function prepareCriteria(Criteria $criteria, $productStreamId);
 
     /**
      * @param array $serializedConditions
+     *
      * @return object[]
      */
     public function unserialize($serializedConditions);

@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Blog;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Standard Code Model Entity
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Comment extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -45,35 +45,35 @@ class Comment extends ModelEntity
     private $id;
 
     /**
-     * @var integer $blogId
+     * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
     private $blogId;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $headline
+     * @var string
      *
      * @ORM\Column(name="headline", type="string", nullable=false)
      */
     private $headline;
 
     /**
-     * @var string $comment
+     * @var string
      *
      * @ORM\Column(name="comment", type="string", nullable=false)
      */
     private $comment;
 
     /**
-     * @var \DateTime $creationDate
+     * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
@@ -82,20 +82,20 @@ class Comment extends ModelEntity
     /**
      * Flag which shows if the blog comment is active or not. 1= active otherwise inactive
      *
-     * @var boolean $active
+     * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
 
     /**
-     * @var string $email
+     * @var string
      *
      * @ORM\Column(name="email", type="string", nullable=false)
      */
     private $email;
 
     /**
-     * @var double $points
+     * @var float
      *
      * @ORM\Column(name="points", type="decimal", nullable=false)
      */
@@ -107,7 +107,6 @@ class Comment extends ModelEntity
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
      */
     private $blog;
-
 
     /**
      * Set id
@@ -122,7 +121,7 @@ class Comment extends ModelEntity
     /**
      * Set Active
      *
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {

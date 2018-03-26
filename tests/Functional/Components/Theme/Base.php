@@ -85,7 +85,8 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getBareTheme()
     {
-        require_once(__DIR__ . '/Themes/TestBare/Theme.php');
+        require_once __DIR__ . '/Themes/TestBare/Theme.php';
+
         return new \Shopware\Themes\TestBare\Theme();
     }
 
@@ -94,7 +95,8 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getResponsiveTheme()
     {
-        require_once(__DIR__ . '/Themes/TestResponsive/Theme.php');
+        require_once __DIR__ . '/Themes/TestResponsive/Theme.php';
+
         return new \Shopware\Themes\TestResponsive\Theme();
     }
 
@@ -122,13 +124,13 @@ class Base extends \Enlight_Components_Test_TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object &$object Instantiated object that we will run method on.
+     * @param object &$object    Instantiated object that we will run method on
      * @param string $methodName Method name to call
-     * @param array $parameters Array of parameters to pass into method.
+     * @param array  $parameters array of parameters to pass into method
      *
-     * @return mixed Method return.
+     * @return mixed method return
      */
-    protected function invokeMethod(&$object, $methodName, array $parameters = array())
+    protected function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);

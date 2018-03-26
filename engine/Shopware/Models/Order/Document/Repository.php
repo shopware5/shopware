@@ -43,40 +43,45 @@ class Repository extends ModelRepository
      * To determine the total number of records, use the following syntax:
      * Shopware()->Models()->getQueryCount($query);
      *
-     * @param       $orderId
-     * @param null  $filter
-     * @param null  $orderBy
-     * @param  null $limit
-     * @param  null $offset
+     * @param      $orderId
+     * @param null $filter
+     * @param null $orderBy
+     * @param null $limit
+     * @param null $offset
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery($orderId, $filter = null, $orderBy = null, $limit = null, $offset = null)
     {
-        /** @var $builder \Doctrine\ORM\QueryBuilder*/
+        /** @var $builder \Doctrine\ORM\QueryBuilder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder = $this->selectListQuery($builder);
 
         $builder = $this->filterListQuery($builder, $filter);
         $this->addOrderBy($builder, $orderBy);
 
-        $builder->andWhere($builder->expr()->eq('documents.orderId', $orderId));
+        $builder->andWhere('documents.orderId = :orderId')
+            ->setParameter('orderId', $orderId);
 
         if ($limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function which sets the fromPath and the selectPath for the order list query.
+     *
      * @param \Doctrine\ORM\QueryBuilder $builder
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     protected function selectListQuery(\Doctrine\ORM\QueryBuilder $builder)
     {
         //select the different entities
-        $builder->select(array(
+        $builder->select([
             'documents.id as id',
             'documents.date as date',
             'documents.typeId as typeId',
@@ -85,8 +90,8 @@ class Repository extends ModelRepository
             'documents.amount as amount',
             'documents.documentId as documentId',
             'documents.hash as hash',
-            'type.name as typeName'
-        ));
+            'type.name as typeName',
+        ]);
 
         //join the required tables for the order list
         $builder->from('Shopware\Models\Order\Document\Document', 'documents')
@@ -95,7 +100,7 @@ class Repository extends ModelRepository
         return $builder;
     }
 
-    protected function filterListQuery(\Doctrine\ORM\QueryBuilder $builder, $filter=null)
+    protected function filterListQuery(\Doctrine\ORM\QueryBuilder $builder, $filter = null)
     {
         return $builder;
     }

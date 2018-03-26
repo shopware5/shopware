@@ -28,7 +28,6 @@ use Shopware\Components\Form\Field;
 
 /**
  * Class Selection
- * @package Shopware\Components\Form\Field
  */
 class Selection extends Field
 {
@@ -41,8 +40,9 @@ class Selection extends Field
 
     /**
      * Requires to set a name for the field
+     *
      * @param $name
-     * @param  array[] $store [['text' => 'displayText', 'value'  => 10], ...]
+     * @param array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      */
     public function __construct($name, $store)
     {
@@ -75,7 +75,7 @@ class Selection extends Field
 
         if (!$this->store) {
             throw new \Exception(sprintf(
-                "Field %s requires a configured store",
+                'Field %s requires a configured store',
                 $this->name
             ));
         }

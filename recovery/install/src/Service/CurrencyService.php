@@ -24,36 +24,35 @@
 
 namespace Shopware\Recovery\Install\Service;
 
-use Shopware\Recovery\Install\Struct\AdminUser;
 use Shopware\Recovery\Install\Struct\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CurrencyService
 {
-    private $currencySettings = array(
-        'EUR' => array(
+    private $currencySettings = [
+        'EUR' => [
             'currency_name' => 'Euro',
             'currency' => 'EUR',
             'template_char' => '&euro;',
-            'symbol_position' => 0
-        ),
-        'USD' => array(
+            'symbol_position' => 0,
+        ],
+        'USD' => [
             'currency_name' => 'US Dollar',
             'currency' => 'USD',
             'template_char' => '$',
-            'symbol_position' => 0
-        ),
-        'GBP' => array(
+            'symbol_position' => 0,
+        ],
+        'GBP' => [
             'currency_name' => 'Pound',
             'currency' => 'GBP',
             'template_char' => '&pound;',
-            'symbol_position' => 0
-        )
-    );
+            'symbol_position' => 0,
+        ],
+    ];
     /**
      * @var \PDO
      */
@@ -68,7 +67,8 @@ class CurrencyService
     }
 
     /**
-     * @param  Shop $shop
+     * @param Shop $shop
+     *
      * @throws \RuntimeException
      */
     public function updateCurrency(Shop $shop)
@@ -81,10 +81,10 @@ class CurrencyService
 
         try {
             $prepareStatement = $this->connection->prepare(
-                "UPDATE s_core_currencies SET
+                'UPDATE s_core_currencies SET
                 `name` = :currency_name, templatechar = :template_char,
                 symbol_position = :symbol_position, currency = :currency
-                WHERE id = 1"
+                WHERE id = 1'
             );
             $prepareStatement->execute($this->currencySettings[$currency]);
         } catch (\Exception $e) {

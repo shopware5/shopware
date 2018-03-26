@@ -24,10 +24,9 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
@@ -37,67 +36,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Esd extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer $articleId
-     *
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
-     */
-    private $articleId;
-
-    /**
-     * @var integer $articleDetailId
-     *
-     * @ORM\Column(name="articleDetailsID", type="integer", nullable=false)
-     */
-    private $articleDetailId;
-
-    /**
-     * @var string $file
-     *
-     * @ORM\Column(name="file", type="string", length=255, nullable=true)
-     */
-    private $file = '';
-
-    /**
-     * @var boolean $serials
-     *
-     * @ORM\Column(name="serials", type="boolean", nullable=false)
-     */
-    private $hasSerials = false;
-
-    /**
-     * @var boolean notification
-     *
-     * @ORM\Column(name="notification", type="boolean", nullable=false)
-     */
-    private $notification = false;
-
-    /**
-     * @var integer $maxdownloads
-     *
-     * @ORM\Column(name="maxdownloads", type="integer", nullable=false)
-     */
-    private $maxdownloads = 0;
-
-    /**
-     * @var \DateTime $date
-     *
-     * @ORM\Column(name="datum", type="datetime", nullable=true)
-     */
-    private $date = null;
-
-    /**
      * INVERSE SIDE
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleEsd", mappedBy="articleEsd", cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\ArticleEsd
      */
     protected $attribute;
@@ -106,6 +48,7 @@ class Esd extends ModelEntity
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\EsdSerial", mappedBy="esd")
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $serials;
@@ -115,6 +58,7 @@ class Esd extends ModelEntity
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="esds")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Article\Article
      */
     protected $article;
@@ -124,9 +68,67 @@ class Esd extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="esd")
      * @ORM\JoinColumn(name="articleDetailsID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Article\Detail
      */
     protected $articleDetail;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     */
+    private $articleId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="articleDetailsID", type="integer", nullable=false)
+     */
+    private $articleDetailId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file", type="string", length=255, nullable=true)
+     */
+    private $file = '';
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="serials", type="boolean", nullable=false)
+     */
+    private $hasSerials = false;
+
+    /**
+     * @var bool notification
+     *
+     * @ORM\Column(name="notification", type="boolean", nullable=false)
+     */
+    private $notification = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="maxdownloads", type="integer", nullable=false)
+     */
+    private $maxdownloads = 0;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datum", type="datetime", nullable=true)
+     */
+    private $date = null;
 
     /**
      * Class constructor.
@@ -146,6 +148,7 @@ class Esd extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\ArticleEsd|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\ArticleEsd
      */
     public function setAttribute($attribute)
@@ -199,7 +202,7 @@ class Esd extends ModelEntity
     public function setArticleDetail(\Shopware\Models\Article\Detail $articleDetail)
     {
         $this->articleDetail = $articleDetail;
-        $this->article       = $articleDetail->getArticle();
+        $this->article = $articleDetail->getArticle();
     }
 
     /**
@@ -212,6 +215,7 @@ class Esd extends ModelEntity
 
     /**
      * @param null|\DateTime|string $date
+     *
      * @return Esd
      */
     public function setDate($date = null)
@@ -250,7 +254,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param boolean $hasSerials
+     * @param bool $hasSerials
      */
     public function setHasSerials($hasSerials)
     {
@@ -258,7 +262,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getHasSerials()
     {
@@ -282,7 +286,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param boolean $notification
+     * @param bool $notification
      */
     public function setNotification($notification)
     {
@@ -290,7 +294,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getNotification()
     {

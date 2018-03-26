@@ -31,7 +31,7 @@ use Shopware\Components\Model\Configuration;
  * Service class to initialize the doctrine annotation driver.
  *
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ModelAnnotation
@@ -41,6 +41,7 @@ class ModelAnnotation
      *
      * @param Configuration $config
      * @param string        $modelPath
+     *
      * @return AnnotationDriver
      */
     public function factory(Configuration $config, $modelPath)
