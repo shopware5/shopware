@@ -169,7 +169,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
                       ->from(\Shopware\Models\Site\Site::class, 'attribute')
-                      ->where('attribute.siteId = ?1')
+                      ->where('attribute.cmsStaticID = ?1')
                       ->setParameter(1, $siteId);
 
         return $builder;
