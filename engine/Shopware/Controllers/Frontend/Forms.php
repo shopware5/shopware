@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Random;
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
@@ -149,7 +148,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)->getFormQuery($formId, $shopId);
+        $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)
+            ->getActiveFormQuery($formId, $shopId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
@@ -226,6 +226,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         // prepare form data for view
         $formData = [
             'id' => (string) $form->getId(),  // intended string cast to keep compatibility
+            'active' => $form->getActive(),
             'name' => $form->getName(),
             'text' => $form->getText(),
             'text2' => $form->getText2(),

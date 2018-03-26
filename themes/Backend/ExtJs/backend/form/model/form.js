@@ -67,6 +67,7 @@ Ext.define('Shopware.apps.Form.model.Form', {
     fields : [
         //{block name="backend/form/model/form/fields"}{/block}
         { name : 'id',    type : 'int' },
+        { name : 'active', type: 'boolean', defaultValue: true },
         { name : 'name',  type : 'string' },
         { name : 'email', type : 'email' },
         { name : 'emailSubject', type : 'string' },

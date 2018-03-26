@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 [View all changes from v5.4.1...v5.4.2](https://github.com/shopware/shopware/compare/v5.4.1...v5.4.2)
 
+### Additions
+
+* Added possibility to enable/disable forms without having to delete them
+
 ### Changes
 
 * Changed password verification process for password protected actions in backend
@@ -47,6 +51,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `newsletter_header_content_logo`
   * `newsletter_header_content_title`
 * Added view variable `sCategoryContent` to the `listingCountAction` of the controller `Shopware_Controllers_Widgets_Listing`
+
 
 ### Changes
 
