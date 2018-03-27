@@ -22,48 +22,51 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Theme\EventListener;
+namespace Shopware\Bundle\SearchBundle\Condition;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * Registers the current backend theme for the backend requests.
- *
  * @category  Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class BackendTheme
+class ProductIdCondition implements ConditionInterface, \JsonSerializable
 {
     /**
-     * @var ContainerInterface
+     * @var int[]
      */
-    private $container;
+    protected $productIds;
 
     /**
-     * @param ContainerInterface $container
+     * @param int[] $productIds
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(array $productIds)
     {
-        $this->container = $container;
+        $this->productIds = $productIds;
     }
 
     /**
-     * Shopware\EventListener: Enlight_Controller_Front_RouteShutdown
-     *
-     * @param \Enlight_Controller_EventArgs $args
+     * {@inheritdoc}
      */
-    public function registerBackendTheme(\Enlight_Controller_EventArgs $args)
+    public function getName()
     {
-        if ($args->getRequest()->getModuleName() !== 'backend') {
-            return;
-        }
+        return 'productids';
+    }
 
-        $directory = $this->container->get('theme_path_resolver')->getExtJsThemeDirectory();
+    /**
+     * @return int[]
+     */
+    public function getProductIds()
+    {
+        return $this->productIds;
+    }
 
-        $this->container->get('template')->setTemplateDir([
-            'backend' => $directory,
-            'include_dir' => '.',
-        ]);
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

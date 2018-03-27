@@ -176,7 +176,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         /** @var VariantCondition $condition */
         $tableKey = $condition->getName();
 
-        $suffix = crc32(json_encode($condition));
+        $suffix = dechex(crc32(json_encode($condition)));
 
         $where = [];
 
@@ -321,7 +321,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
          * Get the cheapest price of the fallback customer group, if no price of the current customer group is available.
          */
         $countSubQuery = clone $cheapestPriceQuery;
-        $graduation = 'IF(prices.id IS NOT NULL, prices.from = 1, defaultPrices.to = 1)';
+        $graduation = 'IF(prices.id IS NOT NULL, prices.from = 1, defaultPrices.from = 1)';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
             $graduation = "CASE WHEN prices.id IS NOT NULL THEN
                                 (IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig'))

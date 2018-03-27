@@ -45,11 +45,11 @@ function smarty_function_flink($params, $template)
         // Try to find the file on the filesystem
         foreach ($templateDirs as $dir) {
             if (file_exists($dir . $file)) {
-                $file = Enlight_Loader::realpath($dir) . DS . str_replace('/', DS, $file);
+                $file = Enlight_Loader::realpath($dir) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $file);
                 break;
             }
             if ($useIncludePath) {
-                if ($dir === '.' . DS) {
+                if ($dir === '.' . DIRECTORY_SEPARATOR) {
                     $dir = '';
                 }
                 if (($result = Enlight_Loader::isReadable($dir . $file)) !== false) {
@@ -74,7 +74,7 @@ function smarty_function_flink($params, $template)
         }
 
         if ($request !== null) {
-            $file = $request->getBasePath() . DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
+            $file = $request->getBasePath() . '/' . ltrim($file, '/');
         }
     }
 

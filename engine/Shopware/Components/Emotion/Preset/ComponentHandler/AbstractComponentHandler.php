@@ -24,10 +24,10 @@
 
 namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Resource\Media as MediaResource;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Media\Media;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AbstractComponentHandler implements ComponentHandlerInterface
 {
@@ -37,15 +37,16 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     protected $mediaResource;
 
     /**
-     * @var MediaService
+     * @var MediaServiceInterface
      */
     protected $mediaService;
 
     /**
-     * @param MediaService $mediaService
-     * @param Container    $container
+     * @param MediaServiceInterface $mediaService
+     * @param MediaResource         $mediaResource
+     * @param ContainerInterface    $container
      */
-    public function __construct(MediaService $mediaService, MediaResource $mediaResource, Container $container)
+    public function __construct(MediaServiceInterface $mediaService, MediaResource $mediaResource, ContainerInterface $container)
     {
         $this->mediaService = $mediaService;
         $this->mediaResource = $mediaResource;

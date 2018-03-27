@@ -167,6 +167,10 @@ class SearchIndexer implements SearchIndexerInterface
 
                 // Go through every row of result
                 foreach ($getTableKeywords as $currentRow => $row) {
+                    if ($row['id'] === null) {
+                        continue;
+                    }
+
                     // Go through every column of result
                     foreach ($fields as $fieldID => $field) {
                         $field_keywords = [$row[$field['fieldName']]];

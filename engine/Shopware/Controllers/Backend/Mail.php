@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Mail\Attachment;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
@@ -689,7 +688,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     {
         return [
             'sShop' => $this->container->get('config')->get('ShopName'),
-            'sShopURL' => ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBasePath(),
+            'sShopURL' => ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBaseUrl(),
             'sConfig' => $this->container->get('config'),
         ];
     }

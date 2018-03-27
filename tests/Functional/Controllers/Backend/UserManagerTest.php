@@ -29,24 +29,206 @@
  */
 class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 {
-    protected $temporaryUsername;
+    /**
+     * Temporary user data
+     *
+     * @var array
+     */
     protected $temporaryUserData = [
-      'username' => '',
-      'password' => 'test',
-      'localeId' => 1,
-      'roleId' => 1,
-      'name' => 'PHPUnit Testuser',
-      'email' => 'test@example.com',
-      'active' => 1,
+        'username' => 'UserManagerTemporaryUser',
+        'password' => 'test',
+        'localeId' => 1,
+        'roleId' => 1,
+        'name' => 'PHPUnit Testuser',
+        'email' => 'test@example.com',
+        'active' => 1,
     ];
-    protected $temporaryRoleName;
+
+    /**
+     * Temporary admin data
+     *
+     * @var array
+     */
+    protected $temporaryAdminUserData = [
+        'id' => null,
+        'localeId' => 1,
+        'roleId' => 1,
+        'active' => 1,
+        'username' => 'testUserManagerAdmin',
+        'name' => 'User Manager Admin Test generated user',
+        'email' => 'test@usermanager.php',
+        'password' => 'testUserManagerAdmin',
+        'admin' => true,
+        'encoder' => 'Bcrypt',
+        'disabledCache' => false,
+        'lockedUntil' => '1999-01-01 00:00:00',
+    ];
 
     public function setUp()
     {
-        parent::setUp();
+        //Parent will not be called since parent::setUp destroys the session and we need it.
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        // Clear entitymanager to prevent weird 'model shop not persisted' errors.
+        Shopware()->Models()->clear();
+
+        $this->databaseTester = null;
+        if (method_exists($this, 'getSetUpOperation')) {
+            $this->getDatabaseTester()->setSetUpOperation($this->getSetUpOperation());
+        }
+        if (method_exists($this, 'getDataSet')) {
+            $this->getDatabaseTester()->setDataSet($this->getDataSet());
+        }
+        if ($this->databaseTester !== null) {
+            $this->getDatabaseTester()->onSetUp();
+        }
+
+        $this->disableAuth();
+    }
+
+    /**
+     * Verify that we can not login with a user that doesn't exists (yet)
+     */
+    public function testWrongAdminLogin()
+    {
+        $this->Request()->setMethod('POST');
+
+        $this->Request()->setParams([
+            'username' => $this->temporaryAdminUserData['username'],
+            'password' => uniqid('t', false),
+            'locale' => $this->temporaryAdminUserData['localeId'],
+        ]);
+
+        $this->dispatch('backend/Login/login');
+        $this->assertFalse($this->View()->success);
+    }
+
+    /**
+     * Creates an admin user that will be used to verify other tests that require authentication to be enabled.
+     */
+    public function testCreateAdminUser()
+    {
+        //Delete the user in case the username is duplicated
+        $this->deleteUserByUsername($this->temporaryAdminUserData['username']);
+
+        $this->Request()->setParams($this->temporaryAdminUserData);
+
+        $this->dispatch('/backend/UserManager/updateUser');
+
+        //Verify that the admin user creation was successful
+        $this->assertTrue($this->View()->success);
+    }
+
+    /**
+     * Verify that the previously created admin user can login with a correct password
+     *
+     * @backupGlobals
+     */
+    public function testAdminLogin()
+    {
+        $this->enableAuth();
+
+        $this->resetRequest();
+        $this->Request()->setParams([
+           'username' => $this->temporaryAdminUserData['username'],
+           'password' => $this->temporaryAdminUserData['password'],
+        ]);
+
+        $this->dispatch('/backend/Login/login');
+        $this->assertTrue($this->View()->success);
+
+        /*
+         * Fill in session data into s_core_sessions_backend
+         */
+        $this->dispatch('/backend');
+        $this->assertNotEmpty(Shopware()->Session()->Auth->sessionID);
+
+        $this->resetRequest()
+        ->resetResponse();
+
+        $this->Request()->setParam('password', $this->temporaryAdminUserData['password']);
+        $this->dispatch('backend/Login/validatePassword');
+
+        $this->assertTrue($this->View()->success);
+        $this->assertEquals(1, Shopware()->BackendSession()->offsetGet('passwordVerified'));
+    }
+
+    /**
+     * Test user creation, note that this test requires testAdminLogin to pass since it's an action protected
+     * by double password verification.
+     *
+     * @return mixed
+     */
+    public function testUserAdd()
+    {
+        //Delete the user in case the username is duplicated
+        $this->deleteUserByUsername($this->temporaryUserData['username']);
+
+        $this->Request()->setParams($this->temporaryUserData);
+
+        $this->dispatch('backend/UserManager/updateUser');
+
+        $this->assertTrue($this->View()->success);
+        $this->assertEquals(
+            $this->temporaryUserData['username'],
+            $this->View()->data['username']
+        );
+
+        return $this->temporaryUserData['username'];
+    }
+
+    /**
+     * Test edit of users
+     *
+     * @depends testUserAdd
+     */
+    public function testUserEdit($username)
+    {
+        $this->resetRequest()
+        ->resetResponse();
+
+        $user = $this->getUserByUsername($username);
+
+        $randomName = sprintf('RandomName_%s', md5(rand(0, time())));
+
+        $this->assertGreaterThan(0, $user['id']);
+
+        //Update the username
+        $this->Request()->setParam('id', $user['id']);
+        $this->Request()->setParam('name', $randomName);
+
+        $this->dispatch('backend/UserManager/updateUser');
+        $this->assertTrue($this->View()->success);
+
+        //Verify that the username has effectively changed in the database
+        $user = $this->getUserByUsername($username);
+
+        $this->assertEquals($randomName, $user['name']);
+
+        return $username;
+    }
+
+    /**
+     * Test deleting of users
+     *
+     * @depends testUserEdit
+     */
+    public function testUserDelete($username)
+    {
+        $user = $this->getUserByUsername($username);
+
+        $this->assertGreaterThan(0, $user['id']);
+
+        $this->Request()->setParam('id', $user['id']);
+        $this->dispatch('backend/UserManager/deleteUser');
+
+        $this->assertTrue(
+            $this->View()->success,
+            sprintf(
+                'User %s with id %s not found',
+                $user['id'],
+                $user['username']
+            )
+        );
     }
 
     /**
@@ -65,11 +247,9 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     public function testUserDetails()
     {
-        $getRandomUserId = Shopware()->Db()->fetchOne('
-        SELECT id FROM s_core_auth
-        ');
+        $user = $this->getRandomUser();
 
-        $this->Request()->setParam('id', $getRandomUserId);
+        $this->Request()->setParam('id', $user['id']);
         $this->dispatch('backend/UserManager/getUserDetails');
 
         // Check if request was successful
@@ -80,68 +260,10 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->assertTrue(is_array($this->View()->data));
 
         // Check that data matches the requested one
-        $this->assertEquals($this->View()->data['id'], $getRandomUserId);
+        $this->assertEquals($user['id'], $this->View()->data['id']);
 
         // Check that result does not contain passwords
         $this->assertNull($this->View()->data['password']);
-    }
-
-    /**
-     * Test user creation
-     *
-     * @return mixed
-     */
-    public function testUserAdd()
-    {
-        $this->temporaryUsername = md5(uniqid(rand()));
-
-        $this->Request()->setParams($this->temporaryUserData);
-        $this->Request()->setParam('username', $this->temporaryUsername);
-
-        $this->dispatch('backend/UserManager/updateUser');
-
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->View()->data['username'], $this->temporaryUsername);
-
-        return $this->temporaryUsername;
-    }
-
-    /**
-     * Test edit of users
-     *
-     * @depends testUserAdd
-     */
-    public function testUserEdit($username)
-    {
-        $this->assertTrue(true);
-        $getRandomUserId = Shopware()->Db()->fetchOne('
-        SELECT id FROM s_core_auth WHERE username = ?
-        ', $username);
-
-        $this->assertGreaterThan(0, $getRandomUserId);
-        $this->Request()->setParam('id', $getRandomUserId);
-        $this->Request()->setParam('name', 'Random');
-        $this->dispatch('backend/UserManager/updateUser');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals('Random', Shopware()->Db()->fetchOne('SELECT name FROM s_core_auth WHERE id = ?', [$getRandomUserId]));
-
-        return $username;
-    }
-
-    /**
-     * Test deleting of users
-     *
-     * @depends testUserEdit
-     */
-    public function testUserDelete($username)
-    {
-        $getRandomUserId = Shopware()->Db()->fetchOne('
-       SELECT id FROM s_core_auth WHERE username = ?
-       ', $username);
-
-        $this->Request()->setParam('id', $getRandomUserId);
-        $this->dispatch('backend/UserManager/deleteUser');
-        $this->assertTrue($this->View()->success, 'User ' . $this->temporaryUsername . ' with id ' . $getRandomUserId . ' not found');
     }
 
     /**
@@ -157,7 +279,8 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     }
 
     /**
-     * Test creating of roles
+     * Test creating of roles, note that this test requires testAdminLogin to pass since it's an action protected
+     * by double password verification.
      *
      * @return string
      */
@@ -183,17 +306,25 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     public function testEditRole($randomRoleName)
     {
-        $getRandomRoleId = Shopware()->Db()->fetchOne('
-        SELECT id FROM s_core_auth_roles WHERE name = ?
-        ', $randomRoleName);
-        $this->assertGreaterThan(0, $getRandomRoleId);
+        $randomRole = Shopware()->Container()
+            ->get('dbal_connection')
+            ->createQueryBuilder()
+            ->select('r.id')
+            ->from('s_core_auth_roles r')
+            ->where('name = :name')
+            ->setParameter('name', $randomRoleName)
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch(\PDO::FETCH_ASSOC);
 
-        $this->Request()->setParam('id', $getRandomRoleId);
+        $this->assertGreaterThan(0, $randomRole['id']);
+
+        $this->Request()->setParam('id', $randomRole['id']);
         $this->Request()->setParam('enabled', false);
         $this->dispatch('backend/UserManager/updateRole');
         $this->assertTrue($this->View()->success);
 
-        return $getRandomRoleId;
+        return $randomRole['id'];
     }
 
     /**
@@ -207,5 +338,82 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->dispatch('backend/UserManager/deleteRole');
 
         $this->assertTrue($this->View()->success);
+    }
+
+    /**
+     * Gets a random user from the database
+     *
+     * @return mixed
+     */
+    public function getRandomUser()
+    {
+        return $this->getBaseUserQuery()
+            ->setMaxResults(1)
+            ->orderBy('RAND(id)')
+            ->execute()
+            ->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Helper method to enable authentication
+     */
+    private function enableAuth()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
+    }
+
+    /**
+     * Helper method to disable authentication
+     */
+    private function disableAuth()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(true);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl(true);
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getBaseUserQuery()
+    {
+        $dbal = Shopware()->Container()->get('dbal_connection');
+
+        return $dbal->createQueryBuilder()
+            ->select('a.id, a.name, a.username')
+            ->from('s_core_auth a');
+    }
+
+    /**
+     * Helper method to retrieve username data by username
+     *
+     * @param string $username
+     *
+     * @return mixed
+     */
+    private function getUserByUsername($username)
+    {
+        return $this->getBaseUserQuery()
+            ->where('username = :username')
+            ->setParameter('username', $username)
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Deletes a user by username
+     *
+     * @param string $name
+     */
+    private function deleteUserByUsername($name)
+    {
+        //Delete the admin user if it exists before attempting to create it (else we will have a duplicate user error)
+        Shopware()->Container()
+            ->get('dbal_connection')
+            ->executeQuery(
+                'DELETE FROM s_core_auth WHERE username=:username',
+                ['username' => $name]
+            );
     }
 }

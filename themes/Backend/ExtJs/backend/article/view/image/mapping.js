@@ -128,10 +128,8 @@ Ext.define('Shopware.apps.Article.view.image.Mapping', {
 
         if (me.hasMultiple) {
             me.title += Ext.String.format('{s name="image/variant_info/mapping_window/title"} ([0] images){/s}', me.selected.length);
-            me.mappingGrid.viewConfig = {
-                emptyText: '<div style="font-size:13px; text-align: center; color: #6c818f; width: 420px; margin: 20px auto;">{s name="image/mapping_window/empty_text"}{/s}</div>',
-                deferEmptyText: false
-            };
+            me.mappingGrid.view.emptyText = '<div style="font-size:13px; text-align: center; color: #6c818f; width: 420px; margin: 20px auto;">{s name="image/mapping_window/empty_text"}{/s}</div>';
+            me.mappingGrid.view.deferEmptyText = false;
         }
 
         me.callParent(arguments);

@@ -26,7 +26,7 @@ namespace Shopware\Components\Emotion\Preset;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Emotion\Preset;
@@ -36,14 +36,14 @@ class PresetLoader implements PresetLoaderInterface
     /** @var ModelManager $modelManager */
     private $modelManager;
 
-    /** @var MediaService $mediaService */
+    /** @var MediaServiceInterface $mediaService */
     private $mediaService;
 
     /**
-     * @param ModelManager $modelManager
-     * @param MediaService $mediaService
+     * @param ModelManager          $modelManager
+     * @param MediaServiceInterface $mediaService
      */
-    public function __construct(ModelManager $modelManager, MediaService $mediaService)
+    public function __construct(ModelManager $modelManager, MediaServiceInterface $mediaService)
     {
         $this->modelManager = $modelManager;
         $this->mediaService = $mediaService;
@@ -57,7 +57,7 @@ class PresetLoader implements PresetLoaderInterface
         $preset = $this->modelManager->getRepository(Preset::class)->find($presetId);
 
         if (!$preset) {
-            throw new NoResultException('The preset with id ' . $presetId . ' could not be found.');
+            throw new NoResultException();
         }
 
         $presetData = json_decode($preset->getPresetData(), true);
