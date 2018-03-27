@@ -6,11 +6,24 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 [View all changes from v5.4.1...v5.4.2](https://github.com/shopware/shopware/compare/v5.4.1...v5.4.2)
 
+### Additions
+
+* Added possibility to enable/disable forms without having to delete them
+* Added pagination to the attribute filter of the product stream configurator 
+* Added `json` attribute for snippets in `Enlight_Components_Snippet_Resource`
+  * You may now set the attribute `json='true'` on smarty snippets, the content of the snippet will then be encoded via `json_encode()`
+    * Example: ```{s json='true' name='foo'}é"'#-_*+`{/s}``` will render as ```"\u00e9\"'#-_*+`"```
+    * Safely constructing a JS object: ```{ "someProp": {s json='true' name='your/snippet'}{/s} }```
+
 ### Changes
 
+* Changed password verification process for password protected actions in backend
 * Changed behaviour of search indexer to allow product attribute search
 * Changed hashing algorithm for product variant search join table aliases to prevent errors on 32bit systems
 * Changed `QueryBuilder::addFilter` to enable compatibility with php7 on cygwin
+* Changed SMTP password input type in base config from plaintext to password
+* Changed detail page behaviour with preselection variants which onsale-flag is active
+* Changed note counting to fix an error which displays 0 notes when adding the first note
 
 ## 5.4.1
 
