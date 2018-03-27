@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed SMTP password input type in base config from plaintext to password
 * Changed detail page behaviour with preselection variants which onsale-flag is active
 * Changed note counting to fix an error which displays 0 notes when adding the first note
+* Changed construction of ProductSearchResult-object to fix error in stream listing count
 
 ## 5.4.1
 
