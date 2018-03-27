@@ -16,15 +16,16 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
-* Changed behaviour of media/temp files, which now will be deleted if they are uploaded
+* Changed input validation to fix possible authenticated SQLi vulnerability in the backend
 * Changed .htaccess file to prohibit download of .env files
+* Changed behaviour of media/temp files, which now will be deleted if they are uploaded
 * Changed `Media` resource to fix a problem with file names set via API
 * Changed "Send E-Mails" checkbox in batch processing window of order to be enabled by default again
 * Changed behaviour of inactive forms to act like any other missing page
 * Changed the notification box behaviour when products are out of stock
 * Changed API behaviour on update, when the lastStock parameter is set for a product its applied to its mainDetail aswell (like on creation)
 * Changed newsletter recipient count to work correctly with customer streams
-* Changed position of several privacy options to the privacy basic setting category
+* Changed position of several privacy options to a new basic setting category "Privacy"
 * Changed search indexer to make the keyword batch size configurable using the key `search.indexer.batchsize` in the `config.php` 
 
 ### Removals
