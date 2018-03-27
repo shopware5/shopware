@@ -32,6 +32,15 @@ class ApiService {
         const headers = this.getBasicHeaders(additionalHeaders);
         const params = Object.assign({ offset, limit }, additionalParams);
 
+        // Switch to the general search end point when we're having a search term
+        if (params.term && params.term.length) {
+            return this.httpClient
+                .post(`${this.getApiBasePath(null, 'search')}`, params, { headers })
+                .then((response) => {
+                    return ApiService.handleResponse(response);
+                });
+        }
+
         return this.httpClient
             .get(this.getApiBasePath(), {
                 params,
@@ -121,14 +130,21 @@ class ApiService {
      * Returns the URI to the API endpoint
      *
      * @param {String|Number} [id]
+     * @param {String} [prefix='']
      * @returns {String}
      */
-    getApiBasePath(id) {
-        if (id && id.length > 0) {
-            return `${this.apiEndpoint}/${id}`;
+    getApiBasePath(id, prefix = '') {
+        let url = '';
+
+        if (prefix && prefix.length) {
+            url += `${prefix}/`;
         }
 
-        return this.apiEndpoint;
+        if (id && id.length > 0) {
+            return `${url}${this.apiEndpoint}/${id}`;
+        }
+
+        return `${url}${this.apiEndpoint}`;
     }
 
     /**

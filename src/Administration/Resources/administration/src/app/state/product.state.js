@@ -28,17 +28,32 @@ State.register('product', {
         /**
          * Get a list of products by offset and limit.
          *
+         * @type action
          * @memberOf module:app/state/product
-         * @param commit
-         * @param offset
-         * @param limit
+         * @param {Function} commit
+         * @param {Number} offset
+         * @param {Number} limit
+         * @param {String} sortBy
+         * @param {String} sortDirection
+         * @param {Array|null} criterias
          * @returns {Promise<T>}
          */
-        getProductList({ commit }, offset, limit) {
+        getProductList({ commit }, { limit, offset, sortBy, sortDirection, term, criterias }) {
             const providerContainer = Shopware.Application.getContainer('service');
             const productService = providerContainer.productService;
 
-            return productService.getList(offset, limit).then((response) => {
+            const sorting = (sortDirection.toLowerCase() === 'asc' ? '' : '-') + sortBy;
+
+            const additionalParams = {
+                sort: sorting,
+                term
+            };
+
+            if (criterias) {
+                additionalParams.filter = criterias;
+            }
+
+            return productService.getList(offset, limit, additionalParams).then((response) => {
                 const products = response.data;
                 const total = response.meta.total;
 
@@ -57,12 +72,13 @@ State.register('product', {
          * Get a product by id.
          * If the product does not exist in the state object, it will be loaded via the API.
          *
+         * @type action
          * @memberOf module:app/state/product
-         * @param commit
-         * @param state
-         * @param id
-         * @param localCopy
-         * @returns {*}
+         * @param {Function} commit
+         * @param {Object} state
+         * @param {String} id
+         * @param {Boolean} [localCopy=false]
+         * @returns {Promise<T>|String}
          */
         getProductById({ commit, state }, id, localCopy = false) {
             const product = state.draft[id];
@@ -89,11 +105,12 @@ State.register('product', {
          * The object can be used in the data binding for creating a new product.
          * It will be marked with a `ìsNew` property.
          *
+         * @type action
          * @memberOf module:app/state/product
-         * @param commit
-         * @param state
-         * @param productId
-         * @returns {*}
+         * @param {Function} commit
+         * @param {Object} state
+         * @param {String|null} [productId=null]
+         * @returns {String|null}
          */
         createEmptyProduct({ commit, state }, productId = null) {
             if (productId === null) {
@@ -118,11 +135,12 @@ State.register('product', {
         /**
          * Saves the given product to the server by sending a changeset.
          *
+         * @type action
          * @memberOf module:app/state/product
-         * @param commit
-         * @param state
-         * @param product
-         * @returns {*}
+         * @param {Function} commit
+         * @param {Object} state
+         * @param {Object} product
+         * @returns {Promise<T>}
          */
         saveProduct({ commit, state }, product) {
             if (!product.id) {
@@ -174,9 +192,11 @@ State.register('product', {
         /**
          * Initializes a new product in the state.
          *
+         * @type mutation
          * @memberOf module:app/state/product
-         * @param state
-         * @param product
+         * @param {Object} state
+         * @param {Object} product
+         * @returns {void}
          */
         initProduct(state, product) {
             // Do not commit products without identifier
@@ -195,9 +215,11 @@ State.register('product', {
         /**
          * Updates a product in the state.
          *
+         * @type mutation
          * @memberOf module:app/state/product
-         * @param state
-         * @param product
+         * @param {Object} state
+         * @param {Object} product
+         * @returns {void}
          */
         setProduct(state, product) {
             // Do not commit products without identifier
