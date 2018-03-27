@@ -67,6 +67,9 @@ Thumbs.db
 /files/documents/*
 !/files/documents/.htaccess
 /files/downloads/*
+# demofiles from http://releases.s3.shopware.com/test_images_since_5.1.zip
+files/552211cce724117c3178e3d22bec532ec
+
 
 # Snippet exports
 /snippetsExport/
