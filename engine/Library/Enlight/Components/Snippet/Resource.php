@@ -194,13 +194,20 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
                 throw new SmartyException("\"" . $_block_tag . "\" missing name attribute");
             }
             $_block_force = (bool) preg_match('#[\s]force#', $_block_args);
+            $_block_json = (bool) preg_match('#[\s]json=["\']true["\']\W#', $_block_args);
             $_block_name = !empty($_match[3]) ? trim($_match[3], '\'"') : $_block_default;
             if (preg_match("!(.?)(namespace=)(.*?)(?=(\s|$))!", $_block_args, $_match)) {
                 $_namespace = trim($_match[3], '\'"');
             } else {
                 $_namespace = $_block_namespace;
             }
+            $_block_args = str_replace('"', '\'', $_block_args);
+
             $_block_content = $this->getSnippet($_namespace, $_block_name, $_block_default, $_block_force);
+
+            if ($_block_json) {
+                $_block_content = json_encode($_block_content);
+            }
 
             if (!empty($_block_default)) {
                 $_block_args .= ' default=' . var_export($_block_default, true);
@@ -209,7 +216,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
                 $_block_args .= ' namespace=' . var_export($_block_namespace, true);
             }
             if (!empty($_block_editable)) {
-                $_block_args .= ' tag="span"';
+                $_block_args .= ' tag=\'span\'';
             }
             if (!empty($_block_force)) {
                 $_block_args = str_replace('force', 'force=true', $_block_args);
