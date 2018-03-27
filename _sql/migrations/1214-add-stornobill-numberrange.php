@@ -26,6 +26,6 @@ class Migrations_Migration1214 extends Shopware\Components\Migrations\AbstractMi
 {
     public function up($modus)
     {
-        $this->addSQL('INSERT INTO `s_order_number`(`number`, `name`, `desc`) VALUES (20000, "doc_3", "Stornorechnungen")');
+        $this->addSQL('INSERT IGNORE INTO `s_order_number`(`number`, `name`, `desc`) VALUES (20000, "doc_3", "Stornorechnungen")');
     }
 }
