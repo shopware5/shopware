@@ -13,7 +13,6 @@ use Shopware\Api\Entity\Write\EntityWriterInterface;
 use Shopware\Api\Entity\Write\WriteContext;
 use Shopware\Api\Product\Definition\ProductDefinition;
 use Shopware\Api\Product\Definition\ProductManufacturerDefinition;
-use Shopware\Api\Product\Repository\ProductRepository;
 use Shopware\Context\Rule\Container\AndRule;
 use Shopware\Context\Rule\Container\NotRule;
 use Shopware\Context\Rule\CurrencyRule;
@@ -57,21 +56,15 @@ class DemodataCommand extends ContainerAwareCommand
      * @var VariantGenerator
      */
     private $variantGenerator;
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
 
     public function __construct(
         ?string $name = null,
         EntityWriterInterface $writer,
-        VariantGenerator $variantGenerator,
-        ProductRepository $productRepository
+        VariantGenerator $variantGenerator
     ) {
         parent::__construct($name);
         $this->writer = $writer;
         $this->variantGenerator = $variantGenerator;
-        $this->productRepository = $productRepository;
     }
 
     protected function configure()

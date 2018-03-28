@@ -1137,7 +1137,7 @@ class ProductRepositoryTest extends KernelTestCase
                 [
                     'id' => $redId,
                     'name' => 'red',
-                    'group' => ['id' => $colorId, 'name' => $colorId],
+                    'group' => ['id' => $colorId, 'name' => 'color'],
                 ],
                 [
                     'id' => $blueId,
@@ -1367,7 +1367,6 @@ class ProductRepositoryTest extends KernelTestCase
             'tax' => ['name' => 'test', 'rate' => 15],
             'contextPrices' => [
                 [
-                    'id' => $ruleA,
                     'currencyId' => Defaults::CURRENCY,
                     'quantityStart' => 1,
                     'quantityEnd' => 20,
@@ -1375,14 +1374,12 @@ class ProductRepositoryTest extends KernelTestCase
                     'price' => ['gross' => 100, 'net' => 100],
                 ],
                 [
-                    'id' => $ruleA,
                     'currencyId' => Defaults::CURRENCY,
                     'quantityStart' => 21,
                     'contextRuleId' => $ruleA,
                     'price' => ['gross' => 10, 'net' => 50],
                 ],
                 [
-                    'id' => $ruleB,
                     'currencyId' => Defaults::CURRENCY,
                     'quantityStart' => 1,
                     'contextRuleId' => $ruleB,

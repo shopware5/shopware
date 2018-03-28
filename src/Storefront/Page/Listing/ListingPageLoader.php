@@ -4,9 +4,12 @@ namespace Shopware\Storefront\Page\Listing;
 
 use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Search\Query\TermQuery;
-use Shopware\Api\Product\Struct\ProductSearchResult;
 use Shopware\Context\Struct\StorefrontContext;
+use Shopware\Storefront\Event\ListingEvents;
+use Shopware\Storefront\Event\ListingPageLoadedEvent;
+use Shopware\Storefront\Event\PageCriteriaCreatedEvent;
 use Shopware\StorefrontApi\Product\StorefrontProductRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class ListingPageLoader
@@ -16,54 +19,46 @@ class ListingPageLoader
      */
     private $productRepository;
 
-    public function __construct(StorefrontProductRepository $productRepository)
-    {
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(
+        StorefrontProductRepository $productRepository,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->productRepository = $productRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function load(string $categoryId, Request $request, StorefrontContext $context): ListingPageStruct
+    public function load(string $categoryId, Request $request, StorefrontContext $context, bool $loadAggregations = true): ListingPageStruct
     {
-        $criteria = $this->createCriteria($categoryId, $request);
-        $products = $this->productRepository->search($criteria, $context);
+        $criteria = new Criteria();
+        $criteria->addFilter(new TermQuery('product.active', 1));
+        $criteria->addFilter(new TermQuery('product.categoriesRo.id', $categoryId));
 
-        $currentPage = $request->query->getInt('p', 1);
-
-        $listingPageStruct = new ListingPageStruct();
-        $listingPageStruct->setProducts($products);
-        $listingPageStruct->setCriteria($criteria);
-        $listingPageStruct->setShowListing(true);
-
-        $listingPageStruct->setCurrentPage($currentPage);
-        $listingPageStruct->setPageCount(
-            $this->getPageCount($products, $criteria, $currentPage)
+        $this->eventDispatcher->dispatch(
+            ListingEvents::PAGE_CRITERIA_CREATED_EVENT,
+            new PageCriteriaCreatedEvent($criteria, $context, $request)
         );
 
-        return $listingPageStruct;
-    }
-
-    private function createCriteria(string $categoryId, Request $request): Criteria
-    {
-        $limit = $request->query->getInt('limit', 20);
-        $page = $request->query->getInt('p', 1);
-
-        $criteria = new Criteria();
-        $criteria->setOffset(($page - 1) * $limit);
-        $criteria->setLimit($limit);
-        $criteria->addFilter(new TermQuery('product.active', 1));
-        $criteria->addFilter(new TermQuery('product.categoryTree', $categoryId));
-        $criteria->setFetchCount(Criteria::FETCH_COUNT_NEXT_PAGES);
-
-        return $criteria;
-    }
-
-    private function getPageCount(ProductSearchResult $products, Criteria  $criteria, int $currentPage): int
-    {
-        $pageCount = (int) round($products->getTotal() / $criteria->getLimit());
-        $pageCount = max(1, $pageCount);
-        if ($pageCount > 1 && $criteria->fetchCount() === Criteria::FETCH_COUNT_NEXT_PAGES) {
-            $pageCount += $currentPage;
+        if (!$loadAggregations) {
+            $criteria->setAggregations([]);
         }
 
-        return $pageCount;
+        $products = $this->productRepository->search($criteria, $context);
+
+        $page = new ListingPageStruct($products, $criteria);
+
+        $page->setShowListing(true);
+        $page->setProductBoxLayout('basic');
+
+        $this->eventDispatcher->dispatch(
+            ListingEvents::LISTING_PAGE_LOADED_EVENT,
+            new ListingPageLoadedEvent($page, $context, $request)
+        );
+
+        return $page;
     }
 }

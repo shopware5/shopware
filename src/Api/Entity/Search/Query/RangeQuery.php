@@ -50,6 +50,10 @@ class RangeQuery extends Query
 
     public function getParameter(string $key)
     {
+        if (!$this->hasParameter($key)) {
+            return null;
+        }
+
         return $this->parameters[$key];
     }
 

@@ -87,14 +87,14 @@
 
         <service class="Shopware\Storefront\Page\Listing\ListingPageLoader" id="Shopware\Storefront\Page\Listing\ListingPageLoader">
             <argument id="Shopware\StorefrontApi\Product\StorefrontProductRepository" type="service"/>
+            <argument type="service" id="event_dispatcher" />
         </service>
 
         <service class="Shopware\Storefront\Page\Search\SearchPageLoader" id="Shopware\Storefront\Page\Search\SearchPageLoader">
             <argument type="service" id="Shopware\Framework\Config\ConfigService" />
             <argument id="Shopware\StorefrontApi\Product\StorefrontProductRepository" type="service"/>
-            <argument type="service" id="Shopware\StorefrontApi\Search\KeywordSearchTermInterpreter"/>
+            <argument type="service" id="event_dispatcher" />
         </service>
-
 
         <service class="Shopware\Storefront\Controller\AccountController" public="true" id="Shopware\Storefront\Controller\AccountController">
             <argument type="service" id="security.authentication_utils" />
@@ -141,5 +141,40 @@
             <argument id="Shopware\Storefront\Session\SessionContextTokenResolver.inner" type="service" />
         </service>
 
+        <service class="Shopware\Storefront\Controller\Widgets\ListingController" id="Shopware\Storefront\Controller\Widgets\ListingController">
+            <argument id="Shopware\StorefrontApi\Product\StorefrontProductRepository" type="service"/>
+            <argument type="service" id="Shopware\Storefront\Page\Listing\ListingPageLoader"/>
+            <call method="setContainer">
+                <argument id="service_container" type="service"/>
+            </call>
+            <argument type="service" id="Shopware\Storefront\Page\Search\SearchPageLoader"/>
+        </service>
+
+        <service class="Shopware\Storefront\Subscriber\SortingSubscriber" id="Shopware\Storefront\Subscriber\SortingSubscriber">
+            <argument id="Shopware\Api\Listing\Repository\ListingSortingRepository" type="service"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Storefront\Subscriber\DatasheetAggregationSubscriber" id="Shopware\Storefront\Subscriber\DatasheetAggregationSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Storefront\Subscriber\PaginationSubscriber" id="Shopware\Storefront\Subscriber\PaginationSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Storefront\Subscriber\ManufacturerAggregationSubscriber" id="Shopware\Storefront\Subscriber\ManufacturerAggregationSubscriber">
+            <argument id="Shopware\Api\Product\Repository\ProductManufacturerRepository" type="service"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Storefront\Subscriber\PriceAggregationSubscriber" id="Shopware\Storefront\Subscriber\PriceAggregationSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Storefront\Subscriber\SearchTermSubscriber" id="Shopware\Storefront\Subscriber\SearchTermSubscriber">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="Shopware\StorefrontApi\Search\KeywordSearchTermInterpreter"/>
+        </service>
     </services>
 </container>
