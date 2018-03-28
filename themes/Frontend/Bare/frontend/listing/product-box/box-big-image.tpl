@@ -22,7 +22,7 @@
                         {/if}
 
                         {block name='frontend_listing_box_article_image_picture_element'}
-                            <img srcset="{$sArticle.image.thumbnails[1].sourceSet}"
+                            <img src="{$sArticle.image.thumbnails[1].source}" srcset="{$sArticle.image.thumbnails[1].sourceSet}"
                                  alt="{$desc}"
                                  title="{$desc|truncate:160}" />
                         {/block}
