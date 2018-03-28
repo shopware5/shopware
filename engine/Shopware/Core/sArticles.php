@@ -1371,7 +1371,7 @@ class sArticles
     }
 
     /**
-     * Returns the the absolute main article image
+     * Returns the absolute main article image
      * This method returns the main cover depending on the main flag no matter if any variant restriction is set
      *
      * @param $articleId
