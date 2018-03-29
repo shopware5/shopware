@@ -68,5 +68,9 @@
             <argument type="service" id="dbal_connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
+
+        <service id="shopware.benchmark_bundle.controller_subscriber" class="Shopware\Bundle\BenchmarkBundle\DependencyInjection\EventListener\ControllerSubscriber">
+            <tag name="shopware.event_subscriber" />
+        </service>
     </services>
 </container>

@@ -28,7 +28,7 @@ use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
-use Shopware\Bundle\BenchmarkBundle\ProviderCompilerPass;
+use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\ProviderCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass;
 use Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass;
@@ -202,7 +202,7 @@ class Kernel implements HttpKernelInterface
      */
     public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
-        if (false === $this->booted) {
+        if ($this->booted === false) {
             $this->boot();
         }
 
@@ -211,7 +211,7 @@ class Kernel implements HttpKernelInterface
 
         $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
 
-        if (null === $front->Request()) {
+        if ($front->Request() === null) {
             $front->setRequest($enlightRequest);
             $response = $front->dispatch();
         } else {
@@ -618,7 +618,7 @@ class Kernel implements HttpKernelInterface
 
         foreach ($runtimeDirectories as $name => $dir) {
             if (!is_dir($dir)) {
-                if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                     throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
                 }
             } elseif (!is_writable($dir)) {
@@ -785,7 +785,7 @@ class Kernel implements HttpKernelInterface
      */
     private function loadPlugins(ContainerBuilder $container)
     {
-        if (0 === count($this->plugins)) {
+        if (count($this->plugins) === 0) {
             return;
         }
 

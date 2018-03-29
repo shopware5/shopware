@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,25 +20,25 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1400 extends Shopware\Components\Migrations\AbstractMigration
-{
-    public function up($modus)
-    {
-        $this->addSQL('CREATE TABLE `s_benchmark_config` (
-             `active` tinyint(4) DEFAULT NULL,
-             `last_sent` datetime NOT NULL,
-             `last_order_id` int(11) NOT NULL,
-             `orders_batch_size` int(11) NOT NULL,
-             `business` int(11) DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-            ');
 
-        // Only inserts this row, when table is empty - we have no unique key for 'Insert ignore'
-        $this->addSql(
-            'INSERT INTO `s_benchmark_config` (`active`, `last_sent`, `last_order_id`, `orders_batch_size`, `business`)
-                SELECT NULL, "1990-01-01 00:00:00", 0, 1000, NULL
-                FROM dual
-                WHERE NOT EXISTS (SELECT * FROM `s_benchmark_config`);'
-        );
+//{namespace name="backend/benchmark/main"}
+
+Ext.define('Shopware.apps.Benchmark', {
+    name: 'Shopware.apps.Benchmark',
+    extend:'Enlight.app.SubApplication',
+    bulkLoad: true,
+    loadPath: '{url action=load}',
+
+    views: ['overview.Window', 'settings.Window', 'settings.BusinessField', 'settings.BusinessWindow'],
+    models: [],
+    stores: [ 'Business' ],
+
+    controllers: [ 'Main', 'Settings' ],
+
+    launch: function() {
+        var me = this,
+            mainController = me.getController('Main');
+
+        return mainController.mainWindow;
     }
-}
+});
