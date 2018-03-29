@@ -578,7 +578,7 @@
 
             if (me.showInstantFilterResult) {
                 // Update page number in web form
-                $.each(linkParamsArray, function(index, param) {
+                $.each(linkParamsArray, function (index, param) {
                     paramValue = param.split('=');
 
                     if (paramValue[0] === 'p') {
@@ -687,7 +687,7 @@
                     var $component = $(component),
                         componentPlugin = $component.data('plugin_swFilterComponent');
 
-                    $.each(componentPlugin.$inputs, function(i, item) {
+                    $.each(componentPlugin.$inputs, function (i, item) {
                         componentPlugin.disable($(item), false);
                         componentPlugin.disableComponent(false);
                     });
@@ -1137,9 +1137,11 @@
 
             html = response.listing.trim();
 
-            setTimeout(function() {
+            setTimeout(function () {
                 listing.html(html);
             }, 1);
+
+            window.picturefill();
 
             listing.removeClass(this.opts.isLoadingCls);
 
