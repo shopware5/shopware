@@ -74,6 +74,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
             'version' => $this->getVersion(),
             'revision' => $this->getRevision(),
             'licence' => $this->getLicence(),
+            'shops' => $this->getShopCount(),
         ];
     }
 
@@ -206,5 +207,13 @@ class ShopwareProvider implements BenchmarkProviderInterface
         }
 
         return $license;
+    }
+
+    /**
+     * @return int
+     */
+    private function getShopCount()
+    {
+        return (int) $this->connection->fetchColumn('SELECT COUNT(id) FROM s_core_shops');
     }
 }

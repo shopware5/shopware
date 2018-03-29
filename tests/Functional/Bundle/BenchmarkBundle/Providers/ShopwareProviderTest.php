@@ -29,7 +29,7 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class ShopwareProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.shopware';
-    const EXPECTED_KEYS_COUNT = 15;
+    const EXPECTED_KEYS_COUNT = 16;
     const EXPECTED_TYPES = [
         'api' => IsType::TYPE_STRING,
         'os' => IsType::TYPE_STRING,
@@ -46,5 +46,6 @@ class ShopwareProviderTest extends ProviderTestCase
         'version' => IsType::TYPE_STRING,
         'revision' => IsType::TYPE_STRING,
         'licence' => IsType::TYPE_STRING,
+        'shops' => IsType::TYPE_INT,
     ];
 }

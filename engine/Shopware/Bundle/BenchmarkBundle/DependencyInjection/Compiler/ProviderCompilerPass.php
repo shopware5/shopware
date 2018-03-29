@@ -34,6 +34,7 @@ class ProviderCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.provider', 'shopware.benchmark_provider', 0);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.collector', 'shopware.benchmark_provider', 0);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.local_collector', 'shopware.benchmark_local_provider', 0);
     }
 }

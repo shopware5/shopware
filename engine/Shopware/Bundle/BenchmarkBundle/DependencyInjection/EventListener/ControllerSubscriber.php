@@ -37,6 +37,8 @@ class ControllerSubscriber implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Benchmark' => 'registerBenchmarkController',
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_BenchmarkOverview' => 'registerBenchmarkOverviewController',
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_BenchmarkLocalOverview' => 'registerBenchmarkLocalOverviewController',
         ];
     }
 
@@ -46,5 +48,21 @@ class ControllerSubscriber implements SubscriberInterface
     public function registerBenchmarkController()
     {
         return __DIR__ . '/../../Controllers/Backend/Benchmark.php';
+    }
+
+    /**
+     * @return string
+     */
+    public function registerBenchmarkOverviewController()
+    {
+        return __DIR__ . '/../../Controllers/Backend/BenchmarkOverview.php';
+    }
+
+    /**
+     * @return string
+     */
+    public function registerBenchmarkLocalOverviewController()
+    {
+        return __DIR__ . '/../../Controllers/Backend/BenchmarkLocalOverview.php';
     }
 }

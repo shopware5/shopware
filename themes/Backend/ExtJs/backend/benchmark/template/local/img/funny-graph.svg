@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 1024 136" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="a" x1="9.0735%" x2="101.5%" y1="92.842%" y2="-.5%">
+<stop stop-color="#5941F4" offset="0"/>
+<stop stop-color="#766FFF" offset="1"/>
+</linearGradient>
+<linearGradient id="b" x1="50%" x2="50%" y1="2.4474%" y2="100%">
+<stop stop-color="#5AC5FF" offset="0"/>
+<stop stop-color="#50E3C2" offset="1"/>
+</linearGradient>
+<linearGradient id="c" x1="2.4686%" x2="100.67%" y1="99.512%" y2=".34313%">
+<stop stop-color="#511CFC" offset="0"/>
+<stop stop-color="#34DCDD" offset="1"/>
+</linearGradient>
+</defs>
+<g fill="none" fill-rule="evenodd">
+<g transform="translate(-448 -439)">
+<g transform="translate(448 144)">
+<g transform="translate(-27 270)">
+<g transform="translate(771 50)" stroke-linecap="round" stroke-width="18">
+<path transform="translate(78.275 64.855) rotate(60) translate(-78.275 -64.855)" d="m93.887 109.51c0-3.0286-10.408-32.802-31.223-89.32" stroke="url(#a)"/>
+<path d="m43.56 92.421c10.728-30.916 19.596-50.619 26.606-59.109 10.318-12.496 20.243-3.8941 32.988 3.1917 20.65 11.48 32.267-5.8848 39.064-13.766" stroke="url(#b)"/>
+<path transform="translate(40.949 50.938) rotate(30) translate(-40.949 -50.938)" d="m59.801 98.873c0-3.0286-12.568-34.985-37.705-95.868" stroke="url(#a)"/>
+</g>
+<g transform="translate(185 34)" stroke-linecap="round" stroke-width="18">
+<path d="m62.653 117.17c0-3.0286-15.819-42.085-47.456-117.17" stroke="url(#a)"/>
+<path d="m40.884 24.094c-28.996 4.8445-42.568 16.623-40.717 35.335 2.7762 28.069 28.306 24.441 34.319 53.342" stroke="url(#b)"/>
+<path transform="translate(74.918 80.494) rotate(30) translate(-74.918 -80.494)" d="m86.814 114.2c0-3.0286-7.931-25.497-23.793-67.406" stroke="url(#a)"/>
+</g>
+<g fill="url(#c)">
+<path d="m0.0188 76.504c31.995 31.341 75.721 50.544 131.18 57.609 83.184 10.598 111.64-8.9883 228.43-15.613s242.63 28.059 354.28 23.613c111.64-4.4453 278.84-58.344 372.33-125.62 16.788-12.08 34.095-24.128 34.825-9.6221 1.1946 23.717 1.7919 75.089 1.7919 154.12h-1122.8v-84.482z"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>

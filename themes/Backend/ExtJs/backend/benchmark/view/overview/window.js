@@ -3,6 +3,9 @@
 //{block name="backend/benchmark/view/overview/window"}
 Ext.define('Shopware.apps.Benchmark.view.overview.Window', {
     extend: 'Enlight.app.Window',
+    layout: 'fit',
+    width: 1050,
+    height: 650,
 
     title: '{s name="overview/title"}Benchmark Overview{/s}',
 
@@ -16,7 +19,7 @@ Ext.define('Shopware.apps.Benchmark.view.overview.Window', {
      * @returns { Ext.container.Container[] }
      */
     getItems: function () {
-        var url = '{url controller=Benchmark action=render}';
+        var url = '{url controller=BenchmarkOverview}';
 
         return [
             Ext.create('Ext.container.Container', {
