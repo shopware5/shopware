@@ -1137,10 +1137,7 @@
 
             html = response.listing.trim();
 
-            setTimeout(function () {
-                listing.html(html);
-            }, 1);
-
+            listing.html(html);
             window.picturefill();
 
             listing.removeClass(this.opts.isLoadingCls);
