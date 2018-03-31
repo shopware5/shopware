@@ -234,4 +234,25 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     {
         return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $string)), '_');
     }
+
+    /**
+     * Check if a list of given plugins is currently available
+     * and active
+     *
+     * @param array $plugins
+     *
+     * @return bool
+     */
+    protected function assertRequiredPluginsPresent(array $plugins)
+    {
+        $pluginRepository = Shopware()->Models()->getRepository(\Shopware\Models\Plugin\Plugin::class);
+        foreach ($plugins as $plugin) {
+            $test = $pluginRepository->findOneBy(['name' => $plugin, 'active' => 1]);
+            if (!$test) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
