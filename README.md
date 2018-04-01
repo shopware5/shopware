@@ -10,6 +10,7 @@
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/shopware/shopware>
 - **Issue Tracker**: <https://issues.shopware.com>
+- **Shopmogifyware** Get your shopware shop in your favourite emoji!: <https://shyware.de/>
 
 ## Overview
 
