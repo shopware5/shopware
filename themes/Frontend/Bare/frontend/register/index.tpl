@@ -111,7 +111,7 @@
             {/block}
 
             {block name='frontend_register_index_form'}
-                <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
+                <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form" id="register--form">
 
                     {block name='frontend_register_index_form_captcha_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$errors.captcha}
