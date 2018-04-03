@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -47,15 +48,23 @@ class ProductNumberService implements ProductNumberServiceInterface
     private $config;
 
     /**
-     * @param Connection                  $connection
+     * @var ShopContextInterface
+     */
+    private $shopContext;
+
+    /**
+     * @param Connection $connection
      * @param \Shopware_Components_Config $config
+     * @param ContextServiceInterface $contextService
      */
     public function __construct(
         Connection $connection,
-        \Shopware_Components_Config $config
+        \Shopware_Components_Config $config,
+        ContextServiceInterface $contextService
     ) {
         $this->connection = $connection;
         $this->config = $config;
+        $this->shopContext = $contextService->getShopContext();
     }
 
     /**
@@ -172,10 +181,13 @@ class ProductNumberService implements ProductNumberServiceInterface
         $query->select(['variant.ordernumber'])
             ->from('s_articles_details', 'variant')
             ->where('variant.articleID = :productId')
-            ->andWhere('variant.active = 1')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->setParameter(':productId', $productId);
+
+        if (!$this->shopContext->isAdmin()) {
+            $query->andWhere('variant.active = 1');
+        }
 
         foreach ($selection as $optionId) {
             $alias = 'option_' . (int) $optionId;
@@ -283,7 +295,13 @@ class ProductNumberService implements ProductNumberServiceInterface
         $query = $this->connection->createQueryBuilder();
         $query->select(['variant.ordernumber']);
         $query->from('s_articles_details', 'variant');
-        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND variant.active = 1');
+
+        $andWhere = '';
+        if (!$this->shopContext->isAdmin()) {
+            $andWhere = ' AND variant.active = 1';
+        }
+
+        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID' . $andWhere);
         $query->setMaxResults(1);
 
         return $query;

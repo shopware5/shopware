@@ -92,6 +92,11 @@ class ShopContext extends Extendable implements ProductContextInterface
     protected $customerStreamIds;
 
     /**
+     * @var bool
+     */
+    protected $admin = false;
+
+    /**
      * @param string       $baseUrl
      * @param Shop         $shop
      * @param Currency     $currency
@@ -102,6 +107,7 @@ class ShopContext extends Extendable implements ProductContextInterface
      * @param Area|null    $area
      * @param Country|null $country
      * @param State|null   $state
+     * @param bool         $admin
      * @param int[]        $customerStreamIds
      */
     public function __construct(
@@ -115,7 +121,8 @@ class ShopContext extends Extendable implements ProductContextInterface
         Area $area = null,
         Country $country = null,
         State $state = null,
-        $customerStreamIds = []
+        $customerStreamIds = [],
+        $admin = false
     ) {
         $this->baseUrl = $baseUrl;
         $this->shop = $shop;
@@ -128,6 +135,7 @@ class ShopContext extends Extendable implements ProductContextInterface
         $this->country = $country;
         $this->state = $state;
         $this->customerStreamIds = $customerStreamIds;
+        $this->admin = $admin;
     }
 
     /**
@@ -220,9 +228,20 @@ class ShopContext extends Extendable implements ProductContextInterface
         return $this->state;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActiveCustomerStreamIds()
     {
         return $this->customerStreamIds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAdmin()
+    {
+        return $this->admin;
     }
 
     /**

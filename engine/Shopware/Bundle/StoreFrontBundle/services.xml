@@ -19,6 +19,7 @@
         <service id="shopware_storefront.product_number_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductNumberService">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="config" />
+            <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
         <service id="shopware_storefront.list_product_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService">
@@ -147,6 +148,7 @@
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.product_hydrator_dbal"/>
             <argument type="service" id="config" />
+            <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
         <service id="shopware_storefront.media_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\MediaGateway">

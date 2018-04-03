@@ -126,4 +126,9 @@ interface ShopContextInterface
      * @return int[]
      */
     public function getActiveCustomerStreamIds();
+
+    /**
+     * @return bool
+     */
+    public function isAdmin();
 }

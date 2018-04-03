@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -66,21 +67,29 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     private $connection;
 
     /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\ProductHydrator    $hydrator
+     * @var Struct\ProductContextInterface
+     */
+    private $shopContext;
+
+    /**
+     * @param Connection $connection
+     * @param FieldHelper $fieldHelper
+     * @param Hydrator\ProductHydrator $hydrator
      * @param \Shopware_Components_Config $config
+     * @param ContextServiceInterface $contextService
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ProductHydrator $hydrator,
-        \Shopware_Components_Config $config
+        \Shopware_Components_Config $config,
+        ContextServiceInterface $contextService
     ) {
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;
         $this->connection = $connection;
         $this->config = $config;
+        $this->shopContext = $contextService->getShopContext();
     }
 
     /**
@@ -160,9 +169,13 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->leftJoin('variant', 's_articles_esd', 'esd', 'esd.articledetailsID = variant.id')
             ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esdAttribute.esdID = esd.id')
             ->where('variant.ordernumber IN (:numbers)')
-            ->andWhere('variant.active = 1')
-            ->andWhere('product.active = 1')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+
+        if (!$this->shopContext->isAdmin()) {
+            $query
+                ->andWhere('variant.active = 1')
+                ->andWhere('product.active = 1');
+        }
 
         if ($this->config->get('hideNoInstock')) {
             $query->andHaving('__product_has_available_variants >= 1');

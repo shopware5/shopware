@@ -138,7 +138,8 @@ class ContextService implements ContextServiceInterface
             $this->getStoreFrontAreaId(),
             $this->getStoreFrontCountryId(),
             $this->getStoreFrontStateId(),
-            $this->getStoreFrontStreamIds()
+            $this->getStoreFrontStreamIds(),
+            $this->getStoreFrontAdmin()
         );
     }
 
@@ -320,13 +321,15 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
-     * @param string      $baseUrl
-     * @param int         $shopId
-     * @param null|int    $currencyId
+     * @param string $baseUrl
+     * @param int $shopId
+     * @param null|int $currencyId
      * @param null|string $currentCustomerGroupKey
-     * @param null|int    $areaId
-     * @param null|int    $countryId
-     * @param null|int    $stateId
+     * @param null|int $areaId
+     * @param null|int $countryId
+     * @param null|int $stateId
+     * @param array $streamIds
+     * @param bool $admin
      *
      * @return ShopContext
      */
@@ -338,12 +341,13 @@ class ContextService implements ContextServiceInterface
         $areaId = null,
         $countryId = null,
         $stateId = null,
-        $streamIds = []
+        $streamIds = [],
+        $admin = false
     ) {
         $shop = $this->shopGateway->get($shopId);
         $fallbackCustomerGroupKey = self::FALLBACK_CUSTOMER_GROUP;
 
-        if ($currentCustomerGroupKey == null) {
+        if ($currentCustomerGroupKey === null) {
             $currentCustomerGroupKey = $fallbackCustomerGroupKey;
         }
 
@@ -353,7 +357,7 @@ class ContextService implements ContextServiceInterface
         $fallbackCustomerGroup = $groups[$fallbackCustomerGroupKey];
 
         $currency = null;
-        if ($currencyId != null) {
+        if ($currencyId !== null) {
             $currency = $this->currencyGateway->getList([$currencyId]);
             $currency = array_shift($currency);
         }
@@ -392,7 +396,8 @@ class ContextService implements ContextServiceInterface
             $area,
             $country,
             $state,
-            $streamIds
+            $streamIds,
+            $admin
         );
     }
 
@@ -428,6 +433,17 @@ class ContextService implements ContextServiceInterface
         return $this->getStreamsOfCustomerId($customerId);
     }
 
+    /**
+     * @return bool
+     */
+    private function getStoreFrontAdmin()
+    {
+        return $this->container->get('session')->get('Admin', false);
+    }
+
+    /**
+     * @return int|null
+     */
     private function getStoreFrontCustomerId()
     {
         $session = $this->container->get('session');
