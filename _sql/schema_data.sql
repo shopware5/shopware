@@ -229,7 +229,7 @@ INSERT INTO `order_state` (`id`, `version_id`, `position`, `has_mail`, `created_
   (UNHEX('1194A493806742C9B85E61F1F2CF9BE8'),	unhex('ffffffffffffffffffffffffffffffff'), 1,	0,	'2018-01-08 09:12:15',	NULL);
 
 INSERT INTO `order_state_translation` (`description`, `version_id`, `order_state_id`, `language_id`) VALUES
-  ('Offen',	UNHEX('1194A493806742C9B85E61F1F2CF9BE8'), unhex('ffffffffffffffffffffffffffffffff'),	UNHEX('ffffffffffffffffffffffffffffffff'));
+  ('Offen',	UNHEX('ffffffffffffffffffffffffffffffff'), unhex('1194A493806742C9B85E61F1F2CF9BE8'),	UNHEX('ffffffffffffffffffffffffffffffff'));
 
 INSERT INTO `order_transaction_state` (`id`, `version_id`, `position`, `has_mail`, `created_at`, `updated_at`) VALUES
   (UNHEX('099E79DBFA9F43E4876B172FF58359F2'),	unhex('ffffffffffffffffffffffffffffffff'),	3,	0,	'2018-03-08 10:45:04',	NULL),
@@ -793,14 +793,14 @@ INSERT INTO `payment_method` (`id`, `version_id`,`technical_name`, `template`, `
   (unhex('77573b9cf7914cb5a9519945bff1d95b'),	unhex('ffffffffffffffffffffffffffffffff'), 'cash',	'cash.tpl',	'Shopware\\Payment\\PaymentHandler\\CashPayment',	'',	0,	NULL,	NULL,	'',	2,	1,	0,	'',	0,	NULL,	NULL,	NULL,	0,	NULL,	'2017-12-14 15:45:46',	NULL),
   (unhex('19d144ffe15f4772860d59fca7f207c1'),	unhex('ffffffffffffffffffffffffffffffff'), 'invoice',	'invoice.tpl',	'Shopware\\Payment\\PaymentHandler\\InvoicePayment',	'',	0,	NULL,	5,	'',	3,	1,	1,	'',	0,	'',	NULL,	NULL,	0,	NULL,	'2017-12-14 15:45:46',	NULL),
   (unhex('47160b00cd064b0188176451f9f3c247'),	unhex('ffffffffffffffffffffffffffffffff'), 'prepayment',	'prepayment.tpl',	'Shopware\\Payment\\PaymentHandler\\PrePayment',	'',	0,	NULL,	NULL,	'',	1,	1,	0,	'',	0,	NULL,	NULL,	NULL,	0,	NULL,	'2017-12-14 15:45:46',	NULL),
-  (unhex('a6ddadce4cb441f3976a32505049f037'),	unhex('ffffffffffffffffffffffffffffffff'), 'sepa',	'sepa.tpl',	'Shopware\\Payment\\PaymentHandler\\SEPAPayment',	'',	0,	NULL,	NULL,	'',	5,	1,	1,	'',	0,	'',	NULL,	NULL,	0,	NULL,	'2017-12-14 15:45:46',	NULL);
+  (unhex('a6ddadce4cb441f3976a32505049f037'),	unhex('ffffffffffffffffffffffffffffffff'), 'sepa',	'@Payment/frontend/sepa.html.twig',	'Shopware\\Payment\\PaymentHandler\\SEPAPayment',	'',	0,	NULL,	NULL,	'',	5,	1,	1,	'',	0,	'',	NULL,	NULL,	0,	NULL,	'2017-12-14 15:45:46',	NULL);
 
 INSERT INTO `payment_method_translation` (`payment_method_id`, `version_id`, `language_id`, `name`, `additional_description`) VALUES
   (unhex('e84976ace9ab4928a3dcc387b66dbaa6'),	unhex('ffffffffffffffffffffffffffffffff'), unhex('ffffffffffffffffffffffffffffffff'),	'Debit',	'Additional text'),
   (unhex('77573b9cf7914cb5a9519945bff1d95b'),	unhex('ffffffffffffffffffffffffffffffff'), unhex('ffffffffffffffffffffffffffffffff'),	'Cash on delivery',	'(including 2.00 Euro VAT)'),
   (unhex('19d144ffe15f4772860d59fca7f207c1'),	unhex('ffffffffffffffffffffffffffffffff'), unhex('ffffffffffffffffffffffffffffffff'),	'Invoice',	'Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.'),
   (unhex('47160b00cd064b0188176451f9f3c247'),	unhex('ffffffffffffffffffffffffffffffff'), unhex('ffffffffffffffffffffffffffffffff'),	'Paid in advance',	'The goods are delivered directly upon receipt of payment.'),
-  (unhex('a6ddadce4cb441f3976a32505049f037'),	unhex('ffffffffffffffffffffffffffffffff'), unhex('ffffffffffffffffffffffffffffffff'),	'',	'SEPA direct debit');
+  (unhex('a6ddadce4cb441f3976a32505049f037'),	unhex('ffffffffffffffffffffffffffffffff'), unhex('ffffffffffffffffffffffffffffffff'),	'SEPA direct debit',	'');
 
 INSERT INTO `shipping_method` (`id`, `version_id`,`type`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `shipping_free`, `bind_shippingfree`, `bind_time_from`, `bind_time_to`, `bind_instock`, `bind_laststock`, `bind_weekday_from`, `bind_weekday_to`, `bind_weight_from`, `bind_weight_to`, `bind_price_from`, `bind_price_to`, `bind_sql`, `status_link`, `calculation_sql`, `created_at`, `updated_at`) VALUES
   (unhex('417beeb2dddf45d1b90188fd211343c3'),	unhex('ffffffffffffffffffffffffffffffff'),0,	1,	1,	1,	3,	0,	NULL,	0,	NULL,	NULL,	NULL,	0,	NULL,	NULL,	NULL,	1.000,	NULL,	NULL,	NULL,	'',	NULL,	'2017-12-14 15:45:50',	NULL);
