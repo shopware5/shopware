@@ -8,7 +8,6 @@ use Enlight_Components_Test_Controller_TestCase;
 class BootstrapTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @group Test
      * @dataProvider getRedirectLinks
      * @param string $oldUrl
      * @param string $newUrl
