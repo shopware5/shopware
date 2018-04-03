@@ -2505,29 +2505,14 @@ class Article extends Resource implements BatchInterface
      */
     private function getAttributeProperties()
     {
-        $metaData = $this->getManager()->getClassMetadata('\Shopware\Models\Attribute\Article');
-        $properties = [];
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
+        $crud = $this->getContainer()->get('shopware_attribute.crud_service');
 
-        foreach ($metaData->getReflectionProperties() as $property) {
-            if ($metaData->hasAssociation($property->getName())) {
-                continue;
-            }
-            $properties[$property->getName()] = $property->getName();
-        }
-
-        foreach ($metaData->getAssociationMappings() as $property => $mapping) {
-            $name = $metaData->getSingleAssociationJoinColumnName($property);
-            $field = $metaData->getFieldForColumn($name);
-            unset($properties[$field]);
-        }
-
-        foreach ($metaData->getIdentifierFieldNames() as $property) {
-            unset($properties[$property]);
-        }
+        $list = $crud->getList('s_articles_attributes');
 
         $fields = [];
-        foreach ($properties as $property) {
-            $fields[] = '__attribute_' . $property;
+        foreach ($list as $property) {
+            $fields[] = '__attribute_' . $property->getColumnName();
         }
 
         return $fields;
