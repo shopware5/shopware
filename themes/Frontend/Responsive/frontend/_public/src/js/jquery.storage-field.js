@@ -103,7 +103,7 @@
             }
 
             // When the field is just a pseudo field also fill the original field.
-            if (me.$el.is('[data-selector]')) {
+            if (me.$el.is('[data-selector]') && value && value.length) {
                 $(me.$el.attr('data-selector')).val(value);
             }
 
