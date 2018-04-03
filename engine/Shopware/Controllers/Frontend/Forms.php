@@ -155,9 +155,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
-            $this->Response()->setHttpResponseCode(404);
-
-            return $this->forward('index', 'index');
+            throw new \Enlight_Controller_Exception(
+                'Form not found',
+                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+            );
         }
 
         /* @var $field Field */
