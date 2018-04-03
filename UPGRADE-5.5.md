@@ -22,6 +22,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Removed tables `s_user_billingaddress_attributes` and `s_user_shippingaddress_attributes`
 * Removed class `Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler`
+* Removed event `Shopware_Controllers_Widgets_Emotion_AddElement`
 * Removed methods `getByCategory` and `getListByCategory` of interface `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface`
 * Removed `sSelfCanonical` of `Shopware\Components\Compatibility\LegacyStructConverter`
 * Removed method `getSourceSet` of `Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail`
