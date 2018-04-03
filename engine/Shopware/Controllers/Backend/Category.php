@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Models\Category\Category;
 
@@ -371,7 +370,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             ->innerJoin('articles.supplier', 'suppliers')
             ->innerJoin('articles.mainDetail', 'details')
             ->where('categories.id = :categoryId')
-            ->setParameters(['categoryId' => $categoryId]);
+            ->setParameter('categoryId', $categoryId);
 
         if (!empty($search)) {
             $builder->andWhere('(articles.name LIKE :search OR suppliers.name LIKE :search OR details.number LIKE :search)');

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Random;
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
@@ -576,7 +575,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $this->redirect(
             [
-                'controller' => 'ticket',
+                'controller' => 'forms',
                 'action' => 'index',
                 'sFid' => $formId,
                 'success' => 1,

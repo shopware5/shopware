@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
@@ -41,7 +40,7 @@ use Shopware\Models\Article\Supplier;
 class sRewriteTable
 {
     /**
-     * @var sSystem
+     * @var \sSystem
      */
     public $sSYSTEM;
 
@@ -127,7 +126,7 @@ class sRewriteTable
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
      * @param Shopware_Components_Config              $config
      * @param ModelManager                            $modelManager
-     * @param sSystem                                 $systemModule
+     * @param \sSystem                                $systemModule
      * @param Enlight_Template_Manager                $template
      * @param Shopware_Components_Modules             $moduleManager
      * @param SlugInterface                           $slug
@@ -141,7 +140,7 @@ class sRewriteTable
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
         ModelManager $modelManager = null,
-        sSystem $systemModule = null,
+        \sSystem $systemModule = null,
         Enlight_Template_Manager $template = null,
         Shopware_Components_Modules $moduleManager = null,
         SlugInterface $slug = null,
@@ -248,7 +247,7 @@ class sRewriteTable
         $this->sCreateRewriteTableCampaigns();
         $lastUpdate = $this->sCreateRewriteTableArticles($lastUpdate);
         $this->sCreateRewriteTableContent(null, null, $context);
-        $this->sCreateRewriteTableSuppliers(null, null, $context);
+        $this->createManufacturerUrls($context);
 
         return $lastUpdate;
     }
@@ -266,10 +265,10 @@ class sRewriteTable
             LEFT JOIN s_cms_static cs
               ON ru.org_path LIKE CONCAT('sViewport=custom&sCustom=', cs.id)
             LEFT JOIN s_cms_support ct
-              ON ru.org_path LIKE CONCAT('sViewport=ticket&sFid=', ct.id)
+              ON ru.org_path LIKE CONCAT('sViewport=forms&sFid=', ct.id)
             WHERE (
                 ru.org_path LIKE 'sViewport=custom&sCustom=%'
-                OR ru.org_path LIKE 'sViewport=ticket&sFid=%'
+                OR ru.org_path LIKE 'sViewport=forms&sFid=%'
                 OR ru.org_path LIKE 'sViewport=campaign&sCampaign=%'
                 OR ru.org_path LIKE 'sViewport=content&sContent=%'
             )
@@ -549,21 +548,6 @@ class sRewriteTable
             $org_path = 'sViewport=blog&sAction=detail&sCategory=' . $blogArticle['categoryId'] . '&blogArticle=' . $blogArticle['id'];
             $this->sInsertUrl($org_path, $path);
         }
-    }
-
-    /**
-     * @deprecated since 5.2 will be removed in 5.3, use \sRewriteTable::createManufacturerUrls
-     *
-     * @param int|null             $offset
-     * @param int|null             $limit
-     * @param ShopContextInterface $context
-     *
-     * @throws \Exception
-     */
-    public function sCreateRewriteTableSuppliers($offset = null, $limit = null, ShopContextInterface $context = null)
-    {
-        $context = $this->createFallbackContext($context);
-        $this->createManufacturerUrls($context, $offset, $limit);
     }
 
     /**
@@ -934,7 +918,7 @@ class sRewriteTable
         foreach ($formListData as $form) {
             $this->data->assign('form', $form);
 
-            $org_path = 'sViewport=ticket&sFid=' . $form['id'];
+            $org_path = 'sViewport=forms&sFid=' . $form['id'];
             $path = $this->template->fetch('string:' . $this->config->get('seoFormRouteTemplate'), $this->data);
             $path = $this->sCleanupPath($path);
 
@@ -1117,7 +1101,7 @@ class sRewriteTable
         $matches = [];
 
         // Check if the current url points to a form
-        if (preg_match('/^sViewport=ticket&sFid=(\d+)$/', $currentOrgPath, $matches) === 1) {
+        if (preg_match('/^sViewport=forms&sFid=(\d+)$/', $currentOrgPath, $matches) === 1) {
             return $this->checkSpecificShopForm($matches);
         }
 

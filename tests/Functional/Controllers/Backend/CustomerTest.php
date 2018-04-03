@@ -283,12 +283,6 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->manager->persist($address);
         $this->manager->flush();
 
-        $billing = new \Shopware\Models\Customer\Billing();
-        $billing->fromAddress($address);
-        $billing->setCustomer($dummyData);
-        $this->manager->persist($billing);
-        $this->manager->flush();
-
         $dummyData->setDefaultBillingAddress($address);
 
         $this->manager->persist($dummyData);

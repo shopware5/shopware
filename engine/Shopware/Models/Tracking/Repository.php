@@ -97,11 +97,9 @@ class Repository extends ModelRepository
                 ->where('articleImpression.articleId = :articleId')
                 ->andWhere('articleImpression.shopId = :shopId')
                 ->andWhere('articleImpression.date = :fromDate')
-                ->setParameters([
-                    'articleId' => $articleId,
-                    'shopId' => $shopId,
-                    'fromDate' => $date->format('Y-m-d'),
-            ]);
+                ->setParameter('articleId', $articleId)
+                ->setParameter('shopId', $shopId)
+                ->setParameter('fromDate', $date->format('Y-m-d'));
 
         if ($deviceType) {
             $builder->andWhere('articleImpression.deviceType = :deviceType')

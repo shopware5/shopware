@@ -34,7 +34,7 @@ class Form extends Page implements HelperSelectorInterface
     /**
      * @var string
      */
-    protected $path = 'shopware.php?sViewport=ticket&sFid={formId}';
+    protected $path = 'shopware.php?sViewport=forms&sFid={formId}';
 
     /**
      * {@inheritdoc}

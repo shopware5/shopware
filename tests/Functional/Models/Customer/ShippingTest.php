@@ -44,7 +44,7 @@ class Shopware_Tests_Models_Customer_ShippingTest extends Enlight_Components_Tes
         Shopware()->Models()->flush($shipping);
         Shopware()->Models()->clear();
 
-        $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->find($shippingId);
+        $shipping = Shopware()->Models()->getRepository(\Shopware\Models\Order\Shipping::class)->find($shippingId);
         $this->assertEquals('This is a really really really long city name', $shipping->getStreet());
         $this->assertEquals('This is a really really really long zip code', $shipping->getZipCode());
 
@@ -57,7 +57,7 @@ class Shopware_Tests_Models_Customer_ShippingTest extends Enlight_Components_Tes
 
     private function getRandomShipping()
     {
-        $ids = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')
+        $ids = Shopware()->Models()->getRepository(\Shopware\Models\Order\Shipping::class)
             ->createQueryBuilder('b')
             ->select('b.id')
             ->getQuery()
@@ -65,6 +65,6 @@ class Shopware_Tests_Models_Customer_ShippingTest extends Enlight_Components_Tes
 
         shuffle($ids);
 
-        return Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->find(array_shift($ids));
+        return Shopware()->Models()->getRepository(\Shopware\Models\Order\Shipping::class)->find(array_shift($ids));
     }
 }

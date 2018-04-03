@@ -233,9 +233,6 @@ class LegacyStructConverter
         $blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
         $detailUrl = ($category->isBlog() ? $blogBaseUrl : $baseUrl) . $category->getId();
-
-        /** @deprecated sSelfCanonical, use $canonicalParams instead */
-        $canonical = $detailUrl;
         $canonicalParams = $this->getCategoryCanonicalParams($category);
 
         if ($media && !array_key_exists('path', $media)) {
@@ -275,7 +272,6 @@ class LegacyStructConverter
             'cmsheadline' => $category->getCmsHeadline(),
             'cmstext' => $category->getCmsText(),
             'sSelf' => $detailUrl,
-            'sSelfCanonical' => $canonical,
             'canonicalParams' => $canonicalParams,
             'hide_sortings' => $category->hideSortings(),
             'rssFeed' => $detailUrl . '&sRss=1',

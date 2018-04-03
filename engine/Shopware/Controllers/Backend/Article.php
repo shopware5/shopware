@@ -756,7 +756,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $builder->select(['categories.id'])
             ->from(\Shopware\Models\Category\Category::class, 'categories', 'categories.id')
             ->andWhere(':articleId MEMBER OF categories.articles')
-            ->setParameters(['articleId' => $articleId]);
+            ->setParameter('articleId', $articleId);
 
         $result = $builder->getQuery()->getArrayResult();
         if (empty($result)) {
@@ -859,7 +859,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 ->where('article.id = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->orderBy('images.position')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         $result = $builder->getQuery()->getArrayResult();
 
@@ -967,7 +967,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->addOrderBy('options.groupId', 'ASC')
             ->addOrderBy('options.position', 'ASC')
             ->where('article.id = :articleId')
-            ->setParameters(['articleId' => $articleId]);
+            ->setParameter('articleId', $articleId);
 
         $result = $builder->getQuery()->getArrayResult();
 
@@ -1878,7 +1878,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $offset = $this->Request()->getParam('offset', null);
         $limit = $this->Request()->getParam('limit', null);
 
-        if (!($articleId > 0) || '' === $syntax) {
+        if (!($articleId > 0) || $syntax === '') {
             return;
         }
 
@@ -3148,7 +3148,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->delete(\Shopware\Models\Attribute\Article::class, 'attribute')
                 ->where('attribute.articleDetailId IN (:articleDetailIds)')
-                ->setParameters(['articleDetailIds' => $ids])
+                ->setParameter('articleDetailIds', $ids)
                 ->getQuery()
                 ->execute();
         }
@@ -3325,7 +3325,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->leftJoin('detail.attribute', 'attribute')
             ->leftJoin('prices.attribute', 'priceAttribute')
             ->where('detail.id = :id')
-            ->setParameters(['id' => $article->getMainDetail()->getId()]);
+            ->setParameter('id', $article->getMainDetail()->getId());
 
         $data = $builder->getQuery()->getArrayResult();
         $data = $data[0];

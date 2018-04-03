@@ -36,39 +36,6 @@ class Repository extends ModelRepository
     /**
      * Returns a query-object for all known and active payments
      *
-     * @deprecated use getActivePaymentsQuery instead
-     *
-     * @param null $filter
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
-     *
-     * @return \Doctrine\ORM\Query
-     */
-    public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
-    {
-        return $this->getActivePaymentsQuery($filter, $order, $offset, $limit);
-    }
-
-    /**
-     * Helper method to create the query builder for the "getPaymentsQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     *
-     * @deprecated use getActivePaymentsQueryBuilder instead
-     *
-     * @param null $filter
-     * @param null $order
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getPaymentsQueryBuilder($filter = null, $order = null)
-    {
-        return $this->getActivePaymentsQueryBuilder($filter, $order);
-    }
-
-    /**
-     * Returns a query-object for all known and active payments
-     *
      * @param null $filter
      * @param null $order
      * @param null $offset
@@ -226,7 +193,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from('Shopware\Models\Attribute\Payment', 'attribute')
+                      ->from(\Shopware\Models\Attribute\Payment::class, 'attribute')
                       ->where('attribute.paymentId = ?1')
                       ->setParameter(1, $paymentId);
 

@@ -30,11 +30,5 @@
                 </button>
             </form>
         {/block}
-
-        {* @deprecated: block no longer in use *}
-        {block name='frontend_listing_box_article_actions_more'}{/block}
-
-        {* @deprecated: misleading name *}
-        {block name="frontend_listing_box_article_actions_inline"}{/block}
     </div>
 {/block}

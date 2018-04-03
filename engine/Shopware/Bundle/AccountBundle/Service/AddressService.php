@@ -27,9 +27,7 @@ namespace Shopware\Bundle\AccountBundle\Service;
 use Shopware\Bundle\AccountBundle\Service\Validator\AddressValidatorInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Address;
-use Shopware\Models\Customer\Billing;
 use Shopware\Models\Customer\Customer;
-use Shopware\Models\Customer\Shipping;
 
 class AddressService implements AddressServiceInterface
 {
@@ -85,21 +83,6 @@ class AddressService implements AddressServiceInterface
     public function update(Address $address)
     {
         $this->validator->validate($address);
-
-        if ($address->getCustomer()->getDefaultBillingAddress()->getId() == $address->getId()) {
-            $billingAddress = $address->getCustomer()->getBilling();
-            if ($billingAddress !== null) {
-                $billingAddress->fromAddress($address);
-            }
-        }
-
-        if ($address->getCustomer()->getDefaultShippingAddress()->getId() == $address->getId()) {
-            $shippingAddress = $address->getCustomer()->getShipping();
-            if ($shippingAddress !== null) {
-                $shippingAddress->fromAddress($address);
-            }
-        }
-
         $this->modelManager->flush();
         $this->modelManager->refresh($address);
     }
@@ -130,18 +113,9 @@ class AddressService implements AddressServiceInterface
         $customer = $address->getCustomer();
         $customer->setDefaultBillingAddress($address);
 
-        $billing = $customer->getBilling();
-        if (!$billing) {
-            $billing = new Billing();
-            $billing->setCustomer($customer);
-            $this->modelManager->persist($billing);
-        }
-
-        $billing->fromAddress($address);
-
         $this->update($address);
 
-        $this->modelManager->flush([$customer, $billing]);
+        $this->modelManager->flush([$customer]);
     }
 
     /**
@@ -152,16 +126,8 @@ class AddressService implements AddressServiceInterface
         $customer = $address->getCustomer();
         $customer->setDefaultShippingAddress($address);
 
-        $shipping = $customer->getShipping();
-        if (!$shipping) {
-            $shipping = new Shipping();
-            $shipping->setCustomer($customer);
-            $this->modelManager->persist($shipping);
-        }
-        $shipping->fromAddress($address);
-
         $this->update($address);
 
-        $this->modelManager->flush([$customer, $shipping]);
+        $this->modelManager->flush([$customer]);
     }
 }

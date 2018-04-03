@@ -358,8 +358,8 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         $this->assertEquals('EK', $customer->getGroup()->getKey());
         $this->assertNotEmpty($customer->getPassword());
 
-        $this->assertNotNull($customer->getBilling());
-        $this->assertNotNull($customer->getShipping());
+        $this->assertNotNull($customer->getDefaultBillingAddress());
+        $this->assertNotNull($customer->getDefaultShippingAddress());
     }
 
     /**
@@ -369,7 +369,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
      */
     private function assertAddress(array $demoData, Customer $customer, $shipping = false)
     {
-        $legacyAddress = $shipping ? $customer->getShipping() : $customer->getBilling();
+        $legacyAddress = $shipping ? $customer->getDefaultShippingAddress() : $customer->getDefaultBillingAddress();
         $address = $shipping ? $customer->getDefaultShippingAddress() : $customer->getDefaultBillingAddress();
 
         $this->assertEquals($demoData['firstname'], $legacyAddress->getFirstName());
@@ -378,11 +378,11 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         $this->assertEquals($demoData['lastname'], $legacyAddress->getLastName());
         $this->assertEquals($demoData['lastname'], $address->getLastname());
 
-        $this->assertEquals($demoData['country']->getId(), $legacyAddress->getCountryId());
+        $this->assertEquals($demoData['country']->getId(), $legacyAddress->getCountry()->getId());
         $this->assertEquals($demoData['country']->getId(), $address->getCountry()->getId());
 
         if (!empty($demoData['state'])) {
-            $this->assertEquals($demoData['state']->getId(), $legacyAddress->getStateId());
+            $this->assertEquals($demoData['state']->getId(), $legacyAddress->getState()->getId());
             $this->assertEquals($demoData['state']->getId(), $address->getState()->getId());
         }
     }

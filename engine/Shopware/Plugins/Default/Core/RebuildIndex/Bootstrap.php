@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 
 /**
@@ -178,7 +177,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
             $this->RewriteTable()->sCreateRewriteTableContent();
             $this->RewriteTable()->sCreateRewriteTableBlog();
-            $this->RewriteTable()->sCreateRewriteTableSuppliers(null, null, $context);
+            $this->RewriteTable()->createManufacturerUrls($context);
             $this->RewriteTable()->sCreateRewriteTableStatic();
 
             Shopware()->Events()->notify('Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable');

@@ -11,9 +11,6 @@
         <input type="hidden" name="sActionIdentifier" value="{$sUniqueRand}"/>
         <input type="hidden" name="sAddAccessories" id="sAddAccessories" value=""/>
 
-        {* @deprecated - Product variants block *}
-        {block name='frontend_detail_buy_variant'}{/block}
-
         <input type="hidden" name="sAdd" value="{$sArticle.ordernumber}"/>
 
         {* Article accessories *}

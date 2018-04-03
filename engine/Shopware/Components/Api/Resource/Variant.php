@@ -527,7 +527,7 @@ class Variant extends Resource implements BatchInterface
         }
 
         /*
-         * @Deprecated
+         * @Deprecated Since 5.4, to be removed in 5.6
          *
          * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
          *

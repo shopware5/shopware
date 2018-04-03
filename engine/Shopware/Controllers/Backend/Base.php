@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Document\Document;
@@ -131,9 +130,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getPaymentsAction()
     {
         // Load shop repository
+        /** @var $repository \Shopware\Models\Payment\Repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
 
-        $query = $repository->getPaymentsQuery(
+        $query = $repository->getActivePaymentsQuery(
             $filter = $this->Request()->getParam('filter', []),
             $order = $this->Request()->getParam('sort', []),
             $offset = $this->Request()->getParam('start'),

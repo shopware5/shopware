@@ -186,7 +186,7 @@ class QueryBuilder extends BaseQueryBuilder
                 $exprKey = $this->alias . '.' . $exprKey;
             }
 
-            if (null == $expression) {
+            if ($expression == null) {
                 switch (true) {
                     case is_string($where):
 

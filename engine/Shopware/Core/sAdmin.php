@@ -168,7 +168,7 @@ class sAdmin
      * @param \Shopware\Components\Password\Manager|null            $passwordEncoder
      * @param Shopware_Components_Snippet_Manager|null              $snippetManager
      * @param Shopware_Components_Modules|null                      $moduleManager
-     * @param sSystem|null                                          $systemModule
+     * @param \sSystem|null                                         $systemModule
      * @param StoreFrontBundle\Service\ContextServiceInterface|null $contextService
      * @param EmailValidatorInterface|null                          $emailValidator
      * @param AddressServiceInterface|null                          $addressService
@@ -184,7 +184,7 @@ class sAdmin
         \Shopware\Components\Password\Manager $passwordEncoder = null,
         Shopware_Components_Snippet_Manager $snippetManager = null,
         Shopware_Components_Modules $moduleManager = null,
-        sSystem $systemModule = null,
+        \sSystem $systemModule = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         EmailValidatorInterface $emailValidator = null,
         AddressServiceInterface $addressService = null,
@@ -238,7 +238,7 @@ class sAdmin
         ) ?: [];
 
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
-        $isMobile = ($this->front->Request()->getDeviceType() == 'mobile');
+        $isMobile = $this->front->Request()->getDeviceType() === 'mobile';
 
         if (!count($user)) {
             $user = [];
@@ -1072,8 +1072,8 @@ class sAdmin
             }
 
             $countryList[$key]['flag'] =
-                ($countryList[$key]['id'] == $this->front->Request()->getPost('country')
-                    || $countryList[$key]['id'] == $this->front->Request()->getPost('countryID')
+                ($this->front->Request()->getPost('country') == $countryList[$key]['id']
+                    || $this->front->Request()->getPost('countryID') == $countryList[$key]['id']
                 );
         }
 
@@ -1637,7 +1637,7 @@ class sAdmin
      */
     public function sRiskCUSTOMERGROUPIS($user, $order, $value)
     {
-        return $user['additional']['user']['customergroup'] == $value;
+        return $value == $user['additional']['user']['customergroup'];
     }
 
     /**
@@ -1651,7 +1651,7 @@ class sAdmin
      */
     public function sRiskCUSTOMERGROUPISNOT($user, $order, $value)
     {
-        return $user['additional']['user']['customergroup'] != $value;
+        return $value != $user['additional']['user']['customergroup'];
     }
 
     /**
@@ -1669,7 +1669,7 @@ class sAdmin
             $value = '';
         }
 
-        return $user['shippingaddress']['zipcode'] == $value;
+        return $value == $user['shippingaddress']['zipcode'];
     }
 
     /**
@@ -1687,7 +1687,7 @@ class sAdmin
             $value = '';
         }
 
-        return $user['billingaddress']['zipcode'] == $value;
+        return $value == $user['billingaddress']['zipcode'];
     }
 
     /**
@@ -1701,7 +1701,7 @@ class sAdmin
      */
     public function sRiskZONEIS($user, $order, $value)
     {
-        return $user['additional']['countryShipping']['countryarea'] == $value;
+        return $value == $user['additional']['countryShipping']['countryarea'];
     }
 
     /**
@@ -1715,7 +1715,7 @@ class sAdmin
      */
     public function sRiskZONEISNOT($user, $order, $value)
     {
-        return $user['additional']['countryShipping']['countryarea'] != $value;
+        return $value != $user['additional']['countryShipping']['countryarea'];
     }
 
     /**
@@ -1729,7 +1729,7 @@ class sAdmin
      */
     public function sRiskBILLINGZONEIS($user, $order, $value)
     {
-        return $user['additional']['country']['countryarea'] == $value;
+        return $value == $user['additional']['country']['countryarea'];
     }
 
     /**
@@ -1743,7 +1743,7 @@ class sAdmin
      */
     public function sRiskBILLINGZONEISNOT($user, $order, $value)
     {
-        return $user['additional']['country']['countryarea'] != $value;
+        return $value != $user['additional']['country']['countryarea'];
     }
 
     /**
@@ -1761,7 +1761,7 @@ class sAdmin
             return true;
         }
 
-        return $user['additional']['countryShipping']['countryiso'] == $value;
+        return $value == $user['additional']['countryShipping']['countryiso'];
     }
 
     /**
@@ -1779,7 +1779,7 @@ class sAdmin
             return true;
         }
 
-        return $user['additional']['countryShipping']['countryiso'] != $value;
+        return $value != $user['additional']['countryShipping']['countryiso'];
     }
 
     /**
@@ -1797,7 +1797,7 @@ class sAdmin
             return true;
         }
 
-        return $user['additional']['country']['countryiso'] == $value;
+        return $value == $user['additional']['country']['countryiso'];
     }
 
     /**
@@ -1815,7 +1815,7 @@ class sAdmin
             return true;
         }
 
-        return $user['additional']['country']['countryiso'] != $value;
+        return $value != $user['additional']['country']['countryiso'];
     }
 
     /**
@@ -1830,7 +1830,7 @@ class sAdmin
     public function sRiskNEWCUSTOMER($user, $order, $value)
     {
         return
-            $user['additional']['user']['firstlogin'] == date('Y-m-d')
+            date('Y-m-d') == $user['additional']['user']['firstlogin']
             || !$user['additional']['user']['firstlogin']
             ;
     }
@@ -2151,7 +2151,7 @@ class sAdmin
      */
     public function sRiskCUSTOMERNR($user, $order, $value)
     {
-        return $user['additional']['user']['customernumber'] == $value && !empty($value);
+        return $value == $user['additional']['user']['customernumber'] && !empty($value);
     }
 
     /**

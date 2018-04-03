@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer;
@@ -37,42 +36,49 @@ class sOrder
      * @var array
      */
     public $sUserData;
+
     /**
      * Array with basketdata
      *
      * @var array
      */
     public $sBasketData;
+
     /**
      * Array with shipping / dispatch data
      *
      * @var array
      */
     public $sShippingData;
+
     /**
      * User comment to save within this order
      *
      * @var string
      */
     public $sComment;
+
     /**
      * Payment-mean object
      *
      * @var object
      */
     public $paymentObject;
+
     /**
      * Total amount net
      *
      * @var float
      */
     public $sAmountNet;
+
     /**
      * Total Amount
      *
      * @var float
      */
     public $sAmount;
+
     /**
      * Total Amount with tax (force)
      *
@@ -86,68 +92,62 @@ class sOrder
      * @var float
      */
     public $sShippingcosts;
+
     /**
      * Shipping costs unformated
      *
      * @var float
      */
     public $sShippingcostsNumeric;
+
     /**
      * Shipping costs net unformated
      *
      * @var float
      */
     public $sShippingcostsNumericNet;
+
     /**
      * Pointer to sSystem object
      *
-     * @var sSYSTEM
+     * @var \sSystem
      */
     public $sSYSTEM;
+
     /**
      * TransactionID (epayment)
      *
      * @var string
      */
     public $bookingId;
+
     /**
      * Ordernumber
      *
      * @var string
      */
     public $sOrderNumber;
+
     /**
      * ID of choosen dispatch
      *
      * @var int
      */
     public $dispatchId;
+
     /**
      * Random id to identify the order
      *
      * @var string
      */
     public $uniqueID;
+
     /**
      * Net order true /false
      *
      * @var bool
      */
     public $sNet;    // Complete taxfree
-
-    /**
-     * Custom attributes
-     *
-     * @var string
-     *
-     * @deprecated since 5.2, remove in 5.3. Use orderAttributes instead
-     */
-    public $o_attr_1;
-    public $o_attr_2;
-    public $o_attr_3;
-    public $o_attr_4;
-    public $o_attr_5;
-    public $o_attr_6;
 
     /**
      * Custom attributes
@@ -453,16 +453,7 @@ class sOrder
         }
 
         // Create order attributes
-        $attributeData = [
-            'attribute1' => $this->o_attr_1,
-            'attribute2' => $this->o_attr_2,
-            'attribute3' => $this->o_attr_3,
-            'attribute4' => $this->o_attr_4,
-            'attribute5' => $this->o_attr_5,
-            'attribute6' => $this->o_attr_6,
-        ];
-        $attributeData = array_merge($attributeData, $this->orderAttributes);
-        $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
+        $this->attributePersister->persist($this->orderAttributes, 's_order_attributes', $orderID);
 
         $position = 0;
         foreach ($this->sBasketData['content'] as $basketRow) {
@@ -635,27 +626,16 @@ class sOrder
             //Payment method code failure
         }
 
-        $attributeData = [
-            'attribute1' => $this->o_attr_1,
-            'attribute2' => $this->o_attr_2,
-            'attribute3' => $this->o_attr_3,
-            'attribute4' => $this->o_attr_4,
-            'attribute5' => $this->o_attr_5,
-            'attribute6' => $this->o_attr_6,
-        ];
-
-        $attributeData = array_merge($attributeData, $this->orderAttributes);
-
         $attributeData = $this->eventManager->filter(
             'Shopware_Modules_Order_SaveOrder_FilterAttributes',
-            $attributeData,
+            $this->orderAttributes,
             [
                 'subject' => $this,
                 'orderID' => $orderID,
                 'orderParams' => $orderParams,
             ]
         );
-        
+
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
         unset($attributes['id']);
@@ -903,7 +883,7 @@ class sOrder
         if ($variables['sBookingID']) {
             $context['sBookingID'] = $variables['sBookingID'];
         }
-        
+
         $context = $this->eventManager->filter(
             'Shopware_Modules_Order_SendMail_FilterContext',
             $context,

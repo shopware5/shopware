@@ -64,7 +64,7 @@ class Repository extends ModelRepository
                 ->leftJoin('article.tax', 'tax')
                 ->leftJoin('mainDetail.attribute', 'attribute')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -101,7 +101,7 @@ class Repository extends ModelRepository
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.categories', 'categories', null, null, 'categories.id')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -139,7 +139,7 @@ class Repository extends ModelRepository
                 ->leftJoin('article.similar', 'similar')
                 ->leftJoin('similar.mainDetail', 'similarDetail')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -167,7 +167,7 @@ class Repository extends ModelRepository
                 ->leftJoin('article.relatedProductStreams', 'relatedProductStreams')
                 ->where('article.id = :articleId')
                 ->andWhere('relatedProductStreams.id IS NOT NULL')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -205,7 +205,7 @@ class Repository extends ModelRepository
                 ->leftJoin('article.related', 'accessories')
                 ->leftJoin('accessories.mainDetail', 'accessoryDetail')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -247,7 +247,7 @@ class Repository extends ModelRepository
                 ->leftJoin('mappingRule.option', 'ruleOption')
                 ->where('article.id = :articleId')
                 ->andWhere('images.parentId IS NULL')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -285,7 +285,7 @@ class Repository extends ModelRepository
                 ->leftJoin('article.links', 'links')
                 ->leftJoin('links.attribute', 'linkAttribute')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -323,7 +323,7 @@ class Repository extends ModelRepository
                 ->leftJoin('article.downloads', 'downloads')
                 ->leftJoin('downloads.attribute', 'downloadAttribute')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -360,7 +360,7 @@ class Repository extends ModelRepository
                 ->from('Shopware\Models\Article\Article', 'article')
                 ->leftJoin('article.customerGroups', 'customerGroups')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -402,7 +402,7 @@ class Repository extends ModelRepository
                 ->addOrderBy('options.groupId', 'ASC')
                 ->addOrderBy('options.position', 'ASC')
                 ->where('article.id = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
 
         return $builder;
     }
@@ -1499,7 +1499,7 @@ class Repository extends ModelRepository
                 ->leftJoin('template.attribute', 'attribute')
                 ->leftJoin('prices.attribute', 'priceAttribute')
                 ->where('template.articleId = :articleId')
-                ->setParameters(['articleId' => $articleId]);
+                ->setParameter('articleId', $articleId);
     }
 
     /**

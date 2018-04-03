@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class sAdminTest extends PHPUnit\Framework\TestCase
 {
     /**
@@ -2499,17 +2498,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     private function deleteDummyCustomer(\Shopware\Models\Customer\Customer $customer)
     {
-        $billingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', [$customer->getId()]);
-        $shippingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', [$customer->getId()]);
-
-        if ($billingId) {
-            Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = ' . $billingId);
-            Shopware()->Db()->delete('s_user_billingaddress', 'id = ' . $billingId);
-        }
-        if ($shippingId) {
-            Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = ' . $shippingId);
-            Shopware()->Db()->delete('s_user_shippingaddress', 'id = ' . $shippingId);
-        }
+        Shopware()->Db()->delete('s_user_addresses', 'user_id = ' . $customer->getId());
         Shopware()->Db()->delete('s_core_payment_data', 'user_id = ' . $customer->getId());
         Shopware()->Db()->delete('s_user_attributes', 'userID = ' . $customer->getId());
         Shopware()->Db()->delete('s_user', 'id = ' . $customer->getId());

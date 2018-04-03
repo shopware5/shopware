@@ -93,31 +93,11 @@ Ext.define('Shopware.form.field.PagingComboBox',
      */
     forceDefaultPageSize: false,
 
-    /**
-     * If set to true, the combobox will load the entry it holds by making an additional call to the server. This fixes
-     * issues when saving entries from e.g. page two of the paging combobox.
-     *
-     * Defaults to false, since its use requires the PHP controller to be able to handle requests for a single entry
-     * of the store.
-     * See method `templateComboBoxChanged` for more information.
-     *
-     * This field is marked deprecated and will be set by default in Shopware 5.5
-     *
-     * @default false
-     * @boolean
-     *
-     * @deprecated
-     */
-    preLoadStoredEntry: false,
-
     initComponent: function () {
         var me = this;
 
         me.callParent(arguments);
-
-        if (me.preLoadStoredEntry) {
-            me.on('change', me.templateComboBoxChanged);
-        }
+        me.on('change', me.templateComboBoxChanged);
     },
 
     /**
@@ -144,7 +124,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
                 }
 
                 if (responseData.length > 1) {
-                    throw new Error('The PHP controller returned more than one entry. When using the config \'preLoadStoredEntry\' in the paging combobox, your controller needs to be able to handle requests for just a single entry.');
+                    throw new Error('The PHP controller returned more than one entry. Your controller needs to be able to handle requests for just a single entry.');
                 }
 
                 // Reset extra params and reload the store, so the combobox will still show all possible entries
@@ -161,7 +141,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
      * @returns { string }
      */
     getDisplayValue: function () {
-        if (!this.preLoadStoredEntry) {
+        if (!Ext.isDefined(this.displayTplData)) {
             return this.callParent(arguments);
         }
 

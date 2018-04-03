@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
@@ -46,7 +45,7 @@ class sArticles
     /**
      * Pointer to sSystem object
      *
-     * @var sSystem
+     * @var \sSystem
      */
     public $sSYSTEM;
 
@@ -180,6 +179,9 @@ class sArticles
      */
     private $productNumberService;
 
+    /**
+     * @var StoreFrontBundle\Service\Core\ListingLinkRewriteService
+     */
     private $listingLinkRewriteService;
 
     public function __construct(
@@ -496,89 +498,6 @@ class sArticles
         $supplier['link'] .= '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1&sSupplier=0';
 
         return $supplier;
-    }
-
-    /**
-     * Get all available suppliers from a specific category
-     *
-     * @deprecated since 5.3, will be removed with 5.5 without replacement
-     *
-     * @param int $id    - category id
-     * @param int $limit
-     *
-     * @return array
-     */
-    public function sGetAffectedSuppliers($id = null, $limit = null)
-    {
-        $id = empty($id) ? (int) $this->frontController->Request()->getQuery('sCategory') : (int) $id;
-        $configLimit = $this->config['sMAXSUPPLIERSCATEGORY'] ? $this->config['sMAXSUPPLIERSCATEGORY'] : 30;
-        $limit = empty($limit) ? $configLimit : (int) $limit;
-
-        $sql = "
-            SELECT s.id AS id, COUNT(DISTINCT a.id) AS countSuppliers, s.name AS name, s.img AS image
-            FROM s_articles a
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID = a.id
-                    AND ac.categoryID = ?
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-
-            JOIN s_articles_supplier s
-            ON s.id=a.supplierID
-
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
-
-            WHERE ag.articleID IS NULL
-            AND a.active = 1
-
-            GROUP BY s.id
-            ORDER BY s.name ASC
-            LIMIT 0, $limit
-        ";
-        $getSupplier = $this->db->fetchAll($sql, [
-            $id,
-        ]);
-
-        $links = [];
-
-        foreach ($getSupplier as $supplierKey => $supplierValue) {
-            if (!Shopware()->Shop()->getDefault()) {
-                $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
-            }
-            if ($supplierValue['image']) {
-                $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-                $getSupplier[$supplierKey]['image'] = $mediaService->getUrl($supplierValue['image']);
-            }
-
-            $supplierId = $supplierValue['id'];
-            if ($id !== Shopware()->Shop()->getCategory()->getId()) {
-                $links[$supplierId] = [
-                    'sViewport' => 'cat',
-                    'sCategory' => $id,
-                    'sPage' => 1,
-                    'sSupplier' => $supplierId,
-                ];
-            } else {
-                $links[$supplierId] = [
-                    'controller' => 'listing',
-                    'action' => 'manufacturer',
-                    'sSupplier' => $supplierId,
-                ];
-            }
-        }
-
-        $seoUrls = Shopware()->Container()->get('router')->generateList($links);
-        foreach ($getSupplier as &$supplier) {
-            $id = $supplier['id'];
-            if (array_key_exists($id, $seoUrls)) {
-                $supplier['link'] = $seoUrls[$id];
-            }
-        }
-
-        return $getSupplier;
     }
 
     /**

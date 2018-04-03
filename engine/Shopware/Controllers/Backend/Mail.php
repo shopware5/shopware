@@ -98,13 +98,13 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
                 $orderStatus = $mail->getStatus();
                 $node['name'] = $this->get('snippets')
                         ->getNamespace('backend/static/order_status')
-                        ->get($orderStatus->getName(), $orderStatus->getDescription());
+                        ->get($orderStatus->getName());
                 $orderNodes['data'][] = $node;
             } elseif ($mail->isPaymentStateMail()) {
                 $paymentStatus = $mail->getStatus();
                 $node['name'] = $this->get('snippets')
                     ->getNamespace('backend/static/payment_status')
-                    ->get($paymentStatus->getName(), $paymentStatus->getDescription());
+                    ->get($paymentStatus->getName());
                 $paymentNodes['data'][] = $node;
             } elseif ($mail->isSystemMail()) {
                 $systemNodes['data'][] = $node;

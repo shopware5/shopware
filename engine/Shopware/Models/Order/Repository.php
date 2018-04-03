@@ -81,7 +81,6 @@ class Repository extends ModelRepository
         $builder->select([
             'status.id as id',
             'status.name as name',
-            'status.description as description',
         ]);
         $builder->from(\Shopware\Models\Order\Status::class, 'status')
             ->where('status.group = ?1')
@@ -135,7 +134,6 @@ class Repository extends ModelRepository
         $builder->select([
             'status.id as id',
             'status.name as name',
-            'status.description as description',
         ]);
         $builder->from(\Shopware\Models\Order\Status::class, 'status');
         $builder->where('status.group = ?1')

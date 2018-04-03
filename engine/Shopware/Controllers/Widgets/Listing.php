@@ -137,7 +137,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $streamId = $this->Request()->getParam('streamId');
 
-        if ($this->Request()->get('type') == 'slider') {
+        if ($this->Request()->get('type') === 'slider') {
             $this->View()->loadTemplate('frontend/_includes/product_slider.tpl');
         } else {
             $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
@@ -211,48 +211,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $result = $this->fetchCategoryListing();
         $this->setSearchResultResponse($result);
-    }
-
-    /**
-     * @deprecated since 5.3, remove in 5.5. Use \Shopware_Controllers_Widgets_Listing::listingCountAction instead
-     *
-     * Listing action for asynchronous fetching listing pages
-     * by infinite scrolling plugin
-     */
-    public function ajaxListingAction()
-    {
-        $categoryId = (int) $this->Request()->getParam('sCategory');
-        $pageIndex = (int) $this->Request()->getParam('sPage');
-
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
-
-        if ($productStreamId) {
-            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
-            $factory = $this->get('shopware_product_stream.criteria_factory');
-            $criteria = $factory->createCriteria($this->Request(), $context);
-
-            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
-            $streamRepository = $this->get('shopware_product_stream.repository');
-            $streamRepository->prepareCriteria($criteria, $productStreamId);
-        } else {
-            $criteria = $this->get('shopware_search.store_front_criteria_factory')
-                ->createAjaxListingCriteria($this->Request(), $context);
-        }
-
-        $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
-        $articles = $articles['sArticles'];
-
-        $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
-
-        $layout = Shopware()->Modules()->Categories()->getProductBoxLayout($categoryId);
-
-        $this->View()->assign([
-            'sArticles' => $articles,
-            'pageIndex' => $pageIndex,
-            'productBoxLayout' => $layout,
-            'sCategoryCurrent' => $categoryId,
-        ]);
     }
 
     /**

@@ -112,7 +112,7 @@ class sBasket
      * @param Enlight_Components_Session_Namespace|null                    $session
      * @param Enlight_Controller_Front|null                                $front
      * @param Shopware_Components_Modules|null                             $moduleManager
-     * @param sSystem|null                                                 $systemModule
+     * @param \sSystem|null                                                $systemModule
      * @param StoreFrontBundle\Service\ContextServiceInterface|null        $contextService
      * @param StoreFrontBundle\Service\AdditionalTextServiceInterface|null $additionalTextService
      *
@@ -126,7 +126,7 @@ class sBasket
         Enlight_Components_Session_Namespace    $session = null,
         Enlight_Controller_Front                $front = null,
         Shopware_Components_Modules             $moduleManager = null,
-        sSystem                                 $systemModule = null,
+        \sSystem                                $systemModule = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
     ) {
@@ -2909,7 +2909,7 @@ class sBasket
         if ($article['configurator_set_id'] > 0) {
             $context = $this->contextService->getShopContext();
             $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
-            if (null === $product) {
+            if ($product === null) {
                 return false;
             }
             $product = $this->additionalTextService->buildAdditionalText($product, $context);

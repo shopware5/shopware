@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -38,7 +37,7 @@ class sArticlesComparisons
     private $articleModule;
 
     /**
-     * @var sSystem
+     * @var \sSystem
      */
     private $systemModule;
 

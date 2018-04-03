@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
@@ -190,7 +189,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign('manufacturer', $manufacturer);
         $this->View()->assign('ajaxCountUrlParams', [
             'sSupplier' => $manufacturerId,
-            'sCategory' => $context->getShop()->getCategory()->getId()
+            'sCategory' => $context->getShop()->getCategory()->getId(),
         ]);
 
         $categoryContent = $this->getSeoDataOfManufacturer($manufacturer);
@@ -360,14 +359,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         ];
 
         $content['canonicalParams'] = $canonicalParams;
-
-        $path = $this->Front()->Router()->assemble($canonicalParams);
-
-        if ($path) {
-            /* @deprecated */
-            $content['sSelfCanonical'] = $path;
-        }
-
         $content['metaTitle'] = $manufacturer->getMetaTitle();
         $content['title'] = $manufacturer->getName();
         $content['productBoxLayout'] = $this->get('config')->get('manufacturerProductBoxLayout');

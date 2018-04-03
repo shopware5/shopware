@@ -37,8 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * The customer model data set from the Shopware\Models\Customer\Repository.
  * One customer has the follows associations:
  * <code>
- *   - Billing  =>  Shopware\Models\Customer\Billing    [1:1] [s_user_billingaddress]
- *   - Shipping =>  Shopware\Models\Customer\Shipping   [1:1] [s_user_shippingaddress]
+ *   - Address  =>  Shopware\Models\Customer\Address    [1:1] [s_user_addresses]
  *   - Group    =>  Shopware\Models\Customer\Group      [n:1] [s_core_customergroups]
  *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_shops]
  *   - Orders   =>  Shopware\Models\Order\Order         [1:n] [s_order]
@@ -78,32 +77,6 @@ class Customer extends LazyFetchModelEntity
      * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
      */
     protected $number = '';
-
-    /**
-     * @deprecated Since 5.2 removed in 5.4 use $defaultBillingAddress
-     * INVERSE SIDE
-     * The billing property is the inverse side of the association between customer and billing.
-     * The association is joined over the billing userID field and the id field of the customer
-     *
-     * @Assert\Valid
-     *
-     * @var \Shopware\Models\Customer\Billing
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Billing", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     */
-    protected $billing;
-
-    /**
-     * @deprecated Since 5.2 removed in 5.4 use $defaultShippingAddress
-     * INVERSE SIDE
-     * The shipping property is the inverse side of the association between customer and shipping.
-     * The association is joined over the shipping userID field and the id field of the customer.
-     *
-     * @Assert\Valid
-     *
-     * @var \Shopware\Models\Customer\Shipping
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Shipping", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     */
-    protected $shipping;
 
     /**
      * OWNING SIDE
@@ -1058,66 +1031,6 @@ class Customer extends LazyFetchModelEntity
     public function setGroup($group)
     {
         return $this->setManyToOne($group, '\Shopware\Models\Customer\Group', 'group');
-    }
-
-    /**
-     * @deprecated Since 5.2 removed in 5.4 use getDefaultShipping()
-     * Returns the instance of the Shopware\Models\Customer\Shipping model which
-     * contains all data about the customer shipping address. The association is defined over
-     * the Customer.shipping property (INVERSE SIDE) and the Shipping.customer (OWNING SIDE) property.
-     * The shipping data is joined over the s_user_shippingaddress.userID field.
-     *
-     * @return \Shopware\Models\Customer\Shipping
-     */
-    public function getShipping()
-    {
-        return $this->shipping;
-    }
-
-    /**
-     * @deprecated Since 5.2 removed in 5.4 use setDefaultShipping()
-     * Setter function for the shipping association property which contains an instance of the Shopware\Models\Customer\Shipping model which
-     * contains all data about the customer shipping address. The association is defined over
-     * the Customer.shipping property (INVERSE SIDE) and the Shipping.customer (OWNING SIDE) property.
-     * The shipping data is joined over the s_user_shippingaddress.userID field.
-     *
-     * @param \Shopware\Models\Customer\Shipping|array|null $shipping
-     *
-     * @return \Shopware\Models\Customer\Shipping
-     */
-    public function setShipping($shipping)
-    {
-        return $this->setOneToOne($shipping, '\Shopware\Models\Customer\Shipping', 'shipping', 'customer');
-    }
-
-    /**
-     * @deprecated Since 5.2 removed in 5.4 use getDefaultBillingAddress()
-     * Returns the instance of the Shopware\Models\Customer\Billing model which
-     * contains all data about the customer billing address. The association is defined over
-     * the Customer.billing property (INVERSE SIDE) and the Billing.customer (OWNING SIDE) property.
-     * The billing data is joined over the s_user_billingaddress.userID field.
-     *
-     * @return \Shopware\Models\Customer\Billing
-     */
-    public function getBilling()
-    {
-        return $this->billing;
-    }
-
-    /**
-     * @deprecated Since 5.2 removed in 5.4 use setDefaultBillingAddress()
-     * Setter function for the billing association property which contains an instance of the Shopware\Models\Customer\Billing model which
-     * contains all data about the customer billing address. The association is defined over
-     * the Customer.billing property (INVERSE SIDE) and the Billing.customer (OWNING SIDE) property.
-     * The billing data is joined over the s_user_billingaddress.userID field.
-     *
-     * @param \Shopware\Models\Customer\Billing|array|null $billing
-     *
-     * @return \Shopware\Models\Customer\Billing
-     */
-    public function setBilling($billing)
-    {
-        return $this->setOneToOne($billing, '\Shopware\Models\Customer\Billing', 'billing', 'customer');
     }
 
     /**
