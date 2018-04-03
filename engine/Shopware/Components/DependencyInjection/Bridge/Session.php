@@ -86,11 +86,11 @@ class Session
 
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $container->get('Shop');
+        $mainShop = $shop->getMain() ?: $shop;
 
-        $name = 'session-' . $shop->getId();
+        $name = 'session-' . $mainShop->getId();
         $sessionOptions['name'] = $name;
 
-        $mainShop = $shop->getMain() ?: $shop;
         if ($mainShop->getSecure()) {
             $sessionOptions['cookie_secure'] = true;
         }

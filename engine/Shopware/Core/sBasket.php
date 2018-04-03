@@ -1415,15 +1415,16 @@ class sBasket
         $queryNewPrice = $this->getPriceForUpdateArticle($id, $quantity, $queryAdditionalInfo);
 
         $customerGroupId = $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId();
-        if (in_array($customerGroupId, $queryAdditionalInfo['blocked_customer_groups'])) {
-            // if blocked for current customer group, delete article from basket
-            $this->sDeleteArticle($id);
+        $hasCategories = $this->db->fetchOne('SELECT 1 FROM s_articles_categories_ro WHERE articleID = ? AND categoryID = ?', [
+            $queryAdditionalInfo['articleID'],
+            $this->contextService->getShopContext()->getShop()->getCategory()->getId()
+        ]);
 
-            return false;
-        }
-
-        if (empty($queryNewPrice['price']) && empty($queryNewPrice['config'])) {
-            // If no price is set for default customer group, delete article from basket
+        if ($hasCategories === false ||
+            (empty($queryNewPrice['price']) && empty($queryNewPrice['config'])) ||
+            in_array($customerGroupId, $queryAdditionalInfo['blocked_customer_groups'])
+        ) {
+            // if blocked for current customer group, no price is set for default customer group, article doesn't have a category for current shop, delete article from basket
             $this->sDeleteArticle($id);
 
             return false;
