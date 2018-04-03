@@ -26,6 +26,7 @@ namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Console\Application;
+use Shopware\Components\Plugin\CachedConfigReader;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
@@ -35,7 +36,9 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
 abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
@@ -155,6 +158,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     {
         $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
         $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
+        $this->addPluginConfigService($container);
         $this->loadFiles($container);
     }
 
@@ -210,6 +214,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * @param ContainerBuilder $container
+     * @throws \Exception
      */
     final protected function loadFiles(ContainerBuilder $container)
     {
@@ -233,5 +238,24 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     private function camelCaseToUnderscore($string)
     {
         return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $string)), '_');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function addPluginConfigService(ContainerBuilder $container)
+    {
+        if (!is_file($this->getPath() . '/Resources/config.xml')) {
+            return;
+        }
+
+        $definition = new Definition(CachedConfigReader::class, [
+            new Reference('shopware.plugin.cached_config_reader'),
+            new Reference('service_container'),
+            $this->getName()
+        ]);
+        $definition->setFactory('Shopware\Components\Plugin\PluginConfigFactory::factory');
+
+        $container->setDefinition($this->getContainerPrefix() . '.config', $definition);
     }
 }
