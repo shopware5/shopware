@@ -653,13 +653,6 @@ class Shop extends ModelEntity
 
             if ($template->getVersion() == 3) {
                 $this->registerTheme($template);
-            } elseif ($template->getVersion() == 2) {
-                $templateManager->addTemplateDir([
-                    'custom' => $template->toString(),
-                    'local' => '_emotion_local',
-                    'emotion' => '_emotion',
-                    'include_dir' => '.',
-                ]);
             } else {
                 throw new \Exception(sprintf(
                     'Tried to load unsupported template version %s for template: %s',
