@@ -172,6 +172,11 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Removed config option `blogcategory` and `bloglimit`
 * Removed the "Show more products" button beneath an emotion when the category itself has no products to be shown
 * Removed support for separate SSL host and SSL path. Also the `Use SSL` and `Always SSL` options were merged.
+    * Removed classes
+        - `Shopware_Components_Convert_Xml`
+        - `Shopware_Components_Convert_Excel`
+        - `Shopware_Components_Convert_Csv`
+
     * Removed database fields
         - `s_core_shops.secure_host`
         - `s_core_shops.secure_base_path`
