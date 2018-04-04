@@ -65,9 +65,21 @@
         {block name="frontend_listing_list_filter_supplier_content"}
             <div class="panel--body is--wide">
 
-                {if $manufacturer->getCoverFile()}
+                {if $manufacturer->getCoverMedia()}
                     <div class="vendor--image-wrapper">
-                        <img class="vendor--image" src="{$manufacturer->getCoverFile()}" alt="{$manufacturer->getName()|escape}">
+                        {$imgSrc = $manufacturer->getCoverFile()}
+                        {$imgSrcSet = ''}
+
+                        {if $manufacturer->getCoverMedia()->getThumbnails()}
+                            {$imgSrc = $manufacturer->getCoverMedia()->getThumbnail(0)->getSource()}
+                            {if $manufacturer->getCoverMedia()->getThumbnail(0)->hasRetinaSource()}
+                                {$retinaSource = $manufacturer->getCoverMedia()->getThumbnail(0)->getRetinaSource()}
+                                {$imgSrcSet = "$imgSrc, $retinaSource 2x"}
+                            {/if}
+                        {/if}
+
+
+                        <img class="vendor--image" src="{$imgSrc}" {if !empty($imgSrcSet)}srcset="{$imgSrcSet}" {/if}alt="{$manufacturer->getName()|escape}">
                     </div>
                 {/if}
 
