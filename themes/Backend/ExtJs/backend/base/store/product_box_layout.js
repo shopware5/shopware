@@ -77,7 +77,17 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
         var me = this,
             data = [];
 
-        if (this.getConfigValue(config, 'displayExtendLayout')) {
+        data = me.createLayoutData(config);
+        me.data = data;
+
+        me.callParent(arguments);
+    },
+
+    createLayoutData: function(config) {
+        var me = this,
+            data = [];
+
+        if (me.getConfigValue(config, 'displayExtendLayout')) {
             data.push({
                 key: 'extend',
                 label: me.snippets.displayExtendLayout.label,
@@ -85,7 +95,7 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
                 image: '{link file="backend/_resources/images/category/layout_box_parent.png"}'
             });
         }
-        if (this.getConfigValue(config, 'displayBasicLayout')) {
+        if (me.getConfigValue(config, 'displayBasicLayout')) {
             data.push({
                 key: 'basic',
                 label: me.snippets.displayBasicLayout.label,
@@ -93,7 +103,7 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
                 image: '{link file="backend/_resources/images/category/layout_box_basic.png"}'
             });
         }
-        if (this.getConfigValue(config, 'displayMinimalLayout')) {
+        if (me.getConfigValue(config, 'displayMinimalLayout')) {
             data.push({
                 key: 'minimal',
                 label: me.snippets.displayMinimalLayout.label,
@@ -101,7 +111,7 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
                 image: '{link file="backend/_resources/images/category/layout_box_minimal.png"}'
             });
         }
-        if (this.getConfigValue(config, 'displayImageLayout')) {
+        if (me.getConfigValue(config, 'displayImageLayout')) {
             data.push({
                 key: 'image',
                 label: me.snippets.displayImageLayout.label,
@@ -109,7 +119,7 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
                 image: '{link file="backend/_resources/images/category/layout_box_image.png"}'
             });
         }
-        if (this.getConfigValue(config, 'displayListLayout')) {
+        if (me.getConfigValue(config, 'displayListLayout')) {
             data.push({
                 key: 'list',
                 label: me.snippets.displayListLayout.label,
@@ -118,9 +128,7 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
             });
         }
 
-        this.data = data;
-
-        this.callParent(arguments);
+        return data;
     },
 
     getConfigValue: function(config, property) {
