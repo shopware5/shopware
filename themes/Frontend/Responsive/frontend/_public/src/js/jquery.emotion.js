@@ -129,7 +129,6 @@
              * Hide the emotion world if it is not defined for the current device.
              */
             if (devices.indexOf(types[state]) === -1) {
-                me.$overlay.remove();
                 me.hideEmotion();
                 return;
             }
