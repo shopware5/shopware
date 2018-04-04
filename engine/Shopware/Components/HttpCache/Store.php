@@ -242,7 +242,7 @@ class Store extends BaseStore
         $requestParams = $request->query->all();
 
         if (count($requestParams) === 0) {
-            return rtrim($request->getUri(), '/');
+            return $request->getUri();
         }
 
         $parsed = parse_url($request->getUri());
@@ -268,11 +268,11 @@ class Store extends BaseStore
         $uri = sprintf(
             '%s%s%s',
             $request->getSchemeAndHttpHost(),
-            $path === '/' ? '/' : rtrim($path, '/') . '/',
+            $path,
             empty($stringParams) ? '' : "?$stringParams"
         );
 
-        return rtrim($uri, '/');
+        return $uri;
     }
 
     /**
