@@ -67,19 +67,21 @@
 
                 {if $manufacturer->getCoverMedia()}
                     <div class="vendor--image-wrapper">
-                        {$imgSrc = $manufacturer->getCoverFile()}
-                        {$imgSrcSet = ''}
+                        {block name="frontend_listing_list_filter_supplier_content_image"}
+                            {$imgSrc = $manufacturer->getCoverFile()}
+                            {$imgSrcSet = ''}
 
-                        {if $manufacturer->getCoverMedia()->getThumbnails()}
-                            {$imgSrc = $manufacturer->getCoverMedia()->getThumbnail(0)->getSource()}
-                            {if $manufacturer->getCoverMedia()->getThumbnail(0)->hasRetinaSource()}
-                                {$retinaSource = $manufacturer->getCoverMedia()->getThumbnail(0)->getRetinaSource()}
-                                {$imgSrcSet = "$imgSrc, $retinaSource 2x"}
+                            {if $manufacturer->getCoverMedia()->getThumbnails()}
+                                {$imgSrc = $manufacturer->getCoverMedia()->getThumbnail(0)->getSource()}
+                                {if $manufacturer->getCoverMedia()->getThumbnail(0)->hasRetinaSource()}
+                                    {$retinaSource = $manufacturer->getCoverMedia()->getThumbnail(0)->getRetinaSource()}
+                                    {$imgSrcSet = "$imgSrc, $retinaSource 2x"}
+                                {/if}
                             {/if}
-                        {/if}
 
 
-                        <img class="vendor--image" src="{$imgSrc}" {if !empty($imgSrcSet)}srcset="{$imgSrcSet}" {/if}alt="{$manufacturer->getName()|escape}">
+                            <img class="vendor--image" src="{$imgSrc}" {if !empty($imgSrcSet)}srcset="{$imgSrcSet}" {/if}alt="{$manufacturer->getName()|escape}">
+                        {/block}
                     </div>
                 {/if}
 
