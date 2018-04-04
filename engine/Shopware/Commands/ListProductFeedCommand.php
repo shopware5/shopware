@@ -26,6 +26,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Models\ProductFeed\ProductFeed;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -66,11 +67,11 @@ class ListProductFeedCommand extends ShopwareCommand
             ];
         }
 
-        $table = $this->getHelperSet()->get('table');
+        $table = new Table($output);
         $table->setHeaders(['Product Feed', 'Id', 'Last export', 'Interval', 'Active'])
             ->setRows($rows);
 
-        $table->render($output);
+        $table->render();
     }
 
     private function formatInterval($interval)
