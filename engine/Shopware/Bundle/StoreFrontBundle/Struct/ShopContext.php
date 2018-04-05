@@ -247,6 +247,14 @@ class ShopContext extends Extendable implements ProductContextInterface
     /**
      * {@inheritdoc}
      */
+    public function setAdmin($admin)
+    {
+        $this->admin = $admin;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function jsonSerialize()
     {
         return get_object_vars($this);

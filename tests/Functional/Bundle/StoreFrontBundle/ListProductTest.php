@@ -26,9 +26,15 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 
 class ListProductTest extends TestCase
 {
+    const INACTIVE_PRODUCTNUMBER = 'SW10239';
+
     public function testProductRequirements()
     {
         $number = 'List-Product-Test';
@@ -55,25 +61,25 @@ class ListProductTest extends TestCase
         $this->assertNotEmpty($product->getTax());
         $this->assertNotEmpty($product->getUnit());
 
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $product);
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getUnit());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer', $product->getManufacturer());
+        $this->assertInstanceOf(ListProduct::class, $product);
+        $this->assertInstanceOf(Unit::class, $product->getUnit());
+        $this->assertInstanceOf(Manufacturer::class, $product->getManufacturer());
 
         $this->assertNotEmpty($product->getPrices());
         $this->assertNotEmpty($product->getPriceRules());
         foreach ($product->getPrices() as $price) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $price);
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $price->getUnit());
+            $this->assertInstanceOf(Price::class, $price);
+            $this->assertInstanceOf(Unit::class, $price->getUnit());
             $this->assertGreaterThanOrEqual(1, $price->getUnit()->getMinPurchase());
         }
 
         foreach ($product->getPriceRules() as $price) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $price);
+            $this->assertInstanceOf(PriceRule::class, $price);
         }
 
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $product->getCheapestPrice());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $product->getCheapestPriceRule());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getCheapestPrice()->getUnit());
+        $this->assertInstanceOf(Price::class, $product->getCheapestPrice());
+        $this->assertInstanceOf(PriceRule::class, $product->getCheapestPriceRule());
+        $this->assertInstanceOf(Unit::class, $product->getCheapestPrice()->getUnit());
         $this->assertGreaterThanOrEqual(1, $product->getCheapestPrice()->getUnit()->getMinPurchase());
 
         $this->assertNotEmpty($product->getCheapestPriceRule()->getPrice());
@@ -83,6 +89,20 @@ class ListProductTest extends TestCase
 
         $this->assertGreaterThanOrEqual(1, $product->getUnit()->getMinPurchase());
         $this->assertNotEmpty($product->getManufacturer()->getName());
+    }
+
+    public function testInactiveArticleWithoutAdminMode()
+    {
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $this->assertNull($this->getListProduct(self::INACTIVE_PRODUCTNUMBER, $context));
+    }
+
+    public function testInactiveArticleWithAdminMode()
+    {
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context->setAdmin(true);
+        $this->assertInstanceOf(ListProduct::class, $this->getListProduct(self::INACTIVE_PRODUCTNUMBER, $context));
+        $context->setAdmin(false);
     }
 
     /**

@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -48,23 +47,15 @@ class ProductNumberService implements ProductNumberServiceInterface
     private $config;
 
     /**
-     * @var ShopContextInterface
-     */
-    private $shopContext;
-
-    /**
      * @param Connection $connection
      * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface $contextService
      */
     public function __construct(
         Connection $connection,
-        \Shopware_Components_Config $config,
-        ContextServiceInterface $contextService
+        \Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->config = $config;
-        $this->shopContext = $contextService->getShopContext();
     }
 
     /**
@@ -107,7 +98,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         $selected = null;
         if (!empty($selection)) {
-            $selected = $this->getNumberBySelection($productId, $selection);
+            $selected = $this->getNumberBySelection($productId, $selection, $context);
         }
 
         if ($selected) {
@@ -118,7 +109,7 @@ class ProductNumberService implements ProductNumberServiceInterface
             return $number;
         }
 
-        $selected = $this->findFallbackById($productId);
+        $selected = $this->findFallbackById($productId, $context);
         if (!$selected) {
             throw new \RuntimeException('No active product variant found');
         }
@@ -128,22 +119,23 @@ class ProductNumberService implements ProductNumberServiceInterface
 
     /**
      * @param int $productId
+     * @param ShopContextInterface $context
      *
      * @return string|false
      */
-    private function findFallbackById($productId)
+    private function findFallbackById($productId, ShopContextInterface $context)
     {
         $selected = $this->getMainVariantNumberById($productId);
         if ($selected) {
             return $selected;
         }
 
-        $selected = $this->getAvailableFallbackVariant($productId);
+        $selected = $this->getAvailableFallbackVariant($productId, $context);
         if ($selected) {
             return $selected;
         }
 
-        return $this->getFallbackVariant($productId);
+        return $this->getFallbackVariant($productId, $context);
     }
 
     /**
@@ -172,10 +164,11 @@ class ProductNumberService implements ProductNumberServiceInterface
      *
      * @param int   $productId
      * @param array $selection
+     * @param ShopContextInterface $shopContext
      *
      * @return string|false
      */
-    private function getNumberBySelection($productId, array $selection)
+    private function getNumberBySelection($productId, array $selection, ShopContextInterface $shopContext)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['variant.ordernumber'])
@@ -185,7 +178,7 @@ class ProductNumberService implements ProductNumberServiceInterface
             ->setMaxResults(1)
             ->setParameter(':productId', $productId);
 
-        if (!$this->shopContext->isAdmin()) {
+        if (!$shopContext->isAdmin()) {
             $query->andWhere('variant.active = 1');
         }
 
@@ -254,12 +247,13 @@ class ProductNumberService implements ProductNumberServiceInterface
      * Returns the first active variant number
      *
      * @param int $productId
+     * @param ShopContextInterface $shopContext
      *
      * @return string|false
      */
-    private function getFallbackVariant($productId)
+    private function getFallbackVariant($productId, ShopContextInterface $shopContext)
     {
-        $query = $this->getProductNumberQuery();
+        $query = $this->getProductNumberQuery($shopContext);
 
         $query->andWhere('product.id = :productId');
         $query->setMaxResults(1);
@@ -272,12 +266,13 @@ class ProductNumberService implements ProductNumberServiceInterface
      * Returns the first active variant number that is available for purchase
      *
      * @param int $productId
+     * @param ShopContextInterface $shopContext
      *
      * @return string|false
      */
-    private function getAvailableFallbackVariant($productId)
+    private function getAvailableFallbackVariant($productId, ShopContextInterface $shopContext)
     {
-        $query = $this->getProductNumberQuery();
+        $query = $this->getProductNumberQuery($shopContext);
 
         $query->andWhere('product.id = :productId');
         $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
@@ -288,16 +283,17 @@ class ProductNumberService implements ProductNumberServiceInterface
     }
 
     /**
+     * @param ShopContextInterface $shopContext
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getProductNumberQuery()
+    private function getProductNumberQuery(ShopContextInterface $shopContext)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['variant.ordernumber']);
         $query->from('s_articles_details', 'variant');
 
         $andWhere = '';
-        if (!$this->shopContext->isAdmin()) {
+        if (!$shopContext->isAdmin()) {
             $andWhere = ' AND variant.active = 1';
         }
 

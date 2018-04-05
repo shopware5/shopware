@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -67,29 +66,21 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     private $connection;
 
     /**
-     * @var Struct\ProductContextInterface
-     */
-    private $shopContext;
-
-    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ProductHydrator $hydrator
      * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface $contextService
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ProductHydrator $hydrator,
-        \Shopware_Components_Config $config,
-        ContextServiceInterface $contextService
+        \Shopware_Components_Config $config
     ) {
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;
         $this->connection = $connection;
         $this->config = $config;
-        $this->shopContext = $contextService->getShopContext();
     }
 
     /**
@@ -171,7 +162,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        if (!$this->shopContext->isAdmin()) {
+        if (!$context->isAdmin()) {
             $query
                 ->andWhere('variant.active = 1')
                 ->andWhere('product.active = 1');
