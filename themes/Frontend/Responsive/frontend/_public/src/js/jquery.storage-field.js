@@ -100,11 +100,11 @@
 
             if (value && value.length) {
                 me.$el.val(value);
-            }
-
-            // When the field is just a pseudo field also fill the original field.
-            if (me.$el.is('[data-selector]') && value && value.length) {
-                $(me.$el.attr('data-selector')).val(value);
+                
+                // When the field is just a pseudo field also fill the original field.
+                if (me.$el.is('[data-selector]')) {
+                    $(me.$el.attr('data-selector')).val(value);
+                }
             }
 
             $.publish('plugin/swStorageField/setFieldValueFromStorage', [ me ]);
