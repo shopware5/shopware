@@ -102,9 +102,11 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         $query = $this->connection->createQueryBuilder();
 
         $query->addSelect($this->fieldHelper->getManufacturerFields());
+        $query->addSelect('media.id as __manufacturer_img_id');
 
         $query->from('s_articles_supplier', 'manufacturer')
             ->leftJoin('manufacturer', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.supplierID = manufacturer.id')
+            ->leftJoin('manufacturer', 's_media', 'media', 'media.path = manufacturer.img')
             ->where('manufacturer.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
@@ -114,16 +116,15 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         $statement = $query->execute();
 
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
-        $mediaIDs = $this->getMediaIdsByPath(array_column($data, '__manufacturer_img'));
-        $medias = $this->mediaService->getList($mediaIDs, $context);
+        $medias = $this->mediaService->getList(array_column($data, '__manufacturer_img_id'), $context);
 
         $manufacturers = [];
         foreach ($data as $row) {
             $id = $row['__manufacturer_id'];
             $manufacturers[$id] = $this->manufacturerHydrator->hydrate($row);
 
-            if (!empty($row['__manufacturer_img']) && isset($mediaIDs[$row['__manufacturer_img']])) {
-                $manufacturers[$id]->setCoverMedia($medias[$mediaIDs[$row['__manufacturer_img']]]);
+            if (!empty($row['__manufacturer_img']) && !empty($medias[$row['__manufacturer_img_id']])) {
+                $manufacturers[$id]->setCoverMedia($medias[$row['__manufacturer_img_id']]);
             }
         }
 
@@ -137,20 +138,5 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         }
 
         return $sorted;
-    }
-
-    /**
-     * @param array $paths
-     * @return array
-     */
-    private function getMediaIdsByPath(array $paths)
-    {
-        return $this->connection->createQueryBuilder()
-            ->from('s_media', 'media')
-            ->select('path, id')
-            ->where('path IN(:paths)')
-            ->setParameter('paths', $paths, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 }

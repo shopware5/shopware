@@ -68,7 +68,7 @@
                 {if $manufacturer->getCoverMedia()}
                     <div class="vendor--image-wrapper">
                         {block name="frontend_listing_list_filter_supplier_content_image"}
-                            {$imgSrc = $manufacturer->getCoverFile()}
+                            {$imgSrc = $manufacturer->getCoverMedia()->getFile()}
                             {$imgSrcSet = ''}
 
                             {if $manufacturer->getCoverMedia()->getThumbnails()}
