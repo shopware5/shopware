@@ -1155,7 +1155,9 @@ class LegacyStructConverter
             'ordernumber' => $product->getNumber(),
             'highlight' => $product->highlight(),
             'description' => $product->getShortDescription(),
-            'description_long' => $product->getLongDescription(),
+            'description_long' => ($this->config->get('useShortDescriptionInListing') && strlen($product->getShortDescription()) > 5)
+                ? $product->getShortDescription()
+                : $product->getLongDescription(),
             'esd' => $product->hasEsd(),
             'articleName' => $product->getName(),
             'taxID' => $product->getTax()->getId(),
