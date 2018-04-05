@@ -44,6 +44,17 @@ class ClientFactory
         $clientBuilder = ClientBuilder::create();
 
         $clientBuilder->setHosts($config['hosts']);
+        $clientBuilder->setConnectionParams(
+            [
+                'client' => [
+                    'curl' => [
+                        CURLOPT_HTTPHEADER => [
+                            'Content-type: application/json',
+                        ],
+                    ],
+                ],
+            ]
+        );
 
         return $clientBuilder->build();
     }

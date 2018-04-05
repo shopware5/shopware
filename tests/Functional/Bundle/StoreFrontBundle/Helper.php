@@ -26,6 +26,8 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
+use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
+use Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
@@ -907,12 +909,9 @@ class Helper
             return;
         }
 
-        $factory = Shopware()->Container()->get('shopware_elastic_search.index_factory');
-        $index = $factory->createShopIndex($shop);
-
         try {
             $client = Shopware()->Container()->get('shopware_elastic_search.client');
-            $client->indices()->delete(['index' => $index->getName()]);
+            $client->indices()->delete(['index' => '_all']);
         } catch (\Exception $e) {
         }
 

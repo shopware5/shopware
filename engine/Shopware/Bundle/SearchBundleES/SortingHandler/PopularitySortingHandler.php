@@ -53,7 +53,7 @@ class PopularitySortingHandler implements HandlerInterface
     ) {
         /* @var PopularitySorting $criteriaPart */
         $search->addSort(
-            new FieldSort('sales', strtolower($criteriaPart->getDirection()))
+            new FieldSort('sales', strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'long'])
         );
     }
 }

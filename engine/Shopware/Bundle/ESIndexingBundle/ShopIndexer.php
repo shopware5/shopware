@@ -110,14 +110,17 @@ class ShopIndexer implements ShopIndexerInterface
     public function index(Shop $shop, ProgressHelperInterface $helper)
     {
         $lastBacklogId = $this->backlogReader->getLastBacklogId();
-        $configuration = $this->indexFactory->createIndexConfiguration($shop);
-        $shopIndex = new ShopIndex($configuration->getName(), $shop);
 
-        $this->createIndex($configuration, $shopIndex);
-        $this->updateMapping($shopIndex);
-        $this->populate($shopIndex, $helper);
-        $this->applyBacklog($shopIndex, $lastBacklogId);
-        $this->createAlias($configuration);
+        foreach ($this->mappings as $mapping) {
+            $configuration = $this->indexFactory->createIndexConfiguration($shop, $mapping->getType());
+            $shopIndex = new ShopIndex($configuration->getName(), $shop, $mapping->getType());
+
+            $this->createIndex($configuration, $shopIndex);
+            $this->updateMapping($shopIndex, $mapping);
+            $this->populate($shopIndex, $helper);
+            $this->applyBacklog($shopIndex, $lastBacklogId);
+            $this->createAlias($configuration);
+        }
     }
 
     /**
@@ -177,15 +180,13 @@ class ShopIndexer implements ShopIndexerInterface
     /**
      * @param ShopIndex $index
      */
-    private function updateMapping(ShopIndex $index)
+    private function updateMapping(ShopIndex $index, MappingInterface $mapping)
     {
-        foreach ($this->mappings as $mapping) {
-            $this->client->indices()->putMapping([
+        $this->client->indices()->putMapping([
                 'index' => $index->getName(),
                 'type' => $mapping->getType(),
                 'body' => $mapping->get($index->getShop()),
             ]);
-        }
     }
 
     /**
@@ -197,6 +198,7 @@ class ShopIndexer implements ShopIndexerInterface
         foreach ($this->indexer as $indexer) {
             $indexer->populate($index, $progress);
         }
+
         $this->client->indices()->refresh(['index' => $index->getName()]);
     }
 
@@ -230,14 +232,12 @@ class ShopIndexer implements ShopIndexerInterface
 
         if ($exist) {
             $this->switchAlias($configuration);
-
-            return;
+        } else {
+            $this->client->indices()->putAlias([
+                'index' => $configuration->getName(),
+                'name' => $configuration->getAlias(),
+            ]);
         }
-
-        $this->client->indices()->putAlias([
-            'index' => $configuration->getName(),
-            'name' => $configuration->getAlias(),
-        ]);
     }
 
     /**

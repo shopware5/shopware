@@ -65,7 +65,7 @@ class BacklogSyncCommand extends ShopwareCommand
 
         $shops = $this->container->get('shopware_elastic_search.identifier_selector')->getShops();
         foreach ($shops as $shop) {
-            $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
+            $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop, '');
             $this->container->get('shopware_elastic_search.backlog_processor')
                 ->process($index, $backlogs);
         }

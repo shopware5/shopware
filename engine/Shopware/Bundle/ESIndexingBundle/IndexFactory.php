@@ -62,14 +62,15 @@ class IndexFactory implements IndexFactoryInterface
 
     /**
      * @param Shop $shop
+     * @param $mappingType
      *
      * @return IndexConfiguration
      */
-    public function createIndexConfiguration(Shop $shop)
+    public function createIndexConfiguration(Shop $shop, $mappingType)
     {
         return new IndexConfiguration(
-            $this->getIndexName($shop) . '_' . $this->getTimestamp(),
-            $this->getIndexName($shop),
+            $this->getIndexName($shop, $mappingType) . '_' . $this->getTimestamp(),
+            $this->getIndexName($shop, $mappingType),
             $this->numberOfShards,
             $this->numberOfReplicas
         );
@@ -77,12 +78,13 @@ class IndexFactory implements IndexFactoryInterface
 
     /**
      * @param Shop $shop
+     * @param $mappingType
      *
      * @return ShopIndex
      */
-    public function createShopIndex(Shop $shop)
+    public function createShopIndex(Shop $shop, $mappingType)
     {
-        return new ShopIndex($this->getIndexName($shop), $shop);
+        return new ShopIndex($this->getIndexName($shop, $mappingType), $shop, $mappingType);
     }
 
     /**
@@ -105,11 +107,12 @@ class IndexFactory implements IndexFactoryInterface
 
     /**
      * @param Shop $shop
+     * @param $mappingType
      *
      * @return string
      */
-    private function getIndexName(Shop $shop)
+    private function getIndexName(Shop $shop, $mappingType)
     {
-        return $this->getPrefix() . $shop->getId();
+        return $this->getPrefix() . $shop->getId() . '_' . $mappingType;
     }
 }
