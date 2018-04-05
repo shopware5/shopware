@@ -1,9 +1,16 @@
 import { Module } from 'src/core/shopware';
-import './src/component';
+import './component/sw-product-basic-form';
+import './component/sw-product-category-form';
+import './component/sw-product-price-form';
+import './component/sw-product-settings-form';
+import './view/sw-product-detail-base';
+import './page/sw-product-list';
+import './page/sw-product-detail';
+import './page/sw-product-create';
 
 Module.register('sw-product', {
     type: 'core',
-    name: 'Produkt Übersicht',
+    name: 'Products',
     description: 'The module for managing products.',
     version: '1.0.0',
     targetVersion: '1.0.0',
@@ -16,27 +23,22 @@ Module.register('sw-product', {
                 default: 'sw-product-list',
                 sidebar: 'sw-product-sidebar'
             },
-            path: 'index'
-        },
-
-        indexPaginated: {
-            components: {
-                default: 'sw-product-list',
-                sidebar: 'sw-product-sidebar'
-            },
-            path: 'index/:offset/:limit/:sortBy/:sortDirection/:term?/:filters?'
+            path: 'index/:offset?/:limit?/:sortBy?/:sortDirection?/:term?/:filters?'
         },
 
         create: {
-            component: 'sw-product-detail',
-            path: 'product/create',
-            meta: {
-                parentPath: 'sw.product.index'
+            component: 'sw-product-create',
+            path: 'create',
+            redirect: {
+                name: 'sw.product.create.base'
             },
             children: {
-                general: {
-                    component: 'sw-product-detail-general',
-                    path: 'general'
+                base: {
+                    component: 'sw-product-detail-base',
+                    path: 'base',
+                    meta: {
+                        parentPath: 'sw.product.index'
+                    }
                 }
             }
         },
@@ -44,21 +46,16 @@ Module.register('sw-product', {
         detail: {
             component: 'sw-product-detail',
             path: 'detail/:id',
-            meta: {
-                parentPath: 'sw.product.index'
+            redirect: {
+                name: 'sw.product.detail.base'
             },
             children: {
-                general: {
-                    component: 'sw-product-detail-general',
-                    path: 'general'
-                },
-                variants: {
-                    component: 'sw-product-detail-variants',
-                    path: 'variants'
-                },
-                advancedPrices: {
-                    component: 'sw-product-detail-advanced-prices',
-                    path: 'advanced-prices'
+                base: {
+                    component: 'sw-product-detail-base',
+                    path: 'base',
+                    meta: {
+                        parentPath: 'sw.product.index'
+                    }
                 }
             }
         }
@@ -72,7 +69,6 @@ Module.register('sw-product', {
     }, {
         path: 'sw.product.create',
         label: 'Produkt anlegen',
-        parent: 'sw.product.index',
         color: '#57D9A3'
     }],
 

@@ -7,7 +7,13 @@ import { deepCopyObject, getObjectChangeSet } from 'src/core/service/utils/objec
  */
 State.register('product', {
     namespaced: true,
-    strict: true,
+    /**
+     * VueJS now also throws an error when changing sub properties on the state directly.
+     * This does not work with our current concept of the watchers.
+     *
+     * ToDo: Evaluate strict state handling with large object structures.
+     */
+    // strict: true,
 
     state() {
         return {
@@ -35,6 +41,7 @@ State.register('product', {
          * @param {Number} limit
          * @param {String} sortBy
          * @param {String} sortDirection
+         * @param {String} term
          * @param {Array|null} criterias
          * @returns {Promise<T>}
          */
@@ -42,12 +49,15 @@ State.register('product', {
             const providerContainer = Shopware.Application.getContainer('service');
             const productService = providerContainer.productService;
 
-            const sorting = (sortDirection.toLowerCase() === 'asc' ? '' : '-') + sortBy;
+            const additionalParams = {};
 
-            const additionalParams = {
-                sort: sorting,
-                term
-            };
+            if (sortBy && sortBy.length) {
+                additionalParams.sort = (sortDirection.toLowerCase() === 'asc' ? '' : '-') + sortBy;
+            }
+
+            if (term) {
+                additionalParams.term = term;
+            }
 
             if (criterias) {
                 additionalParams.filter = criterias;
@@ -150,7 +160,7 @@ State.register('product', {
             const providerContainer = Shopware.Application.getContainer('service');
             const productService = providerContainer.productService;
 
-            const changeset = getObjectChangeSet(state.original[product.id], product);
+            const changeset = getObjectChangeSet(state.original[product.id], product, 'product');
 
             if (types.isEmpty(changeset)) {
                 return false;
