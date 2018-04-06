@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
+## 5.4.3
+
+[View all changes from v5.4.2...v5.4.3](https://github.com/shopware/shopware/compare/v5.4.2...v5.4.3)
+
+### Changes
+
+* Changed .htaccess file to prohibit download of .env files
+
 ## 5.4.2
 
 [View all changes from v5.4.1...v5.4.2](https://github.com/shopware/shopware/compare/v5.4.1...v5.4.2)
