@@ -58,6 +58,7 @@ Ext.define('Shopware.apps.Order.model.Position', {
         { name: 'orderId', type:'int' },
         { name: 'mode', type:'int' },
         { name: 'articleId', type:'int' },
+        { name: 'articleDetailId', type:'int', useNull: true, default: null},
         { name: 'articleNumber', type:'string' },
         { name: 'articleName', type:'string' },
         { name: 'quantity', type:'int' },

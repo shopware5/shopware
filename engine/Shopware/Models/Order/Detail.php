@@ -91,6 +91,16 @@ class Detail extends ModelEntity
      * @var \Shopware\Models\Order\Esd
      */
     protected $esd;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
+     * @ORM\JoinColumn(name="articleDetailId", referencedColumnName="id")
+     *
+     * @var \Shopware\Models\Article\Detail|null
+     */
+    protected $articleDetail;
+
     /**
      * @var int
      *
@@ -137,6 +147,13 @@ class Detail extends ModelEntity
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $statusId;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="articleDetailId", type="integer", nullable=true)
+     */
+    private $articleDetailId;
 
     /**
      * @var string

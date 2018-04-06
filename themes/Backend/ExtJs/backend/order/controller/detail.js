@@ -369,6 +369,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
         // Update articleId for row
         editor.context.record.set('articleId', record.get('articleId'));
+        editor.context.record.set('articleDetailId', record.get('id'));
     },
 
 
