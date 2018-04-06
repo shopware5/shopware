@@ -21,12 +21,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * @Route(service="Shopware\Storefront\Controller\AccountController")
  */
 class AccountController extends StorefrontController
 {
+    use TargetPathTrait;
+
     /**
      * @var AuthenticationUtils
      */
@@ -95,7 +98,7 @@ class AccountController extends StorefrontController
     /**
      * @Route("/account", name="account_home")
      */
-    public function indexAction()
+    public function indexAction(): Response
     {
         return $this->renderStorefront('frontend/account/index.html.twig');
     }
@@ -104,7 +107,7 @@ class AccountController extends StorefrontController
      * @Route("/account/login", name="account_login")
      * @Method({"GET"})
      */
-    public function loginAction(Request $request)
+    public function loginAction(Request $request, StorefrontContext $context): Response
     {
         // get the login error if there is one
         $error = $this->authUtils->getLastAuthenticationError();
@@ -113,6 +116,8 @@ class AccountController extends StorefrontController
         $lastEmail = $this->authUtils->getLastUsername();
 
         return $this->renderStorefront('frontend/register/index.html.twig', [
+            'redirectTo' => $request->get('redirectTo', $this->generateUrl('account_home')),
+            'countryList' => $this->accountService->getCountryList($context),
             'last_email' => $lastEmail,
             'error' => $error,
         ]);
@@ -128,7 +133,7 @@ class AccountController extends StorefrontController
     /**
      * @Route("/account/logout", name="account_logout")
      */
-    public function logoutAction(StorefrontContext $context)
+    public function logoutAction(StorefrontContext $context): Response
     {
         $this->contextPersister->save(
             $context->getToken(),
@@ -136,6 +141,29 @@ class AccountController extends StorefrontController
         );
 
         return new Response('<html><body>Admin page!</body></html>');
+    }
+
+    /**
+     * @Route("/account/saveRegistration", name="account_save_registration")
+     * @Method({"POST"})
+     */
+    public function saveRegistrationAction(Request $request, StorefrontContext $context): Response
+    {
+        $formData = $request->request->get('register');
+        // todo validate user input
+        $this->accountService->createNewCustomer($formData, $context);
+
+        $this->accountService->loginCustomer(
+            $formData['personal']['email'],
+            $formData['personal']['password'],
+            $context
+        );
+
+        if ($targetPath = $this->getTargetPath($request->getSession(), 'storefront')) {
+            return $this->redirect($targetPath);
+        }
+
+        return $this->redirectToRoute('account_home');
     }
 
     /**
@@ -288,7 +316,6 @@ class AccountController extends StorefrontController
     {
         // todo validate user input
         $formData = $request->request->get('address');
-        $customerId = $context->getCustomer()->getId();
         $addressId = $this->accountService->saveAddress($formData, $context);
 
         if (array_key_exists('additional', $formData)) {
@@ -301,6 +328,10 @@ class AccountController extends StorefrontController
             }
         }
         $this->storefrontContextService->refresh($context->getShop()->getId(), $context->getToken());
+
+        if($url = $request->query->get('redirectTo')) {
+            return $this->handleRedirectTo($url);
+        }
 
         return $this->redirectToRoute('address_index');
     }
@@ -316,6 +347,7 @@ class AccountController extends StorefrontController
         return $this->renderStorefront('@Storefront/frontend/address/edit.html.twig', [
             'formData' => $address,
             'countryList' => $this->accountService->getCountryList($context),
+            'redirectTo' => $request->query->get('redirectTo'),
         ]);
     }
 
