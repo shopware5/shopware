@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Changed .htaccess file to prohibit download of .env files
 * Changed "Send E-Mails" checkbox in batch processing window of order to be enabled by default again
+* Changed behaviour of of inactive forms to act like any other missing page
 
 ## 5.4.2
 
