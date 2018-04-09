@@ -20,6 +20,7 @@ use Shopware\Api\Entity\Field\LongTextField;
 use Shopware\Api\Entity\Field\LongTextWithHtmlField;
 use Shopware\Api\Entity\Field\ManyToManyAssociationField;
 use Shopware\Api\Entity\Field\ManyToOneAssociationField;
+use Shopware\Api\Entity\Field\OneToManyAssociationField;
 use Shopware\Api\Entity\Field\PriceField;
 use Shopware\Api\Entity\Field\ReferenceVersionField;
 use Shopware\Api\Entity\Field\StringField;
@@ -27,6 +28,7 @@ use Shopware\Api\Entity\Field\TranslatedField;
 use Shopware\Api\Entity\Field\VersionField;
 use Shopware\Api\Entity\FieldCollection;
 use Shopware\Api\Entity\Write\Flag\Extension;
+use Shopware\Api\Entity\Write\Flag\Inherited;
 use Shopware\Api\Entity\Write\Flag\Serialized;
 use Shopware\Api\Product\Struct\PriceStruct;
 use Shopware\Framework\Struct\ArrayStruct;
@@ -83,6 +85,9 @@ class EntityHydrator
 
         $data = [];
         $toOneAssociations = [];
+        $inherited = new ArrayStruct();
+        $translated = new ArrayStruct();
+
         foreach ($row as $originalKey => $value) {
             $field = $this->getField($fields, $originalKey, $root);
 
@@ -90,10 +95,26 @@ class EntityHydrator
                 continue;
             }
 
+            if ($field->is(Inherited::class)) {
+                $inheritedKey = '_' . $originalKey . '.inherited';
+
+                if (array_key_exists($inheritedKey, $row)) {
+                    $inherited->set($field->getPropertyName(), (bool) $row[$inheritedKey]);
+                    unset($row[$inheritedKey]);
+                }
+            }
+            if ($field instanceof TranslatedField) {
+                $translationKey = '_' . $originalKey . '.translated';
+
+                if (array_key_exists($translationKey, $row)) {
+                    $translated->set($field->getPropertyName(), (bool) $row[$translationKey]);
+                    unset($row[$translationKey]);
+                }
+            }
+
             if (!$field instanceof AssociationInterface) {
                 //reduce data set for nested calls
                 $data[$field->getPropertyName()] = $this->castValue($field, $value);
-                unset($row[$originalKey]);
                 continue;
             }
 
@@ -105,7 +126,7 @@ class EntityHydrator
             }
 
             if ($field instanceof ManyToManyAssociationField) {
-                $property = implode('.', [$root, $field->getPropertyName()]);
+                $property = $root . '.' . $field->getPropertyName();
 
                 $ids = explode('||', (string) $row[$property]);
                 $ids = array_filter($ids);
@@ -133,7 +154,7 @@ class EntityHydrator
                 new $structClass(),
                 $field->getReferenceClass(),
                 $row,
-                implode('.', [$root, $property])
+                $root . '.' . $property
             );
 
             /** @var Field $field */
@@ -148,6 +169,26 @@ class EntityHydrator
 
         if ($objectCacheKey) {
             $this->objects[$objectCacheKey] = $entity;
+        }
+
+        if ($definition::getParentPropertyName()) {
+            $associations = $definition::getFields()
+                ->filterByFlag(Inherited::class)
+                ->filter(
+                    function (Field $field) {
+                        return $field instanceof ManyToManyAssociationField || $field instanceof OneToManyAssociationField;
+                    }
+                );
+
+            foreach ($associations as $association) {
+                $inherited->set($association->getPropertyName(), $this->isInherited($definition, $row, $association));
+            }
+
+            $entity->addExtension('inherited', $inherited);
+        }
+
+        if ($definition::getTranslationDefinitionClass()) {
+            $entity->addExtension('translated', $translated);
         }
 
         return $entity;
@@ -279,5 +320,32 @@ class EntityHydrator
             default:
                 return $value === null ? null : (string) $value;
         }
+    }
+
+    private function isInherited(string $definition, array $row, AssociationInterface $association)
+    {
+        /* @var string|EntityDefinition $definition */
+        if ($association instanceof ManyToOneAssociationField) {
+            $joinField = $association->getJoinField();
+            $idField = $association->getStorageName();
+        } elseif ($association instanceof ManyToManyAssociationField) {
+            $joinField = $association->getLocalField();
+            $idField = 'id';
+        } else {
+            /** @var OneToManyAssociationField $association */
+            $joinField = $association->getLocalField();
+            $idField = 'id';
+        }
+
+        $joinField = $definition::getFields()->getByStorageName($joinField);
+        $idField = $definition::getFields()->getByStorageName($idField);
+
+        $joinField = $definition::getEntityName() . '.' . $joinField->getPropertyName();
+        $idField = $definition::getEntityName() . '.' . $idField->getPropertyName();
+
+        $idValue = $row[$idField];
+        $joinValue = $row[$joinField];
+
+        return $idValue !== $joinValue;
     }
 }
