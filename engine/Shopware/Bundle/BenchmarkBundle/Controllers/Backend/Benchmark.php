@@ -21,27 +21,15 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\BenchmarkBundle\Repository\ConfigRepositoryInterface;
+
 class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backend_ExtJs
 {
-    public function renderAction()
-    {
-        echo '<html><body>Placeholder!</body></html>';
-        exit();
-    }
-
     public function loadSettingsAction()
     {
-        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
-        $settings = $queryBuilder->select([
-                'settings.active',
-                'settings.last_sent as lastSent',
-                'settings.last_order_id as lastOrderId',
-                'settings.orders_batch_size as ordersBatchSize',
-                'settings.business',
-            ])
-            ->from('s_benchmark_config', 'settings')
-            ->execute()
-            ->fetch();
+        /** @var ConfigRepositoryInterface $configRepository */
+        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $settings = $configRepository->loadSettings();
 
         $settings['business'] = (int) $settings['business'];
 
@@ -54,15 +42,11 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
 
     public function saveSettingsAction()
     {
-        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
-
         try {
-            $queryBuilder->update('s_benchmark_config', 'config')
-                ->set('config.orders_batch_size', ':ordersBatchSize')
-                ->setParameters([
-                    ':ordersBatchSize' => $this->request->getParam('ordersBatchSize'),
-                ])
-                ->execute();
+            /** @var ConfigRepositoryInterface $configRepository */
+            $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+
+            $configRepository->saveSettings((int) $this->request->getParam('ordersBatchSize'));
 
             $this->View()->assign('success', true);
         } catch (\Exception $e) {
@@ -72,15 +56,11 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
 
     public function saveBusinessAction()
     {
-        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
-
         try {
-            $queryBuilder->update('s_benchmark_config', 'config')
-                ->set('config.business', ':business')
-                ->setParameters([
-                    ':business' => $this->request->getParam('business'),
-                ])
-                ->execute();
+            /** @var ConfigRepositoryInterface $configRepository */
+            $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+
+            $configRepository->saveBusiness((int) $this->request->getParam('business'));
 
             $this->View()->assign('success', true);
         } catch (\Exception $e) {
@@ -90,15 +70,11 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
 
     public function setActiveAction()
     {
-        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
-
         try {
-            $queryBuilder->update('s_benchmark_config', 'config')
-                ->set('config.active', ':active')
-                ->setParameters([
-                    ':active' => $this->request->getParam('active'),
-                ])
-                ->execute();
+            /** @var ConfigRepositoryInterface $configRepository */
+            $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+
+            $configRepository->setActive((bool) $this->request->getParam('active'));
 
             $this->View()->assign('success', true);
         } catch (\Exception $e) {

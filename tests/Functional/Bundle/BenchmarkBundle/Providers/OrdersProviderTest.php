@@ -103,16 +103,14 @@ class OrdersProviderTest extends ProviderTestCase
             ],
             'items' => [
                 [
-                    'title' => 'Example product 1',
-                    'ean' => 'example_ean',
+                    'ean' => md5('example_ean'),
                     'unitPrice' => 150.00,
                     'totalPrice' => 150.00,
                     'amount' => 1,
                     'packUnit' => '',
                     'purchaseUnit' => '',
                 ], [
-                    'title' => 'Example product 2',
-                    'ean' => 'SW10011',
+                    'ean' => md5('SW10011'),
                     'unitPrice' => 20.00,
                     'totalPrice' => 80.00,
                     'amount' => 4,

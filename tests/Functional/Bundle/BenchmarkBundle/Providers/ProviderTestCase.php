@@ -25,25 +25,14 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase;
 
-abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
+abstract class ProviderTestCase extends BenchmarkTestCase
 {
     /**
      * @var BenchmarkProviderInterface
      */
     private $provider;
-
-    public function setUp()
-    {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $dbalConnection->exec('START TRANSACTION;');
-    }
-
-    public function tearDown()
-    {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $dbalConnection->exec('ROLLBACK;');
-    }
 
     /**
      * @group BenchmarkBundle
@@ -55,6 +44,11 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
         $resultData = $provider->getBenchmarkData();
         $arrayKeys = array_keys($resultData);
 
+        // Dynamic keys
+        if ($this::EXPECTED_KEYS_COUNT === 'dynamic') {
+            return;
+        }
+
         $this->assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
     }
 
@@ -65,6 +59,12 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
     {
         $provider = $this->getProvider();
         $resultData = $provider->getBenchmarkData();
+
+        if (!is_array($this::EXPECTED_TYPES)) {
+            $this->assertInternalType($this::EXPECTED_TYPES, $resultData);
+
+            return;
+        }
 
         $this->checkForTypes($resultData, $this::EXPECTED_TYPES);
     }
@@ -82,24 +82,16 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $dataName
-     */
-    protected function installDemoData($dataName)
-    {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $fileContent = $this->openDemoDataFile($dataName);
-
-        $dbalConnection->exec($fileContent);
-    }
-
-    /**
      * @param array $data
      * @param array $expectedTypes
      */
     protected function checkForTypes(array $data, array $expectedTypes)
     {
-        //TODO: Find solution if no entry is in database, maybe example sql as requirement?
         foreach ($data as $resultKey => $resultItem) {
+            if (!$expectedTypes[$resultKey]) {
+                continue;
+            }
+
             if (is_array($expectedTypes[$resultKey])) {
                 $this->checkForTypes($resultItem, $expectedTypes[$resultKey]);
                 continue;
@@ -108,8 +100,7 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
             try {
                 $this->assertInternalType(
                     $expectedTypes[$resultKey],
-                    $resultItem,
-                    'foo'
+                    $resultItem
                 );
             } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
                 // Print custom error message
@@ -122,20 +113,8 @@ abstract class ProviderTestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @throws \Exception
-     */
-    private function openDemoDataFile($fileName)
+    protected function getAssetsFolder()
     {
-        $fileName .= '.sql';
-        $path = __DIR__ . '/assets/';
-        $filePath = $path . $fileName;
-        if (!file_exists($filePath)) {
-            throw new \Exception(sprintf('File with name %s does not exist in path %s', $fileName, $path));
-        }
-
-        return file_get_contents($filePath);
+        return __DIR__ . '/assets/';
     }
 }

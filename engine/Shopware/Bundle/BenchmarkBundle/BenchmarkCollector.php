@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-class BenchmarkCollector
+class BenchmarkCollector implements BenchmarkCollectorInterface
 {
     /**
      * @var BenchmarkProviderInterface[]
@@ -48,7 +48,7 @@ class BenchmarkCollector
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function get()
     {
@@ -74,7 +74,7 @@ class BenchmarkCollector
      */
     private function moveShopData(array $providerData)
     {
-        if (!$providerData['shop']) {
+        if (!array_key_exists('shop', $providerData)) {
             throw new \Exception('Necessary data with name \'shop\' not provided.');
         }
 

@@ -222,8 +222,7 @@ class OrdersProvider implements BenchmarkProviderInterface
         return $orderDetailsQueryBuilder->select([
                 'details.id',
                 'details.orderID',
-                'details.name as title',
-                'IFNULL(details.ean, details.articleordernumber) as ean',
+                'MD5(IFNULL(details.ean, details.articleordernumber)) as ean',
                 'details.price as unitPrice',
                 'details.price * details.quantity as totalPrice',
                 'details.quantity as amount',

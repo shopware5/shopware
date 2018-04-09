@@ -32,7 +32,6 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
             deActivationFieldSet = this.createDeactivationFieldSet();
 
         return [
-            this.createNoticeContainer(),
             Ext.create('Ext.form.Panel', {
                 flex: 1,
                 name: 'benchmark-settings-panel',
@@ -51,30 +50,12 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
                 loadSettingsRecord: function (settingsData) {
                     var active = settingsData.data.active;
 
-                    if (active === null) {
-                        this.disable();
-                        me.blockMessage.show();
-                        return;
-                    }
-
                     deActivationFieldSet[~~(active) === 1 ? 'show' : 'hide']();
                     activationFieldSet[~~(active) === 0 ? 'show' : 'hide']();
 
                     this.loadRecord(settingsData);
                 }
             })];
-    },
-
-    /**
-     *
-     * @returns { Ext.container.Container }
-     */
-    createNoticeContainer: function () {
-        this.blockMessage = Shopware.Notification.createBlockMessage('{s name="settings/notice/message"}Whoopsy. Head over to the Benchmark Overview first.{/s}', 'notice');
-        this.blockMessage.style = { marginBottom: 0 };
-        this.blockMessage.hide();
-
-        return this.blockMessage;
     },
 
     /**

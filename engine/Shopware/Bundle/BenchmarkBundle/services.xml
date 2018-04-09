@@ -9,6 +9,10 @@
             <argument type="collection" />
         </service>
 
+        <service id="shopware.benchmark_bundle.local_collector" class="Shopware\Bundle\BenchmarkBundle\BenchmarkLocalCollector">
+            <argument type="collection" />
+        </service>
+
         <service id="shopware.benchmark_bundle.providers.shop" class="Shopware\Bundle\BenchmarkBundle\Provider\ShopProvider">
             <tag name="shopware.benchmark_provider" />
         </service>
@@ -69,8 +73,21 @@
             <tag name="shopware.benchmark_provider" />
         </service>
 
+        <service id="shopware.benchmark_bundle.providers.local_orders" class="Shopware\Bundle\BenchmarkBundle\Provider\LocalOrdersProvider">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_local_provider" />
+        </service>
+
         <service id="shopware.benchmark_bundle.controller_subscriber" class="Shopware\Bundle\BenchmarkBundle\DependencyInjection\EventListener\ControllerSubscriber">
             <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.repository.config" class="Shopware\Bundle\BenchmarkBundle\Repository\ConfigRepository">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="shopware.benchmark_bundle.components.template_caching_handler" class="Shopware\Bundle\BenchmarkBundle\Services\TemplateCachingHandler">
+            <argument type="service" id="dbal_connection"/>
         </service>
     </services>
 </container>

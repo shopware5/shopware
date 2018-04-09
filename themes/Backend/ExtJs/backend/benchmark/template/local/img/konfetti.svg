@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 693 162" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" fill-rule="evenodd">
+<g transform="translate(2)">
+<ellipse cx="15.39" cy="81.5" rx="15.39" ry="15.377" stroke="#34DCDD" stroke-width="3"/>
+<ellipse cx="312.41" cy="96.877" rx="15.39" ry="15.377" stroke="#34DCDD" stroke-width="3"/>
+<ellipse cx="564.8" cy="66.123" rx="15.39" ry="15.377" stroke="#34DCDD" stroke-width="3"/>
+<ellipse cx="464" cy="152" rx="10.003" ry="9.9953" fill="#6A63FC"/>
+<ellipse cx="245.47" cy="45.363" rx="10.003" ry="9.9953" fill="#6A63FC"/>
+<ellipse cx="642.52" cy="9.9953" rx="10.003" ry="9.9953" fill="#6A63FC"/>
+<ellipse cx="150.05" cy="139.17" rx="10.003" ry="9.9953" fill="#6A63FC"/>
+<rect transform="translate(112.35 39.212) rotate(-40) translate(-112.35 -39.212)" x="104.65" y="21.528" width="15.39" height="35.368" fill="#189EFF"/>
+<rect transform="translate(670.99 76.118) rotate(240) translate(-670.99 -76.118)" x="663.3" y="58.434" width="15.39" height="35.368" fill="#189EFF"/>
+<rect transform="translate(406.29 57.665) rotate(200) translate(-406.29 -57.665)" x="398.59" y="39.981" width="15.39" height="35.368" fill="#189EFF"/>
+</g>
+</g>
+</svg>

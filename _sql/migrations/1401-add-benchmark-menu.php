@@ -31,7 +31,7 @@ class Migrations_Migration1401 extends Shopware\Components\Migrations\AbstractMi
         $this->addSQL('SET @parentId = (SELECT `id` FROM `s_core_menu` WHERE name="Benchmark");');
 
         $this->addSQL("INSERT IGNORE INTO `s_core_menu` (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`) VALUES
-            (@parentId, 'Einstellungen', NULL, 'sprite-wrench-screwdriver settings--basic-settings', 1, 1, NULL, 'Benchmark', NULL, 'Settings'),
+            (@parentId, 'Einstellungen', NULL, 'sprite-wrench-screwdriver settings--basic-settings', 1, 0, NULL, 'Benchmark', NULL, 'Settings'),
             (@parentId, 'Übersicht', NULL, 'sprite-report-paper marketing--analyses--overview', 0, 1, NULL, 'Benchmark', NULL, 'Index');");
     }
 }
