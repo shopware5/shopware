@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Rest
 {
     /**
@@ -55,8 +54,8 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
      */
     public function indexAction()
     {
-        $limit = $this->Request()->getParam('limit', 1000);
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 1000);
+        $offset = (int) $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);
 
