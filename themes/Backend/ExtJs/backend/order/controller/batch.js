@@ -440,7 +440,6 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     hasDocument: function (order, document) {
         var result = false;
         order.getReceipt().each(function (doc) {
-            console.log("hasDocument", document.get('id'), doc.get('typeId'));
             if (document.get('id') == doc.get('typeId')) {
                 result = true;
                 return false;
