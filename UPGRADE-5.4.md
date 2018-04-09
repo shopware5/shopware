@@ -40,6 +40,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed detail page behaviour with preselection variants which onsale-flag is active
 * Changed note counting to fix an error which displays 0 notes when adding the first note
 * Changed construction of ProductSearchResult-object to fix error in stream listing count
+* Changed content of listing boxes loaded by ajax requests: 
+    * if config value 'useShortDescriptionInListing' is true, short description gets loaded now 
 
 ## 5.4.1
 
