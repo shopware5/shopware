@@ -26,6 +26,8 @@ namespace Shopware\Components\HttpCache;
 
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Event\ErrorEvent;
+use GuzzleHttp\Pool;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Logger;
 
@@ -122,7 +124,6 @@ class CacheWarmer
      * @param int  $shopId
      * @param null $limit
      * @param null $offset
-     *
      * @return string[]
      */
     public function getAllSEOUrls($shopId, $limit = null, $offset = null)
@@ -198,8 +199,9 @@ class CacheWarmer
      *
      * @param string[] $urls
      * @param int      $shopId
+     * @param bool     $parallelMode
      */
-    public function callUrls($urls, $shopId)
+    public function callUrls($urls, $shopId, $parallelMode = false)
     {
         $shop = $this->getShopDataById($shopId);
 
@@ -209,15 +211,38 @@ class CacheWarmer
             $guzzleConfig['cookies'] = ['shop' => $shopId];
         }
 
+        $requests = [];
         foreach ($urls as $url) {
             $request = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
-            try {
-                $this->guzzleClient->send($request);
-            } catch (\Exception $e) {
-                $this->logger->error(
-                    'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
-                );
+
+            if($parallelMode) {
+                $requests[] = $request;
             }
+            else {
+                try {
+                    $this->guzzleClient->send($request);
+                } catch (\Exception $e) {
+                    $this->logger->error(
+                        'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
+                    );
+                }
+            }
+        }
+
+        if($parallelMode) {
+            $pool = new Pool(
+                $this->guzzleClient,
+                $requests,
+                [
+                    'pool_size' => count($urls),
+                    'error' => function(ErrorEvent $event) use ($shopId) {
+                        $this->logger->error(
+                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $event->getException()->getMessage()
+                        );
+                    },
+                ]);
+
+            $pool->wait();
         }
     }
 
