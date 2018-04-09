@@ -258,7 +258,7 @@ class Article extends Resource implements BatchInterface
         $this->checkPrivilege('read');
 
         $builder = $this->getRepository()->createQueryBuilder('article')
-            ->addSelect(['attribute'])
+            ->addSelect(['mainDetail', 'attribute'])
             ->addSelect('mainDetail.lastStock')
             ->leftJoin('article.mainDetail', 'mainDetail')
             ->leftJoin('mainDetail.attribute', 'attribute')
@@ -408,7 +408,7 @@ class Article extends Resource implements BatchInterface
             'tax',
             'supplier',
         ])
-            ->from('Shopware\Models\Article\Article', 'article')
+            ->from(\Shopware\Models\Article\Article::class, 'article')
             ->leftJoin('article.mainDetail', 'mainDetail')
             ->leftJoin('mainDetail.prices', 'mainDetailPrices')
             ->leftJoin('article.tax', 'tax')
@@ -448,7 +448,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * convenience function to delete a article by number
+     * Convenience function to delete a article by number
      *
      * @param string $number
      *
@@ -730,7 +730,7 @@ class Article extends Resource implements BatchInterface
             return false;
         }
 
-        $model = $this->getManager()->find('Shopware\Models\Article\Article', $id);
+        $model = $this->getManager()->find(\Shopware\Models\Article\Article::class, $id);
 
         if ($model) {
             return $id;
@@ -2430,7 +2430,7 @@ class Article extends Resource implements BatchInterface
             $image = $this->getOneToManySubElement(
                 $images,
                 $imageData,
-                '\Shopware\Models\Article\Image'
+                \Shopware\Models\Article\Image::class
             );
 
             if (isset($imageData['link'])) {
@@ -2449,7 +2449,7 @@ class Article extends Resource implements BatchInterface
                 ++$position;
             } elseif (!empty($imageData['mediaId'])) {
                 $media = $this->getManager()->find(
-                    'Shopware\Models\Media\Media',
+                    \Shopware\Models\Media\Media::class,
                     (int) $imageData['mediaId']
                 );
 
@@ -2505,7 +2505,7 @@ class Article extends Resource implements BatchInterface
      */
     private function getAttributeProperties()
     {
-        $metaData = $this->getManager()->getClassMetadata('\Shopware\Models\Attribute\Article');
+        $metaData = $this->getManager()->getClassMetadata(\Shopware\Models\Attribute\Article::class);
         $properties = [];
 
         foreach ($metaData->getReflectionProperties() as $property) {
