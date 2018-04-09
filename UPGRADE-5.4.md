@@ -6,6 +6,12 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 [View all changes from v5.4.2...v5.4.3](https://github.com/shopware/shopware/compare/v5.4.2...v5.4.3)
 
+### Additions
+
+* Added new events to `Shopware_Controllers_Widgets_Listing::listingCountAction` to modify view variables before the template is fetched
+  * `Shopware_Controllers_Widgets_Listing_fetchListing_preFetch`
+  * `Shopware_Controllers_Widgets_Listing_fetchPagination_preFetch`
+
 ### Changes
 
 * Changed .htaccess file to prohibit download of .env files
