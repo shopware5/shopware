@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Changes
 
 * Changed .htaccess file to prohibit download of .env files
+* Changed "Send E-Mails" checkbox in batch processing window of order to be enabled by default again
 
 ## 5.4.2
 

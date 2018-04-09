@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     extend: 'Ext.app.Controller',
 
     /**
-     * all references to get the elements by the applicable selector
+     * All references to get the elements by the applicable selector
      */
     refs: [
         { ref: 'orderListGrid', selector: 'order-list-main-window order-list'},
@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
 
     /**
      * Contains all possible status for the current batch process.
+     *
      * @object
      */
     processStatus: {
@@ -172,7 +173,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         orders = me.prepareOrders(orders, values);
         store = me.prepareStoreProxy(store, values);
 
-        //generate documents? display progress bar window
+        // Generate documents? Display progress bar window
         if (!Ext.isEmpty(values.documentType)) {
             me.currentStatus = me.processStatus.working;
             me.getView('batch.Progress').create({
@@ -281,11 +282,11 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             percentage = index / orders.length;
 
         if (index === orders.length) {
-            me.finishProcess(orders, resultStore, percentage);
+            me.finishProcess(orders, resultStore, percentage, false);
             return;
         }
 
-        //updates the progress bar value and text, the last parameter is the animation flag
+        // Updates the progress bar value and text, the last parameter is the animation flag
         progressBar.updateProgress(percentage, Ext.String.format(snippets.process, index + 1, orders.length), true);
 
         me.process(document, store, orders, index, resultStore);
@@ -307,18 +308,18 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             batchStore = me.getBatchList().getStore(),
             settings = me.getSettingsPanel().getValues();
 
-        //display finish update progress bar and display finish message
+        // Display finish update progress bar and display finish message
         progressBar.updateProgress(percentage, canceled ? '' : snippets.done.message, true);
 
-        //reload the main order store to show the new generated documents on the detail page
+        // Reload the main order store to show the new generated documents on the detail page
         me.subApplication.getStore('Order').load();
 
         if (!canceled) {
-            //display shopware notification message that the batch process finished
+            // Display shopware notification message that the batch process finished
             Shopware.Notification.createGrowlMessage(snippets.done.title, snippets.done.message, snippets.growlMessage);
         }
 
-        //refresh the current batch status and enable the close window button.
+        // Refresh the current batch status and enable the close window button.
         me.currentStatus = me.processStatus.done;
         me.refreshProgressWindow(orders);
 
@@ -407,7 +408,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
                 '{s name=document/attachment/invoice/number/text}{/s}'
             );
 
-            // a little delay is required to open the messageBox in the top layer,
+            // A little delay is required to open the messageBox in the top layer,
             // otherwise the window is behind a modal window.
             Ext.defer(function () {
                 Ext.Msg.prompt(
@@ -439,6 +440,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     hasDocument: function (order, document) {
         var result = false;
         order.getReceipt().each(function (doc) {
+            console.log("hasDocument", document.get('id'), doc.get('typeId'));
             if (document.get('id') == doc.get('typeId')) {
                 result = true;
                 return false;
@@ -447,6 +449,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
 
         return result;
     },
+
     /**
      * Save the Document by call store.sync
      *
@@ -461,7 +464,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
 
         store.removeAll();
 
-        //add the record to the store and sync the store to fire the ajax request
+        // Add the record to the store and sync the store to fire the ajax request
         store.add(orders[index]);
 
         store.sync({
@@ -489,28 +492,29 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         if (operation.resultSet === Ext.undefined || operation.resultSet.records === Ext.undefined) {
             brokenOrderMessage = Ext.String.format(snippets.cancel.brokenOrderMessage, orders[index].data.number);
 
-            //update progress bar and display finish message
+            // Update progress bar and display finish message
             progressBar.updateProgress(1, brokenOrderMessage, true);
             me.refreshProgressWindow(orders);
 
             return false;
         }
 
-        // add the resulting record to our result store
+        // Add the resulting record to our result store
         resultStore.add(operation.resultSet.records);
 
-        //checks if the user clicks the cancel button on the detail window.
+        // Checks if the user clicks the cancel button on the detail window.
         if (me.currentStatus === me.processStatus.cancel) {
 
-            //update progress bar and display finish message
+            // Update progress bar and display finish message
             progressBar.updateProgress(1, snippets.cancel.message, true);
 
             me.refreshProgressWindow(orders);
             me.finishProcess(orders, resultStore, index / orders.length, true);
-            //display shopware notification growl message to display that the batch process canceled successfully
+
+            // Display shopware notification growl message to display that the batch process canceled successfully
             Shopware.Notification.createGrowlMessage(snippets.cancel.title, snippets.cancel.message, snippets.growlMessage);
         } else {
-            //increase the array index and call recursive
+            // Increase the array index and call recursive
             me.queueProcess(document, store, orders, index + 1, resultStore);
         }
     },
@@ -528,14 +532,14 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             store = grid.getStore();
 
         if (orders.length > 0) {
-            //refresh the grid panel with the changed orders
+            // Refresh the grid panel with the changed orders
             store.removeAll();
             store.add(orders);
             grid.reconfigure(store);
         }
 
-        //if the current batch don't working enable the close button
-        //enable the close window button, disable loading mask and disable cancel button
+        // If the current batch doesn't work, enable the close button
+        // Enable the close window button, disable loading mask and disable cancel button
         me.getCloseButton().setDisabled(false);
         me.getCancelButton().setDisabled(true);
         me.getProgressWindow().setLoading(false);
