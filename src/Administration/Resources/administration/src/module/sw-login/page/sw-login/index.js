@@ -1,11 +1,19 @@
-import { Component } from 'src/core/shopware';
+import { Component, Mixin } from 'src/core/shopware';
 import template from './sw-login.html.twig';
 import './sw-login.less';
 
 Component.register('sw-login', {
+    template,
+
+    mixins: [
+        Mixin.getByName('notification')
+    ],
+
     data() {
         return {
-            isLoading: false
+            isLoading: false,
+            isLoginSuccess: false,
+            isLoginError: false
         };
     },
 
@@ -42,8 +50,32 @@ Component.register('sw-login', {
                 this.isLoading = false;
 
                 if (success === true) {
-                    this.forwardLogin();
+                    this.handleLoginSuccess();
+                } else {
+                    this.handleLoginError();
                 }
+            });
+        },
+
+        handleLoginSuccess() {
+            this.isLoginSuccess = true;
+
+            setTimeout(() => {
+                this.isLoginSuccess = false;
+                this.forwardLogin();
+            }, 300);
+        },
+
+        handleLoginError() {
+            this.isLoginError = true;
+
+            setTimeout(() => {
+                this.isLoginError = false;
+            }, 500);
+
+            this.createNotificationError({
+                title: this.$store.state.login.errorTitle,
+                message: this.$store.state.login.errorMessage
             });
         },
 
@@ -57,7 +89,5 @@ Component.register('sw-login', {
                 name: 'core'
             });
         }
-    },
-
-    template
+    }
 });

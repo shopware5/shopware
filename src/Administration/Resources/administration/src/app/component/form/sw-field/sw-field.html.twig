@@ -150,6 +150,37 @@
                            v-bind="$attrs">
                 {% endblock %}
 
+                <!-- Password -->
+                {% block sw_field_input_password %}
+                    <template v-else-if="type === 'password'">
+                        {% block sw_field_input_password_input %}
+                            <input :type="showPassword ? 'text' : 'password'"
+                                   :name="name"
+                                   :id="name"
+                                   :placeholder="placeholder"
+                                   :value="currentValue"
+                                   :disabled="disabled ? 'disabled' : false"
+                                   @input="onInput"
+                                   @change="onChange"
+                                   v-bind="$attrs">
+                        {% endblock %}
+
+                        {% block sw_field_toggle_password_visibility %}
+                            <span @click="onTogglePasswordVisibility"
+                                  :title="showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'"
+                                  class="sw-field__toggle-password-visibility">
+                                {% block sw_field_hide_password_icon %}
+                                    <sw-icon v-if="showPassword" name="default-eye-crossed" small></sw-icon>
+                                {% endblock %}
+
+                                {% block sw_field_show_password_icon %}
+                                    <sw-icon v-else name="default-eye-open" small></sw-icon>
+                                {% endblock %}
+                            </span>
+                        {% endblock %}
+                    </template>
+                {% endblock %}
+
                 <!-- Default Input -->
                 {% block sw_field_input_default %}
                     <input v-else

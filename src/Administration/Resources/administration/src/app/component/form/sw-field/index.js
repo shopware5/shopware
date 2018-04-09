@@ -71,7 +71,8 @@ Component.register('sw-field', {
     data() {
         return {
             currentValue: null,
-            boundExpressionPath: []
+            boundExpressionPath: [],
+            showPassword: false
         };
     },
 
@@ -198,6 +199,10 @@ Component.register('sw-field', {
 
         hasErrorCls() {
             return !this.isValid || this.hasError();
+        },
+
+        onTogglePasswordVisibility() {
+            this.showPassword = !this.showPassword;
         }
     }
 });
