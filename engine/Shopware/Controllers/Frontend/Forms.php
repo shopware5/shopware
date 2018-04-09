@@ -456,6 +456,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $valid = true;
             $value = '';
             if ($element['typ'] === 'text2') {
+                $value = [];
                 $element['name'] = explode(';', $element['name']);
                 if (!empty($inputs[$element['name'][0]])) {
                     $value[0] = $inputs[$element['name'][0]];
