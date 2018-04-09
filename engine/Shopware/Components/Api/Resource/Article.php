@@ -258,7 +258,7 @@ class Article extends Resource implements BatchInterface
         $this->checkPrivilege('read');
 
         $builder = $this->getRepository()->createQueryBuilder('article')
-            ->addSelect(['attribute'])
+            ->addSelect(['mainDetail', 'attribute'])
             ->addSelect('mainDetail.lastStock')
             ->leftJoin('article.mainDetail', 'mainDetail')
             ->leftJoin('mainDetail.attribute', 'attribute')
