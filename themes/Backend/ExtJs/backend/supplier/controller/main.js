@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
             },
             // Listener for the default search
             'supplier-main-toolbar textfield[action=searchSupplier]' : {
-                keyup : this.onSearch
+                change : this.onSearch
             },
 
             // Listener for the action column in the grid
@@ -312,17 +312,18 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
      * Handling the search in the grid
      * @event keypressed
      * @param [object] field - Input field in which the search string has been put
+     * @param [object] value - Value in input
      */
-    onSearch : function (field) {
+    onSearch : function (field, value) {
         var me = this,
             store = me.getStore('Supplier');
 
-        if (field.value.length === 0) {
+        if (value.length === 0) {
             store.clearFilter();
             return false;
         }
         store.filters.clear();
-        store.filter('name', field.value);
+        store.filter('name', value);
 
         return true;
     },

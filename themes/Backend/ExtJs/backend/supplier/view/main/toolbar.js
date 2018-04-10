@@ -64,6 +64,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Toolbar', {
             width: 170,
             cls: 'searchfield',
             enableKeyEvents : true,
+            checkChangeBuffer:500,
             emptyText : '{s name=search_empty}Search...{/s}'
         }, {
             xtype: 'tbspacer',
