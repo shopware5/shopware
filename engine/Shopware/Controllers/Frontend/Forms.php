@@ -120,7 +120,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $mail->setFrom(Shopware()->Config()->Mail);
         $mail->clearRecipients();
-        $mail->addTo($content['email']);
+        $mail->addTo(explode(';', $content['email']));
         $mail->setBodyText($mailBody);
         $mail->setSubject($mailSubject);
 
