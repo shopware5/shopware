@@ -54,6 +54,11 @@ class ModelManager extends EntityManager
      * @var bool
      */
     protected $debugMode = false;
+    
+    public function getPository($model)
+    {
+        return $this->getRepository($model);   
+    }
 
     /**
      * @return DBALQueryBuilder
