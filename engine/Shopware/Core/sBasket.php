@@ -2853,10 +2853,9 @@ SQL;
      */
     private function getPriceForAddArticle(array $article)
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
         $defaultPriceGroup = 'EK';
 
-        $prices = $connection->createQueryBuilder()
+        $prices = $this->connection->createQueryBuilder()
             ->select('price.pricegroup, price, tax.tax')
             ->from('s_articles_details', 'product_detail')
             ->innerJoin('product_detail', 's_articles_prices', 'price', 'product_detail.id = price.articledetailsID')
