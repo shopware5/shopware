@@ -101,30 +101,30 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // event when ever the category tree store should be reloaded
                 'reload'        : me.onReload,
                 // delete event
-                'deleteSubCategory' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) },
+                'deleteSubCategory' : me.onDeleteCategory,
                 // event when ever someone tries to add a new category into the category tree
-                'addSubCategory'    : function() { me._destroyOtherModuleInstances(me.onOpenNameDialog, arguments) },
+                'addSubCategory'    : me.onOpenNameDialog,
                 // event when ever someone tries to duplicate a category from the category tree
-                'duplicateSubCategory'    : function() { me._destroyOtherModuleInstances(me.onDuplicateCategory, arguments) },
+                'duplicateSubCategory'    : me.onDuplicateCategory,
                 // event when ever someone tries to edit a category
                 'itemclick'      : me.onItemClick,
                 //
-                'beforeDropCategory': function() { me._destroyOtherModuleInstances(me.onBeforeDrop, arguments) }
+                'beforeDropCategory': me.onBeforeDrop
             },
              // Add Category from a dialog window, route event to the tree controller
             'category-category-tree button[action=addCategory]' : {
-                'click' : function() { me._destroyOtherModuleInstances(me.onOpenNameDialog, arguments) }
+                'click' : me.onOpenNameDialog
             },
              // Add Category in settings tab
             'category-category-tabs-settings [action=addCategory]':{
-                'click' : function() { me._destroyOtherModuleInstances(me.onAddCategory, arguments) }
+                'click' : me.onAddCategory
             },
             'category-category-tree button[action=duplicateCategory]' : {
-                'click' : function() { me._destroyOtherModuleInstances(me.onDuplicateCategory, arguments) }
+                'click' : me.onDuplicateCategory
             },
             // Add dialog box
             'category-category-tree button[action=deleteCategory]' : {
-                'click' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) }
+                'click' : me.onDeleteCategory
             },
             'duplication-settings-window': {
                 'start-duplication': me.onStartDuplication
@@ -381,64 +381,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 }
             }
         });
-    },
-
-    _destroyOtherModuleInstances: function (cb, cbArgs) {
-        var me = this, activeWindows = [], subAppId = me.subApplication.$subAppId;
-        cbArgs = cbArgs || [];
-
-        Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
-
-            if (!subApp || !subApp.windowManager || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
-                return;
-            }
-            Ext.each(subApp.windowManager.zIndexStack, function (item) {
-                if (me.isItemInBlacklist(item)) {
-                    return false;
-                }
-
-                if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window') {
-                    activeWindows.push(item);
-                }
-                if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window') {
-                    activeWindows.push(item);
-                }
-            });
-        });
-
-        if (activeWindows && activeWindows.length) {
-            Ext.each(activeWindows, function (win) {
-                win.destroy();
-            });
-
-            if (Ext.isFunction(cb)) {
-                cb.apply(me, cbArgs);
-            }
-        } else {
-            if (Ext.isFunction(cb)) {
-                cb.apply(me, cbArgs);
-            }
-        }
-    },
-
-    /**
-     * Checks if the provided item should be destroyed in the category crud operations
-     * @param item
-     * @returns { boolean }
-     */
-    isItemInBlacklist: function(item) {
-        var blacklist = ['widget.widget-sidebar-window'];
-        var inBlackList = false;
-
-        if (item && item.alias) {
-            Ext.each(item.alias, function(alias) {
-                if (blacklist.indexOf(alias) > -1) {
-                    inBlackList = true;
-                }
-            });
-        }
-
-        return inBlackList;
     },
 
    /**
