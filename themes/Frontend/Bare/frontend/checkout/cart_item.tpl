@@ -4,39 +4,23 @@
 {$IS_VOUCHER = 2}
 {$IS_REBATE = 3}
 {$IS_SURCHARGE_DISCOUNT = 4}
+{$path = ''}
 
 {if $sBasketItem.modus == $IS_PRODUCT}
-
-    {* Product *}
-    {block name='frontend_checkout_cart_item_product'}
-        {include file="frontend/checkout/items/product.tpl" isLast=$isLast}
-    {/block}
+    {$path = "frontend/checkout/cart_item_product.tpl"}
 {elseif $sBasketItem.modus == $IS_PREMIUM_PRODUCT}
-
-    {* Chosen premium products *}
-    {block name='frontend_checkout_cart_item_premium_product'}
-        {include file="frontend/checkout/items/premium-product.tpl" isLast=$isLast}
-    {/block}
+    {$path = "frontend/checkout/cart_item_premium_product.tpl"}
 {elseif $sBasketItem.modus == $IS_VOUCHER}
-
-    {* Voucher *}
-    {block name='frontend_checkout_cart_item_voucher'}
-        {include file="frontend/checkout/items/voucher.tpl" isLast=$isLast}
-    {/block}
+    {$path = "frontend/checkout/cart_item_voucher.tpl"}
 {elseif $sBasketItem.modus == $IS_REBATE}
-
-    {* Basket rebate *}
-    {block name='frontend_checkout_cart_item_rebate'}
-        {include file="frontend/checkout/items/rebate.tpl" isLast=$isLast}
-    {/block}
+    {$path = "frontend/checkout/cart_item_rebate.tpl"}
 {elseif $sBasketItem.modus == $IS_SURCHARGE_DISCOUNT}
-
-    {* Surcharge / discount *}
-    {block name='frontend_checkout_cart_item_surcharge_discount'}
-        {include file="frontend/checkout/items/rebate.tpl" isLast=$isLast}
-    {/block}
+    {$path = "frontend/checkout/cart_item_surcharge_discount.tpl"}
 {else}
-
     {* Register your own mode selection *}
     {block name='frontend_checkout_cart_item_additional_type'}{/block}
+{/if}
+
+{if $path != ''}
+    {include $path}
 {/if}
