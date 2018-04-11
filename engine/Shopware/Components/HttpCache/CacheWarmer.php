@@ -124,6 +124,7 @@ class CacheWarmer
      * @param int  $shopId
      * @param null $limit
      * @param null $offset
+     *
      * @return string[]
      */
     public function getAllSEOUrls($shopId, $limit = null, $offset = null)
@@ -215,10 +216,9 @@ class CacheWarmer
         foreach ($urls as $url) {
             $request = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
 
-            if($parallelMode) {
+            if ($parallelMode) {
                 $requests[] = $request;
-            }
-            else {
+            } else {
                 try {
                     $this->guzzleClient->send($request);
                 } catch (\Exception $e) {
@@ -229,13 +229,13 @@ class CacheWarmer
             }
         }
 
-        if($parallelMode) {
+        if ($parallelMode) {
             $pool = new Pool(
                 $this->guzzleClient,
                 $requests,
                 [
                     'pool_size' => count($urls),
-                    'error' => function(ErrorEvent $event) use ($shopId) {
+                    'error' => function (ErrorEvent $event) use ($shopId) {
                         $this->logger->error(
                             'Warm up http-cache error with shopId ' . $shopId . ' ' . $event->getException()->getMessage()
                         );
