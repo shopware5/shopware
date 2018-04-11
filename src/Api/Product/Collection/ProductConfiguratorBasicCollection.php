@@ -82,6 +82,30 @@ class ProductConfiguratorBasicCollection extends EntityCollection
         return $groups;
     }
 
+    public function getByOptionId(string $optionId): ?ProductConfiguratorBasicStruct
+    {
+        foreach ($this->elements as $element) {
+            if ($element->getOptionId() === $optionId) {
+                return $element;
+            }
+        }
+        return null;
+    }
+
+    public function sortByGroup(): void
+    {
+        $this->sort(function(ProductConfiguratorBasicStruct $a, ProductConfiguratorBasicStruct $b) {
+            $a = $a->getOption()->getGroup();
+            $b = $b->getOption()->getGroup();
+
+            if ($a->getPosition() === $b->getPosition()) {
+                return $a->getName() <=> $b->getName();
+            }
+
+            return $a->getPosition() <=> $b->getPosition();
+        });
+    }
+
     protected function getExpectedClass(): string
     {
         return ProductConfiguratorBasicStruct::class;

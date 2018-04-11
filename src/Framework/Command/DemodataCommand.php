@@ -5,14 +5,16 @@ namespace Shopware\Framework\Command;
 use Bezhanov\Faker\Provider\Commerce;
 use Faker\Factory;
 use Faker\Generator;
-use Shopware\Api\Category\Definition\CategoryDefinition;
+use Shopware\Api\Category\Repository\CategoryRepository;
 use Shopware\Api\Configuration\Definition\ConfigurationGroupDefinition;
 use Shopware\Api\Context\Definition\ContextRuleDefinition;
+use Shopware\Api\Context\Repository\ContextRuleRepository;
 use Shopware\Api\Customer\Definition\CustomerDefinition;
+use Shopware\Api\Entity\Search\Criteria;
 use Shopware\Api\Entity\Write\EntityWriterInterface;
 use Shopware\Api\Entity\Write\WriteContext;
-use Shopware\Api\Product\Definition\ProductDefinition;
 use Shopware\Api\Product\Definition\ProductManufacturerDefinition;
+use Shopware\Api\Product\Repository\ProductRepository;
 use Shopware\Context\Rule\Container\AndRule;
 use Shopware\Context\Rule\Container\NotRule;
 use Shopware\Context\Rule\CurrencyRule;
@@ -58,14 +60,35 @@ class DemodataCommand extends ContainerAwareCommand
      */
     private $variantGenerator;
 
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    /**
+     * @var ContextRuleRepository
+     */
+    private $contextRuleRepository;
+
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
+
     public function __construct(
         ?string $name = null,
         EntityWriterInterface $writer,
-        VariantGenerator $variantGenerator
+        VariantGenerator $variantGenerator,
+        ProductRepository $productRepository,
+        ContextRuleRepository $contextRuleRepository,
+        CategoryRepository $categoryRepository
     ) {
         parent::__construct($name);
         $this->writer = $writer;
         $this->variantGenerator = $variantGenerator;
+        $this->productRepository = $productRepository;
+        $this->contextRuleRepository = $contextRuleRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     protected function configure()
@@ -123,6 +146,7 @@ class DemodataCommand extends ContainerAwareCommand
                 'parentId' => 'a1abd0ee-0aa6-4fcd-aef7-25b8b84e5943',
             ];
         }
+
         $parents = $payload;
         foreach ($parents as $category) {
             for ($x = 0; $x < 40; ++$x) {
@@ -140,7 +164,7 @@ class DemodataCommand extends ContainerAwareCommand
 
         $chunks = array_chunk($payload, 100);
         foreach ($chunks as $chunk) {
-            $this->writer->upsert(CategoryDefinition::class, $chunk, $this->getContext());
+            $this->categoryRepository->upsert($chunk, ShopContext::createDefaultContext());
             $this->io->progressAdvance(count($chunk));
         }
 
@@ -259,27 +283,51 @@ class DemodataCommand extends ContainerAwareCommand
     {
         $payload = [];
 
-        $size = 100;
-        if ($size > $count) {
-            $size = $count;
-        }
-
         $this->io->section(sprintf('Generating %d products...', $count));
         $this->io->progressStart($count);
 
         $configurator = $this->createConfigurators();
 
+        $services = $this->createServices();
+
         for ($i = 0; $i < $count; ++$i) {
-            if ($i % 10 === 0) {
-                $this->createConfiguratorProduct($categories, $manufacturer, $contextRules, $configurator);
-            } else {
-                $payload[] = $this->createSimpleProduct($categories, $manufacturer, $contextRules);
+            $product = $this->createSimpleProduct($categories, $manufacturer, $contextRules);
+
+            $hasServices = random_int(1, 100) <= 5;
+            if ($hasServices) {
+                $product['services'] = $this->buildProductServices($services);
             }
-            if ($i % $size === 0 && $i > 0) {
-                $this->writer->upsert(ProductDefinition::class, $payload, $this->getContext());
-                $this->io->progressAdvance(count($payload) + 10);
+
+            $isConfigurator = random_int(1, 100) <= 5;
+            if ($isConfigurator) {
+                $product['configurators'] = $this->buildProductConfigurator($configurator);
+
+                $product['datasheet'] = array_map(function($config) {
+                    return ['id' => $config['optionId']];
+                }, $product['configurators']);
+            }
+
+            if ($isConfigurator) {
+                $this->io->progressAdvance();
+
+                $this->productRepository->upsert([$product], ShopContext::createDefaultContext());
+
+                $this->variantGenerator->generate($product['id'], ShopContext::createDefaultContext());
+
+                continue;
+            }
+
+            $payload[] = $product;
+
+            if (count($payload) >= 20) {
+                $this->io->progressAdvance(count($payload));
+                $this->productRepository->upsert($payload, ShopContext::createDefaultContext());
                 $payload = [];
             }
+        }
+
+        if (!empty($payload)) {
+            $this->productRepository->upsert($payload, ShopContext::createDefaultContext());
         }
 
         $this->io->progressFinish();
@@ -313,6 +361,12 @@ class DemodataCommand extends ContainerAwareCommand
 
     private function createContextRules(): array
     {
+        $ids = $this->contextRuleRepository->searchIds(new Criteria(), ShopContext::createDefaultContext());
+
+        if (!empty($ids->getIds())) {
+            return $ids->getIds();
+        }
+
         $pool = [
             new IsNewCustomerRule(),
             new DateRangeRule(new \DateTime(), (new \DateTime())->modify('+2 day')),
@@ -323,13 +377,13 @@ class DemodataCommand extends ContainerAwareCommand
         ];
 
         $payload = [];
-        for ($i = 0; $i < 50; ++$i) {
+        for ($i = 0; $i < 20; ++$i) {
             $rules = \array_slice($pool, random_int(0, count($pool) - 2), random_int(1, 2));
 
             $payload[] = [
                 'id' => Uuid::uuid4()->getHex(),
-                'name' => 'High cart value',
                 'priority' => $i,
+                'name' => 'Random rule value',
                 'payload' => new AndRule($rules),
             ];
         }
@@ -364,7 +418,7 @@ class DemodataCommand extends ContainerAwareCommand
             $prices[] = [
                 'currencyId' => Defaults::CURRENCY,
                 'contextRuleId' => $ruleId,
-                'quantityStart' => 1,
+                'quantityStart' => 11,
                 'price' => ['gross' => $gross, 'net' => $gross / 1.19],
             ];
         }
@@ -432,46 +486,6 @@ class DemodataCommand extends ContainerAwareCommand
         return $product;
     }
 
-    private function createConfiguratorProduct(
-        array $categories,
-        array $manufacturer,
-        array $contextRules,
-        array $configurator
-    ) {
-        $product = $this->createSimpleProduct($categories, $manufacturer, $contextRules);
-
-        $groups = array_slice($configurator, 0, random_int(1, 2));
-
-        $optionIds = [];
-        foreach ($groups as $group) {
-            $ids = array_column($group['options'], 'id');
-
-            $count = random_int(2, count($ids));
-
-            $offset = random_int(0, count($ids) / 3);
-
-            $optionIds = array_merge(
-                $ids,
-                array_slice($ids, $offset, $count)
-            );
-        }
-
-        $options = array_map(function ($id) {
-            $price = random_int(2, 10);
-
-            return [
-                'optionId' => $id,
-                'price' => ['gross' => $price, 'net' => $price / 1.19],
-            ];
-        }, $optionIds);
-
-        $product['configurators'] = $options;
-
-        $this->writer->insert(ProductDefinition::class, [$product], $this->getContext());
-
-        $this->variantGenerator->generate($product['id'], ShopContext::createDefaultContext());
-    }
-
     private function createConfigurators()
     {
         $data = [
@@ -510,5 +524,91 @@ class DemodataCommand extends ContainerAwareCommand
         $this->writer->insert(ConfigurationGroupDefinition::class, $data, $this->getContext());
 
         return $data;
+    }
+
+    /**
+     * @param array $groups
+     * @return array
+     */
+    private function buildProductConfigurator(array $groups): array
+    {
+        $optionIds = $this->getRandomOptions($groups);
+
+        $options = array_map(
+            function ($id) {
+                $price = random_int(2, 10);
+
+                return [
+                    'optionId' => $id,
+                    'price' => ['gross' => $price, 'net' => $price / 1.19],
+                ];
+            },
+            $optionIds
+        );
+
+        return $options;
+    }
+
+    private function getRandomOptions(array $groups)
+    {
+        $optionIds = [];
+        foreach ($groups as $group) {
+            $ids = array_column($group['options'], 'id');
+
+            $count = random_int(2, \count($ids));
+
+            $x = (int) round(\count($ids) / 3);
+
+            $offset = random_int(0, $x);
+
+            $optionIds = array_merge(
+                $optionIds,
+                array_slice($ids, $offset, $count)
+            );
+        }
+
+        return $optionIds;
+    }
+
+    private function createServices(): array
+    {
+        $data = [
+            [
+                'id' => Uuid::uuid4()->getHex(),
+                'name' => 'warranty',
+                'options' => [
+                    ['id' => Uuid::uuid4()->getHex(), 'name' => '1 year'],
+                    ['id' => Uuid::uuid4()->getHex(), 'name' => '2 years'],
+                    ['id' => Uuid::uuid4()->getHex(), 'name' => '3 years'],
+                ],
+            ],
+            [
+                'id' => Uuid::uuid4()->getHex(),
+                'name' => 'assembly',
+                'options' => [
+                    ['id' => Uuid::uuid4()->getHex(), 'name' => 'full assembly'],
+                    ['id' => Uuid::uuid4()->getHex(), 'name' => 'half assembly'],
+                ],
+            ],
+        ];
+
+        $this->writer->insert(ConfigurationGroupDefinition::class, $data, $this->getContext());
+
+        return $data;
+    }
+
+    private function buildProductServices(array $services)
+    {
+        $optionIds = $this->getRandomOptions($services);
+
+        return array_map(function($optionId) {
+            $price = random_int(5, 100);
+
+            return [
+                'price' => ['gross' => $price, 'net' => $price / 1.19],
+                'taxId' => '4926035368e34d9fa695e017d7a231b9',
+                'optionId' => $optionId
+            ];
+        }, $optionIds);
     }
 }
