@@ -24,16 +24,14 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-use GuzzleHttp\Psr7\Request;
-use Http\Client\HttpAsyncClient;
-use http\Exception;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkSendingException;
 use Shopware\Bundle\BenchmarkBundle\Hydrator\BenchmarkResponseHydrator;
 use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkRequest;
+use Shopware\Components\HttpClient\HttpClientInterface;
+use Shopware\Components\HttpClient\Response;
 
 /**
  * Wandelt die internen Objekte in GuzzleRequest/Responses um
@@ -46,7 +44,7 @@ class BenchmarkClient implements BenchmarkClientInterface
     private $benchmarkApiEndpoint;
 
     /**
-     * @var HttpAsyncClient
+     * @var HttpClientInterface
      */
     private $client;
 
@@ -62,13 +60,13 @@ class BenchmarkClient implements BenchmarkClientInterface
 
     /**
      * @param string                    $benchmarkApiEndpoint
-     * @param HttpAsyncClient           $client
+     * @param HttpClientInterface       $client
      * @param BenchmarkResponseHydrator $benchmarkResponseHydrator
      * @param LoggerInterface           $logger
      */
     public function __construct(
         $benchmarkApiEndpoint,
-        HttpAsyncClient $client,
+        HttpClientInterface $client,
         BenchmarkResponseHydrator $benchmarkResponseHydrator,
         LoggerInterface $logger = null)
     {
@@ -81,34 +79,34 @@ class BenchmarkClient implements BenchmarkClientInterface
     /**
      * @param BenchmarkRequest $benchmarkRequest
      *
-     * @throws \Exception
+     * @throws BenchmarkSendingException
      */
     public function sendBenchmark(BenchmarkRequest $benchmarkRequest)
     {
         $headers = [];
 
-        $promise = $this->client->sendAsyncRequest(new Request('POST', $this->benchmarkApiEndpoint, $headers, (string) $benchmarkRequest));
-
-        $promise->then(function (ResponseInterface $response) {
-            return $this->hydrateBenchmarkResponse($response);
-        }, function (Exception $ex) {
+        try {
+            $response = $this->client->post($this->benchmarkApiEndpoint, $headers, (string) $benchmarkRequest);
+        } catch (\Exception $ex) {
             $this->logger->warning(sprintf('Could not send benchmark data to %s', $this->benchmarkApiEndpoint), [$ex]);
 
             throw new BenchmarkSendingException('Could not send benchmark data', 0, $ex);
-        });
+        }
+
+        return $this->hydrateBenchmarkResponse($response);
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param Response $response
      *
      * @throws BenchmarkHydratingException
      *
      * @return Struct\BenchmarkResponse
      */
-    private function hydrateBenchmarkResponse(ResponseInterface $response)
+    private function hydrateBenchmarkResponse(Response $response)
     {
         $data = json_decode(
-            $response->getBody()->getContents(),
+            $response->getBody(),
             true
         );
 

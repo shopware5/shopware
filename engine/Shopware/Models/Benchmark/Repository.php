@@ -22,41 +22,41 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Models\Benchmark;
 
-use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkRequest;
+use Doctrine\ORM\EntityRepository;
 
-class BenchmarkTransmission
+/**
+ * Repository
+ */
+class Repository extends EntityRepository
 {
     /**
-     * @var BenchmarkCollector
+     * @return BenchmarkConfig
      */
-    private $benchmarkCollector;
-
-    /**
-     * @var BenchmarkClientInterface
-     */
-    private $benchmarkClient;
-
-    /**
-     * @param BenchmarkCollector       $benchmarkCollector
-     * @param BenchmarkClientInterface $benchmarkClient
-     */
-    public function __construct(BenchmarkCollector $benchmarkCollector, BenchmarkClientInterface $benchmarkClient)
+    public function getMainConfig()
     {
-        $this->benchmarkCollector = $benchmarkCollector;
-        $this->benchmarkClient = $benchmarkClient;
+        $all = $this->findAll();
+
+        $config = array_shift($all);
+
+        if (!$config) {
+            $uuid = \Ramsey\Uuid\Uuid::uuid4();
+            $config = new BenchmarkConfig($uuid->getBytes());
+        }
+
+        return $config;
     }
 
-    public function transmit()
+    /**
+     * @param BenchmarkConfig $config
+     */
+    public function save(BenchmarkConfig $config)
     {
-        $this->benchmarkCollector->get();
+        $em = $this->getEntityManager();
 
-        $request = new BenchmarkRequest();
-        $request->data = $this->benchmarkCollector->get();
-
-        $benchmarkResponse = $this->benchmarkClient->sendBenchmark($request);
-
-        // Todo: Store Benchmark
+        $em->merge($config);
+        $em->persist($config);
+        $em->flush($config);
     }
 }

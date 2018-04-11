@@ -29,9 +29,9 @@ Ext.define('Shopware.apps.Benchmark', {
     bulkLoad: true,
     loadPath: '{url action=load}',
 
-    views: ['overview.Window', 'settings.Window', 'settings.BusinessField', 'settings.BusinessWindow'],
+    views: ['overview.Window', 'settings.Window', 'settings.IndustryField', 'settings.IndustryWindow'],
     models: [],
-    stores: [ 'Business' ],
+    stores: [ 'Industry' ],
 
     controllers: [ 'Main', 'Settings' ],
 

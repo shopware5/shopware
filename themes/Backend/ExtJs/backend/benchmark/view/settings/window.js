@@ -24,11 +24,10 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
     },
 
     /**
-     * @returns { Ext.form.Panel }
+     * @returns { Ext.form.Panel[] }
      */
     createItems: function () {
-        var me = this,
-            activationFieldSet = this.createActivationFieldSet(),
+        var activationFieldSet = this.createActivationFieldSet(),
             deActivationFieldSet = this.createDeactivationFieldSet();
 
         return [
@@ -40,7 +39,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
                     activationFieldSet,
                     deActivationFieldSet,
                     this.createSettingsFieldSet(),
-                    this.createBusinessFieldSet(),
+                    this.createIndustryFieldSet(),
                     this.createInfoFieldSet()
                 ],
 
@@ -173,16 +172,16 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
     /**
      * @returns { Ext.form.FieldSet }
      */
-    createBusinessFieldSet: function () {
+    createIndustryFieldSet: function () {
         return Ext.create('Ext.form.FieldSet', {
-            title: '{s name="settings/fieldsets/business/title"}Business{/s}',
-            name: 'businessFieldSet',
+            title: '{s name="settings/fieldsets/industry/title"}Industry{/s}',
+            name: 'industryFieldSet',
             items: [{
-                xtype: 'businessfield',
-                name: 'business',
-                fieldLabel: '{s name="settings/fieldsets/business/label"}Chosen business{/s}',
+                xtype: 'industryfield',
+                name: 'industry',
+                fieldLabel: '{s name="settings/fieldsets/industry/label"}Chosen industry{/s}',
                 labelWidth: 200,
-                store: Ext.create('Shopware.apps.Benchmark.store.Business')
+                store: Ext.create('Shopware.apps.Benchmark.store.Industry')
             }]
         });
     },

@@ -30,4 +30,9 @@ class BenchmarkRequest
      * @var string
      */
     public $data;
+
+    public function __toString()
+    {
+        return $this->data;
+    }
 }

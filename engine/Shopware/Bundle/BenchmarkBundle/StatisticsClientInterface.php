@@ -25,8 +25,14 @@
 namespace Shopware\Bundle\BenchmarkBundle;
 
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
+use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 
 interface StatisticsClientInterface
 {
+    /**
+     * @param StatisticsRequest $statisticsRequest
+     *
+     * @return StatisticsResponse
+     */
     public function fetchStatistics(StatisticsRequest $statisticsRequest);
 }

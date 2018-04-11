@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\Services;
+namespace Shopware\Bundle\BenchmarkBundle\Service;
 
 use Doctrine\DBAL\Connection;
 

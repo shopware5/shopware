@@ -28,7 +28,6 @@ use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
-use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\ProviderCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass;
 use Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass;
@@ -689,7 +688,6 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new EmotionPresetCompilerPass());
         $container->addCompilerPass(new RouterCompilerPass());
-        $container->addCompilerPass(new ProviderCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

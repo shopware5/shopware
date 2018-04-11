@@ -34,11 +34,11 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet()
     {
-        $provider = new BenchmarkCollector([
+        $provider = new BenchmarkCollector(new \ArrayObject([
             new ShopBenchmarkProvider(),
             new FooBenchmarkProvider(),
             new BarBenchmarkProvider(),
-        ]);
+        ]));
 
         $result = $provider->get();
 
@@ -50,10 +50,10 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetShouldThrowExceptionNoShopProvider()
     {
-        $provider = new BenchmarkCollector([
+        $provider = new BenchmarkCollector(new \ArrayObject([
             new FooBenchmarkProvider(),
             new BarBenchmarkProvider(),
-        ]);
+        ]));
 
         $this->expectExceptionMessage('Necessary data with name \'shop\' not provided.');
         $provider->get();

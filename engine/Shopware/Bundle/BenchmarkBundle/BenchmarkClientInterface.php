@@ -25,8 +25,14 @@
 namespace Shopware\Bundle\BenchmarkBundle;
 
 use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkRequest;
+use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkResponse;
 
 interface BenchmarkClientInterface
 {
+    /**
+     * @param BenchmarkRequest $benchmarkRequest
+     *
+     * @return BenchmarkResponse
+     */
     public function sendBenchmark(BenchmarkRequest $benchmarkRequest);
 }

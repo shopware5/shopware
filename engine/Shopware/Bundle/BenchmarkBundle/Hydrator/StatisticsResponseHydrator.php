@@ -35,6 +35,6 @@ class StatisticsResponseHydrator implements HydratorInterface
      */
     public function hydrate(array $data)
     {
-        return new StatisticsResponse(new \DateTime('now', new \DateTimeZone(\DateTimeZone::UTC)), $data['html']);
+        return new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), $data['html']);
     }
 }

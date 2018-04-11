@@ -26,4 +26,29 @@ namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
 class StatisticsRequest
 {
+    /**
+     * @var string
+     */
+    private $token;
+
+    /**
+     * @param string $token
+     */
+    public function __construct($token)
+    {
+        $this->token = $token;
+    }
+
+    public function __toString()
+    {
+        return sprintf('token=%s', $this->token);
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
 }

@@ -1,21 +1,21 @@
 
 //{namespace name="backend/benchmark/main"}
-//{block name="backend/benchmark/view/settings/business_window"}
-Ext.define('Shopware.apps.Benchmark.view.settings.BusinessWindow', {
+//{block name="backend/benchmark/view/settings/industry_window"}
+Ext.define('Shopware.apps.Benchmark.view.settings.IndustryWindow', {
     extend: 'Enlight.app.Window',
-    alias: 'widget.benchmark-settings-business-window',
+    alias: 'widget.benchmark-settings-industry-window',
 
     height: 130,
     width: 320,
 
-    title: '{s name="settings/business_window/title"}Change business{/s}',
+    title: '{s name="settings/industry_window/title"}Change industry{/s}',
 
     initComponent: function () {
         this.items = Ext.create('Ext.panel.Panel', {
             layout: 'anchor',
             bodyPadding: 10,
             border: 0,
-            items: this.createBusinessCombo()
+            items: this.createIndustryCombo()
         });
 
         this.dockedItems = this.createBottomBar();
@@ -26,12 +26,12 @@ Ext.define('Shopware.apps.Benchmark.view.settings.BusinessWindow', {
     /**
      * @returns { Ext.form.field.ComboBox }
      */
-    createBusinessCombo: function () {
+    createIndustryCombo: function () {
         var me = this;
-        me.businessCombo = Ext.create('Ext.form.field.ComboBox', {
-            store: Ext.create('Shopware.apps.Benchmark.store.Business'),
-            fieldLabel: '{s name="settings/business_window/label"}Choose business{/s}',
-            emptyText: '{s name="settings/business_window/empty"}Please choose your business{/s}',
+        me.industryCombo = Ext.create('Ext.form.field.ComboBox', {
+            store: Ext.create('Shopware.apps.Benchmark.store.Industry'),
+            fieldLabel: '{s name="settings/industry_window/label"}Choose industry{/s}',
+            emptyText: '{s name="settings/industry_window/empty"}Please choose your industry{/s}',
             anchor: '100%',
             displayField: 'name',
             valueField: 'id',
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.BusinessWindow', {
             }
         });
 
-        return me.businessCombo;
+        return me.industryCombo;
     },
 
     /**
@@ -61,9 +61,9 @@ Ext.define('Shopware.apps.Benchmark.view.settings.BusinessWindow', {
             disabled: true,
             cls: 'primary',
             action: 'save',
-            text: '{s name="settings/business_window/save"}Save business{/s}',
+            text: '{s name="settings/industry_window/save"}Save industry{/s}',
             handler: function () {
-                me.fireEvent('saveBusiness', me, me.businessCombo.getValue());
+                me.fireEvent('saveIndustry', me, me.industryCombo.getValue());
             }
         });
 

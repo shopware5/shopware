@@ -24,13 +24,12 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-use GuzzleHttp\Psr7\Request;
-use Http\Client\HttpAsyncClient;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
+use Shopware\Components\HttpClient\HttpClientInterface;
+use Shopware\Components\HttpClient\Response;
 
 class StatisticsClient implements StatisticsClientInterface
 {
@@ -40,7 +39,7 @@ class StatisticsClient implements StatisticsClientInterface
     private $statisticsEndpoint;
 
     /**
-     * @var HttpAsyncClient
+     * @var HttpClientInterface
      */
     private $client;
 
@@ -56,13 +55,13 @@ class StatisticsClient implements StatisticsClientInterface
 
     /**
      * @param string                     $statisticsEndpoint
-     * @param HttpAsyncClient            $client
+     * @param HttpClientInterface        $client
      * @param StatisticsResponseHydrator $statisticsResponseHydrator
      * @param LoggerInterface|null       $logger
      */
     public function __construct(
         $statisticsEndpoint,
-        HttpAsyncClient $client,
+        HttpClientInterface $client,
         StatisticsResponseHydrator $statisticsResponseHydrator,
         LoggerInterface $logger = null
     ) {
@@ -75,36 +74,44 @@ class StatisticsClient implements StatisticsClientInterface
     /**
      * @param StatisticsRequest $statisticsRequest
      *
-     * @throws \Exception
+     * @throws StatisticsSendingException
+     *
+     * @return Struct\StatisticsResponse
      */
     public function fetchStatistics(StatisticsRequest $statisticsRequest)
     {
         $headers = [];
 
-        $promise = $this->client->sendAsyncRequest(new Request('POST', $this->statisticsEndpoint, $headers, (string) $statisticsRequest));
-
-        $promise->then(function (ResponseInterface $response) {
-            return $this->hydrateStatisticsResponse($response);
-        }, function (\Exception $ex) {
+        try {
+            $response = $this->client->post($this->statisticsEndpoint, $headers, (string) $statisticsRequest);
+        } catch (\Exception $ex) {
             $this->logger->warning(sprintf('Could not send statistics data to %s', $this->statisticsEndpoint), [$ex]);
 
             throw new StatisticsSendingException('Could not send statistics data', 0, $ex);
-        });
+        }
+
+        return $this->hydrateStatisticsResponse($response);
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param Response $response
      *
      * @throws StatisticsHydratingException
      *
      * @return Struct\StatisticsResponse
      */
-    private function hydrateStatisticsResponse(ResponseInterface $response)
+    private function hydrateStatisticsResponse(Response $response)
     {
-        if (empty($response->getBody()->getContents())) {
-            throw new StatisticsHydratingException(sprintf('Could not read statistics response: %s', $response->getBody()->getContents()));
+        if (empty($response->getBody())) {
+            throw new StatisticsHydratingException(sprintf('Could not read statistics response: %s', $response->getBody()));
         }
 
-        return $this->statisticsResponseHydrator->hydrate(['html' => $response->getBody()->getContents()]);
+        $data = json_decode($response->getBody(), true);
+
+        if (!$data) {
+            throw new StatisticsHydratingException(sprintf('Statistics response coudln\'t be parsed as JSON: %s', $response->getBody()));
+        }
+
+        return $this->statisticsResponseHydrator->hydrate($data);
     }
 }

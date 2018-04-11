@@ -24,26 +24,75 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Shopware\Bundle\BenchmarkBundle\Service\BenchmarkService;
+use Shopware\Bundle\BenchmarkBundle\Service\StatisticsService;
+use Shopware\Models\Benchmark\BenchmarkConfig;
+use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
+
 /**
  * High level Klasse. Soll Statistik-Rohdaten generieren und senden sowie fertige Statistiken holen und bereit stellen
  */
 class BenchmarkStatisticsService
 {
     /**
-     * @var BenchmarkTransmission
+     * @var BenchmarkService
      */
-    private $benchmarkTransmission;
+    private $benchmark;
 
-    public function __construct(BenchmarkTransmission $benchmarkTransmission)
+    /**
+     * @var BenchmarkRepository
+     */
+    private $benchmarkRepository;
+
+    /**
+     * @var \DateInterval
+     */
+    private $interval;
+
+    /**
+     * @var StatisticsService
+     */
+    private $statistics;
+
+    /**
+     * @param BenchmarkService    $benchmark
+     * @param BenchmarkRepository $benchmarkRepository
+     * @param StatisticsService   $statistics
+     * @param \DateInterval|null  $interval
+     *
+     * @throws \Exception
+     */
+    public function __construct(
+        BenchmarkRepository $benchmarkRepository,
+        BenchmarkService $benchmark,
+        StatisticsService $statistics,
+        \DateInterval $interval = null)
     {
-        $this->benchmarkTransmission = $benchmarkTransmission;
+        $this->benchmarkRepository = $benchmarkRepository;
+        $this->benchmark = $benchmark;
+        $this->statistics = $statistics;
+        $this->interval = $interval ?: new \DateInterval('P1D');
     }
 
     public function sendBenchmarkData()
     {
-        $dataToSend = true;
-        if ($dataToSend) {
-            $this->benchmarkTransmission->transmit();
+        /** @var BenchmarkConfig $benchmarkConfig */
+        $benchmarkConfig = $this->benchmarkRepository->getMainConfig();
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        if ($benchmarkConfig->isActive() &&
+            $benchmarkConfig->isTermsAccepted() &&
+            $benchmarkConfig->getLastReceived()->add($this->interval) > $now
+        ) {
+            $this->statistics->transmit();
+        }
+
+        if ($benchmarkConfig->isActive() &&
+            $benchmarkConfig->isTermsAccepted() &&
+            $benchmarkConfig->getLastSent()->add($this->interval) > $now
+        ) {
+            $this->benchmark->transmit();
         }
     }
 }
