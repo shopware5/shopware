@@ -70,7 +70,8 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
         $cacheWarmer = $this->container->get('http_cache_warmer');
 
         foreach ($shopIds as $shopId) {
-            $limit = intval($input->getOption('batch-size'));
+            // Help message for this command may be confusing about using an equal sign. So better strip it.
+            $limit = (int) trim($input->getOption('batch-size'), '=');
             $offset = 0;
             $totalUrlCount = $cacheWarmer->getAllSEOUrlCount($shopId);
             $output->writeln("\n Calling URLs for shop with id " . $shopId);
