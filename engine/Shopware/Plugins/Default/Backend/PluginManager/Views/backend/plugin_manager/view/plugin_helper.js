@@ -328,23 +328,30 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
     },
 
     confirmMessage: function(title, message, callback, declineCallback) {
-        var me = this;
+        var me = this,
+            cfg = {
+                title: title,
+                icon: Ext.Msg.QUESTION,
+                msg: message,
+                buttons: Ext.Msg.YESNOCANCEL,
+                callback: function (apply) {
+                    if (apply === 'cancel') {
+                        return;
+                    }
+                    if (apply !== 'yes') {
 
-        Ext.MessageBox.confirm(title, message, function (apply) {
-            if (apply === 'cancel') {
-                return;
-            }
-            if (apply !== 'yes') {
+                        me.hideLoadingMask();
+                        if (Ext.isFunction(declineCallback)) {
+                            declineCallback();
 
-                me.hideLoadingMask();
-                if (Ext.isFunction(declineCallback)) {
-                    declineCallback();
-
+                        }
+                        return;
+                    }
+                    callback();
                 }
-                return;
-            }
-            callback();
-        });
+            };
+
+        Ext.MessageBox.confirm(cfg);
     },
 
     displayErrorMessage: function(response, callback) {
