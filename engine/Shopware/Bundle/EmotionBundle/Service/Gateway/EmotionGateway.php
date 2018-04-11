@@ -93,7 +93,7 @@ class EmotionGateway
                 ->addSelect($this->fieldHelper->getEmotionTemplateFields());
 
         $builder->from('s_emotion', 'emotion')
-                ->leftJoin('emotion', 's_emotion_attributes', 'emotionAttribute', 'emotion.id = emotionAttribute.emotionID')
+                ->leftJoin('emotion', 's_emotion_attributes', 'emotionAttribute', 'IFNULL(emotion.preview_id, emotion.id) = emotionAttribute.emotionID')
                 ->leftJoin('emotion', 's_emotion_categories', 'emotion_categories', 'emotion.id = emotion_categories.emotion_id')
                 ->leftJoin('emotion', 's_emotion_shops', 'emotion_shops', 'emotion.id = emotion_shops.emotion_id')
                 ->leftJoin('emotion', 's_emotion_templates', 'emotionTemplate', 'emotion.template_id = emotionTemplate.id');
