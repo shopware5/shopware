@@ -331,13 +331,16 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         var me = this;
 
         Ext.MessageBox.confirm(title, message, function (apply) {
+            if (apply === 'cancel') {
+                return;
+            }
             if (apply !== 'yes') {
+
                 me.hideLoadingMask();
-
                 if (Ext.isFunction(declineCallback)) {
-                     declineCallback();
-                }
+                    declineCallback();
 
+                }
                 return;
             }
             callback();
