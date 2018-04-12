@@ -83,6 +83,7 @@ class HookManagerTest extends TestCase
             $this->addHookListener(HookManagerTestTarget::TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME, HookHandler::TypeReplace);
+            $this->addHookListener(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
             $proxy = new $proxyClass();
         }
@@ -897,6 +898,50 @@ class HookManagerTest extends TestCase
         $this->assertEquals(self::TEST_RETURN_VALUE, $returnValue);
         $this->assertEquals(1, $hookCallCounter);
         $this->assertEquals(1, $proxy->originalProtectedMethodCallCounter);
+    }
+
+    /**
+     * Tests that method parameters named '$class', '$method', '$context' or '$hookManager' are not overwritten by any
+     * of the helper variables used in the generated proxy method or the hook args.
+     */
+    public function testVariableNamesDontCollide()
+    {
+        $classArg = 'A';
+        $methodArg = 'B';
+        $contextArg = 'C';
+        $hookManagerArg = 'D';
+        $expectedReturnValue = $classArg . $methodArg . $contextArg . $hookManagerArg;
+
+        $this->addHookListener(
+            HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME,
+            HookHandler::TypeAfter,
+            function (\Enlight_Hook_HookArgs $args) use ($classArg, $methodArg, $contextArg, $hookManagerArg, $expectedReturnValue) {
+                // Assert that no parameters were overwritten by the proxy
+                $this->assertCount(4, $args->getArgs());
+                $this->assertEquals($classArg, $args->get('class'));
+                $this->assertEquals($methodArg, $args->get('method'));
+                $this->assertEquals($contextArg, $args->get('context'));
+                $this->assertEquals($hookManagerArg, $args->get('hookManager'));
+                $this->assertEquals($expectedReturnValue, $args->getReturn());
+
+                // Assert that the subject and method name of the hook args is correct
+                $this->assertInstanceOf(HookManagerTestTarget::class, $args->getSubject());
+                $this->assertEquals(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, $args->getMethod());
+            }
+        );
+
+        $proxy = $this->createProxy();
+        $returnValue = $this->hookManager->executeHooks(
+            $proxy,
+            HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME,
+            [
+                'class' => $classArg,
+                'method' => $methodArg,
+                'context' => $contextArg,
+                'hookManager' => $hookManagerArg,
+            ]
+        );
+        $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
     /**
