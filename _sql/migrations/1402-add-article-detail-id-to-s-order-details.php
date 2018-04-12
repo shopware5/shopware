@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1218 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1402 extends Shopware\Components\Migrations\AbstractMigration
 {
     /**
      * @inheritdoc
