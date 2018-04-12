@@ -34,6 +34,7 @@ class HookManagerTestTarget
     const TEST_METHOD_NAME = 'testMethod';
     const RECURSIVE_TEST_METHOD_NAME = 'recursiveTestMethod';
     const PROTECTED_TEST_METHOD_NAME = 'protectedTestMethod';
+    const VARIABLE_NAME_COLLISION_TEST_METHOD_NAME = 'variableNameCollisionTestMethod';
 
     public $originalMethodCallCounter = 0;
     public $originalRecursiveMethodCallCounter = 0;
@@ -62,5 +63,10 @@ class HookManagerTestTarget
         $this->originalProtectedMethodCallCounter++;
 
         return $name;
+    }
+
+    public function variableNameCollisionTestMethod($class, $method, $context, $hookManager)
+    {
+        return $class . $method . $context . $hookManager;
     }
 }

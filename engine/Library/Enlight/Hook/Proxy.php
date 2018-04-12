@@ -44,18 +44,24 @@ interface Enlight_Hook_Proxy
      * @param string $method
      * @param Enlight_Hook_HookExecutionContext $context
      */
-    public function pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context);
+    public function __pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context);
 
     /**
      * @param string $method
      */
-    public function popHookExecutionContext($method);
+    public function __popHookExecutionContext($method);
 
     /**
      * @param string $method
      * @return Enlight_Hook_HookExecutionContext
      */
-    public function getCurrentHookProxyExecutionContext($method);
+    public function __getCurrentHookProxyExecutionContext($method);
+
+    /**
+     * @param string $method
+     * @return Enlight_Hook_HookManager
+     */
+    public function __getActiveHookManager($method);
 
     /**
      * @param string $method
@@ -69,5 +75,5 @@ interface Enlight_Hook_Proxy
      * @param array $args
      * @return mixed
      */
-    public function executeOriginalMethod($method, array $args = array());
+    public function __executeOriginalMethod($method, array $args = array());
 }
