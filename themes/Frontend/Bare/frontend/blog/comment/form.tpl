@@ -131,6 +131,13 @@
                     <p class="required--notice">{s name="BlogInfoFields"}{/s}</p>
                 {/block}
 
+                {* Data protection information *}
+                {block name='frontend_blog_comments_input_privacy'}
+                    {if {config name=ACTDPRTEXT}}
+                        {include file="frontend/_includes/privacy.tpl"}
+                    {/if}
+                {/block}
+
                 {* Submit button *}
                 {block name='frontend_blog_comments_input_submit'}
                     <input class="btn is--primary" type="submit" name="Submit" value="{s name='BlogLinkSaveComment'}{/s}" />
