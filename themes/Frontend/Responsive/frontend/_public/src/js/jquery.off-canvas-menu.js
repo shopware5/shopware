@@ -224,7 +224,7 @@
                 opts = me.opts;
 
             // Button click
-            me._on(me.$el, 'click touchstart', $.proxy(me.onClickElement, me));
+            me._on(me.$el, 'click touch', $.proxy(me.onClickElement, me));
 
             // Allow the user to close the off canvas menu
             me.$offCanvas.on(me.getEventName('click'), opts.closeButtonSelector, $.proxy(me.onClickCloseButton, me));
