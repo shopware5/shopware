@@ -1914,7 +1914,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             [$this->module->sSYSTEM->_COOKIE['sUniqueID'], $randomArticle['ordernumber']]
         ));
 
-        $this->assertTrue($this->module->sAddNote(
+        $this->assertEquals(1, $this->module->sAddNote(
             $randomArticle['articleID'],
             $randomArticle['name'],
             $randomArticle['ordernumber']
@@ -1925,7 +1925,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             [$this->module->sSYSTEM->_COOKIE['sUniqueID'], $randomArticle['ordernumber']]
         ));
 
-        $this->assertTrue($this->module->sAddNote(
+        $this->assertEquals(1, $this->module->sAddNote(
             $randomArticle['articleID'],
             $randomArticle['name'],
             $randomArticle['ordernumber']
@@ -1976,7 +1976,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             [$randomArticleOne['id']]
         );
 
-        $this->assertTrue($this->module->sAddNote(
+        $this->assertEquals(2, $this->module->sAddNote(
             $randomArticleTwo['articleID'],
             $randomArticleTwo['name'],
             $randomArticleTwo['ordernumber']

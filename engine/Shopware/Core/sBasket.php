@@ -1237,7 +1237,7 @@ class sBasket
      * @throws \Enlight_Exception         If entry could not be added to database
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return bool If operation was successful
+     * @return int If operation was successful
      */
     public function sAddNote($articleID, $articleName, $articleOrderNumber)
     {
@@ -1273,7 +1273,9 @@ class sBasket
             }
         }
 
-        return true;
+        $notesCount = $this->sCountNotes($uniqueId);
+
+        return $notesCount;
     }
 
     /**
@@ -1321,16 +1323,19 @@ class sBasket
      * Returns the number of wishlist entries
      * Used in several locations
      *
+     * @param null|int $uniqueId
      * @return int
      */
-    public function sCountNotes()
+    public function sCountNotes($uniqueId = null)
     {
         $responseCookies = $this->front->Response()->getCookies();
 
-        if (isset($responseCookies['sUniqueID']['value']) && $responseCookies['sUniqueID']['value']) {
-            $uniqueId = $responseCookies['sUniqueID']['value'];
-        } else {
-            $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+        if(!$uniqueId) {
+            if (isset($responseCookies['sUniqueID']['value']) && $responseCookies['sUniqueID']['value']) {
+                $uniqueId = $responseCookies['sUniqueID']['value'];
+            } else {
+                $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+            }
         }
 
         $count = (int) $this->db->fetchOne('
