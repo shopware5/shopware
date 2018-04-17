@@ -1,6 +1,7 @@
 import { Component } from 'src/core/shopware';
-import './sw-grid.less';
+import dom from 'src/core/service/utils/dom.utils';
 import template from './sw-grid.html.twig';
+import './sw-grid.less';
 
 Component.register('sw-grid', {
     template,
@@ -51,13 +52,20 @@ Component.register('sw-grid', {
             type: String,
             required: false,
             default: 'ASC'
+        },
+
+        isFullpage: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 
     data() {
         return {
             columns: [],
-            selected: false,
+            selection: {},
+            scrollbarOffset: 0,
             editing: []
         };
     },
@@ -78,6 +86,7 @@ Component.register('sw-grid', {
         gridClasses() {
             return {
                 'sw-grid--sidebar': this.sidebar,
+                'sw-grid--fullpage': this.isFullpage,
                 [this.sizeClass]: true
             };
         },
@@ -99,14 +108,8 @@ Component.register('sw-grid', {
         }
     },
 
-    watch: {
-        items(items) {
-            items.forEach((item) => {
-                if (!item.selected) {
-                    this.$set(item, 'selected', false);
-                }
-            });
-        }
+    updated() {
+        this.setScrollbarOffset();
     },
 
     created() {
@@ -131,16 +134,34 @@ Component.register('sw-grid', {
         },
 
         selectAll(selected) {
-            this.items.forEach((item) => {
-                this.$set(item, 'selected', selected);
-            });
-            this.selected = selected;
+            this.selection = {};
+
+            if (selected) {
+                this.items.forEach((item) => {
+                    this.selection[item.id] = item;
+                });
+            }
         },
 
         getSelection() {
-            return this.items.filter((item) => {
-                return item.selected;
-            });
+            return this.selection;
+        },
+
+        selectItem(selected, item) {
+            const selection = this.selection;
+
+            if (selected === true) {
+                selection[item.id] = item;
+            } else if (!selected && selection[item.id]) {
+                delete this.selection[item.id];
+            }
+
+            this.selection = {};
+            this.selection = selection;
+        },
+
+        isSelected(itemId) {
+            return typeof this.selection[itemId] !== 'undefined';
         },
 
         getScrollBarWidth() {
@@ -164,6 +185,10 @@ Component.register('sw-grid', {
 
             this.$emit('sw-grid-disable-inline-editing');
             this.$emit('sort-column', column);
+        },
+
+        setScrollbarOffset() {
+            this.scrollbarOffset = dom.getScrollbarWidth(this.$refs.swGridBody);
         }
     }
 });

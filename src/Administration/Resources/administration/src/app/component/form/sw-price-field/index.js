@@ -5,6 +5,8 @@ import './sw-price-field.less';
 Component.register('sw-price-field', {
     template,
 
+    inheritAttrs: false,
+
     props: {
         price: {
             type: Object,
@@ -22,6 +24,18 @@ Component.register('sw-price-field', {
             default() {
                 return {};
             }
+        },
+        currency: {
+            type: Object,
+            required: true,
+            default() {
+                return {};
+            }
+        },
+        validation: {
+            type: [String, Array, Object, Boolean],
+            required: false,
+            default: null
         }
     },
 

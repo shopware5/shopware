@@ -4,7 +4,7 @@
 import throttle from 'lodash/throttle';
 import uuidV4 from 'uuid/v4';
 
-import { deepCopyObject, getObjectChangeSet } from './utils/object.utils';
+import { deepCopyObject, getObjectChangeSet, getAssociatedDeletions } from './utils/object.utils';
 import { warn } from './utils/debug.utils';
 import { currency, date } from './utils/format.utils';
 import domUtils from './utils/dom.utils';
@@ -13,7 +13,8 @@ import typesUtils from './utils/types.utils';
 
 export const object = {
     deepCopyObject: deepCopyObject,
-    getObjectChangeSet: getObjectChangeSet
+    getObjectChangeSet: getObjectChangeSet,
+    getAssociatedDeletions: getAssociatedDeletions
 };
 
 export const debug = {
@@ -43,11 +44,12 @@ export const types = {
     isArray: typesUtils.isArray,
     isFunction: typesUtils.isFunction,
     isDate: typesUtils.isDate,
-    isString: typesUtils.isString
+    isString: typesUtils.isString,
+    isBoolean: typesUtils.isBoolean
 };
 
 export default {
-    createId: uuidV4,
+    createId,
     throttle,
     object,
     debug,
@@ -56,3 +58,12 @@ export default {
     string,
     types
 };
+
+/**
+ * Returns a uuid string in hex format.
+ *
+ * @returns {String}
+ */
+function createId() {
+    return uuidV4().replace(/-/g, '');
+}

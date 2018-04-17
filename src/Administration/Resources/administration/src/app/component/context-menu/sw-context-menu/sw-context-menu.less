@@ -1,20 +1,16 @@
 @import '~less/variables';
 
-@sw-context-menu-color-border: @color-steam-cloud;
-@sw-context-menu-color-background-hover: @color-light-gray;
-@sw-context-menu-color-text: @color-gutenberg;
-@sw-context-menu-color-active: @color-shopware-blue;
+@sw-context-menu-color-border:              @color-steam-cloud;
+@sw-context-menu-color-background-hover:    @color-light-gray;
+@sw-context-menu-color-text:                @color-gutenberg;
+@sw-context-menu-color-active:              @color-shopware-blue;
 
-.sw-context-button {
-    display: inline-block;
-    position: relative;
-    color: @sw-context-menu-color-text;
+.sw-context-menu {
+    position: absolute;
+    z-index: 900;
     cursor: pointer;
 
-    .sw-context-button__menu {
-        position: absolute;
-        z-index: 10;
-        width: 255px;
+    .sw-context-menu__content {
         padding: 5px 0;
         background: @color-white;
         box-shadow: 0 3px 6px 0 rgba(120,138,155,0.5);
@@ -23,6 +19,7 @@
         text-align: left;
         font-size: 14px;
         color: @sw-context-menu-color-text;
+        position: relative;
 
         &::before {
             content: '';
@@ -32,9 +29,14 @@
             height: 8px;
             width: 8px;
             transform: rotate(45deg);
-            background: #fff;
+            background: @color-white;
             border-top: 1px solid @sw-context-menu-color-border;
             border-left: 1px solid @sw-context-menu-color-border;
+        }
+
+        .currency-symbol {
+            font-weight: bold;
+            font-size: 18px;
         }
     }
 }
