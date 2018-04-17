@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Changes
 
 * Changed .htaccess file to prohibit download of .env files
+* Changed `Media` resource to fix a problem with file names set via API
 * Changed "Send E-Mails" checkbox in batch processing window of order to be enabled by default again
 * Changed behaviour of inactive forms to act like any other missing page
 
