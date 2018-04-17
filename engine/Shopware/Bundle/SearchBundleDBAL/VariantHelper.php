@@ -213,7 +213,7 @@ class VariantHelper implements VariantHelperInterface
         /** @var VariantCondition $condition */
         $tableKey = $condition->getName();
 
-        $suffix = dechex(crc32(json_encode($condition)));
+        $suffix = md5(json_encode($condition));
 
         if ($query->hasState('option_' . $tableKey)) {
             return;

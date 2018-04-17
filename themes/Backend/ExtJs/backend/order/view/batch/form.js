@@ -422,6 +422,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             name: 'autoSendMail',
             fieldLabel: me.snippets.mail,
             inputValue: true,
+            checked: true,
             uncheckedValue: false,
             disabled: true,
             listeners: {
@@ -454,7 +455,6 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      * When no document type has been selected, the field will show a tooltip indicating that
      * in order to activate this checkbox, a document type must be selected.
      *
-     * @param Ext.form.field.ComboBox;
      * @returns Ext.form.field.Checkbox
      */
     createAddAttachmentsField: function () {
@@ -510,9 +510,9 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
     /**
      * Creates tooltip for a form field
      *
-     * @param Ext.form.Field el
-     * @param string Text to show in the tooltip
-     * @returns  Ext.tip.QuickTip
+     * @param el [Ext.form.Field]
+     * @param text [string] Text to show in the tooltip
+     * @returns Ext.tip.QuickTip
      */
     createTooltip: function (el, text) {
         return Ext.tip.QuickTipManager.register({
@@ -527,8 +527,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
     /**
      * Removes an Ext.Quicktip from an element
      *
-     * @param Ext.form.Field el
-     * @return undefined
+     * @param el [Ext.form.Field]
      */
     removeTooltip: function (el) {
         return Ext.QuickTips.unregister(el.id);

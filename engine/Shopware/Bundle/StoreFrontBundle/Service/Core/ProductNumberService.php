@@ -211,6 +211,7 @@ class ProductNumberService implements ProductNumberServiceInterface
         $query = $this->getProductNumberQuery();
 
         $query->andWhere('variant.ordernumber = :number')
+            ->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)')
             ->setParameter(':number', $number);
 
         $statement = $query->execute();

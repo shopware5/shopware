@@ -1347,8 +1347,8 @@ SQL;
     {
         $responseCookies = $this->front->Response()->getCookies();
 
-        if (isset($responseCookies['sUniqueID']['value']) && $responseCookies['sUniqueID']['value']) {
-            $uniqueId = $responseCookies['sUniqueID']['value'];
+        if (!empty($responseCookies['sUniqueID-/']['value']) && $responseCookies['sUniqueID-/']['value']) {
+            $uniqueId = $responseCookies['sUniqueID-/']['value'];
         } else {
             $uniqueId = $this->front->Request()->getCookie('sUniqueID');
         }
