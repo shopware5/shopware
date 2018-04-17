@@ -18,6 +18,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed `Media` resource to fix a problem with file names set via API
 * Changed "Send E-Mails" checkbox in batch processing window of order to be enabled by default again
 * Changed behaviour of inactive forms to act like any other missing page
+* Changed API behaviour on update, when the lastStock parameter is set for a product its applied to its mainDetail aswell (like on creation)
 
 ## 5.4.2
 
