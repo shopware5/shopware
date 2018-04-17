@@ -24,7 +24,7 @@
             </div>
 
 
-            <!-- start business-data -->
+            <!-- start industry-data -->
             <!-- @todo:p.stahl Slider fail example -->
             <div class="swag-text-break business-data">
                 <div class="wave-left"></div>

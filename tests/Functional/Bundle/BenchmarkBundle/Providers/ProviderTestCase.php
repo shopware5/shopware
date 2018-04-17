@@ -44,11 +44,6 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         $resultData = $provider->getBenchmarkData();
         $arrayKeys = array_keys($resultData);
 
-        // Dynamic keys
-        if ($this::EXPECTED_KEYS_COUNT === 'dynamic') {
-            return;
-        }
-
         $this->assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
     }
 

@@ -22,34 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
+
+class StatisticsResponseHydrator implements HydratorInterface
 {
     /**
-     * @var BenchmarkProviderInterface[]
+     * @param array $data
+     *
+     * @return StatisticsResponse
      */
-    private $providers;
-
-    /**
-     * @param \IteratorAggregate $providers
-     */
-    public function __construct(\IteratorAggregate $providers)
+    public function hydrate(array $data)
     {
-        $this->providers = $providers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get()
-    {
-        $providerData = [];
-
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
-        }
-
-        return json_encode($providerData, true);
+        return new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), $data['html']);
     }
 }

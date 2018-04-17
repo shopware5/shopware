@@ -22,34 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\Repository;
+namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
-interface ConfigRepositoryInterface
+interface HydratorInterface
 {
     /**
-     * @return array
+     * @param array $data
+     *
+     * @return mixed
      */
-    public function loadSettings();
-
-    /**
-     * @param int $ordersBatchSize
-     */
-    public function saveSettings($ordersBatchSize);
-
-    /**
-     * @param int $business
-     */
-    public function saveBusiness($business);
-
-    /**
-     * @param bool $active
-     */
-    public function setActive($active);
-
-    public function acceptTerms();
-
-    /**
-     * @return string
-     */
-    public function getTemplate();
+    public function hydrate(array $data);
 }

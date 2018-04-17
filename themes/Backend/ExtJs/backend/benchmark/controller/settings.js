@@ -8,7 +8,7 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
         { ref: 'settingsPanel', selector: 'form[name=benchmark-settings-panel]' },
         { ref: 'activationFieldSet', selector: 'fieldset[name=activationFieldSet]' },
         { ref: 'deactivationFieldSet', selector: 'fieldset[name=deactivationFieldSet]' },
-        { ref: 'businessField', selector: 'businessfield[name=business]' }
+        { ref: 'industryField', selector: 'industryfield[name=industry]' }
     ],
 
     init: function () {
@@ -18,11 +18,11 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
                 activateBenchmark: this.activateBenchmark,
                 deactivateBenchmark: this.deactivateBenchmark
             },
-            'businessfield': {
-                changeBusiness: this.onChangeBusiness
+            'industryfield': {
+                changeIndustry: this.onChangeIndustry
             },
-            'benchmark-settings-business-window': {
-                saveBusiness: this.onSaveBusiness
+            'benchmark-settings-industry-window': {
+                saveIndustry: this.onSaveIndustry
             }
         });
 
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
                     Shopware.Notification.createGrowlMessage(
                         '{s name="growlMessage/settings/success/title"}Save successful{/s}',
                         '{s name="growlMessage/settings/success/message"}The benchmark settings were successfully saved{/s}',
-                        'BenchmarkBusinessWindow'
+                        'BenchmarkIndustryWindow'
                     );
 
                     return;
@@ -57,48 +57,48 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
                 Shopware.Notification.createGrowlMessage(
                     '{s name="growlMessage/settings/error/title"}Error saving the settings{/s}',
                     responseData.message ,
-                    'BenchmarkBusinessWindow'
+                    'BenchmarkIndustryWindow'
                 );
             }
         });
     },
 
-    onChangeBusiness: function () {
-        this.getView('settings.BusinessWindow').create().show();
+    onChangeIndustry: function () {
+        this.getView('settings.IndustryWindow').create().show();
     },
 
     /**
-     * @param { Shopware.apps.Benchmark.view.settings.BusinessWindow } win
+     * @param { Shopware.apps.Benchmark.view.settings.IndustryWindow } win
      * @param { integer } val
      */
-    onSaveBusiness: function (win, val) {
+    onSaveIndustry: function (win, val) {
         var me = this;
 
         Ext.Ajax.request({
-            url: '{url controller=Benchmark action=saveBusiness}',
+            url: '{url controller=Benchmark action=saveIndustry}',
             params: {
-                business: val
+                industry: val
             },
             success: function (response) {
                 var responseData = Ext.decode(response.responseText);
 
                 win.destroy();
-                me.getBusinessField().setValue(val);
+                me.getIndustryField().setValue(val);
 
                 if (responseData.success) {
                     Shopware.Notification.createGrowlMessage(
-                        '{s name="growlMessage/business_window/success/title"}Save successful{/s}',
-                        '{s name="growlMessage/business_window/success/message"}The chosen business was saved successfully{/s}',
-                        'BenchmarkBusinessWindow'
+                        '{s name="growlMessage/industry_window/success/title"}Save successful{/s}',
+                        '{s name="growlMessage/industry_window/success/message"}The chosen industry was saved successfully{/s}',
+                        'BenchmarkIndustryWindow'
                     );
 
                     return;
                 }
 
                 Shopware.Notification.createGrowlMessage(
-                    '{s name="growlMessage/business_window/error/title"}Error saving the business{/s}',
+                    '{s name="growlMessage/industry_window/error/title"}Error saving the industry{/s}',
                     responseData.message ,
-                    'BenchmarkBusinessWindow'
+                    'BenchmarkIndustryWindow'
                 );
             }
         });

@@ -22,34 +22,41 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Models\Benchmark;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+use Doctrine\ORM\EntityRepository;
+
+/**
+ * Repository
+ */
+class Repository extends EntityRepository
 {
     /**
-     * @var BenchmarkProviderInterface[]
+     * @return BenchmarkConfig
      */
-    private $providers;
-
-    /**
-     * @param \IteratorAggregate $providers
-     */
-    public function __construct(\IteratorAggregate $providers)
+    public function getMainConfig()
     {
-        $this->providers = $providers;
+        $all = $this->findAll();
+
+        $config = array_shift($all);
+
+        if (!$config) {
+            $uuid = \Ramsey\Uuid\Uuid::uuid4();
+            $config = new BenchmarkConfig($uuid->getBytes());
+        }
+
+        return $config;
     }
 
     /**
-     * {@inheritdoc}
+     * @param BenchmarkConfig $config
      */
-    public function get()
+    public function save(BenchmarkConfig $config)
     {
-        $providerData = [];
+        $em = $this->getEntityManager();
 
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
-        }
-
-        return json_encode($providerData, true);
+        $em->merge($config);
+        $em->persist($config);
+        $em->flush($config);
     }
 }

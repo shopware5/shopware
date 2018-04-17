@@ -48,7 +48,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_branch_select()
+    public function testIndexAction_should_redirect_industry_select()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -60,7 +60,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/branch_select', $redirect);
+        $this->assertContains('BenchmarkLocalOverview/render/template/industry_select', $redirect);
     }
 
     /**
@@ -73,7 +73,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
         $this->setSetting('terms_accepted', 1);
-        $this->setSetting('business', 1);
+        $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s'));
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
 
@@ -94,7 +94,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
         $this->setSetting('terms_accepted', 1);
-        $this->setSetting('business', 1);
+        $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s'));
 
         $controller->indexAction();
@@ -114,7 +114,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
         $this->setSetting('terms_accepted', 1);
-        $this->setSetting('business', 1);
+        $this->setSetting('industry', 1);
         $this->setSetting('active', 0);
 
         $controller->indexAction();
@@ -134,7 +134,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
         $this->setSetting('terms_accepted', 1);
-        $this->setSetting('business', 1);
+        $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s', strtotime('-31 days')));
         $this->setSetting('active', 1);
 
@@ -155,7 +155,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
         $this->setSetting('terms_accepted', 1);
-        $this->setSetting('business', 1);
+        $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s', strtotime('-3 days')));
         $this->setSetting('active', 1);
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');

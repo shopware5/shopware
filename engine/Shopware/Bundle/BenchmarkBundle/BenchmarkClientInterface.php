@@ -24,32 +24,15 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkRequest;
+use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkResponse;
+
+interface BenchmarkClientInterface
 {
     /**
-     * @var BenchmarkProviderInterface[]
+     * @param BenchmarkRequest $benchmarkRequest
+     *
+     * @return BenchmarkResponse
      */
-    private $providers;
-
-    /**
-     * @param \IteratorAggregate $providers
-     */
-    public function __construct(\IteratorAggregate $providers)
-    {
-        $this->providers = $providers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get()
-    {
-        $providerData = [];
-
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
-        }
-
-        return json_encode($providerData, true);
-    }
+    public function sendBenchmark(BenchmarkRequest $benchmarkRequest);
 }

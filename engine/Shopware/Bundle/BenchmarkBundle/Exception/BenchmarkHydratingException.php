@@ -22,34 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\Exception;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+class BenchmarkHydratingException extends \Exception
 {
-    /**
-     * @var BenchmarkProviderInterface[]
-     */
-    private $providers;
-
-    /**
-     * @param \IteratorAggregate $providers
-     */
-    public function __construct(\IteratorAggregate $providers)
-    {
-        $this->providers = $providers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get()
-    {
-        $providerData = [];
-
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
-        }
-
-        return json_encode($providerData, true);
-    }
 }

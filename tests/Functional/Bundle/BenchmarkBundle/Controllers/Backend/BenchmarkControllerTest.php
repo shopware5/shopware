@@ -39,7 +39,7 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
         $this->installDemoData('order_basic');
         $this->installDemoData('benchmark_config');
 
-        $this->setSetting('business', 1);
+        $this->setSetting('industry', 1);
         $this->setSetting('last_order_id', 1);
 
         $controller->loadSettingsAction();
@@ -51,11 +51,11 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
             'lastReceived' => '1990-01-01 00:00:00',
             'lastOrderNumber' => '20000',
             'ordersBatchSize' => 1000,
-            'business' => 1,
+            'industry' => 1,
             'termsAccepted' => 0,
         ], $settings);
 
-        $this->assertInternalType(\PHPUnit_Framework_Constraint_IsType::TYPE_INT, $settings['business']);
+        $this->assertInternalType(\PHPUnit_Framework_Constraint_IsType::TYPE_INT, $settings['industry']);
     }
 
     /**
@@ -78,18 +78,18 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testSaveBusinessAction()
+    public function testSaveIndustryAction()
     {
         /** @var \Shopware_Controllers_Backend_Benchmark $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
 
-        $controller->Request()->setParam('business', 15);
+        $controller->Request()->setParam('industry', 15);
 
-        $controller->saveBusinessAction();
+        $controller->saveIndustryAction();
 
-        $this->assertEquals(15, $this->loadSettingColumn('config.business'));
+        $this->assertEquals(15, $this->loadSettingColumn('config.industry'));
     }
 
     /**

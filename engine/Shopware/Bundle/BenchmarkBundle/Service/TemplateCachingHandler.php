@@ -22,34 +22,37 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\Service;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+use Doctrine\DBAL\Connection;
+
+class TemplateCachingHandler
 {
     /**
-     * @var BenchmarkProviderInterface[]
+     * @var Connection
      */
-    private $providers;
+    private $connection;
 
     /**
-     * @param \IteratorAggregate $providers
+     * @param Connection $connection
      */
-    public function __construct(\IteratorAggregate $providers)
+    public function __construct(Connection $connection)
     {
-        $this->providers = $providers;
+        $this->connection = $connection;
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
-    public function get()
+    public function isTemplateCached()
     {
-        $providerData = [];
+        $queryBuilder = $this->connection->createQueryBuilder();
 
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
-        }
+        $template = $queryBuilder->select('config.cached_template')
+            ->from('s_benchmark_config', 'config')
+            ->execute()
+            ->fetchColumn();
 
-        return json_encode($providerData, true);
+        return (bool) $template;
     }
 }

@@ -22,37 +22,43 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\Services;
+namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
-use Doctrine\DBAL\Connection;
-
-class TemplateCachingHandler
+class StatisticsResponse
 {
     /**
-     * @var Connection
+     * @var \DateTime
      */
-    private $connection;
+    private $dateTime;
 
     /**
-     * @param Connection $connection
+     * @var string
      */
-    public function __construct(Connection $connection)
+    private $html;
+
+    /**
+     * @param \DateTime $dateTime
+     * @param string    $html
+     */
+    public function __construct(\DateTime $dateTime, $html)
     {
-        $this->connection = $connection;
+        $this->dateTime = $dateTime;
+        $this->html = $html;
     }
 
     /**
-     * @return bool
+     * @return \DateTime
      */
-    public function isTemplateCached()
+    public function getDateTime()
     {
-        $queryBuilder = $this->connection->createQueryBuilder();
+        return $this->dateTime;
+    }
 
-        $template = $queryBuilder->select('config.cached_template')
-            ->from('s_benchmark_config', 'config')
-            ->execute()
-            ->fetchColumn();
-
-        return (bool) $template;
+    /**
+     * @return string
+     */
+    public function getHtml()
+    {
+        return $this->html;
     }
 }

@@ -21,8 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use Shopware\Bundle\BenchmarkBundle\Repository\ConfigRepositoryInterface;
-use Shopware\Bundle\BenchmarkBundle\Services\TemplateCachingHandler;
+use Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler;
+use Shopware\Models\Benchmark\BenchmarkConfig;
+use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 use Shopware\Models\Menu\Menu;
 
 class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
@@ -34,16 +35,16 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     public function getWhitelistedCSRFActions()
     {
-        return ['index', 'render', 'acceptTerms', 'setBusiness'];
+        return ['index', 'render', 'acceptTerms', 'setIndustry'];
     }
 
     public function indexAction()
     {
-        /** @var ConfigRepositoryInterface $configRepository */
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $settings = $configRepository->loadSettings();
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $config = $benchmarkRepository->getMainConfig();
 
-        $this->handleSettings($settings);
+        $this->handleSettings($config);
     }
 
     public function renderAction()
@@ -51,32 +52,36 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $this->get('plugins')->Controller()->ViewRenderer()->setNoRender(true);
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        /** @var ConfigRepositoryInterface $configRepository */
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $template = $configRepository->getTemplate();
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $config = $benchmarkRepository->getMainConfig();
 
-        echo $template;
+        echo $config->getCachedTemplate();
     }
 
     public function acceptTermsAction()
     {
-        /** @var ConfigRepositoryInterface $configRepository */
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $configRepository->acceptTerms();
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $config = $benchmarkRepository->getMainConfig();
+        $config->setTermsAccepted(true);
+        $benchmarkRepository->save($config);
 
         $this->redirect([
             'controller' => $this->request->getParam('sTarget', 'BenchmarkOverview'),
             'action' => $this->request->getParam('sTargetAction', 'render'),
-            'template' => 'branch_select',
+            'template' => 'industry_select',
         ]);
     }
 
-    public function setBusinessAction()
+    public function setIndustryAction()
     {
-        /** @var ConfigRepositoryInterface $configRepository */
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $configRepository->saveBusiness((int) $this->request->getParam('business'));
-        $configRepository->setActive(true);
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $config = $benchmarkRepository->getMainConfig();
+        $config->setActive(true);
+        $config->setIndustry((int) $this->request->getParam('industry'));
+        $benchmarkRepository->save($config);
 
         $this->enableMenu();
 
@@ -88,11 +93,11 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     }
 
     /**
-     * @param array $settings
+     * @param BenchmarkConfig $settings
      */
-    private function handleSettings(array $settings)
+    private function handleSettings(BenchmarkConfig $config)
     {
-        if (!$settings['termsAccepted']) {
+        if (!$config->isTermsAccepted()) {
             $this->redirect([
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
@@ -102,23 +107,23 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
             return;
         }
 
-        if (!$settings['business']) {
+        if ($config->getIndustry() === null) {
             $this->redirect([
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
-                'template' => 'branch_select',
+                'template' => 'industry_select',
             ]);
 
             return;
         }
 
-        if ($this->hasFreshStatistics($settings['lastReceived'])) {
+        if ($this->hasFreshStatistics($config->getLastReceived())) {
             $this->loadCachedFile();
 
             return;
         }
 
-        if (!$settings['active'] || $this->hasOutdatedStatistics($settings['lastReceived'])) {
+        if (!$config->isActive() || $this->hasOutdatedStatistics($config->getLastReceived())) {
             $this->redirect([
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
@@ -134,18 +139,17 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is younger than 24 hours.
      *
-     * @param string $lastReceived
+     * @param \DateTime $lastReceived
      *
      * @return bool
      */
-    private function hasFreshStatistics($lastReceived)
+    private function hasFreshStatistics(\DateTime $lastReceived)
     {
-        $dateTimeToday = new \DateTime(date('Y-m-d H:i:s'));
-        $dateTimeReceived = new \DateTime($lastReceived);
+        $today = new \DateTime('now');
 
         $interval = new \DateInterval('PT1H');
 
-        $periods = new \DatePeriod($dateTimeReceived, $interval, $dateTimeToday);
+        $periods = new \DatePeriod($lastReceived, $interval, $today);
         $hours = iterator_count($periods);
 
         return $hours < 24;
@@ -154,18 +158,17 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is older than 7 days.
      *
-     * @param string $lastReceived
+     * @param \DateTime $lastReceived
      *
      * @return bool
      */
-    private function hasOutdatedStatistics($lastReceived)
+    private function hasOutdatedStatistics(\DateTime $lastReceived)
     {
-        $dateTimeToday = new \DateTime(date('Y-m-d H:i:s'));
-        $dateTimeReceived = new \DateTime($lastReceived);
+        $today = new \DateTime('now');
 
         $interval = new \DateInterval('P1D');
 
-        $periods = new \DatePeriod($dateTimeReceived, $interval, $dateTimeToday);
+        $periods = new \DatePeriod($lastReceived, $interval, $today);
         $days = iterator_count($periods);
 
         return $days > 7;

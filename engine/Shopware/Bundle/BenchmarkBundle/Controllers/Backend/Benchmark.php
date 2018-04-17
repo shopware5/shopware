@@ -21,20 +21,28 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use Shopware\Bundle\BenchmarkBundle\Repository\ConfigRepositoryInterface;
+use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backend_ExtJs
 {
     public function loadSettingsAction()
     {
-        /** @var ConfigRepositoryInterface $configRepository */
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $settings = $configRepository->loadSettings();
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkConfig = $benchmarkRepository->getMainConfig();
 
-        $settings['business'] = (int) $settings['business'];
+        $settings = [
+            'lastOrderNumber' => null,
+            'active' => $benchmarkConfig->isActive() ? 1 : 0,
+            'lastSent' => $benchmarkConfig->getLastSent()->format('Y-m-d H:i:s'),
+            'lastReceived' => $benchmarkConfig->getLastReceived()->format('Y-m-d H:i:s'),
+            'ordersBatchSize' => $benchmarkConfig->getOrdersBatchSize(),
+            'industry' => $benchmarkConfig->getIndustry(),
+            'termsAccepted' => $benchmarkConfig->isTermsAccepted() ? 1 : 0,
+        ];
 
-        if ($settings['lastOrderId']) {
-            $settings['lastOrderNumber'] = $this->getOrderNumberFromOrderId($settings['lastOrderId']);
+        if ($benchmarkConfig->getLastOrderId()) {
+            $settings['lastOrderNumber'] = $this->getOrderNumberFromOrderId($benchmarkConfig->getLastOrderId());
         }
 
         $this->View()->assign('data', $settings);
@@ -43,10 +51,13 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function saveSettingsAction()
     {
         try {
-            /** @var ConfigRepositoryInterface $configRepository */
-            $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+            /** @var BenchmarkRepository $benchmarkRepository */
+            $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
-            $configRepository->saveSettings((int) $this->request->getParam('ordersBatchSize'));
+            $benchmarkConfig = $benchmarkRepository->getMainConfig();
+            $benchmarkConfig->setOrdersBatchSize((int) $this->request->getParam('ordersBatchSize'));
+
+            $benchmarkRepository->save($benchmarkConfig);
 
             $this->View()->assign('success', true);
         } catch (\Exception $e) {
@@ -54,13 +65,16 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         }
     }
 
-    public function saveBusinessAction()
+    public function saveIndustryAction()
     {
         try {
-            /** @var ConfigRepositoryInterface $configRepository */
-            $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+            /** @var BenchmarkRepository $benchmarkRepository */
+            $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
-            $configRepository->saveBusiness((int) $this->request->getParam('business'));
+            $benchmarkConfig = $benchmarkRepository->getMainConfig();
+            $benchmarkConfig->setIndustry((int) $this->request->getParam('industry'));
+
+            $benchmarkRepository->save($benchmarkConfig);
 
             $this->View()->assign('success', true);
         } catch (\Exception $e) {
@@ -71,10 +85,13 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function setActiveAction()
     {
         try {
-            /** @var ConfigRepositoryInterface $configRepository */
-            $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+            /** @var BenchmarkRepository $benchmarkRepository */
+            $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
-            $configRepository->setActive((bool) $this->request->getParam('active'));
+            $benchmarkConfig = $benchmarkRepository->getMainConfig();
+            $benchmarkConfig->setActive((bool) $this->request->getParam('active'));
+
+            $benchmarkRepository->save($benchmarkConfig);
 
             $this->View()->assign('success', true);
         } catch (\Exception $e) {

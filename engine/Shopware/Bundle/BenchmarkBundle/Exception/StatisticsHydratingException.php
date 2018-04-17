@@ -24,32 +24,6 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+class StatisticsHydratingException extends \Exception
 {
-    /**
-     * @var BenchmarkProviderInterface[]
-     */
-    private $providers;
-
-    /**
-     * @param \IteratorAggregate $providers
-     */
-    public function __construct(\IteratorAggregate $providers)
-    {
-        $this->providers = $providers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get()
-    {
-        $providerData = [];
-
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
-        }
-
-        return json_encode($providerData, true);
-    }
 }

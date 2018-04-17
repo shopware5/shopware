@@ -9,9 +9,9 @@
                 <div class="swag-container">
                     <div id="select-wrapper">
                         <h1>Los geht's</h1>
-                        <form action="{url controller="BenchmarkOverview" action="setBusiness"}">
+                        <form action="{url controller="BenchmarkOverview" action="setIndustry"}">
                             <div class="btn primary select-bg">
-                                <select name="business">
+                                <select name="industry">
                                     <option value="0">Keine</option>
                                     <option value="1">Tiere & Tierbedarf</option>
                                     <option value="2">Bekleidung & Accessoires</option>

@@ -22,19 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler;
+namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-class ProviderCompilerPass implements CompilerPassInterface
+class BenchmarkRequest
 {
-    use TagReplaceTrait;
+    /**
+     * @var string
+     */
+    public $data;
 
-    public function process(ContainerBuilder $container)
+    public function __toString()
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.collector', 'shopware.benchmark_provider', 0);
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.local_collector', 'shopware.benchmark_local_provider', 0);
+        return $this->data;
     }
 }

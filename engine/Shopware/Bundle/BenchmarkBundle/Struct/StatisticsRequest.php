@@ -22,34 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+class StatisticsRequest
 {
     /**
-     * @var BenchmarkProviderInterface[]
+     * @var string
      */
-    private $providers;
+    private $token;
 
     /**
-     * @param \IteratorAggregate $providers
+     * @param string $token
      */
-    public function __construct(\IteratorAggregate $providers)
+    public function __construct($token)
     {
-        $this->providers = $providers;
+        $this->token = $token;
+    }
+
+    public function __toString()
+    {
+        return sprintf('token=%s', $this->token);
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function get()
+    public function getToken()
     {
-        $providerData = [];
-
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
-        }
-
-        return json_encode($providerData, true);
+        return $this->token;
     }
 }
