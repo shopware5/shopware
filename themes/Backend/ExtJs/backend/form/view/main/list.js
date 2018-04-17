@@ -126,6 +126,11 @@ Ext.define('Shopware.apps.Form.view.main.List', {
             dataIndex: 'email',
             flex: 1
         }, {
+            header: '{s name=column_active}Active{/s}',
+            dataIndex: 'active',
+            renderer: this.activeColumnRenderer,
+            width: 40
+        }, {
             /**
              * Special column type which provides
              * clickable icons in each row
@@ -134,6 +139,19 @@ Ext.define('Shopware.apps.Form.view.main.List', {
             width: actionColumItems.length * 26,
             items: actionColumItems
         }];
+    },
+
+    /**
+     * Renderer for the active flag
+     *
+     * @param [object] - value
+     */
+    activeColumnRenderer: function(value) {
+        if (value) {
+            return '<div class="sprite-ui-check-box"  style="display:block; margin: 0 auto; width: 14px; height: 14px">&nbsp;</div>';
+        } else {
+            return '<div class="sprite-ui-check-box-uncheck" style="display:block; margin: 0 auto; width: 14px; height: 14px">&nbsp;</div>';
+        }
     },
 
     /**

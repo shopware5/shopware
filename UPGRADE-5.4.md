@@ -2,15 +2,46 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
+## 5.4.3
+
+[View all changes from v5.4.2...v5.4.3](https://github.com/shopware/shopware/compare/v5.4.2...v5.4.3)
+
+### Additions
+
+* Added new events to `Shopware_Controllers_Widgets_Listing::listingCountAction` to modify view variables before the template is fetched
+  * `Shopware_Controllers_Widgets_Listing_fetchListing_preFetch`
+  * `Shopware_Controllers_Widgets_Listing_fetchPagination_preFetch`
+
+### Changes
+
+* Changed .htaccess file to prohibit download of .env files
+* Changed `Media` resource to fix a problem with file names set via API
+* Changed "Send E-Mails" checkbox in batch processing window of order to be enabled by default again
+* Changed behaviour of inactive forms to act like any other missing page
+* Changed API behaviour on update, when the lastStock parameter is set for a product its applied to its mainDetail aswell (like on creation)
+
 ## 5.4.2
 
 [View all changes from v5.4.1...v5.4.2](https://github.com/shopware/shopware/compare/v5.4.1...v5.4.2)
+
+### Additions
+
+* Added possibility to enable/disable forms without having to delete them
+* Added pagination to the attribute filter of the product stream configurator 
+* Added `json` attribute for snippets in `Enlight_Components_Snippet_Resource`
+  * You may now set the attribute `json='true'` on smarty snippets, the content of the snippet will then be encoded via `json_encode()`
+    * Example: ```{s json='true' name='foo'}é"'#-_*+`{/s}``` will render as ```"\u00e9\"'#-_*+`"```
+    * Safely constructing a JS object: ```{ "someProp": {s json='true' name='your/snippet'}{/s} }```
 
 ### Changes
 
 * Changed password verification process for password protected actions in backend
 * Changed behaviour of search indexer to allow product attribute search
 * Changed hashing algorithm for product variant search join table aliases to prevent errors on 32bit systems
+* Changed SMTP password input type in base config from plaintext to password
+* Changed detail page behaviour with preselection variants which onsale-flag is active
+* Changed note counting to fix an error which displays 0 notes when adding the first note
+* Changed construction of ProductSearchResult-object to fix error in stream listing count
 
 ## 5.4.1
 

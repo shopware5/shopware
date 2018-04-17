@@ -99,17 +99,27 @@ This can take a very long time, depending on the number of files that need to be
             }
         }
 
+        $path = 'media';
+        if ($input->getArgument('path')) {
+            if (strpos($input->getArgument('path'), 'media') !== 0) {
+                $output->writeln('<error>Only subpaths of "media"-directory supported.</error>');
+
+                return 1;
+            }
+            $path = $input->getArgument('path');
+        }
+
         $numberOfFiles = 0;
         if (!$input->getOption('skip-scan')) {
             // Do not count directories, the many sub-dirs would otherwise throw off the progressbar
-            $numberOfFiles = count(array_filter($mediaService->getFilesystem()->listContents('media', true), function (array $element) {
+            $numberOfFiles = count(array_filter($mediaService->getFilesystem()->listContents($path, true), function (array $element) {
                 return $element['type'] === 'file';
             }));
         }
 
         $progress = new ProgressBar($output, $numberOfFiles);
 
-        $this->optimizeFiles('media', $mediaService, $optimizerService, $progress, $output);
+        $this->optimizeFiles($path, $mediaService, $optimizerService, $progress, $output);
 
         $progress->finish();
 
@@ -156,7 +166,7 @@ This can take a very long time, depending on the number of files that need to be
                 } catch (FileNotFoundException $exception) {
                     $output->writeln(' => ' . $exception->getMessage());
                 } catch (OptimizerNotFoundException $exception) {
-                    // empty catch intended since no optimizer is available
+                    // Empty catch intended since no optimizer is available
                 } catch (FileExistsException $exception) {
                     $output->writeln(' => ' . $exception->getMessage());
                 }

@@ -67,7 +67,7 @@ class Application extends BaseApplication
     {
         $this->kernel = $kernel;
 
-        parent::__construct('Shopware', Kernel::VERSION . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
+        parent::__construct('Shopware', $kernel->getRelease()['version'] . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
@@ -116,7 +116,7 @@ class Application extends BaseApplication
             }
         }
 
-        if (true === $input->hasParameterOption(['--shell', '-s'])) {
+        if ($input->hasParameterOption(['--shell', '-s']) === true) {
             $shell = new Shell($this);
             $shell->setProcessIsolation($input->hasParameterOption(['--process-isolation']));
             $shell->run();
@@ -134,8 +134,8 @@ class Application extends BaseApplication
     {
         $exitCode = parent::doRunCommand($command, $input, $output);
 
-       /** @var \Enlight_Event_EventManager $eventManager */
-       $eventManager = $this->kernel->getContainer()->get('events');
+        /** @var \Enlight_Event_EventManager $eventManager */
+        $eventManager = $this->kernel->getContainer()->get('events');
 
         $eventManager->notify('Shopware_Command_After_Run', [
            'exitCode' => $exitCode,

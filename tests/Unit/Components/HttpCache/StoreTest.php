@@ -52,65 +52,124 @@ class StoreTest extends TestCase
     {
         return [
             [
-                'original' => 'http://example.com/',
-                'compare' => 'http://example.com',
+                'original' => 'http://example.com',
+                'compare' => 'http://example.com/',
             ],
             [
-                'original' => 'http://example.com?a=a&a=1',
+                'original' => 'http://example.com/',
+                'compare' => 'http://example.com/',
+            ],
+            [
+                'original' => 'http://example.com/category',
+                'compare' => 'http://example.com/category',
+            ],
+            [
+                'original' => 'http://example.com/category/',
+                'compare' => 'http://example.com/category/',
+            ],
+            [
+                'original' => 'http://example.com/?a=a&a=1',
                 'compare' => 'http://example.com/?a=a',
+            ],
+            [
+                'original' => 'http://example.com/category/?a=a&a=1',
+                'compare' => 'http://example.com/category/?a=a',
             ],
             [
                 'original' => 'http://example.com?z=a&a=a',
                 'compare' => 'http://example.com/?a=a&z=a',
             ],
             [
+                'original' => 'http://example.com/category?z=a&a=a',
+                'compare' => 'http://example.com/category?a=a&z=a',
+            ],
+            [
                 'original' => 'http://example.com?Z=a&z=a',
                 'compare' => 'http://example.com/?Z=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com/category/?Z=a&z=a',
+                'compare' => 'http://example.com/category/?Z=a&z=a',
             ],
             [
                 'original' => 'http://example.com/?cars[0]=Saab&cars[1]=Audi&colors[0]=red&colors[1]=red&colors[2]=blue&foo=1',
                 'compare' => 'http://example.com/?cars[0]=Saab&cars[1]=Audi&colors[0]=red&colors[1]=red&colors[2]=blue',
             ],
-
             [
-                'original' => 'http://example.com?foo',
-                'compare' => 'http://example.com',
+                'original' => 'http://example.com/category/sub/?cars[0]=Saab&cars[1]=Audi&colors[0]=red&colors[1]=red&colors[2]=blue&foo=1',
+                'compare' => 'http://example.com/category/sub/?cars[0]=Saab&cars[1]=Audi&colors[0]=red&colors[1]=red&colors[2]=blue',
+            ],
+            [
+                'original' => 'http://example.com/foo?foo',
+                'compare' => 'http://example.com/foo',
+            ],
+            [
+                'original' => 'http://example.com/foo/?foo',
+                'compare' => 'http://example.com/foo/',
             ],
             [
                 'original' => 'http://example.com?foo=bar',
-                'compare' => 'http://example.com',
+                'compare' => 'http://example.com/',
+            ],
+            [
+                'original' => 'http://example.com/category?foo=bar',
+                'compare' => 'http://example.com/category',
             ],
             [
                 'original' => 'http://example.com?_foo=bar',
-                'compare' => 'http://example.com',
+                'compare' => 'http://example.com/',
             ],
             [
                 'original' => 'http://example.com?__foo=bar',
-                'compare' => 'http://example.com',
+                'compare' => 'http://example.com/',
             ],
             [
-                'original' => 'http://example.com?foo&z=a&a=a',
+                'original' => 'http://example.com/?foo&z=a&a=a',
                 'compare' => 'http://example.com/?a=a&z=a',
             ],
             [
-                'original' => 'http://example.com?foo=bar&z=a&a=a',
+                'original' => 'http://example.com/category.html?foo&z=a&a=a',
+                'compare' => 'http://example.com/category.html?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com/?foo=bar&z=a&a=a',
                 'compare' => 'http://example.com/?a=a&z=a',
             ],
             [
-                'original' => 'http://example.com?_foo=bar&z=a&a=a',
+                'original' => 'http://example.com/category/sub?foo=bar&z=a&a=a',
+                'compare' => 'http://example.com/category/sub?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com/?_foo=bar&z=a&a=a',
                 'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com/category?_foo=bar&z=a&a=a',
+                'compare' => 'http://example.com/category?a=a&z=a',
             ],
             [
                 'original' => 'http://example.com?__foo=bar&z=a&a=a',
                 'compare' => 'http://example.com/?a=a&z=a',
             ],
             [
+                'original' => 'http://example.com/somecategory?__foo=bar&z=a&a=a',
+                'compare' => 'http://example.com/somecategory?a=a&z=a',
+            ],
+            [
                 'original' => 'http://example.com?z=a&foo=bar&a=a',
                 'compare' => 'http://example.com/?a=a&z=a',
             ],
             [
-                'original' => 'http://example.com?z=a&a=a&foo=bar',
+                'original' => 'http://example.com/somecategory?z=a&foo=bar&a=a',
+                'compare' => 'http://example.com/somecategory?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com/?z=a&a=a&foo=bar',
                 'compare' => 'http://example.com/?a=a&z=a',
+            ],
+            [
+                'original' => 'http://example.com/somecategory/?z=a&a=a&foo=bar',
+                'compare' => 'http://example.com/somecategory/?a=a&z=a',
             ],
         ];
     }

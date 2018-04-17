@@ -148,15 +148,17 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)->getFormQuery($formId, $shopId);
+        $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)
+            ->getActiveFormQuery($formId, $shopId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
-            $this->Response()->setHttpResponseCode(404);
-
-            return $this->forward('index', 'index');
+            throw new \Enlight_Controller_Exception(
+                'Form not found',
+                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+            );
         }
 
         /* @var $field Field */
@@ -225,6 +227,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         // prepare form data for view
         $formData = [
             'id' => (string) $form->getId(),  // intended string cast to keep compatibility
+            'active' => $form->getActive(),
             'name' => $form->getName(),
             'text' => $form->getText(),
             'text2' => $form->getText2(),
@@ -454,6 +457,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $valid = true;
             $value = '';
             if ($element['typ'] === 'text2') {
+                $value = [];
                 $element['name'] = explode(';', $element['name']);
                 if (!empty($inputs[$element['name'][0]])) {
                     $value[0] = $inputs[$element['name'][0]];

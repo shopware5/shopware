@@ -23,7 +23,7 @@
  */
 
 // Check the minimum required php version
-if (version_compare(PHP_VERSION, '5.6.4', '<')) {
+if (PHP_VERSION_ID < 50604) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Error</h2>';
@@ -51,7 +51,7 @@ if (is_file('files/update/update.json') || is_dir('update-assets')) {
 
 // Check for installation
 if (is_dir('recovery/install') && !is_file('recovery/install/data/install.lock')) {
-    if (PHP_SAPI == 'cli') {
+    if (PHP_SAPI === 'cli') {
         echo 'Shopware 5 must be configured before use. Please run the Shopware installer by executing \'php recovery/install/index.php\'.' . PHP_EOL;
     } else {
         $basePath = 'recovery/install';
@@ -75,17 +75,21 @@ if (is_dir('recovery/install') && !is_file('recovery/install/data/install.lock')
     exit;
 }
 
-// check for composer autoloader
+// Check for composer autoloader
 if (!file_exists('vendor/autoload.php')) {
-    header('Content-type: text/html; charset=utf-8', true, 503);
+    $template = '%s: ';
+    if (PHP_SAPI !== 'cli') {
+        $template = '<h2>%s</h2>';
+        header('Content-type: text/html; charset=utf-8', true, 503);
+    }
 
-    echo '<h2>Error</h2>';
-    echo 'Please execute "composer install" from the command line to install the required dependencies for Shopware 5';
+    echo sprintf($template, 'Error');
+    echo "Please execute \"composer install\" from the command line to install the required dependencies for Shopware 5\n";
 
-    echo '<h2>Fehler</h2>';
-    echo 'Bitte führen Sie zuerst "composer install" aus.';
+    echo sprintf($template, 'Fehler');
+    echo "Bitte führen Sie zuerst \"composer install\" aus um alle von Shopware 5 benötigten Abhängigkeiten zu installieren.\n";
 
-    return;
+    exit(1);
 }
 
 require __DIR__ . '/autoload.php';

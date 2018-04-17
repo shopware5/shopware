@@ -31,7 +31,7 @@ Ext.define('Shopware.apps.ProductStream.store.Attribute', {
     extend:'Ext.data.Store',
     fields: [ 'column', 'label' ],
     autoLoad: false,
-    pageSize: 15,
+    pageSize: 20,
     proxy:{
         type:'ajax',
         url: '{url controller=ProductStream action=getAttributes}',
