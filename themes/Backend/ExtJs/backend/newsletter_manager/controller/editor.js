@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
 
     /**
      * Called when a field in the settings form changes
-     * @param field
+     * @param { object } form
      */
     onFormChanged: function(form) {
         var me = this,
