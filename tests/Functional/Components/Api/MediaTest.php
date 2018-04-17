@@ -96,6 +96,28 @@ class MediaTest extends TestCase
         $mediaService->delete($path);
     }
 
+    public function testSubmittedNameIsUsed() {
+        $data = $this->getExtendedTestData();
+        $source = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gQJDCU6ODUJUgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC';
+        $data['file'] = $source;
+        $ids = [];
+
+        // Assert that the given name is used
+        $media = $this->resource->create($data);
+        $ids[] = $media->getId();
+        $this->assertEquals($data['name'], $media->getName());
+
+        // On the second pass the given name should still be used (extended with a random string)
+        $media = $this->resource->create($data);
+        $ids[] = $media->getId();
+        $this->assertContains($data['name'], $media->getName());
+
+        // Delete the created media
+        foreach ($ids as $id) {
+            $this->resource->delete($id);
+        }
+    }
+
     public function testReplaceMedia()
     {
         $data = $this->getSimpleTestData();
@@ -159,5 +181,11 @@ class MediaTest extends TestCase
             'album' => -1,
             'description' => 'Test description',
         ];
+    }
+
+    protected function getExtendedTestData() {
+        $temp = $this->getSimpleTestData();
+        $temp['name'] = 'some-name-lorem-ipsum';
+        return $temp;
     }
 }
