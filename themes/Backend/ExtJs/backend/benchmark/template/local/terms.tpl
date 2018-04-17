@@ -9,8 +9,8 @@
             <div class="swag-onbording">
                 <div class="tob-bar">
                     <ul class="top-benefits">
-                        <li>Keine Kosten</li>
-                        <li>Komplett anonym</li>
+                        <li>Kostenlos</li>
+                        <li>Anonym</li>
                         <li>Unverbindlich</li>
                     </ul>
                 </div>
@@ -274,7 +274,7 @@
                     <div class="accept-abg">
                         <form>
                             <label>
-                                <input type="checkbox" id="swagagb" name="akzeptieren" value="datenschutz" onclick="myFunction()" />
+                                <input type="checkbox" id="swagagb" name="akzeptieren" value="datenschutz" onclick="toggleTerms()" />
                                 Ich habe die Datenschutzbestimmung gelesen und akzeptiert
                             </label>
                             <br>

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle;
 class BenchmarkCollector implements BenchmarkCollectorInterface
 {
     /**
-     * @var BenchmarkProviderInterface[]
+     * @var \IteratorAggregate
      */
     private $providers;
 
@@ -54,6 +54,7 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     {
         $providerData = [];
 
+        /** @var BenchmarkProviderInterface $provider */
         foreach ($this->providers as $provider) {
             $providerData[$provider->getName()] = $provider->getBenchmarkData();
         }

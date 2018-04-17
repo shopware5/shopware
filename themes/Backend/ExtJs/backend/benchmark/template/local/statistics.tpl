@@ -9,7 +9,7 @@
                 <div class="swag-container">
                     <div class="confetti"></div>
                     <h1>Hey!</h1>
-                    <h2>Die Auswertung deiner Shopdaten ist fertig.</h2>
+                    <h2>Die Auswertung Deiner Shopdaten ist fertig.</h2>
                     <div class="bulb">drop this down</div>
                 </div>
             </div>
@@ -18,18 +18,15 @@
                 <div class="swag-container">
                     <h1>Information</h1>
                     <h3>Die <span class="branch-color">Branchendaten</span> werden noch ausgewertet, daher enthält die
-                        Auswertung vorerst nur <span class="shop-color">deine Shopdaten</span>.</h3>
+                        Auswertung vorerst nur <span class="shop-color">Deine Shopdaten</span>.</h3>
                     <div class="nice-graphic"></div>
                 </div>
             </div>
 
-
-            <!-- start industry-data -->
-            <!-- @todo:p.stahl Slider fail example -->
             <div class="swag-text-break business-data">
                 <div class="wave-left"></div>
 
-                <section id="container-business-data" data-slider="true">
+                <section id="container-business-data">
                     <div id="slider-container">
                         <ul class="images-container">
                             <li>
@@ -37,24 +34,12 @@
                                     <h1>Dein Shop</h1>
                                     <h3>hat im <span class="shop-color">Durchschnitt</span> am Tag <span class="shop-color">999 Bestellungen</span>
                                         mit einem <span class="shop-color">Bestellwert von 500€.</span> Am meisten wurde in
-                                        der <span class="shop-color">Zeit von 18 bis 20Uhr</span> bestellt.</h3>
-                                    <div class="nice-graphic"></div>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="slide slide--branch">
-                                    <h1>Die Branche</h1>
-                                    <h3>hat im <span class="branch-color">Durchschnitt</span> am Tag <span class="branch-color">999 Bestellungen</span>
-                                        mit einem <span class="branch-color">Bestellwert von 500€.</span> Am meisten wurde in
-                                        der <span class="branch-color">Zeit von 18 bis 20Uhr</span> bestellt.</h3>
+                                        der <span class="shop-color">Zeit von 18 bis 20 Uhr</span> bestellt.</h3>
                                     <div class="nice-graphic"></div>
                                 </div>
                             </li>
                         </ul>
                     </div>
-                    <span class="arrow a-left"></span>
-                    <span class="arrow a-right"></span>
                     <div class='bullets-container'></div>
                 </section>
 
@@ -65,7 +50,7 @@
                 <div class="swag-container">
                     <h1>Umsatz</h1>
                     <div id="swag-chart--sales" class="diagram">
-                        {include file="backend/benchmark/template/local/include/sales-data.tpl"}
+                        {include file="backend/benchmark/template/local/include/graph-data.tpl" dataKey='turnOver'}
                     </div>
                 </div>
             </div>
@@ -73,14 +58,18 @@
             <div class="swag-chart">
                 <div class="swag-container">
                     <h1>Besucher</h1>
-                    <div id="swag-chart--visitor" class="diagram"></div>
+                    <div id="swag-chart--visitor" class="diagram">
+                        {include file="backend/benchmark/template/local/include/graph-data.tpl" dataKey='visitors'}
+                    </div>
                 </div>
             </div>
 
             <div class="swag-chart">
                 <div class="swag-container">
                     <h1>Bestellungen</h1>
-                    <div id="swag-chart--order" class="diagram"></div>
+                    <div id="swag-chart--order" class="diagram">
+                        {include file="backend/benchmark/template/local/include/graph-data.tpl" dataKey='totalOrders'}
+                    </div>
                 </div>
             </div>
 
@@ -100,25 +89,18 @@
                         <div class="benchmark-text">
 
                             <div class="slide--shop">
-                                <h1>Deine Kunden</h1>
+                                <h1>Die Kunden</h1>
                                 <h3>sind im Durchschitt <span class="shop-color">23 Jahre</span> und <span
                                         class="shop-color">60% weiblich.</span> <span class="shop-color">Achtung: 30%</span>
                                     der Kunden haben <span class="shop-color">kein Geburtsdatum</span> angegeben.</h3>
                                 <div class="nice-graphic"></div>
                             </div>
 
-                            <!--<div class="slide--branch">
-                                <h1>Deine Kunden</h1>
-                                <h3>sind im Durchschitt <span class="branch-color">23 Jahre</span> und <span class="branch-color">60% weiblich.</span> <span class="branch-color">Achtung: 30%</span> der Kunden haben <span class="branch-color">kein Geburtsdatum</span> angegeben.</h3>
-                                <div class="nice-graphic"></div>
-                            </div>-->
-
                         </div>
                     </div>
                 </div>
                 <div class="wave-right"></div>
             </div>
-
 
             <div class="swag-chart">
                 <div class="swag-container">
@@ -223,8 +205,6 @@
             </div>
 
 
-            <!-- start payment-shipping-data -->
-            <!-- @todo:p.stahl - integrate working slider -->
             <div class="swag-text-break payment-shipping-data">
                 <div class="wave-left"></div>
                 <div class="swag-container">
@@ -238,13 +218,6 @@
                                 </h3>
                                 <div class="nice-graphic"></div>
                             </div>
-
-                            <!--<div class="slide--branch">
-                                <h1>Zahlen & Fakten</h1>
-                                <h3>es werden<span class="branch-color">3 Zahlarten</span> angeboten.<span class="branch-color">Versandkosten</span> liegen bei<span class="branch-color"> ca. 3,50 €</span> pro Bestellung. <span class="branch-color">90%</span> der Artikel sind <span class="branch-color">vorrätig und versandfertig.</span></h3>
-                                <div class="nice-graphic"></div>
-                            </div>-->
-
                         </div>
                     </div>
                 </div>
@@ -416,13 +389,19 @@
                             <div class="btn secondary">Nachricht senden</div>
                         </div>
 
-                        <p>Eine Abmeldung ist jederzeit möglich, im Hauptmenü unter: Marketing - Benchmark. </p>
+                        <p>Eine Abmeldung ist jederzeit möglich im Hauptmenü unter: Marketing - Benchmark - Einstellungen. </p>
 
                     </div>
                 </div>
             </footer>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="{link file="backend/benchmark/template/local/js/slider.js"}"></script>
+        <script src="{link file='backend/benchmark/template/local/js/slider.js'}"></script>
+        <script src="{link file='backend/benchmark/template/local/js/line_graph.js'}"></script>
+        <script src="{link file='backend/benchmark/template/local/js/time_switcher.js'}"></script>
+        <script src="{link file='backend/benchmark/template/local/vendor/js/chart.js'}"></script>
+        <script type="text/javascript">
+            window.benchmarkData = JSON.parse('{$benchmarkData}');
+        </script>
     </body>
 {/block}

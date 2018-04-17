@@ -138,7 +138,7 @@ class ProductsProvider implements BenchmarkProviderInterface
             ->execute()
             ->fetchColumn();
 
-        return $productImageCount / $productsTotalCount;
+        return (float) $productImageCount / $productsTotalCount;
     }
 
     /**

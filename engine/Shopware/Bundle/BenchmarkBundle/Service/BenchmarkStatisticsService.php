@@ -22,16 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\Service;
 
-use Shopware\Bundle\BenchmarkBundle\Service\BenchmarkService;
-use Shopware\Bundle\BenchmarkBundle\Service\StatisticsService;
 use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
-/**
- * High level Klasse. Soll Statistik-Rohdaten generieren und senden sowie fertige Statistiken holen und bereit stellen
- */
 class BenchmarkStatisticsService
 {
     /**

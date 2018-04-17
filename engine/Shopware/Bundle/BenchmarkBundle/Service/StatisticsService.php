@@ -53,6 +53,9 @@ class StatisticsService
         $this->benchmarkRepository = $benchmarkRepository;
     }
 
+    /**
+     * @return StatisticsResponse
+     */
     public function transmit()
     {
         $config = $this->benchmarkRepository->getMainConfig();

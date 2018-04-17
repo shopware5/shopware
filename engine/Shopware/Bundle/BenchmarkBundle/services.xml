@@ -5,8 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="shopware.benchmark_bundle.benchmark_endpoint">http://shopware-hendrik.example/5.5/index/testStatistics</parameter>
-        <parameter key="shopware.benchmark_bundle.statistics_endpoint">http://shopware-hendrik.example/5.5/index/testEndpoint</parameter>
+        <parameter key="shopware.benchmark_bundle.benchmark_endpoint">example.com</parameter>
+        <parameter key="shopware.benchmark_bundle.statistics_endpoint">example.com</parameter>
         <parameter key="shopware.benchmark_bundle.guzzle_config" type="collection">
             <parameter type="collection" key="defaults">
                 <parameter key="timeout">7</parameter>
@@ -20,8 +20,10 @@
             <argument type="tagged" tag="shopware.benchmark_provider" />
         </service>
 
-        <service id="shopware.benchmark_bundle.local_collector" class="Shopware\Bundle\BenchmarkBundle\BenchmarkLocalCollector">
+        <service id="shopware.benchmark_bundle.local_collector"
+                class="Shopware\Bundle\BenchmarkBundle\BenchmarkLocalCollector">
             <argument type="tagged" tag="shopware.benchmark_local_provider" />
+            <argument type="service" id="shopware.benchmark_bundle.local_hydrator" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.shop"
@@ -115,6 +117,13 @@
             <tag name="shopware.benchmark_local_provider" />
         </service>
 
+        <service id="shopware.benchmark_bundle.providers.local_visitors"
+                 class="Shopware\Bundle\BenchmarkBundle\Provider\LocalVisitorsProvider"
+                 public="false">
+            <argument type="service" id="dbal_connection"/>
+            <tag name="shopware.benchmark_local_provider" />
+        </service>
+
         <service id="shopware.benchmark_bundle.controller_subscriber"
                  class="Shopware\Bundle\BenchmarkBundle\DependencyInjection\EventListener\ControllerSubscriber">
             <tag name="shopware.event_subscriber" />
@@ -125,8 +134,32 @@
             <argument type="string">\Shopware\Models\Benchmark\BenchmarkConfig</argument>
         </service>
 
-        <service id="shopware.benchmark_bundle.components.template_caching_handler" class="Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler">
+        <service id="shopware.benchmark_bundle.components.template_caching_handler"
+                class="Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler">
             <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="shopware.benchmark_bundle.local_hydrator"
+                class="Shopware\Bundle\BenchmarkBundle\BenchmarkLocalHydrator">
+            <argument type="tagged" tag="shopware.benchmark_local_hydrator" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.hydrator.weekly_hydrator"
+                class="Shopware\Bundle\BenchmarkBundle\Hydrator\WeeklyHydrator"
+                public="false">
+            <tag name="shopware.benchmark_local_hydrator" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.hydrator.monthly_hydrator"
+                class="Shopware\Bundle\BenchmarkBundle\Hydrator\MonthlyHydrator"
+                public="false">
+            <tag name="shopware.benchmark_local_hydrator" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.hydrator.yearly_hydrator"
+                class="Shopware\Bundle\BenchmarkBundle\Hydrator\YearlyHydrator"
+                public="false">
+            <tag name="shopware.benchmark_local_hydrator" />
         </service>
 
         <!-- Transmission services -->
@@ -148,7 +181,7 @@
         </service>
 
         <service id="shopware.bundle_benchmark.benchmark_statistics"
-                 class="Shopware\Bundle\BenchmarkBundle\BenchmarkStatisticsService">
+                 class="Shopware\Bundle\BenchmarkBundle\Service\BenchmarkStatisticsService">
             <argument type="service" id="shopware.benchmark_bundle.repository.config"/>
             <argument type="service" id="shopware.bundle_benchmark.benchmark_transmission"/>
             <argument type="service" id="shopware.bundle_benchmark.statistics_transmission"/>

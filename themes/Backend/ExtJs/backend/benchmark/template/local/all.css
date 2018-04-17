@@ -128,6 +128,9 @@
   max-width: 800px;
   margin: 15px auto 15px auto;
 }
+ul.top-benefits {
+  margin-bottom: 20px;
+}
 ul.top-benefits li {
   float: left;
   width: 33%;
@@ -157,27 +160,26 @@ ul.top-benefits li:before {
   list-style-position: outside;
 }
 .info--text ul.top-benefits li:before {
-  height: 13px;
-  width: 13px;
+  height: 11px;
+  width: 11px;
   margin-right: 5px;
 }
 .preview-screen {
   background: url(img/preview-screen.png) center top no-repeat;
-  background-size: contain;
+  background-size: cover;
   height: 400px;
-  width: 68%;
+  width: 80%;
   margin: 0 auto;
-  box-shadow: 0 8px 130px #14202c;
-  border-radius: 40px 40px 0 0;
   margin-top: 3%;
 }
 .funny-graph {
   position: absolute;
-  bottom: 33%;
+  top: -200px;
   background: url(img/funny-graph.svg) center bottom no-repeat;
   width: 100%;
-  height: 250px;
+  height: 200px;
   background-size: 100%;
+  left: 0;
 }
 .teaser-text {
   position: absolute;
@@ -190,26 +192,11 @@ ul.top-benefits li:before {
 }
 .teaser-text h1 {
   color: #213448;
-  font-size: 32px;
+  font-size: 33px;
 }
 .teaser-text .btn {
   margin-top: 30px;
   margin-bottom: 30px;
-}
-.teaser-text .row {
-  max-width: 800px;
-  margin: 0 auto;
-  clear: both;
-}
-.teaser-text .col {
-  width: 100%;
-}
-@media (min-width: 650px) {
-  .teaser-text .col {
-    margin: 0 auto;
-    width: 50%;
-    float: left;
-  }
 }
 .wrapper-info {
   background-color: #FFF;
@@ -273,34 +260,6 @@ ul.top-benefits li:before {
 .agb--text .btn {
   margin-top: 5px;
   margin-bottom: 30px;
-}
-.info--text .row,
-.agb--text .row {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.info--text .col-m,
-.agb--text .col-m {
-  width: 90%;
-}
-@media (min-width: 650px) {
-  .info--text .col-m,
-  .agb--text .col-m {
-    width: 65%;
-    float: left;
-  }
-}
-.info--text .col-s,
-.agb--text .col-s {
-  width: 90%;
-}
-@media (min-width: 650px) {
-  .info--text .col-s,
-  .agb--text .col-s {
-    width: 30%;
-    margin-left: 5%;
-    float: left;
-  }
 }
 .accept-abg {
   width: 100%;
@@ -591,12 +550,18 @@ body {
   margin: 0;
   color: #798EA3;
 }
-body#swag-start,
-body#swag-info,
+body#swag-start {
+  background-color: #213448;
+}
+body#swag-info {
+  background-color: #FFFFFF;
+}
 body#swag-agb {
   background-color: #FFFFFF;
 }
-body#swag-select,
+body#swag-select {
+  background-color: #213448;
+}
 body#swag-benchmark {
   background-color: #213448;
 }
@@ -614,14 +579,14 @@ body#swag-benchmark {
 }
 .swag-chart,
 .swag-text-break {
-    margin: 50px 0;
+  margin: 50px 0;
 }
 .swag-onbording {
   text-align: center;
   width: 100%;
   margin: 0 auto;
 }
-.confetti {
+.konfetti {
   width: 450px;
   height: 106px;
   margin: 0 auto;
@@ -651,20 +616,105 @@ body#swag-benchmark {
 .row {
   clear: both;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
-.col-33 {
+.col-100 {
+  width: 100%;
+  float: left;
+}
+#swag-start .col-33,
+#swag-info .col-33,
+#swag-agb .col-33,
+#swag-select .col-33,
+#swag-start .col-50,
+#swag-info .col-50,
+#swag-agb .col-50,
+#swag-select .col-50,
+#swag-start .col-66,
+#swag-info .col-66,
+#swag-agb .col-66,
+#swag-select .col-66,
+#swag-start .col-80,
+#swag-info .col-80,
+#swag-agb .col-80,
+#swag-select .col-80 {
+  width: 90%;
+  float: left;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.computed-data {
+  padding-top: 20px;
+}
+.computed-data .time-container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.computed-data .value-container {
+  float: left;
+  width: 33%;
+}
+.computed-data .value-container.total .data-value {
+  font-size: 25px;
+}
+.computed-data .value-container.total .data-value.local {
+  color: #34DCDD;
+}
+.computed-data .value-container.total .data-value.industry {
+  color: #6A63FC;
+}
+.computed-data .data-value {
+  color: #fff;
+  font-size: 22px;
+}
+@media (min-width: 800px) {
+  #swag-start .col-33,
+  #swag-info .col-33,
+  #swag-agb .col-33,
+  #swag-select .col-33 {
+    width: 30%;
+    float: left;
+    margin: 0 0 0 3%;
+  }
+  #swag-start .col-50,
+  #swag-info .col-50,
+  #swag-agb .col-50,
+  #swag-select .col-50 {
+    width: 50%;
+    float: left;
+    margin: 0;
+  }
+  #swag-start .col-66,
+  #swag-info .col-66,
+  #swag-agb .col-66,
+  #swag-select .col-66 {
+    width: 66%;
+    float: left;
+    margin: 0;
+  }
+  #swag-start .col-80,
+  #swag-info .col-80,
+  #swag-agb .col-80,
+  #swag-select .col-80 {
+    width: 80%;
+    margin: 0 0 0 20%;
+  }
+}
+#swag-benchmark .col-33 {
   width: 33%;
   float: left;
 }
-.col-50 {
+#swag-benchmark .col-50 {
   width: 50%;
   float: left;
 }
-.col-66 {
+#swag-benchmark .col-66 {
   width: 66%;
   float: left;
 }
-.col-80 {
+#swag-benchmark .col-80 {
   width: 80%;
   margin-left: 20%;
 }

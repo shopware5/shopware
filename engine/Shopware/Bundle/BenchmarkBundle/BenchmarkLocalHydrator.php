@@ -24,39 +24,38 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-class BenchmarkLocalCollector implements BenchmarkCollectorInterface
+use Shopware\Bundle\BenchmarkBundle\Hydrator\HydratorInterface;
+
+class BenchmarkLocalHydrator
 {
     /**
      * @var \IteratorAggregate
      */
-    private $providers;
-    /**
-     * @var BenchmarkLocalHydrator
-     */
-    private $benchmarkLocalHydrator;
+    private $hydrators;
 
     /**
-     * @param \IteratorAggregate     $providers
-     * @param BenchmarkLocalHydrator $benchmarkLocalHydrator
+     * @param \IteratorAggregate $hydrators
      */
-    public function __construct(\IteratorAggregate $providers, BenchmarkLocalHydrator $benchmarkLocalHydrator)
+    public function __construct(\IteratorAggregate $hydrators)
     {
-        $this->providers = $providers;
-        $this->benchmarkLocalHydrator = $benchmarkLocalHydrator;
+        $this->hydrators = $hydrators;
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     *
+     * @return string
      */
-    public function get()
+    public function hydrate(array $data)
     {
-        $providerData = [];
+        $hydratedData = [];
 
-        /** @var BenchmarkProviderInterface $provider */
-        foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
+        /** @var HydratorInterface $hydrator */
+        foreach ($this->hydrators as $hydrator) {
+            $hydrateResult = $hydrator->hydrate($data);
+            $hydratedData['local'][$hydrator->getName()] = $hydrateResult;
         }
 
-        return $this->benchmarkLocalHydrator->hydrate($providerData);
+        return json_encode($hydratedData);
     }
 }
