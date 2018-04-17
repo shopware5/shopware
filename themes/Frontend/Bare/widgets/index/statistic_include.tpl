@@ -41,10 +41,9 @@
                 document.cookie = 'x-ua-device=' + device + '; path=/';
             }
 
-            document.asyncReady(function(){
-                var frm = document.getElementById('refresh-statistics');
-                frm.src = url;
-            });
+            document
+                .getElementById('refresh-statistics')
+                .src = url;
         })(window, document);
     </script>
 {/block}

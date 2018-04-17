@@ -43,8 +43,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
     /**
      * Index action method
-     *
-     * @throws \Enlight_Controller_Exception
      */
     public function indexAction()
     {
@@ -78,7 +76,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $this->View()->assign($emotionConfiguration);
 
-        // only show the listing if an emotion viewport is empty or the showListing option is active
+        // Only show the listing if an emotion viewport is empty or the showListing option is active
         if (!$emotionConfiguration['showListing']) {
             return;
         }
@@ -120,8 +118,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Listing of all manufacturer products.
      * Templates extends from the normal listing template.
-     *
-     * @throws \Enlight_Exception
      */
     public function manufacturerAction()
     {
@@ -192,10 +188,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sCategory' => $context->getShop()->getCategory()->getId(),
         ]);
 
-        $categoryContent = $this->getSeoDataOfManufacturer($manufacturer);
-        $categoryContent['productBoxLayout'] = $context->getShop()->getCategory()->getProductBoxLayout();
-
-        $this->View()->assign('sCategoryContent', $categoryContent);
+        $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
     }
 
     /**
@@ -378,7 +371,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
         /** @var $repository \Shopware\Models\Category\Repository */
-        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryRepository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         $categoryPath = $categoryRepository->getPathById($categoryId);
 
         if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
@@ -446,7 +439,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $permanentVisibleDevices = [];
 
         foreach ($emotions as $emotion) {
-            // always show the listing in the emotion viewports when the option "show listing" is active
+            // Always show the listing in the emotion viewports when the option "show listing" is active
             if ($emotion['showListing']) {
                 $permanentVisibleDevices = array_merge($permanentVisibleDevices, $emotion['devicesArray']);
             }

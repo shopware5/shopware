@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
 
@@ -356,11 +355,12 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Gets a single form incl. it's fields
      *
-     * @param int $id
+     * @param int      $id     Mandatory form id
+     * @param int|null $shopId If specified, the form will be fetched from a specific store
      */
-    protected function getSingleForm($id)
+    protected function getSingleForm($id, $shopId = null)
     {
-        $data = $this->getRepository()->getFormQuery($id)->getArrayResult();
+        $data = $this->getRepository()->getFormQuery($id, $shopId)->getArrayResult();
 
         foreach ($data as &$form) {
             $form['shopIds'] = $this->explodeShopIds($form['shopIds']);

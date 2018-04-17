@@ -23,7 +23,7 @@
  * our trademarks remain entirely with us.
  */
 use League\Flysystem;
-use Shopware\Bundle\BenchmarkBundle\Repository\ConfigRepositoryInterface;
+use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
 {
@@ -67,16 +67,16 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
      */
     private function getStartingTemplate()
     {
-        /** @var ConfigRepositoryInterface $configRepository */
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $config = $configRepository->loadSettings();
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkConfig = $benchmarkRepository->getMainConfig();
 
-        if ((int) $config['termsAccepted'] === 0) {
+        if (!$benchmarkConfig->isTermsAccepted()) {
             return 'start';
         }
 
-        if ($config['business'] === null) {
-            return 'branch_select';
+        if ($benchmarkConfig->getIndustry() === null) {
+            return 'industry_select';
         }
 
         return 'statistics';

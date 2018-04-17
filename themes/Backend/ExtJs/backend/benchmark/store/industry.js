@@ -1,6 +1,6 @@
 //{namespace name="backend/benchmark/categories"}
-//{block name="backend/benchmark/store/business"}
-Ext.define('Shopware.apps.Benchmark.store.Business', {
+//{block name="backend/benchmark/store/industry"}
+Ext.define('Shopware.apps.Benchmark.store.Industry', {
     extend : 'Ext.data.Store',
     autoLoad : false,
 

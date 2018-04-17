@@ -100,7 +100,7 @@ class ProductMapping implements MappingInterface
                 'variantId' => ['type' => 'long'],
 
                 //number fields
-                'number' => $this->textMapping->getNotAnalyzedField(),
+                'number' => array_merge($this->textMapping->getTextField(), ['analyzer' => 'standard']),
                 'ean' => $this->textMapping->getNotAnalyzedField(),
                 'manufacturerNumber' => $this->textMapping->getNotAnalyzedField(),
 

@@ -1208,9 +1208,12 @@ class Media extends ModelEntity
         if ($this->file instanceof UploadedFile) {
             // Load file information
             $fileInfo = pathinfo($this->file->getClientOriginalName());
-            $name = $fileInfo['filename'];
 
-            if (!empty($fileInfo['extension'])) {
+            if (!$name && $fileInfo['filename']) {
+                $name = $fileInfo['filename'];
+            }
+
+            if ($fileInfo['extension']) {
                 $extension = $fileInfo['extension'];
             }
         }

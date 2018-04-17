@@ -1008,6 +1008,12 @@ class Article extends Resource implements BatchInterface
 
         $data = $this->prepareImageAssociatedData($data, $article);
         $data = $this->prepareAttributeAssociatedData($data, $article);
+
+        // The mainDetail gets its initial value for lastStock from $article, so this has to be set beforehand
+        if (isset($data['lastStock'])) {
+            $article->setLastStock((bool) $data['lastStock']);
+        }
+
         $data = $this->prepareMainDetail($data, $article);
         $data = $this->prepareVariants($data, $article);
 
@@ -1075,7 +1081,7 @@ class Article extends Resource implements BatchInterface
              *
              * If `lastStock` was only defined on the main product, apply it to all it's variants
              */
-            if (empty($variantData['lastStock'])) {
+            if (!isset($variantData['lastStock'])) {
                 $variantData['lastStock'] = $article->getLastStock();
             }
 

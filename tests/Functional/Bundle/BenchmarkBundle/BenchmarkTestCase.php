@@ -30,6 +30,7 @@ abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
     {
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $dbalConnection->beginTransaction();
+        Shopware()->Container()->get('models')->clear();
     }
 
     public function tearDown()

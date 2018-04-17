@@ -22,19 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler;
+namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-class ProviderCompilerPass implements CompilerPassInterface
+interface HydratorInterface
 {
-    use TagReplaceTrait;
-
-    public function process(ContainerBuilder $container)
-    {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.collector', 'shopware.benchmark_provider', 0);
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.benchmark_bundle.local_collector', 'shopware.benchmark_local_provider', 0);
-    }
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function hydrate(array $data);
 }

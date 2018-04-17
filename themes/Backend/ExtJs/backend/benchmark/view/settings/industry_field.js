@@ -1,9 +1,9 @@
 
 //{namespace name="backend/benchmark/main"}
-//{block name="backend/benchmark/view/settings/business_field"}
-Ext.define('Shopware.apps.Benchmark.view.settings.BusinessField', {
+//{block name="backend/benchmark/view/settings/industry_field"}
+Ext.define('Shopware.apps.Benchmark.view.settings.IndustryField', {
     extend: 'Ext.form.FieldContainer',
-    alias: 'widget.businessfield',
+    alias: 'widget.industryfield',
 
     mixins: {
         field: 'Ext.form.field.Field'
@@ -18,14 +18,14 @@ Ext.define('Shopware.apps.Benchmark.view.settings.BusinessField', {
         var me = this;
 
         if (!me.store || !me.store instanceof Ext.data.Store) {
-            throw new Error('The business field requires a store');
+            throw new Error('The industry field requires a store');
         }
 
         me.tpl = me.createFieldTemplate();
         me.data = {};
         me.listeners = {
             click: function() {
-                me.fireEvent('changeBusiness');
+                me.fireEvent('changeIndustry');
             },
             element: 'el',
             delegate: 'span#other-action'
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.BusinessField', {
                 '<div class="value"><b>{ value }</b></div>',
                 '<div>',
                     '<span id="other-action" style="text-decoration: underline; font-style: italic; cursor: pointer; display: block; margin-top: 8px; font-size: 10px;">',
-                        '{s name="settings/fieldsets/business/wrong"}Wrong business?{/s}',
+                        '{s name="settings/fieldsets/industry/wrong"}Wrong industry?{/s}',
                     '</span>',
                 '</div>',
             '</div>'

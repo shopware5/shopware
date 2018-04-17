@@ -26,7 +26,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
     RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
 
     # Restrict access to root folder files
-    RedirectMatch 404 /(autoload\.php|composer\.(json|lock|phar)|README\.md|UPGRADE-(.*)\.md|CONTRIBUTING\.md|eula.*\.txt|\.gitignore|.*\.dist)$
+    RedirectMatch 404 /(autoload\.php|composer\.(json|lock|phar)|README\.md|UPGRADE-(.*)\.md|CONTRIBUTING\.md|eula.*\.txt|\.gitignore|.*\.dist|\.env.*)$
 
     # Restrict access to shop configs files
     RedirectMatch 404 /(web\/cache\/(config_\d+\.json|all.less))$
@@ -94,7 +94,7 @@ DirectoryIndex shopware.php
 
 # Disables auto directory index
 <IfModule mod_autoindex.c>
-	Options -Indexes
+    Options -Indexes
 </IfModule>
 
 <IfModule mod_negotiation.c>

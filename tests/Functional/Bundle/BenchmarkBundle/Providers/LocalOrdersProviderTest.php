@@ -29,7 +29,7 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class LocalOrdersProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.local_orders';
-    const EXPECTED_KEYS_COUNT = 'dynamic';
+    const EXPECTED_KEYS_COUNT = 2;
 
     // Starts dynamically on first layer already
     const EXPECTED_TYPES = IsType::TYPE_ARRAY;

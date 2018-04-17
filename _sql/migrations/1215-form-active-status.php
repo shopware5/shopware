@@ -21,35 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Bundle\BenchmarkBundle\Repository;
-
-interface ConfigRepositoryInterface
+class Migrations_Migration1215 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * @return array
-     */
-    public function loadSettings();
-
-    /**
-     * @param int $ordersBatchSize
-     */
-    public function saveSettings($ordersBatchSize);
-
-    /**
-     * @param int $business
-     */
-    public function saveBusiness($business);
-
-    /**
-     * @param bool $active
-     */
-    public function setActive($active);
-
-    public function acceptTerms();
-
-    /**
-     * @return string
-     */
-    public function getTemplate();
+    public function up($modus)
+    {
+        $this->addSql('ALTER TABLE `s_cms_support` ADD COLUMN `active` TINYINT(1) NOT NULL DEFAULT 1 AFTER `id`;');
+    }
 }

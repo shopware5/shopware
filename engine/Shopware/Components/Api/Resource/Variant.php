@@ -533,7 +533,7 @@ class Variant extends Resource implements BatchInterface
          *
          * If `lastStock` was only defined on the main product, apply it to all it's variants
          */
-        if (empty($data['lastStock'])) {
+        if (!isset($data['lastStock'])) {
             $data['lastStock'] = $article->getLastStock();
         }
 

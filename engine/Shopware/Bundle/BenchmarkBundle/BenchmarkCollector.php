@@ -32,9 +32,9 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     private $providers;
 
     /**
-     * @param BenchmarkProviderInterface[] $providers
+     * @param \IteratorAggregate $providers
      */
-    public function __construct(array $providers)
+    public function __construct(\IteratorAggregate $providers)
     {
         $this->providers = $providers;
     }
