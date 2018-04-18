@@ -1213,7 +1213,7 @@ class Media extends ModelEntity
                 $name = $fileInfo['filename'];
             }
 
-            if ($fileInfo['extension']) {
+            if (isset($fileInfo['extension'])) {
                 $extension = $fileInfo['extension'];
             }
         }
