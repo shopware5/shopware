@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer;
@@ -393,11 +392,11 @@ class sOrder
 
         $this->sBasketData['AmountNetNumeric'] = round($this->sBasketData['AmountNetNumeric'], 2);
 
-        if (empty($this->sSYSTEM->sCurrency['currency'])) {
-            $this->sSYSTEM->sCurrency['currency'] = 'EUR';
+        if (empty($this->sBasketData['sCurrencyName'])) {
+            $this->sBasketData['sCurrencyName'] = 'EUR';
         }
-        if (empty($this->sSYSTEM->sCurrency['factor'])) {
-            $this->sSYSTEM->sCurrency['factor'] = '1';
+        if (empty($this->sBasketData['sCurrencyFactor'])) {
+            $this->sBasketData['sCurrencyFactor'] = '1';
         }
 
         $shop = Shopware()->Shop();
@@ -436,8 +435,8 @@ class sOrder
             'referer' => (string) $this->getSession()->offsetGet('sReferer'),
             'language' => $shop->getId(),
             'dispatchID' => $dispatchId,
-            'currency' => $this->sSYSTEM->sCurrency['currency'],
-            'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
+            'currency' => $this->sBasketData['sCurrencyName'],
+            'currencyFactor' => $this->sBasketData['sCurrencyFactor'],
             'subshopID' => $mainShop->getId(),
             'deviceType' => $this->deviceType,
         ];
@@ -559,11 +558,11 @@ class sOrder
 
         $this->sBasketData['AmountNetNumeric'] = round($this->sBasketData['AmountNetNumeric'], 2);
 
-        if (empty($this->sSYSTEM->sCurrency['currency'])) {
-            $this->sSYSTEM->sCurrency['currency'] = 'EUR';
+        if (empty($this->sBasketData['sCurrencyName'])) {
+            $this->sBasketData['sCurrencyName'] = 'EUR';
         }
-        if (empty($this->sSYSTEM->sCurrency['factor'])) {
-            $this->sSYSTEM->sCurrency['factor'] = '1';
+        if (empty($this->sBasketData['sCurrencyFactor'])) {
+            $this->sBasketData['sCurrencyFactor'] = '1';
         }
 
         $shop = Shopware()->Shop();
@@ -602,8 +601,8 @@ class sOrder
             'referer' => (string) $this->getSession()->offsetGet('sReferer'),
             'language' => $shop->getId(),
             'dispatchID' => $dispatchId,
-            'currency' => $this->sSYSTEM->sCurrency['currency'],
-            'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
+            'currency' => $this->sBasketData['sCurrencyName'],
+            'currencyFactor' => $this->sBasketData['sCurrencyFactor'],
             'subshopID' => $mainShop->getId(),
             'remote_addr' => (string) $_SERVER['REMOTE_ADDR'],
             'deviceType' => $this->deviceType,
@@ -655,7 +654,7 @@ class sOrder
                 'orderParams' => $orderParams,
             ]
         );
-        
+
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
         unset($attributes['id']);
@@ -793,10 +792,10 @@ class sOrder
             'billingaddress' => $this->sUserData['billingaddress'],
             'shippingaddress' => $this->sUserData['shippingaddress'],
             'additional' => $this->sUserData['additional'],
-            'sShippingCosts' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sShippingcosts) . ' ' . $this->sSYSTEM->sCurrency['currency'],
-            'sAmount' => $this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax) . ' ' . $this->sSYSTEM->sCurrency['currency'] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount) . ' ' . $this->sSYSTEM->sCurrency['currency'],
+            'sShippingCosts' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sShippingcosts) . ' ' . $this->sBasketData['sCurrencyName'],
+            'sAmount' => $this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax) . ' ' . $this->sBasketData['sCurrencyName'] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount) . ' ' . $this->sBasketData['sCurrencyName'],
             'sAmountNumeric' => $this->sAmountWithTax ? $this->sAmountWithTax : $this->sAmount,
-            'sAmountNet' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData['AmountNetNumeric']) . ' ' . $this->sSYSTEM->sCurrency['currency'],
+            'sAmountNet' => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData['AmountNetNumeric']) . ' ' . $this->sBasketData['sCurrencyName'],
             'sAmountNetNumeric' => $this->sBasketData['AmountNetNumeric'],
             'sTaxRates' => $this->sBasketData['sTaxRates'],
             'ordernumber' => $orderNumber,
@@ -874,7 +873,7 @@ class sOrder
             'sComment' => $variables['sComment'],
 
             'attributes' => $variables['attributes'],
-            'sCurrency' => $this->sSYSTEM->sCurrency['currency'],
+            'sCurrency' => $this->sBasketData['sCurrencyName'],
 
             'sLanguage' => $shopContext->getShop()->getId(),
 
@@ -903,7 +902,7 @@ class sOrder
         if ($variables['sBookingID']) {
             $context['sBookingID'] = $variables['sBookingID'];
         }
-        
+
         $context = $this->eventManager->filter(
             'Shopware_Modules_Order_SendMail_FilterContext',
             $context,

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
@@ -400,6 +399,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if ($this->Request()->isGet()) {
             return $this->forward('confirm');
         }
+
+        $this->updateCurrencyDependencies($basket['sCurrencyId']);
 
         $this->saveOrder();
         $this->saveDefaultAddresses();
@@ -983,8 +984,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $basket = $this->basket->sGetBasket();
 
-        $basket['sCurrencyId'] = Shopware()->Shop()->getCurrency()->getId();
-        $basket['sCurrencyName'] = Shopware()->Shop()->getCurrency()->getCurrency();
+        /** @var \Shopware\Models\Shop\Currency $currency */
+        $currency = $this->get('shop')->getCurrency();
+
+        $basket['sCurrencyId'] = $currency->getId();
+        $basket['sCurrencyName'] = $currency->getCurrency();
+        $basket['sCurrencyFactor'] = $currency->getFactor();
         $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
         $basket['sShippingcostsNet'] = $shippingcosts['netto'];
         $basket['sShippingcostsTax'] = $shippingcosts['tax'];
@@ -1930,5 +1935,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $persister->persist($signature, $basket);
 
         return $signature;
+    }
+
+    /**
+     * Updates all currency dependies (e.g. in the shop model or in the shop context).
+     *
+     * @param int $currencyId
+     */
+    private function updateCurrencyDependencies($currencyId)
+    {
+        /** @var \Shopware\Models\Shop\Currency $currencyModel */
+        $currencyModel = $this->get('models')->find(\Shopware\Models\Shop\Currency::class, $currencyId);
+
+        /** @var Shopware\Models\Shop\Shop $shopModel */
+        $shopModel = $this->get('shop');
+        $shopModel->setCurrency($currencyModel);
+
+        /** @var $currency \Zend_Currency */
+        $currency = $this->get('Currency');
+        $currency->setFormat($currencyModel->toArray());
+
+        $this->get('shopware_storefront.context_service')->initializeShopContext();
     }
 }
