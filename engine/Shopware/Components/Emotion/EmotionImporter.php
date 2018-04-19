@@ -95,7 +95,7 @@ class EmotionImporter implements EmotionImporterInterface
      */
     public function cleanupImport($filePath, $presetId = null)
     {
-        $extractPath = dirname($filePath) . '/' . pathinfo($filePath, PATHINFO_FILENAME);
+        $extractPath = dirname($filePath) . '/' . basename($filePath);
 
         $this->filesystem->remove($extractPath);
 
