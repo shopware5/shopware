@@ -171,7 +171,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
         $query = $this->connection->createQueryBuilder();
         $query->from('(' . $subQuery->getSQL() . ')', 'sr')
-            ->innerJoin('sr', 's_articles', 'a', 'a.id = sr.articleID');
+            ->innerJoin('sr', 's_articles', 'a', 'a.id = sr.articleID AND a.active = 1');
 
         return $query;
     }
