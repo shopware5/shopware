@@ -321,8 +321,16 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $user->fromArray($params);
 
-        // Do logout
-        // $user->setSessionId('');
+        if (isset($params['locked'])) {
+            if (empty($params['locked'])) {
+                $user->setLockedUntil(null);
+                $user->setFailedLogins(0);
+            } else {
+                $curDate = new DateTime();
+                $curDate->add(new DateInterval('P100Y'));
+                $user->setLockedUntil($curDate);
+            }
+        }
 
         Shopware()->Models()->persist($user);
         Shopware()->Models()->flush();

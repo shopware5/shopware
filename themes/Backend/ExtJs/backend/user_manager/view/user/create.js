@@ -136,17 +136,6 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
      *
      * @return
      */
-    getUserPermissions: function(){
-       /*return Ext.create('Ext.panel.Panel',{
-           title: '{s name="create_user/tab_permissions"}Permissions{/s}',
-           html: 'Test'
-       });*/
-    },
-
-    /**
-     *
-     * @return
-     */
     getUserForm: function(){
         var me = this;
 
@@ -214,6 +203,14 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
 
                                inputValue:1,
                                supportText: '{s name=create_user/enabled_info}Enable or disable this account{/s}'
+                           },
+                           {
+                               xtype: 'checkbox',
+                               name: 'locked',
+                               boxLabel: '{s name=create_user/locked}Locked{/s}',
+                               anchor: '100%',
+                               uncheckedValue: 0,
+                               inputValue: 1
                            }
                        ]
                   },
