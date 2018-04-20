@@ -49,7 +49,17 @@ Ext.define('Shopware.apps.UserManager.model.UserDetail', {
         'failedlogins',
         'password',
         { name: 'extendedEditor', type: 'boolean'},
-        { name: 'disabledCache', type: 'boolean'}
+        { name: 'disabledCache', type: 'boolean'},
+        { name: 'lockedUntil', type: 'date'},
+        {
+            name: 'locked',
+            type: 'boolean',
+            convert: function (defaultValue, record) {
+                var lockedUntil = record.get('lockedUntil') ? record.get('lockedUntil').getTime() : 0;
+                var currentDate = new Date();
+                return lockedUntil >= currentDate.getTime();
+            }
+        }
     ],
     proxy: {
         type: 'ajax',

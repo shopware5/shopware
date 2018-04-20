@@ -151,6 +151,16 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             record.set('apiKey', '');
         }
 
+        if (values.locked === 0) {
+            record.set('lockedUntil', null);
+            record.set('locked', false);
+        } else {
+            var lockedUntil = new Date();
+            lockedUntil.setFullYear(lockedUntil.getFullYear() + 100);
+            record.set('lockedUntil', lockedUntil);
+            record.set('locked', true);
+        }
+
         Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
 
             formPnl.up('window').setLoading(true);
