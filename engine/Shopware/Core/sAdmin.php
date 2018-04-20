@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
@@ -160,6 +162,11 @@ class sAdmin
     private $translationComponent;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null          $db
      * @param Enlight_Event_EventManager|null                       $eventManager
      * @param Shopware_Components_Config|null                       $config
@@ -174,6 +181,7 @@ class sAdmin
      * @param AddressServiceInterface|null                          $addressService
      * @param NumberRangeIncrementerInterface|null                  $numberRangeIncrementer
      * @param Shopware_Components_Translation|null                  $translationComponent
+     * @param Connection|null                                       $connection
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -189,7 +197,8 @@ class sAdmin
         EmailValidatorInterface $emailValidator = null,
         AddressServiceInterface $addressService = null,
         NumberRangeIncrementerInterface $numberRangeIncrementer = null,
-        Shopware_Components_Translation $translationComponent = null
+        Shopware_Components_Translation $translationComponent = null,
+        Connection $connection = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -212,6 +221,7 @@ class sAdmin
         $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
         $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
     }
 
     /**
@@ -3108,13 +3118,13 @@ class sAdmin
      * Called when provided user data is correct
      * Logs in the user
      *
-     * @param $getUser
-     * @param $email
-     * @param $password
-     * @param $isPreHashed
-     * @param $encoderName
-     * @param $plaintext
-     * @param $hash
+     * @param array $getUser
+     * @param string $email
+     * @param string $password
+     * @param bool $isPreHashed
+     * @param string $encoderName
+     * @param string $plaintext
+     * @param string $hash
      */
     protected function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
     {
@@ -3168,6 +3178,15 @@ class sAdmin
         $this->session->offsetSet('sUserMail', $email);
         $this->session->offsetSet('sUserPassword', $hash);
         $this->session->offsetSet('sUserId', $getUser['id']);
+
+        // Update note userID
+        $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+        if (!empty($uniqueId)) {
+            $this->connection->executeQuery('UPDATE s_order_notes SET userID = :userId WHERE sUniqueID = :uniqueId AND userID = 0', [
+                'userId' => $getUser['id'],
+                'uniqueId' => $uniqueId
+            ]);
+        }
 
         $this->sCheckUser();
     }
