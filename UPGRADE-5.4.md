@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `Shopware_Controllers_Widgets_Listing_fetchPagination_preFetch`
 * Added a new category for the basic setting containing privacy options
 * Added possibility to enable/disable data protection information texts
+* Added theme data to the mail context
 
 ### Changes
 
