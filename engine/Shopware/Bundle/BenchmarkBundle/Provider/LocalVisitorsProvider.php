@@ -27,7 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 
-class LocalOrdersProvider implements BenchmarkProviderInterface
+class LocalVisitorsProvider implements BenchmarkProviderInterface
 {
     /**
      * @var Connection
@@ -41,42 +41,33 @@ class LocalOrdersProvider implements BenchmarkProviderInterface
 
     public function getName()
     {
-        return 'orders';
+        return 'visitors';
     }
 
     public function getBenchmarkData()
     {
-        return $this->getOrderDataByDay();
+        return $this->getVisitorsByDay();
     }
 
     /**
      * @return array
      */
-    private function getOrderDataByDay()
+    private function getVisitorsByDay()
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
         $result = $queryBuilder->select([
-                'DATE(orders.ordertime) as orderTime',
-                'DAYNAME(orders.ordertime) as dayOfWeek',
-                'SUM(orders.invoice_amount) as orderAmount',
-                'SUM(orders.invoice_amount_net) as orderAmountNet',
-                'COUNT(orders.id) as totalOrders',
+                'DATE(visitors.datum) as day',
+                'SUM(visitors.uniquevisits) as visitors',
             ])
-            ->from('s_order', 'orders')
-            ->orderBy('orders.ordertime', 'asc')
-            ->groupBy('DATE(orders.ordertime)')
+            ->from('s_statistics_visitors', 'visitors')
+            ->orderBy('visitors.datum', 'asc')
+            ->groupBy('DATE(visitors.datum)')
             ->setMaxResults(365)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-        $result = array_map(function ($item) {
-            $item['orderAmount'] = round((float) $item['orderAmount'], 2);
-            $item['orderAmountNet'] = round((float) $item['orderAmountNet'], 2);
-            $item['totalOrders'] = (int) $item['totalOrders'];
-
-            return $item;
-        }, $result);
+        $result = array_map('intval', $result);
 
         return $result;
     }

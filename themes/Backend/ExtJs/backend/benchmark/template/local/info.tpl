@@ -8,8 +8,8 @@
         <div class="swag-onbording">
             <div class="tob-bar">
                 <ul class="top-benefits">
-                    <li>Keine Kosten</li>
-                    <li>Komplett anonym</li>
+                    <li>Kostenlos</li>
+                    <li>Anonym</li>
                     <li>Unverbindlich</li>
                 </ul>
             </div>
@@ -19,36 +19,27 @@
                     <h1>Fragen & Antworten</h1>
 
                     <div class="row">
-                        <div class="col-m">
-                            <h2>Was passiert mit meinen Daten?</h2>
-                            <p>Deine Daten werden anonym abgelegt - dies bedeutet, dass dein Export eine ID bekommt die
-                                niemand kennt und es auch nicht möglich ist von deinen Shopnamen oder anderen Daten
-                                diese ausfindig zu machen.</p>
+                        <div class="col-66">
+                            <h2>Was passiert mit meinen Daten? </h2>
+                            <p>Wir behandeln Deine Daten immer streng anonym. Der Export mit Deiner Auswertung wird mit einer anonymisierten ID versehen und macht den Rückschluss auf Dich und Deinen Shop unmöglich.</p>
 
-                            <h2>Wie werden meine Daten genutzt?</h2>
-                            <p>Ausschließlich für die Auswertungen und den Branchen-Vergleich. Um so mehr Daten wir in
-                                jeder Branche erhalten um so effektiver und informativer werden die Ergebnisse. Die
-                                Auswertungen sind ebenfalls bestandteil einer Trainingsphase für einen möglichen
-                                Shopware-AI Service.</p>
+                            <h2>Wofür werden meine Daten verwendet/benutzt?</h2>
+                            <p>Wir verwenden die Daten ausschließlich für Shop-Auswertungen und Branchenvergleiche. Je mehr Daten wir zu jeder Branche erhalten, desto informativer und effektiver wird die Benchmark zusammengestellt.</p>
 
-                            <h2>Weshalb könnte das für mich nützlich sein?</h2>
-                            <p>Bisher kannst du dir nur deine Statistiken ansehen oder auf Shopbetreiber-Treffen Infos
-                                von anderen erfragen. Mit diesem Branchen-Vergleich wird es dir möglichkeit sein, anhand
-                                von Zahlen und Fakten defiziten zu erkennen und gezielt Maßnahmen zu ergreifen. <strong>Lerne
-                                    deinen Shop noch besser kenn.</strong></p>
+                            <h2>Warum ist das für mich nützlich?</h2>
+                            <p>Bisher siehst Du nur Deine eigenen Statistiken und kannst nur selten bis gar nicht den Vergleichswert von anderen Onlineshops Deiner Branche bekommen. Der Branchenvergleich von Shopware macht es Dir möglich, anhand von Zahlen und Fakten Defizite zu erkennen und gezielt Maßnahmen zu ergreifen. <br><strong>Lerne Deinen Shop noch besser kenn.</strong></p>
                         </div>
 
-                        <div class="col-s">
+                        <div class="col-33">
                             <h2><span class="check-color">Die Fakten</span></h2>
                             <ul class="top-benefits">
-                                <li>Auswertung deiner Shopdaten</li>
+                                <li>Auswertung Deiner Shop-Daten</li>
                                 <li>Vergleich mit Branchendaten</li>
-                                <li>Hochwertige Darstellung</li>
-                                <li>Auto Aktualisierungen</li>
-                                <li>Keine Kosten</li>
-                                <li>Komplett anonym</li>
-                                <li>Komplett unverbindlich</li>
-                                <li>Sofortige Abmeldung möglich</li>
+                                <li>Einfache Usabilty</li>
+                                <li>Auto-Aktualisierungen</li>
+                                <li>Kostenlos</li>
+                                <li>Anonym</li>
+                                <li>Unverbindlich</li>
                             </ul>
                         </div>
                     </div>

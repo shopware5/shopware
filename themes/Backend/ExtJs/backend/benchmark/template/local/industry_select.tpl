@@ -36,7 +36,7 @@
                                     <option value="21">Fahrzeuge & Teile</option>
                                 </select>
                             </div>
-                            <p>Wähle deine Branche aus, damit die Daten <br />verglichen werden können.</p>
+                            <p>Wähle Deine Branche aus, damit die Daten <br />verglichen werden können.</p>
 
                             <button type="submit" class="btn secondary">Jetzt speichern</button>
                         </form>

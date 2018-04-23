@@ -93,7 +93,7 @@ class ProductsProviderTest extends ProviderTestCase
         $provider = $this->getProvider();
         $resultData = $provider->getBenchmarkData();
 
-        $this->assertSame(3, $resultData['images']['average']);
+        $this->assertSame(3.0, $resultData['images']['average']);
         $this->assertSame(2, $resultData['images']['missing']);
     }
 }

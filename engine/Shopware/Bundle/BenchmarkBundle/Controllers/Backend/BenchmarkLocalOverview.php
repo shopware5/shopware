@@ -40,7 +40,13 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $this->get('plugins')->Controller()->ViewRenderer()->setNoRender(false);
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $this->View()->loadTemplate($this->getTemplate());
+        $template = $this->getTemplate();
+
+        $this->View()->loadTemplate(sprintf('backend/benchmark/template/local/%s.tpl', $template));
+
+        if ($template === 'statistics') {
+            $this->View()->assign('benchmarkData', $this->get('shopware.benchmark_bundle.local_collector')->get());
+        }
     }
 
     /**
@@ -57,9 +63,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         }
 
         // Prevents directory traversal
-        $templateParam = FlySystem\Util::normalizeRelativePath($templateParam);
-
-        return sprintf('backend/benchmark/template/local/%s.tpl', $templateParam);
+        return FlySystem\Util::normalizeRelativePath($templateParam);
     }
 
     /**

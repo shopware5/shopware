@@ -62,6 +62,9 @@ class BenchmarkService
         $this->benchmarkRepository = $benchmarkRepository;
     }
 
+    /**
+     * @return BenchmarkResponse
+     */
     public function transmit()
     {
         $this->benchmarkCollector->get();
