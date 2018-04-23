@@ -171,6 +171,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     getRequestConfig: function(win, progress, taskName, resource) {
         return {
             batchSize: win.batchSizeCombo.getValue(),
+            concurrencySize: win.concurrencySizeCombo.getValue(),
             progress: win[progress],
             requestUrl: win[taskName][resource].requestUrl,
             totalCount: win.taskConfig.totalCounts[resource] * 1,
@@ -329,6 +330,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         // Set the params single, to support additional request params
         params.offset = offset;
         params.limit = currentConfig.batchSize;
+        params.concurrent = currentConfig.concurrencySize;
 
         Ext.Ajax.request({
             url: currentConfig.requestUrl,
@@ -346,7 +348,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                     me.snippets.error.message,
                     response.status,
                     response.statusText
-                ].join('</br>');
+                ].join('<br/>');
 
                 me.resetButtons(dialog);
                 Shopware.Notification.createGrowlMessage(me.snippets.error.title, message);
@@ -375,6 +377,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
 
         dialog.combo.disable();
         config.batchSize = dialog.combo.getValue();
+        config.concurrencySize = dialog.combo.getValue();
         config.progress = dialog.progressBar;
         config.snippet = me.snippets.process;
 
