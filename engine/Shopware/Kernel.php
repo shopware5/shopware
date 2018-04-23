@@ -240,7 +240,7 @@ class Kernel implements HttpKernelInterface
         // Overwrite superglobals with state of the SymfonyRequest
         $request->overrideGlobals();
 
-        // Create englight request from global state
+        // Create enlight request from global state
         $enlightRequest = new EnlightRequest();
 
         // Let the symfony request handle the trusted proxies
@@ -294,7 +294,7 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
-     * Boots the shopware and symfony di container
+     * Boots the Shopware and Symfony DI container
      *
      * @param bool $skipDatabase
      *
