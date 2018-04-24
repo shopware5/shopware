@@ -56,7 +56,7 @@
             {if (!isset($sArticle.active) || $sArticle.active)}
                 {if $sArticle.isAvailable}
                     {block name="frontend_detail_buy_button_container"}
-                        <div class="buybox--button-container block-group{if $NotifyHideBasket && $sArticle.notification && $sArticle.instock < $sArticle.minstock} is--hidden{/if}">
+                        <div class="buybox--button-container block-group{if $NotifyHideBasket && $sArticle.notification && $sArticle.instock <= 0} is--hidden{/if}">
 
                             {* Quantity selection *}
                             {block name='frontend_detail_buy_quantity'}
