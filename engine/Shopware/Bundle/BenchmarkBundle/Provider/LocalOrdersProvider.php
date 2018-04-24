@@ -59,11 +59,13 @@ class LocalOrdersProvider implements BenchmarkProviderInterface
         $result = $queryBuilder->select([
                 'DATE(orders.ordertime) as orderTime',
                 'DAYNAME(orders.ordertime) as dayOfWeek',
-                'SUM(orders.invoice_amount) as orderAmount',
-                'SUM(orders.invoice_amount_net) as orderAmountNet',
+                'SUM(orders.invoice_amount/currencyFactor) as orderAmount',
+                'SUM(orders.invoice_amount_net/currencyFactor) as orderAmountNet',
                 'COUNT(orders.id) as totalOrders',
             ])
             ->from('s_order', 'orders')
+            ->where('orders.status != 4')
+            ->andWhere('orders.status != -1')
             ->orderBy('orders.ordertime', 'asc')
             ->groupBy('DATE(orders.ordertime)')
             ->setMaxResults(365)

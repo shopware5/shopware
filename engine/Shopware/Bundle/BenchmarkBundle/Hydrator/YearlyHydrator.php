@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
-class YearlyHydrator implements HydratorInterface
+class YearlyHydrator extends BaseTimeHydrator
 {
     /**
      * {@inheritdoc}
@@ -45,27 +45,7 @@ class YearlyHydrator implements HydratorInterface
         $hydratedOrders = $this->hydrateOrders($months, $data['orders']);
         $hydratedVisitors = $this->hydrateVisitors($months, $data['visitors']);
 
-        $hydratedNumbers = [];
-        $hydratedNumbers['labels'] = $labels;
-        foreach ($labels as $label) {
-            // Format orders turnOver
-            if (!$hydratedOrders[$label]) {
-                $hydratedNumbers['turnOver']['values'][] = 0;
-                $hydratedNumbers['totalOrders']['values'][] = 0;
-            } else {
-                $hydratedNumbers['turnOver']['values'][] = $hydratedOrders[$label]['turnOver'];
-                $hydratedNumbers['totalOrders']['values'][] = $hydratedOrders[$label]['totalOrders'];
-            }
-
-            // Format visitors
-            if (!$hydratedVisitors[$label]) {
-                $hydratedNumbers['visitors']['values'][] = 0;
-            } else {
-                $hydratedNumbers['visitors']['values'][] = $hydratedVisitors[$label]['totalVisitors'];
-            }
-        }
-
-        return $hydratedNumbers;
+        return $this->hydrateWithLabels($labels, $hydratedOrders, $hydratedVisitors);
     }
 
     /**

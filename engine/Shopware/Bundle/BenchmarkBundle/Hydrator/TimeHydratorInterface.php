@@ -22,40 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
-use Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydratorInterface;
-
-class BenchmarkLocalHydrator
+interface TimeHydratorInterface extends HydratorInterface
 {
     /**
-     * @var \IteratorAggregate
-     */
-    private $hydrators;
-
-    /**
-     * @param \IteratorAggregate $hydrators
-     */
-    public function __construct(\IteratorAggregate $hydrators)
-    {
-        $this->hydrators = $hydrators;
-    }
-
-    /**
-     * @param array $data
-     *
      * @return string
      */
-    public function hydrate(array $data)
-    {
-        $hydratedData = [];
-
-        /** @var TimeHydratorInterface $hydrator */
-        foreach ($this->hydrators as $hydrator) {
-            $hydrateResult = $hydrator->hydrate($data);
-            $hydratedData['local'][$hydrator->getName()] = $hydrateResult;
-        }
-
-        return json_encode($hydratedData);
-    }
+    public function getName();
 }

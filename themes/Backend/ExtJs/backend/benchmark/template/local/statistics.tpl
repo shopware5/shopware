@@ -76,7 +76,9 @@
             <div class="swag-chart">
                 <div class="swag-container">
                     <h1>Conversion</h1>
-                    <div id="swag-chart--conversion" class="column-graph"></div>
+                    <div id="swag-chart--conversion" class="column-graph">
+                        {include file="backend/benchmark/template/local/include/graph-data.tpl" dataKey='conversions' chartType='bar'}
+                    </div>
                 </div>
             </div>
 
@@ -397,7 +399,7 @@
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="{link file='backend/benchmark/template/local/js/slider.js'}"></script>
-        <script src="{link file='backend/benchmark/template/local/js/line_graph.js'}"></script>
+        <script src="{link file='backend/benchmark/template/local/js/benchmark_charts.js'}"></script>
         <script src="{link file='backend/benchmark/template/local/js/time_switcher.js'}"></script>
         <script src="{link file='backend/benchmark/template/local/vendor/js/chart.js'}"></script>
         <script type="text/javascript">

@@ -10,7 +10,8 @@
                 data-benchmark-graph="true"
                 data-name="{$dataKey}"
                 data-include-business="false"
-                data-time="weeks">
+                data-time="weeks"
+                data-chart-type="{$chartType|default:"line"}">
         </canvas>
     </div>
 

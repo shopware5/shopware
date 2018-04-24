@@ -19,7 +19,8 @@ TimeSwitcher.prototype.init = function () {
  */
 TimeSwitcher.prototype.onClickEl = function (event) {
     var currentTarget = $(event.currentTarget),
-        newCanvasTpl;
+        newCanvasTpl,
+        $previousCanvasEl;
     if (currentTarget.hasClass('is-active')) {
         return;
     }
@@ -27,7 +28,9 @@ TimeSwitcher.prototype.onClickEl = function (event) {
     this.timeScaleElements.removeClass('is-active');
     currentTarget.addClass('is-active');
 
-    newCanvasTpl = this.getCanvas(this.valuesKey, currentTarget.attr('name'));
+    $previousCanvasEl = this.graphContainer.find('canvas');
+    newCanvasTpl = this.getCanvas(this.valuesKey, currentTarget.attr('name'), $previousCanvasEl.attr('data-chart-type'));
+
     this.graphContainer.empty();
     this.graphContainer.append(newCanvasTpl);
     newCanvasTpl.benchmarkGraph();
@@ -41,13 +44,14 @@ TimeSwitcher.prototype.onClickEl = function (event) {
  * @param { string } timeSpan
  * @returns { jQuery }
  */
-TimeSwitcher.prototype.getCanvas = function (dataKey, timeSpan) {
+TimeSwitcher.prototype.getCanvas = function (dataKey, timeSpan, chartType) {
     return $('<canvas></canvas>')
         .attr('height', 260)
         .attr('data-benchmark-graph', 'true')
         .attr('data-name', dataKey)
         .attr('data-include-business', false)
-        .attr('data-time', timeSpan);
+        .attr('data-time', timeSpan)
+        .attr('data-chart-type', chartType);
 };
 
 $.fn.timeSwitcher = function() {

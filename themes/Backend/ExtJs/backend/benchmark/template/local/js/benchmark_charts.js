@@ -6,28 +6,29 @@ var globals  = {
     businessColor: '#6A63FC'
 };
 
-function BenchmarkGraph(el) {
+function BenchmarkChart(el) {
     this.el = el;
     this.name = el.getAttribute('data-name');
     this.time = el.getAttribute('data-time');
     this.includeBusiness = (el.getAttribute('data-include-business') === 'true');
+    this.chartType = el.getAttribute('data-chart-type');
 
     this.init();
 }
 
-BenchmarkGraph.prototype.init = function() {
+BenchmarkChart.prototype.init = function() {
     this.initDefaultConfig();
     this.initTimeRangeLabel();
 
     new Chart(this.el.getContext('2d'), this.buildConfig());
 };
 
-BenchmarkGraph.prototype.initDefaultConfig = function () {
+BenchmarkChart.prototype.initDefaultConfig = function () {
     Chart.defaults.global.defaultFontColor = '#798EA3';
     Chart.defaults.global.defaultFontFamily = 'Brandon';
 };
 
-BenchmarkGraph.prototype.initTimeRangeLabel = function () {
+BenchmarkChart.prototype.initTimeRangeLabel = function () {
     this.timeRangeLabel = '';
 
     //TODO: Translations?
@@ -44,9 +45,9 @@ BenchmarkGraph.prototype.initTimeRangeLabel = function () {
     }
 };
 
-BenchmarkGraph.prototype.buildConfig = function() {
+BenchmarkChart.prototype.buildConfig = function() {
     return {
-        type: 'line',
+        type: this.chartType,
         data: {
             labels: window.benchmarkData['local'][this.time].labels,
             datasets: this.getDatasets()
@@ -55,7 +56,7 @@ BenchmarkGraph.prototype.buildConfig = function() {
     };
 };
 
-BenchmarkGraph.prototype.getDatasets = function() {
+BenchmarkChart.prototype.getDatasets = function() {
     var dataSets = [];
 
     // Shop data
@@ -90,7 +91,7 @@ BenchmarkGraph.prototype.getDatasets = function() {
     return dataSets;
 };
 
-BenchmarkGraph.prototype.getOptions = function() {
+BenchmarkChart.prototype.getOptions = function() {
     return {
         maintainAspectRatio: false,
         tooltips: {
@@ -130,7 +131,7 @@ BenchmarkGraph.prototype.getOptions = function() {
 
 $.fn.benchmarkGraph = function() {
     return this.each(function() {
-        new BenchmarkGraph(this);
+        new BenchmarkChart(this);
     });
 };
 
