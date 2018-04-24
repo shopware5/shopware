@@ -92,7 +92,6 @@
                                 {$sArticle.price|currency}
                                 {s name="Star" namespace="frontend/listing/box_article"}{/s}
                             </span>
-                        {/block}
                     {/block}
 
                     {* Article unit price *}
@@ -112,6 +111,7 @@
                                 {/if}
                             </div>
                         {/if}
+                        {/block}
                     </li>
                 {/block}
 
