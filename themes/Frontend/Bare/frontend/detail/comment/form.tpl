@@ -90,6 +90,13 @@
             </p>
         {/block}
 
+        {* Data protection information *}
+        {block name='frontend_detail_comment_input_privacy'}
+            {if {config name=ACTDPRTEXT}}
+                {include file="frontend/_includes/privacy.tpl"}
+            {/if}
+        {/block}
+
         {* Review actions *}
         {block name='frontend_detail_comment_input_actions'}
             <div class="review--actions">

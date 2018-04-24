@@ -11,6 +11,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new events to `Shopware_Controllers_Widgets_Listing::listingCountAction` to modify view variables before the template is fetched
   * `Shopware_Controllers_Widgets_Listing_fetchListing_preFetch`
   * `Shopware_Controllers_Widgets_Listing_fetchPagination_preFetch`
+* Added a new category for the basic setting containing privacy options
+* Added possibility to enable/disable data protection information texts
 
 ### Changes
 
@@ -22,6 +24,11 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed the notification box behaviour when products are out of stock
 * Changed API behaviour on update, when the lastStock parameter is set for a product its applied to its mainDetail aswell (like on creation)
 * Changed newsletter recipient count to work correctly with customer streams
+* Changed position of serveral privacy options to the privacy basic setting category
+
+### Removals
+
+* Removed now empty "Cookie hint" basic setting category in backend
 
 ## 5.4.2
 
