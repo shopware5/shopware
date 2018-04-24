@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `Shopware_Controllers_Widgets_Listing_fetchPagination_preFetch`
 * Added a new category for the basic setting containing privacy options
 * Added possibility to enable/disable data protection information texts
+* Registed class `Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch` additionally as service `shopware_searchdbal.product_number_search`
 
 ### Changes
 

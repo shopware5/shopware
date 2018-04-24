@@ -14,6 +14,15 @@
             <argument type="service" id="service_container" />
         </service>
 
+        <service id="shopware_searchdbal.product_number_search" class="Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
+            <argument type="service" id="events" />
+
+            <!--facet handler-->
+            <argument type="collection" />
+            <argument type="service" id="service_container" />
+        </service>
+
         <service id="shopware_searchdbal.search_price_helper_dbal" class="Shopware\Bundle\SearchBundleDBAL\PriceHelper">
             <argument type="service" id="config" />
         </service>
