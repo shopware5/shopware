@@ -180,7 +180,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             if ($src[1] === 'a' && preg_match('#^https?://#', $src[3])) {
                 $host = @parse_url($src[3], PHP_URL_HOST);
                 if (!strstr($src[0], 'rel=') && !in_array($host, $this->backLinkWhiteList)) {
-                    $src[0] = rtrim($src[0], '>') . ' rel="nofollow">';
+                    $src[0] = rtrim($src[0], '>') . ' rel="nofollow noopener">';
                 }
             }
         }
