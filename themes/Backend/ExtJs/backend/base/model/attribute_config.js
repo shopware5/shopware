@@ -18,6 +18,7 @@ Ext.define('Shopware.model.AttributeConfig', {
         { name: 'supportText', type: 'string' },
         { name: 'translatable', type: 'boolean' },
         { name: 'displayInBackend', type: 'boolean', defaultValue: true },
+        { name: 'readonly', type: 'boolean', defaultValue: false },
         { name: 'pluginId', type: 'integer' },
         { name: 'configured', type: 'boolean' },
         { name: 'position', type: 'integer' },

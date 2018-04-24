@@ -341,18 +341,19 @@ Ext.define('Shopware.attribute.Form', {
         var me = this, fields = [];
 
         Ext.each(attributes, function(attribute) {
-            var field = {
-                name: '__attribute_' + attribute.get('columnName'),
-                translatable: attribute.get('translatable'),
-                fieldLabel: attribute.get('label'),
-                supportText: attribute.get('supportText'),
-                helpText: attribute.get('helpText'),
-                labelWidth: 155,
-                value: attribute.get('defaultValue')
-            };
             var handler = me.getTypeHandler(attribute);
 
             if (handler && attribute.get('displayInBackend')) {
+                var field = {
+                    name: '__attribute_' + attribute.get('columnName'),
+                    translatable: attribute.get('translatable'),
+                    fieldLabel: attribute.get('label'),
+                    supportText: attribute.get('supportText'),
+                    helpText: attribute.get('helpText'),
+                    labelWidth: 155,
+                    value: attribute.get('defaultValue'),
+                    disabled: attribute.get('readonly')
+                };
                 fields.push(handler.create(field, attribute));
             }
         });

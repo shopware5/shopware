@@ -374,6 +374,7 @@ Ext.define('Shopware.apps.Attributes.view.Detail', {
                         helpText: { fieldLabel: '{s name="help_text"}{/s}', translatable: true },
                         position: '{s name="position"}{/s}',
                         displayInBackend: '{s name="display_in_backend"}{/s}',
+                        readonly: '{s name="readonly"}{/s}',
                         translatable: '{s name="translatable"}{/s}',
                         arrayStore: me.createArrayStore
                     }
