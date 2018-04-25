@@ -118,5 +118,9 @@
             <argument id="dbal_connection" type="service"/>
             <argument id="config" type="service"/>
         </service>
+
+        <service id="shopware_account.maintenance_service" class="Shopware\Bundle\AccountBundle\Service\MaintenanceService" >
+            <argument id="dbal_connection" type="service"/>
+        </service>
     </services>
 </container>
