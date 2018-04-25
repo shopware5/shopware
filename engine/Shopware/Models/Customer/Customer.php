@@ -452,6 +452,24 @@ class Customer extends LazyFetchModelEntity
     private $birthday;
 
     /**
+     * @var \boolean
+     * @ORM\Column(name="doubleOptinRegister", type="boolean", nullable=false)
+     */
+    private $doubleOptinRegister;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="doubleOptinEmailSentDate", type="datetime", nullable=true)
+     */
+    private $doubleOptinEmailSentDate;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="doubleOptinConfirmDate", type="datetime", nullable=true)
+     */
+    private $doubleOptinConfirmDate;
+
+    /**
      * @var string
      */
     private $customerType;
@@ -1409,5 +1427,53 @@ class Customer extends LazyFetchModelEntity
     public function setAdditional($additional)
     {
         $this->additional = $additional;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDoubleOptinRegister()
+    {
+        return $this->doubleOptinRegister;
+    }
+
+    /**
+     * @param bool $doubleOptinRegister
+     */
+    public function setDoubleOptinRegister($doubleOptinRegister)
+    {
+        $this->doubleOptinRegister = $doubleOptinRegister;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinEmailSentDate()
+    {
+        return $this->doubleOptinEmailSentDate;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinEmailSentDate
+     */
+    public function setDoubleOptinEmailSentDate($doubleOptinEmailSentDate)
+    {
+        $this->doubleOptinEmailSentDate = $doubleOptinEmailSentDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinConfirmDate()
+    {
+        return $this->doubleOptinConfirmDate;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinConfirmDate
+     */
+    public function setDoubleOptinConfirmDate($doubleOptinConfirmDate)
+    {
+        $this->doubleOptinConfirmDate = $doubleOptinConfirmDate;
     }
 }

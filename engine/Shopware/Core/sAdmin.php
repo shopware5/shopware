@@ -1133,6 +1133,7 @@ class sAdmin
 
         $namespace = $this->snippetManager->getNamespace('frontend/salutation');
         $register = $this->session->offsetGet('sRegister');
+
         foreach ($register['billing'] as $key => $value) {
             if ($key === 'salutation') {
                 $value = $namespace->get($value);
@@ -3441,10 +3442,32 @@ SQL;
      */
     private function failedLoginUser($addScopeSql, $email, $sErrorMessages, $password)
     {
-        // Check if account is disabled
-        $sql = 'SELECT id FROM s_user WHERE email=? AND active=0 ' . $addScopeSql;
-        $getUser = $this->db->fetchOne($sql, [$email]);
-        if ($getUser) {
+        // Check if account is disabled or not verified yet
+        $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation
+                FROM s_user
+                WHERE email=? AND active=0' . $addScopeSql;
+        $getUser = $this->db->fetchRow($sql, [$email]);
+
+        // if the verification process is active, the customer has an email sent date, but no confirm date
+        if ($getUser['doubleOptinRegister'] && $getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
+            $hash = \Shopware\Components\Random::getAlphanumericString(32);
+
+            $userInfo = [
+                'mail' => $getUser['email'],
+                'firstname' => $getUser['firstname'],
+                'lastname' => $getUser['lastname'],
+                'salutation' => $getUser['salutation'],
+            ];
+
+            $this->refreshOptinHash($getUser, $hash);
+            $this->resendConfirmationMail($userInfo, $hash);
+
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get(
+                    'LoginFailureOptIn',
+                    'Your account has not been verified yet. You received a new activation mail.'
+                );
+        } elseif ($getUser) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get(
                     'LoginFailureActive',
@@ -3483,7 +3506,7 @@ SQL;
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Login_Failure',
-            ['subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages]
+            ['subject' => $this, 'email' => $getUser['email'], 'password' => $password, 'error' => $sErrorMessages]
         );
 
         $this->session->offsetUnset('sUserMail');
@@ -3491,6 +3514,93 @@ SQL;
         $this->session->offsetUnset('sUserId');
 
         return $sErrorMessages;
+    }
+
+    /**
+     * @param array  $user
+     * @param string $hash
+     */
+    private function refreshOptinHash(array $user, $hash)
+    {
+        // Get old optin information
+        $sql = 'SELECT `id`, `data`
+                FROM `s_core_optin`
+                WHERE datum = ?
+                AND type = "register"';
+        $result = $this->db->fetchAll($sql, [$user['doubleOptinEmailSentDate']]);
+
+        // most times iterates only once
+        foreach ($result as $row) {
+            $data = unserialize($row['data']);
+            $optInId = $row['id'];
+            $customerId = $data['customerId'];
+            if ($customerId === $user['id']) {
+                break;
+            }
+        }
+
+        $dateString = (new DateTime())->format('Y-m-d H:i:s');
+
+        // Refreshes doubleOptinEmailSentDate + hash to generate a new activation key
+        $this->db->beginTransaction();
+        if (!empty($optInId)) {
+            $sql = 'UPDATE `s_core_optin`
+                    SET `datum` = ?, `hash` = ?
+                    WHERE type = "register"
+                    AND id = ?';
+            $params = [$dateString, $hash, $optInId];
+        } else {
+            $customerId = $user['id'];
+            $storedData = [
+                'customerId' => $customerId,
+                'register' => null,
+            ];
+
+            $sql = 'INSERT INTO `s_core_optin`
+                    (`type`, `datum`, `hash`, `data`)
+                    VALUES
+                    (?, ?, ?, ?)';
+            $params = ['register', $dateString, $hash, serialize($storedData)];
+        }
+        $this->db->executeQuery($sql, $params);
+
+        $sql = 'UPDATE `s_user`
+                SET doubleOptinEmailSentDate = ?
+                WHERE id = ?';
+        $this->db->executeQuery($sql, [$dateString, $customerId]);
+        $this->db->commit();
+    }
+
+    /**
+     * @param array  $userInfo
+     * @param string $hash
+     */
+    private function resendConfirmationMail(array $userInfo, $hash)
+    {
+        $link = Shopware()->Container()->get('router')->assemble([
+            'sViewport' => 'register',
+            'action' => 'confirmValidation',
+            'sConfirmation' => $hash,
+        ]);
+
+        $context = array_merge(
+            [
+                'sConfirmLink' => $link,
+            ],
+            $userInfo
+        );
+
+        $context = Shopware()->Container()->get('events')->filter(
+            'Shopware_Controllers_Frontend_Register_DoubleOptIn_ResendMail',
+            $context,
+            [
+                'mail' => $userInfo['mail'],
+            ]
+        );
+
+        $mail = Shopware()->Container()->get('templatemail')->createMail('sOPTINREGISTER', $context);
+        $mail->addTo($userInfo['mail']);
+        $mail->send();
     }
 
     /**
