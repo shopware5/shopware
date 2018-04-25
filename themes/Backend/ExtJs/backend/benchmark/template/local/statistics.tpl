@@ -23,10 +23,10 @@
                 </div>
             </div>
 
-            <div class="swag-text-break business-data">
+            <div class="swag-text-break industry-data">
                 <div class="wave-left"></div>
 
-                <section id="container-business-data">
+                <section id="container-industry-data">
                     <div id="slider-container">
                         <ul class="images-container">
                             <li>
@@ -401,6 +401,7 @@
         <script src="{link file='backend/benchmark/template/local/js/slider.js'}"></script>
         <script src="{link file='backend/benchmark/template/local/js/benchmark_charts.js'}"></script>
         <script src="{link file='backend/benchmark/template/local/js/time_switcher.js'}"></script>
+        <script src="{link file='backend/benchmark/template/local/js/switch_button.js'}"></script>
         <script src="{link file='backend/benchmark/template/local/vendor/js/chart.js'}"></script>
         <script type="text/javascript">
             window.benchmarkData = JSON.parse('{$benchmarkData}');

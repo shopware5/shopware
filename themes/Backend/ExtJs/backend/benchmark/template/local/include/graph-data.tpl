@@ -6,13 +6,26 @@
     </div>
 
     <div class="graph-container">
-        <canvas height="260"
-                data-benchmark-graph="true"
-                data-name="{$dataKey}"
-                data-include-business="false"
-                data-time="weeks"
-                data-chart-type="{$chartType|default:"line"}">
-        </canvas>
+        <div class="graph-wrapper">
+            <canvas height="260"
+                    data-benchmark-graph="true"
+                    data-name="{$dataKey}"
+                    data-include-industry="false"
+                    data-time="weeks"
+                    data-chart-type="{$chartType|default:"line"}">
+            </canvas>
+        </div>
+
+        <div class="button-container">
+            <div class="button-wrapper switch-shop" data-switch-button="true" data-industry="false" data-values-key="{$dataKey}" data-time="weeks">
+                <label class="switch">
+                    <input type="checkbox" checked="checked">
+                    <span class="slider round"></span>
+                </label>
+                {* TODO: Translations? *}
+                <div>Shop</div>
+            </div>
+        </div>
     </div>
 
     {include file="backend/benchmark/template/local/include/computed_data.tpl"}

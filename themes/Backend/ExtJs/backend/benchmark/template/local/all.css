@@ -344,7 +344,7 @@ ul:after {
   clear: both;
 }
 #container,
-#container-business-data,
+#container-industry-data,
 #container-user-data {
   max-width: 780px;
   height: 600px;
@@ -433,6 +433,73 @@ ul:after {
 .bullets-container .bullet.active {
   background: #FFF;
   border: 1px solid #FFF;
+}
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 16px;
+}
+.switch input {
+  display: none;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(121, 142, 163, 0.5);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 0;
+  background-color: #798ea3;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+input:checked + .slider {
+  background-color: rgba(52, 220, 221, 0.4);
+}
+input:checked + .slider:before {
+  background-color: #34DCDD;
+  -webkit-transform: translateX(12px);
+  -ms-transform: translateX(12px);
+  transform: translateX(12px);
+}
+.slider.round {
+  border-radius: 16px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+.switch-shop {
+  color: #50E3C2;
+}
+.switch-industry {
+  color: #6a63fc;
+}
+.switch-industry input:checked + .slider {
+  background-color: rgba(106, 99, 252, 0.4);
+}
+.switch-industry input:checked + .slider:before {
+  background-color: #6a63fc;
+}
+.button-container {
+  margin-top: 10px;
+  float: right;
+  font-size: 14px;
+  width: 60px;
+}
+.button-container .button-wrapper {
+  margin-bottom: 20px;
 }
 .btn.timescale {
   font-size: 14px;
@@ -544,6 +611,15 @@ input {
 .payment .wrapper {
   height: 200px;
 }
+.graph-wrapper {
+  float: left;
+  width: 740px;
+}
+.graph-container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 body {
   font-family: 'Brandon', sans-serif;
   padding: 0;
@@ -571,7 +647,6 @@ body#swag-benchmark {
   background: #213448;
 }
 .swag-container {
-  padding: 20px;
   text-align: center;
   height: 600px;
   max-width: 800px;
@@ -725,11 +800,11 @@ body#swag-benchmark {
   background: url(img/wait-info.svg) bottom center no-repeat;
   background-size: 180px;
 }
-.business-data .slide--shop .nice-graphic {
+.industry-data .slide--shop .nice-graphic {
   background: url(img/durchschnitt-shop.svg) bottom center no-repeat;
   background-size: 180px;
 }
-.business-data .slide--branch .nice-graphic {
+.industry-data .slide--branch .nice-graphic {
   background: url(img/durchschnitt-branch.svg) bottom center no-repeat;
   background-size: 180px;
 }
