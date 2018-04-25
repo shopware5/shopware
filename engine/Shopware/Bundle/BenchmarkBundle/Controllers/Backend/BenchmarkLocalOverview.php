@@ -75,12 +75,8 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
         $benchmarkConfig = $benchmarkRepository->getMainConfig();
 
-        if (!$benchmarkConfig->isTermsAccepted()) {
-            return 'start';
-        }
-
         if ($benchmarkConfig->getIndustry() === null) {
-            return 'industry_select';
+            return 'start';
         }
 
         return 'statistics';

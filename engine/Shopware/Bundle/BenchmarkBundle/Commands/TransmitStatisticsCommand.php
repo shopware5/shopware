@@ -55,11 +55,6 @@ class TransmitStatisticsCommand extends ShopwareCommand
             exit(1);
         }
 
-        if (!$config->isTermsAccepted()) {
-            $output->writeln('<comment>Terms of service haven\'t been accepted yet.</comment>');
-            exit(1);
-        }
-
         if (!$input->getOption('force') &&
             $config->getLastReceived()->add(new \DateInterval('P1D')) > new \DateTime('now', new \DateTimeZone('UTC'))) {
             $output->writeln('<comment>No retrieval currently necessary.</comment>');

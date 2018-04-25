@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CacheManager;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backend_ExtJs
@@ -38,7 +39,6 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             'lastReceived' => $benchmarkConfig->getLastReceived()->format('Y-m-d H:i:s'),
             'ordersBatchSize' => $benchmarkConfig->getOrdersBatchSize(),
             'industry' => $benchmarkConfig->getIndustry(),
-            'termsAccepted' => $benchmarkConfig->isTermsAccepted() ? 1 : 0,
         ];
 
         if ($benchmarkConfig->getLastOrderId()) {
@@ -97,6 +97,32 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
+    }
+
+    public function disableBenchmarkTeaserAction()
+    {
+        $conn = $this->container->get('dbal_connection');
+        $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "benchmarkTeaser"');
+        $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
+
+        $data = [
+            'element_id' => $elementId,
+            'shop_id' => 1,
+            'value' => serialize(false),
+        ];
+
+        if ($valueId) {
+            $conn->update(
+                's_core_config_values',
+                $data,
+                ['id' => $valueId]
+            );
+        } else {
+            $conn->insert('s_core_config_values', $data);
+        }
+        /** @var CacheManager */
+        $cacheManager = $this->get('shopware.cache_manager');
+        $cacheManager->clearConfigCache();
     }
 
     /**

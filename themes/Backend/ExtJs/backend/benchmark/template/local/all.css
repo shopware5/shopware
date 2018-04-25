@@ -202,30 +202,7 @@ ul.top-benefits li:before {
   background-color: #FFF;
   width: 100%;
 }
-.wrapper-agb {
-  background-color: #FFF;
-  width: 100%;
-}
-.wrapper-agb:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 440px;
-  height: 35px;
-  z-index: 10;
-  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
-  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
-  pointer-events: none;
-}
-.agb--text {
-  max-height: 400px;
-  overflow-y: scroll;
-  border-bottom: 1px solid #f2f4f6;
-}
-.info--text,
-.agb--text {
+.info--text {
   color: #798EA3;
   text-align: left;
   display: inline-block;
@@ -235,15 +212,13 @@ ul.top-benefits li:before {
   padding: 0 10px 0 10px;
   width: 100%;
 }
-.info--text h1,
-.agb--text h1 {
+.info--text h1 {
   color: #213448;
   font-size: 33px;
   text-align: center;
   margin-bottom: 10px;
 }
-.info--text h2,
-.agb--text h2 {
+.info--text h2 {
   color: #213448;
   font-size: 18px;
   font-weight: 600;
@@ -251,15 +226,13 @@ ul.top-benefits li:before {
   margin: 8px 0 5px 0;
   padding: 0;
 }
-.info--text h2 .check-color,
-.agb--text h2 .check-color {
+.info--text h2 .check-color {
   color: #50E3C2;
   font-size: 26px;
 }
-.info--text .btn,
-.agb--text .btn {
-  margin-top: 5px;
-  margin-bottom: 30px;
+.info--text .confirmation-label {
+  font-weight: 500;
+  font-size: 16px;
 }
 .accept-abg {
   width: 100%;
@@ -632,9 +605,6 @@ body#swag-start {
 body#swag-info {
   background-color: #FFFFFF;
 }
-body#swag-agb {
-  background-color: #FFFFFF;
-}
 body#swag-select {
   background-color: #213448;
 }
@@ -700,19 +670,15 @@ body#swag-benchmark {
 }
 #swag-start .col-33,
 #swag-info .col-33,
-#swag-agb .col-33,
 #swag-select .col-33,
 #swag-start .col-50,
 #swag-info .col-50,
-#swag-agb .col-50,
 #swag-select .col-50,
 #swag-start .col-66,
 #swag-info .col-66,
-#swag-agb .col-66,
 #swag-select .col-66,
 #swag-start .col-80,
 #swag-info .col-80,
-#swag-agb .col-80,
 #swag-select .col-80 {
   width: 90%;
   float: left;
@@ -747,7 +713,6 @@ body#swag-benchmark {
 @media (min-width: 800px) {
   #swag-start .col-33,
   #swag-info .col-33,
-  #swag-agb .col-33,
   #swag-select .col-33 {
     width: 30%;
     float: left;
@@ -755,7 +720,6 @@ body#swag-benchmark {
   }
   #swag-start .col-50,
   #swag-info .col-50,
-  #swag-agb .col-50,
   #swag-select .col-50 {
     width: 50%;
     float: left;
@@ -763,7 +727,6 @@ body#swag-benchmark {
   }
   #swag-start .col-66,
   #swag-info .col-66,
-  #swag-agb .col-66,
   #swag-select .col-66 {
     width: 66%;
     float: left;
@@ -771,7 +734,6 @@ body#swag-benchmark {
   }
   #swag-start .col-80,
   #swag-info .col-80,
-  #swag-agb .col-80,
   #swag-select .col-80 {
     width: 80%;
     margin: 0 0 0 20%;
@@ -874,9 +836,6 @@ body#swag-benchmark {
 }
 input.btn.primary {
   font-family: 'Brandon';
-}
-input#swagagbbtn {
-  outline: none;
 }
 footer {
   font-size: 14px;

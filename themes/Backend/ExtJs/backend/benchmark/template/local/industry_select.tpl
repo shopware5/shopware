@@ -1,6 +1,6 @@
 {extends file="backend/benchmark/template/local/index.tpl"}
 
-{block name="benchmark_index_title"}Shop Benchmark - Branche wählen{/block}
+{block name="benchmark_index_title"}Shopware BI - Branche wählen{/block}
 
 {block name="benchmark_index_body"}
     <body id="swag-select">

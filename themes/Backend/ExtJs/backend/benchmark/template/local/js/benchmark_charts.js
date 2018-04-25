@@ -125,6 +125,7 @@
                         zeroLineColor: globals.gridLineColor,
                     },
                     ticks: {
+                        suggestedMin: 0,
                         fontSize: 14,
                         fontColor: '#798EA3',
                         maxTicksLimit: 6

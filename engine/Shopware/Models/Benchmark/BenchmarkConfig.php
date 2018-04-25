@@ -90,15 +90,6 @@ class BenchmarkConfig extends ModelEntity
     private $industry;
 
     /**
-     * Flag which shows if the tos have previously been accepted
-     *
-     * @var bool
-     *
-     * @ORM\Column(name="terms_accepted", type="boolean", nullable=false)
-     */
-    private $termsAccepted;
-
-    /**
      * The latest token provided by the server
      *
      * @var string
@@ -209,22 +200,6 @@ class BenchmarkConfig extends ModelEntity
     public function setIndustry($industry)
     {
         $this->industry = (int) $industry;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTermsAccepted()
-    {
-        return (bool) $this->termsAccepted;
-    }
-
-    /**
-     * @param bool $termsAccepted
-     */
-    public function setTermsAccepted($termsAccepted)
-    {
-        $this->termsAccepted = (bool) $termsAccepted;
     }
 
     /**

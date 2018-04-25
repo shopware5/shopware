@@ -21,17 +21,15 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1401 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1402 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSQL("INSERT IGNORE INTO `s_core_menu` (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`) VALUES
-            (69, 'Shopware BI', NULL, 'sprite-chart marketing--analyses', 1, 1, NULL, 'BenchmarkMenu', NULL, NULL);");
-
-        $this->addSQL('SET @parentId = (SELECT `id` FROM `s_core_menu` WHERE name="Shopware BI");');
-
-        $this->addSQL("INSERT IGNORE INTO `s_core_menu` (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`) VALUES
-            (@parentId, 'Einstellungen', NULL, 'sprite-wrench-screwdriver settings--basic-settings', 1, 0, NULL, 'Benchmark', NULL, 'Settings'),
-            (@parentId, 'Übersicht', NULL, 'sprite-report-paper marketing--analyses--overview', 0, 1, NULL, 'Benchmark', NULL, 'Index');");
+        $sql = <<<SQL
+    INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
+    VALUES 
+    (NULL, 0, 'benchmarkTeaser', 'b:1;', 'Teaser zur Shopware BI', NULL, 'boolean', 0, 0, 0, NULL)
+SQL;
+        $this->addSql($sql);
     }
 }

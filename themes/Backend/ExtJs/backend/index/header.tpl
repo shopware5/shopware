@@ -61,7 +61,8 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
                 sbpLogin: {$sbpLogin},
                 updateWizardStarted: {$updateWizardStarted|intval},
                 enableInstallationFeedback: {$installationSurvey|intval},
-                enableBetaFeedback: {$feedbackRequired|intval}
+                enableBetaFeedback: {$feedbackRequired|intval},
+                biOverviewEnabled: {$biOverviewEnabled|intval}
             });
 {else}
             this.addSubApplication({

@@ -5,14 +5,41 @@ Ext.define('Shopware.apps.Benchmark.view.overview.Window', {
     extend: 'Enlight.app.Window',
     layout: 'fit',
     width: 1050,
-    height: 650,
+    height: 670,
+
+    alias: 'widget.benchmark-overview-window',
 
     title: '{s name="overview/title"}Benchmark Overview{/s}',
 
     initComponent: function () {
-        this.items = this.getItems();
+        var me = this;
 
-        this.callParent(arguments);
+        me.items = me.getItems();
+
+        if (me.isTeaser) {
+            me.checkbox = Ext.create('Ext.form.field.Checkbox', {
+                padding: '0 0 0 5px',
+                itemId: 'disableBenchmarkTeaser',
+                width: 150,
+                boxLabel: '{s name=window/do_not_show_again}{/s}'
+            });
+
+            me.cancelButton = Ext.create('Ext.button.Button', {
+                cls: 'primary',
+                text: '{s name=window/close}{/s}',
+                handler: function() {
+                    me.close();
+                }
+            });
+
+            me.dockedItems = [{
+                xtype: 'toolbar',
+                dock: 'bottom',
+                items:[me.checkbox, '->', me.cancelButton]
+            }];
+        }
+
+        me.callParent(arguments);
     },
 
     /**
