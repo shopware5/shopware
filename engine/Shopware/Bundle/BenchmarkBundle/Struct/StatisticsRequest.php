@@ -29,26 +29,18 @@ class StatisticsRequest
     /**
      * @var string
      */
-    private $token;
+    private $data;
 
     /**
-     * @param string $token
+     * @param string $data
      */
-    public function __construct($token)
+    public function __construct($data)
     {
-        $this->token = $token;
+        $this->data = $data;
     }
 
     public function __toString()
     {
-        return sprintf('token=%s', $this->token);
-    }
-
-    /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
+        return $this->data;
     }
 }

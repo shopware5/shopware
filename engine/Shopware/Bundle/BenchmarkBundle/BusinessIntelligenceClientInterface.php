@@ -22,17 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\Struct;
+namespace Shopware\Bundle\BenchmarkBundle;
 
-class BenchmarkRequest
+use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceRequest;
+use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
+
+interface BusinessIntelligenceClientInterface
 {
     /**
-     * @var string
+     * @param BusinessIntelligenceRequest $biRequest
+     *
+     * @return BusinessIntelligenceResponse
      */
-    public $data;
-
-    public function __toString()
-    {
-        return $this->data;
-    }
+    public function fetchBusinessIntelligence(BusinessIntelligenceRequest $biRequest);
 }

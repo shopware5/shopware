@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
+use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 
 class StatisticsResponseHydrator implements HydratorInterface
@@ -31,10 +32,20 @@ class StatisticsResponseHydrator implements HydratorInterface
     /**
      * @param array $data
      *
+     * @throws StatisticsHydratingException
+     *
      * @return StatisticsResponse
      */
     public function hydrate(array $data)
     {
-        return new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), $data['html']);
+        if ($data['message'] !== 'Success') {
+            throw new StatisticsHydratingException(sprintf('Expected field "message" to be "success", was "%s"', $data['message']));
+        }
+
+        if (empty($data['mappedResponseID'])) {
+            throw new StatisticsHydratingException('Missing field "token" from server response');
+        }
+
+        return new StatisticsResponse($date = new \DateTime('now'), $data['mappedResponseID']);
     }
 }

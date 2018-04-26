@@ -5,8 +5,6 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="shopware.benchmark_bundle.benchmark_endpoint">example.com</parameter>
-        <parameter key="shopware.benchmark_bundle.statistics_endpoint">example.com</parameter>
         <parameter key="shopware.benchmark_bundle.guzzle_config" type="collection">
             <parameter type="collection" key="defaults">
                 <parameter key="timeout">7</parameter>
@@ -113,7 +111,7 @@
         <service id="shopware.benchmark_bundle.providers.local_orders"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\LocalOrdersProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="dbal_connection" />
             <tag name="shopware.benchmark_local_provider" />
         </service>
 
@@ -136,7 +134,7 @@
 
         <service id="shopware.benchmark_bundle.components.template_caching_handler"
                 class="Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="shopware.benchmark_bundle.local_hydrator"
@@ -163,54 +161,56 @@
         </service>
 
         <!-- Transmission services -->
-        <service id="shopware.bundle_benchmark.commands.transmit" class="Shopware\Bundle\BenchmarkBundle\Commands\TransmitStatisticsCommand">
+        <service id="shopware.benchmark_bundle.commands.transmit" class="Shopware\Bundle\BenchmarkBundle\Commands\TransmitStatisticsCommand">
             <tag name="console.command"/>
         </service>
 
-        <service id="shopware.bundle_benchmark.statistics_transmission"
+        <service id="shopware.benchmark_bundle.bi_transmission"
+                 class="Shopware\Bundle\BenchmarkBundle\Service\BusinessIntelligenceService">
+            <argument id="shopware.benchmark_bundle.bi_client" type="service" />
+            <argument id="shopware.benchmark_bundle.repository.config" type="service" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.statistics_transmission"
                  class="Shopware\Bundle\BenchmarkBundle\Service\StatisticsService">
-            <argument id="shopware.bundle_benchmark.statistics_client" type="service"/>
-            <argument type="service" id="shopware.benchmark_bundle.repository.config"/>
+            <argument id="shopware.benchmark_bundle.collector" type="service" />
+            <argument id="shopware.benchmark_bundle.statistics_client" type="service" />
+            <argument id="shopware.benchmark_bundle.repository.config" type="service" />
         </service>
 
-        <service id="shopware.bundle_benchmark.benchmark_transmission"
-                 class="Shopware\Bundle\BenchmarkBundle\Service\BenchmarkService">
-            <argument id="shopware.benchmark_bundle.collector" type="service"/>
-            <argument id="shopware.bundle_benchmark.benchmark_client" type="service"/>
-            <argument type="service" id="shopware.benchmark_bundle.repository.config"/>
-        </service>
-
-        <service id="shopware.bundle_benchmark.benchmark_statistics"
+        <service id="shopware.benchmark_bundle.benchmark_statistics"
                  class="Shopware\Bundle\BenchmarkBundle\Service\BenchmarkStatisticsService">
-            <argument type="service" id="shopware.benchmark_bundle.repository.config"/>
-            <argument type="service" id="shopware.bundle_benchmark.benchmark_transmission"/>
-            <argument type="service" id="shopware.bundle_benchmark.statistics_transmission"/>
+            <argument id="shopware.benchmark_bundle.repository.config" type="service" />
+            <argument id="shopware.benchmark_bundle.statistics_transmission" type="service" />
+            <argument id="shopware.benchmark_bundle.bi_transmission" type="service" />
         </service>
 
-        <service id="shopware.bundle_benchmark.statistics_client"
+        <service id="shopware.benchmark_bundle.bi_client"
+                 class="Shopware\Bundle\BenchmarkBundle\BusinessIntelligenceClient"
+                 public="false">
+            <argument type="string">%shopware.bi.endpoint.benchmark%</argument>
+            <argument id="shopware.benchmark_bundle.client" type="service" />
+            <argument id="shopware.benchmark_bundle.hydrator.bi_response_hydrator" type="service" />
+            <argument id="shopware_benchmark_bundle.benchmark_encryption" type="service" />
+            <argument id="corelogger" type="service" />
+        </service>
+
+        <service id="shopware.benchmark_bundle.statistics_client"
                  class="Shopware\Bundle\BenchmarkBundle\StatisticsClient"
                  public="false">
-            <argument type="string">%shopware.benchmark_bundle.statistics_endpoint%</argument>
-            <argument id="shopware.benchmark_bundle.client" type="service"/>
-            <argument id="shopware.bundle_benchmark.hydrator.statistics_response_hydrator" type="service"/>
+            <argument type="string">%shopware.bi.endpoint.statistics%</argument>
+            <argument id="shopware.benchmark_bundle.client" type="service" />
+            <argument id="shopware.benchmark_bundle.hydrator.statistics_response_hydrator" type="service" />
+            <argument id="shopware_benchmark_bundle.benchmark_encryption" type="service" />
             <argument id="corelogger" type="service"/>
         </service>
 
-        <service id="shopware.bundle_benchmark.benchmark_client"
-                 class="Shopware\Bundle\BenchmarkBundle\BenchmarkClient"
-                 public="false">
-            <argument type="string">%shopware.benchmark_bundle.benchmark_endpoint%</argument>
-            <argument id="shopware.benchmark_bundle.client" type="service"/>
-            <argument id="shopware.bundle_benchmark.hydrator.benchmark_response_hydrator" type="service"/>
-            <argument id="corelogger" type="service"/>
-        </service>
-
-        <service id="shopware.bundle_benchmark.hydrator.statistics_response_hydrator"
+        <service id="shopware.benchmark_bundle.hydrator.statistics_response_hydrator"
                  class="Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator"
                  public="false" />
 
-        <service id="shopware.bundle_benchmark.hydrator.benchmark_response_hydrator"
-                 class="Shopware\Bundle\BenchmarkBundle\Hydrator\BenchmarkResponseHydrator"
+        <service id="shopware.benchmark_bundle.hydrator.bi_response_hydrator"
+                 class="Shopware\Bundle\BenchmarkBundle\Hydrator\BusinessIntelligenceResponseHydrator"
                  public="false" />
 
         <service id="shopware.benchmark_bundle.client"
@@ -219,5 +219,12 @@
             <argument type="service" id="guzzle_http_client_factory"/>
             <argument type="collection" id="shopware.benchmark_bundle.guzzle_config" />
         </service>
+
+        <service id="shopware_benchmark_bundle.benchmark_encryption"
+                 class="Shopware\Bundle\BenchmarkBundle\BenchmarkEncryption"
+                 public="false">
+            <argument type="string">%kernel.root_dir%/engine/Shopware/Components/HttpClient/public.key</argument>
+        </service>
+
     </services>
 </container>

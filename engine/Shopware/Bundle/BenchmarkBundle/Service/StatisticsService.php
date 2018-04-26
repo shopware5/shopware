@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
+use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\StatisticsClientInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
@@ -31,6 +32,11 @@ use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class StatisticsService
 {
+    /**
+     * @var BenchmarkCollector
+     */
+    private $benchmarkCollector;
+
     /**
      * @var StatisticsClientInterface
      */
@@ -42,13 +48,16 @@ class StatisticsService
     private $benchmarkRepository;
 
     /**
+     * @param BenchmarkCollector        $benchmarkCollector
      * @param StatisticsClientInterface $statisticsClient
      * @param BenchmarkRepository       $benchmarkRepository
      */
     public function __construct(
+        BenchmarkCollector $benchmarkCollector,
         StatisticsClientInterface $statisticsClient,
         BenchmarkRepository $benchmarkRepository)
     {
+        $this->benchmarkCollector = $benchmarkCollector;
         $this->statisticsClient = $statisticsClient;
         $this->benchmarkRepository = $benchmarkRepository;
     }
@@ -58,16 +67,19 @@ class StatisticsService
      */
     public function transmit()
     {
+        $this->benchmarkCollector->get();
+
+        $request = new StatisticsRequest($this->benchmarkCollector->get());
+
+        /** @var StatisticsResponse $statisticsResponse */
+        $statisticsResponse = $this->statisticsClient->sendStatistics($request);
+
         $config = $this->benchmarkRepository->getMainConfig();
-
-        /** @var StatisticsResponse $response */
-        $response = $this->statisticsClient->fetchStatistics(new StatisticsRequest($config->getToken()));
-
-        $config->setCachedTemplate($response->getHtml());
-        $config->setLastReceived($response->getDateTime());
+        $config->setLastSent($statisticsResponse->getDateUpdated());
+        $config->setToken($statisticsResponse->getToken());
 
         $this->benchmarkRepository->save($config);
 
-        return $response;
+        return $statisticsResponse;
     }
 }

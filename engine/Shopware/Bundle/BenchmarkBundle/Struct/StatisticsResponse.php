@@ -29,36 +29,36 @@ class StatisticsResponse
     /**
      * @var \DateTime
      */
-    private $dateTime;
+    private $dateUpdated;
 
     /**
      * @var string
      */
-    private $html;
+    private $token;
 
     /**
-     * @param \DateTime $dateTime
-     * @param string    $html
+     * @param \DateTime $dateUpdated
+     * @param string    $token
      */
-    public function __construct(\DateTime $dateTime, $html)
+    public function __construct(\DateTime $dateUpdated, $token)
     {
-        $this->dateTime = $dateTime;
-        $this->html = $html;
+        $this->dateUpdated = $dateUpdated;
+        $this->token = $token;
     }
 
     /**
      * @return \DateTime
      */
-    public function getDateTime()
+    public function getDateUpdated()
     {
-        return $this->dateTime;
+        return $this->dateUpdated;
     }
 
     /**
      * @return string
      */
-    public function getHtml()
+    public function getToken()
     {
-        return $this->html;
+        return $this->token;
     }
 }

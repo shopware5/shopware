@@ -184,6 +184,12 @@ return array_replace_recursive([
            '_ga',
         ],
     ],
+    'bi' => [
+        'endpoint' => [
+            'benchmark' => 'https://bi-staging.shopware.com/benchmark',
+            'statistics' => 'https://bi-staging.shopware.com/statistics',
+        ],
+    ],
     'session' => [
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,

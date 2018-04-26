@@ -24,7 +24,7 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
-use Shopware\Components\Random;
+use Shopware\Components\OpenSSLEncryption;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
@@ -40,9 +40,9 @@ class FeedbackCollector
     private $apiEndpoint;
 
     /**
-     * @var string
+     * @var OpenSSLEncryption
      */
-    private $publicKey;
+    private $encryption;
 
     /**
      * @var string
@@ -56,14 +56,14 @@ class FeedbackCollector
 
     /**
      * @param string                $apiEndpoint
-     * @param string                $publicKey
+     * @param OpenSSLEncryption     $encryption
      * @param string                $uniqueId
      * @param ShopwareReleaseStruct $release
      */
-    public function __construct($apiEndpoint, $publicKey, $uniqueId, ShopwareReleaseStruct $release)
+    public function __construct($apiEndpoint, OpenSSLEncryption $encryption, $uniqueId, ShopwareReleaseStruct $release)
     {
         $this->apiEndpoint = rtrim($apiEndpoint, '/');
-        $this->publicKey = $publicKey;
+        $this->encryption = $encryption;
         $this->uniqueId = $uniqueId;
         $this->release = $release;
     }
@@ -88,8 +88,8 @@ class FeedbackCollector
         $dataString = json_encode($data);
 
         $encryptionMethod = 'aes128';
-        if ($this->isEncryptionSupported($encryptionMethod)) {
-            $data = $this->encryptData($dataString, $encryptionMethod);
+        if ($this->encryption->isEncryptionSupported($encryptionMethod)) {
+            $data = $this->encryption->encryptData($dataString, $encryptionMethod);
             $dataString = json_encode($data);
         }
 
@@ -149,60 +149,5 @@ class FeedbackCollector
         ];
 
         return $data;
-    }
-
-    /**
-     * @param string $encryptionMethod
-     *
-     * @return bool
-     */
-    private function isEncryptionSupported($encryptionMethod)
-    {
-        if (!extension_loaded('openssl')) {
-            return false;
-        }
-
-        if (!in_array($encryptionMethod, openssl_get_cipher_methods('true'))) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $data
-     * @param string $encryptionMethod
-     *
-     * @return array
-     */
-    private function encryptData($data, $encryptionMethod)
-    {
-        $publicKeyString = $this->publicKey;
-
-        $publicKey = openssl_pkey_get_public($publicKeyString);
-
-        $key = Random::getAlphanumericString(32);
-
-        $ivLength = openssl_cipher_iv_length($encryptionMethod);
-        $iv = Random::getBytes($ivLength);
-
-        $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, false, $iv);
-
-        $encryptedKey = '';
-        if (!true === openssl_public_encrypt($key, $encryptedKey, $publicKey)) {
-            $errors = [];
-            while ($errors[] = openssl_error_string());
-            $errorString = implode("\n", $errors);
-            throw new \Exception('Got openssl error' . $errorString);
-        }
-
-        $result = [
-            'encryptedKey' => base64_encode($encryptedKey),
-            'iv' => base64_encode($iv),
-            'encryptionMethod' => $encryptionMethod,
-            'encryptedMessage' => $encryptedMessage,
-        ];
-
-        return $result;
     }
 }
