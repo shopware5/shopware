@@ -234,7 +234,7 @@ class ConfigurationStruct implements \JsonSerializable
     /**
      * @return bool
      */
-    public function readonly()
+    public function isReadonly()
     {
         return $this->readonly;
     }
