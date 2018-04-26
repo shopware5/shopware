@@ -9,16 +9,15 @@
     {* Pagination - Frist page *}
     {block name="frontend_listing_actions_paging_first"}
         {if strpos($baseUrl, '?') !== false}
-            {assign var='pagingFirstPage' value="{$baseUrl}&p=1"}
-            {assign var='pagingPrevPage' value="{$baseUrl}&p={$sPage - 1}"}
-            {assign var='pagingNextPage' value="{$baseUrl}&p={$sPage + 1}"}
-            {assign var='pagingLastPage' value="{$baseUrl}&p={$sPages}"}
+            {assign var='baseUrlParamChar' value='&'}
         {else}
-            {assign var='pagingFirstPage' value="{$baseUrl}?p=1"}
-            {assign var='pagingPrevPage' value="{$baseUrl}?p={$sPage - 1}"}
-            {assign var='pagingNextPage' value="{$baseUrl}?p={$sPage + 1}"}
-            {assign var='pagingLastPage' value="{$baseUrl}?p={$sPages}"}
+            {assign var='baseUrlParamChar' value='?'}
         {/if}
+
+        {assign var='pagingFirstPage' value="{$baseUrl}{$baseUrlParamChar}p=1"}
+        {assign var='pagingPrevPage' value="{$baseUrl}{$baseUrlParamChar}p={$sPage - 1}"}
+        {assign var='pagingNextPage' value="{$baseUrl}{$baseUrlParamChar}p={$sPage + 1}"}
+        {assign var='pagingLastPage' value="{$baseUrl}{$baseUrlParamChar}p={$sPages}"}
 
         {if $sPage > 1}
             <a href="{$pagingFirstPage}" title="{"{s name='ListingLinkFirst'}{/s}"|escape}" class="paging--link paging--prev" data-action-link="true">
