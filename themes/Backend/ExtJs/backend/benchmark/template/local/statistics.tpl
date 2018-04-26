@@ -1,6 +1,6 @@
 {extends file="backend/benchmark/template/local/index.tpl"}
 
-{block name="benchmark_index_title"}Shop Benchmark{/block}
+{block name="benchmark_index_title"}Shopware BI{/block}
 
 {block name="benchmark_index_body"}
     <body id="swag-benchmark">
@@ -391,7 +391,7 @@
                             <div class="btn secondary">Nachricht senden</div>
                         </div>
 
-                        <p>Eine Abmeldung ist jederzeit möglich im Hauptmenü unter: Marketing - Benchmark - Einstellungen. </p>
+                        <p>Eine Abmeldung ist jederzeit möglich im Hauptmenü unter: Marketing - Shopware BI - Einstellungen. </p>
 
                     </div>
                 </div>

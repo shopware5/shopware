@@ -9,10 +9,25 @@ Ext.define('Shopware.apps.Benchmark.controller.Main', {
 
     init: function () {
         var me = this,
-            windowName = 'overview.Window';
+            windowName = 'overview.Window',
+            params = {};
+
+        me.control({
+            'benchmark-overview-window': {
+                'beforeclose': me.onBeforeCloseOverviewWindow
+            }
+        });
+
+        if (me.subApplication.params && me.subApplication.params.isTeaser) {
+            params = {
+                isTeaser: true,
+                height: 700
+            };
+        }
 
         if (this.subApplication.action === 'Settings') {
             windowName = 'settings.Window';
+            params = {};
 
             Ext.Ajax.request({
                 url: '{url controller=Benchmark action=loadSettings}',
@@ -25,9 +40,21 @@ Ext.define('Shopware.apps.Benchmark.controller.Main', {
             });
         }
 
-        me.mainWindow = me.getView(windowName).create().show();
+        me.mainWindow = me.getView(windowName).create(params).show();
 
         me.callParent(arguments);
+    },
+
+    /**
+     * @param { Ext.window.Window } win
+     */
+    onBeforeCloseOverviewWindow: function (win) {
+        var checked = win.down('#disableBenchmarkTeaser').getValue();
+        if (checked) {
+            Ext.Ajax.request({
+                url: '{url controller=Benchmark action=disableBenchmarkTeaser}'
+            });
+        }
     }
 });
 //{/block}

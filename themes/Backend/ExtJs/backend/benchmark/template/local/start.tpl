@@ -1,6 +1,6 @@
 {extends file="backend/benchmark/template/local/index.tpl"}
 
-{block name="benchmark_index_title"}Shop Benchmark - Start{/block}
+{block name="benchmark_index_title"}Shopware BI - Start{/block}
 
 {block name="benchmark_index_body"}
     <body id="swag-start">
@@ -23,7 +23,7 @@
                 <div class="funny-graph"></div>
                 <div class="row">
                     <div class="col-100">
-                        <h1>Benchmark für Deinen Onlineshop</h1>
+                        <h1>Shopware BI für Deinen Onlineshop</h1>
                         <p>Erhalte Deine Shop-Auswertung und vergleiche sie mit Unternehmen Deiner Branche.</p>
                     </div>
 

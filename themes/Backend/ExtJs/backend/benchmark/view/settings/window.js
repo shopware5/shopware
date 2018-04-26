@@ -12,7 +12,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
         align: 'stretch'
     },
 
-    title: '{s name="settings/title"}Benchmark Settings{/s}',
+    title: '{s name="settings/title"}Shopware BI Settings{/s}',
 
     initComponent: function () {
         this.items = this.createItems();

@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     public function getWhitelistedCSRFActions()
     {
-        return ['index', 'render', 'acceptTerms', 'setIndustry'];
+        return ['index', 'render', 'setIndustry'];
     }
 
     public function indexAction()
@@ -57,21 +57,6 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $config = $benchmarkRepository->getMainConfig();
 
         echo $config->getCachedTemplate();
-    }
-
-    public function acceptTermsAction()
-    {
-        /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $config = $benchmarkRepository->getMainConfig();
-        $config->setTermsAccepted(true);
-        $benchmarkRepository->save($config);
-
-        $this->redirect([
-            'controller' => $this->request->getParam('sTarget', 'BenchmarkOverview'),
-            'action' => $this->request->getParam('sTargetAction', 'render'),
-            'template' => 'industry_select',
-        ]);
     }
 
     public function setIndustryAction()
@@ -97,21 +82,11 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     private function handleSettings(BenchmarkConfig $config)
     {
-        if (!$config->isTermsAccepted()) {
-            $this->redirect([
-                'controller' => 'BenchmarkLocalOverview',
-                'action' => 'render',
-                'template' => 'start',
-            ]);
-
-            return;
-        }
-
         if ($config->getIndustry() === null) {
             $this->redirect([
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
-                'template' => 'industry_select',
+                'template' => 'start',
             ]);
 
             return;

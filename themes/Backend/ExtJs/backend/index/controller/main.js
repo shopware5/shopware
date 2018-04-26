@@ -46,7 +46,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep'),
             firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled,
             enableInstallationFeedback = me.subApplication.enableInstallationFeedback,
-            enableBetaFeedback = me.subApplication.enableBetaFeedback;
+            enableBetaFeedback = me.subApplication.enableBetaFeedback,
+            biOverviewEnabled = me.subApplication.biOverviewEnabled;
 
         if (!firstRunWizardEnabled) {
             firstRunWizardStep = 0;
@@ -98,6 +99,17 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         });
                     }, 2000);
                 }
+            }
+
+            if (biOverviewEnabled) {
+                Ext.Function.defer(function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Benchmark',
+                        params: {
+                            isTeaser: true
+                        }
+                    });
+                }, 2000);
             }
         }
     },

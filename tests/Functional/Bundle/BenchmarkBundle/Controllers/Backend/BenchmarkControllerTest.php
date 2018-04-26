@@ -51,8 +51,7 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
             'lastReceived' => '1990-01-01 00:00:00',
             'lastOrderNumber' => '20000',
             'ordersBatchSize' => 1000,
-            'industry' => 1,
-            'termsAccepted' => 0,
+            'industry' => 1
         ], $settings);
 
         $this->assertInternalType(\PHPUnit_Framework_Constraint_IsType::TYPE_INT, $settings['industry']);

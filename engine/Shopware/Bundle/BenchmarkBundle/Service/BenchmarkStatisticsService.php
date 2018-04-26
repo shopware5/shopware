@@ -77,14 +77,12 @@ class BenchmarkStatisticsService
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
         if ($benchmarkConfig->isActive() &&
-            $benchmarkConfig->isTermsAccepted() &&
             $benchmarkConfig->getLastReceived()->add($this->interval) > $now
         ) {
             $this->statistics->transmit();
         }
 
         if ($benchmarkConfig->isActive() &&
-            $benchmarkConfig->isTermsAccepted() &&
             $benchmarkConfig->getLastSent()->add($this->interval) > $now
         ) {
             $this->benchmark->transmit();

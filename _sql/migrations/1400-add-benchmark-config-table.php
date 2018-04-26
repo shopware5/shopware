@@ -33,7 +33,6 @@ class Migrations_Migration1400 extends Shopware\Components\Migrations\AbstractMi
              `last_order_id` INT(11) NOT NULL,
              `orders_batch_size` INT(11) NOT NULL,
              `industry` INT(11) DEFAULT NULL,
-             `terms_accepted` TINYINT(1) NOT NULL DEFAULT 0,
              `response_token` VARCHAR(200) DEFAULT NULL,
              `cached_template` LONGTEXT DEFAULT NULL,
              PRIMARY KEY (`id`)
@@ -47,8 +46,8 @@ class Migrations_Migration1400 extends Shopware\Components\Migrations\AbstractMi
         if ($configMissing) {
             $uuid = \Ramsey\Uuid\Uuid::uuid4();
             $this->addSql(
-                'INSERT INTO `s_benchmark_config` (`id`, `active`, `last_sent`, `last_received`, `last_order_id`, `orders_batch_size`, `industry`, `terms_accepted`, `cached_template`)
-                 VALUES(' . $this->connection->quote($uuid->getBytes()) . ', 0, "1990-01-01 00:00:00", "1990-01-01 00:00:00", 0, 1000, NULL, 0, NULL);'
+                'INSERT INTO `s_benchmark_config` (`id`, `active`, `last_sent`, `last_received`, `last_order_id`, `orders_batch_size`, `industry`, `cached_template`)
+                 VALUES(' . $this->connection->quote($uuid->getBytes()) . ', 0, "1990-01-01 00:00:00", "1990-01-01 00:00:00", 0, 1000, NULL, NULL);'
             );
         }
     }

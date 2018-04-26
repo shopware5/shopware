@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -151,6 +150,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('SHOPWARE_REVISION', $shopwareRelease->getRevision());
         $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
         $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
+        $this->View()->assign('biOverviewEnabled', $this->isBIOverviewEnabled());
     }
 
     public function authAction()
@@ -324,6 +324,22 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $now = new \DateTime();
         $interval = $installationDate->diff($now);
 
-        return self::MIN_DAYS_INSTALLATION_SURVEY <= $interval->days;
+        return $interval->days >= self::MIN_DAYS_INSTALLATION_SURVEY;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isBIOverviewEnabled()
+    {
+        if (!$this->get('config')->get('benchmarkTeaser')) {
+            return false;
+        }
+
+        /** @var \Shopware\Models\Benchmark\Repository $configRepository */
+        $configRepository = $this->get('models')->getRepository(\Shopware\Models\Benchmark\BenchmarkConfig::class);
+        $config = $configRepository->getMainConfig();
+
+        return $config->getIndustry() === null;
     }
 }
