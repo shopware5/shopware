@@ -24,7 +24,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed the notification box behaviour when products are out of stock
 * Changed API behaviour on update, when the lastStock parameter is set for a product its applied to its mainDetail aswell (like on creation)
 * Changed newsletter recipient count to work correctly with customer streams
-* Changed position of serveral privacy options to the privacy basic setting category
+* Changed position of several privacy options to the privacy basic setting category
+* Changed search indexer to make the keyword batch size configurable using the key `search.indexer.batchsize` in the `config.php` 
 
 ### Removals
 

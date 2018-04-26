@@ -237,6 +237,11 @@ return array_replace_recursive([
         'php_modifiers' => include __DIR__ . '/smarty_functions.php',
         'php_functions' => include __DIR__ . '/smarty_functions.php',
     ],
+    'search' => [
+        'indexer' => [
+            'batchsize' => 4000,
+        ],
+    ],
     'app' => [
         'rootDir' => $this->DocPath(),
         'downloadsDir' => $this->DocPath('files_downloads'),
