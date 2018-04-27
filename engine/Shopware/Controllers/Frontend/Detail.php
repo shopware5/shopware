@@ -262,7 +262,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         $this->View()->sAction = 'ratingAction';
 
-        $this->forward('index');
+        $this->forward(
+            $this->Request()->getParam('sTargetAction', 'index'),
+            $this->Request()->getParam('sTarget', 'detail')
+        );
     }
 
     /**

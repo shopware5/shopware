@@ -101,6 +101,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
         - `DynamicCacheTimeService`
     * Added `invalidation_date_provider` tag to the DIC
 * Added parameter mode to Log module, to directly open the systemlogs tab
+* Added possibility to set `sTarget` for Detail/ratingAction
 * Added support in `config.php` to specify TrustedHeaderSet options for Symfony
 * Added user attributes to PDF documents
 * Added shop selection to emotions, to limit emotion to a specific shop
@@ -173,7 +174,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
        | --product             | -p    | Warm up products                              |
        | --variantswitch       | -d    | Warm up variant switch of configurators       |
        | --productwithnumber   | -z    | Warm up products with number parameter        |
-       | --productwithcategory | -y    | Warm up producss with category parameter      |
+       | --productwithcategory | -y    | Warm up products with category parameter      |
        | --extensions          | -x    | Warm up all URLs provided by other extensions |
 * Changed visibility of `Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::getPluginInformationFromApi()` to public
 * Changed Double-Opt-In behaviour to redirect back into the checkout, if user registered from there
