@@ -56,6 +56,15 @@ class Document extends ModelEntity
     private $name = '';
 
     /**
+     * An internal key, which can be used to identify a document type independently
+     * from its id or name, because these values may have been changed by the user.
+     *
+     * @var string
+     * @ORM\Column(name="`key`", type="string", nullable=true, unique=true)
+     */
+    private $key;
+
+    /**
      * Contains the template-file of the document.
      *
      * @var string
@@ -152,6 +161,30 @@ class Document extends ModelEntity
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Sets the document's unique key
+     *
+     * @param string
+     *
+     * @return \Shopware\Models\Document\Document
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    /**
+     * Gets the document's unique key
+     *
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**
@@ -313,8 +346,6 @@ class Document extends ModelEntity
     }
 
     /**
-     * Gets the top-value of the document.
-     *
      * Gets the top-value of the document.
      *
      * @return int

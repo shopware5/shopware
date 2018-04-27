@@ -30,7 +30,7 @@
 class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * tests the cron job config pagination
+     * Tests the cron job config pagination
      */
     public function testCronJobPaginationConfig()
     {
@@ -44,7 +44,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     * tests the cron job search
+     * Tests the cron job search
      */
     public function testCronJobSearchConfig()
     {
@@ -61,7 +61,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     * tests the searchField config pagination
+     * Tests the searchField config pagination
      */
     public function testSearchFieldConfig()
     {
@@ -75,7 +75,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     * tests the cron job search
+     * Tests the cron job search
      */
     public function testSearchFieldSearchConfig()
     {
@@ -92,9 +92,87 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     * test the config tableList
+     * Tests the existence of the document type key
+     */
+    public function testPersistDocumentTypeKey()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+
+        $newTestDocumentType = [
+            'id' => 0,
+            'name' => 'Test document 1',
+            'key' => 'first_test_document',
+            'template' => 'index.tpl',
+            'numbers' => 'user',
+            'left' => 2,
+            'right' => 3,
+            'top' => 4,
+            'bottom' => 5,
+            'pageBreak' => 6,
+            'elements' => [],
+        ];
+
+        $this->Request()->setPost($newTestDocumentType);
+        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
+
+        $this->assertEquals(true, json_decode($response->getBody(), true)['success']);
+
+        Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `key`="first_test_document";');
+    }
+
+    /**
+     * Tests the document type key unique constraint
+     */
+    public function testDocumentTypeKeyUniqueConstraint()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+
+        $firstTestDocumentType = [
+            'id' => 0,
+            'name' => 'Test document 1',
+            'key' => 'test_document',
+            'template' => 'index.tpl',
+            'numbers' => 'user',
+            'left' => 2,
+            'right' => 3,
+            'top' => 4,
+            'bottom' => 5,
+            'pageBreak' => 6,
+            'elements' => [],
+        ];
+
+        $this->Request()->setPost($firstTestDocumentType);
+        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
+
+        $this->assertEquals(true, json_decode($response->getBody(), true)['success']);
+
+        // Try to add another document type with the same document type
+        $secondTestDocumentType = [
+            'id' => 0,
+            'name' => 'Test document 2',
+            'key' => 'test_document',
+            'template' => 'index.tpl',
+            'numbers' => 'user',
+            'left' => 2,
+            'right' => 3,
+            'top' => 4,
+            'bottom' => 5,
+            'pageBreak' => 6,
+            'elements' => [],
+        ];
+
+        $this->Request()->setPost($secondTestDocumentType);
+        $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
+
+        $this->assertEquals(false, json_decode($response->getBody(), true)['success']);
+
+        Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `key`="test_document";');
+    }
+
+    /**
+     * Tests the config tableList
      *
-     * @param $tableListName
+     * @param string $tableListName
      */
     private function checkTableListConfig($tableListName)
     {
@@ -107,9 +185,9 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     * test the config table list with pagination
+     * Tests the config table list with pagination
      *
-     * @param $tableListName
+     * @param strin $tableListName
      */
     private function checkGetTableListConfigPagination($tableListName)
     {
@@ -122,11 +200,11 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     * checks the search of the table list config
+     * Checks the search of the table list config
      *
-     * @param $searchTerm
-     * @param $totalCount
-     * @param $tableListName
+     * @param string $searchTerm
+     * @param int    $totalCount
+     * @param string $tableListName
      */
     private function checkGetTableListSearch($searchTerm, $totalCount, $tableListName)
     {
@@ -154,10 +232,10 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     *  checks the search and the pagination of the table list config
+     * Checks the search and the pagination of the table list config
      *
-     * @param $searchTerm
-     * @param $tableListName
+     * @param string $searchTerm
+     * @param string $tableListName
      */
     private function checkGetTableListSearchWithPagination($searchTerm, $tableListName)
     {

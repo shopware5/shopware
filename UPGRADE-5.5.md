@@ -6,6 +6,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Additions
 
+* Added unique identifier to `s_core_documents` for document types in order to create a unique, settable property for plugin developers and enabling risk free user editing of the name field
 * Added new emotion component handlers:
     - `HtmlCodeComponentHandler`
     - `HtmlElementComponentHandler`
