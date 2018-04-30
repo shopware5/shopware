@@ -158,20 +158,20 @@ class Enlight_Hook_HookManager extends Enlight_Class
     }
 
     /**
-     * Creates a new hook execution context using the given $class, $method and $args and executes it. Finally the
+     * Creates a new hook execution context using the given $subject, $method and $args and executes it. Finally the
      * execution result is returned.
      *
-     * @param Enlight_Hook_Proxy $class
+     * @param Enlight_Hook_Proxy $subject
      * @param string $method
      * @param array $args
      * @return mixed
      */
-    public function executeHooks(Enlight_Hook_Proxy $class, $method, array $args)
+    public function executeHooks(Enlight_Hook_Proxy $subject, $method, array $args)
     {
-        $className = get_parent_class($class);
+        $className = get_parent_class($subject);
         $context = new Enlight_Hook_HookExecutionContext(
             $this,
-            $class,
+            $subject,
             $method,
             $args
         );

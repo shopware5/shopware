@@ -175,8 +175,8 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             Enlight_Hook_Proxy::class
         ]);
 
-        // Add the private 'hookProxyExecutionContexts' array property
-        $classGenerator->addProperty('_hookProxyExecutionContexts', null, PropertyGenerator::FLAG_PRIVATE);
+        // Add the private '__hookProxyExecutionContexts' array property
+        $classGenerator->addProperty('__hookProxyExecutionContexts', null, PropertyGenerator::FLAG_PRIVATE);
 
         // Prepare generators for the hooked methods
         $hookMethods = $this->getHookedMethods($reflectionClass);
@@ -195,9 +195,9 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         $getHookMethodsGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $getHookMethodsGenerator);
 
-        // Add the 'pushHookExecutionContext' method (from Enlight_Hook_Proxy)
+        // Add the '__pushHookExecutionContext' method (from Enlight_Hook_Proxy)
         $pushHookExecutionContextGenerator = MethodGenerator::fromArray([
-            'name' => 'pushHookExecutionContext',
+            'name' => '__pushHookExecutionContext',
             'parameters' => [
                 [
                     'name' => 'method'
@@ -207,49 +207,67 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
                     'name' => 'context'
                 ]
             ],
-            'body' => "\$this->_hookProxyExecutionContexts[\$method][] = \$context;\n"
+            'body' => "\$this->__hookProxyExecutionContexts[\$method][] = \$context;\n"
         ]);
         $pushHookExecutionContextGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $pushHookExecutionContextGenerator);
 
-        // Add the 'popHookExecutionContext' method (from Enlight_Hook_Proxy)
+        // Add the '__popHookExecutionContext' method (from Enlight_Hook_Proxy)
         $popHookExecutionContextGenerator = MethodGenerator::fromArray([
-            'name' => 'popHookExecutionContext',
+            'name' => '__popHookExecutionContext',
             'parameters' => [
                 [
                     'name' => 'method'
                 ]
             ],
             'body' => (
-                "if (isset(\$this->_hookProxyExecutionContexts[\$method])) {\n" .
-                "    array_pop(\$this->_hookProxyExecutionContexts[\$method]);\n" .
+                "if (isset(\$this->__hookProxyExecutionContexts[\$method])) {\n" .
+                "    array_pop(\$this->__hookProxyExecutionContexts[\$method]);\n" .
                 "}\n"
             )
         ]);
         $popHookExecutionContextGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $popHookExecutionContextGenerator);
 
-        // Add the 'getCurrentHookProxyExecutionContext' method (from Enlight_Hook_Proxy)
+        // Add the '__getCurrentHookProxyExecutionContext' method (from Enlight_Hook_Proxy)
         $getCurrentHookProxyExecutionContextGenerator = MethodGenerator::fromArray([
-            'name' => 'getCurrentHookProxyExecutionContext',
+            'name' => '__getCurrentHookProxyExecutionContext',
             'parameters' => [
                 [
                     'name' => 'method'
                 ]
             ],
             'body' => (
-                "if (!isset(\$this->_hookProxyExecutionContexts[\$method]) || count(\$this->_hookProxyExecutionContexts[\$method]) === 0) {\n" .
+                "if (!isset(\$this->__hookProxyExecutionContexts[\$method]) || count(\$this->__hookProxyExecutionContexts[\$method]) === 0) {\n" .
                 "    return null;\n" .
                 "}\n" .
                 "\n" .
-                "\$contextCount = count(\$this->_hookProxyExecutionContexts[\$method]);\n" .
-                "\$context = \$this->_hookProxyExecutionContexts[\$method][\$contextCount - 1];\n" .
+                "\$contextCount = count(\$this->__hookProxyExecutionContexts[\$method]);\n" .
+                "\$context = \$this->__hookProxyExecutionContexts[\$method][\$contextCount - 1];\n" .
                 "\n" .
                 "return \$context;\n"
             )
         ]);
         $getCurrentHookProxyExecutionContextGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $getCurrentHookProxyExecutionContextGenerator);
+
+        // Add the '__getActiveHookManager' method (from Enlight_Hook_Proxy)
+        $getActiveHookManagerGenerator = MethodGenerator::fromArray([
+            'name' => '__getActiveHookManager',
+            'parameters' => [
+                [
+                    'name' => 'method'
+                ]
+            ],
+            'body' => (
+                "\$context = \$this->__getCurrentHookProxyExecutionContext(\$method);\n" .
+                "\$hookManager = (\$context) ? \$context->getHookManager() : Shopware()->Hooks();\n" .
+                "\n" .
+                "return \$hookManager;\n"
+            )
+        ]);
+        $getActiveHookManagerGenerator->setDocblock('@inheritdoc');
+        ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $getActiveHookManagerGenerator);
 
         // Add the 'executeParent' method (from Enlight_Hook_Proxy)
         $executeParentGenerator = MethodGenerator::fromArray([
@@ -265,7 +283,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
                 ]
             ],
             'body' => (
-                "\$context = \$this->getCurrentHookProxyExecutionContext(\$method);\n" .
+                "\$context = \$this->__getCurrentHookProxyExecutionContext(\$method);\n" .
                 "if (!\$context) {\n" .
                 "    throw new Exception(\n" .
                 "        sprintf('Cannot execute parent without hook execution context for method \"%s\"', \$method)\n" .
@@ -278,9 +296,9 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         $executeParentGenerator->setDocblock('@inheritdoc');
         ClassGeneratorUtils::addMethodIfNotFinal($reflectionClass, $classGenerator, $executeParentGenerator);
 
-        // Add the 'executeOriginalMethod' method (from Enlight_Hook_Proxy)
+        // Add the '__executeOriginalMethod' method (from Enlight_Hook_Proxy)
         $executeOriginalMethodGenerator = MethodGenerator::fromArray([
-            'name' => 'executeOriginalMethod',
+            'name' => '__executeOriginalMethod',
             'parameters' => [
                 [
                     'name' => 'method'
@@ -351,13 +369,9 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         $methodGenerator = MethodGenerator::fromReflection($originalMethod);
         $methodGenerator->setDocblock('@inheritdoc');
         $methodGenerator->setBody(
-            "\$method = '" . $originalMethod->getName() . "';\n" .
-            "\$context = \$this->getCurrentHookProxyExecutionContext(\$method);\n" .
-            "\$hookManager = (\$context) ? \$context->getHookManager() : Shopware()->Hooks();\n" .
-            "\n" .
-            "return \$hookManager->executeHooks(\n" .
+            "return \$this->__getActiveHookManager(__FUNCTION__)->executeHooks(\n" .
             "    \$this,\n" .
-            "    \$method,\n" .
+            "    __FUNCTION__,\n" .
             "    [" . implode(", ", $params) . "]\n" .
             ");\n"
         );
