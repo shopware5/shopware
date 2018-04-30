@@ -37,6 +37,7 @@ class BasketSignatureGeneratorTest extends TestCase
                 'sAmount' => 0,
                 'sAmountTax' => 0,
                 'content' => [],
+                'sCurrencyId' => 1,
             ],
             null
         );
@@ -56,6 +57,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(null, null, null, 19),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -66,6 +68,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(null, null, null, 22),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -84,6 +87,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(null, 1, null, null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -94,6 +98,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(null, 2, null, null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -112,6 +117,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(100, null, null, null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -122,6 +128,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(200, null, null, null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -140,6 +147,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(null, null, 'A', null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -150,6 +158,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'content' => [
                         $this->createItemRow(null, null, 'B', null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -166,6 +175,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'sAmount' => 100,
                     'sAmountTax' => 0,
                     'content' => [],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -174,6 +184,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'sAmount' => 200,
                     'sAmountTax' => 0,
                     'content' => [],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -190,6 +201,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'sAmount' => 0,
                     'sAmountTax' => 100,
                     'content' => [],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -198,6 +210,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'sAmount' => 0,
                     'sAmountTax' => 200,
                     'content' => [],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -219,6 +232,7 @@ class BasketSignatureGeneratorTest extends TestCase
                         $this->createItemRow(10, null, null, null),
                         $this->createItemRow(10, null, null, null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -230,6 +244,7 @@ class BasketSignatureGeneratorTest extends TestCase
                         $this->createItemRow(10, null, null, null),
                         $this->createItemRow(10, null, null, null),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -254,6 +269,7 @@ class BasketSignatureGeneratorTest extends TestCase
                         $this->createItemRow(10, 1, 'B', 19.00),
                         $this->createItemRow(20, 1, 'A', 19.00),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             ),
@@ -265,6 +281,7 @@ class BasketSignatureGeneratorTest extends TestCase
                         $this->createItemRow(20, 1, 'A', 19.00),
                         $this->createItemRow(10, 1, 'B', 19.00),
                     ],
+                    'sCurrencyId' => 1,
                 ],
                 null
             )
@@ -309,6 +326,54 @@ class BasketSignatureGeneratorTest extends TestCase
                     'sAmount' => 0,
                     'sAmountTax' => 0,
                     'content' => [],
+                    'sCurrencyId' => 1,
+                ],
+                1
+            ),
+            $signatureCreator->generateSignature(
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [],
+                    'sCurrencyId' => 1,
+                ],
+                2
+            )
+        );
+    }
+
+    public function testSignatureConsidersCurrencyId()
+    {
+        $signatureCreator = new BasketSignatureGenerator();
+
+        $this->assertNotSame(
+            $signatureCreator->generateSignature(
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [],
+                    'sCurrencyId' => 1,
+                ],
+                1
+            ),
+            $signatureCreator->generateSignature(
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [],
+                    'sCurrencyId' => 0,
+                ],
+                1
+            )
+        );
+
+        $this->assertNotSame(
+            $signatureCreator->generateSignature(
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [],
+                    'sCurrencyId' => 1,
                 ],
                 1
             ),
@@ -318,7 +383,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'sAmountTax' => 0,
                     'content' => [],
                 ],
-                2
+                1
             )
         );
     }
