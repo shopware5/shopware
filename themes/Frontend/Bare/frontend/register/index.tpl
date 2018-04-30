@@ -132,6 +132,12 @@
                         {include file="frontend/register/shipping_fieldset.tpl" form_data=$register.shipping error_flags=$errors.shipping country_list=$countryList}
                     {/block}
 
+                    {* @deprecated Block will be excluded in 5.7 *}
+                    {* It has been replaced by "frontend_register_index_form_privacy" below *}
+                    {if !$update}
+                        {block name='frontend_register_index_input_privacy'}{/block}
+                    {/if}
+
                     {block name='frontend_register_index_form_required'}
                         {* Required fields hint *}
                         <div class="register--required-info required_fields">
@@ -147,28 +153,36 @@
                     {/block}
 
                     {* Data protection information *}
-                    {block name="frontend_register_index_form_privacy"}
-                        {if {config name=ACTDPRTEXT}}
-                            <h2 class="panel--title is--underline">
-                                {s name="PrivacyTitle" namespace="frontend/index/privacy"}{/s}
-                            </h2>
-                            <div class="panel--body is--wide">
-                                <div class="register--password-description">
-                                    {* Privacy checkbox *}
-                                    {if !$update}
-                                        {if {config name=ACTDPRCHECK}}
-                                            <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="is--required" />
-                                            <label for="privacy-text">
-                                        {/if}
-                                    {/if}
-                                    {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
-                                    {if {config name=ACTDPRCHECK}}
-                                        </label>
-                                    {/if}
+                    {if !$update}
+                        {block name="frontend_register_index_form_privacy"}
+                            {if {config name=ACTDPRTEXT}}
+                                {block name="frontend_register_index_form_privacy_title"}
+                                    <h2 class="panel--title is--underline">
+                                        {s name="PrivacyTitle" namespace="frontend/index/privacy"}{/s}
+                                    </h2>
+                                {/block}
+                                <div class="panel--body is--wide">
+                                    {block name="frontend_register_index_form_privacy_content"}
+                                        <div class="register--password-description">
+                                            {if {config name=ACTDPRCHECK}}
+                                                {* Privacy checkbox *}
+                                                {block name="frontend_register_index_form_privacy_content_checkbox"}
+                                                    <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="is--required" />
+                                                    <label for="privacy-text">
+                                                        {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
+                                                    </label>
+                                                {/block}
+                                            {else}
+                                                {block name="frontend_register_index_form_privacy_content_text"}
+                                                    {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
+                                                {/block}
+                                            {/if}
+                                        </div>
+                                    {/block}
                                 </div>
-                            </div>
-                        {/if}
-                    {/block}
+                            {/if}
+                        {/block}
+                    {/if}
 
                     {block name='frontend_register_index_form_submit'}
                         {* Submit button *}
