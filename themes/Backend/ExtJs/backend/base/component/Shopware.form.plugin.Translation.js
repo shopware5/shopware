@@ -103,12 +103,7 @@ Ext.define('Shopware.form.plugin.Translation',
     init: function(form) {
         var me = this;
 
-        form._translationConfig = {
-            translationType: me.translationType,
-            translationKey: me.translationKey,
-            translationCallback: me.translationCallback,
-            translationMerge: me.translationMerge
-        };
+        me.initConfig(form);
 
         form.on('afterrender', function() {
             me.initTranslationFields(form);
@@ -120,6 +115,18 @@ Ext.define('Shopware.form.plugin.Translation',
 
         form.translationPlugin = this;
         me.callParent(arguments);
+    },
+
+    /**
+     * @param form Ext.form.Panel
+     */
+    initConfig: function (form) {
+        form._translationConfig = {
+            translationType: this.translationType,
+            translationKey: this.translationKey,
+            translationCallback: this.translationCallback,
+            translationMerge: this.translationMerge
+        };
     },
 
     /**

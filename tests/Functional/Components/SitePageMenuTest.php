@@ -58,13 +58,13 @@ class SitePageMenuTest extends TestCase
 
     public function testSiteWithoutLink()
     {
-        $this->connection->insert('s_cms_static', ['id' => 1, 'description' => 'test', 'grouping' => 'gLeft']);
+        $this->connection->insert('s_cms_static', ['id' => 1, 'description' => 'test', 'grouping' => 'left']);
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('gLeft', $pages);
-        $this->assertCount(1, $pages['gLeft']);
+        $this->assertArrayHasKey('left', $pages);
+        $this->assertCount(1, $pages['left']);
 
-        $page = array_shift($pages['gLeft']);
+        $page = array_shift($pages['left']);
         $this->assertSame($this->getPath() . '/custom/index/sCustom/1', $page['link']);
     }
 
@@ -72,14 +72,14 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'gLeft', 'link' => 'http://localhost/examples']
+            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'http://localhost/examples']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('gLeft', $pages);
-        $this->assertCount(1, $pages['gLeft']);
+        $this->assertArrayHasKey('left', $pages);
+        $this->assertCount(1, $pages['left']);
 
-        $page = array_shift($pages['gLeft']);
+        $page = array_shift($pages['left']);
         $this->assertSame('http://localhost/examples', $page['link']);
     }
 
@@ -87,14 +87,14 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'gLeft', 'link' => 'https://www.google.de']
+            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'https://www.google.de']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('gLeft', $pages);
-        $this->assertCount(1, $pages['gLeft']);
+        $this->assertArrayHasKey('left', $pages);
+        $this->assertCount(1, $pages['left']);
 
-        $page = array_shift($pages['gLeft']);
+        $page = array_shift($pages['left']);
         $this->assertSame('https://www.google.de', $page['link']);
     }
 
@@ -102,14 +102,14 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'gLeft', 'link' => 'www.google.de']
+            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'www.google.de']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('gLeft', $pages);
-        $this->assertCount(1, $pages['gLeft']);
+        $this->assertArrayHasKey('left', $pages);
+        $this->assertCount(1, $pages['left']);
 
-        $page = array_shift($pages['gLeft']);
+        $page = array_shift($pages['left']);
         $this->assertSame('www.google.de', $page['link']);
     }
 
@@ -117,14 +117,14 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'gLeft', 'link' => '/de/hoehenluft-abenteuer/']
+            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => '/de/hoehenluft-abenteuer/']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('gLeft', $pages);
-        $this->assertCount(1, $pages['gLeft']);
+        $this->assertArrayHasKey('left', $pages);
+        $this->assertCount(1, $pages['left']);
 
-        $page = array_shift($pages['gLeft']);
+        $page = array_shift($pages['left']);
         $this->assertSame('/de/hoehenluft-abenteuer/', $page['link']);
     }
 
@@ -132,14 +132,14 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'gLeft', 'link' => 'shopware.php?sViewport=cat&sCategory=300']
+            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'shopware.php?sViewport=cat&sCategory=300']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('gLeft', $pages);
-        $this->assertCount(1, $pages['gLeft']);
+        $this->assertArrayHasKey('left', $pages);
+        $this->assertCount(1, $pages['left']);
 
-        $page = array_shift($pages['gLeft']);
+        $page = array_shift($pages['left']);
         $this->assertSame($this->getPath() . '/cat/index/sCategory/300', $page['link']);
     }
 

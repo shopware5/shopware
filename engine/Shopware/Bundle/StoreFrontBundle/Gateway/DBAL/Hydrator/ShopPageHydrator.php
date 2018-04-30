@@ -101,6 +101,9 @@ class ShopPageHydrator extends Hydrator
 
         $shopPage->setShopIds($shopIds);
 
+        $translation = $this->getTranslation($data, '__page');
+        $data = array_merge($data, $translation);
+
         $this->attributeHydrator->addAttribute($shopPage, $data, 'pageAttribute');
     }
 }

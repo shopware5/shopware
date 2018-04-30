@@ -46,6 +46,11 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
     bodyPadding: 5,
     autoScroll: true,
 
+    plugins: [{
+        ptype: 'translation',
+        translationType: 'page'
+    }],
+
     initComponent: function() {
         var me = this;
         me.dockedItems = [];
@@ -137,7 +142,9 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 emptyText: '{s name=formContentFieldDescriptionEmptyText}Page name{/s}',
                 name: 'description',
                 allowBlank: false,
-                anchor:'100%'
+                anchor:'100%',
+                translatable: true,
+                translationName: 'description'
             },
             {
                 fieldLabel: '{s name=formContentFieldActiveLabel}Active{/s}',
@@ -152,7 +159,9 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 xtype: 'tinymce',
                 name: 'html',
                 anchor:'100%',
-                height: 300
+                height: 300,
+                translatable: true,
+                translationName: 'html'
             },
             me.getDdSelector()
         ]
@@ -170,7 +179,9 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 fieldLabel: '{s name=formLinkFieldAddressLabel}Link-Address{/s}',
                 xtype: 'textfield',
                 name: 'link',
-                anchor:'100%'
+                anchor:'100%',
+                translatable: true,
+                translationName: 'link'
             },
             {
                 fieldLabel: '{s name=formLinkFieldTargetLabel}Link-Target{/s}',
@@ -246,19 +257,25 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 fieldLabel: '{s name=formSettingsFieldSEOTitle}SEO Title{/s}',
                 xtype: 'textfield',
                 name: 'pageTitle',
-                anchor:'100%'
+                anchor:'100%',
+                translatable: true,
+                translationName: 'seoPageTitle'
             },
             {
                 fieldLabel: '{s name=formSettingsFieldMetaKeywords}Meta-Keywords{/s}',
                 xtype: 'textfield',
                 name: 'metaKeywords',
-                anchor:'100%'
+                anchor:'100%',
+                translatable: true,
+                translationName: 'seoMetaKeywords'
             },
             {
                 fieldLabel: '{s name=formSettingsFieldMetaDescription}Meta-Description{/s}',
                 xtype: 'textfield',
                 name: 'metaDescription',
-                anchor:'100%'
+                anchor:'100%',
+                translatable: true,
+                translationName: 'seoMetaDescription'
             }
         ]
     },

@@ -25,6 +25,8 @@
 namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Routing\Router;
 use Shopware\Components\Routing\RouterInterface;
 
@@ -44,13 +46,27 @@ class SitePageMenu
     private $router;
 
     /**
-     * @param Connection      $connection
-     * @param RouterInterface $router
+     * @var FieldHelper
      */
-    public function __construct(Connection $connection, RouterInterface $router)
+    private $fieldHelper;
+
+    /**
+     * @var ContextServiceInterface
+     */
+    private $shopContextService;
+
+    /**
+     * @param Connection              $connection
+     * @param RouterInterface         $router
+     * @param FieldHelper             $fieldHelper
+     * @param ContextServiceInterface $shopContextService
+     */
+    public function __construct(Connection $connection, RouterInterface $router, FieldHelper $fieldHelper, ContextServiceInterface $shopContextService)
     {
         $this->connection = $connection;
         $this->router = $router;
+        $this->fieldHelper = $fieldHelper;
+        $this->shopContextService = $shopContextService;
     }
 
     /**
@@ -72,8 +88,44 @@ class SitePageMenu
 
         $menu = [];
         $links = [];
+
+        /**
+         * @deprecated
+         *
+         * Only necessary for mapping legacy page groups from e.g. "gLeft" to "left"
+         * To be removed in version 5.6
+         */
+        $legacyGroups = [
+            'gLeft',
+            'gBottom',
+            'gBottom2',
+            'gDisabled',
+        ];
+
         foreach ($data as $site) {
-            $key = !empty($site['mapping']) ? $site['mapping'] : $site['group'];
+            /*
+             * @deprecated
+             *
+             * Only necessary for mapping legacy page groups from e.g. "gLeft" to "left"
+             * To be removed in version 5.6
+             */
+            if (isset($site['mapping'])) {
+                /**
+                 * If there's a mapping present, we're dealing with one of the
+                 * english legacy groups, so rename it to make it usable in the frontend.
+                 */
+                $key = $site['mapping'];
+                if (in_array($site['mapping'], $legacyGroups, true)) {
+                    $key = strtolower(substr($site['mapping'], 1));
+                }
+            } else {
+                /** group either contains the new or the legacy group key */
+                $key = $site['group'];
+                if (in_array($site['group'], $legacyGroups, true)) {
+                    /** If its a legacy group key, rename like above */
+                    $key = strtolower(substr($site['group'], 1));
+                }
+            }
 
             if ($this->overrideExisting($menu, $key, $site)) {
                 $menu[$key] = [];
@@ -88,6 +140,20 @@ class SitePageMenu
                     'action' => 'index',
                     'sCustom' => $id,
                 ];
+            }
+
+            if ($site['__page_translation']) {
+                $translations = unserialize($site['__page_translation']);
+
+                if ($translations) {
+                    foreach ($translations as $property => $translation) {
+                        if (strlen($translation) > 0) {
+                            $site[$property] = $translation;
+                        }
+                    }
+                }
+
+                unset($site['__page_translation']);
             }
 
             $menu[$key][] = $site;
@@ -159,13 +225,14 @@ class SitePageMenu
     }
 
     /**
-     * @param $shopId
+     * @param int $shopId
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery($shopId)
     {
         $query = $this->connection->createQueryBuilder();
+        $context = $this->shopContextService->createShopContext($shopId);
 
         $query->select([
             'page.id',
@@ -199,6 +266,8 @@ class SitePageMenu
             'shops',
             'groups.id = shops.group_id AND shops.shop_id = :shopId'
         );
+
+        $this->fieldHelper->addShopPageTranslation($query, $context);
 
         $query->andWhere('groups.active = 1')
             ->andWhere('page.active = 1')

@@ -395,8 +395,10 @@
         </service>
 
         <service id="shop_page_menu" class="Shopware\Components\SitePageMenu">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="router" />
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
         </service>
 
         <service id="emotion_device_configuration" class="Shopware\Components\Emotion\DeviceConfiguration">

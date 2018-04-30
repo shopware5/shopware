@@ -1312,6 +1312,15 @@ class FieldHelper
         $this->addTranslation('categoryAttribute', 's_categories_attributes', $query, $context, 'category.id');
     }
 
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addShopPageTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('page', 'page', $query, $context);
+    }
+
     public function getCustomerFields()
     {
         $fields = [

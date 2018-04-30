@@ -4,7 +4,7 @@
         {* Service menu *}
         {block name="frontend_index_minimal_footer_menu"}
             <div class="footer--service-menu">
-                {include file="widgets/index/menu.tpl" sGroup=gLeft}
+                {include file="widgets/index/menu.tpl" sGroup=left}
             </div>
         {/block}
 
