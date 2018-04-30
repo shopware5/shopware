@@ -1,28 +1,26 @@
-{extends file='frontend/checkout/cart_item.tpl'}
+{* Constants for the different basket item types *}
+{$IS_PRODUCT = 0}
+{$IS_PREMIUM_PRODUCT = 1}
+{$IS_VOUCHER = 2}
+{$IS_REBATE = 3}
+{$IS_SURCHARGE_DISCOUNT = 4}
+{$path = ''}
 
-{* Article price *}
-{block name='frontend_checkout_cart_item_price'}{/block}
+{if $sBasketItem.modus == $IS_PRODUCT}
+    {$path = 'frontend/checkout/finish_item_product.tpl'}
+{elseif $sBasketItem.modus == $IS_PREMIUM_PRODUCT}
+    {$path = 'frontend/checkout/finish_item_premium_product.tpl'}
+{elseif $sBasketItem.modus == $IS_VOUCHER}
+    {$path = 'frontend/checkout/finish_item_voucher.tpl'}
+{elseif $sBasketItem.modus == $IS_REBATE}
+    {$path = 'frontend/checkout/cart_item_rebate.tpl'}
+{elseif $sBasketItem.modus == $IS_SURCHARGE_DISCOUNT}
+    {$path = 'frontend/checkout/cart_item_surcharge_discount.tpl'}
+{else}
+    {* Register your own mode selection *}
+    {block name='frontend_checkout_cart_item_additional_type'}{/block}
+{/if}
 
-{* Delivery informations *}
-{block name='frontend_checkout_cart_item_delivery_informations'}{/block}
-
-{* Article amount *}
-{block name='frontend_checkout_cart_item_quantity'}
-    <div class="table--column column--quantity block is--align-right">
-        {* Label *}
-        {block name='frontend_checkout_cart_item_quantity_label'}
-            <div class="column--label quantity--label">
-                {s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
-            </div>
-        {/block}
-
-        {$sBasketItem.quantity}
-    </div>
-{/block}
-
-{* Remove all the delete buttons for products *}
-{block name='frontend_checkout_cart_item_delete_article'}{/block}
-{block name='frontend_checkout_cart_item_voucher_delete'}{/block}
-{block name='frontend_checkout_cart_item_premium_delete'}{/block}
-{block name='frontend_checkout_cart_item_premium_delete_article'}{/block}
-{block name='frontend_checkout_cart_item_voucher_delete_article'}{/block}
+{if $path != ''}
+    {include file="$path" isLast=$isLast}
+{/if}

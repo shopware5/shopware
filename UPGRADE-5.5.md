@@ -21,7 +21,15 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `cart_item_rebate.tpl`
     * `cart_item_surcharge_discount.tpl`
     * `cart_item_voucher.tpl`
-
+    * `confirm_item_premium_product.tpl`
+    * `confirm_item_product.tpl`
+    * `confirm_item_rebate.tpl`
+    * `confirm_item_surcharge_discount.tpl`
+    * `confirm_item_voucher.tpl`
+    * `finish_item_premium_product.tpl`
+    * `finish_item_product.tpl`
+    * `finish_item_voucher.tpl`
+    
 ### Changes
 
 * Changed the execution model of `replace` hooks to prevent multiple calls of the hooked method, if more than one `replace` hook on the same method exists and all of them call `executeParent()` once
@@ -35,7 +43,11 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `frontend_checkout_cart_item_rebate`
     * `frontend_checkout_cart_item_surcharge_discount`
     
-    All these blocks are moved to own template files to optimize include process.
+    All these blocks are moved to own template files to optimize include process. Please be aware that these changes make it necessary to change templates that extend `cart_item.tpl`.
+* Changed `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl` and `finish_item.tpl` to keep track of the earlier mentioned changes and additions to `cart_item.tpl` and to use Smarty Inheritance system correctly.
+
+    Please check your templates when you extend `cart_item.tpl`. You now have to extend one of the added subtemplates.
+    
 
 ### Removals
 
