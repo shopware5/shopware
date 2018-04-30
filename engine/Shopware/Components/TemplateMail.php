@@ -178,6 +178,9 @@ class Shopware_Components_TemplateMail
             $translationReader = $this->getTranslationReader();
             $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
             $mailModel->setTranslation($translation);
+
+            $inheritance = Shopware()->Container()->get('theme_inheritance');
+            $defaultContext['theme'] = $inheritance->buildConfig($this->getShop()->getTemplate(), $this->getShop(), false);
         } else {
             $defaultContext = [
                 'sConfig' => $config,
@@ -185,7 +188,7 @@ class Shopware_Components_TemplateMail
         }
 
         // save current context to mail model
-        $mailContext = json_decode(json_encode($context), true);
+        $mailContext = json_decode(json_encode(array_merge($defaultContext, $context)), true);
         $mailModel->setContext($mailContext);
         $this->getModelManager()->flush($mailModel);
 
