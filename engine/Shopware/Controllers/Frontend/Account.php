@@ -503,6 +503,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
           WHERE id = ?';
 
         $user = $this->get('dbal_connection')->fetchAssoc($sql, [$userID]);
+        $email = $user['email'];
         $user['attributes'] = $this->get('dbal_connection')->fetchAssoc('SELECT * FROM s_user_attributes WHERE userID = ?', [$userID]);
 
         $context['user'] = $user;
