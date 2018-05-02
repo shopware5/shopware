@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `cart_item_rebate.tpl`
     * `cart_item_surcharge_discount.tpl`
     * `cart_item_voucher.tpl`
+* Added option to allow multiple documents of the same type for orders in `engine/Shopware/Components/Document.php`.
 
 ### Changes
 
