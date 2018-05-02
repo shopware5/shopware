@@ -42,6 +42,8 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             ->setDescription('Warm up http cache')
             ->addArgument('shopId', InputArgument::OPTIONAL, 'The Id of the shop')
             ->addOption('clear-cache', 'c', InputOption::VALUE_NONE, 'Clear complete httpcache before warmup')
+            ->addOption('parallel-mode', 'p', InputOption::VALUE_NONE, 'Send more than one HTTP request at a time. The amount of parallel requests is determined by the batch size. This is faster as sending one request after another.')
+            ->addOption('batch-size', 'b', InputOption::VALUE_REQUIRED, 'The amount of URLs handled in one program cycle. To many URLs at a time may cause script timeouts, memory issues or block your HTTP server (when using parallel mode)', 10)
             ->setHelp('The <info>%command.name%</info> warms up the http cache')
         ;
     }
@@ -68,7 +70,8 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
         $cacheWarmer = $this->container->get('http_cache_warmer');
 
         foreach ($shopIds as $shopId) {
-            $limit = 10;
+            // Help message for this command may be confusing about using an equal sign. So better strip it.
+            $limit = (int) trim($input->getOption('batch-size'), '=');
             $offset = 0;
             $totalUrlCount = $cacheWarmer->getAllSEOUrlCount($shopId);
             $output->writeln("\n Calling URLs for shop with id " . $shopId);
@@ -78,7 +81,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             while ($offset < $totalUrlCount) {
                 $urls = $cacheWarmer->getAllSEOUrls($shopId, $limit, $offset);
 
-                $cacheWarmer->callUrls($urls, $shopId);
+                $cacheWarmer->callUrls($urls, $shopId, $input->getOption('parallel-mode'));
                 $progressBar->advance(count($urls));
                 $offset += count($urls);
             }
