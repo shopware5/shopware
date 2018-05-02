@@ -72,6 +72,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
     Please check your templates when you extend `cart_item.tpl`. You now have to extend one of the added subtemplates.
 * Changed `country_id` to `countryId` and `state_id` to `stateId` in `Shopware.apps.Customer.model.Address`
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
+* Changed the translation logic for config elements of types `combo` and
+  `select` to consider translations other than for the non-standard `en`
+  locale, but to instead try the user's locale, `en_GB` and `en` as fallbacks
+  before resorting to the first defined (by array index) translation.
 
 ### Removals
 
