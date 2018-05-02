@@ -156,7 +156,15 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         close: '{s name=progress/close}Close window{/s}'
     },
 
+    /**
+     * How many items should be worked in batch in one AJAX-request to the server
+     */
     batchSize: 50,
+
+    /**
+     * For HTTPCache, how many URLs should be called concurrently?
+     */
+    concurrencySize: 5,
 
     currentType: 'seo',
 
@@ -262,7 +270,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                 padding: '20 0',
                 items: items
             },
-            me.createBatchSizeCombo()
+            me.createBatchSizeCombo(),
+            me.createConcurrencySizeCombo()
         ];
     },
 
@@ -307,6 +316,46 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             'multiRequestTasksCancelProcess',
             'startSeoIndex'
         );
+    },
+
+    createConcurrencySizeCombo: function() {
+        var me = this;
+
+        me.concurrencySizeCombo = Ext.create('Ext.form.ComboBox', {
+            fieldLabel: '{s name=multi_request/concurrency/label}Concurrency{/s}',
+            helpText: '{s name=multi_request/concurrency/help}How many URLs should be requested in parallel? Default: 5{/s}',
+            name: 'concurrencySize',
+            margin: '0 0 10 0',
+            allowBlank: false,
+            value: me.concurrencySize,
+            editable: true,
+            displayField: 'concurrencySize',
+            store: Ext.create('Ext.data.Store', {
+                fields: [
+                    { name: 'concurrencySize', type: 'int' }
+                ],
+                data: [
+                    { concurrencySize: '1' },
+                    { concurrencySize: '2' },
+                    { concurrencySize: '3' },
+                    { concurrencySize: '4' },
+                    { concurrencySize: '5' },
+                    { concurrencySize: '6' },
+                    { concurrencySize: '7' },
+                    { concurrencySize: '8' },
+                    { concurrencySize: '9' },
+                    { concurrencySize: '10' },
+                    { concurrencySize: '15' },
+                    { concurrencySize: '20' },
+                    { concurrencySize: '25' },
+                    { concurrencySize: '30' },
+                    { concurrencySize: '40' },
+                    { concurrencySize: '50' }
+                ]
+            })
+        });
+
+        return me.concurrencySizeCombo;
     },
 
     createBatchSizeCombo: function() {

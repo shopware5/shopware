@@ -26,6 +26,8 @@ namespace Shopware\Components\HttpCache;
 
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Event\ErrorEvent;
+use GuzzleHttp\Pool;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Logger;
 
@@ -76,7 +78,7 @@ class CacheWarmer
     }
 
     /**
-     * calculates the amount of available urls based on a specific viewport and shop
+     * Calculates the amount of available URLs based on a specific viewport and shop
      *
      * @param string $viewPort
      * @param int    $shopId
@@ -97,7 +99,7 @@ class CacheWarmer
     }
 
     /**
-     * returns the amount of all available seo urls
+     * Returns the amount of all available SEO URLs
      *
      * @param int $shopId
      *
@@ -117,11 +119,11 @@ class CacheWarmer
     }
 
     /**
-     * returns all available seo urls
+     * Returns all available seo urls
      *
-     * @param int  $shopId
-     * @param null $limit
-     * @param null $offset
+     * @param int      $shopId
+     * @param null|int $limit
+     * @param null|int $offset
      *
      * @return string[]
      */
@@ -148,7 +150,7 @@ class CacheWarmer
     }
 
     /**
-     * returns the urls from the seo url table by the given view ports
+     * Returns the URLs from the SEO URL table by the given view ports
      *
      * @param string[] $viewPorts
      * @param int      $shopId
@@ -194,35 +196,44 @@ class CacheWarmer
     }
 
     /**
-     * calls every given url with the specific shop cookie
+     * Calls every URL given with the specific shop cookie
      *
      * @param string[] $urls
      * @param int      $shopId
+     * @param int      $concurrentRequests
      */
-    public function callUrls($urls, $shopId)
+    public function callUrls($urls, $shopId, $concurrentRequests = 1)
     {
         $shop = $this->getShopDataById($shopId);
 
         $guzzleConfig = [];
         if (!empty($shop['main_id'])) {
-            //is not the main shop call url without shop cookie encoded in it
+            // Is not the main shop call url without shop cookie encoded in it
             $guzzleConfig['cookies'] = ['shop' => $shopId];
         }
 
+        $requests = [];
         foreach ($urls as $url) {
-            $request = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
-            try {
-                $this->guzzleClient->send($request);
-            } catch (\Exception $e) {
-                $this->logger->error(
-                    'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
-                );
-            }
+            $requests[] = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
         }
+
+        $pool = new Pool(
+            $this->guzzleClient,
+            $requests,
+            [
+                'pool_size' => $concurrentRequests,
+                'error' => function (ErrorEvent $event) use ($shopId) {
+                    $this->logger->error(
+                        'Warm up http-cache error with shopId ' . $shopId . ' ' . $event->getException()->getMessage()
+                    );
+                },
+            ]);
+
+        $pool->wait();
     }
 
     /**
-     * helper to add the host and the basepath as a prefix to the url
+     * Helper to add the host and the basepath as a prefix to the url
      *
      * @param int      $shopId
      * @param string[] $urls
@@ -239,22 +250,21 @@ class CacheWarmer
         if ($shop['base_url']) {
             $baseUrl = $shop['base_url'];
         } else {
-            // if no virtual url of the language shop is give us the one from the main shop. Otherwise use simply the base_path
+            // If no virtual url of the language shop is give us the one from the main shop. Otherwise use simply the base_path
             $baseUrl = $mainShop['base_url'] ?: $mainShop['base_path'];
         }
-        // use the main host if no language host ist available
+        // Use the main host if no language host ist available
         $shopHost = empty($shop['host']) ? $mainShop['host'] : $shop['host'];
 
         foreach ($urls as &$url) {
-            $url = strtolower($url);
-            $url = $httpHost . $shopHost . $baseUrl . '/' . $url;
+            $url = $httpHost . $shopHost . $baseUrl . '/' . strtolower($url);
         }
 
         return $urls;
     }
 
     /**
-     * returns the shop object by id
+     * Returns the shop object by id
      *
      * @param int $shopId
      *
@@ -264,7 +274,7 @@ class CacheWarmer
     {
         $shopData = $this->connection->fetchAssoc(
             'SELECT * FROM s_core_shops WHERE active = 1 AND id = :id',
-            ['id' => $shopId]
+            ['id' => (int) $shopId]
         );
 
         return $shopData;
