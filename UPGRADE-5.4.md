@@ -8,7 +8,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
-* Change Tinymce editor to resolve placeholder images on initialization 
+* Change Tinymce editor to resolve placeholder images on initialization
+* The AJAX search now respects the basic setting for direct number searches and shows the same results as the normal search 
 
 ## 5.4.3
 
