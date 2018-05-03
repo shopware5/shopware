@@ -42,9 +42,9 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         parent::setUp();
 
         $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+        $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Customer::class);
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -61,7 +61,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->assertEquals(0, $customer->getPaymentId());
 
         $debit = $this->manager
-            ->getRepository('Shopware\Models\Payment\Payment')
+            ->getRepository(\Shopware\Models\Payment\Payment::class)
             ->findOneBy(['name' => 'debit']);
 
         $params = [
@@ -88,7 +88,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     public function testAddCustomerPaymentDataWithDebit()
     {
         $debit = $this->manager
-            ->getRepository('Shopware\Models\Payment\Payment')
+            ->getRepository(\Shopware\Models\Payment\Payment::class)
             ->findOneBy(['name' => 'debit']);
 
         $params = [
@@ -128,7 +128,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
 
         /** @var \Shopware\Models\Customer\PaymentData $paymentData */
         $paymentData = array_shift($dummyData->getPaymentData()->toArray());
-        $this->assertInstanceOf('\Shopware\Models\Customer\PaymentData', $paymentData);
+        $this->assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
         $this->assertEquals('Account Holder Name', $paymentData->getAccountHolder());
         $this->assertEquals('1234567890', $paymentData->getAccountNumber());
         $this->assertEquals('2345678901', $paymentData->getBankCode());
@@ -149,10 +149,10 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         $dummyData = $this->repository->find($dummyDataId);
         $sepa = $this->manager
-            ->getRepository('Shopware\Models\Payment\Payment')
+            ->getRepository(\Shopware\Models\Payment\Payment::class)
             ->findOneBy(['name' => 'sepa']);
         $debit = $this->manager
-            ->getRepository('Shopware\Models\Payment\Payment')
+            ->getRepository(\Shopware\Models\Payment\Payment::class)
             ->findOneBy(['name' => 'debit']);
 
         $this->assertEquals($debit->getId(), $dummyData->getPaymentId());
@@ -187,7 +187,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         // Old debit payment data is still there, it's just not used currently
         /** @var \Shopware\Models\Customer\PaymentData $paymentData */
         $paymentData = array_shift($paymentDataArray);
-        $this->assertInstanceOf('\Shopware\Models\Customer\PaymentData', $paymentData);
+        $this->assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
         $this->assertEquals('Account Holder Name', $paymentData->getAccountHolder());
         $this->assertEquals('1234567890', $paymentData->getAccountNumber());
         $this->assertEquals('2345678901', $paymentData->getBankCode());
@@ -199,7 +199,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         // New SEPA data
         /** @var \Shopware\Models\Customer\PaymentData $paymentData */
         $paymentData = array_shift($paymentDataArray);
-        $this->assertInstanceOf('\Shopware\Models\Customer\PaymentData', $paymentData);
+        $this->assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
         $this->assertEmpty($paymentData->getAccountHolder());
         $this->assertEmpty($paymentData->getAccountNumber());
         $this->assertEmpty($paymentData->getBankCode());
@@ -242,9 +242,9 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         $dummy = $this->createDummyCustomer();
 
-        $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $dummy->getId());
+        $customer = Shopware()->Models()->find(\Shopware\Models\Customer\Customer::class, $dummy->getId());
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        $this->assertInstanceOf(\Shopware\Models\Customer\Customer::class, $customer);
         $this->assertEquals('1', $customer->getGroup()->getId());
     }
 
@@ -267,7 +267,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         $dummyData = new \Shopware\Models\Customer\Customer();
         $dummyData->setEmail('test@phpunit.org');
-        $dummyData->setGroup($this->manager->find('Shopware\Models\Customer\Group', 1));
+        $dummyData->setGroup($this->manager->find(\Shopware\Models\Customer\Group::class, 1));
         $this->manager->persist($dummyData);
         $this->manager->flush();
 
@@ -278,7 +278,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             'zipcode' => 'test',
             'city' => 'test',
             'customer' => $dummyData,
-            'country' => $this->manager->find('Shopware\Models\Country\Country', 2),
+            'country' => $this->manager->find(\Shopware\Models\Country\Country::class, 2),
         ]);
         $this->manager->persist($address);
         $this->manager->flush();

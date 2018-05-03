@@ -166,6 +166,8 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
 
         $this->assertEquals(false, json_decode($response->getBody(), true)['success']);
 
+        $this->resetContainer();
+
         Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `key`="test_document";');
     }
 
@@ -260,5 +262,22 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $returnData = $this->View()->getAssign('data');
         $this->assertCount(2, $returnData);
         $this->assertTrue($this->View()->getAssign('success'));
+    }
+
+    /**
+     * Resets the shopware container
+     */
+    private function resetContainer()
+    {
+        // synthetic services
+        $kernel = Shopware()->Container()->get('kernel');
+        $connection = Shopware()->Container()->get('db_connection');
+        $application = Shopware()->Container()->get('application');
+
+        Shopware()->Container()->reset();
+
+        Shopware()->Container()->set('kernel', $kernel);
+        Shopware()->Container()->set('db_connection', $connection);
+        Shopware()->Container()->set('application', $application);
     }
 }
