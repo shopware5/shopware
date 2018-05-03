@@ -63,6 +63,9 @@ class StoreFrontCustomerGreetingService implements StoreFrontCustomerGreetingSer
      */
     public function fetch()
     {
+        if (!$this->session->offsetGet('sUserId')) {
+            return null;
+        }
         if (!$this->config->get('useSltCookie')) {
             return null;
         }
