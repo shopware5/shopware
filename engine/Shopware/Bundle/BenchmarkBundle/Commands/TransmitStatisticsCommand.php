@@ -68,12 +68,12 @@ class TransmitStatisticsCommand extends ShopwareCommand
         }
 
         $output->write('Transmitting statistics...');
-        $statistics = $this->container->get('shopware.bundle_benchmark.statistics_transmission');
+        $statistics = $this->container->get('shopware.benchmark_bundle.statistics_transmission');
         $statistics->transmit();
         $output->writeln('<info>done!</info>');
 
-        $output->write('Retrieving benchmarks...');
-        $benchmark = $this->container->get('shopware.bundle_benchmark.benchmark_transmission');
+        $output->write('Retrieving business intelligence...');
+        $benchmark = $this->container->get('shopware.benchmark_bundle.bi_transmission');
         $benchmark->transmit();
         $output->writeln('<info>done!</info>');
     }

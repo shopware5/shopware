@@ -24,23 +24,17 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
-use Shopware\Bundle\BenchmarkBundle\BenchmarkClientInterface;
-use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
-use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkRequest;
-use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkResponse;
+use Shopware\Bundle\BenchmarkBundle\BusinessIntelligenceClientInterface;
+use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceRequest;
+use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
-class BenchmarkService
+class BusinessIntelligenceService
 {
     /**
-     * @var BenchmarkCollector
+     * @var BusinessIntelligenceClientInterface
      */
-    private $benchmarkCollector;
-
-    /**
-     * @var BenchmarkClientInterface
-     */
-    private $benchmarkClient;
+    private $biClient;
 
     /**
      * @var BenchmarkRepository
@@ -48,39 +42,32 @@ class BenchmarkService
     private $benchmarkRepository;
 
     /**
-     * @param BenchmarkCollector       $benchmarkCollector
-     * @param BenchmarkClientInterface $benchmarkClient
-     * @param BenchmarkRepository      $benchmarkRepository
+     * @param BusinessIntelligenceClientInterface $biClient
+     * @param BenchmarkRepository                 $benchmarkRepository
      */
     public function __construct(
-        BenchmarkCollector $benchmarkCollector,
-        BenchmarkClientInterface $benchmarkClient,
+        BusinessIntelligenceClientInterface $biClient,
         BenchmarkRepository $benchmarkRepository)
     {
-        $this->benchmarkCollector = $benchmarkCollector;
-        $this->benchmarkClient = $benchmarkClient;
+        $this->biClient = $biClient;
         $this->benchmarkRepository = $benchmarkRepository;
     }
 
     /**
-     * @return BenchmarkResponse
+     * @return BusinessIntelligenceResponse
      */
     public function transmit()
     {
-        $this->benchmarkCollector->get();
-
-        $request = new BenchmarkRequest();
-        $request->data = $this->benchmarkCollector->get();
-
-        /** @var BenchmarkResponse $benchmarkResponse */
-        $benchmarkResponse = $this->benchmarkClient->sendBenchmark($request);
-
         $config = $this->benchmarkRepository->getMainConfig();
-        $config->setLastSent($benchmarkResponse->getDateUpdated());
-        $config->setToken($benchmarkResponse->getToken());
+
+        /** @var BusinessIntelligenceResponse $response */
+        $response = $this->biClient->fetchBusinessIntelligence(new BusinessIntelligenceRequest($config->getToken()));
+
+        $config->setCachedTemplate($response->getHtml());
+        $config->setLastReceived($response->getDateTime());
 
         $this->benchmarkRepository->save($config);
 
-        return $benchmarkResponse;
+        return $response;
     }
 }

@@ -30,7 +30,7 @@ use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 class BenchmarkStatisticsService
 {
     /**
-     * @var BenchmarkService
+     * @var StatisticsService
      */
     private $benchmark;
 
@@ -45,22 +45,22 @@ class BenchmarkStatisticsService
     private $interval;
 
     /**
-     * @var StatisticsService
+     * @var BusinessIntelligenceService
      */
     private $statistics;
 
     /**
-     * @param BenchmarkService    $benchmark
-     * @param BenchmarkRepository $benchmarkRepository
-     * @param StatisticsService   $statistics
-     * @param \DateInterval|null  $interval
+     * @param StatisticsService           $benchmark
+     * @param BenchmarkRepository         $benchmarkRepository
+     * @param BusinessIntelligenceService $statistics
+     * @param \DateInterval|null          $interval
      *
      * @throws \Exception
      */
     public function __construct(
         BenchmarkRepository $benchmarkRepository,
-        BenchmarkService $benchmark,
-        StatisticsService $statistics,
+        StatisticsService $benchmark,
+        BusinessIntelligenceService $statistics,
         \DateInterval $interval = null)
     {
         $this->benchmarkRepository = $benchmarkRepository;

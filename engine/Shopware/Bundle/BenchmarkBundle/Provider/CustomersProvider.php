@@ -107,7 +107,9 @@ class CustomersProvider implements BenchmarkProviderInterface
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-        $salutationCounts = [];
+        $salutationCounts = [
+            'other' => 0,
+        ];
         foreach ($countsForSalutations as $key => $countsForSalutation) {
             if ($key === 'mr') {
                 $salutationCounts['male'] = $countsForSalutation;

@@ -165,6 +165,8 @@ class ShopwareProvider implements BenchmarkProviderInterface
     {
         $extensions = [];
         foreach (get_loaded_extensions() as $extension) {
+            // Whitespace in JSON keys can create problems
+            $extension = str_replace(' ', '_', $extension);
             $extensions[$extension] = phpversion($extension);
         }
 

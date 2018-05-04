@@ -24,33 +24,17 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
-use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkHydratingException;
-use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkResponse;
+use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
 
-class BenchmarkResponseHydrator implements HydratorInterface
+class BusinessIntelligenceResponseHydrator implements HydratorInterface
 {
     /**
      * @param array $data
      *
-     * @throws BenchmarkHydratingException
-     *
-     * @return BenchmarkResponse
+     * @return BusinessIntelligenceResponse
      */
     public function hydrate(array $data)
     {
-        if (empty($data['dateUpdated'])) {
-            throw new BenchmarkHydratingException('Missing field "dateUpdated" from server response');
-        }
-
-        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $data['dateUpdated'], new \DateTimeZone('UTC'));
-        if (!$date) {
-            throw new BenchmarkHydratingException(sprintf('Field "dateUpdated" in server response contained invalid data: "%s"', $data['dateUpdated']));
-        }
-
-        if (empty($data['token'])) {
-            throw new BenchmarkHydratingException('Missing field "token" from server response');
-        }
-
-        return new BenchmarkResponse($date, $data['token']);
+        return new BusinessIntelligenceResponse(new \DateTime('now', new \DateTimeZone('UTC')), $data['html']);
     }
 }

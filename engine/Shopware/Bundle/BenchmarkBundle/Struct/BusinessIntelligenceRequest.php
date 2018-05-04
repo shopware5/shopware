@@ -24,34 +24,24 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
-class BenchmarkResponse
+class BusinessIntelligenceRequest
 {
-    /**
-     * @var \DateTime
-     */
-    private $dateUpdated;
-
     /**
      * @var string
      */
     private $token;
 
     /**
-     * @param \DateTime $dateUpdated
-     * @param string    $token
+     * @param string $token
      */
-    public function __construct(\DateTime $dateUpdated, $token)
+    public function __construct($token)
     {
-        $this->dateUpdated = $dateUpdated;
         $this->token = $token;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getDateUpdated()
+    public function __toString()
     {
-        return $this->dateUpdated;
+        return sprintf('token=%s', $this->token);
     }
 
     /**

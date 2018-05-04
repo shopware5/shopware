@@ -22,17 +22,43 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle;
+namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
-use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkRequest;
-use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkResponse;
-
-interface BenchmarkClientInterface
+class BusinessIntelligenceResponse
 {
     /**
-     * @param BenchmarkRequest $benchmarkRequest
-     *
-     * @return BenchmarkResponse
+     * @var \DateTime
      */
-    public function sendBenchmark(BenchmarkRequest $benchmarkRequest);
+    private $dateTime;
+
+    /**
+     * @var string
+     */
+    private $html;
+
+    /**
+     * @param \DateTime $dateTime
+     * @param string    $html
+     */
+    public function __construct(\DateTime $dateTime, $html)
+    {
+        $this->dateTime = $dateTime;
+        $this->html = $html;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateTime()
+    {
+        return $this->dateTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtml()
+    {
+        return $this->html;
+    }
 }

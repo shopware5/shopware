@@ -236,7 +236,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        if (!$this->checkIdententical($localFh, $remoteFh)) {
+        if (!$this->checkIdentical($localFh, $remoteFh)) {
             $this->View()->assign([
                 'success' => false,
                 'error' => 'Files are not identical.',
@@ -270,7 +270,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $publicKey = trim(file_get_contents($rootDir . '/engine/Shopware/Components/HttpClient/public.key'));
             $shopwareRelease = $this->container->get('shopware.release');
 
-            $collector = new FeedbackCollector($apiEndpoint, $publicKey, $this->getUnique(), $shopwareRelease);
+            $collector = new FeedbackCollector($apiEndpoint, new \Shopware\Components\OpenSSLEncryption($publicKey), $this->getUnique(), $shopwareRelease);
 
             try {
                 $collector->sendData();
@@ -437,7 +437,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      *
      * @return bool
      */
-    private function checkIdententical($fp1, $fp2)
+    private function checkIdentical($fp1, $fp2)
     {
         $blockSize = 4096;
         rewind($fp1);
