@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             }
 
             $widgetData['label'] = Shopware()->Container()->get('snippets')->getNamespace('backend/widget/labels')
-                ->get($widgetData['name'], $widgetData['label']);
+                ->get($widgetData['name'], $widgetData['name']);
 
             $widgets[] = $widgetData;
         }

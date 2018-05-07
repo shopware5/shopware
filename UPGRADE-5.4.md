@@ -205,6 +205,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `s_core_shops.secure_host`
         - `s_core_shops.secure_base_path`
         - `s_core_shops.always_secure`
+        - `s_core_widgets.label`
         
     * Removed methods
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::setSecureHost`
@@ -225,6 +226,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `\Shopware\Models\Shop\Shop::setSecureBaseUrl`
         - `\Shopware\Models\Shop\Shop::getAlwaysSecure`
         - `\Shopware\Models\Shop\Shop::setAlwaysSecure`
+        - `\Shopware\Models\Widget\Widget::setLabel`
+        - `\Shopware\Models\Widget\Widget::getLabel`
 
     * Changed methods
         - `\Shopware\Components\Theme\PathResolver::formatPathToUrl`
