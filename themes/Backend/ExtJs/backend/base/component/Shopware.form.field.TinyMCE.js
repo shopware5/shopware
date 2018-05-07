@@ -530,7 +530,7 @@ Ext.define('Shopware.form.field.TinyMCE',
             content, params = '';
 
         if (!me.isValidContent(rawContent)) {
-            if (typeof callback === 'function') {
+            if (Ext.isFunction(callback)) {
                 callback(rawContent);
                 return;
             } else {
@@ -547,7 +547,7 @@ Ext.define('Shopware.form.field.TinyMCE',
         params = params.substring(0, params.length - 1);
 
         if (params.length <= 0) {
-            if (typeof callback === 'function') {
+            if (Ext.isFunction(callback)) {
                 callback(rawContent);
                 return;
             } else {
@@ -574,7 +574,7 @@ Ext.define('Shopware.form.field.TinyMCE',
 
                 html = me.DOMElementsToHTMLBlob(content);
 
-                if (typeof callback === 'function') {
+                if (Ext.isFunction(callback)) {
                     callback(html);
                 } else {
                     me.tinymce.setContent(html);
