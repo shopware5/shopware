@@ -782,5 +782,15 @@
             <argument type="service" id="validator.user_name"/>
             <tag name="validator.constraint_validator" alias="UserNameValidator"/>
         </service>
+
+        <service id="shopware.components.privacy.privacy_cleanup_cron_subscriber" class="Shopware\Components\Privacy\PrivacyCleanupCronSubscriber" >
+            <argument type="service" id="shopware.components.privacy.privacy_service"/>
+            <argument type="service" id="config"/>
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware.components.privacy.privacy_service" class="Shopware\Components\Privacy\PrivacyService">
+            <argument id="dbal_connection" type="service"/>
+        </service>
     </services>
 </container>

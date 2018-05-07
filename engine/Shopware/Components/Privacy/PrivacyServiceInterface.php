@@ -22,18 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service;
+namespace Shopware\Components\Privacy;
 
-interface MaintenanceServiceInterface
+interface PrivacyServiceInterface
 {
     /**
-     * Delete guest users which have a firstlogin date in months greater than $months and an order amount greater or
-     * equal than $order amount.
+     * Delete guest users which have a firstlogin date in months greater than $months and no orders
      *
      * @param int $months
-     * @param $orderAmount
      */
-    public function cleanupGuestUsers($months, $orderAmount);
+    public function cleanupGuestUsers($months);
 
     /**
      * Delete canceled orders that have a creation time in months greater or equal than $months
