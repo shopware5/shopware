@@ -24,14 +24,6 @@ Ext.define('Shopware.apps.Benchmark.view.overview.Window', {
                 boxLabel: '{s name=window/do_not_show_again}{/s}'
             });
 
-            me.cancelButton = Ext.create('Ext.button.Button', {
-                cls: 'primary',
-                text: '{s name=window/close}{/s}',
-                handler: function() {
-                    me.close();
-                }
-            });
-
             me.dockedItems = [{
                 xtype: 'toolbar',
                 dock: 'bottom',

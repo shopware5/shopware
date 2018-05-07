@@ -29,7 +29,7 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class ProductsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.products';
-    const EXPECTED_KEYS_COUNT = 3;
+    const EXPECTED_KEYS_COUNT = 4;
     const EXPECTED_TYPES = [
         'total' => IsType::TYPE_INT,
         'variants' => [
@@ -41,6 +41,7 @@ class ProductsProviderTest extends ProviderTestCase
             'average' => IsType::TYPE_FLOAT,
             'missing' => IsType::TYPE_INT,
         ],
+        'shippingReadyProducts' => IsType::TYPE_INT,
     ];
 
     /**

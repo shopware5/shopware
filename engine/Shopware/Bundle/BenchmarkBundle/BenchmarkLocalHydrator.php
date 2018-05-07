@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-use Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydratorInterface;
+use Shopware\Bundle\BenchmarkBundle\Hydrator\LocalHydratorInterface;
 
 class BenchmarkLocalHydrator
 {
@@ -34,11 +34,18 @@ class BenchmarkLocalHydrator
     private $hydrators;
 
     /**
-     * @param \IteratorAggregate $hydrators
+     * @var \IteratorAggregate
      */
-    public function __construct(\IteratorAggregate $hydrators)
+    private $lastYearHydrators;
+
+    /**
+     * @param \IteratorAggregate $hydrators
+     * @param \IteratorAggregate $lastYearHydrators
+     */
+    public function __construct(\IteratorAggregate $hydrators, \IteratorAggregate $lastYearHydrators)
     {
         $this->hydrators = $hydrators;
+        $this->lastYearHydrators = $lastYearHydrators;
     }
 
     /**
@@ -50,10 +57,14 @@ class BenchmarkLocalHydrator
     {
         $hydratedData = [];
 
-        /** @var TimeHydratorInterface $hydrator */
+        /** @var LocalHydratorInterface $hydrator */
         foreach ($this->hydrators as $hydrator) {
-            $hydrateResult = $hydrator->hydrate($data);
-            $hydratedData['local'][$hydrator->getName()] = $hydrateResult;
+            $hydratedData['local'][$hydrator->getName()] = $hydrator->hydrate($data);
+        }
+
+        /** @var LocalHydratorInterface $lastYearHydrator */
+        foreach ($this->lastYearHydrators as $lastYearHydrator) {
+            $hydratedData['local']['lastYear'][$lastYearHydrator->getName()] = $lastYearHydrator->hydrate($data);
         }
 
         return json_encode($hydratedData);

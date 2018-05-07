@@ -39,11 +39,17 @@ class LocalVisitorsProvider implements BenchmarkProviderInterface
         $this->dbalConnection = $dbalConnection;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
-        return 'visitors';
+        return 'local_visitors';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getBenchmarkData()
     {
         return $this->getVisitorsByDay();

@@ -35,7 +35,7 @@
   height: 30px;
   margin: -7px 0 0 -45px;
   text-align: center;
-  font-family: BrandonText-Black;
+  font-family: 'Asap';
   font-weight: 600;
   font-size: 20px;
 }
@@ -250,6 +250,9 @@ div#select-wrapper {
   z-index: 1;
   padding-top: 10%;
 }
+div#select-wrapper button.btn {
+  background: none;
+}
 .branch-select {
   background-color: #213448;
 }
@@ -454,7 +457,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 .switch-shop {
-  color: #50E3C2;
+  color: #34DCDD;
 }
 .switch-industry {
   color: #6a63fc;
@@ -465,6 +468,23 @@ input:checked + .slider:before {
 .switch-industry input:checked + .slider:before {
   background-color: #6a63fc;
 }
+.switch-last-year {
+  color: #798EA3;
+}
+.switch-last-year .switch {
+  height: 12px;
+  width: 24px;
+}
+.switch-last-year .slider:before {
+  height: 12px;
+  width: 12px;
+}
+.switch-last-year input:checked + .slider {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.switch-last-year input:checked + .slider:before {
+  background-color: #ffffff;
+}
 .button-container {
   margin-top: 10px;
   float: right;
@@ -474,10 +494,17 @@ input:checked + .slider:before {
 .button-container .button-wrapper {
   margin-bottom: 20px;
 }
+* {
+  font-weight: 600 !important;
+  font-family: 'Asap', sans-serif !important;
+}
+h3 {
+  padding: 0 15%;
+}
 .btn.timescale {
   font-size: 14px;
-  padding: 10px 20px;
-  margin: 10px auto 10px auto;
+  padding: 12px 27px;
+  margin: 10px 15px 10px 15px;
   background: transparent;
   color: #798EA3;
   border: none;
@@ -490,7 +517,7 @@ input:checked + .slider:before {
   color: #FFFFFF;
 }
 .btn.timescale.is-active:hover {
-  background-color: #50E3C2;
+  background-color: rgba(24, 158, 255, 0.8);
   box-shadow: 0 3px 10px rgba(24, 158, 255, 0.3);
 }
 input {
@@ -593,8 +620,207 @@ input {
   display: table;
   clear: both;
 }
+.industry-disabled {
+  position: relative;
+}
+.industry-disabled::after {
+  display: grid;
+  position: absolute;
+  content: 'Bald \A verfügbar';
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  font-size: 30px;
+  color: #B2C4D7;
+  background: rgba(33, 52, 72, 0.85);
+  font-weight: 600;
+  white-space: pre;
+}
+.devices-graph-list-wrapper .devices-item {
+  margin-bottom: 8px;
+}
+.devices-graph-list-wrapper .devices-item::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.btn-liquid {
+  margin-top: 45px;
+}
+.btn-liquid .inner {
+  font-size: 20px;
+}
+.scroll {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  color: #798EA3;
+  margin-top: 35px;
+}
+.scroll .cont-mouse {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.scroll .mouse {
+  width: 33px;
+  height: 60px;
+  border-radius: 60px;
+  border: solid 3px #798EA3;
+  margin-bottom: 10px;
+  position: relative;
+}
+.scroll .mouse .wheelcont {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  top: 15px;
+}
+.scroll .mouse .wheelcont .wheel {
+  width: 5px;
+  height: 9px;
+  border-radius: 3px;
+  background-color: white;
+  display: block;
+  margin: 0 auto;
+  -webkit-animation-name: wheel;
+  animation-name: wheel;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+}
+.scroll .mouse .arrows {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  width: 100%;
+  height: 29px;
+  background-position: center;
+  background-size: auto 100%;
+  -webkit-animation-name: arrow-animation;
+  animation-name: arrow-animation;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  text-align: center;
+  padding: 4px 0;
+}
+.scroll .mouse .arrows .fl,
+.scroll .mouse .arrows .flb {
+  border-left: solid 1px white;
+  border-top: solid 1px white;
+  width: 4px;
+  height: 4px;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  display: block;
+  margin: 0 auto;
+}
+.scroll .mouse .arrows .flb {
+  -webkit-transform: rotate(225deg);
+  transform: rotate(225deg);
+}
+.scroll .mouse .arrows .up {
+  margin-bottom: 14px;
+}
+.preview-disclaimer {
+  width: 130px;
+  height: 240px;
+  margin: 0 auto;
+  background: url(img/bg-preview.png) no-repeat;
+  background-size: 130px 205px;
+  position: absolute;
+  top: 0;
+  left: 10%;
+  color: #FFF;
+  display: grid;
+  text-align: center;
+  align-content: center;
+  line-height: 30px;
+  font-size: 25px;
+}
+.preview-disclaimer:before {
+  content: '!';
+  display: block;
+  position: absolute;
+  color: #FFF;
+  font-size: 78px;
+  left: 0;
+  right: 0;
+  top: 30px;
+}
+/*
+============================================
+			KEYFRAMES
+============================================
+*/
+@-webkit-keyframes wheel {
+  0% {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+  }
+  50% {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+  }
+  100% {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+  }
+}
+@keyframes wheel {
+  0% {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+  }
+  50% {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+  }
+  100% {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+  }
+}
+@-webkit-keyframes arrow-animation {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+@keyframes arrow-animation {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
 body {
-  font-family: 'Brandon', sans-serif;
+  font-family: 'Asap', sans-serif;
   padding: 0;
   margin: 0;
   color: #798EA3;
@@ -739,6 +965,9 @@ body#swag-benchmark {
     margin: 0 0 0 20%;
   }
 }
+#swag-benchmark {
+  margin-top: 70px;
+}
 #swag-benchmark .col-33 {
   width: 33%;
   float: left;
@@ -835,7 +1064,7 @@ body#swag-benchmark {
   vertical-align: middle;
 }
 input.btn.primary {
-  font-family: 'Brandon';
+  font-family: 'Asap';
 }
 footer {
   font-size: 14px;
@@ -866,47 +1095,35 @@ textarea::-moz-placeholder {
 textarea:-ms-input-placeholder {
   ccolor: #4a5b6c;
 }
+/* asap-regular - latin */
 @font-face {
-  font-family: 'Brandon';
-  src: url('fonts/2D7E1D_1_0.eot');
-  src: url('fonts/2D7E1D_1_0.eot?#iefix') format('embedded-opentype'), url('fonts/2D7E1D_1_0.woff2') format('woff2'), url('fonts/2D7E1D_1_0.woff') format('woff'), url('fonts/2D7E1D_1_0.ttf') format('truetype'), url('fonts/2D7E1D_1_0.svg#wf') format('svg');
-  font-weight: 600;
+  font-family: 'Asap';
   font-style: normal;
-}
-@font-face {
-  font-family: 'Brandon';
-  src: url('fonts/2D7E1D_3_0.eot');
-  src: url('fonts/2D7E1D_3_0.eot?#iefix') format('embedded-opentype'), url('fonts/2D7E1D_3_0.woff2') format('woff2'), url('fonts/2D7E1D_3_0.woff') format('woff'), url('fonts/2D7E1D_3_0.ttf') format('truetype'), url('fonts/2D7E1D_3_0.svg#wf') format('svg');
-  font-weight: 800;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Brandon';
-  src: url('fonts/2D7E1D_5_0.eot');
-  src: url('fonts/2D7E1D_5_0.eot?#iefix') format('embedded-opentype'), url('fonts/2D7E1D_5_0.woff2') format('woff2'), url('fonts/2D7E1D_5_0.woff') format('woff'), url('fonts/2D7E1D_5_0.ttf') format('truetype'), url('fonts/2D7E1D_5_0.svg#wf') format('svg');
-  font-weight: 200;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Brandon';
-  src: url('fonts/2D7E1D_7_0.eot');
-  src: url('fonts/2D7E1D_7_0.eot?#iefix') format('embedded-opentype'), url('fonts/2D7E1D_7_0.woff2') format('woff2'), url('fonts/2D7E1D_7_0.woff') format('woff'), url('fonts/2D7E1D_7_0.ttf') format('truetype'), url('fonts/2D7E1D_7_0.svg#wf') format('svg');
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Brandon';
-  src: url('fonts/2D7E1D_8_0.eot');
-  src: url('fonts/2D7E1D_8_0.eot?#iefix') format('embedded-opentype'), url('fonts/2D7E1D_8_0.woff2') format('woff2'), url('fonts/2D7E1D_8_0.woff') format('woff'), url('fonts/2D7E1D_8_0.ttf') format('truetype'), url('fonts/2D7E1D_8_0.svg#wf') format('svg');
   font-weight: 400;
-  font-style: normal;
+  src: url('fonts/asap-v7-latin-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Asap Regular'), local('Asap-Regular'), url('fonts/asap-v7-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('fonts/asap-v7-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('fonts/asap-v7-latin-regular.woff') format('woff'), /* Modern Browsers */ url('fonts/asap-v7-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */ url('fonts/asap-v7-latin-regular.svg#Asap') format('svg');
+  /* Legacy iOS */
 }
+/* asap-600 - latin */
 @font-face {
-  font-family: 'Brandon';
-  src: url('fonts/2D7E1D_A_0.eot');
-  src: url('fonts/2D7E1D_A_0.eot?#iefix') format('embedded-opentype'), url('fonts/2D7E1D_A_0.woff2') format('woff2'), url('fonts/2D7E1D_A_0.woff') format('woff'), url('fonts/2D7E1D_A_0.ttf') format('truetype'), url('fonts/2D7E1D_A_0.svg#wf') format('svg');
-  font-weight: 100;
+  font-family: 'Asap';
   font-style: normal;
+  font-weight: 600;
+  src: url('fonts/asap-v7-latin-600.eot');
+  /* IE9 Compat Modes */
+  src: local('Asap SemiBold'), local('Asap-SemiBold'), url('fonts/asap-v7-latin-600.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('fonts/asap-v7-latin-600.woff2') format('woff2'), /* Super Modern Browsers */ url('fonts/asap-v7-latin-600.woff') format('woff'), /* Modern Browsers */ url('fonts/asap-v7-latin-600.ttf') format('truetype'), /* Safari, Android, iOS */ url('fonts/asap-v7-latin-600.svg#Asap') format('svg');
+  /* Legacy iOS */
+}
+/* asap-700 - latin */
+@font-face {
+  font-family: 'Asap';
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/asap-v7-latin-700.eot');
+  /* IE9 Compat Modes */
+  src: local('Asap Bold'), local('Asap-Bold'), url('fonts/asap-v7-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('fonts/asap-v7-latin-700.woff2') format('woff2'), /* Super Modern Browsers */ url('fonts/asap-v7-latin-700.woff') format('woff'), /* Modern Browsers */ url('fonts/asap-v7-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */ url('fonts/asap-v7-latin-700.svg#Asap') format('svg');
+  /* Legacy iOS */
 }
 a {
   text-decoration: none;
@@ -918,11 +1135,12 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: 'Brandon';
+  font-family: 'Asap';
   margin: 8px 0;
   padding: 0 3%;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.6px;
+  line-height: 145%;
 }
 .opener h1,
 .swag-text-break h1 {

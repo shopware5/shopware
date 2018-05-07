@@ -49,22 +49,27 @@
 
     TimeSwitcher.prototype.initSwitchButtons = function (target) {
         // TODO: translations?
-        var shopButton = this.buildButtonTemplate('Shop', false, this.valuesKey, target.attr('name')),
+        var shopButton = this.buildButtonTemplate('Shop', false, false, this.valuesKey, target.attr('name')),
             hasIndustry = !!(this.buttonContainer.find('.switch-industry').length),
-            industryButton;
+            industryButton,
+            // TODO: translations?
+            lastYearButton = this.buildButtonTemplate('Vorjahr', false, true, this.valuesKey, target.attr('name'));
 
         this.buttonContainer.empty();
         this.buttonContainer.append(shopButton);
 
         if (hasIndustry) {
             // TODO: translations?
-            industryButton = this.buildButtonTemplate('Branche', true, this.valuesKey, target.attr('name'));
+            industryButton = this.buildButtonTemplate('Branche', true, false, this.valuesKey, target.attr('name'));
             this.buttonContainer.append(industryButton);
 
             industryButton.switchButton();
         }
 
+        this.buttonContainer.append(lastYearButton);
+
         shopButton.switchButton();
+        lastYearButton.switchButton();
     };
 
     /**
@@ -88,23 +93,33 @@
     /**
      * @param { string } label
      * @param { bool } industry
+     * @param { bool } lastYear
      * @param { string } valuesKey
      * @param { string } time
      * @returns { jQuery }
      */
-    TimeSwitcher.prototype.buildButtonTemplate = function (label, industry, valuesKey, time) {
-        var className = industry ? 'switch-industry' : 'switch-shop',
+    TimeSwitcher.prototype.buildButtonTemplate = function (label, industry, lastYear, valuesKey, time) {
+        var className = 'switch-shop',
             $rootEl,
             $labelEl,
             $inputEl,
             $sliderEl,
             $buttonLabel;
 
+        if (industry) {
+            className = 'switch-industry';
+        }
+
+        if (lastYear) {
+            className = 'switch-last-year';
+        }
+
         $rootEl = $('<div>', {
             'class': 'button-wrapper ' + className,
             'data-switch-button': 'true',
             'data-industry': industry + '',
             'data-values-key': valuesKey,
+            'data-last-year': lastYear + '',
             'data-time': time
         });
 
