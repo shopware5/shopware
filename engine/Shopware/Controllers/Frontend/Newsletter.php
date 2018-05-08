@@ -85,31 +85,34 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
         if (empty($config->get('sOPTINNEWSLETTER')) || $this->View()->voteConfirmed) {
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
-            if ($this->View()->sStatus['code'] == 3) {
+            if ($this->View()->sStatus['code'] == 3 && $this->View()->sStatus['isNewRegistration']) {
                 // Send mail to subscriber
                 $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sNEWSLETTERCONFIRMATION');
             }
         } else {
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+
             if ($this->View()->sStatus['code'] == 3) {
-                Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
-                $hash = \Shopware\Components\Random::getAlphanumericString(32);
-                $data = serialize(Shopware()->System()->_POST->toArray());
+                if ($this->View()->sStatus['isNewRegistration']) {
+                    Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
+                    $hash = \Shopware\Components\Random::getAlphanumericString(32);
+                    $data = serialize(Shopware()->System()->_POST->toArray());
 
-                $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash]);
+                    $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash]);
 
-                $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
+                    $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
 
-                // Setting status-code
+                    Shopware()->Db()->query('
+                    INSERT INTO s_core_optin (datum,hash,data)
+                    VALUES (
+                    now(),?,?
+                    )
+                    ', [$hash, $data]);
+                }
+
                 $this->View()->sStatus = ['code' => 3, 'message' => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation')];
-
-                Shopware()->Db()->query('
-                INSERT INTO s_core_optin (datum,hash,data)
-                VALUES (
-                now(),?,?
-                )
-                ', [$hash, $data]);
             }
+
         }
     }
 
