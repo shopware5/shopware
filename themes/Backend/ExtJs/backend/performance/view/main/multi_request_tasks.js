@@ -119,25 +119,25 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     },
 
     httpCache: {
-        article: {
-            initialText: '{s name=progress/initialArticles}Article URLs...{/s}',
-            progressText: '{s name=progress/articles}[0] of [1] article URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=article}'
-        },
         category: {
             initialText: '{s name=progress/initialCategory}Category URLs...{/s}',
             progressText: '{s name=progress/category}[0] of [1] category URLs{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=category}'
         },
-        blog: {
-            initialText: '{s name=progress/initialBlog}Blog URLs...{/s}',
-            progressText: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}'
-        },
         static: {
             initialText: '{s name=progress/initialStatic}Static URLs...{/s}',
             progressText: '{s name=progress/httpCacheWarmer/static}[0] of [1] static URLs{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=static}'
+        },
+        article: {
+            initialText: '{s name=progress/initialArticles}Article URLs...{/s}',
+            progressText: '{s name=progress/articles}[0] of [1] article URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=article}'
+        },
+        blog: {
+            initialText: '{s name=progress/initialBlog}Blog URLs...{/s}',
+            progressText: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}'
         },
         supplier: {
             initialText: '{s name=progress/initialSupplier}Supplier URLs...{/s}',
@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     /**
      * For HTTPCache, how many URLs should be called concurrently?
      */
-    concurrencySize: 5,
+    concurrencySize: 2,
 
     currentType: 'seo',
 
