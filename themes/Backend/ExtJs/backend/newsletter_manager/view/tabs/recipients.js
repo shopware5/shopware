@@ -222,8 +222,11 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 dataIndex: 'added',
                 flex: 1,
                 xtype: 'datecolumn',
+                getSortParam: function() {
+                    return 'address.added';
+                },
                 renderer: function(value) {
-                    if ( typeof value === Ext.undefined ) {
+                    if (!Ext.isDefined(value)) {
                         return value;
                     }
                     return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
@@ -234,8 +237,11 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
                 dataIndex: 'doubleOptinConfirmed',
                 flex: 1,
                 xtype: 'datecolumn',
+                getSortParam: function() {
+                    return 'address.doubleOptinConfirmed';
+                },
                 renderer: function(value) {
-                    if ( !Ext.isDefined(value) ) {
+                    if (!Ext.isDefined(value)) {
                         return value;
                     }
                     return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
