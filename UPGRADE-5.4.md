@@ -4,22 +4,25 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.4
 
+[View all changes from v5.4.3...v5.4.4](https://github.com/shopware/shopware/compare/v5.4.3...v5.4.4)
+
 ### Changes
 
 * Change Tinymce editor to resolve placeholder images on initialization
 * Change product notification to match the documented feature
 * Change AJAX search to respect the basic setting for direct number searches and show the same results as the normal search 
+* Changed ReflectionHelper to work with Windows 
 * Changed ``Unknown path`` Smarty error to work with Windows
 
 ### Additions
 
 * Added newsletter registration check
-* Added possibility to config elements to override ``queryMode`` option
-* Added workaround for disabled localStorage in browser
 * Added Double-Opt-In for customer registration
   * Added new notify event, which will be thrown when awaiting Double-Opt-In confirmation: `Shopware_Modules_Admin_SaveRegister_Successful`
   * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
   * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
+* Added possibility to config elements to override ``queryMode`` option
+* Added workaround for disabled localStorage in browser
 
 ## 5.4.3
 
