@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
@@ -2330,19 +2329,25 @@ class sAdmin
         }
 
         if (!empty($result['code']) && in_array($result['code'], [2, 3])) {
+            $voteConfirmed = $this->front->getParam('voteConfirmed');
+            $now = $this->front->getParam('optinNow');
+            $now = isset($now) ? $now : (new \DateTime())->format('Y-m-d H:i:s');
+
+            $added = $voteConfirmed ? $this->front->getParam('optinDate') : $now;
+            $doubleOptInConfirmed = $voteConfirmed ? $now : null;
             $mailDataExists = $this->connection->fetchColumn('SELECT 1 FROM s_campaigns_maildata WHERE email = ? AND groupID = ?', [
                 $email,
-                $groupID
+                $groupID,
             ]);
 
             if (empty($mailDataExists)) {
                 $sql = '
-                REPLACE INTO s_campaigns_maildata (
-                  email, groupID, salutation, title, firstname,
-                  lastname, street, zipcode, city, added
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
-            ';
+                    REPLACE INTO s_campaigns_maildata (
+                      email, groupID, salutation, title, firstname,
+                      lastname, street, zipcode, city, added, double_optin_confirmed
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ';
                 $this->connection->executeQuery($sql, [
                     $email,
                     $groupID,
@@ -2353,6 +2358,8 @@ class sAdmin
                     $this->front->Request()->getPost('street'),
                     $this->front->Request()->getPost('zipcode'),
                     $this->front->Request()->getPost('city'),
+                    $added,
+                    $doubleOptInConfirmed,
                 ]);
             } else {
                 $this->connection->update('s_campaigns_maildata',
@@ -2363,11 +2370,11 @@ class sAdmin
                         'firstname' => $this->front->Request()->getPost('firstname'),
                         'lastname' => $this->front->Request()->getPost('lastname'),
                         'street' => $this->front->Request()->getPost('street'),
-                        'city' => $this->front->Request()->getPost('city')
+                        'city' => $this->front->Request()->getPost('city'),
                     ],
                     [
                         'email' => $email,
-                        'groupID' => $groupID
+                        'groupID' => $groupID,
                     ]
                 );
             }
@@ -3813,13 +3820,21 @@ SQL;
                 [$email]
             );
 
+            $voteConfirmed = $this->front->getParam('voteConfirmed');
+            $now = $this->front->getParam('optinNow');
+            $now = isset($now) ? $now : (new \DateTime())->format('Y-m-d H:i:s');
+
+            $added = $voteConfirmed ? $this->front->getParam('optinDate') : $now;
+            $doubleOptInConfirmed = $voteConfirmed ? $now : null;
+
             $result = $this->db->insert(
                 's_campaigns_mailaddresses',
                 [
                     'customer' => (int) !empty($customer),
                     'groupID' => $groupID,
                     'email' => $email,
-                    'added' => $this->getCurrentDateFormatted(),
+                    'added' => $added,
+                    'double_optin_confirmed' => $doubleOptInConfirmed,
                 ]
             );
 
@@ -3847,7 +3862,7 @@ SQL;
             'code' => 3,
             'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
-            'isNewRegistration' => $isEmailExists
+            'isNewRegistration' => $isEmailExists,
         ];
 
         return $result;
