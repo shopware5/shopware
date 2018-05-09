@@ -90,6 +90,8 @@ class ShopPageGateway implements Gateway\ShopPageGatewayInterface
             ->where('page.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
+        $this->fieldHelper->addShopPageTranslation($query, $context);
+
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 

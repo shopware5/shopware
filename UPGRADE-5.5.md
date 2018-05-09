@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `finish_item_voucher.tpl`
 * Added ability to translate categories
 * Added payment and dispatch translation for order status mails
+* Added ability to translate shop pages. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
 
 ### Changes
 
@@ -109,3 +110,4 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Deprecated `lastStock` field in `\Shopware\Models\Article\Article` as the field has been moved to the variants. It will be removed in 5.6
 * Deprecated `laststock` column in `s_articles` since this field has been moved to the variants. It will be removed in 5.6
+* Deprecated the translation workaround ("gLeft", "gBottom", "eLeft", "eBottom", etc.) for shop page groups. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
