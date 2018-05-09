@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `finish_item_product.tpl`
     * `finish_item_voucher.tpl`
 * Added ability to translate categories
+* Added payment and dispatch translation for order status mails
 
 ### Changes
 

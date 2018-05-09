@@ -1233,7 +1233,7 @@ class sOrder
 
         if (!empty($order['dispatchID'])) {
             $dispatch = $this->db->fetchRow('
-                SELECT name, description FROM s_premium_dispatch
+                SELECT id, name, description FROM s_premium_dispatch
                 WHERE id=?
             ', [$order['dispatchID']]);
         }
@@ -1250,6 +1250,9 @@ class sOrder
         $shop = $repository->getById($shopId);
         $shop->registerResources();
 
+        $dispatch = Shopware()->Modules()->Admin()->sGetDispatchTranslation($dispatch);
+        $payment = Shopware()->Modules()->Admin()->sGetPaymentTranslation(['id' => $order['paymentID']]);
+
         $order['status_description'] = Shopware()->Snippets()->getNamespace('backend/static/order_status')->get(
             $order['status_name'],
             $order['status_description']
@@ -1258,6 +1261,10 @@ class sOrder
             $order['cleared_name'],
             $order['cleared_description']
         );
+
+        if (!empty($payment['description'])) {
+            $order['payment_description'] = $payment['description'];
+        }
 
         /* @var $mailModel \Shopware\Models\Mail\Mail */
         $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
