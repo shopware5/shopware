@@ -77,7 +77,10 @@ class GenericPage extends Page implements HelperSelectorInterface
         $link = $linkElement->getAttribute('href');
         $linkParts = parse_url($link);
 
-        $expectedUrl = rtrim($this->getParameter('base_url'), '/') . '/' . rtrim($path, '/') . '/';
+        $expectedUrl = rtrim($this->getParameter('base_url'), '/') . '/' . rtrim($path, '/');
+        if (strpos($expectedUrl, '?') === false) {
+            $expectedUrl .= '/';
+        }
         if (!empty($query)) {
             $expectedUrl .= '?' . http_build_query($query);
         }

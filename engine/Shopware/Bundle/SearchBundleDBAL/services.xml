@@ -49,6 +49,7 @@
             <argument type="service" id="config" />
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_searchdbal.search_term_helper" />
+            <argument>%shopware.search.indexer.batchsize%</argument>
         </service>
 
         <service id="shopware_searchdbal.search_term_helper" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper">

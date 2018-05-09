@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -61,7 +60,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * Optimize Sourcecode / Apply seo rules
+     * Optimize Sourcecode / Apply SEO rules
      *
      * @param Enlight_Event_EventArgs $args
      */
@@ -72,7 +71,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         $view = $args->getSubject()->View();
 
         if (!$request->isDispatched() || $response->isException()
-            || $request->getModuleName() != 'frontend'
+            || $request->getModuleName() !== 'frontend'
             || !$view->hasTemplate()
         ) {
             return;
