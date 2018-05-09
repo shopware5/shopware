@@ -11,14 +11,26 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new events to `Shopware_Controllers_Widgets_Listing::listingCountAction` to modify view variables before the template is fetched
   * `Shopware_Controllers_Widgets_Listing_fetchListing_preFetch`
   * `Shopware_Controllers_Widgets_Listing_fetchPagination_preFetch`
+* Added a new category for the basic setting containing privacy options
+* Added possibility to enable/disable data protection information texts
+* Added theme data to the mail context
 
 ### Changes
 
+* Changed input validation to fix possible authenticated SQLi vulnerability in the backend
 * Changed .htaccess file to prohibit download of .env files
+* Changed behaviour of media/temp files, which now will be deleted if they are uploaded
 * Changed `Media` resource to fix a problem with file names set via API
 * Changed "Send E-Mails" checkbox in batch processing window of order to be enabled by default again
 * Changed behaviour of inactive forms to act like any other missing page
 * Changed API behaviour on update, when the lastStock parameter is set for a product its applied to its mainDetail aswell (like on creation)
+* Changed newsletter recipient count to work correctly with customer streams
+* Changed position of several privacy options to a new basic setting category "Privacy"
+* Changed search indexer to make the keyword batch size configurable using the key `search.indexer.batchsize` in the `config.php` 
+
+### Removals
+
+* Removed now empty "Cookie hint" basic setting category in backend
 
 ## 5.4.2
 

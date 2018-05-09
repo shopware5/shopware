@@ -39,6 +39,13 @@
                         <i class="icon--mail"></i>
                     </button>
                 {/block}
+
+                {* Data protection information *}
+                {block name="frontend_detail_index_notification_privacy"}
+                    {if {config name=ACTDPRTEXT}}
+                        {include file="frontend/_includes/privacy.tpl"}
+                    {/if}
+                {/block}
             </form>
         {/if}
     {/block}

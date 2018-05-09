@@ -160,14 +160,19 @@ class Shopware_Components_TemplateMail
             }
         }
 
-        //todo@all Add setter and getter like the shop
         $config = Shopware()->Config();
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $keys = ['mobileLogo' => true, 'tabletLogo' => true, 'tabletLandscapeLogo' => true, 'desktopLogo' => true, 'appleTouchIcon' => true];
+        $theme = $inheritance->buildConfig($this->getShop()->getTemplate(), $this->getShop(), false);
+        $theme = array_intersect_key($theme, $keys);
 
         if ($this->getShop() !== null) {
             $defaultContext = [
                 'sConfig' => $config,
                 'sShop' => $config->get('shopName'),
                 'sShopURL' => ($this->getShop()->getSecure() ? 'https://' : 'http://') . $this->getShop()->getHost() . $this->getShop()->getBaseUrl(),
+                'theme' => $theme,
             ];
             $isoCode = $this->getShop()->get('isocode');
             $translationReader = $this->getTranslationReader();

@@ -922,6 +922,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             'AmountNumeric' => 105.83,
             'AmountNetNumeric' => 88.936134453780994,
             'AmountWithTaxNumeric' => 0,
+            'sCurrencyId' => 1,
+            'sCurrencyFactor' => 10,
             'content' => [
                 [
                     'id' => 1,

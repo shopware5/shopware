@@ -124,6 +124,13 @@
                                 <i class="icon--mail"></i> <span class="button--text">{s name='IndexFooterNewsletterSubmit'}{/s}</span>
                             </button>
                         {/block}
+
+                        {* Data protection information *}
+                        {block name="frontend_index_footer_column_newsletter_privacy"}
+                            {if {config name=ACTDPRTEXT}}
+                                {include file="frontend/_includes/privacy.tpl"}
+                            {/if}
+                        {/block}
                     </form>
                 {/block}
             </div>
