@@ -148,6 +148,10 @@ class SearchIndexer implements SearchIndexerInterface
                 // Get all fields & values from current table
                 $getTableKeywords = $this->connection->fetchAll($sql);
 
+                if ($table['table'] === 's_categories') {
+                    $getTableKeywords = $this->mapCategoryKeywords($getTableKeywords);
+                }
+
                 // If no result, return
                 if (empty($getTableKeywords)) {
                     continue;
@@ -324,5 +328,46 @@ class SearchIndexer implements SearchIndexerInterface
                     AND sf.relevance != 0
             GROUP BY sf.tableID
        ");
+    }
+
+    /**
+     * @param array $keywords
+     *
+     * @return array
+     */
+    private function mapCategoryKeywords(array $keywords)
+    {
+        $ids = array_column($keywords, 'id');
+
+        $translations = $this->connection->createQueryBuilder()
+            ->select(['objectkey', 'objectdata'])
+            ->from('s_core_translations')
+            ->where('objectkey IN (:ids)')
+            ->andWhere('objecttype = :type')
+            ->setParameter(':type', 'category')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
+
+        $mapping = [];
+        foreach ($keywords as $keyword) {
+            $mapping[] = $keyword;
+            $id = $keyword['id'];
+
+            if (!isset($translations[$id])) {
+                continue;
+            }
+
+            unset($keyword['id']);
+            $field = array_pop(array_keys($keyword));
+
+            $categoryTranslations = $translations[$id];
+            foreach ($categoryTranslations as $translation) {
+                $translation = unserialize($translation);
+                $mapping[] = ['id' => $id, $field => $translation[$field]];
+            }
+        }
+
+        return $mapping;
     }
 }

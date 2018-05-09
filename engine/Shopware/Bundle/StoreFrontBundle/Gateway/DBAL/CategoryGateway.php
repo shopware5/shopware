@@ -147,6 +147,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $this->fieldHelper->addCategoryTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addProductStreamTranslation($query, $context);
+        $this->fieldHelper->addCategoryMainDataTranslation($query, $context);
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -165,7 +166,6 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $categories = [];
         foreach ($data as $row) {
             $id = $row['__category_id'];
-
             $categories[$id] = $this->categoryHydrator->hydrate($row);
         }
 
