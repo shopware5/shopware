@@ -32,6 +32,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added ability to translate categories
 * Added payment and dispatch translation for order status mails
 * Added ability to translate shop pages. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
+* Added snippets for locales in backend menus
 
 ### Changes
 

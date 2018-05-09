@@ -287,6 +287,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $data = $query->getArrayResult();
         }
 
+        if (!empty($data) && $name === 'locale') {
+            $data = $this->getSnippetsForLocales($data);
+        }
+
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -1342,5 +1346,29 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         );
 
         return $fallback;
+    }
+
+    /**
+     * Replaces the locales with the snippets data
+     *
+     * @param array $data
+     *
+     * @return array $data
+     */
+    private function getSnippetsForLocales($data)
+    {
+        $snippets = $this->container->get('snippets');
+        foreach ($data as &$locale) {
+            if (!empty($locale['language'])) {
+                $locale['language'] = $snippets->getNamespace('backend/locale/language')->get($locale['locale'],
+                    $locale['language'], true);
+            }
+            if (!empty($locale['territory'])) {
+                $locale['territory'] = $snippets->getNamespace('backend/locale/territory')->get($locale['locale'],
+                    $locale['territory'], true);
+            }
+        }
+
+        return $data;
     }
 }
