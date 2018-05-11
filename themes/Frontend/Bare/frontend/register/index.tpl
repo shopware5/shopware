@@ -113,6 +113,20 @@
             {block name='frontend_register_index_form'}
                 <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
 
+                    {* Successfull optin verification *}
+                    {block name='frontend_register_index_form_optin_success'}
+                        {if $smarty.get.optinsuccess && {config name=optinregister}}
+                            {include file="frontend/_includes/messages.tpl" type="success" content="{s name="RegisterInfoSuccessOptin"}{/s}"}
+                        {/if}
+                    {/block}
+
+                    {* Invalid hash while option verification process *}
+                    {block name='frontend_register_index_form_optin_invalid_hash'}
+                        {if $smarty.get.optinhashinvalid && {config name=optinregister}}
+                            {include file="frontend/_includes/messages.tpl" type="error" content="{s name="RegisterInfoInvalidHash"}{/s}"}
+                        {/if}
+                    {/block}
+
                     {block name='frontend_register_index_form_captcha_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$errors.captcha}
                     {/block}
