@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
@@ -160,6 +162,11 @@ class sAdmin
     private $translationComponent;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null          $db
      * @param Enlight_Event_EventManager|null                       $eventManager
      * @param Shopware_Components_Config|null                       $config
@@ -174,6 +181,7 @@ class sAdmin
      * @param AddressServiceInterface|null                          $addressService
      * @param NumberRangeIncrementerInterface|null                  $numberRangeIncrementer
      * @param Shopware_Components_Translation|null                  $translationComponent
+     * @param Connection|null                                       $connection
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -189,7 +197,8 @@ class sAdmin
         EmailValidatorInterface $emailValidator = null,
         AddressServiceInterface $addressService = null,
         NumberRangeIncrementerInterface $numberRangeIncrementer = null,
-        Shopware_Components_Translation $translationComponent = null
+        Shopware_Components_Translation $translationComponent = null,
+        Connection $connection = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -212,6 +221,7 @@ class sAdmin
         $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
         $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
     }
 
     /**
@@ -2283,7 +2293,7 @@ class sAdmin
             $this->db->query($sql, [$groupID, 'Newsletter-Empfänger']);
         }
 
-        $email = trim(strtolower(stripslashes($email)));
+        $email = strtolower(trim(stripslashes($email)));
         if (empty($email)) {
             return [
                 'code' => 6,
@@ -2320,26 +2330,49 @@ class sAdmin
         }
 
         if (!empty($result['code']) && in_array($result['code'], [2, 3])) {
-            $sql = '
+            $mailDataExists = $this->connection->fetchColumn('SELECT 1 FROM s_campaigns_maildata WHERE email = ? AND groupID = ?', [
+                $email,
+                $groupID
+            ]);
+
+            if (empty($mailDataExists)) {
+                $sql = '
                 REPLACE INTO s_campaigns_maildata (
                   email, groupID, salutation, title, firstname,
                   lastname, street, zipcode, city, added
                 )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ';
-            $this->db->query($sql, [
-                $email,
-                $groupID,
-                $this->front->Request()->getPost('salutation'),
-                $this->front->Request()->getPost('title'),
-                $this->front->Request()->getPost('firstname'),
-                $this->front->Request()->getPost('lastname'),
-                $this->front->Request()->getPost('street'),
-                $this->front->Request()->getPost('zipcode'),
-                $this->front->Request()->getPost('city'),
-            ]);
+                $this->connection->executeQuery($sql, [
+                    $email,
+                    $groupID,
+                    $this->front->Request()->getPost('salutation'),
+                    $this->front->Request()->getPost('title'),
+                    $this->front->Request()->getPost('firstname'),
+                    $this->front->Request()->getPost('lastname'),
+                    $this->front->Request()->getPost('street'),
+                    $this->front->Request()->getPost('zipcode'),
+                    $this->front->Request()->getPost('city'),
+                ]);
+            } else {
+                $this->connection->update('s_campaigns_maildata',
+                    [
+                        'groupID' => $groupID,
+                        'salutation' => $this->front->Request()->getPost('salutation'),
+                        'title' => $this->front->Request()->getPost('title'),
+                        'firstname' => $this->front->Request()->getPost('firstname'),
+                        'lastname' => $this->front->Request()->getPost('lastname'),
+                        'street' => $this->front->Request()->getPost('street'),
+                        'city' => $this->front->Request()->getPost('city')
+                    ],
+                    [
+                        'email' => $email,
+                        'groupID' => $groupID
+                    ]
+                );
+            }
         } elseif (!empty($unsubscribe)) {
-            $this->db->delete('s_campaigns_maildata', ['email = ?' => $email, 'groupID = ?' => $groupID]);
+            $this->connection->delete('s_campaigns_maildata', ['email' => $email, 'groupID' => $groupID]);
         }
 
         return $result;
@@ -3690,6 +3723,7 @@ SQL;
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
+        $isEmailExists = count($result) === 0;
 
         if ($result === false) {
             $result = [
@@ -3739,6 +3773,7 @@ SQL;
             'code' => 3,
             'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
+            'isNewRegistration' => $isEmailExists
         ];
 
         return $result;

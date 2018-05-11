@@ -7,12 +7,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
 [View all changes from v5.4.3...v5.4.4](https://github.com/shopware/shopware/compare/v5.4.3...v5.4.4)
 
 ### Changes
+<<<<<<< HEAD
 
 * Change Tinymce editor to resolve placeholder images on initialization
 * The AJAX search now respects the basic setting for direct number searches and shows the same results as the normal search 
 
 ### Additions
 
+* Added newsletter registration check
 * Added possibility to config elements to override ``queryMode`` option
 
 ## 5.4.3
