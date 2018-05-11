@@ -26,7 +26,7 @@
  * Shopware API
  * Zugriff auf XML-Dateien
  *
- * @deprecated since 5.3, to be removed in 5.4
+ * @deprecated Since 5.3, will be removed in 5.5.
  *
  * @author      Heiner Lohaus <hl@shopware2.de>
  */
@@ -40,6 +40,11 @@ class Shopware_Components_Convert_Xml
         'padding' => "\t",
         'newline' => "\r\n",
     ];
+
+    public function __construct()
+    {
+        trigger_error(sprintf('%s is deprecated since 5.3 and will be removed in 5.5.', __CLASS__), E_USER_DEPRECATED);
+    }
 
     public function encode($array)
     {

@@ -81,7 +81,7 @@ class Status extends ModelEntity
     const PAYMENT_STATE_THE_CREDIT_HAS_BEEN_PRELIMINARILY_ACCEPTED = 31;
     const PAYMENT_STATE_THE_CREDIT_HAS_BEEN_ACCEPTED = 32;
     const PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED = 33;
-    /** @deprecated use PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED instead */
+    /** @deprecated Will be removed in 5.5. Use PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED instead. */
     const PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED_BY_HANSEATIC_BANK = self::PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED;
     const PAYMENT_STATE_A_TIME_EXTENSION_HAS_BEEN_REGISTERED = 34;
     const PAYMENT_STATE_THE_PROCESS_HAS_BEEN_CANCELLED = 35;
@@ -114,7 +114,7 @@ class Status extends ModelEntity
     /**
      * @var string
      *
-     * @deprecated Use 'name' in conjunction with the 'backend/static/*' snippet namespaces instead
+     * @deprecated Will be removed in 5.5. Use 'name' in conjunction with the 'backend/static/*' snippet namespaces instead.
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
@@ -170,7 +170,7 @@ class Status extends ModelEntity
     /**
      * Set description
      *
-     * @deprecated Use getName() + snippets instead
+     * @deprecated Will be removed in 5.5. Use getName() + snippets instead.
      *
      * @param string $description
      *
@@ -178,6 +178,8 @@ class Status extends ModelEntity
      */
     public function setDescription($description)
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5. Use Shopware\Models\Order\Status::getName() and snippets instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $this->description = $description;
 
         return $this;
@@ -186,12 +188,14 @@ class Status extends ModelEntity
     /**
      * Get description
      *
-     * @deprecated Use getName() + snippets instead
+     * @deprecated Will be removed in 5.5. Use getName() + snippets instead.
      *
      * @return string
      */
     public function getDescription()
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5. Use Shopware\Models\Order\Status::getName() and snippets instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->description;
     }
 

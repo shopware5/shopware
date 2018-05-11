@@ -313,12 +313,14 @@ class Form extends ModelEntity
     }
 
     /**
-     * @deprecated
+     * @deprecated Will be removed in 5.5.
      *
      * @return Form
      */
     public function save()
     {
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this;
     }
 

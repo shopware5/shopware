@@ -303,10 +303,12 @@ class ModelManager extends EntityManager
      *
      * @throws \InvalidArgumentException
      *
-     * @deprecated since version 5.2.2, to be removed in 5.4 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead
+     * @deprecated since version 5.2.2, will be removed in 5.5. Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead.
      */
     public function addAttribute($table, $prefix, $column, $type, $nullable = true, $default = null)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since version 5.2.2 and will be removed in 5.5. Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (empty($table)) {
             throw new \InvalidArgumentException('No table name passed');
         }
@@ -340,10 +342,12 @@ class ModelManager extends EntityManager
      *
      * @throws \InvalidArgumentException
      *
-     * @deprecated since version 5.2.2, to be removed in 5.4 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::delete instead
+     * @deprecated since version 5.2.2, will be removed in 5.5. Use \Shopware\Bundle\AttributeBundle\Service\CrudService::delete instead.
      */
     public function removeAttribute($table, $prefix, $column)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since version 5.2.2 and will be removed in 5.5. Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (empty($table)) {
             throw new \InvalidArgumentException('No table name passed');
         }

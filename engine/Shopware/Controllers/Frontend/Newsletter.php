@@ -31,13 +31,16 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
      * Transition method
      * Confirm action method
      *
-     * @deprecated
+     * @deprecated Will be removed in 5.5.
      */
     public function confirmAction()
     {
         // todo@all maybe this method can be deleted once all references are removed
         // transition method
         // confirm check is done via helper method isConfirmed()
+
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->forward('index');
     }
 

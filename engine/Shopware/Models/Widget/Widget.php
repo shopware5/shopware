@@ -51,7 +51,7 @@ class Widget extends ModelEntity
      * @var string
      * @ORM\Column(name="label", type="string", nullable=false)
      *
-     * @deprecated
+     * @deprecated Will be removed in 5.5.
      */
     private $label;
 
@@ -99,22 +99,26 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
+     * @deprecated Will be removed in 5.5. Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead.
      *
      * @return string
      */
     public function getLabel()
     {
+        trigger_error(sprintf("%s::%s() is deprecated and will be removed in 5.5. Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead.", __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->label;
     }
 
     /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
+     * @deprecated Will be removed in 5.5. Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead.
      *
      * @param string $label
      */
     public function setLabel($label)
     {
+        trigger_error(sprintf("%s::%s() is deprecated and will be removed in 5.5. Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead.", __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $this->label = $label;
     }
 

@@ -38,7 +38,7 @@ use Shopware\Components\Model\ModelEntity;
  * @ORM\Entity
  * @ORM\Table(name="s_core_documents")
  *
- * @deprecated since 5.4, will be removed with 5.5. Use \Shopware\Models\Document\Document instead.
+ * @deprecated Since 5.4, will be removed with 5.5. Use \Shopware\Models\Document\Document instead.
  */
 class Type extends ModelEntity
 {
@@ -106,6 +106,11 @@ class Type extends ModelEntity
      * @ORM\Column(name="pagebreak", type="integer", nullable=false)
      */
     private $pageBreak;
+
+    public function __construct()
+    {
+        trigger_error(sprintf('%s is deprecated since 5.4 and will be removed in 5.5. Use Shopware\Models\Document\Document instead.', __CLASS__), E_USER_DEPRECATED);
+    }
 
     /**
      * Get id

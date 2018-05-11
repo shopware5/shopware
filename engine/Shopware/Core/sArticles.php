@@ -500,7 +500,7 @@ class sArticles
     /**
      * Get all available suppliers from a specific category
      *
-     * @deprecated since 5.3, will be removed with 5.5 without replacement
+     * @deprecated Since 5.3, will be removed with 5.5 without replacement.
      *
      * @param int $id    - category id
      * @param int $limit
@@ -509,6 +509,8 @@ class sArticles
      */
     public function sGetAffectedSuppliers($id = null, $limit = null)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.3 and will be removed in 5.5 without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $id = empty($id) ? (int) $this->frontController->Request()->getQuery('sCategory') : (int) $id;
         $configLimit = $this->config['sMAXSUPPLIERSCATEGORY'] ? $this->config['sMAXSUPPLIERSCATEGORY'] : 30;
         $limit = empty($limit) ? $configLimit : (int) $limit;

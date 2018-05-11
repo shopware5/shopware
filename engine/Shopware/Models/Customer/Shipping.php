@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
 
 /**
- * @deprecated Since 5.2 removed in 5.4 use \Shopware\Models\Customer\Address
+ * @deprecated Since 5.2, will be removed in 5.5. Use \Shopware\Models\Customer\Address instead.
  * Shopware customer shipping model represents a single shipping address of a customer.
  *
  * The Shopware customer shipping model represents a row of the s_user_shippingaddress table.
@@ -196,6 +196,11 @@ class Shipping extends ModelEntity
      * @ORM\Column(name="countryID", type="integer", nullable=false)
      */
     private $countryId = 0;
+
+    public function __construct()
+    {
+        trigger_error(sprintf('%s is deprecated since 5.2 and will be removed in 5.5. Use Shopware\Models\Customer\Address instead.', __CLASS__), E_USER_DEPRECATED);
+    }
 
     /**
      * Getter function for the unique id identifier property

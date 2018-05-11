@@ -208,13 +208,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @deprecated since 5.3, remove in 5.5. Use \Shopware_Controllers_Widgets_Listing::listingCountAction instead
+     * @deprecated since 5.3, will be removed in 5.5. Use Shopware_Controllers_Widgets_Listing::listingCountAction instead.
      *
      * Listing action for asynchronous fetching listing pages
      * by infinite scrolling plugin
      */
     public function ajaxListingAction()
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.3 and will be removed in 5.5. Use Shopware_Controllers_Widgets_Listing::listingCountAction() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $categoryId = (int) $this->Request()->getParam('sCategory');
         $pageIndex = (int) $this->Request()->getParam('sPage');
 
