@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Change AJAX search to respect the basic setting for direct number searches and show the same results as the normal search 
 * Changed ReflectionHelper to work with Windows 
 * Changed ``Unknown path`` Smarty error to work with Windows
+* Change TemplateMail to work without shop context
 
 ### Additions
 

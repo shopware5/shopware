@@ -161,6 +161,20 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
     }
 
     /**
+     * Sending mails throught cron without having shop set
+     */
+    public function testCreateMailWithoutShop()
+    {
+        $templateMail = new Shopware_Components_TemplateMail();
+        $templateMail->setModelManager(Shopware()->Models());
+        $templateMail->setStringCompiler(new Shopware_Components_StringCompiler(Shopware()->Template()));
+
+        $mail = $templateMail->createMail('sOrder');
+
+        $this->assertInstanceOf(Enlight_Components_Mail::class, $mail);
+    }
+
+    /**
      * @return \Shopware\Models\Mail\Attachment
      */
     protected function getAttachmentMockObject()
