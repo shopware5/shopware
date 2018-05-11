@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Change Tinymce editor to resolve placeholder images on initialization
 * Change product notification to match the documented feature
 * Change AJAX search to respect the basic setting for direct number searches and show the same results as the normal search 
+* Changed ``Unknown path`` Smarty error to work with Windows
 
 ### Additions
 
