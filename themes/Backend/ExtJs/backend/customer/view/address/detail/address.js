@@ -163,7 +163,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             labelWidth: 155,
                             anchor: '95%'
                         },
-                        country_id: {
+                        countryId: {
                             allowBlank: false,
                             fieldLabel: me.snippets.fields.country,
                             labelWidth: 155,
@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                                 scope: me
                             }
                         },
-                        state_id: {
+                        stateId: {
                             fieldLabel: me.snippets.fields.state,
                             labelWidth: 155,
                             anchor: '95%',
@@ -221,7 +221,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
         var me = this;
         var store = me.callParent(arguments);
         if (associationKey == 'state') {
-            me.addCountryIdFilter(store, me.record.get('country_id'));
+            me.addCountryIdFilter(store, me.record.get('countryId'));
         }
         return store;
     },
