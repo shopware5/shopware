@@ -47,6 +47,31 @@ class TemplateManagerTest extends TestCase
         $renderingResult = $templateManager->fetch('template.tpl');
 
         // The actual thing to test here is that there is no SmartyException thrown here
-        self::assertEquals($renderingResult, 'test');
+        $this->assertEquals($renderingResult, 'test');
+    }
+
+    /**
+     * Tests where invalid file in extends has occurred SmartySecurity errors
+     */
+    public function testFetchInvalidExtends()
+    {
+        // Create a dummy file
+        $tempDir = Shopware()->Container()->getParameter('kernel.root_dir') . '/media/temp/frontend/detail2/';
+
+        if (!file_exists($tempDir)) {
+            mkdir($tempDir, 0777, true);
+        }
+
+        $tempFile = $tempDir . 'index.tpl';
+        file_put_contents($tempFile, '{extends file="parent:frontent/detail/index.tpl"}');
+
+        /** @var \Enlight_Template_Manager $templateManager */
+        $templateManager = clone Shopware()->Container()->get('template');
+        $templateManager->addTemplateDir(Shopware()->Container()->getParameter('kernel.root_dir') . '/media/temp/');
+
+        $this->expectException(\SmartyException::class);
+        $this->expectExceptionMessage('Unknown path');
+
+        $templateManager->fetch('frontend/detail2/index.tpl');
     }
 }
