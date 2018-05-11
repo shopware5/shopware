@@ -1147,15 +1147,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function createConfiguratorVariantsAction()
     {
-        //first get the id parameter of the request object
-        $articleId = $this->Request()->getParam('articleId', 1);
+        // First get the id parameter of the request object
+        $articleId = (int) $this->Request()->getParam('articleId', 1);
         $groups = $this->Request()->getParam('groups');
-        $offset = $this->Request()->getParam('offset', 0);
-        $limit = $this->Request()->getParam('limit', 50);
+        $offset = (int) $this->Request()->getParam('offset', 0);
+        $limit = (int) $this->Request()->getParam('limit', 50);
 
-        //the merge type defines if all variants has to been regenerated or if only new variants will be added.
-        //1 => Regenerate all variants
-        //2 => Merge variants
+        // The merge type defines if all variants has to been regenerated or if only new variants will be added.
+        // 1 => Regenerate all variants
+        // 2 => Merge variants
         $mergeType = (int) $this->Request()->getParam('mergeType', 1);
 
         /** @var $article Article */
@@ -1203,7 +1203,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             // Merge the data with the original main detail data
             $data = array_merge($detailData, $variantData);
 
-            //use only the main detail of the article as base object, if the merge type is set to "Override" and the current variant is the first generated variant.
+            // Use only the main detail of the article as base object, if the merge type is set to "Override" and the current variant is the first generated variant.
             if ($offset === 0 && $mergeType === 1) {
                 $detail = $article->getMainDetail();
             } else {
@@ -3021,17 +3021,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * the cross join sql for all possible variants.
      * Returns an array with the sql and all used group ids
      *
-     * @param $groups
-     * @param $offset
-     * @param $limit
+     * @param array $groups
+     * @param int   $offset
+     * @param int   $limit
      *
      * @return array
      */
-    protected function prepareGeneratorData($groups, $offset, $limit)
+    protected function prepareGeneratorData(array $groups, $offset, $limit)
     {
-        //we have to iterate all passed groups to check the activated options.
+        // We have to iterate all passed groups to check the activated options.
         $activeGroups = [];
-        //we need a second array with all group ids to iterate them easily in the sql generation
+        // We need a second array with all group ids to iterate them easily in the sql generation
         $originals = [];
         $allOptions = [];
 
@@ -3043,7 +3043,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             $options = [];
-            //we iterate the options to get the option ids in a one dimensional array.
+            // We iterate the options to get the option ids in a one dimensional array.
             foreach ($group['options'] as $option) {
                 if ($option['active']) {
                     $options[] = (int) $option['id'];
@@ -3051,8 +3051,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 }
             }
 
-            //if some options active, we save the group and the options in an internal array
+            // If some options active, we save the group and the options in an internal array
             if (!empty($options)) {
+                $group['id'] = (int) $group['id'];
                 $activeGroups[] = ['id' => $group['id'], 'options' => $options];
                 $groupPositions[$group['id']] = (int) $group['position'];
                 $originals[] = $group['id'];
@@ -3063,11 +3064,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return [];
         }
 
-        //the first groups serves as the sql from path, so we have to remove the first id from the array
+        // The first groups serves as the sql from path, so we have to remove the first id from the array
         $first = array_shift($activeGroups);
         $firstId = $first['id'];
 
-        //now we create plain sql templates to parse the ids over the sprintf function
+        // Now we create plain sql templates to parse the ids over the sprintf function
         $selectTemplate = 'o%s.id as o%sId, o%s.name as o%sName, g%s.id as g%sId, g%s.name as g%sName, o%s.position as o%sPosition, g%s.position as g%sPosition ';
 
         $fromTemplate = 'FROM s_article_configurator_options o%s
@@ -3089,19 +3090,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $groupSql = [];
         $selectSql = [];
 
-        //we have remove the first group id, but we need the first id in the select, from and where path.
+        // We have remove the first group id, but we need the first id in the select, from and where path.
         $selectSql[] = sprintf($selectTemplate, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId);
         $groupSql[] = sprintf($fromTemplate, $firstId, $firstId, $firstId, $firstId);
         $whereSql = sprintf($whereTemplate, $firstId, $firstId, $firstId, implode(',', $first['options']));
 
-        //now we iterate all other groups, and create a select sql path and a cross join sql path.
+        // Now we iterate all other groups, and create a select sql path and a cross join sql path.
         foreach ($activeGroups as $group) {
-            $groupId = $group['id'];
+            $groupId = (int) $group['id'];
             $selectSql[] = sprintf($selectTemplate, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId);
             $groupSql[] = sprintf($joinTemplate, $groupId, $groupId, $groupId, $groupId, implode(',', $group['options']), $groupId, $groupId, $groupId);
         }
 
-        //concat the sql statement
+        // Concat the sql statement
         $sql = 'SELECT ' . implode(",\n", $selectSql) . ' ' . implode("\n", $groupSql) . ' ' . $whereSql . $orderBy . ' LIMIT ' . $offset . ',' . $limit;
 
         return [

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
@@ -622,7 +621,6 @@ class sArticles
         if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
             $price = $this->sFormatPrice($price);
         } else {
-            //if ($price > 100)         die(round($price * (100 + $tax) / 100, 5));
             $price = $this->sFormatPrice(round($price * (100 + $tax) / 100, 3));
         }
 
