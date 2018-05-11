@@ -30,6 +30,12 @@ class BenchmarkLocalCollector implements BenchmarkCollectorInterface
      * @var \IteratorAggregate
      */
     private $providers;
+
+    /**
+     * @var \IteratorAggregate
+     */
+    private $localProviders;
+
     /**
      * @var BenchmarkLocalHydrator
      */
@@ -37,11 +43,13 @@ class BenchmarkLocalCollector implements BenchmarkCollectorInterface
 
     /**
      * @param \IteratorAggregate     $providers
+     * @param \IteratorAggregate     $localProviders
      * @param BenchmarkLocalHydrator $benchmarkLocalHydrator
      */
-    public function __construct(\IteratorAggregate $providers, BenchmarkLocalHydrator $benchmarkLocalHydrator)
+    public function __construct(\IteratorAggregate $providers, \IteratorAggregate $localProviders, BenchmarkLocalHydrator $benchmarkLocalHydrator)
     {
         $this->providers = $providers;
+        $this->localProviders = $localProviders;
         $this->benchmarkLocalHydrator = $benchmarkLocalHydrator;
     }
 
@@ -55,6 +63,11 @@ class BenchmarkLocalCollector implements BenchmarkCollectorInterface
         /** @var BenchmarkProviderInterface $provider */
         foreach ($this->providers as $provider) {
             $providerData[$provider->getName()] = $provider->getBenchmarkData();
+        }
+
+        /** @var BenchmarkProviderInterface $localProvider */
+        foreach ($this->localProviders as $localProvider) {
+            $providerData[$localProvider->getName()] = $localProvider->getBenchmarkData();
         }
 
         return $this->benchmarkLocalHydrator->hydrate($providerData);

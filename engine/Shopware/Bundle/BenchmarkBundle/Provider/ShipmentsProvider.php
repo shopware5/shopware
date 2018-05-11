@@ -49,7 +49,10 @@ class ShipmentsProvider implements BenchmarkProviderInterface
      */
     public function getBenchmarkData()
     {
-        return ['shipments' => $this->getShipments()];
+        return [
+            'shipments' => $this->getShipments(),
+            'shipmentUsages' => $this->getShipmentUsages(),
+        ];
     }
 
     /**
@@ -72,5 +75,20 @@ class ShipmentsProvider implements BenchmarkProviderInterface
 
             return $shippingCost;
         }, $shippingCosts);
+    }
+
+    /**
+     * @return array
+     */
+    private function getShipmentUsages()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('orders.dispatchID, dispatches.name, COUNT(orders.id) as usages')
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_premium_dispatch', 'dispatches', 'dispatches.id = orders.dispatchID')
+            ->groupBy('orders.dispatchID')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
     }
 }

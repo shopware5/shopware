@@ -48,9 +48,11 @@ class CustomersProvider implements BenchmarkProviderInterface
     {
         return [
             'total' => $this->getTotalCustomers(),
-            'birthYear' => $this->getCustomersByBirthYear(),
+            'turnOverPerAge' => $this->getTurnOverPerAge(),
+            'turnOverPerGender' => $this->getTurnOverPerGender(),
             'sex' => $this->getCustomersBySex(),
             'countries' => $this->getCustomersByCountries(),
+            'ageBySex' => $this->getAverageAgeBySex(),
         ];
     }
 
@@ -70,28 +72,51 @@ class CustomersProvider implements BenchmarkProviderInterface
     /**
      * @return array
      */
-    private function getCustomersByBirthYear()
+    private function getTurnOverPerAge()
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        $birthYearCounts = $queryBuilder->select('YEAR(customers.birthday) as birthYear, COUNT(customers.id) as customerCount')
-            ->from('s_user', 'customers')
+        $turnOverPerAge = $queryBuilder->select('IFNULL(YEAR(customers.birthday), "unknown") birthYear, SUM(orders.invoice_amount)')
+            ->from('s_order', 'orders')
+            ->innerJoin('orders', 's_user', 'customers', 'customers.id = orders.userID')
             ->groupBy('YEAR(customers.birthday)')
             ->execute()
-            ->fetchAll();
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-        $birthYearCounts = array_map(function ($birthYearCount) {
-            if (!$birthYearCount['birthYear']) {
-                $birthYearCount['birthYear'] = 'unknown';
-            }
+        return $turnOverPerAge;
+    }
 
-            return $birthYearCount;
-        }, $birthYearCounts);
+    /**
+     * @return array
+     */
+    private function getTurnOverPerGender()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        // Creates key=>value pairs
-        $birthYearCounts = array_column($birthYearCounts, 'customerCount', 'birthYear');
+        $result = $queryBuilder->select('IFNULL(customers.salutation, "unknown"), SUM(orders.invoice_amount)')
+            ->from('s_order', 'orders')
+            ->innerJoin('orders', 's_user', 'customers', 'customers.id = orders.userID')
+            ->groupBy('customers.salutation')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-        return $birthYearCounts;
+        $turnOverPerAge['male'] = 0;
+        $turnOverPerAge['female'] = 0;
+        if ($result['mr']) {
+            $turnOverPerAge['male'] = $result['mr'];
+        }
+
+        if ($result['mrs']) {
+            $turnOverPerAge['female'] += $result['mrs'];
+        }
+
+        if ($result['ms']) {
+            $turnOverPerAge['female'] += $result['ms'];
+        }
+
+        $turnOverPerAge['others'] = $result['unknown'];
+
+        return $turnOverPerAge;
     }
 
     /**
@@ -125,6 +150,52 @@ class CustomersProvider implements BenchmarkProviderInterface
         }
 
         return $salutationCounts;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAverageAgeBySex()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $birthYears = $queryBuilder->select('customers.salutation, YEAR(customers.birthday) as birthYear')
+            ->from('s_user', 'customers')
+            ->execute()
+            ->fetchAll();
+
+        $totalAgeWomen = 0;
+        $totalAgeMen = 0;
+        $totalWomen = 0;
+        $totalMen = 0;
+        foreach ($birthYears as $birthYearData) {
+            $salutation = $birthYearData['salutation'];
+            $birthYear = $birthYearData['birthYear'];
+            $dateNow = new \DateTime('now');
+            $then = \DateTime::createFromFormat('Y', $birthYear);
+            $age = $dateNow->diff($then)->y;
+
+            if (in_array($salutation, ['ms', 'mrs'], true)) {
+                ++$totalWomen;
+                $totalAgeWomen += $age;
+                continue;
+            }
+
+            if ($salutation !== 'mr') {
+                continue;
+            }
+
+            ++$totalMen;
+            $totalAgeMen += $age;
+        }
+
+        $averageMen = $totalAgeMen / $totalMen;
+        $averageWomen = $totalAgeWomen / $totalWomen;
+
+        return [
+            'averageAgeMen' => is_nan($averageMen) ? 0 : $averageMen,
+            'averageAgeWomen' => is_nan($averageWomen) ? 0 : $averageWomen,
+        ];
     }
 
     /**

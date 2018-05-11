@@ -55,6 +55,7 @@ class PaymentsProvider implements BenchmarkProviderInterface
             'paymentsWithReduction' => $this->getPaymentsWithReduction(),
             'paymentsWithPercentagePrice' => $this->getPaymentsWithPercentagePrice(),
             'paymentsWithAbsolutePrice' => $this->getPaymentsWithAbsolutePrice(),
+            'paymentUsages' => $this->getPaymentUsages(),
         ];
     }
 
@@ -142,6 +143,22 @@ class PaymentsProvider implements BenchmarkProviderInterface
             ->where("payments.surcharge != 0 OR payments.surchargestring != ''")
             ->execute()
             ->fetchColumn();
+    }
+
+    /**
+     * @return array
+     */
+    private function getPaymentUsages()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('orders.paymentID, payments.name, COUNT(orders.id) as usages')
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_core_paymentmeans', 'payments', 'payments.id = orders.paymentID')
+            ->groupBy('orders.paymentID')
+            ->orderBy('usages', 'DESC')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
     }
 
     /**

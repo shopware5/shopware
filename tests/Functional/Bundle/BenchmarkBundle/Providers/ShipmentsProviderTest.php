@@ -29,9 +29,10 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class ShipmentsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.shipments';
-    const EXPECTED_KEYS_COUNT = 1;
+    const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
         'shipments' => IsType::TYPE_ARRAY,
+        'shipmentUsages' => IsType::TYPE_ARRAY,
     ];
 
     /**

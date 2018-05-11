@@ -27,7 +27,7 @@
 
     BenchmarkChart.prototype.initDefaultConfig = function () {
         Chart.defaults.global.defaultFontColor = '#798EA3';
-        Chart.defaults.global.defaultFontFamily = 'Brandon';
+        Chart.defaults.global.defaultFontFamily = 'Asap';
     };
 
     BenchmarkChart.prototype.initTimeRangeLabel = function () {
@@ -39,7 +39,7 @@
         }
 
         if (this.time === 'months') {
-            this.timeRangeLabel = 'KW';
+            this.timeRangeLabel = 'Tage';
         }
 
         if (this.time === 'years') {
@@ -75,6 +75,21 @@
             fill: false
         });
 
+        // Last year data
+        dataSets.push({
+            //TODO: Translations?
+            label: 'Shop Vorjahr',
+            backgroundColor: globals.shopColor,
+            borderColor: globals.shopColor,
+            borderWidth: '3',
+            borderCapStyle: 'round',
+            lineTension: 0,
+            pointRadius: 0,
+            borderDash: [1, 8],
+            data: window.benchmarkData['local']['lastYear'][this.time][this.name].values,
+            fill: false
+        });
+
         if (this.includeIndustry) {
             dataSets.push({
                 //TODO: Translations?
@@ -86,6 +101,20 @@
                 lineTension: 0,
                 pointRadius: 0,
                 data: window.benchmarkData['industry'][this.time][this.name].values,
+                fill: false
+            });
+
+            dataSets.push({
+                //TODO: Translations?
+                label: 'Branche Vorjahr',
+                backgroundColor: globals.industryColor,
+                borderColor: globals.industryColor,
+                borderWidth: '3',
+                borderCapStyle: 'round',
+                lineTension: 0,
+                pointRadius: 0,
+                borderDash: [1, 8],
+                data: window.benchmarkData['industry']['lastYear'][this.time][this.name].values,
                 fill: false
             });
         }

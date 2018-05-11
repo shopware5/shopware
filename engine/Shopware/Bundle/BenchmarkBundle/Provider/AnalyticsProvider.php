@@ -51,18 +51,21 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     public function getBenchmarkData()
     {
         return [
-            'totalVisits' => $this->getVisits(),
-            'totalViews' => $this->getViews(),
-            'visitsByDevice' => $this->getVisitsPerDevice(),
+            'totalVisitsYesterday' => $this->getVisitsYesterday(),
+            'totalViewsYesterday' => $this->getViewsYesterday(),
+            'visitsByDeviceYesterday' => $this->getVisitsYesterdayPerDevice(),
+            'totalVisitsByDevice' => $this->getTotalVisitsByDevice(),
+            'totalVisits' => $this->getTotalVisits(),
+            'averageShippingCostsPerOrder' => $this->getAverageShippingCostsPerOrder(),
         ];
     }
 
     /**
      * @return int
      */
-    private function getVisits()
+    private function getVisitsYesterday()
     {
-        $queryBuilder = $this->getVisitsQueryBuilder();
+        $queryBuilder = $this->getVisitsYesterdayQueryBuilder();
 
         return (int) $queryBuilder->groupBy('visitors.datum')
             ->execute()
@@ -72,7 +75,7 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     /**
      * @return int
      */
-    private function getViews()
+    private function getViewsYesterday()
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
@@ -87,9 +90,9 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     /**
      * @return array
      */
-    private function getVisitsPerDevice()
+    private function getVisitsYesterdayPerDevice()
     {
-        $queryBuilder = $this->getVisitsQueryBuilder();
+        $queryBuilder = $this->getVisitsYesterdayQueryBuilder();
 
         $visitsPerDevice = $queryBuilder->select('visitors.deviceType, SUM(visitors.uniquevisits) as uniqueVisits')
             ->groupBy('visitors.datum, visitors.deviceType')
@@ -104,12 +107,62 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     /**
      * @return QueryBuilder
      */
-    private function getVisitsQueryBuilder()
+    private function getVisitsYesterdayQueryBuilder()
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
         return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
             ->from('s_statistics_visitors', 'visitors')
             ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY');
+    }
+
+    /**
+     * @return int
+     */
+    private function getTotalVisits()
+    {
+        $queryBuilder = $this->getTotalVisitsQueryBuilder();
+
+        return (int) $queryBuilder->execute()->fetchColumn();
+    }
+
+    /**
+     * @return array
+     */
+    private function getTotalVisitsByDevice()
+    {
+        $queryBuilder = $this->getTotalVisitsQueryBuilder();
+
+        $visitsPerDevice = $queryBuilder->select('visitors.deviceType, SUM(visitors.uniquevisits) as uniqueVisits')
+            ->groupBy('visitors.deviceType')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        $visitsPerDevice = array_map('intval', $visitsPerDevice);
+
+        return $visitsPerDevice;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    private function getTotalVisitsQueryBuilder()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
+            ->from('s_statistics_visitors', 'visitors');
+    }
+
+    /**
+     * @return float
+     */
+    private function getAverageShippingCostsPerOrder()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return (float) $queryBuilder->select('AVG(orders.invoice_shipping)')
+            ->from('s_order', 'orders')
+            ->execute()->fetchColumn();
     }
 }

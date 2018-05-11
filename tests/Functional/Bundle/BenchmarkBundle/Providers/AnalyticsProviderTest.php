@@ -29,11 +29,14 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class AnalyticsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.analytics';
-    const EXPECTED_KEYS_COUNT = 3;
+    const EXPECTED_KEYS_COUNT = 6;
     const EXPECTED_TYPES = [
+        'totalVisitsYesterday' => IsType::TYPE_INT,
+        'totalViewsYesterday' => IsType::TYPE_INT,
+        'visitsByDeviceYesterday' => IsType::TYPE_ARRAY,
+        'totalVisitsByDevice' => IsType::TYPE_ARRAY,
         'totalVisits' => IsType::TYPE_INT,
-        'totalViews' => IsType::TYPE_INT,
-        'visitsByDevice' => IsType::TYPE_ARRAY,
+        'averageShippingCostsPerOrder' => IsType::TYPE_FLOAT,
     ];
 
     /**
@@ -47,13 +50,13 @@ class AnalyticsProviderTest extends ProviderTestCase
 
         $resultData = $provider->getBenchmarkData();
 
-        $this->assertSame(25, $resultData['totalVisits']);
+        $this->assertSame(492, $resultData['totalVisits']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalViews()
+    public function testGetTotalVisitsYesterday()
     {
         $this->installDemoData('analytics');
 
@@ -61,7 +64,21 @@ class AnalyticsProviderTest extends ProviderTestCase
 
         $resultData = $provider->getBenchmarkData();
 
-        $this->assertSame(16, $resultData['totalViews']);
+        $this->assertSame(25, $resultData['totalVisitsYesterday']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetTotalViewsYesterday()
+    {
+        $this->installDemoData('analytics');
+
+        $provider = $this->getProvider();
+
+        $resultData = $provider->getBenchmarkData();
+
+        $this->assertSame(16, $resultData['totalViewsYesterday']);
     }
 
     /**
@@ -75,7 +92,7 @@ class AnalyticsProviderTest extends ProviderTestCase
 
         $resultData = $provider->getBenchmarkData();
 
-        $this->assertSame(7, $resultData['visitsByDevice']['desktop']);
-        $this->assertSame(18, $resultData['visitsByDevice']['mobile']);
+        $this->assertSame(12, $resultData['totalVisitsByDevice']['desktop']);
+        $this->assertSame(480, $resultData['totalVisitsByDevice']['mobile']);
     }
 }
