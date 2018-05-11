@@ -524,13 +524,18 @@ Ext.define('Shopware.form.field.TinyMCE',
         return rawContent;
     },
 
-    replacePlaceholderWithImage: function(rawContent) {
+    replacePlaceholderWithImage: function(rawContent, callback) {
         var me = this,
             imagesToLoad = [],
             content, params = '';
 
         if (!me.isValidContent(rawContent)) {
-            return rawContent;
+            if (Ext.isFunction(callback)) {
+                callback(rawContent);
+                return;
+            } else {
+                return rawContent;
+            }
         }
 
         content = me.HTMLBlobToDomElements(rawContent);
@@ -542,7 +547,12 @@ Ext.define('Shopware.form.field.TinyMCE',
         params = params.substring(0, params.length - 1);
 
         if (params.length <= 0) {
-            return;
+            if (Ext.isFunction(callback)) {
+                callback(rawContent);
+                return;
+            } else {
+                return rawContent;
+            }
         }
 
         Ext.Ajax.request({
@@ -563,7 +573,12 @@ Ext.define('Shopware.form.field.TinyMCE',
                 });
 
                 html = me.DOMElementsToHTMLBlob(content);
-                me.tinymce.setContent(html);
+
+                if (Ext.isFunction(callback)) {
+                    callback(html);
+                } else {
+                    me.tinymce.setContent(html);
+                }
             }
         });
     },
@@ -679,8 +694,11 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         if(!me.initialized) {
             value = me.replaceSmartyPluginWithImagePaths(value);
-            me.setRawValue(me.valueToRaw(value));
-            me.mixins.field.setValue.call(me, value);
+
+            me.replacePlaceholderWithImage(value, function (value) {
+                me.setRawValue(me.valueToRaw(value));
+                me.mixins.field.setValue.call(me, value);
+            });
 
             return me;
         }
