@@ -163,11 +163,11 @@ class Shopware_Components_TemplateMail
         $config = Shopware()->Config();
         $inheritance = Shopware()->Container()->get('theme_inheritance');
 
-        $keys = ['mobileLogo' => true, 'tabletLogo' => true, 'tabletLandscapeLogo' => true, 'desktopLogo' => true, 'appleTouchIcon' => true];
-        $theme = $inheritance->buildConfig($this->getShop()->getTemplate(), $this->getShop(), false);
-        $theme = array_intersect_key($theme, $keys);
-
         if ($this->getShop() !== null) {
+            $keys = ['mobileLogo' => true, 'tabletLogo' => true, 'tabletLandscapeLogo' => true, 'desktopLogo' => true, 'appleTouchIcon' => true];
+            $theme = $inheritance->buildConfig($this->getShop()->getTemplate(), $this->getShop(), false);
+            $theme = array_intersect_key($theme, $keys);
+
             $defaultContext = [
                 'sConfig' => $config,
                 'sShop' => $config->get('shopName'),
