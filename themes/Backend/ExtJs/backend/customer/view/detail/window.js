@@ -161,8 +161,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
     refreshTemplateContainer: function() {
         var me = this;
 
-        me.billingContainer.update(me.record.getBilling().first().getData());
-        me.shippingContainer.update(me.record.getShipping().first().getData());
+        me.billingContainer.update(me.record.getDefaultBillingAddress().first().getData());
+        me.shippingContainer.update(me.record.getDefaultShippingAddress().first().getData());
     },
 
     /**
@@ -540,7 +540,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         me.billingContainer = Ext.create('Ext.container.Container', {
             tpl: me.createBillingTemplate(),
-            data: me.record.getBilling().first().getData()
+            data: me.record.getDefaultBillingAddress().first().getData()
         });
 
         return Ext.create('Ext.panel.Panel', {
@@ -567,17 +567,21 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             '{literal}<tpl for=".">',
                 '<div class="customer-info-pnl">',
                     '<div class="base-info">',
-                        '<p>',
-                            '<span>{company}</span>',
-                        '</p>',
-                        '<p>',
-                            '<span>{department}</span>',
-                        '</p>',
+                        '<tpl if="company">',
+                            '<p>',
+                                '<span>{company}</span>',
+                            '</p>',
+                        '</tpl>',
+                        '<tpl if="department">',
+                            '<p>',
+                                '<span>{department}</span>',
+                            '</p>',
+                        '</tpl>',
                         '<p>',
                             '<span>{salutationSnippet}</span>&nbsp;',
                             '<tpl if="title"><span>{title}</span><br /></tpl>',
-                            '<span>{firstName}</span>&nbsp;',
-                            '<span>{lastName}</span>',
+                            '<span>{firstname}</span>&nbsp;',
+                            '<span>{lastname}</span>',
                         '</p>',
                         '<p>',
                             '<span>{street}</span>',
@@ -593,7 +597,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                             '</p>',
                         '</tpl>',
                         '<p>',
-                            '<span>{zipCode}</span>&nbsp;',
+                            '<span>{zipcode}</span>&nbsp;',
                             '<span>{city}</span>',
                         '</p>',
                         '<p><span>{[this.getCountry(values.countryId)]}</span></p>',
@@ -612,7 +616,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                         return me.countryStateStore.getById(stateId).get('name');
                     }
                 }
-            }
+            },
         );
     },
 
@@ -621,13 +625,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      */
     createShippingContainer: function() {
         var me = this,
-            shipping = me.record.getShipping().first();
+            shipping = me.record.getDefaultShippingAddress().first();
 
         if (shipping === Ext.undefined) {
-            if (me.record.getBilling() === null || me.record.getBilling().first() === null) {
+            if (me.record.getDefaultBillingAddress() === null || me.record.getDefaultBillingAddress().first() === null) {
                 return;
             }
-            shipping = me.record.getBilling().first();
+            shipping = me.record.getDefaultBillingAddress().first();
             if (shipping == null) {
                 return;
             }
@@ -635,7 +639,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         me.shippingContainer = Ext.create('Ext.container.Container', {
             tpl: me.createShippingTemplate(),
-            data: me.record.getShipping().first().getData()
+            data: me.record.getDefaultShippingAddress().first().getData()
         });
 
         return Ext.create('Ext.panel.Panel', {
@@ -669,8 +673,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             callback: function(updatedRecord) {
                 me.record = updatedRecord[0];
 
-                me.billingContainer.update(me.record.getBilling().first().raw);
-                me.shippingContainer.update(me.record.getShipping().first().raw);
+                me.billingContainer.update(me.record.getDefaultBillingAddress().first().raw);
+                me.shippingContainer.update(me.record.getDefaultShippingAddress().first().raw);
             }
         });
     },
