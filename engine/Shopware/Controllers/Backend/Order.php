@@ -367,7 +367,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $id = $this->Request()->getParam('id');
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         //the backend order module have no function to create a new order so an order id must be passed.
         if (empty($id)) {
@@ -441,12 +441,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $order = $this->getRepository()->find($id);
 
         //if the status has been changed an status mail is created.
+        $warning = null;
         $mail = null;
         if ($order->getOrderStatus()->getId() !== $statusBefore->getId() || $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
             if ($order->getOrderStatus()->getId() !== $statusBefore->getId()) {
-                $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
+                $status = $order->getOrderStatus();
             } else {
-                $mail = $this->getMailForOrder($order->getId(), $order->getPaymentStatus()->getId());
+                $status = $order->getPaymentStatus();
+            }
+            try {
+                $mail = $this->getMailForOrder($order->getId(), $status->getId());
+            } catch (\Exception $e) {
+                $warning = sprintf(
+                    $namespace->get('warning/mail_creation_failed'),
+                    $status->getName(),
+                    $e->getMessage()
+                );
             }
         }
 
@@ -457,10 +467,15 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['mail'] = null;
         }
 
-        $this->View()->assign([
+        $result = [
             'success' => true,
             'data' => $data,
-        ]);
+        ];
+        if (isset($warning)) {
+            $result['warning'] = $warning;
+        }
+
+        $this->View()->assign($result);
     }
 
     /**

@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
     snippets: {
         successTitle: '{s name=message/save/success_title}Successful{/s}',
         failureTitle: '{s name=message/save/error_title}Error{/s}',
+        warningTitle:'{s name=message/save/warning_title}Warning{/s}',
         changeStatus: {
             successMessage: '{s name=message/status/success}The status has been changed successfully{/s}',
             failureMessage: '{s name=message/status/failure}An error has occurred while changing the status.{/s}'
@@ -139,6 +140,10 @@ Ext.define('Shopware.apps.Order.controller.List', {
 
                 if (operation.success === true) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.changeStatus.successMessage, me.snippets.growlMessage);
+                    if (rawData && rawData.warning) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.warningTitle, rawData.warning, me.snippets.growlMessage);
+                    }
+
                     record.set('invoiceAmount', rawData.data.invoiceAmount);
 
                     //Check if a status mail is created and create a model with the returned data and open the mail window.
