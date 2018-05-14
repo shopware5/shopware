@@ -53,8 +53,6 @@ class GenericSearcher implements SearcherInterface
     protected $searchBuilder;
 
     /**
-     * GenericSearcher constructor.
-     *
      * @param string        $entity
      * @param ModelManager  $entityManager
      * @param SearchBuilder $searchBuilder

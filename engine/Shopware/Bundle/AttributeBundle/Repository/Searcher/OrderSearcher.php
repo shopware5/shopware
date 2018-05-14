@@ -25,34 +25,27 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Customer\Customer;
-use Shopware\Models\CustomerStream\Mapping;
+use Shopware\Models\Order\Order;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class CustomerSearcher extends GenericSearcher
+class OrderSearcher extends GenericSearcher
 {
     /**
      * {@inheritdoc}
      */
     protected function createQuery(SearchCriteria $criteria)
     {
-        $builder = $this->entityManager->createQueryBuilder();
-        $builder->select($this->getIdentifierField());
-        $builder->from(Customer::class, 'entity');
-        $builder->innerJoin('entity.defaultBillingAddress', 'billing');
-        $builder->innerJoin('entity.group', 'customerGroup');
-        $builder->setAlias('entity');
+        $query = $this->entityManager->createQueryBuilder();
+        $query->select($this->getIdentifierField());
+        $query->from(Order::class, 'entity', $this->getIdentifierField());
+        $query->leftJoin('entity.payment', 'payment');
+        $query->leftJoin('entity.dispatch', 'dispatch');
+        $query->leftJoin('entity.shop', 'shop');
+        $query->leftJoin('entity.billing', 'billing');
+        $query->leftJoin('entity.customer', 'customer');
+        $query->leftJoin('billing.country', 'billingCountry');
+        $query->setAlias('entity');
 
-        if ($criteria->params && $criteria->params['streamId']) {
-            $builder->innerJoin(Mapping::class, 'mapping', 'WITH', 'mapping.customerId = entity.id AND mapping.streamId = :streamId');
-            $builder->setParameter(':streamId', $criteria->params['streamId']);
-        }
-
-        return $builder;
+        return $query;
     }
 
     /**
@@ -64,9 +57,9 @@ class CustomerSearcher extends GenericSearcher
     {
         return [
             'entity.number^2',
-            'entity.email^2',
-            'entity.firstname^3',
-            'entity.lastname^3',
+            'customer.email^2',
+            'customer.firstname^3',
+            'customer.lastname^3',
             'billing.zipCode^0.5',
             'billing.city^0.5',
             'billing.company^0.5',

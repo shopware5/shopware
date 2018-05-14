@@ -42,8 +42,6 @@ class SearcherResult
     private $count;
 
     /**
-     * SearchGatewayResult constructor.
-     *
      * @param int[]|string[] $identifiers
      * @param int            $count
      */

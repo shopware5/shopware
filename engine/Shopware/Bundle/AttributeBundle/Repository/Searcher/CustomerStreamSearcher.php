@@ -33,6 +33,9 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
  */
 class CustomerStreamSearcher extends GenericSearcher
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function createQuery(SearchCriteria $criteria)
     {
         $query = parent::createQuery($criteria);

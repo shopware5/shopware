@@ -22,45 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\EsBackend\Subscriber;
 
-use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Premium\Premium;
+use Doctrine\Common\Collections\ArrayCollection;
+use Enlight\Event\SubscriberInterface;
+use Shopware\Bundle\EsBackend\Commands\IndexPopulateCommand;
+use Shopware\Bundle\EsBackend\Commands\SyncBacklogCommand;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class PremiumSearcher extends GenericSearcher
+class ServiceSubscriber implements SubscriberInterface
 {
     /**
      * {@inheritdoc}
      */
-    protected function createQuery(SearchCriteria $criteria)
+    public static function getSubscribedEvents()
     {
-        $query = $this->entityManager->createQueryBuilder();
-        $query->select($this->getIdentifierField());
-        $query->from(Premium::class, 'entity');
-        $query->innerJoin('entity.articleDetail', 'variant');
-        $query->innerJoin('variant.article', 'article');
-        $query->leftJoin('entity.shop', 's');
-
-        return $query;
+        return [
+            'Shopware_Console_Add_Command' => ['addCommands'],
+        ];
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
-     * @return array
+     * @return ArrayCollection
      */
-    protected function getSearchFields(SearchCriteria $criteria)
+    public function addCommands()
     {
-        return [
-            'entity.orderNumberExport',
-            'variant.number',
-            'article.name',
-            's.name',
-        ];
+        return new ArrayCollection([
+            new IndexPopulateCommand(),
+            new SyncBacklogCommand(),
+        ]);
     }
 }

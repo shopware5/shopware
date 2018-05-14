@@ -82,6 +82,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         if (strpos($this->Request()->getPathInfo(), '/backend/') !== 0) {
             $this->redirect('backend/', ['code' => 301]);
         }
+
+        $this->View()->assign('esEnabled', $this->container->getParameter('shopware.es.backend.enabled'));
     }
 
     /**

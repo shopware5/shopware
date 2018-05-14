@@ -22,41 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\EsBackend;
 
-use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Property\Value;
+use Shopware\Bundle\AttributeBundle\Repository\RepositoryInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class PropertyOptionSearcher extends GenericSearcher
+interface EsAwareSearcher extends RepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function createQuery(SearchCriteria $criteria)
-    {
-        $query = $this->entityManager->createQueryBuilder();
-        $query->select($this->getIdentifierField());
-        $query->from(Value::class, 'entity');
-        $query->innerJoin('entity.option', 'option');
-
-        return $query;
-    }
-
-    /**
-     * @param SearchCriteria $criteria
-     *
-     * @return array
-     */
-    protected function getSearchFields(SearchCriteria $criteria)
-    {
-        return [
-            'entity.value',
-            'option.name',
-        ];
-    }
 }

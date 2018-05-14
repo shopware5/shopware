@@ -21,42 +21,19 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
-
-use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Property\Value;
-
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class PropertyOptionSearcher extends GenericSearcher
+class Migrations_Migration1405 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function createQuery(SearchCriteria $criteria)
+    public function up($modus)
     {
-        $query = $this->entityManager->createQueryBuilder();
-        $query->select($this->getIdentifierField());
-        $query->from(Value::class, 'entity');
-        $query->innerJoin('entity.option', 'option');
+        $sql = <<<'EOF'
+CREATE TABLE `s_es_backend_backlog` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `entity` varchar(500) NOT NULL,
+  `entity_id` int NOT NULL,
+  `time` datetime NOT NULL
+);    
+EOF;
 
-        return $query;
-    }
-
-    /**
-     * @param SearchCriteria $criteria
-     *
-     * @return array
-     */
-    protected function getSearchFields(SearchCriteria $criteria)
-    {
-        return [
-            'entity.value',
-            'option.name',
-        ];
+        $this->addSql($sql);
     }
 }

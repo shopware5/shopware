@@ -34,12 +34,11 @@ Ext.define('Shopware.apps.Index.view.Search', {
     alternateClassName: 'Shopware.Search',
     cls: 'searchfield-container',
 
-    /**
-     * Minimum search query length
-     *
-     * @integer
-     */
-    minSearchLength: 4,
+    /*{if $esEnabled}*/
+        minSearchLength: 2,
+    /*{else}*/
+        minSearchLength: 4,
+    /*{/if}*/
 
     /**
      * URL which handles the search requests
@@ -70,7 +69,11 @@ Ext.define('Shopware.apps.Index.view.Search', {
             margin: '5 0',
             allowBlank: true,
             enableKeyEvents: true,
+            /*{if $esEnabled}*/
+            checkChangeBuffer: 50,
+            /*{else}*/
             checkChangeBuffer: 400,
+            /*{/if}*/
             listeners: {
                 scope: me,
                 change: me.sendSearchRequest,
