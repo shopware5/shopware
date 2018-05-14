@@ -14,6 +14,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed ReflectionHelper to work with Windows 
 * Changed ``Unknown path`` Smarty error to work with Windows
 * Change TemplateMail to work without shop context
+* Changed ``Shopware\Recovery\UpdateFilePermissionChanger`` to make it PHP 7 compatible
 
 ### Additions
 
