@@ -104,6 +104,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
         });
         me.availableCountries.filters.clear();
         me.availableCountries.filter('usedIds', ids);
+        me.availableCountries.sort('position','ASC');
+        me.usedCountriesStore.sort('position','ASC');
 
         // Create the view
         me.items = me.getItems();
