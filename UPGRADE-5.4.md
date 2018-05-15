@@ -8,13 +8,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ### Changes
 
-* Change Tinymce editor to resolve placeholder images on initialization
-* Change product notification to match the documented feature
-* Change AJAX search to respect the basic setting for direct number searches and show the same results as the normal search 
+* Changed Tinymce editor to resolve placeholder images on initialization
+* Changed product notification to match the documented feature
+* Changed AJAX search to respect the basic setting for direct number searches and show the same results as the normal search 
+* Changed TemplateMail to work without shop context
 * Changed ReflectionHelper to work with Windows 
-* Changed ``Unknown path`` Smarty error to work with Windows
-* Change TemplateMail to work without shop context
-* Changed ``Shopware\Recovery\UpdateFilePermissionChanger`` to make it PHP 7 compatible
+* Changed `Unknown path` Smarty error to work with Windows
+* Changed `Shopware\Recovery\UpdateFilePermissionChanger` to make it PHP 7 compatible
+* Changed `manufacturerNumber` field type in elasticsearch to improve search for manufacturer numbers
 
 ### Additions
 
