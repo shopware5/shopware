@@ -323,13 +323,22 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
 
         me.concurrencySizeCombo = Ext.create('Ext.form.ComboBox', {
             fieldLabel: '{s name=multi_request/concurrency/label}Concurrency{/s}',
-            helpText: '{s name=multi_request/concurrency/help}How many URLs should be requested in parallel? Default: 5{/s}',
+            helpText: '{s name=multi_request/concurrency/help}How many URLs should be requested in parallel? Default: 2{/s}',
             name: 'concurrencySize',
             margin: '0 0 10 0',
             allowBlank: false,
             value: me.concurrencySize,
             editable: true,
             displayField: 'concurrencySize',
+            validator: function (value) {
+                if (value > me.batchSizeCombo.getValue()) {
+                    me.startButton.disable();
+                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                }
+                me.batchSizeCombo.clearInvalid();
+                me.startButton.enable();
+                return true;
+            },
             store: Ext.create('Ext.data.Store', {
                 fields: [
                     { name: 'concurrencySize', type: 'int' }
@@ -344,13 +353,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     { concurrencySize: '7' },
                     { concurrencySize: '8' },
                     { concurrencySize: '9' },
-                    { concurrencySize: '10' },
-                    { concurrencySize: '15' },
-                    { concurrencySize: '20' },
-                    { concurrencySize: '25' },
-                    { concurrencySize: '30' },
-                    { concurrencySize: '40' },
-                    { concurrencySize: '50' }
+                    { concurrencySize: '10' }
                 ]
             })
         });
@@ -370,6 +373,16 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             value: me.batchSize,
             editable: true,
             displayField: 'batchSize',
+            validator: function (value) {
+                if (value < me.concurrencySizeCombo.getValue()) {
+                    me.startButton.disable();
+                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                }
+                me.concurrencySizeCombo.clearInvalid();
+                me.startButton.enable();
+
+                return true;
+            },
             store: Ext.create('Ext.data.Store', {
                 fields: [
                     { name: 'batchSize', type: 'int' }
