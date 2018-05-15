@@ -22,45 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\EsBackend\Searcher;
 
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Premium\Premium;
+use Shopware\Models\Article\Article;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class PremiumSearcher extends GenericSearcher
+class ProductSearcher extends GenericSearcher
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function createQuery(SearchCriteria $criteria)
+    protected function getIdentifierColumn()
     {
-        $query = $this->entityManager->createQueryBuilder();
-        $query->select($this->getIdentifierField());
-        $query->from(Premium::class, 'entity');
-        $query->innerJoin('entity.articleDetail', 'variant');
-        $query->innerJoin('variant.article', 'article');
-        $query->leftJoin('entity.shop', 's');
-
-        return $query;
+        return 'number';
     }
 
-    /**
-     * @param SearchCriteria $criteria
-     *
-     * @return array
-     */
-    protected function getSearchFields(SearchCriteria $criteria)
+    protected function buildSearchObject(SearchCriteria $criteria)
     {
-        return [
-            'entity.orderNumberExport',
-            'variant.number',
-            'article.name',
-            's.name',
-        ];
+        $search = parent::buildSearchObject($criteria);
+
+        if ($criteria->entity === Article::class) {
+            $search->addFilter(new TermQuery('kind', 1));
+        }
+
+        return $search;
     }
 }

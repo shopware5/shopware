@@ -33,6 +33,22 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added payment and dispatch translation for order status mails
 * Added ability to translate shop pages. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
 * Added snippets for locales in backend menus
+* Added implementation of elasticsearch backend
+    * Added EsBackend bundle to index and search products, customers and orders for the backend
+    * Added new searcher, reader and repositories to AttributeBundle for implementing elasticsearch backend
+        * `engine/Shopware/Bundle/AttributeBundle/Repository`
+            * `Reader/OrderReader.php`
+            * `Searcher/OrderSearcher.php`
+            * `CustomerRepository.php`
+            * `OrderRepository.php`
+    * Added indexing and backlog sync command
+        * `engine/Shopware/Bundle/EsBackend/Commands/IndexPopulateCommand.php`
+        * `engine/Shopware/Bundle/EsBackend/Commands/SyncBacklogCommand.php`
+    * Added new templates to `themes/Backend/ExtJs/backend/search/` to split the `index.tpl`
+        * `articles.tpl`
+        * `customers.tpl`
+        * `orders.tpl`
+    * Added new config parameters `write_backlog`, `enabled` and `backend` to `es` parameter
 
 ### Changes
 
@@ -115,3 +131,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Deprecated `lastStock` field in `\Shopware\Models\Article\Article` as the field has been moved to the variants. It will be removed in 5.6
 * Deprecated `laststock` column in `s_articles` since this field has been moved to the variants. It will be removed in 5.6
 * Deprecated the translation workaround ("gLeft", "gBottom", "eLeft", "eBottom", etc.) for shop page groups. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
+
+### Elasticsearch in backend
+
+To activate elasticsearch in backend you have to enable the `es => backend => enabled` parameter in the `config.php` and start a indexation
+of the backend entities with `sw:es:backend:index:populate`.

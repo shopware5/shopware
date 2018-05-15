@@ -42,8 +42,6 @@ class SearchResult
     private $data;
 
     /**
-     * SearchResult constructor.
-     *
      * @param int   $count
      * @param array $data
      */

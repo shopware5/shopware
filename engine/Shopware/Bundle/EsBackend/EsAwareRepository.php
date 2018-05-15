@@ -22,41 +22,35 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\EsBackend;
 
-use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Property\Value;
+use Shopware\Bundle\AttributeBundle\Repository\RepositoryInterface;
+use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class PropertyOptionSearcher extends GenericSearcher
+interface EsAwareRepository extends RepositoryInterface
 {
     /**
-     * {@inheritdoc}
+     * @return LastIdQuery
      */
-    protected function createQuery(SearchCriteria $criteria)
-    {
-        $query = $this->entityManager->createQueryBuilder();
-        $query->select($this->getIdentifierField());
-        $query->from(Value::class, 'entity');
-        $query->innerJoin('entity.option', 'option');
-
-        return $query;
-    }
+    public function getIterator();
 
     /**
-     * @param SearchCriteria $criteria
+     * Returns a mapping for elastic search
+     *
+     *   [
+     *       'properties' => [
+     *           'id' => ['type' => 'long'],
+     *           'active' => ['type' => 'boolean'],
+     *           ...
+     *       ]
+     *   ]
      *
      * @return array
      */
-    protected function getSearchFields(SearchCriteria $criteria)
-    {
-        return [
-            'entity.value',
-            'option.name',
-        ];
-    }
+    public function getMapping();
+
+    /**
+     * @return string
+     */
+    public function getDomainName();
 }

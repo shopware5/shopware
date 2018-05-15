@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Article\Article;
 
@@ -86,26 +85,21 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         // Sanitize and clean up the search parameter for later processing
-        $search = $this->Request()->get('search');
-        $search = strtolower($search);
-        $search = trim($search);
+        $term = $this->Request()->get('search');
+        $term = strtolower($term);
+        $term = trim($term);
 
-        $search = preg_replace('/[^\\w0-9]+/u', ' ', $search);
-        $search = trim(preg_replace('/\s+/', '%', $search), '%');
+        $term = preg_replace('/[^\\w0-9]+/u', ' ', $term);
+        $term = trim(preg_replace('/\s+/', '%', $term), '%');
 
-        if ($search === '') {
+        if ($term === '') {
             return;
         }
 
-        $articles = $this->getArticles($search);
-        $customers = $this->getCustomers($search);
-        $orders = $this->getOrders($search);
+        $search = $this->container->get('shopware.backend.global_search');
+        $result = $search->search($term);
 
-        $this->View()->assign('searchResult', [
-            'articles' => $articles,
-            'customers' => $customers,
-            'orders' => $orders,
-        ]);
+        $this->View()->assign('searchResult', $result);
     }
 
     /**

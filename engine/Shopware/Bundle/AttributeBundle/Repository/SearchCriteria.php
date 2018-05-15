@@ -72,9 +72,7 @@ class SearchCriteria
     public $params = [];
 
     /**
-     * SearchCriteria constructor.
-     *
-     * @param $entity
+     * @param string $entity
      */
     public function __construct($entity)
     {

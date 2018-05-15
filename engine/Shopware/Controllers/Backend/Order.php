@@ -21,8 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Random;
 use Shopware\Models\Article\Detail as ArticleDetail;
@@ -275,7 +275,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $filter = $this->Request()->getParam('filter', []);
         $orderId = $this->Request()->getParam('orderID');
 
-        if (null !== $orderId) {
+        if ($orderId !== null) {
             $orderIdFilter = ['property' => 'orders.id', 'value' => $orderId];
             if (!is_array($filter)) {
                 $filter = [];
@@ -1086,23 +1086,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         return self::$documentRepository;
     }
 
-    /**
-     * @param $filter
-     * @param $sort
-     * @param $offset
-     * @param $limit
-     *
-     * @return array
-     */
     protected function getList($filter, $sort, $offset, $limit)
     {
         $sort = $this->resolveSortParameter($sort);
 
-        $searchResult = $this->getRepository()->search($offset, $limit, $filter, $sort);
+        if ($this->container->getParameter('shopware.es.backend.enabled')) {
+            $repository = $this->container->get('shopware_attribute.order_repository');
+            $criteria = $this->createCriteria();
+            $result = $repository->search($criteria);
 
-        $total = $searchResult['total'];
-
-        $ids = array_column($searchResult['orders'], 'id');
+            $total = $result->getCount();
+            $ids = array_column($result->getData(), 'id');
+        } else {
+            $searchResult = $this->getRepository()->search($offset, $limit, $filter, $sort);
+            $total = $searchResult['total'];
+            $ids = array_column($searchResult['orders'], 'id');
+        }
 
         $orders = $this->getRepository()->getList($ids);
         $documents = $this->getRepository()->getDocuments($ids);
@@ -1368,6 +1367,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $result = Shopware()->Modules()->Order()->sendStatusMail($mail['mail']);
                 $mail['data']['sent'] = is_object($result);
             }
+
             return $mail['data'];
         }
 
@@ -1814,5 +1814,64 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    private function createCriteria()
+    {
+        $request = $this->Request();
+        $criteria = new SearchCriteria(Order::class);
+
+        $criteria->offset = $request->getParam('start', 0);
+        $criteria->limit = $request->getParam('limit', 30);
+        $criteria->ids = $request->getParam('ids', []);
+        $criteria->sortings = $request->getParam('sort', []);
+        $conditions = $request->getParam('filter', []);
+
+        $mapped = [];
+        foreach ($conditions as $condition) {
+            if ($condition['property'] === 'free') {
+                $criteria->term = $condition['value'];
+                continue;
+            }
+
+            if ($condition['property'] === 'billing.countryId') {
+                $condition['property'] = 'billingCountryId';
+            } elseif ($condition['property'] === 'shipping.countryId') {
+                $condition['property'] = 'shippingCountryId';
+            } else {
+                $name = explode('.', $condition['property']);
+                $name = array_pop($name);
+                $condition['property'] = $name;
+            }
+
+            if ($condition['property'] === 'to') {
+                $condition['value'] = (new DateTime($condition['value']))->format('Y-m-d');
+                $condition['property'] = 'orderTime';
+                $condition['expression'] = '<=';
+            }
+
+            if ($condition['property'] === 'from') {
+                $condition['value'] = (new DateTime($condition['value']))->format('Y-m-d');
+                $condition['property'] = 'orderTime';
+                $condition['expression'] = '>=';
+            }
+            $mapped[] = $condition;
+        }
+
+        foreach ($criteria->sortings as &$sorting) {
+            if ($sorting['property'] === 'customerEmail') {
+                $sorting['property'] = 'email';
+            }
+            if ($sorting['property'] === 'customerName') {
+                $sorting['property'] = 'firstname';
+            }
+        }
+
+        $criteria->conditions = $mapped;
+
+        return $criteria;
     }
 }

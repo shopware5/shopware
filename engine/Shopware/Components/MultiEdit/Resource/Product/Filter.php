@@ -202,13 +202,7 @@ class Filter
         $query = $this->getFilterQuery($tokens, $offset, $limit, $orderBy);
         list($result, $totalCount) = $this->getPaginatedResult($query);
 
-        $articles = [];
-        foreach ($result as $detailId) {
-            // Skip invalid articles like articles not having attributes
-            if ($article = $this->getDqlHelper()->getProductForListing($detailId)) {
-                $articles[] = $article;
-            }
-        }
+        $articles = $this->getDqlHelper()->getProductsForListing($result);
 
         return [
             'data' => $articles,

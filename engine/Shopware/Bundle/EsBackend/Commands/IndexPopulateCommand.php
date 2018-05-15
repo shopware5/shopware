@@ -22,45 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\EsBackend\Commands;
 
-use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Premium\Premium;
+use Shopware\Bundle\EsBackend\EsBackendIndexer;
+use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
+use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PremiumSearcher extends GenericSearcher
+class IndexPopulateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
      */
-    protected function createQuery(SearchCriteria $criteria)
+    protected function configure()
     {
-        $query = $this->entityManager->createQueryBuilder();
-        $query->select($this->getIdentifierField());
-        $query->from(Premium::class, 'entity');
-        $query->innerJoin('entity.articleDetail', 'variant');
-        $query->innerJoin('variant.article', 'article');
-        $query->leftJoin('entity.shop', 's');
-
-        return $query;
+        $this
+            ->setName('sw:es:backend:index:populate')
+            ->setDescription('Reindex all documents for the backend')
+        ;
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getSearchFields(SearchCriteria $criteria)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        return [
-            'entity.orderNumberExport',
-            'variant.number',
-            'article.name',
-            's.name',
-        ];
+        /** @var EsBackendIndexer $indexer */
+        $indexer = $this->container->get('shopware_es_backend.indexer');
+
+        $helper = new ConsoleProgressHelper($output);
+
+        $indexer->index($helper);
     }
 }

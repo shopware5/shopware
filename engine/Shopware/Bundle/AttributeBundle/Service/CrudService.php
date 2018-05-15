@@ -58,8 +58,6 @@ class CrudService
     private $typeMapping;
 
     /**
-     * CrudService constructor.
-     *
      * @param ModelManager   $entityManager
      * @param SchemaOperator $schemaOperator
      * @param TableMapping   $tableMapping

@@ -32,7 +32,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 interface RepositoryInterface
 {
     /**
-     * @param $entity
+     * @param string $entity
      *
      * @return bool
      */
