@@ -169,9 +169,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     },
 
     getRequestConfig: function(win, progress, taskName, resource) {
-        return {
+        var config = {
             batchSize: win.batchSizeCombo.getValue(),
-            concurrencySize: win.concurrencySizeCombo.getValue(),
             progress: win[progress],
             requestUrl: win[taskName][resource].requestUrl,
             totalCount: win.taskConfig.totalCounts[resource] * 1,
@@ -180,6 +179,12 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 shopId: win.shopCombo.getValue()
             }
         };
+
+        if (win.concurrencySizeCombo) {
+            config.concurrencySize = win.concurrencySizeCombo.getValue();
+        }
+
+        return config;
     },
 
     getSeoInitRequestConfig: function(window) {
