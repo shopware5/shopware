@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed `Unknown path` Smarty error to work with Windows
 * Changed `Shopware\Recovery\UpdateFilePermissionChanger` to make it PHP 7 compatible
 * Changed `manufacturerNumber` field type in elasticsearch to improve search for manufacturer numbers
+* Changed default sorting of the customer list to the order of creation
 
 ### Additions
 

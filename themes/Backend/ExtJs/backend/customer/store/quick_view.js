@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Customer.store.QuickView', {
     model: 'Shopware.apps.Customer.model.QuickView',
 
     sorters: [{
-        property: 'number',
+        property: 'id',
         direction: 'DESC'
     }],
 
