@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\AttributeBundle\Repository\RegistryInterface;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;

@@ -1577,3 +1577,41 @@ UPDATE s_search_custom_facet SET `name` = 'Variants', `facet` = '{"Shopware\\\\B
 
 -- s_core_translations --
 UPDATE `s_core_translations` SET objectdata = 'a:1:{s:5:\"label\";s:8:\"Variants\";}' WHERE objecttype = 'custom_facet' AND objectlanguage = 1 AND dirty != 1;
+
+-- s_media-album --
+UPDATE `s_media_album` SET `name` = 'Recycle bin' WHERE `id` = -13;
+UPDATE `s_media_album` SET `name` = 'Manufacturer' WHERE `id` = -12;
+UPDATE `s_media_album` SET `name` = 'Blog' WHERE `id` = -11;
+UPDATE `s_media_album` SET `name` = 'Unsorted' WHERE `id` = -10;
+UPDATE `s_media_album` SET `name` = 'Other' WHERE `id` = -9;
+UPDATE `s_media_album` SET `name` = 'Music' WHERE `id` = -8;
+UPDATE `s_media_album` SET `name` = 'Video' WHERE `id` = -7;
+UPDATE `s_media_album` SET `name` = 'Files' WHERE `id` = -6;
+UPDATE `s_media_album` SET `name` = 'Newsletter' WHERE `id` = -5;
+UPDATE `s_media_album` SET `name` = 'Campaigns' WHERE `id` = -4;
+UPDATE `s_media_album` SET `name` = 'Shopping Worlds' WHERE `id` = -3;
+UPDATE `s_media_album` SET `name` = 'Banner' WHERE `id` = -2;
+UPDATE `s_media_album` SET `name` = 'Products' WHERE `id` = -1;
+
+-- s_premium_holidays --
+UPDATE `s_premium_holidays` SET `name` = 'New Year''s Day' WHERE `id` = '1';
+UPDATE `s_premium_holidays` SET `name` = 'Epiphany' WHERE `id` = '3';
+UPDATE `s_premium_holidays` SET `name` = 'Carnival Monday' WHERE `id` = '4';
+UPDATE `s_premium_holidays` SET `name` = 'Saint Joseph''s Day' WHERE `id` = '5';
+UPDATE `s_premium_holidays` SET `name` = 'Good Friday' WHERE `id` = '6';
+UPDATE `s_premium_holidays` SET `name` = 'Easter Monday' WHERE `id` = '7';
+UPDATE `s_premium_holidays` SET `name` = 'Labour Day' WHERE `id` = '8';
+UPDATE `s_premium_holidays` SET `name` = 'Ascension Day' WHERE `id` = '9';
+UPDATE `s_premium_holidays` SET `name` = 'Whitmonday' WHERE `id` = '10';
+UPDATE `s_premium_holidays` SET `name` = 'Corpus Christi' WHERE `id` = '11';
+UPDATE `s_premium_holidays` SET `name` = 'Assumption Day' WHERE `id` = '13';
+UPDATE `s_premium_holidays` SET `name` = 'German Unification Day' WHERE `id` = '14';
+UPDATE `s_premium_holidays` SET `name` = 'Austrian National Day' WHERE `id` = '15';
+UPDATE `s_premium_holidays` SET `name` = 'Reformation Day' WHERE `id` = '16';
+UPDATE `s_premium_holidays` SET `name` = 'All Hallows'' Day' WHERE `id` = '17';
+UPDATE `s_premium_holidays` SET `name` = 'Day of Prayer and Repentance' WHERE `id` = '18';
+UPDATE `s_premium_holidays` SET `name` = 'Feast of the Immaculate Conception' WHERE `id` = '19';
+UPDATE `s_premium_holidays` SET `name` = 'Christmas Eve' WHERE `id` = '20';
+UPDATE `s_premium_holidays` SET `name` = 'Christmas Day' WHERE `id` = '21';
+UPDATE `s_premium_holidays` SET `name` = 'Boxing Day' WHERE `id` = '22';
+UPDATE `s_premium_holidays` SET `name` = 'New Year''s Eve' WHERE `id` = '23';
