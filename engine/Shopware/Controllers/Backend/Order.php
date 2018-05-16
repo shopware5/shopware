@@ -32,12 +32,12 @@ use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Document\Document as DocumentType;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Billing;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\DetailStatus;
 use Shopware\Models\Order\Document\Document;
-use Shopware\Models\Order\Document\Type;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Shipping;
 use Shopware\Models\Order\Status;
@@ -980,9 +980,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $mailTemplates = $mailTemplatesQuery->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
 
         // Add a display name to the mail templates
-        $documentTypes = $this->getModelManager()->getRepository(Type::class)->findAll();
+        $documentTypes = $this->getModelManager()->getRepository(DocumentType::class)->findAll();
         $documentTypeNames = [];
-        /** @var Type $documentType */
+        /** @var DocumentType $documentType */
         foreach ($documentTypes as $documentType) {
             $documentTypeNames['document_' . $documentType->getKey()] = $documentType->getName();
         }
