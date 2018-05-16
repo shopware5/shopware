@@ -37,6 +37,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class CloseoutConditionHandler implements ConditionHandlerInterface
 {
+    const STATE_INCLUDES_VARIANT_TABLE = 'variant';
+
     /**
      * {@inheritdoc}
      */
@@ -53,7 +55,16 @@ class CloseoutConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $query->innerJoin('product', 's_articles_details', 'variant', 'product.id = variant.articleID');
+        if (!$query->hasState(self::STATE_INCLUDES_VARIANT_TABLE)) {
+            $query->innerJoin(
+                'product',
+                's_articles_details',
+                'variant',
+                'product.id = variant.articleID'
+            );
+            $query->addState(self::STATE_INCLUDES_VARIANT_TABLE);
+        }
+
         $query->andWhere('variant.laststock = 1');
     }
 }
