@@ -164,6 +164,13 @@ class Payment extends ModelEntity
     private $surcharge = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="surchargestring", type="string", length=255, nullable=false)
+     */
+    private $surchargeString = '';
+
+    /**
      * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
@@ -424,6 +431,30 @@ class Payment extends ModelEntity
     public function getSurcharge()
     {
         return $this->surcharge;
+    }
+
+    /**
+     * Sets the country-surcharge as a string of a payment
+     *
+     * @param string $surchargeString
+     *
+     * @return Payment
+     */
+    public function setSurchargeString($surchargeString)
+    {
+        $this->surchargeString = $surchargeString;
+
+        return $this;
+    }
+
+    /**
+     * Gets the country-surcharge-string of a payment
+     *
+     * @return string
+     */
+    public function getSurchargeString()
+    {
+        return $this->surchargeString;
     }
 
     /**
