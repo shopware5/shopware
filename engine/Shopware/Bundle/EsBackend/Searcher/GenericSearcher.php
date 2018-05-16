@@ -66,6 +66,13 @@ class GenericSearcher implements SearcherInterface
      */
     protected $enabled;
 
+    /**
+     * @param Client             $client
+     * @param SearcherInterface  $decorated
+     * @param SearchQueryBuilder $searchQueryBuilder
+     * @param string             $domainName
+     * @param bool               $enabled
+     */
     public function __construct(
         Client $client,
         SearcherInterface $decorated,
@@ -75,11 +82,16 @@ class GenericSearcher implements SearcherInterface
     ) {
         $this->decorated = $decorated;
         $this->client = $client;
-        $this->domainName = $domainName;
         $this->searchQueryBuilder = $searchQueryBuilder;
+        $this->domainName = $domainName;
         $this->enabled = $enabled;
     }
 
+    /**
+     * @param SearchCriteria $criteria
+     *
+     * @return SearcherResult
+     */
     public function search(SearchCriteria $criteria)
     {
         if (!$this->enabled) {
@@ -132,6 +144,11 @@ class GenericSearcher implements SearcherInterface
         ]);
     }
 
+    /**
+     * @param array $result
+     *
+     * @return SearcherResult
+     */
     protected function iterate(array $result)
     {
         $hits = $result['hits']['hits'];
@@ -143,6 +160,9 @@ class GenericSearcher implements SearcherInterface
         return new SearcherResult($ids, (int) $result['hits']['total']);
     }
 
+    /**
+     * @return string
+     */
     protected function getIdentifierColumn()
     {
         return 'id';
@@ -168,7 +188,7 @@ class GenericSearcher implements SearcherInterface
 
     /**
      * @param SearchCriteria $criteria
-     * @param $search
+     * @param Search         $search
      */
     protected function addSortings(SearchCriteria $criteria, Search $search)
     {
@@ -190,7 +210,7 @@ class GenericSearcher implements SearcherInterface
                 continue;
             }
 
-            $expression = $condition['expression'] ? $condition['expression'] : '=';
+            $expression = $condition['expression'] ?: '=';
 
             switch (strtolower($expression)) {
                 case 'in':
@@ -210,21 +230,25 @@ class GenericSearcher implements SearcherInterface
                         BoolQuery::MUST
                     );
                     break;
+
                 case '>=':
                     $query->add(
                         new RangeQuery($condition['property'], [RangeQuery::GTE => $condition['value']])
                     );
                     break;
+
                 case '<=':
                     $query->add(
                         new RangeQuery($condition['property'], [RangeQuery::LTE => $condition['value']])
                     );
                     break;
+
                 case '<':
                     $query->add(
                         new RangeQuery($condition['property'], [RangeQuery::LT => $condition['value']])
                     );
                     break;
+
                 case '>':
                     $query->add(
                         new RangeQuery($condition['property'], [RangeQuery::GT => $condition['value']])
@@ -239,9 +263,11 @@ class GenericSearcher implements SearcherInterface
                     break;
             }
         }
+
         if (empty($query->getQueries())) {
             return;
         }
+
         $search->addQuery($query);
     }
 }

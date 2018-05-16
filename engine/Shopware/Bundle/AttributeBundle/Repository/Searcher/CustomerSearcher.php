@@ -67,7 +67,7 @@ class CustomerSearcher extends GenericSearcher
             'entity.email^2',
             'entity.firstname^3',
             'entity.lastname^3',
-            'billing.zipCode^0.5',
+            'billing.zipcode^0.5',
             'billing.city^0.5',
             'billing.company^0.5',
         ];
