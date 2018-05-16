@@ -27,6 +27,7 @@ namespace   Shopware\Models\Customer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -1146,10 +1147,11 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @param Address $defaultBillingAddress
+     * @return ModelEntity
      */
     public function setDefaultBillingAddress(Address $defaultBillingAddress)
     {
-        $this->defaultBillingAddress = $defaultBillingAddress;
+        return $this->setOneToOne($defaultBillingAddress, Address::class, 'defaultBillingAddress', 'customer');
     }
 
     /**
@@ -1162,10 +1164,11 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @param Address $defaultShippingAddress
+     * @return ModelEntity
      */
     public function setDefaultShippingAddress(Address $defaultShippingAddress)
     {
-        $this->defaultShippingAddress = $defaultShippingAddress;
+        return $this->setOneToOne($defaultShippingAddress, Address::class, 'defaultShippingAddress', 'customer');
     }
 
     /**
