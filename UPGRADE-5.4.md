@@ -18,6 +18,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed `manufacturerNumber` field type in elasticsearch to improve search for manufacturer numbers
 * Changed default sorting of the customer list to the order of creation
 * Changed behaviour of closeout condition to work with product streams
+* Changed Font-Face settings to fix rendering if `OpenSans` is locally available
 
 ### Additions
 
