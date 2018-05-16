@@ -498,16 +498,12 @@ class Payment extends ModelEntity
     /**
      * Sets the country-surcharge as a string of a payment
      *
-     * @deprecated Will be removed in 5.5.
-     *
      * @param string $surchargeString
      *
      * @return Payment
      */
     public function setSurchargeString($surchargeString)
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $this->surchargeString = $surchargeString;
 
         return $this;
@@ -516,14 +512,10 @@ class Payment extends ModelEntity
     /**
      * Gets the country-surcharge-string of a payment
      *
-     * @deprecated Will be removed in 5.5.
-     *
      * @return string
      */
     public function getSurchargeString()
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->surchargeString;
     }
 
