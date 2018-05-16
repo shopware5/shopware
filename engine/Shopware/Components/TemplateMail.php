@@ -164,16 +164,26 @@ class Shopware_Components_TemplateMail
         $inheritance = Shopware()->Container()->get('theme_inheritance');
 
         if ($this->getShop() !== null) {
-            $keys = ['mobileLogo' => true, 'tabletLogo' => true, 'tabletLandscapeLogo' => true, 'desktopLogo' => true, 'appleTouchIcon' => true];
-            $theme = $inheritance->buildConfig($this->getShop()->getTemplate(), $this->getShop(), false);
-            $theme = array_intersect_key($theme, $keys);
-
             $defaultContext = [
                 'sConfig' => $config,
                 'sShop' => $config->get('shopName'),
                 'sShopURL' => ($this->getShop()->getSecure() ? 'https://' : 'http://') . $this->getShop()->getHost() . $this->getShop()->getBaseUrl(),
-                'theme' => $theme,
             ];
+
+            // Add theme to the context if given shop (or its main shop) has a template.
+            $theme = null;
+            if ($this->getShop()->getTemplate()) {
+                $theme = $inheritance->buildConfig($this->getShop()->getTemplate(), $this->getShop(), false);
+            } elseif ($this->getShop()->getMain() && $this->getShop()->getMain()->getTemplate()) {
+                $theme = $inheritance->buildConfig($this->getShop()->getMain()->getTemplate(), $this->getShop(), false);
+            }
+
+            if ($theme) {
+                $keys = ['mobileLogo' => true, 'tabletLogo' => true, 'tabletLandscapeLogo' => true, 'desktopLogo' => true, 'appleTouchIcon' => true];
+                $theme = array_intersect_key($theme, $keys);
+                $defaultContext['theme'] = $theme;
+            }
+
             $isoCode = $this->getShop()->get('isocode');
             $translationReader = $this->getTranslationReader();
             $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
