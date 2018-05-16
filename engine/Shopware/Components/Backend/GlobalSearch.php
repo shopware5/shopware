@@ -57,6 +57,11 @@ class GlobalSearch
         $this->orderRepository = $orderRepository;
     }
 
+    /**
+     * @param string $term
+     *
+     * @return array
+     */
     public function search($term)
     {
         return [
@@ -66,6 +71,11 @@ class GlobalSearch
         ];
     }
 
+    /**
+     * @param string $term
+     *
+     * @return array
+     */
     private function getArticles($term)
     {
         $criteria = new SearchCriteria(Article::class);
@@ -77,6 +87,11 @@ class GlobalSearch
         return $result->getData();
     }
 
+    /**
+     * @param string $term
+     *
+     * @return array
+     */
     private function getCustomers($term)
     {
         $criteria = new SearchCriteria(Customer::class);
@@ -88,6 +103,11 @@ class GlobalSearch
         return $result->getData();
     }
 
+    /**
+     * @param string $term
+     *
+     * @return array
+     */
     private function getOrders($term)
     {
         $criteria = new SearchCriteria(Order::class);
