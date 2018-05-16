@@ -1146,10 +1146,10 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param Address $defaultBillingAddress
+     * @param $defaultBillingAddress
      * @return ModelEntity
      */
-    public function setDefaultBillingAddress(Address $defaultBillingAddress)
+    public function setDefaultBillingAddress($defaultBillingAddress)
     {
         return $this->setOneToOne($defaultBillingAddress, Address::class, 'defaultBillingAddress', 'customer');
     }
@@ -1163,10 +1163,10 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param Address $defaultShippingAddress
+     * @param $defaultShippingAddress
      * @return ModelEntity
      */
-    public function setDefaultShippingAddress(Address $defaultShippingAddress)
+    public function setDefaultShippingAddress($defaultShippingAddress)
     {
         return $this->setOneToOne($defaultShippingAddress, Address::class, 'defaultShippingAddress', 'customer');
     }
