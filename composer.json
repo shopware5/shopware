@@ -45,6 +45,7 @@
         "symfony/console": "3.4.9",
         "symfony/form": "3.4.9",
         "symfony/process": "3.4.9",
+        "symfony/serializer": "3.4.9",
         "monolog/monolog": "1.23.0",
         "doctrine/common": "2.7.3",
         "doctrine/dbal": "2.5.9",

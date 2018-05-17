@@ -2,63 +2,71 @@
 
 {block name="benchmark_index_title"}Shopware BI - Fragen und Antworten{/block}
 
+{block name="benchmark_index_head"}
+	{$smarty.block.parent}
+    <script type="text/javascript">
+        function enableButton() {
+            var checkBox = document.getElementById("confirmation-check"),
+                button = document.getElementById("load-industry");
+
+            button.style.display = checkBox.checked ? 'block' : 'none';
+        };
+    </script>
+{/block}
+
 {block name="benchmark_index_body"}
     <body id="swag-info">
+        {include file="backend/benchmark/template/local/include/language_switch.tpl"}
         <div class="wrapper">
             <div class="swag-onbording">
                 <div class="tob-bar">
                     <ul class="top-benefits">
-                        <li>Kostenlos</li>
-                        <li>Anonym</li>
-                        <li>Unverbindlich</li>
+                        <li>[[ $t('freeText') ]]</li>
+                        <li>[[ $t('anonymousText') ]]</li>
+                        <li>[[ $t('nonBindingText') ]]</li>
                     </ul>
                 </div>
 
                 <div class="wrapper-info">
                     <div class="info--text">
-                        <h1>Fragen & Antworten</h1>
+                        <h1>[[ $t('faqHeadline') ]]</h1>
 
                         <div class="row">
                             <div class="col-66">
-                                <h2>Was passiert mit meinen Daten? </h2>
-                                <p>Wir behandeln Deine Daten immer streng anonym. Der Export mit Deiner Auswertung wird mit einer anonymisierten ID versehen und macht den Rückschluss auf Dich und Deinen Shop unmöglich.</p>
+                                <h2>[[ $t('question1Headline') ]]</h2>
+                                <p>[[ $t('question1Text') ]]</p>
 
-                                <h2>Wofür werden meine Daten verwendet/benutzt?</h2>
-                                <p>Wir verwenden die Daten ausschließlich für Shop-Auswertungen und Branchenvergleiche. Je mehr Daten wir zu jeder Branche erhalten, desto informativer und effektiver wird die Shopware BI zusammengestellt.</p>
+                                <h2>[[ $t('question2Headline') ]]</h2>
+                                <p>[[ $t('question2Text') ]]</p>
 
-                                <h2>Warum ist das für mich nützlich?</h2>
-                                <p>Bisher siehst Du nur Deine eigenen Statistiken und kannst nur selten bis gar nicht den Vergleichswert von anderen Onlineshops Deiner Branche bekommen. Der Branchenvergleich von Shopware macht es Dir möglich, anhand von Zahlen und Fakten Defizite zu erkennen und gezielt Maßnahmen zu ergreifen. <br><strong>Lerne Deinen Shop noch besser kenn.</strong></p>
+                                <h2>[[ $t('question3Headline') ]]</h2>
+                                <p>[[ $t('question3Text') ]]</p>
                             </div>
 
                             <div class="col-33">
-                                <h2><span class="check-color">Die Fakten</span></h2>
+                                <h2><span class="check-color">[[ $t('factsHeadline') ]]</span></h2>
                                 <ul class="top-benefits">
-                                    <li>Auswertung Deiner Shop-Daten</li>
-                                    <li>Vergleich mit Branchendaten</li>
-                                    <li>Einfache Usabilty</li>
-                                    <li>Auto-Aktualisierungen</li>
-                                    <li>Kostenlos</li>
-                                    <li>Anonym</li>
-                                    <li>Unverbindlich</li>
+                                    <li>[[ $t('fact1') ]]</li>
+                                    <li>[[ $t('fact2') ]]</li>
+                                    <li>[[ $t('fact3') ]]</li>
+                                    <li>[[ $t('fact4') ]]</li>
+                                    <li>[[ $t('fact5') ]]</li>
+                                    <li>[[ $t('fact6') ]]</li>
+                                    <li>[[ $t('fact7') ]]</li>
                                 </ul>
                             </div>
                         </div>
 
                         <div class="accept-abg">
-                            <script type="text/javascript">
-                                function enableButton() {
-                                    var checkBox = document.getElementById("confirmation-check"),
-                                        button = document.getElementById("load-industry");
-
-                                    button.style.display = checkBox.checked ? 'block' : 'none';
-                                };
-                            </script>
                             <input type="checkbox" id="confirmation-check" onclick="enableButton()"/>
-                            <label for="confirmation-check" class="confirmation-label">Ich möchte gerne teilnehmen</label>
+                            <label for="confirmation-check" class="confirmation-label">[[ $t('participationCheck') ]]</label>
                             <div id="load-industry" style="display: none;">
-                                <a href="{url controller="BenchmarkLocalOverview" action="render" template="industry_select"}">
-                                    <div class="btn primary">Weiter</div>
-                                </a>
+                                <form method="get" action="{url controller="BenchmarkLocalOverview" action="render" template="industry_select"}">
+                                    <input type="hidden" value="{$benchmarkDefaultLanguage}" name="lang"/>
+                                    <button class="btn primary" type="submit">
+                                        [[ $t('nextButton') ]]
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -74,6 +74,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
             'controller' => $this->request->getParam('sTarget', 'BenchmarkOverview'),
             'action' => $this->request->getParam('sTargetAction', 'index'),
             'template' => 'statistics',
+            'lang' => $this->request->getParam('lang', 'de'),
         ]);
     }
 
@@ -87,6 +88,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
                 'template' => 'start',
+                'lang' => $this->request->getParam('lang', 'de'),
             ]);
 
             return;
@@ -103,6 +105,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
                 'template' => 'statistics',
+                'lang' => $this->request->getParam('lang', 'de'),
             ]);
 
             return;
@@ -167,6 +170,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
             'controller' => 'BenchmarkLocalOverview',
             'action' => 'render',
             'template' => 'statistics',
+            'lang' => $this->request->getParam('lang', 'de'),
         ]);
     }
 

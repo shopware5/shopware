@@ -1,8 +1,8 @@
 <form>
     <div data-time-switcher="true" data-values-key="{$dataKey}">
-        <label><input type="button" class="btn timescale is-active timescale-week" name="weeks" value="Woche" /></label>
-        <label><input type="button" class="btn timescale timescale-month" name="months" value="Monat" /></label>
-        <label><input type="button" class="btn timescale timescale-year" name="years" value="Jahr" /></label>
+        <label><input type="button" class="btn timescale is-active timescale-week" name="weeks" :value="$t('weeksText')" /></label>
+        <label><input type="button" class="btn timescale timescale-month" name="months" :value="$t('monthsText')" /></label>
+        <label><input type="button" class="btn timescale timescale-year" name="years" :value="$t('yearsText')" /></label>
     </div>
 
     <div class="graph-container">
@@ -22,7 +22,7 @@
                     <input type="checkbox" checked="checked">
                     <span class="slider round"></span>
                 </label>
-                <div>Shop</div>
+                <div>[[ $t('shopTitle') ]]</div>
             </div>
 
             <div class="button-wrapper switch-last-year"
@@ -35,7 +35,7 @@
                     <input type="checkbox" checked="checked">
                     <span class="slider round"></span>
                 </label>
-                <div>Vorjahr</div>
+                <div>[[ $t('previousTitle') ]]</div>
             </div>
         </div>
     </div>

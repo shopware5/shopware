@@ -47,6 +47,12 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         if ($template === 'statistics') {
             $this->View()->assign('benchmarkData', $this->get('shopware.benchmark_bundle.local_collector')->get());
         }
+
+        $this->View()->assign('benchmarkTranslations', json_encode(
+            $this->get('shopware.benchmark_bundle.components.translation')->getAll(),
+            JSON_HEX_APOS
+        ));
+        $this->View()->assign('benchmarkDefaultLanguage', $this->Request()->getParam('lang', 'de'));
     }
 
     /**

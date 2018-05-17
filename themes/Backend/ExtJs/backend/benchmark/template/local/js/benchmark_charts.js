@@ -13,6 +13,7 @@
         this.time = el.getAttribute('data-time');
         this.includeIndustry = (el.getAttribute('data-include-industry') === 'true');
         this.chartType = el.getAttribute('data-chart-type');
+        this.translations = window.benchmarkTranslations;
 
         this.init();
     }
@@ -33,17 +34,16 @@
     BenchmarkChart.prototype.initTimeRangeLabel = function () {
         this.timeRangeLabel = '';
 
-        //TODO: Translations?
         if (this.time === 'weeks') {
-            this.timeRangeLabel = 'Tage';
+            this.timeRangeLabel = this.translations[window.i18n.locale].timeUnitDays;
         }
 
         if (this.time === 'months') {
-            this.timeRangeLabel = 'Tage';
+            this.timeRangeLabel = this.translations[window.i18n.locale].timeUnitDays;
         }
 
         if (this.time === 'years') {
-            this.timeRangeLabel = 'Monate';
+            this.timeRangeLabel = this.translations[window.i18n.locale].timeUnitMonths;
         }
     };
 
@@ -51,7 +51,7 @@
         return {
             type: this.chartType,
             data: {
-                labels: window.benchmarkData['local'][this.time].labels,
+                labels: this.getTranslatedLabels(),
                 datasets: this.getDatasets()
             },
             options: this.getOptions()
@@ -63,8 +63,7 @@
 
         // Shop data
         dataSets.push({
-            //TODO: Translations?
-            label: 'Shop',
+            label: this.translations[window.i18n.locale].shopTitle,
             backgroundColor: globals.shopColor,
             borderColor: globals.shopColor,
             borderWidth: '12',
@@ -77,8 +76,7 @@
 
         // Last year data
         dataSets.push({
-            //TODO: Translations?
-            label: 'Shop Vorjahr',
+            label: this.translations[window.i18n.locale].previousTitleShop,
             backgroundColor: globals.shopColor,
             borderColor: globals.shopColor,
             borderWidth: '3',
@@ -92,8 +90,7 @@
 
         if (this.includeIndustry) {
             dataSets.push({
-                //TODO: Translations?
-                label: 'Branche',
+                label: this.translations[window.i18n.locale].industryTitle,
                 backgroundColor: globals.industryColor,
                 borderColor: globals.industryColor,
                 borderWidth: '12',
@@ -105,8 +102,7 @@
             });
 
             dataSets.push({
-                //TODO: Translations?
-                label: 'Branche Vorjahr',
+                label: this.translations[window.i18n.locale].previousTitleIndustry,
                 backgroundColor: globals.industryColor,
                 borderColor: globals.industryColor,
                 borderWidth: '3',
@@ -164,17 +160,34 @@
         };
     };
 
+    BenchmarkChart.prototype.getTranslatedLabels = function () {
+        var labels = window.benchmarkData['local'][this.time].labels,
+            translations = window.benchmarkTranslations[window.i18n.locale],
+            translatedLabels = [];
+
+        labels.forEach(function (val) {
+            if (!translations[val]) {
+                translatedLabels.push(val);
+                return;
+            }
+
+            translatedLabels.push(translations[val]);
+        });
+
+        return translatedLabels;
+    };
+
     $.fn.benchmarkGraph = function() {
         return this.each(function() {
-            var $el = $(this);
+            var $el = $(this),
+                plugin;
 
             if ($el.data('plugin_benchmarkGraph')) {
                 return;
             }
 
-            var plugin = new BenchmarkChart(this);
+            plugin = new BenchmarkChart(this);
             $el.data('plugin_benchmarkGraph', plugin);
-
         });
     };
 

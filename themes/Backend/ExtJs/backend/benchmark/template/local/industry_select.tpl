@@ -4,41 +4,43 @@
 
 {block name="benchmark_index_body"}
     <body id="swag-select">
+        {include file="backend/benchmark/template/local/include/language_switch.tpl"}
         <div class="wrapper">
             <div class="branch-select">
                 <div class="swag-container">
                     <div id="select-wrapper">
-                        <h1>Los geht's</h1>
+                        <h1>[[ $t('industrySelectionHeadline') ]]</h1>
                         <form action="{url controller="BenchmarkOverview" action="setIndustry"}">
+                            <input type="hidden" name="lang" value="{$benchmarkDefaultLanguage}">
                             <div class="btn primary select-bg">
                                 <select name="industry">
-                                    <option value="0">Keine</option>
-                                    <option value="1">Tiere & Tierbedarf</option>
-                                    <option value="2">Bekleidung & Accessoires</option>
-                                    <option value="3">Kunst & Unterhaltung</option>
-                                    <option value="4">Baby & Kleinkind</option>
-                                    <option value="5">Wirtschaft & Industrie</option>
-                                    <option value="6">Kameras & Optik</option>
-                                    <option value="7">Elektronik</option>
-                                    <option value="8">Nahrungsmittel, Getränke & Tabak</option>
-                                    <option value="9">Möbel</option>
-                                    <option value="10">Heimwerkerbedarf</option>
-                                    <option value="11">Gesundheit & Schönheit</option>
-                                    <option value="12">Heim & Garten</option>
-                                    <option value="13">Taschen & Gepäck</option>
-                                    <option value="14">Für Erwachsene</option>
-                                    <option value="15">Medien</option>
-                                    <option value="16">Bürobedarf</option>
-                                    <option value="17">Religion & Feierlichkeiten</option>
-                                    <option value="18">Software</option>
-                                    <option value="19">Sportartikel</option>
-                                    <option value="20">Spielzeuge & Spiele</option>
-                                    <option value="21">Fahrzeuge & Teile</option>
+                                    <option value="0">[[ $t('noneSelected') ]]</option>
+                                    <option value="1">[[ $t('animalsPetSupplies') ]]</option>
+                                    <option value="2">[[ $t('apparelAccessories') ]]</option>
+                                    <option value="3">[[ $t('artsEntertainment') ]]</option>
+                                    <option value="4">[[ $t('babyToddler') ]]</option>
+                                    <option value="5">[[ $t('businessIndustrial') ]]</option>
+                                    <option value="6">[[ $t('camerasOptics') ]]</option>
+                                    <option value="7">[[ $t('eletronics') ]]</option>
+                                    <option value="8">[[ $t('foodBeveragesTobacco') ]]</option>
+                                    <option value="9">[[ $t('furniture') ]]</option>
+                                    <option value="10">[[ $t('hardware') ]]</option>
+                                    <option value="11">[[ $t('healthBeauty') ]]</option>
+                                    <option value="12">[[ $t('homeGarden') ]]</option>
+                                    <option value="13">[[ $t('luggageBags') ]]</option>
+                                    <option value="14">[[ $t('mature') ]]</option>
+                                    <option value="15">[[ $t('media') ]]</option>
+                                    <option value="16">[[ $t('officeSupplies') ]]</option>
+                                    <option value="17">[[ $t('religiousCeremonial') ]]</option>
+                                    <option value="18">[[ $t('software') ]]</option>
+                                    <option value="19">[[ $t('sportingGoods') ]]</option>
+                                    <option value="20">[[ $t('toysGames') ]]</option>
+                                    <option value="21">[[ $t('vehiclesParts') ]]</option>
                                 </select>
                             </div>
-                            <p>Wähle Deine Branche aus, damit die Daten <br />verglichen werden können.</p>
+                            <p>[[ $t('industrySelectionDescription') ]]</p>
 
-                            <button type="submit" class="btn secondary">Jetzt speichern</button>
+                            <button type="submit" class="btn secondary">[[ $t('industrySelectionSaveButton') ]]</button>
                         </form>
                     </div>
                 </div>
@@ -47,7 +49,6 @@
                 <div class="bubble-one"></div>
                 <div class="bubble-two"></div>
             </div>
-
         </div>
     </body>
 {/block}

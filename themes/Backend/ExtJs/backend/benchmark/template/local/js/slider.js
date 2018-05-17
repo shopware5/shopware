@@ -98,8 +98,15 @@
     };
 
     $.fn.slider = function () {
-        return this.each(function () {
-            new Slider(this);
+        return this.each(function() {
+            var $el = $(this);
+
+            if ($el.data('plugin_slider')) {
+                return;
+            }
+
+            var plugin = new Slider(this);
+            $el.data('plugin_slider', plugin);
         });
     };
 

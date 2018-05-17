@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e8660321249f6ffeb052f9752c6322c",
+    "content-hash": "6483a16e7a11ea075a5879ad5db2651e",
     "packages": [
         {
             "name": "bcremer/line-reader",
