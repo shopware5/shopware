@@ -34,6 +34,9 @@ use Shopware\Models\Property\Value;
  */
 class PropertyOptionSearcher extends GenericSearcher
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function createQuery(SearchCriteria $criteria)
     {
         $query = $this->entityManager->createQueryBuilder();

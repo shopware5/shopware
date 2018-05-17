@@ -90,7 +90,10 @@
             <argument type="service" id="models" />
             <argument type="service" id="shopware_attribute.product_reader" />
             <argument type="service" id="shopware_attribute.product_searcher" />
+            <argument type="service" id="shopware_elastic_search.text_mapping"/>
+
             <tag name="attribute_search_repository" />
+            <tag name="shopware_es_backend.repository" />
         </service>
 
         <service id="shopware_attribute.product_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\ProductSearcher">
@@ -163,12 +166,38 @@
             <argument type="service" id="models" />
         </service>
 
-        <service id="shopware_attribute.customer_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+        <service class="Shopware\Bundle\AttributeBundle\Repository\Reader\OrderReader" id="shopware_attribute.order_reader">
+            <argument>Shopware\Models\Order\Order</argument>
+            <argument id="models" type="service"/>
+            <argument id="snippets" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\AttributeBundle\Repository\Searcher\OrderSearcher" id="shopware_attribute.order_searcher">
+            <argument>Shopware\Models\Order\Order</argument>
+            <argument id="models" type="service"/>
+            <argument id="shopware.model.search_builder" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\AttributeBundle\Repository\OrderRepository"
+                 id="shopware_attribute.order_repository">
+            <argument>Shopware\Models\Order\Order</argument>
+            <argument id="models" type="service"/>
+            <argument id="shopware_attribute.order_reader" type="service"/>
+            <argument id="shopware_attribute.order_searcher" type="service"/>
+            <argument id="shopware_elastic_search.text_mapping" type="service"/>
+            <tag name="shopware_es_backend.repository"/>
+            <tag name="attribute_search_repository"/>
+        </service>
+
+
+        <service id="shopware_attribute.customer_repository" class="Shopware\Bundle\AttributeBundle\Repository\CustomerRepository">
             <argument>Shopware\Models\Customer\Customer</argument>
             <argument type="service" id="models" />
             <argument type="service" id="shopware_attribute.customer_reader" />
             <argument type="service" id="shopware_attribute.customer_searcher" />
+            <argument id="shopware_elastic_search.text_mapping" type="service"/>
             <tag name="attribute_search_repository" />
+            <tag name="shopware_es_backend.repository"/>
         </service>
 
         <service id="shopware_attribute.customer_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CustomerSearcher">

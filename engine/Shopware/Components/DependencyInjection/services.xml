@@ -22,6 +22,12 @@
             <argument>%shopware.release.revision%</argument>
         </service>
 
+        <service class="Shopware\Components\Backend\GlobalSearch" id="shopware.backend.global_search">
+            <argument type="service" id="shopware_attribute.product_repository"/>
+            <argument type="service" id="shopware_attribute.customer_repository"/>
+            <argument type="service" id="shopware_attribute.order_repository"/>
+        </service>
+
         <service id="bootstrap" class="Shopware_Bootstrap">
             <argument type="service" id="service_container"/>
             <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 6.0.</deprecated>

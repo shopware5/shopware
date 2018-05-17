@@ -34,6 +34,9 @@ use Shopware\Models\Premium\Premium;
  */
 class PremiumSearcher extends GenericSearcher
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function createQuery(SearchCriteria $criteria)
     {
         $query = $this->entityManager->createQueryBuilder();

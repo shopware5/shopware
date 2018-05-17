@@ -1263,11 +1263,11 @@ class LegacyStructConverter
     /**
      * @param StoreFrontBundle\Struct\Category $category
      *
-     * @return string
+     * @return array
      */
     private function getCategoryCanonicalParams(StoreFrontBundle\Struct\Category $category)
     {
-        $page = $this->container->get('front')->Request()->getQuery('sPage');
+        $page = (int) $this->container->get('front')->Request()->getQuery('sPage');
 
         $emotion = $this->modelManager->getRepository(Emotion::class)
             ->getCategoryBaseEmotionsQuery($category->getId())
@@ -1278,8 +1278,13 @@ class LegacyStructConverter
             'sCategory' => $category->getId(),
         ];
 
-        if ($this->config->get('seoIndexPaginationLinks') && (!$emotion || $page)) {
-            $canonicalParams['sPage'] = $page ?: 1;
+        /*
+         * Only include page parameter in canonical if...
+         * a) we are on a page > 1
+         * b) we are on the page 1 and the category has a ShoppingWorld (so /category and /category?p=1 show different content
+         */
+        if ($page > 1 || ($emotion && $page === 1)) {
+            $canonicalParams['sPage'] = $page;
         }
 
         return $canonicalParams;

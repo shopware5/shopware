@@ -59,7 +59,7 @@
         "ongr/elasticsearch-dsl": "2.2.2",
         "league/flysystem": "1.0.41",
         "paragonie/random_compat": "2.0.11",
-        "cocur/slugify": "2.5",
+        "cocur/slugify": "3.1",
         "bcremer/line-reader": "0.2.0",
         "ramsey/uuid": "3.5.2",
         "setasign/fpdf": "1.8.1",

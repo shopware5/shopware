@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Customer.model.Address', {
         { name: 'department', type: 'string', useNull: true },
         { name: 'vatId', type: 'string', useNull: true },
         { name: 'salutation', type: 'string' },
+        { name: 'salutationSnippet', type: 'string', useNull: true },
         { name: 'title', type: 'string' },
         { name: 'firstname', type: 'string' },
         { name: 'lastname', type: 'string' },
@@ -65,15 +66,15 @@ Ext.define('Shopware.apps.Customer.model.Address', {
         { name: 'city', type: 'string' },
         { name: 'additionalAddressLine1', type: 'string', useNull: true },
         { name: 'additionalAddressLine2', type: 'string', useNull: true },
-        { name: 'country_id', type: 'int' },
-        { name: 'state_id', type: 'int', useNull: true },
-        { name: 'phone', type: 'string', useNull: true }
+        { name: 'countryId', type: 'int' },
+        { name: 'stateId', type: 'int', useNull: true },
+        { name: 'phone', type: 'string', useNull: true },
     ],
 
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Base.model.Customer', name: 'getCustomer', associationKey: 'customer' },
-        { type: 'hasMany', model: 'Shopware.apps.Base.model.Country', name: 'getCountry', associationKey: 'country', relation: 'ManyToOne', field: 'country_id' },
-        { type: 'hasMany', model: 'Shopware.apps.Base.model.CountryState', name: 'getState', associationKey: 'state', relation: 'ManyToOne', field: 'state_id' }
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.Country', name: 'getCountry', associationKey: 'country', relation: 'ManyToOne', field: 'countryId' },
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.CountryState', name: 'getState', associationKey: 'state', relation: 'ManyToOne', field: 'stateId' }
     ]
 
 });

@@ -29,13 +29,14 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class PaymentsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.payments';
-    const EXPECTED_KEYS_COUNT = 5;
+    const EXPECTED_KEYS_COUNT = 6;
     const EXPECTED_TYPES = [
         'activePayments' => IsType::TYPE_INT,
         'paymentsWithSurcharge' => IsType::TYPE_INT,
         'paymentsWithReduction' => IsType::TYPE_INT,
         'paymentsWithPercentagePrice' => IsType::TYPE_INT,
         'paymentsWithAbsolutePrice' => IsType::TYPE_INT,
+        'paymentUsages' => IsType::TYPE_ARRAY,
     ];
 
     /**

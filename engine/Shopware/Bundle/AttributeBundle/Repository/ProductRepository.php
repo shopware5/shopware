@@ -24,18 +24,97 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository;
 
+use Shopware\Bundle\AttributeBundle\Repository\Reader\ReaderInterface;
+use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
+use Shopware\Bundle\EsBackend\EsAwareRepository;
+use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
+use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
+use Shopware\Components\Model\ModelManager;
+
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class ProductRepository extends GenericRepository
+class ProductRepository extends GenericRepository implements EsAwareRepository
 {
+    /**
+     * @var TextMappingInterface
+     */
+    protected $textMapping;
+
+    public function __construct(
+        $entity,
+        ModelManager $entityManager,
+        ReaderInterface $reader,
+        SearcherInterface $searcher,
+        TextMappingInterface $textMapping
+    ) {
+        parent::__construct($entity, $entityManager, $reader, $searcher);
+        $this->textMapping = $textMapping;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function supports($entity)
     {
         return in_array($entity, [
-            'Shopware\Models\Article\Article',
-            'Shopware\Models\Article\Detail',
+            \Shopware\Models\Article\Article::class,
+            \Shopware\Models\Article\Detail::class,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+
+        $query = $query
+            ->select(['products.id', 'products.ordernumber'])
+            ->from('s_articles_details', 'products')
+            ->andWhere('products.id > :lastId')
+            ->setParameter(':lastId', 0)
+            ->addOrderBy('products.id')
+            ->setMaxResults(50);
+
+        return new LastIdQuery($query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMapping()
+    {
+        return [
+            'properties' => [
+                'id' => ['type' => 'long'],
+                'number' => $this->textMapping->getNotAnalyzedField(),
+                'categoryIds' => ['type' => 'long'],
+                'variantId' => ['type' => 'long'],
+                'taxId' => ['type' => 'long'],
+                'articleId' => ['type' => 'long'],
+                'kind' => ['type' => 'long'],
+                'name' => $this->textMapping->getNotAnalyzedField(),
+                'inStock' => ['type' => 'long'],
+                'ean' => $this->textMapping->getNotAnalyzedField(),
+                'supplierNumber' => $this->textMapping->getNotAnalyzedField(),
+                'additionalText' => $this->textMapping->getTextField(),
+                'articleActive' => ['type' => 'boolean'],
+                'variantActive' => ['type' => 'boolean'],
+                'supplierId' => ['type' => 'long'],
+                'supplierName' => $this->textMapping->getTextField(),
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomainName()
+    {
+        return 'product';
     }
 }

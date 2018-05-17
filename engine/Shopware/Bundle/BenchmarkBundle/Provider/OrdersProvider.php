@@ -64,6 +64,9 @@ class OrdersProvider implements BenchmarkProviderInterface
         return [
             'total' => $this->getTotalOrders(),
             'revenue' => $this->getTotalOrderAmount(),
+            'averageAmount' => $this->getAverageOrderAmount(),
+            'averageHourRange' => $this->getAverageHourRange(),
+            'firstOrderDate' => $this->getFirstOrderDate(),
         ];
     }
 
@@ -301,5 +304,49 @@ class OrdersProvider implements BenchmarkProviderInterface
             ->set('last_order_id', ':lastOrderId')
             ->setParameter(':lastOrderId', $lastOrderId)
             ->execute();
+    }
+
+    /**
+     * @return float
+     */
+    private function getAverageOrderAmount()
+    {
+        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return number_format($ordersQueryBuilder->select('AVG(orders.invoice_amount_net)')
+            ->from('s_order', 'orders')
+            ->execute()
+            ->fetchColumn(), 2, ',', '');
+    }
+
+    /**
+     * @return string
+     */
+    private function getFirstOrderDate()
+    {
+        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $ordersQueryBuilder->select('orders.ordertime')
+            ->from('s_order', 'orders')
+            ->orderBy('ordertime', 'ASC')
+            ->addOrderBy('id', 'ASC')
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchColumn();
+    }
+
+    /**
+     * @return string
+     */
+    private function getAverageHourRange()
+    {
+        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $averageHour = (int) $ordersQueryBuilder->select('AVG(HOUR(orders.ordertime))')
+            ->from('s_order', 'orders')
+            ->execute()
+            ->fetchColumn();
+
+        return ($averageHour - 1) . ' - ' . ($averageHour + 1);
     }
 }

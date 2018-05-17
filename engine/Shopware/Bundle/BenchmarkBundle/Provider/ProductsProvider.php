@@ -50,6 +50,7 @@ class ProductsProvider implements BenchmarkProviderInterface
             'total' => $this->getProductsTotal(),
             'variants' => $this->getVariantsInformation(),
             'images' => $this->getProductImages(),
+            'shippingReadyProducts' => $this->getShippingReadyProducts(),
         ];
     }
 
@@ -60,7 +61,7 @@ class ProductsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return (int) $queryBuilder->select('COUNT(products.id)')
+        return (int) $queryBuilder->select('COUNT(1)')
             ->from('s_articles', 'products')
             ->execute()
             ->fetchColumn();
@@ -161,5 +162,26 @@ class ProductsProvider implements BenchmarkProviderInterface
             ->fetchColumn();
 
         return $productsTotalCount - $productsWithImagesCount;
+    }
+
+    /**
+     * @return int
+     */
+    private function getShippingReadyProducts()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $detailQueryBuilder = $this->dbalConnection->createQueryBuilder();
+        $detailQueryBuilder->select('DISTINCT detail.articleID')
+            ->from('s_articles_details', 'detail')
+            ->where('detail.instock > 0')
+            ->execute()->fetchColumn();
+
+        return (int) $queryBuilder->select('COUNT(article.id)')
+            ->from('s_articles', 'article')
+            ->where('article.active = 1')
+            ->andWhere('article.id IN (' . $detailQueryBuilder->getSQL() . ')')
+            ->execute()
+            ->fetchColumn();
     }
 }

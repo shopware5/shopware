@@ -100,6 +100,10 @@ return array_replace_recursive([
         'number_of_replicas' => null,
         'number_of_shards' => null,
         'wait_for_status' => 'green',
+        'backend' => [
+            'write_backlog' => false,
+            'enabled' => false,
+        ],
         'client' => [
             'hosts' => [
                 'localhost:9200',
@@ -242,6 +246,11 @@ return array_replace_recursive([
     'template_security' => [
         'php_modifiers' => include __DIR__ . '/smarty_functions.php',
         'php_functions' => include __DIR__ . '/smarty_functions.php',
+    ],
+    'search' => [
+        'indexer' => [
+            'batchsize' => 4000,
+        ],
     ],
     'app' => [
         'rootDir' => $this->DocPath(),

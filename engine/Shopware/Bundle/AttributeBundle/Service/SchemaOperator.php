@@ -49,8 +49,6 @@ class SchemaOperator
     private $nameBlacklist;
 
     /**
-     * SchemaOperator constructor.
-     *
      * @param Connection   $connection
      * @param TableMapping $tableMapping
      */
@@ -73,12 +71,19 @@ class SchemaOperator
     public function createColumn($table, $column, $type, $defaultValue = null)
     {
         $this->validate($table, $column);
+        $defaultValue = $this->filterDefaultValue($defaultValue);
 
         if (!$type) {
             throw new \Exception('No column type provided');
         }
 
-        $sql = sprintf('ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s', $table, $column, $type, $defaultValue);
+        $sql = sprintf('ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s',
+            $table,
+            $column,
+            $type,
+            $defaultValue
+        );
+
         $this->connection->executeQuery($sql);
     }
 
@@ -103,7 +108,16 @@ class SchemaOperator
             throw new \Exception('No column type provided');
         }
 
-        $sql = sprintf('ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;', $table, $originalName, $newName, $type, $defaultValue);
+        $this->validateField($newName);
+        $defaultValue = $this->filterDefaultValue($defaultValue);
+
+        $sql = sprintf('ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;',
+            $table,
+            $originalName,
+            $newName,
+            $type,
+            $defaultValue
+        );
 
         $this->connection->executeQuery($sql);
     }
@@ -163,15 +177,55 @@ class SchemaOperator
             throw new \Exception('No column name provided');
         }
 
+        $this->validateField($table);
+        $this->validateField($name);
+
         if (!$this->tableMapping->isAttributeTable($table)) {
             throw new \Exception(sprintf('Provided table is no attribute table: %s', $table));
         }
         if ($this->tableMapping->isIdentifierColumn($table, $name)) {
             throw new \Exception(sprintf('Provided column is an identifier column: %s', $name));
         }
+
         $lowerCaseName = strtolower($name);
         if (in_array($lowerCaseName, $this->nameBlacklist)) {
             throw new \Exception(sprintf('Provided name %s is a reserved keyword.', $name));
         }
+    }
+
+    /**
+     * @param string $field
+     *
+     * @throws \Exception
+     */
+    private function validateField($field)
+    {
+        if (strlen($field) > 64) {
+            throw new \Exception('Maximum length: 64 chars');
+        }
+
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $field)) {
+            throw new \Exception(sprintf('Invalid chars in %s', $field));
+        }
+    }
+
+    /**
+     * @param null|float|int|string $defaultValue
+     *
+     * @return null|float|int|string
+     */
+    private function filterDefaultValue($defaultValue)
+    {
+        if (!is_string($defaultValue)) {
+            return $defaultValue;
+        }
+
+        if ($defaultValue === 'NULL') {
+            return $defaultValue;
+        }
+
+        return $this->connection->quote(
+            str_replace(['`', '\''], '', $defaultValue)
+        );
     }
 }

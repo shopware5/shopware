@@ -1051,9 +1051,10 @@ class Media extends ModelEntity
                  */
                 $this->path = str_replace('\\', '/', $this->path);
             }
+            $tempPath = $projectDir . 'media' . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR . $this->file->getFilename();
 
             $mediaService->write($this->path, file_get_contents($this->file->getRealPath()));
-            if (is_uploaded_file($this->file->getPathname())) {
+            if (file_exists($tempPath) || is_uploaded_file($this->file->getPathname())) {
                 unlink($this->file->getPathname());
             }
         }
@@ -1208,12 +1209,9 @@ class Media extends ModelEntity
         if ($this->file instanceof UploadedFile) {
             // Load file information
             $fileInfo = pathinfo($this->file->getClientOriginalName());
+            $name = $fileInfo['filename'];
 
-            if (!$name && $fileInfo['filename']) {
-                $name = $fileInfo['filename'];
-            }
-
-            if ($fileInfo['extension']) {
+            if (isset($fileInfo['extension'])) {
                 $extension = $fileInfo['extension'];
             }
         }

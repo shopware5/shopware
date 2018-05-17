@@ -50,18 +50,26 @@ class SearchIndexer implements SearchIndexerInterface
     private $termHelper;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param Connection                  $connection
      * @param TermHelperInterface         $termHelper
+     * @param int                         $batchSize
      */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
-        TermHelperInterface $termHelper
+        TermHelperInterface $termHelper,
+        $batchSize = 4000
     ) {
         $this->config = $config;
         $this->connection = $connection;
         $this->termHelper = $termHelper;
+        $this->batchSize = $batchSize > 0 ? $batchSize : 4000;
     }
 
     /**
@@ -71,7 +79,7 @@ class SearchIndexer implements SearchIndexerInterface
     {
         $strategy = $this->config->get('searchRefreshStrategy', 3);
 
-        //search index refresh strategy is configured for "live refresh"?
+        // Search index refresh strategy is configured for "live refresh"?
         if ($strategy !== 3) {
             return;
         }
@@ -131,7 +139,7 @@ class SearchIndexer implements SearchIndexerInterface
         if (!empty($tables)) {
             foreach ($tables as $table) {
                 // Set primary key
-                $table['elementID'] = empty($table['foreign_key']) && $table['table'] != 's_articles' ? 'articleID' : 'id';
+                $table['elementID'] = empty($table['foreign_key']) && $table['table'] !== 's_articles' ? 'articleID' : 'id';
 
                 if ($table['table'] === 's_articles_attributes') {
                     $table['elementID'] = '(SELECT articleID FROM s_articles_details WHERE id = articledetailsID LIMIT 1)';
@@ -192,6 +200,7 @@ class SearchIndexer implements SearchIndexerInterface
                             $keyword = $this->connection->quote($keyword);
                             $keywords[] = $keyword;
                         }
+                        unset($keyword);
 
                         // SQL-queries to fill s_search_index
                         $sqlIndex[] = 'SELECT sk.id as keywordID, ' . $row['id'] . ' as elementID, ' . $fieldID . ' as fieldID '
@@ -205,7 +214,7 @@ class SearchIndexer implements SearchIndexerInterface
                     }
 
                     // If last row or more then 5000 keywords fetched, write results to index
-                    if ($currentRow == count($getTableKeywords) - 1 || count($keywords) > 5000) {
+                    if ($currentRow == count($getTableKeywords) - 1 || count($keywords) > $this->batchSize) {
                         $keywords = array_unique($keywords); // Remove duplicates
                         $sql_keywords = 'INSERT IGNORE INTO `s_search_keywords` (`keyword`) VALUES';
                         $sql_keywords .= ' (' . implode('), (', $keywords) . ')';

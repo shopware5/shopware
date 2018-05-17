@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
@@ -78,6 +79,7 @@ class ProductReader extends GenericReader
     {
         $products = parent::getList($identifiers);
         $products = $this->assignAdditionalText($products);
+        $products = $this->assignCategoryIds($products);
 
         return $products;
     }
@@ -89,17 +91,26 @@ class ProductReader extends GenericReader
     {
         $query = $this->entityManager->createQueryBuilder();
         $query->select([
+            'variant.id as id',
             'variant.id as variantId',
             'article.id as articleId',
             'article.name',
+            'article.taxId',
+            'article.description',
             'variant.number',
+            'variant.kind',
             'variant.inStock',
+            'variant.ean',
+            'variant.supplierNumber',
             'variant.additionalText',
             'article.active as articleActive',
             'variant.active as variantActive',
+            'supplier.id as supplierId',
+            'supplier.name as supplierName',
         ]);
         $query->from(Detail::class, 'variant', $this->getIdentifierField());
-        $query->innerJoin('variant.article', 'article');
+        $query->leftJoin('variant.article', 'article');
+        $query->leftJoin('article.supplier', 'supplier');
 
         return $query;
     }
@@ -157,6 +168,31 @@ class ProductReader extends GenericReader
             $product = new ListProduct($article['articleId'], $article['variantId'], $article['number']);
             $product->setAdditional($article['additionalText']);
             $products[$article['number']] = $product;
+        }
+
+        return $products;
+    }
+
+    private function assignCategoryIds(array $products)
+    {
+        $ids = array_column($products, 'articleId');
+
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select(['articleID', 'GROUP_CONCAT(categoryID)']);
+        $query->from('s_articles_categories_ro');
+        $query->where('articleID IN (:ids)');
+        $query->groupBy('articleID');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $categories = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        foreach ($products as &$product) {
+            $mapping = [];
+            $id = $product['articleId'];
+            if (array_key_exists($id, $categories)) {
+                $mapping = array_values(array_filter(explode(',', $categories[$id])));
+            }
+            $product['categoryIds'] = $mapping;
         }
 
         return $products;

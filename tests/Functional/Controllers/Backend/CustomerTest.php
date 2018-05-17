@@ -95,15 +95,6 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             'paymentId' => $debit->getId(),
             'email' => 'test@shopware.de',
             'newPassword' => '222',
-            'billing' => [
-                [
-                    'firstName' => 'test',
-                    'lastName' => 'test',
-                    'zipCode' => 'test',
-                    'city' => 'test',
-                    'countryId' => 2,
-                ],
-            ],
             'paymentData' => [[
                 'accountHolder' => 'Account Holder Name',
                 'accountNumber' => '1234567890',
@@ -138,6 +129,89 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->assertFalse($paymentData->getUseBillingData());
 
         return $dummyData->getId();
+    }
+
+    /**
+     * Test create customer with address
+     */
+    public function testAddCustomerWithAddress()
+    {
+        $debit = $this->manager
+            ->getRepository(\Shopware\Models\Payment\Payment::class)
+            ->findOneBy(['name' => 'debit']);
+
+        $params = [
+            'paymentId' => $debit->getId(),
+            'email' => 'debit@shopware.de',
+            'newPassword' => '222',
+        ];
+        $this->Request()->setMethod('POST')->setPost($params);
+        $this->dispatch('/backend/Customer/save');
+        $jsonBody = $this->View()->getAssign();
+
+        $this->assertTrue($this->View()->success);
+        $this->assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
+
+        $params = [
+            'id' => null,
+            'defaultAddress' => '',
+            'setDefaultBillingAddress' => true,
+            'setDefaultShippingAddress' => true,
+            'user_id' => $this->View()->data['id'],
+            'company' => 'company',
+            'department' => 'department',
+            'vatId' => 'vatId',
+            'salutation' => 'mr',
+            'salutationSnippet' => '',
+            'title' => 'title',
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'street' => 'street',
+            'zipcode' => 'zipcode',
+            'city' => 'city',
+            'additionalAddressLine1' => 'additionalAddressLine1',
+            'additionalAddressLine2' => 'additionalAddressLine2',
+            'countryId' => 3,
+            'stateId' => NULL,
+            'phone' => '',
+            'customer' => [],
+            'country' => [],
+            'state' => []
+        ];
+
+        $this->reset();
+
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        $this->Request()->setMethod('POST')->setPost($params);
+
+        $this->dispatch('/backend/Address/create');
+
+        /** @var \Shopware\Models\Customer\Customer $dummyData */
+        $dummyData = $this->repository->find($params['user_id']);
+
+        $this->assertEquals('firstname', $dummyData->getDefaultBillingAddress()->getFirstname());
+        $this->assertEquals('lastname', $dummyData->getDefaultBillingAddress()->getLastname());
+        $this->assertEquals('department', $dummyData->getDefaultBillingAddress()->getDepartment());
+        $this->assertEquals('vatId', $dummyData->getDefaultBillingAddress()->getVatId());
+        $this->assertEquals('title', $dummyData->getDefaultBillingAddress()->getTitle());
+        $this->assertEquals('zipcode', $dummyData->getDefaultBillingAddress()->getZipcode());
+        $this->assertEquals('city', $dummyData->getDefaultBillingAddress()->getCity());
+        $this->assertEquals('street', $dummyData->getDefaultBillingAddress()->getStreet());
+        $this->assertEquals('additionalAddressLine1', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine1());
+        $this->assertEquals('additionalAddressLine2', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine2());
+
+        $this->assertEquals('firstname', $dummyData->getDefaultShippingAddress()->getFirstname());
+        $this->assertEquals('lastname', $dummyData->getDefaultShippingAddress()->getLastname());
+        $this->assertEquals('department', $dummyData->getDefaultShippingAddress()->getDepartment());
+        $this->assertEquals('vatId', $dummyData->getDefaultShippingAddress()->getVatId());
+        $this->assertEquals('title', $dummyData->getDefaultShippingAddress()->getTitle());
+        $this->assertEquals('zipcode', $dummyData->getDefaultShippingAddress()->getZipcode());
+        $this->assertEquals('city', $dummyData->getDefaultShippingAddress()->getCity());
+        $this->assertEquals('street', $dummyData->getDefaultShippingAddress()->getStreet());
+        $this->assertEquals('additionalAddressLine1', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine1());
+        $this->assertEquals('additionalAddressLine2', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine2());
     }
 
     /**

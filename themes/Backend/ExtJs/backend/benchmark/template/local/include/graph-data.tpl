@@ -8,11 +8,11 @@
     <div class="graph-container">
         <div class="graph-wrapper">
             <canvas height="260"
-                    data-benchmark-graph="true"
-                    data-name="{$dataKey}"
-                    data-include-industry="false"
-                    data-time="weeks"
-                    data-chart-type="{$chartType|default:"line"}">
+                data-benchmark-graph="true"
+                data-name="{$dataKey}"
+                data-include-industry="false"
+                data-time="weeks"
+                data-chart-type="line">
             </canvas>
         </div>
 
@@ -22,11 +22,23 @@
                     <input type="checkbox" checked="checked">
                     <span class="slider round"></span>
                 </label>
-                {* TODO: Translations? *}
                 <div>Shop</div>
+            </div>
+
+            <div class="button-wrapper switch-last-year"
+                 data-switch-button="true"
+                 data-industry="false"
+                 data-last-year="true"
+                 data-values-key="{$dataKey}"
+                 data-time="weeks">
+                <label class="switch">
+                    <input type="checkbox" checked="checked">
+                    <span class="slider round"></span>
+                </label>
+                <div>Vorjahr</div>
             </div>
         </div>
     </div>
 
-    {include file="backend/benchmark/template/local/include/computed_data.tpl"}
+    {include file="backend/benchmark/template/local/include/computed_data.tpl" key="{$dataKey}"}
 </form>

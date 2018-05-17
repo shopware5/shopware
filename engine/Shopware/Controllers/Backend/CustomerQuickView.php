@@ -21,7 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 
@@ -163,7 +164,11 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             }
         }
 
-        $list = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
+        if ($this->container->getParameter('shopware.es.backend.enabled')) {
+            $list = $this->loadFromRepository();
+        } else {
+            $list = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
+        }
 
         $ids = array_column($list['data'], 'id');
 
@@ -200,14 +205,66 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         return $fields;
     }
 
+    /**
+     * @param array $ids
+     *
+     * @return array
+     */
     private function fetchAttributes(array $ids)
     {
         $query = $this->container->get('models')->createQueryBuilder();
         $query->select(['attribute']);
         $query->from(CustomerAttribute::class, 'attribute', 'attribute.customerId');
         $query->where('attribute.customerId IN (:ids)');
-        $query->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         return $query->getQuery()->getArrayResult();
+    }
+
+    private function loadFromRepository()
+    {
+        $request = $this->Request();
+        $criteria = new SearchCriteria(Customer::class);
+        $criteria->offset = (int) $request->getParam('start', 0);
+        $criteria->limit = (int) $request->getParam('limit', 30);
+        $criteria->term = $request->getParam('query', null);
+        $criteria->sortings = $request->getParam('sort', []);
+        $criteria->conditions = $request->getParam('filter', []);
+
+        foreach ($criteria->sortings as $index => &$sorting) {
+            switch ($sorting['property']) {
+                case 'customerGroup':
+                    $sorting['property'] = 'customerGroupId';
+                    break;
+                case 'shop':
+                    $sorting['property'] = 'shopId';
+                    break;
+            }
+        }
+
+        foreach ($criteria->conditions as $index => &$condition) {
+            switch ($condition['property']) {
+                case 'customerGroup':
+                    $condition['property'] = 'customerGroupId';
+                    break;
+                case 'shop':
+                    $condition['property'] = 'shopId';
+                    break;
+            }
+        }
+
+        $repository = $this->container->get('shopware_attribute.customer_repository');
+
+        $result = $repository->search($criteria);
+
+        $ids = array_column($result->getData(), 'id');
+
+        $query = $this->getListQuery();
+        $query->where('customer.id IN (:ids)');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $data = $query->getQuery()->getArrayResult();
+
+        return ['data' => array_values($data), 'total' => $result->getCount()];
     }
 }

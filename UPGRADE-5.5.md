@@ -33,11 +33,28 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added payment and dispatch translation for order status mails
 * Added ability to translate shop pages. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
 * Added snippets for locales in backend menus
+* Added implementation of elasticsearch backend
+    * Added EsBackend bundle to index and search products, customers and orders for the backend
+    * Added new searcher, reader and repositories to AttributeBundle for implementing elasticsearch backend
+        * `engine/Shopware/Bundle/AttributeBundle/Repository`
+            * `Reader/OrderReader.php`
+            * `Searcher/OrderSearcher.php`
+            * `CustomerRepository.php`
+            * `OrderRepository.php`
+    * Added indexing and backlog sync command
+        * `engine/Shopware/Bundle/EsBackend/Commands/IndexPopulateCommand.php`
+        * `engine/Shopware/Bundle/EsBackend/Commands/SyncBacklogCommand.php`
+    * Added new templates to `themes/Backend/ExtJs/backend/search/` to split the `index.tpl`
+        * `articles.tpl`
+        * `customers.tpl`
+        * `orders.tpl`
+    * Added new config parameters `write_backlog`, `enabled` and `backend` to `es` parameter
 
 ### Changes
 
 * Changed the execution model of `replace` hooks to prevent multiple calls of the hooked method, if more than one `replace` hook on the same method exists and all of them call `executeParent()` once
 * Changed Symfony version to 3.4.4
+* Changed Slugify version to 3.1
 * Changed the event `Shopware_Form_Builder` so that the `reference` contains the `BlockPrefix` of the Formtype, not the name
 * Changed REST API `articles` list call to include `mainDetail`
 * Changed `themes/Frontend/Bare/frontend/checkout/cart_item.tpl` in which the following blocks are contained:
@@ -51,7 +68,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl` and `finish_item.tpl` to keep track of the earlier mentioned changes and additions to `cart_item.tpl` and to use Smarty Inheritance system correctly.
 
     Please check your templates when you extend `cart_item.tpl`. You now have to extend one of the added subtemplates.
-    
+* Renamed `country_id` to `countryId` and `state_id` to `stateId` in `Shopware.apps.Customer.model.Address`
+
 
 ### Removals
 
@@ -83,13 +101,11 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed class `Shopware\Models\Order\Document\Type`
 * Removed constant `PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED_BY_HANSEATIC_BANK` of `Shopware\Models\Order\Status`
 * Removed variable `description` with methods `setDescription` and `getDescription` of `Shopware\Models\Order\Status`
-* Removed variable `surchargeString` and methods of `Shopware\Models\Payment\Payment`:
+* Removed methods of `Shopware\Models\Payment\Payment`:
     * `setClass`
     * `getClass`
     * `setTable`
     * `getTable`
-    * `setSurchargeString`
-    * `getSurchargeString`
     * `setEmbedIFrame`
     * `getEmbedIFrame`
 * Removed methods `getPaymentsQuery`, `getPaymentsQueryBuilder` of `Shopware\Models\Payment\Repository`
@@ -106,9 +122,15 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed smarty block `frontend_index_categories_left_ul`
 * Removed smarty block `frontend_listing_box_article_actions_more`
 * Removed smarty block `frontend_listing_box_article_actions_inline`
+* Removed ExtJs models `Shopware.apps.Customer.model.Billing` and `Shopware.apps.Customer.model.Shipping`
 
 ### Deprecations
 
 * Deprecated `lastStock` field in `\Shopware\Models\Article\Article` as the field has been moved to the variants. It will be removed in 5.6
 * Deprecated `laststock` column in `s_articles` since this field has been moved to the variants. It will be removed in 5.6
 * Deprecated the translation workaround ("gLeft", "gBottom", "eLeft", "eBottom", etc.) for shop page groups. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
+
+### Elasticsearch in backend
+
+To activate elasticsearch in backend you have to enable the `es => backend => enabled` parameter in the `config.php` and start a indexation
+of the backend entities with `sw:es:backend:index:populate`.
