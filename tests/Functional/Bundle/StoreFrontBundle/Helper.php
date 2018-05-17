@@ -35,6 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Api\Resource;
 use Shopware\Kernel;
 use Shopware\Models;
+use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Tax\Tax;
 
 class Helper
@@ -267,7 +268,7 @@ class Helper
         }
 
         foreach ($this->createdConfiguratorGroups as $groupId) {
-            $group = $this->entityManager->find(\Shopware\Models\Article\Configurator\Group::class, $groupId);
+            $group = $this->entityManager->find(ConfiguratorGroup::class, $groupId);
             if (!$group) {
                 continue;
             }
@@ -919,6 +920,139 @@ class Helper
         $indexer->index($shop, new ProgressHelper());
     }
 
+    /**
+     * @param ConfiguratorGroup[] $groups
+     *
+     * @return array
+     */
+    public function createConfiguratorSet(array $groups)
+    {
+        $data = [];
+
+        foreach ($groups as $group) {
+            $options = [];
+            /** @var $option Models\Article\Configurator\Option */
+            foreach ($group->getOptions() as $option) {
+                $options[] = [
+                    'id' => $option->getId(),
+                    'name' => $option->getName(),
+                ];
+            }
+            $data[] = [
+                'id' => $group->getId(),
+                'name' => $group->getName(),
+                'options' => $options,
+            ];
+        }
+
+        return [
+            'name' => 'Unit test configurator set',
+            'groups' => $data,
+        ];
+    }
+
+    /**
+     * @param array $groups
+     *
+     * @return ConfiguratorGroup[]
+     */
+    public function insertConfiguratorData($groups)
+    {
+        $pos = 1;
+        $data = [];
+
+        foreach ($groups as $groupName => $options) {
+            $group = new ConfiguratorGroup();
+            $group->setName($groupName);
+            $group->setPosition($groups);
+            $this->db->executeQuery('DELETE FROM s_article_configurator_groups WHERE name = ?', [$groupName]);
+
+            $collection = [];
+            $optionPos = 1;
+            foreach ($options as $optionName) {
+                $this->db->executeQuery('DELETE FROM s_article_configurator_options WHERE name = ?', [$optionName]);
+
+                $option = new Models\Article\Configurator\Option();
+                $option->setName($optionName);
+                $option->setPosition($optionPos);
+                $collection[] = $option;
+                ++$optionPos;
+            }
+            $group->setOptions($collection);
+            ++$pos;
+
+            $data[] = $group;
+
+            $this->entityManager->persist($group);
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+
+            $this->createdConfiguratorGroups[] = $group->getId();
+        }
+
+        return $data;
+    }
+
+    /**
+     * Helper function which creates all variants for
+     * the passed groups with options.
+     *
+     * @param $groups
+     * @param null  $numberPrefix
+     * @param array $data
+     *
+     * @return array
+     */
+    public function generateVariants(
+        $groups,
+        $numberPrefix = null,
+        $data = []
+    ) {
+        $options = [];
+
+        foreach ($groups as $group) {
+            $groupOptions = [];
+            foreach ($group['options'] as $option) {
+                $groupOptions[] = [
+                    'groupId' => $group['id'],
+                    'optionId' => $option['id'],
+                    'option' => $option['name'],
+                ];
+            }
+            $options[] = $groupOptions;
+        }
+
+        $combinations = $this->combinations($options);
+        $combinations = $this->cleanUpCombinations($combinations);
+
+        $variants = [];
+        $count = 1;
+        if (!$numberPrefix) {
+            $numberPrefix = 'Unit-Test-Variant-';
+        }
+
+        $this->db->executeQuery(
+            'DELETE FROM s_articles_details WHERE ordernumber LIKE ?',
+            [$numberPrefix . '%']
+        );
+
+        foreach ($combinations as $combination) {
+            $variantData = array_merge(
+                ['number' => $numberPrefix . $count],
+                $data
+            );
+
+            $variant = $this->getVariantData($variantData);
+
+            $variant['configuratorOptions'] = $combination;
+            $variants[] = $variant;
+
+            ++$count;
+        }
+
+        return $variants;
+    }
+
     private function createProperties($groupCount, $optionCount, $namePrefix = 'Test')
     {
         $this->propertyNames[] = $namePrefix;
@@ -1002,74 +1136,6 @@ class Helper
         $ids = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         return array_column($ids, 'article_id');
-    }
-
-    /**
-     * @param Models\Article\Configurator\Group[] $groups
-     *
-     * @return array
-     */
-    private function createConfiguratorSet(array $groups)
-    {
-        $data = [];
-
-        foreach ($groups as $group) {
-            $options = [];
-            /** @var $option Models\Article\Configurator\Option */
-            foreach ($group->getOptions() as $option) {
-                $options[] = [
-                    'id' => $option->getId(),
-                    'name' => $option->getName(),
-                ];
-            }
-            $data[] = [
-                'id' => $group->getId(),
-                'name' => $group->getName(),
-                'options' => $options,
-            ];
-        }
-
-        return [
-            'name' => 'Unit test configurator set',
-            'groups' => $data,
-        ];
-    }
-
-    private function insertConfiguratorData($groups)
-    {
-        $pos = 1;
-        $data = [];
-
-        foreach ($groups as $groupName => $options) {
-            $group = new Models\Article\Configurator\Group();
-            $group->setName($groupName);
-            $group->setPosition($groups);
-            $this->db->executeQuery('DELETE FROM s_article_configurator_groups WHERE name = ?', [$groupName]);
-
-            $collection = [];
-            $optionPos = 1;
-            foreach ($options as $optionName) {
-                $this->db->executeQuery('DELETE FROM s_article_configurator_options WHERE name = ?', [$optionName]);
-
-                $option = new Models\Article\Configurator\Option();
-                $option->setName($optionName);
-                $option->setPosition($optionPos);
-                $collection[] = $option;
-                ++$optionPos;
-            }
-            $group->setOptions($collection);
-            ++$pos;
-
-            $data[] = $group;
-
-            $this->entityManager->persist($group);
-            $this->entityManager->flush();
-            $this->entityManager->clear();
-
-            $this->createdConfiguratorGroups[] = $group->getId();
-        }
-
-        return $data;
     }
 
     private function deleteCustomerGroup($key)
@@ -1159,65 +1225,6 @@ class Helper
         }
 
         return $result;
-    }
-
-    /**
-     * Helper function which creates all variants for
-     * the passed groups with options.
-     *
-     * @param $groups
-     * @param null  $numberPrefix
-     * @param array $data
-     *
-     * @return array
-     */
-    private function generateVariants(
-        $groups,
-        $numberPrefix = null,
-        $data = []
-    ) {
-        $options = [];
-
-        foreach ($groups as $group) {
-            $groupOptions = [];
-            foreach ($group['options'] as $option) {
-                $groupOptions[] = [
-                    'groupId' => $group['id'],
-                    'option' => $option['name'],
-                ];
-            }
-            $options[] = $groupOptions;
-        }
-
-        $combinations = $this->combinations($options);
-        $combinations = $this->cleanUpCombinations($combinations);
-
-        $variants = [];
-        $count = 1;
-        if (!$numberPrefix) {
-            $numberPrefix = 'Unit-Test-Variant-';
-        }
-
-        $this->db->executeQuery(
-            'DELETE FROM s_articles_details WHERE ordernumber LIKE ?',
-            [$numberPrefix . '%']
-        );
-
-        foreach ($combinations as $combination) {
-            $variantData = array_merge(
-                ['number' => $numberPrefix . $count],
-                $data
-            );
-
-            $variant = $this->getVariantData($variantData);
-
-            $variant['configuratorOptions'] = $combination;
-            $variants[] = $variant;
-
-            ++$count;
-        }
-
-        return $variants;
     }
 
     /**
