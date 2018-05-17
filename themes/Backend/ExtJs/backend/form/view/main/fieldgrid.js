@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
         me.columns     = me.getColumns();
         me.viewConfig  = me.getViewConfig();
         me.editor      = me.getRowEditingPlugin();
-        me.plugins     = [ me.editor, me.getHeaderToolTipPlugin() ];
+        me.plugins     = [ me.editor, me.getHeaderToolTipPlugin(), me.getGridTranslationPlugin() ];
         me.dockedItems = [ me.getToolbar(),  me.getPagingbar() ];
 
         me.callParent(arguments);
@@ -140,6 +140,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             editor: {
                 xtype: 'textfield',
                 allowBlank: false
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_name}Name{/s}',
+                name: 'name',
+                xtype: 'textfield',
+                allowBlank: false
             }
         }, {
             header: '{s name=column_label}Label{/s}',
@@ -149,6 +155,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             editor: {
                 xtype: 'textfield',
                 allowBlank: false
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_label}Label{/s}',
+                name: 'label',
+                xtype: 'textfield',
+                allowBlank: false
             }
         }, {
             header: '{s name=column_typ}Typ{/s}',
@@ -156,6 +168,18 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
+                xtype: 'combo',
+                allowBlank: false,
+                editable: false,
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'label',
+                valueField: 'id',
+                store: me.getTypComboStore()
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_typ}Typ{/s}',
+                name: 'typ',
                 xtype: 'combo',
                 allowBlank: false,
                 editable: false,
@@ -179,6 +203,18 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 displayField: 'label',
                 valueField: 'id',
                 store: me.getClassComboStore()
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_class}Class{/s}',
+                name: 'class',
+                xtype: 'combo',
+                allowBlank: false,
+                editable: false,
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'label',
+                valueField: 'id',
+                store: me.getClassComboStore()
             }
         }, {
             header: '{s name=column_value}Value{/s}',
@@ -187,6 +223,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
+                xtype:'textfield'
+            },
+            translationEditor: {
+                name: 'value',
+                fieldLabel: '{s name=column_value}Value{/s}',
                 xtype:'textfield'
             }
         }, {
@@ -197,6 +238,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             hideable: false,
             editor: {
                 xtype:'textfield'
+            },
+            translationEditor: {
+                name: 'note',
+                fieldLabel: '{s name=column_note}Note{/s}',
+                xtype:'textfield'
             }
         }, {
             header: '{s name=column_errormsg}Error Message{/s}',
@@ -206,6 +252,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             hideable: false,
             editor: {
                 xtype:'textfield'
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_errormsg}Error Message{/s}',
+                name: 'error_msg',
+                xtype:'textfield',
             }
         }, {
             xtype: 'booleancolumn',
@@ -214,6 +265,13 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
+                xtype: 'checkbox',
+                inputValue: true,
+                uncheckedValue: false
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_required}Required{/s}',
+                name: 'required',
                 xtype: 'checkbox',
                 inputValue: true,
                 uncheckedValue: false
@@ -335,6 +393,17 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
         metadata.tdAttr = 'data-qtip="' + this.messages.hintDragDrop +'"';
 
         return '<div style="cursor: n-resize;">&#009868;</div>';
-    }
+    },
+
+    /**
+     * Creates new Grid-Translation Plugin
+     *
+     * @return [Shopware.grid.plugin.Translation]
+     */
+    getGridTranslationPlugin: function() {
+        return Ext.create('Shopware.grid.plugin.Translation', {
+            translationType: 'forms_elements'
+        });
+    },
 });
 //{/block}

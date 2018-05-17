@@ -192,16 +192,11 @@ Ext.define('Shopware.grid.plugin.Translation', {
                 return true;
             }
         });
-        //here we create the new action column. We pass the actionColumn property to the function to merge the items.
-        var newActionColumn = me.createTranslationActionColumn(actionColumn);
 
         //if an action column already exist, we have to remove this before we add the new one
         if (actionColumn) {
-            me.grid.headerCt.remove(actionColumn);
+            me.updateTranslationActionColumn(actionColumn);
         }
-
-        //now we insert the new action column
-        me.grid.headerCt.insert(newActionColumn);
         return true;
     },
 
@@ -236,8 +231,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
      * @return { Boolean }
      */
     hasActionColumnTranslationItem: function(column) {
-        var me = this,
-            translationItemExist = false;
+        var translationItemExist = false;
 
         if (!column) {
             return translationItemExist;
@@ -253,28 +247,23 @@ Ext.define('Shopware.grid.plugin.Translation', {
 
 
     /**
-     * Creates a new action column for the grid panel.
+     * Updates the action column for the grid panel.
      * The passed actionColumn parameter can contains an already existing action column.
      *
      * @return { Ext.grid.column.Action }
      */
-    createTranslationActionColumn: function(actionColumn) {
-        var me = this, items = [], width = 0;
+    updateTranslationActionColumn: function(actionColumn) {
+        var me = this;
 
-        //if an action column already exist we have to merge the action column items of the old one with
-        //the action column items of the translation action column
-
-        if (actionColumn) {
-            items = actionColumn.items;
-            width = actionColumn.width;
+        if (!me.hasActionColumnTranslationItem(actionColumn)) {
+            if (actionColumn.rendered) {
+                actionColumn.setWidth(actionColumn.getWidth() + 30);
+                actionColumn.add(me.createTranslationActionColumnItem());
+            } else {
+                actionColumn.items.push(me.createTranslationActionColumnItem());
+                actionColumn.width = actionColumn.width + 30;
+            }
         }
-
-        items.push(me.createTranslationActionColumnItem());
-
-        return Ext.create('Ext.grid.column.Action', {
-            width: width + 30,
-            items: items
-        });
     },
 
     /**
@@ -305,7 +294,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
      * @return { Boolean }
      */
     getTranslatableFields: function() {
-        var me = this, field;
+        var me = this;
 
         if (!me.grid) {
             return false;

@@ -205,9 +205,15 @@ class Shopware_Components_Translation
                 ->setParameter('objectType', $type);
         }
         if ($key) {
-            $queryBuilder
-                ->andWhere('t.objectkey = :objectKey')
-                ->setParameter('objectKey', $merge ? 1 : $key);
+            if (is_array($key)) {
+                $queryBuilder
+                    ->andWhere('t.objectkey IN (:objectKey)')
+                    ->setParameter('objectKey', $key, Connection::PARAM_INT_ARRAY);
+            } else {
+                $queryBuilder
+                    ->andWhere('t.objectkey = :objectKey')
+                    ->setParameter('objectKey', $merge ? 1 : $key);
+            }
         }
 
         $data = $queryBuilder->execute()->fetchAll();
@@ -231,28 +237,30 @@ class Shopware_Components_Translation
      * Reads multiple translations including their fallbacks
      * Merges the two (fallback has less priority) and returns the results
      *
-     * @param int    $language
-     * @param int    $fallback
-     * @param string $type
+     * @param int       $language
+     * @param int       $fallback
+     * @param string    $type
+     * @param int|array $key
+     * @param bool      $merge
      *
      * @return array|mixed
      */
-    public function readBatchWithFallback($language, $fallback, $type)
+    public function readBatchWithFallback($language, $fallback, $type, $key = 1, $merge = true)
     {
-        $translationData = $this->readBatch($language, $type, 1, true);
+        $translationData = $this->readBatch($language, $type, $key, $merge);
 
         // Look for a fallback and correspondent translations
         if (!empty($fallback)) {
-            $translationFallback = $this->readBatch($fallback, $type, 1, true);
+            $translationFallback = $this->readBatch($fallback, $type, $key, $merge);
 
             if (!empty($translationFallback)) {
                 // We need something like array_merge_recursive, but that also
                 // recursively merges elements with int keys.
-                foreach ($translationFallback as $key => $data) {
-                    if (array_key_exists($key, $translationData)) {
-                        $translationData[$key] += $data;
+                foreach ($translationFallback as $translationKey => $data) {
+                    if (array_key_exists($translationKey, $translationData)) {
+                        $translationData[$translationKey] += $data;
                     } else {
-                        $translationData[$key] = $data;
+                        $translationData[$translationKey] = $data;
                     }
                 }
             }

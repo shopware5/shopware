@@ -53,6 +53,11 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
         anchor: '99%'
     },
 
+    plugins: [{
+        ptype: 'translation',
+        translationType: 'forms'
+    }],
+
     /**
      * Sets up the ui component
      *
@@ -118,7 +123,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
             table: 's_cms_support_attributes',
-            allowTranslation: false,
+            allowTranslation: true,
             margin: '20 0 0',
             disabled: false
         });
@@ -130,7 +135,8 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             fieldLabel:'{s name=label_name}Name{/s}',
             name       : 'name',
             allowBlank: false,
-            supportText : linkToForm
+            supportText : linkToForm,
+            translatable: true
         }, {
             fieldLabel: '{s name=label_active}Active{/s}',
             xtype: 'checkbox',
@@ -144,17 +150,20 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             vtype: 'remote',
             validationUrl: '{url controller="base" action="validateEmail"}',
             validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
-            allowBlank : false
+            allowBlank : false,
+            translatable: true
         }, {
             fieldLabel:'{s name=label_subject}Subject{/s}',
             name       : 'emailSubject',
-            allowBlank: false
+            allowBlank: false,
+            translatable: true
         }, {
             xtype: 'codemirrorfield',
             mode: 'smarty',
             fieldLabel:'{s name=label_emailtemplate}Email template{/s}',
             name: 'emailTemplate',
-            supportText: variableHint
+            supportText: variableHint,
+            translatable: true
         }, {
             /*{if !{acl_is_allowed privilege=createupdate}}*/
             readOnly: true,
@@ -163,7 +172,8 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             fieldLabel:'{s name=label_headertext}Form-Header{/s}',
             name       : 'text',
             supportText : '{s name=support_text_headertext}Will be displayed above the form{/s}',
-            xtype:'tinymce'
+            xtype:'tinymce',
+            translatable: true
         }, {
             /*{if !{acl_is_allowed privilege=createupdate}}*/
             readOnly: true,
@@ -172,18 +182,22 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             supportText:'{s name=support_text_confirmationtext}Will be displayed after a successful submission{/s}',
             name       : 'text2',
             height: 350,
-            xtype:'tinymce'
+            xtype:'tinymce',
+            translatable: true
         },
             me.getShopSelector(),
         {
             fieldLabel: '{s name=label_metatitle}Meta title{/s}',
-            name: 'metaTitle'
+            name: 'metaTitle',
+            translatable: true
         }, {
             fieldLabel: '{s name=label_metakeywords}Meta keywords{/s}',
-            name: 'metaKeywords'
+            name: 'metaKeywords',
+            translatable: true
         }, {
             fieldLabel: '{s name=label_metadescription}Meta description{/s}',
-            name: 'metaDescription'
+            name: 'metaDescription',
+            translatable: true
         }, {
             xtype: 'hidden',
             name: 'id'
