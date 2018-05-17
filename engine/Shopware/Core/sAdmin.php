@@ -2949,16 +2949,22 @@ class sAdmin
             GROUP BY d.id
         ";
 
-        return $this->calculateDispatchSurcharge(
-            $basket,
-            $this->db->fetchAll(
-                $sql,
-                [
-                    'billingAddressId' => $this->getBillingAddressId(),
-                    'shippingAddressId' => $this->getShippingAddressId(),
-                ]
-            )
+        $dispatches = $this->db->fetchAll(
+            $sql, 
+            [
+                'billingAddressId' => $this->getBillingAddressId(),
+                'shippingAddressId' => $this->getShippingAddressId(),
+            ]
         );
+        
+        $surcharge = $this->calculateDispatchSurcharge($basket, $dispatches);
+        
+        $this->eventManager->notify(
+            'Shopware_Modules_Admin_PremiumDispatchSurcharge_Calculated',
+            ['subject' => $this, 'dispatches' => $dispatches, 'surcharge' => $surcharge]
+        );
+        
+        return $surcharge;
     }
 
     /**
