@@ -101,13 +101,11 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed class `Shopware\Models\Order\Document\Type`
 * Removed constant `PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED_BY_HANSEATIC_BANK` of `Shopware\Models\Order\Status`
 * Removed variable `description` with methods `setDescription` and `getDescription` of `Shopware\Models\Order\Status`
-* Removed variable `surchargeString` and methods of `Shopware\Models\Payment\Payment`:
+* Removed methods of `Shopware\Models\Payment\Payment`:
     * `setClass`
     * `getClass`
     * `setTable`
     * `getTable`
-    * `setSurchargeString`
-    * `getSurchargeString`
     * `setEmbedIFrame`
     * `getEmbedIFrame`
 * Removed methods `getPaymentsQuery`, `getPaymentsQueryBuilder` of `Shopware\Models\Payment\Repository`
