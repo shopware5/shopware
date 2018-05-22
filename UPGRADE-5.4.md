@@ -35,6 +35,9 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added debug logs to deprecated methods which will be removed in 5.5. The using of deprecated methods will create debug logs, if Shopware is not running in production mode.
 * Added possibility to config elements to override ``queryMode`` option
 * Added workaround for disabled localStorage in browser
+* Added the following arguments to `notify` event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable`: 
+    * `shopContext` – The context of the shop being processed
+    * `cachedTime` – `\DateTime` instance used for the new entries
 * Added Smarty blocks to `themes/Frontend/Bare/frontend/listing/actions/action-filter-facets.tpl`:
   * `frontend_listing_actions`
   * `frontend_listing_actions_facet`
