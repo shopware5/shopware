@@ -63,11 +63,11 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\TerminableInterface;
 
 /**
@@ -235,13 +235,15 @@ class Kernel implements HttpKernelInterface, TerminableInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Enlight_Event_Exception
      */
-    public function terminate(Request $request, Response $response)
+    public function terminate(SymfonyRequest $request, SymfonyResponse $response)
     {
-        $this->container->get('events')->notify(KernelEvents::TERMINATE, [
-            'request' => $request,
-            'response' => $response
-        ]);
+        if ($this->container->has('events')) {
+            $this->container->get('events')->notify(KernelEvents::TERMINATE, [
+                'postResponseEvent' => new PostResponseEvent($this, $request, $response)
+            ]);
+        }
     }
 
     /**
