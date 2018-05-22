@@ -49,6 +49,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
         * `customers.tpl`
         * `orders.tpl`
     * Added new config parameters `write_backlog`, `enabled` and `backend` to `es` parameter
+* Added ability to translate shop forms
+* Added attributes to shop forms page
 
 ### Changes
 

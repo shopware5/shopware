@@ -916,6 +916,18 @@ class sRewriteTable
             ->getQuery()->getArrayResult();
 
         foreach ($formListData as $form) {
+            $formTranslation = $this->translationComponent->readWithFallback(
+                $context->getShop()->getId(),
+                $context->getShop()->getFallbackId(),
+                'forms',
+                $form['id'],
+                false
+            );
+
+            if (!empty($formTranslation)) {
+                $form = $formTranslation + $form;
+            }
+
             $this->data->assign('form', $form);
 
             $org_path = 'sViewport=forms&sFid=' . $form['id'];

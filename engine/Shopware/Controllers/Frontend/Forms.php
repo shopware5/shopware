@@ -176,6 +176,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             ];
         }
 
+        $this->translateForm($form, $this->_elements);
+
         if ($this->Request()->isPost()) {
             $this->checkFields();
         }
@@ -184,7 +186,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
                     if ($sOrdernumber = $this->Request()->getParam('sOrdernumber')) {
-                        $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, false);
+                        $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
                         $element['value'] = sprintf('%s (%s)', $product, $sOrdernumber);
                         $this->_elements[$id]['value'] = $element['value'];
                     }
@@ -237,6 +239,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             'metaTitle' => $form->getMetaTitle(),
             'metaDescription' => $form->getMetaDescription(),
             'metaKeywords' => $form->getMetaKeywords(),
+            'attribute' => $this->get('models')->toArray($form->getAttribute())
         ];
 
         return array_merge($formData, [
@@ -651,10 +654,67 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $content = str_replace(
             ['{sIP}', '{sDateTime}', '{sShopname}'],
-            [$_SERVER['REMOTE_ADDR'], date('d.m.Y h:i:s'), Shopware()->Config()->shopName],
+            [$this->Request()->getClientIp(), date('d.m.Y h:i:s'), Shopware()->Config()->shopName],
             $content
         );
 
         return strip_tags($content);
+    }
+
+    /**
+     * @param Form $form
+     * @param array $fields
+     * @return Form
+     */
+    protected function translateForm(Form $form, array &$fields)
+    {
+        $context = $this->get('shopware_storefront.context_service')->getContext();
+
+        $translation = $this->get('translation')->readWithFallback(
+            $context->getShop()->getId(),
+            $context->getShop()->getFallbackId(),
+            'forms',
+            $this->View()->id
+        );
+
+        if (!empty($translation)) {
+            $form->fromArray($translation);
+        }
+
+        if (!empty($form->getAttribute())) {
+            $translation = $this->get('translation')->readWithFallback(
+                $context->getShop()->getId(),
+                $context->getShop()->getFallbackId(),
+                's_cms_support_attributes',
+                $this->View()->id
+            );
+
+            if (!empty($translation)) {
+                $data = [];
+
+                foreach ($translation as $key => $value) {
+                    $data[str_replace('__attribute_', '', $key)] = $value;
+                }
+
+                $form->getAttribute()->fromArray($data);
+            }
+        }
+
+        $elementIds = array_keys($fields);
+
+        $fieldTranslations = $this->get('translation')->readBatchWithFallback(
+            $context->getShop()->getId(),
+            $context->getShop()->getFallbackId(),
+            'forms_elements',
+            $elementIds,
+            false
+        );
+
+        foreach ($fieldTranslations as $fieldTranslation) {
+            $key = $fieldTranslation['objectkey'];
+            $fields[$key] = $fieldTranslation['objectdata'] + $fields[$key];
+        }
+
+        return $form;
     }
 }
