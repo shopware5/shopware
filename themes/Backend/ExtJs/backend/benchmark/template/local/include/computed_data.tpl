@@ -1,11 +1,11 @@
 <div class="computed-data">
     <div class="time-container weeks">
-        <div class="value-container current-day">
+        <div class="value-container current-weeks">
             <div class="data-value">
-                [[  local.weeks.meta.today ]]
+                [[  local.weeks.meta.shownTime ]]
             </div>
             <div class="data-label">
-                Tag
+                [[ $t('periodTitle') ]]
             </div>
         </div>
 
@@ -14,27 +14,18 @@
                 [[  local.weeks.totalValues.{$key} ]]
             </div>
             <div class="data-label">
-                Gesamt
-            </div>
-        </div>
-
-        <div class="value-container current-weeks">
-            <div class="data-value">
-                [[  local.weeks.meta.shownTime ]]
-            </div>
-            <div class="data-label">
-                Woche(n)
+                [[ $t('totalTitle') ]]
             </div>
         </div>
     </div>
 
     <div class="time-container months" style="display: none;">
-        <div class="value-container current-week">
+        <div class="value-container current-weeks">
             <div class="data-value">
-                [[  local.months.meta.today ]]
+                [[  local.weeks.meta.shownTime ]]
             </div>
             <div class="data-label">
-                Woche
+                [[ $t('periodTitle') ]]
             </div>
         </div>
 
@@ -43,27 +34,18 @@
                 [[  local.months.totalValues.{$key} ]]
             </div>
             <div class="data-label">
-                Gesamt
-            </div>
-        </div>
-
-        <div class="value-container current-months">
-            <div class="data-value">
-                [[  local.months.meta.shownTime ]]
-            </div>
-            <div class="data-label">
-                Monat(e)
+                [[ $t('totalTitle') ]]
             </div>
         </div>
     </div>
 
     <div class="time-container years" style="display: none;">
-        <div class="value-container current-month">
+        <div class="value-container current-weeks">
             <div class="data-value">
-                [[  local.years.meta.today ]]
+                [[  local.weeks.meta.shownTime ]]
             </div>
             <div class="data-label">
-                Monat
+                [[ $t('periodTitle') ]]
             </div>
         </div>
 
@@ -72,16 +54,7 @@
                 [[  local.years.totalValues.{$key} ]]
             </div>
             <div class="data-label">
-                Gesamt
-            </div>
-        </div>
-
-        <div class="value-container current-months">
-            <div class="data-value">
-                [[  local.years.meta.shownTime ]]
-            </div>
-            <div class="data-label">
-                Jahr(e)
+                [[ $t('totalTitle') ]]
             </div>
         </div>
     </div>

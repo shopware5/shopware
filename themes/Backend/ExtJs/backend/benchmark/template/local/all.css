@@ -620,13 +620,15 @@ input {
   display: table;
   clear: both;
 }
+.disabled-notice {
+  display: none;
+}
 .industry-disabled {
   position: relative;
 }
-.industry-disabled::after {
+.industry-disabled .disabled-notice {
   display: grid;
   position: absolute;
-  content: 'Bald \A verfügbar';
   align-items: center;
   top: 0;
   bottom: 0;
@@ -635,8 +637,6 @@ input {
   font-size: 30px;
   color: #B2C4D7;
   background: rgba(33, 52, 72, 0.85);
-  font-weight: 600;
-  white-space: pre;
 }
 .devices-graph-list-wrapper .devices-item {
   margin-bottom: 8px;
@@ -1093,7 +1093,22 @@ textarea::-moz-placeholder {
   color: #4a5b6c;
 }
 textarea:-ms-input-placeholder {
-  ccolor: #4a5b6c;
+  color: #4a5b6c;
+}
+.language-switch {
+  position: absolute;
+  top: 2%;
+  right: 10%;
+  z-index: 1000;
+}
+.language-switch .language {
+  cursor: pointer;
+}
+.language-switch .language.active {
+  color: #FFF;
+}
+.language-switch .language-separator {
+  margin: 0 5px 0;
 }
 /* asap-regular - latin */
 @font-face {

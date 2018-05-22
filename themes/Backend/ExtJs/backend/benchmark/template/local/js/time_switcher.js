@@ -8,6 +8,7 @@
         this.valuesKey = this.$el.attr('data-values-key');
         this.computedDataContainer = this.$el.parent('form').find('.computed-data');
         this.buttonContainer = this.$el.parent('form').find('.button-container');
+        this.translations = window.benchmarkTranslations;
 
         this.init();
     }
@@ -48,19 +49,16 @@
     };
 
     TimeSwitcher.prototype.initSwitchButtons = function (target) {
-        // TODO: translations?
-        var shopButton = this.buildButtonTemplate('Shop', false, false, this.valuesKey, target.attr('name')),
+        var shopButton = this.buildButtonTemplate(this.translations[window.i18n.locale].shopTitle, false, false, this.valuesKey, target.attr('name')),
             hasIndustry = !!(this.buttonContainer.find('.switch-industry').length),
             industryButton,
-            // TODO: translations?
-            lastYearButton = this.buildButtonTemplate('Vorjahr', false, true, this.valuesKey, target.attr('name'));
+            lastYearButton = this.buildButtonTemplate(this.translations[window.i18n.locale].previousTitle, false, true, this.valuesKey, target.attr('name'));
 
         this.buttonContainer.empty();
         this.buttonContainer.append(shopButton);
 
         if (hasIndustry) {
-            // TODO: translations?
-            industryButton = this.buildButtonTemplate('Branche', true, false, this.valuesKey, target.attr('name'));
+            industryButton = this.buildButtonTemplate(this.translations[window.i18n.locale].industryTitle, true, false, this.valuesKey, target.attr('name'));
             this.buttonContainer.append(industryButton);
 
             industryButton.switchButton();

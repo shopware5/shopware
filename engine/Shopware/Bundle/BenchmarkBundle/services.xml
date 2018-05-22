@@ -220,6 +220,12 @@
             <argument type="service" id="dbal_connection"/>
         </service>
 
+        <service id="shopware.benchmark_bundle.components.translation"
+                 class="Shopware\Bundle\BenchmarkBundle\Service\TranslationService">
+            <argument type="service" id="snippets"/>
+            <argument type="service" id="models"/>
+        </service>
+
         <!-- Transmission services -->
         <service id="shopware.benchmark_bundle.commands.transmit" class="Shopware\Bundle\BenchmarkBundle\Commands\TransmitStatisticsCommand">
             <tag name="console.command"/>
