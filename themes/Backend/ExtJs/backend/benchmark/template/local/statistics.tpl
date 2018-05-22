@@ -282,7 +282,7 @@
                     <h4>[[ $t('endText') ]]</h4>
 
                     <div class="nice-message">
-                        <a href="https://www.surveymonkey.de/r/Shopware-BI" target="_blank" class="btn secondary">[[ $t('sendFeedbackBtn') ]]</a>
+                        <a :href="[[ $t('surveyLink') ]]" target="_blank" class="btn secondary">[[ $t('sendFeedbackBtn') ]]</a>
                     </div>
 
                     <p>[[ $t('endSignOffText') ]]</p>
