@@ -179,7 +179,14 @@ class Shopware_Components_TemplateMail
             }
 
             if ($theme) {
-                $keys = ['mobileLogo' => true, 'tabletLogo' => true, 'tabletLandscapeLogo' => true, 'desktopLogo' => true, 'appleTouchIcon' => true];
+                $eventManager = Shopware()->Container()->get('events');
+
+                $keys = $eventManager->filter(
+                    'TemplateMail_CreateMail_Available_Theme_Config',
+                    ['mobileLogo' => true, 'tabletLogo' => true, 'tabletLandscapeLogo' => true, 'desktopLogo' => true, 'appleTouchIcon' => true],
+                    ['theme' => $theme]
+                );
+
                 $theme = array_intersect_key($theme, $keys);
                 $defaultContext['theme'] = $theme;
             }
@@ -194,7 +201,7 @@ class Shopware_Components_TemplateMail
             ];
         }
 
-        // save current context to mail model
+        // Save current context to mail model
         $mailContext = json_decode(json_encode($context), true);
         $mailModel->setContext($mailContext);
         $this->getModelManager()->flush($mailModel);

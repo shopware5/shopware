@@ -38,7 +38,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added Smarty blocks to `themes/Frontend/Bare/frontend/listing/actions/action-filter-facets.tpl`:
   * `frontend_listing_actions`
   * `frontend_listing_actions_facet`
-  
+* Added filter event `TemplateMail_CreateMail_Available_Theme_Config` to allow extension of theme variables made available to the mail templates 
+
 ## 5.4.3
 
 [View all changes from v5.4.2...v5.4.3](https://github.com/shopware/shopware/compare/v5.4.2...v5.4.3)
