@@ -11,6 +11,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed Tinymce editor to resolve placeholder images on initialization
 * Changed product notification to match the documented feature
 * Changed AJAX search to respect the basic setting for direct number searches and show the same results as the normal search 
+* Changed information of backend recipients overview
+  * `Double-Opt-In date` is now `Register date`, which doesnt display the Double-Opt-In confirmation date anymore
 * Changed TemplateMail to work without shop context
 * Changed ReflectionHelper to work with Windows
 * Changed `Unknown path` Smarty error to work with Windows
@@ -27,6 +29,9 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * Added new notify event, which will be thrown when awaiting Double-Opt-In confirmation: `Shopware_Modules_Admin_SaveRegister_Successful`
   * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
   * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
+* Added Double-Opt-In information for newsletter registrations
+  * Added database column `double_optin_confirmed` in `s_campaigns_mailaddresses` and `s_campaigns_maildata`
+  * Added `Opt-In confirmed` column in backend recipients overview
 * Added debug logs to deprecated methods which will be removed in 5.5. The using of deprecated methods will create debug logs, if Shopware is not running in production mode.
 * Added possibility to config elements to override ``queryMode`` option
 * Added workaround for disabled localStorage in browser

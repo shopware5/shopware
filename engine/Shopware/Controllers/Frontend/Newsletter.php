@@ -53,6 +53,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $this->Request()->setParam('voteConfirmed', $this->View()->voteConfirmed);
         $this->View()->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
+        $this->front->setParam('voteConfirmed', $this->View()->voteConfirmed);
+        $this->front->setParam('optinNow', (new \DateTime())->format('Y-m-d H:i:s'));
+
         if (isset($this->Request()->sUnsubscribe)) {
             $this->View()->sUnsubscribe = true;
         } else {
@@ -87,13 +90,13 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         if (empty($config->get('sOPTINNEWSLETTER')) || $this->View()->voteConfirmed) {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter']);
             if ($this->View()->sStatus['code'] == 3 && $this->View()->sStatus['isNewRegistration']) {
                 // Send mail to subscriber
                 $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sNEWSLETTERCONFIRMATION');
             }
         } else {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter']);
 
             if ($this->View()->sStatus['code'] == 3) {
                 if ($this->View()->sStatus['isNewRegistration']) {
@@ -115,7 +118,6 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
                 $this->View()->sStatus = ['code' => 3, 'message' => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation')];
             }
-
         }
     }
 
@@ -259,6 +261,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         if (empty($getVote['data'])) {
             return false;
         }
+
+        // Needed for 'added' date
+        $this->front->setParam('optinDate', $getVote['datum']);
 
         Shopware()->System()->_POST = unserialize($getVote['data']);
 
