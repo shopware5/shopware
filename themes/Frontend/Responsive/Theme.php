@@ -138,6 +138,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.storage-field.js',
         'src/js/jquery.cookie-permission.js',
         'src/js/jquery.shopware-responsive.js',
+        'src/js/jquery.invalid-tos-jump.js',
     ];
 
     /**
