@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
+use Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks\AuthMock;
+
 class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 {
     const CONTROLLER_NAME = \Shopware_Controllers_Backend_BenchmarkOverview::class;
@@ -154,6 +156,18 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $this->expectOutputString('<h2>Placeholder</h2>');
         $controller->renderAction();
+    }
+
+    /**
+     * @return \Shopware_Controllers_Backend_BenchmarkOverview
+     */
+    protected function getController()
+    {
+        $controller = parent::getController();
+
+        Shopware()->Container()->set('auth', new AuthMock());
+
+        return $controller;
     }
 
     /**
