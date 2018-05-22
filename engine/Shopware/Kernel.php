@@ -63,9 +63,12 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
+use Symfony\Component\HttpKernel\TerminableInterface;
 
 /**
  * Middleware class between the old Shopware bootstrap mechanism
@@ -75,7 +78,7 @@ use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Kernel implements HttpKernelInterface
+class Kernel implements HttpKernelInterface, TerminableInterface
 {
     /**
      * @Deprecated Since 5.4, to be removed in 5.6
@@ -228,6 +231,17 @@ class Kernel implements HttpKernelInterface
         $response->prepare($request);
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function terminate(Request $request, Response $response)
+    {
+        $this->container->get('events')->notify(KernelEvents::TERMINATE, [
+            'request' => $request,
+            'response' => $response
+        ]);
     }
 
     /**
