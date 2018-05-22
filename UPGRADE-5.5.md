@@ -51,6 +51,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added new config parameters `write_backlog`, `enabled` and `backend` to `es` parameter
 * Added ability to translate shop forms
 * Added attributes to shop forms page
+* Added smarty block `frontend_register_index_back_to_shop_button` to `themes/Frontend/Bare/frontend/register/index.tpl`
 
 ### Changes
 
