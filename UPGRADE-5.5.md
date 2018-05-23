@@ -51,6 +51,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added new config parameters `write_backlog`, `enabled` and `backend` to `es` parameter
 * Added ability to translate shop forms
 * Added attributes to shop forms page
+* Added missing handling of plugin update fails by reloading the plugin listing in the plugin manager window
 
 ### Changes
 
