@@ -48,7 +48,7 @@ class Customer extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Customer\Customer');
+        return $this->getManager()->getRepository(\Shopware\Models\Customer\Customer::class);
     }
 
     /**
@@ -69,7 +69,7 @@ class Customer extends Resource
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['customer.id'])
-                ->from('\Shopware\Models\Customer\Customer', 'customer')
+                ->from(\Shopware\Models\Customer\Customer::class, 'customer')
                 ->where('customer.number = ?1')
                 ->setParameter(1, $number);
 
@@ -176,10 +176,10 @@ class Customer extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the customer data
+        // Returns the customer data
         $customers = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $customers, 'total' => $totalResult];
@@ -195,7 +195,7 @@ class Customer extends Resource
         $this->checkPrivilege('create');
         $this->setupContext($params['shopId']);
 
-        // create models
+        // Create models
         $customer = new CustomerModel();
         $params = $this->prepareCustomerData($params, $customer);
         $params = $this->prepareAssociatedData($params, $customer);

@@ -21,8 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
+use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
 
 /**
  * Shopware SwagMultiEdit Plugin - MultiEdit Backend Controller
@@ -354,6 +356,17 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             throw new RuntimeException('Could not decode AST');
         }
 
+        if ($this->container->getParameter('shopware.es.backend.enabled')) {
+            $result = $this->filterByRepository();
+            $this->View()->assign([
+                'success' => true,
+                'data' => $result['data'],
+                'total' => $result['total'],
+            ]);
+
+            return;
+        }
+
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
         $result = $resource->filter($ast, $offset, $limit, $sort);
@@ -487,7 +500,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $id = (int) $this->Request()->getParam('Detail_id');
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var $articleDetail Detail */
         $articleDetail = $this->getDetailRepository()->find($id);
         if (!is_object($articleDetail)) {
             $this->View()->assign([
@@ -646,5 +659,81 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         );
 
         return $service->buildAdditionalTextLists($products, $context);
+    }
+
+    private function filterByRepository()
+    {
+        $criteria = $this->createCriteria($this->Request());
+
+        $repository = $this->container->get('shopware_attribute.product_repository');
+
+        $result = $repository->search($criteria);
+
+        $ids = array_column($result->getData(), 'variantId');
+
+        $data = $this->container->get('multi_edit.product.dql_helper')
+            ->getProductsForListing($ids);
+
+        return ['data' => $data, 'total' => $result->getCount()];
+    }
+
+    /**
+     * @param Enlight_Controller_Request_Request $request
+     *
+     * @return SearchCriteria
+     */
+    private function createCriteria(Enlight_Controller_Request_Request $request)
+    {
+        if ($request->has('showVariants')) {
+            $criteria = new SearchCriteria(Detail::class);
+        } else {
+            $criteria = new SearchCriteria(Article::class);
+        }
+        $criteria->offset = $request->getParam('start', 0);
+        $criteria->limit = $request->getParam('limit', 30);
+        $criteria->ids = $request->getParam('ids', []);
+        $criteria->term = $request->getParam('query', null);
+        $criteria->sortings = $request->getParam('sort', []);
+        $criteria->conditions = $request->getParam('filters', []);
+
+        $categoryId = (int) $request->getParam('categoryId');
+        if ($categoryId > 0) {
+            $criteria->conditions[] = ['property' => 'categoryIds', 'value' => $categoryId, 'expression' => 'IN'];
+        }
+
+        foreach ($criteria->sortings as $index => &$sorting) {
+            switch ($sorting['property']) {
+                case 'Detail_number':
+                    $sorting['property'] = 'number';
+                    break;
+                case 'Article_name':
+                    $sorting['property'] = 'name';
+                    break;
+                case 'Supplier_name':
+                    $sorting['property'] = 'supplierName';
+                    break;
+                case 'Article_active':
+                    $sorting['property'] = 'articleActive';
+                    break;
+                case 'Tax_name':
+                    $sorting['property'] = 'taxId';
+                    break;
+                case 'Detail_inStock':
+                    $sorting['property'] = 'inStock';
+                    break;
+                case 'Price_price':
+                default:
+                    unset($criteria->sortings[$index]);
+                    break;
+            }
+        }
+
+        $criteria->params = $request->getParams();
+
+        if (!empty($criteria->ids)) {
+            $criteria->ids = json_decode($criteria->ids, true);
+        }
+
+        return $criteria;
     }
 }

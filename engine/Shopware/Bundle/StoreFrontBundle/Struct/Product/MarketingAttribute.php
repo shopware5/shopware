@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class MarketingAttribute extends Attribute implements \JsonSerializable
+class MarketingAttribute extends Attribute
 {
     /**
      * @var bool

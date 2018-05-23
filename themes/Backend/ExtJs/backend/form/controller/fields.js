@@ -96,10 +96,10 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
      * grid (e.g. the grid store) and the row index
      *
      * @event render
-     * @param [Ext.grid.View] grid - The grid on which the event has been fired
-     * @param [integer] rowIndex - On which row position has been clicked
-     * @param [integer] colIndex - On which coulmn position has been clicked
-     * @param [object] item - The item that has been clicked
+     * @param { Ext.grid.View } grid - The grid on which the event has been fired
+     * @param { integer } rowIndex - On which row position has been clicked
+     * @param { integer } colIndex - On which coulmn position has been clicked
+     * @param { object } item - The item that has been clicked
      * @return void
      */
     onDeleteSingleField: function(grid, rowIndex, colIndex, item) {
@@ -146,15 +146,15 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
      * Saves current positions in the grid to the backend
      *
      * @event drop
-     * @param [HTMLElement ] The GridView node if any over which the mouse was positioned.
-     * @param [Object] The data object gathered at mousedown time
-     * @param [Ext.data.Model]
-     * @param [String] "before" or "after" depending on whether the mouse is above or below the midline of the node.
+     * @param { HTMLElement } node          The GridView node if any over which the mouse was positioned.
+     * @param { Object } data               The data object gathered at mousedown time
+     * @param { Ext.data.Model } overModel
+     * @param { string } dropPosition       "before" or "after" depending on whether the mouse is above or below the midline of the node.
      * @return void
      */
     onDropField: function (node, data, overModel, dropPosition) {
         var store = this.getStore('Field'),
-            orderedItems = new Array(),
+            orderedItems = [],
             index = 0;
 
         store.each(function(item) {
@@ -176,8 +176,8 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
      * after the store's update event is fired with this edit.
      *
      * @event edit
-     * @param [Ext.grid.plugin.Editing]
-     * @param [object] An edit event with the following properties:
+     * @param { Ext.grid.plugin.Editing } editor
+     * @param { Object } event An edit event with the following properties:
      *                 grid - The grid
      *                 record - The record that was edited
      *                 field - The field name that was edited
@@ -210,8 +210,8 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
      * Fires when the user has started editing a row but then cancelled the edit
      *
      * @event canceledit Fires when the user started editing but then cancelled the edit.
-     * @param [Ext.grid.plugin.Editing]
-     * @param [object] An edit event with the following properties:
+     * @param { Ext.grid.plugin.Editing } editor
+     * @param { Object } event An edit event with the following properties:
      *                 grid - The grid
      *                 record - The record that was edited
      *                 field - The field name that was edited
@@ -245,7 +245,7 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
      * Disables the add button and the drag and drop handler
      *
      * @event beforeedit
-     * @param [Ext.grid.plugin.Editing]
+     * @param { Ext.grid.plugin.Editing } editor
      * @return void
      */
     onBeforeEditField: function(editor) {
@@ -267,9 +267,10 @@ Ext.define('Shopware.apps.Form.controller.Fields', {
      * Validates the record
      *
      * @event validateedit
-     * @param [Ext.grid.plugin.Editing]
-     * @param [object] An edit event
-     * @return void
+     * @param { Ext.grid.plugin.Editing } editor
+     * @param { Object } event An edit event
+     *
+     * @return bool
      */
     onValidateEditField: function(editor, event) {
         var record = event.record,

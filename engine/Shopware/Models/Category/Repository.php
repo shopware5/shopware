@@ -27,6 +27,7 @@ namespace Shopware\Models\Category;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Translation\Translation;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -460,9 +461,7 @@ class Repository extends ModelRepository
         $builder = $this->getCategoriesByParentBuilder($id);
         $builder->select('COUNT(categories) as categoriesCount');
 
-        $count = $builder->getQuery()->getSingleScalarResult();
-
-        return $count;
+        return $builder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -472,11 +471,7 @@ class Repository extends ModelRepository
      */
     public function getFullChildrenList($id)
     {
-        $builder = $this->getCategoriesByParentBuilder($id);
-
-        $categories = $builder->getQuery()->getArrayResult();
-
-        return $categories;
+        return $this->getCategoriesByParentBuilder($id)->getQuery()->getArrayResult();
     }
 
     /**
@@ -664,13 +659,27 @@ class Repository extends ModelRepository
         }
 
         $builder->select($selection)
-                ->from('Shopware\Models\Category\Category', 'category')
+                ->from(Category::class, 'category')
                 ->where('category.id = :id')
-                ->setParameter('id', $id);
+                ->setParameter('id', (int) $id);
 
         $result = $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
+
+        if (Shopware()->Container()->initialized('shop')) {
+            $translationComponent = Shopware()->Container()->get('translation');
+            $shopId = Shopware()->Shop()->getId();
+            $fallbackId = null;
+            if (Shopware()->Shop()->getFallback()) {
+                $fallbackId = Shopware()->Shop()->getFallback()->getId();
+            }
+
+            $translations = $translationComponent->readWithFallback($shopId, $fallbackId, 'category', $id);
+            if (isset($translations) && isset($translations['description']) && (isset($result['name']) || $fields === 'name')) {
+                $result['name'] = $translations['description'];
+            }
+        }
 
         if (is_array($fields)) {
             return $result;

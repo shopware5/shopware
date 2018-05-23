@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
         me.columns     = me.getColumns();
         me.viewConfig  = me.getViewConfig();
         me.editor      = me.getRowEditingPlugin();
-        me.plugins     = [ me.editor, me.getHeaderToolTipPlugin() ];
+        me.plugins     = [ me.editor, me.getHeaderToolTipPlugin(), me.getGridTranslationPlugin() ];
         me.dockedItems = [ me.getToolbar(),  me.getPagingbar() ];
 
         me.callParent(arguments);
@@ -80,11 +80,9 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @return [Shopware.grid.HeaderToolTip]
      */
     getHeaderToolTipPlugin: function() {
-        var headerToolTipPlugin = Ext.create('Shopware.grid.HeaderToolTip', {
+        return Ext.create('Shopware.grid.HeaderToolTip', {
             showIcons: true
         });
-
-        return headerToolTipPlugin;
     },
 
     /**
@@ -93,22 +91,20 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @return [Ext.grid.plugin.RowEditing]
      */
     getRowEditingPlugin: function() {
-        var me = this, rowEditingPlugin = Ext.create('Ext.grid.plugin.RowEditing', {
-            saveBtnText : me.messages.saveBtnText,
-            cancelBtnText : me.messages.cancelBtnText,
+        return Ext.create('Ext.grid.plugin.RowEditing', {
+            saveBtnText: this.messages.saveBtnText,
+            cancelBtnText: this.messages.cancelBtnText,
             errorSummary: false
         });
-
-        return rowEditingPlugin;
     },
 
     /**
      * Creates gridviewdragdrop plugin
      *
-     * @return [object]
+     * @return { object }
      */
     getViewConfig: function() {
-        var viewConfig = {
+        return {
             /*{if {acl_is_allowed privilege=createupdate}}*/
             plugins: {
                 pluginId: 'my-gridviewdragdrop',
@@ -116,8 +112,6 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             }
             /*{/if}*/
         };
-
-        return viewConfig;
     },
 
     /**
@@ -146,6 +140,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             editor: {
                 xtype: 'textfield',
                 allowBlank: false
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_name}Name{/s}',
+                name: 'name',
+                xtype: 'textfield',
+                allowBlank: false
             }
         }, {
             header: '{s name=column_label}Label{/s}',
@@ -155,6 +155,12 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             editor: {
                 xtype: 'textfield',
                 allowBlank: false
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_label}Label{/s}',
+                name: 'label',
+                xtype: 'textfield',
+                allowBlank: false
             }
         }, {
             header: '{s name=column_typ}Typ{/s}',
@@ -162,6 +168,18 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
+                xtype: 'combo',
+                allowBlank: false,
+                editable: false,
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'label',
+                valueField: 'id',
+                store: me.getTypComboStore()
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_typ}Typ{/s}',
+                name: 'typ',
                 xtype: 'combo',
                 allowBlank: false,
                 editable: false,
@@ -185,6 +203,18 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 displayField: 'label',
                 valueField: 'id',
                 store: me.getClassComboStore()
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_class}Class{/s}',
+                name: 'class',
+                xtype: 'combo',
+                allowBlank: false,
+                editable: false,
+                mode: 'local',
+                triggerAction: 'all',
+                displayField: 'label',
+                valueField: 'id',
+                store: me.getClassComboStore()
             }
         }, {
             header: '{s name=column_value}Value{/s}',
@@ -193,6 +223,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
+                xtype:'textfield'
+            },
+            translationEditor: {
+                name: 'value',
+                fieldLabel: '{s name=column_value}Value{/s}',
                 xtype:'textfield'
             }
         }, {
@@ -203,6 +238,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             hideable: false,
             editor: {
                 xtype:'textfield'
+            },
+            translationEditor: {
+                name: 'note',
+                fieldLabel: '{s name=column_note}Note{/s}',
+                xtype:'textfield'
             }
         }, {
             header: '{s name=column_errormsg}Error Message{/s}',
@@ -212,6 +252,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             hideable: false,
             editor: {
                 xtype:'textfield'
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_errormsg}Error Message{/s}',
+                name: 'error_msg',
+                xtype:'textfield',
             }
         }, {
             xtype: 'booleancolumn',
@@ -220,6 +265,13 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             flex: 1,
             hideable: false,
             editor: {
+                xtype: 'checkbox',
+                inputValue: true,
+                uncheckedValue: false
+            },
+            translationEditor: {
+                fieldLabel: '{s name=column_required}Required{/s}',
+                name: 'required',
                 xtype: 'checkbox',
                 inputValue: true,
                 uncheckedValue: false
@@ -248,8 +300,6 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
         return columns;
     },
 
-
-
     /**
      * Creates store object used for the typ column
      *
@@ -264,7 +314,8 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 ['checkbox', 'Checkbox'],
                 ['email', 'Email'],
                 ['select', 'select'],
-                ['textarea', 'textarea']
+                ['textarea', 'textarea'],
+                ['hidden', 'hidden']
             ]
         });
     },
@@ -288,12 +339,10 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
     /**
      * Creates the grid toolbar with the add and delete button
      *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
+     * @return { Ext.toolbar.Toolbar } grid toolbar
      */
     getToolbar: function() {
-        var me = this;
-
-        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+        return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
             ui: 'shopware-ui',
             cls: 'shopware-toolbar',
@@ -312,13 +361,11 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 xtype: 'tbfill'
             }, {
                 xtype: 'container',
-                html: '<p style="padding: 5px">' + me.messages.hintDragDrop + '</p>'
+                html: '<p style="padding: 5px">' + this.messages.hintDragDrop + '</p>'
             }
             /*{/if}*/
             ]
         });
-
-        return toolbar;
     },
 
     /**
@@ -327,26 +374,36 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
      * @return Ext.toolbar.Paging
      */
     getPagingbar: function () {
-        var pagingbar =  Ext.create('Ext.toolbar.Paging', {
+        return Ext.create('Ext.toolbar.Paging', {
             store: this.store,
             dock:'bottom',
             displayInfo: true
         });
-
-        return pagingbar;
     },
 
     /**
      * Renderer for sorthandle-column
      *
-     * @param [string] value
+     * @param { string } value
+     * @param { Object } metadata
+     *
+     * @return string
      */
     renderSorthandleColumn: function (value,  metadata) {
-        var me = this;
-
-        metadata.tdAttr = 'data-qtip="' + me.messages.hintDragDrop +'"';
+        metadata.tdAttr = 'data-qtip="' + this.messages.hintDragDrop +'"';
 
         return '<div style="cursor: n-resize;">&#009868;</div>';
-    }
+    },
+
+    /**
+     * Creates new Grid-Translation Plugin
+     *
+     * @return [Shopware.grid.plugin.Translation]
+     */
+    getGridTranslationPlugin: function() {
+        return Ext.create('Shopware.grid.plugin.Translation', {
+            translationType: 'forms_elements'
+        });
+    },
 });
 //{/block}

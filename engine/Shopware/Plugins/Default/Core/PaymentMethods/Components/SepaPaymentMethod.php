@@ -81,8 +81,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
     {
         $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
-        $paymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
-        getPaymentsQuery(['name' => 'Sepa'])->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+        $paymentMean = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class)->
+        getAllPaymentsQuery(['name' => 'Sepa'])->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $data = [
             'use_billing_data' => ($request->getParam('sSepaUseBillingData') === 'true' ? 1 : 0),
@@ -193,7 +193,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
     private function validateIBAN($value)
     {
-        if (null === $value || '' === $value) {
+        if ($value === null || $value === '') {
             return false;
         }
 
@@ -204,19 +204,19 @@ class SepaPaymentMethod extends GenericPaymentMethod
         }
 
         $teststring = substr($teststring, 4)
-            . strval(ord($teststring[0]) - 55)
-            . strval(ord($teststring[1]) - 55)
+            . (string) (ord($teststring[0]) - 55)
+            . (string) (ord($teststring[1]) - 55)
             . substr($teststring, 2, 2);
 
         $teststring = preg_replace_callback('/[A-Za-z]/', function ($letter) {
-            return intval(ord(strtolower($letter[0])) - 87);
+            return (int) (ord(strtolower($letter[0])) - 87);
         }, $teststring);
 
         $rest = 0;
         $strlen = strlen($teststring);
         for ($pos = 0; $pos < $strlen; $pos += 7) {
-            $part = strval($rest) . substr($teststring, $pos, 7);
-            $rest = intval($part) % 97;
+            $part = (string) $rest . substr($teststring, $pos, 7);
+            $rest = (int) $part % 97;
         }
 
         if ($rest != 1) {
@@ -228,8 +228,6 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
     private function sendSepaEmail($orderNumber, $userId, $data)
     {
-        require_once Shopware()->DocPath() . 'engine/Library/Mpdf/mpdf.php';
-
         $mail = Shopware()->TemplateMail()->createMail('sORDERSEPAAUTHORIZATION', [
             'paymentInstance' => [
                 'firstName' => $data['firstname'],
@@ -267,11 +265,12 @@ class SepaPaymentMethod extends GenericPaymentMethod
         Shopware()->Template()->addTemplateDir(__DIR__ . '/../Views/');
         $data = Shopware()->Template()->fetch('frontend/plugins/sepa/email.tpl');
 
-        $mpdf = new \mPDF('utf-8', 'A4', '', '');
+        $mpdfConfig = Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig');
+        $mpdf = new \Mpdf\Mpdf($mpdfConfig);
         $mpdf->WriteHTML($data);
         $pdfFileContent = $mpdf->Output('', 'S');
 
-        if (false === $pdfFileContent) {
+        if ($pdfFileContent === false) {
             throw new \Enlight_Exception('Could not generate SEPA attachment file');
         }
 

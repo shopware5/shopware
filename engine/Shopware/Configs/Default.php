@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
@@ -101,6 +100,10 @@ return array_replace_recursive([
         'number_of_replicas' => null,
         'number_of_shards' => null,
         'wait_for_status' => 'green',
+        'backend' => [
+            'write_backlog' => false,
+            'enabled' => false,
+        ],
         'client' => [
             'hosts' => [
                 'localhost:9200',
@@ -123,6 +126,7 @@ return array_replace_recursive([
         'Local' => $this->AppPath('Plugins_Local'),
         'Community' => $this->AppPath('Plugins_Community'),
         'ShopwarePlugins' => $this->DocPath('custom_plugins'),
+        'ProjectPlugins' => $this->DocPath('custom_project'),
     ],
     'template' => [
         'compileCheck' => true,
@@ -134,6 +138,7 @@ return array_replace_recursive([
         'forceCache' => false,
         'cacheDir' => $this->getCacheDir() . '/templates',
         'compileDir' => $this->getCacheDir() . '/templates',
+        'templateDir' => $this->DocPath('themes'),
     ],
     'mail' => [
         'charset' => 'utf-8',
@@ -150,6 +155,44 @@ return array_replace_recursive([
         'stale_if_error' => false,
         'cache_dir' => $this->getCacheDir() . '/html',
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
+        /*
+         * The "ignored_url_parameters" configuration will spare your Shopware system from recaching a page when any
+         * of the parameters listed here is matched. This allows the caching system to be more efficient.
+         */
+        'ignored_url_parameters' => [
+           'pk_campaign',    // Piwik
+           'piwik_campaign',
+           'pk_kwd',
+           'piwik_kwd',
+           'pk_keyword',
+           'pixelId',        // Yahoo
+           'kwid',
+           'kw',
+           'adid',
+           'chl',
+           'dv',
+           'nk',
+           'pa',
+           'camid',
+           'adgid',
+           'utm_term',       // Google
+           'utm_source',
+           'utm_medium',
+           'utm_campaign',
+           'utm_content',
+           'gclid',
+           'cx',
+           'ie',
+           'cof',
+           'siteurl',
+           '_ga',
+        ],
+    ],
+    'bi' => [
+        'endpoint' => [
+            'benchmark' => 'https://bi-staging.shopware.com/benchmark',
+            'statistics' => 'https://bi-staging.shopware.com/statistics',
+        ],
     ],
     'session' => [
         'cookie_lifetime' => 0,
@@ -201,9 +244,75 @@ return array_replace_recursive([
         'locking' => false,
     ],
     'template_security' => [
-        // @deprecated with 5.3, config switch will be removed with 5.4
-        'enabled' => true,
         'php_modifiers' => include __DIR__ . '/smarty_functions.php',
         'php_functions' => include __DIR__ . '/smarty_functions.php',
+    ],
+    'search' => [
+        'indexer' => [
+            'batchsize' => 4000,
+        ],
+    ],
+    'app' => [
+        'rootDir' => $this->DocPath(),
+        'downloadsDir' => $this->DocPath('files_downloads'),
+        'documentsDir' => $this->DocPath('files_documents'),
+    ],
+    'web' => [
+        'webDir' => $this->DocPath('web'),
+        'cacheDir' => $this->DocPath('web_cache'),
+    ],
+    'mpdf' => [
+        // Passed to \Mpdf\Mpdf::__construct:
+        'defaultConfig' => [
+            'tempDir' => $this->getCacheDir() . '/mpdf/',
+            'fontDir' => $this->DocPath('engine_Library_Mpdf_ttfonts_'),
+            'fonttrans' => [
+                'helvetica' => 'arial',
+                'verdana' => 'arial',
+                'times' => 'timesnewroman',
+                'courier' => 'couriernew',
+                'trebuchet' => 'arial',
+                'comic' => 'arial',
+                'franklin' => 'arial',
+                'albertus' => 'arial',
+                'arialuni' => 'arial',
+                'zn_hannom_a' => 'arial',
+                'ocr-b' => 'ocrb',
+                'ocr-b10bt' => 'ocrb',
+                'damase' => 'mph2bdamase',
+            ],
+            'fontdata' => [
+                'arial' => [
+                    'R' => 'arial.ttf',
+                    'B' => 'arialbd.ttf',
+                    'I' => 'ariali.ttf',
+                    'BI' => 'arialbi.ttf',
+                ],
+                'couriernew' => [
+                    'R' => 'cour.ttf',
+                    'B' => 'courbd.ttf',
+                    'I' => 'couri.ttf',
+                    'BI' => 'courbi.ttf',
+                ],
+                'georgia' => [
+                    'R' => 'georgia.ttf',
+                    'B' => 'georgiab.ttf',
+                    'I' => 'georgiai.ttf',
+                    'BI' => 'georgiaz.ttf',
+                ],
+                'timesnewroman' => [
+                    'R' => 'times.ttf',
+                    'B' => 'timesbd.ttf',
+                    'I' => 'timesi.ttf',
+                    'BI' => 'timesbi.ttf',
+                ],
+                'verdana' => [
+                    'R' => 'verdana.ttf',
+                    'B' => 'verdanab.ttf',
+                    'I' => 'verdanai.ttf',
+                    'BI' => 'verdanaz.ttf',
+                ],
+            ],
+        ],
     ],
 ], $customConfig);

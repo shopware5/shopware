@@ -76,9 +76,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      */
     public function getProductsConfigurations($products, Struct\ShopContextInterface $context)
     {
-        $configuration = $this->productConfigurationGateway->getList($products, $context);
-
-        return $configuration;
+        return $this->productConfigurationGateway->getList($products, $context);
     }
 
     /**

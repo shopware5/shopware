@@ -102,8 +102,8 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
             $shop = $shop->getMain();
         }
 
-        if ($shop->getAlwaysSecure()) {
-            $baseUrl = 'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() . '/';
+        if ($shop->getSecure()) {
+            $baseUrl = 'https://' . $shop->getHost() . $shop->getBasePath() . '/';
         } else {
             $baseUrl = 'http://' . $shop->getHost() . $shop->getBasePath() . '/';
         }

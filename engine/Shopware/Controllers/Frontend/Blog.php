@@ -171,8 +171,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         //get all blog articles
         $query = $this->getCategoryRepository()->getBlogCategoriesByParentQuery($categoryId);
-        $blogCategories = $query->getArrayResult();
-        $blogCategoryIds = $this->getBlogCategoryListIds($blogCategories);
+        $blogCategoryIds = array_column($query->getArrayResult(), 'id');
         $blogCategoryIds[] = $categoryId;
         $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $limitStart, $limitEnd, $filter);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -373,7 +372,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function ratingAction()
     {
-        $blogArticleId = intval($this->Request()->blogArticle);
+        $blogArticleId = (int) $this->Request()->getParam('blogArticle');
 
         if (!empty($blogArticleId)) {
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
@@ -669,22 +668,5 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         return $filter;
-    }
-
-    /**
-     * Helper method returns the blog category ids for the list query.
-     *
-     * @param array $blogCategories
-     *
-     * @return array
-     */
-    private function getBlogCategoryListIds(array $blogCategories)
-    {
-        $ids = [];
-        foreach ($blogCategories as $blogCategory) {
-            $ids[] = $blogCategory['id'];
-        }
-
-        return $ids;
     }
 }

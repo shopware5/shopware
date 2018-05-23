@@ -57,27 +57,30 @@ class GenericPage extends Page implements HelperSelectorInterface
      * If null arguments are provided, no next page link is expected, and validation
      * will fail if one is found
      *
-     * @param locator
-     * @param $path
-     * @param $query
+     * @param string $locator
+     * @param string $path
+     * @param array  $query
      */
     public function checkLink($locator, $path = null, $query = [])
     {
         $elements = Helper::findElements($this, [$locator], false);
         $linkElement = $elements[$locator];
 
-        if ($path !== null && empty($linkElement)) {
+        if (null !== $path && empty($linkElement)) {
             Helper::throwException(['Link expected but not found while looking for ' . $locator]);
-        } elseif ($path === null && !empty($linkElement)) {
+        } elseif (null === $path && !empty($linkElement)) {
             Helper::throwException(['Link not expected but found while looking for ' . $locator]);
-        } elseif ($path === null && empty($linkElement)) {
+        } elseif (null === $path && empty($linkElement)) {
             return;
         }
 
         $link = $linkElement->getAttribute('href');
         $linkParts = parse_url($link);
 
-        $expectedUrl = rtrim($this->getParameter('base_url'), '/') . '/' . rtrim($path, '/') . '/';
+        $expectedUrl = rtrim($this->getParameter('base_url'), '/') . '/' . rtrim($path, '/');
+        if (strpos($expectedUrl, '?') === false) {
+            $expectedUrl .= '/';
+        }
         if (!empty($query)) {
             $expectedUrl .= '?' . http_build_query($query);
         }

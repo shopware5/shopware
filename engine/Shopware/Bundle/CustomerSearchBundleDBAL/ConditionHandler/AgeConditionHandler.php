@@ -27,10 +27,13 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\CustomerSearchBundle\Condition\AgeCondition;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\DynamicConditionParserTrait;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class AgeConditionHandler implements ConditionHandlerInterface
 {
+    use DynamicConditionParserTrait;
+
     public function supports(ConditionInterface $condition)
     {
         return $condition instanceof AgeCondition;
@@ -38,34 +41,16 @@ class AgeConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /** @var AgeCondition $condition */
-        if (!$condition->getOperator()) {
-            throw new \Exception('AgeCondition class requires a defined operator!');
-        }
-
-        if (!$condition->getOperator()) {
-            throw new \Exception('AgeCondition class requires a defined value!');
-        }
-
-        switch (true) {
-            case $condition->getOperator() === AgeCondition::OPERATOR_BETWEEN:
-                $value = $condition->getValue();
-
-                if (isset($value['min'])) {
-                    $query->andWhere('customer.age >= :minAge')
-                        ->setParameter(':minAge', $value['min']);
-                }
-
-                if (isset($value['max'])) {
-                    $query->andWhere('customer.age <= :maxAge')
-                        ->setParameter(':maxAge', $value['max']);
-                }
-
-                break;
-            default:
-                $query->andWhere('customer.age ' . $condition->getOperator() . ' :ageValue');
-                $query->setParameter(':ageValue', $condition->getValue());
-                break;
-        }
+        /*
+         * $this->parse method is Imported from DynamicConditionParserTrait
+         */
+        return $this->parse(
+            $query,
+            's_customer_search_index',
+            'customer',
+            'age',
+            $condition->getValue(),
+            $condition->getOperator()
+        );
     }
 }

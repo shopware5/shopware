@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Article\Article;
 
@@ -86,26 +85,21 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         // Sanitize and clean up the search parameter for later processing
-        $search = $this->Request()->get('search');
-        $search = strtolower($search);
-        $search = trim($search);
+        $term = $this->Request()->get('search');
+        $term = strtolower($term);
+        $term = trim($term);
 
-        $search = preg_replace('/[^\\w0-9]+/u', ' ', $search);
-        $search = trim(preg_replace('/\s+/', '%', $search), '%');
+        $term = preg_replace('/[^\\w0-9]+/u', ' ', $term);
+        $term = trim(preg_replace('/\s+/', '%', $term), '%');
 
-        if ($search === '') {
+        if ($term === '') {
             return;
         }
 
-        $articles = $this->getArticles($search);
-        $customers = $this->getCustomers($search);
-        $orders = $this->getOrders($search);
+        $search = $this->container->get('shopware.backend.global_search');
+        $result = $search->search($term);
 
-        $this->View()->assign('searchResult', [
-            'articles' => $articles,
-            'customers' => $customers,
-            'orders' => $orders,
-        ]);
+        $this->View()->assign('searchResult', $result);
     }
 
     /**
@@ -181,9 +175,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         ";
 
         $sql = Shopware()->Db()->limit($sql, 5);
-        $result = Shopware()->Db()->fetchAll($sql);
 
-        return $result;
+        return Shopware()->Db()->fetchAll($sql);
     }
 
     /**
@@ -233,6 +226,48 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
+     * @param $entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function createEntitySearchQuery($entity)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $query */
+        $query = $this->get('models')->createQueryBuilder();
+        $query->select('entity')
+            ->from($entity, 'entity');
+
+        switch ($entity) {
+            case 'Shopware\Models\Article\Article':
+                $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
+                    ->innerJoin('entity.mainDetail', 'mainDetail')
+                    ->leftJoin('entity.details', 'details');
+                break;
+
+            case 'Shopware\Models\Property\Value':
+                if ($groupId = $this->Request()->getParam('groupId')) {
+                    $query->andWhere('entity.optionId = :optionId')
+                        ->setParameter(':optionId', $this->Request()->getParam('groupId'));
+                }
+                break;
+
+            case 'Shopware\Models\Property\Option':
+                if ($setId = $this->Request()->getParam('setId')) {
+                    $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
+                        ->setParameter(':setId', $setId);
+                }
+                break;
+            case 'Shopware\Models\Category\Category':
+                $query->andWhere('entity.parent IS NOT NULL')
+                    ->addOrderBy('entity.parentId')
+                    ->addOrderBy('entity.position');
+                break;
+        }
+
+        return $query;
+    }
+
+    /**
      * @param $builder \Doctrine\ORM\QueryBuilder
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
@@ -244,9 +279,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
         /** @var \Shopware\Components\Model\ModelManager $entityManager */
         $entityManager = $this->get('models');
-        $pagination = $entityManager->createPaginator($query);
 
-        return $pagination;
+        return $entityManager->createPaginator($query);
     }
 
     /**
@@ -302,48 +336,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $entity
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function createEntitySearchQuery($entity)
-    {
-        /** @var \Doctrine\ORM\QueryBuilder $query */
-        $query = $this->get('models')->createQueryBuilder();
-        $query->select('entity')
-            ->from($entity, 'entity');
-
-        switch ($entity) {
-            case 'Shopware\Models\Article\Article':
-                $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
-                    ->innerJoin('entity.mainDetail', 'mainDetail')
-                    ->leftJoin('entity.details', 'details');
-                break;
-
-            case 'Shopware\Models\Property\Value':
-                if ($groupId = $this->Request()->getParam('groupId')) {
-                    $query->andWhere('entity.optionId = :optionId')
-                        ->setParameter(':optionId', $this->Request()->getParam('groupId'));
-                }
-                break;
-
-            case 'Shopware\Models\Property\Option':
-                if ($setId = $this->Request()->getParam('setId')) {
-                    $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
-                        ->setParameter(':setId', $setId);
-                }
-                break;
-            case 'Shopware\Models\Category\Category':
-                $query->andWhere('entity.parent IS NOT NULL')
-                    ->addOrderBy('entity.parentId')
-                    ->addOrderBy('entity.position');
-                break;
-        }
-
-        return $query;
-    }
-
-    /**
      * @param string                     $entity
      * @param \Doctrine\ORM\QueryBuilder $query
      * @param string                     $term
@@ -378,9 +370,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function createCustomFieldToSearchTermCondition($entity, $column)
     {
         $field = $entity . '.' . $column;
-        $where = $field . ' LIKE :search';
 
-        return $where;
+        return $field . ' LIKE :search';
     }
 
     /**

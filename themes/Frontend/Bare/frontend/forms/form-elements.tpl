@@ -1,7 +1,8 @@
 {namespace name="frontend/forms/elements"}
+
 {block name='frontend_forms_form_elements'}
-    <form id="support" name="support" class="{$sSupport.class}" method="post" action="{url controller='ticket' action='index' id=$id}" enctype="multipart/form-data">
-    <input type="hidden" name="forceMail" value="{$forceMail|escape}">
+    <form id="support" name="support" class="{$sSupport.class}" method="post" action="{url controller='forms' action='index' id=$id}" enctype="multipart/form-data">
+        <input type="hidden" name="forceMail" value="{$forceMail|escape}">
 
         {* Form Content *}
         {block name='frontend_forms_form_elements_form_content'}
@@ -50,6 +51,13 @@
                     <div class="forms--required">{s name='SupportLabelInfoFields'}{/s}</div>
                 {/block}
 
+                {* Data protection information *}
+                {block name='frontend_forms_form_elements_form_privacy'}
+                    {if {config name=ACTDPRTEXT}}
+                        {include file="frontend/_includes/privacy.tpl"}
+                    {/if}
+                {/block}
+
                 {* Forms actions *}
                 {block name='frontend_forms_form_elements_form_submit'}
                     <div class="buttons">
@@ -60,4 +68,3 @@
         {/block}
     </form>
 {/block}
-

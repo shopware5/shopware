@@ -113,6 +113,14 @@ class Album extends ModelEntity
     private $position;
 
     /**
+     * Defines if this album is allowed to be garbage collected using the GarbageCollector
+     *
+     * @var bool
+     * @ORM\Column(name="garbage_collectable", type="boolean", nullable=false)
+     */
+    private $garbageCollectable;
+
+    /**
      * An album can have multiple sub-albums.
      *
      * @var
@@ -206,9 +214,31 @@ class Album extends ModelEntity
     }
 
     /**
+     * Sets if this album is to be garbage collected
+     *
+     * @return bool
+     */
+    public function getGarbageCollectable()
+    {
+        return $this->garbageCollectable;
+    }
+
+    /**
+     * @param bool $garbageCollectable
+     *
+     * @return \Shopware\Models\Media\Album
+     */
+    public function setGarbageCollectable($garbageCollectable)
+    {
+        $this->garbageCollectable = $garbageCollectable;
+
+        return $this;
+    }
+
+    /**
      * Returns the child albums.
      *
-     * @return array
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getChildren()
     {
@@ -266,7 +296,7 @@ class Album extends ModelEntity
     /**
      * Sets the associated media
      *
-     * @param $media
+     * @param array|\Doctrine\Common\Collections\ArrayCollection $media
      */
     public function setMedia($media)
     {
@@ -286,7 +316,7 @@ class Album extends ModelEntity
     /**
      * Sets the album settings
      *
-     * @param  $settings \Shopware\Models\Media\Settings
+     * @param $settings \Shopware\Models\Media\Settings
      *
      * @return \Shopware\Models\Media\Album
      */
@@ -302,11 +332,12 @@ class Album extends ModelEntity
      * All assigned media set to the unsorted album.
      *
      * @ORM\PreRemove
+     *
+     * @throws \Zend_Db_Adapter_Exception
      */
     public function onRemove()
     {
-        //change the associated media to the unsorted album.
-        $sql = 'UPDATE s_media SET albumID = ? WHERE albumID = ?';
-        Shopware()->Db()->query($sql, [-10, $this->id]);
+        // Change the associated media to the unsorted album.
+        Shopware()->Db()->query('UPDATE s_media SET albumID = ? WHERE albumID = ?', [-10, $this->id]);
     }
 }

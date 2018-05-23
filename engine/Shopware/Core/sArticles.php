@@ -21,14 +21,15 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
@@ -44,7 +45,7 @@ class sArticles
     /**
      * Pointer to sSystem object
      *
-     * @var sSystem
+     * @var \sSystem
      */
     public $sSYSTEM;
 
@@ -178,6 +179,11 @@ class sArticles
      */
     private $productNumberService;
 
+    /**
+     * @var StoreFrontBundle\Service\Core\ListingLinkRewriteService
+     */
+    private $listingLinkRewriteService;
+
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
@@ -208,6 +214,7 @@ class sArticles
         $this->session = $container->get('session');
         $this->storeFrontCriteriaFactory = $container->get('shopware_search.store_front_criteria_factory');
         $this->productNumberService = $container->get('shopware_storefront.product_number_service');
+        $this->listingLinkRewriteService = $container->get('shopware_storefront.listing_link_rewrite_service');
 
         $this->articleComparisons = new sArticlesComparisons($this, $container);
     }
@@ -330,7 +337,7 @@ class sArticles
         $sVoteName = strip_tags($request->getPost('sVoteName'));
         $sVoteSummary = strip_tags($request->getPost('sVoteSummary'));
         $sVoteComment = strip_tags($request->getPost('sVoteComment'));
-        $sVoteStars = floatval($request->getPost('sVoteStars'));
+        $sVoteStars = (float) $request->getPost('sVoteStars');
         $sVoteMail = strip_tags($request->getPost('sVoteMail'));
 
         if ($sVoteStars < 1 || $sVoteStars > 10) {
@@ -418,7 +425,7 @@ class sArticles
         if (!$this->frontController->Request()->getQuery('sSearch')) {
             return;
         }
-        $sSearch = intval($this->frontController->Request()->getQuery('sSearch'));
+        $sSearch = (int) $this->frontController->Request()->getQuery('sSearch');
 
         $getArticles = $this->db->fetchAll(
             'SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC',
@@ -494,89 +501,6 @@ class sArticles
     }
 
     /**
-     * Get all available suppliers from a specific category
-     *
-     * @deprecated since 5.3, will be removed with 5.5 without replacement
-     *
-     * @param int $id    - category id
-     * @param int $limit
-     *
-     * @return array
-     */
-    public function sGetAffectedSuppliers($id = null, $limit = null)
-    {
-        $id = empty($id) ? (int) $this->frontController->Request()->getQuery('sCategory') : (int) $id;
-        $configLimit = $this->config['sMAXSUPPLIERSCATEGORY'] ? $this->config['sMAXSUPPLIERSCATEGORY'] : 30;
-        $limit = empty($limit) ? $configLimit : (int) $limit;
-
-        $sql = "
-            SELECT s.id AS id, COUNT(DISTINCT a.id) AS countSuppliers, s.name AS name, s.img AS image
-            FROM s_articles a
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID = a.id
-                    AND ac.categoryID = ?
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-
-            JOIN s_articles_supplier s
-            ON s.id=a.supplierID
-
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
-
-            WHERE ag.articleID IS NULL
-            AND a.active = 1
-
-            GROUP BY s.id
-            ORDER BY s.name ASC
-            LIMIT 0, $limit
-        ";
-        $getSupplier = $this->db->fetchAll($sql, [
-            $id,
-        ]);
-
-        $links = [];
-
-        foreach ($getSupplier as $supplierKey => $supplierValue) {
-            if (!Shopware()->Shop()->getDefault()) {
-                $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
-            }
-            if ($supplierValue['image']) {
-                $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-                $getSupplier[$supplierKey]['image'] = $mediaService->getUrl($supplierValue['image']);
-            }
-
-            $supplierId = $supplierValue['id'];
-            if ($id !== Shopware()->Shop()->getCategory()->getId()) {
-                $links[$supplierId] = [
-                    'sViewport' => 'cat',
-                    'sCategory' => $id,
-                    'sPage' => 1,
-                    'sSupplier' => $supplierId,
-                ];
-            } else {
-                $links[$supplierId] = [
-                    'controller' => 'listing',
-                    'action' => 'manufacturer',
-                    'sSupplier' => $supplierId,
-                ];
-            }
-        }
-
-        $seoUrls = Shopware()->Container()->get('router')->generateList($links);
-        foreach ($getSupplier as &$supplier) {
-            $id = $supplier['id'];
-            if (array_key_exists($id, $seoUrls)) {
-                $supplier['link'] = $seoUrls[$id];
-            }
-        }
-
-        return $getSupplier;
-    }
-
-    /**
      * Article price calucation
      *
      * @param float $price
@@ -609,7 +533,7 @@ class sArticles
             $price = $price - ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
         }
         if ($this->sSYSTEM->sCurrency['factor']) {
-            $price = $price * floatval($this->sSYSTEM->sCurrency['factor']);
+            $price = $price * (float) $this->sSYSTEM->sCurrency['factor'];
         }
 
         // Condition Output-Netto AND NOT overwrite by customer-group
@@ -674,7 +598,7 @@ class sArticles
         }
 
         if (!empty($this->sSYSTEM->sCurrency['factor']) && $ignoreCurrency == false) {
-            $price = floatval($price) * floatval($this->sSYSTEM->sCurrency['factor']);
+            $price = (float) $price * (float) $this->sSYSTEM->sCurrency['factor'];
         }
 
         if ($ignoreTax == true) {
@@ -691,9 +615,9 @@ class sArticles
             }
         } else {
             if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $price = round($price, 3);
+                $price = round($price, 2);
             } else {
-                $price = round($price * (100 + $tax) / 100, 3);
+                $price = round($price * (100 + $tax) / 100, 2);
             }
         }
 
@@ -1119,12 +1043,12 @@ class sArticles
         }
 
         $product = $this->productService->get($productNumber, $context);
+
         if (!$product) {
             return [];
         }
 
-        $hideNoInStock = $this->config->get('hideNoInStock');
-        if ($hideNoInStock && !$product->isAvailable()) {
+        if ($this->config->get('hideNoInStock') && !$product->isAvailable()) {
             return [];
         }
 
@@ -1149,13 +1073,13 @@ class sArticles
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
-        $product = $this->getLegacyProduct(
+        $legacyProduct = $this->getLegacyProduct(
             $product,
             $categoryId,
             $selection
         );
 
-        return $product;
+        return $legacyProduct;
     }
 
     /**
@@ -1174,7 +1098,7 @@ class sArticles
         $purchaseUnit = (float) $purchaseUnit;
         $referenceUnit = (float) $referenceUnit;
 
-        $price = floatval(str_replace(',', '.', $price));
+        $price = (float) str_replace(',', '.', $price);
 
         if ($purchaseUnit == 0 || $referenceUnit == 0) {
             return 0;
@@ -1522,11 +1446,12 @@ class sArticles
      * Get name from a certain article by order number
      *
      * @param string $orderNumber
-     * @param bool   $returnAll   return only name or additional data, too
+     * @param bool   $returnAll   Return only name or additional data, too
+     * @param bool   $translate   Disables the translation of the product if set to false
      *
      * @return string or array
      */
-    public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false)
+    public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false, $translate = true)
     {
         $article = $this->db->fetchRow('
             SELECT
@@ -1549,18 +1474,20 @@ class sArticles
         }
 
         // Load translations for article or variant
-        if ($article['did'] != $article['main_detail_id']) {
-            $article = $this->sGetTranslation(
-                $article,
-                $article['did'],
-                'variant'
-            );
-        } else {
-            $article = $this->sGetTranslation(
-                $article,
-                $article['id'],
-                'article'
-            );
+        if ($translate) {
+            if ((int) $article['did'] !== (int) $article['main_detail_id']) {
+                $article = $this->sGetTranslation(
+                    $article,
+                    $article['did'],
+                    'variant'
+                );
+            } else {
+                $article = $this->sGetTranslation(
+                    $article,
+                    $article['id'],
+                    'article'
+                );
+            }
         }
 
         // If article has variants, we need to append the additional text to the name
@@ -1650,6 +1577,7 @@ class sArticles
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'articleName',
                     'txtzusatztxt' => 'additionaltext',
                     'txtkeywords' => 'keywords',
@@ -1720,10 +1648,10 @@ class sArticles
     /**
      * Get translation for an object (article / variant / link / download / supplier)
      *
-     * @param $data
-     * @param $id
-     * @param $object
-     * @param $language
+     * @param array  $data
+     * @param int    $id
+     * @param string $object
+     * @param int    $language
      *
      * @return array
      */
@@ -1741,6 +1669,7 @@ class sArticles
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'articleName',
                     'txtzusatztxt' => 'additionaltext',
                     'txtkeywords' => 'keywords',
@@ -1748,7 +1677,7 @@ class sArticles
                 ];
                 break;
             case 'variant':
-                $map = ['txtzusatztxt' => 'additionaltext', 'txtpackunit' => 'packunit'];
+                $map = ['txtshippingtime' => 'shippingtime', 'txtzusatztxt' => 'additionaltext', 'txtpackunit' => 'packunit'];
                 break;
             case 'link':
                 $map = ['linkname' => 'description'];
@@ -1802,10 +1731,9 @@ class sArticles
         }
         if (!empty($objectData)) {
             foreach ($objectData as $translateKey => $value) {
+                $key = $translateKey;
                 if (isset($map[$translateKey])) {
                     $key = $map[$translateKey];
-                } else {
-                    $key = $translateKey;
                 }
                 $data[$key] = $value;
             }
@@ -1837,11 +1765,9 @@ class sArticles
                 foreach ($sArticle['sConfigurator'] as $key => $group) {
                     foreach ($group['values'] as $key2 => $option) {
                         $groupVal = $group['groupnameOrig'] ? $group['groupnameOrig'] : $group['groupname'];
-                        $groupVal = str_replace('/', '', $groupVal);
-                        $groupVal = str_replace(' ', '', $groupVal);
+                        $groupVal = str_replace(['/', ' '], '', $groupVal);
                         $optionVal = $option['optionnameOrig'] ? $option['optionnameOrig'] : $option['optionname'];
-                        $optionVal = str_replace('/', '', $optionVal);
-                        $optionVal = str_replace(' ', '', $optionVal);
+                        $optionVal = str_replace(['/', ' '], '', $optionVal);
                         if (!empty($option['selected'])) {
                             $referenceImages[strtolower($groupVal . ':' . str_replace(' ', '', $optionVal))] = true;
                         }
@@ -1866,7 +1792,7 @@ class sArticles
                     if (preg_match('/(.*){(.*)}/', $value['relations'])) {
                         $configuratorImages = true;
                     }
-                    if ($value['main'] == 1) {
+                    if ((int) $value['main'] === 1) {
                         $mainKey = $k;
                     }
                 }
@@ -1910,13 +1836,13 @@ class sArticles
                             $imageFailedCheck[] = true;
                         }
                     }
-                    if (count($imageFailedCheck) && count($imageFailedCheck) >= 1 && count($available) >= 1 && $relation == '||') { // ODER Verknï¿½pfunbg
+                    if ($relation === '||' && count($imageFailedCheck) && count($imageFailedCheck) >= 1 && count($available) >= 1) { // OR combination
                         if (!empty($debug)) {
                             echo $string . " matching combination\n";
                         }
                         $sArticle['images'][$imageKey]['relations'] = '';
                         $positions[$image['position']] = $imageKey;
-                    } elseif (count($imageFailedCheck) == count($available) && $relation == '&') { // UND VERKNï¿½PFUNG
+                    } elseif ($relation === '&' && count($imageFailedCheck) === count($available)) { // AND combination
                         $sArticle['images'][$imageKey]['relations'] = '';
                         $positions[$image['position']] = $imageKey;
                     } else {
@@ -1940,7 +1866,7 @@ class sArticles
 
         if (!empty($sArticle['images'])) {
             foreach ($sArticle['images'] as $key => $image) {
-                if ($image['relations'] == '&{}' || $image['relations'] == '||{}') {
+                if ($image['relations'] === '&{}' || $image['relations'] === '||{}') {
                     $sArticle['images'][$key]['relations'] = '';
                 }
             }
@@ -1992,7 +1918,7 @@ class sArticles
             $diff = $ids;
         }
 
-        if ($mode == 'new') {
+        if ($mode === 'new') {
             $value = current($diff);
         } else {
             shuffle($diff);
@@ -2012,7 +1938,7 @@ class sArticles
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+            $this->mediaRepository = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class);
         }
 
         return $this->mediaRepository;
@@ -2026,7 +1952,7 @@ class sArticles
     private function getArticleRepository()
     {
         if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+            $this->articleRepository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
         }
 
         return $this->articleRepository;
@@ -2036,6 +1962,8 @@ class sArticles
      * @param int                                          $categoryId
      * @param StoreFrontBundle\Struct\ShopContextInterface $context
      * @param Enlight_Controller_Request_RequestHttp       $request
+     *
+     * @throws \Exception
      *
      * @return SearchBundle\Criteria
      */
@@ -2076,9 +2004,9 @@ class sArticles
     }
 
     /**
-     * @param SearchBundle\ProductNumberSearchResult $searchResult
-     * @param $orderNumber
-     * @param $categoryId
+     * @param SearchBundle\ProductNumberSearchResult          $searchResult
+     * @param string                                          $orderNumber
+     * @param int                                             $categoryId
      * @param StoreFrontBundle\Struct\ProductContextInterface $context
      *
      * @return array
@@ -2173,9 +2101,8 @@ class sArticles
         );
 
         $queryPrams = http_build_query($params, null, '&');
-        $listingLink = $this->config->get('sBASEFILE') . '?' . $queryPrams;
 
-        return $listingLink;
+        return $this->config->get('sBASEFILE') . '?' . $queryPrams;
     }
 
     /**
@@ -2231,8 +2158,10 @@ class sArticles
     /**
      * Internal helper function to convert the image data from the database to the frontend structure.
      *
-     * @param $image
+     * @param array $image
      * @param $articleAlbum \Shopware\Models\Media\Album
+     *
+     * @throws \Exception
      *
      * @return array
      */
@@ -2361,7 +2290,7 @@ class sArticles
      * Returns a listing of products. Used for the backward compatibility category listings.
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
-     * @param $categoryId
+     * @param int                                             $categoryId
      * @param StoreFrontBundle\Struct\ProductContextInterface $context
      * @param Enlight_Controller_Request_Request              $request
      * @param SearchBundle\Criteria                           $criteria
@@ -2374,14 +2303,20 @@ class sArticles
         Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
-        $searchResult = $this->searchService->search(
-            $criteria,
-            $context
-        );
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
+
+        if (count($conditions) > 0) {
+            $this->config->offsetSet('forceArticleMainImageInListing', 0);
+            $searchResult = $this->searchService->search($criteria, $context);
+            $this->config->offsetSet('forceArticleMainImageInListing', 1);
+        } else {
+            $searchResult = $this->searchService->search($criteria, $context);
+        }
 
         $articles = [];
-
-        /** @var $product StoreFrontBundle\Struct\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertListProductStruct($product);
 
@@ -2396,6 +2331,8 @@ class sArticles
 
             $articles[$article['ordernumber']] = $article;
         }
+
+        $articles = $this->listingLinkRewriteService->rewriteLinks($criteria, $articles, $context);
 
         $pageSizes = explode('|', $this->config->get('numberArticlesToShow'));
         $sPage = (int) $request->getParam('sPage', 1);
@@ -2477,6 +2414,42 @@ class sArticles
             $data['description_long']
         );
 
+        $isSelectionSpecified = false;
+        if (isset($data['isSelectionSpecified']) || array_key_exists('isSelectionSpecified', $data)) {
+            $isSelectionSpecified = $data['isSelectionSpecified'];
+        }
+
+        if ($isSelectionSpecified === true || !$product->hasConfigurator()) {
+            $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
+
+            return $data;
+        }
+
+        $criteria = new SearchBundle\Criteria();
+        foreach ($selection as $groupId => $optionId) {
+            $criteria->addBaseCondition(
+                new VariantCondition([(int) $optionId], true, (int) $groupId)
+            );
+        }
+
+        $service = Shopware()->Container()->get('shopware_storefront.variant_listing_price_service');
+
+        $result = new SearchBundle\ProductSearchResult(
+            [$product->getNumber() => $product],
+            1,
+            [],
+            $criteria,
+            $this->contextService->getShopContext()
+        );
+
+        $service->updatePrices($criteria, $result, $this->contextService->getShopContext());
+
+        if ($product->displayFromPrice()) {
+            $data['priceStartingFrom'] = $product->getListingPrice()->getCalculatedPrice();
+        }
+
+        $data['price'] = $product->getListingPrice()->getCalculatedPrice();
+
         $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
 
         return $data;
@@ -2523,10 +2496,15 @@ class sArticles
         ];
     }
 
+    /**
+     * @param string $longDescription
+     *
+     * @return string
+     */
     private function getDescriptionKeywords($longDescription)
     {
         //sDescriptionKeywords
-        $string = (strip_tags(html_entity_decode($longDescription, null, 'UTF-8')));
+        $string = strip_tags(html_entity_decode($longDescription, null, 'UTF-8'));
         $string = str_replace(',', '', $string);
         $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
         $badWords = explode(',', $this->config->get('badwords'));
@@ -2567,7 +2545,10 @@ class sArticles
         }
 
         foreach ($selection as $groupId => $optionId) {
-            if (!$groupId || !$optionId) {
+            $groupId = (int) $groupId;
+            $optionId = (int) $optionId;
+
+            if ($groupId <= 0 || $optionId <= 0) {
                 unset($selection[$groupId]);
             }
         }

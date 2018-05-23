@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\Common\EventArgs;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
@@ -142,6 +141,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postUpdate', 'onPostPersist');
+
+        $this->subscribeEvent('Shopware\Models\Site\Site::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Site\Site::postUpdate', 'onPostPersist');
 
         $this->installForm();
 
@@ -290,7 +292,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         /** @var ModelManager $em */
         $em = $this->get('models');
-        $repository = $em->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $em->getRepository(\Shopware\Models\Shop\Shop::class);
 
         /** @var Shopware\Models\Shop\Shop $shop */
         $shop = $repository->findOneBy(['default' => true]);
@@ -351,7 +353,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return;
         }
 
-        if ($this->request->getModuleName() != 'frontend' && $this->request->getModuleName() != 'widgets') {
+        if ($this->request->getModuleName() !== 'frontend' && $this->request->getModuleName() !== 'widgets') {
             return;
         }
 
@@ -436,7 +438,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * Sets the shopware cache headers
+     * Sets the Shopware cache headers
      */
     public function setCacheHeaders()
     {
@@ -476,7 +478,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * This methods sets the nocache-cookie if actions in the shop are triggerd
+     * This methods sets the nocache-cookie if actions in the shop are triggered
      */
     public function setNoCacheCookie()
     {
@@ -607,8 +609,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * Helper function to flag the request with cacheIds
-     * to invalidate the caching.
+     * Helper function to flag the request with cacheIds to invalidate the caching.
      *
      * @param array $cacheIds
      */
@@ -660,6 +661,16 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $entityName = get_class($entity);
         }
 
+        if (Shopware()->Events()->notifyUntil(
+            'Shopware_Plugins_HttpCache_ShouldNotInvalidateCache',
+            [
+                'entity' => $entity,
+                'entityName' => $entityName,
+            ]
+        )) {
+            return;
+        }
+
         $cacheIds = [];
 
         switch ($entityName) {
@@ -683,6 +694,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 break;
             case Shopware\Models\Emotion\Emotion::class:
                 $cacheIds[] = 'e' . $entity->getId();
+                break;
+            case Shopware\Models\Site\Site::class:
+                $cacheIds[] = 's' . $entity->getId();
                 break;
         }
 
@@ -871,7 +885,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return false;
         }
 
-        return false !== strpos($value, 'ESI/1.0');
+        return strpos($value, 'ESI/1.0') !== false;
     }
 
     /**

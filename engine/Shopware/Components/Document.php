@@ -24,8 +24,6 @@
 
 use Shopware\Components\NumberRangeIncrementerInterface;
 
-include_once Shopware()->DocPath() . 'engine/Library/Mpdf/mpdf.php';
-
 /**
  * Shopware document generator
  *
@@ -230,6 +228,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      * Start renderer / pdf-generation
      *
      * @param string optional define renderer (pdf,html,return)
+     *
+     * @throws \Enlight_Event_Exception
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function render($_renderer = '')
     {
@@ -242,7 +243,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         /* @var $template \Shopware\Models\Shop\Template */
         if (!empty($this->_subshop['doc_template_id'])) {
-            $template = Shopware()->Container()->get('models')->find('Shopware\Models\Shop\Template', $this->_subshop['doc_template_id']);
+            $template = Shopware()->Container()->get('models')->find(\Shopware\Models\Shop\Template::class, $this->_subshop['doc_template_id']);
 
             $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
             $this->_template->setTemplateDir($inheritance);
@@ -250,17 +251,27 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $data = $this->_template->fetch('documents/' . $this->_document['template'], $this->_view);
 
-        if ($this->_renderer == 'html' || !$this->_renderer) {
+        if ($this->_renderer === 'html' || !$this->_renderer) {
             echo $data;
-        } elseif ($this->_renderer == 'pdf') {
+        } elseif ($this->_renderer === 'pdf') {
+            $mpdfConfig = array_replace_recursive(
+                Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig'),
+                [
+                    'margin_left' => $this->_document['left'],
+                    'margin_right' => $this->_document['right'],
+                    'margin_top' => $this->_document['top'],
+                    'margin_bottom' => $this->_document['bottom'],
+                ]
+            );
             if ($this->_preview == true || !$this->_documentHash) {
-                $mpdf = new mPDF('utf-8', 'A4', '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
+                $mpdf = new \Mpdf\Mpdf($mpdfConfig);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output();
                 exit;
             }
-            $path = Shopware()->DocPath() . 'files/documents' . '/' . $this->_documentHash . '.pdf';
-            $mpdf = new mPDF('utf-8', 'A4', '', '', $this->_document['left'], $this->_document['right'], $this->_document['top'], $this->_document['bottom']);
+            $documentsPath = rtrim(Shopware()->Container()->getParameter('shopware.app.documentsdir'), '/');
+            $path = $documentsPath . '/' . $this->_documentHash . '.pdf';
+            $mpdf = new \Mpdf\Mpdf($mpdfConfig);
             $mpdf->WriteHTML($data);
             $mpdf->Output($path, 'F');
         }
@@ -282,6 +293,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Set template path
+     *
+     * @param string $path
      */
     public function setTemplate($path)
     {
@@ -292,6 +305,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Set renderer
+     *
+     * @param string $renderer
      */
     public function setRenderer($renderer)
     {
@@ -300,6 +315,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Set type of document (0,1,2,3) > s_core_documents
+     *
+     * @param int $id
      */
     public function setDocumentId($id)
     {
@@ -308,6 +325,10 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Get voucher (s_vouchers.id)
+     *
+     * @param $id
+     *
+     * @return bool|mixed
      */
     public function getVoucher($id)
     {
@@ -441,8 +462,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Loads translations including fallbacks
      *
-     * @param $languageId
-     * @param $type
+     * @param string $languageId
+     * @param string $type
      *
      * @return array
      */
@@ -500,6 +521,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Initiate smarty template engine
+     *
+     * @throws \Exception
      */
     protected function initTemplateEngine()
     {
@@ -519,6 +542,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Sets the translation component
+     *
+     * @throws \Exception
      */
     protected function setTranslationComponent()
     {
@@ -526,17 +551,19 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * Set order
+     * @param Shopware_Models_Document_Order $order
+     *
+     * @throws \Exception
      */
     protected function setOrder(Shopware_Models_Document_Order $order)
     {
         $this->_order = $order;
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         // "language" actually refers to a language-shop and not to a locale
         $shop = $repository->getById($this->_order->order->language);
         if (!empty($this->_order->order->currencyID)) {
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
+            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
         $shop->registerResources();
@@ -544,6 +571,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Set object configuration from array
+     *
+     * @param array $config
      */
     protected function setConfig(array $config)
     {
@@ -557,6 +586,11 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Save document in database / generate number
+     *
+     * @throws \Exception
+     * @throws \RuntimeException
+     * @throws \Zend_Db_Adapter_Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function saveDocument()
     {
@@ -598,7 +632,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             if (!empty($this->_config['attributes'])) {
                 // Get the updated document
-                $updatedDocument = Shopware()->Models()->getRepository("\Shopware\Models\Order\Document\Document")->findOneBy([
+                $updatedDocument = Shopware()->Models()->getRepository(\Shopware\Models\Order\Document\Document::class)->findOneBy([
                     'type' => $typID,
                     'customerId' => $this->_order->userID,
                     'orderId' => $this->_order->id,

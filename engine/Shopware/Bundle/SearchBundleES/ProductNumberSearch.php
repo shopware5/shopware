@@ -114,10 +114,11 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria             $criteria
+     * @param Criteria $criteria
      * @param ShopContextInterface $context
      *
      * @return Search
+     * @throws \Exception
      */
     private function buildSearch(Criteria $criteria, ShopContextInterface $context)
     {

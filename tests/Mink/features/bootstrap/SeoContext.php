@@ -59,6 +59,15 @@ class SeoContext extends SubContext
     }
 
     /**
+     * @Then /^I should see (canonical) link$/
+     * @Then /^I should see (prev|next) page meta$/
+     */
+    public function iShouldSeePageMeta($locator)
+    {
+        $this->getPage('GenericPage')->checkLink($locator);
+    }
+
+    /**
      * @Then /^I should not see (canonical) link$/
      * @Then /^I should not see (prev|next) page meta$/
      */
@@ -68,8 +77,8 @@ class SeoContext extends SubContext
     }
 
     /**
-     * @Then /^I should robots meta "(?P<metaOne>[^"]*)"$/
-     * @Then /^I should robots metas "(?P<metaOne>[^"]*)" and "(?P<metaTwo>[^"]*)"$/
+     * @Then /^I should see robots meta "(?P<metaOne>[^"]*)"$/
+     * @Then /^I should see robots metas "(?P<metaOne>[^"]*)" and "(?P<metaTwo>[^"]*)"$/
      */
     public function iShouldRobotsMeta($metaOne, $metaTwo = null)
     {

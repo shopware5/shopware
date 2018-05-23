@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework\TestCase
 {
     public function testManagerInstance()
@@ -139,9 +138,10 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         copy($sourcePath, $imagePath);
 
         $file = new \Symfony\Component\HttpFoundation\File\File($imagePath);
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
 
         $media->setFile($file);
-        $media->setPath(str_replace(Shopware()->DocPath(), '', $imagePath));
+        $media->setPath(str_replace($projectDir, '', $imagePath));
 
         @unlink($file->getRealPath());
 
@@ -200,7 +200,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
 
         $media->setFile($file);
         $media->setAlbumId(-10);
-        $media->setAlbum(Shopware()->Models()->find('Shopware\Models\Media\Album', -10));
+        $media->setAlbum(Shopware()->Models()->find(\Shopware\Models\Media\Album::class, -10));
         $media->setPath(str_replace(Shopware()->DocPath(), '', $imagePath));
         $media->setDescription('');
         $media->setUserId(0);

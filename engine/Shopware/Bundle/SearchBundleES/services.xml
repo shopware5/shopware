@@ -40,6 +40,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.productid_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\ProductIdConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.customer_group_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CustomerGroupConditionHandler" >
             <tag name="shopware_search_es.search_handler" />
         </service>
@@ -70,7 +74,7 @@
         </service>
 
         <service id="shopware_search_es.price_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\PriceConditionHandler" >
-            <argument type="service" id="shopware_elastic_search.field_mapping" />
+            <argument type="service" id="shopware_search_es.price_field_mapper"/>
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -107,7 +111,7 @@
         <service id="shopware_search_es.price_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\PriceFacetHandler">
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
-            <argument type="service" id="shopware_elastic_search.field_mapping" />
+            <argument type="service" id="shopware_search_es.price_field_mapper" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -159,7 +163,7 @@
         </service>
 
         <service id="shopware_search_es.price_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\PriceSortingHandler">
-            <argument type="service" id="shopware_elastic_search.field_mapping" />
+            <argument type="service" id="shopware_search_es.price_field_mapper" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -184,6 +188,10 @@
         </service>
 
         <service id="shopware_search_es.search_random_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\RandomSortingHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.product_stock_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\ProductStockSortingHandler">
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -225,5 +233,25 @@
         <service id="shopware_search_es.product_dimensions_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ProductDimensionsFacetHandler" >
             <tag name="shopware_search_es.search_handler"/>
         </service>
+
+        <service id="shopware_search_es.variant_search" class="Shopware\Bundle\SearchBundleES\VariantSearch" decorates="shopware_search_es.product_number_search">
+            <argument type="service" id="shopware_search_es.variant_search.inner" />
+        </service>
+
+        <service id="shopware_search_es.main_variant_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\MainVariantConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.variant_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\VariantConditionHandler" >
+            <tag name="shopware_search_es.search_handler"/>
+        </service>
+
+        <service id="shopware_search_es.variant_condition_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\VariantFacetHandler">
+            <tag name="shopware_search_es.search_handler"/>
+            <argument type="service" id="shopware_storefront.configurator_options_gateway"/>
+            <argument type="service" id="query_alias_mapper"/>
+        </service>
+
+        <service class="Shopware\Bundle\SearchBundleES\PriceFieldMapper" id="shopware_search_es.price_field_mapper"/>
     </services>
 </container>

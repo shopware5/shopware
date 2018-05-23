@@ -60,6 +60,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     protected $cacheManager;
 
+    /**
+     * {@inheritdoc}
+     */
     public function preDispatch()
     {
         parent::preDispatch();
@@ -91,6 +94,8 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
     /**
      * Clear cache action
+     *
+     * @throws \Zend_Cache_Exception
      */
     public function clearCacheAction()
     {
@@ -101,22 +106,22 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $capabilities = $cacheInstance->getBackend()->getCapabilities();
 
         if (empty($capabilities['tags'])) {
-            if ($cache['config'] == 'on' || $cache['template'] == 'on') {
+            if ($cache['config'] === 'on' || $cache['template'] === 'on') {
                 $cacheInstance->clean();
             }
         } else {
             $tags = [];
-            if ($cache['config'] == 'on' || $cache['backend'] == 'on') {
+            if ($cache['config'] === 'on' || $cache['backend'] === 'on') {
                 $tags[] = 'Shopware_Config';
                 $tags[] = 'Shopware_Plugin';
             }
-            if ($cache['search'] == 'on') {
+            if ($cache['search'] === 'on') {
                 $tags[] = 'Shopware_Modules_Search';
             }
-            if ($cache['backend'] == 'on') {
+            if ($cache['backend'] === 'on') {
                 $tags[] = 'Shopware_Config';
             }
-            if ($cache['proxy'] == 'on') {
+            if ($cache['proxy'] === 'on') {
                 $tags[] = 'Shopware_Models';
             }
             if (!empty($tags) && $tags < 7) {
@@ -126,25 +131,25 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        if ($cache['config'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
-            $this->cacheManager->clearTemplateCache();
+        if ($cache['config'] === 'on' || $cache['backend'] === 'on' || $cache['frontend'] === 'on') {
+            $this->cacheManager->clearConfigCache();
         }
-        if ($cache['search'] == 'on') {
+        if ($cache['search'] === 'on') {
             $this->cacheManager->clearSearchCache();
         }
-        if ($cache['router'] == 'on') {
+        if ($cache['router'] === 'on') {
             $this->cacheManager->clearRewriteCache();
         }
-        if ($cache['template'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
+        if ($cache['template'] === 'on' || $cache['backend'] === 'on' || $cache['frontend'] === 'on') {
             $this->cacheManager->clearTemplateCache();
         }
-        if ($cache['theme'] == 'on' || $cache['frontend'] == 'on') {
+        if ($cache['theme'] === 'on' || $cache['frontend'] === 'on') {
             $this->cacheManager->clearHttpCache();
         }
-        if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
+        if ($cache['http'] === 'on' || $cache['frontend'] === 'on') {
             $this->cacheManager->clearHttpCache();
         }
-        if ($cache['proxy'] == 'on') {
+        if ($cache['proxy'] === 'on') {
             $this->cacheManager->clearProxyCache();
             $this->cacheManager->clearOpCache();
         }
@@ -161,7 +166,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $shopId = $this->Request()->get('shopId');
 
-        $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $query = $repository->getShopsWithThemes(['shop.id' => $shopId]);
 
@@ -201,7 +206,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     public function moveThemeFilesAction()
     {
         /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');
         $pathResolver = $this->container->get('theme_path_resolver');
@@ -209,8 +214,8 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $time = time();
 
         foreach ($shops as $shop) {
-            $oldTimestamp = $compiler->getThemeTimestamp($shop);
-            if ($oldTimestamp == $time) {
+            $oldTimestamp = (int) $compiler->getThemeTimestamp($shop);
+            if ($oldTimestamp === $time) {
                 ++$time;
             }
 
@@ -253,6 +258,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function initAcl()
     {
         // read

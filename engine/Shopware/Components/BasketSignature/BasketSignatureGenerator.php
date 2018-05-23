@@ -49,6 +49,7 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
             'amount' => (float) $basket['sAmount'],
             'taxAmount' => (float) $basket['sAmountTax'],
             'items' => $items,
+            'currencyId' => (int) $basket['sCurrencyId'],
         ];
 
         return hash('sha256', json_encode($data) . $customerId);

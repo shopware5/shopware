@@ -389,8 +389,9 @@
             }
 
             me.lastSearchAjax = $.ajax({
-                'url': me.requestURL,
-                'data': {
+                url: me.requestURL,
+                dataType: 'html',
+                data: {
                     'sSearch': me.lastSearchTerm
                 },
                 'success': function (response) {
@@ -650,7 +651,7 @@
                 return;
             }
 
-            me.$parent.submit();
+            me.$searchField.parent().submit();
         },
 
         /**

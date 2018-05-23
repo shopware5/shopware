@@ -136,7 +136,15 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
              * @param [object] form - Ext.form.Panel - The settings Panel
              * @param [object] record - Shopware.apps.Article.model.Media
              */
-            'saveImageSettings'
+            'saveImageSettings',
+
+            /**
+             * Event will be fired when the "loadRecord" method on the settings form is called.
+             * @event
+             * @param [Ext.form.Panel] form - The info panel
+             * @param [Ext.data.Model] model - The model to be loaded
+             */
+            'onSettingsFormLoadRecord'
         );
     },
 
@@ -208,6 +216,14 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             }
         });
 
+        me.variantInfoField = Ext.create('Ext.container.Container', {
+            cls: 'image-variant-info-ct',
+            tpl: me.createVariantInfoTemplate(),
+            data: {
+                hasItems: false
+            }
+        });
+
         me.settingsForm = Ext.create('Ext.form.Panel', {
             layout: 'anchor',
             border: false,
@@ -217,11 +233,42 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             autoScroll:true,
             defaults: {
                 labelWidth: 90,
-                anchor: '100%'
+                anchor: '100%',
+                padding: '10px 0'
             },
-            items: [me.titleField]
+            items: [me.titleField, me.variantInfoField],
+
+            /**
+             * @param { Ext.data.Model } record
+             */
+            loadRecord: function (record) {
+                this.getForm().loadRecord(record);
+
+                me.fireEvent('onSettingsFormLoadRecord', me, record);
+            }
         });
+
         return me.settingsForm;
+    },
+
+    /**
+     * @returns { Ext.XTemplate }
+     */
+    createVariantInfoTemplate: function () {
+        return new Ext.XTemplate(
+            // Check if any data was applied at all, but show only once as title
+            '<tpl if="hasItems">',
+                '<div class="image-variant-info-title">',
+                    '{s name="image/variant_info/title"}Assigned variant configurations{/s}',
+                '</div>',
+            '</tpl>',
+            '<tpl for="items">',
+                '<div class="image-variant-info-row">',
+                    '<span class="sprite-tick-small image-variant-info-icon"></span>',
+                    '{ assignedVariants }',
+                '</div>',
+            '</tpl>'
+        );
     }
 });
 //{/block}

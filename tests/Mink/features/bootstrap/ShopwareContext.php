@@ -182,7 +182,7 @@ class ShopwareContext extends SubContext
             switch ($args['action']) {
                 //Artikel-Benachrichtigungen
                 case 'notify':
-                    $mask = '%sConfirm&sNotificationConfirmation=%s&sNotify=1';
+                    $mask = '%s&sNotificationConfirmation=%s&sNotify=1&action=notifyConfirm';
                     break;
 
                 //Artikel-Bewertungen

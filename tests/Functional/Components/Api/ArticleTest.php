@@ -986,7 +986,7 @@ class ArticleTest extends TestCase
         $this->assertEquals(1, $result['total']);
         $this->assertEquals($id, $result['data'][0]['id'], $id);
 
-         // Filter with attribute of other (non-main) variant => no result
+        // Filter with attribute of other (non-main) variant => no result
         $result = $this->resource->getList(0, 1, [
             'id' => $id,
             'attribute.attr3' => 'Freitext3',
@@ -1852,6 +1852,7 @@ class ArticleTest extends TestCase
                 'name' => 'English-Name',
                 'description' => 'English-Description',
                 'descriptionLong' => 'English-DescriptionLong',
+                'shippingTime' => 'English-ShippingTime',
                 'keywords' => 'English-Keywords',
                 'packUnit' => 'English-PackUnit',
             ],
@@ -1872,6 +1873,7 @@ class ArticleTest extends TestCase
         $this->assertEquals($definedTranslation['name'], $savedTranslation['name']);
         $this->assertEquals($definedTranslation['description'], $savedTranslation['description']);
         $this->assertEquals($definedTranslation['descriptionLong'], $savedTranslation['descriptionLong']);
+        $this->assertEquals($definedTranslation['shippingTime'], $savedTranslation['shippingTime']);
         $this->assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
         $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
 
@@ -2819,6 +2821,58 @@ class ArticleTest extends TestCase
         $model = $this->resource->create($data);
 
         $this->assertSame(0, $model->getMainDetail()->getInStock());
+    }
+
+    /**
+     * Regression test for SW-21360
+     */
+    public function testUpdateLastStock()
+    {
+        $data = $this->getSimpleTestData();
+        $model = $this->resource->create($data);
+        $id = $model->getId();
+
+        $cases = [true, false, 1, 0, null];
+
+        /*
+         * Ensure that the mainDetails lastStock Attribute can be set
+         */
+        foreach ($cases as $val) {
+            $temp = $this->resource->update($id, ['mainDetail' => ['lastStock' => $val]]);
+
+            $this->assertEquals($val, $temp->getMainDetail()->getLastStock());
+        }
+
+        /*
+         * @Deprecated
+         * "lastStock" on products (s_articles) is deprecated and will be removed in Shopware 5.6
+         *
+         * This ensures compatibility with Shopware versions < 5.3 - the value given for the product should be
+         * applied to its mainDetail automatically.
+         *
+         * This can be removed with version 5.6 aswell
+         */
+        foreach ($cases as $val) {
+            $temp = $this->resource->update($id, ['lastStock' => $val]);
+
+            $this->assertEquals($val, $temp->getLastStock() && $temp->getMainDetail()->getLastStock());
+        }
+
+        /*
+         * @Deprecated
+         * "lastStock" on products (s_articles) is deprecated and will be removed in Shopware 5.6
+         *
+         * This ensures that the lastStock value is still set for the mainDetail, even when other data is provided
+         *
+         * This can be removed with version 5.6 aswell
+         */
+        foreach ($cases as $val) {
+            $temp = $this->resource->update($id, ['lastStock' => $val, 'mainDetail' => ['inStock' => 15]]);
+
+            $this->assertEquals($val, $temp->getLastStock() && $temp->getMainDetail()->getLastStock());
+        }
+
+        $this->resource->delete($id);
     }
 
     /**

@@ -21,8 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-use Shopware\Components\ConfigWriter;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Config\ElementTranslation;
 use Shopware\Models\Config\Form;
@@ -904,10 +902,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Check if a given version is greater or equal to
      * the currently installed shopware version.
      *
-     * Attention: If your target shopware version may
-     * include a version less than 4.1.3 you have to
-     * use assertVersionGreaterThen().
-     *
      * @since 4.1.3 introduced assertMinimumVersion($requiredVersion)
      *
      * @param string $requiredVersion string Format: 3.5.4 or 3.5.4.21111
@@ -923,23 +917,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         return version_compare($version, $requiredVersion, '>=');
-    }
-
-    /**
-     * Alias for assertMinimumVersion().
-     *
-     * Check if a given version is greater or equal to
-     * the currently installed shopware version.
-     *
-     * @deprecated 4.1.3 Use assertMinimumVersion instead
-     *
-     * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
-     *
-     * @return bool
-     */
-    protected function assertVersionGreaterThen($requiredVersion)
-    {
-        return $this->assertMinimumVersion($requiredVersion);
     }
 
     /**
@@ -960,34 +937,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @return bool
      */
-    protected function addHttpCacheRoute($route, $time, $invalidateTags = [])
+    protected function addHttpCacheRoute($route, $time, array $invalidateTags = [])
     {
-        /** @var $writer ConfigWriter */
-        $writer = $this->get('config_writer');
+        $cacheRouteInstaller = $this->get('shopware.http_cache.route_installer');
 
-        $value = $writer->get('cacheControllers', 'HttpCache');
-        if (empty($value)) {
-            return false;
-        }
-
-        $value = $this->explodeHttpCacheRoutes($value);
-        $value = $this->addOrUpdateHttpCacheRoute($route, $time, $value);
-        $value = $this->implodeHttpCacheRoutes($value);
-        $writer->save('cacheControllers', $value, 'HttpCache');
-
-        if (empty($invalidateTags)) {
-            return true;
-        }
-
-        $value = $writer->get('noCacheControllers', 'HttpCache');
-        $value = $this->explodeHttpCacheRoutes($value);
-        foreach ($invalidateTags as $tag) {
-            $value = $this->addNoCacheTag($route, strtolower($tag), $value);
-        }
-        $value = $this->implodeHttpCacheRoutes($value);
-        $writer->save('noCacheControllers', $value, 'HttpCache');
-
-        return true;
+        return $cacheRouteInstaller->addHttpCacheRoute($route, $time, $invalidateTags);
     }
 
     /**
@@ -997,34 +951,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     protected function removeHttpCacheRoute($route)
     {
-        /** @var $writer ConfigWriter */
-        $writer = $this->get('config_writer');
+        $cacheRouteInstaller = $this->get('shopware.http_cache.route_installer');
 
-        //remove cached controller
-        $value = $writer->get('cacheControllers', 'HttpCache');
-        if (empty($value)) {
-            return false;
-        }
-
-        $value = $this->explodeHttpCacheRoutes($value);
-        $new = array_filter($value, function ($row) use ($route) {
-            return $row['route'] != $route;
-        });
-
-        $new = $this->implodeHttpCacheRoutes($new);
-        $writer->save('cacheControllers', $new, 'HttpCache');
-
-        //remove no cache tags
-        $value = $writer->get('noCacheControllers', 'HttpCache');
-        $value = $this->explodeHttpCacheRoutes($value);
-        $new = array_filter($value, function ($row) use ($route) {
-            return $row['route'] != $route;
-        });
-
-        $new = $this->implodeHttpCacheRoutes($new);
-        $writer->save('noCacheControllers', $new, 'HttpCache');
-
-        return true;
+        return $cacheRouteInstaller->removeHttpCacheRoute($route);
     }
 
     /**
@@ -1067,101 +996,5 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         return false;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return array
-     */
-    private function explodeHttpCacheRoutes($value)
-    {
-        $value = explode("\n", $value);
-
-        $value = array_map(function ($row) {
-            $row = explode(' ', $row);
-            if (empty($row[0])) {
-                return null;
-            }
-
-            return ['route' => $row[0], 'time' => $row[1]];
-        }, $value);
-
-        $value = array_filter($value);
-
-        return $value;
-    }
-
-    /**
-     * @param string $route
-     * @param int    $time
-     * @param array  $value
-     *
-     * @return array
-     */
-    private function addOrUpdateHttpCacheRoute($route, $time, $value)
-    {
-        $exist = false;
-        foreach ($value as &$row) {
-            if ($row['route'] != $route) {
-                continue;
-            }
-
-            $exist = true;
-            if ($row['time'] == (int) $time) {
-                continue;
-            }
-
-            $row['time'] = $time;
-        }
-
-        if ($exist == false) {
-            $value[] = ['route' => $route, 'time' => $time];
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param string $route
-     * @param string $tag
-     * @param array  $value
-     *
-     * @return array
-     */
-    private function addNoCacheTag($route, $tag, $value)
-    {
-        $exist = false;
-        foreach ($value as $row) {
-            if ($row['route'] != $route) {
-                continue;
-            }
-
-            if ($row['time'] != $tag) {
-                continue;
-            }
-
-            $exist = true;
-        }
-
-        if ($exist == false) {
-            $value[] = ['route' => $route, 'time' => $tag];
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param array $value
-     *
-     * @return string
-     */
-    private function implodeHttpCacheRoutes($value)
-    {
-        $value = array_map(function ($row) {
-            return implode(' ', $row);
-        }, $value);
-
-        return implode("\n", $value);
     }
 }

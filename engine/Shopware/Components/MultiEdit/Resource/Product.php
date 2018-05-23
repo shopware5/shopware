@@ -157,9 +157,7 @@ class Product implements ResourceInterface
      */
     public function getColumnConfig()
     {
-        $columns = array_values($this->dqlHelper->getColumnsForProductListing());
-
-        return $columns;
+        return array_values($this->dqlHelper->getColumnsForProductListing());
     }
 
     /**
@@ -207,7 +205,7 @@ class Product implements ResourceInterface
                     $model->$setter($field['value']);
                 }
                 $entityManager->persist($model);
-            // price_model
+                // price_model
             } else {
                 $detailModel = $entityManager->find('\Shopware\Models\Article\Detail', $primaryIdentifiers['detail']);
                 // store net prices

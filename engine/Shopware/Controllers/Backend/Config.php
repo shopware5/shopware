@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
@@ -186,6 +185,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
             $values['options']['store'] = $this->translateStore('en', $values['options']['store']);
             $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
+            $values['options']['queryMode'] = 'remote';
         }
 
         $this->View()->assign([
@@ -285,6 +285,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $query = $builder->getQuery();
             $total = Shopware()->Models()->getQueryCount($query);
             $data = $query->getArrayResult();
+        }
+
+        if (!empty($data) && $name === 'locale') {
+            $data = $this->getSnippetsForLocales($data);
         }
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
@@ -637,6 +641,22 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         return;
                     }
                     break;
+                case 'document':
+                    $exceptionMessage = $ex->getMessage();
+                    if (strpos($exceptionMessage, '1062 Duplicate entry') !== false
+                        &&
+                        strpos($exceptionMessage, 'for key \'key\'') !== false
+                    ) {
+                        $this->View()->assign([
+                            'success' => false,
+                            'message' => $this->get('snippets')->getNamespace('backend/config/view/document')->get('document/detail/key_exists'),
+                        ]);
+
+                        return;
+                    }
+
+                    // Not the exception we want to handle here, rethrow. (Instead of fall through)
+                    throw $ex;
                 default:
                     throw $ex;
             }
@@ -1112,7 +1132,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 // check existence of each locale
                 foreach ($value as $localeId) {
                     $locale = Shopware()->Models()->find('Shopware\Models\Shop\Locale', $localeId);
-                    if (null === $locale) {
+                    if ($locale === null) {
                         return false;
                     }
                 }
@@ -1326,5 +1346,29 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         );
 
         return $fallback;
+    }
+
+    /**
+     * Replaces the locales with the snippets data
+     *
+     * @param array $data
+     *
+     * @return array $data
+     */
+    private function getSnippetsForLocales($data)
+    {
+        $snippets = $this->container->get('snippets');
+        foreach ($data as &$locale) {
+            if (!empty($locale['language'])) {
+                $locale['language'] = $snippets->getNamespace('backend/locale/language')->get($locale['locale'],
+                    $locale['language'], true);
+            }
+            if (!empty($locale['territory'])) {
+                $locale['territory'] = $snippets->getNamespace('backend/locale/territory')->get($locale['locale'],
+                    $locale['territory'], true);
+            }
+        }
+
+        return $data;
     }
 }

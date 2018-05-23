@@ -25,8 +25,11 @@
 namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\CriteriaAwareInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -36,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
+class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
     const STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS = 'ImmediateDeliveryVariants';
 
@@ -44,6 +47,11 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
      * @var VariantHelper
      */
     private $variantHelper;
+
+    /**
+     * @var Criteria
+     */
+    private $criteria;
 
     public function __construct(VariantHelper $variantHelper)
     {
@@ -66,11 +74,27 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $this->variantHelper->joinVariants($query);
+        $conditions = $this->criteria->getConditionsByClass(VariantCondition::class);
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
 
         if (!$query->hasState(self::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS)) {
-            $query->andWhere('allVariants.instock >= allVariants.minpurchase');
+            if (empty($conditions)) {
+                $this->variantHelper->joinVariants($query);
+                $query->andWhere('allVariants.instock >= allVariants.minpurchase');
+            } else {
+                $query->andWhere('variant.instock >= variant.minpurchase');
+            }
             $query->addState(self::STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS);
         }
+    }
+
+    /**
+     * @param Criteria $criteria
+     */
+    public function setCriteria(Criteria $criteria)
+    {
+        $this->criteria = $criteria;
     }
 }

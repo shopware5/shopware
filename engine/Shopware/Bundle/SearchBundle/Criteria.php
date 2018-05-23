@@ -40,7 +40,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Criteria extends Extendable implements \JsonSerializable
+class Criteria extends Extendable
 {
     /**
      * Offset for the limitation
@@ -501,5 +501,32 @@ class Criteria extends Extendable implements \JsonSerializable
         $this->fetchCount = $fetchCount;
 
         return $this;
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return bool
+     */
+    public function hasConditionOfClass($class)
+    {
+        $conditions = $this->getConditionsByClass($class);
+
+        return !empty($conditions);
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return ConditionInterface[]
+     */
+    public function getConditionsByClass($class)
+    {
+        return array_filter(
+            $this->getConditions(),
+            function (ConditionInterface $condition) use ($class) {
+                return $condition instanceof $class;
+            }
+        );
     }
 }

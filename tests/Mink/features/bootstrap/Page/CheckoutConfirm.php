@@ -233,4 +233,12 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
         $button = $this->find('named', ['button', 'Adresse speichern']);
         $button->press();
     }
+
+    /**
+     * @param string $path
+     */
+    public function checkoutUsingGet($path)
+    {
+        $this->getDriver()->visit($path);
+    }
 }

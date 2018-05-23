@@ -48,14 +48,6 @@ class Widget extends ModelEntity
     private $name;
 
     /**
-     * @var string
-     * @ORM\Column(name="label", type="string", nullable=false)
-     *
-     * @deprecated
-     */
-    private $label;
-
-    /**
      * @var
      * @ORM\OneToMany(targetEntity="Shopware\Models\Widget\View", mappedBy="widget")
      */
@@ -99,27 +91,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
-     *
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    }
-
-    /**
-     * @return
+     * @return \Shopware\Models\Widget\View[]
      */
     public function getViews()
     {
@@ -127,7 +99,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @param  $views
+     * @param \Shopware\Models\Widget\View[] $views
      */
     public function setViews($views)
     {

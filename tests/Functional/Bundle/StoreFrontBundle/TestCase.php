@@ -287,14 +287,19 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup();
-
         $shop = $this->helper->getShop($shopId);
 
-        return $this->helper->createContext(
+        $context = $this->helper->createContext(
             $customerGroup,
             $shop,
             [$tax]
         );
+
+        if (!$context->getShop()->getCurrency()) {
+            $context->getShop()->setCurrency($context->getCurrency());
+        }
+
+        return $context;
     }
 
     /**

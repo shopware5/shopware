@@ -1,30 +1,44 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/bsd-license.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
  * This class is highly based on Zend_Controller_Request_Http
  *
- * @link https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Request/Abstract.php
- * @link https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Request/Http.php
+ * @see https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Request/Abstract.php
+ * @see https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Request/Http.php
  */
 class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Request_Request
 {
+    /**
+     * Scheme for http
+     */
+    const SCHEME_HTTP = 'http';
+
+    /**
+     * Scheme for https
+     */
+    const SCHEME_HTTPS = 'https';
     /**
      * @var string[]
      */
@@ -35,105 +49,158 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     ];
 
     /**
-     * @var array
-     */
-    private $attributes = [];
-
-    /**
      * Has the action been dispatched?
-     * @var boolean
+     *
+     * @var bool
      */
     protected $_dispatched = false;
 
     /**
      * Module
+     *
      * @var string
      */
     protected $_module;
 
     /**
      * Module key for retrieving module from params
+     *
      * @var string
      */
     protected $_moduleKey = 'module';
 
     /**
      * Controller
+     *
      * @var string
      */
     protected $_controller;
 
     /**
      * Controller key for retrieving controller from params
+     *
      * @var string
      */
     protected $_controllerKey = 'controller';
 
     /**
      * Action
+     *
      * @var string
      */
     protected $_action;
 
     /**
      * Action key for retrieving action from params
+     *
      * @var string
      */
     protected $_actionKey = 'action';
 
     /**
      * Request parameters
+     *
      * @var array
      */
     protected $_params = [];
 
     /**
-     * Scheme for http
-     *
-     */
-    const SCHEME_HTTP  = 'http';
-
-    /**
-     * Scheme for https
-     *
-     */
-    const SCHEME_HTTPS = 'https';
-
-    /**
      * Allowed parameter sources
+     *
      * @var array
      */
     protected $_paramSources = ['_GET', '_POST'];
 
     /**
      * REQUEST_URI
+     *
      * @var string;
      */
     protected $_requestUri;
 
     /**
      * Base URL of request
+     *
      * @var string
      */
     protected $_baseUrl;
 
     /**
      * Base path of request
+     *
      * @var string
      */
     protected $_basePath;
 
     /**
      * PATH_INFO
+     *
      * @var string
      */
     protected $_pathInfo = '';
 
     /**
      * Raw request body
+     *
      * @var string|false
      */
     protected $_rawBody;
+
+    /**
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
+     * Constructor
+     *
+     * If a $uri is passed, the object will attempt to populate itself using
+     * that information.
+     *
+     * @param string
+     */
+    public function __construct($uri = null)
+    {
+        if (null === $uri) {
+            $this->setRequestUri();
+        } else {
+            $uri = Zend_Uri::factory($uri);
+            if (!$uri->valid()) {
+                throw new RuntimeException('Invalid URI provided to constructor');
+            }
+
+            $path = $uri->getPath();
+            $query = $uri->getQuery();
+            if (!empty($query)) {
+                $path .= '?' . $query;
+            }
+            $this->setRequestUri($path);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __set($key, $value)
+    {
+        $this->set($key, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __isset($key)
+    {
+        return $this->has($key);
+    }
 
     /**
      * {@inheritdoc}
@@ -177,6 +244,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setSecure($value = true)
     {
         $_SERVER['HTTPS'] = $value ? 'on' : null;
+
         return $this;
     }
 
@@ -196,6 +264,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setHttpHost($host)
     {
         $_SERVER['HTTP_HOST'] = $host;
+
         return $this;
     }
 
@@ -206,6 +275,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     {
         $temp = strtoupper(str_replace('-', '_', $header));
         $_SERVER['HTTP_' . $temp] = $value;
+
         return $this;
     }
 
@@ -284,12 +354,13 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setActionName($value)
     {
         $this->_action = $value;
-        /**
+        /*
          * @see ZF-3465
          */
         if (null === $value) {
             $this->setParam($this->getActionKey(), $value);
         }
+
         return $this;
     }
 
@@ -307,6 +378,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setModuleKey($key)
     {
         $this->_moduleKey = (string) $key;
+
         return $this;
     }
 
@@ -324,6 +396,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setControllerKey($key)
     {
         $this->_controllerKey = (string) $key;
+
         return $this;
     }
 
@@ -341,6 +414,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setActionKey($key)
     {
         $this->_actionKey = (string) $key;
+
         return $this;
     }
 
@@ -386,6 +460,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function clearParams()
     {
         $this->_params = [];
+
         return $this;
     }
 
@@ -395,6 +470,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setDispatched($flag = true)
     {
         $this->_dispatched = $flag ? true : false;
+
         return $this;
     }
 
@@ -404,41 +480,6 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function isDispatched()
     {
         return $this->_dispatched;
-    }
-
-
-    /**
-     * Constructor
-     *
-     * If a $uri is passed, the object will attempt to populate itself using
-     * that information.
-     * @param string
-     */
-    public function __construct($uri = null)
-    {
-        if (null === $uri) {
-            $this->setRequestUri();
-        } else {
-            $uri = Zend_Uri::factory($uri);
-            if (!$uri->valid()) {
-                throw new RuntimeException('Invalid URI provided to constructor');
-            }
-
-            $path  = $uri->getPath();
-            $query = $uri->getQuery();
-            if (!empty($query)) {
-                $path .= '?' . $query;
-            }
-            $this->setRequestUri($path);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __get($key)
-    {
-        return $this->get($key);
     }
 
     /**
@@ -455,9 +496,9 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
                 return $_POST[$key];
             case isset($_COOKIE[$key]):
                 return $_COOKIE[$key];
-            case ($key == 'REQUEST_URI'):
+            case $key == 'REQUEST_URI':
                 return $this->getRequestUri();
-            case ($key == 'PATH_INFO'):
+            case $key == 'PATH_INFO':
                 return $this->getPathInfo();
             case isset($_SERVER[$key]):
                 return $_SERVER[$key];
@@ -471,25 +512,9 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     /**
      * {@inheritdoc}
      */
-    public function __set($key, $value)
-    {
-        $this->set($key, $value);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function set($key, $value)
     {
         throw new RuntimeException('Setting values in superglobals not allowed; please use setParam()');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __isset($key)
-    {
-        return $this->has($key);
     }
 
     /**
@@ -522,9 +547,11 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     {
         if (!is_array($spec) && $value === null) {
             unset($_GET[$spec]);
+
             return $this;
         } elseif (is_array($spec) && empty($spec)) {
             $_GET = [];
+
             return $this;
         }
 
@@ -536,6 +563,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             foreach ($spec as $key => $value) {
                 $this->setQuery($key, $value);
             }
+
             return $this;
         }
         $_GET[(string) $spec] = $value;
@@ -570,9 +598,11 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     {
         if (!is_array($spec) && $value === null) {
             unset($_POST[$spec]);
+
             return $this;
         } elseif (is_array($spec) && empty($spec)) {
             $_POST = [];
+
             return $this;
         }
 
@@ -583,9 +613,11 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             foreach ($spec as $key => $value) {
                 $this->setPost($key, $value);
             }
+
             return $this;
         }
         $_POST[(string) $spec] = $value;
+
         return $this;
     }
 
@@ -685,6 +717,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         }
 
         $this->_requestUri = $requestUri;
+
         return $this;
     }
 
@@ -711,6 +744,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
 
         if ($baseUrl !== null) {
             $this->_baseUrl = rtrim($baseUrl, '/');
+
             return $this;
         }
 
@@ -725,15 +759,15 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         } else {
             // Backtrack up the script_filename to find the portion matching
             // php_self
-            $path    = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : '';
-            $file    = isset($_SERVER['SCRIPT_FILENAME']) ? $_SERVER['SCRIPT_FILENAME'] : '';
-            $segs    = explode('/', trim($file, '/'));
-            $segs    = array_reverse($segs);
-            $index   = 0;
-            $last    = count($segs);
+            $path = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : '';
+            $file = isset($_SERVER['SCRIPT_FILENAME']) ? $_SERVER['SCRIPT_FILENAME'] : '';
+            $segs = explode('/', trim($file, '/'));
+            $segs = array_reverse($segs);
+            $index = 0;
+            $last = count($segs);
             $baseUrl = '';
             do {
-                $seg     = $segs[$index];
+                $seg = $segs[$index];
                 $baseUrl = '/' . $seg . $baseUrl;
                 ++$index;
             } while (($last > $index) && (false !== ($pos = strpos($path, $baseUrl))) && (0 != $pos));
@@ -745,12 +779,14 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         if (0 === strpos($requestUri, $baseUrl)) {
             // full $baseUrl matches
             $this->_baseUrl = $baseUrl;
+
             return $this;
         }
 
         if (0 === strpos($requestUri, dirname($baseUrl))) {
             // directory portion of $baseUrl matches
             $this->_baseUrl = rtrim(dirname($baseUrl), '/');
+
             return $this;
         }
 
@@ -763,6 +799,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         if (empty($basename) || !strpos($truncatedRequestUri, $basename)) {
             // no match whatsoever; set it blank
             $this->_baseUrl = '';
+
             return $this;
         }
 
@@ -788,7 +825,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             $this->setBaseUrl();
         }
 
-        return (($raw == false) ? urldecode($this->_baseUrl) : $this->_baseUrl);
+        return ($raw == false) ? urldecode($this->_baseUrl) : $this->_baseUrl;
     }
 
     /**
@@ -804,21 +841,22 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             $baseUrl = $this->getBaseUrl();
             if (empty($baseUrl)) {
                 $this->_basePath = '';
+
                 return $this;
             }
 
+            $basePath = $baseUrl;
             if (basename($baseUrl) === $filename) {
                 $basePath = dirname($baseUrl);
-            } else {
-                $basePath = $baseUrl;
             }
         }
 
-        if (substr(PHP_OS, 0, 3) === 'WIN') {
+        if (0 === strpos(PHP_OS, 'WIN')) {
             $basePath = str_replace('\\', '/', $basePath);
         }
 
         $this->_basePath = rtrim($basePath, '/');
+
         return $this;
     }
 
@@ -869,6 +907,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         }
 
         $this->_pathInfo = (string) $pathInfo;
+
         return $this;
     }
 
@@ -890,6 +929,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setParamSources(array $paramSources = [])
     {
         $this->_paramSources = $paramSources;
+
         return $this;
     }
 
@@ -923,7 +963,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getParams()
     {
-        $return       = $this->_params;
+        $return = $this->_params;
         $paramSources = $this->getParamSources();
         if (in_array('_GET', $paramSources)
             && isset($_GET)
@@ -937,6 +977,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         ) {
             $return += $_POST;
         }
+
         return $return;
     }
 
@@ -948,6 +989,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         foreach ($params as $key => $value) {
             $this->setParam($key, $value);
         }
+
         return $this;
     }
 
@@ -1012,7 +1054,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isXmlHttpRequest()
     {
-        return ($this->getHeader('X_REQUESTED_WITH') == 'XMLHttpRequest');
+        return $this->getHeader('X_REQUESTED_WITH') == 'XMLHttpRequest';
     }
 
     /**
@@ -1021,6 +1063,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function isFlashRequest()
     {
         $header = strtolower($this->getHeader('USER_AGENT'));
+
         return strstr($header, ' flash') ? true : false;
     }
 
@@ -1029,7 +1072,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isSecure()
     {
-        return ($this->getScheme() === self::SCHEME_HTTPS);
+        return $this->getScheme() === self::SCHEME_HTTPS;
     }
 
     /**
@@ -1046,6 +1089,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
                 $this->_rawBody = false;
             }
         }
+
         return $this->_rawBody;
     }
 
@@ -1110,16 +1154,16 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         }
 
         $scheme = $this->getScheme();
-        $name   = $this->getServer('SERVER_NAME');
-        $port   = $this->getServer('SERVER_PORT');
+        $name = $this->getServer('SERVER_NAME');
+        $port = $this->getServer('SERVER_PORT');
 
         if (null === $name) {
             return '';
         } elseif (($scheme == self::SCHEME_HTTP && $port == 80) || ($scheme == self::SCHEME_HTTPS && $port == 443)) {
             return $name;
-        } else {
-            return $name . ':' . $port;
         }
+
+        return $name . ':' . $port;
     }
 
     /**

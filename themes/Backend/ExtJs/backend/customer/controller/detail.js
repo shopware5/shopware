@@ -365,15 +365,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 addressData[field.getName()] = field.getValue();
             });
 
-            var addressModel = Ext.create('Shopware.apps.Customer.model.Address', addressData),
-                billingModel = Ext.create('Shopware.apps.Customer.model.Billing'),
-                shippingModel = Ext.create('Shopware.apps.Customer.model.Shipping');
-
-            billingModel.fromAddress(addressModel);
-            shippingModel.fromAddress(addressModel);
-
-            model.getBilling().add(billingModel);
-            model.getShipping().add(shippingModel);
+            var addressModel = Ext.create('Shopware.apps.Customer.model.Address', addressData);
         }
 
         form.getForm().updateRecord(model);

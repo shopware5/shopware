@@ -25,7 +25,7 @@
             <nav class="column--navigation column--content">
                 <ul class="navigation--list" role="menu">
                     {block name="frontend_index_footer_column_service_menu_before"}{/block}
-                    {foreach $sMenu.gBottom as $item}
+                    {foreach $sMenu.bottom as $item}
 
                         {block name="frontend_index_footer_column_service_menu_entry"}
                             <li class="navigation--entry" role="menuitem">
@@ -66,7 +66,7 @@
             <nav class="column--navigation column--content">
                 <ul class="navigation--list" role="menu">
                     {block name="frontend_index_footer_column_information_menu_before"}{/block}
-                        {foreach $sMenu.gBottom2 as $item}
+                        {foreach $sMenu.bottom2 as $item}
 
                             {block name="frontend_index_footer_column_information_menu_entry"}
                                 <li class="navigation--entry" role="menuitem">
@@ -123,6 +123,13 @@
                             <button type="submit" class="newsletter--button btn">
                                 <i class="icon--mail"></i> <span class="button--text">{s name='IndexFooterNewsletterSubmit'}{/s}</span>
                             </button>
+                        {/block}
+
+                        {* Data protection information *}
+                        {block name="frontend_index_footer_column_newsletter_privacy"}
+                            {if {config name=ACTDPRTEXT}}
+                                {include file="frontend/_includes/privacy.tpl"}
+                            {/if}
                         {/block}
                     </form>
                 {/block}

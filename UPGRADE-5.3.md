@@ -2,6 +2,64 @@
 
 This changelog references changes done in Shopware 5.3 patch versions.
 
+## 5.3.7
+
+[View all changes from v5.3.6...v5.3.7](https://github.com/shopware/shopware/compare/v5.3.6...v5.3.7)
+
+### Changes
+
+* Changed input validation to fix non persistent XSS vulnerability in the frontend
+* Changed timeout for store API requests
+
+### Deprecations
+
+* Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
+
+## 5.3.6
+
+[View all changes from v5.3.5...v5.3.6](https://github.com/shopware/shopware/compare/v5.3.5...v5.3.6)
+
+### Changes
+
+* Changed logging of exceptions to not log 404 errors 
+
+### Additions
+
+* Added product sorting by stock facet
+
+## 5.3.5
+
+[View all changes from v5.3.4...v5.3.5](https://github.com/shopware/shopware/compare/v5.3.4...v5.3.5)
+
+### Additions
+
+* Added new filter event `Shopware_Modules_Order_SaveOrder_FilterAttributes` to `engine/Shopware/Core/sOrder.php` to allow modification of the Order's attributes
+* Added new notify until event `Shopware_Plugins_HttpCache_ShouldNotInvalidateCache` to `engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php` to be notified when the cache for a model will be invalidated and be able to prevent it
+* Added new service `Shopware\Components\HttpCache\CacheRouteInstaller` for creating cache routes
+* Added smarty block `frontend_index_header_meta_description_twitter` for `twitter:description` meta tag
+* Added smarty block `frontend_index_header_meta_description_og` for `og:description` meta tag
+* Added EventEmitter to StateManager constructor
+* Added translation for article `shippingtime` field
+* Added feed-id parameter to sw:product:feeds:refresh to refresh only a specific product feed 
+* Added sw:product:feeds:list command to show all product feeds
+* Added possibility for the http cache component to ignore certain url parameters for the cache key. A set of default parameters will be provided in version 5.4
+* Added new API endpoint /users which allows to manage the backend users. For more information, look [here](https://developers.shopware.com/developers-guide/rest-api/api-resource-user/) 
+* Added generatePassword method to engine/Shopware/Components/Random.php which allows to generate cryptographically secure passwords
+* Added UserName and UserEmail validator in /engine/Shopware/Components/Auth
+* Added hidden `sordernumber` form fields to inquiry forms
+
+### Changes
+
+* Changed the cache ids for the listing back to a<id> instead of <id>
+* Changed the captcha validation with double-opt-in
+* Changed the `createValueListFacetResult` method of `ProductAttributeFacetHandler` to display translations of attribute values in facet list
+* Changed the snippet export to specify the fallback language
+* The tax id of the invoice address is now also used for deliveries to foreign countries if the invoice country and delivery country are marked to be tax free for companies and if the delivery address does not have a tax id
+
+### Removals
+
+* Removed ambiguous variant cache ids from the emotion pages (`a<variantId>`)
+
 ## 5.3.4
 
 [View all changes from v5.3.3...v5.3.4](https://github.com/shopware/shopware/compare/v5.3.3...v5.3.4)
@@ -13,7 +71,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added smarty function `is_object` to the list of allowed functions
 * Added grunt task support for child themes so that their tasks are run as well by the Shopware grunt
 * Added dispatch attributes to frontend
-* Added missing handling of plugin update fails by reloading the plugin listing in the plugin manager window
+* Added initialization check for the "disable" and "enable" form field functionality of the TinyMCE component
+* Added infinite sliding option to product slider
 
 ### Changes
 
@@ -23,6 +82,13 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed method visibility of `\Shopware_Controllers_Backend_Search::createEntitySearchQuery` from `private` to `public`
 * Changed the `I am` select option for the registration: If it is deactivated in the backend, it effects only the registration
 * Changed the update, delete and insert backlog from product number to the main detail product number by variant and price model
+* Changed payment type text legacy for `the_payment_has_been_ordered_by_hanseatic_bank` to be more generic
+* Changed the snippet read operation: Snippets with numeric names are now possible
+* Changed the creation of Cronjobs to insert active Cronjobs by a `cronjob.xml`
+
+### Removals
+
+* Removed the default option `touchControls: true` from the instantiation of the `swImageSlider`
 
 ## 5.3.3
 
@@ -280,7 +346,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed snippet `ListingBuyActionAdd` in `snippets/frontend/listing/box_article.ini`, it now contains another <span> tag
 * Merged `account/sidebar.tpl` and `account/sidebar_personal.tpl`
 * Moved snippets from `account/sidebar_personal.ini` to `account/sidebar.ini`
-* Changed `Enlight_Hook_ProxyFactory` to use `ocramius/proxy-manager` for generating proxy classes
 
 ### Removals
 

@@ -1,8 +1,9 @@
 {extends file="frontend/account/index.tpl"}
 
 {* Breadcrumb *}
-{block name="frontend_index_start" append}
-    {$sBreadcrumb[] = ['name'=>"{s name='MyDownloadsTitle'}{/s}", 'link'=>{url}]}
+{block name="frontend_index_start"}
+    {$smarty.block.parent}
+    {$sBreadcrumb[] = ['name' => "{s name='MyDownloadsTitle'}{/s}", 'link' => {url}]}
 {/block}
 
 {* Main content *}
@@ -120,6 +121,7 @@
                             {foreach $sPages.numbers as $page}
                                 {if $page.markup}
                                     <a class="paging--link is--active">{$page.value}</a>
+                                    {$sPage=$page.value}
                                 {else}
                                     <a href="{$page.link}" class="paging--link">{$page.value}</a>
                                 {/if}

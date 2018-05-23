@@ -25,8 +25,8 @@
 namespace Shopware\Components\Theme\EventListener;
 
 use Enlight\Event\SubscriberInterface;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ConfigLoader
@@ -34,14 +34,14 @@ use Shopware\Models\Shop\Shop;
 class ConfigLoader implements SubscriberInterface
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @param Container $container
+     * @param ContainerInterface $container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -74,21 +74,22 @@ class ConfigLoader implements SubscriberInterface
         /** @var $shop Shop */
         $shop = $this->container->get('shop');
 
+        $inheritance = $this->container->get('theme_inheritance');
+
         $templateManager = $this->container->get('template');
+        $templateManager->addPluginsDir(
+            $inheritance->getSmartyDirectories($shop->getTemplate())
+        );
+
         $themeSettings = $templateManager->getTemplateVars('theme');
         if (!empty($themeSettings)) {
             return;
         }
 
-        $inheritance = $this->container->get('theme_inheritance');
         $config = $inheritance->buildConfig(
             $shop->getTemplate(),
             $shop,
             false
-        );
-
-        $templateManager->addPluginsDir(
-            $inheritance->getSmartyDirectories($shop->getTemplate())
         );
 
         $templateManager->assign('theme', $config);

@@ -28,7 +28,7 @@
 
     {block name="frontend_detail_index_notification_form"}
         {if !$NotifyAlreadyRegistered}
-            <form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" class="notification--form block-group">
+            <form method="post" action="{url action='notify' sArticle=$sArticle.articleID number=$sArticle.ordernumber}" class="notification--form block-group">
                 <input type="hidden" name="notifyOrdernumber" value="{$sArticle.ordernumber}" />
                 {block name="frontend_detail_index_notification_field"}
                     <input name="sNotificationEmail" type="email" class="notification--field block" placeholder="{s name='DetailNotifyLabelMail'}{/s}" />
@@ -38,6 +38,13 @@
                     <button type="submit" class="notification--button btn is--center block">
                         <i class="icon--mail"></i>
                     </button>
+                {/block}
+
+                {* Data protection information *}
+                {block name="frontend_detail_index_notification_privacy"}
+                    {if {config name=ACTDPRTEXT}}
+                        {include file="frontend/_includes/privacy.tpl"}
+                    {/if}
                 {/block}
             </form>
         {/if}

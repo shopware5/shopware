@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Components\Api\Resource\Address;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
 
@@ -139,23 +140,23 @@ class CustomerTest extends TestCase
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
 
-        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstname']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
         $this->assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
 
-        $this->assertEquals($customer->getBilling()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
         $this->assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
 
-        $this->assertEquals($customer->getShipping()->getFirstName(), $testData['shipping']['firstname']);
+        $this->assertEquals($customer->getDefaultShippingAddress()->getFirstName(), $testData['shipping']['firstname']);
         $this->assertEquals($customer->getDefaultShippingAddress()->getFirstname(), $testData['shipping']['firstname']);
 
-        $this->assertEquals($customer->getShipping()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
+        $this->assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
         $this->assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
 
         //test additional address lines
-        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
-        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
-        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
-        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
+        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
+        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
 
         return $customer->getId();
     }
@@ -292,14 +293,14 @@ class CustomerTest extends TestCase
         $this->assertEquals($id, $customer->getId());
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
-        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstname']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
 
         //test additional fields
-        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
-        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
 
-        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
-        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
+        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
+        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
 
         return $id;
     }
@@ -328,7 +329,7 @@ class CustomerTest extends TestCase
         $this->assertEquals($id, $customer->getId());
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
-        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstname']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
 
         return $number;
     }
@@ -376,8 +377,6 @@ class CustomerTest extends TestCase
 
         $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
         $this->assertEquals(null, $customer->getId());
-        $this->assertEquals(null, $customer->getShipping()->getId());
-        $this->assertEquals(null, $customer->getBilling()->getId());
     }
 
     /**

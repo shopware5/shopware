@@ -142,7 +142,7 @@ class CustomerEmailValidator extends ConstraintValidator
 
         if ($shop->hasCustomerScope()) {
             $builder->andWhere('subshopID = :shopId');
-            $builder->setParameter('shopId', $shop->getId());
+            $builder->setParameter('shopId', $shop->getParentId());
         }
 
         if ($customerId !== null) {

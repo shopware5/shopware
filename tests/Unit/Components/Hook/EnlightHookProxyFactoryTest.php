@@ -87,11 +87,11 @@ class EnlightHookProxyFactoryTest extends TestCase
 class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\MyBasicTestClass implements \Enlight_Hook_Proxy
 {
 
-    public function executeParent($method, $args = array())
-    {
-        return call_user_func_array([$this, 'parent::' . $method], $args);
-    }
+    private $__hookProxyExecutionContexts = null;
 
+    /**
+     * @inheritdoc
+     */
     public static function getHookMethods()
     {
         return ['myPublic', 'myProtected'];
@@ -100,11 +100,78 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
     /**
      * @inheritdoc
      */
+    public function __pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context)
+    {
+        $this->__hookProxyExecutionContexts[$method][] = $context;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __popHookExecutionContext($method)
+    {
+        if (isset($this->__hookProxyExecutionContexts[$method])) {
+            array_pop($this->__hookProxyExecutionContexts[$method]);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __getCurrentHookProxyExecutionContext($method)
+    {
+        if (!isset($this->__hookProxyExecutionContexts[$method]) || count($this->__hookProxyExecutionContexts[$method]) === 0) {
+            return null;
+        }
+
+        $contextCount = count($this->__hookProxyExecutionContexts[$method]);
+        $context = $this->__hookProxyExecutionContexts[$method][$contextCount - 1];
+
+        return $context;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __getActiveHookManager($method)
+    {
+        $context = $this->__getCurrentHookProxyExecutionContext($method);
+        $hookManager = ($context) ? $context->getHookManager() : Shopware()->Hooks();
+
+        return $hookManager;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function executeParent($method, array $args = array())
+    {
+        $context = $this->__getCurrentHookProxyExecutionContext($method);
+        if (!$context) {
+            throw new Exception(
+                sprintf('Cannot execute parent without hook execution context for method "%s"', $method)
+            );
+        }
+
+        return $context->executeReplaceChain($args);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __executeOriginalMethod($method, array $args = array())
+    {
+        return parent::{$method}(...$args);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function myPublic($bar, $foo = 'bar', array $barBar = array(), \Shopware\Tests\Unit\Components\MyInterface $fooFoo = null)
     {
-        return Shopware()->Hooks()->executeHooks(
+        return $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
             $this,
-            'myPublic',
+            __FUNCTION__,
             ['bar' => $bar, 'foo' => $foo, 'barBar' => $barBar, 'fooFoo' => $fooFoo]
         );
     }
@@ -114,9 +181,9 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
      */
     protected function myProtected($bar)
     {
-        return Shopware()->Hooks()->executeHooks(
+        return $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
             $this,
-            'myProtected',
+            __FUNCTION__,
             ['bar' => $bar]
         );
     }
@@ -136,11 +203,11 @@ EOT;
 class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\MyReferenceTestClass implements \Enlight_Hook_Proxy
 {
 
-    public function executeParent($method, $args = array())
-    {
-        return call_user_func_array([$this, 'parent::' . $method], $args);
-    }
+    private $__hookProxyExecutionContexts = null;
 
+    /**
+     * @inheritdoc
+     */
     public static function getHookMethods()
     {
         return ['myPublic'];
@@ -149,11 +216,78 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
     /**
      * @inheritdoc
      */
+    public function __pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context)
+    {
+        $this->__hookProxyExecutionContexts[$method][] = $context;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __popHookExecutionContext($method)
+    {
+        if (isset($this->__hookProxyExecutionContexts[$method])) {
+            array_pop($this->__hookProxyExecutionContexts[$method]);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __getCurrentHookProxyExecutionContext($method)
+    {
+        if (!isset($this->__hookProxyExecutionContexts[$method]) || count($this->__hookProxyExecutionContexts[$method]) === 0) {
+            return null;
+        }
+
+        $contextCount = count($this->__hookProxyExecutionContexts[$method]);
+        $context = $this->__hookProxyExecutionContexts[$method][$contextCount - 1];
+
+        return $context;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __getActiveHookManager($method)
+    {
+        $context = $this->__getCurrentHookProxyExecutionContext($method);
+        $hookManager = ($context) ? $context->getHookManager() : Shopware()->Hooks();
+
+        return $hookManager;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function executeParent($method, array $args = array())
+    {
+        $context = $this->__getCurrentHookProxyExecutionContext($method);
+        if (!$context) {
+            throw new Exception(
+                sprintf('Cannot execute parent without hook execution context for method "%s"', $method)
+            );
+        }
+
+        return $context->executeReplaceChain($args);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __executeOriginalMethod($method, array $args = array())
+    {
+        return parent::{$method}(...$args);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function myPublic(&$bar, $foo)
     {
-        return Shopware()->Hooks()->executeHooks(
+        return $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
             $this,
-            'myPublic',
+            __FUNCTION__,
             ['bar' => &$bar, 'foo' => $foo]
         );
     }

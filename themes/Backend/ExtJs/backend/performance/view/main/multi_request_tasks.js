@@ -119,25 +119,25 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     },
 
     httpCache: {
-        article: {
-            initialText: '{s name=progress/initialArticles}Article URLs...{/s}',
-            progressText: '{s name=progress/articles}[0] of [1] article URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=article}'
-        },
         category: {
             initialText: '{s name=progress/initialCategory}Category URLs...{/s}',
             progressText: '{s name=progress/category}[0] of [1] category URLs{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=category}'
         },
-        blog: {
-            initialText: '{s name=progress/initialBlog}Blog URLs...{/s}',
-            progressText: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}'
-        },
         static: {
             initialText: '{s name=progress/initialStatic}Static URLs...{/s}',
             progressText: '{s name=progress/httpCacheWarmer/static}[0] of [1] static URLs{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=static}'
+        },
+        article: {
+            initialText: '{s name=progress/initialArticles}Article URLs...{/s}',
+            progressText: '{s name=progress/articles}[0] of [1] article URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=article}'
+        },
+        blog: {
+            initialText: '{s name=progress/initialBlog}Blog URLs...{/s}',
+            progressText: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}'
         },
         supplier: {
             initialText: '{s name=progress/initialSupplier}Supplier URLs...{/s}',
@@ -156,7 +156,15 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         close: '{s name=progress/close}Close window{/s}'
     },
 
+    /**
+     * How many items should be worked in batch in one AJAX-request to the server
+     */
     batchSize: 50,
+
+    /**
+     * For HTTPCache, how many URLs should be called concurrently?
+     */
+    concurrencySize: 2,
 
     currentType: 'seo',
 
@@ -262,7 +270,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                 padding: '20 0',
                 items: items
             },
-            me.createBatchSizeCombo()
+            me.createBatchSizeCombo(),
+            me.createConcurrencySizeCombo()
         ];
     },
 
@@ -309,6 +318,49 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         );
     },
 
+    createConcurrencySizeCombo: function() {
+        var me = this;
+
+        me.concurrencySizeCombo = Ext.create('Ext.form.ComboBox', {
+            fieldLabel: '{s name=multi_request/concurrency/label}Concurrency{/s}',
+            helpText: '{s name=multi_request/concurrency/help}How many URLs should be requested in parallel? Default: 2{/s}',
+            name: 'concurrencySize',
+            margin: '0 0 10 0',
+            allowBlank: false,
+            value: me.concurrencySize,
+            editable: true,
+            displayField: 'concurrencySize',
+            validator: function (value) {
+                if (value > me.batchSizeCombo.getValue()) {
+                    me.startButton.disable();
+                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                }
+                me.batchSizeCombo.clearInvalid();
+                me.startButton.enable();
+                return true;
+            },
+            store: Ext.create('Ext.data.Store', {
+                fields: [
+                    { name: 'concurrencySize', type: 'int' }
+                ],
+                data: [
+                    { concurrencySize: '1' },
+                    { concurrencySize: '2' },
+                    { concurrencySize: '3' },
+                    { concurrencySize: '4' },
+                    { concurrencySize: '5' },
+                    { concurrencySize: '6' },
+                    { concurrencySize: '7' },
+                    { concurrencySize: '8' },
+                    { concurrencySize: '9' },
+                    { concurrencySize: '10' }
+                ]
+            })
+        });
+
+        return me.concurrencySizeCombo;
+    },
+
     createBatchSizeCombo: function() {
         var me = this;
 
@@ -321,6 +373,16 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             value: me.batchSize,
             editable: true,
             displayField: 'batchSize',
+            validator: function (value) {
+                if (value < me.concurrencySizeCombo.getValue()) {
+                    me.startButton.disable();
+                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                }
+                me.concurrencySizeCombo.clearInvalid();
+                me.startButton.enable();
+
+                return true;
+            },
             store: Ext.create('Ext.data.Store', {
                 fields: [
                     { name: 'batchSize', type: 'int' }

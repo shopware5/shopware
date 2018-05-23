@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DbAdapter;
 use Shopware\Models\Plugin\Plugin;
@@ -103,20 +102,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             'sectionColumn' => ['shopID', 'localeID'],
             'allowWrites' => $snippetConfig['writeToDb'],
         ]);
-    }
-
-    /**
-     * Returns a snippet model instance
-     *
-     * @param string $namespace
-     *
-     * @return Enlight_Components_Snippet_Namespace
-     *
-     * @deprecated  4.0 - 2012/04/01
-     */
-    public function getSnippet($namespace = null)
-    {
-        return parent::getNamespace($namespace);
     }
 
     /**

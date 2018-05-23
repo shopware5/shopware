@@ -88,6 +88,7 @@ class Billing extends ModelEntity
      * @var \Shopware\Models\Attribute\OrderBilling
      */
     protected $attribute;
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field

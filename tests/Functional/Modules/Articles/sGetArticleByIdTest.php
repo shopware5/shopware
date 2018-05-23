@@ -1956,7 +1956,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'esd' => false,
             'sBlockPrices' => [],
             'sVariants' => [],
-            'referenceprice' => '14.271',
+            'referenceprice' => '14.27',
             'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
             'priceStartingFrom' => 0,
             'image' => [

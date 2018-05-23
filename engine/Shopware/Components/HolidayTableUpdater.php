@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Doctrine\DBAL\Connection as Connection;
+use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware
@@ -164,6 +164,6 @@ SQL;
         $d = $L + 28 - 31 * ((int) ($m / 4));
         $E = mktime(0, 0, 0, $m, $d, $year) - mktime(0, 0, 0, 3, 21, $year);
 
-        return intval(round($E / (60 * 60 * 24), 0));
+        return (int) round($E / (60 * 60 * 24), 0);
     }
 }

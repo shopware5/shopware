@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\LegacyRequestWrapper\CookieWrapper;
 use Shopware\Components\LegacyRequestWrapper\GetWrapper;
 use Shopware\Components\LegacyRequestWrapper\PostWrapper;

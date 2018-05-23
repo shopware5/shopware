@@ -114,7 +114,6 @@
             var me = this;
 
             $(document).ajaxSend($.proxy(me._ajaxBeforeSend, me));
-            $(document).ajaxSend($.proxy(me._jsonpBeforeSend, me));
             $(document).ajaxComplete($.proxy(me._ajaxAfterSend, me));
 
             $.publish('plugin/swCsrfProtection/setupAjax', [ me, me.getToken() ]);
@@ -132,7 +131,7 @@
         },
 
         /**
-         * Append X-CSRF-Token header to every request which is not a jsonp-request
+         * Append X-CSRF-Token header
          *
          * @param event
          * @param request
@@ -146,34 +145,7 @@
                 return;
             }
 
-            if (!settings.dataType || settings.dataType.toLowerCase() === 'jsonp') {
-                return;
-            }
-
             request.setRequestHeader('X-CSRF-Token', this.getToken());
-        },
-
-        /**
-         * Append __csrf_token parameter to the URL if it's missing
-         * @param event
-         * @param request
-         * @param settings
-         * @private
-         */
-        _jsonpBeforeSend: function(event, request, settings) {
-            if (!settings.type || settings.type.toLowerCase() !== 'get' ||
-                !settings.dataType || settings.dataType.toLowerCase() !== 'jsonp') {
-                return;
-            }
-
-            if (settings.url.indexOf('__csrf_token=') !== -1) {
-                return;
-            }
-
-            if (!settings.appendCSRFToken || settings.appendCSRFToken !== true) {
-                return;
-            }
-            settings.url += (settings.url.indexOf('?') >= 0 ? '&' : '?') + '__csrf_token=' + this.getToken();
         },
 
         /**

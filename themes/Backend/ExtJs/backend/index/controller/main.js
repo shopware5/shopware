@@ -46,7 +46,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep'),
             firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled,
             enableInstallationFeedback = me.subApplication.enableInstallationFeedback,
-            enableBetaFeedback = me.subApplication.enableBetaFeedback;
+            enableBetaFeedback = me.subApplication.enableBetaFeedback,
+            biOverviewEnabled = me.subApplication.biOverviewEnabled;
 
         if (!firstRunWizardEnabled) {
             firstRunWizardStep = 0;
@@ -74,7 +75,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         } else {
             me.initBackendDesktop();
-            
+
             if (enableInstallationFeedback) {
                 Ext.Function.defer(function() {
                     Shopware.app.Application.addSubApplication({
@@ -98,6 +99,17 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         });
                     }, 2000);
                 }
+            }
+
+            if (biOverviewEnabled) {
+                Ext.Function.defer(function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Benchmark',
+                        params: {
+                            isTeaser: true
+                        }
+                    });
+                }, 2000);
             }
         }
     },
@@ -407,7 +419,6 @@ createKeyNavOverlay = function() {
         items: [ dataView ]
     });
     win.show();
-
 };
 
 /**
@@ -459,7 +470,7 @@ openSearchResult = function(module, id) {
             break;
     }
     return false;
-}
+};
 
 /**
  * Proxy method which just shows a growl like
@@ -490,7 +501,7 @@ createShopwareVersionMessage = function() {
             xtype: 'container',
             region: 'south',
             cls: Ext.baseCSSPrefix + 'about-shopware-footer',
-            html: '<a  href="http://www.shopware.de" target="_blank">{s name=about/footer}Copyright &copy; shopware AG. All rights reserved.{/s}</a>'
+            html: '<a  href="https://www.shopware.com" target="_blank">{s name=about/footer}Copyright &copy; shopware AG. All rights reserved.{/s}</a>'
         }, {
             xtype: 'container',
             region: 'center',
@@ -498,8 +509,8 @@ createShopwareVersionMessage = function() {
             autoScroll: true,
             cls: Ext.baseCSSPrefix + 'about-shopware-content',
             html: '<p>' +
-                    '<strong>Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT}</strong>' +
-                    '<span>Build Rev {Shopware::REVISION}</span></p>' +
+                    '<strong>Shopware {$SHOPWARE_VERSION} {$SHOPWARE_VERSION_TEXT}</strong>' +
+                    '<span>Build Rev {$SHOPWARE_REVISION}</span></p>' +
 
                     '{if $product == "CE"}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
                     '<p><strong>{if $product == "PE"}Professional Edition{elseif $product == "PP"}Professional Plus Edition{elseif $product == "EE"}Enterprise Edition{elseif $product == "EB"}Enterprise Business Edition{elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
@@ -536,5 +547,5 @@ createShopwareVersionMessage = function() {
         single: true,
         stopEvent: true
     });
-}
+};
 //{/block}

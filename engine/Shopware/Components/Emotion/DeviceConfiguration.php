@@ -164,9 +164,7 @@ class DeviceConfiguration
         /** @var $statement \PDOStatement */
         $statement = $query->execute();
 
-        $shops = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-        return $shops;
+        return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**

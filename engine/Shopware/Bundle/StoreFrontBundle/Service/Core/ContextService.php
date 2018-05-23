@@ -34,8 +34,8 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
@@ -47,7 +47,7 @@ class ContextService implements ContextServiceInterface
     const FALLBACK_CUSTOMER_GROUP = 'EK';
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -87,7 +87,7 @@ class ContextService implements ContextServiceInterface
     private $countryGateway;
 
     /**
-     * @param Container                          $container
+     * @param ContainerInterface                 $container
      * @param CustomerGroupGatewayInterface      $customerGroupGateway
      * @param TaxGatewayInterface                $taxGateway
      * @param CountryGatewayInterface            $countryGateway
@@ -96,7 +96,7 @@ class ContextService implements ContextServiceInterface
      * @param CurrencyGatewayInterface           $currencyGateway
      */
     public function __construct(
-        Container $container,
+        ContainerInterface $container,
         CustomerGroupGatewayInterface $customerGroupGateway,
         TaxGatewayInterface $taxGateway,
         CountryGatewayInterface $countryGateway,

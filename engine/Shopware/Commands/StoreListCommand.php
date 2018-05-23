@@ -26,6 +26,7 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -89,7 +90,7 @@ class StoreListCommand extends StoreCommand
             ];
         }
 
-        $table = $this->getHelperSet()->get('table');
+        $table = new Table($output);
         $table->setHeaders(['Technical name', 'Description', 'domain', 'Creation date', 'Type'])
               ->setRows($result);
 

@@ -75,7 +75,14 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
             filterString += 'ARTICLE.ID > 0';
         }
 
-        me.getController('Suggest').loadFilter(filterString, me.getFilterNameByConfig(categoryId, showVariants));
+        me.getController('Suggest').loadFilter(
+            filterString,
+            me.getFilterNameByConfig(categoryId, showVariants),
+            {
+                categoryId: categoryId,
+                showVariants: showVariants
+            }
+        );
     },
 
     onShowVariants: function(isActive) {
@@ -104,8 +111,6 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
         }
 
         return snippet;
-
     }
-
 });
 //{/block}

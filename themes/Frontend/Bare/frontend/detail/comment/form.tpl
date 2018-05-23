@@ -20,7 +20,7 @@
 
         {* Review author name *}
         {block name='frontend_detail_comment_input_name'}
-            <input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}*" required="required" aria-required="true" />
+            <input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}" />
         {/block}
 
         {* Reviewer email address *}
@@ -88,6 +88,13 @@
             <p class="review--notice">
                 {s name="DetailCommentInfoFields"}{/s}
             </p>
+        {/block}
+
+        {* Data protection information *}
+        {block name='frontend_detail_comment_input_privacy'}
+            {if {config name=ACTDPRTEXT}}
+                {include file="frontend/_includes/privacy.tpl"}
+            {/if}
         {/block}
 
         {* Review actions *}

@@ -1,7 +1,15 @@
 {literal}
 <script type="text/javascript">
-    document.getElementById('main-script').addEventListener('load', function() {
+    // Wrap the replacement code into a function to call it from the outside to replace the method when necessary
+    var replaceAsyncReady = window.replaceAsyncReady = function() {
+        document.asyncReady = function (callback) {
+            if (typeof callback === 'function') {
+                window.setTimeout(callback.apply(document), 0);
+            }
+        };
+    };
 
+    document.getElementById('main-script').addEventListener('load', function() {
         if (!asyncCallbacks) {
             return false;
         }
@@ -12,11 +20,7 @@
             }
         }
 
-        document.asyncReady = function (callback) {
-            if (typeof callback === 'function') {
-                window.setTimeout(callback.apply(document), 0);
-            }
-        }
+        replaceAsyncReady();
     });
 </script>
 {/literal}

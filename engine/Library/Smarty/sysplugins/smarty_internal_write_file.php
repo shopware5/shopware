@@ -1,31 +1,44 @@
 <?php
 /**
- * Smarty write file plugin
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * @package Smarty
- * @subpackage PluginsInternal
- * @author Monte Ohrt
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
  * Smarty Internal Write File Class
- *
- * @package Smarty
- * @subpackage PluginsInternal
  */
-class Smarty_Internal_Write_File {
-
+class Smarty_Internal_Write_File
+{
     /**
      * Writes file in a safe way to disk
      *
      * @param string $_filepath complete filepath
      * @param string $_contents file content
      * @param Smarty $smarty    smarty instance
-     * @return boolean true
+     *
+     * @return bool true
      */
     public static function writeFile($_filepath, $_contents, Smarty $smarty)
     {
-        if(empty($_contents)) {
+        if (empty($_contents)) {
             return false;
         }
         $_error_reporting = error_reporting();
@@ -83,6 +96,7 @@ class Smarty_Internal_Write_File {
         }
 
         error_reporting($_error_reporting);
+
         return $success;
     }
 
@@ -92,7 +106,8 @@ class Smarty_Internal_Write_File {
      * @see https://bugs.php.net/bug.php?id=35326
      *
      * @param string $pathname a (nested) directory path to create
-     * @param integer $mode the permission to use
+     * @param int    $mode     the permission to use
+     *
      * @return bool true iff the directory path was successfully created
      */
     private static function ensureDirectoryExists($pathname, $mode)

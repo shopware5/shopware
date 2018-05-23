@@ -306,23 +306,16 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
      */
     private function assertAddress($email, $data, $type = 'billing')
     {
-        $table = 's_user_billingaddress';
         $column = 'default_billing_address_id';
         if ($type !== 'billing') {
-            $table = 's_user_shippingaddress';
             $column = 'default_shipping_address_id';
         }
 
-        $legacy = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
-            'SELECT address.id FROM ' . $table . ' address, s_user user WHERE user.email = :mail AND address.userID = user.id LIMIT 1',
-            [':mail' => $email]
-        );
         $address = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
             'SELECT address.* FROM s_user_addresses address, s_user user WHERE user.' . $column . ' = address.id AND user.email = :mail',
             [':mail' => $email]
         );
 
-        $this->assertNotEmpty($legacy);
         $this->assertNotEmpty($address);
 
         foreach ($data as $key => $value) {

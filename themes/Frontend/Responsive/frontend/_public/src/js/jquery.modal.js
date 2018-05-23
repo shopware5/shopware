@@ -299,25 +299,25 @@
             $modalBox.css('display', 'block');
 
             switch (opts.mode) {
-            case 'ajax':
-                $.ajax(content, {
-                    data: {
-                        isXHR: 1
-                    },
-                    success: function (result) {
-                        me.setContent(result);
-                        $.publish('plugin/swModal/onOpenAjax', me);
-                    }
-                });
-                me.options.src = content;
-                break;
-            case 'iframe':
-                me.setContent('<iframe class="content--iframe" src="' + content + '" width="100%" height="100%"></iframe>');
-                me.options.src = content;
-                break;
-            default:
-                me.setContent(content);
-                break;
+                case 'ajax':
+                    $.ajax(content, {
+                        data: {
+                            isXHR: 1
+                        },
+                        success: function (result) {
+                            me.setContent(result);
+                            $.publish('plugin/swModal/onOpenAjax', me);
+                        }
+                    });
+                    me.options.src = content;
+                    break;
+                case 'iframe':
+                    me.setContent('<iframe class="content--iframe" src="' + content + '" width="100%" height="100%"></iframe>');
+                    me.options.src = content;
+                    break;
+                default:
+                    me.setContent(content);
+                    break;
             }
 
             me.setTransition({

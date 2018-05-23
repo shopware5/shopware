@@ -259,21 +259,21 @@
              * many parameters.
              */
             switch (args.length) {
-            case 0:
-                while (++i < len) (event = eventList[i]).callback.call(event.context);
-                return me;
-            case 1:
-                while (++i < len) (event = eventList[i]).callback.call(event.context, a1);
-                return me;
-            case 2:
-                while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2);
-                return me;
-            case 3:
-                while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2, a3);
-                return me;
-            default:
-                while (++i < len) (event = eventList[i]).callback.apply(event.context, args);
-                return me;
+                case 0:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context);
+                    return me;
+                case 1:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1);
+                    return me;
+                case 2:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2);
+                    return me;
+                case 3:
+                    while (++i < len) (event = eventList[i]).callback.call(event.context, a1, a2, a3);
+                    return me;
+                default:
+                    while (++i < len) (event = eventList[i]).callback.apply(event.context, args);
+                    return me;
             }
         },
 
@@ -294,7 +294,16 @@
      * @type {Object}
      */
     window.StateManager = $.extend(Object.create(EventEmitter.prototype), {
-
+        
+        /**
+         * Constructor for Shopware EventEmitter
+         *
+         * @public
+         * @class EventEmitter
+         * @constructor
+         */
+        EventEmitter: EventEmitter,
+        
         /**
          * Collection of all registered breakpoints
          *
@@ -1281,7 +1290,7 @@
             detections['is--chrome'] = !detections['is--edge'] && me._checkUserAgent(/\bchrome\b/);
             detections['is--firefox'] = me._checkUserAgent(/firefox/);
             detections['is--webkit'] = !detections['is--edge'] && me._checkUserAgent(/webkit/);
-            detections['is--safari'] = !detections['is--edge'] && !detections['is--chrome'] && me._checkUserAgent(/safari/);
+            detections['is--safari'] = !detections['is--edge'] && !detections['is--chrome'] && me._checkUserAgent(/safari/) && me._checkUserAgent(/trident/);
             detections['is--ie'] = !detections['is--opera'] && (me._checkUserAgent(/msie/) || me._checkUserAgent(/trident\/7/));
             detections['is--ie-touch'] = detections['is--ie'] && me._checkUserAgent(/touch/);
             detections['is--gecko'] = !detections['is--webkit'] && me._checkUserAgent(/gecko/);
@@ -1292,21 +1301,22 @@
         },
 
         _getCurrentDevice: function() {
-            var me = this,
-                devices = {
-                    'xs': 'mobile',
-                    's': 'mobile',
-                    'm': 'tablet',
-                    'l': 'tablet',
-                    'xl': 'desktop'
-                };
+            var i = 0,
+                width = this.getViewportWidth(),
+                device = 'desktop',
+                devices = window.statisticDevices || [];
 
-            return devices[me.getCurrentState()] || 'desktop';
+            for (; i < devices.length; i++) {
+                if (width >= ~~(devices[i].enter) && width <= ~~(devices[i].exit)) {
+                    device = devices[i].device;
+                }
+            }
+
+            return device;
         },
 
         _setDeviceCookie: function() {
-            var me = this,
-                device = me._getCurrentDevice();
+            var device = this._getCurrentDevice();
 
             document.cookie = 'x-ua-device=' + device + '; path=/';
         },

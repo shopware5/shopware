@@ -46,10 +46,8 @@ class PaymentDataRepository extends ModelRepository
             ->where('customer.id = :userId')
             ->andWhere('paymentmean.name = :paymentName')
             ->andWhere('paymentmean.active = 1')
-            ->setParameters([
-                'userId' => $userId,
-                'paymentName' => $paymentName,
-            ]);
+            ->setParameter('userId', $userId)
+            ->setParameter('paymentName', $paymentName);
 
         return $builder;
     }

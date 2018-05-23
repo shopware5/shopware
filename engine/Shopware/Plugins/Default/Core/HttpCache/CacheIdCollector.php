@@ -52,7 +52,7 @@ class CacheIdCollector
                 return $this->getBlogCacheIds($request, $view);
 
             case 'widgets/listing':
-                return $this->getAjaxListingCacheIds($context, $request, $view);
+                return $this->getAjaxListingCacheIds($request, $view);
 
             case 'frontend/index':
                 return $this->getHomePageCacheIds($context);
@@ -66,9 +66,11 @@ class CacheIdCollector
             case 'widgets/emotion':
                 return $this->getEmotionCacheIds($view);
 
-                break;
             case 'frontend/listing':
-                return $this->getListingCacheIds($view);
+                return $this->getListingCacheIds($request, $view);
+
+            case 'frontend/custom':
+                return $this->getStaticSiteCacheIds($request);
 
             default:
                 return [];
@@ -103,13 +105,11 @@ class CacheIdCollector
         return $cacheIds;
     }
 
-    private function getAjaxListingCacheIds(ShopContextInterface $context, Request $request, View $view)
+    private function getAjaxListingCacheIds(Request $request, View $view)
     {
         $cacheIds = [];
+
         $categoryId = (int) $request->getParam('sCategory');
-        if (empty($categoryId)) {
-            $categoryId = $context->getShop()->getCategory()->getId();
-        }
         $cacheIds[] = 'c' . $categoryId;
 
         foreach ($view->getAssign('sArticles') as $article) {
@@ -186,13 +186,11 @@ class CacheIdCollector
                         continue;
                     }
                     $cacheIds[] = 'a' . $product->getId();
-                    $cacheIds[] = 'a' . $product->getVariantId();
                 } elseif ($element['component']['type'] === ArticleSliderComponentHandler::COMPONENT_NAME) {
                     /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products */
                     $products = $element['data']['products'];
                     foreach ($products as $product) {
                         $cacheIds[] = 'a' . $product->getId();
-                        $cacheIds[] = 'a' . $product->getVariantId();
                     }
                 }
             }
@@ -202,18 +200,34 @@ class CacheIdCollector
     }
 
     /**
-     * @param View $view
+     * @param Request $request
+     * @param View    $view
      *
      * @return array
      */
-    private function getListingCacheIds(View $view)
+    private function getListingCacheIds(Request $request, View $view)
     {
         $cacheIds = [];
+
+        $categoryId = (int) $request->getParam('sCategory');
+        $cacheIds[] = 'c' . $categoryId;
 
         foreach ($view->getAssign('sArticles') as $article) {
             $cacheIds[] = 'a' . $article['articleID'];
         }
 
         return $cacheIds;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return array
+     */
+    private function getStaticSiteCacheIds(Request $request)
+    {
+        $staticSiteId = $request->getParam('sCustom');
+
+        return ['s' . (int) $staticSiteId];
     }
 }

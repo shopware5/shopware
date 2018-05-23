@@ -24,6 +24,7 @@
 
 namespace  Shopware\Tests\Mink\Page;
 
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\WebAssert;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\Article;

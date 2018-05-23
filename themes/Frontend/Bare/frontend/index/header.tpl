@@ -18,13 +18,13 @@
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
         <meta property="og:title" content="{{config name=sShopname}|escapeHtml}" />
-        <meta property="og:description" content="{s name='IndexMetaDescriptionStandard'}{/s}" />
+        <meta property="og:description" content="{block name='frontend_index_header_meta_description_og'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
         <meta property="og:image" content="{link file=$theme.desktopLogo fullPath}" />
 
         <meta name="twitter:card" content="website" />
         <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
         <meta name="twitter:title" content="{{config name=sShopname}|escapeHtml}" />
-        <meta name="twitter:description" content="{s name='IndexMetaDescriptionStandard'}{/s}" />
+        <meta name="twitter:description" content="{block name='frontend_index_header_meta_description_twitter'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
         <meta name="twitter:image" content="{link file=$theme.desktopLogo fullPath}" />
     {/block}
 
@@ -97,9 +97,6 @@
         <script src="{link file='frontend/_public/src/js/vendors/modernizr/modernizr.custom.35977.js'}"></script>
     {/if}
 {/block}
-
-{* Block for IE specific stylesheets - @deprecated due to the stylesheets are now merged *}
-{block name="frontend_index_header_css_ie"}{/block}
 
 {* Block for tracking codes which are required to include in the `head` section of the document *}
 {block name="frontend_index_header_javascript_tracking"}{/block}

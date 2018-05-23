@@ -41,10 +41,11 @@ class GuzzleHttpClient implements HttpClientInterface
 
     /**
      * @param GuzzleFactory $guzzleFactory
+     * @param array         $guzzleConfig
      */
-    public function __construct(GuzzleFactory $guzzleFactory)
+    public function __construct(GuzzleFactory $guzzleFactory, array $guzzleConfig = [])
     {
-        $this->guzzleClient = $guzzleFactory->createClient();
+        $this->guzzleClient = $guzzleFactory->createClient($guzzleConfig);
     }
 
     /**

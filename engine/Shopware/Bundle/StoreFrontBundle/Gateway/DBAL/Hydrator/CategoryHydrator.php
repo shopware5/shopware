@@ -71,6 +71,8 @@ class CategoryHydrator extends Hydrator
     public function hydrate(array $data)
     {
         $category = new Struct\Category();
+        $translation = $this->getTranslation($data, '__category');
+        $data = array_merge($data, $translation);
 
         $this->assignCategoryData($category, $data);
 

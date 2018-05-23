@@ -46,7 +46,7 @@ interface BlogGatewayInterface
      * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
      *
-     * @return Struct\Blog\Blog
+     * @return Struct\Blog\Blog[]
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);
 }

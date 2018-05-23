@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
@@ -71,6 +72,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      * @param FieldHelper                                                     $fieldHelper
      * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
+     * @param VariantHelper                                                   $variantHelper
      */
     public function __construct(
         Connection $connection,
@@ -172,7 +174,14 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query->from('s_article_configurator_option_relations', 'relations')
             ->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.articleID = :articleId AND variant.active = 1')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->innerJoin(
+                'variant',
+                's_articles',
+                'product',
+                'product.id = variant.articleID AND (
+                    (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)
+                )'
+            )
             ->leftJoin('relations', 's_article_configurator_option_relations', 'assignedRelations', 'assignedRelations.article_id = relations.article_id AND assignedRelations.option_id != relations.option_id')
             ->groupBy('relations.option_id')
             ->setParameter(':articleId', $product->getId());

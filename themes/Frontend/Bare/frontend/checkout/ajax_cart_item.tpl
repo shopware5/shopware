@@ -13,7 +13,7 @@
     {$detailLink=$sBasketItem.linkDetails}
 {/if}
 
-<div class="cart--item{if $basketItem.modus == 1} is--premium-article{elseif $basketItem.modus == 10} is--bundle-article{/if}">
+<div class="cart--item{if $basketItem.modus == 1} is--premium-article{/if}">
     {* Article image *}
     {block name='frontend_checkout_ajax_cart_articleimage'}
         <div class="thumbnail--container{if $basketItem.image.thumbnails[0]} has--image{/if}">
@@ -112,14 +112,10 @@
             {/block}
             {block name="frontend_checkout_ajax_cart_articlename_name"}
                 <span class="item--name">
-                    {if $basketItem.modus == 10}
-                        {s name='AjaxCartInfoBundle'}{/s}
+                    {if $theme.offcanvasCart}
+                        {$basketItem.articlename|escapeHtml}
                     {else}
-                        {if $theme.offcanvasCart}
-                            {$basketItem.articlename|escapeHtml}
-                        {else}
-                            {$basketItem.articlename|truncate:28:"...":true|escapeHtml}
-                        {/if}
+                        {$basketItem.articlename|truncate:28:"...":true|escapeHtml}
                     {/if}
                 </span>
             {/block}

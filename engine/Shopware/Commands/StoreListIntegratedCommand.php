@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -51,7 +52,8 @@ class StoreListIntegratedCommand extends StoreCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $context = new ListingRequest(null, \Shopware::VERSION, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);
+        $shopwareVersion = $this->container->getParameter('shopware.release.version');
+        $context = new ListingRequest(null, $shopwareVersion, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);
         $listing = $this->container->get('shopware_plugininstaller.plugin_service_view')->getStoreListing($context);
 
         $result = [];
@@ -66,7 +68,7 @@ class StoreListIntegratedCommand extends StoreCommand
             ];
         }
 
-        $table = $this->getHelperSet()->get('table');
+        $table = new Table($output);
         $table->setHeaders(['Id', 'Technical name', 'Label', 'Installed', 'Version', 'Update available'])
             ->setRows($result);
 

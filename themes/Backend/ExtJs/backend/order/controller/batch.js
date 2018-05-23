@@ -42,17 +42,17 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     extend: 'Ext.app.Controller',
 
     /**
-     * all references to get the elements by the applicable selector
+     * All references to get the elements by the applicable selector
      */
     refs: [
-        { ref: 'orderListGrid', selector: 'order-list-main-window order-list' },
-        { ref: 'batchWindow', selector: 'order-batch-window' },
-        { ref: 'batchList', selector: 'order-batch-window batch-list' },
-        { ref: 'settingsPanel', selector: 'order-batch-window batch-settings-panel' },
-        { ref: 'progressBar', selector: 'order-progress-window progressbar' },
-        { ref: 'progressWindow', selector: 'order-progress-window' },
-        { ref: 'closeButton', selector: 'order-progress-window button[action=closeWindow]' },
-        { ref: 'cancelButton', selector: 'order-progress-window button[action=cancel]' }
+        { ref: 'orderListGrid', selector: 'order-list-main-window order-list'},
+        { ref: 'batchWindow', selector: 'order-batch-window'},
+        { ref: 'batchList', selector: 'order-batch-window batch-list'},
+        { ref: 'settingsPanel', selector: 'order-batch-window batch-settings-panel'},
+        { ref: 'progressBar', selector: 'order-progress-window progressbar'},
+        { ref: 'progressWindow', selector: 'order-progress-window'},
+        { ref: 'closeButton', selector: 'order-progress-window button[action=closeWindow]'},
+        { ref: 'cancelButton', selector: 'order-progress-window button[action=cancel]'}
     ],
 
     /**
@@ -70,13 +70,15 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             message: '{s name=cancel_message}{/s}',
             title: '{s name=cancel_title}{/s}'
         },
-
-        growlMessage: '{s name=growlMessage}{/s}'
-
+        errorTitle: '{s name=batch/error/title}Error{/s}',
+        growlMessage: '{s name=growlMessage}{/s}',
+        formInvalid: '{s name=settings/form_invalid}Please correct the information in the form{/s}',
+        noEmailsWillBeSent: '{s name=batch/no_emails_will_be_sent}Due to your current configuration no emails will be sent.{/s}'
     },
 
     /**
      * Contains all possible status for the current batch process.
+     *
      * @object
      */
     processStatus: {
@@ -105,7 +107,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      */
-    init: function() {
+    init: function () {
         var me = this;
 
         me.control({
@@ -123,7 +125,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     /**
      * Cancel the document creation.
      */
-    onCancelProcess: function() {
+    onCancelProcess: function () {
         var me = this;
 
         if (me.currentStatus !== me.processStatus.working) {
@@ -135,22 +137,43 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
     /**
      * Event listener method which is fired when the user clicks the "process changes" button
      * on the batch window to create documents for the selected orders or|and change the order or|and payment status.
-     * @param form
+     *
+     * @param formComponent
      */
-    onProcessChanges: function(form) {
+    onProcessChanges: function (formComponent) {
         var me = this,
-            orders = form.records,
-            values = form.getValues(),
+            orders = formComponent.records,
+            values = formComponent.getValues(),
             orderListGrid = me.getOrderListGrid(),
             gridStore = orderListGrid.getStore(),
             store = Ext.create('Shopware.apps.Order.store.Batch'),
-            document = form.down('*[name=documentType]').store.getById(values.documentType);
+            document = formComponent.down('*[name=documentType]').store.getById(values.documentType),
+            attachDocumentsField = formComponent.form.findField('addAttachments'),
+            sendEmailsField = formComponent.form.findField('autoSendMail'),
+            orderStatusField = formComponent.form.findField('orderStatus'),
+            paymentStatusField = formComponent.form.findField('paymentStatus');
+
+        if (!formComponent.form.isValid()) {
+            Shopware.Msg.createStickyGrowlMessage({
+                title: me.snippets.errorTitle,
+                text: me.snippets.formInvalid
+            });
+            return false;
+        }
+
+        var canAttachDocuments = document && attachDocumentsField.getValue(),
+            statusHasValue = orderStatusField.getValue() || paymentStatusField.getValue(),
+            autoSend = sendEmailsField.getValue();
+
+        if (autoSend && !canAttachDocuments && !statusHasValue){
+            Shopware.Msg.createGrowlMessage('', me.snippets.noEmailsWillBeSent);
+        }
 
         me.mode = values.mode;
         orders = me.prepareOrders(orders, values);
         store = me.prepareStoreProxy(store, values);
 
-        //generate documents? display progress bar window
+        // Generate documents? Display progress bar window
         if (!Ext.isEmpty(values.documentType)) {
             me.currentStatus = me.processStatus.working;
             me.getView('batch.Progress').create({
@@ -169,7 +192,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Store } listingStore
      * @param { Array } orders
      */
-    syncBatchStore: function(orderStore, listingStore, orders) {
+    syncBatchStore: function (orderStore, listingStore, orders) {
         var me = this,
             grid = me.getBatchList(),
             resultSet;
@@ -177,13 +200,22 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         grid.setLoading(true);
         orderStore.add(orders);
         orderStore.sync({
-            callback: function(batch) {
-                var operation = batch.operations[0];
+            callback: function (batch) {
+                var operation = batch.operations[0],
+                    settings = me.getSettingsPanel().getValues();
                 resultSet = operation.resultSet ? operation.resultSet.records : operation.records;
 
                 grid.getStore().removeAll();
                 grid.getStore().add(resultSet);
                 grid.setLoading(false);
+
+                var mailSent = resultSet.some(function (record) {
+                    return record.getMail().first();
+                });
+                // Inform the user if no mail was sent, but the autoSendMail checkbox is active (Occurs when no status change took place for example)
+                if (!mailSent && settings && settings.autoSendMail) {
+                    Shopware.Msg.createGrowlMessage('', me.snippets.noEmailsWillBeSent);
+                }
 
                 listingStore.load();
             }
@@ -197,7 +229,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { object } values
      * @returns { Ext.data.Store }
      */
-    prepareStoreProxy: function(store, values) {
+    prepareStoreProxy: function (store, values) {
         store.getProxy().extraParams = {
             docType: values.documentType,
             mode: values.mode,
@@ -216,8 +248,8 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { object } values
      * @returns { Array }
      */
-    prepareOrders: function(orders, values) {
-        Ext.each(orders, function(order) {
+    prepareOrders: function (orders, values) {
+        Ext.each(orders, function (order) {
             if (Ext.isDefined(values.orderStatus)) {
                 order.set('status', values.orderStatus);
             }
@@ -243,18 +275,18 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param index
      * @param { Shopware.apps.Order.store.Batch } resultStore
      */
-    queueProcess: function(document, store, orders, index, resultStore) {
+    queueProcess: function (document, store, orders, index, resultStore) {
         var me = this,
             progressBar = me.getProgressBar(),
             snippets = me.snippets,
             percentage = index / orders.length;
 
         if (index === orders.length) {
-            me.finishProcess(orders, resultStore, percentage);
+            me.finishProcess(orders, resultStore, percentage, false);
             return;
         }
 
-        //updates the progress bar value and text, the last parameter is the animation flag
+        // Updates the progress bar value and text, the last parameter is the animation flag
         progressBar.updateProgress(percentage, Ext.String.format(snippets.process, index + 1, orders.length), true);
 
         me.process(document, store, orders, index, resultStore);
@@ -268,32 +300,43 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { number } percentage
      * @param { boolean } canceled
      */
-    finishProcess: function(orders, resultStore, percentage, canceled) {
+    finishProcess: function (orders, resultStore, percentage, canceled) {
         var me = this,
+            mailSent = false,
             snippets = me.snippets,
             progressBar = me.getProgressBar(),
-            batchStore = me.getBatchList().getStore();
+            batchStore = me.getBatchList().getStore(),
+            settings = me.getSettingsPanel().getValues();
 
-        //display finish update progress bar and display finish message
+        // Display finish update progress bar and display finish message
         progressBar.updateProgress(percentage, canceled ? '' : snippets.done.message, true);
 
-        //reload the main order store to show the new generated documents on the detail page
+        // Reload the main order store to show the new generated documents on the detail page
         me.subApplication.getStore('Order').load();
 
         if (!canceled) {
-            //display shopware notification message that the batch process finished
+            // Display shopware notification message that the batch process finished
             Shopware.Notification.createGrowlMessage(snippets.done.title, snippets.done.message, snippets.growlMessage);
         }
 
-        //refresh the current batch status and enable the close window button.
+        // Refresh the current batch status and enable the close window button.
         me.currentStatus = me.processStatus.done;
         me.refreshProgressWindow(orders);
 
         // Update the grid in order to set the new status or the mail
         batchStore.removeAll();
-        resultStore.each(function(record) {
+        resultStore.each(function (record) {
+            if (record.getMail().first() !== undefined) {
+                mailSent = true;
+            }
+
             batchStore.add(record);
         });
+
+        // Inform the user if no mail was sent, but the autoSendMail checkbox is active (Occurs when no status change took place for example)
+        if (!mailSent && settings && settings.autoSendMail) {
+            Shopware.Msg.createGrowlMessage('', me.snippets.noEmailsWillBeSent);
+        }
 
         me.createSingleDocument(orders);
     },
@@ -303,7 +346,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      *
      * @param { Array } orders
      */
-    createSingleDocument: function(orders) {
+    createSingleDocument: function (orders) {
         var me = this,
             settingValues = me.getSettingsPanel().getValues(),
             orderIds, data;
@@ -311,7 +354,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         if (settingValues.createSingleDocument) {
             orderIds = [];
 
-            Ext.each(orders, function(order) {
+            Ext.each(orders, function (order) {
                 orderIds.push(order.get('id'));
             });
 
@@ -333,7 +376,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Store } resultStore
      * @param { number } index
      */
-    process: function(document, store, orders, index, resultStore) {
+    process: function (document, store, orders, index, resultStore) {
         var me = this;
 
         if (!me.checkForCancellation(document, store, orders, index, resultStore)) {
@@ -351,7 +394,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { number } index
      * @returns { boolean }
      */
-    checkForCancellation: function(document, store, orders, index, resultStore) {
+    checkForCancellation: function (document, store, orders, index, resultStore) {
         var me = this,
             message;
 
@@ -365,12 +408,12 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
                 '{s name=document/attachment/invoice/number/text}{/s}'
             );
 
-            // a little delay is required to open the messageBox in the top layer,
+            // A little delay is required to open the messageBox in the top layer,
             // otherwise the window is behind a modal window.
-            Ext.defer(function() {
+            Ext.defer(function () {
                 Ext.Msg.prompt(
                     '{s name=document/attachment/invoice/number}{/s}', message,
-                    function(clickedButtonName, inputText) {
+                    function (clickedButtonName, inputText) {
                         if (clickedButtonName !== 'ok' || !inputText) {
                             return;
                         }
@@ -394,9 +437,9 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Model } document
      * @returns { boolean }
      */
-    hasDocument: function(order, document) {
+    hasDocument: function (order, document) {
         var result = false;
-        order.getReceipt().each(function(doc) {
+        order.getReceipt().each(function (doc) {
             if (document.get('id') == doc.get('typeId')) {
                 result = true;
                 return false;
@@ -415,12 +458,12 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Ext.data.Store } resultStore
      * @param { number } index
      */
-    saveDocument: function(document, orders, store, resultStore, index) {
+    saveDocument: function (document, orders, store, resultStore, index) {
         var me = this;
 
         store.removeAll();
 
-        //add the record to the store and sync the store to fire the ajax request
+        // Add the record to the store and sync the store to fire the ajax request
         store.add(orders[index]);
 
         store.sync({
@@ -438,7 +481,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { number } index
      * @returns { boolean }
      */
-    afterSaveDocument: function(batch, event, document, orders, store, resultStore, index) {
+    afterSaveDocument: function (batch, event, document, orders, store, resultStore, index) {
         var me = this,
             snippets = me.snippets,
             progressBar = me.getProgressBar(),
@@ -448,28 +491,29 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         if (operation.resultSet === Ext.undefined || operation.resultSet.records === Ext.undefined) {
             brokenOrderMessage = Ext.String.format(snippets.cancel.brokenOrderMessage, orders[index].data.number);
 
-            //update progress bar and display finish message
+            // Update progress bar and display finish message
             progressBar.updateProgress(1, brokenOrderMessage, true);
             me.refreshProgressWindow(orders);
 
             return false;
         }
 
-        // add the resulting record to our result store
+        // Add the resulting record to our result store
         resultStore.add(operation.resultSet.records);
 
-        //checks if the user clicks the cancel button on the detail window.
+        // Checks if the user clicks the cancel button on the detail window.
         if (me.currentStatus === me.processStatus.cancel) {
 
-            //update progress bar and display finish message
+            // Update progress bar and display finish message
             progressBar.updateProgress(1, snippets.cancel.message, true);
 
             me.refreshProgressWindow(orders);
             me.finishProcess(orders, resultStore, index / orders.length, true);
-            //display shopware notification growl message to display that the batch process canceled successfully
+
+            // Display shopware notification growl message to display that the batch process canceled successfully
             Shopware.Notification.createGrowlMessage(snippets.cancel.title, snippets.cancel.message, snippets.growlMessage);
         } else {
-            //increase the array index and call recursive
+            // Increase the array index and call recursive
             me.queueProcess(document, store, orders, index + 1, resultStore);
         }
     },
@@ -478,22 +522,23 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * Internal helper function which called when the batch process finished or canceled.
      * Refresh the progress window elements. Enables the close window button, disable the cancel
      * process button and set the window loading to false.
+     *
      * @return void
      */
-    refreshProgressWindow: function(orders) {
+    refreshProgressWindow: function (orders) {
         var me = this,
             grid = me.getBatchList(),
             store = grid.getStore();
 
         if (orders.length > 0) {
-            //refresh the grid panel with the changed orders
+            // Refresh the grid panel with the changed orders
             store.removeAll();
             store.add(orders);
             grid.reconfigure(store);
         }
 
-        //if the current batch don't working enable the close button
-        //enable the close window button, disable loading mask and disable cancel button
+        // If the current batch doesn't work, enable the close button
+        // Enable the close window button, disable loading mask and disable cancel button
         me.getCloseButton().setDisabled(false);
         me.getCancelButton().setDisabled(true);
         me.getProgressWindow().setLoading(false);

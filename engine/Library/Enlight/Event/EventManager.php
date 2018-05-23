@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Event
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,7 +39,7 @@ use Enlight\Event\SubscriberInterface;
  *       );
  *
  * @category   Enlight
- * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -46,7 +47,7 @@ class Enlight_Event_EventManager extends Enlight_Class
 {
     /**
      * @var Enlight_Event_Handler[] Contains all registered event listeners. A listener can be registered by the
-     * registerListener(Enlight_Event_Handler $handler) function.
+     *                              registerListener(Enlight_Event_Handler $handler) function.
      */
     protected $listeners = [];
 
@@ -67,7 +68,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      * @param $listener
      * @param int $priority
      *
-     * @return  Enlight_Event_EventManager
+     * @return Enlight_Event_EventManager
      */
     public function addListener($eventName, $listener, $priority = 0)
     {
@@ -91,15 +92,19 @@ class Enlight_Event_EventManager extends Enlight_Class
      * If no event position is set in the event handler, the event handler will be added to the
      * end of the list.
      *
-     * @param   Enlight_Event_Handler $handler
+     * @param Enlight_Event_Handler $handler
      *
-     * @return  Enlight_Event_EventManager
+     * @return Enlight_Event_EventManager
      */
     public function registerListener(Enlight_Event_Handler $handler)
     {
         $eventName = strtolower($handler->getName());
 
-        $list =& $this->listeners[$eventName];
+        if (!isset($this->listeners[$eventName])) {
+            $this->listeners[$eventName] = [];
+        }
+
+        $list = &$this->listeners[$eventName];
 
         if ($handler->getPosition()) {
             $position = (int) $handler->getPosition();
@@ -119,9 +124,9 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * Removes the listeners for the given event handler.
      *
-     * @param   Enlight_Event_Handler $handler
+     * @param Enlight_Event_Handler $handler
      *
-     * @return  Enlight_Event_EventManager
+     * @return Enlight_Event_EventManager
      */
     public function removeListener(Enlight_Event_Handler $handler)
     {
@@ -144,9 +149,9 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * Checks if the given event name has an event listener.
      *
-     * @param   string $event
+     * @param string $event
      *
-     * @return  bool
+     * @return bool
      */
     public function hasListeners($event)
     {
@@ -160,7 +165,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * @param   $event
      *
-     * @return  Enlight_Event_Handler[]
+     * @return Enlight_Event_Handler[]
      */
     public function getListeners($event)
     {
@@ -168,15 +173,15 @@ class Enlight_Event_EventManager extends Enlight_Class
 
         if (isset($this->listeners[$event])) {
             return $this->listeners[$event];
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
      * Get a list of events for which this collection has listeners.
      *
-     * @return  array
+     * @return array
      */
     public function getEvents()
     {
@@ -192,12 +197,13 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Before the listener will be executed the the flag "processed" will be set to false in the event arguments.
      * After all event listeners has been executed the "processed" flag will be set to true.
      *
-     * @throws  Enlight_Event_Exception
      *
-     * @param   string                             $event
-     * @param   Enlight_Event_EventArgs|array|null $eventArgs
+     * @param string                             $event
+     * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
-     * @return  Enlight_Event_EventArgs|null
+     * @throws Enlight_Event_Exception
+     *
+     * @return Enlight_Event_EventArgs|null
      */
     public function notify($event, $eventArgs = null)
     {
@@ -229,12 +235,13 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The event listeners will be executed until one of the listeners return not null.
      *
-     * @throws  Enlight_Exception
      *
-     * @param   string                             $event
-     * @param   Enlight_Event_EventArgs|array|null $eventArgs
+     * @param string                             $event
+     * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
-     * @return  Enlight_Event_EventArgs|null
+     * @throws Enlight_Exception
+     *
+     * @return Enlight_Event_EventArgs|null
      */
     public function notifyUntil($event, $eventArgs = null)
     {
@@ -273,13 +280,14 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The return value of the execute method will be set in the event arguments return value.
      *
-     * @throws  Enlight_Event_Exception
      *
-     * @param   string                             $event
-     * @param   mixed                              $value
-     * @param   Enlight_Event_EventArgs|array|null $eventArgs
+     * @param string                             $event
+     * @param mixed                              $value
+     * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
-     * @return  mixed
+     * @throws Enlight_Event_Exception
+     *
+     * @return mixed
      */
     public function filter($event, $value, $eventArgs = null)
     {
@@ -311,6 +319,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      * @param null            $eventArgs
      *
      * @throws Enlight_Event_Exception
+     *
      * @return ArrayCollection|null
      */
     public function collect($event, ArrayCollection $collection, $eventArgs = null)
@@ -359,9 +368,7 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * Registers all listeners of the given Enlight_Event_Subscriber.
      *
-     * @param   Enlight_Event_Subscriber $subscriber
-     *
-     * @return  void
+     * @param Enlight_Event_Subscriber $subscriber
      */
     public function registerSubscriber(Enlight_Event_Subscriber $subscriber)
     {
@@ -375,7 +382,7 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * Resets the event listeners.
      *
-     * @return  Enlight_Event_EventManager
+     * @return Enlight_Event_EventManager
      */
     public function reset()
     {
@@ -386,8 +393,10 @@ class Enlight_Event_EventManager extends Enlight_Class
 
     /**
      * @param Enlight_Event_EventArgs|array|null $eventArgs
-     * @return Enlight_Event_EventArgs
+     *
      * @throws Enlight_Event_Exception
+     *
+     * @return Enlight_Event_EventArgs
      */
     private function buildEventArgs($eventArgs = null)
     {

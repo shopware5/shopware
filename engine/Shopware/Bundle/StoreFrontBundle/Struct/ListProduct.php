@@ -37,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ListProduct extends BaseProduct implements \JsonSerializable
+class ListProduct extends BaseProduct
 {
     /**
      * State for a calculated product price.
@@ -606,6 +606,8 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
+     * Refers to the ability of a product to be "on sale", even if it's out of stock
+     *
      * @return bool
      */
     public function isCloseouts()

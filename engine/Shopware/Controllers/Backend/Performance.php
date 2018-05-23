@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\HttpCache\CacheWarmer;
@@ -67,8 +66,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * set productive mode true or false
-     * enable and disable caching by enable or disable plugin 'HttpCache'
+     * Set productive mode true or false
+     * Enable and disable caching by enable or disable plugin 'HttpCache'
      */
     public function toggleProductiveModeAction()
     {
@@ -338,7 +337,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Read a given config by name
      *
-     * @param $configName
+     * @param string $configName
      * @param string $defaultValue
      *
      * @return null|string
@@ -452,13 +451,14 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * calculates and call every url depending on the shopId and the resource
+     * Calculates and call every url depending on the shopId and the resource
      */
     public function warmUpCacheAction()
     {
         $shopId = (int) $this->Request()->getParam('shopId', 1);
-        $limit = $this->Request()->get('limit');
-        $offset = $this->Request()->get('offset');
+        $limit = (int) $this->Request()->get('limit');
+        $offset = (int) $this->Request()->get('offset');
+        $concurrentRequests = (int) $this->Request()->getParam('concurrent', 1);
         $resource = $this->Request()->get('resource');
 
         /** @var CacheWarmer $cacheWarmer */
@@ -489,7 +489,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         $urls = $cacheWarmer->getSEOUrlByViewPort($viewPorts, $shopId, $limit, $offset);
-        $cacheWarmer->callUrls($urls, $shopId);
+        $cacheWarmer->callUrls($urls, $shopId, $concurrentRequests);
 
         $this->View()->assign([
             'success' => true,
@@ -673,7 +673,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * activate httpCache-Plugin
+     * Activate httpCache-Plugin
      *
      * @param Plugin $httpCache
      */
@@ -691,7 +691,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * deactivate httpCache-Plugin
+     * Deactivate httpCache-Plugin
      *
      * @param Plugin $httpCache
      */

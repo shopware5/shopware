@@ -85,9 +85,9 @@
 
             // Load compare modal before opening modal box
             $.ajax({
-                'url': modalUrl,
-                'dataType': 'jsonp',
-                'success': function(template) {
+                url: modalUrl,
+                dataType: 'html',
+                success: function(template) {
                     $.publish('plugin/swProductCompareMenu/onStartCompareSuccess', [ me, template ]);
 
                     $.loadingIndicator.close(function() {
@@ -160,9 +160,9 @@
             }
 
             $.ajax({
-                'url': deleteUrl,
-                'dataType': 'jsonp',
-                'success': function () {
+                url: deleteUrl,
+                dataType: 'html',
+                success: function () {
                     $menu.empty().addClass(me.opts.hiddenCls);
 
                     $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [ me ]);
@@ -205,18 +205,18 @@
 
                 // remove product silent in the background
                 $.ajax({
-                    'url': deleteUrl,
-                    'dataType': 'jsonp',
-                    'success': function (response) {
+                    url: deleteUrl,
+                    dataType: 'html',
+                    success: function (response) {
                         $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [ me, response ]);
                     }
                 });
             } else {
                 // remove last product, reload full compare plugin
                 $.ajax({
-                    'url': deleteUrl,
-                    'dataType': 'jsonp',
-                    'success': function (response) {
+                    url: deleteUrl,
+                    dataType: 'html',
+                    success: function (response) {
                         $(me.opts.compareMenuSelector).empty().addClass(me.opts.hiddenCls);
 
                         // Reload compare menu plugin

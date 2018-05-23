@@ -28,25 +28,12 @@
 class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 {
     /**
-     * Transition method
-     * Confirm action method
-     *
-     * @deprecated
-     */
-    public function confirmAction()
-    {
-        // todo@all maybe this method can be deleted once all references are removed
-        // transition method
-        // confirm check is done via helper method isConfirmed()
-        return $this->forward('index');
-    }
-
-    /**
      * Index action method
      */
     public function indexAction()
     {
         $this->View()->voteConfirmed = $this->isConfirmed();
+        $this->Request()->setParam('voteConfirmed', $this->View()->voteConfirmed);
         $this->View()->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (isset($this->Request()->sUnsubscribe)) {
@@ -204,7 +191,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         $this->View()->sContentItem = $content;
-        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing']) . '?p=' . $this->Request()->getParam('p', 1);
+        $this->View()->sBackLink = $this->Front()->Router()->assemble(['action' => 'listing']) . '?p=' . (int) $this->Request()->getParam('p', 1);
     }
 
     /**

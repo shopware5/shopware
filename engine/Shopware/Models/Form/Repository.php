@@ -73,8 +73,8 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select all data about a single form
      * for the passed form id.
      *
-     * @param $formId
-     * @param $shopId
+     * @param int      $formId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -86,11 +86,26 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Get active forms query
+     *
+     * @param int      $formId
+     * @param int|null $shopId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getActiveFormQuery($formId, $shopId = null)
+    {
+        return $this->getFormQueryBuilder($formId, $shopId)
+            ->andWhere('forms.active = 1')
+            ->getQuery();
+    }
+
+    /**
      * Helper function to create the query builder for the "getFormQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $formId
-     * @param $shopId
+     * @param int      $formId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -101,9 +116,9 @@ class Repository extends ModelRepository
             ->from('Shopware\Models\Form\Form', 'forms')
             ->leftJoin('forms.fields', 'fields')
             ->leftJoin('forms.attribute', 'attribute')
-            ->where('forms.id = ?1')
-            ->setParameter(1, $formId)
-            ->orderBy('fields.position');
+            ->where('forms.id = :form_id')
+            ->orderBy('fields.position')
+            ->setParameter('form_id', $formId);
 
         if ($shopId) {
             $builder->andWhere('(forms.shopIds LIKE :shopId OR forms.shopIds IS NULL)')
@@ -117,7 +132,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search defined attributes
      * for the passed form id.
      *
-     * @param $formId
+     * @param int $formId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -132,7 +147,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $formId
+     * @param int $formId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

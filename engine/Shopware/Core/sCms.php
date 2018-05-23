@@ -61,16 +61,30 @@ class sCms
      */
     private $moduleManager;
 
+    /**
+     * @var Shopware_Components_Translation
+     */
+    private $translationComponent;
+
+    /**
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null $db
+     * @param Shopware_Components_Config|null              $config
+     * @param Enlight_Controller_Front|null                $front
+     * @param Shopware_Components_Modules|null             $moduleManager
+     * @param Shopware_Components_Translation|null         $translationComponent
+     */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
         Enlight_Controller_Front $front = null,
-        Shopware_Components_Modules $moduleManager = null
+        Shopware_Components_Modules $moduleManager = null,
+        Shopware_Components_Translation $translationComponent = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->config = $config ?: Shopware()->Config();
         $this->front = $front ?: Shopware()->Front();
         $this->moduleManager = $moduleManager ?: Shopware()->Modules();
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
 
     /**
@@ -90,12 +104,21 @@ class sCms
             return false;
         }
 
-        $sql = 'SELECT * FROM s_cms_static WHERE id = :pageId';
+        $fallbackId = null;
+        $translations = null;
+
+        $sql = 'SELECT * FROM s_cms_static WHERE id = :pageId and active = 1';
         $params = ['pageId' => $staticId];
 
         if ($shopId) {
             $sql .= ' AND (shop_ids IS NULL OR shop_ids LIKE :shopId)';
             $params['shopId'] = '%|' . $shopId . '|%';
+
+            if (Shopware()->Shop()->getFallback()) {
+                $fallbackId = Shopware()->Shop()->getFallback()->getId();
+            }
+
+            $translations = $this->translationComponent->readWithFallback($shopId, $fallbackId, 'page', $staticId);
         }
 
         // Load static page data from database
@@ -107,9 +130,16 @@ class sCms
             return false;
         }
 
+        if ($translations) {
+            foreach ($translations as $property => $translation) {
+                if (strlen($translation) > 0) {
+                    $staticPage[$property] = $translation;
+                }
+            }
+        }
+
         // load attributes
         $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
-
         /*
          * Add support for sub pages
          */
@@ -141,7 +171,7 @@ class sCms
                 p.id, p.description, p.link, p.target, p.parentID,
                 (SELECT COUNT(*) FROM s_cms_static WHERE parentID = p.id) as childrenCount
                 FROM s_cms_static p
-                WHERE p.id = :parentId
+                WHERE p.id = :parentId and p.active = 1
             ';
 
             $menu['parent'] = Shopware()->Db()->fetchRow($sql, ['parentId' => $pageId]);
@@ -154,7 +184,7 @@ class sCms
             (SELECT COUNT(*) FROM s_cms_static WHERE parentID = p.id) as childrenCount
             FROM s_cms_static p
             WHERE p.parentID = :parentId
-            AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', :groupKey, '|%')
+            AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', :groupKey, '|%') and p.active = 1
         ";
 
         $menu['children'] = Shopware()->Db()->fetchAll($sql, ['parentId' => $pageId, 'groupKey' => $groupKey]);
@@ -182,16 +212,24 @@ class sCms
             'parentId' => $staticPage['parentID'],
         ];
 
+        $translations = null;
+        $fallbackId = null;
         if ($shopId) {
             $andWhere .= ' AND (p.shop_ids IS NULL OR p.shop_ids LIKE :shopId)';
             $siblingsParams['shopId'] = '%|' . $shopId . '|%';
             $parentParams['shopId'] = '%|' . $shopId . '|%';
+
+            if (Shopware()->Shop()->getFallback()) {
+                $fallbackId = Shopware()->Shop()->getFallback()->getId();
+            }
+
+            $translations = $this->translationComponent->readWithFallback($shopId, $fallbackId, 'page', $staticPage['parentID']);
         }
 
         $siblingsSql = '
                 SELECT p.id, p.description, p.link, p.target, IF(p.id=:pageId, 1, 0) as active, p.page_title
                 FROM s_cms_static p
-                WHERE p.parentID = :parentId
+                WHERE p.parentID = :parentId AND p.active = 1
                 ' . $andWhere . '
                 ORDER BY p.position
             ';
@@ -200,10 +238,19 @@ class sCms
         $parentSql = '
                 SELECT p.id, p.description, p.link, p.target, p.page_title
                 FROM s_cms_static p
-                WHERE p.id = :parentId
+                WHERE p.id = :parentId and p.active = 1
                 ' . $andWhere;
+        $parent = $this->db->fetchRow($parentSql, $parentParams);
 
-        $staticPage['parent'] = $this->db->fetchRow($parentSql, $parentParams);
+        if ($translations) {
+            foreach ($translations as $property => $translation) {
+                if (strlen($translation) > 0) {
+                    $parent[$property] = $translation;
+                }
+            }
+        }
+
+        $staticPage['parent'] = $parent;
         $staticPage['parent'] = $staticPage['parent'] ?: [];
 
         return $staticPage;
@@ -232,7 +279,7 @@ class sCms
         $sql = '
                 SELECT p.id, p.description, p.link, p.target, p.page_title
                 FROM s_cms_static p
-                WHERE p.parentID = :pageId
+                WHERE p.parentID = :pageId and p.active = 1
                 ' . $andWhere . '
                 ORDER BY p.position
             ';

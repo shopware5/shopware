@@ -21,8 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Random;
 use Shopware\Models\Article\Detail as ArticleDetail;
@@ -275,7 +275,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $filter = $this->Request()->getParam('filter', []);
         $orderId = $this->Request()->getParam('orderID');
 
-        if (null !== $orderId) {
+        if ($orderId !== null) {
             $orderIdFilter = ['property' => 'orders.id', 'value' => $orderId];
             if (!is_array($filter)) {
                 $filter = [];
@@ -721,7 +721,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             // the setOrder function of the Shopware_Components_Document change the currency of the shop.
             // this would create a new Shop if we execute an flush();
-            $this->createOrderDocuments($documentType, $documentMode, $order);
+            // Only create order documents when requested.
+            if ($documentType) {
+                $this->createOrderDocuments($documentType, $documentMode, $order);
+            }
 
             $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
             $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
@@ -774,7 +777,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $models = $query->getResult();
         foreach ($models as $model) {
             foreach ($model->getDocuments() as $document) {
-                $files[] = Shopware()->DocPath('files/documents') . $document->getHash() . '.pdf';
+                $files[] = Shopware()->Container()->getParameter('shopware.app.documentsdir') . '/' . $document->getHash() . '.pdf';
             }
         }
         $this->mergeDocuments($files);
@@ -831,7 +834,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function deleteDocumentAction()
     {
         $documentId = $this->request->getParam('documentId');
-        $documentPath = $this->container->getParameter('kernel.root_dir') . '/files/documents/';
+        $documentPath = rtrim($this->container->getParameter('shopware.app.documentsdir'), '/') . DIRECTORY_SEPARATOR;
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->container->get('dbal_connection');
         $queryBuilder = $connection->createQueryBuilder();
@@ -925,7 +928,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function openPdfAction()
     {
         $name = basename($this->Request()->getParam('id')) . '.pdf';
-        $file = Shopware()->DocPath('files/documents') . $name;
+        $file = Shopware()->Container()->getParameter('shopware.app.documentsdir') . '/' . $name;
         if (!file_exists($file)) {
             $this->View()->assign([
                 'success' => false,
@@ -1083,23 +1086,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         return self::$documentRepository;
     }
 
-    /**
-     * @param $filter
-     * @param $sort
-     * @param $offset
-     * @param $limit
-     *
-     * @return array
-     */
     protected function getList($filter, $sort, $offset, $limit)
     {
         $sort = $this->resolveSortParameter($sort);
 
-        $searchResult = $this->getRepository()->search($offset, $limit, $filter, $sort);
+        if ($this->container->getParameter('shopware.es.backend.enabled')) {
+            $repository = $this->container->get('shopware_attribute.order_repository');
+            $criteria = $this->createCriteria();
+            $result = $repository->search($criteria);
 
-        $total = $searchResult['total'];
-
-        $ids = array_column($searchResult['orders'], 'id');
+            $total = $result->getCount();
+            $ids = array_column($result->getData(), 'id');
+        } else {
+            $searchResult = $this->getRepository()->search($offset, $limit, $filter, $sort);
+            $total = $searchResult['total'];
+            $ids = array_column($searchResult['orders'], 'id');
+        }
 
         $orders = $this->getRepository()->getList($ids);
         $documents = $this->getRepository()->getDocuments($ids);
@@ -1317,9 +1319,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * Internal helper function to check if the order or payment status has been changed. If one
-     * of the status changed, the function will create a status mail. If the passed autoSend parameter
-     * is true, the created status mail will be send directly.
+     * Internal helper function to check if the order or payment status has been changed.
+     * If one of the status changed, the function will create a status mail.
+     * If the autoSend parameter is true, the created status mail will be sent directly,
+     * if addAttachments and documentType are true/selected aswell, the according documents will be attached.
      *
      * @param Order                         $order
      * @param \Shopware\Models\Order\Status $statusBefore
@@ -1332,27 +1335,36 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments)
     {
-        if ($autoSend ||
-            $order->getOrderStatus()->getId() !== $statusBefore->getId() ||
-            $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
-            //status or cleared changed?
-            if ($order->getOrderStatus()->getId() !== $statusBefore->getId()) {
-                $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
-            } elseif ($order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
-                $mail = $this->getMailForOrder($order->getId(), $order->getPaymentStatus()->getId());
-            } else {
-                $mail = $this->getMailForOrder($order->getId(), null);
+        $orderStatusChanged = $order->getOrderStatus()->getId() !== $statusBefore->getId();
+        $paymentStatusChanged = $order->getPaymentStatus()->getId() !== $clearedBefore->getId();
+        $documentMailSendable = $documentType && $addAttachments;
+        $mail = null;
+
+        // Abort if autoSend isn't active and neither the order-, nor the payment-status changed
+        if (!$autoSend && !$orderStatusChanged && !$paymentStatusChanged) {
+            return null;
+        }
+
+        if ($orderStatusChanged) {
+            // Generate mail with order status template
+            $mail = $this->getMailForOrder($order->getId(), $order->getOrderStatus()->getId());
+        } elseif ($paymentStatusChanged) {
+            // Generate mail with payment status template
+            $mail = $this->getMailForOrder($order->getId(), $order->getPaymentStatus()->getId());
+        } elseif ($documentMailSendable) {
+            // Generate mail with document template
+            $mail = $this->getMailForOrder($order->getId(), null);
+        }
+
+        if (is_object($mail['mail'])) {
+            if ($addAttachments) {
+                // Attach documents
+                $document = $this->getDocument($documentType, $order);
+                $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
             }
-
-            //mail object created and auto send activated, then send mail directly.
-            if ($autoSend && is_object($mail['mail'])) {
-                if ($addAttachments) {
-                    $document = $this->getDocument($documentType, $order);
-                    $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
-                }
+            if ($autoSend) {
+                // Send mail
                 $result = Shopware()->Modules()->Order()->sendStatusMail($mail['mail']);
-
-                //check if send mail was successfully.
                 $mail['data']['sent'] = is_object($result);
             }
 
@@ -1432,8 +1444,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function addAttachments(Enlight_Components_Mail $mail, $orderId, array $attachments = [])
     {
-        $rootDirectory = $this->container->getParameter('kernel.root_dir');
-        $documentDirectory = $rootDirectory . '/files/documents';
+        $documentDirectory = rtrim($this->get('service_container')->getParameter('shopware.app.documentsdir'), '/');
 
         foreach ($attachments as $attachment) {
             $filePath = $documentDirectory . '/' . $attachment['hash'] . '.pdf';
@@ -1803,5 +1814,64 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    private function createCriteria()
+    {
+        $request = $this->Request();
+        $criteria = new SearchCriteria(Order::class);
+
+        $criteria->offset = $request->getParam('start', 0);
+        $criteria->limit = $request->getParam('limit', 30);
+        $criteria->ids = $request->getParam('ids', []);
+        $criteria->sortings = $request->getParam('sort', []);
+        $conditions = $request->getParam('filter', []);
+
+        $mapped = [];
+        foreach ($conditions as $condition) {
+            if ($condition['property'] === 'free') {
+                $criteria->term = $condition['value'];
+                continue;
+            }
+
+            if ($condition['property'] === 'billing.countryId') {
+                $condition['property'] = 'billingCountryId';
+            } elseif ($condition['property'] === 'shipping.countryId') {
+                $condition['property'] = 'shippingCountryId';
+            } else {
+                $name = explode('.', $condition['property']);
+                $name = array_pop($name);
+                $condition['property'] = $name;
+            }
+
+            if ($condition['property'] === 'to') {
+                $condition['value'] = (new DateTime($condition['value']))->format('Y-m-d');
+                $condition['property'] = 'orderTime';
+                $condition['expression'] = '<=';
+            }
+
+            if ($condition['property'] === 'from') {
+                $condition['value'] = (new DateTime($condition['value']))->format('Y-m-d');
+                $condition['property'] = 'orderTime';
+                $condition['expression'] = '>=';
+            }
+            $mapped[] = $condition;
+        }
+
+        foreach ($criteria->sortings as &$sorting) {
+            if ($sorting['property'] === 'customerEmail') {
+                $sorting['property'] = 'email';
+            }
+            if ($sorting['property'] === 'customerName') {
+                $sorting['property'] = 'firstname';
+            }
+        }
+
+        $criteria->conditions = $mapped;
+
+        return $criteria;
     }
 }

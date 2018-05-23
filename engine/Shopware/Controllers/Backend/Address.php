@@ -25,10 +25,11 @@
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Address as AddressModel;
 
 class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_Application
 {
-    protected $model = '\Shopware\Models\Customer\Address';
+    protected $model = AddressModel::class;
     protected $alias = 'address';
 
     /**
@@ -56,7 +57,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         if (!$customerAddressId) {
             return;
         }
-        $address = $this->getManager()->getRepository('Shopware\Models\Customer\Address')->find($customerAddressId);
+        $address = $this->getManager()->getRepository(AddressModel::class)->find($customerAddressId);
         Shopware()->Container()->get('shopware_account.address_service')->update($address);
     }
 
@@ -78,8 +79,8 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             $this->getManager()->persist($model);
         }
 
-        $data['country'] = $data['country_id'];
-        $data['state'] = $data['state_id'];
+        $data['country'] = $data['countryId'];
+        $data['state'] = $data['stateId'];
 
         /** @var \Symfony\Component\Form\FormInterface $form */
         $form = $this->get('shopware.form.factory')->create(AddressFormType::class, $model);

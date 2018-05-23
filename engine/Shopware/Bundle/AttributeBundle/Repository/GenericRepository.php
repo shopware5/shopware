@@ -56,7 +56,7 @@ class GenericRepository implements RepositoryInterface
     protected $entity;
 
     /**
-     * @param $entity
+     * @param string            $entity
      * @param ModelManager      $entityManager
      * @param ReaderInterface   $reader
      * @param SearcherInterface $searcher

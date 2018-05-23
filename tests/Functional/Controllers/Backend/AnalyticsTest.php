@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Analytics\Repository;
 
 /**
@@ -805,14 +804,6 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         );
         $this->userId = Shopware()->Db()->lastInsertId();
 
-        Shopware()->Db()->insert('s_user_billingaddress', [
-            'userID' => $this->userId,
-            'company' => 'PHPUNIT',
-            'salutation' => 'mr',
-            'countryID' => 2,
-            'stateID' => 3,
-        ]);
-
         Shopware()->Db()->insert('s_user_addresses', [
             'user_id' => $this->userId,
             'company' => 'PHPUNIT',
@@ -1068,7 +1059,6 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         if ($this->userId) {
             Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
             Shopware()->Db()->delete('s_user_addresses', 'user_id = ' . $this->userId);
-            Shopware()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
             Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
             Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
         }

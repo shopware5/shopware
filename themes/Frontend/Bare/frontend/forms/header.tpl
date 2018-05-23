@@ -1,7 +1,7 @@
 {extends file="frontend/index/header.tpl"}
 
 {block name='frontend_index_header_canonical'}
-    <link rel="canonical" href="{url controller=ticket sFid=$sSupport.id}" />
+    <link rel="canonical" href="{url controller=forms sFid=$sSupport.id}" />
 {/block}
 
 {* title *}
@@ -12,3 +12,5 @@
 
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $sSupport.metaDescription}{$sSupport.metaDescription|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_meta_description_og"}{if $sSupport.metaDescription}{$sSupport.metaDescription|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_meta_description_twitter"}{if $sSupport.metaDescription}{$sSupport.metaDescription|escapeHtml}{else}{$smarty.block.parent}{/if}{/block}

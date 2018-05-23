@@ -72,3 +72,23 @@ Thumbs.db
 /snippetsExport/
 
 !**/.gitkeep
+
+# tooling
+/dev-ops/docker/_volumes
+/docker-compose.override.yml
+/.psh.yml
+/.psh.yaml
+/dev-ops/docker/containers/*/createuser.sh
+/dev-ops/docker/containers/php7/Dockerfile
+/.psh.yaml.override
+/.psh.yml.override
+
+# tests / ci
+/build/**
+!/build/artifacts/.gitkeep
+!/build/logs/mink/.gitkeep
+/tests/nightwatch/node_modules
+
+# scripts
+!/build/composer-post-install-cmd.sh
+!/build/composer-post-update-cmd.sh

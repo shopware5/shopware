@@ -53,6 +53,11 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
         anchor: '99%'
     },
 
+    plugins: [{
+        ptype: 'translation',
+        translationType: 'forms'
+    }],
+
     /**
      * Sets up the ui component
      *
@@ -105,7 +110,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             names = [];
 
         if (record !== undefined) {
-            linkToForm =  '{s name=label_linktoform}Link to Form{/s}: ' + 'shopware.php?sViewport=ticket&sFid=' + record.get('id');
+            linkToForm =  '{s name=label_linktoform}Link to Form{/s}: ' + 'shopware.php?sViewport=forms&sFid=' + record.get('id');
 
             record.getFields().each(function(item) {
                 /* {literal} */
@@ -118,7 +123,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
             table: 's_cms_support_attributes',
-            allowTranslation: false,
+            allowTranslation: true,
             margin: '20 0 0',
             disabled: false
         });
@@ -130,24 +135,35 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             fieldLabel:'{s name=label_name}Name{/s}',
             name       : 'name',
             allowBlank: false,
-            supportText : linkToForm
+            supportText : linkToForm,
+            translatable: true
         }, {
+            fieldLabel: '{s name=label_active}Active{/s}',
+            xtype: 'checkbox',
+            inputValue: true,
+            uncheckedValue: false,
+            name: 'active'
+        },
+        {
             fieldLabel:'{s name=label_email}Email{/s}',
             name: 'email',
             vtype: 'remote',
             validationUrl: '{url controller="base" action="validateEmail"}',
             validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
-            allowBlank : false
+            allowBlank : false,
+            translatable: true
         }, {
             fieldLabel:'{s name=label_subject}Subject{/s}',
             name       : 'emailSubject',
-            allowBlank: false
+            allowBlank: false,
+            translatable: true
         }, {
             xtype: 'codemirrorfield',
             mode: 'smarty',
             fieldLabel:'{s name=label_emailtemplate}Email template{/s}',
             name: 'emailTemplate',
-            supportText: variableHint
+            supportText: variableHint,
+            translatable: true
         }, {
             /*{if !{acl_is_allowed privilege=createupdate}}*/
             readOnly: true,
@@ -156,7 +172,8 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             fieldLabel:'{s name=label_headertext}Form-Header{/s}',
             name       : 'text',
             supportText : '{s name=support_text_headertext}Will be displayed above the form{/s}',
-            xtype:'tinymce'
+            xtype:'tinymce',
+            translatable: true
         }, {
             /*{if !{acl_is_allowed privilege=createupdate}}*/
             readOnly: true,
@@ -165,31 +182,46 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             supportText:'{s name=support_text_confirmationtext}Will be displayed after a successful submission{/s}',
             name       : 'text2',
             height: 350,
-            xtype:'tinymce'
-        }, {
-            xtype: 'combobox',
-            name: 'shopIds',
-            fieldLabel: '{s name=label_shop}Limit to shop(s){/s}',
-            helpText: '{s name=shop_helper}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',
-            store: me.shopStore,
-            multiSelect: true,
-            displayField: 'name',
-            valueField: 'id',
-            queryMode: 'local',
-            editable: false
-        }, {
+            xtype:'tinymce',
+            translatable: true
+        },
+            me.getShopSelector(),
+        {
             fieldLabel: '{s name=label_metatitle}Meta title{/s}',
-            name: 'metaTitle'
+            name: 'metaTitle',
+            translatable: true
         }, {
             fieldLabel: '{s name=label_metakeywords}Meta keywords{/s}',
-            name: 'metaKeywords'
+            name: 'metaKeywords',
+            translatable: true
         }, {
             fieldLabel: '{s name=label_metadescription}Meta description{/s}',
-            name: 'metaDescription'
+            name: 'metaDescription',
+            translatable: true
         }, {
             xtype: 'hidden',
             name: 'id'
         }, me.attributeForm];
+    },
+
+    /**
+     * @returns { Shopware.form.field.ShopGrid }
+     */
+    getShopSelector: function () {
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory');
+
+        return Ext.create('Shopware.form.field.ShopGrid', {
+            name: 'shopIds',
+            fieldLabel: '{s name=label_shop}Limit to shop(s){/s}',
+            helpText: '{s name=shop_helper}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',
+            editable: false,
+            allowSorting: false,
+            height: 130,
+            labelWidth: 155,
+            useSeparator: false,
+            store: selectionFactory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop'),
+            searchStore: selectionFactory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop')
+        });
     }
 });
 //{/block}

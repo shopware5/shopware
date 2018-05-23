@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Mail\Attachment;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
@@ -99,13 +98,13 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
                 $orderStatus = $mail->getStatus();
                 $node['name'] = $this->get('snippets')
                         ->getNamespace('backend/static/order_status')
-                        ->get($orderStatus->getName(), $orderStatus->getDescription());
+                        ->get($orderStatus->getName());
                 $orderNodes['data'][] = $node;
             } elseif ($mail->isPaymentStateMail()) {
                 $paymentStatus = $mail->getStatus();
                 $node['name'] = $this->get('snippets')
                     ->getNamespace('backend/static/payment_status')
-                    ->get($paymentStatus->getName(), $paymentStatus->getDescription());
+                    ->get($paymentStatus->getName());
                 $paymentNodes['data'][] = $node;
             } elseif ($mail->isSystemMail()) {
                 $systemNodes['data'][] = $node;
@@ -531,7 +530,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
             $childNodes = [];
             foreach ($attachments as $attachment) {
-                if ($shop->getId() != $attachment->getShopId()) {
+                if ($shop->getId() !== $attachment->getShopId()) {
                     continue;
                 }
 
@@ -601,7 +600,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * Gets a single mail
      *
-     * @param $id
+     * @param int $id
      */
     protected function getSingleMail($id)
     {
@@ -646,7 +645,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * Returns an array with the converted mail data and a mail object for the passed mail id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return array|bool
      */
@@ -689,9 +688,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     {
         return [
             'sShop' => $this->container->get('config')->get('ShopName'),
-            'sShopURL' => ($shop->getAlwaysSecure() ?
-                'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() :
-                'http://' . $shop->getHost() . $shop->getBasePath()),
+            'sShopURL' => ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBaseUrl(),
             'sConfig' => $this->container->get('config'),
         ];
     }

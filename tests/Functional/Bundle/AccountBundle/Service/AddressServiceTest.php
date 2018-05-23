@@ -190,32 +190,6 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     /**
      * @depends testSetDefaultBilling
      */
-    public function testSetDefaultBillingLegacySync($addressId)
-    {
-        $address = self::$modelManager->find(Address::class, $addressId);
-
-        $billing = $address->getCustomer()->getBilling();
-
-        $this->assertEquals($address->getCompany(), $billing->getCompany());
-        $this->assertEquals($address->getDepartment(), $billing->getDepartment());
-        $this->assertEquals($address->getDepartment(), $billing->getDepartment());
-        $this->assertEquals($address->getSalutation(), $billing->getSalutation());
-        $this->assertEquals($address->getFirstname(), $billing->getFirstName());
-        $this->assertEquals($address->getLastname(), $billing->getLastName());
-        $this->assertEquals($address->getStreet(), $billing->getStreet());
-        $this->assertEquals($address->getZipcode(), $billing->getZipCode());
-        $this->assertEquals($address->getCity(), $billing->getCity());
-        $this->assertEquals($address->getPhone(), $billing->getPhone());
-        $this->assertEquals($address->getCountry()->getId(), $billing->getCountryId());
-        $this->assertEquals($address->getState() ? $address->getState()->getId() : null, $billing->getStateId());
-        $this->assertEquals($address->getVatId(), $billing->getVatId());
-        $this->assertEquals($address->getAdditionalAddressLine1(), $billing->getAdditionalAddressLine1());
-        $this->assertEquals($address->getAdditionalAddressLine2(), $billing->getAdditionalAddressLine2());
-    }
-
-    /**
-     * @depends testSetDefaultBilling
-     */
     public function testUpdateBilling($addressId)
     {
         $address = self::$modelManager->find(Address::class, $addressId);
@@ -225,7 +199,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
 
         self::$addressService->update($address);
 
-        $this->testSetDefaultBillingLegacySync($addressId);
+        $this->testSetDefaultBilling($addressId);
 
         return $addressId;
     }
@@ -246,30 +220,6 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         $this->assertEquals($address->getLastname(), $shipping->getLastname());
 
         return $addressId;
-    }
-
-    /**
-     * @depends testSetDefaultShipping
-     */
-    public function testSetDefaultShippingLegacySync($addressId)
-    {
-        $address = self::$modelManager->find(Address::class, $addressId);
-
-        $shipping = $address->getCustomer()->getShipping();
-
-        $this->assertEquals($address->getCompany(), $shipping->getCompany());
-        $this->assertEquals($address->getDepartment(), $shipping->getDepartment());
-        $this->assertEquals($address->getDepartment(), $shipping->getDepartment());
-        $this->assertEquals($address->getSalutation(), $shipping->getSalutation());
-        $this->assertEquals($address->getFirstname(), $shipping->getFirstName());
-        $this->assertEquals($address->getLastname(), $shipping->getLastName());
-        $this->assertEquals($address->getStreet(), $shipping->getStreet());
-        $this->assertEquals($address->getZipcode(), $shipping->getZipCode());
-        $this->assertEquals($address->getCity(), $shipping->getCity());
-        $this->assertEquals($address->getCountry()->getId(), $shipping->getCountryId());
-        $this->assertEquals($address->getState() ? $address->getState()->getId() : null, $shipping->getStateId());
-        $this->assertEquals($address->getAdditionalAddressLine1(), $shipping->getAdditionalAddressLine1());
-        $this->assertEquals($address->getAdditionalAddressLine2(), $shipping->getAdditionalAddressLine2());
     }
 
     /**

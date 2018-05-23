@@ -21,12 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\EmotionExporter;
 use Shopware\Components\Emotion\Exception\MappingRequiredException;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Random;
 use Shopware\Models\Emotion\Element;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
@@ -178,6 +178,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data = [];
 
             foreach ($componentData as $entry) {
+                $filterResult = $this->container->get('events')->filter(
+                    'Shopware_Controllers_Backend_Emotion_Detail_Filter_Values',
+                    $entry,
+                    ['subject' => $this]
+                );
+
+                $entry = $filterResult;
+
                 switch (strtolower($entry['valueType'])) {
                     case 'json':
                         if ($entry['value'] != '') {
@@ -308,7 +316,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
             return;
         }
-        $downloadPath = $this->container->getParameter('kernel.root_dir') . '/files/downloads/';
+
+        $downloadPath = sprintf('%s%s', sys_get_temp_dir(), DIRECTORY_SEPARATOR);
 
         if (!is_writable($downloadPath)) {
             $this->View()->assign([
@@ -319,12 +328,15 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             return;
         }
 
-        $fileSystem->copy($file, $downloadPath . $file->getClientOriginalName());
+        $tempFile = sprintf('%s%s', Random::getAlphanumericString(32), '.zip');
+        $copyTo = sprintf('%s%s', $downloadPath, $tempFile);
+
+        $fileSystem->copy($file, $copyTo);
         $fileSystem->remove($file->getPathname());
 
         $this->View()->assign([
             'success' => true,
-            'filePath' => $downloadPath . $file->getClientOriginalName(),
+            'filePath' => $tempFile,
         ]);
     }
 
@@ -333,7 +345,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function importAction()
     {
-        $filePath = $this->Request()->get('filePath');
+        $filePath = sprintf(
+            '%s%s%s',
+            sys_get_temp_dir(),
+            DIRECTORY_SEPARATOR,
+            basename($this->Request()->get('filePath'))
+        );
 
         $emotionImporter = $this->container->get('shopware.emotion.emotion_importer');
         $preset = $emotionImporter->import($filePath);
@@ -348,26 +365,37 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Execute cleanup on imported emotion files.
+     *
+     * @throws \InvalidArgumentException If the passed filePath is empty (code: 1)
      */
     public function afterImportAction()
     {
-        $filePath = $this->Request()->get('filePath');
-        $presetId = $this->Request()->get('presetId');
+        $filePath = trim($this->Request()->get('filePath'));
+        $presetId = (int) $this->Request()->get('presetId');
 
-        if (!$filePath) {
+        try {
+            if ($filePath === '') {
+                throw new \InvalidArgumentException('File path can not be empty', 1);
+            }
+
+            $filePath = sprintf(
+                '%s%s%s',
+                sys_get_temp_dir(),
+                DIRECTORY_SEPARATOR,
+                basename($filePath)
+            );
+
+            $this->container->get('shopware.emotion.emotion_importer')->cleanupImport($filePath, $presetId);
+
             $this->View()->assign([
+                'success' => true,
+            ]);
+        } catch (\Exception $e) {
+            $this->View()->assign([
+                'error' => $e->getMessage(),
                 'success' => false,
             ]);
-
-            return;
         }
-
-        $emotionImporter = $this->container->get('shopware.emotion.emotion_importer');
-        $emotionImporter->cleanupImport($filePath, $presetId);
-
-        $this->View()->assign([
-            'success' => true,
-        ]);
     }
 
     public function importTranslationsAction()
@@ -763,7 +791,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $this->View()->assign(
             $this->getTemplates(
                 $this->Request()->getParam('start', null),
-                $this->Request()->getParam('limit', null)
+                $this->Request()->getParam('limit', null),
+                $this->Request()->getParam('id', null)
             )
         );
     }
@@ -864,13 +893,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *
      * @param null $offset
      * @param null $limit
+     * @param null $id
      *
      * @return array
      */
-    protected function getTemplates($offset = null, $limit = null)
+    protected function getTemplates($offset = null, $limit = null, $id = null)
     {
         try {
-            $query = $this->getTemplatesQuery($offset, $limit);
+            $query = $this->getTemplatesQuery($offset, $limit, $id);
             $paginator = $this->getQueryPaginator($query->getQuery());
 
             $result = [
@@ -888,14 +918,22 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * @param null $offset
      * @param null $limit
+     * @param null $id
      *
      * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
      */
-    protected function getTemplatesQuery($offset = null, $limit = null)
+    protected function getTemplatesQuery($offset = null, $limit = null, $id = null)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['templates'])
             ->from('Shopware\Models\Emotion\Template', 'templates');
+
+        if ($id !== null) {
+            $builder->where('templates.id = :id')
+                ->setParameter(':id', $id);
+            $offset = 0;
+            $limit = 1;
+        }
 
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)

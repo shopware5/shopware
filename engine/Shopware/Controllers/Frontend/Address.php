@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Models\Customer\Address;
@@ -279,6 +278,12 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                 }
             }
         }
+
+        /** @var string $data */
+        $extraData = array_map(function ($data) {
+            // only allow alphanumeric characters, commas and spaces
+            return preg_replace('/[^A-Za-z0-9 ,]/', '', $data);
+        }, $extraData);
 
         $this->View()->assign('addresses', $addresses);
         $this->View()->assign('activeAddressId', $activeAddressId);

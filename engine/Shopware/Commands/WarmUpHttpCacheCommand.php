@@ -42,6 +42,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             ->setDescription('Warm up http cache')
             ->addArgument('shopId', InputArgument::OPTIONAL, 'The Id of the shop')
             ->addOption('clear-cache', 'c', InputOption::VALUE_NONE, 'Clear complete httpcache before warmup')
+            ->addOption('concurrent-requests', 'b', InputOption::VALUE_OPTIONAL, 'Integer representing the maximum number of requests that are allowed to be sent concurrently. To many URLs at a time may cause script timeouts, memory issues or block your HTTP server', 1)
             ->setHelp('The <info>%command.name%</info> warms up the http cache')
         ;
     }
@@ -67,18 +68,25 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
         /** @var \Shopware\Components\HttpCache\CacheWarmer $cacheWarmer */
         $cacheWarmer = $this->container->get('http_cache_warmer');
 
+        // Help message for this command may be confusing about using an equal sign. So better strip it.
+        $concurrentRequests = (int) trim($input->getOption('concurrent-requests'), '=');
+        $offset = 0;
+        $limit = $concurrentRequests > 10 ? $concurrentRequests : 10;
+
         foreach ($shopIds as $shopId) {
-            $limit = 10;
-            $offset = 0;
             $totalUrlCount = $cacheWarmer->getAllSEOUrlCount($shopId);
-            $output->writeln("\n Calling URLs for shop with id " . $shopId);
+
+            $output->writeln(sprintf("\nCalling URLs for shop with id %s with %d concurrent processes", $shopId, $concurrentRequests));
+
             $progressBar = new ProgressBar($output, $totalUrlCount);
             $progressBar->setBarWidth(100);
+            $progressBar->setFormat('very_verbose');
             $progressBar->start();
+
             while ($offset < $totalUrlCount) {
                 $urls = $cacheWarmer->getAllSEOUrls($shopId, $limit, $offset);
 
-                $cacheWarmer->callUrls($urls, $shopId);
+                $cacheWarmer->callUrls($urls, $shopId, $concurrentRequests);
                 $progressBar->advance(count($urls));
                 $offset += count($urls);
             }

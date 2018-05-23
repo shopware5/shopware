@@ -1,9 +1,6 @@
 {block name='frontend_detail_data_block_prices_start'}
     <div class="block-prices--container{if $hidden && !$sArticle.selected} is--hidden{/if} block-price--{$sArticle.ordernumber}">
 
-        {* @deprecated *}
-        {block name='frontend_detail_data_block_prices_headline'}{/block}
-
         {$hasReferencePrice = ($sArticle.referenceprice > 0)}
 
         {block name="frontend_detail_data_block_prices_table"}

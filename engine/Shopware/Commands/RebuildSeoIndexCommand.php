@@ -30,22 +30,34 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RebuildSeoIndexCommand extends ShopwareCommand
 {
-    /** @var \Shopware_Components_SeoIndex */
+    /**
+     * @var \Shopware_Components_SeoIndex
+     */
     protected $seoIndex;
 
-    /** @var \sRewriteTable */
+    /**
+     * @var \sRewriteTable
+     */
     protected $rewriteTable;
 
-    /** @var \sCategories */
+    /**
+     * @var \sCategories
+     */
     protected $categories;
 
-    /** @var \Doctrine\DBAL\Connection */
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $database;
 
-    /** @var \Shopware_Components_Modules */
+    /**
+     * @var \Shopware_Components_Modules
+     */
     protected $modules;
 
-    /** @var \Shopware\Components\Model\ModelManager */
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
     protected $modelManager;
 
     /**
@@ -63,6 +75,8 @@ class RebuildSeoIndexCommand extends ShopwareCommand
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -86,20 +100,21 @@ class RebuildSeoIndexCommand extends ShopwareCommand
 
         $currentTime = new \DateTime();
 
-        $this->seoIndex->registerShop($shops[0]);
         $this->rewriteTable->sCreateRewriteTableCleanup();
 
         foreach ($shops as $shopId) {
             $output->writeln('Rebuilding SEO index for shop ' . $shopId);
+
             /** @var $repository \Shopware\Models\Shop\Repository */
-            $repository = $this->modelManager->getRepository('Shopware\Models\Shop\Shop');
+            $repository = $this->modelManager->getRepository(\Shopware\Models\Shop\Shop::class);
             $shop = $repository->getActiveById($shopId);
 
             if ($shop === null) {
-                throw new \Exception('No valid shop id passed');
+                throw new \RuntimeException('No valid shop id passed');
             }
 
             $shop->registerResources();
+
             $this->modules->Categories()->baseId = $shop->getCategory()->getId();
 
             list($cachedTime, $elementId, $shopId) = $this->seoIndex->getCachedTime();

@@ -30,7 +30,7 @@
 
                                 {* Include of the widget *}
                                 {block name="frontend_index_checkout_actions_service_menu_include"}
-                                    {include file="widgets/index/menu.tpl" sGroup=gLeft}
+                                    {include file="widgets/index/menu.tpl" sGroup=left}
                                 {/block}
                             </div>
                         {/block}

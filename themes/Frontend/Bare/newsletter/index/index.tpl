@@ -1,6 +1,12 @@
+{block name="newsletter_index_start"}{/block}
+{block name="newsletter_index_doctype"}
 <!DOCTYPE HTML>
-<html>
+{/block}
+
+<html {block name="newsletter_index_html_attributes"}{/block}>
+
 <head>
+{block name="newsletter_index_index_head"}
     <meta charset="UTF-8" />
     <title>Newsletter</title>
     <style type="text/css">
@@ -28,46 +34,64 @@
             text-decoration:none;
         }
     </style>
+{/block}
 </head>
 
-<body style="height:100%; font-family:Arial, Helvetica, sans-serif; padding:0; background-color:#E9EBED;" background="#ffffff;margin:0;padding:0;" leftmargin="0" topmargin="0">
+<body {block name="newsletter_index_body_attributes"}style="height:100%; font-family:Arial, Helvetica, sans-serif; padding:0; background-color:#E9EBED;" background="#ffffff;margin:0;padding:0;" leftmargin="0" topmargin="0"{/block}>
 
+{block name="newsletter_index_table"}
 <table align="center" width="100%" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c;font-family:Arial,Helvetica;">
     <tr>
         <td>
             <table align="center" width="560" bgcolor="#ffffff" border="0" cellspacing="25" cellpadding="0" style="color:#8c8c8c; border:1px solid #dfdfdf;font-family:Arial,Helvetica;">
                 <tr>
                     <td>
+                        {block name="newsletter_index_table_inner"}
+                            {block name="newsletter_index_table_inner_header"}
+                                {include file="newsletter/index/header.tpl"}
+                            {/block}
 
-                        {include file="newsletter/index/header.tpl"}
+                            {block name="newsletter_index_table_inner_content"}{/block}
 
-                        {foreach from=$sCampaign.containers item=sCampaignContainer}
-                            {if $sCampaignContainer.type == "ctBanner"}
-                                {include file="newsletter/container/banner.tpl"}
-                            {elseif $sCampaignContainer.type == "ctText"}
-                                {include file="newsletter/container/text.tpl"}
-                            {elseif $sCampaignContainer.type == "ctSuggest"}
-                                {include file="newsletter/container/suggest.tpl" sCampaignContainer=$sRecommendations}
-                            {elseif $sCampaignContainer.type == "ctArticles"}
-                                {include file="newsletter/container/article.tpl"}
-                            {elseif $sCampaignContainer.type == "ctLinks"}
-                                {include file="newsletter/container/link.tpl"}
-                            {elseif isset($sCampaignContainer.templateName) }
-                                {include file="newsletter/container/{$sCampaignContainer.templateName}.tpl"}
-                            {/if}
-                        {/foreach}
+                            {$path = ""}
 
-                        {include file="newsletter/index/footer.tpl"}
+                            {foreach from=$sCampaign.containers item=sCampaignContainer}
+                                {if $sCampaignContainer.type == "ctBanner"}
+                                    {$path = "newsletter/container/banner.tpl"}
+                                {elseif $sCampaignContainer.type == "ctText"}
+                                    {$path = "newsletter/container/text.tpl"}
+                                {elseif $sCampaignContainer.type == "ctSuggest"}
+                                    {$path = "newsletter/container/suggest.tpl"}
+                                {elseif $sCampaignContainer.type == "ctArticles"}
+                                    {$path = "newsletter/container/article.tpl"}
+                                {elseif $sCampaignContainer.type == "ctLinks"}
+                                    {$path = "newsletter/container/link.tpl"}
+                                {elseif isset($sCampaignContainer.templateName) }
+                                    {$path = "newsletter/container/{$sCampaignContainer.templateName}.tpl"}
+                                {/if}
 
-                        <!--FOOTER-->
+                                {if $path != ""}
+                                    {if $sCampaignContainer.type == "ctSuggest"}
+                                        {include file=$path sCampaignContainer=$sRecommendations}
+                                    {else}
+                                        {include file=$path}
+                                    {/if}
+                                {/if}
+                            {/foreach}
+
+                            {block name="newsletter_index_table_inner_footer"}
+                                {include file="newsletter/index/footer.tpl"}
+                            {/block}
+                        {/block}
                     </td>
                 </tr>
             </table>
-
+            {block name="newsletter_index_log"}
             <img src="{url module='backend' controller='newsletter' action='log' mailing=$sMailing.id mailaddress=$sUser.mailaddressID fullPath}" style="width:1px;height:1px">
-
+            {/block}
         </td>
     </tr>
 </table>
+{/block}
 </body>
 </html>

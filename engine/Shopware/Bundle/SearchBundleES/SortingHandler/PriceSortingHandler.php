@@ -31,21 +31,19 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\PriceFieldMapper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PriceSortingHandler implements HandlerInterface
 {
     /**
-     * @var FieldMappingInterface
+     * @var PriceFieldMapper
      */
-    private $fieldMapping;
+    private $mapper;
 
-    /**
-     * @param FieldMappingInterface $fieldMapping
-     */
-    public function __construct(FieldMappingInterface $fieldMapping)
+    public function __construct(PriceFieldMapper $mapper)
     {
-        $this->fieldMapping = $fieldMapping;
+        $this->mapper = $mapper;
     }
 
     /**
@@ -66,7 +64,7 @@ class PriceSortingHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var PriceSorting $criteriaPart */
-        $field = $this->fieldMapping->getPriceField($context);
+        $field = $this->mapper->getPriceField($criteria, $context);
         $sort = new FieldSort($field, strtolower($criteriaPart->getDirection()));
         $search->addSort($sort);
     }

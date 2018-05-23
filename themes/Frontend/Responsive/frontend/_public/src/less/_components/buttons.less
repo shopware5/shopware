@@ -27,7 +27,7 @@ Adding the class `is--disabled` changes the element to a disabled button.
     -webkit-font-smoothing: inherit;
     display: inline-block;
     position: relative;
-    font-weight: bold;
+    font-weight: @font-bold-weight;
     text-decoration: none;
     text-align: left;
     cursor: pointer;
@@ -69,7 +69,7 @@ To work properly the button needs the class `is--icon-left` or `is--icon-right` 
             .unitize(line-height, 32);
             .unitize-margin(-16, 0, 0, 0);
             .unitize(right, 12);
-            font-weight: normal;
+            font-weight: @font-base-weight;
             display: block;
             position: absolute;
             top: 50%;
@@ -84,7 +84,7 @@ To work properly the button needs the class `is--icon-left` or `is--icon-right` 
             .unitize(line-height, 32);
             .unitize-margin(-16, 0, 0, 0);
             .unitize(left, 12);
-            font-weight: normal;
+            font-weight: @font-base-weight;
             display: block;
             position: absolute;
             top: 50%;

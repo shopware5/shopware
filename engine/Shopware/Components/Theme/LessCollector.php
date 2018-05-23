@@ -68,6 +68,9 @@ class LessCollector
      * @param Shop\Template $template
      * @param Shop\Shop     $shop
      *
+     * @throws \Exception
+     * @throws \Enlight_Event_Exception
+     *
      * @return LessDefinition[]
      */
     public function collectLessDefinitions(Shop\Template $template, Shop\Shop $shop)
@@ -101,6 +104,23 @@ class LessCollector
             $this->collectInheritanceCss($inheritances['custom'])
         );
 
+        $discardLess = [];
+        for ($i = count($definitions) - 1; $i >= 0; --$i) {
+            $definition = $definitions[$i];
+            $theme = $definition->getTheme();
+
+            if (!$theme) {
+                continue;
+            }
+
+            $themeClassName = get_class($theme);
+            $discardLess = array_merge($discardLess, $theme->getDiscardedLessThemes());
+
+            if (in_array($themeClassName, $discardLess)) {
+                $definitions[$i]->setFiles([]);
+            }
+        }
+
         $definitions = $this->eventManager->filter(
             'Theme_Compiler_Collect_Less_Definitions_FilterResult',
             $definitions,
@@ -114,14 +134,16 @@ class LessCollector
     }
 
     /**
-     * @param $inheritance
+     * @param array $inheritance
+     *
+     * @throws \Exception
      *
      * @return LessDefinition[]
      */
-    private function collectInheritanceLess($inheritance)
+    private function collectInheritanceLess(array $inheritance)
     {
         $definitions = [];
-        //use array_reverse to compile the bare themes first.
+        // Use array_reverse to compile the bare themes first.
         foreach (array_reverse($inheritance) as $shopTemplate) {
             $definition = new LessDefinition();
 
@@ -132,6 +154,7 @@ class LessCollector
             $definition->setFiles([
                 $this->pathResolver->getThemeLessFile($shopTemplate),
             ]);
+            $definition->setTheme($this->inheritance->getTheme($shopTemplate));
 
             $definitions[] = $definition;
         }
@@ -140,11 +163,13 @@ class LessCollector
     }
 
     /**
-     * @param $inheritance
+     * @param array $inheritance
+     *
+     * @throws \Exception
      *
      * @return LessDefinition[]
      */
-    private function collectInheritanceCss($inheritance)
+    private function collectInheritanceCss(array $inheritance)
     {
         $files = [];
         foreach (array_reverse($inheritance) as $template) {

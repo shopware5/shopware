@@ -92,7 +92,7 @@ Feature: My account (without changing login data)
         Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
         And   the current payment method should be "SEPA"
 
-    @configChange @esd
+    @configChange @esd @knownFailing
     Scenario: I can disable ESD-Articles in account
         Given I should see "Sofortdownloads"
         When  I disable the config "showEsd"

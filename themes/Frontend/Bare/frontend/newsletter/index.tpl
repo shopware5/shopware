@@ -1,8 +1,9 @@
 {extends file="frontend/index/index.tpl"}
 
 {* Breadcrumb *}
-{block name='frontend_index_start' append}
-    {$sBreadcrumb = [['name'=>"{s name='NewsletterTitle'}{/s}", 'link'=>{url}]]}
+{block name='frontend_index_start'}
+    {$smarty.block.parent}
+    {$sBreadcrumb = [['name' => "{s name='NewsletterTitle'}{/s}", 'link' => {url}]]}
 {/block}
 
 {* Meta description *}
@@ -199,6 +200,13 @@
                                                  data-hasError="true"{/if} data-autoload="true"></div>
                                         {/if}
                                     </div>
+                                {/if}
+                            {/block}
+
+                            {* Data protection information *}
+                            {block name="frontend_newsletter_form_privacy"}
+                                {if {config name=ACTDPRTEXT}}
+                                    {include file="frontend/_includes/privacy.tpl"}
                                 {/if}
                             {/block}
 

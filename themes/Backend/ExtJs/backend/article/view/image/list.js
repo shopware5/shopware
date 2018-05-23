@@ -85,6 +85,8 @@ Ext.define('Shopware.apps.Article.view.image.List', {
      */
     hasActiveAttributes: false,
 
+    layout: 'fit',
+
     /**
      * Initializes the component and sets the neccessary
      * toolbars and items.
@@ -99,15 +101,23 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         me.title = me.snippets.title;
         me.tbar = me.createActionToolbar();
         me.dropZone = Ext.create('Shopware.apps.Article.view.image.DropZone', {
-            anchor: '100%',
             padding: 20,
-            dropZoneConfig: { hideOnLegacy: true, focusable: false }
+            dropZoneConfig: { hideOnLegacy: true, focusable: false },
+            height: 100,
+            style: {
+                borderBottom: '1px solid',
+                borderColor: '#a4b5c0'
+            }
         });
 
         me.items = [{
             xtype: 'container',
             style: 'background: #fff',
             autoScroll: true,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
             items: [
                 me.dropZone,
                 me.createMediaView()
@@ -196,13 +206,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         var me = this;
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<tpl if="main===1">',
-                    '<div class="article-thumb-wrap main middle" >',
-                '</tpl>',
-                '<tpl if="main!=1">',
-                    '<div class="article-thumb-wrap middle" >',
-                '</tpl>',
-
+                '<div class="article-thumb-wrap middle" >',
                     // If the type is image, then show the image
                     '<div class="thumb">',
                         '<div class="inner-thumb"><img src="{literal}{thumbnail}{/literal}" /></div>',
@@ -226,20 +230,19 @@ Ext.define('Shopware.apps.Article.view.image.List', {
      * @return [object] this.dataView - created Ext.view.View
      */
     createMediaView: function() {
-        var me = this, model;
+        var me = this;
 
-        me.dataView = Ext.create('Ext.view.View', {
-            itemSelector: '.article-thumb-wrap',
-            name: 'image-listing',
-            emptyText: 'No Media found',
-            multiSelect: true,
-            padding: '10 10 20',
+        me.dataView = Ext.create('Shopware.apps.Article.view.image.DataView', {
             store: me.mediaStore,
             tpl: me.createMediaViewTemplate()
         });
 
         me.dataView.getSelectionModel().on('select', function (dataViewModel, media) {
             me.fireEvent('mediaSelect', dataViewModel, media, me.previewButton, me.removeButton, me.configButton, me.downloadButton);
+        });
+
+        me.dataView.on('openSettingsForm', function(record) {
+            me.fireEvent('openImageMapping', record);
         });
 
         me.dataView.getSelectionModel().on('deselect', function (dataViewModel, media) {

@@ -54,7 +54,9 @@ class DetailContext extends SubContext
      */
     public function iPutTheArticleTimesIntoTheBasket($quantity = 1)
     {
-        $this->getPage('Detail')->toBasket($quantity);
+        /** @var $page Detail */
+        $page = $this->getPage('Detail');
+        $page->addToBasket($quantity);
     }
 
     /**
@@ -133,5 +135,27 @@ class DetailContext extends SubContext
         /** @var Detail $page */
         $page = $this->getPage('Detail');
         $page->openEvaluationSection();
+    }
+
+    /**
+     * @Given /^The notification plugin is activated$/
+     */
+    public function theNotificationPluginIsActivated()
+    {
+        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
+        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
+        $plugin = $pluginManager->getPluginByName('Notification');
+        $pluginManager->activatePlugin($plugin);
+    }
+
+    /**
+     * @Given /^The notification plugin is deactivated$/
+     */
+    public function theNotificationPluginIsDeactivated()
+    {
+        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
+        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
+        $plugin = $pluginManager->getPluginByName('Notification');
+        $pluginManager->deactivatePlugin($plugin);
     }
 }

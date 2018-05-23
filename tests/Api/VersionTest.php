@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Kernel;
+
 class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
@@ -71,6 +73,9 @@ class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase
 
     public function testGetVersionShouldBeSuccessful()
     {
+        $kernel = new Kernel('testing', true);
+        $release = $kernel->getRelease();
+
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/version');
         $result = $client->request('GET');
 
@@ -88,7 +93,7 @@ class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase
         $data = $result['data'];
         $this->assertInternalType('array', $data);
 
-        $this->assertEquals(Shopware::VERSION, $data['version']);
-        $this->assertEquals(Shopware::REVISION, $data['revision']);
+        $this->assertEquals($release['version'], $data['version']);
+        $this->assertEquals($release['revision'], $data['revision']);
     }
 }

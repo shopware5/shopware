@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Thumbnail extends Extendable implements \JsonSerializable
+class Thumbnail extends Extendable
 {
     /**
      * @var string
@@ -87,22 +87,6 @@ class Thumbnail extends Extendable implements \JsonSerializable
     public function getRetinaSource()
     {
         return $this->retinaSource;
-    }
-
-    /**
-     * @deprecated deprecated since version 5.1, please build the sourceSet in a hydrator or view
-     *
-     * @param string $imageDir
-     *
-     * @return string
-     */
-    public function getSourceSet($imageDir)
-    {
-        if ($this->retinaSource !== null) {
-            return sprintf('%s%s, %s%s 2x', $imageDir, $this->source, $imageDir, $this->retinaSource);
-        }
-
-        return $imageDir . $this->source;
     }
 
     /**

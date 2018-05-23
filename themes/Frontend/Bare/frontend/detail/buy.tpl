@@ -11,9 +11,6 @@
         <input type="hidden" name="sActionIdentifier" value="{$sUniqueRand}"/>
         <input type="hidden" name="sAddAccessories" id="sAddAccessories" value=""/>
 
-        {* @deprecated - Product variants block *}
-        {block name='frontend_detail_buy_variant'}{/block}
-
         <input type="hidden" name="sAdd" value="{$sArticle.ordernumber}"/>
 
         {* Article accessories *}
@@ -56,7 +53,7 @@
             {if (!isset($sArticle.active) || $sArticle.active)}
                 {if $sArticle.isAvailable}
                     {block name="frontend_detail_buy_button_container"}
-                        <div class="buybox--button-container block-group{if $NotifyHideBasket && $sArticle.notification && $sArticle.instock <= 0} is--hidden{/if}">
+                        <div class="buybox--button-container block-group{if $NotifyHideBasket && $sArticle.notification && $sArticle.instock < $sArticle.minstock} is--hidden{/if}">
 
                             {* Quantity selection *}
                             {block name='frontend_detail_buy_quantity'}

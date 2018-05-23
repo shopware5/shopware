@@ -34,7 +34,7 @@ class Form extends Page implements HelperSelectorInterface
     /**
      * @var string
      */
-    protected $path = 'shopware.php?sViewport=ticket&sFid={formId}';
+    protected $path = 'shopware.php?sViewport=forms&sFid={formId}';
 
     /**
      * {@inheritdoc}
@@ -100,6 +100,8 @@ class Form extends Page implements HelperSelectorInterface
             $message = 'The captcha was not loaded or does not exist!';
             Helper::throwException($message);
         }
+
+        $this->getSession()->wait(5000);
 
         /** @var NodeElement[] $elements */
         $elements = Helper::findElements($this, ['captchaPlaceholder']);

@@ -81,9 +81,7 @@ class PluginCategoryService
 
         $firstLevel = $categories[null];
 
-        $result = $this->buildTree($firstLevel, $categories);
-
-        return $result;
+        return $this->buildTree($firstLevel, $categories);
     }
 
     /**

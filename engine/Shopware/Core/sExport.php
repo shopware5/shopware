@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
@@ -47,16 +46,6 @@ class sExport
 
     public $sCurrency;
     public $sCustomergroup;
-
-    /**
-     * @deprecated Use $shopData instead
-     */
-    public $sLanguage;
-
-    /**
-     * @deprecated Use $shopData instead
-     */
-    public $sMultishop;
 
     /**
      * @var \Shopware\Models\Shop\Shop
@@ -167,16 +156,18 @@ class sExport
     }
 
     /**
-     * @param int $customerGroup
+     * @param int|string $customerGroup
      *
      * @return bool
      */
     public function sGetCustomergroup($customerGroup)
     {
         static $cache = [];
+
         if (empty($customerGroup)) {
-            $customerGroup = $this->sMultishop['defaultcustomergroup'];
+            $customerGroup = $this->shopData['customer_group_id'];
         }
+
         if (isset($cache[$customerGroup])) {
             return $cache[$customerGroup];
         }
@@ -197,58 +188,12 @@ class sExport
         return $cache[$customerGroup];
     }
 
-    /**
-     * @deprecated Use getShopData
-     *
-     * @param $language
-     *
-     * @return mixed
-     */
-    public function sGetMultishop($language)
-    {
-        static $cache = [];
-
-        if (isset($cache[$language])) {
-            return $cache[$language];
-        }
-        if (empty($language)) {
-            $sql = 's.`default`=1';
-        } elseif (is_numeric($language)) {
-            $sql = 's.id=' . $language;
-        } elseif (is_string($language)) {
-            $sql = 's.name=' . $this->db->quote(trim($language));
-        }
-
-        $cache[$language] = $this->db->fetchRow("
-            SELECT
-              s.id AS id, s.id AS isocode, s.locale_id AS locale,
-              s.category_id AS parentID, s.default AS skipbackend, s.name,
-              (SELECT groupkey FROM s_core_customergroups WHERE id=s.customer_group_id) as defaultcustomergroup,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.template_id) as template,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.document_template_id) as doc_template,
-              CONCAT(s.host, '\n', s.hosts) as domainaliase,
-              GROUP_CONCAT(d.currency_id SEPARATOR '|') as switchCurrencies,
-              (SELECT GROUP_CONCAT(id SEPARATOR '|') FROM s_core_shops WHERE id=m.id OR main_id=m.id)  as switchLanguages,
-              s.currency_id AS defaultcurrency, s.default, s.fallback_id AS fallback
-            FROM s_core_shops s
-            LEFT JOIN s_core_shops m
-            ON m.id=s.main_id
-            OR (s.main_id IS NULL AND m.id=s.id)
-            LEFT JOIN s_core_shop_currencies d
-            ON d.shop_id=m.id
-            WHERE s.active=1 AND $sql
-            GROUP BY s.id
-        ");
-
-        return $cache[$language];
-    }
-
     public function sInitSettings()
     {
         $hash = $this->db->quote($this->sHash);
 
         /** @var $shopRepository \Shopware\Models\Shop\Repository */
-        $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $sql = "
             SELECT
@@ -312,15 +257,12 @@ class sExport
 
         if (empty($this->sSettings['languageID'])) {
             $defaultShop = $shopRepository->getDefault();
-            //just a fall back for update reasons
+            // Just a fall back for update reasons
             $this->sSettings['languageID'] = $defaultShop->getId();
         }
 
         $shop = $shopRepository->getActiveById($this->sSettings['languageID']);
         $this->shopData = $this->getShopData($this->sSettings['languageID']);
-
-        $this->sLanguage = $this->sGetMultishop($this->sSettings['languageID']);
-        $this->sMultishop = $this->sLanguage;
 
         if (empty($this->sSettings['categoryID'])) {
             $this->sSettings['categoryID'] = $this->shopData['category_id'];
@@ -342,7 +284,7 @@ class sExport
             ->getAlbumWithSettingsQuery(-1)
             ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
         $shop->setCurrency($repository->find($this->sCurrency['id']));
         $shop->registerResources();
 
@@ -375,17 +317,13 @@ class sExport
         $this->sSmarty->assign('sCustomergroup', $this->sCustomergroup);
         $this->sSmarty->assign('sSettings', $this->sSettings);
 
-        // deprecated: use shopData instead
-        $this->sSmarty->assign('sLanguage', $this->sLanguage);
-        $this->sSmarty->assign('sMultishop', $this->sMultishop);
-
         $this->sSmarty->config_vars['F'] = $this->sSettings['fieldmark'];
         $this->sSmarty->config_vars['EF'] = $this->sSettings['escaped_separator'];
         $this->sSmarty->config_vars['S'] = $this->sSettings['separator'];
         $this->sSmarty->config_vars['ES'] = $this->sSettings['escaped_fieldmark'];
         $this->sSmarty->config_vars['L'] = $this->sSettings['line_separator'];
         $this->sSmarty->config_vars['EL'] = $this->sSettings['escaped_line_separator'];
-        if ($this->sSettings['encoding'] == 'UTF-8') {
+        if ($this->sSettings['encoding'] === 'UTF-8') {
             $this->sSmarty->config_vars['BOM'] = "\xEF\xBB\xBF";
         } else {
             $this->sSmarty->config_vars['BOM'] = '';
@@ -393,6 +331,12 @@ class sExport
         $this->sSmarty->config_vars['EN'] = $this->sSettings['encoding'];
     }
 
+    /**
+     * @param string      $string
+     * @param null|string $char_set
+     *
+     * @return string
+     */
     public function sHtmlEntities($string, $char_set = null)
     {
         if (empty($char_set)) {
@@ -402,11 +346,25 @@ class sExport
         return htmlentities($string, ENT_COMPAT | ENT_HTML401, $char_set);
     }
 
+    /**
+     * @param string      $string
+     * @param string      $esc_type
+     * @param null|string $char_set
+     *
+     * @return mixed|string
+     */
     public function sFormatString($string, $esc_type = '', $char_set = null)
     {
         return $this->sEscapeString($string, $esc_type, $char_set);
     }
 
+    /**
+     * @param string      $string
+     * @param string      $esc_type
+     * @param null|string $char_set
+     *
+     * @return mixed|string
+     */
     public function sEscapeString($string, $esc_type = '', $char_set = null)
     {
         if (empty($esc_type)) {
@@ -424,6 +382,7 @@ class sExport
         switch ($esc_type) {
             case 'number':
                 return number_format($string, 2, $this->sSettings['dec_separator'], '');
+
             case 'csv':
                 if (empty($this->sSettings['escaped_line_separator'])) {
                     $string = preg_replace('#[\r\n]+#m', ' ', $string);
@@ -436,35 +395,40 @@ class sExport
                     $string = str_replace($this->sSettings['separator'], $this->sSettings['escaped_separator'], $string);
                 }
 
-                if ($char_set != 'UTF-8') {
+                if ($char_set !== 'UTF-8') {
                     $string = utf8_decode($string);
                 }
                 $string = html_entity_decode($string, ENT_NOQUOTES, $char_set);
 
                 return $this->sSettings['fieldmark'] . $string . $this->sSettings['fieldmark'];
+
             case 'xml':
-                if ($char_set != 'UTF-8') {
+                if ($char_set !== 'UTF-8') {
                     $string = utf8_decode($string);
                 }
 
                 return $string;
+
             case 'html':
                 $string = html_entity_decode($string, ENT_NOQUOTES, $char_set);
 
                 return htmlspecialchars($string, ENT_QUOTES, $char_set, false);
+
             case 'htmlall':
                 return htmlentities($string, ENT_QUOTES, $char_set);
+
             case 'url':
                 return rawurlencode($string);
+
             case 'urlpathinfo':
                 return str_replace('%2F', '/', rawurlencode($string));
 
             case 'quotes':
-                // escape unescaped single quotes
+                // Escape unescaped single quotes
                 return preg_replace("%(?<!\\\\)'%", "\\'", $string);
 
             case 'hex':
-                // escape every character into hex
+                // Escape every character into hex
                 $return = '';
                 for ($x = 0; $x < strlen($string); ++$x) {
                     $return .= '%' . bin2hex($string[$x]);
@@ -489,19 +453,19 @@ class sExport
                 return $return;
 
             case 'javascript':
-                // escape quotes and backslashes, newlines, etc.
+                // Escape quotes and backslashes, newlines, etc.
                 return strtr($string, ['\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/']);
 
             case 'mail':
-                // safe way to display e-mail address on a web page
+                // Safe way to display e-mail address on a web page
                 return str_replace(['@', '.'], [' [AT] ', ' [DOT] '], $string);
 
             case 'nonstd':
-                // escape non-standard chars, such as ms document quotes
+                // Escape non-standard chars, such as ms document quotes
                 $_res = '';
                 for ($_i = 0, $_len = strlen($string); $_i < $_len; ++$_i) {
                     $_ord = ord(substr($string, $_i, 1));
-                    // non-standard char, escape it
+                    // Non-standard char, escape it
                     if ($_ord >= 126) {
                         $_res .= '&#' . $_ord . ';';
                     } else {
@@ -513,14 +477,21 @@ class sExport
         }
     }
 
+    /**
+     * @param int    $articleID
+     * @param string $title
+     *
+     * @return string
+     */
     public function sGetArticleLink($articleID, $title = '')
     {
         return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
     }
 
     /**
-     * @param string $hash
+     * @param string      $hash
      * @param null|string $imageSize
+     *
      * @return null|string
      */
     public function sGetImageLink($hash, $imageSize = null)
@@ -531,20 +502,20 @@ class sExport
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        // get the image directory
+        // Get the image directory
         $imageDir = 'media/image/';
 
-        // if no imageSize was set, return the full image
-        if (null === $imageSize) {
+        // If no imageSize was set, return the full image
+        if ($imageSize === null) {
             return $this->fixShopHost($mediaService->getUrl($imageDir . $hash), $mediaService->getAdapterType());
         }
 
-        // get filename and extension in order to insert thumbnail size later
+        // Get filename and extension in order to insert thumbnail size later
         $extension = pathinfo($hash, PATHINFO_EXTENSION);
         $fileName = pathinfo($hash, PATHINFO_FILENAME);
         $thumbDir = $imageDir . 'thumbnail/';
 
-        // get thumbnail sizes
+        // Get thumbnail sizes
         $sizes = $this->articleMediaAlbum
             ->getSettings()
             ->getThumbnailSize();
@@ -569,16 +540,16 @@ class sExport
      * Returns the article image links with the frontend logic.
      * Checks the image restriction of variant articles, too.
      *
-     * @param $articleId
-     * @param $orderNumber
-     * @param null   $imageSize
-     * @param string $separator
+     * @param int         $articleId
+     * @param string      $orderNumber
+     * @param null|string $imageSize
+     * @param string      $separator
      *
      * @return string
      */
     public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = '|')
     {
-        $imageSize = ($imageSize == null) ? 'original' : $imageSize;
+        $imageSize = ($imageSize === null) ? 'original' : $imageSize;
         $returnData = [];
         if (empty($articleId) || empty($orderNumber)) {
             return '';
@@ -597,8 +568,8 @@ class sExport
      * Returns an array with the article property data.
      * Needs to be parsed over the feed smarty template
      *
-     * @param $articleId
-     * @param $filterGroupId
+     * @param int $articleId
+     * @param int $filterGroupId
      *
      * @return string
      */
@@ -611,6 +582,12 @@ class sExport
         return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
     }
 
+    /**
+     * @param string $object
+     * @param string $objectData
+     *
+     * @return array
+     */
     public function sMapTranslation($object, $objectData)
     {
         switch ($object) {
@@ -619,6 +596,7 @@ class sExport
                 $map = [
                     'txtshortdescription' => 'description',
                     'txtlangbeschreibung' => 'description_long',
+                    'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'name',
                     'txtzusatztxt' => 'additionaltext',
                 ];
@@ -659,7 +637,7 @@ class sExport
     /**
      * Expects a string of type
      *
-     * @param $line
+     * @param string $line
      *
      * @return array
      */
@@ -669,7 +647,9 @@ class sExport
         $fieldmark = '"';
         $elements = explode($separator, $line);
         $tmp_elements = [];
-        for ($i = 0; $i < count($elements); ++$i) {
+        $amountOfElements = count($elements);
+
+        for ($i = 0; $i < $amountOfElements; ++$i) {
             $nquotes = substr_count($elements[$i], $fieldmark);
             if ($nquotes % 2 == 1) {
                 if (isset($elements[$i + 1])) {
@@ -677,10 +657,10 @@ class sExport
                 }
             } else {
                 if ($nquotes > 0) {
-                    if (substr($elements[$i], 0, 1) == $fieldmark) {
+                    if (substr($elements[$i], 0, 1) === $fieldmark) {
                         $elements[$i] = substr($elements[$i], 1);
                     }
-                    if (substr($elements[$i], -1, 1) == $fieldmark) {
+                    if (substr($elements[$i], -1, 1) === $fieldmark) {
                         $elements[$i] = substr($elements[$i], 0, -1);
                     }
                     $elements[$i] = str_replace($fieldmark . $fieldmark, $fieldmark, $elements[$i]);
@@ -714,7 +694,7 @@ class sExport
             $sql_add_select[] = 'ta.objectdata as article_translation';
             $sql_add_select[] = 'td.objectdata as detail_translation';
 
-            //read the fallback for the case the translation is not going to be set
+            // Read the fallback for the case the translation is not going to be set
             $fallbackId = $this->shop->getFallback() ? $this->shop->getFallback()->getId() : null;
             if (!empty($fallbackId)) {
                 $sqlFallbackLanguageId = $this->db->quote($fallbackId);
@@ -755,7 +735,7 @@ class sExport
         if (
             !empty($this->sCustomergroup['groupkey'])
             && empty($this->sCustomergroup['mode'])
-            && $this->sCustomergroup['groupkey'] != 'EK'
+            && $this->sCustomergroup['groupkey'] !== 'EK'
         ) {
             $sql_add_join[] = "
                 LEFT JOIN s_articles_prices as p2
@@ -839,6 +819,14 @@ class sExport
             $sql_add_group_by = '';
         }
 
+        $attributeColumns = 'at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20';
+
+        // Workaround to fetch all attribute columns without also fetching possible NULL articleIDs
+        $attributeColumnNames = $this->db->fetchRow('SELECT * FROM s_articles_attributes LIMIT 1');
+        if (!empty($attributeColumnNames)) {
+            unset($attributeColumnNames['id'], $attributeColumnNames['articleID'], $attributeColumnNames['articledetailsID']);
+            $attributeColumns = trim('at.' . implode(',at.', array_keys($attributeColumnNames)), ',');
+        }
         $sql = "
             SELECT
                 a.id as `articleID`,
@@ -896,8 +884,7 @@ class sExport
                 d.weight,
                 d.position,
 
-                at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
-                at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20,
+                {$attributeColumns},
 
                 s.name as supplier,
                 u.unit,
@@ -922,8 +909,8 @@ class sExport
             INNER JOIN s_articles_details d
             ON d.articleID = a.id
             $sql_add_article_detail_join_condition
-            LEFT JOIN s_articles_attributes at
-            ON d.id = at.articledetailsID
+            LEFT JOIN s_articles_attributes AS `at`
+            ON d.id = `at`.articledetailsID
 
             LEFT JOIN `s_core_units` as `u`
             ON d.unitID = u.id
@@ -989,7 +976,7 @@ class sExport
     }
 
     /**
-     * executes the current product export
+     * Executes the current product export
      *
      * @param resource $handleResource used as a file or the stdout to fetch the smarty output
      */
@@ -1025,7 +1012,7 @@ class sExport
             ['id = ?' => $this->sFeedID]
         );
 
-        // fetches all required data to smarty
+        // Fetches all required data to smarty
         $rows = [];
         for ($rowIndex = 1; $row = $result->fetch(); ++$rowIndex) {
             if (!empty($row['group_ordernumber_2'])) {
@@ -1085,9 +1072,9 @@ class sExport
             $row['name'] = htmlspecialchars_decode($row['name']);
             $row['supplier'] = htmlspecialchars_decode($row['supplier']);
 
-            //cast it to float to prevent the division by zero warning
-            $row['purchaseunit'] = floatval($row['purchaseunit']);
-            $row['referenceunit'] = floatval($row['referenceunit']);
+            // Cast it to float to prevent the division by zero warning
+            $row['purchaseunit'] = (float) $row['purchaseunit'];
+            $row['referenceunit'] = (float) $row['referenceunit'];
             if (!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
                 $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice(
                     $row['price'],
@@ -1164,6 +1151,13 @@ class sExport
         fclose($handleResource);
     }
 
+    /**
+     * @param int      $articleID
+     * @param string   $separator
+     * @param null|int $categoryID
+     *
+     * @return string
+     */
     public function sGetArticleCategoryPath($articleID, $separator = ' > ', $categoryID = null)
     {
         if (empty($categoryID)) {
@@ -1180,6 +1174,11 @@ class sExport
         return htmlspecialchars_decode(implode($separator, $breadcrumbs));
     }
 
+    /**
+     * @param int|string $country
+     *
+     * @return bool|array
+     */
     public function sGetCountry($country)
     {
         static $cache = [];
@@ -1207,6 +1206,11 @@ class sExport
         return $cache[$country] = $this->db->fetchRow($sql);
     }
 
+    /**
+     * @param int|string $payment
+     *
+     * @return bool|array
+     */
     public function sGetPaymentmean($payment)
     {
         static $cache = [];
@@ -1233,17 +1237,22 @@ class sExport
         if (!empty($cache[$payment]['surchargestring'])) {
             foreach (explode(';', $cache[$payment]['surchargestring']) as $countrySurcharge) {
                 list($key, $value) = explode(':', $countrySurcharge);
-                $value = floatval(str_replace(',', '.', $value));
+                $value = (float) str_replace(',', '.', $value);
                 if (!empty($value)) {
                     $cache[$payment]['country_surcharge'][$key] = $value;
                 }
             }
         }
-        $cache[$payment]['surcharge'] = $cache[$payment]['surcharge'];
 
         return $cache[$payment];
     }
 
+    /**
+     * @param null|int|string $dispatch
+     * @param null|int|string $country
+     *
+     * @return mixed
+     */
     public function sGetDispatch($dispatch = null, $country = null)
     {
         if (empty($dispatch)) {
@@ -1291,6 +1300,13 @@ class sExport
         return $cache[$sql_order . '|' . $sql_where] = $this->db->fetchRow($sql);
     }
 
+    /**
+     * @param array    $article
+     * @param null|int $countryID
+     * @param null|int $paymentID
+     *
+     * @return bool|mixed
+     */
     public function sGetDispatchBasket($article, $countryID = null, $paymentID = null)
     {
         $sql_select = '';
@@ -1312,7 +1328,7 @@ class sExport
             SELECT
                 MIN(d.instock>=b.quantity) as instock,
                 MIN(d.instock>=(b.quantity+d.stockmin)) as stockmin,
-                MIN(a.laststock) as laststock,
+                MIN(d.laststock) as laststock,
                 SUM(d.weight*b.quantity) as weight,
                 SUM(IF(a.id,b.quantity,0)) as count_article,
                 MAX(b.shippingfree) as shippingfree,
@@ -1350,8 +1366,8 @@ class sExport
             ON (d.ordernumber=b.ordernumber)
             AND d.articleID=a.id
 
-            LEFT JOIN s_articles_attributes at
-            ON at.articledetailsID=d.id
+            LEFT JOIN s_articles_attributes AS `at`
+            ON `at`.articledetailsID=d.id
 
             LEFT JOIN s_core_tax t
             ON t.id=a.taxID
@@ -1400,6 +1416,14 @@ class sExport
         return $basket;
     }
 
+    /**
+     * @param array  $article
+     * @param string $payment
+     * @param string $country
+     * @param null   $dispatch
+     *
+     * @return bool|float
+     */
     public function sGetArticleShippingcost($article, $payment, $country, $dispatch = null)
     {
         if (empty($article) || !is_array($article)) {
@@ -1421,6 +1445,12 @@ class sExport
         return $this->sGetArticlePremiumShippingcosts($article, $payment, $country, $dispatch);
     }
 
+    /**
+     * @param array           $basket
+     * @param null|int|string $dispatch
+     *
+     * @return null|array
+     */
     public function sGetPremiumDispatch($basket, $dispatch = null)
     {
         if (empty($dispatch)) {
@@ -1463,7 +1493,10 @@ class sExport
         foreach ($basket as $key => $value) {
             $sql_basket[] = $this->db->quote($value) . " as `$key`";
         }
+
         $sql_basket = implode(', ', $sql_basket);
+
+        $articleId = $this->db->quote($basket['articleID']);
 
         $sql = "
             SELECT d.id, d.name, d.description, d.calculation, d.status_link, d.surcharge_calculation, d.bind_shippingfree, tax_calculation, t.tax as tax_calculation_value, d.shippingfree
@@ -1476,7 +1509,7 @@ class sExport
                 SELECT dc.dispatchID
                 FROM s_articles_categories_ro ac,
                 s_premium_dispatch_categories dc
-                WHERE ac.articleID={$basket['articleID']}
+                WHERE ac.articleID=$articleId
                 AND dc.categoryID=ac.categoryID
                 GROUP BY dc.dispatchID
             ) as dk
@@ -1513,6 +1546,7 @@ class sExport
             LIMIT 1
         ";
         $dispatch = $this->db->fetchRow($sql);
+
         if (empty($dispatch)) {
             $sql = '
                 SELECT
@@ -1538,6 +1572,11 @@ class sExport
         return $dispatch;
     }
 
+    /**
+     * @param array $basket
+     *
+     * @return bool|float|int
+     */
     public function sGetPremiumDispatchSurcharge($basket)
     {
         if (empty($basket)) {
@@ -1659,6 +1698,14 @@ class sExport
         return $surcharge;
     }
 
+    /**
+     * @param array      $article
+     * @param array      $payment
+     * @param array      $country
+     * @param null|array $dispatch
+     *
+     * @return bool|float
+     */
     public function sGetArticlePremiumShippingcosts($article, $payment, $country, $dispatch = null)
     {
         $basket = $this->sGetDispatchBasket($article, $country['id'], $payment['id']);
@@ -1725,7 +1772,7 @@ class sExport
     }
 
     /**
-     * @param $id
+     * @param int|string $id
      *
      * @return mixed
      */
@@ -1756,9 +1803,6 @@ class sExport
               COALESCE (s.base_url, m.base_url) AS base_url,
               COALESCE (s.hosts, m.hosts) AS hosts,
               GREATEST (COALESCE (s.secure, 0), COALESCE (m.secure, 0)) AS secure,
-              GREATEST (COALESCE (s.always_secure, 0), COALESCE (m.always_secure, 0)) AS always_secure,
-              COALESCE (s.secure_host, m.secure_host) AS secure_host,
-              COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
               COALESCE (s.template_id, m.template_id) AS template_id,
               COALESCE (s.document_template_id, m.document_template_id) AS document_template_id,
               s.category_id,
@@ -1789,7 +1833,7 @@ class sExport
     private function getArticleRepository()
     {
         if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+            $this->articleRepository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
         }
 
         return $this->articleRepository;
@@ -1803,7 +1847,7 @@ class sExport
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+            $this->mediaRepository = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class);
         }
 
         return $this->mediaRepository;
@@ -1814,6 +1858,7 @@ class sExport
      *
      * @param string $url
      * @param string $adapterType
+     *
      * @return string
      */
     private function fixShopHost($url, $adapterType)
@@ -1824,7 +1869,7 @@ class sExport
 
         $url = str_replace(parse_url($url, PHP_URL_HOST), $this->shopData['host'], $url);
 
-        if ($this->shopData['always_secure']) {
+        if ($this->shopData['secure']) {
             return str_replace('http:', 'https:', $url);
         }
 

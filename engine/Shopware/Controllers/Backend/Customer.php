@@ -21,11 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Address;
-use Shopware\Models\Customer\Customer as Customer;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
 
 /**
@@ -42,44 +41,44 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      *
      * @var \Shopware\Models\Customer\Repository
      */
-    public static $repository = null;
+    public static $repository;
 
     /**
      * Contains the shopware model manager
      *
      * @var \Shopware\Components\Model\ModelManager
      */
-    public static $manager = null;
+    public static $manager;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $groupRepository = null;
+    protected $groupRepository;
 
     /**
      * @var \Shopware\Models\Shop\Repository
      */
-    protected $shopRepository = null;
+    protected $shopRepository;
 
     /**
      * @var \Shopware\Models\Order\Repository
      */
-    protected $orderRepository = null;
+    protected $orderRepository;
 
     /**
      * @var \Shopware\Models\Payment\Repository
      */
-    protected $paymentRepository = null;
+    protected $paymentRepository;
 
     /**
      * @var \Shopware\Models\Dispatch\Repository
      */
-    protected $dispatchRepository = null;
+    protected $dispatchRepository;
 
     /**
      * @var \Shopware\Models\Country\Repository
      */
-    protected $countryRepository = null;
+    protected $countryRepository;
 
     /**
      * Deactivates the authentication for the performOrderRedirect action
@@ -688,29 +687,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data['birthday'] = $birthday->format('d.m.Y');
         }
 
-        if (empty($data['billing'])) {
-            $billingAddress = $this->fetchAddress($data['default_billing_address_id']);
-
-            if ($billingAddress) {
-                $data['billing'] = new \Shopware\Models\Customer\Billing();
-                $data['billing']->fromAddress($billingAddress);
-                $data['billing'] = $this->container->get('models')->toArray($data['billing']);
-            }
-        }
-
-        if (empty($data['shipping'])) {
-            $shippingAddress = $this->fetchAddress($data['default_shipping_address_id']);
-
-            if ($shippingAddress) {
-                $data['shipping'] = new \Shopware\Models\Customer\Shipping();
-                $data['shipping']->fromAddress($shippingAddress);
-                $data['shipping'] = $this->container->get('models')->toArray($data['shipping']);
-            }
-        }
-
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
-        $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
-        $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
+        $data['defaultBillingAddress']['salutationSnippet'] = $namespace->get($data['defaultBillingAddress']['salutation']);
+        $data['defaultShippingAddress']['salutationSnippet'] = $namespace->get($data['defaultShippingAddress']['salutation']);
         $data['customerStreamIds'] = $this->fetchCustomerStreams($id);
 
         return $data;

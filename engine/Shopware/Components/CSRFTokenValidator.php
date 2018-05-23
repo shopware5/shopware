@@ -26,7 +26,7 @@ namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class CSRFTokenValidator
@@ -34,7 +34,7 @@ use Shopware\Components\DependencyInjection\Container;
 class CSRFTokenValidator implements SubscriberInterface
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -56,11 +56,11 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * CSRFTokenValidator constructor.
      *
-     * @param Container $container
-     * @param bool      $isEnabledFrontend
-     * @param bool      $isEnabledBackend
+     * @param ContainerInterface $container
+     * @param bool               $isEnabledFrontend
+     * @param bool               $isEnabledBackend
      */
-    public function __construct(Container $container, $isEnabledFrontend = true, $isEnabledBackend = true)
+    public function __construct(ContainerInterface $container, $isEnabledFrontend = true, $isEnabledBackend = true)
     {
         $this->container = $container;
         $this->isEnabledFrontend = (bool) $isEnabledFrontend;
@@ -74,7 +74,6 @@ class CSRFTokenValidator implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Action_PreDispatch_Backend' => 'checkBackendTokenValidation',
-
             'Enlight_Controller_Action_PreDispatch_Frontend' => 'checkFrontendTokenValidation',
             'Enlight_Controller_Action_PreDispatch_Widgets' => 'checkFrontendTokenValidation',
         ];
@@ -128,13 +127,16 @@ class CSRFTokenValidator implements SubscriberInterface
         $controller = $args->getSubject();
         $request = $controller->Request();
 
-        // do not check internal subrequests
-        if ($request->getAttribute('_isSubrequest')) {
+        // do not check internal subrequests or validated requests
+        if ($request->getAttribute('_isSubrequest') || $request->getAttribute('isValidated')) {
             return;
         }
 
-        // skip if the request has already been validated
-        if ($request->getAttribute('isValidated')) {
+        if ($request->isGet() && !$this->isProtected($controller)) {
+            return;
+        }
+
+        if ($request->isPost() && $request->isXmlHttpRequest()) {
             return;
         }
 
@@ -143,17 +145,10 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        if ($request->isPost() && $request->isXmlHttpRequest()) {
-            return;
-        }
-
-        if ($request->isGet() && !$this->isProtected($controller)) {
-            return;
-        }
-
         if (!$this->checkRequest($request)) {
             throw new CSRFTokenValidationException(sprintf('The provided X-CSRF-Token for path "%s" is invalid. Please go back, reload the page and try again.', $request->getRequestUri()));
         }
+
         // mark request as validated to avoid double validation
         $request->setAttribute('isValidated', true);
     }

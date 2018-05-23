@@ -35,6 +35,7 @@ use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\ORM\Repository\RepositoryFactory;
+use Shopware\Components\ShopwareReleaseStruct;
 
 /**
  * @category  Shopware
@@ -58,11 +59,22 @@ class Configuration extends BaseConfiguration
     protected $cacheNamespace = null;
 
     /**
-     * @param array             $options
-     * @param \Zend_Cache_Core  $cache
-     * @param RepositoryFactory $repositoryFactory
+     * @var ShopwareReleaseStruct
      */
-    public function __construct(array $options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory)
+    protected $release;
+
+    /**
+     * @param array                 $options
+     * @param \Zend_Cache_Core      $cache
+     * @param RepositoryFactory     $repositoryFactory
+     * @param ShopwareReleaseStruct $release
+     *
+     * @throws \Exception
+     * @throws \RuntimeException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function __construct(array $options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory, ShopwareReleaseStruct $release)
     {
         // Specifies the FQCN of a subclass of the EntityRepository.
         // That will be available for all entities without a custom repository class.
@@ -76,15 +88,17 @@ class Configuration extends BaseConfiguration
 
         $this->setAttributeDir($options['attributeDir']);
 
-        Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
-        Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
-        Type::overrideType('array', 'Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType');
+        Type::overrideType('datetime', \Shopware\Components\Model\DBAL\Types\DateTimeStringType::class);
+        Type::overrideType('date', \Shopware\Components\Model\DBAL\Types\DateStringType::class);
+        Type::overrideType('array', \Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType::class);
 
-        $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
-        $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
-        $this->addCustomStringFunction('IF', 'Shopware\Components\Model\Query\Mysql\IfElse');
-        $this->addCustomStringFunction('RegExp', 'Shopware\Components\Model\Query\Mysql\RegExp');
-        $this->addCustomStringFunction('Replace', 'Shopware\Components\Model\Query\Mysql\Replace');
+        $this->addCustomStringFunction('DATE_FORMAT', \Shopware\Components\Model\Query\Mysql\DateFormat::class);
+        $this->addCustomStringFunction('IFNULL', \Shopware\Components\Model\Query\Mysql\IfNull::class);
+        $this->addCustomStringFunction('IF', \Shopware\Components\Model\Query\Mysql\IfElse::class);
+        $this->addCustomStringFunction('RegExp', \Shopware\Components\Model\Query\Mysql\RegExp::class);
+        $this->addCustomStringFunction('Replace', \Shopware\Components\Model\Query\Mysql\Replace::class);
+
+        $this->release = $release;
 
         // Load custom namespace for doctrine cache provider, if provided
         if (isset($options['cacheNamespace'])) {
@@ -109,7 +123,7 @@ class Configuration extends BaseConfiguration
     {
         // Set namespace for doctrine cache provider to avoid collisions
         $namespace = !is_null($this->cacheNamespace) ? $this->cacheNamespace : md5(
-            $this->getProxyDir() . \Shopware::REVISION
+            $this->getProxyDir() . $this->release->getRevision()
         );
         $cache->setNamespace('dc2_' . $namespace . '_');
 
@@ -168,7 +182,7 @@ class Configuration extends BaseConfiguration
      */
     public function setCacheResource(\Zend_Cache_Core $cacheResource)
     {
-        $cache = new Cache($cacheResource, null, ['Shopware_Models']);
+        $cache = new Cache($cacheResource, 'Shopware_Models_' . $this->release->getRevision() . '_', ['Shopware_Models']);
 
         $this->setCache($cache);
     }
@@ -254,6 +268,11 @@ class Configuration extends BaseConfiguration
         } else {
             $redis->connect($options['redisHost'], $options['redisPort']);
         }
+
+        if (isset($options['redisAuth'])) {
+            $redis->auth($options['redisAuth']);
+        }
+
         $redis->select($options['redisDbIndex']);
         $cache = new RedisCache();
         $cache->setRedis($redis);

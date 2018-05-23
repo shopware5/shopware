@@ -95,8 +95,8 @@ class Backup
      */
     public function setupBackupDir()
     {
-        $this->backupPath = Shopware()->DocPath() . 'files/backup/multi_edit';
-
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
+        $this->backupPath = $projectDir . 'files/backup/multi_edit';
         $this->backupPath = rtrim($this->backupPath, '/\\') . '/';
 
         if (!is_dir($this->backupPath)) {
@@ -126,7 +126,7 @@ class Backup
     public function getList($offset, $limit)
     {
         /** @var \Doctrine\ORM\Query $query */
-        $query = $this->getDqlHelper()->getEntityManager()->getRepository('\Shopware\Models\MultiEdit\Backup')->getBackupListQuery($offset, $limit);
+        $query = $this->getDqlHelper()->getEntityManager()->getRepository(\Shopware\Models\MultiEdit\Backup::class)->getBackupListQuery($offset, $limit);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         /** @var \Doctrine\ORM\Tools\Pagination\Paginator $paginator */
         $paginator = Shopware()->Models()->createPaginator($query);
@@ -214,7 +214,7 @@ class Backup
     {
         $entityManager = $this->getDqlHelper()->getEntityManager();
         /** @var \Shopware\Models\MultiEdit\Backup $backup */
-        $backup = $entityManager->find('\Shopware\Models\MultiEdit\Backup', $id);
+        $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
 
         if (!$backup) {
             throw new \RuntimeException("Backup by id {$id} not found");
@@ -282,7 +282,7 @@ class Backup
     /**
      * Deletes a given backup
      *
-     * @param $id
+     * @param int $id
      *
      * @throws \RuntimeException
      *
@@ -292,7 +292,7 @@ class Backup
     {
         $entityManager = $this->getDqlHelper()->getEntityManager();
         /** @var \Shopware\Models\MultiEdit\Backup $backup */
-        $backup = $entityManager->find('\Shopware\Models\MultiEdit\Backup', $id);
+        $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
 
         if (!$backup) {
             throw new \RuntimeException("Backup by id {$id} not found");
@@ -342,7 +342,7 @@ class Backup
             if (empty($zips)) {
                 $query = $this->getDqlHelper()->getEntityManager()->createQueryBuilder()
                     ->select('backup')
-                    ->from('\Shopware\Models\MultiEdit\Backup', 'backup')
+                    ->from(\Shopware\Models\MultiEdit\Backup::class, 'backup')
                     ->where('backup.path LIKE ?1')
                     ->setParameter(1, $folder . '%')
                     ->getQuery();
@@ -380,7 +380,7 @@ class Backup
         // use float as type
         if ((float) $value != (int) $value) {
             return \Zend_Db::FLOAT_TYPE;
-        // Else encode it as int
+            // Else encode it as int
         }
 
         return \Zend_Db::INT_TYPE;
@@ -496,7 +496,7 @@ class Backup
     /**
      * Creates a backup model for a given backup
      *
-     * @param $path
+     * @param string $path
      * @param $filterString
      * @param $operations
      * @param $items

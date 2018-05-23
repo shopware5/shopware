@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
@@ -44,8 +43,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
     /**
      * Index action method
-     *
-     * @throws \Enlight_Controller_Exception
      */
     public function indexAction()
     {
@@ -53,7 +50,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryContent = $this->loadCategoryContent($requestCategoryId);
 
-        $emotionConfiguration = $this->getEmotionConfiguration($requestCategoryId, false);
+        $emotionConfiguration = $this->getEmotionConfiguration(
+            $requestCategoryId,
+            false,
+            $categoryContent['streamId']
+        );
 
         $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion']);
         if ($location) {
@@ -75,7 +76,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $this->View()->assign($emotionConfiguration);
 
-        // only show the listing if an emotion viewport is empty or the showListing option is active
+        // Only show the listing if an emotion viewport is empty or the showListing option is active
         if (!$emotionConfiguration['showListing']) {
             return;
         }
@@ -89,9 +90,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryId = (int) $this->Request()->getParam('sCategory');
 
-        $config = $this->getEmotionConfiguration($categoryId, true);
-
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+
+        $config = $this->getEmotionConfiguration($categoryId, true, $categoryContent['streamId']);
 
         $config = array_merge($config, [
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
@@ -117,8 +118,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Listing of all manufacturer products.
      * Templates extends from the normal listing template.
-     *
-     * @throws \Enlight_Exception
      */
     public function manufacturerAction()
     {
@@ -207,14 +206,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param int  $categoryId
-     * @param bool $withStreams
-     *
-     * @throws \Exception
+     * @param int    $categoryId
+     * @param bool   $withStreams
+     * @param string $streamId
      *
      * @return array
      */
-    protected function getEmotionConfiguration($categoryId, $withStreams = false)
+    protected function getEmotionConfiguration($categoryId, $withStreams = false, $streamId = null)
     {
         if ($this->Request()->getParam('sPage')) {
             return [
@@ -242,15 +240,47 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'showListing' => $this->hasListing($emotions) && !$isHomePage,
             'showListingDevices' => $devicesWithListing,
             'isHomePage' => $isHomePage,
+            'showListingButton' => $this->hasProducts($categoryId, $context, $streamId),
         ];
     }
 
     /**
+     * @param string               $categoryId
+     * @param ShopContextInterface $context
+     * @param string               $streamId
+     *
+     * @return bool
+     */
+    private function hasProducts($categoryId, ShopContextInterface $context, $streamId)
+    {
+        if ($streamId) {
+            $criteria = $this->createCategoryStreamCriteria($categoryId, $streamId);
+        } else {
+            /** @var $criteria Criteria */
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createListingCriteria($this->Request(), $context);
+        }
+
+        // Creating the criteria above will also set the sPage param to at least 1, which we don't want
+        $this->Request()->setParam('sPage', null);
+
+        // Performance increase
+        $criteria->setFetchCount(false);
+        $criteria->resetFacets();
+        $criteria->limit(1);
+
+        $numberResult = $this->get('shopware_search.product_number_search')->search($criteria, $context);
+
+        return $numberResult->getTotalCount() > 0;
+    }
+
+    /**
      * @param array $categoryContent
-     * @param bool $hasEmotion
+     * @param bool  $hasEmotion
+     *
+     * @throws \Enlight_Controller_Exception
      *
      * @return array|bool
-     * @throws \Enlight_Controller_Exception
      */
     private function getRedirectLocation($categoryContent, $hasEmotion)
     {
@@ -322,16 +352,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         ];
 
         $content['canonicalParams'] = $canonicalParams;
-
-        $path = $this->Front()->Router()->assemble($canonicalParams);
-
-        if ($path) {
-            /* @deprecated */
-            $content['sSelfCanonical'] = $path;
-        }
-
         $content['metaTitle'] = $manufacturer->getMetaTitle();
         $content['title'] = $manufacturer->getName();
+        $content['productBoxLayout'] = $this->get('config')->get('manufacturerProductBoxLayout');
 
         return $content;
     }
@@ -348,7 +371,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
         /** @var $repository \Shopware\Models\Category\Repository */
-        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryRepository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         $categoryPath = $categoryRepository->getPathById($categoryId);
 
         if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
@@ -416,7 +439,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $permanentVisibleDevices = [];
 
         foreach ($emotions as $emotion) {
-            // always show the listing in the emotion viewports when the option "show listing" is active
+            // Always show the listing in the emotion viewports when the option "show listing" is active
             if ($emotion['showListing']) {
                 $permanentVisibleDevices = array_merge($permanentVisibleDevices, $emotion['devicesArray']);
             }

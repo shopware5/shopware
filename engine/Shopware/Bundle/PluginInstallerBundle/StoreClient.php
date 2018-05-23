@@ -274,7 +274,7 @@ class StoreClient
      */
     public function doPing()
     {
-        $response = $this->httpClient->get($this->apiEndPoint . '/ping', ['timeout' => 7]);
+        $response = $this->httpClient->get($this->apiEndPoint . '/ping');
         $this->verifyResponseSignature($response);
 
         return json_decode($response->getBody(), true) ?: false;
@@ -295,7 +295,7 @@ class StoreClient
         ];
 
         try {
-            $response = $this->httpClient->post($this->apiEndPoint . '/tracking/events', ['timeout' => 7], json_encode($payload));
+            $response = $this->httpClient->post($this->apiEndPoint . '/tracking/events', [], json_encode($payload));
             $this->verifyResponseSignature($response);
         } catch (RequestException $ex) {
             return false;

@@ -139,7 +139,8 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
             $this->Config()->get('update-api-endpoint'),
             $this->Config()->get('update-channel'),
             $this->Config()->get('update-verify-signature'),
-            Shopware()->Container()->get('shopware.openssl_verificator')
+            Shopware()->Container()->get('shopware.openssl_verificator'),
+            Shopware()->Container()->get('shopware.release')
         );
     }
 

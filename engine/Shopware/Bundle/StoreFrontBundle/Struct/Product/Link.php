@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Link extends Extendable implements \JsonSerializable
+class Link extends Extendable
 {
     /**
      * @var int

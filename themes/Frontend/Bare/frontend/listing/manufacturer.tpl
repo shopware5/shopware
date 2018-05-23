@@ -34,6 +34,7 @@
          data-compare-ajax="true"
             {if $theme.infiniteScrolling}
             data-infinite-scrolling="true"
+            data-productBoxLayout="{$sCategoryContent.productBoxLayout}"
             data-ajaxUrl="{url module="widgets" controller="Listing" action="ajaxListing" sSupplier=$manufacturer->getId()}"
             data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
             data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"

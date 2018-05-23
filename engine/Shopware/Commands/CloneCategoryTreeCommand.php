@@ -139,7 +139,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
     private function getCategoryFromInput($categoryInput)
     {
         if (is_numeric($categoryInput)) {
-            $categoryInput = intval($categoryInput);
+            $categoryInput = (int) $categoryInput;
             $mode = 'find';
         } else {
             $mode = 'findByName';

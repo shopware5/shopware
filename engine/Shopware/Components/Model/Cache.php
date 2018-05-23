@@ -57,10 +57,6 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     public function __construct(\Zend_Cache_Core $cache, $prefix = null, array $tags = [])
     {
-        if ($prefix === null) {
-            $prefix = 'Shopware_Models_' . \Shopware::REVISION . '_';
-        }
-
         $this->tags = $tags;
         $this->prefix = $prefix;
         $this->cache = $cache;
@@ -83,7 +79,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      *
      * @param string $id cache id The cache id of the entry to check for
      *
-     * @return bool tRUE if a cache entry exists for the given cache id, FALSE otherwise
+     * @return bool TRUE if a cache entry exists for the given cache id, FALSE otherwise
      */
     protected function doContains($id)
     {
@@ -97,7 +93,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      * @param string   $data     the cache entry/data
      * @param bool|int $lifeTime The lifetime. If != false, sets a specific lifetime for this cache entry (null => infinite lifeTime).
      *
-     * @return bool tRUE if the entry was successfully stored in the cache, FALSE otherwise
+     * @return bool TRUE if the entry was successfully stored in the cache, FALSE otherwise
      */
     protected function doSave($id, $data, $lifeTime = false)
     {
@@ -119,7 +115,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     /**
      * Deletes all cache entries.
      *
-     * @return bool tRUE if the cache entry was successfully deleted, FALSE otherwise
+     * @return bool TRUE if the cache entry was successfully deleted, FALSE otherwise
      */
     protected function doFlush()
     {
