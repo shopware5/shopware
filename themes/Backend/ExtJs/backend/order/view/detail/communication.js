@@ -202,7 +202,11 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
             text: me.snippets.internal.button,
             handler: function() {
                 me.record.set('internalComment', me.internalTextArea.getValue());
-                me.fireEvent('saveInternalComment', me.record, me);
+                me.fireEvent('saveInternalComment', me.record, me, {
+                    callback: function (order) {
+                        me.fireEvent('updateForms', order, me.up('window'));
+                    },
+                });
             }
         });
 
@@ -250,7 +254,11 @@ Ext.define('Shopware.apps.Order.view.detail.Communication', {
                 me.record.set('customerComment', me.customerTextArea.getValue());
                 me.record.set('comment', me.externalTextArea.getValue());
 
-                me.fireEvent('saveExternalComment', me.record, me);
+                me.fireEvent('saveExternalComment', me.record, me, {
+                    callback: function (order) {
+                        me.fireEvent('updateForms', order, me.up('window'));
+                    },
+                });
             }
         });
 

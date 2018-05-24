@@ -108,7 +108,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             },
             'order-detail-window order-communication-panel': {
                 saveInternalComment: me.onSaveInternalComment,
-                saveExternalComment: me.onSaveExternalComment
+                saveExternalComment: me.onSaveExternalComment,
+                updateForms: me.onUpdateDetailPage
             },
             'order-detail-window order-overview-panel': {
                 saveOverview: me.onSaveOverview,
@@ -294,6 +295,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         }
 
         e.record.save({
+            params: {
+                changed: order.get('changed'),
+            },
             callback:function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
@@ -302,12 +306,13 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 if ( operation.success === true ) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.positions.successMessage, me.snippets.growlMessage);
                     order.set('invoiceAmount', rawData.invoiceAmount);
+                    order.set('changed', rawData.changed);
                     if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
                         options.callback(order);
                     }
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.positions.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage);
-                    e.store.remove(records);
+                    e.store.rejectChanges();
                 }
             }
         });
@@ -401,7 +406,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             }
             store.remove(positions);
             store.getProxy().extraParams = {
-                orderID: orderId
+                orderID: orderId,
+                changed: order.get('changed'),
             };
             store.sync({
                 callback:function (batch, operation) {
@@ -411,12 +417,14 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.delete.successMessage, me.snippets.growlMessage);
 
                         order.set('invoiceAmount', rawData.data.invoiceAmount);
+                        order.set('changed', rawData.data.changed);
                         if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
                             options.callback(order);
                         }
 
                     } else {
                         Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.delete.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
+                        store.rejectChanges();
                     }
                 }
             });
@@ -616,10 +624,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * which can be edit in the communication tab panel on the detail page.
      * @return void
      */
-    onSaveInternalComment: function(record) {
+    onSaveInternalComment: function(record, panel, options) {
         var me = this;
 
-        me.saveRecord(record, me.snippets.internalComment.successMessage, me.snippets.internalComment.failureMessage);
+        me.saveRecord(record, me.snippets.internalComment.successMessage, me.snippets.internalComment.failureMessage, options);
     },
 
     /**
@@ -651,10 +659,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * which can be edit in the communication tab panel on the detail page.
      * @return void
      */
-    onSaveExternalComment: function(record) {
+    onSaveExternalComment: function(record, panel, options) {
         var me = this;
 
-        me.saveRecord(record, me.snippets.externalComment.successMessage, me.snippets.externalComment.failureMessage);
+        me.saveRecord(record, me.snippets.externalComment.successMessage, me.snippets.externalComment.failureMessage, options);
 
     },
 
@@ -690,7 +698,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         options.callback(order);
                     }
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
+                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + operation.getError(), me.snippets.growlMessage)
                 }
                 // reload the order list
                 me.getOrderList().store.load();
