@@ -13,14 +13,16 @@
 {* Back to the shop button *}
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
-    {if $theme.checkoutHeader && !$toAccount}
-        <a href="{url controller='index'}"
-           class="btn is--small btn--back-top-shop is--icon-left"
-           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
-            <i class="icon--arrow-left"></i>
-            {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
-        </a>
-    {/if}
+    {block name='frontend_register_index_back_to_shop_button'}
+        {if $theme.checkoutHeader && !$toAccount}
+            <a href="{url controller='index'}"
+               class="btn is--small btn--back-top-shop is--icon-left"
+               title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
+                <i class="icon--arrow-left"></i>
+                {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
+            </a>
+        {/if}
+    {/block}
 {/block}
 
 {* Hide breadcrumb *}
