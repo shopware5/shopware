@@ -70,8 +70,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl` and `finish_item.tpl` to keep track of the earlier mentioned changes and additions to `cart_item.tpl` and to use Smarty Inheritance system correctly.
 
     Please check your templates when you extend `cart_item.tpl`. You now have to extend one of the added subtemplates.
-* Renamed `country_id` to `countryId` and `state_id` to `stateId` in `Shopware.apps.Customer.model.Address`
-
+* Changed `country_id` to `countryId` and `state_id` to `stateId` in `Shopware.apps.Customer.model.Address`
+* Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
 
 ### Removals
 
