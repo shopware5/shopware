@@ -747,6 +747,7 @@ class Kernel implements HttpKernelInterface
             'shopware.release.version' => $this->release['version'],
             'shopware.release.version_text' => $this->release['version_text'],
             'shopware.release.revision' => $this->release['revision'],
+            'kernel.default_error_level' => $this->debug ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
         ];
     }
 

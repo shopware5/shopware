@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
@@ -160,6 +161,11 @@ class sAdmin
     private $translationComponent;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null          $db
      * @param Enlight_Event_EventManager|null                       $eventManager
      * @param Shopware_Components_Config|null                       $config
@@ -174,6 +180,7 @@ class sAdmin
      * @param AddressServiceInterface|null                          $addressService
      * @param NumberRangeIncrementerInterface|null                  $numberRangeIncrementer
      * @param Shopware_Components_Translation|null                  $translationComponent
+     * @param Connection|null                                       $connection
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -189,7 +196,8 @@ class sAdmin
         EmailValidatorInterface $emailValidator = null,
         AddressServiceInterface $addressService = null,
         NumberRangeIncrementerInterface $numberRangeIncrementer = null,
-        Shopware_Components_Translation $translationComponent = null
+        Shopware_Components_Translation $translationComponent = null,
+        Connection $connection = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -212,6 +220,7 @@ class sAdmin
         $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
         $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
     }
 
     /**
@@ -2283,7 +2292,7 @@ class sAdmin
             $this->db->query($sql, [$groupID, 'Newsletter-Empfänger']);
         }
 
-        $email = trim(strtolower(stripslashes($email)));
+        $email = strtolower(trim(stripslashes($email)));
         if (empty($email)) {
             return [
                 'code' => 6,
@@ -2320,26 +2329,57 @@ class sAdmin
         }
 
         if (!empty($result['code']) && in_array($result['code'], [2, 3])) {
-            $sql = '
-                REPLACE INTO s_campaigns_maildata (
-                  email, groupID, salutation, title, firstname,
-                  lastname, street, zipcode, city, added
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
-            ';
-            $this->db->query($sql, [
+            $voteConfirmed = $this->front->getParam('voteConfirmed');
+            $now = $this->front->getParam('optinNow');
+            $now = isset($now) ? $now : (new \DateTime())->format('Y-m-d H:i:s');
+
+            $added = $voteConfirmed ? $this->front->getParam('optinDate') : $now;
+            $doubleOptInConfirmed = $voteConfirmed ? $now : null;
+            $mailDataExists = $this->connection->fetchColumn('SELECT 1 FROM s_campaigns_maildata WHERE email = ? AND groupID = ?', [
                 $email,
                 $groupID,
-                $this->front->Request()->getPost('salutation'),
-                $this->front->Request()->getPost('title'),
-                $this->front->Request()->getPost('firstname'),
-                $this->front->Request()->getPost('lastname'),
-                $this->front->Request()->getPost('street'),
-                $this->front->Request()->getPost('zipcode'),
-                $this->front->Request()->getPost('city'),
             ]);
+
+            if (empty($mailDataExists)) {
+                $sql = '
+                    REPLACE INTO s_campaigns_maildata (
+                      email, groupID, salutation, title, firstname,
+                      lastname, street, zipcode, city, added, double_optin_confirmed
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ';
+                $this->connection->executeQuery($sql, [
+                    $email,
+                    $groupID,
+                    $this->front->Request()->getPost('salutation'),
+                    $this->front->Request()->getPost('title'),
+                    $this->front->Request()->getPost('firstname'),
+                    $this->front->Request()->getPost('lastname'),
+                    $this->front->Request()->getPost('street'),
+                    $this->front->Request()->getPost('zipcode'),
+                    $this->front->Request()->getPost('city'),
+                    $added,
+                    $doubleOptInConfirmed,
+                ]);
+            } else {
+                $this->connection->update('s_campaigns_maildata',
+                    [
+                        'groupID' => $groupID,
+                        'salutation' => $this->front->Request()->getPost('salutation'),
+                        'title' => $this->front->Request()->getPost('title'),
+                        'firstname' => $this->front->Request()->getPost('firstname'),
+                        'lastname' => $this->front->Request()->getPost('lastname'),
+                        'street' => $this->front->Request()->getPost('street'),
+                        'city' => $this->front->Request()->getPost('city'),
+                    ],
+                    [
+                        'email' => $email,
+                        'groupID' => $groupID,
+                    ]
+                );
+            }
         } elseif (!empty($unsubscribe)) {
-            $this->db->delete('s_campaigns_maildata', ['email = ?' => $email, 'groupID = ?' => $groupID]);
+            $this->connection->delete('s_campaigns_maildata', ['email' => $email, 'groupID' => $groupID]);
         }
 
         return $result;
@@ -3401,10 +3441,23 @@ SQL;
      */
     private function failedLoginUser($addScopeSql, $email, $sErrorMessages, $password)
     {
-        // Check if account is disabled
-        $sql = 'SELECT id FROM s_user WHERE email=? AND active=0 ' . $addScopeSql;
-        $getUser = $this->db->fetchOne($sql, [$email]);
-        if ($getUser) {
+        // Check if account is disabled or not verified yet
+        $sql = 'SELECT id, doubleOptinEmailSentDate, doubleOptinConfirmDate, email FROM s_user WHERE email=? AND active=0' . $addScopeSql;
+        $getUser = $this->db->fetchRow($sql, [$email]);
+
+        // if the verification process is active, the customer has an email sent date, but no confirm date
+        if ($getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
+            $hash = \Shopware\Components\Random::getAlphanumericString(32);
+
+            $this->refreshOptinHash($getUser, $hash);
+            $this->resendConfirmationMail($getUser['email'], $hash);
+
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get(
+                    'LoginFailureOptIn',
+                    'Your account has not been verified yet. You received a new activation mail.'
+                );
+        } elseif ($getUser) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get(
                     'LoginFailureActive',
@@ -3443,7 +3496,7 @@ SQL;
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Login_Failure',
-            ['subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages]
+            ['subject' => $this, 'email' => $getUser['email'], 'password' => $password, 'error' => $sErrorMessages]
         );
 
         $this->session->offsetUnset('sUserMail');
@@ -3451,6 +3504,67 @@ SQL;
         $this->session->offsetUnset('sUserId');
 
         return $sErrorMessages;
+    }
+
+    /**
+     * @param array  $user
+     * @param string $hash
+     */
+    private function refreshOptinHash(array $user, $hash)
+    {
+        // Get old optin information
+        $sql = "SELECT `id`, `data`
+                FROM `s_core_optin`
+                WHERE datum = ?
+                AND type = 'register'";
+        $result = $this->db->fetchAll($sql, [$user['doubleOptinEmailSentDate']]);
+
+        // most times iterates only once
+        foreach ($result as $row) {
+            $data = unserialize($row['data']);
+            $optInId = $row['id'];
+            $customerId = $data['customerId'];
+            if ($customerId === $user['id']) {
+                break;
+            }
+        }
+
+        $dateString = (new DateTime())->format('Y-m-d H:i:s');
+
+        // Refreshes doubleOptinEmailSentDate + hash to generate a new activation key
+        $this->db->beginTransaction();
+        $sql = "UPDATE `s_core_optin`
+                SET `datum` = ?, `hash` = ?
+                WHERE type = 'register'
+                AND id = ?";
+        $this->db->executeQuery($sql, [$dateString, $hash, $optInId]);
+
+        $sql = 'UPDATE `s_user`
+                SET doubleOptinEmailSentDate = ?
+                WHERE id = ?';
+        $this->db->executeQuery($sql, [$dateString, $customerId]);
+        $this->db->commit();
+    }
+
+    /**
+     * @param string $userMail
+     * @param string $hash
+     */
+    private function resendConfirmationMail($userMail, $hash)
+    {
+        $link = Shopware()->Container()->get('router')->assemble([
+            'sViewport' => 'register',
+            'action' => 'confirmValidation',
+            'sConfirmation' => $hash,
+        ]);
+
+        $context = [
+            'sConfirmLink' => $link,
+        ];
+
+        $mail = Shopware()->Container()->get('templatemail')->createMail('sOPTINREGISTER', $context);
+        $mail->addTo($userMail);
+        $mail->send();
     }
 
     /**
@@ -3690,6 +3804,7 @@ SQL;
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
+        $isEmailExists = count($result) === 0;
 
         if ($result === false) {
             $result = [
@@ -3705,13 +3820,21 @@ SQL;
                 [$email]
             );
 
+            $voteConfirmed = $this->front->getParam('voteConfirmed');
+            $now = $this->front->getParam('optinNow');
+            $now = isset($now) ? $now : (new \DateTime())->format('Y-m-d H:i:s');
+
+            $added = $voteConfirmed ? $this->front->getParam('optinDate') : $now;
+            $doubleOptInConfirmed = $voteConfirmed ? $now : null;
+
             $result = $this->db->insert(
                 's_campaigns_mailaddresses',
                 [
                     'customer' => (int) !empty($customer),
                     'groupID' => $groupID,
                     'email' => $email,
-                    'added' => $this->getCurrentDateFormatted(),
+                    'added' => $added,
+                    'double_optin_confirmed' => $doubleOptInConfirmed,
                 ]
             );
 
@@ -3739,6 +3862,7 @@ SQL;
             'code' => 3,
             'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
+            'isNewRegistration' => $isEmailExists,
         ];
 
         return $result;

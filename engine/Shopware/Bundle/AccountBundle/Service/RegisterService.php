@@ -165,7 +165,7 @@ class RegisterService implements RegisterServiceInterface
             $customer->setCustomerType(Customer::CUSTOMER_TYPE_BUSINESS);
         }
 
-        $customer->setActive(true);
+        $customer->setActive($customer->getDoubleOptinEmailSentDate() === null);
 
         // Password validation
         if ($customer->getPassword()) {

@@ -124,12 +124,20 @@ class Address extends LazyFetchModelEntity
     private $lastReadId = 0;
 
     /**
-     * The Double-Opt-In date
+     * The Double-Opt-In registration date
      *
      * @var \DateTime
      * @ORM\Column(name="added", type="datetime", nullable=true)
      */
     private $added;
+
+    /**
+     * The Double-Opt-In confirmation date
+     *
+     * @var \DateTime
+     * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=true)
+     */
+    private $doubleOptinConfirmed;
 
     /**
      * Sets the default value for the added column
@@ -267,5 +275,21 @@ class Address extends LazyFetchModelEntity
     public function setAdded($added)
     {
         $this->added = $added;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinConfirmed()
+    {
+        return $this->doubleOptinConfirmed;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinConfirmed
+     */
+    public function setDoubleOptinConfirmed($doubleOptinConfirmed)
+    {
+        $this->doubleOptinConfirmed = $doubleOptinConfirmed;
     }
 }

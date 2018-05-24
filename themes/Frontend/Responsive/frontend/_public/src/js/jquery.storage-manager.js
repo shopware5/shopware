@@ -34,10 +34,29 @@
      */
     window.StorageManager = (function () {
         var storage = {
+            }, p;
+
+        try {
+            storage = {
                 local: window.localStorage,
                 session: window.sessionStorage
-            },
-            p;
+            };
+        } catch (err) {
+            // User has blocked local storage in browser settings
+            var blackHoleStorage = {
+                length: 0,
+                clear: function () {},
+                getItem: function () { return null; },
+                key: function () { return null; },
+                removeItem: function () { return null; },
+                setItem: function () { return null; }
+            };
+
+            storage = {
+                local: blackHoleStorage,
+                session: blackHoleStorage
+            };
+        }
 
         /**
          * Helper function to detect if cookies are enabled.

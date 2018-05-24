@@ -2081,6 +2081,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
+                'isNewRegistration' => true,
             ],
             $result
         );
@@ -2116,6 +2117,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
+                'isNewRegistration' => false,
             ],
             $result
         );
@@ -2128,6 +2130,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
+                'isNewRegistration' => false,
             ],
             $result
         );

@@ -53,7 +53,6 @@ class CloseoutConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $query->innerJoin('product', 's_articles_details', 'variant', 'product.id = variant.articleID');
         $query->andWhere('variant.laststock = 1');
     }
 }

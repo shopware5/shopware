@@ -185,7 +185,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
             $values['options']['store'] = $this->translateStore('en', $values['options']['store']);
             $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
-            $values['options']['queryMode'] = 'remote';
+            if (!isset($values['options']['queryMode'])) {
+                $values['options']['queryMode'] = 'remote';
+            }
         }
 
         $this->View()->assign([

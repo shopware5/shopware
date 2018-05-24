@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class ListingPriceSwitcher
 {
     /**
-     * @var ListingPriceTable
+     * @var ListingPriceTableInterface
      */
     private $listingPriceTable;
 
@@ -41,7 +41,7 @@ class ListingPriceSwitcher
      */
     private $variantHelper;
 
-    public function __construct(ListingPriceTable $listingPriceTable, VariantHelperInterface $variantHelper)
+    public function __construct(ListingPriceTableInterface $listingPriceTable, VariantHelperInterface $variantHelper)
     {
         $this->listingPriceTable = $listingPriceTable;
         $this->variantHelper = $variantHelper;

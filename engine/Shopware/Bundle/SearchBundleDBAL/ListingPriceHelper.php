@@ -96,7 +96,7 @@ class ListingPriceHelper
     public function getPriceTable(ShopContextInterface $context)
     {
         $priceTable = $this->connection->createQueryBuilder();
-        $priceTable->select($this->getPriceColumns());
+        $priceTable->select($this->getDefaultPriceColumns());
         $priceTable->from('s_articles_prices', 'defaultPrice');
         $priceTable->where('defaultPrice.pricegroup = :fallbackCustomerGroup');
 
@@ -138,6 +138,25 @@ class ListingPriceHelper
     }
 
     /**
+     * @return array
+     */
+    public function getPriceColumns()
+    {
+        return [
+            '`id`',
+            '`pricegroup`',
+            '`from`',
+            '`to`',
+            '`articleID`',
+            '`articledetailsID`',
+            '`price`',
+            '`pseudoprice`',
+            '`baseprice`',
+            '`percent`',
+        ];
+    }
+
+    /**
      * @return string
      */
     private function getPriceSwitchColumns()
@@ -152,22 +171,19 @@ class ListingPriceHelper
     }
 
     /**
-     * @return array
+     * Get the columns for the price group prices.
+     *
+     * @return string
      */
-    private function getPriceColumns()
+    private function getDefaultPriceColumns()
     {
-        return [
-            '`id`',
-            '`pricegroup`',
-            '`from`',
-            '`to`',
-            '`articleID`',
-            '`articledetailsID`',
-            '`price`',
-            '`pseudoprice`',
-            '`baseprice`',
-            '`percent`',
-        ];
+        $template = 'defaultPrice.%s';
+        $switch = [];
+        foreach ($this->getPriceColumns() as $column) {
+            $switch[] = sprintf($template, $column, $column, $column);
+        }
+
+        return implode(',', $switch);
     }
 
     /**

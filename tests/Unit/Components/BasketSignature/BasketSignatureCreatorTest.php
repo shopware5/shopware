@@ -382,6 +382,7 @@ class BasketSignatureGeneratorTest extends TestCase
                     'sAmount' => 0,
                     'sAmountTax' => 0,
                     'content' => [],
+                    'sCurrencyId' => null,
                 ],
                 1
             )

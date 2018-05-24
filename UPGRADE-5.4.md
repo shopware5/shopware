@@ -2,6 +2,57 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
+## 5.4.4
+
+[View all changes from v5.4.3...v5.4.4](https://github.com/shopware/shopware/compare/v5.4.3...v5.4.4)
+
+### Changes
+
+* Changed Tinymce editor to resolve placeholder images on initialization
+* Changed product notification to match the documented feature
+* Changed AJAX search to respect the basic setting for direct number searches and show the same results as the normal search
+* Changed information of backend recipients overview
+  * `Double-Opt-In date` is now `Register date`, which doesn't display the Double-Opt-In confirmation date anymore
+* Changed TemplateMail to work without shop context or shops without templates
+* Changed ReflectionHelper to work with Windows
+* Changed `Unknown path` Smarty error to work with Windows
+* Changed `Shopware\Recovery\UpdateFilePermissionChanger` to make it PHP 7 compatible
+* Changed `manufacturerNumber` field type in elasticsearch to improve search for manufacturer numbers
+* Changed default sorting of the customer list to the order of creation
+* Changed behaviour of closeout condition to work with product streams
+* Changed Font-Face settings to fix rendering if `OpenSans` is locally available
+* Changed following classes to use interface instead class as typehint
+    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HeightConditionHandler`
+    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler`
+    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\LengthConditionHandler`
+    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\WeightConditionHandler`
+    * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\CategoryFacetHandler`
+    * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ImmediateDeliveryFacetHandler`
+    * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler`
+    * `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
+
+### Additions
+
+* Added newsletter registration check
+* Added Double-Opt-In for customer registration
+  * Added new notify event, which will be thrown when awaiting Double-Opt-In confirmation: `Shopware_Modules_Admin_SaveRegister_Successful`
+  * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
+  * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
+* Added Double-Opt-In information for newsletter registrations
+  * Added database column `double_optin_confirmed` in `s_campaigns_mailaddresses` and `s_campaigns_maildata`
+  * Added `Opt-In confirmed` column in backend recipients overview
+* Added debug logs to deprecated methods which will be removed in 5.5. The using of deprecated methods will create debug logs, if Shopware is not running in production mode.
+* Added possibility to config elements to override ``queryMode`` option
+* Added workaround for disabled localStorage in browser
+* Added the following arguments to `notify` event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable`: 
+    * `shopContext` – The context of the shop being processed
+    * `cachedTime` – `\DateTime` instance used for the new entries
+* Added Smarty block `frontend_register_back_to_shop_button` to `themes/Frontend/Bare/frontend/register/index.tpl`
+* Added Smarty blocks to `themes/Frontend/Bare/frontend/listing/actions/action-filter-facets.tpl`:
+  * `frontend_listing_actions`
+  * `frontend_listing_actions_facet`
+* Added filter event `TemplateMail_CreateMail_Available_Theme_Config` to allow extension of theme variables made available to the mail templates 
+
 ## 5.4.3
 
 [View all changes from v5.4.2...v5.4.3](https://github.com/shopware/shopware/compare/v5.4.2...v5.4.3)
@@ -14,6 +65,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added a new category for the basic setting containing privacy options
 * Added possibility to enable/disable data protection information texts
 * Added theme data to the mail context
+* Added cron job for deleting canceled orders
+* Added cron job for deleting accountless users
 
 ### Changes
 
