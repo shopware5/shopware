@@ -184,7 +184,7 @@
                                                 {* Privacy checkbox *}
                                                 {block name="frontend_register_index_form_privacy_content_checkbox"}
                                                     <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="is--required" />
-                                                    <label for="privacy-text">
+                                                    <label for="dpacheckbox">
                                                         {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
                                                     </label>
                                                 {/block}

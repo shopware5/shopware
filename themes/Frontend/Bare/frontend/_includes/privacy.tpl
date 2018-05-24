@@ -3,7 +3,7 @@
         {if {config name=ACTDPRCHECK}}
             {block name="frontend_data_protection_information_checkbox"}
                 <input name="privacy-checkbox" type="checkbox" id="privacy-checkbox" required="required" aria-required="true" value="1" class="is--required" />
-                <label for="privacy-text">
+                <label for="privacy-checkbox">
                     {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
                 </label>
             {/block}
