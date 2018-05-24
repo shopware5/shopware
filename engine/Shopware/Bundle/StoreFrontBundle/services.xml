@@ -507,6 +507,5 @@
             <argument id="shopware_storefront.configurator_service" type="service"/>
             <argument type="service" id="router"/>
         </service>
-
     </services>
 </container>

@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
+use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Address;
@@ -464,6 +464,24 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $this->Response()->setCookie('session-' . $shopId, $sessionId, 0, '/');
 
         $this->redirect($shop->getBaseUrl());
+    }
+
+    public function unlockCustomerAction()
+    {
+        $customerId = (int) $this->Request()->getParam('customerId');
+
+        try {
+            /** @var CustomerUnlockServiceInterface $unlockService */
+            $unlockService = $this->get('shopware_account.customer_unlock_service');
+
+            $unlockService->unlock($customerId);
+        } catch (Exception $e) {
+            $this->View()->assign('success', false);
+
+            return;
+        }
+
+        $this->View()->assign('success', true);
     }
 
     /**

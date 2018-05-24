@@ -83,6 +83,13 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             errorText: '{s name=message/account/error_text}There is an error occurred while saving.{/s}'
         },
 
+        unlock: {
+            successTitle: '{s name="unlock_customer/success_title"}Successfully{/s}',
+            successText: '{s name="unlock_customer/success_text"}Successfully unlocked the customer.{/s}',
+            errorTitle: '{s name="unlock_customer/error_title"}Failure{/s}',
+            errorText: '{s name="unlock_customer/error_text"}An error occurred while unlocking the customer.{/s}'
+        },
+
         growlMessage: '{s name=message/growlMessage}Customer{/s}'
     },
 
@@ -106,7 +113,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 click: me.onSaveCustomer
             },
             'customer-base-field-set': {
-                generatePassword: me.onGeneratePassword
+                generatePassword: me.onGeneratePassword,
+                unlockCustomer: me.onUnlockCustomer
             },
             'customer-debit-field-set': {
                 changePayment: me.onChangePayment
@@ -412,6 +420,36 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.password.errorTitle, me.snippets.password.errorText + '<br> ' + rawData.message, me.snippets.growlMessage);
                 }
+            }
+        });
+    },
+
+    /**
+     * @param { Ext.container.Container } unlockContainer
+     * @param { Ext.data.Model } record
+     */
+    onUnlockCustomer: function (unlockContainer, record) {
+        var me = this,
+            displayField = unlockContainer.down('displayfield'),
+            button = unlockContainer.down('button');
+
+        Ext.Ajax.request({
+            url: '{url action=unlockCustomer}',
+            params: {
+                customerId: record.get('id')
+            },
+            success: function (response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                if (!result.success) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.unlock.errorTitle, me.snippets.unlock.errorText, me.snippets.growlMessage);
+                    return;
+                }
+
+                Shopware.Notification.createGrowlMessage(me.snippets.unlock.successTitle, me.snippets.unlock.successText, me.snippets.growlMessage);
+                displayField.setDisabled(true);
+                displayField.setValue('');
+                button.setDisabled(true);
             }
         });
     }

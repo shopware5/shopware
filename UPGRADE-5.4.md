@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new configuration to set shopware store timeout and connection_timeout
 * Added JS, less and theme template files to md5 filecheck
 * Added OpenSans woff2-Files to responsive fonts
+* Added button to the customer backend module to unlock a locked customer
 
 ### Changes
 
