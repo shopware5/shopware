@@ -175,6 +175,57 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
     }
 
     /**
+     * Tests the mail creation if the passed shop does not have a template, but its main shop does.
+     */
+    public function testCreateMailWithoutShopTemplate()
+    {
+        // Prepare new shop without template
+        $entityManager = Shopware()->Container()->get('models');
+        $defaultShop = $entityManager->find(\Shopware\Models\Shop\Shop::class, 1);
+        $newShop = new \Shopware\Models\Shop\Shop();
+        $newShop->setMain($defaultShop);
+        $newShop->setName('New Shop');
+        $entityManager->persist($newShop);
+        $entityManager->flush($newShop);
+
+        // Test mail creation
+        $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
+        $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
+        $this->assertInstanceOf(Enlight_Components_Mail::class, $mail);
+
+        // Revert changes in the database
+        $entityManager->remove($newShop);
+        $entityManager->flush($newShop);
+    }
+
+    /**
+     * Tests the mail creation if the passed shop and its main shop does not have templates.
+     */
+    public function testCreateMailWithoutMainShopTemplate()
+    {
+        // Prepare new shop and main shop without templates
+        $entityManager = Shopware()->Container()->get('models');
+        $newMainShop = new \Shopware\Models\Shop\Shop();
+        $newMainShop->setName('New Main Shop');
+        $entityManager->persist($newMainShop);
+        $newShop = new \Shopware\Models\Shop\Shop();
+        $newShop->setMain($newMainShop);
+        $newShop->setName('New Shop');
+        $entityManager->persist($newShop);
+        $entityManager->flush([$newMainShop, $newShop]);
+
+        // Test mail creation
+        $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
+        $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
+        $this->assertInstanceOf(Enlight_Components_Mail::class, $mail);
+
+        // Revert changes in the database
+        $entityManager->remove($newMainShop);
+        $entityManager->remove($newShop);
+        $entityManager->flush([$newMainShop, $newShop]);
+    }
+
+    /**
      * @return \Shopware\Models\Mail\Attachment
      */
     protected function getAttachmentMockObject()
