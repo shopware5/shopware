@@ -179,7 +179,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
      */
     public function testCreateMailWithoutShopTemplate()
     {
-        // Pepare new shop without template
+        // Prepare new shop without template
         $entityManager = Shopware()->Container()->get('models');
         $defaultShop = $entityManager->find(\Shopware\Models\Shop\Shop::class, 1);
         $newShop = new \Shopware\Models\Shop\Shop();
