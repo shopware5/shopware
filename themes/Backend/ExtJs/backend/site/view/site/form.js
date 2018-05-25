@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 name: 'pageTitle',
                 anchor:'100%',
                 translatable: true,
-                translationName: 'seoPageTitle'
+                translationName: 'page_title'
             },
             {
                 fieldLabel: '{s name=formSettingsFieldMetaKeywords}Meta-Keywords{/s}',
@@ -267,7 +267,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 name: 'metaKeywords',
                 anchor:'100%',
                 translatable: true,
-                translationName: 'seoMetaKeywords'
+                translationName: 'meta_keywords'
             },
             {
                 fieldLabel: '{s name=formSettingsFieldMetaDescription}Meta-Description{/s}',
@@ -275,7 +275,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 name: 'metaDescription',
                 anchor:'100%',
                 translatable: true,
-                translationName: 'seoMetaDescription'
+                translationName: 'meta_description'
             }
         ]
     },
