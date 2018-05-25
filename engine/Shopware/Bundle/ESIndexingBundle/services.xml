@@ -159,6 +159,7 @@
             <argument type="service" id="shopware_elastic_search.identifier_selector"/>
             <argument type="service" id="shopware_storefront.context_service"/>
             <argument type="service" id="shopware_searchdbal.listing_price_helper"/>
+            <argument type="service" id="config"/>
         </service>
 
 

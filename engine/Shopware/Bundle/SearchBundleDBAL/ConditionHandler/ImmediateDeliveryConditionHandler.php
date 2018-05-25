@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\CriteriaAwareInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -44,7 +44,7 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface, Cr
     const STATE_INCLUDES_IMMEDIATE_DELIVERY_VARIANTS = 'ImmediateDeliveryVariants';
 
     /**
-     * @var VariantHelper
+     * @var VariantHelperInterface
      */
     private $variantHelper;
 
@@ -53,7 +53,7 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface, Cr
      */
     private $criteria;
 
-    public function __construct(VariantHelper $variantHelper)
+    public function __construct(VariantHelperInterface $variantHelper)
     {
         $this->variantHelper = $variantHelper;
     }

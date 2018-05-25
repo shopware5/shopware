@@ -112,7 +112,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $facets = [],
         $sortings = [],
         $context = null,
-        array $configs = []
+        array $configs = [],
+        $variantSearch = false
     ) {
         if ($context === null) {
             $context = $this->getContext();
@@ -145,7 +146,11 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
         $criteria->offset(0)->limit(4000);
 
-        $search = Shopware()->Container()->get('shopware_search.product_number_search');
+        if ($variantSearch) {
+            $search = Shopware()->Container()->get('shopware_search.variant_search');
+        } else {
+            $search = Shopware()->Container()->get('shopware_search.product_number_search');
+        }
 
         $result = $search->search($criteria, $context);
 

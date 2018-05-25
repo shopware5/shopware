@@ -74,12 +74,16 @@ class QueryBuilder extends BaseQueryBuilder
      * instead or call {@link setParameters()} only once, or with all the
      * parameters.
      *
+     * @deprecated This method is deprecated since 5.4.
+     *
      * @param \Doctrine\Common\Collections\ArrayCollection|array $parameters the query parameters to set
      *
      * @return QueryBuilder this QueryBuilder instance
      */
     public function setParameters($parameters)
     {
+        trigger_error(sprintf('%s::%s() is deprecated. Please use setParameter().', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $existingParameters = $this->getParameters();
 
         if (count($existingParameters) && is_array($parameters)) {
@@ -97,7 +101,7 @@ class QueryBuilder extends BaseQueryBuilder
      * should only use it to quickly move backwards to the old
      * {@link setParameters()} behavior.
      *
-     * @deprecated
+     * @deprecated This method is deprecated since 5.4.
      *
      * @param array $parameters
      *
@@ -105,6 +109,8 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addParameters(array $parameters)
     {
+        trigger_error(sprintf('%s::%s() is deprecated. Please use addParameter().', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $existingParameters = $this->getParameters();
         $newParameters = new ArrayCollection();
 

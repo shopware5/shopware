@@ -50,7 +50,8 @@ Ext.define('Shopware.apps.NewsletterManager.model.Recipient', {
         { name: 'email', type: 'string' },
         { name: 'groupId', type: 'int' },
         { name: 'lastNewsletterId', type: 'int' },
-        { name: 'added', type: 'date' }
+        { name: 'added', type: 'date' },
+        { name: 'doubleOptinConfirmed', type: 'date' }
     ],
 
 

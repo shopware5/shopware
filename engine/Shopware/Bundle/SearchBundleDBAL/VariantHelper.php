@@ -144,16 +144,24 @@ class VariantHelper implements VariantHelperInterface
             return;
         }
 
+        $subQuery = new QueryBuilder($this->connection);
+        $subQuery->from('s_articles_details', 'variant');
+
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         /** @var VariantCondition $condition */
         foreach ($conditions as $condition) {
             if ($condition->expandVariants()) {
                 $this->joinVariantCondition($query, $condition);
+                $this->joinVariantCondition($subQuery, $condition);
             }
         }
 
         $variantCondition = [
-            'listing_price.product_id = product.id',
+            'listing_price.product_id = variant.articleId',
+        ];
+
+        $variantOnSaleCondition = [
+            'onsale_listing_price.product_id = variant.articleId',
         ];
 
         foreach ($conditions as $condition) {
@@ -163,13 +171,35 @@ class VariantHelper implements VariantHelperInterface
 
             $tableKey = $condition->getName();
             $variantCondition[] = 'listing_price.' . $tableKey . '_id = ' . $tableKey . '.option_id';
+            $variantOnSaleCondition[] = 'onsale_listing_price.' . $tableKey . '_id = ' . $tableKey . '.option_id';
+            $subQuery->addSelect('IFNULL(listing_price.' . $tableKey . '_id, onsale_listing_price.' . $tableKey . '_id) AS ' . $tableKey . '_id');
         }
 
         $priceTable = $this->createListingPriceTable($criteria, $context);
+        $onSalePriceTable = $this->createOnSaleListingPriceTable($criteria, $context);
 
-        $query->addSelect(['listing_price.*']);
-        $query->innerJoin('variant', '(' . $priceTable->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
-        $query->andWhere('variant.laststock * variant.instock >= variant.laststock * variant.minpurchase');
+        $subQuery->addSelect($query->getQueryPart('select'));
+        $subQuery->addSelect([$this->getOnSalePriceColums()]);
+        $subQuery->addSelect([
+            '
+            IFNULL(listing_price.cheapest_price, onsale_listing_price.cheapest_price) AS cheapest_price,
+            IFNULL(listing_price.variant_id, onsale_listing_price.variant_id) AS variant_id,
+            IFNULL(listing_price.different_price_count, onsale_listing_price.different_price_count) AS different_price_count,
+            IFNULL(listing_price.product_id, onsale_listing_price.product_id) AS product_id
+            ',
+        ]);
+
+        $subQuery->leftJoin('variant', '(' . $priceTable->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
+        $subQuery->leftJoin('variant', '(' . $onSalePriceTable->getSQL() . ')', 'onsale_listing_price', implode(' AND ', $variantOnSaleCondition));
+        $subQuery->resetQueryPart('groupBy');
+
+        $query->addSelect('listing_price.*');
+        $query->leftJoin('variant', '(' . $subQuery->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
+
+        if ($this->config->get('hideNoInStock')) {
+            $query->andWhere('variant.laststock * variant.instock >= variant.laststock * variant.minpurchase');
+        }
+
         $query->andWhere('variant.active = 1');
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
@@ -253,6 +283,24 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
+     * Returns the price columns for the onsale option.
+     *
+     * @return string
+     */
+    private function getOnSalePriceColums()
+    {
+        $template = 'IFNULL(listing_price.%s, onsale_listing_price.%s) %s';
+
+        return implode(',',
+            array_map(
+                function ($column) use ($template) {
+                    return sprintf($template, $column, $column, $column);
+                }, $this->listingPriceHelper->getPriceColumns()
+            )
+        );
+    }
+
+    /**
      * @param Criteria $criteria
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
@@ -266,6 +314,72 @@ class VariantHelper implements VariantHelperInterface
         $query->select([
             'prices.*',
             'MIN(' . $selection . ') AS cheapest_price',
+            'prices.articledetailsID AS variant_id',
+            'COUNT(DISTINCT price) as different_price_count',
+            'prices.articleID AS product_id',
+        ]);
+
+        $priceTable = $this->listingPriceHelper->getPriceTable($context);
+        $priceTable->innerJoin('defaultPrice', 's_articles_details', 'details', 'details.id = defaultPrice.articledetailsID');
+        $priceTable->andWhere('(details.laststock * details.instock) >= (details.laststock * details.minpurchase)');
+
+        $query->from('s_articles', 'product');
+        $query->innerJoin('product', '(' . $priceTable->getSQL() . ')', 'prices', 'product.id = prices.articleID');
+        $query->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID AND variant.active = 1');
+        $query->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID');
+
+        $this->joinAvailableVariant($query);
+        $query->andWhere('prices.articledetailsID = availableVariant.id');
+
+        $this->listingPriceHelper->joinPriceGroup($query);
+
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+
+        /** @var VariantCondition $condition */
+        foreach ($conditions as $condition) {
+            if (!$condition->expandVariants()) {
+                continue;
+            }
+
+            $tableKey = $condition->getName();
+            $column = $tableKey . '.option_id AS ' . $tableKey . '_id';
+            $query->innerJoin('prices', 's_article_configurator_option_relations', $tableKey, $tableKey . '.article_id = prices.articledetailsID');
+            $query->addSelect($column);
+            $query->addGroupBy($tableKey . '.option_id');
+        }
+
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $query->andWhere("IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')");
+        } else {
+            $query->andWhere('prices.from = 1');
+        }
+
+        $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
+        $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
+
+        if ($this->hasDifferentCustomerGroups($context)) {
+            $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey());
+        }
+
+        $query->addGroupBy('prices.articleID');
+
+        return $query;
+    }
+
+    /**
+     * @param Criteria $criteria
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function createOnSaleListingPriceTable(Criteria $criteria, ShopContextInterface $context)
+    {
+        $selection = $this->listingPriceHelper->getSelection($context);
+
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select([
+            'prices.*',
+            'MAX(' . $selection . ') AS cheapest_price',
             'prices.articledetailsID AS variant_id',
             'COUNT(DISTINCT price) as different_price_count',
             'prices.articleID AS product_id',
@@ -298,11 +412,7 @@ class VariantHelper implements VariantHelperInterface
             $query->addGroupBy($tableKey . '.option_id');
         }
 
-        if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $query->andWhere("IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')");
-        } else {
-            $query->andWhere('prices.from = 1');
-        }
+        $query->andWhere('prices.from = 1');
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
         $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());

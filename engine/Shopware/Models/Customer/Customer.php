@@ -426,6 +426,18 @@ class Customer extends LazyFetchModelEntity
     private $birthday;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="doubleOptinEmailSentDate", type="datetime", nullable=true)
+     */
+    private $doubleOptinEmailSentDate;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="doubleOptinConfirmDate", type="datetime", nullable=true)
+     */
+    private $doubleOptinConfirmDate;
+
+    /**
      * @var string
      */
     private $customerType;
@@ -1147,6 +1159,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @param $defaultBillingAddress
+     *
      * @return ModelEntity
      */
     public function setDefaultBillingAddress($defaultBillingAddress)
@@ -1164,6 +1177,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @param $defaultShippingAddress
+     *
      * @return ModelEntity
      */
     public function setDefaultShippingAddress($defaultShippingAddress)
@@ -1317,5 +1331,37 @@ class Customer extends LazyFetchModelEntity
     public function setAdditional($additional)
     {
         $this->additional = $additional;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinEmailSentDate()
+    {
+        return $this->doubleOptinEmailSentDate;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinEmailSentDate
+     */
+    public function setDoubleOptinEmailSentDate($doubleOptinEmailSentDate)
+    {
+        $this->doubleOptinEmailSentDate = $doubleOptinEmailSentDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinConfirmDate()
+    {
+        return $this->doubleOptinConfirmDate;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinConfirmDate
+     */
+    public function setDoubleOptinConfirmDate($doubleOptinConfirmDate)
+    {
+        $this->doubleOptinConfirmDate = $doubleOptinConfirmDate;
     }
 }

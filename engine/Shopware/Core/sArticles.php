@@ -541,7 +541,6 @@ class sArticles
         if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
             $price = $this->sFormatPrice($price);
         } else {
-            //if ($price > 100)         die(round($price * (100 + $tax) / 100, 5));
             $price = $this->sFormatPrice(round($price * (100 + $tax) / 100, 3));
         }
 

@@ -13,14 +13,16 @@
 {* Back to the shop button *}
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
-    {if $theme.checkoutHeader && !$toAccount}
-        <a href="{url controller='index'}"
-           class="btn is--small btn--back-top-shop is--icon-left"
-           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
-            <i class="icon--arrow-left"></i>
-            {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
-        </a>
-    {/if}
+    {block name='frontend_register_index_back_to_shop_button'}
+        {if $theme.checkoutHeader && !$toAccount}
+            <a href="{url controller='index'}"
+               class="btn is--small btn--back-top-shop is--icon-left"
+               title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
+                <i class="icon--arrow-left"></i>
+                {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
+            </a>
+        {/if}
+    {/block}
 {/block}
 
 {* Hide breadcrumb *}
@@ -113,6 +115,20 @@
             {block name='frontend_register_index_form'}
                 <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
 
+                    {* Successfull optin verification *}
+                    {block name='frontend_register_index_form_optin_success'}
+                        {if $smarty.get.optinsuccess && {config name=optinregister}}
+                            {include file="frontend/_includes/messages.tpl" type="success" content="{s name="RegisterInfoSuccessOptin"}{/s}"}
+                        {/if}
+                    {/block}
+
+                    {* Invalid hash while option verification process *}
+                    {block name='frontend_register_index_form_optin_invalid_hash'}
+                        {if $smarty.get.optinhashinvalid && {config name=optinregister}}
+                            {include file="frontend/_includes/messages.tpl" type="error" content="{s name="RegisterInfoInvalidHash"}{/s}"}
+                        {/if}
+                    {/block}
+
                     {block name='frontend_register_index_form_captcha_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$errors.captcha}
                     {/block}
@@ -168,7 +184,7 @@
                                                 {* Privacy checkbox *}
                                                 {block name="frontend_register_index_form_privacy_content_checkbox"}
                                                     <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="is--required" />
-                                                    <label for="privacy-text">
+                                                    <label for="dpacheckbox">
                                                         {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
                                                     </label>
                                                 {/block}
