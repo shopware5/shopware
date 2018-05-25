@@ -722,7 +722,6 @@
             <argument>false</argument>
         </service>
 
-
         <service id="shopware.routing.matchers.rewrite_matcher" class="Shopware\Components\Routing\Matchers\RewriteMatcher">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="query_alias_mapper"/>
@@ -792,5 +791,12 @@
         <service id="shopware.components.privacy.privacy_service" class="Shopware\Components\Privacy\PrivacyService">
             <argument id="dbal_connection" type="service"/>
         </service>
+
+        <service id="shopware.components.privacy.ip_anonymizer" class="Shopware\Components\Privacy\ConfigDependentIpAnonymizer" public="true">
+            <argument type="service" id="shopware.components.privacy.ip_anonymizer_service"/>
+            <argument type="service" id="config"/>
+        </service>
+
+        <service id="shopware.components.privacy.ip_anonymizer_service" class="Shopware\Components\Privacy\IpAnonymizer" public="false"/>
     </services>
 </container>

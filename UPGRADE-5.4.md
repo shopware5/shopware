@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
+## 5.4.5
+
+[View all changes from v5.4.4...v5.4.5](https://github.com/shopware/shopware/compare/v5.4.3...v5.4.4)
+
+### Additions
+
+* Added anonymization of IP addresses, activated by default
+
 ## 5.4.4
 
 [View all changes from v5.4.3...v5.4.4](https://github.com/shopware/shopware/compare/v5.4.3...v5.4.4)

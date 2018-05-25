@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -159,11 +158,12 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             $params = $request->getParams();
             $params['key'] = html_entity_decode($params['key']);
 
-            $logModel = new Shopware\Models\Log\Log();
+            $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
 
+            $logModel = new Shopware\Models\Log\Log();
             $logModel->fromArray($params);
             $logModel->setDate(new \DateTime('now'));
-            $logModel->setIpAddress($request->getClientIp());
+            $logModel->setIpAddress($ip);
             $logModel->setUserAgent($request->getServer('HTTP_USER_AGENT', 'Unknown'));
 
             Shopware()->Models()->persist($logModel);
@@ -186,7 +186,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $logFile = $this->getLogFile($files, $logFile);
 
         if (!$logFile) {
-            new RuntimeException('Log file not found.');
+            throw new RuntimeException('Log file not found.');
         }
 
         $logFilePath = $logDir . '/' . $this->getLogFile($files, $logFile);
