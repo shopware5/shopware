@@ -46,7 +46,7 @@ class Migrations_Migration1220 extends Shopware\Components\Migrations\AbstractMi
 
         // New Cronjob
         $sql = "INSERT INTO `s_crontab` (`name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `disable_on_error`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
-                ('Lösche nicht aktivierte Benutzer', 'RegistrationCleanup', NULL, '', (CURDATE() + INTERVAL 3 HOUR), NULL, 86400, 1, 0, '2016-01-01 01:00:00', '', '', NULL);";
+                ('Delete inactive users', 'RegistrationCleanup', NULL, '', (CURDATE() + INTERVAL 3 HOUR), NULL, 86400, 1, 0, '2016-01-01 01:00:00', '', '', NULL);";
         $this->addSql($sql);
 
         // Add Cronjob-Settings in Backend
