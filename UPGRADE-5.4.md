@@ -29,6 +29,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added filter event `TemplateMail_CreateMail_Available_Theme_Config` to allow extension of theme variables made available to the mail templates 
 * Added new configuration to set shopware store timeout and connection_timeout
 * Added JS, less and theme template files to md5 filecheck
+* Added OpenSans woff2-Files to responsive fonts
 
 ### Changes
 
