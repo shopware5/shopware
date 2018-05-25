@@ -83,12 +83,14 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     private function handleSettings(BenchmarkConfig $config)
     {
+        $backendLanguage = $this->get('auth')->getIdentity()->locale->getId() === 1 ? 'de' : 'en';
+
         if ($config->getIndustry() === null) {
             $this->redirect([
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
                 'template' => 'start',
-                'lang' => $this->request->getParam('lang', 'de'),
+                'lang' => $this->request->getParam('lang', $backendLanguage),
             ]);
 
             return;
@@ -105,7 +107,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
                 'template' => 'statistics',
-                'lang' => $this->request->getParam('lang', 'de'),
+                'lang' => $this->request->getParam('lang', $backendLanguage),
             ]);
 
             return;
