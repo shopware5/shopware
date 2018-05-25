@@ -89,6 +89,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             message: '{s name=convertOrder/message}Do you want to convert this order to a regular order?{/s}',
             successTitle: '{s name=convertOrderSuccess/tile}Order converted{/s}'
         },
+        overwriteOrder: {
+            title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
+            message: '{s name=overwriteOrder/message}Do you really want to overwrite the latest changes?{/s}',
+        },
         growlMessage: '{s name=growlMessage}Order{/s}'
     },
 
@@ -312,7 +316,17 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     }
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.positions.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage);
-                    e.store.rejectChanges();
+
+                    if (rawData.overwriteAble) {
+                        Ext.MessageBox.confirm(me.snippets.overwriteOrder.title, me.snippets.overwriteOrder.message, function (response) {
+                            if (response === 'yes') {
+                                order.set('changed', rawData.data.changed);
+                                me.onSavePosition(editor, e, order, options);
+                            } else {
+                                e.store.rejectChanges();
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -424,7 +438,23 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
                     } else {
                         Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.delete.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
-                        store.rejectChanges();
+
+                        if (rawData.overwriteAble) {
+                            Ext.MessageBox.confirm(me.snippets.overwriteOrder.title, me.snippets.overwriteOrder.message, function (response) {
+                                if (response === 'yes') {
+                                    order.set('changed', rawData.data.changed);
+                                    store.rejectChanges();
+
+                                    grid.getView().select(positions);
+
+                                    me.onDeleteMultiplePositions(order, grid, options);
+                                } else {
+                                    store.rejectChanges();
+                                }
+                            });
+                        } else {
+                            store.rejectChanges();
+                        }
                     }
                 }
             });
@@ -699,6 +729,15 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     }
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + operation.getError(), me.snippets.growlMessage)
+
+                    if (rawData.overwriteAble) {
+                        Ext.MessageBox.confirm(me.snippets.overwriteOrder.title, me.snippets.overwriteOrder.message, function (response) {
+                            if (response === 'yes') {
+                                order.set('changed', rawData.data.changed);
+                                me.saveRecord(order, successMessage, errorMessage, options);
+                            }
+                        });
+                    }
                 }
                 // reload the order list
                 me.getOrderList().store.load();

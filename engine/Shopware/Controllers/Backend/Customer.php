@@ -302,6 +302,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->getCustomer($customer->getId()),
+                'overwriteAble' => true,
                 'message' => $namespace->get('customer_has_been_changed', 'The customer has been changed in the meantime. To prevent overwriting these changes, saving the customer was aborted. Please close the customer and re-open it.'),
             ]);
 
