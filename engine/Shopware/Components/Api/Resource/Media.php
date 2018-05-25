@@ -481,17 +481,22 @@ class Media extends Resource
                 $params['name'] = pathinfo($params['file'], PATHINFO_FILENAME);
             }
             $params['name'] = $this->getUniqueFileName($params['file'], $params['name']);
+            $originalName = $params['file'];
 
             if (!file_exists($params['file'])) {
                 try {
                     $path = $this->load($params['file'], $params['name']);
+
+                    if (strpos($params['file'], 'data:image') !== false) {
+                        $originalName = $params['name'];
+                    }
                 } catch (\Exception $e) {
                     throw new \Exception(sprintf('Could not load image %s', $params['file']));
                 }
             } else {
                 $path = $params['file'];
             }
-            $params['file'] = new UploadedFile($path, $params['file']);
+            $params['file'] = new UploadedFile($path, $originalName);
         }
 
         return $params;

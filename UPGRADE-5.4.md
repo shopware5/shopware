@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ImmediateDeliveryFacetHandler`
     * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler`
     * `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
+* Changed `Media` resource to fix a problem with file names set via API
 
 ### Additions
 
