@@ -60,6 +60,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed `Media` resource to fix a problem with file names set via API
 * Changed behaviour of unchecked ToS-checkbox in checkout to hint the missing input, especially on iOS
 * Changed privacy policy checkbox setting to automatically activate privacy policy text being displayed
+* Changed PluginManager rangeDownloadAction and extractAction to no longer use the provided URL parameters
 
 ## 5.4.3
 

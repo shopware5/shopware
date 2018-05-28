@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
@@ -43,6 +42,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\StoreOrderService;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\MetaStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\Plugin\Context\InstallContext;
@@ -76,6 +76,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             /** @var $service DownloadService */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->getMetaInformation($request);
+            $this->get('BackendSession')->offsetSet('plugin_manager_meta_download', $result);
         } catch (Exception $e) {
             $this->handleException($e);
 
@@ -87,19 +88,29 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function rangeDownloadAction()
     {
-        $url = $this->Request()->getParam('uri');
+        /** @var MetaStruct $metaStruct */
+        $metaStruct = $this->get('BackendSession')->offsetGet('plugin_manager_meta_download');
+        if (!$metaStruct) {
+            $this->View()->assign(['success' => false, 'message' => 'Unable to retrieve meta information']);
+
+            return;
+        }
+
         $offset = (int) $this->Request()->getParam('offset');
-        $size = $this->Request()->getParam('size');
-        $sha1 = $this->Request()->getParam('sha1');
-        $name = $this->Request()->getParam('fileName', 'download.zip');
 
         $downloadsDir = $this->container->getParameter('shopware.app.downloadsdir');
-        $destination = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $name;
+        $destination = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $metaStruct->getFileName();
         if ($offset === 0) {
             unlink($destination);
         }
 
-        $request = new RangeDownloadRequest($url, $offset, $size, $sha1, $destination);
+        $request = new RangeDownloadRequest(
+            $metaStruct->getUri(),
+            $offset,
+            $metaStruct->getSize(),
+            $metaStruct->getSha1(),
+            $destination
+        );
 
         try {
             /** @var $service DownloadService */
@@ -121,12 +132,20 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function extractAction()
     {
-        $technicalName = $this->Request()->getParam('technicalName');
-        $fileName = $this->Request()->getParam('fileName');
+        /** @var MetaStruct $metaStruct */
+        $metaStruct = $this->get('BackendSession')->offsetGet('plugin_manager_meta_download');
+        if (!$metaStruct) {
+            $this->View()->assign(['success' => false, 'message' => 'Unable to retrieve meta information']);
+
+            return;
+        }
+
+        $downloadsDir = $this->container->getParameter('shopware.app.downloadsdir');
+        $filePath = rtrim($downloadsDir, '/') . DIRECTORY_SEPARATOR . $metaStruct->getFileName();
         $service = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
         try {
-            $service->extractPluginZip($fileName, $technicalName);
+            $service->extractPluginZip($filePath, $metaStruct->getTechnicalName());
 
             /** @var InstallerService $pluginManager */
             $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
