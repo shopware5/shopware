@@ -62,7 +62,22 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name: 'lastname', type: 'string' },
         { name: 'title', type: 'string' },
         { name: 'number', type: 'string' },
-        { name: 'lockedUntil', type: 'date' },
+        { name: 'serverTime', type: 'date' },
+        {
+            name: 'lockedUntil',
+            type: 'date',
+            convert: function (value, record) {
+                if (record.get('serverTime') === null || value === null) {
+                    return value;
+                }
+
+                if (record.get('serverTime').getTime() >= value.getTime()) {
+                    return null;
+                }
+
+                return value;
+            }
+        },
         { name: 'customerStreamIds', type: 'string' }
     ],
 

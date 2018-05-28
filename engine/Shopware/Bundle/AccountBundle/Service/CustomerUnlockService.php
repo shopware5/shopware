@@ -45,6 +45,6 @@ class CustomerUnlockService implements CustomerUnlockServiceInterface
      */
     public function unlock($customerId)
     {
-        $this->connection->update('s_user', ['lockedUntil' => null], ['id' => $customerId]);
+        $this->connection->update('s_user', ['lockedUntil' => null, 'failedlogins' => 0], ['id' => $customerId]);
     }
 }
