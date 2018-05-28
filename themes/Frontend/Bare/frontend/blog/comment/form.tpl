@@ -133,7 +133,7 @@
 
                 {* Data protection information *}
                 {block name='frontend_blog_comments_input_privacy'}
-                    {if {config name=ACTDPRTEXT}}
+                    {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
                         {include file="frontend/_includes/privacy.tpl"}
                     {/if}
                 {/block}

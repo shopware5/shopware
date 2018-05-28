@@ -127,7 +127,7 @@
 
                         {* Data protection information *}
                         {block name="frontend_index_footer_column_newsletter_privacy"}
-                            {if {config name=ACTDPRTEXT}}
+                            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
                                 {include file="frontend/_includes/privacy.tpl"}
                             {/if}
                         {/block}

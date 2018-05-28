@@ -171,7 +171,7 @@
                     {* Data protection information *}
                     {if !$update}
                         {block name="frontend_register_index_form_privacy"}
-                            {if {config name=ACTDPRTEXT}}
+                            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
                                 {block name="frontend_register_index_form_privacy_title"}
                                     <h2 class="panel--title is--underline">
                                         {s name="PrivacyTitle" namespace="frontend/index/privacy"}{/s}

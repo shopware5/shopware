@@ -56,7 +56,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler`
     * `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
 * Changed `Media` resource to fix a problem with file names set via API
-  
+* Changed privacy policy checkbox setting to automatically activate privacy policy text being displayed
+
 ## 5.4.3
 
 [View all changes from v5.4.2...v5.4.3](https://github.com/shopware/shopware/compare/v5.4.2...v5.4.3)
