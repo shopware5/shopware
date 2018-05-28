@@ -58,6 +58,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler`
     * `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
 * Changed `Media` resource to fix a problem with file names set via API
+* Changed behaviour of unchecked ToS-checkbox in checkout to hint the missing input, especially on iOS
 * Changed privacy policy checkbox setting to automatically activate privacy policy text being displayed
 
 ## 5.4.3
