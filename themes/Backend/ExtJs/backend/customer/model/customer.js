@@ -62,6 +62,7 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name: 'lastname', type: 'string' },
         { name: 'title', type: 'string' },
         { name: 'number', type: 'string' },
+        { name: 'lockedUntil', type: 'date' },
         { name: 'customerStreamIds', type: 'string' }
     ],
 

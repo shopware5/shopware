@@ -118,5 +118,9 @@
             <argument id="dbal_connection" type="service"/>
             <argument id="config" type="service"/>
         </service>
+
+        <service id="shopware_account.customer_unlock_service" class="Shopware\Bundle\AccountBundle\Service\CustomerUnlockService">
+            <argument id="dbal_connection" type="service"/>
+        </service>
     </services>
 </container>

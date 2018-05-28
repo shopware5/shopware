@@ -128,7 +128,16 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
              * @param [object] passwordField - Associated password field
              * @param [object] confirmField - Associated confirm password field
              */
-            'generatePassword'
+            'generatePassword',
+
+            /**
+             * Event will be fired when the user clicks on the "unlock" button
+             *
+             * @event unlockCustomer
+             * @param { Ext.container.Container }
+             * @param { Ext.data.Model }
+             */
+            'unlockCustomer'
         );
     },
 
@@ -311,9 +320,21 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      * @return [Array] Contains the three form fields
      */
     createBaseFormRight: function () {
-        var me = this;
+        var me = this,
+            items = [],
+            factory = Ext.create('Shopware.attribute.SelectionFactory'),
+            activeCheckBox = {
+                name: 'active',
+                anchor: '95%',
+                boxLabel: me.snippets.active.box,
+                fieldLabel: me.snippets.active.field,
+                xtype: 'checkbox',
+                value: true,
+                labelWidth: 155,
+                uncheckedValue: false,
+                inputValue: true
+            };
 
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
         me.customerStreamSelection = Ext.create('Shopware.form.field.CustomerStreamGrid', {
             name: 'customerStreamIds',
             labelWidth: 155,
@@ -326,17 +347,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             searchStore: factory.createEntitySearchStore("Shopware\\Models\\CustomerStream\\CustomerStream")
         });
 
-        return [{
-            name: 'active',
-            anchor: '95%',
-            boxLabel: me.snippets.active.box,
-            fieldLabel: me.snippets.active.field,
-            xtype: 'checkbox',
-            value: true,
-            labelWidth: 155,
-            uncheckedValue: false,
-            inputValue: true
-        }, me.customerStreamSelection ];
+        items.push(activeCheckBox);
+        items.push(me.customerStreamSelection);
+        items.push(me.createUnlockField());
+
+        return items;
     },
 
     /**
@@ -400,6 +415,51 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             height: 70,
             items: [ me.passwordField, me.passwordButton ]
         });
+    },
+
+    /**
+     * @returns { Ext.container.Container }
+     */
+    createUnlockField: function () {
+        var me = this,
+            disabled = true;
+
+        if (me.record.get('lockedUntil')) {
+            disabled = false;
+        }
+
+        me.unlockContainer = Ext.create('Ext.container.Container', {
+            items: [
+                {
+                    xtype: 'displayfield',
+                    fieldLabel: '{s name="base/unlock_customer/label_text"}Locked until{/s}',
+                    labelStyle: 'margin-top: 0',
+                    name: 'lockedUntil',
+                    disabled: disabled,
+                    renderer: function (val) {
+                        if (!val) {
+                            return '';
+                        }
+
+                        return Ext.util.Format.date(val) + ' ' + Ext.util.Format.date(val, timeFormat)
+                    }
+                }, {
+                    xtype: 'button',
+                    text: '{s name="unlock_button_text"}Entsperren{/s}',
+                    iconCls: 'sprite-key--pencil',
+                    anchor: '100%',
+                    cls: 'small secondary',
+                    disabled: disabled,
+                    handler: Ext.bind(me.onClickUnlock, me)
+                }
+            ]
+        });
+
+        return me.unlockContainer;
+    },
+
+    onClickUnlock: function () {
+        this.fireEvent('unlockCustomer', this.unlockContainer, this.record);
     }
 
 });
