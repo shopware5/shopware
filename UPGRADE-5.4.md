@@ -40,6 +40,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed information of backend recipients overview
   * `Double-Opt-In date` is now `Register date`, which doesn't display the Double-Opt-In confirmation date anymore
 * Changed TemplateMail to work without shop context or shops without templates
+* Changed Symfony version to v2.8.41
 * Changed ReflectionHelper to work with Windows
 * Changed `Unknown path` Smarty error to work with Windows
 * Changed `Shopware\Recovery\UpdateFilePermissionChanger` to make it PHP 7 compatible
