@@ -2958,10 +2958,11 @@ class sAdmin
         );
         
         $surcharge = $this->calculateDispatchSurcharge($basket, $dispatches);
-        
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_PremiumDispatchSurcharge_Calculated',
-            ['subject' => $this, 'dispatches' => $dispatches, 'surcharge' => $surcharge]
+ 
+        $surcharge = $this->eventManager->filter(
+            'Shopware_Modules_Admin_sGetPremiumDispatchSurcharge_FilterSurcharge',
+            $surcharge,
+            ['subject' => $this, 'dispatches' => $dispatches]
         );
         
         return $surcharge;
