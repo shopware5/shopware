@@ -62,10 +62,11 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name: 'lastname', type: 'string' },
         { name: 'title', type: 'string' },
         { name: 'number', type: 'string' },
-        { name: 'serverTime', type: 'date' },
+        { name: 'serverTime', type: 'date', defaultValue: null },
         {
             name: 'lockedUntil',
             type: 'date',
+            defaultValue: null,
             convert: function (value, record) {
                 if (record.get('serverTime') === null || value === null) {
                     return value;
