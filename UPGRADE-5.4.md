@@ -9,10 +9,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added newsletter registration check
-* Added Double-Opt-In for customer registration
-  * Added new notify event, which will be thrown when awaiting Double-Opt-In confirmation: `Shopware_Modules_Admin_SaveRegister_Successful`
-  * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
-  * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
 * Added Double-Opt-In information for newsletter registrations
   * Added database column `double_optin_confirmed` in `s_campaigns_mailaddresses` and `s_campaigns_maildata`
   * Added `Opt-In confirmed` column in backend recipients overview
