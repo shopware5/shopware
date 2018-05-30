@@ -8,7 +8,6 @@ use Shopware\Models\Shop\Shop;
 /**
  * Class FormTest
  * @package Shopware\Tests\Functional\Controllers\Frontend
- * @group Test
  */
 class FormTest extends Enlight_Components_Test_Plugin_TestCase
 {

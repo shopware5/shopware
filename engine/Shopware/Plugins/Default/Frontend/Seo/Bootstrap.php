@@ -62,9 +62,9 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     /**
      * Optimize Sourcecode / Apply SEO rules
      *
-     * @param Enlight_Event_EventArgs $args
+     * @param Enlight_Controller_ActionEventArgs $args
      */
-    public function onPostDispatch(Enlight_Event_EventArgs $args)
+    public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
         $request = $args->getSubject()->Request();
         $response = $args->getSubject()->Response();
@@ -77,7 +77,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return;
         }
 
-        $config = Shopware()->Config();
+        $config = $this->get('config');
 
         /** @var $mapper QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
@@ -147,6 +147,9 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if (!empty($metaDescription)) {
             $view->SeoMetaDescription = $metaDescription;
         }
+
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $view->assign('sHrefLinks', $this->get('shopware_storefront.cached_href_lang_service')->getUrls($request->getParams(), $context));
     }
 
     /**
@@ -164,7 +167,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return $source;
         }
 
-        $config = Shopware()->Config();
+        $config = $this->get('config');
 
         // Remove comments
         if (!empty($config['sSEOREMOVECOMMENTS'])) {
