@@ -435,6 +435,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                     fieldLabel: '{s name="base/unlock_customer/label_text"}Locked until{/s}',
                     labelStyle: 'margin-top: 0',
                     name: 'lockedUntil',
+                    labelWidth: 155,
                     disabled: disabled,
                     renderer: function (val) {
                         if (!val) {
@@ -445,10 +446,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                     }
                 }, {
                     xtype: 'button',
-                    text: '{s name="unlock_button_text"}Entsperren{/s}',
+                    text: '{s name="base/unlock_button_text"}Unlock{/s}',
                     iconCls: 'sprite-key--pencil',
                     anchor: '100%',
                     cls: 'small secondary',
+                    margin: '0 0 0 160',
                     disabled: disabled,
                     handler: Ext.bind(me.onClickUnlock, me)
                 }

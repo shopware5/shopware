@@ -84,10 +84,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
         },
 
         unlock: {
-            successTitle: '{s name="unlock_customer/success_title"}Successfully{/s}',
-            successText: '{s name="unlock_customer/success_text"}Successfully unlocked the customer.{/s}',
-            errorTitle: '{s name="unlock_customer/error_title"}Failure{/s}',
-            errorText: '{s name="unlock_customer/error_text"}An error occurred while unlocking the customer.{/s}'
+            successTitle: '{s name=base/unlock_customer/success_title}Successfully{/s}',
+            successText: '{s name=base/unlock_customer/success_text}Successfully unlocked the customer.{/s}',
+            errorTitle: '{s name=base/unlock_customer/error_title}Failure{/s}',
+            errorText: '{s name=base/unlock_customer/error_text}An error occurred while unlocking the customer.{/s}'
         },
 
         growlMessage: '{s name=message/growlMessage}Customer{/s}'
