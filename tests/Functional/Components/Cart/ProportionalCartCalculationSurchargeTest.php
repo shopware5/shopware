@@ -1,0 +1,315 @@
+<?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+namespace Shopware\Tests\Functional\Components\Cart;
+
+use Shopware\Components\Test\CheckoutTest;
+
+/**
+ * Class ProportionalCartCalculationTest
+ *
+ * @group Basket
+ */
+class ProportionalCartCalculationSurchargeTest extends CheckoutTest
+{
+    /**
+     * A article with 7% tax
+     *
+     * @var string
+     */
+    private $tax7;
+
+    /**
+     * A article with 19% tax
+     *
+     * @var string
+     */
+    private $tax19;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->setConfig('proportionalTaxCalculation', true);
+        $this->setPaymentSurcharge(0);
+        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+
+        $this->setCustomerGroupSurcharge(0, 0);
+
+        Shopware()->Container()->get('dbal_connection')->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
+
+        $this->tax7 = $this->createArticle(10, 7.00);
+        $this->tax19 = $this->createArticle(10, 19.00);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        Shopware()->Container()->get('dbal_connection')->rollBack();
+
+        $this->setConfig('proportionalTaxCalculation', false);
+        $this->setPaymentSurcharge(0);
+    }
+
+    public function testMultipleTaxesWithoutDiscounts()
+    {
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax7, 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax19, 1);
+
+        $this->dispatch('/checkout/cart');
+
+        $sBasket = $this->View()->getAssign('sBasketProportional');
+
+        $this->assertInternalType('float', $sBasket['sShippingcosts']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        $this->assertInternalType('array', $sBasket['sShippingcostsTaxProportional']);
+        $this->assertInternalType('array', $sBasket['sTaxRates']);
+
+        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
+        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        $this->assertEquals(3.4610853687269, $sBasket['sShippingcostsNet']);
+
+        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        $this->assertCount(2, $sBasket['sShippingcostsTaxProportional']);
+        $this->assertCount(2, $sBasket['sTaxRates']);
+
+        $this->assertCount(2, $sBasket['content']);
+
+        $this->reset();
+    }
+
+    public function testMultipleTaxesWithPaymentSurchargeAbsolute()
+    {
+        $this->setPaymentSurcharge(10);
+
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax7, 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax19, 1);
+
+        $this->dispatch('/checkout/cart');
+
+        $sBasket = $this->View()->getAssign('sBasketProportional');
+
+        $this->assertInternalType('float', $sBasket['sShippingcosts']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        $this->assertInternalType('array', $sBasket['sShippingcostsTaxProportional']);
+        $this->assertInternalType('array', $sBasket['sTaxRates']);
+
+        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
+        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        $this->assertEquals(3.4610853687269, $sBasket['sShippingcostsNet']);
+
+        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        $this->assertCount(2, $sBasket['sShippingcostsTaxProportional']);
+        $this->assertCount(2, $sBasket['sTaxRates']);
+
+        $this->assertCount(4, $sBasket['content']);
+
+        $this->hasBasketItem($sBasket['content'], 'Zuschlag für Zahlungsart (19%)', 5.0, 4.2016806722689, 'sw-payment-absolute');
+        $this->hasBasketItem($sBasket['content'], 'Zuschlag für Zahlungsart (7%)', 5.0, 4.6728971962617, 'sw-payment-absolute');
+
+        $this->reset();
+    }
+
+    public function testMultipleTaxesWithPaymentSurchargePercent()
+    {
+        $this->setPaymentSurcharge(0, 10);
+
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax7, 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax19, 1);
+
+        $this->dispatch('/checkout/cart');
+
+        $sBasket = $this->View()->getAssign('sBasketProportional');
+
+        $this->assertInternalType('float', $sBasket['sShippingcosts']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        $this->assertInternalType('array', $sBasket['sShippingcostsTaxProportional']);
+        $this->assertInternalType('array', $sBasket['sTaxRates']);
+
+        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
+        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        $this->assertEquals(3.4610853687269, $sBasket['sShippingcostsNet']);
+
+        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        $this->assertCount(2, $sBasket['sShippingcostsTaxProportional']);
+        $this->assertCount(2, $sBasket['sTaxRates']);
+
+        $this->assertCount(4, $sBasket['content']);
+
+        $this->hasBasketItem($sBasket['content'], 'Zuschlag für Zahlungsart (19%)', 1.0, 0.84033613445378, 'sw-payment');
+        $this->hasBasketItem($sBasket['content'], 'Zuschlag für Zahlungsart (7%)', 1.0, 0.93457943925234, 'sw-payment');
+
+        $this->reset();
+    }
+
+    public function testMultipleTaxesWithPaymentSurchargePercentCountry()
+    {
+        $this->setPaymentSurcharge(0, 0, 'DE:10');
+
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax7, 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax19, 1);
+
+        $this->dispatch('/checkout/cart');
+
+        $sBasket = $this->View()->getAssign('sBasketProportional');
+
+        $this->assertInternalType('float', $sBasket['sShippingcosts']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        $this->assertInternalType('array', $sBasket['sShippingcostsTaxProportional']);
+        $this->assertInternalType('array', $sBasket['sTaxRates']);
+
+        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
+        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        $this->assertEquals(3.4610853687269, $sBasket['sShippingcostsNet']);
+
+        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        $this->assertCount(2, $sBasket['sShippingcostsTaxProportional']);
+        $this->assertCount(2, $sBasket['sTaxRates']);
+
+        $this->assertCount(4, $sBasket['content']);
+
+        $this->hasBasketItem($sBasket['content'], 'Zuschlag für Zahlungsart (19%)', 5.0, 4.2016806722689, 'sw-payment-absolute');
+        $this->hasBasketItem($sBasket['content'], 'Zuschlag für Zahlungsart (7%)', 5.0, 4.6728971962617, 'sw-payment-absolute');
+
+        $this->reset();
+    }
+
+    public function testMultipleTaxesWithPaymentSurchargeAbsoluteNegative()
+    {
+        $this->setPaymentSurcharge(-10);
+
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax7, 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax19, 1);
+
+        $this->dispatch('/checkout/cart');
+
+        $sBasket = $this->View()->getAssign('sBasketProportional');
+
+        $this->assertInternalType('float', $sBasket['sShippingcosts']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        $this->assertInternalType('array', $sBasket['sShippingcostsTaxProportional']);
+        $this->assertInternalType('array', $sBasket['sTaxRates']);
+
+        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
+        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        $this->assertEquals(3.4610853687269, $sBasket['sShippingcostsNet']);
+
+        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        $this->assertCount(2, $sBasket['sShippingcostsTaxProportional']);
+        $this->assertCount(2, $sBasket['sTaxRates']);
+
+        $this->assertCount(4, $sBasket['content']);
+
+        $this->hasBasketItem($sBasket['content'], 'Abschlag für Zahlungsart (19%)', -5.0, -4.2016806722689, 'sw-payment-absolute');
+        $this->hasBasketItem($sBasket['content'], 'Abschlag für Zahlungsart (7%)', -5.0, -4.6728971962617, 'sw-payment-absolute');
+
+        $this->reset();
+    }
+
+    public function testMultipleTaxesWithPaymentSurchargePercentNegative()
+    {
+        $this->setPaymentSurcharge(0, -10);
+
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax7, 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax19, 1);
+
+        $this->dispatch('/checkout/cart');
+
+        $sBasket = $this->View()->getAssign('sBasketProportional');
+
+        $this->assertInternalType('float', $sBasket['sShippingcosts']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        $this->assertInternalType('array', $sBasket['sShippingcostsTaxProportional']);
+        $this->assertInternalType('array', $sBasket['sTaxRates']);
+
+        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
+        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        $this->assertEquals(3.4610853687269, $sBasket['sShippingcostsNet']);
+
+        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        $this->assertCount(2, $sBasket['sShippingcostsTaxProportional']);
+        $this->assertCount(2, $sBasket['sTaxRates']);
+
+        $this->assertCount(4, $sBasket['content']);
+
+        $this->hasBasketItem($sBasket['content'], 'Abschlag für Zahlungsart (19%)', -1.0, -0.84033613445378, 'sw-payment');
+        $this->hasBasketItem($sBasket['content'], 'Abschlag für Zahlungsart (7%)', -1.0, -0.93457943925234, 'sw-payment');
+
+        $this->reset();
+    }
+
+    public function testMultipleTaxesWithPaymentSurchargePercentCountryNegative()
+    {
+        $this->setPaymentSurcharge(0, 0, 'DE:-10');
+
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax7, 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->tax19, 1);
+
+        $this->dispatch('/checkout/cart');
+
+        $sBasket = $this->View()->getAssign('sBasketProportional');
+
+        $this->assertInternalType('float', $sBasket['sShippingcosts']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
+        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        $this->assertInternalType('array', $sBasket['sShippingcostsTaxProportional']);
+        $this->assertInternalType('array', $sBasket['sTaxRates']);
+
+        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
+        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        $this->assertEquals(3.4610853687269, $sBasket['sShippingcostsNet']);
+
+        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        $this->assertCount(2, $sBasket['sShippingcostsTaxProportional']);
+        $this->assertCount(2, $sBasket['sTaxRates']);
+
+        $this->assertCount(4, $sBasket['content']);
+
+        $this->hasBasketItem($sBasket['content'], 'Abschlag für Zahlungsart (19%)', -5.0, -4.2016806722689, 'sw-payment-absolute');
+        $this->hasBasketItem($sBasket['content'], 'Abschlag für Zahlungsart (7%)', -5.0, -4.6728971962617, 'sw-payment-absolute');
+
+        $this->reset();
+    }
+}

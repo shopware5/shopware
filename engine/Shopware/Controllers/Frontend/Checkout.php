@@ -230,7 +230,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return $this->forward('cart');
         }
 
-        $this->session['sOrderVariables'] = new ArrayObject($this->View()->getAssign(), ArrayObject::ARRAY_AS_PROPS);
+        $sOrderVariables = $this->View()->getAssign();
+        $sOrderVariables['sBasketView'] = $sOrderVariables['sBasket'];
+        $sOrderVariables['sBasket'] = $this->getBasket(false);
+
+        $this->session['sOrderVariables'] = new ArrayObject($sOrderVariables, ArrayObject::ARRAY_AS_PROPS);
 
         $agbChecked = $this->Request()->getParam('sAGB');
         if (!empty($agbChecked)) {
@@ -313,6 +317,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
                 $this->View()->assign($orderVariables);
 
+                if ($this->View()->sBasketView) {
+                    $this->View()->sBasket = $this->View()->sBasketView;
+                    unset($this->View()->sBasketView);
+                }
+
                 return;
             }
         }
@@ -335,6 +344,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         $this->View()->assign($orderVariables);
+        if ($this->View()->sBasketView) {
+            $this->View()->sBasket = $this->View()->sBasketView;
+            unset($this->View()->sBasketView);
+        }
 
         if ($this->basket->sCountBasket() <= 0) {
             return;
@@ -415,6 +428,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
 
         $this->View()->assign($orderVariables);
+
+        if ($this->View()->sBasketView) {
+            $this->View()->sBasket = $this->View()->sBasketView;
+            unset($this->View()->sBasketView);
+        }
     }
 
     /**
@@ -814,7 +832,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 WHERE groupkey = ?
             ', [$system->sUSERGROUP]);
 
-            if ($this->isTaxFreeDelivery($userData)) {
+            $taxFree = $this->isTaxFreeDelivery($userData);
+            $this->session->offsetSet('taxFree', $taxFree);
+
+            if ($taxFree) {
                 $system->sUSERGROUPDATA['tax'] = 0;
                 $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
                 Shopware()->Session()->sUserGroupData = $system->sUSERGROUPDATA;
@@ -839,6 +860,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $order = Shopware()->Modules()->Order();
 
+        $orgBasketData = $this->View()->sBasket;
+        $this->View()->sBasket = $this->getBasket(false);
+
         $order->sUserData = $this->View()->sUserData;
         $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
         $order->sBasketData = $this->View()->sBasket;
@@ -851,6 +875,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order->dispatchId = $this->session['sDispatch'];
         $order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
         $order->deviceType = $this->Request()->getDeviceType();
+
+        $this->View()->sBasket = $orgBasketData;
 
         $order->sDeleteTemporaryOrder();    // Delete previous temporary orders
         $order->sCreateTemporaryOrder();    // Create new temporary order
@@ -863,6 +889,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $order = Shopware()->Modules()->Order();
 
+        $orgBasketData = $this->View()->sBasket;
+        $this->View()->sBasket = $this->getBasket(false);
+
         $order->sUserData = $this->View()->sUserData;
         $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
         $order->sBasketData = $this->View()->sBasket;
@@ -875,6 +904,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order->dispatchId = $this->session['sDispatch'];
         $order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
         $order->deviceType = $this->Request()->getDeviceType();
+
+        $this->View()->sBasket = $orgBasketData;
 
         return $order->sSaveOrder();
     }
@@ -974,9 +1005,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * Return complete basket data to view
      * Basket items / Shippingcosts / Amounts / Tax-Rates
      *
+     * @param bool $mergeProportional
+     *
      * @return array
      */
-    public function getBasket()
+    public function getBasket($mergeProportional = true)
     {
         $shippingcosts = $this->getShippingCosts();
 
@@ -985,12 +1018,35 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         /** @var \Shopware\Models\Shop\Currency $currency */
         $currency = $this->get('shop')->getCurrency();
 
+        $positions = $this->container->get('shopware.cart.basket_helper')->getPositionPrices();
+        $taxCalculator = $this->container->get('shopware.cart.proportional_tax_calculator');
+        $hasDifferentTaxes = $taxCalculator->hasDifferentTaxes($positions);
+
         $basket['sCurrencyId'] = $currency->getId();
         $basket['sCurrencyName'] = $currency->getCurrency();
         $basket['sCurrencyFactor'] = $currency->getFactor();
-        $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
-        $basket['sShippingcostsNet'] = $shippingcosts['netto'];
-        $basket['sShippingcostsTax'] = $shippingcosts['tax'];
+
+        if ($hasDifferentTaxes && empty($shippingcosts['taxMode']) && $this->get('config')->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
+            $taxProportional = $taxCalculator->calculate($shippingcosts['brutto'], $positions, !Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id']);
+
+            $basket['sShippingcostsTaxProportional'] = $taxProportional;
+
+            $shippingNet = 0;
+
+            foreach ($taxProportional as $shippingProportional) {
+                $shippingNet += $shippingProportional->getNetPrice();
+            }
+
+            $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
+            $basket['sShippingcostsNet'] = $shippingNet;
+            $basket['sShippingcostsTax'] = $shippingcosts['tax'];
+
+            $shippingcosts['netto'] = $shippingNet;
+        } else {
+            $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
+            $basket['sShippingcostsNet'] = $shippingcosts['netto'];
+            $basket['sShippingcostsTax'] = $shippingcosts['tax'];
+        }
 
         if (!empty($shippingcosts['brutto'])) {
             $basket['AmountNetNumeric'] += $shippingcosts['netto'];
@@ -1000,7 +1056,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if (!empty($basket['AmountWithTaxNumeric'])) {
             $basket['AmountWithTaxNumeric'] += $shippingcosts['brutto'];
         }
-        if ((!Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id'])) {
+        if (!Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id']) {
             $basket['sTaxRates'] = $this->getTaxRates($basket);
 
             $basket['sShippingcosts'] = $shippingcosts['netto'];
@@ -1016,7 +1072,67 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $basket['sAmountTax'] = round($basket['AmountNumeric'] - $basket['AmountNetNumeric'], 2);
         }
 
+        $this->View()->sBasketProportional = $basket;
+        if ($mergeProportional && $hasDifferentTaxes && $this->get('config')->get('proportionalTaxCalculation')) {
+            $basket['content'] = $this->mergeProportionalItems($basket['content']);
+        }
+
         return $basket;
+    }
+
+    /**
+     * Merges proportional cart items into one
+     * @param array $content
+     * @return array
+     */
+    private function mergeProportionalItems(array $content)
+    {
+        $newCart = [];
+
+        foreach ($content as $cartItem) {
+            if (!isset($newCart[$cartItem['ordernumber']])) {
+                $newCart[$cartItem['ordernumber']] = $cartItem;
+                continue;
+            }
+
+            // There are some plugins, which allows to have same product multiple times in cart
+            if (empty($newCart[$cartItem['ordernumber']]['modus'])) {
+                $newCart[] = $cartItem;
+                continue;
+            }
+
+            if (!isset($newCart[$cartItem['ordernumber']]['fixedName'])) {
+                $newCart[$cartItem['ordernumber']]['articlename'] = substr($newCart[$cartItem['ordernumber']]['articlename'], 0, strrpos($newCart[$cartItem['ordernumber']]['articlename'], ' '));
+            }
+
+            $newCart[$cartItem['ordernumber']]['price'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'price');
+            $newCart[$cartItem['ordernumber']]['netprice'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'netprice');
+            $newCart[$cartItem['ordernumber']]['amountWithTax'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'amountWithTax');
+            $newCart[$cartItem['ordernumber']]['amount'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'amount');
+            $newCart[$cartItem['ordernumber']]['amountnet'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'amountnet');
+            $newCart[$cartItem['ordernumber']]['priceNumeric'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'priceNumeric');
+            $newCart[$cartItem['ordernumber']]['tax'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'tax');
+        }
+
+        return array_values($newCart);
+    }
+
+    /**
+     * @param array $item1
+     * @param array $item2
+     * @param string $property
+     * @return string
+     */
+    private function mergeAmount(array $item1, array $item2, $property)
+    {
+        $hasComma = strpos($item1[$property], ',') !== false;
+        $amount = str_replace(',', '.', $item1[$property]) + str_replace(',', '.', $item2[$property]);
+
+        if ($hasComma) {
+            $amount = Shopware()->Modules()->Articles()->sFormatPrice($amount);
+        }
+
+        return $amount;
     }
 
     /**
@@ -1031,11 +1147,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $result = [];
 
         if (!empty($basket['sShippingcostsTax'])) {
-            $basket['sShippingcostsTax'] = number_format((float) $basket['sShippingcostsTax'], 2);
+            if (!empty($basket['sShippingcostsTaxProportional'])) {
+                /** @var \Shopware\Components\Cart\Struct\Price $shippingTax */
+                foreach ($basket['sShippingcostsTaxProportional'] as $shippingTax) {
+                    $result[number_format($shippingTax->getTaxRate(), 2)] += $shippingTax->getTax();
+                }
+            } else {
+                $basket['sShippingcostsTax'] = number_format((float) $basket['sShippingcostsTax'], 2);
 
-            $result[$basket['sShippingcostsTax']] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
-            if (empty($result[$basket['sShippingcostsTax']])) {
-                unset($result[$basket['sShippingcostsTax']]);
+                $result[$basket['sShippingcostsTax']] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
+                if (empty($result[$basket['sShippingcostsTax']])) {
+                    unset($result[$basket['sShippingcostsTax']]);
+                }
             }
         }
 

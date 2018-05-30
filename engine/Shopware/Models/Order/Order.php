@@ -459,6 +459,13 @@ class Order extends ModelEntity
      */
     private $deviceType = 'desktop';
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_proportional_calculation",type="boolean", nullable=false)
+     */
+    private $isProportionalCalculation = false;
+
     public function __construct()
     {
         $this->details = new ArrayCollection();
@@ -1299,6 +1306,22 @@ class Order extends ModelEntity
     public function getDeviceType()
     {
         return $this->deviceType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProportionalCalculation()
+    {
+        return $this->isProportionalCalculation;
+    }
+
+    /**
+     * @param bool $proportionalCalculation
+     */
+    public function setIsProportionalCalculation($proportionalCalculation)
+    {
+        $this->isProportionalCalculation = $proportionalCalculation;
     }
 
     /**

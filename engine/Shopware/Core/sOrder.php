@@ -569,6 +569,8 @@ class sOrder
             $taxfree = '1';
         }
 
+        $proportionalCalculation = $this->config->get('proportionalTaxCalculation') && !$taxfree;
+
         $partner = $this->getPartnerCode(
             $this->sUserData['additional']['user']['affiliate']
         );
@@ -599,6 +601,7 @@ class sOrder
             'subshopID' => $mainShop->getId(),
             'remote_addr' => (string) $_SERVER['REMOTE_ADDR'],
             'deviceType' => $this->deviceType,
+            'is_proportional_calculation' => $proportionalCalculation,
         ];
 
         $orderParams = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterParams', $orderParams, ['subject' => $this]);

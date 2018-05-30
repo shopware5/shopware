@@ -810,5 +810,14 @@
         <service id="shopware.components.privacy.privacy_service" class="Shopware\Components\Privacy\PrivacyService">
             <argument id="dbal_connection" type="service"/>
         </service>
+
+        <service id="shopware.cart.proportional_tax_calculator"
+                 class="Shopware\Components\Cart\ProportionalTaxCalculator"/>
+
+        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="session"/>
+            <argument type="service" id="shopware.cart.proportional_tax_calculator"/>
+        </service>
     </services>
 </container>

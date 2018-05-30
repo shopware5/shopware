@@ -689,17 +689,4 @@ class VariantConditionWithGraduationTest extends TestCase
 
         return $groups;
     }
-
-    /**
-     * Sets the config value and refresh the shop.
-     *
-     * @param $name
-     * @param $value
-     */
-    private function setConfig($name, $value)
-    {
-        Shopware()->Container()->get('config_writer')->save($name, $value);
-        Shopware()->Container()->get('cache')->clean();
-        Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
-    }
 }
