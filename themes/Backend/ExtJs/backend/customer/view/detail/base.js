@@ -436,7 +436,6 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                     labelStyle: 'margin-top: 0',
                     name: 'lockedUntil',
                     labelWidth: 155,
-                    disabled: disabled,
                     renderer: function (val) {
                         if (!val) {
                             return '';
