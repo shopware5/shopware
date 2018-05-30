@@ -388,9 +388,9 @@
             var me = this,
                 opts = me.opts;
 
-            me.$filterForm.removeAttr('style');
-            me.$filterFacetContainer.removeAttr('style');
-            me.$filterActionButtonBottom.removeAttr('style');
+            me.$filterForm.prop('style', '');
+            me.$filterFacetContainer.prop('style', '');
+            me.$filterActionButtonBottom.prop('style', '');
 
             me.disableActiveFilterContainer(false);
 
@@ -1257,7 +1257,7 @@
             if (count <= 0) {
                 this.$applyFilterBtn.attr('disabled', 'disabled');
             } else {
-                this.$applyFilterBtn.removeAttr('disabled');
+                this.$applyFilterBtn.prop('disabled', false);
             }
 
             $.publish('plugin/swListingActions/onUpdateFilterButton', [this, count]);
@@ -1393,7 +1393,7 @@
 
             if (param === 'rating') {
                 $input = this.$filterForm.find('.filter--rating .is--active input[name="rating"]');
-                $input.removeAttr('checked').trigger('change');
+                $input.prop('checked', false).trigger('change');
             } else {
                 $input = this.$filterForm.find('[name="' + this.escapeDoubleQuotes(param) + '"]');
                 if ($input.is('[data-range-input]')) {
@@ -1402,7 +1402,7 @@
                 } else if ($input.is('[data-datepicker="true"]') || $input.is('[data-date-range-input]')) {
                     $input.trigger('clear');
                 } else {
-                    $input.removeAttr('checked').trigger('change');
+                    $input.prop('checked', false).trigger('change');
                 }
             }
 

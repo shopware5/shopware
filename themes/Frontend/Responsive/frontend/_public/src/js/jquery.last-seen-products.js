@@ -282,7 +282,7 @@
                 opts = me.opts,
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
-                products = productsJson ? $.parseJSON(productsJson) : [],
+                products = productsJson ? JSON.parse(productsJson) : [],
                 linkDetailsQuery = '',
                 len = products.length,
                 i = 0,
