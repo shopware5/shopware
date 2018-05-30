@@ -42,6 +42,12 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
     {/block}
+
+    {block name="frontend_index_header_hreflangs"}
+        {foreach from=$sHrefLinks item=hrefLink}
+            <link rel="alternate" hreflang="{$hrefLink->getLocale()}" href="{$hrefLink->getLink()}" />
+        {/foreach}
+    {/block}
 {/block}
 
 {* Set favicons and touch icons for all different sizes *}
