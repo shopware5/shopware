@@ -156,7 +156,21 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $data = $this->Request()->getParams();
         if ($this->Request()->has('id')) {
+            /** @var Article $article */
             $article = $this->getRepository()->find((int) $this->Request()->getParam('id'));
+            // Check whether the article has been modified in the meantime
+            if ($article->getChanged() != new \DateTime($data['changed'])) {
+                $namespace = Shopware()->Snippets()->getNamespace('backend/article/controller/main');
+
+                $this->View()->assign([
+                    'success' => false,
+                    'overwriteAble' => true,
+                    'data' => $this->getArticle($article->getId()),
+                    'message' => $namespace->get('article_has_been_changed', 'The article has been changed in the meantime. To prevent overwriting these changes, saving the article was aborted. Please close the article and re-open it.')
+                ]);
+
+                return;
+            }
         } else {
             $article = new Article();
         }
@@ -3593,7 +3607,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $data['propertyGroup'] = null;
         }
 
-        $data['changed'] = new \DateTime();
+        // The 'changed' value (time of last change of the dataset) gets automatically updated in the doctrine model
+        unset($data['changed']);
 
         return $data;
     }

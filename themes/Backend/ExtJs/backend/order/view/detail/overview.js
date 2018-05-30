@@ -112,7 +112,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             customerEmail: '{s name=overview/details/customer_email}E-Mail{/s}',
             referer: '{s name=overview/details/referer}Referer{/s}',
             deviceType: '{s name=overview/details/device_type}Device type{/s}',
-            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}'
+            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}',
+            changed: '{s name=overview/details/changed}Last changed{/s}'
         },
         customerDeleted: '{s name=overview/details/customer_deleted_text}Caution: The assigned customer has been deleted.{/s}'
     },
@@ -632,7 +633,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         return [
             { name: 'referer', fieldLabel: me.snippets.details.referer},
             { name: 'remoteAddressConverted', fieldLabel: me.snippets.details.remoteAddress},
-            { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType}
+            { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType},
+            { name: 'changed', fieldLabel: me.snippets.details.changed}
         ];
     },
 
@@ -763,6 +765,10 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                 store: me.paymentStatusStore,
                 displayField: 'description',
                 valueField: 'id'
+            },
+            {
+                xtype: 'hiddenfield',
+                name: 'changed'
             }
         ];
     },

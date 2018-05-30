@@ -295,6 +295,20 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $params = $this->Request()->getParams();
 
+        // Check whether the customer has been modified in the meantime
+        if ($customer->getChanged() != new \DateTime($params['changed'])) {
+            $namespace = Shopware()->Snippets()->getNamespace('backend/customer/controller/main');
+
+            $this->View()->assign([
+                'success' => false,
+                'data' => $this->getCustomer($customer->getId()),
+                'overwriteAble' => true,
+                'message' => $namespace->get('customer_has_been_changed', 'The customer has been changed in the meantime. To prevent overwriting these changes, saving the customer was aborted. Please close the customer and re-open it.'),
+            ]);
+
+            return;
+        }
+
         if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
             $paymentData = new PaymentData();
             $customer->addPaymentData($paymentData);

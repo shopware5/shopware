@@ -310,6 +310,37 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     }
 
     /**
+     * Tests whether a customer cannot be overwritten by a save request that bases on outdated data. (The customer in the
+     * database is newer than that one the request body is based on.)
+     */
+    public function testSaveCustomerOverwriteProtection()
+    {
+        // Prepare data for the test
+        $customer = $this->createDummyCustomer();
+
+        // Prepare post data for request
+        $postData = [
+            'id' => $customer->getId(),
+            'changed' => $customer->getChanged()->format('c'),
+        ];
+
+        // Try to change the entity with the correct timestamp. This should work
+        $this->Request()
+            ->setMethod('POST')
+            ->setPost($postData);
+        $this->dispatch('backend/Customer/save');
+        self::assertTrue($this->View()->success);
+
+        // Now use an outdated timestamp. The controller should detect this and fail.
+        $postData['changed'] = '2008-08-07 18:11:31';
+        $this->Request()
+            ->setMethod('POST')
+            ->setPost($postData);
+        $this->dispatch('backend/Customer/save');
+        self::assertFalse($this->View()->success);
+    }
+
+    /**
      * SW-6667 Tests if the customer has an id to check if lazy loading was fetching the data
      */
     public function testCustomerId()

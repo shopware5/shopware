@@ -86,7 +86,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             errorMessage: '{s name=article_saved/error_message}An error has occurred while saving the article:{/s}',
             errorTitle: '{s name=article_saved/error_title}Error{/s}',
             removeMessage: '{s name=article_removed/message}Article has been removed{/s}'
-        }
+        },
+        overwriteArticle: {
+            title: '{s name=overwriteArticle/title}Overwrite most recent changes{/s}',
+            message: '{s name=overwriteArticle/message}Do you really want to overwrite the latest changes?{/s}',
+        },
     },
 
     /**
@@ -311,6 +315,15 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 priceStore.filter(lastFilter);
                 if (options !== Ext.undefined && options !== null && Ext.isFunction(options.callback)) {
                     options.callback(null, false);
+                }
+
+                if (rawData.overwriteAble) {
+                    Ext.MessageBox.confirm(me.snippets.overwriteArticle.title, me.snippets.overwriteArticle.message, function (response) {
+                        if (response === 'yes') {
+                            record.set('changed', rawData.data[0].changed);
+                            me.onSaveArticle(win, article, options);
+                        }
+                    });
                 }
             }
         });
