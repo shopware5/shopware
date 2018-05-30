@@ -57,11 +57,12 @@ In case you wish to contribute to Shopware, fork the `5.5` branch rather than cl
 
 2.) Set the correct directory permissions:
 
-    chmod -R 755 var
-    chmod -R 755 web
+    chmod -R 755 custom/plugins
+    chmod -R 755 engine/Shopware/Plugins/Community
     chmod -R 755 files
     chmod -R 755 media
-    chmod -R 755 engine/Shopware/Plugins/Community
+    chmod -R 755 var
+    chmod -R 755 web
 
 Depending on your server configuration, it might be necessary to set whole write permissions (777) to the files and folders above.
 You can also start testing with lower permissions due to security reasons (644 for example) as long as your php process can write to those files.
