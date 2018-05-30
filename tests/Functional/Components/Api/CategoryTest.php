@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Category;
+use Shopware\Components\Api\Resource\Resource;
 
 /**
  * @category  Shopware
@@ -106,18 +107,6 @@ class CategoryTest extends TestCase
         $this->assertGreaterThan(0, $category['id']);
     }
 
-//    /**
-//     * @depends testCreateShouldBeSuccessful
-//     */
-//    public function testGetOneShouldBeAbleToReturnObject($id)
-//    {
-//        $this->resource->setResultMode(1);
-//        $category = $this->resource->getOne($id);
-//
-//        $this->assertInstanceOf('\Shopware\Models\Category\Category', $category);
-//        $this->assertGreaterThan(0, $category->getId());
-//    }
-
     /**
      * @depends testCreateShouldBeSuccessful
      */
@@ -131,23 +120,6 @@ class CategoryTest extends TestCase
         $this->assertGreaterThanOrEqual(1, $result['total']);
         $this->assertGreaterThanOrEqual(1, $result['data']);
     }
-
-//    /**
-//     * @depends testCreateShouldBeSuccessful
-//     */
-//    public function testGetListShouldBeAbleToReturnObjects()
-//    {
-//        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
-//        $result = $this->resource->getList();
-//
-//        $this->assertArrayHasKey('data', $result);
-//        $this->assertArrayHasKey('total', $result);
-//
-//        $this->assertGreaterThanOrEqual(1, $result['total']);
-//        $this->assertGreaterThanOrEqual(1, $result['data']);
-//
-//        $this->assertInstanceOf('\Shopware\Models\Category\Category', $result['data'][0]);
-//    }
 
     /**
      * @depends testCreateShouldBeSuccessful
@@ -241,5 +213,90 @@ class CategoryTest extends TestCase
         $this->resource->flush();
 
         $this->assertSame($category->getId(), $secondCategory->getId());
+    }
+
+    public function testCreateCategoryWithTranslation()
+    {
+        $categoryData = [
+            'name' => 'German',
+            'parent' => 3,
+            'translations' => [
+                2 => [
+                    'shopId' => 2,
+                    'description' => 'Englisch',
+                    '__attribute_attribute1' => 'Attr1'
+                ]
+            ]
+        ];
+        $category = $this->resource->create($categoryData);
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+
+        $categoryResult = $this->resource->getOne($category->getId());
+
+        if (isset($categoryData['translations'])) {
+            $this->assertEquals($categoryData['translations'], $categoryResult['translations']);
+        }
+
+        $this->assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId()
+        ]));
+
+        $this->resource->delete($category->getId());
+
+        $this->assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId()
+        ]));
+    }
+
+    public function testCreateCategoryWithTranslationWithUpdate()
+    {
+        $categoryData = [
+            'name' => 'German',
+            'parent' => 3,
+            'translations' => [
+                2 => [
+                    'shopId' => 2,
+                    'description' => 'Englisch',
+                    '__attribute_attribute1' => 'Attr1'
+                ]
+            ]
+        ];
+        $category = $this->resource->create($categoryData);
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+
+        $categoryResult = $this->resource->getOne($category->getId());
+
+        if (isset($categoryData['translations'])) {
+            $this->assertEquals($categoryData['translations'], $categoryResult['translations']);
+        }
+
+        $this->assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId()
+        ]));
+
+        $categoryData = [
+            'name' => 'German',
+            'parent' => 3,
+            'translations' => [
+                2 => [
+                    'shopId' => 2,
+                    'description' => 'Englisch2',
+                    '__attribute_attribute1' => 'Attr13'
+                ]
+            ]
+        ];
+        $category = $this->resource->update($category->getId(), $categoryData);
+
+        $categoryResult = $this->resource->getOne($category->getId());
+
+        if (isset($categoryData['translations'])) {
+            $this->assertEquals($categoryData['translations'], $categoryResult['translations']);
+        }
+
+        $this->resource->delete($category->getId());
+
+        $this->assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId()
+        ]));
     }
 }
