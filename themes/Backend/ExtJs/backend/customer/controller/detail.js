@@ -447,7 +447,6 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 }
 
                 Shopware.Notification.createGrowlMessage(me.snippets.unlock.successTitle, me.snippets.unlock.successText, me.snippets.growlMessage);
-                displayField.setDisabled(true);
                 displayField.setValue('');
                 button.setDisabled(true);
             }
