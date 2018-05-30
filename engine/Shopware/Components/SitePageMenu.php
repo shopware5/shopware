@@ -131,17 +131,6 @@ class SitePageMenu
                 $menu[$key] = [];
             }
 
-            $id = (int) $site['id'];
-            if (!empty($site['link']) && strpos($site['link'], 'shopware.php') !== false) {
-                $links[$id] = $site['link'];
-            } elseif (empty($site['link'])) {
-                $links[$id] = [
-                    'controller' => 'custom',
-                    'action' => 'index',
-                    'sCustom' => $id,
-                ];
-            }
-
             if ($site['__page_translation']) {
                 $translations = unserialize($site['__page_translation']);
 
@@ -154,6 +143,17 @@ class SitePageMenu
                 }
 
                 unset($site['__page_translation']);
+            }
+
+            $id = (int) $site['id'];
+            if (!empty($site['link']) && strpos($site['link'], 'shopware.php') !== false) {
+                $links[$id] = $site['link'];
+            } elseif (empty($site['link'])) {
+                $links[$id] = [
+                    'controller' => 'custom',
+                    'action' => 'index',
+                    'sCustom' => $id,
+                ];
             }
 
             $menu[$key][] = $site;
