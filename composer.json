@@ -35,6 +35,7 @@
         "ext-zlib": "*",
         "lib-libxml": "*",
         "symfony/http-kernel": "2.8.41",
+        "symfony/http-foundation": "2.8.41",
         "symfony/config": "2.8.41",
         "symfony/class-loader": "2.8.41",
         "symfony/dependency-injection": "2.8.41",
