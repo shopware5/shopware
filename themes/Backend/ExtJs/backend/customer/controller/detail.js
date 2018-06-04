@@ -446,6 +446,9 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     return;
                 }
 
+                record.set('lockedUntil', null);
+                record.set('failedLogins', 0);
+
                 Shopware.Notification.createGrowlMessage(me.snippets.unlock.successTitle, me.snippets.unlock.successText, me.snippets.growlMessage);
                 displayField.setValue('');
                 button.setDisabled(true);

@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name: 'newPassword', type: 'string' },
         { name: 'amount', type: 'float' },
         { name: 'orderCount', type: 'int' },
+        { name: 'failedLogins', type: 'int' },
         { name: 'canceledOrderAmount', type: 'float' },
         { name: 'shopName', type: 'string' },
         { name: 'language', type: 'string' },
@@ -68,7 +69,7 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
             type: 'date',
             defaultValue: null,
             convert: function (value, record) {
-                if (record.get('serverTime') === null || value === null) {
+                if (record.get('serverTime') === null || value === null || !Ext.isDefined(record.get('serverTime'))) {
                     return value;
                 }
 
