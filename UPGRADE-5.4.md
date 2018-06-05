@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `frontend_account_menu_link_addresses_notInHeader`
   * `frontend_account_menu_link_overview_SltCookie`
   * `frontend_account_menu_link_overview_link`
+* Added check to smarty block `frontend_index_footer_column_newsletter_privacy` to avoid double confirmation of privacy settings
 * Added Double-Opt-In for customer registration
   * Added new notify event, which will be thrown when awaiting Double-Opt-In confirmation: `Shopware_Modules_Admin_SaveRegister_Successful`
   * Added two new filter events:
