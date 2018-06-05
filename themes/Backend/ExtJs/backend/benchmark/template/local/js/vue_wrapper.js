@@ -36,6 +36,10 @@
                 },
             },
 
+            mounted: function() {
+                document.querySelector('.loading-wrapper').style.display = 'none';
+            },
+
             methods: {
                 onChangeLanguage: function () {
                     var lastLocale = this.$i18n.locale;

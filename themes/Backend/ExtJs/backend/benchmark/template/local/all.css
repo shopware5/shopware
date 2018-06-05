@@ -1,13 +1,14 @@
-#loading-wrapper {
+.loading-wrapper {
   background-color: #213448;
   position: fixed;
-  width: 60%;
-  height: 600px;
-  left: 20%;
-  top: 20%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
   border-radius: 3px;
+  z-index: 10000;
 }
-.oval-one {
+.loading-wrapper .oval-one {
   position: absolute;
   left: -180px;
   bottom: -100px;
@@ -16,7 +17,7 @@
   height: 430px;
   width: 430px;
 }
-.oval-two {
+.loading-wrapper .oval-two {
   position: absolute;
   right: 50px;
   top: -130px;
@@ -25,52 +26,25 @@
   height: 230px;
   width: 230px;
 }
-#loading-text {
+.loading-wrapper .loading-text {
   display: block;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: calc(45% - 11px);
+  left: calc(50% - 48px);
   color: #798EA3;
   width: 100px;
   height: 30px;
-  margin: -7px 0 0 -45px;
   text-align: center;
-  font-family: 'Asap';
   font-weight: 600;
   font-size: 20px;
 }
-#loading-content {
+.loading-wrapper .loading-content {
   display: block;
   position: relative;
-  left: 50%;
-  top: 50%;
+  left: calc(50% - 85px);
+  top: calc(45% - 85px);
   width: 170px;
   height: 170px;
-  margin: -85px 0 0 -85px;
-  border: 5px solid #F00;
-}
-#loading-content:hover {
-  cursor: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/9632/happy.png"), auto;
-}
-#loading-content:after {
-  content: "";
-  position: absolute;
-  border: 5px solid #0F0;
-  left: 15px;
-  right: 15px;
-  top: 15px;
-  bottom: 15px;
-}
-#loading-content:before {
-  content: "";
-  position: absolute;
-  border: 5px solid #00F;
-  left: 5px;
-  right: 5px;
-  top: 5px;
-  bottom: 5px;
-}
-#loading-content {
   border: 5px solid transparent;
   border-top-color: #6A63FC;
   border-bottom-color: #6A63FC;
@@ -80,7 +54,13 @@
   -o-animation: loader 2s linear infinite;
   animation: loader 2s linear infinite;
 }
-#loading-content:before {
+.loading-wrapper .loading-content::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
   border: 5px solid transparent;
   border-top-color: #34DCDD;
   border-bottom-color: #34DCDD;
@@ -90,7 +70,13 @@
   -o-animation: loader 2s linear infinite;
   animation: loader 3s linear infinite;
 }
-#loading-content:after {
+.loading-wrapper .loading-content::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 15px;
+  bottom: 15px;
   border: 5px solid transparent;
   border-top-color: #189EFF;
   border-bottom-color: #189EFF;
