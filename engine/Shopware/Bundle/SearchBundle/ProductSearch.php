@@ -92,14 +92,12 @@ class ProductSearch implements ProductSearchInterface
         foreach ($searchProducts as $searchProduct) {
             $number = $searchProduct->getNumber();
 
-            $product = $products[$number];
-
-            if (!$product) {
+            if(!isset($products[$number])) {
                 continue;
             }
 
             foreach ($searchProduct->getAttributes() as $key => $attribute) {
-                $product->addAttribute($key, $attribute);
+                $products[$number]->addAttribute($key, $attribute);
             }
         }
 
