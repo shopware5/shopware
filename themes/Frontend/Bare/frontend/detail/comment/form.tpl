@@ -92,7 +92,7 @@
 
         {* Data protection information *}
         {block name='frontend_detail_comment_input_privacy'}
-            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}}
+            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
                 {include file="frontend/_includes/privacy.tpl"}
             {/if}
         {/block}
