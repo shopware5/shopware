@@ -4,6 +4,7 @@
 
 {block name="benchmark_index_body"}
     <body id="swag-start">
+        {include file="backend/benchmark/template/local/include/loading_indicator.tpl"}
         {include file="backend/benchmark/template/local/include/language_switch.tpl"}
         <div class="wrapper">
             <div class="swag-onbording">
