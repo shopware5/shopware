@@ -92,6 +92,7 @@ Ext.define('Shopware.apps.Order.model.Order', {
         { name : 'partnerId', type: 'string' },
         { name : 'invoiceAmount', type: 'float' },
         { name : 'invoiceShipping', type: 'float' },
+        { name : 'invoiceShippingTaxRate', type: 'float' },
         { name : 'orderTime', type: 'date' },
         {
             name : 'invoiceShippingEuro',

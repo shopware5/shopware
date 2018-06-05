@@ -328,6 +328,13 @@ class Order extends ModelEntity
     private $invoiceShippingNet;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="invoice_shipping_tax_rate", type="decimal", nullable=true)
+     */
+    private $invoiceShippingTaxRate;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="ordertime", type="datetime", nullable=false)
@@ -610,6 +617,22 @@ class Order extends ModelEntity
     public function getInvoiceShippingNet()
     {
         return $this->invoiceShippingNet;
+    }
+
+    /**
+     * @return float
+     */
+    public function getInvoiceShippingTaxRate()
+    {
+        return $this->invoiceShippingTaxRate;
+    }
+
+    /**
+     * @param float $invoiceShippingTaxRate
+     */
+    public function setInvoiceShippingTaxRate($invoiceShippingTaxRate)
+    {
+        $this->invoiceShippingTaxRate = $invoiceShippingTaxRate;
     }
 
     /**

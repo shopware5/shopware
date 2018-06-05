@@ -283,12 +283,13 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processOrder()
     {
-        if ($this->_order['invoice_shipping_net'] != 0) {
-            // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
-            $approximateTaxRate = $this->_order['invoice_shipping'] / $this->_order['invoice_shipping_net'] * 100 - 100;
-        } else {
-            $approximateTaxRate = 0;
-        }
+        if ($this->_order['invoice_shipping_tax_rate'] === null) {
+            if ($this->_order['invoice_shipping_net'] != 0) {
+                // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
+                $approximateTaxRate = $this->_order['invoice_shipping'] / $this->_order['invoice_shipping_net'] * 100 - 100;
+            } else {
+                $approximateTaxRate = 0;
+            }
 
         $shippingName = Shopware()->Snippets()->getNamespace('documents/index')->get('ShippingCosts', 'Shipping costs', true);
 
@@ -300,7 +301,15 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_user['customergroupID']
         );
 
-        $taxShipping = (float) $taxShipping;
+            $taxShipping = (float) $taxShipping;
+        } else {
+            if ($this->_order['invoice_shipping_net'] != 0) {
+                $taxShipping = $this->_order['invoice_shipping_tax_rate'];
+            } else {
+                $taxShipping = 0;
+            }
+        }
+
         $this->_shippingCosts = $this->_order['invoice_shipping'];
 
         if ($this->_shippingCostsAsPosition == true && !empty($this->_shippingCosts)) {
