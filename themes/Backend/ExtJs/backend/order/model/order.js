@@ -131,6 +131,10 @@ Ext.define('Shopware.apps.Order.model.Order', {
                     return value;
                 }
             }
+        },
+        {
+            name: 'isProportionalCalculation',
+            type: 'boolean'
         }
     ],
 

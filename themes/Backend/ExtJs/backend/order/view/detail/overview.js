@@ -753,6 +753,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                 decimalPrecision: 2,
                 submitLocaleSeparator: false,
                 name: 'invoiceShippingTaxRate',
+                disabled: me.record.get('isProportionalCalculation'),
                 fieldLabel: me.snippets.edit.shippingTaxRate
             },
             {

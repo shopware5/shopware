@@ -849,6 +849,20 @@ SQL;
                 $voucherPrices = $taxCalculator->calculate($voucherDetails['value'], $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
             }
 
+            $voucherPrices = $this->eventManager->filter(
+                'Shopware_Modules_Basket_AddVoucher_VoucherPrices',
+                $voucherPrices,
+                [
+                    'subject' => $this,
+                    'voucher' => $voucherDetails,
+                    'vouchername' => $voucherName,
+                    'shippingfree' => $freeShipping,
+                    'tax' => $tax,
+                    'prices' => $prices,
+                    'hasMultipleTaxes' => $hasMultipleTaxes
+                ]
+            );
+
             foreach ($voucherPrices as $voucherPrice) {
                 $sql = '
                     INSERT INTO s_order_basket (
