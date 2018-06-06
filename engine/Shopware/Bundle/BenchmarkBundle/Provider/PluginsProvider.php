@@ -26,6 +26,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PluginsProvider implements BenchmarkProviderInterface
 {
@@ -44,13 +45,14 @@ class PluginsProvider implements BenchmarkProviderInterface
         return 'plugins';
     }
 
-    public function getBenchmarkData()
+    /**
+     * {@inheritdoc}
+     */
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         return [
             'total' => $this->getTotalPlugins(),
-            'updateable' => $this->getUpdateablePlugins(),
-            'shopware' => $this->getShopwarePlugins(),
-            'technical' => $this->getTechnicalPluginNames(),
+            'shopwarePlugins' => $this->getShopwarePlugins(),
         ];
     }
 
@@ -70,52 +72,14 @@ class PluginsProvider implements BenchmarkProviderInterface
     /**
      * @return int
      */
-    private function getUpdateablePlugins()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        $pluginVersions = $queryBuilder->select('plugins.version as currentVersion, plugins.update_version as updateVersion')
-            ->from('s_core_plugins', 'plugins')
-            ->where('plugins.update_version IS NOT NULL')
-            ->execute()
-            ->fetchAll();
-
-        // Check if the updateVersion is actually greater than the currentVersion
-        foreach ($pluginVersions as $key => $pluginVersion) {
-            if (version_compare($pluginVersion['updateVersion'], $pluginVersion['currentVersion'], '>')) {
-                continue;
-            }
-
-            unset($pluginVersions[$key]);
-        }
-
-        return count($pluginVersions);
-    }
-
-    /**
-     * @return int
-     */
     private function getShopwarePlugins()
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return (int) $queryBuilder->select('COUNT(plugins.id)')
+        return $queryBuilder->select('plugins.name, plugins.active')
             ->from('s_core_plugins', 'plugins')
             ->where("plugins.author = 'shopware AG'")
             ->execute()
-            ->fetchColumn();
-    }
-
-    /**
-     * @return array
-     */
-    private function getTechnicalPluginNames()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $queryBuilder->select('plugins.name as technicalName')
-            ->from('s_core_plugins', 'plugins')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->fetchAll();
     }
 }

@@ -28,6 +28,7 @@ use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\StatisticsClientInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class StatisticsService
@@ -48,18 +49,26 @@ class StatisticsService
     private $benchmarkRepository;
 
     /**
+     * @var ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
      * @param BenchmarkCollector        $benchmarkCollector
      * @param StatisticsClientInterface $statisticsClient
      * @param BenchmarkRepository       $benchmarkRepository
+     * @param ContextServiceInterface   $contextService
      */
     public function __construct(
         BenchmarkCollector $benchmarkCollector,
         StatisticsClientInterface $statisticsClient,
-        BenchmarkRepository $benchmarkRepository)
-    {
+        BenchmarkRepository $benchmarkRepository,
+        ContextServiceInterface $contextService
+    ) {
         $this->benchmarkCollector = $benchmarkCollector;
         $this->statisticsClient = $statisticsClient;
         $this->benchmarkRepository = $benchmarkRepository;
+        $this->contextService = $contextService;
     }
 
     /**
@@ -67,9 +76,9 @@ class StatisticsService
      */
     public function transmit()
     {
-        $this->benchmarkCollector->get();
+        $benchmarkData = $this->benchmarkCollector->get($this->contextService->createShopContext(1));
 
-        $request = new StatisticsRequest($this->benchmarkCollector->get());
+        $request = new StatisticsRequest($benchmarkData);
 
         /** @var StatisticsResponse $statisticsResponse */
         $statisticsResponse = $this->statisticsClient->sendStatistics($request);

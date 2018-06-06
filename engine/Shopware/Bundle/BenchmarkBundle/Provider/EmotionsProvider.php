@@ -27,6 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class EmotionsProvider implements BenchmarkProviderInterface
 {
@@ -34,6 +35,16 @@ class EmotionsProvider implements BenchmarkProviderInterface
      * @var Connection
      */
     private $dbalConnection;
+
+    /**
+     * @var ShopContextInterface
+     */
+    private $shopContext;
+
+    /**
+     * @var array
+     */
+    private $emotionIds = [];
 
     public function __construct(Connection $dbalConnection)
     {
@@ -46,10 +57,12 @@ class EmotionsProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
+        $this->shopContext = $shopContext;
+
         return [
             'total' => $this->getTotalEmotions(),
             'landingPages' => $this->getLandingPageEmotions(),
@@ -76,7 +89,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->getBasicEmotionCountQueryBuilder();
 
-        return (int) $queryBuilder->where('emotion.is_landingpage = 1')
+        return (int) $queryBuilder->andWhere('emotion.is_landingpage = 1')
             ->execute()
             ->fetchColumn();
     }
@@ -88,7 +101,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->getBasicEmotionCountQueryBuilder();
 
-        return (int) $queryBuilder->where('emotion.valid_from IS NOT NULL OR emotion.valid_to IS NOT NULL')
+        return (int) $queryBuilder->andWhere('emotion.valid_from IS NOT NULL OR emotion.valid_to IS NOT NULL')
             ->execute()
             ->fetchColumn();
     }
@@ -100,10 +113,14 @@ class EmotionsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
+        $emotionIds = $this->getEmotionIds();
+
         return $queryBuilder->select('COUNT(element.id) as elementCount, element.x_type as elementName')
             ->from('s_emotion_element', 'elementRelation')
             ->innerJoin('elementRelation', 's_library_component', 'element', 'element.id = elementRelation.componentID')
+            ->where('elementRelation.emotionID IN (:emotionIds)')
             ->groupBy('elementRelation.componentID')
+            ->setParameter(':emotionIds', $emotionIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll();
     }
@@ -114,8 +131,12 @@ class EmotionsProvider implements BenchmarkProviderInterface
     private function getViewportUsages()
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
+        $emotionIds = $this->getEmotionIds();
+
         $devicesUsed = $queryBuilder->select("GROUP_CONCAT(emotion.device SEPARATOR ',') as devicesUsed")
             ->from('s_emotion', 'emotion')
+            ->where('emotion.id IN (:emotionIds)')
+            ->setParameter(':emotionIds', $emotionIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchColumn();
 
@@ -141,7 +162,49 @@ class EmotionsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
+        $emotionIds = $this->getEmotionIds();
+
         return $queryBuilder->select('COUNT(emotion.id)')
-            ->from('s_emotion', 'emotion');
+            ->from('s_emotion', 'emotion')
+            ->where('emotion.id IN (:emotionId)')
+            ->setParameter(':emotionId', $emotionIds, Connection::PARAM_INT_ARRAY);
+    }
+
+    /**
+     * @return array
+     */
+    private function getEmotionIds()
+    {
+        $shopId = $this->shopContext->getShop()->getId();
+        if (array_key_exists($shopId, $this->emotionIds)) {
+            return $this->emotionIds[$shopId];
+        }
+
+        $emoCategoriesQb = $this->dbalConnection->createQueryBuilder();
+        $emoShopsQb = $this->dbalConnection->createQueryBuilder();
+
+        $categoryId = $this->shopContext->getShop()->getCategory()->getId();
+
+        $emoCategoryIds = $emoCategoriesQb->select('emotion.id')
+            ->from('s_emotion', 'emotion')
+            ->innerJoin('emotion', 's_emotion_categories', 'emoCategories', 'emotion.id = emoCategories.emotion_id')
+            ->innerJoin('emoCategories', 's_categories', 'category', 'category.id = emoCategories.category_id')
+            ->where('emotion.is_landingpage = 0 AND (category.path LIKE :categoryIdPath OR category.id = :categoryId)')
+            ->setParameter(':categoryId', $categoryId)
+            ->setParameter(':categoryIdPath', '%|' . $categoryId . '|%')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $emoShopIds = $emoShopsQb->select('emotion.id')
+            ->from('s_emotion', 'emotion')
+            ->innerJoin('emotion', 's_emotion_shops', 'emoShops', 'emotion.id = emoShops.emotion_id')
+            ->where('emotion.is_landingpage = 1 AND emoShops.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopContext->getShop()->getId())
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $this->emotionIds[$shopId] = array_merge($emoShopIds, $emoCategoryIds);
+
+        return $this->emotionIds[$shopId];
     }
 }

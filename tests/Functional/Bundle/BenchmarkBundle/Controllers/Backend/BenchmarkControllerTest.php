@@ -50,8 +50,8 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
             'lastSent' => '1990-01-01 00:00:00',
             'lastReceived' => '1990-01-01 00:00:00',
             'lastOrderNumber' => '20000',
-            'ordersBatchSize' => 1000,
-            'industry' => 1
+            'batchSize' => 1000,
+            'industry' => 1,
         ], $settings);
 
         $this->assertInternalType(\PHPUnit_Framework_Constraint_IsType::TYPE_INT, $settings['industry']);
@@ -67,11 +67,11 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
 
-        $controller->Request()->setParam('ordersBatchSize', 5000);
+        $controller->Request()->setParam('batchSize', 5000);
 
         $controller->saveSettingsAction();
 
-        $this->assertEquals(5000, $this->loadSettingColumn('config.orders_batch_size'));
+        $this->assertEquals(5000, $this->loadSettingColumn('config.batch_size'));
     }
 
     /**

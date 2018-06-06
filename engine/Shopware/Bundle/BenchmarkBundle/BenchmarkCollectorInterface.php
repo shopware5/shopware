@@ -24,10 +24,14 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 interface BenchmarkCollectorInterface
 {
     /**
+     * @param ShopContextInterface $shopContext
+     *
      * @return string - Must be a JSON encoded string
      */
-    public function get();
+    public function get(ShopContextInterface $shopContext);
 }

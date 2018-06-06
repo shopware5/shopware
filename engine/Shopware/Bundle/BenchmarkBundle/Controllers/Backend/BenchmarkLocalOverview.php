@@ -44,10 +44,6 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
 
         $this->View()->loadTemplate(sprintf('backend/benchmark/template/local/%s.tpl', $template));
 
-        if ($template === 'statistics') {
-            $this->View()->assign('benchmarkData', $this->get('shopware.benchmark_bundle.local_collector')->get());
-        }
-
         $this->View()->assign('benchmarkTranslations', json_encode(
             $this->get('shopware.benchmark_bundle.components.translation')->getAll(),
             JSON_HEX_APOS
@@ -90,6 +86,6 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
             return 'start';
         }
 
-        return 'statistics';
+        return 'waiting';
     }
 }

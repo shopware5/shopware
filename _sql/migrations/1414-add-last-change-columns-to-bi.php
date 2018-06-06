@@ -21,28 +21,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
-
-class NumberHydrator implements LocalHydratorInterface
+class Migrations_Migration1414 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function up($modus)
     {
-        return 'numbers';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hydrate(array $data)
-    {
-        return [
-            'averagePayments' => $data['payments']['activePayments'],
-            'averageShippingCosts' => number_format($data['analytics']['averageShippingCostsPerOrder'], 2, ',', ''),
-            'shippingReadyProducts' => $data['products']['shippingReadyProducts'],
-        ];
+        // Add new 'last id' columns, e.g. for products and customers
+        // Rename "orders_batch_size" to "batch_size" so it works with all entities
+        $sql = <<<SQL
+            ALTER TABLE `s_benchmark_config`
+                ADD `last_customer_id` int(11) NOT NULL AFTER `last_order_id`,
+                ADD `last_product_id` int(11) NOT NULL AFTER `last_customer_id`,
+                CHANGE `orders_batch_size` `batch_size` int(11) NOT NULL AFTER `last_product_id`;
+SQL;
+        $this->addSql($sql);
     }
 }

@@ -19,16 +19,10 @@
             <argument type="tagged" tag="shopware.benchmark_provider" />
         </service>
 
-        <service id="shopware.benchmark_bundle.local_collector"
-                class="Shopware\Bundle\BenchmarkBundle\BenchmarkLocalCollector">
-            <argument type="tagged" tag="shopware.benchmark_provider" />
-            <argument type="tagged" tag="shopware.benchmark_local_provider" />
-            <argument type="service" id="shopware.benchmark_bundle.local_hydrator" />
-        </service>
-
         <service id="shopware.benchmark_bundle.providers.shop"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\ShopProvider"
                  public="false">
+            <argument type="service" id="dbal_connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
@@ -110,103 +104,10 @@
             <tag name="shopware.benchmark_provider" />
         </service>
 
-        <service id="shopware.benchmark_bundle.providers.orders_graph_provider"
-                 class="\Shopware\Bundle\BenchmarkBundle\Provider\OrdersGraphProvider"
-                 public="false">
-            <argument type="service" id="dbal_connection" />
-            <tag name="shopware.benchmark_local_provider" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.providers.local_visitors"
-                 class="Shopware\Bundle\BenchmarkBundle\Provider\LocalVisitorsProvider"
-                 public="false">
-            <argument type="service" id="dbal_connection"/>
-            <tag name="shopware.benchmark_local_provider" />
-        </service>
-
         <!-- Subscriber -->
         <service id="shopware.benchmark_bundle.controller_subscriber"
                  class="Shopware\Bundle\BenchmarkBundle\DependencyInjection\EventListener\ControllerSubscriber">
             <tag name="shopware.event_subscriber" />
-        </service>
-
-        <!-- Hydrators -->
-        <service id="shopware.benchmark_bundle.local_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\BenchmarkLocalHydrator">
-            <argument type="tagged" tag="shopware.benchmark_local_hydrator" />
-            <argument type="tagged" tag="shopware.benchmark_local_last_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.weekly_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydrator\WeeklyHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.last_weekly_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydrator\LastWeeklyHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_last_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.monthly_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydrator\MonthlyHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.last_monthly_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydrator\LastMonthlyHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_last_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.yearly_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydrator\YearlyHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.last_yearly_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\TimeHydrator\LastYearlyHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_last_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.order_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\OrderHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.customer_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\CustomerHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.devices_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\DevicesHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.number_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\NumberHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.payment_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\PaymentHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
-        </service>
-
-        <service id="shopware.benchmark_bundle.hydrator.shipment_hydrator"
-                class="Shopware\Bundle\BenchmarkBundle\Hydrator\ShipmentHydrator"
-                public="false">
-            <tag name="shopware.benchmark_local_hydrator" />
         </service>
 
         <!-- Services-->
@@ -242,6 +143,7 @@
             <argument id="shopware.benchmark_bundle.collector" type="service" />
             <argument id="shopware.benchmark_bundle.statistics_client" type="service" />
             <argument id="shopware.benchmark_bundle.repository.config" type="service" />
+            <argument id="shopware_storefront.context_service" type="service" />
         </service>
 
         <service id="shopware.benchmark_bundle.benchmark_statistics"

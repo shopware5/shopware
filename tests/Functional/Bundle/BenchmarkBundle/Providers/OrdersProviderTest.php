@@ -29,59 +29,39 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class OrdersProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.orders';
-    const EXPECTED_KEYS_COUNT = 3;
+    const EXPECTED_KEYS_COUNT = 1;
     const EXPECTED_TYPES = [
-        'dateTime' => IsType::TYPE_STRING,
-        'numbers' => [
-            'total' => IsType::TYPE_INT,
-            'revenue' => IsType::TYPE_ARRAY,
-        ],
         'list' => IsType::TYPE_ARRAY,
     ];
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalOrders()
-    {
-        $this->installDemoData('orders_basic');
-
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(8, $resultData['numbers']['total']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
-    public function testGetOrdersRevenue()
-    {
-        $this->installDemoData('orders_basic');
-
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(1950.00, $resultData['numbers']['revenue']['totalGross']);
-        $this->assertSame(520.00, $resultData['numbers']['revenue']['totalNet']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
     public function testGetOrdersList()
     {
+        $this->resetConfig();
         $this->installDemoData('orders_detailed');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertArraySubset([
             'orderId' => '1',
-            'datetime' => '2012-08-30 10:15:00',
+            'currency' => 'EUR',
+            'shippingCosts' => '15',
+            'customer' => [
+                'registered' => 1,
+                'birthYear' => 1993,
+                'birthMonth' => 1,
+                'gender' => 'male',
+                'registerDate' => '2011-11-23',
+                'hasNewsletter' => 0,
+                'billing' => [
+                    'country' => 'DE',
+                ],
+                'shipping' => [
+                    'country' => 'GR',
+                ],
+            ],
             'analytics' => [
                 'device' => 'mobile',
                 'referer' => null,
@@ -103,14 +83,12 @@ class OrdersProviderTest extends ProviderTestCase
             ],
             'items' => [
                 [
-                    'ean' => md5('example_ean'),
                     'unitPrice' => 150.00,
                     'totalPrice' => 150.00,
                     'amount' => 1,
                     'packUnit' => '',
                     'purchaseUnit' => '',
                 ], [
-                    'ean' => md5('SW10011'),
                     'unitPrice' => 20.00,
                     'totalPrice' => 80.00,
                     'amount' => 4,
@@ -128,15 +106,13 @@ class OrdersProviderTest extends ProviderTestCase
     {
         $this->installDemoData('orders_detailed');
 
-        $provider = $this->getProvider();
-
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, orders_batch_size=1;');
-        $singleResult = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=1;');
+        $singleResult = $this->getBenchmarkData();
 
         $this->assertCount(1, $singleResult['list']);
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, orders_batch_size=5;');
-        $multipleResults = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=5;');
+        $multipleResults = $this->getBenchmarkData();
 
         $this->assertCount(5, $multipleResults['list']);
     }
@@ -148,10 +124,8 @@ class OrdersProviderTest extends ProviderTestCase
     {
         $this->installDemoData('orders_detailed');
 
-        $provider = $this->getProvider();
-
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, orders_batch_size=1;');
-        $resultData = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(5, $resultData['list'][0]['orderId']);
     }
@@ -163,38 +137,52 @@ class OrdersProviderTest extends ProviderTestCase
     {
         $this->installDemoData('orders_detailed');
 
-        $provider = $this->getProvider();
-
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, orders_batch_size=1;');
-        $firstResult = $provider->getBenchmarkData();
-        $secondResult = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
+        $firstResult = $this->getBenchmarkData();
+        $secondResult = $this->getBenchmarkData();
 
         $this->assertSame(5, $firstResult['list'][0]['orderId']);
         $this->assertSame(6, $secondResult['list'][0]['orderId']);
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, orders_batch_size=2;');
-        $thirdResultSet = $provider->getBenchmarkData();
-        $forthResultSet = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=2;');
+        $thirdResultSet = $this->getBenchmarkData();
+        $forthResultSet = $this->getBenchmarkData();
 
         $this->assertSame(5, $thirdResultSet['list'][0]['orderId']);
         $this->assertSame(6, $thirdResultSet['list'][1]['orderId']);
 
         $this->assertSame(7, $forthResultSet['list'][0]['orderId']);
-        $this->assertSame(8, $forthResultSet['list'][1]['orderId']);
+        // Only seven results possible, no eighth result available
+        $this->assertEmpty($forthResultSet['list'][1]);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetOrdersListDateConfigGetsUpdated()
+    public function testGetOrdersListIdConfigGetsUpdated()
     {
         $this->installDemoData('orders_detailed');
 
-        $provider = $this->getProvider();
-
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, orders_batch_size=1;');
-        $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
+        $this->getBenchmarkData();
 
         $this->assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config'));
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetOrdersListPerShop()
+    {
+        $this->installDemoData('orders_detailed');
+        $provider = $this->getProvider();
+
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=10;');
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertCount(7, $resultData['list']);
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertCount(2, $resultData['list']);
     }
 }

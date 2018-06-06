@@ -29,72 +29,155 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class ProductsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.products';
-    const EXPECTED_KEYS_COUNT = 4;
+    const EXPECTED_KEYS_COUNT = 1;
     const EXPECTED_TYPES = [
-        'total' => IsType::TYPE_INT,
-        'variants' => [
-            'average' => IsType::TYPE_FLOAT,
-            'max' => IsType::TYPE_INT,
-        ],
-        'images' => [
-            'sizes' => IsType::TYPE_ARRAY,
-            'average' => IsType::TYPE_FLOAT,
-            'missing' => IsType::TYPE_INT,
-        ],
-        'shippingReadyProducts' => IsType::TYPE_INT,
+        'list' => IsType::TYPE_ARRAY,
     ];
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetProductsTotal()
+    public function testGetProductListBasic()
+    {
+        $this->installDemoData('products_basic');
+
+        $benchmarkData = $this->getBenchmarkData();
+        $productsList = $benchmarkData['list'];
+
+        $this->assertNotEmpty($productsList);
+
+        $this->assertEquals(0, $productsList[1]['active']);
+        $this->assertEquals(1, $productsList[2]['active']);
+        $this->assertEquals(8, $productsList[3]['instock']);
+        $this->assertEquals(20, $productsList[4]['instockMinimum']);
+        $this->assertEquals(0, $productsList[1]['sale']);
+        $this->assertEquals(1, $productsList[2]['sale']);
+        $this->assertEquals(2, $productsList[2]['minPurchase']);
+        $this->assertEquals(10, $productsList[3]['maxPurchase']);
+        $this->assertEquals(5, $productsList[4]['purchaseSteps']);
+        $this->assertEquals(0, $productsList[0]['shippingFree']);
+        $this->assertEquals(1, $productsList[1]['shippingFree']);
+        $this->assertEquals(10, $productsList[2]['pseudoSales']);
+        $this->assertEquals(0, $productsList[2]['topSeller']);
+        $this->assertEquals(1, $productsList[3]['topSeller']);
+        $this->assertEquals(0, $productsList[0]['notificationEnabled']);
+        $this->assertEquals(1, $productsList[1]['notificationEnabled']);
+        $this->assertEquals(7, $productsList[1]['shippingTime']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetVariants()
+    {
+        $this->installDemoData('products_variants');
+
+        $benchmarkData = $this->getBenchmarkData();
+        $productsList = $benchmarkData['list'];
+
+        $this->assertEquals(25, $productsList[4]['variants'][0]['instock']);
+        $this->assertEquals(30, $productsList[4]['variants'][1]['instock']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetProductProperties()
+    {
+        $this->installDemoData('products_properties');
+
+        $benchmarkData = $this->getBenchmarkData();
+        $productsList = $benchmarkData['list'];
+
+        $this->assertArrayHasKey('Zielgruppe', $productsList[2]['properties']);
+        $this->assertArrayHasKey('Farbe', $productsList[2]['properties']);
+
+        $this->assertCount(2, $productsList[2]['properties']['Zielgruppe']);
+
+        $this->assertTrue(in_array('Kinder', $productsList[2]['properties']['Zielgruppe']));
+        $this->assertTrue(in_array('Frauen', $productsList[2]['properties']['Zielgruppe']));
+
+        $this->assertCount(1, $productsList[2]['properties']['Farbe']);
+        $this->assertArraySubset(['Rot'], $productsList[2]['properties']['Farbe']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetProductImages()
+    {
+        $this->installDemoData('products_images');
+
+        $benchmarkData = $this->getBenchmarkData();
+        $productsList = $benchmarkData['list'];
+
+        $this->assertEquals(12345, $productsList[0]['images'][0]['fileSize']);
+        $this->assertEquals(54321, $productsList[0]['images'][1]['fileSize']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetProductListBasicPerShop()
     {
         $this->installDemoData('products_basic');
 
         $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1));
+        $productsList = $benchmarkData['list'];
 
-        $this->assertSame(5, $resultData['total']);
+        $this->assertCount(5, $productsList);
+
+        $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(2));
+        $productsList = $benchmarkData['list'];
+
+        $this->assertCount(1, $productsList);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetVariantsInformation()
+    public function testGetProductListBasicConsidersBatchSize()
     {
-        $this->installDemoData('products_details');
+        $this->resetConfig();
+        $this->installDemoData('products_basic');
 
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_product_id=4, batch_size=1;');
 
-        $this->assertSame(5, $resultData['variants']['max']);
-        $this->assertSame(3.0, $resultData['variants']['average']);
+        $benchmarkData = $this->getBenchmarkData();
+        $productsList = $benchmarkData['list'];
+
+        $this->assertCount(1, $productsList);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetImageSizes()
+    public function testGetProductListBasicConsidersLastProductId()
     {
-        $this->installDemoData('media_album_settings');
+        $this->resetConfig();
+        $this->installDemoData('products_basic');
 
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_product_id=4, batch_size=1;');
 
-        $this->assertCount(8, $resultData['images']['sizes']);
+        $benchmarkData = $this->getBenchmarkData();
+        $productsList = $benchmarkData['list'];
+
+        $this->assertEquals(15, $productsList[0]['instock']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetProductImageInformation()
+    public function testGetProductListBasicUpdatesLastProductId()
     {
-        $this->installDemoData('products_with_images');
+        $this->resetConfig();
+        $this->installDemoData('products_basic');
 
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_product_id=4, batch_size=1;');
 
-        $this->assertSame(3.0, $resultData['images']['average']);
-        $this->assertSame(2, $resultData['images']['missing']);
+        $this->getBenchmarkData();
+
+        $this->assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_product_id FROM s_benchmark_config'));
     }
 }
