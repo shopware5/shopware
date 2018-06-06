@@ -299,6 +299,9 @@ Ext.define('Shopware.form.plugin.Translation',
                         config.emptyText = field.store.findRecord('id', config.emptyText).get('name');
                     }
                 }
+                if (config.xtype == 'checkbox') {
+                    config.checked = field.checked;
+                }
             }
             result.push(config)
         });
