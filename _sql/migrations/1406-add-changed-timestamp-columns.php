@@ -34,8 +34,10 @@ class Migrations_Migration1406 extends AbstractMigration
     public function up($modus)
     {
         $sql = <<<'EOD'
-ALTER TABLE s_order ADD COLUMN changed DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP();
-ALTER TABLE s_user ADD COLUMN changed DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP();
+ALTER TABLE s_order ADD COLUMN changed DATETIME NULL;
+ALTER TABLE s_user ADD COLUMN changed DATETIME NULL;
+UPDATE s_order SET changed = NOW();
+UPDATE s_user SET changed = NOW();
 EOD;
         $this->addSql($sql);
     }

@@ -407,8 +407,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //get all passed order data
         $data = $this->Request()->getParams();
 
+        $changed = new \DateTime($data['changed']);
         // Check whether the order has been modified in the meantime
-        if ($order->getChanged() != new \DateTime($data['changed'])) {
+        if ($order->getChanged() !== null && $order->getChanged()->getTimestamp() != $changed->getTimestamp()) {
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->getOrder($order->getId()),
@@ -545,8 +546,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         // Check whether the order has been modified in the meantime
-        $lastOrderChange = $this->Request()->getParam('changed');
-        if ($order->getChanged() != new \DateTime($lastOrderChange)) {
+        $lastOrderChange = new \DateTime($this->Request()->getParam('changed'));
+        if ($order->getChanged() !== null && $order->getChanged()->getTimestamp() != $lastOrderChange->getTimestamp()) {
             $params = $this->Request()->getParams();
             $params['changed'] = $order->getChanged();
             $this->View()->assign([
@@ -670,8 +671,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
         // Check whether the order has been modified in the meantime
-        $lastOrderChange = $this->Request()->getParam('changed');
-        if ($order->getChanged() != new \DateTime($lastOrderChange)) {
+        $lastOrderChange = new \DateTime($this->Request()->getParam('changed'));
+        if ($order->getChanged() !== null && $order->getChanged()->getTimestamp() != $lastOrderChange->getTimestamp()) {
             $params = $this->Request()->getParams();
             $params['changed'] = $order->getChanged();
             $this->View()->assign([

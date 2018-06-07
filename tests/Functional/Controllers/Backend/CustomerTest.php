@@ -67,6 +67,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $params = [
             'id' => $customer->getId(),
             'paymentId' => $debit->getId(),
+            'changed' => $customer->getChanged()->format('c')
         ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
@@ -221,6 +222,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
      */
     public function testUpdateCustomerPaymentDataWithSepa($dummyDataId)
     {
+        /** @var \Shopware\Models\Customer\Customer $dummyData */
         $dummyData = $this->repository->find($dummyDataId);
         $sepa = $this->manager
             ->getRepository(\Shopware\Models\Payment\Payment::class)
@@ -244,6 +246,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
                 'iban' => '456iban654',
                 'useBillingData' => true,
             ]],
+            'changed' => $dummyData->getChanged()->format('c')
         ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
@@ -329,7 +332,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             ->setMethod('POST')
             ->setPost($postData);
         $this->dispatch('backend/Customer/save');
-        self::assertTrue($this->View()->success);
+        $this->assertTrue($this->View()->success);
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
@@ -337,7 +340,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             ->setMethod('POST')
             ->setPost($postData);
         $this->dispatch('backend/Customer/save');
-        self::assertFalse($this->View()->success);
+        $this->assertFalse($this->View()->success);
     }
 
     /**
