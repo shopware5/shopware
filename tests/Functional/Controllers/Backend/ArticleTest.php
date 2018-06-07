@@ -52,6 +52,8 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
         $this->modelManager = Shopware()->Container()->get('models');
         $this->repository = $this->modelManager->getRepository(Article::class);
 
+        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
@@ -63,10 +65,29 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
      */
     public function testSaveArticleOverwriteProtection()
     {
-        // Prepare data for the test
-        $articles = $this->repository->findAll();
-        /** @var Article $article */
-        $article = $articles[0];
+        $helper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+        $article = $helper->createArticle([
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid(rand()),
+                'inStock' => 15,
+                'lastStock' => true,
+                'unitId' => 1,
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 29.97,
+                    ],
+                ],
+            ],
+            'taxId' => 4,
+            'supplierId' => 2,
+            'categories' => [10],
+        ]);
 
         // Prepare post data for request
         $postData = [
@@ -80,7 +101,7 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
             ->setPost($postData);
 
         $this->dispatch('backend/Article/save');
-        self::assertTrue($this->View()->success);
+        $this->assertTrue($this->View()->success);
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
@@ -89,6 +110,15 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
             ->setPost($postData);
 
         $this->dispatch('backend/Article/save');
-        self::assertFalse($this->View()->success);
+        $this->assertFalse($this->View()->success);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
+
+        Shopware()->Container()->get('dbal_connection')->rollBack();
     }
 }

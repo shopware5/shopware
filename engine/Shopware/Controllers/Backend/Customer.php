@@ -258,6 +258,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     {
         $id = $this->Request()->getParam('id', null);
         $paymentId = $this->Request()->getParam('paymentId', null);
+        $params = $this->Request()->getParams();
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
@@ -279,6 +280,21 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $paymentData = $this->getManager()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
                 ['customer' => $customer, 'paymentMean' => $paymentId]
             );
+
+            // Check whether the customer has been modified in the meantime
+            $changed = new \DateTime($params['changed']);
+            if ($customer->getChanged() !== null && $customer->getChanged()->getTimestamp() != $changed->getTimestamp()) {
+                $namespace = Shopware()->Snippets()->getNamespace('backend/customer/controller/main');
+
+                $this->View()->assign([
+                    'success' => false,
+                    'data' => $this->getCustomer($customer->getId()),
+                    'overwriteAble' => true,
+                    'message' => $namespace->get('customer_has_been_changed', 'The customer has been changed in the meantime. To prevent overwriting these changes, saving the customer was aborted. Please close the customer and re-open it.'),
+                ]);
+
+                return;
+            }
         } else {
             //check if the user has the rights to create a new customer
             if (!$this->_isAllowed('create', 'customer')) {
@@ -291,22 +307,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 return;
             }
             $customer = new Customer();
-        }
-
-        $params = $this->Request()->getParams();
-
-        // Check whether the customer has been modified in the meantime
-        if ($customer->getChanged() != new \DateTime($params['changed'])) {
-            $namespace = Shopware()->Snippets()->getNamespace('backend/customer/controller/main');
-
-            $this->View()->assign([
-                'success' => false,
-                'data' => $this->getCustomer($customer->getId()),
-                'overwriteAble' => true,
-                'message' => $namespace->get('customer_has_been_changed', 'The customer has been changed in the meantime. To prevent overwriting these changes, saving the customer was aborted. Please close the customer and re-open it.'),
-            ]);
-
-            return;
         }
 
         if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {

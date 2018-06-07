@@ -52,7 +52,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added ability to translate shop forms
 * Added attributes to shop forms page
 * Added hreflang support to translated pages
-* Added new column `changed` with `DEFAULT CURRENT_TIMESTAMP()` to tables `s_order` and `s_user`
+* Added new column `changed` with `DEFAULT NULL` to tables `s_order` and `s_user`
 * Added checks for changes on products, customers and orders in backend while a user saves them to prevent an overwriting of changes made by someone else
 
 ### Changes

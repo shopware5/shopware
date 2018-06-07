@@ -224,7 +224,6 @@ Feature: View all categories on sitemap
             | /beispiele/crossselling/196/artikel-mit-aehnlichen-produkten                                             |
             | /beispiele/crossselling/194/artikel-mit-zubehoer                                                         |
             | /beispiele/konfiguratorartikel/205/artikel-mit-aufpreiskonfigurator                                      |
-            | /beispiele/preisgestaltung/206/artikel-mit-grundpreisberechnung                                          |
             | /beispiele/preisgestaltung/209/staffelpreise                                                             |
             | /sommerwelten/129/sonnenschirm-fortino-270cm                                                             |
             | /sommerwelten/132/sonnenschirm-sunwing-c-260cm                                                           |
@@ -303,6 +302,7 @@ Feature: View all categories on sitemap
             | /sommerwelten/beachwear/178/strandtuch-ibiza                                                             |
             | /genusswelten/koestlichkeiten/44/bienenkleber                                                            |
             | /sommerwelten/beachwear/155/flip-flop-sunshine-yellow                                                    |
+            | /beispiele/preisgestaltung/206/artikel-mit-grundpreisberechnung                                          |
             | /trends-news/der-sommer-wird-bunt                                                                        |
             | /trends-news/sonnenschutz-so-gehoeren-sie-zur-creme-de-la-creme                                          |
             | /trends-news/ich-packe-meinen-koffer                                                                     |

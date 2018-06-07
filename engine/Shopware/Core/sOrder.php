@@ -581,6 +581,7 @@ class sOrder
             'invoice_shipping' => (float) $this->sShippingcostsNumeric,
             'invoice_shipping_net' => (float) $this->sShippingcostsNumericNet,
             'ordertime' => new Zend_Db_Expr('NOW()'),
+            'changed' => new Zend_Db_Expr('NOW()'),
             'status' => 0,
             'cleared' => 17,
             'paymentID' => $this->getPaymentId(),
