@@ -649,9 +649,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             }
         }
 
+        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($this->Request()->getClientIp());
+
         $content = str_replace(
             ['{sIP}', '{sDateTime}', '{sShopname}'],
-            [$_SERVER['REMOTE_ADDR'], date('d.m.Y h:i:s'), Shopware()->Config()->shopName],
+            [$ip, date('d.m.Y h:i:s'), Shopware()->Config()->shopName],
             $content
         );
 

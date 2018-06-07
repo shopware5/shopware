@@ -31,49 +31,56 @@ use Shopware\Models\Customer\Customer;
 class sOrder
 {
     /**
-     * Array with userdata
+     * Array with user data
      *
      * @var array
      */
     public $sUserData;
+
     /**
-     * Array with basketdata
+     * Array with basket data
      *
      * @var array
      */
     public $sBasketData;
+
     /**
      * Array with shipping / dispatch data
      *
      * @var array
      */
     public $sShippingData;
+
     /**
      * User comment to save within this order
      *
      * @var string
      */
     public $sComment;
+
     /**
      * Payment-mean object
      *
      * @var object
      */
     public $paymentObject;
+
     /**
      * Total amount net
      *
      * @var float
      */
     public $sAmountNet;
+
     /**
-     * Total Amount
+     * Total amount
      *
      * @var float
      */
     public $sAmount;
+
     /**
-     * Total Amount with tax (force)
+     * Total amount with tax (force)
      *
      * @var float
      */
@@ -85,54 +92,62 @@ class sOrder
      * @var float
      */
     public $sShippingcosts;
+
     /**
-     * Shipping costs unformated
+     * Shipping costs unformatted
      *
      * @var float
      */
     public $sShippingcostsNumeric;
+
     /**
-     * Shipping costs net unformated
+     * Shipping costs net unformatted
      *
      * @var float
      */
     public $sShippingcostsNumericNet;
+
     /**
      * Pointer to sSystem object
      *
      * @var sSYSTEM
      */
     public $sSYSTEM;
+
     /**
      * TransactionID (epayment)
      *
      * @var string
      */
     public $bookingId;
+
     /**
      * Ordernumber
      *
      * @var string
      */
     public $sOrderNumber;
+
     /**
-     * ID of choosen dispatch
+     * ID of chosen dispatch
      *
      * @var int
      */
     public $dispatchId;
+
     /**
      * Random id to identify the order
      *
      * @var string
      */
     public $uniqueID;
+
     /**
-     * Net order true /false
+     * Net order true/false
      *
      * @var bool
      */
-    public $sNet;    // Complete taxfree
+    public $sNet;    // Completely taxfree
 
     /**
      * Custom attributes
@@ -268,7 +283,7 @@ class sOrder
         $quantity = $basketRow['quantity'];
         $basketRow['assignedSerials'] = [];
 
-        //check if current order number is an esd variant.
+        // Check if current order number is an esd variant.
         $esdArticle = $this->getVariantEsd($basketRow['ordernumber']);
 
         if (!$esdArticle['id']) {
@@ -581,6 +596,8 @@ class sOrder
             $this->sUserData['additional']['user']['affiliate']
         );
 
+        $ip = Shopware()->Container()->get('shopware.components.privacy.ip_anonymizer')->anonymize((string) $_SERVER['REMOTE_ADDR']);
+
         $orderParams = [
             'ordernumber' => $orderNumber,
             'userID' => $this->sUserData['additional']['user']['id'],
@@ -604,7 +621,7 @@ class sOrder
             'currency' => $this->sBasketData['sCurrencyName'],
             'currencyFactor' => $this->sBasketData['sCurrencyFactor'],
             'subshopID' => $mainShop->getId(),
-            'remote_addr' => (string) $_SERVER['REMOTE_ADDR'],
+            'remote_addr' => $ip,
             'deviceType' => $this->deviceType,
         ];
 
@@ -1072,7 +1089,7 @@ class sOrder
     }
 
     /**
-     * save order shipping address
+     * Save order shipping address
      *
      * @param array $address
      * @param int   $id
@@ -1687,7 +1704,7 @@ EOT;
      * Used for the sManageEsd function to check if the current order article variant
      * is an esd variant.
      *
-     * @param $orderNumber
+     * @param string $orderNumber
      *
      * @return array|false
      */
@@ -1727,7 +1744,7 @@ EOT;
      * Checks if the passed transaction id is already set as transaction id of an
      * existing order.
      *
-     * @param $transactionId
+     * @param string $transactionId
      *
      * @return bool
      */
@@ -1763,7 +1780,7 @@ EOT;
      * Checks if the current order was send from a partner and returns
      * the partner code.
      *
-     * @param int $userAffiliate affiliate flag of the user data
+     * @param int $userAffiliate Affiliate flag of the user data
      *
      * @return null|string
      */
@@ -1837,11 +1854,11 @@ EOT;
      * and formats the article name and order number.
      * This function is used for the order status mail.
      *
-     * @param $basketRows
+     * @param array $basketRows
      *
      * @return array
      */
-    private function getOrderDetailsForMail($basketRows)
+    private function getOrderDetailsForMail(array $basketRows)
     {
         $details = [];
         foreach ($basketRows as $content) {
@@ -1892,7 +1909,7 @@ EOT;
      * This function is used if the order status changed and the status mail will be
      * send.
      *
-     * @param $orderId
+     * @param int $orderId
      *
      * @return mixed
      */
@@ -1911,7 +1928,7 @@ EOT;
      * Helper function which converts all HTML entities, in the passed user data array,
      * to their applicable characters.
      *
-     * @param $userData
+     * @param array $userData
      *
      * @return array
      */
@@ -1940,9 +1957,9 @@ EOT;
      * This function sets the default for different properties, which
      * might not be set or invalid.
      *
-     * @param $basketRow
+     * @param array $basketRow
      *
-     * @return mixed
+     * @return array
      */
     private function formatBasketRow($basketRow)
     {
@@ -1982,7 +1999,7 @@ EOT;
      * Helper function which returns the current payment status
      * of the passed order.
      *
-     * @param $orderId
+     * @param int $orderId
      *
      * @return string
      */
@@ -1998,7 +2015,7 @@ EOT;
      * Helper function which returns the current order status of the passed order
      * id.
      *
-     * @param $orderId
+     * @param int $orderId
      *
      * @return string
      */
