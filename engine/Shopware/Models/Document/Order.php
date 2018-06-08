@@ -283,6 +283,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processOrder()
     {
+        $shippingName = Shopware()->Snippets()->getNamespace('documents/index')->get('ShippingCosts', 'Shipping costs', true);
+
         if ($this->_order['invoice_shipping_tax_rate'] === null) {
             if ($this->_order['invoice_shipping_net'] != 0) {
                 // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
@@ -291,15 +293,13 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 $approximateTaxRate = 0;
             }
 
-        $shippingName = Shopware()->Snippets()->getNamespace('documents/index')->get('ShippingCosts', 'Shipping costs', true);
-
-        $taxShipping = $this->getTaxRateByApproximateTaxRate(
-            $approximateTaxRate,
-            $this->_shipping['country']['areaID'],
-            $this->_shipping['countryID'],
-            $this->_shipping['stateID'],
-            $this->_user['customergroupID']
-        );
+            $taxShipping = $this->getTaxRateByApproximateTaxRate(
+                $approximateTaxRate,
+                $this->_shipping['country']['areaID'],
+                $this->_shipping['countryID'],
+                $this->_shipping['stateID'],
+                $this->_user['customergroupID']
+            );
 
             $taxShipping = (float) $taxShipping;
         } else {
