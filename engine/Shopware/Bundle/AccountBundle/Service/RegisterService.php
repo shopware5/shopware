@@ -304,7 +304,7 @@ class RegisterService implements RegisterServiceInterface
     private function doubleOptInSaveHash(Customer $customer, $hash)
     {
         $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`)
-                VALUES ('register', ?, ?, ?)";
+                VALUES ('swRegister', ?, ?, ?)";
 
         // Minimal billing data for Mailtemplates
         $storedData = [

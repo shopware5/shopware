@@ -588,6 +588,7 @@ class sAdmin
                         'datum' => new Zend_Date(),
                         'hash' => $hash,
                         'data' => $data,
+                        'type' => 'swNewsletter',
                     ]
                 );
 
@@ -3526,7 +3527,7 @@ SQL;
         $sql = 'SELECT `id`, `data`
                 FROM `s_core_optin`
                 WHERE datum = ?
-                AND type = "register"';
+                AND type = "swRegister"';
         $result = $this->db->fetchAll($sql, [$user['doubleOptinEmailSentDate']]);
 
         // most times iterates only once
@@ -3546,7 +3547,7 @@ SQL;
         if (!empty($optInId)) {
             $sql = 'UPDATE `s_core_optin`
                     SET `datum` = ?, `hash` = ?
-                    WHERE type = "register"
+                    WHERE type = "swRegister"
                     AND id = ?';
             $params = [$dateString, $hash, $optInId];
         } else {
@@ -3560,7 +3561,7 @@ SQL;
                     (`type`, `datum`, `hash`, `data`)
                     VALUES
                     (?, ?, ?, ?)';
-            $params = ['register', $dateString, $hash, serialize($storedData)];
+            $params = ['swRegister', $dateString, $hash, serialize($storedData)];
         }
         $this->db->executeQuery($sql, $params);
 

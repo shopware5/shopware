@@ -56,7 +56,7 @@ class CommentConfirm extends ModelEntity
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    private $type = null;
+    private $type;
 
     /**
      * @var string
@@ -71,6 +71,11 @@ class CommentConfirm extends ModelEntity
      * @ORM\Column(name="data", type="string", nullable=false)
      */
     private $data;
+
+    public function __construct()
+    {
+        $this->type = 'swComment';
+    }
 
     /**
      * Get id

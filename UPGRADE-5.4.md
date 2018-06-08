@@ -25,6 +25,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * `Shopware_Controllers_Frontend_Register_DoubleOptIn_ResendMail` will be thrown before an new confirmation Mail will be sent 
   * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
   * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
+* Added new Cronjob `OptinCleanup`, which uses the interval-setting from Double-Opt-In register to cleanup every shopware opt-in from the `s_core_optin` table except Double-Opt-In register
+
 
 ### Changes
 
@@ -36,6 +38,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed behaviour of the Zend/Mail/Protocol classes according to the Zend upstream repository
   * the TLS protocol version used when sending E-Mails is not determined solely by the `STREAM_CRYPTO_METHOD_TLS_CLIENT` constant anymore. If `STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT` is available, TLSv1.1 and TLSv1.2 are added to the usable protocol versions.
 * Changed some texts to fix its typos
+* Changed opt-in types: Every Shopware opt-in now saves a specific name into `s_core_optin` with the prefix `sw`
 
 ## 5.4.4
 
@@ -87,7 +90,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\CategoryFacetHandler`
   * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ImmediateDeliveryFacetHandler`
   * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler`
-* `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
+  * `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
 * Changed `Media` resource to fix a problem with file names set via API
 * Changed behaviour of unchecked ToS-checkbox in checkout to hint the missing input, especially on iOS
 * Changed privacy policy checkbox setting to automatically activate privacy policy text being displayed
@@ -118,7 +121,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed API behaviour on update, when the lastStock parameter is set for a product its applied to its mainDetail aswell (like on creation)
 * Changed newsletter recipient count to work correctly with customer streams
 * Changed position of several privacy options to a new basic setting category "Privacy"
-* Changed search indexer to make the keyword batch size configurable using the key `search.indexer.batchsize` in the `config.php` 
+* Changed search indexer to make the keyword batch size configurable using the key `search.indexer.batchsize` in the `config.php`
 
 ### Removals
 
@@ -131,7 +134,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added possibility to enable/disable forms without having to delete them
-* Added pagination to the attribute filter of the product stream configurator 
+* Added pagination to the attribute filter of the product stream configurator
 * Added `json` attribute for snippets in `Enlight_Components_Snippet_Resource`
   * You may now set the attribute `json='true'` on smarty snippets, the content of the snippet will then be encoded via `json_encode()`
     * Example: ```{s json='true' name='foo'}é"'#-_*+`{/s}``` will render as ```"\u00e9\"'#-_*+`"```
@@ -185,10 +188,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Changes
 
 * Changed Smarty to improve error message when a template extends a parent template and said parent does not exist
-* Changed cloning of `Enlight_Template_Manager` object to preserve reference of the security policy to the instance  
+* Changed cloning of `Enlight_Template_Manager` object to preserve reference of the security policy to the instance
 * Changed newsletter logo from a static file to the active themes logo
 * Changed condition in `sBasket::sGetAmountRestrictedArticles`, it now also checks for an empty `$articles` array
-* Changed `ImmediateDeliveryConditionHandler` (DBAL and ES) and product indexing to improve variant filtering  
+* Changed `ImmediateDeliveryConditionHandler` (DBAL and ES) and product indexing to improve variant filtering
 
 ### Removals
 
@@ -215,11 +218,11 @@ This changelog references changes done in Shopware 5.4 patch versions.
         The version_text of the Shopware installation (e.g. 'RC1')
     - `shopware.release.revision`
         The revision of the Shopware installation (e.g. '20180081547')
-* Added new service in the DIC containing all parameters above 
+* Added new service in the DIC containing all parameters above
     - `shopware.release`
         A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
 * Added several paths to the DIC:
-	- `shopware.plugin_directories.projectplugins` 
+	- `shopware.plugin_directories.projectplugins`
 		Path to project specific plugins, see [Composer project](https://github.com/shopware/composer-project)
 	- `shopware.template.templatedir`
 		Path to the themes folder
@@ -232,8 +235,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 	- `shopware.web.webdir`
 		Path to the web folder
 	- `shopware.web.cachedir`
-		Path to the web-cache folder 
-	
+		Path to the web-cache folder
+
 	These paths are configurable in the `config.php`, see `engine/Shopware/Configs/Default.php` for defaults
 
 * Added all additional article columns to product import/export
@@ -244,7 +247,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added config `preLoadStoredEntry` to `Shopware.form.field.PagingComboBox` to be compatible with saving and loading entries from e.g. the second page.
 * Added order attributes to return values of `OrderRepository::getDetails`
 * Added option for batch updating plugins to plugin update command
-* Added defaults for `ignored_url_parameters` setting of HTTP cache in `config.php`. See [Ignore some HTTP parameters](https://developers.shopware.com/developers-guide/http-cache/#ignore-some-http-parameters) for more information. 
+* Added defaults for `ignored_url_parameters` setting of HTTP cache in `config.php`. See [Ignore some HTTP parameters](https://developers.shopware.com/developers-guide/http-cache/#ignore-some-http-parameters) for more information.
 * Added optional `id` parameter to `getTemplatesAction` in `engine/Shopware/Controllers/Backend/Emotion.php` to allow fetching of a single template
 * Added new filter event `Shopware_Controllers_Backend_Emotion_Detail_Filter_Values` to `Shopware/Controllers/Backend/Emotion.php` to allow manipulation of elements
 
@@ -256,7 +259,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed all writing actions to POST to be more HTTP compliant.
     * Checkout actions:
         - `finish`
-    
+
     * Basket actions
         - `addArticle`
         - `addAccessories`
@@ -268,7 +271,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `ajaxAddArticleCart`
         - `ajaxDeleteArticle`
         - `ajaxDeleteArticleCart`
-        
+
 * Changed JSONP requests to JSON in the following Frontend controllers:
     * Controller List
         - Frontend/AjaxSearch.php
@@ -298,7 +301,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `s_core_shops.secure_host`
         - `s_core_shops.secure_base_path`
         - `s_core_shops.always_secure`
-        
+
     * Removed methods
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::setSecureHost`
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::getSecureHost`
@@ -336,7 +339,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
             The revision of the Shopware installation (e.g. '20180081547')
     * New, alternative DIC service:
         - `shopware.release`
-            A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above 
+            A new struct of type `\Shopware\Components\ShopwareReleaseStruct` containing all parameters above
 * Deprecated `lastStock` field in `\Shopware\Models\Article\Article` as the field has been moved to the variants. It will be removed in 6.0.
 * Deprecated `laststock` column in `s_articles` since this field has been moved to the variants. It will be removed in 6.0
 * Deprecated `articleId` column in `s_articles_attributes` table, it will be removed in Shopware version 5.5 as it isn't used anymore since version 5.2
