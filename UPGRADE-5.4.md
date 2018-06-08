@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
 * Changed behaviour of account controller for onetime accounts, which now redirects to checkout
   * Changed account-sidebar window to only display a `quit guest session` option
+* Changed some texts to fix its typos
 
 ## 5.4.4
 
@@ -74,14 +75,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed behaviour of closeout condition to work with product streams
 * Changed Font-Face settings to fix rendering if `OpenSans` is locally available
 * Changed following classes to use interface instead class as typehint
-    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HeightConditionHandler`
-    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler`
-    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\LengthConditionHandler`
-    * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\WeightConditionHandler`
-    * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\CategoryFacetHandler`
-    * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ImmediateDeliveryFacetHandler`
-    * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler`
-    * `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
+  * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HeightConditionHandler`
+  * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler`
+  * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\LengthConditionHandler`
+  * `Shopware\Bundle\SearchBundleDBAL\ConditionHandler\WeightConditionHandler`
+  * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\CategoryFacetHandler`
+  * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ImmediateDeliveryFacetHandler`
+  * `Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler`
+* `Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher`
 * Changed `Media` resource to fix a problem with file names set via API
 * Changed behaviour of unchecked ToS-checkbox in checkout to hint the missing input, especially on iOS
 * Changed privacy policy checkbox setting to automatically activate privacy policy text being displayed
