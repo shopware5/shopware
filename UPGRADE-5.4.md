@@ -9,6 +9,13 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added anonymization of IP addresses, activated by default
+* Added Double-Opt-In for customer registration
+  * Added new notify event, which will be thrown when awaiting Double-Opt-In confirmation: `Shopware_Modules_Admin_SaveRegister_Successful`
+  * Added two new filter events:
+    * `Shopware_Controllers_Frontend_RegisterService_DoubleOptIn_ConfirmationMail` will be thrown before the confirmation Mail will be sent
+    * `Shopware_Controllers_Frontend_Register_DoubleOptIn_ResendMail` will be thrown before an new confirmation Mail will be sent 
+  * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
+  * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
 
 ### Changes
 
@@ -28,8 +35,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added possibility to config elements to override ``queryMode`` option
 * Added workaround for disabled localStorage in browser
 * Added the following arguments to `notify` event `Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable`: 
-    * `shopContext` – The context of the shop being processed
-    * `cachedTime` – `\DateTime` instance used for the new entries
+  * `shopContext` – The context of the shop being processed
+  * `cachedTime` – `\DateTime` instance used for the new entries
 * Added Smarty block `frontend_register_back_to_shop_button` to `themes/Frontend/Bare/frontend/register/index.tpl`
 * Added Smarty blocks to `themes/Frontend/Bare/frontend/listing/actions/action-filter-facets.tpl`:
   * `frontend_listing_actions`

@@ -537,6 +537,16 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
+        <service id="registration_cleanup_cron_job_subscriber" class="Shopware\Components\Register\RegistrationCleanupSubscriber" >
+            <argument type="service" id="shopware.components.registration_cleanup_service" />
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware.components.registration_cleanup_service" class="Shopware\Components\Register\RegistrationCleanupService" >
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
         <service id="shopware.components.last_articles_subscriber" class="Shopware\Components\LastArticlesSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
