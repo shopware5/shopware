@@ -57,6 +57,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
     public function testAbsoluteVoucher()
     {
+        $this->setVoucherTax('absolut','default');
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddVoucher('absolut');
 
@@ -80,12 +81,12 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
         $this->assertCount(2, $sBasket['content']);
 
-        $this->hasBasketItem($sBasket['content'], 'Gutschein', -5, -4.202, 'GUTABS');
+        $this->hasBasketItem($sBasket['content'], 'Gutschein', -5, -4.2016806722689, 'GUTABS');
     }
 
     public function testAbsoluteVoucherMultipleTaxesWithMaxTax()
     {
-        $this->setVoucherTax('GUTABS', 'auto');
+        $this->setVoucherTax('GUTABS', 'default');
 
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00), 1);
@@ -116,7 +117,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
     public function testAbsoluteVoucherMultipleTaxes()
     {
-        $this->setVoucherTax('GUTABS', 'default');
+        $this->setVoucherTax('GUTABS', 'auto');
 
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00), 1);
@@ -148,7 +149,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
     public function testPercentVoucher()
     {
-        $this->setVoucherTax('GUTPROZ', 'auto');
+        $this->setVoucherTax('GUTPROZ', 'default');
 
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddVoucher('prozentual');
@@ -178,7 +179,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
     public function testPercentVoucherProportionalWithOneTax()
     {
-        $this->setVoucherTax('GUTPROZ', 'default');
+        $this->setVoucherTax('GUTPROZ', 'auto');
 
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddVoucher('prozentual');
@@ -208,7 +209,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
     public function testPercentVoucherProportionalWithMultipleTaxes()
     {
-        $this->setVoucherTax('GUTPROZ', 'default');
+        $this->setVoucherTax('GUTPROZ', 'auto');
 
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00), 1);
@@ -240,7 +241,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
     public function testProportionalBasketView()
     {
-        $this->setVoucherTax('GUTABS', 'default');
+        $this->setVoucherTax('GUTABS', 'auto');
 
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00), 1);

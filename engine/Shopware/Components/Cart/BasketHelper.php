@@ -63,13 +63,7 @@ class BasketHelper implements BasketHelperInterface
     }
 
     /**
-     * @param int    $discountType
-     * @param float  $discountValue
-     * @param string $itemName
-     * @param int    $mode
-     * @param string $ordernumber
-     * @param float  $currencyFactor
-     * @param bool   $netPrice
+     * {@inheritdoc}
      */
     public function addProportionalDiscount($discountType, $discountValue, $itemName, $mode, $ordernumber, $currencyFactor, $netPrice)
     {
@@ -104,7 +98,7 @@ class BasketHelper implements BasketHelperInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPositionPrices()
     {

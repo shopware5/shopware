@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Test;
 
+use Shopware\Components\Random;
+
 abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
 {
     public function reset()
@@ -67,6 +69,34 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         ]);
 
         return $orderNumber;
+    }
+
+    /**
+     * @param $value
+     * @param $taxId
+     * @param int $percent
+     * @param string $taxConfig
+     * @return string
+     */
+    protected function createVoucher($value, $taxId, $percent = 1)
+    {
+        $code = Random::getAlphanumericString(12);
+        Shopware()->Container()->get('dbal_connection')
+            ->insert('s_emarketing_vouchers', [
+                'description' => 'test voucher',
+                'value' => $value,
+                'vouchercode' => $code,
+                'numberofunits' => 1000,
+                'minimumcharge' => 1,
+                'shippingfree' => 0,
+                'ordercode' => $code,
+                'modus' => 0,
+                'numorder' => 1000,
+                'percental' => $percent,
+                'taxconfig' => $taxId
+            ]);
+
+        return $code;
     }
 
     /**

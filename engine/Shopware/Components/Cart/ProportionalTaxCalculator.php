@@ -89,9 +89,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
     }
 
     /**
-     * @param Price[] $prices
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasDifferentTaxes(array $prices)
     {

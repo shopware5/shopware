@@ -838,7 +838,7 @@ SQL;
         // Tax calculation for vouchers
         list($taxRate, $tax, $voucherDetails, $freeShipping) = $this->calculateVoucherValues($voucherDetails);
 
-        if ($this->proportionalTaxCalculation && !$this->session->get('taxFree') && $voucherDetails['taxconfig'] === 'default') {
+        if ($this->proportionalTaxCalculation && !$this->session->get('taxFree') && $voucherDetails['taxconfig'] === 'auto') {
             $taxCalculator = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator');
             $prices = $this->basketHelper->getPositionPrices();
             $hasMultipleTaxes = $taxCalculator->hasDifferentTaxes($prices);
