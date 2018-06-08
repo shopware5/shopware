@@ -9,6 +9,14 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Additions
 
 * Added anonymization of IP addresses, activated by default
+* Added new Smarty blocks to `themes/Frontend/Bare/frontend/account/sidebar.tpl`:
+  * `frontend_account_menu_logout_onetimeaccount`
+  * `frontend_account_menu_logout_onetimeaccount_link`
+  * `frontend_account_menu_logout_onetimeaccount_link_text`
+  * `frontend_account_menu_link_addresses_inHeader`
+  * `frontend_account_menu_link_addresses_notInHeader`
+  * `frontend_account_menu_link_overview_SltCookie`
+  * `frontend_account_menu_link_overview_link`
 * Added Double-Opt-In for customer registration
   * Added new notify event, which will be thrown when awaiting Double-Opt-In confirmation: `Shopware_Modules_Admin_SaveRegister_Successful`
   * Added two new filter events:
@@ -20,6 +28,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 ### Changes
 
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
+* Changed behaviour of account controller for onetime accounts, which now redirects to checkout
+  * Changed account-sidebar window to only display a `quit guest session` option
 
 ## 5.4.4
 

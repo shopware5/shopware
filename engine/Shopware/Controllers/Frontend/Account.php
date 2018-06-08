@@ -72,7 +72,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
         $this->View()->assign('sAction', $this->Request()->getActionName());
 
-        if ($this->isOneTimeAccount()) {
+        if ($this->isOneTimeAccount() && $this->request->getParams()['action'] !== 'abort') {
             $this->logoutAction();
             $this->redirect(['controller' => 'register']);
         }
@@ -235,6 +235,16 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      * Logout account and delete session
      */
     public function logoutAction()
+    {
+        $this->admin->logout();
+    }
+
+    /**
+     * Abort action method
+     *
+     * Abort one time order and delete session
+     */
+    public function abortAction()
     {
         $this->admin->logout();
     }
