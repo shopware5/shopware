@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed behaviour of account controller for onetime accounts, which now redirects to checkout
   * Changed account-sidebar window to only display a `quit guest session` option
 * Changed some texts to fix its typos
+* Changed the translation logic for config elements of types `combo` and `select` to consider translations other than for the non-standard `en` locale, but to instead try the user's locale, `en_GB` and `en` as fallbacks before resorting to the first defined (by array index) translation.
 
 ## 5.4.4
 

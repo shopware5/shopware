@@ -35,18 +35,18 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
     const TEST_FORM_ELEMENT_NAME = 'formElementUnderTest';
     const TEST_LOCALE_LOCALE = 'test_TEST';
     const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS = [
-        'first_LANG' => 'first_LANG: Language fallback that should never happen if there is an en/en_GB locale',
+        'aa_DJ' => 'aa_DJ: Language fallback that should never happen if there is an en/en_GB locale',
         'de_DE' => 'de_DE: Getestete Einstellung',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
         'en_GB' => 'en_GB: Tested Setting',
         'en' => 'en: Tested Setting (fallback)',
     ];
     const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK = [
-        'first_LANG' => 'first_LANG: Language fallback that should never happen',
+        'aa_DJ' => 'aa_DJ: Language fallback that should never happen',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
     ];
     const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK = [
-        'first_LANG' => 'first_LANG: Language fallback that should never happen if there is an en/en_GB locale',
+        'aa_DJ' => 'aa_DJ: Language fallback that should never happen if there is an en/en_GB locale',
         'en' => 'en: Fallback locale translation',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
     ];
@@ -112,7 +112,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('en_GB'));
         $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK);
         $this->assertEquals(
-            static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK['first_LANG'],
+            static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK['aa_DJ'],
             $storeSettings[0][1],
             'If no matching translation and no locale-based (en_GB, en) translation exists, should use '
             . 'the first (index-based) translation from the store settings.'

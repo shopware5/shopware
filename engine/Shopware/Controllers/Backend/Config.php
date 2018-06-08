@@ -177,7 +177,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $data = $this->translateValues($locale->getId(), $data);
 
         // 'en' is supported as last fallback.
-        $storeFallbackLocales = ['en_GB', 'en'];
+        $storeFallbackLocales = [substr($language, 0, 2), 'en_GB', 'en'];
 
         foreach ($data['elements'] as &$values) {
             $values = $this->translateValues($fallback, $values);
@@ -951,18 +951,33 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             }
 
             // Find the most preferable translation:
-            foreach ($tryLocales as $tryLocale) {
-                if (isset($value[$tryLocale])) {
-                    $row[] = $value[$tryLocale];
-                    continue 2;
-                }
-            }
+            $translation = $this->getTranslation($value, $tryLocales);
 
-            // If none of the available locales could be identified as preferable, fallback to the first defined translation:
-            $row[] = array_shift($value);
+            if ($translation) {
+                $row[] = $translation;
+            } else {
+                // If none of the available locales could be identified as preferable, fallback to the first defined translation:
+                $row[] = array_shift($value);
+            }
         }
 
         return $store;
+    }
+
+    /**
+     * @param array $value
+     * @param array $tryLocales
+     * @return string|null
+     */
+    private function getTranslation(array $value, array $tryLocales)
+    {
+        foreach ($tryLocales as $tryLocale) {
+            if (isset($value[$tryLocale])) {
+                return $value[$tryLocale];
+            }
+        }
+
+        return null;
     }
 
     private function createDocumentElements($model)
