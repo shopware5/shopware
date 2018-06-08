@@ -28,13 +28,13 @@ class Migrations_Migration1223 extends Shopware\Components\Migrations\AbstractMi
         $this->addSql('SET @privacyFormId = ( SELECT id FROM `s_core_config_forms` WHERE name = "Privacy" LIMIT 1 )');
 
         $sql = "INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
-                VALUES (@privacyFormId, 'anonymizeIp', '" . serialize(true) . "', 'Kunden IPs anonymisieren', 'Entfernt die letzten zwei Blöcke einer IPv4, resp. drei Blöcke einer IPv6 Adresse in Statistiken und Bestellungen um rechtlichen Rahmenbedingungen einzuhalten.', 'boolean', 0, 40, 0);";
+                VALUES (@privacyFormId, 'anonymizeIp', '" . serialize(true) . "', 'Kunden IPs anonymisieren', 'Entfernt die letzten zwei Blöcke einer IPv4, resp. drei Blöcke einer IPv6 Adresse in Statistiken und Bestellungen, um rechtlichen Rahmenbedingungen einzuhalten.', 'boolean', 0, 40, 0);";
         $this->addSql($sql);
         $this->addSql("SET @elementId = ( SELECT id FROM `s_core_config_elements` WHERE name = 'anonymizeIp' LIMIT 1 );");
 
         // Translation for the new menu element
         $sql = "INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
-                VALUES (@elementId, '2', 'Anonymize customer\\'s IPs', 'Removes the last two blocks of IPv4 and three blocks of IPv6 addresses in statistics and orders to comply with privacy laws.');";
+                VALUES (@elementId, '2', 'Anonymize customer IPs', 'Removes the last two blocks of IPv4 and three blocks of IPv6 addresses in statistics and orders to comply with privacy laws.');";
         $this->addSql($sql);
     }
 }
