@@ -144,8 +144,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             translationEditor: {
                 fieldLabel: '{s name=column_name}Name{/s}',
                 name: 'name',
-                xtype: 'textfield',
-                allowBlank: false
+                xtype: 'textfield'
             }
         }, {
             header: '{s name=column_label}Label{/s}',
@@ -159,8 +158,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
             translationEditor: {
                 fieldLabel: '{s name=column_label}Label{/s}',
                 name: 'label',
-                xtype: 'textfield',
-                allowBlank: false
+                xtype: 'textfield'
             }
         }, {
             header: '{s name=column_typ}Typ{/s}',
@@ -181,8 +179,6 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 fieldLabel: '{s name=column_typ}Typ{/s}',
                 name: 'typ',
                 xtype: 'combo',
-                allowBlank: false,
-                editable: false,
                 mode: 'local',
                 triggerAction: 'all',
                 displayField: 'label',
@@ -208,8 +204,6 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 fieldLabel: '{s name=column_class}Class{/s}',
                 name: 'class',
                 xtype: 'combo',
-                allowBlank: false,
-                editable: false,
                 mode: 'local',
                 triggerAction: 'all',
                 displayField: 'label',
