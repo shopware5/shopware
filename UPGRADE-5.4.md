@@ -31,10 +31,11 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
 * Changed behaviour of account controller for onetime accounts, which now redirects to checkout
   * Changed account-sidebar window to only display a `quit guest session` option
-* Changed some texts to fix its typos
+* Changed error handling of missing blog articles or CMS pages, the configured setting in the backend is now respected
 * Changed the translation logic for config elements of types `combo` and `select` to consider translations other than for the non-standard `en` locale, but to instead try the user's locale, `en_GB` and `en` as fallbacks before resorting to the first defined (by array index) translation.
 * Changed behaviour of the Zend/Mail/Protocol classes according to the Zend upstream repository
   * the TLS protocol version used when sending E-Mails is not determined solely by the `STREAM_CRYPTO_METHOD_TLS_CLIENT` constant anymore. If `STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT` is available, TLSv1.1 and TLSv1.2 are added to the usable protocol versions.
+* Changed some texts to fix its typos
 
 ## 5.4.4
 
