@@ -54,6 +54,13 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added hreflang support to translated pages
 * Added new column `changed` with `DEFAULT NULL` to tables `s_order` and `s_user`
 * Added checks for changes on products, customers and orders in backend while a user saves them to prevent an overwriting of changes made by someone else
+* Added proportional calculation of tax positions
+    * New configuration option in Basic Settings => Checkout, "Proportional calculation of tax positions", inactive by default
+    * Added ``Shopware\Components\Cart\ProportionalTaxCalculator`` to calculate proportional taxes for the cart items
+    * Added ``Shopware\Components\Cart\BasketHelper`` to to add items to the cart that need to be calculation in a proportional way
+    * For the proportional tax calculation to work with vouchers and modes of dispatch, be sure to set the mode of tax calculation to "auto detection" in their settings
+    * Added new filter event to modify proportional vouchers ``Shopware_Modules_Basket_AddVoucher_VoucherPrices``
+* Added new column ``invoice_shipping_tax_rate`` to s_order, to save exact dispatch shipping tax rate
 
 ### Changes
 
@@ -74,6 +81,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     Please check your templates when you extend `cart_item.tpl`. You now have to extend one of the added subtemplates.
 * Changed `country_id` to `countryId` and `state_id` to `stateId` in `Shopware.apps.Customer.model.Address`
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
+* Changed rebates and vouchers to also show their icon in the cart for values >1 €
 
 ### Removals
 

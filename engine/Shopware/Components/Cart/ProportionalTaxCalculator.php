@@ -34,7 +34,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
     /**
      * {@inheritdoc}
      */
-    public function calculate($discount, $prices, $netPrice)
+    public function calculate($discount, $prices, $isNetPrice)
     {
         $sumByTaxes = $this->sumByTax($prices);
 
@@ -51,7 +51,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
 
             $tax = $net * ($taxRate / 100);
 
-            $taxes[] = new Price($priceForTax, $netPrice ? $priceForTax : $net, $taxRate, $tax);
+            $taxes[] = new Price($priceForTax, $isNetPrice ? $priceForTax : $net, $taxRate, $tax);
         }
 
         return $taxes;
@@ -60,7 +60,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
     /**
      * {@inheritdoc}
      */
-    public function recalculatePercentageDiscount($percentage, array $prices, $netPrice)
+    public function recalculatePercentageDiscount($percentage, array $prices, $isNetPrice)
     {
         $discounts = [];
         /** @var Price $price */
@@ -83,8 +83,8 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
             $discounts[$key]['netPrice'] += $newNet;
         }
 
-        return array_map(function ($item) use ($netPrice) {
-            return new Price($item['price'], $netPrice ? $item['price'] : $item['netPrice'], $item['taxRate'], null);
+        return array_map(function ($item) use ($isNetPrice) {
+            return new Price($item['price'], $isNetPrice ? $item['price'] : $item['netPrice'], $item['taxRate'], null);
         }, $discounts);
     }
 

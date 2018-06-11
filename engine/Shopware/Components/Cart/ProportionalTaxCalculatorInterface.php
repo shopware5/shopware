@@ -36,20 +36,20 @@ interface ProportionalTaxCalculatorInterface
      *
      * @param float   $discount - Price which calculated percentage by the provided prices array. Example: -10€ voucher
      * @param Price[] $prices   - Prices array which used for the "discount" calculation
-     * @param bool    $netPrice - Net price state of customergroup
+     * @param bool    $isNetPrice - Net price state of customergroup
      *
      * @return Price[]
      */
-    public function calculate($discount, $prices, $netPrice);
+    public function calculate($discount, $prices, $isNetPrice);
 
     /**
      * @param float   $percentage
      * @param Price[] $prices
-     * @param bool    $netPrice
+     * @param bool    $isNetPrice
      *
      * @return Price[]
      */
-    public function recalculatePercentageDiscount($percentage, array $prices, $netPrice);
+    public function recalculatePercentageDiscount($percentage, array $prices, $isNetPrice);
 
     /**
      * @param Price[] $prices
