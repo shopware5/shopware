@@ -32,7 +32,7 @@ class Migrations_Migration1402 extends Shopware\Components\Migrations\AbstractMi
         $this->addSql(
             'ALTER TABLE `s_order_details`
             ADD
-                articleDetailId INT(11) UNSIGNED NULL'
+                articledetailsID INT(11) UNSIGNED NULL'
         );
     }
 }

@@ -485,7 +485,7 @@ class sOrder
                 'orderID' => $orderID,
                 'ordernumber' => 0,
                 'articleID' => $basketRow['articleID'],
-                'articleDetailId' => $basketRow['additional_details']['articleDetailsID'],
+                'articledetailsID' => $basketRow['additional_details']['articleDetailsID'],
                 'articleordernumber' => $basketRow['ordernumber'],
                 'price' => $basketRow['priceNumeric'],
                 'quantity' => $basketRow['quantity'],
@@ -669,7 +669,7 @@ class sOrder
                 ean,
                 unit,
                 pack_unit,
-                articleDetailId
+                articledetailsID
                 )
                 VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s, %d)
             ';
