@@ -92,7 +92,7 @@ class AdminCreateCommand extends ShopwareCommand
         $this->fillOption('username', 'Username', $input, $output);
         $this->fillOption('name', 'Fullname', $input, $output);
         $this->fillOption('locale', 'Locale', $input, $output);
-        $this->fillOption('password', 'Password', $input, $output);
+        $this->fillSensitiveOption('password', 'Password', $input, $output);
     }
 
     /**
@@ -131,6 +131,16 @@ class AdminCreateCommand extends ShopwareCommand
         $input->setOption(
             $field,
             $io->ask($label, $input->getOption($field))
+        );
+    }
+
+    private function fillSensitiveOption($field, $label, InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+
+        $input->setOption(
+            $field,
+            $io->askHidden($label, $input->getOption($field))
         );
     }
 
