@@ -33,6 +33,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * Changed account-sidebar window to only display a `quit guest session` option
 * Changed some texts to fix its typos
 * Changed the translation logic for config elements of types `combo` and `select` to consider translations other than for the non-standard `en` locale, but to instead try the user's locale, `en_GB` and `en` as fallbacks before resorting to the first defined (by array index) translation.
+* Changed behaviour of the Zend/Mail/Protocol classes according to the Zend upstream repository
+  * the TLS protocol version used when sending E-Mails is not determined solely by the `STREAM_CRYPTO_METHOD_TLS_CLIENT` constant anymore. If `STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT` is available, TLSv1.1 and TLSv1.2 are added to the usable protocol versions.
 
 ## 5.4.4
 
