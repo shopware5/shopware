@@ -121,6 +121,7 @@
             <arg value="--email=demo@example.com"/>
             <arg value="--username=demo"/>
             <arg value="--password=demo"/>
+            <arg value="--password-confirm=demo"/>
             <arg value="--locale=de_DE"/>
         </exec>
     </target>
