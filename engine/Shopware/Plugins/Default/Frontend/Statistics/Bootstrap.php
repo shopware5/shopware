@@ -206,8 +206,11 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $sql = '
         INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType)
         VALUES (?, ?, NOW(), ?, ?)';
+
+        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
+
         Shopware()->Db()->query($sql, [
-            $this->filterIp($request->getClientIp()),
+            $ip,
             $request->getParam('requestPage', $request->getRequestUri()),
             empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
             $request->getDeviceType(),
@@ -223,7 +226,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      */
     public function refreshLog(Enlight_Controller_Request_Request $request)
     {
-        $ip = $this->filterIp($request->getClientIp());
+        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
         $deviceType = $request->getDeviceType();
         $shopId = Shopware()->Shop()->getId();
         $isNewRecord = false;
@@ -372,19 +375,5 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                 Shopware()->Session()->sPartner = $partner;
             }
         }
-    }
-
-    /**
-     * @param string $ip
-     *
-     * @return string
-     */
-    private function filterIp($ip)
-    {
-        if (Shopware()->Config()->get('anonymizeIp')) {
-            return Shopware()->Container()->get('shopware.components.privacy.ip_anonymizer')->anonymize($ip);
-        }
-
-        return $ip;
     }
 }
