@@ -24,6 +24,7 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Components\Cart\BasketHelperInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Random;
 
@@ -112,6 +113,16 @@ class sBasket
     private $connection;
 
     /**
+     * @var BasketHelperInterface
+     */
+    private $basketHelper;
+
+    /**
+     * @var bool
+     */
+    private $proportionalTaxCalculation;
+
+    /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null                 $db
      * @param Enlight_Event_EventManager|null                              $eventManager
      * @param Shopware_Components_Snippet_Manager|null                     $snippetManager
@@ -157,6 +168,12 @@ class sBasket
         if ($this->additionalTextService === null) {
             $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
         }
+
+        if ($this->basketHelper === null) {
+            $this->basketHelper = Shopware()->Container()->get('shopware.cart.basket_helper');
+        }
+
+        $this->proportionalTaxCalculation = $this->config->get('proportionalTaxCalculation');
     }
 
     /**
@@ -289,7 +306,7 @@ class sBasket
     {
         $voucher = $this->sGetVoucher();
         if ($voucher) {
-            $this->sDeleteArticle($voucher['basketID']);
+            $this->sDeleteArticle('voucher');
             $this->sAddVoucher($voucher['code']);
         }
     }
@@ -409,7 +426,21 @@ class sBasket
             ]
         );
 
-        if (!$notifyUntilBeforeAdd) {
+        if ($notifyUntilBeforeAdd) {
+            return;
+        }
+
+        if ($this->proportionalTaxCalculation && !$this->session->get('taxFree')) {
+            $this->basketHelper->addProportionalDiscount(
+                BasketHelperInterface::DISCOUNT_PERCENT,
+                -$basketDiscount,
+                $discountName,
+                3,
+                $name,
+                $this->sSYSTEM->sCurrency['factor'],
+                !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+            );
+        } else {
             $this->db->insert('s_order_basket', $params);
         }
     }
@@ -807,6 +838,71 @@ SQL;
         // Tax calculation for vouchers
         list($taxRate, $tax, $voucherDetails, $freeShipping) = $this->calculateVoucherValues($voucherDetails);
 
+        if ($this->proportionalTaxCalculation && !$this->session->get('taxFree') && $voucherDetails['taxconfig'] === 'auto') {
+            $taxCalculator = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator');
+            $prices = $this->basketHelper->getPositionPrices();
+            $hasMultipleTaxes = $taxCalculator->hasDifferentTaxes($prices);
+
+            if ($voucherDetails['percental']) {
+                $voucherPrices = $taxCalculator->recalculatePercentageDiscount('-' . $value, $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
+            } else {
+                $voucherPrices = $taxCalculator->calculate($voucherDetails['value'], $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
+            }
+
+            $voucherPrices = $this->eventManager->filter(
+                'Shopware_Modules_Basket_AddVoucher_VoucherPrices',
+                $voucherPrices,
+                [
+                    'subject' => $this,
+                    'voucher' => $voucherDetails,
+                    'vouchername' => $voucherName,
+                    'shippingfree' => $freeShipping,
+                    'tax' => $tax,
+                    'prices' => $prices,
+                    'hasMultipleTaxes' => $hasMultipleTaxes
+                ]
+            );
+
+            foreach ($voucherPrices as $voucherPrice) {
+                $sql = '
+                    INSERT INTO s_order_basket (
+                      sessionID, articlename, articleID, ordernumber, shippingfree,
+                      quantity, price, netprice,tax_rate, datum, modus, currencyFactor
+                    )
+                    VALUES (?,?,?,?,?,1,?,?,?,?,2,?)
+                    ';
+
+                $params = [
+                    $this->session->get('sessionId'),
+                    $voucherName . ($hasMultipleTaxes ? ' (' . $voucherPrice->getTaxRate() . '%)' : ''),
+                    $voucherDetails['id'],
+                    $voucherDetails['ordercode'],
+                    $freeShipping,
+                    $voucherPrice->getPrice(),
+                    $voucherPrice->getNetPrice(),
+                    $voucherPrice->getTaxRate(),
+                    $timeInsert,
+                    $this->sSYSTEM->sCurrency['factor'],
+                ];
+
+                $sql = $this->eventManager->filter(
+                    'Shopware_Modules_Basket_AddVoucher_FilterSql',
+                    $sql,
+                    [
+                        'subject' => $this,
+                        'params' => $params,
+                        'voucher' => $voucherDetails,
+                        'vouchername' => $voucherName,
+                        'shippingfree' => $freeShipping,
+                        'tax' => $tax,
+                    ]
+                );
+
+                $this->db->query($sql, $params);
+            }
+
+            return !empty($prices);
+        }
         // Finally, add the discount entry to the basket
         $sql = '
         INSERT INTO s_order_basket (
@@ -816,29 +912,29 @@ SQL;
         VALUES (?,?,?,?,?,1,?,?,?,?,2,?)
         ';
         $params = [
-            $this->session->get('sessionId'),
-            $voucherName,
-            $voucherDetails['id'],
-            $voucherDetails['ordercode'],
-            $freeShipping,
-            $voucherDetails['value'],
-            $tax,
-            $taxRate,
-            $timeInsert,
-            $this->sSYSTEM->sCurrency['factor'],
-        ];
+                $this->session->get('sessionId'),
+                $voucherName,
+                $voucherDetails['id'],
+                $voucherDetails['ordercode'],
+                $freeShipping,
+                $voucherDetails['value'],
+                $tax,
+                $taxRate,
+                $timeInsert,
+                $this->sSYSTEM->sCurrency['factor'],
+            ];
         $sql = $this->eventManager->filter(
-            'Shopware_Modules_Basket_AddVoucher_FilterSql',
-            $sql,
-            [
-                'subject' => $this,
-                'params' => $params,
-                'voucher' => $voucherDetails,
-                'vouchername' => $voucherName,
-                'shippingfree' => $freeShipping,
-                'tax' => $tax,
-            ]
-        );
+                'Shopware_Modules_Basket_AddVoucher_FilterSql',
+                $sql,
+                [
+                    'subject' => $this,
+                    'params' => $params,
+                    'voucher' => $voucherDetails,
+                    'vouchername' => $voucherName,
+                    'shippingfree' => $freeShipping,
+                    'tax' => $tax,
+                ]
+            );
 
         return (bool) $this->db->query($sql, $params);
     }
@@ -973,7 +1069,21 @@ SQL;
             ]
         );
 
-        if (!$notifyUntilBeforeAdd) {
+        if ($notifyUntilBeforeAdd) {
+            return null;
+        }
+
+        if ($this->proportionalTaxCalculation && !$this->session->get('taxFree')) {
+            $this->basketHelper->addProportionalDiscount(
+                BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                $surcharge,
+                $surchargeName,
+                4,
+                $name,
+                $this->sSYSTEM->sCurrency['factor'],
+                !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+            );
+        } else {
             $this->db->insert('s_order_basket', $params);
         }
 
@@ -1077,9 +1187,25 @@ SQL;
             ]
         );
 
-        if (!$notifyUntilBeforeAdd) {
-            $this->db->insert('s_order_basket', $params);
+        if ($notifyUntilBeforeAdd) {
+            return;
         }
+
+        if ($this->proportionalTaxCalculation && !$this->session->get('taxFree')) {
+            $this->basketHelper->addProportionalDiscount(
+                BasketHelperInterface::DISCOUNT_PERCENT,
+                $percent,
+                $surchargeName,
+                4,
+                $name,
+                $this->sSYSTEM->sCurrency['factor'],
+                !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+            );
+
+            return;
+        }
+
+        $this->db->insert('s_order_basket', $params);
     }
 
     /**
@@ -1589,7 +1715,13 @@ SQL;
     public function sDeleteArticle($id)
     {
         if ($id === 'voucher') {
-            $this->sDeleteVoucher();
+            $this->db->delete(
+                's_order_basket',
+                [
+                    'sessionID = ?' => $this->session->get('sessionId'),
+                    'modus = ?' => 2,
+                ]
+            );
         } else {
             $this->db->delete(
                 's_order_basket',
@@ -1856,44 +1988,11 @@ SQL;
     }
 
     /**
-     * Round a total to two decimal places. Also make sure to round to positive zero instead of negative zero.
-     *
-     * @param float $total a number to round
-     *
-     * @return float The number rounded to two decimal places, with -0.0 replaced with 0.0
-     */
-    private static function roundTotal($total)
-    {
-        $roundedTotal = round($total, 2);
-
-        // -0.0 == 0.0 in PHP
-        if (((float) $roundedTotal) == 0.0) {
-            // prevent -0.0 (FP negative zero) from being returned from this function
-            return 0.0;
-        }
-
-        return $roundedTotal;
-    }
-
-    /**
-     * Deletes the current basket voucher
-     *
-     * @throws \Enlight_Exception
-     */
-    private function sDeleteVoucher()
-    {
-        $voucher = $this->sGetVoucher();
-        if ($voucher) {
-            $this->sDeleteArticle($voucher['basketID']);
-        }
-    }
-
-    /**
      * Returns the current basket voucher or false
      *
      * @return array|false
      */
-    private function sGetVoucher()
+    public function sGetVoucher()
     {
         $voucher = $this->db->fetchRow(
             'SELECT id basketID, ordernumber, articleID as voucherID
@@ -1915,6 +2014,26 @@ SQL;
         }
 
         return $voucher;
+    }
+
+    /**
+     * Round a total to two decimal places. Also make sure to round to positive zero instead of negative zero.
+     *
+     * @param float $total a number to round
+     *
+     * @return float The number rounded to two decimal places, with -0.0 replaced with 0.0
+     */
+    private static function roundTotal($total)
+    {
+        $roundedTotal = round($total, 2);
+
+        // -0.0 == 0.0 in PHP
+        if (((float) $roundedTotal) == 0.0) {
+            // prevent -0.0 (FP negative zero) from being returned from this function
+            return 0.0;
+        }
+
+        return $roundedTotal;
     }
 
     /**
@@ -2228,7 +2347,7 @@ SQL;
                     [$temporaryTax]
                 );
                 $taxRate = $getTaxRate;
-                $tax = round($voucherDetails['value'] / (100 + ((int) $getTaxRate)) * 100, 3) * -1;
+                $tax = round($voucherDetails['value'] / (100 + ((float) $getTaxRate)) * 100, 3) * -1;
             } else {
                 // No tax
                 $tax = $voucherDetails['value'] * -1;

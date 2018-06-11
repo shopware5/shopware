@@ -95,6 +95,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             trackingCode: '{s name=overview/edit/tracking_code}Tracking code{/s}',
             shippingCost: '{s name=overview/edit/shipping_cost}Shipping costs ([0]){/s}',
             shippingCostNet: '{s name=overview/edit/shipping_cost_net}Shipping costs net ([0]){/s}',
+            shippingTaxRate: '{s name=overview/edit/shipping_tax_rate}Shipping tax rate{/s}',
             orderState: '{s name=overview/edit/order_status}Order status{/s}',
             paymentState: '{s name=overview/edit/payment_status}Payment status{/s}'
         },
@@ -746,6 +747,14 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                 submitLocaleSeparator: false,
                 name: 'invoiceShippingNet',
                 fieldLabel: Ext.String.format(me.snippets.edit.shippingCostNet, me.record.get('currency'))
+            },
+            {
+                xtype: 'numberfield',
+                decimalPrecision: 2,
+                submitLocaleSeparator: false,
+                name: 'invoiceShippingTaxRate',
+                disabled: me.record.get('isProportionalCalculation'),
+                fieldLabel: me.snippets.edit.shippingTaxRate
             },
             {
                 xtype: 'combobox',

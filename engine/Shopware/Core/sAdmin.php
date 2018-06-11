@@ -25,6 +25,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Components\Cart\BasketHelperInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
@@ -166,6 +167,19 @@ class sAdmin
     private $connection;
 
     /**
+     * @var BasketHelperInterface
+     */
+    private $basketHelper;
+
+    /**
+     * @var array
+     */
+    private $cache = [
+        'country' => [],
+        'payment' => [],
+    ];
+
+    /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null          $db
      * @param Enlight_Event_EventManager|null                       $eventManager
      * @param Shopware_Components_Config|null                       $config
@@ -221,6 +235,7 @@ class sAdmin
         $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
         $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
+        $this->basketHelper = Shopware()->Container()->get('shopware.cart.basket_helper');
     }
 
     /**
@@ -2409,12 +2424,11 @@ class sAdmin
      */
     public function sGetCountry($country)
     {
-        static $cache = [];
         if (empty($country)) {
             return false;
         }
-        if (isset($cache[$country])) {
-            return $cache[$country];
+        if (isset($this->cache['country'][$country])) {
+            return $this->cache['country'][$country];
         }
 
         if (is_numeric($country)) {
@@ -2433,7 +2447,7 @@ class sAdmin
             WHERE $sql
         ";
 
-        return $cache[$country] = $this->db->fetchRow($sql) ?: [];
+        return $this->cache['country'][$country] = $this->db->fetchRow($sql) ?: [];
     }
 
     /**
@@ -2446,12 +2460,11 @@ class sAdmin
      */
     public function sGetPaymentMean($payment)
     {
-        static $cache = [];
         if (empty($payment)) {
             return false;
         }
-        if (isset($cache[$payment])) {
-            return $cache[$payment];
+        if (isset($this->cache['payment'][$payment])) {
+            return $this->cache['payment'][$payment];
         }
         if (is_numeric($payment)) {
             $sql = $this->db->quoteInto('id = ?', $payment);
@@ -2465,20 +2478,20 @@ class sAdmin
             SELECT * FROM s_core_paymentmeans
             WHERE $sql
         ";
-        $cache[$payment] = $this->db->fetchRow($sql) ?: [];
+        $this->cache['payment'][$payment] = $this->db->fetchRow($sql) ?: [];
 
-        $cache[$payment]['country_surcharge'] = [];
-        if (!empty($cache[$payment]['surchargestring'])) {
-            foreach (explode(';', $cache[$payment]['surchargestring']) as $countrySurcharge) {
+        $this->cache['payment'][$payment]['country_surcharge'] = [];
+        if (!empty($this->cache['payment'][$payment]['surchargestring'])) {
+            foreach (explode(';', $this->cache['payment'][$payment]['surchargestring']) as $countrySurcharge) {
                 list($key, $value) = explode(':', $countrySurcharge);
                 $value = (float) str_replace(',', '.', $value);
                 if (!empty($value)) {
-                    $cache[$payment]['country_surcharge'][$key] = $value;
+                    $this->cache['payment'][$payment]['country_surcharge'][$key] = $value;
                 }
             }
         }
 
-        return $cache[$payment];
+        return $this->cache['payment'][$payment];
     }
 
     /**
@@ -3132,6 +3145,9 @@ class sAdmin
         if ($result['brutto'] < 0) {
             return ['brutto' => 0, 'netto' => 0];
         }
+
+        $result['taxMode'] = $dispatch['tax_calculation'];
+
         if (empty($dispatch['tax_calculation'])) {
             $result['tax'] = $basket['max_tax'];
         } else {
@@ -3963,22 +3979,34 @@ SQL;
             $basket_discount_net = $basket_discount_net * -1;
             $basket_discount = $basket_discount * -1;
 
-            $this->db->insert(
-                's_order_basket',
-                [
-                    'sessionID' => $this->session->offsetGet('sessionId'),
-                    'articlename' => '- ' . $percent . ' % ' . $discount_basket_name,
-                    'articleID' => 0,
-                    'ordernumber' => $discount_basket_ordernumber,
-                    'quantity' => 1,
-                    'price' => $basket_discount,
-                    'netprice' => $basket_discount_net,
-                    'tax_rate' => $tax_rate,
-                    'datum' => new Zend_Date(),
-                    'modus' => 3,
-                    'currencyFactor' => $currencyFactor,
-                ]
-            );
+            if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
+                $this->basketHelper->addProportionalDiscount(
+                    BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                    $basket_discount,
+                    '- ' . $percent . ' % ' . $discount_basket_name,
+                    3,
+                    $discount_basket_ordernumber,
+                    $this->sSYSTEM->sCurrency['factor'],
+                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                );
+            } else {
+                $this->db->insert(
+                    's_order_basket',
+                    [
+                        'sessionID' => $this->session->offsetGet('sessionId'),
+                        'articlename' => '- ' . $percent . ' % ' . $discount_basket_name,
+                        'articleID' => 0,
+                        'ordernumber' => $discount_basket_ordernumber,
+                        'quantity' => 1,
+                        'price' => $basket_discount,
+                        'netprice' => $basket_discount_net,
+                        'tax_rate' => $tax_rate,
+                        'datum' => new Zend_Date(),
+                        'modus' => 3,
+                        'currencyFactor' => $currencyFactor,
+                    ]
+                );
+            }
         }
     }
 
@@ -4009,22 +4037,34 @@ SQL;
             }
             $tax_rate = $discount_tax;
 
-            $this->db->insert(
-                's_order_basket',
-                [
-                    'sessionID' => $this->session->offsetGet('sessionId'),
-                    'articlename' => $discount_name,
-                    'articleID' => 0,
-                    'ordernumber' => $discount_ordernumber,
-                    'quantity' => 1,
-                    'price' => $discount,
-                    'netprice' => $discount_net,
-                    'tax_rate' => $tax_rate,
-                    'datum' => new Zend_Date(),
-                    'modus' => 4,
-                    'currencyFactor' => $currencyFactor,
-                ]
-            );
+            if (!$this->session->get('taxFree') && $this->config->get('proportionalTaxCalculation')) {
+                $this->basketHelper->addProportionalDiscount(
+                    BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                    $discount,
+                    $discount_name,
+                    4,
+                    $discount_ordernumber,
+                    $this->sSYSTEM->sCurrency['factor'],
+                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                );
+            } else {
+                $this->db->insert(
+                    's_order_basket',
+                    [
+                        'sessionID' => $this->session->offsetGet('sessionId'),
+                        'articlename' => $discount_name,
+                        'articleID' => 0,
+                        'ordernumber' => $discount_ordernumber,
+                        'quantity' => 1,
+                        'price' => $discount,
+                        'netprice' => $discount_net,
+                        'tax_rate' => $tax_rate,
+                        'datum' => new Zend_Date(),
+                        'modus' => 4,
+                        'currencyFactor' => $currencyFactor,
+                    ]
+                );
+            }
         }
     }
 
@@ -4040,9 +4080,6 @@ SQL;
      */
     private function handlePaymentMeanSurcharge($country, $payment, $currencyFactor, $dispatch, $discount_tax)
     {
-        $surcharge_name = $this->snippetManager
-            ->getNamespace('backend/static/discounts_surcharges')
-            ->get('payment_surcharge_absolute', 'Surcharge for payment');
         $surcharge_ordernumber = $this->config->get('sPAYMENTSURCHARGEABSOLUTENUMBER', 'PAYMENTSURCHARGEABSOLUTENUMBER');
         $percent_ordernumber = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
 
@@ -4058,28 +4095,50 @@ SQL;
             $payment['surcharge'] = 0;
             if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
                 $surcharge_net = $surcharge;
-            //$tax_rate = 0;
             } else {
                 $surcharge_net = round($surcharge / (100 + $discount_tax) * 100, 2);
             }
 
             $tax_rate = $discount_tax;
-            $this->db->insert(
-                's_order_basket',
-                [
-                    'sessionID' => $this->session->offsetGet('sessionId'),
-                    'articlename' => $surcharge_name,
-                    'articleID' => 0,
-                    'ordernumber' => $surcharge_ordernumber,
-                    'quantity' => 1,
-                    'price' => $surcharge,
-                    'netprice' => $surcharge_net,
-                    'tax_rate' => $tax_rate,
-                    'datum' => new Zend_Date(),
-                    'modus' => 4,
-                    'currencyFactor' => $currencyFactor,
-                ]
-            );
+
+            if ($surcharge > 0) {
+                $surcharge_name = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_add');
+            } else {
+                $surcharge_name = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_dev');
+            }
+
+            if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
+                $this->basketHelper->addProportionalDiscount(
+                    BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                    $surcharge,
+                    $surcharge_name,
+                    4,
+                    $surcharge_ordernumber,
+                    $this->sSYSTEM->sCurrency['factor'],
+                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                );
+            } else {
+                $this->db->insert(
+                    's_order_basket',
+                    [
+                        'sessionID' => $this->session->offsetGet('sessionId'),
+                        'articlename' => $surcharge_name,
+                        'articleID' => 0,
+                        'ordernumber' => $surcharge_ordernumber,
+                        'quantity' => 1,
+                        'price' => $surcharge,
+                        'netprice' => $surcharge_net,
+                        'tax_rate' => $tax_rate,
+                        'datum' => new Zend_Date(),
+                        'modus' => 4,
+                        'currencyFactor' => $currencyFactor,
+                    ]
+                );
+            }
         }
 
         // Percentage surcharge
@@ -4110,22 +4169,35 @@ SQL;
             }
 
             $tax_rate = $discount_tax;
-            $this->db->insert(
-                's_order_basket',
-                [
-                    'sessionID' => $this->session->offsetGet('sessionId'),
-                    'articlename' => $percent_name,
-                    'articleID' => 0,
-                    'ordernumber' => $percent_ordernumber,
-                    'quantity' => 1,
-                    'price' => $percent,
-                    'netprice' => $percent_net,
-                    'tax_rate' => $tax_rate,
-                    'datum' => new Zend_Date(),
-                    'modus' => 4,
-                    'currencyFactor' => $currencyFactor,
-                ]
-            );
+
+            if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
+                $this->basketHelper->addProportionalDiscount(
+                    BasketHelperInterface::DISCOUNT_PERCENT,
+                    $payment['debit_percent'],
+                    $percent_name,
+                    4,
+                    $percent_ordernumber,
+                    $this->sSYSTEM->sCurrency['factor'],
+                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                );
+            } else {
+                $this->db->insert(
+                    's_order_basket',
+                    [
+                        'sessionID' => $this->session->offsetGet('sessionId'),
+                        'articlename' => $percent_name,
+                        'articleID' => 0,
+                        'ordernumber' => $percent_ordernumber,
+                        'quantity' => 1,
+                        'price' => $percent,
+                        'netprice' => $percent_net,
+                        'tax_rate' => $tax_rate,
+                        'datum' => new Zend_Date(),
+                        'modus' => 4,
+                        'currencyFactor' => $currencyFactor,
+                    ]
+                );
+            }
         }
 
         return $payment;

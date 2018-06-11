@@ -21,9 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Cart\Struct\Price;
 
 /**
  * Order model for document generation
+ *
  * @property int id;
  * @property array order;
  * @property ArrayObject positions;
@@ -281,35 +283,80 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processOrder()
     {
-        if ($this->_order['invoice_shipping_net'] != 0) {
-            // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
-            $approximateTaxRate = $this->_order['invoice_shipping'] / $this->_order['invoice_shipping_net'] * 100 - 100;
+        $shippingName = Shopware()->Snippets()->getNamespace('documents/index')->get('ShippingCosts', 'Shipping costs', true);
+
+        if ($this->_order['invoice_shipping_tax_rate'] === null) {
+            if ($this->_order['invoice_shipping_net'] != 0) {
+                // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
+                $approximateTaxRate = $this->_order['invoice_shipping'] / $this->_order['invoice_shipping_net'] * 100 - 100;
+            } else {
+                $approximateTaxRate = 0;
+            }
+
+            $taxShipping = $this->getTaxRateByApproximateTaxRate(
+                $approximateTaxRate,
+                $this->_shipping['country']['areaID'],
+                $this->_shipping['countryID'],
+                $this->_shipping['stateID'],
+                $this->_user['customergroupID']
+            );
+
+            $taxShipping = (float) $taxShipping;
         } else {
-            $approximateTaxRate = 0;
+            if ($this->_order['invoice_shipping_net'] != 0) {
+                $taxShipping = $this->_order['invoice_shipping_tax_rate'];
+            } else {
+                $taxShipping = 0;
+            }
         }
 
-        $taxShipping = $this->getTaxRateByApproximateTaxRate(
-            $approximateTaxRate,
-            $this->_shipping['country']['areaID'],
-            $this->_shipping['countryID'],
-            $this->_shipping['stateID'],
-            $this->_user['customergroupID']
-        );
-
-        $taxShipping = (float) $taxShipping;
         $this->_shippingCosts = $this->_order['invoice_shipping'];
 
         if ($this->_shippingCostsAsPosition == true && !empty($this->_shippingCosts)) {
             if ($this->_order['taxfree']) {
                 $this->_amountNetto = $this->_amountNetto + $this->_order['invoice_shipping'];
             } else {
-                $this->_amountNetto = $this->_amountNetto + ($this->_order['invoice_shipping'] / (100 + $taxShipping) * 100);
-                if (!empty($taxShipping) && !empty($this->_order['invoice_shipping'])) {
-                    $this->_tax[number_format($taxShipping, 2)] += ($this->_order['invoice_shipping'] / (100 + $taxShipping)) * $taxShipping;
+                if ($this->_order['is_proportional_calculation']) {
+                    $taxes = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator')->calculate($this->_order['invoice_shipping'], $this->getPricePositions(), false);
+
+                    $taxNet = 0;
+
+                    /** @var Price $tax */
+                    foreach ($taxes as $tax) {
+                        $taxNet += $tax->getNetPrice();
+                        $this->_tax[number_format($tax->getTaxRate(), 2)] += $tax->getTax();
+                    }
+
+                    $this->_amountNetto += $taxNet;
+                } else {
+                    $this->_amountNetto += ($this->_order['invoice_shipping'] / (100 + $taxShipping) * 100);
+                    if (!empty($taxShipping) && !empty($this->_order['invoice_shipping'])) {
+                        $this->_tax[number_format($taxShipping, 2)] += ($this->_order['invoice_shipping'] / (100 + $taxShipping)) * $taxShipping;
+                    }
                 }
             }
 
             $this->_amount = $this->_amount + $this->_order['invoice_shipping'];
+
+            if ($this->_order['is_proportional_calculation']) {
+                /** @var Price $tax */
+                foreach ($taxes as $tax) {
+                    $shipping = [];
+                    $shipping['quantity'] = 1;
+                    $shipping['netto'] = $tax->getNetPrice();
+                    $shipping['tax'] = $tax->getTaxRate();
+                    $shipping['price'] = $tax->getPrice();
+                    $shipping['amount'] = $tax->getPrice();
+                    $shipping['modus'] = 1;
+                    $shipping['amount_netto'] = $tax->getNetPrice();
+                    $shipping['articleordernumber'] = '';
+                    $shipping['name'] = $shippingName . ' ' . (count($taxes) > 1 ? '(' . $tax->getTaxRate() . '%)' : '');
+
+                    $this->positions[] = $shipping;
+                }
+
+                return;
+            }
 
             $shipping = [];
             $shipping['quantity'] = 1;
@@ -326,7 +373,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $shipping['modus'] = 1;
             $shipping['amount_netto'] = $shipping['netto'];
             $shipping['articleordernumber'] = '';
-            $shipping['name'] = 'Versandkosten';
+            $shipping['name'] = $shippingName;
 
             $this->positions[] = $shipping;
         }
@@ -479,7 +526,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 if (empty($position['tax_rate'])) {
                     if ($ticketResult['taxconfig'] == 'default' || empty($ticketResult['taxconfig'])) {
                         $position['tax'] = Shopware()->Config()->sVOUCHERTAX;
-                        // Pre 3.5.4 behaviour
+                    // Pre 3.5.4 behaviour
                     } elseif ($ticketResult['taxconfig'] == 'auto') {
                         // Check max. used tax-rate from basket
                         $position['tax'] = $this->getMaxTaxRate();
@@ -824,5 +871,21 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     private function getDemoData()
     {
         return include __DIR__ . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR . 'OrderData.php';
+    }
+
+    /**
+     * Returns prices from invoice positions
+     */
+    private function getPricePositions()
+    {
+        $prices = [];
+
+        foreach ($this->positions as $position) {
+            if ($position['modus'] === '0') {
+                $prices[] = new Price($position['amount'], $position['amount_netto'], (float) $position['tax_rate'], null);
+            }
+        }
+
+        return $prices;
     }
 }

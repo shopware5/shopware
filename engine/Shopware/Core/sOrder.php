@@ -580,6 +580,7 @@ class sOrder
             'invoice_amount_net' => $this->sBasketData['AmountNetNumeric'],
             'invoice_shipping' => (float) $this->sShippingcostsNumeric,
             'invoice_shipping_net' => (float) $this->sShippingcostsNumericNet,
+            'invoice_shipping_tax_rate' => isset($this->sBasketData['sShippingcostsTaxProportional']) ? 0 : $this->sBasketData['sShippingcostsTax'],
             'ordertime' => new Zend_Db_Expr('NOW()'),
             'changed' => new Zend_Db_Expr('NOW()'),
             'status' => 0,
@@ -599,6 +600,7 @@ class sOrder
             'subshopID' => $mainShop->getId(),
             'remote_addr' => (string) $_SERVER['REMOTE_ADDR'],
             'deviceType' => $this->deviceType,
+            'is_proportional_calculation' => isset($this->sBasketData['sShippingcostsTaxProportional']) ? 1 : 0,
         ];
 
         $orderParams = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterParams', $orderParams, ['subject' => $this]);

@@ -328,6 +328,13 @@ class Order extends ModelEntity
     private $invoiceShippingNet;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="invoice_shipping_tax_rate", type="decimal", nullable=true)
+     */
+    private $invoiceShippingTaxRate;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="ordertime", type="datetime", nullable=false)
@@ -458,6 +465,13 @@ class Order extends ModelEntity
      * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
      */
     private $deviceType = 'desktop';
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_proportional_calculation",type="boolean", nullable=false)
+     */
+    private $isProportionalCalculation = false;
 
     public function __construct()
     {
@@ -603,6 +617,22 @@ class Order extends ModelEntity
     public function getInvoiceShippingNet()
     {
         return $this->invoiceShippingNet;
+    }
+
+    /**
+     * @return float
+     */
+    public function getInvoiceShippingTaxRate()
+    {
+        return $this->invoiceShippingTaxRate;
+    }
+
+    /**
+     * @param float $invoiceShippingTaxRate
+     */
+    public function setInvoiceShippingTaxRate($invoiceShippingTaxRate)
+    {
+        $this->invoiceShippingTaxRate = $invoiceShippingTaxRate;
     }
 
     /**
@@ -1299,6 +1329,22 @@ class Order extends ModelEntity
     public function getDeviceType()
     {
         return $this->deviceType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProportionalCalculation()
+    {
+        return $this->isProportionalCalculation;
+    }
+
+    /**
+     * @param bool $proportionalCalculation
+     */
+    public function setIsProportionalCalculation($proportionalCalculation)
+    {
+        $this->isProportionalCalculation = $proportionalCalculation;
     }
 
     /**
