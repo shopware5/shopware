@@ -176,6 +176,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $data = $this->translateValues($fallback, $data);
         $data = $this->translateValues($locale->getId(), $data);
 
+        // 'en' is supported as last fallback.
+        $storeFallbackLocales = [substr($language, 0, 2), 'en_GB', 'en'];
+
         foreach ($data['elements'] as &$values) {
             $values = $this->translateValues($fallback, $values);
             $values = $this->translateValues($locale->getId(), $values);
@@ -184,8 +187,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 continue;
             }
 
-            $values['options']['store'] = $this->translateStore('en', $values['options']['store']);
-            $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
+            $store = $values['options']['store'];
+            // Replace the store, which may contain multiple translations, with
+            // a store with translated messages:
+            $values['options']['store'] = $this->translateStore($language, $store, $storeFallbackLocales);
             if (!isset($values['options']['queryMode'])) {
                 $values['options']['queryMode'] = 'remote';
             }
@@ -907,6 +912,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     /**
      * Helper function to translate the store of select- and combo-fields
      * Store value will be replaced by the value in the correct language.
+     * If no match for $language is found in the $store array, the first found translation
+     * for the languages defined by $fallbackLocales will be used.
      * If there is no matching language in array defined, the first array element will be used.
      * If the store or a value is not an array, it will not be changed.
      *
@@ -915,37 +922,62 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      * $store = array(
      *              array(1, array('de_DE' => 'Auto', 'en_GB' => 'car')),
      *              array(2, array('de_DE' => 'Hund', 'en_GB' => 'dog')),
-     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat'))
+     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat')),
+     *              array(4, 'A string without translation')
      *          );
      *
-     * @param string $language
+     * @param string $language        the preferred locale (e.g., the user's locale)
      * @param mixed  $store
+     * @param array  $fallbackLocales a list of locales (e.g., ['en_GB', 'en'])
      *
      * @return mixed
      */
-    private function translateStore($language, $store)
+    private function translateStore($language, $store, array $fallbackLocales)
     {
         if (!is_array($store)) {
             return $store;
         }
 
+        // All locales ordered according to which translations shall be preferred:
+        $tryLocales = array_merge([$language], $fallbackLocales);
+
         foreach ($store as &$row) {
             $value = array_pop($row);
 
+            // If not an array, there are no translations and we directly choose the given value:
             if (!is_array($value)) {
                 $row[] = $value;
                 continue;
             }
 
-            if (!array_key_exists($language, $value)) {
-                $row[] = array_shift($value);
-                continue;
-            }
+            // Find the most preferable translation:
+            $translation = $this->getTranslation($value, $tryLocales);
 
-            $row[] = $value[$language];
+            if ($translation) {
+                $row[] = $translation;
+            } else {
+                // If none of the available locales could be identified as preferable, fallback to the first defined translation:
+                $row[] = array_shift($value);
+            }
         }
 
         return $store;
+    }
+
+    /**
+     * @param array $value
+     * @param array $tryLocales
+     * @return string|null
+     */
+    private function getTranslation(array $value, array $tryLocales)
+    {
+        foreach ($tryLocales as $tryLocale) {
+            if (isset($value[$tryLocale])) {
+                return $value[$tryLocale];
+            }
+        }
+
+        return null;
     }
 
     private function createDocumentElements($model)
