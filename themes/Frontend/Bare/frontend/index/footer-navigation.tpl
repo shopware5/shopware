@@ -128,7 +128,14 @@
                         {* Data protection information *}
                         {block name="frontend_index_footer_column_newsletter_privacy"}
                             {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
-                                {include file="frontend/_includes/privacy.tpl"}
+                                {$checkboxNecessary=true}
+
+                                {* If a captcha is active, the user has to accept the privacy statement on the newsletter page *}
+                                {if {config name=newsletterCaptcha} == "nocaptcha"}
+                                    {$checkboxNecessary=false}
+                                {/if}
+
+                                {include file="frontend/_includes/privacy.tpl" checkboxNecessary=$checkboxNecessary}
                             {/if}
                         {/block}
                     </form>
