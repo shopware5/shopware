@@ -317,9 +317,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
                 $this->View()->assign($orderVariables);
 
-                if ($this->View()->sBasketView) {
-                    $this->View()->sBasket = $this->View()->sBasketView;
-                    unset($this->View()->sBasketView);
+                if ($this->View()->getAssign('sBasketView')) {
+                    $this->View()->assign('sBasket', $this->View()->getAssign('sBasketView'));
+                    $this->View()->clearAssign('sBasketView');
                 }
 
                 return;
@@ -344,9 +344,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         $this->View()->assign($orderVariables);
-        if ($this->View()->sBasketView) {
-            $this->View()->sBasket = $this->View()->sBasketView;
-            unset($this->View()->sBasketView);
+        if ($this->View()->getAssign('sBasketView')) {
+            $this->View()->assign('sBasket', $this->View()->getAssign('sBasketView'));
+            $this->View()->clearAssign('sBasketView');
         }
 
         if ($this->basket->sCountBasket() <= 0) {
@@ -429,9 +429,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->assign($orderVariables);
 
-        if ($this->View()->sBasketView) {
-            $this->View()->sBasket = $this->View()->sBasketView;
-            unset($this->View()->sBasketView);
+        if ($this->View()->getAssign('sBasketView')) {
+            $this->View()->assign('sBasket', $this->View()->getAssign('sBasketView'));
+            $this->View()->clearAssign('sBasketView');
         }
     }
 
