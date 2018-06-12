@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Shopware_Components_Config;
 
-class RegistrationCleanupService implements RegistrationCleanupServiceInterface
+class OptinCleanupService implements OptinCleanupServiceInterface
 {
     /**
      * @var Shopware_Components_Config
@@ -62,16 +62,9 @@ class RegistrationCleanupService implements RegistrationCleanupServiceInterface
             $queryBuilder = $this->connection->createQueryBuilder();
 
             $queryBuilder->delete('s_core_optin')
-                ->where('type = "swRegister"')
+                ->where('type != "swRegister"')
+                ->where('type LIKE "sw%"')
                 ->andWhere('datum < NOW() - INTERVAL :interval DAY')
-                ->setParameter(':interval', $interval)
-                ->execute();
-
-            $queryBuilder->delete('s_user')
-                ->where('doubleOptinEmailSentDate < NOW() - INTERVAL :interval DAY')
-                ->andWhere('doubleOptinConfirmDate IS NULL')
-                ->andWhere('doubleOptinRegister = true')
-                ->andWhere('active = 0')
                 ->setParameter(':interval', $interval)
                 ->execute();
 

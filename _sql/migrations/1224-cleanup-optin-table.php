@@ -21,38 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Components\Register;
-
-use Enlight\Event\SubscriberInterface;
-
-class RegistrationCleanupSubscriber implements SubscriberInterface
+class Migrations_Migration1224 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * @var RegistrationCleanupServiceInterface
-     */
-    private $cleanupService;
-
-    /**
-     * @param RegistrationCleanupServiceInterface $cleanupService
-     */
-    public function __construct(RegistrationCleanupServiceInterface $cleanupService)
+    public function up($modus)
     {
-        $this->cleanupService = $cleanupService;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Shopware_CronJob_RegistrationCleanup' => 'cleanup',
-        ];
-    }
-
-    public function cleanup()
-    {
-        return $this->cleanupService->cleanup();
+        // New Cronjob
+        $sql = "INSERT INTO `s_crontab` (`name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `disable_on_error`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
+                ('s_core_optin table cleanup', 'OptinCleanup', NULL, '', (CURDATE() + INTERVAL 3 HOUR), NULL, 86400, 1, 0, '2016-01-01 01:00:00', '', '', NULL);";
+        $this->addSql($sql);
     }
 }

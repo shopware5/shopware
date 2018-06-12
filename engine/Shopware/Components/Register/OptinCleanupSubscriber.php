@@ -26,17 +26,17 @@ namespace Shopware\Components\Register;
 
 use Enlight\Event\SubscriberInterface;
 
-class RegistrationCleanupSubscriber implements SubscriberInterface
+class OptinCleanupSubscriber implements SubscriberInterface
 {
     /**
-     * @var RegistrationCleanupServiceInterface
+     * @var OptinCleanupServiceInterface
      */
     private $cleanupService;
 
     /**
-     * @param RegistrationCleanupServiceInterface $cleanupService
+     * @param OptinCleanupServiceInterface $cleanupService
      */
-    public function __construct(RegistrationCleanupServiceInterface $cleanupService)
+    public function __construct(OptinCleanupServiceInterface $cleanupService)
     {
         $this->cleanupService = $cleanupService;
     }
@@ -47,7 +47,7 @@ class RegistrationCleanupSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Shopware_CronJob_RegistrationCleanup' => 'cleanup',
+            'Shopware_CronJob_OptinCleanup' => 'cleanup',
         ];
     }
 

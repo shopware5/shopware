@@ -109,9 +109,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
                     $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
 
                     Shopware()->Db()->query('
-                    INSERT INTO s_core_optin (datum,hash,data)
+                    INSERT INTO s_core_optin (datum,hash,data,type)
                     VALUES (
-                    now(),?,?
+                    now(),?,?,"swNewsletter"
                     )
                     ', [$hash, $data]);
                 }

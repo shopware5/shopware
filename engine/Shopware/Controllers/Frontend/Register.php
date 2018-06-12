@@ -212,7 +212,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $hash = $this->Request()->get('sConfirmation');
 
-        $sql = "SELECT `data` FROM `s_core_optin` WHERE `hash` = ? AND type = 'register'";
+        $sql = "SELECT `data` FROM `s_core_optin` WHERE `hash` = ? AND type = 'swRegister'";
         $result = $connection->fetchColumn($sql, [$hash]);
 
         // Triggers an Error-Message, which tells the customer that his confirmation link was invalid
@@ -255,7 +255,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $modelManager->persist($customer);
         $modelManager->flush();
 
-        $sql = "DELETE FROM `s_core_optin` WHERE `hash` = ?  AND type = 'register'";
+        $sql = "DELETE FROM `s_core_optin` WHERE `hash` = ?  AND type = 'swRegister'";
         $connection->executeQuery($sql, [$this->Request()->get('sConfirmation')]);
 
         $this->saveRegisterSuccess($data, $customer);

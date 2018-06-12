@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1220 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1225 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -52,12 +52,12 @@ class Migrations_Migration1220 extends Shopware\Components\Migrations\AbstractMi
 
         // Add Cronjob-Settings in Backend
         $sql = "INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
-                VALUES ( @formId, 'optintimetodelete', 'i:3;', 'Tage ohne Verifizierung bis zur Löschung', 'Wenn Double-Opt-In aktiv ist: Die Zeit, bis ein angemeldeter, aber nicht aktivierter Benutzer gelöscht wird', 'number', '0', '16', '0', NULL )";
+                VALUES ( @formId, 'optintimetodelete', 'i:3;', 'Tage ohne Verifizierung bis zur Löschung', 'Für Double-Opt-In: Zeitraum, nachdem nicht bestätigte Aktionen gelöscht werden.', 'number', '0', '16', '0', NULL )";
         $this->addSql($sql);
 
         // Translation
         $sql = "INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
-                VALUES ( LAST_INSERT_ID(), 2, 'Days without confirmation until deletion', 'If Double-Opt-In is active: Time until an registed, but not confirmed customer will be deleted' )";
+                VALUES ( LAST_INSERT_ID(), 2, 'Days without confirmation until deletion', 'For Double-Opt-In: Time after which unconfirmed actions are deleted.' )";
         $this->addSql($sql);
 
         // Store localePrefix

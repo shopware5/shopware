@@ -24,35 +24,12 @@
 
 namespace Shopware\Components\Register;
 
-use Enlight\Event\SubscriberInterface;
-
-class RegistrationCleanupSubscriber implements SubscriberInterface
+interface OptinCleanupServiceInterface
 {
     /**
-     * @var RegistrationCleanupServiceInterface
+     * Cronjob Service to cleanup expired confirmations from the `s_core_optin` table
+     *
+     * @return bool
      */
-    private $cleanupService;
-
-    /**
-     * @param RegistrationCleanupServiceInterface $cleanupService
-     */
-    public function __construct(RegistrationCleanupServiceInterface $cleanupService)
-    {
-        $this->cleanupService = $cleanupService;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Shopware_CronJob_RegistrationCleanup' => 'cleanup',
-        ];
-    }
-
-    public function cleanup()
-    {
-        return $this->cleanupService->cleanup();
-    }
+    public function cleanup();
 }
