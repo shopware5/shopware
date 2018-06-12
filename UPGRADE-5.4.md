@@ -32,7 +32,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
 * Changed behaviour of account controller for onetime accounts, which now redirects to checkout
-  * Changed account-sidebar window to only display a `quit guest session` option
+  * Changed account-sidebar window to only display a `close guest session` option
 * Changed error handling of missing blog articles or CMS pages, the configured setting in the backend is now respected
 * Changed the translation logic for config elements of types `combo` and `select` to consider translations other than for the non-standard `en` locale, but to instead try the user's locale, `en_GB` and `en` as fallbacks before resorting to the first defined (by array index) translation.
 * Changed behaviour of the Zend/Mail/Protocol classes according to the Zend upstream repository
@@ -259,7 +259,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed all writing actions to POST to be more HTTP compliant.
     * Checkout actions:
         - `finish`
-
     * Basket actions
         - `addArticle`
         - `addAccessories`
@@ -271,7 +270,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `ajaxAddArticleCart`
         - `ajaxDeleteArticle`
         - `ajaxDeleteArticleCart`
-
 * Changed JSONP requests to JSON in the following Frontend controllers:
     * Controller List
         - Frontend/AjaxSearch.php
@@ -301,7 +299,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
         - `s_core_shops.secure_host`
         - `s_core_shops.secure_base_path`
         - `s_core_shops.always_secure`
-
     * Removed methods
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::setSecureHost`
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::getSecureHost`
