@@ -24,6 +24,10 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
+use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkDataResult;
 use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
@@ -32,7 +36,7 @@ class BenchmarkStatisticsService
     /**
      * @var StatisticsService
      */
-    private $benchmark;
+    private $statistics;
 
     /**
      * @var BenchmarkRepository
@@ -40,33 +44,33 @@ class BenchmarkStatisticsService
     private $benchmarkRepository;
 
     /**
-     * @var \DateInterval
+     * @var DateInterval
      */
     private $interval;
 
     /**
      * @var BusinessIntelligenceService
      */
-    private $statistics;
+    private $biService;
 
     /**
-     * @param StatisticsService           $benchmark
-     * @param BenchmarkRepository         $benchmarkRepository
-     * @param BusinessIntelligenceService $statistics
-     * @param \DateInterval|null          $interval
+     * @param StatisticsService $statistics
+     * @param BenchmarkRepository $benchmarkRepository
+     * @param BusinessIntelligenceService $biService
+     * @param DateInterval|null $interval
      *
      * @throws \Exception
      */
     public function __construct(
         BenchmarkRepository $benchmarkRepository,
-        StatisticsService $benchmark,
-        BusinessIntelligenceService $statistics,
-        \DateInterval $interval = null)
-    {
+        StatisticsService $statistics,
+        BusinessIntelligenceService $biService,
+        DateInterval $interval = null
+    ) {
         $this->benchmarkRepository = $benchmarkRepository;
-        $this->benchmark = $benchmark;
         $this->statistics = $statistics;
-        $this->interval = $interval ?: new \DateInterval('P1D');
+        $this->biService = $biService;
+        $this->interval = $interval ?: new DateInterval('P1D');
     }
 
     public function sendBenchmarkData()
@@ -74,18 +78,23 @@ class BenchmarkStatisticsService
         /** @var BenchmarkConfig $benchmarkConfig */
         $benchmarkConfig = $this->benchmarkRepository->getMainConfig();
 
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $statisticsResponse = null;
+        $biResponse = null;
 
-        if ($benchmarkConfig->isActive() &&
-            $benchmarkConfig->getLastReceived()->add($this->interval) > $now
-        ) {
-            $this->statistics->transmit();
+        $now = new DateTime('now', new DateTimeZone('UTC'));
+
+        if ($benchmarkConfig->isActive()) {
+
+            if ($benchmarkConfig->getLastSent()->add($this->interval) < $now) {
+                $statisticsResponse = $this->statistics->transmit();
+            }
+
+            if ($benchmarkConfig->getLastReceived()->add($this->interval) < $now) {
+                $biResponse = $this->biService->transmit();
+            }
+
         }
 
-        if ($benchmarkConfig->isActive() &&
-            $benchmarkConfig->getLastSent()->add($this->interval) > $now
-        ) {
-            $this->benchmark->transmit();
-        }
+        return new BenchmarkDataResult($statisticsResponse, $biResponse);
     }
 }

@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      * Add an acl permission rule to $this->aclPermissions array
      * Permissions will be checked automatically.
      *
-     * @param string $action       Name of action with action prefix
+     * @param string $action       Name of action with or without 'Action'-suffix
      * @param string $privilege    Name of privilege as you have set in s_core_acl_privileges
      * @param string $errorMessage Optionally error message to show if permission denied
      */

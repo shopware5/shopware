@@ -49,12 +49,15 @@ Ext.define('Shopware.apps.Benchmark.controller.Main', {
      * @param { Ext.window.Window } win
      */
     onBeforeCloseOverviewWindow: function (win) {
-        var checked = win.down('#disableBenchmarkTeaser').getValue();
-        if (checked) {
+        /*{if {acl_is_allowed privilege=manage}}*/
+        var el =  win.down('#disableBenchmarkTeaser');
+
+        if (el && el.getValue()) {
             Ext.Ajax.request({
                 url: '{url controller=Benchmark action=disableBenchmarkTeaser}'
             });
         }
+        /*{/if}*/
     }
 });
 //{/block}
