@@ -461,7 +461,6 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
             $shopService->updateShop($shop);
             $currencyService->updateCurrency($shop);
             $shopService->updateConfig($shop);
-            $shopService->updateCmsSupportMails($shop->email);
             $localeSettingsService->updateLocaleSettings($locale);
         } catch (\Exception $e) {
             $hasErrors = true;

@@ -2734,7 +2734,7 @@ CREATE TABLE IF NOT EXISTS `s_core_customergroups` (
 --
 
 INSERT INTO `s_core_customergroups` (`id`, `groupkey`, `description`, `tax`, `taxinput`, `mode`, `discount`, `minimumorder`, `minimumordersurcharge`) VALUES
-(1, 'EK', 'Shopkunden', 1, 1, 0, 0, 0, 0);
+(1, 'EK', 'Shopkunden', 1, 1, 0, 0, 10, 5);
 
 -- --------------------------------------------------------
 

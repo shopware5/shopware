@@ -101,18 +101,8 @@ EOT;
             throw new \RuntimeException('Please fill in all required fields. (shop configuration#2)');
         }
 
-        $this->updateMailAddress($shop);
+        $this->updateMailAddresses($shop);
         $this->updateShopName($shop);
-    }
-
-    /**
-     * @param string $mail
-     */
-    public function updateCmsSupportMails($mail)
-    {
-        $sql = 'UPDATE `s_cms_support` SET mail = :mail';
-        $prepared = $this->connection->prepare($sql);
-        $prepared->execute(['mail' => $mail]);
     }
 
     /**
@@ -137,9 +127,17 @@ EOT;
     /**
      * @param Shop $shop
      */
-    private function updateMailAddress(Shop $shop)
+    private function updateMailAddresses(Shop $shop)
     {
         $this->updateConfigValue('mail', $shop->email);
+
+        $sql = 'UPDATE `s_cms_support` SET email = :email';
+        $prepareStatement = $this->connection->prepare($sql);
+        $prepareStatement->execute(['email' => $shop->email]);
+
+        $sql = 'UPDATE `s_campaigns_sender` SET email = :email';
+        $prepareStatement = $this->connection->prepare($sql);
+        $prepareStatement->execute(['email' => $shop->email]);
     }
 
     /**
