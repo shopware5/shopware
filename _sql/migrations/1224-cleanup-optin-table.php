@@ -27,7 +27,7 @@ class Migrations_Migration1224 extends Shopware\Components\Migrations\AbstractMi
     {
         // New Cronjob
         $sql = "INSERT INTO `s_crontab` (`name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `disable_on_error`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
-                ('s_core_optin table cleanup', 'OptinCleanup', NULL, '', (CURDATE() + INTERVAL 3 HOUR), NULL, 86400, 1, 0, '2016-01-01 01:00:00', '', '', NULL);";
+                ('Opt-In table cleanup', 'OptinCleanup', NULL, '', (CURDATE() + INTERVAL 3 HOUR), NULL, 86400, 1, 0, '2016-01-01 01:00:00', '', '', NULL);";
         $this->addSql($sql);
     }
 }
