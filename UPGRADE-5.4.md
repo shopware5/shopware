@@ -39,6 +39,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * the TLS protocol version used when sending E-Mails is not determined solely by the `STREAM_CRYPTO_METHOD_TLS_CLIENT` constant anymore. If `STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT` is available, TLSv1.1 and TLSv1.2 are added to the usable protocol versions.
 * Changed some texts to fix its typos
 * Changed opt-in types: Every Shopware opt-in now saves a specific name into `s_core_optin` with the prefix `sw`
+* Changed Tinymce to fix a problem with image replacements
 
 ## 5.4.4
 
