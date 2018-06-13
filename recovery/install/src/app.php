@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Pimple\Container;
 use Shopware\Recovery\Common\Utils;
 use Shopware\Recovery\Install\ContainerProvider;
@@ -462,6 +461,7 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
             $shopService->updateShop($shop);
             $currencyService->updateCurrency($shop);
             $shopService->updateConfig($shop);
+            $shopService->updateCmsSupportMails($shop->email);
             $localeSettingsService->updateLocaleSettings($locale);
         } catch (\Exception $e) {
             $hasErrors = true;

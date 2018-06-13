@@ -106,6 +106,16 @@ EOT;
     }
 
     /**
+     * @param string $mail
+     */
+    public function updateCmsSupportMails($mail)
+    {
+        $sql = 'UPDATE `s_cms_support` SET mail = :mail';
+        $prepared = $this->connection->prepare($sql);
+        $prepared->execute(['mail' => $mail]);
+    }
+
+    /**
      * @param string $locale
      *
      * @return int
