@@ -178,7 +178,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request                                  $request
+     * @param Request $request
      * @param Enlight_Controller_Response_ResponseHttp $response
      */
     protected function upgradeShop($request, $response)
@@ -342,9 +342,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param Request $request
-     * @param Shop    $newShop
+     * @param Shop $newShop
      *
      * @return string
+     * @throws Zend_Cache_Exception
      */
     protected function getNewShopUrl(
         Request $request,
@@ -392,6 +393,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $url = '/' . $url;
         }
 
+        $languageUrl = $this->searchSeoUrlForOtherLanguage($url, (int) $requestShop['id'], $newShop->getId(), $baseUrl);
+        if ($languageUrl !== null) {
+            $url = $languageUrl;
+        }
+
         //build full redirect url to allow host switches
         return sprintf(
             '%s://%s%s%s',
@@ -404,7 +410,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param Request $request
-     * @param Shop    $shop
+     * @param Shop $shop
      *
      * @return bool
      */
@@ -429,7 +435,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param Request $request
-     * @param Shop    $shop
+     * @param Shop $shop
      *
      * @return null|string
      */
@@ -471,7 +477,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param string $requestUri
-     * @param Shop   $shop
+     * @param Shop $shop
      *
      * @return string
      */
@@ -529,5 +535,58 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if (!$mainShop->getDocumentTemplate()) {
             throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no document template.", $shop->getName(), $shop->getId()));
         }
+    }
+
+    /**
+     * @param string $path
+     * @param int $oldShopId
+     * @param int $newShopId
+     * @param string $baseUrl
+     * @return string
+     * @throws Zend_Cache_Exception
+     */
+    protected function searchSeoUrlForOtherLanguage($path, $oldShopId, $newShopId, $baseUrl)
+    {
+        /** @var Zend_Cache_Core $cache */
+        $cache = $this->get('cache');
+
+        if ($path[0] === '/') {
+            $path = substr($path, 1);
+        }
+
+        $cacheKey = 'languageUrl' . md5($path . $oldShopId . $newShopId . $baseUrl);
+
+        if ($url = $cache->load($cacheKey)) {
+            return $url;
+        }
+
+        if (!empty($path)) {
+            $query = 'SELECT
+              path
+            FROM s_core_rewrite_urls
+            WHERE
+              org_path = (SELECT org_path FROM s_core_rewrite_urls WHERE path = :path and subshopID = :oldShopId LIMIT 1) AND
+              subshopID = :newShopId';
+
+            $result = $this->get('dbal_connection')->fetchColumn($query, [
+                'path' => strtok($path, '?'),
+                'newShopId' => $newShopId,
+                'oldShopId' => $oldShopId
+            ]);
+
+            if (!empty($result)) {
+                $url = $result;
+
+                if (empty($baseUrl) || $baseUrl[strlen($baseUrl) - 1] !== '/') {
+                    $url = '/' . $url;
+                }
+
+                $cache->save($url, $cacheKey, ['Shopware_Config'], 86400);
+
+                return $url;
+            }
+        }
+
+        return null;
     }
 }
