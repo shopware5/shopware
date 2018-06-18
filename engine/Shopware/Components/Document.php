@@ -259,10 +259,16 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $this->_template->setTemplateDir($inheritance);
         }
 
-        $data = $this->_template->fetch('documents/' . $this->_document['template'], $this->_view);
+        $html = $this->_template->fetch('documents/' . $this->_document['template'], $this->_view);
+
+        /** @var \Enlight_Event_EventManager $eventManager */
+        $eventManager = Shopware()->Container()->get('events');
+        $html = $eventManager->filter('Shopware_Components_Document_Render_FilterHtml', $html, [
+            'subject' => $this,
+        ]);
 
         if ($this->_renderer === 'html' || !$this->_renderer) {
-            echo $data;
+            echo $html;
         } elseif ($this->_renderer === 'pdf') {
             $mpdfConfig = array_replace_recursive(
                 Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig'),
@@ -275,14 +281,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             );
             if ($this->_preview == true || !$this->_documentHash) {
                 $mpdf = new \Mpdf\Mpdf($mpdfConfig);
-                $mpdf->WriteHTML($data);
+                $mpdf->WriteHTML($html);
                 $mpdf->Output();
                 exit;
             }
 
             $tmpFile = tempnam(sys_get_temp_dir(), 'document');
             $mpdf = new \Mpdf\Mpdf($mpdfConfig);
-            $mpdf->WriteHTML($data);
+            $mpdf->WriteHTML($html);
             $mpdf->Output($tmpFile, 'F');
 
             $stream = fopen($tmpFile, 'rb');
