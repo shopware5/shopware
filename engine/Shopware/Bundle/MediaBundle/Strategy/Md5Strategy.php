@@ -45,7 +45,7 @@ class Md5Strategy implements StrategyInterface
         $path = str_replace('//', '/', $path);
 
         // remove everything before /media/...
-        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/", $path, $matches);
+        preg_match("/.*((media\/(?:archive|image|model|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/", $path, $matches);
 
         if (!empty($matches)) {
             return $matches[2] . '/' . $matches[3];
@@ -99,7 +99,7 @@ class Md5Strategy implements StrategyInterface
             return false;
         }
 
-        return (bool) preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?\/(?:([0-9a-g]{2}\/[0-9a-g]{2}\/[0-9a-g]{2}\/))((.+)\.(.+)))/", $path);
+        return (bool) preg_match("/.*(media\/(?:archive|image|model|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?\/(?:([0-9a-g]{2}\/[0-9a-g]{2}\/[0-9a-g]{2}\/))((.+)\.(.+)))/", $path);
     }
 
     /**
@@ -125,7 +125,7 @@ class Md5Strategy implements StrategyInterface
      */
     private function substringPath($path)
     {
-        preg_match("/(media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?\/.*)/", $path, $matches);
+        preg_match("/(media\/(?:archive|image|model|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?\/.*)/", $path, $matches);
 
         return empty($matches) ? null : $matches[0];
     }
