@@ -546,7 +546,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
         $this->assertCount(count($expectedCheapestPriceNumbers), $products);
 
-        //Pseudo prices
+        // Pseudo prices
         $expectedPseudoPriceNumbers = array_keys($prices['pseudoPrice']);
 
         foreach ($numbers as $number) {
@@ -557,18 +557,5 @@ class VariantConditionWithCurrencyFactor extends TestCase
         }
 
         $this->assertCount(count($expectedPseudoPriceNumbers), $products);
-    }
-
-    /**
-     * Sets the config value and refresh the shop.
-     *
-     * @param $name
-     * @param $value
-     */
-    private function setConfig($name, $value)
-    {
-        Shopware()->Container()->get('config_writer')->save($name, $value);
-        Shopware()->Container()->get('cache')->clean();
-        Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
     }
 }

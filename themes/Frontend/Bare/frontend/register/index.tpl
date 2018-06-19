@@ -115,7 +115,7 @@
             {block name='frontend_register_index_form'}
                 <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
 
-                    {* Successfull optin verification *}
+                    {* Successful optin verification *}
                     {block name='frontend_register_index_form_optin_success'}
                         {if $smarty.get.optinsuccess && {config name=optinregister}}
                             {include file="frontend/_includes/messages.tpl" type="success" content="{s name="RegisterInfoSuccessOptin"}{/s}"}
@@ -171,7 +171,7 @@
                     {* Data protection information *}
                     {if !$update}
                         {block name="frontend_register_index_form_privacy"}
-                            {if {config name=ACTDPRTEXT}}
+                            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
                                 {block name="frontend_register_index_form_privacy_title"}
                                     <h2 class="panel--title is--underline">
                                         {s name="PrivacyTitle" namespace="frontend/index/privacy"}{/s}

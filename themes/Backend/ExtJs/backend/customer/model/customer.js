@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name: 'changed', type: 'date' },
         { name: 'amount', type: 'float' },
         { name: 'orderCount', type: 'int' },
+        { name: 'failedLogins', type: 'int' },
         { name: 'canceledOrderAmount', type: 'float' },
         { name: 'shopName', type: 'string' },
         { name: 'language', type: 'string' },
@@ -63,6 +64,23 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name: 'lastname', type: 'string' },
         { name: 'title', type: 'string' },
         { name: 'number', type: 'string' },
+        { name: 'serverTime', type: 'date', defaultValue: null },
+        {
+            name: 'lockedUntil',
+            type: 'date',
+            defaultValue: null,
+            convert: function (value, record) {
+                if (record.get('serverTime') === null || value === null || !Ext.isDefined(record.get('serverTime'))) {
+                    return value;
+                }
+
+                if (record.get('serverTime').getTime() >= value.getTime()) {
+                    return null;
+                }
+
+                return value;
+            }
+        },
         { name: 'customerStreamIds', type: 'string' }
     ],
 

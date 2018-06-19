@@ -54,7 +54,7 @@ class Migrations_Migration1218 extends Shopware\Components\Migrations\AbstractMi
 
         $sql = "UPDATE `s_core_config_element_translations`
                 SET label = 'Link to the data privacy statement for cookies'
-                WHERE element_id = ( SELECT id FROM `s_core_config_elements` WHERE name = 'data_privacy_statement_link' LIMIT 1 )";
+                WHERE element_id = ( SELECT id FROM `s_core_config_elements` WHERE name = 'data_privacy_statement_link' LIMIT 1 ) and locale_id = 2";
         $this->addSql($sql);
 
         // Move the ACTDPR-Elements together

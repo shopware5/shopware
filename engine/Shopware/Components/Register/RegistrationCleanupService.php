@@ -62,13 +62,16 @@ class RegistrationCleanupService implements RegistrationCleanupServiceInterface
             $queryBuilder = $this->connection->createQueryBuilder();
 
             $queryBuilder->delete('s_core_optin')
-                ->where('type = "register"')
+                ->where('type = "swRegister"')
                 ->andWhere('datum < NOW() - INTERVAL :interval DAY')
                 ->setParameter(':interval', $interval)
                 ->execute();
 
             $queryBuilder->delete('s_user')
                 ->where('doubleOptinEmailSentDate < NOW() - INTERVAL :interval DAY')
+                ->andWhere('doubleOptinConfirmDate IS NULL')
+                ->andWhere('doubleOptinRegister = true')
+                ->andWhere('active = 0')
                 ->setParameter(':interval', $interval)
                 ->execute();
 

@@ -435,6 +435,12 @@ class Customer extends LazyFetchModelEntity
     private $birthday;
 
     /**
+     * @var \boolean
+     * @ORM\Column(name="doubleOptinRegister", type="boolean", nullable=false)
+     */
+    private $doubleOptinRegister;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="doubleOptinEmailSentDate", type="datetime", nullable=true)
      */
@@ -1348,6 +1354,22 @@ class Customer extends LazyFetchModelEntity
     public function setAdditional($additional)
     {
         $this->additional = $additional;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDoubleOptinRegister()
+    {
+        return $this->doubleOptinRegister;
+    }
+
+    /**
+     * @param bool $doubleOptinRegister
+     */
+    public function setDoubleOptinRegister($doubleOptinRegister)
+    {
+        $this->doubleOptinRegister = $doubleOptinRegister;
     }
 
     /**

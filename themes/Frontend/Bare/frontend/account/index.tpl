@@ -25,7 +25,7 @@
             {include file="frontend/account/success_messages.tpl"}
         {/block}
 
-        {* Optin Successfull *}
+        {* Optin successful *}
         {if $smarty.get.optinconfirmed && {config name=optinregister}}
             {include file="frontend/_includes/messages.tpl" type="success" content="{s name="AccountOptinConfirmed"}{/s}"}
         {/if}

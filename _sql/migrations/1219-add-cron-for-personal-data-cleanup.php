@@ -39,7 +39,7 @@ EOD;
 
         $sql = <<<'EOD'
 INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`) VALUES
-(@formId, 'privacyGuestCustomerMonths', 'i:6;', 'Schnellbesteller ohne Bestellungen nach X Monaten löschen', 'Der Cronjob \"Guest customer cleanup\" muss hierfür aktiviert sein.', 'combo', 1, 30, 0, 'a:2:{s:8:\"editable\";b:1;s:5:\"store\";a:12:{i:0;i:1;i:1;i:2;i:2;i:3;i:3;i:4;i:4;i:5;i:5;i:6;i:6;i:7;i:7;i:8;i:8;i:9;i:9;i:10;i:10;i:11;i:11;i:12;}}');
+(@formId, 'privacyGuestCustomerMonths', 'i:6;', 'Schnellbesteller ohne Bestellungen nach X Monaten löschen', 'Der Cronjob \"Guest customer cleanup\" muss hierfür aktiviert sein.', 'number', 1, 30, 0, NULL);
 EOD;
         $this->addSql($sql);
 
@@ -55,7 +55,7 @@ EOD;
 
         $sql = <<<'EOD'
 INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`) VALUES
-(@formId, 'privacyBasketMonths', 'i:6;', 'Abgebrochene Bestellungen nach X Monaten löschen', 'Der Cronjob \"Cancelled baskets cleanup\" muss hierfür aktiviert sein.', 'combo', 1, 30, 0, 'a:2:{s:8:\"editable\";b:1;s:5:\"store\";a:12:{i:0;i:1;i:1;i:2;i:2;i:3;i:3;i:4;i:4;i:5;i:5;i:6;i:6;i:7;i:7;i:8;i:8;i:9;i:9;i:10;i:10;i:11;i:11;i:12;}}');
+(@formId, 'privacyBasketMonths', 'i:6;', 'Abgebrochene Bestellungen nach X Monaten löschen', 'Der Cronjob \"Cancelled baskets cleanup\" muss hierfür aktiviert sein.', 'number', 1, 30, 0, NULL);
 EOD;
         $this->addSql($sql);
 

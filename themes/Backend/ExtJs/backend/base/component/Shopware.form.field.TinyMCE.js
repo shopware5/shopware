@@ -696,8 +696,13 @@ Ext.define('Shopware.form.field.TinyMCE',
             value = me.replaceSmartyPluginWithImagePaths(value);
 
             me.replacePlaceholderWithImage(value, function (value) {
+                value = value === null || value === undefined ? '' : value;
                 me.setRawValue(me.valueToRaw(value));
                 me.mixins.field.setValue.call(me, value);
+
+                if (me.tinymce) {
+                    me.tinymce.setContent(value);
+                }
             });
 
             return me;

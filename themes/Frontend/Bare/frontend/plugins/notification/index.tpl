@@ -42,7 +42,7 @@
 
                 {* Data protection information *}
                 {block name="frontend_detail_index_notification_privacy"}
-                    {if {config name=ACTDPRTEXT}}
+                    {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
                         {include file="frontend/_includes/privacy.tpl"}
                     {/if}
                 {/block}

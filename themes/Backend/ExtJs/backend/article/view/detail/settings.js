@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
         },
         onSale: {
             field: '{s name=detail/settings/on_sale_field}On sale{/s}',
-            box: "{s name=detail/settings/on_sale_box}If instock <= 0, article isn't orderable{/s}"
+            box: '{s name=detail/settings/on_sale_box}If instock <= 0, the article is not available{/s}'
         },
         minimumOrder: '{s name=detail/settings/minimum_order}Minimum order{/s}',
         graduation: '{s name=detail/settings/graduation}Graduation{/s}',

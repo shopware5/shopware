@@ -87,6 +87,13 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             message: '{s name=overwriteCustomer/message}Do you really want to overwrite the latest changes?{/s}',
         },
 
+        unlock: {
+            successTitle: '{s name=base/unlock_customer/success_title}Successfully{/s}',
+            successText: '{s name=base/unlock_customer/success_text}Successfully unlocked the customer.{/s}',
+            errorTitle: '{s name=base/unlock_customer/error_title}Failure{/s}',
+            errorText: '{s name=base/unlock_customer/error_text}An error occurred while unlocking the customer.{/s}'
+        },
+
         growlMessage: '{s name=message/growlMessage}Customer{/s}'
     },
 
@@ -110,7 +117,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 click: me.onSaveCustomer
             },
             'customer-base-field-set': {
-                generatePassword: me.onGeneratePassword
+                generatePassword: me.onGeneratePassword,
+                unlockCustomer: me.onUnlockCustomer
             },
             'customer-debit-field-set': {
                 changePayment: me.onChangePayment
@@ -417,6 +425,38 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                         });
                     }
                 }
+            }
+        });
+    },
+
+    /**
+     * @param { Ext.container.Container } unlockContainer
+     * @param { Ext.data.Model } record
+     */
+    onUnlockCustomer: function (unlockContainer, record) {
+        var me = this,
+            displayField = unlockContainer.down('displayfield'),
+            button = unlockContainer.down('button');
+
+        Ext.Ajax.request({
+            url: '{url action=unlockCustomer}',
+            params: {
+                customerId: record.get('id')
+            },
+            success: function (response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                if (!result.success) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.unlock.errorTitle, me.snippets.unlock.errorText, me.snippets.growlMessage);
+                    return;
+                }
+
+                record.set('lockedUntil', null);
+                record.set('failedLogins', 0);
+
+                Shopware.Notification.createGrowlMessage(me.snippets.unlock.successTitle, me.snippets.unlock.successText, me.snippets.growlMessage);
+                displayField.setValue('');
+                button.setDisabled(true);
             }
         });
     }

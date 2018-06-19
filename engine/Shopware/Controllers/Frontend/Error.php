@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action implements CSRFWhitelistAware
@@ -55,7 +54,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             $this->View()->assign('success', false);
         } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('Db')) {
             $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
-        } elseif (isset($_ENV['SHELL']) || php_sapi_name() === 'cli') {
+        } elseif (isset($_ENV['SHELL']) || PHP_SAPI === 'cli') {
             $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
         } elseif (empty($_SERVER['SERVER_NAME'])) {
             $this->View()->loadTemplate($templateModule . '/error/ajax.tpl');
@@ -87,6 +86,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         switch ($code) {
             case Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found:
             case Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route:
+            case Enlight_Controller_Exception::PROPERTY_NOT_FOUND:
             case Enlight_Controller_Exception::ActionNotFound:
             case 404:
                 $this->forward('pageNotFoundError');

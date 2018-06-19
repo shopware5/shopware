@@ -89,7 +89,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $sql = 'SELECT * FROM `s_statistics_currentusers` ORDER BY `id` DESC LIMIT 1';
         $result = Shopware()->Container()->get('dbal_connection')->fetchAssoc($sql);
 
-        $this->assertSame('192.168.33.10', $result['remoteaddr']);
+        $this->assertSame('192.168.0.0', $result['remoteaddr']); // IP should have been anonymized
         $this->assertSame('/foobar', $result['page']);
         $this->assertSame('mobile', $result['deviceType']);
     }

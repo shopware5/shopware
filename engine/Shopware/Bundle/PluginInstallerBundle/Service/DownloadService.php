@@ -160,7 +160,8 @@ class DownloadService
             $result['size'],
             $result['sha1'],
             $result['binaryVersion'],
-            md5($request->getTechnicalName()) . '.zip'
+            md5($request->getTechnicalName()) . '.zip',
+            $request->getTechnicalName()
         );
     }
 

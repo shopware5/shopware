@@ -72,7 +72,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
         $this->View()->assign('sAction', $this->Request()->getActionName());
 
-        if ($this->isOneTimeAccount()) {
+        if ($this->isOneTimeAccount() && $this->request->getParams()['action'] !== 'abort') {
             $this->logoutAction();
             $this->redirect(['controller' => 'register']);
         }
@@ -235,6 +235,16 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      * Logout account and delete session
      */
     public function logoutAction()
+    {
+        $this->admin->logout();
+    }
+
+    /**
+     * Abort action method
+     *
+     * Abort one time order and delete session
+     */
+    public function abortAction()
     {
         $this->admin->logout();
     }
@@ -514,7 +524,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $mail->send();
 
         // Add the hash to the optin table
-        $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`) VALUES ('password', NOW(), ?, ?)";
+        $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`) VALUES ('swPassword', NOW(), ?, ?)";
         Shopware()->Db()->query($sql, [$hash, $userID]);
     }
 
@@ -564,6 +574,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (!$target = $this->Request()->getParam('sTarget')) {
             $target = 'account';
         }
+
+        $this->get('dbal_connection')->executeQuery(
+            'DELETE FROM s_core_optin WHERE hash = ? AND type = ?',
+            [$hash, 'swPassword']
+        );
 
         $this->redirect(['controller' => $target, 'action' => 'index', 'success' => 'resetPassword']);
     }
@@ -736,7 +751,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $connection = $this->get('dbal_connection');
 
         $connection->executeUpdate(
-            'DELETE FROM s_core_optin WHERE datum <= (NOW() - INTERVAL 2 HOUR) AND type = "password"'
+            'DELETE FROM s_core_optin WHERE datum <= (NOW() - INTERVAL 2 HOUR) AND type = "swPassword"'
         );
     }
 
@@ -756,7 +771,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var $confirmModel \Shopware\Models\CommentConfirm\CommentConfirm */
         $confirmModel = $this->get('models')
             ->getRepository('Shopware\Models\CommentConfirm\CommentConfirm')
-            ->findOneBy(['hash' => $hash, 'type' => 'password']);
+            ->findOneBy(['hash' => $hash, 'type' => 'swPassword']);
 
         if (!$confirmModel) {
             throw new Exception(

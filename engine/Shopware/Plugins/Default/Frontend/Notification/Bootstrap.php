@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Routing\Context;
 
 /**
@@ -180,8 +179,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     Shopware()->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->sBASEFILE;
 
                     $sql = '
-                        INSERT INTO s_core_optin (datum, hash, data)
-                        VALUES (NOW(), ?, ?)
+                        INSERT INTO s_core_optin (datum, hash, data, type)
+                        VALUES (NOW(), ?, ?, "swNotification")
                     ';
                     Shopware()->Db()->query($sql, [$hash, serialize(Shopware()->System()->_POST->toArray())]);
 

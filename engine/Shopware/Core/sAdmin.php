@@ -603,6 +603,7 @@ class sAdmin
                         'datum' => new Zend_Date(),
                         'hash' => $hash,
                         'data' => $data,
+                        'type' => 'swNewsletter',
                     ]
                 );
 
@@ -1148,6 +1149,7 @@ class sAdmin
 
         $namespace = $this->snippetManager->getNamespace('frontend/salutation');
         $register = $this->session->offsetGet('sRegister');
+
         foreach ($register['billing'] as $key => $value) {
             if ($key === 'salutation') {
                 $value = $namespace->get($value);
@@ -3458,15 +3460,24 @@ SQL;
     private function failedLoginUser($addScopeSql, $email, $sErrorMessages, $password)
     {
         // Check if account is disabled or not verified yet
-        $sql = 'SELECT id, doubleOptinEmailSentDate, doubleOptinConfirmDate, email FROM s_user WHERE email=? AND active=0' . $addScopeSql;
+        $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation
+                FROM s_user
+                WHERE email=? AND active=0' . $addScopeSql;
         $getUser = $this->db->fetchRow($sql, [$email]);
 
         // if the verification process is active, the customer has an email sent date, but no confirm date
-        if ($getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
+        if ($getUser['doubleOptinRegister'] && $getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
             $hash = \Shopware\Components\Random::getAlphanumericString(32);
 
+            $userInfo = [
+                'mail' => $getUser['email'],
+                'firstname' => $getUser['firstname'],
+                'lastname' => $getUser['lastname'],
+                'salutation' => $getUser['salutation'],
+            ];
+
             $this->refreshOptinHash($getUser, $hash);
-            $this->resendConfirmationMail($getUser['email'], $hash);
+            $this->resendConfirmationMail($userInfo, $hash);
 
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get(
@@ -3529,10 +3540,10 @@ SQL;
     private function refreshOptinHash(array $user, $hash)
     {
         // Get old optin information
-        $sql = "SELECT `id`, `data`
+        $sql = 'SELECT `id`, `data`
                 FROM `s_core_optin`
                 WHERE datum = ?
-                AND type = 'register'";
+                AND type = "swRegister"';
         $result = $this->db->fetchAll($sql, [$user['doubleOptinEmailSentDate']]);
 
         // most times iterates only once
@@ -3549,11 +3560,26 @@ SQL;
 
         // Refreshes doubleOptinEmailSentDate + hash to generate a new activation key
         $this->db->beginTransaction();
-        $sql = "UPDATE `s_core_optin`
-                SET `datum` = ?, `hash` = ?
-                WHERE type = 'register'
-                AND id = ?";
-        $this->db->executeQuery($sql, [$dateString, $hash, $optInId]);
+        if (!empty($optInId)) {
+            $sql = 'UPDATE `s_core_optin`
+                    SET `datum` = ?, `hash` = ?
+                    WHERE type = "swRegister"
+                    AND id = ?';
+            $params = [$dateString, $hash, $optInId];
+        } else {
+            $customerId = $user['id'];
+            $storedData = [
+                'customerId' => $customerId,
+                'register' => null,
+            ];
+
+            $sql = 'INSERT INTO `s_core_optin`
+                    (`type`, `datum`, `hash`, `data`)
+                    VALUES
+                    (?, ?, ?, ?)';
+            $params = ['swRegister', $dateString, $hash, serialize($storedData)];
+        }
+        $this->db->executeQuery($sql, $params);
 
         $sql = 'UPDATE `s_user`
                 SET doubleOptinEmailSentDate = ?
@@ -3563,10 +3589,10 @@ SQL;
     }
 
     /**
-     * @param string $userMail
+     * @param array  $userInfo
      * @param string $hash
      */
-    private function resendConfirmationMail($userMail, $hash)
+    private function resendConfirmationMail(array $userInfo, $hash)
     {
         $link = Shopware()->Container()->get('router')->assemble([
             'sViewport' => 'register',
@@ -3574,12 +3600,23 @@ SQL;
             'sConfirmation' => $hash,
         ]);
 
-        $context = [
-            'sConfirmLink' => $link,
-        ];
+        $context = array_merge(
+            [
+                'sConfirmLink' => $link,
+            ],
+            $userInfo
+        );
+
+        $context = Shopware()->Container()->get('events')->filter(
+            'Shopware_Controllers_Frontend_Register_DoubleOptIn_ResendMail',
+            $context,
+            [
+                'mail' => $userInfo['mail'],
+            ]
+        );
 
         $mail = Shopware()->Container()->get('templatemail')->createMail('sOPTINREGISTER', $context);
-        $mail->addTo($userMail);
+        $mail->addTo($userInfo['mail']);
         $mail->send();
     }
 
