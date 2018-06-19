@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.4 patch versions.
 
+## 5.4.6
+
+[View all changes from v5.4.5...v5.4.6](https://github.com/shopware/shopware/compare/v5.4.5...v5.4.6)
+
+### Changes
+
+* Changed behaviour of the notification plugin, so that it will only notify the customer if the stock is at least as high as the minimal purchase amount
+
 ## 5.4.5
 
 [View all changes from v5.4.4...v5.4.5](https://github.com/shopware/shopware/compare/v5.4.4...v5.4.5)
@@ -26,7 +34,6 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
   * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
 * Added new Cronjob `OptinCleanup`, which uses the interval-setting from Double-Opt-In register to cleanup every shopware opt-in from the `s_core_optin` table except Double-Opt-In register
-
 
 ### Changes
 
