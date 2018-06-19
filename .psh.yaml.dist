@@ -43,7 +43,7 @@ const:
 
 dynamic:
   USERKEY: echo "$(id -u):$(id -g)"
-  APP_ID: docker-compose ps -q app_server
+  APP_ID: docker-compose ps -q appserver
   MYSQL_ID: docker-compose ps -q app_mysql
 
 environments:
@@ -54,7 +54,7 @@ environments:
     paths:
       - "dev-ops/bamboo.shopware.com/actions"
     const:
-      SW_HOST: "app_server"
+      SW_HOST: "appserver"
       SW_BASE_PATH: ""
     templates:
       - source: "dev-ops/common/templates/build.properties"
