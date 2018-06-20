@@ -48,7 +48,7 @@ class ReflectionHelper
      *
      * @return object
      */
-    public function createInstanceFromNamedArguments($className, $arguments, $secure = true, $docPath = null, array $directories = ['engine' . DS . 'Shopware', 'custom'])
+    public function createInstanceFromNamedArguments($className, $arguments, $secure = true, $docPath = null, array $directories = ['engine' . DIRECTORY_SEPARATOR . 'Shopware', 'custom'])
     {
         $reflectionClass = new \ReflectionClass($className);
 

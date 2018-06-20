@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Random;
 
 /**
@@ -230,8 +229,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             ) {
                 $hash = \Shopware\Components\Random::getAlphanumericString(32);
                 $sql = '
-                    INSERT INTO s_core_optin (datum, hash, data)
-                    VALUES (NOW(), ?, ?)
+                    INSERT INTO s_core_optin (datum, hash, data, type)
+                    VALUES (NOW(), ?, ?, "swProductVote")
                 ';
                 Shopware()->Db()->query($sql, [
                     $hash, serialize(Shopware()->System()->_POST->toArray()),

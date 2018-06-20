@@ -207,7 +207,9 @@ class Customer extends Resource
         $registerService = $this->getContainer()->get('shopware_account.register_service');
         $context = $this->getContainer()->get('shopware_storefront.context_service')->getShopContext()->getShop();
 
-        $registerService->register($context, $customer, $billing, $shipping);
+        $sendOptinMail = $params['sendOptinMail'] === true;
+
+        $registerService->register($context, $customer, $billing, $shipping, $sendOptinMail);
 
         return $customer;
     }

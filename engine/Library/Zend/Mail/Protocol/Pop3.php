@@ -20,6 +20,8 @@
  * @version    $Id$
  */
 
+use Zend\Mail\Protocol\ProtocolTrait;
+
 
 /**
  * @category   Zend
@@ -30,6 +32,8 @@
  */
 class Zend_Mail_Protocol_Pop3
 {
+    use ProtocolTrait;
+
     /**
      * Default timeout in seconds for initiating session
      */
@@ -121,7 +125,7 @@ class Zend_Mail_Protocol_Pop3
 
         if ($ssl === 'TLS') {
             $this->request('STLS');
-            $result = stream_socket_enable_crypto($this->_socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            $result = stream_socket_enable_crypto($this->_socket, true, $this->getCryptoMethod());
             if (!$result) {
                 /**
                  * @see Zend_Mail_Protocol_Exception

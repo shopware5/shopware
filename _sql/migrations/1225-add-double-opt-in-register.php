@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1220 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1225 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -38,10 +38,11 @@ class Migrations_Migration1220 extends Shopware\Components\Migrations\AbstractMi
                 VALUES ( LAST_INSERT_ID(), 2, 'Double opt in for registrations', NULL )";
         $this->addSql($sql);
 
-        // Insert flag to show if a user is verified
+        // Insert flags to show if a user is verified
         $sql = 'ALTER TABLE `s_user`
-                ADD `doubleOptinConfirmDate`   datetime NULL AFTER `paymentID`,
-                ADD `doubleOptinEmailSentDate` datetime NULL AFTER `paymentID`';
+                ADD `doubleOptinConfirmDate`   datetime NULL          AFTER `paymentID`,
+                ADD `doubleOptinEmailSentDate` datetime NULL          AFTER `paymentID`,
+                ADD `doubleOptinRegister`      boolean  DEFAULT FALSE AFTER `paymentID`';
         $this->addSql($sql);
 
         // New Cronjob
@@ -51,12 +52,12 @@ class Migrations_Migration1220 extends Shopware\Components\Migrations\AbstractMi
 
         // Add Cronjob-Settings in Backend
         $sql = "INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
-                VALUES ( @formId, 'optintimetodelete', 'i:3;', 'Tage ohne Verfikation bis zur Löschung', 'Wenn Double-Opt-In aktiv ist: Die Zeit, bis ein angemeldeter, aber nicht aktivierter Benutzer gelöscht wird', 'number', '0', '16', '0', NULL )";
+                VALUES ( @formId, 'optintimetodelete', 'i:3;', 'Tage ohne Verifizierung bis zur Löschung', 'Für Double-Opt-In: Zeitraum, nachdem nicht bestätigte Aktionen gelöscht werden.', 'number', '0', '16', '0', NULL )";
         $this->addSql($sql);
 
         // Translation
         $sql = "INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
-                VALUES ( LAST_INSERT_ID(), 2, 'Days without confirmation until deletion', 'If Double-Opt-In is active: Time until an registed, but not confirmed customer will be deleted' )";
+                VALUES ( LAST_INSERT_ID(), 2, 'Days without confirmation until deletion', 'For Double-Opt-In: Time after which unconfirmed actions are deleted.' )";
         $this->addSql($sql);
 
         // Store localePrefix
@@ -91,6 +92,8 @@ Bitte bestätigen Sie die Registrierung über den nachfolgenden Link:
 
 {$sConfirmLink}
 
+Durch diese Bestätigung erklären Sie sich ebenso damit einverstanden, dass wir Ihnen im Rahmen der Vertragserfüllung weitere E-Mails senden dürfen.
+
 {include file="string:{config name=emailfooterplain}"}',
     '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
@@ -101,7 +104,9 @@ Bitte bestätigen Sie die Registrierung über den nachfolgenden Link:
         vielen Dank für Ihre Anmeldung bei {$sShop}.<br/>
         Bitte bestätigen Sie die Registrierung über den nachfolgenden Link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Anmeldung abschließen</a>
+        <a href="{$sConfirmLink}">Anmeldung abschließen</a><br/>
+        <br/>
+        Durch diese Bestätigung erklären Sie sich ebenso damit einverstanden, dass wir Ihnen im Rahmen der Vertragserfüllung weitere E-Mails senden dürfen.<br/>
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',
@@ -131,6 +136,8 @@ Please confirm your registration by clicking the following link:
 
 {$sConfirmLink}
 
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
 {include file="string:{config name=emailfooterplain}"}',
     '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
@@ -141,7 +148,9 @@ Please confirm your registration by clicking the following link:
         thank you for signing up at {$sShop}.<br/>
         Please confirm your registration by clicking the following link:<br/>
         <br/>
-        <a href="{$sConfirmLink}">Confirm registration</a>
+        <a href="{$sConfirmLink}">Confirm registration</a><br/>
+        <br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',

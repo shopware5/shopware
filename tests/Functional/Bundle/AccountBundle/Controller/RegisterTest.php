@@ -286,7 +286,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         );
 
         $this->assertNotEmpty($optin);
-        $this->assertEquals('register', $optin['type']);
+        $this->assertEquals('swRegister', $optin['type']);
         $this->assertNotEmpty($optin['data']);
 
         $data = unserialize($optin['data']);

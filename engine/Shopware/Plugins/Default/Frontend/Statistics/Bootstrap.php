@@ -45,8 +45,8 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
         ]);
 
         $form->setElement('textarea', 'botBlackList', [
-                'label' => 'Bot-Liste',
-                'value' => 'antibot;appie;architext;bjaaland;digout4u;echo;fast-webcrawler;ferret;googlebot;
+            'label' => 'Bot-Liste',
+            'value' => 'antibot;appie;architext;bjaaland;digout4u;echo;fast-webcrawler;ferret;googlebot;
 gulliver;harvest;htdig;ia_archiver;jeeves;jennybot;linkwalker;lycos;mercator;moget;muscatferret;
 myweb;netcraft;nomad;petersnews;scooter;slurp;unlost_web_crawler;voila;voyager;webbase;weblayers;
 wget;wisenutbot;acme.spider;ahoythehomepagefinder;alkaline;arachnophilia;aretha;ariadne;arks;
@@ -76,8 +76,8 @@ wz101;xget;awbot;bobby;boris;bumblebee;cscrawler;daviesbot;ezresult;gigabot;gnod
 justview;linkbot;linkchecker;nederland.zoek;perman;pompos;pooodle;redalert;shoutcast;slysearch;
 ultraseek;webcompass;yandex;robot;yahoo;bot;psbot;crawl;RSS;larbin;ichiro;Slurp;msnbot;bot;Googlebot;
 ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;spider;HTTPClient',
-                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
-            ]);
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+        ]);
 
         return true;
     }
@@ -185,7 +185,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      */
     public function cleanupStatistic()
     {
-        if ((rand() % 10) == 0) {
+        if ((rand() % 10) === 0) {
             $sql = 'DELETE FROM s_statistics_currentusers WHERE time < DATE_SUB(NOW(), INTERVAL 3 MINUTE)';
             Shopware()->Db()->query($sql);
             $sql = 'DELETE FROM s_statistics_pool WHERE datum != CURDATE()';
@@ -195,7 +195,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
 
     /**
      * Refresh current users
-     *
      *
      * @param \Enlight_Controller_Request_Request $request
      *
@@ -207,8 +206,11 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $sql = '
         INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType)
         VALUES (?, ?, NOW(), ?, ?)';
+
+        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
+
         Shopware()->Db()->query($sql, [
-            $request->getClientIp(),
+            $ip,
             $request->getParam('requestPage', $request->getRequestUri()),
             empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
             $request->getDeviceType(),
@@ -218,14 +220,13 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh visitor log
      *
-     *
      * @param Enlight_Controller_Request_Request $request
      *
      * @throws \Exception
      */
     public function refreshLog(Enlight_Controller_Request_Request $request)
     {
-        $ip = $request->getClientIp();
+        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
         $deviceType = $request->getDeviceType();
         $shopId = Shopware()->Shop()->getId();
         $isNewRecord = false;
@@ -306,8 +307,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      * Refresh article impressions
      *
      * @param \Enlight_Controller_Request_Request $request
-     *
-     * @return null|object|\Shopware\Models\Tracking\Banner
      */
     public function refreshArticleImpression($request)
     {

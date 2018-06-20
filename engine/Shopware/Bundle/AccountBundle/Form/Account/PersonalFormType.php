@@ -215,7 +215,10 @@ class PersonalFormType extends AbstractType
         $constraints = [];
 
         if ($this->config->get('ACTDPRCHECK')) {
-            $constraints[] = new EqualTo(['value' => 1]);
+            $constraints[] = new EqualTo([
+                'value' => 1,
+                'message' => $this->getSnippet(['namespace' => 'frontend/index/privacy', 'name' => 'PrivacyCheckboxError']),
+            ]);
         }
 
         return $constraints;

@@ -96,6 +96,29 @@ class MediaTest extends TestCase
         $mediaService->delete($path);
     }
 
+    public function testSubmittedNameIsUsed()
+    {
+        $data = $this->getExtendedTestData();
+        $base64Data = base64_encode(file_get_contents(__DIR__ . '/fixtures/shopware_logo.png'));
+        $data['file'] = 'data:image/png;base64,' . $base64Data;
+        $ids = [];
+
+        // Assert that the given name is used
+        $media = $this->resource->create($data);
+        $ids[] = $media->getId();
+        $this->assertEquals($data['name'], $media->getName());
+
+        // On the second pass the given name should still be used (extended with a random string)
+        $media = $this->resource->create($data);
+        $ids[] = $media->getId();
+        $this->assertContains($data['name'], $media->getName());
+
+        // Delete the created media
+        foreach ($ids as $id) {
+            $this->resource->delete($id);
+        }
+    }
+
     public function testReplaceMedia()
     {
         $data = $this->getSimpleTestData();
@@ -159,5 +182,13 @@ class MediaTest extends TestCase
             'album' => -1,
             'description' => 'Test description',
         ];
+    }
+
+    protected function getExtendedTestData()
+    {
+        $temp = $this->getSimpleTestData();
+        $temp['name'] = 'some-name-lorem-ipsum';
+
+        return $temp;
     }
 }

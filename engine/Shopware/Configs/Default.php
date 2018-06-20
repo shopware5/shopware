@@ -120,6 +120,8 @@ return array_replace_recursive([
     'config' => [],
     'store' => [
         'apiEndpoint' => 'https://api.shopware.com',
+        'timeout' => 7,
+        'connect_timeout' => 5,
     ],
     'plugin_directories' => [
         'Default' => $this->AppPath('Plugins_Default'),

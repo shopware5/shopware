@@ -156,27 +156,21 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         /** @var Address $billing */
         $billing = $billingForm->getData();
 
-        // Generates an E-mail-Send-Date if DoubleOptIn is enabled, otherwise it'll be set to null if the feature is inactive
-        $doubleOptinEmailSentDate = $this->container->get('config')->get('optinregister') ? new \DateTime() : null;
+        $doubleOptinRegister = $this->container->get('config')->get('optinregister');
 
         $customer->setReferer((string) $session->offsetGet('sReferer'));
         $customer->setValidation((string) $data['register']['personal']['sValidation']);
         $customer->setAffiliate((int) $session->offsetGet('sPartner'));
         $customer->setPaymentId((int) $session->offsetGet('sPaymentID'));
+        $customer->setDoubleOptinRegister($doubleOptinRegister);
         $customer->setDoubleOptinConfirmDate(null);
-        $customer->setDoubleOptinEmailSentDate($doubleOptinEmailSentDate);
-
-        if ($doubleOptinEmailSentDate !== null) {
-            // Reset login information if Double-Opt-In is active
-            $customer->setFirstLogin('0000-00-00');
-            $customer->setLastLogin('0000-00-00');
-        }
 
         $registerService->register(
             $context->getShop(),
             $customer,
             $billing,
-            $shipping
+            $shipping,
+            $doubleOptinRegister
         );
 
         /*
@@ -186,8 +180,20 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         unset($data['register']['personal']['passwordConfirmation']);
         unset($data['register']['billing']['password']);
 
-        if ($doubleOptinEmailSentDate !== null) {
-            $this->doubleOptInRegister($data, $customer);
+        if ($doubleOptinRegister) {
+            $this->get('events')->notify(
+                'Shopware_Modules_Admin_SaveRegister_DoubleOptIn_Waiting',
+                [
+                    'id' => $customer->getId(),
+                    'billingID' => $customer->getDefaultBillingAddress()->getId(),
+                    'shippingID' => $customer->getDefaultShippingAddress()->getId(),
+                ]
+            );
+
+            $this->redirectCustomer([
+                'location' => 'register',
+                'optinsuccess' => true,
+            ]);
 
             return;
         }
@@ -206,7 +212,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $hash = $this->Request()->get('sConfirmation');
 
-        $sql = "SELECT `data` FROM `s_core_optin` WHERE `hash` = ? AND type = 'register'";
+        $sql = "SELECT `data` FROM `s_core_optin` WHERE `hash` = ? AND type = 'swRegister'";
         $result = $connection->fetchColumn($sql, [$hash]);
 
         // Triggers an Error-Message, which tells the customer that his confirmation link was invalid
@@ -228,6 +234,20 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         /** @var Customer $customer */
         $customer = $modelManager->find(Customer::class, $customerId);
+
+        // One-Time-Account
+        if ($customer->getAccountMode() === 1) {
+            $redirection = [
+                'controller' => 'checkout',
+                'action' => 'confirm',
+            ];
+        } else {
+            $redirection = [
+                'controller' => 'account',
+                'action' => 'index',
+            ];
+        }
+
         $customer->setFirstLogin($date);
         $customer->setDoubleOptinConfirmDate($date);
         $customer->setActive(true);
@@ -235,13 +255,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $modelManager->persist($customer);
         $modelManager->flush();
 
-        $sql = "DELETE FROM `s_core_optin` WHERE `hash` = ?  AND type = 'register'";
+        $sql = "DELETE FROM `s_core_optin` WHERE `hash` = ?  AND type = 'swRegister'";
         $connection->executeQuery($sql, [$this->Request()->get('sConfirmation')]);
 
         $this->saveRegisterSuccess($data, $customer);
-        $this->redirectCustomer([
-            'optinconfirmed' => true,
-        ]);
+        $this->redirectCustomer(
+            array_merge(['optinconfirmed' => true], $redirection)
+        );
     }
 
     public function ajaxValidateEmailAction()
@@ -276,58 +296,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->Response()->setHeader('Content-type', 'application/json', true);
         $this->Response()->setBody(json_encode($errors));
-    }
-
-    /**
-     * @param array    $data
-     * @param Customer $customer
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function doubleOptInRegister(array $data, Customer $customer)
-    {
-        $hash = \Shopware\Components\Random::getAlphanumericString(32);
-
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->container->get('dbal_connection');
-
-        $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`)
-                    VALUES ('register', ?, ?, ?)";
-
-        $storedData = [
-            'customerId' => $customer->getId(),
-            'register' => $data['register'],
-        ];
-
-        $connection->executeQuery($sql, [$customer->getDoubleOptinEmailSentDate()->format('Y-m-d H:i:s'), $hash, serialize($storedData)]);
-
-        $link = $this->Front()->Router()->assemble([
-            'sViewport' => 'register',
-            'action' => 'confirmValidation',
-            'sConfirmation' => $hash,
-        ]);
-
-        $context = [
-            'sConfirmLink' => $link,
-        ];
-
-        $mail = $this->container->get('templatemail')->createMail('sOPTINREGISTER', $context);
-        $mail->addTo($customer->getEmail());
-        $mail->send();
-
-        $this->get('events')->notify(
-            'Shopware_Modules_Admin_SaveRegister_DoubleOptIn_Waiting',
-            [
-                'id' => $customer->getId(),
-                'billingID' => $customer->getDefaultBillingAddress()->getId(),
-                'shippingID' => $customer->getDefaultShippingAddress()->getId(),
-            ]
-        );
-
-        $this->redirectCustomer([
-            'location' => 'register',
-            'optinsuccess' => true,
-        ]);
     }
 
     /**
@@ -575,7 +543,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $location = ['controller' => 'checkout', 'action' => 'shippingPayment'];
         }
 
-        $this->redirect(array_merge($params, $location));
+        $this->redirect(array_merge($location, $params));
     }
 
     /**
