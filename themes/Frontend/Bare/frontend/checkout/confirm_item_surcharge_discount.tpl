@@ -1,6 +1,6 @@
 {extends file='frontend/checkout/cart_item_surcharge_discount.tpl'}
 
-{* Rebate tax price *}
+{* Surcharge tax price *}
 {block name='frontend_checkout_cart_item_rebate_tax_price'}
     <div class="panel--td column--tax-price block is--align-right">
         {block name='frontend_checkout_cart_voucher_tax_label'}
@@ -13,9 +13,28 @@
             </div>
         {/block}
 
-        {if $sUserData.additional.charge_vat}{$sBasketItem.tax|currency}{else}&nbsp;{/if}
+        {block name='frontend_checkout_cart_voucher_tax_value'}
+            {if $sUserData.additional.charge_vat}
+                {if $sBasketItem.proportion}
+                    {foreach from=$sBasketItem.proportion item=proportion}
+                        {$proportion.tax_rate}%: {$proportion.tax|currency}<br>
+                    {/foreach}
+                {else}
+                    {$sBasketItem.tax|currency}
+                {/if}
+            {/if}
+        {/block}
     </div>
 {/block}
 
 {* Hide tax symbols *}
 {block name='frontend_checkout_cart_tax_symbol'}{/block}
+
+{* Proportional info *}
+{block name='frontend_checkout_cart_item_rebate_details_inline'}
+    {if $sBasketItem.proportion}
+        <div class="product--essential-features">
+            {s name="ProportionalItemInfo" namespace="frontend/checkout/cart"}{/s}
+        </div>
+    {/if}
+{/block}

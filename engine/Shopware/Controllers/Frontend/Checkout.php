@@ -1074,65 +1074,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->sBasketProportional = $basket;
         if ($mergeProportional && $hasDifferentTaxes && $this->get('config')->get('proportionalTaxCalculation')) {
-            $basket['content'] = $this->mergeProportionalItems($basket['content']);
+            $basket['content'] = $this->get('shopware.cart.proportional_cart_merger')->mergeProportionalItems($basket['content']);
         }
 
         return $basket;
-    }
-
-    /**
-     * Merges proportional cart items into one
-     * @param array $content
-     * @return array
-     */
-    private function mergeProportionalItems(array $content)
-    {
-        $newCart = [];
-
-        foreach ($content as $cartItem) {
-            if (!isset($newCart[$cartItem['ordernumber']])) {
-                $newCart[$cartItem['ordernumber']] = $cartItem;
-                continue;
-            }
-
-            // There are some plugins, which allows to have same product multiple times in cart
-            if (empty($newCart[$cartItem['ordernumber']]['modus'])) {
-                $newCart[] = $cartItem;
-                continue;
-            }
-
-            if (!isset($newCart[$cartItem['ordernumber']]['fixedName'])) {
-                $newCart[$cartItem['ordernumber']]['articlename'] = substr($newCart[$cartItem['ordernumber']]['articlename'], 0, strrpos($newCart[$cartItem['ordernumber']]['articlename'], ' '));
-            }
-
-            $newCart[$cartItem['ordernumber']]['price'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'price');
-            $newCart[$cartItem['ordernumber']]['netprice'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'netprice');
-            $newCart[$cartItem['ordernumber']]['amountWithTax'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'amountWithTax');
-            $newCart[$cartItem['ordernumber']]['amount'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'amount');
-            $newCart[$cartItem['ordernumber']]['amountnet'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'amountnet');
-            $newCart[$cartItem['ordernumber']]['priceNumeric'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'priceNumeric');
-            $newCart[$cartItem['ordernumber']]['tax'] = $this->mergeAmount($newCart[$cartItem['ordernumber']], $cartItem, 'tax');
-        }
-
-        return array_values($newCart);
-    }
-
-    /**
-     * @param array $item1
-     * @param array $item2
-     * @param string $property
-     * @return string
-     */
-    private function mergeAmount(array $item1, array $item2, $property)
-    {
-        $hasComma = strpos($item1[$property], ',') !== false;
-        $amount = str_replace(',', '.', $item1[$property]) + str_replace(',', '.', $item2[$property]);
-
-        if ($hasComma) {
-            $amount = Shopware()->Modules()->Articles()->sFormatPrice($amount);
-        }
-
-        return $amount;
     }
 
     /**
