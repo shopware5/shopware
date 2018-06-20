@@ -338,16 +338,12 @@ class Payment extends ModelEntity
     /**
      * Sets the class of a payment
      *
-     * @deprecated Will be removed in 5.5.
-     *
      * @param string $class
      *
      * @return Payment
      */
     public function setClass($class)
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $this->class = $class;
 
         return $this;
@@ -356,21 +352,15 @@ class Payment extends ModelEntity
     /**
      * Gets the class of a payment
      *
-     * @deprecated Will be removed in 5.5.
-     *
      * @return string
      */
     public function getClass()
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->class;
     }
 
     /**
      * Set the special table of a payment
-     *
-     * @deprecated Will be removed in 5.5.
      *
      * @param string $table
      *
@@ -378,8 +368,6 @@ class Payment extends ModelEntity
      */
     public function setTable($table)
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $this->table = $table;
 
         return $this;
@@ -388,14 +376,10 @@ class Payment extends ModelEntity
     /**
      * Gets the table of a payment
      *
-     * @deprecated Will be removed in 5.5.
-     *
      * @return string
      */
     public function getTable()
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->table;
     }
 
@@ -618,16 +602,12 @@ class Payment extends ModelEntity
     /**
      * Sets the embed-IFrame of a payment
      *
-     * @deprecated Will be removed in 5.5.
-     *
      * @param string $embedIFrame
      *
      * @return Payment
      */
     public function setEmbedIFrame($embedIFrame)
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $this->embedIFrame = $embedIFrame;
 
         return $this;
@@ -636,14 +616,10 @@ class Payment extends ModelEntity
     /**
      * Gets the embed-IFrame of a payment
      *
-     * @deprecated Will be removed in 5.5.
-     *
      * @return string
      */
     public function getEmbedIFrame()
     {
-        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->embedIFrame;
     }
 
