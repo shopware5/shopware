@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\ProductFeed\ProductFeed;
 
 /**
@@ -38,22 +37,22 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
      *
      * @var null
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var \Shopware\Models\Article\Repository
      */
-    protected $articleRepository = null;
+    protected $articleRepository;
 
     /**
      * @var \Shopware\Models\Shop\Repository
      */
-    protected $shopRepository = null;
+    protected $shopRepository;
 
     /**
      * @var \Shopware\Models\ProductFeed\Repository
      */
-    protected $productFeedRepository = null;
+    protected $productFeedRepository;
 
     /**
      * returns a JSON string to the view containing all Product Feeds
@@ -179,6 +178,10 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
             $params['languageId'] = null;
         }
 
+        if (!$this->_isAllowed('sqli') && !empty($params['ownFilter'])) {
+            unset($params['ownFilter']);
+        }
+
         //save data of the category tree
         $params['categories'] = $this->prepareAssociationDataForSaving('categories', 'Shopware\Models\Category\Category', $params);
 
@@ -199,7 +202,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $cacheDir = $this->container->getParameter('kernel.cache_dir');
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
-            if (false === @mkdir($cacheDir, 0777, true)) {
+            if (@mkdir($cacheDir, 0777, true) === false) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
             }
         } elseif (!is_writable($cacheDir)) {
