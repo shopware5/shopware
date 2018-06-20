@@ -142,6 +142,12 @@ Ext.define('Shopware.form.field.Media', {
     resetButtonText: '{s name="media_field/reset_button_text"}Reset media{/s}',
 
     /**
+     * Removes the white background of the media
+     * @type { boolean }
+     */
+    removeBackground: false,
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -330,7 +336,7 @@ Ext.define('Shopware.form.field.Media', {
         me.buttonContainer = Ext.create('Ext.container.Container', {
             width: 180,
             padding: '0 10',
-            style: "background: #fff",
+            style: me.removeBackground ? '' : 'background: #fff',
             layout: {
                 type: 'vbox',
                 align: 'stretch'
@@ -354,7 +360,7 @@ Ext.define('Shopware.form.field.Media', {
 
         me.previewContainer = Ext.create('Ext.container.Container', {
             flex: 1,
-            style: "background: #fff",
+            style: me.removeBackground ? '' : 'background: #fff',
             items: [ me.createPreview() ]
         });
         return me.previewContainer;
@@ -601,6 +607,24 @@ Ext.define('Shopware.form.field.Media', {
                 }
             }
         });
+    },
+
+    /**
+     * Inserts the globe icon into the image
+     *
+     * @param { Ext.dom.Element } globe
+     */
+    insertGlobeIcon: function (globe) {
+        var me = this;
+
+        globe.setStyle({
+            position: 'absolute',
+            top: '14px',
+            left: '14px',
+            right: 'auto'
+        });
+
+        me.previewContainer.getEl().appendChild(globe);
     }
 });
 //{/block}

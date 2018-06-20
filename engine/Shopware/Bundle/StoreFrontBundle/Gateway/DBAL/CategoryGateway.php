@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -61,18 +62,26 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     private $connection;
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * @param Connection                $connection
      * @param FieldHelper               $fieldHelper
      * @param Hydrator\CategoryHydrator $categoryHydrator
+     * @param MediaServiceInterface     $mediaService
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\CategoryHydrator $categoryHydrator
+        Hydrator\CategoryHydrator $categoryHydrator,
+        MediaServiceInterface $mediaService
     ) {
         $this->connection = $connection;
         $this->categoryHydrator = $categoryHydrator;
         $this->fieldHelper = $fieldHelper;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -166,7 +175,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $categories = [];
         foreach ($data as $row) {
             $id = $row['__category_id'];
-            $categories[$id] = $this->categoryHydrator->hydrate($row);
+            $categories[$id] = $this->categoryHydrator->hydrate($this->translateCategoryMedia($row, $context));
         }
 
         return $categories;
@@ -224,5 +233,28 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         }
 
         return $productCategories;
+    }
+
+    /**
+     * Resolves translated category media
+     *
+     * @param array                       $category
+     * @param Struct\ShopContextInterface $context
+     *
+     * @return array
+     */
+    private function translateCategoryMedia(array $category, Struct\ShopContextInterface $context)
+    {
+        if (empty($category['__category_translation'])) {
+            return $category;
+        }
+
+        $translation = unserialize($category['__category_translation']);
+
+        if (!empty($translation['imagePath'])) {
+            $category['mediaTranslation'] = $this->mediaService->get($translation['imagePath'], $context);
+        }
+
+        return $category;
     }
 }

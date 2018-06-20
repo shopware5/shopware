@@ -301,6 +301,7 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.category_hydrator_dbal"/>
+            <argument type="service" id="shopware_storefront.media_service"/>
         </service>
 
         <!-- Helper classes -->

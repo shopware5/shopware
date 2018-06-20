@@ -82,6 +82,10 @@ class CategoryHydrator extends Hydrator
             );
         }
 
+        if (isset($data['mediaTranslation'])) {
+            $category->setMedia($data['mediaTranslation']);
+        }
+
         if ($data['__categoryAttribute_id']) {
             $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
         }

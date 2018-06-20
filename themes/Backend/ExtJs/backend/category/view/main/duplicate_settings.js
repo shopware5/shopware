@@ -76,7 +76,8 @@ Ext.define('Shopware.apps.Category.view.main.DuplicateSettings', {
             fieldLabel: me.snippets.categoryName,
             store: Ext.create('Shopware.apps.Category.store.CategoryPath'),
             valueField: 'id',
-            displayField: 'name'
+            displayField: 'name',
+            disableLoadingSelectedName: true
         });
 
         me.associationField = Ext.create('Ext.form.field.Checkbox', {
