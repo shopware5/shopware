@@ -485,6 +485,7 @@ class sOrder
                 'orderID' => $orderID,
                 'ordernumber' => 0,
                 'articleID' => $basketRow['articleID'],
+                'articleDetailId' => $basketRow['additional_details']['articleDetailsID'],
                 'articleordernumber' => $basketRow['ordernumber'],
                 'price' => $basketRow['priceNumeric'],
                 'quantity' => $basketRow['quantity'],
@@ -669,9 +670,10 @@ class sOrder
                 tax_rate,
                 ean,
                 unit,
-                pack_unit
+                pack_unit,
+                articleDetailId
                 )
-                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s)
+                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s, %d)
             ';
 
             $sql = sprintf($preparedQuery,
@@ -690,7 +692,8 @@ class sOrder
                 $basketRow['tax_rate'],
                 $this->db->quote((string) $basketRow['ean']),
                 $this->db->quote((string) $basketRow['itemUnit']),
-                $this->db->quote((string) $basketRow['packunit'])
+                $this->db->quote((string) $basketRow['packunit']),
+                $basketRow['additional_details']['articleDetailsID']
             );
 
             $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, ['subject' => $this, 'row' => $basketRow, 'user' => $this->sUserData, 'order' => ['id' => $orderID, 'number' => $orderNumber]]);
