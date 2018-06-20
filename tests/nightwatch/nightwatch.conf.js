@@ -36,9 +36,9 @@ module.exports = {
             selenium_port: (process.env.SELENIUM_PORT || 4444),
             selenium_host: (process.env.SELENIUM_HOST || 'selenium'),
             silent: true,
-            launch_url: (process.env.URL || 'http://app_server'),
+            launch_url: (process.env.URL || 'http://appserver'),
             globals: {
-                devServerURL: (process.env.PAGE || 'http://app_server')
+                devServerURL: (process.env.PAGE || 'http://appserver')
             }
         },
 
