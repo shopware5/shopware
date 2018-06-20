@@ -447,7 +447,9 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 fieldLabel:me.snippets.defaultSettingsLinkExternalPageLabel,
                 helpText:me.snippets.defaultSettingsLinkExternalPageHelp,
                 dataIndex:'external',
-                name:'external'
+                name:'external',
+                translatable: true,
+                translationName: 'external',
             },
             {
                 fieldLabel: me.snippets.defaultSettingsLinkExternalPageTarget,
@@ -466,20 +468,24 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                         { externalTarget: me.snippets.defaultSettingsLinkExternalPageTargetSelf },
                         { externalTarget: me.snippets.defaultSettingsLinkExternalPageTargetBlank }
                     ]
-                })
+                }),
+                translatable: true,
+                translationName: 'externalTarget'
             },
             {
-                xtype:'mediaselectionfield',
+                xtype:'shopware-media-field',
                 fieldLabel:me.snippets.defaultSettingsImageLabel,
                 buttonText:me.snippets.defaultSettingsImageButtonText,
                 name:'imagePath',
                 readOnly:false,
-                valueField:'virtualPath',
+                valueField:'id',
                 supportText:me.snippets.defaultSettingsImageSupportText,
                 multiSelect:false,
                 anchor:'100%',
+                removeBackground: true,
                 validTypes:me.getAllowedExtensions(),
-                validTypeErrorFunction:me.getExtensionErrorCallback()
+                validTypeErrorFunction:me.getExtensionErrorCallback(),
+                translatable: true,
             },
             {
                 xtype:'checkboxgroup',
