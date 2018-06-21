@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
@@ -610,10 +609,10 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $typID = $this->_typID;
 
         $checkForExistingDocument = Shopware()->Db()->fetchRow('
-        SELECT ID,docID,hash FROM s_order_documents WHERE userID = ? AND orderID = ? AND type = ?
+        SELECT id , docID , hash FROM s_order_documents WHERE userID = ? AND orderID = ? AND `type` = ?
         ', [$this->_order->userID, $this->_order->id, $typID]);
 
-        if (!empty($checkForExistingDocument['ID'])) {
+        if (!empty($checkForExistingDocument['id'])) {
             // Document already exist. Update date and amount!
             $update = '
             UPDATE `s_order_documents` SET `date` = now(),`amount` = ?
@@ -651,7 +650,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 Shopware()->Models()->flush($updatedDocument->getAttribute());
             }
 
-            $rowID = $checkForExistingDocument['ID'];
+            $rowID = $checkForExistingDocument['id'];
             $bid = $checkForExistingDocument['docID'];
             $hash = $checkForExistingDocument['hash'];
         } else {
@@ -709,7 +708,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $nextNumber = $incrementer->increment($numberrange);
 
                 Shopware()->Db()->query('
-                    UPDATE `s_order_documents` SET `docID` = ? WHERE `ID` = ? LIMIT 1 ;
+                    UPDATE `s_order_documents` SET `docID` = ? WHERE `id` = ? LIMIT 1 ;
                 ', [$nextNumber, $rowID]);
 
                 $bid = $nextNumber;
