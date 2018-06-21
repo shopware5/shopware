@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\MediaBundle;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
@@ -43,11 +44,11 @@ class OptimizerServiceTest extends TestCase
 
     protected function setUp()
     {
-        $this->optimizers = [
+        $this->optimizers = new ArrayCollection([
             new RunnableUnitOptimizer(),
             new NotRunnableUnitOptimizer(),
             new SingleRunnableUnitOptimizer(),
-        ];
+        ]);
 
         $this->optimizerService = new OptimizerService($this->optimizers);
     }
