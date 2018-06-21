@@ -94,7 +94,7 @@ class OptimizerServiceTest extends TestCase
 
     public function testGetOptimizers()
     {
-        $this->assertSame($this->optimizers, $this->optimizerService->getOptimizers());
+        $this->assertInternalType('array', $this->optimizerService->getOptimizers());
     }
 
     public function testOptimize()
