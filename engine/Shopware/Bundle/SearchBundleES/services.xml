@@ -13,7 +13,7 @@
         <service id="shopware_search_es.struct_hydrator" class="Shopware\Bundle\SearchBundleES\StructHydrator" />
 
         <service id="shopware_search_es.product_number_search_factory" class="Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory">
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.product_number_search" class="Shopware\Bundle\SearchBundleES\ProductNumberSearch">

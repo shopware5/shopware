@@ -38,7 +38,7 @@ class OptimizerServiceTest extends TestCase
     private $optimizerService;
 
     /**
-     * @var array
+     * @var ArrayCollection
      */
     private $optimizers = [];
 
@@ -94,7 +94,9 @@ class OptimizerServiceTest extends TestCase
 
     public function testGetOptimizers()
     {
-        $this->assertInternalType('array', $this->optimizerService->getOptimizers());
+        $optimizers = $this->optimizerService->getOptimizers();
+        $this->assertInternalType('array', $optimizers);
+        $this->assertSame($this->optimizers->toArray(), $optimizers);
     }
 
     public function testOptimize()

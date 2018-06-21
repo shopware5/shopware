@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES\DependencyInjection\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ProductNumberSearch;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,11 +38,11 @@ class ProductNumberSearchFactory
     private $handlers;
 
     /**
-     * @param HandlerInterface[] $handlers
+     * @param IteratorAggregate $handlers
      */
-    public function __construct($handlers)
+    public function __construct(IteratorAggregate $handlers)
     {
-        $this->handlers = $handlers;
+        $this->handlers = iterator_to_array($handlers, false);
     }
 
     /**
