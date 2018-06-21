@@ -27,9 +27,6 @@ namespace Shopware\Components\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * @deprecated since 5.5, to be removed in 6.0. Please use tagged tag in services.xml instead
- */
 trait TagReplaceTrait
 {
     /**
