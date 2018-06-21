@@ -66,7 +66,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         Container $container
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->facetHandlers = $facetHandlers;
+        $this->facetHandlers = iterator_to_array($facetHandlers);
         $this->eventManager = $eventManager;
         $this->facetHandlers = $this->registerFacetHandlers();
 

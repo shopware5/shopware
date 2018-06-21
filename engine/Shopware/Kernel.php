@@ -38,8 +38,6 @@ use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\Synchroniz
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
-use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
-use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
@@ -671,8 +669,6 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new StaticResourcesCompilerPass());
 
         // Diese sind dann überflüssig
-        $container->addCompilerPass(new DBALCompilerPass());
-        $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
         $container->addCompilerPass(new MappingCompilerPass());
         $container->addCompilerPass(new SynchronizerCompilerPass());
         $container->addCompilerPass(new DataIndexerCompilerPass());

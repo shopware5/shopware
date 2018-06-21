@@ -8,9 +8,7 @@
         <service id="shopware_search.product_number_search" class="Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
             <argument type="service" id="events" />
-
-            <!--facet handler-->
-            <argument type="collection" />
+            <argument type="tagged" tag="facet_handler_dbal" />
             <argument type="service" id="service_container" />
         </service>
 
@@ -271,10 +269,10 @@
             <argument type="service" id="events" />
 
             <!--condition handlers-->
-            <argument type="collection" />
+            <argument type="tagged" tag="condition_handler_dbal" />
 
             <!--sorting handlers-->
-            <argument type="collection" />
+            <argument type="tagged" tag="sorting_handler_dbal" />
 
             <argument type="service" id="service_container" />
         </service>

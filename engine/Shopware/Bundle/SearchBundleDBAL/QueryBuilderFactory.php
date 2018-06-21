@@ -78,8 +78,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         ContainerInterface $container
     ) {
         $this->connection = $connection;
-        $this->conditionHandlers = $conditionHandlers;
-        $this->sortingHandlers = $sortingHandlers;
+        $this->conditionHandlers = iterator_to_array($conditionHandlers);
+        $this->sortingHandlers = iterator_to_array($sortingHandlers);
         $this->eventManager = $eventManager;
 
         $this->conditionHandlers = $this->registerConditionHandlers();
