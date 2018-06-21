@@ -25,6 +25,7 @@
 namespace Shopware\Components\Emotion\Preset;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use Shopware\Components\Emotion\Preset\ComponentHandler\ComponentHandlerInterface;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Components\Model\ModelManager;
@@ -56,14 +57,14 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     /**
      * @param ModelManager                $modelManager
      * @param \Enlight_Event_EventManager $eventManager
-     * @param array                       $componentHandlers
+     * @param IteratorAggregate           $componentHandlers
      */
-    public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, array $componentHandlers, $rootDir)
+    public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, IteratorAggregate $componentHandlers, $rootDir)
     {
         $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
 
-        $this->componentHandlers = $componentHandlers;
+        $this->componentHandlers = iterator_to_array($componentHandlers);
         $this->componentHandlers = $this->registerComponentHandlers();
         $this->rootDir = $rootDir;
     }
@@ -238,7 +239,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $assets = $syncData->get('assets');
 
         foreach ($assets as $key => &$path) {
-            if (0 === strpos($path, '/custom/')) {
+            if (strpos($path, '/custom/') === 0) {
                 $path = 'file://' . $this->rootDir . $path;
             }
         }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\EmotionBundle\Service;
 
+use IteratorAggregate;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ComponentHandlerInterface;
 use Shopware\Bundle\EmotionBundle\Exception\ComponentHandlerNotFoundException;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway;
@@ -50,14 +51,14 @@ class EmotionElementService implements EmotionElementServiceInterface
     private $dataCollectionResolver;
 
     /**
-     * @param array                           $componentHandler
+     * @param IteratorAggregate               $componentHandler
      * @param EmotionElementGateway           $gateway
      * @param DataCollectionResolverInterface $dataCollectionResolver
      */
-    public function __construct(array $componentHandler, EmotionElementGateway $gateway, DataCollectionResolverInterface $dataCollectionResolver)
+    public function __construct(IteratorAggregate $componentHandler, EmotionElementGateway $gateway, DataCollectionResolverInterface $dataCollectionResolver)
     {
         $this->gateway = $gateway;
-        $this->componentHandler = $componentHandler;
+        $this->componentHandler = iterator_to_array($componentHandler);
         $this->dataCollectionResolver = $dataCollectionResolver;
     }
 

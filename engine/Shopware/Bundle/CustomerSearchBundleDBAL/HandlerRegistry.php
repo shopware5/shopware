@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL;
 
+use IteratorAggregate;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 
@@ -40,15 +41,15 @@ class HandlerRegistry
     private $sortingHandlers;
 
     /**
-     * @param ConditionHandlerInterface[] $conditionHandlers
-     * @param array                       $sortingHandlers
+     * @param IteratorAggregate $conditionHandlers
+     * @param IteratorAggregate $sortingHandlers
      */
     public function __construct(
-        array $conditionHandlers,
-        array $sortingHandlers
+        IteratorAggregate $conditionHandlers,
+        IteratorAggregate $sortingHandlers
     ) {
-        $this->conditionHandlers = $conditionHandlers;
-        $this->sortingHandlers = $sortingHandlers;
+        $this->conditionHandlers = iterator_to_array($conditionHandlers);
+        $this->sortingHandlers = iterator_to_array($sortingHandlers);
     }
 
     /**

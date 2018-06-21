@@ -683,7 +683,7 @@
             <argument type="service" id="models" />
             <argument type="service" id="events" />
             <!--preset element handlers-->
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware.emotion.preset_component_handler" />
             <argument>%kernel.root_dir%</argument>
         </service>
 
