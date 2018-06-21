@@ -52,6 +52,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added ability to translate shop forms
 * Added attributes to shop forms page
 * Added hreflang support to translated pages
+    * Added configuration to "Seo / Router" to disable href-lang or show only language instead of language and locale.
 * Added new column `changed` with `DEFAULT NULL` to tables `s_order` and `s_user`
 * Added checks for changes on products, customers and orders in backend while a user saves them to prevent an overwriting of changes made by someone else
 * Added proportional calculation of tax positions

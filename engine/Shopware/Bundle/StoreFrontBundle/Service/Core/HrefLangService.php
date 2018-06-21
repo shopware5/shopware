@@ -29,11 +29,11 @@ use Shopware\Bundle\StoreFrontBundle\Service\HrefLangServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\HrefLang;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\Router;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Config as Config;
-use Shopware\Components\Model\ModelManager;
 
 class HrefLangService implements HrefLangServiceInterface
 {
@@ -63,9 +63,9 @@ class HrefLangService implements HrefLangServiceInterface
     private $modelManager;
 
     /**
-     * @param Connection $connection
-     * @param Router $router
-     * @param Config $config
+     * @param Connection   $connection
+     * @param Router       $router
+     * @param Config       $config
      * @param ModelManager $modelManager
      */
     public function __construct(Connection $connection, Router $router, Config $config, ModelManager $modelManager)
@@ -95,6 +95,10 @@ class HrefLangService implements HrefLangServiceInterface
             $href->setLocale($languageShop['locale']);
             $href->setLink($this->getRouter($languageShop['id'])->assemble($parameters));
 
+            if (!$this->config->get('hrefLangCountry')) {
+                $href->setLocale(explode('-', $languageShop['locale'])[0]);
+            }
+
             if (!$this->isSeoUrl($parameters, $href->getLink())) {
                 continue;
             }
@@ -110,7 +114,23 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
+     * @param array  $parameters
+     * @param string $url
+     *
+     * @return bool
+     */
+    protected function isSeoUrl(array $parameters, $url)
+    {
+        if (strpos($url, $parameters['controller']) !== false && strpos($url, $parameters['action']) !== false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param Shop $shop
+     *
      * @return array
      */
     private function getLanguageShops(Shop $shop)
@@ -133,6 +153,7 @@ class HrefLangService implements HrefLangServiceInterface
 
     /**
      * @param int $shopId
+     *
      * @return Router
      */
     private function getRouter($shopId)
@@ -148,19 +169,5 @@ class HrefLangService implements HrefLangServiceInterface
         $this->routerCache[$shopId] = $languageRouter;
 
         return $languageRouter;
-    }
-
-    /**
-     * @param array $parameters
-     * @param string $url
-     * @return bool
-     */
-    protected function isSeoUrl(array $parameters, $url)
-    {
-        if (strpos($url, $parameters['controller']) !== false && strpos($url, $parameters['action']) !== false) {
-            return false;
-        }
-
-        return true;
     }
 }
