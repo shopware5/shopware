@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository;
 
+use IteratorAggregate;
 use Shopware\Bundle\AttributeBundle\Repository\Reader\GenericReader;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher;
 use Shopware\Components\Model\ModelManager;
@@ -46,12 +47,12 @@ class Registry implements RegistryInterface
     private $entityManager;
 
     /**
-     * @param RepositoryInterface[] $repositories
-     * @param ModelManager          $entityManager
+     * @param IteratorAggregate $repositories
+     * @param ModelManager      $entityManager
      */
-    public function __construct(array $repositories, ModelManager $entityManager)
+    public function __construct(IteratorAggregate $repositories, ModelManager $entityManager)
     {
-        $this->repositories = $repositories;
+        $this->repositories = iterator_to_array($repositories);
         $this->entityManager = $entityManager;
     }
 

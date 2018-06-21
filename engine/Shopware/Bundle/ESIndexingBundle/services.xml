@@ -11,9 +11,9 @@
         </service>
 
         <service id="shopware_elastic_search.shop_indexer_factory" class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\ShopIndexerFactory" >
-            <argument type="collection" />
-            <argument type="collection" />
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware_elastic_search.data_indexer" />
+            <argument type="tagged" tag="shopware_elastic_search.mapping" />
+            <argument type="tagged" tag="shopware_elastic_search.settings" />
         </service>
 
         <service id="shopware_elastic_search.shop_indexer" class="Shopware\Bundle\ESIndexingBundle\ShopIndexer">
@@ -54,7 +54,7 @@
         </service>
 
         <service id="shopware_elastic_search.composite_synchronizer_factory" class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory" >
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware_elastic_search.synchronizer" />
         </service>
 
         <service id="shopware_elastic_search.composite_synchronizer" class="Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer">
