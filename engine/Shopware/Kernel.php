@@ -666,16 +666,18 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new EventListenerCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new EventSubscriberCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
+        $container->addCompilerPass(new FormPass());
+        $container->addCompilerPass(new AddConstraintValidatorsPass());
+        $container->addCompilerPass(new StaticResourcesCompilerPass());
+
+        // Diese sind dann überflüssig
         $container->addCompilerPass(new DBALCompilerPass());
         $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
         $container->addCompilerPass(new MappingCompilerPass());
         $container->addCompilerPass(new SynchronizerCompilerPass());
         $container->addCompilerPass(new DataIndexerCompilerPass());
         $container->addCompilerPass(new SettingsCompilerPass());
-        $container->addCompilerPass(new FormPass());
-        $container->addCompilerPass(new AddConstraintValidatorsPass());
         $container->addCompilerPass(new SearchRepositoryCompilerPass());
-        $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new EmotionComponentHandlerCompilerPass());
         $container->addCompilerPass(new HandlerRegistryCompilerPass());

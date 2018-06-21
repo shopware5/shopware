@@ -58,7 +58,7 @@ class OptimizerServiceTest extends TestCase
         $this->expectException(OptimizerNotFoundException::class);
         $file = __DIR__ . '/fixtures/sw-icon.png';
 
-        $optimizerService = new OptimizerService([]);
+        $optimizerService = new OptimizerService(new ArrayCollection());
         $optimizerService->optimize($file);
     }
 
