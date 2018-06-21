@@ -1,4 +1,4 @@
-.loading-wrapper {
+#loading-wrapper {
   background-color: #213448;
   position: fixed;
   top: 0;
@@ -8,7 +8,7 @@
   border-radius: 3px;
   z-index: 10000;
 }
-.loading-wrapper .oval-one {
+#loading-wrapper .oval-one {
   position: absolute;
   left: -180px;
   bottom: -100px;
@@ -17,7 +17,7 @@
   height: 430px;
   width: 430px;
 }
-.loading-wrapper .oval-two {
+#loading-wrapper .oval-two {
   position: absolute;
   right: 50px;
   top: -130px;
@@ -26,7 +26,7 @@
   height: 230px;
   width: 230px;
 }
-.loading-wrapper .loading-text {
+#loading-wrapper .loading-text {
   display: block;
   position: absolute;
   top: calc(45% - 11px);
@@ -38,7 +38,7 @@
   font-weight: 600;
   font-size: 20px;
 }
-.loading-wrapper .loading-content {
+#loading-wrapper .loading-content {
   display: block;
   position: relative;
   left: calc(50% - 85px);
@@ -54,7 +54,7 @@
   -o-animation: loader 2s linear infinite;
   animation: loader 2s linear infinite;
 }
-.loading-wrapper .loading-content::before {
+#loading-wrapper .loading-content::before {
   content: "";
   position: absolute;
   left: 5px;
@@ -70,7 +70,7 @@
   -o-animation: loader 2s linear infinite;
   animation: loader 3s linear infinite;
 }
-.loading-wrapper .loading-content::after {
+#loading-wrapper .loading-content::after {
   content: "";
   position: absolute;
   left: 15px;
@@ -1211,4 +1211,56 @@ p {
 }
 .is-bigger {
   font-size: 200%;
+}
+body#swag-waiting {
+  background-color: #213448;
+  overflow: hidden;
+}
+.waiting {
+  padding-top: 2rem;
+}
+.waiting h1 {
+  font-weight: 700;
+}
+.waiting p {
+  margin-left: auto;
+  margin-right: auto;
+  width: 55%;
+  line-height: 2rem;
+  font-size: 1.25rem;
+}
+.waiting svg.circle {
+  position: absolute;
+  fill: #ffffff;
+}
+.waiting svg.circle.big {
+  top: 20rem;
+  left: -12rem;
+  width: 30rem;
+  fill-opacity: .05;
+}
+.waiting svg.circle.small {
+  top: -15rem;
+  right: 2rem;
+  width: 20rem;
+  fill-opacity: .03;
+}
+.waiting-graphic,
+.compare-no-apples-and-pears,
+.eat-fruits-while-waiting,
+.no-fruits-no-fun {
+  margin: 1rem auto;
+  height: 10rem;
+  width: 50%;
+}
+.compare-no-apples-and-pears {
+  background: url(img/compare-no-apples-and-pears.svg) center bottom no-repeat;
+}
+.eat-fruits-while-waiting {
+  background: url(img/eat-fruits-while-waiting.svg) center bottom no-repeat;
+}
+.no-fruits-no-fun {
+  background: url(img/no-fruits-no-fun.svg) center bottom no-repeat;
+  background-size: 25%;
+  background-position-y: 85%;
 }
