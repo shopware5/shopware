@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\MediaBundle;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Shopware\Bundle\MediaBundle\CacheOptimizerService;
@@ -41,9 +42,9 @@ class CacheOptimizerServiceTest extends TestCase
     protected function setUp()
     {
         $this->optimizerService = new CacheOptimizerService(
-            new OptimizerService([
+            new OptimizerService(new ArrayCollection([
                 new TestPngOptimizer(),
-            ])
+            ]))
         );
     }
 
