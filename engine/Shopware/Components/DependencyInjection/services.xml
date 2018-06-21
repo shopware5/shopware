@@ -112,10 +112,10 @@
         <service id="router" class="Shopware\Components\Routing\Router">
             <factory service="router_factory" method="factory" />
             <argument type="service" id="events"/>
-            <argument type="collection"/>
-            <argument type="collection"/>
-            <argument type="collection"/>
-            <argument type="collection"/>
+            <argument type="tagged" tag="router.matcher"/>
+            <argument type="tagged" tag="router.generator"/>
+            <argument type="tagged" tag="router.pre_filter"/>
+            <argument type="tagged" tag="router.post_filter"/>
         </service>
 
         <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default" />
@@ -597,7 +597,7 @@
         </service>
 
         <service id="shopware.captcha.repository" class="Shopware\Components\Captcha\CaptchaRepository">
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware.captcha" />
             <argument type="service" id="config" />
             <argument type="service" id="service_container" />
         </service>

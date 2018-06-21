@@ -42,13 +42,11 @@ use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHan
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
 use Shopware\Components\ConfigLoader;
-use Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
-use Shopware\Components\DependencyInjection\Compiler\RouterCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\LegacyPhpDumper;
 use Shopware\Components\Plugin;
@@ -679,12 +677,10 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SearchRepositoryCompilerPass());
         $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
-        $container->addCompilerPass(new AddCaptchaCompilerPass());
         $container->addCompilerPass(new EmotionComponentHandlerCompilerPass());
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
         $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new EmotionPresetCompilerPass());
-        $container->addCompilerPass(new RouterCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

@@ -25,6 +25,7 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Enlight_Event_EventManager as EnlightEventManager;
+use IteratorAggregate;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\Router as RoutingRouter;
@@ -39,26 +40,26 @@ class Router
 {
     /**
      * @param EnlightEventManager $eventManager
-     * @param array               $matchers
-     * @param array               $generators
-     * @param array               $preFilters
-     * @param array               $postFilters
+     * @param IteratorAggregate   $matchers
+     * @param IteratorAggregate   $generators
+     * @param IteratorAggregate   $preFilters
+     * @param IteratorAggregate   $postFilters
      *
      * @return RouterInterface
      */
     public function factory(
         EnlightEventManager $eventManager,
-        array $matchers,
-        array $generators,
-        array $preFilters,
-        array $postFilters
+        IteratorAggregate $matchers,
+        IteratorAggregate $generators,
+        IteratorAggregate $preFilters,
+        IteratorAggregate $postFilters
     ) {
         $router = new RoutingRouter(
             Context::createEmpty(), // Request object will created on dispatch :/
-            $matchers,
-            $generators,
-            $preFilters,
-            $postFilters
+            iterator_to_array($matchers),
+            iterator_to_array($generators),
+            iterator_to_array($preFilters),
+            iterator_to_array($postFilters)
         );
 
         /* Still better than @see \Shopware\Models\Shop\Shop::registerResources */
