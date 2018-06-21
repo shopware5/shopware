@@ -64,7 +64,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
 
-        $this->componentHandlers = iterator_to_array($componentHandlers);
+        $this->componentHandlers = iterator_to_array($componentHandlers, false);
         $this->componentHandlers = $this->registerComponentHandlers();
         $this->rootDir = $rootDir;
     }

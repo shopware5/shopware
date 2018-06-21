@@ -62,9 +62,9 @@ class ShopIndexerFactory
      */
     public function __construct(IteratorAggregate $indexer, IteratorAggregate $mappings, IteratorAggregate $settings)
     {
-        $this->indexer = iterator_to_array($indexer);
-        $this->mappings = iterator_to_array($mappings);
-        $this->settings = iterator_to_array($settings);
+        $this->indexer = iterator_to_array($indexer, false);
+        $this->mappings = iterator_to_array($mappings, false);
+        $this->settings = iterator_to_array($settings, false);
     }
 
     /**

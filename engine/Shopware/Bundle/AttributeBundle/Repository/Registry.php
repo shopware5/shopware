@@ -52,7 +52,7 @@ class Registry implements RegistryInterface
      */
     public function __construct(IteratorAggregate $repositories, ModelManager $entityManager)
     {
-        $this->repositories = iterator_to_array($repositories);
+        $this->repositories = iterator_to_array($repositories, false);
         $this->entityManager = $entityManager;
     }
 

@@ -59,7 +59,7 @@ class MediaServiceFactory
     public function __construct(ContainerInterface $container, IteratorAggregate $adapterFactories, array $cdnConfig)
     {
         $this->container = $container;
-        $this->adapterFactories = $adapterFactories;
+        $this->adapterFactories = iterator_to_array($adapterFactories, false);
         $this->cdnConfig = $cdnConfig;
     }
 

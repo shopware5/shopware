@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
@@ -56,17 +57,17 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     /**
      * @param QueryBuilderFactoryInterface $queryBuilderFactory
      * @param \Enlight_Event_EventManager  $eventManager
-     * @param FacetHandlerInterface[]      $facetHandlers
+     * @param IteratorAggregate            $facetHandlers
      * @param Container                    $container
      */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Enlight_Event_EventManager $eventManager,
-        $facetHandlers,
+        IteratorAggregate $facetHandlers,
         Container $container
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->facetHandlers = iterator_to_array($facetHandlers);
+        $this->facetHandlers = iterator_to_array($facetHandlers, false);
         $this->eventManager = $eventManager;
         $this->facetHandlers = $this->registerFacetHandlers();
 

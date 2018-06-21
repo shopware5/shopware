@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle\Commands;
 
-use IteratorAggregate;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
@@ -181,7 +180,7 @@ This can take a very long time, depending on the number of files that need to be
      * @param OutputInterface      $output
      * @param OptimizerInterface[] $capabilities
      */
-    private function displayCapabilities(OutputInterface $output, IteratorAggregate $capabilities)
+    private function displayCapabilities(OutputInterface $output, array $capabilities)
     {
         $table = new Table($output);
         $table->setHeaders(['Optimizer', 'Runnable', 'Supported mime-types']);

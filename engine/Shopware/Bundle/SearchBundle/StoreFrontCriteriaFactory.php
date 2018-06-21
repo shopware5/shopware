@@ -66,7 +66,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
         $this->config = $config;
         $this->eventManager = $eventManager;
 
-        $this->requestHandlers = iterator_to_array($requestHandlers);
+        $this->requestHandlers = iterator_to_array($requestHandlers, false);
         $this->requestHandlers = $this->registerRequestHandlers();
     }
 

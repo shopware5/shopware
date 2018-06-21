@@ -48,8 +48,8 @@ class HandlerRegistry
         IteratorAggregate $conditionHandlers,
         IteratorAggregate $sortingHandlers
     ) {
-        $this->conditionHandlers = iterator_to_array($conditionHandlers);
-        $this->sortingHandlers = iterator_to_array($sortingHandlers);
+        $this->conditionHandlers = iterator_to_array($conditionHandlers, false);
+        $this->sortingHandlers = iterator_to_array($sortingHandlers, false);
     }
 
     /**

@@ -56,10 +56,10 @@ class Router
     ) {
         $router = new RoutingRouter(
             Context::createEmpty(), // Request object will created on dispatch :/
-            iterator_to_array($matchers),
-            iterator_to_array($generators),
-            iterator_to_array($preFilters),
-            iterator_to_array($postFilters)
+            iterator_to_array($matchers, false),
+            iterator_to_array($generators, false),
+            iterator_to_array($preFilters, false),
+            iterator_to_array($postFilters, false)
         );
 
         /* Still better than @see \Shopware\Models\Shop\Shop::registerResources */

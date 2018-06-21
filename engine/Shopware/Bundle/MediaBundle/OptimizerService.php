@@ -40,7 +40,7 @@ class OptimizerService implements OptimizerServiceInterface
      */
     public function __construct(IteratorAggregate $optimizers)
     {
-        $this->optimizers = $optimizers;
+        $this->optimizers = iterator_to_array($optimizers, false);
     }
 
     /**

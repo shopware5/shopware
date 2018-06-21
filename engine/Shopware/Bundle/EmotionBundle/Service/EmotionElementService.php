@@ -58,7 +58,7 @@ class EmotionElementService implements EmotionElementServiceInterface
     public function __construct(IteratorAggregate $componentHandler, EmotionElementGateway $gateway, DataCollectionResolverInterface $dataCollectionResolver)
     {
         $this->gateway = $gateway;
-        $this->componentHandler = iterator_to_array($componentHandler);
+        $this->componentHandler = iterator_to_array($componentHandler, false);
         $this->dataCollectionResolver = $dataCollectionResolver;
     }
 

@@ -47,7 +47,7 @@ class CompositeSynchronizerFactory
      */
     public function __construct(IteratorAggregate $synchronizer)
     {
-        $this->synchronizer = iterator_to_array($synchronizer);
+        $this->synchronizer = iterator_to_array($synchronizer, false);
     }
 
     /**

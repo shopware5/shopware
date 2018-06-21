@@ -55,7 +55,7 @@ class CaptchaRepository
         \Shopware_Components_Config $config,
         ContainerInterface $container
     ) {
-        $this->captchas = iterator_to_array($captchas);
+        $this->captchas = iterator_to_array($captchas, false);
         $this->config = $config;
         $this->container = $container;
     }
