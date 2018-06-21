@@ -95,7 +95,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     /**
      * @var int
      *
-     * @ORM\Column(name="admin", type="integer", nullable=false)
+     * @ORM\Column(name="`admin`", type="integer", nullable=false)
      */
     private $admin;
 

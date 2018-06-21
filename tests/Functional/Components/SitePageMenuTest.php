@@ -58,7 +58,7 @@ class SitePageMenuTest extends TestCase
 
     public function testSiteWithoutLink()
     {
-        $this->connection->insert('s_cms_static', ['id' => 1, 'description' => 'test', 'grouping' => 'left']);
+        $this->connection->insert('s_cms_static', ['id' => 1, 'description' => 'test', '`grouping`' => 'left']);
 
         $pages = $this->sitePageMenu->getTree(1, null);
         $this->assertArrayHasKey('left', $pages);
@@ -72,7 +72,7 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'http://localhost/examples']
+            ['id' => 1, 'description' => 'test', '`grouping`' => 'left', 'link' => 'http://localhost/examples']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
@@ -87,7 +87,7 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'https://www.google.de']
+            ['id' => 1, 'description' => 'test', '`grouping`' => 'left', 'link' => 'https://www.google.de']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
@@ -102,7 +102,7 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'www.google.de']
+            ['id' => 1, 'description' => 'test', '`grouping`' => 'left', 'link' => 'www.google.de']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
@@ -117,7 +117,7 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => '/de/hoehenluft-abenteuer/']
+            ['id' => 1, 'description' => 'test', '`grouping`' => 'left', 'link' => '/de/hoehenluft-abenteuer/']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
@@ -132,7 +132,7 @@ class SitePageMenuTest extends TestCase
     {
         $this->connection->insert(
             's_cms_static',
-            ['id' => 1, 'description' => 'test', 'grouping' => 'left', 'link' => 'shopware.php?sViewport=cat&sCategory=300']
+            ['id' => 1, 'description' => 'test', '`grouping`' => 'left', 'link' => 'shopware.php?sViewport=cat&sCategory=300']
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);

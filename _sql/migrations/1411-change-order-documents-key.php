@@ -21,15 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration411 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1411 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $sql = <<<SQL
-ALTER TABLE s_core_auth
-DROP `admin`,
-DROP `salted`
-SQL;
-        $this->addSql($sql);
+        $this->addSql('ALTER TABLE `s_order_documents` CHANGE COLUMN `ID` `id` INT(11) NOT NULL AUTO_INCREMENT FIRST;');
+        $this->addSql('ALTER TABLE `s_order_documents_attributes`
+	DROP FOREIGN KEY `s_order_documents_attributes_ibfk_1`;
+ALTER TABLE `s_order_documents_attributes`
+	ADD CONSTRAINT `s_order_documents_attributes_ibfk_1` FOREIGN KEY (`documentID`) REFERENCES `s_order_documents` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE;');
     }
 }

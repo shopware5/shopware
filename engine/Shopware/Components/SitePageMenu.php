@@ -249,19 +249,19 @@ class SitePageMenu
         $query->leftJoin(
             'page',
             's_cms_static_groups',
-            'groups',
+            '`groups`',
             'groups.active = 1'
         );
 
         $query->leftJoin(
-            'groups',
+            '`groups`',
             's_cms_static_groups',
             'mapping',
             'groups.mapping_id = mapping.id'
         );
 
         $query->leftJoin(
-            'groups',
+            '`groups`',
             's_core_shop_pages',
             'shops',
             'groups.id = shops.group_id AND shops.shop_id = :shopId'

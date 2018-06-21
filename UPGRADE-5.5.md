@@ -2,7 +2,7 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
-[View all changes from v5.4.2...v5.5.0](https://github.com/shopware/shopware/compare/v5.4.2...v5.5.0)
+[View all changes from v5.4.5...v5.5.0](https://github.com/shopware/shopware/compare/v5.4.5...v5.5.0)
 
 ### Additions
 
@@ -64,6 +64,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new column ``invoice_shipping_tax_rate`` to s_order, to save exact dispatch shipping tax rate
 * Added `Shopware\Components\DependencyInjection\LegacyPhpDumper` to support old container events such as ``Enlight_Bootstrap_InitResource_``
 * Added new `sqli` privilege to product feed to restrict access on custom filters
+* Added MySQL 8.0 support
 
 ### Changes
 
@@ -86,6 +87,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
 * Changed rebates and vouchers to also show their icon in the cart for values >1 €
 * Changed basic settings option `Extended SQL query`, so users now need the `sql_rule` permission of `shipping` to edit it.
+* Changed `s_order_documents` column `ID` to `id`
 
 ### Removals
 

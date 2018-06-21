@@ -523,7 +523,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function getMailingEmails($id)
     {
-        $sql = 'SELECT groups, languageID FROM s_campaigns_mailings WHERE id=?';
+        $sql = 'SELECT `groups`, languageID FROM s_campaigns_mailings WHERE id=?';
         $mailing = Shopware()->Db()->fetchRow($sql, [$id]);
 
         if (empty($mailing)) {

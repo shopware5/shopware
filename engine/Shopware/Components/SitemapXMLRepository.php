@@ -264,10 +264,10 @@ class SitemapXMLRepository
     private function getSitesByShopId($shopId)
     {
         $sql = '
-            SELECT groups.key
+            SELECT static_groups.key
             FROM s_core_shop_pages shopPages
-              INNER JOIN s_cms_static_groups groups
-                ON groups.id = shopPages.group_id
+              INNER JOIN s_cms_static_groups static_groups
+                ON static_groups.id = shopPages.group_id
             WHERE shopPages.shop_id = ?
         ';
 
