@@ -356,10 +356,6 @@ class sBasket
             $tax = $this->config->get('sDISCOUNTTAX');
         }
 
-        $taxAutoMode = $this->config->get('sTAXAUTOMODE');
-        if (!empty($taxAutoMode)) {
-            $tax = $this->getMaxTax();
-        }
         if (!$tax) {
             $tax = 19;
         }
