@@ -58,6 +58,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * New configuration option in Basic Settings => Checkout, "Proportional calculation of tax positions", inactive by default
     * Added ``Shopware\Components\Cart\ProportionalTaxCalculator`` to calculate proportional taxes for the cart items
     * Added ``Shopware\Components\Cart\BasketHelper`` to to add items to the cart that need to be calculation in a proportional way
+    * Added ``Shopware\Components\Cart\ProportionalCartMerger`` to merge proportional cart items into one cart item
     * For the proportional tax calculation to work with vouchers and modes of dispatch, be sure to set the mode of tax calculation to "auto detection" in their settings
     * Added new filter event to modify proportional vouchers ``Shopware_Modules_Basket_AddVoucher_VoucherPrices``
 * Added new column ``invoice_shipping_tax_rate`` to s_order, to save exact dispatch shipping tax rate

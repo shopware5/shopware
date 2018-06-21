@@ -15,6 +15,7 @@
         <service id="application"     synthetic="true" />
         <service id="PasswordEncoder" synthetic="true" />
         <service id="db_connection"   synthetic="true" />
+        <service id="modules"         synthetic="true" />
 
         <service id="shopware.release" class="Shopware\Components\ShopwareReleaseStruct">
             <argument>%shopware.release.version%</argument>
@@ -834,6 +835,10 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="session"/>
             <argument type="service" id="shopware.cart.proportional_tax_calculator"/>
+        </service>
+
+        <service id="shopware.cart.proportional_cart_merger" class="Shopware\Components\Cart\ProportionalCartMerger">
+            <argument type="service" id="modules"/>
         </service>
     </services>
 </container>
