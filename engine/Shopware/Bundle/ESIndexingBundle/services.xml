@@ -134,10 +134,6 @@
             <tag name="shopware_elastic_search.mapping" />
         </service>
 
-        <service id="shopware_elastic_search.service_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber">
-            <tag name="shopware.event_subscriber" />
-        </service>
-
         <service id="shopware_elastic_search.orm_backlog_save_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSaveSubscriber">
             <argument type="service" id="shopware_elastic_search.orm_backlog_subscriber" />
             <argument type="service" id="service_container" />
@@ -170,5 +166,30 @@
             <argument type="service" id="config"/>
         </service>
 
+        <!-- Commands -->
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexPopulateCommand" id="shopware_elastic_search.commands.index_populate_command">
+            <tag name="console.command"/>
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexCleanupCommand" id="shopware_elastic_search.commands.index_cleanup_command">
+            <tag name="console.command"/>
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogClearCommand" id="shopware_elastic_search.commands.backlog_clear_command">
+            <tag name="console.command"/>
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand" id="shopware_elastic_search.commands.backlog_sync_command">
+            <tag name="console.command"/>
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\SwitchAliasCommand" id="shopware_elastic_search.commands.switch_alias_command">
+            <tag name="console.command"/>
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\AnalyzeCommand" id="shopware_elastic_search.commands.analyze_command">
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>

@@ -11,10 +11,6 @@
             <argument type="tagged" tag="shopware_es_backend.repository" />
         </service>
 
-        <service class="Shopware\Bundle\EsBackend\Subscriber\ServiceSubscriber" id="shopware_es_backend.service_subscriber">
-            <tag name="shopware.event_subscriber"/>
-        </service>
-
         <service class="Shopware\Bundle\EsBackend\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />
 
         <service class="Shopware\Bundle\EsBackend\Searcher\OrderSearcher"
@@ -55,6 +51,18 @@
 
             <tag name="doctrine.event_subscriber"/>
             <argument type="service" id="service_container"/>
+        </service>
+
+        <!-- Commands -->
+
+        <service class="Shopware\Bundle\EsBackend\Commands\IndexPopulateCommand"
+                 id="shopware_es_backend.commands.index_populate_command">
+            <tag name="console.command"/>
+        </service>
+
+        <service class="Shopware\Bundle\EsBackend\Commands\SyncBacklogCommand"
+                 id="shopware_es_backend.commands.sync_backlog_command">
+            <tag name="console.command"/>
         </service>
     </services>
 </container>

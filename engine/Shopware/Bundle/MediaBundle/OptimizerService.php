@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use IteratorAggregate;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
 
@@ -37,7 +38,7 @@ class OptimizerService implements OptimizerServiceInterface
     /**
      * @param OptimizerInterface[] $optimizers
      */
-    public function __construct(array $optimizers)
+    public function __construct(IteratorAggregate $optimizers)
     {
         $this->optimizers = $optimizers;
     }

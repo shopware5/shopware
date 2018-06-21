@@ -37,8 +37,6 @@ use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCo
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
-use Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaAdapterCompilerPass;
-use Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaOptimizerCompilerPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
@@ -683,8 +681,6 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new AddCaptchaCompilerPass());
         $container->addCompilerPass(new EmotionComponentHandlerCompilerPass());
-        $container->addCompilerPass(new MediaAdapterCompilerPass());
-        $container->addCompilerPass(new MediaOptimizerCompilerPass());
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
         $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new EmotionPresetCompilerPass());

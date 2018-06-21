@@ -36,7 +36,7 @@
 
         <service id="shopware_media.media_service_factory" class="Shopware\Bundle\MediaBundle\MediaServiceFactory">
             <argument type="service" id="service_container" />
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware_media.adapter"/>
             <argument>%shopware.cdn%</argument>
         </service>
 
@@ -58,7 +58,7 @@
         </service>
 
         <service id="shopware_media.optimizer_service" class="Shopware\Bundle\MediaBundle\OptimizerService">
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware_media.optimizer"/>
         </service>
 
         <service id="shopware_media.cache_optimizer_service" class="Shopware\Bundle\MediaBundle\CacheOptimizerService"
@@ -97,6 +97,20 @@
 
         <service id="shopware_media.adapter.ftp" class="Shopware\Bundle\MediaBundle\Adapters\FtpAdapterFactory">
             <tag name="shopware_media.adapter" />
+        </service>
+
+        <!-- Commands -->
+
+        <service id="shopware_media.commands.media_cleanup" class="Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand">
+            <tag name="console.command" />
+        </service>
+
+        <service id="shopware_media.commands.image_migrate" class="Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand">
+            <tag name="console.command" />
+        </service>
+
+        <service id="shopware_media.commands.media_optimize" class="Shopware\Bundle\MediaBundle\Commands\MediaOptimizeCommand">
+            <tag name="console.command" />
         </service>
     </services>
 </container>

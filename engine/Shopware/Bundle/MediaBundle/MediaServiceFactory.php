@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 use Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface;
@@ -52,10 +53,10 @@ class MediaServiceFactory
 
     /**
      * @param ContainerInterface $container
-     * @param array              $adapterFactories
+     * @param IteratorAggregate  $adapterFactories
      * @param array              $cdnConfig
      */
-    public function __construct(ContainerInterface $container, array $adapterFactories, array $cdnConfig)
+    public function __construct(ContainerInterface $container, IteratorAggregate $adapterFactories, array $cdnConfig)
     {
         $this->container = $container;
         $this->adapterFactories = $adapterFactories;
