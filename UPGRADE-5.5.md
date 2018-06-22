@@ -66,6 +66,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added `Shopware\Components\DependencyInjection\LegacyPhpDumper` to support old container events such as ``Enlight_Bootstrap_InitResource_``
 * Added new `sqli` privilege to product feed to restrict access on custom filters
 * Added MySQL 8.0 support
+* Added new filter event `Shopware_Controllers_Article_CreateConfiguratorVariants_FilterData` to article backend controller to modify variant data during generation
 
 ### Changes
 
