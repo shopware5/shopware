@@ -6,10 +6,17 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 [View all changes from v5.4.5...v5.4.6](https://github.com/shopware/shopware/compare/v5.4.5...v5.4.6)
 
+### Additions
+
+* Added new mail template for Double-Opt-In used by blog article evaluations: `sOPTINBLOGCOMMENT`
+* Added `sitemap.batchsize` config option to configure the amount of collected products per process in the SitemapXMLRepository
+
 ### Changes
 
+* Changed error behaviour of blog article evaluations when the Double-Opt-In confirmation link is invalid
 * Changed behaviour of the notification plugin, so that it will only notify the customer if the stock is at least as high as the minimal purchase amount
 * Added support in config.php to specify TrustedHeader options for Symfony.
+* Changed SitemapXMLRepository to collect 10.000 products in batch, because of elastic search limitations
 
 ## 5.4.5
 
