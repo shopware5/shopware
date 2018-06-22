@@ -55,6 +55,11 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $this->View()->assign('benchmarkDefaultLanguage', $this->Request()->getParam('lang', 'de'));
     }
 
+    protected function initAcl()
+    {
+        $this->addAclPermission('render', 'read', 'Insufficient permissions');
+    }
+
     /**
      * @throws \LogicException in case of directory traversal
      *

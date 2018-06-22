@@ -128,6 +128,9 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         me.addKeyboardEvents();
         me.checkLoginStatus();
+        /*{if {acl_is_allowed privilege=submit resource=benchmark}}*/
+        me.checkBenchmarksStatus();
+        /*{/if}*/
     },
 
     /**
@@ -247,19 +250,15 @@ Ext.define('Shopware.apps.Index.controller.Main', {
     },
 
     /**
-     * Helper method which sends each 5 seconds an request
-     * to the backend and checks if the user is logged in.
-     *
-     * The method registers an new task runner which checks
-     * the status.
+     * Helper method which checks every 30 seconds wether the user is logged in.
      *
      * @private
      * @return void
      */
-    checkLoginStatus: function() {
+    checkLoginStatus: function () {
         Ext.TaskManager.start({
             interval: 30000,
-            run: function() {
+            run: function () {
                 Ext.Ajax.request({
                     url: '{url controller=login action=getLoginStatus}',
                     success: function(response) {
@@ -271,6 +270,30 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                     },
                     failure: function() {
                         window.location.href = '{url controller=index}';
+                    }
+                });
+            }
+        });
+    },
+
+    /**
+     * Helper method which checks for new Benchmark data periodically (every 15 minutes).
+     *
+     * @private
+     * @return void
+     */
+    checkBenchmarksStatus: function () {
+        Ext.TaskManager.start({
+            interval: 900000,
+            run: function () {
+                Ext.Ajax.request({
+                    url: '{url controller=benchmark action=checkBenchmarks}',
+                    success: function(response) {
+                        var res = Ext.decode(response.responseText);
+
+                        if (res.bi) {
+                            Shopware.Notification.createGrowlMessage('{s name=title/new_benchmark}{/s}', '{s name=content/new_benchmark}{/s}');
+                        }
                     }
                 });
             }

@@ -23,6 +23,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.IndustryField', {
 
         me.tpl = me.createFieldTemplate();
         me.data = {};
+        /*{if {acl_is_allowed privilege=manage}}*/
         me.listeners = {
             click: function() {
                 me.fireEvent('changeIndustry');
@@ -30,6 +31,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.IndustryField', {
             element: 'el',
             delegate: 'span#other-action'
         };
+        /*{/if}*/
 
         me.callParent(arguments);
     },
@@ -55,9 +57,11 @@ Ext.define('Shopware.apps.Benchmark.view.settings.IndustryField', {
             '<div>',
                 '<div class="value"><b>{ value }</b></div>',
                 '<div>',
+                    /*{if {acl_is_allowed privilege=manage}}*/
                     '<span id="other-action" style="text-decoration: underline; font-style: italic; cursor: pointer; display: block; margin-top: 8px; font-size: 10px;">',
                         '{s name="settings/fieldsets/industry/wrong"}Wrong industry?{/s}',
                     '</span>',
+                    /*{/if}*/
                 '</div>',
             '</div>'
         );

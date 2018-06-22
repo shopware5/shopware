@@ -78,6 +78,13 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         ]);
     }
 
+    protected function initAcl()
+    {
+        $this->addAclPermission('index', 'read', 'Insufficient permissions');
+        $this->addAclPermission('render', 'read', 'Insufficient permissions');
+        $this->addAclPermission('setIndustry', 'manage', 'Insufficient permissions');
+    }
+
     /**
      * @param BenchmarkConfig $settings
      */

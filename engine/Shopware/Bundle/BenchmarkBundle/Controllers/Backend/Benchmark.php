@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkDataResult;
 use Shopware\Components\CacheManager;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
@@ -103,7 +104,8 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     {
         $conn = $this->container->get('dbal_connection');
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "benchmarkTeaser"');
-        $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
+        $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId',
+            ['elementId' => $elementId]);
 
         $data = [
             'element_id' => $elementId,
@@ -123,6 +125,35 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         /** @var CacheManager */
         $cacheManager = $this->get('shopware.cache_manager');
         $cacheManager->clearConfigCache();
+    }
+
+    public function checkBenchmarksAction()
+    {
+        $result = new BenchmarkDataResult();
+        $message = false;
+
+        try {
+            $result = $this->get('shopware.benchmark_bundle.benchmark_statistics')->sendBenchmarkData();
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        $this->View()->assign([
+            'success' => true,
+            'statistics' => $result->getStatisticsResponse(),
+            'bi' => $result->getBiResponse(),
+            'message' => $message,
+        ]);
+    }
+
+    protected function initAcl()
+    {
+        $this->addAclPermission('loadSettings', 'read', 'Insufficient permissions');
+        $this->addAclPermission('saveSettings', 'manage', 'Insufficient permissions');
+        $this->addAclPermission('saveIndustry', 'manage', 'Insufficient permissions');
+        $this->addAclPermission('setActive', 'manage', 'Insufficient permissions');
+        $this->addAclPermission('disableBenchmarkTeaser', 'manage', 'Insufficient permissions');
+        $this->addAclPermission('checkBenchmarksAction', 'submit', 'Insufficient permissions');
     }
 
     /**

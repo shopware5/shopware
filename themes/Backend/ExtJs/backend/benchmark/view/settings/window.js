@@ -36,9 +36,11 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
                 name: 'benchmark-settings-panel',
                 bodyPadding: 10,
                 items: [
+                    /*{if {acl_is_allowed privilege=manage}}*/
                     activationFieldSet,
                     deActivationFieldSet,
                     this.createSettingsFieldSet(),
+                    /*{/if}*/
                     this.createIndustryFieldSet(),
                     this.createInfoFieldSet()
                 ],
