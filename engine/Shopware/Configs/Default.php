@@ -117,7 +117,7 @@ return array_replace_recursive([
     'store' => [
         'apiEndpoint' => 'https://api.shopware.com',
         'timeout' => 7,
-        'connect_timeout' => 5
+        'connect_timeout' => 5,
     ],
     'plugin_directories' => [
         'Default' => $this->AppPath('Plugins_Default'),
@@ -194,6 +194,9 @@ return array_replace_recursive([
         'save_handler' => 'db',
         'use_trans_sid' => 0,
         'locking' => true,
+    ],
+    'sitemap' => [
+        'batchsize' => 10000,
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
