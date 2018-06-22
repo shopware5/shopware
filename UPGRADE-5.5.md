@@ -166,6 +166,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added `Shopware_Controllers_Backend_Order::getMailTemplatesAction`
     * Added `Shopware\Models\Mail\Mail::isDocumentMail`
     * Added `Shopware\Models\Mail\Repository::getMailsListQueryBuilder`
+* Added new filter event `Shopware_Controllers_Article_CreateConfiguratorVariants_FilterData` to article backend controller to modify variant data during generation
 
 ### Changes
 

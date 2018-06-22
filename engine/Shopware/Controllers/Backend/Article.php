@@ -1225,8 +1225,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             // Merge the data with the original main detail data
             $data = array_merge($detailData, $variantData);
 
+            $existentDetailModel = $offset === 0 && $mergeType === 1;
+
+            $data = $this->container->get('events')->filter(
+                'Shopware_Controllers_Article_CreateConfiguratorVariants_FilterData',
+                $data,
+                [
+                    'subject' => $this,
+                    'existentDetailModel' => $existentDetailModel,
+                ]
+            );
+
             // Use only the main detail of the article as base object, if the merge type is set to "Override" and the current variant is the first generated variant.
-            if ($offset === 0 && $mergeType === 1) {
+            if ($existentDetailModel) {
                 $detail = $article->getMainDetail();
             } else {
                 $detail = new Detail();
