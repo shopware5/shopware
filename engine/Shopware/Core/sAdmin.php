@@ -3140,7 +3140,7 @@ class sAdmin
             $result['tax'] = $dispatch['tax_calculation_value'];
         }
         $result['tax'] = (float) $result['tax'];
-        $result['netto'] = round($result['brutto'] * 100 / (100 + $result['tax']), 2);
+        $result['netto'] = round($result['brutto'] * 100 / (100 + $result['tax']), 4);
 
         return $result;
     }
