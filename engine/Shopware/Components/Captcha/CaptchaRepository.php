@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Captcha;
 
+use IteratorAggregate;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -45,16 +46,16 @@ class CaptchaRepository
     private $container;
 
     /**
-     * @param array                       $captchas
+     * @param IteratorAggregate           $captchas
      * @param \Shopware_Components_Config $config
      * @param ContainerInterface          $container
      */
     public function __construct(
-        array $captchas,
+        IteratorAggregate $captchas,
         \Shopware_Components_Config $config,
         ContainerInterface $container
     ) {
-        $this->captchas = $captchas;
+        $this->captchas = iterator_to_array($captchas, false);
         $this->config = $config;
         $this->container = $container;
     }

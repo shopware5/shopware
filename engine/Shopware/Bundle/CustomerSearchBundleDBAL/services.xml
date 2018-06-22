@@ -173,8 +173,8 @@
         </service>
 
         <service id="customer_search.dbal.handler_registry" class="Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry">
-            <argument type="collection"/>
-            <argument type="collection"/>
+            <argument type="tagged" tag="customer_search.condition_handler"/>
+            <argument type="tagged" tag="customer_search.sorting_handler"/>
         </service>
 
         <service id="customer_search.dbal.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundleDBAL\Commands\SearchIndexPopulateCommand">

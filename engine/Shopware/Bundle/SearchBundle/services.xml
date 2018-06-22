@@ -49,7 +49,7 @@
             <argument type="service" id="events" />
 
             <!--criteria request handlers-->
-            <argument type="collection" />
+            <argument type="tagged" tag="criteria_request_handler" />
         </service>
 
         <service id="shopware_search.batch_product_number_search" class="Shopware\Bundle\SearchBundle\BatchProductNumberSearch">

@@ -54,19 +54,19 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     private $requestHandlers;
 
     /**
-     * @param \Shopware_Components_Config       $config
-     * @param \Enlight_Event_EventManager       $eventManager
-     * @param CriteriaRequestHandlerInterface[] $requestHandlers
+     * @param \Shopware_Components_Config $config
+     * @param \Enlight_Event_EventManager $eventManager
+     * @param \IteratorAggregate          $requestHandlers
      */
     public function __construct(
         \Shopware_Components_Config $config,
         \Enlight_Event_EventManager $eventManager,
-        $requestHandlers = []
+        $requestHandlers
     ) {
         $this->config = $config;
         $this->eventManager = $eventManager;
 
-        $this->requestHandlers = $requestHandlers;
+        $this->requestHandlers = iterator_to_array($requestHandlers, false);
         $this->requestHandlers = $this->registerRequestHandlers();
     }
 

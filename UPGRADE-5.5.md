@@ -89,7 +89,23 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed rebates and vouchers to also show their icon in the cart for values >1 €
 * Changed basic settings option `Extended SQL query`, so users now need the `sql_rule` permission of `shipping` to edit it.
 * Changed `s_order_documents` column `ID` to `id`
-
+* Changed following classes constructor to accept `IteratorAggregate` instead `array` for `tagged` services collections:
+    * `Shopware\Bundle\AttributeBundle\Repository\Registry`
+    * `Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry`
+    * `Shopware\Bundle\EmotionBundle\Service\EmotionElementService`
+    * `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory`
+    * `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\ShopIndexerFactory`
+    * `Shopware\Bundle\MediaBundle\MediaServiceFactory`
+    * `Shopware\Bundle\MediaBundle\OptimizerService`
+    * `Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory`
+    * `Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch`
+    * `Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch`
+    * `Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory`
+    * `Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory`
+    * `Shopware\Components\Captcha\CaptchaRepository`
+    * `Shopware\Components\DependencyInjection\Bridge\Router`
+    * `Shopware\Components\Emotion\Preset\PresetDataSynchronizer`
+    
 ### Removals
 
 * Removed tables `s_user_billingaddress_attributes` and `s_user_shippingaddress_attributes`
@@ -142,6 +158,26 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed smarty block `frontend_listing_box_article_actions_more`
 * Removed smarty block `frontend_listing_box_article_actions_inline`
 * Removed ExtJs models `Shopware.apps.Customer.model.Billing` and `Shopware.apps.Customer.model.Shipping`
+* Removed following unnecessary CompilerPasses due Symfony `tagged` tag:
+    * `Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass`
+    * `Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass`
+    * `Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass`
+    * `Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass`
+    * `Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass`
+    * `Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass`
+    * `Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass`
+    * `Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaAdapterCompilerPass`
+    * `Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaOptimizerCompilerPass`
+    * `Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass`
+    * `Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass`
+    * `Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass`
+    * `Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass`
+    * `Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass`
+    * `Shopware\Components\DependencyInjection\Compiler\RouterCompilerPass`
+    
+* Removed following unnecessary Subscriber:
+    * `Shopware\Bundle\EsBackend\Subscriber\ServiceSubscriber`
+    * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
 
 ### Deprecations
 

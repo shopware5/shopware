@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer;
 use Shopware\Bundle\ESIndexingBundle\SynchronizerInterface;
 use Symfony\Component\DependencyInjection\Container;
@@ -42,11 +43,11 @@ class CompositeSynchronizerFactory
     private $synchronizer;
 
     /**
-     * @param SynchronizerInterface[] $synchronizer
+     * @param IteratorAggregate $synchronizer
      */
-    public function __construct($synchronizer)
+    public function __construct(IteratorAggregate $synchronizer)
     {
-        $this->synchronizer = $synchronizer;
+        $this->synchronizer = iterator_to_array($synchronizer, false);
     }
 
     /**

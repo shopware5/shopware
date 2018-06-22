@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use IteratorAggregate;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -63,8 +64,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     /**
      * @param Connection                  $connection
      * @param \Enlight_Event_EventManager $eventManager
-     * @param ConditionHandlerInterface[] $conditionHandlers
-     * @param SortingHandlerInterface[]   $sortingHandlers
+     * @param IteratorAggregate           $conditionHandlers
+     * @param IteratorAggregate           $sortingHandlers
      * @param ContainerInterface          $container
      *
      * @throws \RuntimeException
@@ -73,13 +74,13 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     public function __construct(
         Connection $connection,
         \Enlight_Event_EventManager $eventManager,
-        $conditionHandlers,
-        $sortingHandlers,
+        IteratorAggregate $conditionHandlers,
+        IteratorAggregate $sortingHandlers,
         ContainerInterface $container
     ) {
         $this->connection = $connection;
-        $this->conditionHandlers = $conditionHandlers;
-        $this->sortingHandlers = $sortingHandlers;
+        $this->conditionHandlers = iterator_to_array($conditionHandlers, false);
+        $this->sortingHandlers = iterator_to_array($sortingHandlers, false);
         $this->eventManager = $eventManager;
 
         $this->conditionHandlers = $this->registerConditionHandlers();

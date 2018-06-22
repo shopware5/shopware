@@ -10,7 +10,7 @@
         </service>
 
         <service id="shopware_attribute.repository_registry" class="Shopware\Bundle\AttributeBundle\Repository\Registry">
-            <argument type="collection" />
+            <argument type="tagged" tag="attribute_search_repository" />
             <argument type="service" id="models" />
         </service>
 
