@@ -94,9 +94,8 @@ class Detail extends ModelEntity
     protected $esd;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
-     * @ORM\JoinColumn(name="articleDetailId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="articleDetailID", referencedColumnName="id")
      *
      * @var ArticleDetail|null
      */
@@ -152,9 +151,9 @@ class Detail extends ModelEntity
     /**
      * @var int|null
      *
-     * @ORM\Column(name="articleDetailId", type="integer", nullable=true)
+     * @ORM\Column(name="articleDetailID", type="integer", nullable=true)
      */
-    private $articleDetailId;
+    private $articleDetailID;
 
     /**
      * @var string

@@ -21,18 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-class Migrations_Migration1218 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1415 extends Shopware\Components\Migrations\AbstractMigration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function up($modus)
     {
-        $this->addSql(
-            'ALTER TABLE `s_order_details`
-            ADD
-                articleDetailId INT(11) UNSIGNED NULL'
-        );
+        $this->addSql('ALTER TABLE `s_order_details` ADD articleDetailID INT(11) UNSIGNED NULL');
     }
 }

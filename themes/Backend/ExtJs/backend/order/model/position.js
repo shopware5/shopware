@@ -40,19 +40,19 @@ Ext.define('Shopware.apps.Order.model.Position', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Unique identifier field
      * @string
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/order/model/position/fields"}{/block}
         { name: 'id', type:'int' },
         { name: 'orderId', type:'int' },
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Order.model.Position', {
         { name: 'inStock', type:'int' },
         {
             name: 'total',
-            type:'float',
+            type: 'float',
             convert: function(value, record) {
                 if (!Ext.isNumeric(record.get('price'))) {
                     return record.get('price');
@@ -85,29 +85,29 @@ Ext.define('Shopware.apps.Order.model.Position', {
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api:{
-            destroy:'{url action="deletePosition" targetField=positions}',
-            create:'{url action="savePosition"}',
-            update:'{url action="savePosition"}'
+        api: {
+            destroy: '{url action="deletePosition" targetField=positions}',
+            create: '{url action="savePosition"}',
+            update: '{url action="savePosition"}'
         },
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
+        reader: {
             type:'json',
             root:'data',
             totalProperty:'total'
