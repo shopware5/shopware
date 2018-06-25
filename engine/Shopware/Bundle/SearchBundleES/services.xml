@@ -108,6 +108,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.last_id_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\LastProductIdConditionHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.price_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\PriceFacetHandler">
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
