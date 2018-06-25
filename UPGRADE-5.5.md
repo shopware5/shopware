@@ -64,6 +64,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added new filter event to modify proportional vouchers ``Shopware_Modules_Basket_AddVoucher_VoucherPrices``
 * Added new column ``invoice_shipping_tax_rate`` to s_order, to save exact dispatch shipping tax rate
 * Added `Shopware\Components\DependencyInjection\LegacyPhpDumper` to support old container events such as ``Enlight_Bootstrap_InitResource_``
+* Added new column `articleDetailsID` to table `s_order_details`
 * Added new `sqli` privilege to product feed to restrict access on custom filters
 * Added MySQL 8.0 support
 

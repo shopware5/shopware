@@ -26,6 +26,7 @@ namespace Shopware\Models\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Detail as ArticleDetail;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -91,6 +92,15 @@ class Detail extends ModelEntity
      * @var \Shopware\Models\Order\Esd
      */
     protected $esd;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
+     * @ORM\JoinColumn(name="articleDetailID", referencedColumnName="id")
+     *
+     * @var ArticleDetail|null
+     */
+    protected $articleDetail;
+
     /**
      * @var int
      *
@@ -137,6 +147,13 @@ class Detail extends ModelEntity
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $statusId;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="articleDetailID", type="integer", nullable=true)
+     */
+    private $articleDetailID;
 
     /**
      * @var string
@@ -372,6 +389,22 @@ class Detail extends ModelEntity
     public function getArticleName()
     {
         return $this->articleName;
+    }
+
+    /**
+     * @return null|ArticleDetail
+     */
+    public function getArticleDetail()
+    {
+        return $this->articleDetail;
+    }
+
+    /**
+     * @param null|ArticleDetail $articleDetail
+     */
+    public function setArticleDetail(ArticleDetail $articleDetail = null)
+    {
+        $this->articleDetail = $articleDetail;
     }
 
     /**
