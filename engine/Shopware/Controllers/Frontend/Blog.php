@@ -393,7 +393,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 if ($getComment) {
                     $commentData = unserialize($getComment->getData());
 
-                    // Delete the data in the comment confirm table we don't need it anymore
+                    // Delete the data in the s_core_optin table. We don't need it anymore
                     Shopware()->Models()->remove($getComment);
                     Shopware()->Models()->flush();
 
@@ -401,36 +401,39 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
                     return $this->forward('detail');
                 }
+                $sErrorFlag['invalidHash'] = true;
             }
 
-            // Validation
-            if (empty($this->Request()->name)) {
-                $sErrorFlag['name'] = true;
-            }
-            if (empty($this->Request()->headline)) {
-                $sErrorFlag['headline'] = true;
-            }
-
-            if (empty($this->Request()->comment)) {
-                $sErrorFlag['comment'] = true;
-            }
-
-            if (empty($this->Request()->points)) {
-                $sErrorFlag['points'] = true;
-            }
-
-            if (!empty(Shopware()->Config()->CaptchaColor)) {
-                /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
-                $captchaValidator = $this->container->get('shopware.captcha.validator');
-
-                if (!$captchaValidator->validate($this->Request())) {
-                    $sErrorFlag['sCaptcha'] = true;
+            // Validation only occurs when entering data, but not on failed Double-Opt-In
+            if (!$sErrorFlag['invalidHash']) {
+                if (empty($this->Request()->name)) {
+                    $sErrorFlag['name'] = true;
                 }
-            }
+                if (empty($this->Request()->headline)) {
+                    $sErrorFlag['headline'] = true;
+                }
 
-            $validator = $this->container->get('validator.email');
-            if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
-                $sErrorFlag['eMail'] = true;
+                if (empty($this->Request()->comment)) {
+                    $sErrorFlag['comment'] = true;
+                }
+
+                if (empty($this->Request()->points)) {
+                    $sErrorFlag['points'] = true;
+                }
+
+                if (!empty(Shopware()->Config()->CaptchaColor)) {
+                    /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+                    $captchaValidator = $this->container->get('shopware.captcha.validator');
+
+                    if (!$captchaValidator->validate($this->Request())) {
+                        $sErrorFlag['sCaptcha'] = true;
+                    }
+                }
+
+                $validator = $this->container->get('validator.email');
+                if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
+                    $sErrorFlag['eMail'] = true;
+                }
             }
 
             if (empty($sErrorFlag)) {
@@ -449,7 +452,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $link = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'action' => 'rating', 'blogArticle' => $blogArticleId, 'sConfirmation' => $hash]);
 
                     $context = ['sConfirmLink' => $link, 'sArticle' => ['title' => $blogArticleData['title']]];
-                    $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
+                    $mail = Shopware()->TemplateMail()->createMail('sOPTINBLOGCOMMENT', $context);
                     $mail->addTo($this->Request()->getParam('eMail'));
                     $mail->send();
                 } else {

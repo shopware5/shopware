@@ -205,6 +205,9 @@ return array_replace_recursive([
         'use_trans_sid' => 0,
         'locking' => true,
     ],
+    'sitemap' => [
+        'batchsize' => 10000,
+    ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
         'display_errors' => 0,
