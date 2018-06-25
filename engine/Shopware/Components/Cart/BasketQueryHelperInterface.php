@@ -24,27 +24,40 @@
 
 namespace Shopware\Components\Cart;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\Cart\Struct\DiscountContext;
 
-/**
- * Interface BasketHelperInterface
- */
-interface BasketHelperInterface
+interface BasketQueryHelperInterface
 {
-    const DISCOUNT_ABSOLUTE = 1;
-    const DISCOUNT_PERCENT = 2;
+    const BASKET_TABLE_NAME = 's_order_basket';
+
+    const BASKET_ATTRIBUTE_TABLE_NAME = 's_order_basket_attributes';
+
+    const BASKET_TABLE_ALIAS = 'basket';
 
     /**
      * @param DiscountContext $discountContext
      *
-     * @return
+     * @return QueryBuilder
      */
-    public function addProportionalDiscount(DiscountContext $discountContext);
+    public function getPositionPricesQuery(DiscountContext $discountContext);
 
     /**
      * @param DiscountContext $discountContext
      *
-     * @return array
+     * @return QueryBuilder
      */
-    public function getPositionPrices(DiscountContext $discountContext);
+    public function getInsertDiscountQuery(DiscountContext $discountContext);
+
+    /**
+     * @param DiscountContext $discountContext
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function getInsertDiscountAttributeQuery(DiscountContext $discountContext);
+
+    /**
+     * @return int
+     */
+    public function getLastInsertId();
 }

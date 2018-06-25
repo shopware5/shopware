@@ -832,10 +832,13 @@
         <service id="shopware.cart.proportional_tax_calculator"
                  class="Shopware\Components\Cart\ProportionalTaxCalculator"/>
 
-        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
+        <service id="shopware.cart.basket_query_helper" class="Shopware\Components\Cart\BasketQueryHelper">
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="session"/>
+        </service>
+
+        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
             <argument type="service" id="shopware.cart.proportional_tax_calculator"/>
+            <argument type="service" id="shopware.cart.basket_query_helper" />
         </service>
 
         <service id="shopware.cart.proportional_cart_merger" class="Shopware\Components\Cart\ProportionalCartMerger">
