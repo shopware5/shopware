@@ -67,6 +67,14 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new column `articleDetailsID` to table `s_order_details`
 * Added new `sqli` privilege to product feed to restrict access on custom filters
 * Added MySQL 8.0 support
+* Added additional filesystem adapter implementations for services out of the box:
+    * Amazon Web Services
+    * Google Cloud Platform
+* Added service `shopware.filesystem.public` and `shopware.filesystem.private` for file handling
+    * Documents and ESD files can be now also served from S3 or Google Cloud
+* Added automatic prefixed filesystem service registration for plugins
+    * `plugin_name.filesystem.public`
+    * `plugin_name.filesystem.private`
 
 ### Changes
 

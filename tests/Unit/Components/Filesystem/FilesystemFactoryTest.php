@@ -24,11 +24,12 @@
 
 namespace Shopware\Tests\Unit\Components\Filesystem;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use League\Flysystem\FilesystemInterface;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Filesystem\Adapter\AwsS3v3Factory;
-use Shopware\Components\Filesystem\Adapter\GoogleStorageFactory;
-use Shopware\Components\Filesystem\Adapter\LocalFactory;
+use Shopware\Bundle\MediaBundle\Adapters\AwsS3v3Factory;
+use Shopware\Bundle\MediaBundle\Adapters\GoogleStorageFactory;
+use Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory;
 use Shopware\Components\Filesystem\Exception\AdapterFactoryNotFoundException;
 use Shopware\Components\Filesystem\Exception\DuplicateFilesystemFactoryException;
 use Shopware\Components\Filesystem\FilesystemFactory;
@@ -41,7 +42,7 @@ class FilesystemFactoryTest extends TestCase
         $this->expectException(AdapterFactoryNotFoundException::class);
         $this->expectExceptionMessage('Adapter factory for type "local" was not found.');
 
-        $factory = new FilesystemFactory([]);
+        $factory = new FilesystemFactory(new ArrayCollection());
         $factory->factory($this->getValidFactoryConfig());
     }
 
@@ -50,9 +51,9 @@ class FilesystemFactoryTest extends TestCase
         $this->expectException(AdapterFactoryNotFoundException::class);
         $this->expectExceptionMessage('Adapter factory for type "local" was not found.');
 
-        $factory = new FilesystemFactory([
+        $factory = new FilesystemFactory(new ArrayCollection([
             new AwsS3v3Factory(),
-        ]);
+        ]));
 
         $factory->factory($this->getValidFactoryConfig());
     }
@@ -79,10 +80,10 @@ class FilesystemFactoryTest extends TestCase
         $this->expectException(DuplicateFilesystemFactoryException::class);
         $this->expectExceptionMessage('The type of factory "local" must be unique.');
 
-        new FilesystemFactory([
-            new LocalFactory(),
-            new LocalFactory(),
-        ]);
+        new FilesystemFactory(new ArrayCollection([
+            new LocalAdapterFactory(),
+            new LocalAdapterFactory(),
+        ]));
     }
 
     public function testFactoryWithoutType()
@@ -96,11 +97,11 @@ class FilesystemFactoryTest extends TestCase
 
     private function createCompleteFactory()
     {
-        return new FilesystemFactory([
-            new LocalFactory(),
+        return new FilesystemFactory(new ArrayCollection([
+            new LocalAdapterFactory(),
             new AwsS3v3Factory(),
             new GoogleStorageFactory(),
-        ]);
+        ]));
     }
 
     private function getValidFactoryConfig()

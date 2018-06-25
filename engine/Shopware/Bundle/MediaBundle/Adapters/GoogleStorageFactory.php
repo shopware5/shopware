@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Filesystem\Adapter;
+namespace Shopware\Bundle\MediaBundle\Adapters;
 
 use Google\Cloud\Storage\StorageClient;
 use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
@@ -54,7 +54,7 @@ class GoogleStorageFactory implements AdapterFactoryInterface
      */
     public function getType()
     {
-        return 'google-storage';
+        return 'gcp';
     }
 
     /**
@@ -67,7 +67,7 @@ class GoogleStorageFactory implements AdapterFactoryInterface
         $options = new OptionsResolver();
 
         $options->setRequired(['projectId', 'keyFilePath', 'bucket']);
-        $options->setDefined(['root']);
+        $options->setDefined(['root', 'mediaUrl', 'type']);
 
         $options->setAllowedTypes('projectId', 'string');
         $options->setAllowedTypes('keyFilePath', 'string');

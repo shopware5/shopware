@@ -26,19 +26,19 @@ namespace Shopware\Tests\Unit\Components\Filesystem\Adapter;
 
 use League\Flysystem\Adapter\Local;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Filesystem\Adapter\LocalFactory;
+use Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 class LocalFactoryTest extends TestCase
 {
     /**
-     * @var LocalFactory
+     * @var LocalAdapterFactory
      */
     private $factory;
 
     public function setUp()
     {
-        $this->factory = new LocalFactory();
+        $this->factory = new LocalAdapterFactory();
     }
 
     public function testTypeLocal()
@@ -57,6 +57,13 @@ class LocalFactoryTest extends TestCase
     {
         $filesystem = $this->factory->create([
             'root' => 'web',
+        ]);
+
+        $this->assertInstanceOf(Local::class, $filesystem);
+
+        // Old path usage
+        $filesystem = $this->factory->create([
+            'path' => 'web',
         ]);
 
         $this->assertInstanceOf(Local::class, $filesystem);

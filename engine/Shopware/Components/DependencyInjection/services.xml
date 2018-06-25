@@ -843,7 +843,7 @@
 
         <!-- Filesystem -->
         <service id="shopware.filesystem_factory" class="Shopware\Components\Filesystem\FilesystemFactory">
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware_media.adapter" />
         </service>
 
         <service id="shopware.filesystem.public" class="League\Flysystem\FilesystemInterface">
@@ -855,18 +855,5 @@
             <factory service="shopware.filesystem_factory" method="factory" />
             <argument>%shopware.filesystem.private%</argument>
         </service>
-
-        <service id="shopware.filesystem.factory.local" class="Shopware\Components\Filesystem\Adapter\LocalFactory">
-            <tag name="shopware.filesystem.factory" />
-        </service>
-
-        <service id="shopware.filesystem.factory.s3" class="Shopware\Components\Filesystem\Adapter\AwsS3v3Factory">
-            <tag name="shopware.filesystem.factory" />
-        </service>
-
-        <service id="shopware.filesystem.factory.gcp" class="Shopware\Components\Filesystem\Adapter\GoogleStorageFactory">
-            <tag name="shopware.filesystem.factory" />
-        </service>
-    </services>
     </services>
 </container>

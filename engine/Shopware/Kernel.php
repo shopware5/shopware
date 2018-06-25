@@ -33,7 +33,6 @@ use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
-use Shopware\Components\DependencyInjection\Compiler\AddFilesystemCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;

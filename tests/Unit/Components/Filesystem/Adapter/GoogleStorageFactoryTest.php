@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Components\Filesystem\Adapter;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Filesystem\Adapter\GoogleStorageFactory;
+use Shopware\Bundle\MediaBundle\Adapters\GoogleStorageFactory;
 use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
@@ -43,7 +43,7 @@ class GoogleStorageFactoryTest extends TestCase
 
     public function testTypeLocal()
     {
-        $this->assertSame('google-storage', $this->factory->getType());
+        $this->assertSame('gcp', $this->factory->getType());
     }
 
     public function testCreationWithEmptyConfig()

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Filesystem\Adapter;
+namespace Shopware\Bundle\MediaBundle\Adapters;
 
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
@@ -49,7 +49,7 @@ class AwsS3v3Factory implements AdapterFactoryInterface
      */
     public function getType()
     {
-        return 'amazon-s3';
+        return 's3';
     }
 
     /**
@@ -62,7 +62,7 @@ class AwsS3v3Factory implements AdapterFactoryInterface
         $options = new OptionsResolver();
 
         $options->setRequired(['credentials', 'bucket', 'region']);
-        $options->setDefined(['version', 'root']);
+        $options->setDefined(['version', 'root', 'type', 'mediaUrl']);
 
         $options->setAllowedTypes('credentials', 'array');
         $options->setAllowedTypes('region', 'string');

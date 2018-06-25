@@ -26,7 +26,7 @@ namespace Shopware\Tests\Unit\Components\Filesystem\Adapter;
 
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Filesystem\Adapter\AwsS3v3Factory;
+use Shopware\Bundle\MediaBundle\Adapters\AwsS3v3Factory;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 class AwsS3v3FactoryTest extends TestCase
@@ -43,7 +43,7 @@ class AwsS3v3FactoryTest extends TestCase
 
     public function testTypeLocal()
     {
-        $this->assertSame('amazon-s3', $this->factory->getType());
+        $this->assertSame('s3', $this->factory->getType());
     }
 
     public function testCreationWithEmptyConfig()

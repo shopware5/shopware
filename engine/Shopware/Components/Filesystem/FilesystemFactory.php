@@ -24,9 +24,9 @@
 
 namespace Shopware\Components\Filesystem;
 
+use IteratorAggregate;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
-use Shopware\Components\Filesystem\Adapter\AdapterFactoryInterface;
 use Shopware\Components\Filesystem\Exception\AdapterFactoryNotFoundException;
 use Shopware\Components\Filesystem\Exception\DuplicateFilesystemFactoryException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,10 +39,11 @@ class FilesystemFactory implements FilesystemFactoryInterface
     private $adapterFactories;
 
     /**
-     * @param AdapterFactoryInterface[] $adapterFactories
+     * @param IteratorAggregate $adapterFactories
      */
-    public function __construct(array $adapterFactories)
+    public function __construct(IteratorAggregate $adapterFactories)
     {
+        $adapterFactories = iterator_to_array($adapterFactories, false);
         $this->checkDuplicates($adapterFactories);
         $this->adapterFactories = $adapterFactories;
     }

@@ -68,7 +68,7 @@ return array_replace_recursive([
                         'private' => 0700 & ~umask(),
                     ],
                 ],
-                'path' => realpath(__DIR__ . '/../../../'),
+                'root' => realpath(__DIR__ . '/../../../'),
             ],
             'ftp' => [
                 'type' => 'ftp',
@@ -82,6 +82,26 @@ return array_replace_recursive([
                 'passive' => true,
                 'ssl' => false,
                 'timeout' => 30,
+            ],
+            's3' => [
+                'type' => 's3',
+                'mediaUrl' => '',
+
+                'bucket' => '',
+                'region' => '',
+                'credentials' => [
+                    'key' => '',
+                    'secret' => '',
+                ],
+            ],
+            'gcp' => [
+                'type' => 'gcp',
+                'mediaUrl' => '',
+
+                'projectId' => '',
+                'keyFilePath' => '',
+                'bucket' => '',
+                'root' => '',
             ],
         ],
     ],

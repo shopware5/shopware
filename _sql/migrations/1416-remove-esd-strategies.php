@@ -21,26 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Components\DependencyInjection\Compiler;
-
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class AddFilesystemCompilerPass implements CompilerPassInterface
+class Migrations_Migration1416 extends Shopware\Components\Migrations\AbstractMigration
 {
-    use TagReplaceTrait;
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container)
+    public function up($modus)
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.filesystem_factory', 'shopware.filesystem.factory', 0);
+        $this->addSql('SET @elementId = (SELECT id FROM s_core_config_elements WHERE name="esdDownloadStrategy")');
+        $this->addSql('DELETE FROM s_core_config_values WHERE element_id = @elementId');
+        $this->addSql('DELETE FROM s_core_config_elements WHERE id = @elementId');
     }
 }
