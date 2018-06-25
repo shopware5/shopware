@@ -38,7 +38,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             'active' => $benchmarkConfig->isActive() ? 1 : 0,
             'lastSent' => $benchmarkConfig->getLastSent()->format('Y-m-d H:i:s'),
             'lastReceived' => $benchmarkConfig->getLastReceived()->format('Y-m-d H:i:s'),
-            'ordersBatchSize' => $benchmarkConfig->getOrdersBatchSize(),
+            'batchSize' => $benchmarkConfig->getBatchSize(),
             'industry' => $benchmarkConfig->getIndustry(),
         ];
 
@@ -56,7 +56,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
             $benchmarkConfig = $benchmarkRepository->getMainConfig();
-            $benchmarkConfig->setOrdersBatchSize((int) $this->request->getParam('ordersBatchSize'));
+            $benchmarkConfig->setBatchSize((int) $this->request->getParam('batchSize'));
 
             $benchmarkRepository->save($benchmarkConfig);
 

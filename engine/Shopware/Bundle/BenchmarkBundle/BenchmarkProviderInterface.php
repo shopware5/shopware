@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 interface BenchmarkProviderInterface
 {
     /**
@@ -32,7 +34,9 @@ interface BenchmarkProviderInterface
     public function getName();
 
     /**
+     * @param ShopContextInterface $shopContext
+     *
      * @return array
      */
-    public function getBenchmarkData();
+    public function getBenchmarkData(ShopContextInterface $shopContext);
 }

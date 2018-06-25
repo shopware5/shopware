@@ -26,6 +26,8 @@ namespace Shopware\Tests\Unit\Bundle\BenchmarkBundle;
 
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -40,7 +42,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
             new BarBenchmarkProvider(),
         ]));
 
-        $result = $provider->get();
+        $result = $provider->get(new ShopContextMock());
 
         $this->assertSame('{"id":"1","foo":{"foo":"bar","john":"doe"},"bar":{"test":"example"}}', $result);
     }
@@ -56,7 +58,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         ]));
 
         $this->expectExceptionMessage('Necessary data with name \'shop\' not provided.');
-        $provider->get();
+        $provider->get(new ShopContextMock());
     }
 }
 
@@ -67,7 +69,7 @@ class FooBenchmarkProvider implements BenchmarkProviderInterface
         return 'foo';
     }
 
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         return [
             'foo' => 'bar',
@@ -83,7 +85,7 @@ class BarBenchmarkProvider implements BenchmarkProviderInterface
         return 'bar';
     }
 
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         return [
             'test' => 'example',
@@ -98,10 +100,43 @@ class ShopBenchmarkProvider implements BenchmarkProviderInterface
         return 'shop';
     }
 
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         return [
             'id' => '1',
         ];
+    }
+}
+
+class ShopContextMock extends ShopContext
+{
+    public function __construct()
+    {
+    }
+
+    public function getShop()
+    {
+        return new ShopMock();
+    }
+}
+
+class ShopMock
+{
+    public function getId()
+    {
+        return 1;
+    }
+
+    public function getCategory()
+    {
+        return new CategoryMock();
+    }
+}
+
+class CategoryMock
+{
+    public function getId()
+    {
+        return 2;
     }
 }

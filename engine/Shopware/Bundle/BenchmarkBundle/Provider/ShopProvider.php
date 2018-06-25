@@ -24,29 +24,64 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ShopProvider implements BenchmarkProviderInterface
 {
+    /**
+     * @var Connection
+     */
+    private $dbalConnection;
+
+    public function __construct(Connection $dbalConnection)
+    {
+        $this->dbalConnection = $dbalConnection;
+    }
+
     public function getName()
     {
         return 'shop';
     }
 
-    public function getBenchmarkData()
+    /**
+     * {@inheritdoc}
+     */
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
+        $now = new \DateTime('now');
+
         return [
-            'id' => $this->getShopId(),
+            'id' => $this->getUniqueShopHash(),
             'industry' => $this->getIndustry(),
-            'datetime' => date('Y-m-d H:i:s'),
+            'datetime' => $now->format('Y-m-d H:i:s'),
         ];
     }
 
-    private function getShopId()
+    /**
+     * @return string
+     */
+    private function getUniqueShopHash()
     {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('config.id')
+            ->from('s_benchmark_config', 'config')
+            ->execute()
+            ->fetchColumn();
     }
 
+    /**
+     * @return string
+     */
     private function getIndustry()
     {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('industry')
+            ->from('s_benchmark_config')
+            ->execute()
+            ->fetchColumn();
     }
 }

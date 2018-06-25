@@ -27,6 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class AnalyticsProvider implements BenchmarkProviderInterface
 {
@@ -34,6 +35,11 @@ class AnalyticsProvider implements BenchmarkProviderInterface
      * @var Connection
      */
     private $dbalConnection;
+
+    /**
+     * @var int
+     */
+    private $shopId;
 
     public function __construct(Connection $dbalConnection)
     {
@@ -46,17 +52,18 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
+        $this->shopId = $shopContext->getShop()->getId();
+
         return [
             'totalVisitsYesterday' => $this->getVisitsYesterday(),
             'totalViewsYesterday' => $this->getViewsYesterday(),
             'visitsByDeviceYesterday' => $this->getVisitsYesterdayPerDevice(),
             'totalVisitsByDevice' => $this->getTotalVisitsByDevice(),
             'totalVisits' => $this->getTotalVisits(),
-            'averageShippingCostsPerOrder' => $this->getAverageShippingCostsPerOrder(),
         ];
     }
 
@@ -82,6 +89,8 @@ class AnalyticsProvider implements BenchmarkProviderInterface
         return (int) $queryBuilder->select('SUM(visitors.pageimpressions) as pageImpressions')
             ->from('s_statistics_visitors', 'visitors')
             ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY')
+            ->andWhere('visitors.shopID = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->groupBy('visitors.datum')
             ->execute()
             ->fetchColumn();
@@ -113,7 +122,9 @@ class AnalyticsProvider implements BenchmarkProviderInterface
 
         return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
             ->from('s_statistics_visitors', 'visitors')
-            ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY');
+            ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY')
+            ->andWhere('visitors.shopID = :shopId')
+            ->setParameter(':shopId', $this->shopId);
     }
 
     /**
@@ -151,18 +162,8 @@ class AnalyticsProvider implements BenchmarkProviderInterface
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
         return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
-            ->from('s_statistics_visitors', 'visitors');
-    }
-
-    /**
-     * @return float
-     */
-    private function getAverageShippingCostsPerOrder()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return (float) $queryBuilder->select('AVG(orders.invoice_shipping)')
-            ->from('s_order', 'orders')
-            ->execute()->fetchColumn();
+            ->from('s_statistics_visitors', 'visitors')
+            ->where('visitors.shopID = :shopId')
+            ->setParameter(':shopId', $this->shopId);
     }
 }

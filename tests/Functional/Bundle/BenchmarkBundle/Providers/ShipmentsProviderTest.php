@@ -31,8 +31,8 @@ class ShipmentsProviderTest extends ProviderTestCase
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.shipments';
     const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
-        'shipments' => IsType::TYPE_ARRAY,
-        'shipmentUsages' => IsType::TYPE_ARRAY,
+        'list' => IsType::TYPE_ARRAY,
+        'usages' => IsType::TYPE_ARRAY,
     ];
 
     /**
@@ -42,8 +42,7 @@ class ShipmentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('shipments');
 
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertArraySubset([
             'Example dispatch 1' => [
@@ -66,8 +65,35 @@ class ShipmentsProviderTest extends ProviderTestCase
                 'minPrice' => 15.00,
                 'maxPrice' => 15.00,
             ],
-        ], $resultData['shipments']);
+        ], $resultData['list']);
 
-        $this->assertSame(1.0, $resultData['shipments']['Example dispatch 1']['minPrice']);
+        $this->assertSame(1.0, $resultData['list']['Example dispatch 1']['minPrice']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetUsages()
+    {
+        $this->installDemoData('shipments');
+
+        $resultData = $this->getBenchmarkData();
+
+        $this->assertCount(4, $resultData['usages']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetShipmentsPerShop()
+    {
+        $this->installDemoData('shipments');
+
+        $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1));
+        $this->assertCount(5, $resultData['list']);
+
+        $resultData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(2));
+        $this->assertCount(6, $resultData['list']);
     }
 }

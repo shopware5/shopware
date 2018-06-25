@@ -46,11 +46,9 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(5, $resultData['activePayments']);
+        $this->assertSame(4, $resultData['activePayments']);
     }
 
     /**
@@ -60,9 +58,7 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(4, $resultData['paymentsWithSurcharge']);
     }
@@ -74,9 +70,7 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(5, $resultData['paymentsWithReduction']);
     }
@@ -88,9 +82,7 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(4, $resultData['paymentsWithPercentagePrice']);
     }
@@ -102,10 +94,24 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(6, $resultData['paymentsWithAbsolutePrice']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetTotalActivePaymentsPerShop()
+    {
+        $this->installDemoData('payments');
+
+        $provider = $this->getProvider();
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertSame(4, $resultData['activePayments']);
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(5, $resultData['activePayments']);
     }
 }

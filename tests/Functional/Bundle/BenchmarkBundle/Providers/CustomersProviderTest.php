@@ -29,71 +29,125 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class CustomersProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.customers';
-    const EXPECTED_KEYS_COUNT = 6;
+    const EXPECTED_KEYS_COUNT = 1;
     const EXPECTED_TYPES = [
-        'total' => IsType::TYPE_INT,
-        'turnOverPerAge' => IsType::TYPE_ARRAY,
-        'turnOverPerGender' => IsType::TYPE_ARRAY,
-        'sex' => IsType::TYPE_ARRAY,
-        'countries' => [
-            'billing' => IsType::TYPE_ARRAY,
-            'shipping' => IsType::TYPE_ARRAY,
-        ],
-        'ageBySex' => IsType::TYPE_ARRAY,
+        'list' => IsType::TYPE_ARRAY,
     ];
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalCustomers()
+    public function testGetCustomersList()
     {
+        $this->resetConfig();
         $this->installDemoData('customers');
+        $resultData = $this->getBenchmarkData();
+        $customersList = $resultData['list'];
 
-        $provider = $this->getProvider();
+        $this->assertEquals(1993, $customersList[0]['birthYear']);
+        $this->assertEquals(1, $customersList[0]['birthMonth']);
 
-        $resultData = $provider->getBenchmarkData();
+        $this->assertEquals(1, $customersList[0]['registered']);
+        $this->assertEquals(0, $customersList[1]['registered']);
 
-        $this->assertSame(7, $resultData['total']);
+        $this->assertEquals('2013-11-25', $customersList[5]['registerDate']);
+
+        $this->assertEquals(1, $customersList[4]['hasNewsletter']);
+        $this->assertEquals(0, $customersList[5]['hasNewsletter']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersBySex()
+    public function testMatchGenders()
     {
+        $this->resetConfig();
         $this->installDemoData('customers');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
+        $customersList = $resultData['list'];
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertArraySubset([
-            'male' => 1,
-            'female' => 4,
-            'other' => 2,
-        ], $resultData['sex']);
+        $this->assertSame('male', $customersList[0]['gender']);
+        $this->assertSame('female', $customersList[1]['gender']);
+        $this->assertSame('unknown', $customersList[3]['gender']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersByCounty()
+    public function testGetCustomersTurnOver()
     {
+        $this->resetConfig();
         $this->installDemoData('customers');
 
+        $resultData = $this->getBenchmarkData();
+        $customersList = $resultData['list'];
+
+        $this->assertEquals(750, $customersList[3]['turnOver']);
+        $this->assertEquals(850, $customersList[4]['turnOver']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetCustomersListPerShop()
+    {
+        $this->installDemoData('customers');
         $provider = $this->getProvider();
 
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $customersList = $resultData['list'];
+        $this->assertCount(7, $customersList);
 
-        $this->assertArraySubset([
-            'Deutschland' => 6,
-            'Arabische Emirate' => 1,
-        ], $resultData['countries']['billing']);
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $customersList = $resultData['list'];
+        $this->assertCount(1, $customersList);
+    }
 
-        $this->assertArraySubset([
-            'Arabische Emirate' => 3,
-            'Deutschland' => 1,
-            'Australien' => 3,
-        ], $resultData['countries']['shipping']);
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetCustomersListConsidersBatchSize()
+    {
+        $this->resetConfig();
+        $this->installDemoData('customers');
+
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_customer_id=0, batch_size=1;');
+
+        $resultData = $this->getBenchmarkData();
+        $customersList = $resultData['list'];
+
+        $this->assertCount(1, $customersList);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetCustomersListConsidersLastCustomerId()
+    {
+        $this->resetConfig();
+        $this->installDemoData('customers');
+
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_customer_id=4, batch_size=1;');
+
+        $resultData = $this->getBenchmarkData();
+        $customersList = $resultData['list'];
+
+        $this->assertEquals(850, $customersList[0]['turnOver']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetCustomersListUpdatesCustomerId()
+    {
+        $this->resetConfig();
+        $this->installDemoData('customers');
+
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_customer_id=4, batch_size=1;');
+
+        $this->getBenchmarkData();
+
+        $this->assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_customer_id FROM s_benchmark_config'));
     }
 }

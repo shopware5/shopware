@@ -113,7 +113,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
             $this->redirect([
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
-                'template' => 'statistics',
+                'template' => 'waiting',
                 'lang' => $this->request->getParam('lang', $backendLanguage),
             ]);
 
@@ -178,7 +178,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $this->redirect([
             'controller' => 'BenchmarkLocalOverview',
             'action' => 'render',
-            'template' => 'statistics',
+            'template' => 'waiting',
             'lang' => $this->request->getParam('lang', 'de'),
         ]);
     }

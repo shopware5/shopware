@@ -29,14 +29,13 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class AnalyticsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.analytics';
-    const EXPECTED_KEYS_COUNT = 6;
+    const EXPECTED_KEYS_COUNT = 5;
     const EXPECTED_TYPES = [
         'totalVisitsYesterday' => IsType::TYPE_INT,
         'totalViewsYesterday' => IsType::TYPE_INT,
         'visitsByDeviceYesterday' => IsType::TYPE_ARRAY,
         'totalVisitsByDevice' => IsType::TYPE_ARRAY,
         'totalVisits' => IsType::TYPE_INT,
-        'averageShippingCostsPerOrder' => IsType::TYPE_FLOAT,
     ];
 
     /**
@@ -46,11 +45,9 @@ class AnalyticsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('analytics');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(492, $resultData['totalVisits']);
+        $this->assertSame(26, $resultData['totalVisits']);
     }
 
     /**
@@ -60,11 +57,9 @@ class AnalyticsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('analytics');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(25, $resultData['totalVisitsYesterday']);
+        $this->assertSame(15, $resultData['totalVisitsYesterday']);
     }
 
     /**
@@ -74,11 +69,9 @@ class AnalyticsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('analytics');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(16, $resultData['totalViewsYesterday']);
+        $this->assertSame(7, $resultData['totalViewsYesterday']);
     }
 
     /**
@@ -88,11 +81,39 @@ class AnalyticsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('analytics');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(12, $resultData['totalVisitsByDevice']['desktop']);
-        $this->assertSame(480, $resultData['totalVisitsByDevice']['mobile']);
+        $this->assertSame(14, $resultData['totalVisitsByDevice']['mobile']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetTotalVisitsByShop()
+    {
+        $this->installDemoData('analytics');
+        $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+
+        $this->assertSame(26, $resultData['totalVisits']);
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(466, $resultData['totalVisits']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetTotalViewsYesterdayByShop()
+    {
+        $this->installDemoData('analytics');
+        $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+
+        $this->assertSame(7, $resultData['totalViewsYesterday']);
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(9, $resultData['totalViewsYesterday']);
     }
 }

@@ -72,13 +72,31 @@ class BenchmarkConfig extends ModelEntity
     private $lastOrderId;
 
     /**
-     * The batch size in which orders are to be transmitted
+     * The id of the last customer that was sent to the server
      *
      * @var int
      *
-     * @ORM\Column(name="orders_batch_size", type="integer", nullable=false)
+     * @ORM\Column(name="last_customer_id", type="integer", nullable=false)
      */
-    private $ordersBatchSize;
+    private $lastCustomerId;
+
+    /**
+     * The id of the last product that was sent to the server
+     *
+     * @var int
+     *
+     * @ORM\Column(name="last_product_id", type="integer", nullable=false)
+     */
+    private $lastProductId;
+
+    /**
+     * The batch size in which entities are to be transmitted
+     *
+     * @var int
+     *
+     * @ORM\Column(name="batch_size", type="integer", nullable=false)
+     */
+    private $batchSize;
 
     /**
      * The industry the shop is in
@@ -173,17 +191,49 @@ class BenchmarkConfig extends ModelEntity
     /**
      * @return int
      */
-    public function getOrdersBatchSize()
+    public function getLastCustomerId()
     {
-        return $this->ordersBatchSize;
+        return (int) $this->lastCustomerId;
     }
 
     /**
-     * @param int $ordersBatchSize
+     * @param int $lastCustomerId
      */
-    public function setOrdersBatchSize($ordersBatchSize)
+    public function setLastCustomerId($lastCustomerId)
     {
-        $this->ordersBatchSize = (int) $ordersBatchSize;
+        $this->lastCustomerId = (int) $lastCustomerId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastProductId()
+    {
+        return (int) $this->lastProductId;
+    }
+
+    /**
+     * @param int $lastProductId
+     */
+    public function setLastProductId($lastProductId)
+    {
+        $this->lastProductId = (int) $lastProductId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBatchSize()
+    {
+        return $this->batchSize;
+    }
+
+    /**
+     * @param int $batchSize
+     */
+    public function setBatchSize($batchSize)
+    {
+        $this->batchSize = (int) $batchSize;
     }
 
     /**

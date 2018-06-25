@@ -70,7 +70,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_local_fresh_statistics_no_file()
+    public function testIndexAction_should_redirect_waiting_fresh_statistics_no_cached_template()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -83,13 +83,13 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/statistics', $redirect);
+        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_local_inactive()
+    public function testIndexAction_should_redirect_waiting_inactive()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -102,13 +102,13 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/statistics', $redirect);
+        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_local_active_outdated()
+    public function testIndexAction_should_redirect_waiting_active_outdated()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
@@ -122,7 +122,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/statistics', $redirect);
+        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
