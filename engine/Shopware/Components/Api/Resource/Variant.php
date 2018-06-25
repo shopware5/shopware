@@ -88,7 +88,8 @@ class Variant extends Resource implements BatchInterface
         }
 
         $builder = $this->getRepository()->getVariantDetailQuery();
-        $builder->andWhere('variants.id = :variantId')
+        $builder->addSelect('article')
+                ->andWhere('variants.id = :variantId')
                 ->addOrderBy('variants.id', 'ASC')
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC')
@@ -126,10 +127,11 @@ class Variant extends Resource implements BatchInterface
         /** @var \Doctrine\DBAL\Query\QueryBuilder */
         $builder = $this->getRepository()->createQueryBuilder('detail');
 
-        $builder->addSelect(['prices', 'attribute', 'customerGroup'])
+        $builder->addSelect(['prices', 'attribute', 'partial article.{id,name,active,taxId}', 'customerGroup'])
                 ->leftJoin('detail.prices', 'prices')
                 ->innerJoin('prices.customerGroup', 'customerGroup')
                 ->leftJoin('detail.attribute', 'attribute')
+                ->innerJoin('detail.article', 'article')
                 ->addFilter($criteria)
                 ->addOrderBy($orderBy)
                 ->setFirstResult($offset)
