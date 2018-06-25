@@ -54,18 +54,11 @@ class DownloadService
     private $connection;
 
     /**
-     * @var string
-     */
-    private $downloadsDir;
-
-    /**
-     * @param string      $rootDir
      * @param array       $pluginDirectories
      * @param StoreClient $storeClient
      * @param Connection  $connection
      */
     public function __construct(
-        $rootDir,
         array $pluginDirectories,
         StoreClient $storeClient,
         Connection $connection
@@ -73,7 +66,6 @@ class DownloadService
         $this->pluginDirectories = $pluginDirectories;
         $this->storeClient = $storeClient;
         $this->connection = $connection;
-        $this->downloadsDir = $rootDir;
     }
 
     /**
@@ -190,6 +182,7 @@ class DownloadService
         $file = $this->createDownloadZip($response->getBody());
 
         $this->extractPluginZip($file, $request->getTechnicalName());
+        unlink($file);
 
         return true;
     }
@@ -201,10 +194,7 @@ class DownloadService
      */
     private function createDownloadZip($content)
     {
-        $name = 'plugin_' . md5(uniqid()) . '.zip';
-
-        $file = rtrim($this->downloadsDir, '/') . DIRECTORY_SEPARATOR . $name;
-
+        $file = tempnam(sys_get_temp_dir(), 'plugin_') . '.zip';
         file_put_contents($file, $content);
 
         return $file;

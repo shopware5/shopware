@@ -303,6 +303,7 @@ class Basic implements GeneratorInterface
         try {
             $this->optimizerService->optimize($tmpFilename);
             $this->uploadImage($destination, $tmpFilename);
+            unlink($tmpFilename);
         } catch (OptimizerNotFoundException $exception) {
             // empty catch intended since no optimizer is available
         }

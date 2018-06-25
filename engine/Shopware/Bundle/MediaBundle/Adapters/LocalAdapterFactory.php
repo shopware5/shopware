@@ -25,31 +25,106 @@
 namespace Shopware\Bundle\MediaBundle\Adapters;
 
 use League\Flysystem\Adapter\Local;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LocalAdapterFactory implements AdapterFactoryInterface
 {
     /**
-     * {@inheritdoc}
+     * @param array $config
+     *
+     * @return Local
      */
     public function create(array $config)
     {
-        if (!array_key_exists('permissions', $config)) {
-            $config['permissions'] = [];
+        if (isset($config['path'])) {
+            $config['root'] = $config['path'];
+            unset($config['path']);
         }
 
+        $options = $this->resolveOptions($config);
+
         return new Local(
-            $config['path'],
+            $options['root'],
             LOCK_EX,
             Local::DISALLOW_LINKS,
-            $config['permissions']
+            $options
         );
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getType()
     {
         return 'local';
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return array
+     */
+    private function resolveOptions(array $config)
+    {
+        $options = new OptionsResolver();
+
+        $options->setRequired(['root']);
+        $options->setDefined(['file', 'dir', 'mediaUrl', 'type', 'permissions']);
+
+        $options->setAllowedTypes('root', 'string');
+        $options->setAllowedTypes('file', 'array');
+        $options->setAllowedTypes('dir', 'array');
+        $options->setAllowedTypes('mediaUrl', 'string');
+        $options->setAllowedTypes('type', 'string');
+        $options->setAllowedTypes('permissions', 'array');
+
+        $options->setDefault('file', []);
+        $options->setDefault('dir', []);
+
+        $config = $options->resolve($config);
+        $config['file'] = $this->resolveFilePermissions($config['file']);
+        $config['dir'] = $this->resolveDirectoryPermissions($config['dir']);
+
+        return $config;
+    }
+
+    /**
+     * @param array $permissions
+     *
+     * @return array
+     */
+    private function resolveFilePermissions(array $permissions)
+    {
+        $options = new OptionsResolver();
+
+        $options->setDefined(['public', 'private']);
+
+        $options->setAllowedTypes('public', 'int');
+        $options->setAllowedTypes('private', 'int');
+
+        $options->setDefault('public', 0666 & ~umask());
+        $options->setDefault('private', 0600 & ~umask());
+
+        return $options->resolve($permissions);
+    }
+
+    /**
+     * @param array $permissions
+     *
+     * @return array
+     */
+    private function resolveDirectoryPermissions(array $permissions)
+    {
+        $options = new OptionsResolver();
+
+        $options->setDefined(['public', 'private']);
+
+        $options->setAllowedTypes('public', 'int');
+        $options->setAllowedTypes('private', 'int');
+
+        $options->setDefault('public', 0777 & ~umask());
+        $options->setDefault('private', 0700 & ~umask());
+
+        return $options->resolve($permissions);
     }
 }

@@ -46,10 +46,10 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         et justo duo dolores et ea rebum. Stet clita kasd gubergren,
         no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 
-        $filePath = Shopware()->DocPath() . 'files/' . Shopware()->Config()->get('sESDKEY');
-        $deleteFolderOnTearDown = !file_exists($filePath) ? $filePath : false;
-        @mkdir($filePath, 0777);
-        file_put_contents($filePath . '/shopware_packshot_community_edition_72dpi_rgb.png', $loremIpsum);
+        $filesystem = Shopware()->Container()->get('shopware.filesystem.private');
+        $filePath = Shopware()->Config()->offsetGet('esdKey') . '/shopware_packshot_community_edition_72dpi_rgb.png';
+        $deleteFolderOnTearDown = !$filesystem->has($filePath) ? $filePath : false;
+        $filesystem->put($filePath, $loremIpsum);
 
         $this->Request()
             ->setMethod('POST')
@@ -61,23 +61,18 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         $params['esdID'] = 204;
         $this->Request()->setParams($params);
+
         $this->dispatch('/account/download');
 
         $header = $this->Response()->getHeaders();
         $this->assertEquals('Content-Disposition', $header[1]['name']);
         $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $header[1]['value']);
         $this->assertEquals('Content-Length', $header[2]['name']);
-        $this->assertGreaterThan(630, intval($header[2]['value']));
-        $this->assertEquals(strlen($this->Response()->getBody()), intval($header[2]['value']));
+        $this->assertGreaterThan(630, (int) $header[2]['value']);
+        $this->assertEquals(strlen($this->Response()->getBody()), (int) $header[2]['value']);
 
         if ($deleteFolderOnTearDown) {
-            $files = glob($deleteFolderOnTearDown . '/*'); // get all file names
-            foreach ($files as $file) {
-                if (is_file($file)) {
-                    @unlink($file);
-                }
-            }
-            rmdir($deleteFolderOnTearDown);
+            $filesystem->delete($filePath);
         }
     }
 

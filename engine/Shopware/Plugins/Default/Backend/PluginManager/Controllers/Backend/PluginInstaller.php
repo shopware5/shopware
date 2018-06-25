@@ -219,8 +219,8 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
             return;
         }
 
-        $tempDirectory = rtrim(Shopware()->Container()->getParameter('shopware.app.downloadsdir'), '/') . DIRECTORY_SEPARATOR;
-        $tempFileName = tempnam($tempDirectory, $file->getClientOriginalName());
+        $tempFileName = tempnam(sys_get_temp_dir(), $file->getClientOriginalName());
+        $tempDirectory = dirname(realpath($tempFileName));
 
         try {
             $file = $file->move($tempDirectory, $tempFileName);
