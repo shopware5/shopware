@@ -2161,7 +2161,7 @@ class sBasket
                     [$temporaryTax]
                 );
                 $taxRate = $getTaxRate;
-                $tax = round($voucherDetails['value'] / (100 + ((int) $getTaxRate)) * 100, 3) * -1;
+                $tax = round($voucherDetails['value'] / (100 + (number_format($getTaxRate, 2))) * 100, 3) * -1;
             } else {
                 // No tax
                 $tax = $voucherDetails['value'] * -1;
