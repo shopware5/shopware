@@ -114,7 +114,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `Shopware\Components\Captcha\CaptchaRepository`
     * `Shopware\Components\DependencyInjection\Bridge\Router`
     * `Shopware\Components\Emotion\Preset\PresetDataSynchronizer`
-    
+* Changed `getRolesAction` in `Shopware/Controllers/Backend/UserManager` so it takes the `id` parameter into account. This is needed for the paging combobox to work properly.
+
 ### Removals
 
 * Removed tables `s_user_billingaddress_attributes` and `s_user_shippingaddress_attributes`
@@ -183,7 +184,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass`
     * `Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass`
     * `Shopware\Components\DependencyInjection\Compiler\RouterCompilerPass`
-    
 * Removed following unnecessary Subscriber:
     * `Shopware\Bundle\EsBackend\Subscriber\ServiceSubscriber`
     * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
