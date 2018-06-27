@@ -82,7 +82,7 @@ class CustomersProvider implements BenchmarkProviderInterface
 
         $customers = array_map([$this, 'matchGenders'], array_values($customers));
 
-        if ($customerId) {
+        if (isset($customerId)) {
             $this->updateLastCustomerId($customerId);
         }
 

@@ -72,9 +72,11 @@ class StatisticsService
     }
 
     /**
+     * @param int $shopId
+     *
      * @return StatisticsResponse
      */
-    public function transmit()
+    public function transmit($shopId)
     {
         $benchmarkData = $this->benchmarkCollector->get($this->contextService->createShopContext(1));
 
@@ -83,7 +85,7 @@ class StatisticsService
         /** @var StatisticsResponse $statisticsResponse */
         $statisticsResponse = $this->statisticsClient->sendStatistics($request);
 
-        $config = $this->benchmarkRepository->getMainConfig();
+        $config = $this->benchmarkRepository->getConfigForShop($shopId);
         $config->setLastSent($statisticsResponse->getDateUpdated());
         $config->setToken($statisticsResponse->getToken());
 

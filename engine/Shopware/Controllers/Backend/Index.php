@@ -340,10 +340,9 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
 
         /** @var \Shopware\Models\Benchmark\Repository $configRepository */
         $configRepository = $this->get('models')->getRepository(\Shopware\Models\Benchmark\BenchmarkConfig::class);
-        $config = $configRepository->getMainConfig();
 
         $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
 
-        return !in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true) && $config->getIndustry() === null;
+        return !in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true) && $configRepository->getConfigsCount() === 0;
     }
 }

@@ -45,6 +45,15 @@ class BenchmarkConfig extends ModelEntity
     private $id;
 
     /**
+     * The shop id for this config
+     *
+     * @var int
+     *
+     * @ORM\Column(name="shop_id", type="integer", nullable=false)
+     */
+    private $shopId;
+
+    /**
      * Defines the date and time when the statistics were sent the last time
      *
      * @var \DateTime
@@ -108,6 +117,15 @@ class BenchmarkConfig extends ModelEntity
     private $industry;
 
     /**
+     * The shop type, e.g. "b2b" or "b2c"
+     *
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", nullable=false)
+     */
+    private $type;
+
+    /**
      * The latest token provided by the server
      *
      * @var string
@@ -138,6 +156,31 @@ class BenchmarkConfig extends ModelEntity
     public function __construct($id)
     {
         $this->id = $id;
+
+        // Default values
+        $this->lastReceived = '1990-01-01 00:00:00';
+        $this->lastSent = '1990-01-01 00:00:00';
+        $this->lastOrderId = 0;
+        $this->lastCustomerId = 0;
+        $this->lastProductId = 0;
+        $this->batchSize = 1000;
+        $this->active = 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
     }
 
     /**
@@ -250,6 +293,22 @@ class BenchmarkConfig extends ModelEntity
     public function setIndustry($industry)
     {
         $this->industry = (int) $industry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     /**

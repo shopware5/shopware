@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.IndustryField', {
                 '<div>',
                     /*{if {acl_is_allowed privilege=manage}}*/
                     '<span id="other-action" style="text-decoration: underline; font-style: italic; cursor: pointer; display: block; margin-top: 8px; font-size: 10px;">',
-                        '{s name="settings/fieldsets/industry/wrong"}Wrong industry?{/s}',
+                        '{s name="settings/industry_window/wrong"}Wrong industry?{/s}',
                     '</span>',
                     /*{/if}*/
                 '</div>',

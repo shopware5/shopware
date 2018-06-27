@@ -33,7 +33,7 @@
         </script>
 
         {block name="benchmark_index_head_scripts"}
-            <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16"></script>
             <script src="https://unpkg.com/vue-i18n/dist/vue-i18n.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
             <script src="{link file='backend/benchmark/template/local/js/translation.js'}"></script>

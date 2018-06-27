@@ -27,40 +27,16 @@ use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backend_ExtJs
 {
-    public function loadSettingsAction()
-    {
-        /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $benchmarkConfig = $benchmarkRepository->getMainConfig();
-
-        $settings = [
-            'lastOrderNumber' => null,
-            'active' => $benchmarkConfig->isActive() ? 1 : 0,
-            'lastSent' => $benchmarkConfig->getLastSent()->format('Y-m-d H:i:s'),
-            'lastReceived' => $benchmarkConfig->getLastReceived()->format('Y-m-d H:i:s'),
-            'batchSize' => $benchmarkConfig->getBatchSize(),
-            'industry' => $benchmarkConfig->getIndustry(),
-        ];
-
-        if ($benchmarkConfig->getLastOrderId()) {
-            $settings['lastOrderNumber'] = $this->getOrderNumberFromOrderId($benchmarkConfig->getLastOrderId());
-        }
-
-        $this->View()->assign('data', $settings);
-    }
-
-    public function saveSettingsAction()
+    public function getShopConfigsAction()
     {
         try {
             /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
-            $benchmarkConfig = $benchmarkRepository->getMainConfig();
-            $benchmarkConfig->setBatchSize((int) $this->request->getParam('batchSize'));
-
-            $benchmarkRepository->save($benchmarkConfig);
-
-            $this->View()->assign('success', true);
+            $this->View()->assign([
+                'success' => true,
+                'data' => array_values($benchmarkRepository->getShopConfigs(true)),
+            ]);
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -72,7 +48,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
-            $benchmarkConfig = $benchmarkRepository->getMainConfig();
+            $benchmarkConfig = $benchmarkRepository->getConfigForShop($this->request->getParam('shopId'));
             $benchmarkConfig->setIndustry((int) $this->request->getParam('industry'));
 
             $benchmarkRepository->save($benchmarkConfig);
@@ -89,8 +65,25 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
-            $benchmarkConfig = $benchmarkRepository->getMainConfig();
+            $benchmarkConfig = $benchmarkRepository->getConfigForShop($this->request->getParam('shopId'));
             $benchmarkConfig->setActive((bool) $this->request->getParam('active'));
+
+            $benchmarkRepository->save($benchmarkConfig);
+
+            $this->View()->assign('success', true);
+        } catch (\Exception $e) {
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function saveTypeAction()
+    {
+        try {
+            /** @var BenchmarkRepository $benchmarkRepository */
+            $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+
+            $benchmarkConfig = $benchmarkRepository->getConfigForShop($this->request->getParam('shopId'));
+            $benchmarkConfig->setType($this->request->getParam('type'));
 
             $benchmarkRepository->save($benchmarkConfig);
 
@@ -148,28 +141,12 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
 
     protected function initAcl()
     {
-        $this->addAclPermission('loadSettings', 'read', 'Insufficient permissions');
+        $this->addAclPermission('getShopConfigs', 'read', 'Insufficient permissions');
         $this->addAclPermission('saveSettings', 'manage', 'Insufficient permissions');
         $this->addAclPermission('saveIndustry', 'manage', 'Insufficient permissions');
+        $this->addAclPermission('saveTypeAction', 'manage', 'Insufficient permissions');
         $this->addAclPermission('setActive', 'manage', 'Insufficient permissions');
         $this->addAclPermission('disableBenchmarkTeaser', 'manage', 'Insufficient permissions');
         $this->addAclPermission('checkBenchmarksAction', 'submit', 'Insufficient permissions');
-    }
-
-    /**
-     * @param int $orderId
-     *
-     * @return string
-     */
-    private function getOrderNumberFromOrderId($orderId)
-    {
-        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
-
-        return $queryBuilder->select('orders.ordernumber')
-            ->from('s_order', 'orders')
-            ->where('orders.id = :orderId')
-            ->setParameter(':orderId', $orderId)
-            ->execute()
-            ->fetchColumn();
     }
 }

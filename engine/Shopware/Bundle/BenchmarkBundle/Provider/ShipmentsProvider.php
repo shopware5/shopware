@@ -115,7 +115,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
     private function getShipmentIds()
     {
         $shopId = $this->shopContext->getShop()->getId();
-        if ($this->shipmentIds[$shopId]) {
+        if (array_key_exists($shopId, $this->shipmentIds)) {
             return $this->shipmentIds[$shopId];
         }
 
