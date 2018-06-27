@@ -20,6 +20,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed error in language handling of mail templates
 * Changed listing filters to work on mobile devices
 * Changed listing controller to load custom templates on pages containing an emotion component
+* Changed Notification plugin behaviour to also be displayed if the minimal purchase is higher than stock
 
 ## 5.4.5
 
