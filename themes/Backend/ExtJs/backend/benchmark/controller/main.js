@@ -42,6 +42,12 @@ Ext.define('Shopware.apps.Benchmark.controller.Main', {
 
         me.mainWindow = me.getView(windowName).create(params).show();
 
+        window.addEventListener('message', function (msg) {
+            if (msg.data === 'closeWindow') {
+                me.mainWindow.destroy();
+            }
+        }, false);
+
         me.callParent(arguments);
     },
 
