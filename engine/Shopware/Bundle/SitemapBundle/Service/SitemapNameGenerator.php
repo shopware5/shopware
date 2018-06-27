@@ -42,7 +42,7 @@ class SitemapNameGenerator implements SitemapNameGeneratorInterface
      * @param string $path
      * @param string $pattern
      */
-    public function __construct($path, $pattern = 'sitemap-shop-{shopId}-number-{number}.xml.gz')
+    public function __construct($path, $pattern = 'sitemap-shop-{shopId}-{number}.xml.gz')
     {
         $this->path = $path;
         $this->pattern = $pattern;
@@ -66,5 +66,15 @@ class SitemapNameGenerator implements SitemapNameGeneratorInterface
         } while (file_exists($path));
 
         return $path;
+    }
+
+    /**
+     * @param int $shopId
+     *
+     * @return string
+     */
+    public function getSitemapFilenameGlob($shopId)
+    {
+        return str_ireplace(['{shopId}', '{number}'], [$shopId, '*'], $this->pattern);
     }
 }

@@ -20,31 +20,65 @@
             <argument type="service" id="shopware_storefront.context_service" />
             <argument type="service" id="config" />
             <argument type="tagged" tag="sitemap_url_provider" />
+            <argument type="service" id="config_writer" />
         </service>
 
         <service id="shopware_bundle_sitemap.service.sitemap_lister" class="Shopware\Bundle\SitemapBundle\Service\SitemapLister">
             <argument type="string">%shopware.web.sitemapdir%</argument>
             <argument type="string">%shopware.app.rootdir%</argument>
+            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_name_generator"/>
         </service>
 
         <!-- UrlProviders -->
-        <service id="shopware_bundle_sitemap.provider.legacy_url_provider"
-                 class="Shopware\Bundle\SitemapBundle\Provider\LegacyUrlProvider"
-                 public="false">
-            <argument id="router" type="service" />
-            <argument id="sitemapxml.repository" type="service" />
-
-            <tag name="sitemap_url_provider" />
-        </service>
-
         <service id="shopware_bundle_sitemap.provider.url.product"
                  class="Shopware\Bundle\SitemapBundle\Provider\ProductUrlProvider"
                  public="false">
             <argument id="router" type="service"/>
-            <argument id="shopware_search.product_number_search" type="service" />
-            <argument id="shopware_search.store_front_criteria_factory" type="service" />
+            <argument type="service" id="shopware_search.product_number_search"/>
+            <argument type="service" id="shopware_search.store_front_criteria_factory"/>
             <argument type="service" id="dbal_connection"/>
+            <argument>%shopware.sitemap.batchsize%</argument>
 
+            <tag name="sitemap_url_provider" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.provider.url.static"
+                 class="Shopware\Bundle\SitemapBundle\Provider\StaticUrlProvider"
+                 public="false">
+            <argument type="service" id="router"/>
+            <argument type="service" id="dbal_connection"/>
+            <tag name="sitemap_url_provider" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.provider.url.category"
+                 class="Shopware\Bundle\SitemapBundle\Provider\CategoryUrlProvider"
+                 public="false">
+            <argument type="service" id="models"/>
+            <argument type="service" id="router"/>
+            <tag name="sitemap_url_provider" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.provider.url.blog"
+                 class="Shopware\Bundle\SitemapBundle\Provider\BlogUrlProvider"
+                 public="false">
+            <argument type="service" id="models"/>
+            <argument type="service" id="router"/>
+            <tag name="sitemap_url_provider" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.provider.url.manufacturer"
+                 class="Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider"
+                 public="false">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="sitemap_url_provider" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.provider.url.landingpage"
+                 class="Shopware\Bundle\SitemapBundle\Provider\LandingPageUrlProvider"
+                 public="false">
+            <argument type="service" id="models"/>
+            <argument type="service" id="router"/>
             <tag name="sitemap_url_provider" />
         </service>
 
@@ -54,13 +88,18 @@
             <tag name="console.command"/>
         </service>
 
-        <!-- LastIdCondition -->
-        <service id="shopware_bundle_sitemap.service_subscriber" class="Shopware\Bundle\SitemapBundle\Subscriber\ServiceSubscriber">
+        <service id="shopware_bundle_sitemap.service_subscriber" class="Shopware\Bundle\SitemapBundle\Subscriber\SitemapSubscriber">
+            <argument type="service" id="config"/>
+            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_exporter"/>
+            <argument type="service" id="models"/>
             <tag name="shopware.event_subscriber" />
         </service>
 
-        <service class="Shopware\Bundle\SitemapBundle\Condition\LastIdConditionHandler" id="shopware_bundle_sitemap.condition.category_condition_handler">
-            <tag name="condition_handler_dbal"/>
+        <service id="shopware_bundle_sitemap.cronjob_subscriber" class="Shopware\Bundle\SitemapBundle\Subscriber\CronjobSubscriber">
+            <argument type="service" id="config"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_exporter"/>
+            <tag name="shopware.event_subscriber" />
         </service>
     </services>
 </container>

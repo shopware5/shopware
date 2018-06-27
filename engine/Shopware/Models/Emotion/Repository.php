@@ -27,6 +27,7 @@ namespace   Shopware\Models\Emotion;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
 /**
  * @category  Shopware
@@ -308,7 +309,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['data.id', 'data.value', 'field.id as fieldId', 'field.name', 'field.valueType'])
-            ->from(\Shopware\Models\Emotion\Data::class, 'data')
+            ->from(Data::class, 'data')
             ->join('data.field', 'field')
             ->leftJoin('field.component', 'component')
             ->where('component.id = ?1')
@@ -365,7 +366,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-            ->from(\Shopware\Models\Attribute\Emotion::class, 'attribute')
+            ->from(EmotionAttribute::class, 'attribute')
             ->where('attribute.emotionId = ?1')
             ->setParameter(1, $emotionId);
 
@@ -416,7 +417,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['elements', 'component']);
-        $builder->from(\Shopware\Models\Emotion\Element::class, 'elements');
+        $builder->from(Element::class, 'elements');
         $builder->leftJoin('elements.component', 'component');
         $builder->where('elements.emotionId = :emotionId');
         $builder->addOrderBy([['property' => 'elements.startRow', 'direction' => 'ASC']]);
@@ -493,7 +494,7 @@ class Repository extends ModelRepository
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['viewports'])
-            ->from(\Shopware\Models\Emotion\ElementViewport::class, 'viewports')
+            ->from(ElementViewport::class, 'viewports')
             ->where('viewports.elementId IN (?1)')
             ->setParameter(1, $elementIds, Connection::PARAM_INT_ARRAY);
 

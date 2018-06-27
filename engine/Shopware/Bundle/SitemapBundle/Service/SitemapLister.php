@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SitemapBundle\Service;
 
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
+use Shopware\Bundle\SitemapBundle\SitemapNameGeneratorInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
 
 /**
@@ -43,23 +44,39 @@ class SitemapLister implements SitemapListerInterface
     private $projectDirectory;
 
     /**
-     * @param string $sitemapDirectory
-     * @param string $projectDirectory
+     * @var SitemapNameGeneratorInterface
      */
-    public function __construct($sitemapDirectory, $projectDirectory)
+    private $nameGenerator;
+
+    /**
+     * @param string                        $sitemapDirectory
+     * @param string                        $projectDirectory
+     * @param SitemapNameGeneratorInterface $nameGenerator
+     */
+    public function __construct($sitemapDirectory, $projectDirectory, SitemapNameGeneratorInterface $nameGenerator)
     {
         $this->sitemapDirectory = $sitemapDirectory;
         $this->projectDirectory = $projectDirectory;
+        $this->nameGenerator = $nameGenerator;
     }
 
     /**
-     * @return Sitemap[]
+     * {@inheritdoc}
      */
-    public function getSitemaps()
+    public function getSitemaps($shopId = null)
     {
+        if ($shopId) {
+            $dir = rtrim($this->sitemapDirectory, DIRECTORY_SEPARATOR);
+            $iterator = new \GlobIterator($dir . DIRECTORY_SEPARATOR . $this->nameGenerator->getSitemapFilenameGlob($shopId));
+        } else {
+            $iterator = new \DirectoryIterator($this->sitemapDirectory);
+        }
+
         $sitemaps = [];
-        foreach (new \DirectoryIterator($this->sitemapDirectory) as $file) {
-            if ($file->isDot()) {
+
+        /** @var \SplFileInfo $file */
+        foreach ($iterator as $file) {
+            if ($file->getBasename()[0] === '.') {
                 continue;
             }
 

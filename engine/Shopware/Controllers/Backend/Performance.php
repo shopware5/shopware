@@ -184,6 +184,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
         $output['various'] = $this->prepareForSavingDefault($data['various'][0]);
         $output['customer'] = $this->prepareForSavingDefault($data['customer'][0]);
+        $output['sitemap'] = $this->prepareForSavingDefault($data['sitemap'][0]);
 
         return $output;
     }
@@ -539,6 +540,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'similarRefreshStrategy',
                 'similarValidationTime',
                 'similarActive',
+            ]),
+            'sitemap' => $this->genericConfigLoader([
+                'sitemapRefreshStrategy',
+                'sitemapRefreshTime',
+                'sitemapLastRefresh',
             ]),
         ];
     }

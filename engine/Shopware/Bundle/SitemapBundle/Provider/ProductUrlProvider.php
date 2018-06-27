@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\SitemapBundle\Condition\LastIdCondition;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
@@ -45,7 +45,7 @@ class ProductUrlProvider implements UrlProviderInterface
     /**
      * @var int
      */
-    private $lastId = -1;
+    private $lastId;
 
     /**
      * @var ProductNumberSearchInterface
@@ -63,21 +63,29 @@ class ProductUrlProvider implements UrlProviderInterface
     private $connection;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param Router                             $router
      * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
      * @param Connection                         $connection
+     * @param int                                $batchSize
      */
     public function __construct(
         Router $router,
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
-        Connection $connection)
-    {
+        Connection $connection,
+        $batchSize
+    ) {
         $this->router = $router;
         $this->productNumberSearch = $productNumberSearch;
         $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory;
         $this->connection = $connection;
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -91,15 +99,15 @@ class ProductUrlProvider implements UrlProviderInterface
         $criteria = $this->storeFrontCriteriaFactory
             ->createBaseCriteria([$shopContext->getShop()->getCategory()->getId()], $shopContext);
         $criteria->setFetchCount(false);
-        $criteria->limit(50000);
+        $criteria->limit($this->batchSize);
 
-        if ($this->lastId > -1) {
-            $criteria->addBaseCondition(new LastIdCondition($this->lastId));
+        if ($this->lastId) {
+            $criteria->addBaseCondition(new LastProductIdCondition($this->lastId));
         }
 
         $productNumberSearchResult = $this->productNumberSearch->search($criteria, $shopContext);
 
-        if (empty($productNumberSearchResult->getProducts())) {
+        if (count($productNumberSearchResult->getProducts()) === 0) {
             return null;
         }
 
@@ -109,11 +117,12 @@ class ProductUrlProvider implements UrlProviderInterface
         }, array_values($productNumberSearchResult->getProducts()));
         unset($productNumberSearchResult);
 
-        $statement = $this->connection->executeQuery(
-            'SELECT id, changetime AS changed FROM s_articles WHERE id IN (:productIds)',
-            [':productIds' => $productIds],
-            [':productIds' => Connection::PARAM_INT_ARRAY]
-        );
+        $qb = $this->connection->createQueryBuilder();
+        $statement = $qb->from('s_articles', 'product')
+            ->select('id, changetime')
+            ->where('id IN(:productIds)')
+            ->setParameter('productIds', $productIds, Connection::PARAM_INT_ARRAY)
+            ->execute();
 
         $products = [];
         // Enrich product ids with date of last modification
@@ -127,9 +136,7 @@ class ProductUrlProvider implements UrlProviderInterface
         }
 
         // Batch generate routes
-        $routes = $this->router->generateList(array_map(function (array $product) {
-            return $product['urlParams'];
-        }, $products), $routingContext);
+        $routes = $this->router->generateList(array_column($products, 'urlParams'), $routingContext);
 
         $urls = [];
         for ($i = 0, $productCount = count($products); $i < $productCount; ++$i) {
@@ -140,5 +147,13 @@ class ProductUrlProvider implements UrlProviderInterface
         $this->lastId = array_pop($products)['id'];
 
         return $urls;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->lastId = null;
     }
 }

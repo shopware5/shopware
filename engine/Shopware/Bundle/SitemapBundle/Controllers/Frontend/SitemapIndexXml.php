@@ -24,11 +24,22 @@
 
 namespace Shopware\Bundle\SitemapBundle\Controller;
 
-use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
 
 class SitemapIndexXml extends \Enlight_Controller_Action
 {
+    /**
+     * Show also the sitemap, if the user request /sitemapindex.xml
+     */
+    public function preDispatch()
+    {
+        if ($this->Request()->getRequestUri() !== '/sitemap_index.xml') {
+            $this->redirect(['controller' => 'sitemap_index.xml']);
+
+            return;
+        }
+    }
+
     /**
      * Index action method
      */
@@ -39,21 +50,6 @@ class SitemapIndexXml extends \Enlight_Controller_Action
 
         $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
 
-        $this->View()->sitemaps = $sitemapLister->getSitemaps();
-
-        $this->response->sendResponse();
-        ob_flush();
-
-        // Todo: Checken, wie alt die Sitemaps sind und bei Bedarf neu generieren
-        $age = 500;
-
-        if ($age > 1000) {
-            set_time_limit(0);
-
-            /** @var SitemapExporterInterface $exporter */
-            $exporter = $this->get('shopware_bundle_sitemap.service.sitemap_exporter');
-
-            $exporter->generate();
-        }
+        $this->View()->sitemaps = $sitemapLister->getSitemaps($this->get('shop')->getId());
     }
 }

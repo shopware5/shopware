@@ -412,7 +412,6 @@ class Context implements \JsonSerializable
         $self->setShopId($shop->getId());
         $self->setUrlToLower($config->get('routerToLower'));
         $self->setBaseFile($config->get('baseFile'));
-        $self->setBaseUrl($config->get('baseUrl'));
         $self->setRemoveCategory((bool) $config->get('routerRemoveCategory'));
 
         return $self;

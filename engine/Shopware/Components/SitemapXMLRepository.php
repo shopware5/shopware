@@ -26,17 +26,20 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
+use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Category\Category;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
+ *
+ * @deprecated Will be removed in Shopware 5.6
  */
 class SitemapXMLRepository
 {
@@ -66,67 +69,48 @@ class SitemapXMLRepository
     private $storeFrontCriteriaFactory;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
      * @param ModelManager                       $em
      * @param ContextServiceInterface            $contextService
+     * @param int                                $batchSize
      */
     public function __construct(
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
         ModelManager $em,
-        ContextServiceInterface $contextService)
-    {
+        ContextServiceInterface $contextService,
+        $batchSize = 10000
+    ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->contextService = $contextService;
         $this->productNumberSearch = $productNumberSearch;
         $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory;
+        $this->batchSize = $batchSize;
     }
 
     /**
-     * @param ShopContextInterface|null $shopContext
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return array
      */
-    public function getSitemapContent(ShopContextInterface $shopContext = null)
+    public function getSitemapContent()
     {
-        if (!$shopContext) {
-            $shopContext = $this->contextService->getShopContext();
-        }
-
-        $parentId = $shopContext->getShop()->getCategory()->getId();
-
-        $categories = $this->readCategoryUrls($parentId, $shopContext);
+        $parentId = $this->contextService->getShopContext()->getShop()->getCategory()->getId();
+        $categories = $this->readCategoryUrls($parentId);
         $categoryIds = array_column($categories, 'id');
 
         return [
             'categories' => $categories,
-            'articles' => $this->readProductUrls($categoryIds, $shopContext),
+            'articles' => $this->readProductUrls($categoryIds),
             'blogs' => $this->readBlogUrls($parentId),
-            'customPages' => $this->readStaticUrls($shopContext),
-            'suppliers' => $this->readManufacturerUrls($shopContext),
-            'landingPages' => $this->readLandingPageUrls($shopContext),
-        ];
-    }
-
-    /**
-     * @param ShopContextInterface $shopContext
-     *
-     * @return array
-     */
-    public function getNewSitemapContent(ShopContextInterface $shopContext)
-    {
-        $parentId = $shopContext->getShop()->getCategory()->getId();
-
-        return [
-            'categories' => $this->readCategoryUrls($parentId, $shopContext),
-            'blogs' => $this->readBlogUrls($parentId),
-            'customPages' => $this->readStaticUrls($shopContext),
-            'suppliers' => $this->readManufacturerUrls($shopContext),
-            'landingPages' => $this->readLandingPageUrls($shopContext),
+            'customPages' => $this->readStaticUrls(),
+            'suppliers' => $this->readSupplierUrls(),
+            'landingPages' => $this->readLandingPageUrls(),
         ];
     }
 
@@ -137,10 +121,10 @@ class SitemapXMLRepository
      *
      * @return array
      */
-    private function readCategoryUrls($parentId, ShopContextInterface $shopContext)
+    private function readCategoryUrls($parentId)
     {
-        $categoryRepository = $this->em->getRepository(\Shopware\Models\Category\Category::class);
-        $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId());
+        $categoryRepository = $this->em->getRepository(Category::class);
+        $categories = $categoryRepository->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
 
         foreach ($categories as &$category) {
             $category['show'] = empty($category['external']);
@@ -160,7 +144,7 @@ class SitemapXMLRepository
     }
 
     /**
-     * Read article urls
+     * Read product urls
      *
      * @param int[] $categoryIds
      *
@@ -168,26 +152,20 @@ class SitemapXMLRepository
      *
      * @return array
      */
-    private function readProductUrls(array $categoryIds, ShopContextInterface $shopContext)
+    private function readProductUrls(array $categoryIds)
     {
         if (empty($categoryIds)) {
             return [];
         }
 
-        // We are using the ProductNumberSearchService to make sure all basic checks for valid articles are fulfilled.
-        $productNumberSearchResult = $this->productNumberSearch->search(
-            $this->storeFrontCriteriaFactory->createBaseCriteria($categoryIds, $shopContext),
-            $shopContext
-        );
+        $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria($categoryIds, $this->contextService->getShopContext());
 
-        $productIds = array_map(function (BaseProduct $baseProduct) {
-            return $baseProduct->getId();
-        }, array_values($productNumberSearchResult->getProducts()));
+        $productIds = $this->readProductUrlsRecursive($criteria);
 
         $statement = $this->connection->executeQuery(
-            'SELECT id, changetime FROM s_articles WHERE id IN (:productIds)',
-            [':productIds' => $productIds],
-            [':productIds' => Connection::PARAM_INT_ARRAY]
+            'SELECT id,changetime FROM s_articles WHERE id IN (:articleIds)',
+            [':articleIds' => $productIds],
+            [':articleIds' => Connection::PARAM_INT_ARRAY]
         );
 
         $products = [];
@@ -205,6 +183,43 @@ class SitemapXMLRepository
     }
 
     /**
+     * Reads all product urls recursive
+     *
+     * @param Criteria $criteria
+     *
+     * @return array
+     */
+    private function readProductUrlsRecursive(Criteria $criteria)
+    {
+        $result = [];
+        $criteria->limit($this->batchSize);
+
+        $productNumberSearchResult = $this->productNumberSearch->search(
+            $criteria,
+            $this->contextService->getShopContext()
+        );
+
+        $products = $productNumberSearchResult->getProducts();
+
+        if (empty($products)) {
+            return $result;
+        }
+
+        foreach ($products as $product) {
+            $result[] = $product->getId();
+        }
+
+        sort($result, SORT_NUMERIC);
+
+        $lastProductId = $result[count($result) - 1];
+
+        $criteria->removeBaseCondition('last_product_id');
+        $criteria->addBaseCondition(new LastProductIdCondition($lastProductId));
+
+        return array_merge($result, $this->readProductUrlsRecursive($criteria));
+    }
+
+    /**
      * Reads the blog item urls
      *
      * @param int $parentId
@@ -215,7 +230,7 @@ class SitemapXMLRepository
     {
         $blogs = [];
 
-        $categoryRepository = $this->em->getRepository(\Shopware\Models\Category\Category::class);
+        $categoryRepository = $this->em->getRepository('Shopware\Models\Category\Category');
         $query = $categoryRepository->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 
@@ -257,13 +272,11 @@ class SitemapXMLRepository
     /**
      * Helper function to Read the static pages urls
      *
-     * @param ShopContextInterface $shopContext
-     *
      * @return array
      */
-    private function readStaticUrls(ShopContextInterface $shopContext)
+    private function readStaticUrls()
     {
-        $shopId = $shopContext->getShop()->getId();
+        $shopId = $this->contextService->getShopContext()->getShop()->getId();
         $sites = $this->getSitesByShopId($shopId);
 
         foreach ($sites as $site) {
@@ -305,13 +318,13 @@ class SitemapXMLRepository
 
         $keys = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
-        $siteRepository = $this->em->getRepository(\Shopware\Models\Site\Site::class);
+        $siteRepository = $this->em->getRepository('Shopware\Models\Site\Site');
 
         $sites = [];
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
-                ->from(\Shopware\Models\Site\Site::class, 'sites', 'sites.id')
+                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
                 ->getQuery()
                 ->getArrayResult();
 
@@ -349,41 +362,39 @@ class SitemapXMLRepository
     }
 
     /**
-     * Helper function to read the manufacturer pages urls
-     *
-     * @param ShopContextInterface $shopContext
+     * Helper function to read the supplier pages urls
      *
      * @return array
      */
-    private function readManufacturerUrls(ShopContextInterface $shopContext)
+    private function readSupplierUrls()
     {
-        $manufacturers = $this->getManufacturersForSitemap($shopContext);
-        foreach ($manufacturers as &$manufacturer) {
-            $manufacturer['changed'] = new \DateTime($manufacturer['changed']);
-            $manufacturer['urlParams'] = [
+        $suppliers = $this->getSupplierForSitemap();
+        foreach ($suppliers as &$supplier) {
+            $supplier['urlParams'] = [
                 'sViewport' => 'listing',
                 'sAction' => 'manufacturer',
-                'sSupplier' => $manufacturer['id'],
+                'sSupplier' => $supplier['id'],
             ];
         }
 
-        return $manufacturers;
+        return $suppliers;
     }
 
     /**
      * Gets all suppliers that have products for the current shop
      *
-     * @param ShopContextInterface $shopContext
+     * @throws \Exception
      *
      * @return array
      */
-    private function getManufacturersForSitemap(ShopContextInterface $shopContext)
+    private function getSupplierForSitemap()
     {
-        $categoryId = $shopContext->getShop()->getCategory()->getId();
+        $context = $this->contextService->getShopContext();
+        $categoryId = $context->getShop()->getCategory()->getId();
 
         /** @var $query QueryBuilder */
         $query = $this->connection->createQueryBuilder();
-        $query->select(['manufacturer.id', 'manufacturer.name', 'manufacturer.changed']);
+        $query->select(['manufacturer.id', 'manufacturer.name']);
 
         $query->from('s_articles_supplier', 'manufacturer');
         $query->innerJoin('manufacturer', 's_articles', 'product', 'product.supplierID = manufacturer.id')
@@ -401,21 +412,18 @@ class SitemapXMLRepository
     /**
      * Helper function to read the landing pages urls
      *
-     * @param ShopContextInterface $shopContext
-     *
      * @return array
      */
-    private function readLandingPageUrls(ShopContextInterface $shopContext)
+    private function readLandingPageUrls()
     {
-        $emotionRepository = $this->em->getRepository(\Shopware\Models\Emotion\Emotion::class);
+        $emotionRepository = $this->em->getRepository('Shopware\Models\Emotion\Emotion');
 
-        $shopId = $shopContext->getShop()->getId();
+        $shopId = $this->contextService->getShopContext()->getShop()->getId();
 
         $builder = $emotionRepository->getCampaignsByShopId($shopId);
         $campaigns = $builder->getQuery()->getArrayResult();
 
         foreach ($campaigns as &$campaign) {
-            $campaign['changed'] = $campaign['modified'];
             $campaign['show'] = $this->filterCampaign($campaign['validFrom'], $campaign['validTo']);
             $campaign['urlParams'] = [
                 'sViewport' => 'campaign',
@@ -430,8 +438,8 @@ class SitemapXMLRepository
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param null|\DateTime $from
-     * @param null|\DateTime $to
+     * @param null $from
+     * @param null $to
      *
      * @return bool
      */

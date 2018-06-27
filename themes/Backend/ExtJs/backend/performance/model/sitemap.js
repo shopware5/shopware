@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,33 +19,38 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Performance
+ * @subpackage Model
+ * @version    $Id$
+ * @author shopware AG
  */
-
-namespace Shopware\Bundle\SitemapBundle\Subscriber;
-
-use Enlight\Event\SubscriberInterface;
-use Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml;
 
 /**
- * Class ServiceSubscriber
+ * Base config model which holds references to the config items
  */
-class ServiceSubscriber implements SubscriberInterface
-{
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SitemapIndexXml' => 'registerSitemapIndexXmlController',
-        ];
-    }
+//{block name="backend/performance/model/sitemap"}
+Ext.define('Shopware.apps.Performance.model.Sitemap', {
 
     /**
-     * @return string
+     * Extends the standard Ext Model
+     * @string
      */
-    public function registerSitemapIndexXmlController()
-    {
-        return SitemapIndexXml::class;
-    }
-}
+    extend:'Ext.data.Model',
+
+    /**
+     * Contains the model fields
+     * @array
+     */
+    fields:[
+        //{block name="backend/performance/model/sitemap/fields"}{/block}
+        { name:'id', type:'int' },
+
+        { name:'sitemapRefreshStrategy', type:'int' },
+        { name:'sitemapRefreshTime', type:'int' },
+        { name:'sitemapLastRefresh', type:'int' },
+    ]
+
+});
+//{/block}

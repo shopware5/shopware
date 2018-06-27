@@ -38,11 +38,8 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
-        set_time_limit(0);
-
-        /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
-        $sitemap = $this->get('sitemapxml.repository');
-        $this->View()->sitemap = $sitemap->getSitemapContent();
+        $this->redirect([
+            'controller' => 'sitemap_index.xml',
+        ]);
     }
 }

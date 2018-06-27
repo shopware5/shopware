@@ -32,7 +32,9 @@ use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
 interface SitemapListerInterface
 {
     /**
+     * @param int|null $shopId
+     *
      * @return Sitemap[]
      */
-    public function getSitemaps();
+    public function getSitemaps($shopId = null);
 }

@@ -39,7 +39,7 @@ class SitemapGenerateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:generate:sitemap')
-            ->setDescription('Generates sitemaps for a given shop (or all)')
+            ->setDescription('Generates sitemaps for a given shop (or all active ones)')
             ->addOption('shopId', 'i', InputOption::VALUE_OPTIONAL)
         ;
     }
@@ -52,26 +52,29 @@ class SitemapGenerateCommand extends ShopwareCommand
         $repository = $this->container->get('models')->getRepository(Shop::class);
 
         $shops = null;
+        $shopId = $input->getOption('shopId');
 
-        if ($input->getOption('shopId')) {
+        if ($shopId) {
             /** @var Shop $shop */
-            $shop = $repository->find($input->getOption('shopId'));
+            $shop = $repository->getById($shopId);
             if ($shop) {
                 $shops = [$shop];
+            } else {
+                throw new \RuntimeException(sprintf('Could not found a shop with id %d', $shopId));
             }
         }
 
         if (empty($shops)) {
-            $shops = $repository->findAll();
+            $shops = $repository->getActiveShopsFixed();
         }
 
         $sitemapExporter = $this->container->get('shopware_bundle_sitemap.service.sitemap_exporter');
         foreach ($shops as $shop) {
-            $output->write(sprintf('Generating sitemaps for shop #%d (%s)...', $shop->getId(), $shop->getName()));
+            $output->writeln(sprintf('Generating sitemaps for shop #%d (%s)...', $shop->getId(), $shop->getName()));
 
             $sitemapExporter->generate($shop);
-
-            $output->writeln('done!');
         }
+
+        $output->writeln('done!');
     }
 }

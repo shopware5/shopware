@@ -27,19 +27,19 @@ namespace Shopware\Bundle\SitemapBundle\Provider;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing;
-use Shopware\Components\Routing\Router;
-use Shopware\Components\SitemapXMLRepository;
+use Shopware\Models\Category\Category;
 
-class LegacyUrlProvider implements UrlProviderInterface
+class CategoryUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var SitemapXMLRepository
+     * @var ModelManager
      */
-    private $sitemapXMLRepository;
+    private $modelManager;
 
     /**
-     * @var Router
+     * @var Routing\Router
      */
     private $router;
 
@@ -49,20 +49,22 @@ class LegacyUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * @param Router               $router
-     * @param SitemapXMLRepository $sitemapXMLRepository
+     * CategoryUrlProvider constructor.
+     *
+     * @param ModelManager   $modelManager
+     * @param Routing\Router $router
      */
-    public function __construct(Router $router, SitemapXMLRepository $sitemapXMLRepository)
+    public function __construct(ModelManager $modelManager, Routing\Router $router)
     {
+        $this->modelManager = $modelManager;
         $this->router = $router;
-        $this->sitemapXMLRepository = $sitemapXMLRepository;
     }
 
     /**
      * @param Routing\Context      $routingContext
      * @param ShopContextInterface $shopContext
      *
-     * @return null|Url[]
+     * @return Url[]
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
@@ -70,25 +72,47 @@ class LegacyUrlProvider implements UrlProviderInterface
             return null;
         }
 
-        $routingParams = $this->sitemapXMLRepository->getSitemapContent($shopContext);
+        $parentId = $shopContext->getShop()->getCategory()->getId();
+        $categoryRepository = $this->modelManager->getRepository(Category::class);
+        $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId());
 
+        foreach ($categories as $key => &$category) {
+            if (!empty($category['external'])) {
+                unset($categories[$key]);
+            }
+
+            $category['urlParams'] = [
+                'sViewport' => 'cat',
+                'sCategory' => $category['id'],
+                'title' => $category['name'],
+            ];
+
+            if ($category['blog']) {
+                $category['urlParams']['sViewport'] = 'blog';
+            }
+        }
+
+        unset($category);
+
+        $categories = array_values($categories);
+
+        $routes = $this->router->generateList(array_column($categories, 'urlParams'), $routingContext);
         $urls = [];
-        foreach ($routingParams as $area => $urlParams) {
-            if (empty($urlParams)) {
-                continue;
-            }
 
-            $routes = $this->router->generateList(array_map(function (array $param) {
-                return $param['urlParams'];
-            }, $urlParams), $routingContext);
-
-            for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-                $urls[] = new Url($routes[$i], $urlParams[$i]['changed'], 'weekly');
-            }
+        for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
+            $urls[] = new Url($routes[$i], $categories[$i]['changed'], 'weekly');
         }
 
         $this->allExported = true;
 
         return $urls;
+    }
+
+    /**
+     * Resets the provider for next sitemap generation
+     */
+    public function reset()
+    {
+        $this->allExported = false;
     }
 }

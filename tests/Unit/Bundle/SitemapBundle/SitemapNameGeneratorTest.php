@@ -22,24 +22,37 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle;
+namespace Shopware\Tests\Unit\Bundle\SitemapBundle;
 
-use Shopware\Bundle\SitemapBundle\Struct\Url;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\SitemapBundle\Service\SitemapNameGenerator;
 
-interface UrlProviderInterface
+class SitemapNameGeneratorTest extends TestCase
 {
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return null|Url[]
+     * @var SitemapNameGenerator
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);
+    private $generator;
 
-    /**
-     * Resets the provider for next sitemap generation
-     */
-    public function reset();
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->generator = new SitemapNameGenerator(__DIR__);
+    }
+
+    public function testPathGeneration()
+    {
+        $name = __DIR__ . '/sitemap-shop-1-1.xml.gz';
+        $this->assertSame($name, $this->generator->getSitemapFilename(1));
+        touch(__DIR__ . '/sitemap-shop-1-1.xml.gz');
+
+        $this->assertSame(__DIR__ . '/sitemap-shop-1-2.xml.gz', $this->generator->getSitemapFilename(1));
+
+        unlink($name);
+    }
+
+    public function testGlobGeneration()
+    {
+        $this->assertSame('sitemap-shop-1-*.xml.gz', $this->generator->getSitemapFilenameGlob(1));
+    }
 }

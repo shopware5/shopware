@@ -107,7 +107,7 @@ class SitemapWriter implements SitemapWriterInterface
         $this->openFile($shop->getId());
 
         foreach ($urls as $url) {
-            if ($this->files[$shop->getId()]['urlCount'] >= 49999) {
+            if ($this->files[$shop->getId()]['urlCount'] >= self::SITEMAP_URL_LIMIT) {
                 $this->closeFile($shop->getId());
 
                 $this->openFile($shop->getId());
@@ -128,7 +128,7 @@ class SitemapWriter implements SitemapWriterInterface
     /**
      * @param int $shopId
      *
-     * @throws \Shopware\Bundle\SitemapBundle\Exception\UnknownFileException
+     * @throws UnknownFileException
      *
      * @return bool
      */

@@ -21,25 +21,23 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Bundle\SitemapBundle;
-
-use Shopware\Bundle\SitemapBundle\Struct\Url;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
-
-interface UrlProviderInterface
+class Migrations_Migration1418 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return null|Url[]
-     */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);
+    public function up($modus)
+    {
+        $sql = <<<'EOD'
+INSERT IGNORE INTO `s_core_config_elements`
+  (`name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
+VALUES
+('sitemapRefreshStrategy', 'i:3;', '', '', '', 1, 0, 0, ''),
+('sitemapRefreshTime', 'i:86400;', '', '', '', 1, 0, 0, ''),
+('sitemapLastRefresh', 'i:0;', '', '', '', 1, 0, 0, '');
+EOD;
 
-    /**
-     * Resets the provider for next sitemap generation
-     */
-    public function reset();
+        $this->addSql($sql);
+
+        $sql = "INSERT INTO `s_crontab` (`name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `disable_on_error`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
+                ('Sitemap generation', 'SitemapGeneration', NULL, '', (CURDATE()), NULL, 86400, 0, 0, '2016-01-01 01:00:00', '', '', NULL);";
+        $this->addSql($sql);
+    }
 }
