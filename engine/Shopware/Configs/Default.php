@@ -299,6 +299,7 @@ return array_replace_recursive([
     'web' => [
         'webDir' => $this->DocPath('web'),
         'cacheDir' => $this->DocPath('web_cache'),
+        'sitemapDir' => $this->DocPath('web_sitemap'),
     ],
     'mpdf' => [
         // Passed to \Mpdf\Mpdf::__construct:

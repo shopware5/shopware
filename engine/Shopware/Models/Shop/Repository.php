@@ -341,6 +341,22 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns the active shops in fixed
+     *
+     * @return array
+     */
+    public function getActiveShopsFixed()
+    {
+        $shops = $this->getActiveShops();
+
+        foreach ($shops as $shop) {
+            $this->fixActive($shop);
+        }
+
+        return $shops;
+    }
+
+    /**
      * @param \Enlight_Controller_Request_Request $request
      *
      * @return DetachedShop
@@ -486,7 +502,7 @@ class Repository extends ModelRepository
                 if (!$shop || $currentShop['base_url'] > $shop['base_url']) {
                     $shop = $currentShop;
                 }
-            } elseif (!$shop && $currentShop['base_path'] . '/' === $requestPath) {
+            } elseif (!$shop && $requestPath === $currentShop['base_path'] . '/') {
                 /*
                  * If no shop was found, use the one which basePath equals the requestPath
                  *
