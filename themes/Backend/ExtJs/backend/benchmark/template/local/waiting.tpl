@@ -1,9 +1,16 @@
 {extends file="backend/benchmark/template/local/index.tpl"}
 
+{block name="benchmark_index_head_scripts"}
+	{$smarty.block.parent}
+	<script type="text/javascript" src="{link file="backend/base/frame/postmessage-api.js"}"></script>
+{/block}
+
 {block name="benchmark_index_title"}Shopware BI - Waiting{/block}
 
 {block name="benchmark_index_body"}
     <body id="swag-waiting">
+		{include file="backend/benchmark/template/local/include/loading_indicator.tpl"}
+		{include file="backend/benchmark/template/local/include/language_switch.tpl"}
         <div class="wrapper swag-onbording waiting">
             <div class="row">
                 <div class="col-100">
@@ -24,7 +31,7 @@
                 </div>
 
                 <div class="col-100">
-                    <button class="btn primary" type="submit">
+                    <button class="btn primary" onclick="window.parent.postMessage('closeWindow', window.location.origin)">
                         [[ $t('waitingButton{$waitingSinceDays}') ]]
                     </button>
                 </div>
