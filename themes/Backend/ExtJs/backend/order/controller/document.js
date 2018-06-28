@@ -67,19 +67,20 @@ Ext.define('Shopware.apps.Order.controller.Document', {
     openMail: function(record) {
         var me = this,
             order = me.getDocumentWindow().record,
-            documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
+            documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType'),
+            listingStore = me.getListing() ? me.getListing().listStore : null;
 
         // The window depends on a completely loaded documentTypeStore. So we load it here and open the window
         // after successful loading.
         documentTypeStore.load({
             scope: me,
             callback: function() {
-                this.getView('mail.Window').create({
+                me.getView('mail.Window').create({
                     record: order,
                     order: order,
                     preSelectedAttachment: record,
                     documentTypeStore: documentTypeStore,
-                    listStore: this.getListing().listStore
+                    listStore: listingStore
                 }).show();
             }
         });

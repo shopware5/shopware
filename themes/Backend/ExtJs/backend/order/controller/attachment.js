@@ -184,9 +184,12 @@ Ext.define('Shopware.apps.Order.controller.Attachment', {
     callStoreReload: function(attachmentGrid, addAsAttachment, listStore) {
         var me = this;
 
-        listStore.reload({
-            callback: Ext.bind(me.applyNewDocument, me, [attachmentGrid, addAsAttachment])
-        });
+        // if no listStore is available no need to reload & update ui
+        if (listStore) {
+            listStore.reload({
+                callback: Ext.bind(me.applyNewDocument, me, [attachmentGrid, addAsAttachment])
+            });
+        }
     },
 
     /**
