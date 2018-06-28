@@ -33,7 +33,7 @@ class SitemapIndexXml extends \Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        if ($this->Request()->getRequestUri() !== '/sitemap_index.xml') {
+        if ($this->Request()->getPathInfo() !== '/sitemap_index.xml') {
             $this->redirect(['controller' => 'sitemap_index.xml']);
 
             return;
