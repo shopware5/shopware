@@ -975,7 +975,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 a.id as articleID,
                 ob.quantity,
                 IF(ad.instock < 0, 0, ad.instock) as instock,
-                a.laststock,
+                ad.laststock,
                 ad.ordernumber as ordernumber
             FROM s_articles a
             LEFT JOIN s_articles_details ad
