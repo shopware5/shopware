@@ -931,6 +931,36 @@ WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE';
 
 
 
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for signing up at {$sShop}.
+Please confirm your registration by clicking the following link:
+
+{$sConfirmLink}
+
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for signing up at {$sShop}.<br/>
+        Please confirm your registration by clicking the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm registration</a><br/>
+        <br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTER';
+
+
+
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Your article is available again',`content` = '{include file="string:{config name=emailheaderplain}"}
 
 Hello,
