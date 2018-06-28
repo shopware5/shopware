@@ -514,8 +514,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * The loadStoresAction function is an ExtJs event listener method of the article backend module.
      * The function is used to load all required stores for the article detail page in one request.
-     *
-     * @return array
      */
     public function loadStoresAction()
     {
