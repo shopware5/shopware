@@ -18,6 +18,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed SitemapXMLRepository to collect 10.000 products in batch, because of elastic search limitations
 * Changed VariantFilter to work with MariaDB
 * Changed error in language handling of mail templates
+* Changed listing filters to work on mobile devices
 
 ## 5.4.5
 
