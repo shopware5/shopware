@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed listing filters to work on mobile devices
 * Changed listing controller to load custom templates on pages containing an emotion component
 * Changed Notification plugin behaviour to also be displayed if the minimal purchase is higher than stock
+* Changed "My orders" in account to also show when ESD is disabled
 
 ## 5.4.5
 
