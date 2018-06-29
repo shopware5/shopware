@@ -184,11 +184,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 ->from('s_emotion_categories', 'emotion_categories')
                 ->innerJoin('emotion_categories', 's_emotion', 'emotion', 'emotion_categories.emotion_id = emotion.id')
                 ->andWhere('emotion_categories.category_id = :categoryId')
-                ->andWhere('(emotion.valid_from <= :now OR emotions.valid_from IS NULL)')
-                ->andWhere('(emotions.valid_to >= :now OR emotions.valid_to IS NULL)')
-                ->andWhere('emotions.is_landingpage = 0 ')
-                ->andWhere('emotions.active = 1 ')
-                ->andWhere('emotions.preview_id IS NULL')
+                ->andWhere('(emotion.valid_from <= :now OR emotion.valid_from IS NULL)')
+                ->andWhere('(emotion.valid_to >= :now OR emotion.valid_to IS NULL)')
+                ->andWhere('emotion.is_landingpage = 0 ')
+                ->andWhere('emotion.active = 1 ')
+                ->andWhere('emotion.preview_id IS NULL')
                 ->setParameter('categoryId', $categoryId)
                 ->setParameter('now', new \DateTime());
 
