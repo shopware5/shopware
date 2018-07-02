@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed error behaviour of blog article evaluations when the Double-Opt-In confirmation link is invalid
 * Changed behaviour of the notification plugin, so that it will only notify the customer if the stock is at least as high as the minimal purchase amount
 * Changed SitemapXMLRepository to collect 10.000 products in batch, because of elastic search limitations
+* Changed VariantFilter to work with MariaDB
 
 ## 5.4.5
 

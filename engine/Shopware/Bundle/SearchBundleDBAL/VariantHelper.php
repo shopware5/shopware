@@ -102,7 +102,7 @@ class VariantHelper implements VariantHelperInterface
      */
     public function getVariantFacet()
     {
-        if ($this->variantFacet !== false) {
+        if (false !== $this->variantFacet) {
             return $this->variantFacet;
         }
 
@@ -314,9 +314,7 @@ class VariantHelper implements VariantHelperInterface
         $query->select([
             'prices.*',
             'MIN(' . $selection . ') AS cheapest_price',
-            'prices.articledetailsID AS variant_id',
             'COUNT(DISTINCT price) as different_price_count',
-            'prices.articleID AS product_id',
         ]);
 
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
@@ -380,9 +378,7 @@ class VariantHelper implements VariantHelperInterface
         $query->select([
             'prices.*',
             'MAX(' . $selection . ') AS cheapest_price',
-            'prices.articledetailsID AS variant_id',
             'COUNT(DISTINCT price) as different_price_count',
-            'prices.articleID AS product_id',
         ]);
 
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
