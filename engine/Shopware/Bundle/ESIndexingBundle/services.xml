@@ -181,6 +181,8 @@
         </service>
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand" id="shopware_elastic_search.commands.backlog_sync_command">
+            <argument>%shopware.es.batchsize%</argument>
+
             <tag name="console.command"/>
         </service>
 

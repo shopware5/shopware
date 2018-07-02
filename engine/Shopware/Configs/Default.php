@@ -134,6 +134,7 @@ return array_replace_recursive([
         'number_of_replicas' => null,
         'number_of_shards' => null,
         'wait_for_status' => 'green',
+        'batchsize' => 500,
         'backend' => [
             'write_backlog' => false,
             'enabled' => false,
