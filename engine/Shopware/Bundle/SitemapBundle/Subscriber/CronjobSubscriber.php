@@ -48,8 +48,6 @@ class CronjobSubscriber implements SubscriberInterface
     private $sitemapExporter;
 
     /**
-     * CronjobSubscriber constructor.
-     *
      * @param Config                   $config
      * @param ModelManager             $modelManager
      * @param SitemapExporterInterface $sitemapExporter

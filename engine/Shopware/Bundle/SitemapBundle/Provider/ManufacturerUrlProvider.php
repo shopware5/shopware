@@ -49,7 +49,8 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * {@inheritdoc}
+     * @param Connection     $connection
+     * @param Routing\Router $router
      */
     public function __construct(Connection $connection, Routing\Router $router)
     {
@@ -58,15 +59,12 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
-            return null;
+            return [];
         }
 
         $manufacturers = $this->getManufacturersForSitemap($shopContext);

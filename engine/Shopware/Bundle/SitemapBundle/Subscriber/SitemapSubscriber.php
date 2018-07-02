@@ -58,10 +58,7 @@ class SitemapSubscriber implements SubscriberInterface
     private $modelManager;
 
     /**
-     * SitemapSubscriber constructor.
-     *
      * @param Config                   $config
-     * @param SitemapListerInterface   $sitemapLister
      * @param SitemapExporterInterface $sitemapExporter
      * @param ModelManager             $modelManager
      */

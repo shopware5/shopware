@@ -65,11 +65,11 @@ class SitemapLister implements SitemapListerInterface
      */
     public function getSitemaps($shopId = null)
     {
+        $iterator = new \DirectoryIterator($this->sitemapDirectory);
+
         if ($shopId) {
             $dir = rtrim($this->sitemapDirectory, DIRECTORY_SEPARATOR);
             $iterator = new \GlobIterator($dir . DIRECTORY_SEPARATOR . $this->nameGenerator->getSitemapFilenameGlob($shopId));
-        } else {
-            $iterator = new \DirectoryIterator($this->sitemapDirectory);
         }
 
         $sitemaps = [];
