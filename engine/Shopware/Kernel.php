@@ -670,6 +670,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('StoreFrontBundle/services.xml');
         $loader->load('PluginInstallerBundle/services.xml');
         $loader->load('ESIndexingBundle/services.xml');
+        $loader->load('EsdBundle/services.xml');
         $loader->load('MediaBundle/services.xml');
         $loader->load('FormBundle/services.xml');
         $loader->load('AccountBundle/services.xml');
