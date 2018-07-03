@@ -931,7 +931,8 @@ WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE';
 
 
 
-UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = '{include file="string:{config name=emailheaderplain}"}
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your registration at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
 
 Hello,
 
