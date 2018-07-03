@@ -395,7 +395,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var \Shopware\Bundle\EsdBundle\Service\DownloadInterface $downloadService */
         $downloadService = $this->container->get('shopware_esd.download_service');
 
-        if ($downloadService->existsFile($download['file'])) {
+        if (!$downloadService->existsFile($download['file'])) {
             $this->View()->sErrorCode = 2;
 
             return $this->forward('downloads');
