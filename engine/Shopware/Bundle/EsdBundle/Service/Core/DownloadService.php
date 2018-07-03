@@ -43,7 +43,7 @@ class DownloadService implements DownloadInterface
      */
     public function getAbsoluteFilePath($file)
     {
-        return $this->shopwareRootDirectory . $this->getRelativeFilePath($this);
+        return $this->shopwareRootDirectory . $this->getRelativeFilePath($file);
     }
 
     /**
