@@ -24,6 +24,8 @@ class DownloadService implements DownloadInterface
     private $front;
 
     /**
+     * @param $shopwareRootDirectory
+     * @param Shopware_Components_Config $config
      * @param Enlight_Controller_Front $front
      */
     public function __construct(
