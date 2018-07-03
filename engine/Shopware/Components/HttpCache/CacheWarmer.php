@@ -26,6 +26,7 @@ namespace Shopware\Components\HttpCache;
 
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Logger;
 
@@ -213,6 +214,16 @@ class CacheWarmer
             $request = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
             try {
                 $this->guzzleClient->send($request);
+            } catch (ClientException $e) {
+                if ($e->getResponse() && $e->getResponse()->getStatusCode() === 404) {
+                    $this->logger->notice(
+                        'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
+                    );
+                } else {
+                    $this->logger->error(
+                        'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
+                    );
+                }
             } catch (\Exception $e) {
                 $this->logger->error(
                     'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()

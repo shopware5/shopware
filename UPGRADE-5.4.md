@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added new mail template for Double-Opt-In used by blog article evaluations: `sOPTINBLOGCOMMENT`
 * Added `sitemap.batchsize` config option to configure the amount of collected products per process in the SitemapXMLRepository
+* Added `logger.level` config option, to define log level. Default in production is level `ERROR`
 
 ### Changes
 
@@ -22,6 +23,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed listing controller to load custom templates on pages containing an emotion component
 * Changed Notification plugin behaviour to also be displayed if the minimal purchase is higher than stock
 * Changed "My orders" in account to also show when ESD is disabled
+* Changed EnlightMailHandler to only handle errors
+* Changed `Shopware\Components\HttpCache\CacheWarmer` to log 404 as notice
 
 ## 5.4.5
 
