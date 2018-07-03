@@ -80,7 +80,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Sitemaps will be now served from cache and compressed with gzip
     * Added new DI tag ``sitemap_url_provider`` to add custom sitemap url provider.
     * Added new interface ``Shopware\Bundle\SitemapBundle\UrlProviderInterface`` for url providers
-** Added new event ``KernelEvents::TERMINATE``, which will be fired when the kernel terminates
+* Added new event ``KernelEvents::TERMINATE``, which will be fired after the response has been sent, when the kernel terminates
+* Added new DIC parameter `shopware.es.batchsize` (configurable via `config.php`) to change the number of products that are send to elasticsearch in one batch
 
 ### Changes
 
