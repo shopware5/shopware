@@ -42,10 +42,10 @@ class StatisticsResponseHydrator implements HydratorInterface
             throw new StatisticsHydratingException(sprintf('Expected field "message" to be "success", was "%s"', $data['message']));
         }
 
-        if (empty($data['mappedResponseID'])) {
+        if (empty($data['responseToken'])) {
             throw new StatisticsHydratingException('Missing field "token" from server response');
         }
 
-        return new StatisticsResponse($date = new \DateTime('now'), $data['mappedResponseID']);
+        return new StatisticsResponse($date = new \DateTime('now'), $data['responseToken']);
     }
 }
