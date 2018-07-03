@@ -35,6 +35,11 @@ class ShopProvider implements BenchmarkProviderInterface
      */
     private $dbalConnection;
 
+    /**
+     * @var int
+     */
+    private $shopId;
+
     public function __construct(Connection $dbalConnection)
     {
         $this->dbalConnection = $dbalConnection;
@@ -52,9 +57,12 @@ class ShopProvider implements BenchmarkProviderInterface
     {
         $now = new \DateTime('now');
 
+        $this->shopId = $shopContext->getShop()->getId();
+
         return [
             'id' => $this->getUniqueShopHash(),
             'industry' => $this->getIndustry(),
+            'type' => $this->getType(),
             'datetime' => $now->format('Y-m-d H:i:s'),
         ];
     }
@@ -66,10 +74,16 @@ class ShopProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return $queryBuilder->select('config.id')
+        $shopHash = \Ramsey\Uuid\Uuid::fromBytes(
+            $queryBuilder->select('config.id')
             ->from('s_benchmark_config', 'config')
+            ->where('config.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->execute()
-            ->fetchColumn();
+            ->fetchColumn()
+        );
+
+        return $shopHash->toString();
     }
 
     /**
@@ -80,7 +94,24 @@ class ShopProvider implements BenchmarkProviderInterface
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
         return $queryBuilder->select('industry')
-            ->from('s_benchmark_config')
+            ->from('s_benchmark_config', 'config')
+            ->where('config.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetchColumn();
+    }
+
+    /**
+     * @return string
+     */
+    private function getType()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('type')
+            ->from('s_benchmark_config', 'config')
+            ->where('config.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetchColumn();
     }
