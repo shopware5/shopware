@@ -48,33 +48,36 @@ class TransmitStatisticsCommand extends ShopwareCommand
     {
         $benchmarkRepository = $this->container->get('shopware.benchmark_bundle.repository.config');
 
-        $config = $benchmarkRepository->getMainConfig();
+        $shopConfigs = $benchmarkRepository->getShopConfigs();
+        foreach ($shopConfigs as $config) {
+            if (!$config['active']) {
+                $output->writeln(sprintf('<comment>Benchmarks for shop with ID %s are deactivated, doing nothing.</comment>', $config['shopId']));
+                continue;
+            }
 
-        if (!$config->isActive()) {
-            $output->writeln('<comment>Benchmarks are deactivated, doing nothing.</comment>');
-            exit(1);
+            $lastReceived = \DateTime::createFromFormat('Y-m-d H:i:s', $config['lastReceived']);
+            if (!$input->getOption('force') &&
+                $lastReceived->add(new \DateInterval('P1D')) > new \DateTime('now', new \DateTimeZone('UTC'))) {
+                $output->writeln(sprintf('<comment>No retrieval currently necessary for shop with ID %s.</comment>', $config['shopId']));
+                continue;
+            }
+
+            $lastSent = \DateTime::createFromFormat('Y-m-d H:i:s', $config['lastSent']);
+            if (!$input->getOption('force') &&
+                $lastSent->add(new \DateInterval('P1D')) > new \DateTime('now', new \DateTimeZone('UTC'))) {
+                $output->writeln(sprintf('<comment>No transmission currently necessary for shop with ID %s.</comment>', $config['shopId']));
+                continue;
+            }
+
+            $output->write(sprintf('Transmitting statistics for shop with ID %s...', $config['shopId']));
+            $statistics = $this->container->get('shopware.benchmark_bundle.statistics_transmission');
+            $statistics->transmit($config['shopId']);
+            $output->writeln('<info>done!</info>');
+
+            $output->write(sprintf('Retrieving business intelligence for shop with ID %s...', $config['shopId']));
+            $benchmark = $this->container->get('shopware.benchmark_bundle.bi_transmission');
+            $benchmark->transmit($config['shopId']);
+            $output->writeln('<info>done!</info>');
         }
-
-        if (!$input->getOption('force') &&
-            $config->getLastReceived()->add(new \DateInterval('P1D')) > new \DateTime('now', new \DateTimeZone('UTC'))) {
-            $output->writeln('<comment>No retrieval currently necessary.</comment>');
-            exit(1);
-        }
-
-        if (!$input->getOption('force') &&
-            $config->getLastSent()->add(new \DateInterval('P1D')) > new \DateTime('now', new \DateTimeZone('UTC'))) {
-            $output->writeln('<comment>No transmission currently necessary.</comment>');
-            exit(1);
-        }
-
-        $output->write('Transmitting statistics...');
-        $statistics = $this->container->get('shopware.benchmark_bundle.statistics_transmission');
-        $statistics->transmit();
-        $output->writeln('<info>done!</info>');
-
-        $output->write('Retrieving business intelligence...');
-        $benchmark = $this->container->get('shopware.benchmark_bundle.bi_transmission');
-        $benchmark->transmit();
-        $output->writeln('<info>done!</info>');
     }
 }

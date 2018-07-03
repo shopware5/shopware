@@ -38,8 +38,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
-        $this->installDemoData('benchmark_config');
-
+        Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
         $controller->indexAction();
 
         $redirect = $this->getRedirect($controller->Response());

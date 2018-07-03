@@ -28,16 +28,6 @@ Ext.define('Shopware.apps.Benchmark.controller.Main', {
         if (this.subApplication.action === 'Settings') {
             windowName = 'settings.Window';
             params = {};
-
-            Ext.Ajax.request({
-                url: '{url controller=Benchmark action=loadSettings}',
-                success: function (response) {
-                    var settingsData = Ext.decode(response.responseText);
-
-                    me.getSettingsPanel().loadSettingsRecord(settingsData);
-                    me.getSettingsPanel().setLoading(false);
-                }
-            });
         }
 
         me.mainWindow = me.getView(windowName).create(params).show();

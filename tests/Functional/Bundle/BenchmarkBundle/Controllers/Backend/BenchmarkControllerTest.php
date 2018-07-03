@@ -31,52 +31,6 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testLoadSettingsAction()
-    {
-        /** @var \Shopware_Controllers_Backend_Benchmark $controller */
-        $controller = $this->getController();
-
-        $this->installDemoData('order_basic');
-        $this->installDemoData('benchmark_config');
-
-        $this->setSetting('industry', 1);
-        $this->setSetting('last_order_id', 1);
-
-        $controller->loadSettingsAction();
-        $settings = $controller->View()->getAssign('data');
-
-        $this->assertArraySubset([
-            'active' => null,
-            'lastSent' => '1990-01-01 00:00:00',
-            'lastReceived' => '1990-01-01 00:00:00',
-            'lastOrderNumber' => '20000',
-            'batchSize' => 1000,
-            'industry' => 1,
-        ], $settings);
-
-        $this->assertInternalType(\PHPUnit_Framework_Constraint_IsType::TYPE_INT, $settings['industry']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
-    public function testSaveSettingsAction()
-    {
-        /** @var \Shopware_Controllers_Backend_Benchmark $controller */
-        $controller = $this->getController();
-
-        $this->installDemoData('benchmark_config');
-
-        $controller->Request()->setParam('batchSize', 5000);
-
-        $controller->saveSettingsAction();
-
-        $this->assertEquals(5000, $this->loadSettingColumn('config.batch_size'));
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
     public function testSaveIndustryAction()
     {
         /** @var \Shopware_Controllers_Backend_Benchmark $controller */
@@ -84,6 +38,7 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
 
+        $controller->Request()->setParam('shopId', 1);
         $controller->Request()->setParam('industry', 15);
 
         $controller->saveIndustryAction();
@@ -101,10 +56,29 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $this->installDemoData('benchmark_config');
 
+        $controller->Request()->setParam('shopId', 1);
         $controller->Request()->setParam('active', 1);
 
         $controller->setActiveAction();
 
         $this->assertEquals(1, $this->loadSettingColumn('config.active'));
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testSaveTypeAction()
+    {
+        /** @var \Shopware_Controllers_Backend_Benchmark $controller */
+        $controller = $this->getController();
+
+        $this->installDemoData('benchmark_config');
+
+        $controller->Request()->setParam('shopId', 1);
+        $controller->Request()->setParam('type', 'b2c');
+
+        $controller->saveTypeAction();
+
+        $this->assertEquals('b2c', $this->loadSettingColumn('config.type'));
     }
 }

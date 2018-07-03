@@ -54,10 +54,10 @@ class BenchmarkStatisticsService
     private $biService;
 
     /**
-     * @param StatisticsService $statistics
-     * @param BenchmarkRepository $benchmarkRepository
+     * @param StatisticsService           $statistics
+     * @param BenchmarkRepository         $benchmarkRepository
      * @param BusinessIntelligenceService $biService
-     * @param DateInterval|null $interval
+     * @param DateInterval|null           $interval
      *
      * @throws \Exception
      */
@@ -73,10 +73,15 @@ class BenchmarkStatisticsService
         $this->interval = $interval ?: new DateInterval('P1D');
     }
 
-    public function sendBenchmarkData()
+    /**
+     * @param int $shopId
+     *
+     * @return BenchmarkDataResult
+     */
+    public function sendBenchmarkData($shopId)
     {
         /** @var BenchmarkConfig $benchmarkConfig */
-        $benchmarkConfig = $this->benchmarkRepository->getMainConfig();
+        $benchmarkConfig = $this->benchmarkRepository->getConfigForShop($shopId);
 
         $statisticsResponse = null;
         $biResponse = null;
@@ -84,15 +89,13 @@ class BenchmarkStatisticsService
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
         if ($benchmarkConfig->isActive()) {
-
             if ($benchmarkConfig->getLastSent()->add($this->interval) < $now) {
-                $statisticsResponse = $this->statistics->transmit();
+                $statisticsResponse = $this->statistics->transmit($shopId);
             }
 
             if ($benchmarkConfig->getLastReceived()->add($this->interval) < $now) {
-                $biResponse = $this->biService->transmit();
+                $biResponse = $this->biService->transmit($shopId);
             }
-
         }
 
         return new BenchmarkDataResult($statisticsResponse, $biResponse);

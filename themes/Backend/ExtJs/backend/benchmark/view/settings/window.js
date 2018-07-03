@@ -17,18 +17,19 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
     initComponent: function () {
         this.items = this.createItems();
 
-        // Is removed in controller/main.js
-        this.setLoading(true);
-
         this.callParent(arguments);
+    },
+
+    loadRecord: function (record) {
+        this.down('form[name=benchmark-settings-panel]').loadRecord(record);
     },
 
     /**
      * @returns { Ext.form.Panel[] }
      */
     createItems: function () {
-        var activationFieldSet = this.createActivationFieldSet(),
-            deActivationFieldSet = this.createDeactivationFieldSet();
+        var me = this,
+            shopFieldSet = this.createShopFieldSet();
 
         return [
             Ext.create('Ext.form.Panel', {
@@ -36,13 +37,11 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
                 name: 'benchmark-settings-panel',
                 bodyPadding: 10,
                 items: [
-                    /*{if {acl_is_allowed privilege=manage}}*/
-                    activationFieldSet,
-                    deActivationFieldSet,
-                    this.createSettingsFieldSet(),
-                    /*{/if}*/
+                    shopFieldSet,
                     this.createIndustryFieldSet(),
-                    this.createInfoFieldSet()
+                    /*{if {acl_is_allowed privilege=manage}}*/
+                    this.createBusinessPlanFieldSet()
+                    /*{/if}*/
                 ],
 
                 /**
@@ -51,8 +50,8 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
                 loadSettingsRecord: function (settingsData) {
                     var active = settingsData.data.active;
 
-                    deActivationFieldSet[~~(active) === 1 ? 'show' : 'hide']();
-                    activationFieldSet[~~(active) === 0 ? 'show' : 'hide']();
+                    me.deActivationContainer[~~(active) === 1 ? 'show' : 'hide']();
+                    me.activationContainer[~~(active) === 0 ? 'show' : 'hide']();
 
                     this.loadRecord(settingsData);
                 }
@@ -62,112 +61,121 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
     /**
      * @returns { Ext.form.FieldSet }
      */
-    createActivationFieldSet: function () {
-        var me = this;
+    createShopFieldSet: function () {
+        this.activationContainer = this.createActivationContainer();
+        this.deActivationContainer = this.createDeactivationContainer();
 
         return Ext.create('Ext.form.FieldSet', {
-            title: '{s name="settings/fieldsets/activation/title"}Participate{/s}',
-            name: 'activationFieldSet',
+            title: '{s name="settings/fieldsets/shop/title"}Shop selection{/s}',
+            name: 'shopFieldSet',
+            items: [
+                this.createShopSelection(),
+                this.activationContainer,
+                this.deActivationContainer
+            ]
+        });
+    },
+
+    /**
+     * @returns { Ext.form.field.ComboBox }
+     */
+    createShopSelection: function () {
+        var me = this;
+
+        me.comboBox = Ext.create('Ext.form.field.ComboBox', {
+            anchor: '100%',
+            name: 'shopSelection',
+            displayField: 'shopName',
+            valueField: 'shopId',
+            editable: false,
+            store: Ext.create('Shopware.apps.Benchmark.store.ShopConfigs').load(function () {
+                me.fireEvent('shopConfigLoaded', this, me.comboBox);
+            }),
+            fieldLabel: 'Shop',
+            listeners: {
+                select: function (combo, records) {
+                    me.fireEvent('configSelected', me, combo, records[0]);
+                }
+            }
+        });
+
+        return me.comboBox;
+    },
+
+    /**
+     * @returns { Ext.container.Container }
+     */
+    createActivationContainer: function () {
+        var me = this;
+
+        return Ext.create('Ext.container.Container', {
+            layout: 'hbox',
+            name: 'activationContainer',
+            style: {
+                margin: '20px 0'
+            },
             hidden: true,
-            items: Ext.create('Ext.container.Container', {
-                layout: 'hbox',
-                items: [
-                    {
-                        xtype: 'container',
-                        html: '{s name="settings/fieldsets/activation/text"}I would like to participate.{/s}',
-                        style: {
-                            fontWeight: 'bold',
-                            fontSize: '11px',
-                            color: '#475c6a'
-                        },
-                        flex: 1
-                    }, {
-                        xtype: 'button',
-                        text: '{s name="settings/fieldsets/activation/button"}Participate now{/s}',
-                        cls: 'primary',
-                        flex: 1,
-                        handler: function () {
-                            me.fireEvent('activateBenchmark');
-                        }
+            items: [
+                /*{if {acl_is_allowed privilege=manage}}*/
+                {
+                    xtype: 'container',
+                    html: '{s name="settings/fieldsets/shop/activation_text"}I would like to participate.{/s}',
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '11px',
+                        color: '#475c6a'
+                    },
+                    flex: 1
+                },
+                {
+                    xtype: 'button',
+                    text: '{s name="settings/fieldsets/shop/activation_button"}Participate now{/s}',
+                    cls: 'primary',
+                    flex: 1,
+                    handler: function () {
+                        me.fireEvent('activateBenchmark');
                     }
-                ]
-            })
+                }
+                /*{/if}*/
+            ]
         });
     },
 
     /**
      * @returns { Ext.form.FieldSet }
      */
-    createDeactivationFieldSet: function () {
+    createDeactivationContainer: function () {
         var me = this;
 
-        return Ext.create('Ext.form.FieldSet', {
-            title: '{s name="settings/fieldsets/deactivation/title"}Sign off{/s}',
-            name: 'deactivationFieldSet',
+        return Ext.create('Ext.container.Container', {
+            layout: 'hbox',
+            name: 'deActivationContainer',
+            style: {
+                margin: '20px 0'
+            },
             hidden: true,
-            items: Ext.create('Ext.container.Container', {
-                layout: 'hbox',
-                items: [
-                    {
-                        xtype: 'container',
-                        html: '{s name="settings/fieldsets/deactivation/text"}I want to stop the service.{/s}',
-                        style: {
-                            fontWeight: 'bold',
-                            fontSize: '11px',
-                            color: '#475c6a'
-                        },
-                        flex: 1
-                    }, {
-                        xtype: 'button',
-                        text: '{s name="settings/fieldsets/deactivation/button"}Stop the service{/s}',
-                        cls: 'primary',
-                        flex: 1,
-                        handler: function () {
-                            me.fireEvent('deactivateBenchmark');
-                        }
-                    }
-                ]
-            })
-        });
-    },
-
-    /**
-     * @returns { Ext.form.FieldSet }
-     */
-    createSettingsFieldSet: function () {
-        var me = this;
-
-        return Ext.create('Ext.form.FieldSet', {
-            title: '{s name="settings/fieldsets/settings/title"}Settings{/s}',
-            items: Ext.create('Ext.container.Container', {
-                layout: 'vbox',
-                width: '100%',
-                items: [{
-                    xtype: 'numberfield',
-                    fieldLabel: '{s name="settings/fieldsets/settings/ordersBatchSize"}Transmitted orders per request{/s}',
-                    name: 'ordersBatchSize',
-                    minValue: 0,
-                    labelWidth: 200,
-                    width: 300,
+            items: [
+                /*{if {acl_is_allowed privilege=manage}}*/
+                {
+                    xtype: 'container',
+                    html: '{s name="settings/fieldsets/shop/deactivation_text"}I want to stop the service.{/s}',
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '11px',
+                        color: '#475c6a'
+                    },
                     flex: 1
                 }, {
-                    xtype: 'container',
+                    xtype: 'button',
+                    text: '{s name="settings/fieldsets/shop/deactivation_button"}Stop the service{/s}',
+                    cls: 'primary',
                     flex: 1,
-                    width: '100%',
-                    items: [{
-                        xtype: 'button',
-                        cls: 'primary',
-                        style: {
-                            position: 'absolute',
-                            right: '0px'
-                        },
-                        text: '{s name="settings/fieldsets/settings/save"}Save settings{/s}',
-                        handler: function () {
-                            me.fireEvent('saveSettings');
-                        }
-                    }]
-                }]
-            })
+                    handler: function () {
+                        me.fireEvent('deactivateBenchmark');
+                    }
+                }
+                /*{/if}*/
+            ]
         });
     },
 
@@ -181,7 +189,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
             items: [{
                 xtype: 'industryfield',
                 name: 'industry',
-                fieldLabel: '{s name="settings/fieldsets/industry/label"}Chosen industry{/s}',
+                fieldLabel: '{s name="settings/industry_window/label"}Choose industry{/s}',
                 labelWidth: 200,
                 store: Ext.create('Shopware.apps.Benchmark.store.Industry')
             }]
@@ -191,32 +199,45 @@ Ext.define('Shopware.apps.Benchmark.view.settings.Window', {
     /**
      * @returns { Ext.form.FieldSet }
      */
-    createInfoFieldSet: function () {
-        return Ext.create('Ext.form.FieldSet', {
-            title: '{s name="settings/fieldsets/information/title"}Last updates{/s}',
-            defaults: {
-                labelWidth: 200
-            },
-            items: [{
-                xtype: 'displayfield',
-                name: 'lastSent',
-                fieldLabel: '{s name="settings/fieldsets/information/lastSent"}Last update date{/s}',
-                fieldStyle: {
-                    color: '#475c6a'
-                },
-                setValue: function (val) {
-                    val = Ext.util.Format.date(val) + ' ' + Ext.util.Format.date(val, timeFormat);
+    createBusinessPlanFieldSet: function () {
+        var me = this,
+            b2bText = '<b>{s name="settings/fieldsets/business_plan/b2bText"}Business to Business{/s} ({s name="settings/fieldsets/business_plan/b2bShortText"}B2B{/s})</b>',
+            b2cText = '<b>{s name="settings/fieldsets/business_plan/b2cText"}Business to Consumer{/s} ({s name="settings/fieldsets/business_plan/b2cShortText"}(B2C){/s})</b>';
 
-                    Ext.form.field.Display.prototype.setValue.apply(this, arguments);
+        return Ext.create('Ext.form.FieldSet', {
+            title: '{s name="settings/fieldsets/business_plan/title"}Business plan{/s}',
+            name: 'typeFieldSet',
+            items: [
+                Ext.create('Ext.form.RadioGroup', {
+                    columns: 1,
+                    name: 'typeRadios',
+                    items: [
+                        {
+                            name: 'type',
+                            inputValue: 'b2c',
+                            boxLabel: b2cText
+                        },
+                        {
+                            name: 'type',
+                            inputValue: 'b2b',
+                            boxLabel: b2bText
+                        },
+                    ]
+                }),
+                /*{if {acl_is_allowed privilege=manage}}*/
+                {
+                    xtype: 'button',
+                    text: '{s name="settings/fieldsets/business_plan/save_button"}Save{/s}',
+                    cls: 'primary',
+                    style: {
+                        float: 'right'
+                    },
+                    handler: function () {
+                        me.fireEvent('saveType');
+                    }
                 }
-            }, {
-                xtype: 'displayfield',
-                name: 'lastOrderNumber',
-                fieldLabel: '{s name="settings/fieldsets/information/lastOrderNumber"}Last transmitted order (number){/s}',
-                fieldStyle: {
-                    color: '#475c6a'
-                }
-            }]
+                /* {/if}*/
+            ]
         });
     }
 });

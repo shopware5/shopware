@@ -54,11 +54,13 @@ class BusinessIntelligenceService
     }
 
     /**
+     * @param int $shopId
+     *
      * @return BusinessIntelligenceResponse
      */
-    public function transmit()
+    public function transmit($shopId)
     {
-        $config = $this->benchmarkRepository->getMainConfig();
+        $config = $this->benchmarkRepository->getConfigForShop($shopId);
 
         /** @var BusinessIntelligenceResponse $response */
         $response = $this->biClient->fetchBusinessIntelligence(new BusinessIntelligenceRequest($config->getToken()));
