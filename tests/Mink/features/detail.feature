@@ -14,12 +14,12 @@ Feature: Detail page
         When  I write an evaluation:
             | field        | value           |
             | sVoteName    | Max Mustermann  |
-            | sVoteMail    | info@example.de |
             | sVoteStars   | 1 sehr schlecht |
             | sVoteSummary | Neue Bewertung  |
             | sVoteComment | Hallo Welt      |
-        And  I click the link in my latest email
+        And  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
         And  the shop owner activates my latest evaluation
+        And  I am on the detail page for article 198
 
         Then  I should see an average customer evaluation of 7 from following evaluations:
             | stars |
@@ -65,19 +65,15 @@ Feature: Detail page
         When  I write an evaluation:
             | field        | value           |
             | sVoteName    | Max Mustermann  |
-            | sVoteMail    | info@example.de |
             | sVoteStars   | 3               |
             | sVoteSummary | Neue Bewertung  |
             | sVoteComment | Hallo Welt      |
         Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
-        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
-        But   I should not see "Hallo Welt"
-
-        When  I click the link in my latest email
-        Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
+        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
         But   I should not see "Hallo Welt"
 
         When  the shop owner activates my latest evaluation
+        And   I am on the detail page for article 100
         Then  I should see an average customer evaluation of 3 from following evaluations:
             | author         | stars | headline       | comment    |
             | Max Mustermann | 3     | Neue Bewertung | Hallo Welt |
