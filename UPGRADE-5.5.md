@@ -121,6 +121,11 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `Shopware\Components\DependencyInjection\Bridge\Router`
     * `Shopware\Components\Emotion\Preset\PresetDataSynchronizer`
 * Changed `getRolesAction` in `Shopware/Controllers/Backend/UserManager` so it takes the `id` parameter into account. This is needed for the paging combobox to work properly.
+* Changed elasticsearch indexing for ES6 compatibility:
+    * Every type gets a own index
+    * The `sw:es:analyze` and `sw:es:switch:alias` commands require a mapping type as a new argument.
+    * Added a new mapping type argument to the constructor of the `ShopIndex`
+    * Added a new mapping type argument to methods `createIndexConfiguration`, `createShopIndex` of the `IndexFactory` and the `IndexFactoryInterface`
 
 ### Removals
 

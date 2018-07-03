@@ -22,38 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleES\SortingHandler;
+namespace Shopware\Bundle\ESIndexingBundle\TextMapping;
 
-use ONGR\ElasticsearchDSL\Search;
-use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
-use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 
-class ReleaseDateSortingHandler implements HandlerInterface
+class TextMappingES6 implements TextMappingInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supports(CriteriaPartInterface $criteriaPart)
+    public function getTextField()
     {
-        return $criteriaPart instanceof ReleaseDateSorting;
+        return ['type' => 'text', 'fielddata' => true];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(
-        CriteriaPartInterface $criteriaPart,
-        Criteria $criteria,
-        Search $search,
-        ShopContextInterface $context
-    ) {
-        /* @var ReleaseDateSorting $criteriaPart */
-        $search->addSort(
-            new FieldSort('formattedCreatedAt', strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'date'])
-        );
+    public function getNotAnalyzedField()
+    {
+        return ['type' => 'keyword', 'index' => 'false'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getKeywordField()
+    {
+        return ['type' => 'keyword'];
     }
 }

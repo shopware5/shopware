@@ -72,13 +72,13 @@ class ImmediateDeliveryConditionHandler implements PartialConditionHandlerInterf
         $groupBy = $this->buildGroupBy($criteria);
 
         if ($groupBy) {
-            $search->addPostFilter(new TermQuery($groupBy, 1));
+            $search->addPostFilter(new TermQuery($groupBy, true));
 
             return;
         }
 
         $search->addPostFilter(
-            new TermQuery('hasAvailableVariant', 1)
+            new TermQuery('hasAvailableVariant', true)
         );
     }
 

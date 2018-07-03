@@ -47,8 +47,8 @@ class SwitchAliasCommand extends ShopwareCommand
         $this->setName('sw:es:switch:alias')
             ->setDescription('Allows to switch live-system aliases.')
             ->addArgument('shopId', InputArgument::REQUIRED)
-            ->addArgument('index', InputArgument::REQUIRED)
-        ;
+            ->addArgument('type', InputArgument::REQUIRED, 'Mapping type of the elasticsearch index (e.g. product, property)')
+            ->addArgument('index', InputArgument::REQUIRED);
     }
 
     /**
@@ -57,6 +57,7 @@ class SwitchAliasCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $shopId = $input->getArgument('shopId');
+        $type = $input->getArgument('type');
         $indexName = $input->getArgument('index');
 
         /** @var $shop Shop */
@@ -64,7 +65,7 @@ class SwitchAliasCommand extends ShopwareCommand
 
         /** @var $index ShopIndex */
         $index = $this->container->get('shopware_elastic_search.index_factory')
-            ->createShopIndex($shop);
+            ->createShopIndex($shop, $type);
 
         /** @var $client Client */
         $client = $this->container->get('shopware_elastic_search.client');

@@ -76,7 +76,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     public function search(Criteria $criteria, ShopContextInterface $context)
     {
         $search = $this->buildSearch($criteria, $context);
-        $index = $this->indexFactory->createShopIndex($context->getShop());
+        $index = $this->indexFactory->createShopIndex($context->getShop(), ProductMapping::TYPE);
 
         $data = $this->client->search([
             'index' => $index->getName(),
@@ -114,11 +114,12 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return Search
      * @throws \Exception
+     *
+     * @return Search
      */
     private function buildSearch(Criteria $criteria, ShopContextInterface $context)
     {
