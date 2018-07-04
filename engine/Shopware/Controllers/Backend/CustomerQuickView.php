@@ -250,6 +250,13 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
                 case 'shop':
                     $condition['property'] = 'shopId';
                     break;
+
+                case 'lastLogin':
+                case 'firstLogin':
+                    $date = new \DateTime($condition['value']);
+                    $condition['value'] = $date->format('Y-m-d');
+                    $condition['expression'] = '>=';
+                    break;
             }
         }
 
