@@ -183,7 +183,7 @@ class GenericSearcher implements SearcherInterface
      */
     protected function getSearchFields()
     {
-        return ['_all' => 1];
+        return ['swag_all' => 1];
     }
 
     /**

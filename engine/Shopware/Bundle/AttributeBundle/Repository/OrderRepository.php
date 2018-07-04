@@ -80,7 +80,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'number' => $this->textMapping->getNotAnalyzedField(),
+                'number' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
                 'invoiceAmount' => ['type' => 'double'],
                 'invoiceShipping' => ['type' => 'double'],
                 'orderTime' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
@@ -90,10 +90,10 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'billingCountryId' => ['type' => 'long'],
                 'shippingCountryId' => ['type' => 'long'],
                 'groupKey' => $this->textMapping->getNotAnalyzedField(),
-                'email' => $this->textMapping->getNotAnalyzedField(),
+                'email' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
                 'transactionId' => $this->textMapping->getNotAnalyzedField(),
-                'firstname' => $this->textMapping->getTextField(),
-                'lastname' => $this->textMapping->getTextField(),
+                'firstname' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
+                'lastname' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
                 'paymentId' => ['type' => 'long'],
                 'paymentName' => $this->textMapping->getTextField(),
                 'dispatchId' => ['type' => 'long'],
@@ -108,6 +108,8 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'city' => $this->textMapping->getTextField(),
                 'phone' => $this->textMapping->getNotAnalyzedField(),
                 'countryName' => $this->textMapping->getTextField(),
+
+                'swag_all' => $this->textMapping->getTextField(),
             ],
         ];
     }
