@@ -25,6 +25,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed "My orders" in account to also show when ESD is disabled
 * Changed EnlightMailHandler to only handle errors
 * Changed `Shopware\Components\HttpCache\CacheWarmer` to log 404 as notice
+* Changed notification plugin snippets
 
 ## 5.4.5
 
