@@ -28,6 +28,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed notification plugin snippets
 * Changed Zend locales to match their names
 * Changed the english `sOPTINREGISTER` mail template
+* Changed range slider to fix rounding problems
 
 ## 5.4.5
 
