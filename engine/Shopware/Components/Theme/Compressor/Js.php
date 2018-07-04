@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Theme\Compressor;
 
+use JShrink\Minifier;
+
 /**
  * Javascript compressor for the frontend themes.
  * Used to compress theme and plugin javascript files.
@@ -40,10 +42,12 @@ class Js implements CompressorInterface
      *
      * @param string $content
      *
+     * @throws \Exception
+     *
      * @return string
      */
     public function compress($content)
     {
-        return \JSMin::minify($content);
+        return Minifier::minify($content);
     }
 }

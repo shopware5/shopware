@@ -82,6 +82,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added new interface ``Shopware\Bundle\SitemapBundle\UrlProviderInterface`` for url providers
 * Added new event ``KernelEvents::TERMINATE``, which will be fired after the response has been sent, when the kernel terminates
 * Added new DIC parameter `shopware.es.batchsize` (configurable via `config.php`) to change the number of products that are send to elasticsearch in one batch
+* Added JShrink as replacement for JSMin
 
 ### Changes
 
@@ -199,6 +200,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed following unnecessary Subscriber:
     * `Shopware\Bundle\EsBackend\Subscriber\ServiceSubscriber`
     * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
+* Removed JSMin
 
 ### Deprecations
 
