@@ -21,6 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Shopware\Components\Logger;
+
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
@@ -256,4 +259,7 @@ return array_replace_recursive([
         'webDir' => $this->DocPath('web'),
         'cacheDir' => $this->DocPath('web_cache'),
     ],
+    'logger' => [
+        'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR
+    ]
 ], $customConfig);
