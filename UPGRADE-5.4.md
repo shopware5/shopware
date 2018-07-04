@@ -27,6 +27,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed `Shopware\Components\HttpCache\CacheWarmer` to log 404 as notice
 * Changed notification plugin snippets
 * Changed Zend locales to match their names
+* Changed the english `sOPTINREGISTER` mail template
 
 ## 5.4.5
 
