@@ -13,8 +13,8 @@
     IndustrySelect.prototype.initElements = function () {
         this.$shopEntries = this.$el.find('.shop-list--entry');
         this.$configOverlay = this.$el.find('.shop-config--overlay');
-        this.$cancelButton = this.$el.find('.action-buttons--cancel-button');
-        this.$resetButton = this.$el.find('.action-buttons--reset-button');
+        this.$cancelButton = this.$el.find('.cancel-button--ct');
+        this.$resetButton = this.$el.find('.reset-button--ct');
         this.$industrySelect = this.$el.find('.industry-select');
         this.$industryOption = this.$industrySelect.find('.industry-option');
         this.$industrySelectHeader = this.$industrySelect.find('.select-header');
