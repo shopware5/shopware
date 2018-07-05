@@ -29,6 +29,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed Zend locales to match their names
 * Changed the english `sOPTINREGISTER` mail template
 * Changed range slider to fix rounding problems
+* Changed opt-in setting for product and blog to be off by default
 
 ## 5.4.5
 

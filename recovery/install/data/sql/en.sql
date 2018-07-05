@@ -910,7 +910,7 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hello,
 
 thank you for evaluating the article {$sArticle.articleName}.
-Please confirm the evaluation by clicking the following link:
+Please confirm your evaluation using the following link:
 
 {$sConfirmLink}
 
@@ -920,7 +920,7 @@ Please confirm the evaluation by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for evaluating the article {$sArticle.articleName}.<br/>
-        Please confirm the evaluation by clicking the following link:<br/>
+        Please confirm your evaluation using the following link:<br/>
         <br/>
         <a href="{$sConfirmLink}">Confirm</a>
     </p>
@@ -959,6 +959,32 @@ With this confirmation you also agree that we may send you further e-mails withi
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
 WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTER';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your blog article evaluation',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for evaluating the blog article "{$sArticle.title}".
+Please confirm your evaluation using the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for evaluating the blog article for "{$sArticle.title}".<br/>
+        Please confirm your evaluation using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINBLOGCOMMENT';
 
 
 
