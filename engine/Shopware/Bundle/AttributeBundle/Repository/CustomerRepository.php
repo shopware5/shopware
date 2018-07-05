@@ -94,12 +94,60 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
                 'lockedUntil' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'accountMode' => ['type' => 'long'],
                 'shopId' => ['type' => 'long'],
-                'shopName' => $this->textMapping->getNotAnalyzedField(),
-                'company' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
-                'department' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
-                'street' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
-                'zipcode' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
-                'city' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
+                'shopName' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
+                'company' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
+                'department' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
+                'street' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
+                'zipcode' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
+                'city' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
                 'phone' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
                 'countryId' => ['type' => 'long'],
                 'countryName' => $this->textMapping->getNotAnalyzedField(),

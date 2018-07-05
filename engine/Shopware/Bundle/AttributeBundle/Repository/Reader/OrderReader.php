@@ -115,6 +115,9 @@ class OrderReader extends GenericReader
         $query->leftJoin('entity.billing', 'billing');
         $query->leftJoin('entity.shipping', 'shipping');
         $query->leftJoin('billing.country', 'billingCountry');
+        $query->andWhere('entity.number IS NOT NULL');
+        $query->andWhere('entity.status != :cancelStatus');
+        $query->setParameter(':cancelStatus', -1);
 
         return $query;
     }

@@ -80,6 +80,7 @@ class ProductReader extends GenericReader
         $products = parent::getList($identifiers);
         $products = $this->assignAdditionalText($products);
         $products = $this->assignCategoryIds($products);
+        $products = $this->assignPrice($products);
 
         return $products;
     }
@@ -193,6 +194,32 @@ class ProductReader extends GenericReader
                 $mapping = array_values(array_filter(explode(',', $categories[$id])));
             }
             $product['categoryIds'] = $mapping;
+        }
+
+        return $products;
+    }
+
+    private function assignPrice(array $products)
+    {
+        $ids = array_column($products, 'articleId');
+        $variantIds = array_column($products, 'variantId');
+
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select(['articledetailsID', 'price']);
+        $query->from('s_articles_prices');
+        $query->where('articleID IN (:ids)');
+        $query->andWhere('articledetailsID IN (:variantIds)');
+        $query->andWhere('`from` = 1');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('variantIds', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        $prices = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        foreach ($products as &$product) {
+            $id = $product['variantId'];
+            if (array_key_exists($id, $prices)) {
+                $product['price'] = $prices[$id];
+            }
         }
 
         return $products;

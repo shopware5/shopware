@@ -108,6 +108,10 @@ class EsBackendIndexer
                 if (in_array($key, $booleanFields, true)) {
                     $value = (bool) $value;
                 }
+
+                if (is_string($value)) {
+                    $value = strtolower($value);
+                }
             }
 
             $documents[] = json_encode($row, JSON_PRESERVE_ZERO_FRACTION);

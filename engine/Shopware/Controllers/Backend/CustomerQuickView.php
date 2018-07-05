@@ -239,6 +239,9 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
                 case 'shop':
                     $sorting['property'] = 'shopId';
                     break;
+                case 'city':
+                    $sorting['property'] = 'city.raw';
+                    break;
             }
         }
 
@@ -272,6 +275,17 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
 
         $data = $query->getQuery()->getArrayResult();
 
-        return ['data' => array_values($data), 'total' => $result->getCount()];
+        $sortedData = [];
+        foreach ($ids as $id) {
+            foreach ($data as $key => $row) {
+                if ($row['id'] == $id) {
+                    $sortedData[] = $row;
+                    unset($data[$key]);
+                    break;
+                }
+            }
+        }
+
+        return ['data' => array_values($sortedData), 'total' => $result->getCount()];
     }
 }
