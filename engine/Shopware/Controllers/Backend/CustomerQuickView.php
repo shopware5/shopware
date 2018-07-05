@@ -197,7 +197,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         $fields = array_merge($fields, [
             'customerGroup' => ['alias' => 'groups.id', 'type' => 'int'],
             'shop' => ['alias' => 'shops.id', 'type' => 'int'],
-            'zipCode' => ['alias' => 'billing.zipcode', 'type' => 'string'],
+            'zipcode' => ['alias' => 'billing.zipcode', 'type' => 'string'],
             'city' => ['alias' => 'billing.city', 'type' => 'string'],
             'company' => ['alias' => 'billing.company', 'type' => 'string'],
         ]);
