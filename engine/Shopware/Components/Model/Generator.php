@@ -506,7 +506,7 @@ class %className% extends ModelEntity
             $parentClass = str_replace('_attributes', '', $table->getName());
             $className = $this->getClassNameOfTableName($parentClass);
 
-            //if the passed table is not an attribute table, we have to check if the table is already declared
+        //if the passed table is not an attribute table, we have to check if the table is already declared
         } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
             //if this is the case we will use the already declared class name
             $className = $this->tableMapping[$table->getName()]['class'];
@@ -813,6 +813,8 @@ class %className% extends ModelEntity
                     break;
                 case 'date':
                 case 'datetime':
+                    // MariaDB has already quoted the default value
+                    $default = trim($default, '\'');
                     $default = 'new \DateTime("' . $default . '")';
             }
 
