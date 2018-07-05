@@ -21,16 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1411 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1417 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        /**
-         * Column case change does not flush cache and we still get in the constraint upper case column name
-         * We need to rename it to a another name and then back
-         * @ticket: https://jira.mariadb.org/browse/MDEV-13671
-         */
-        $this->addSql('ALTER TABLE `s_order_documents_attributes` DROP FOREIGN KEY `s_order_documents_attributes_ibfk_1`;');
-        $this->addSql('ALTER TABLE `s_order_documents` CHANGE COLUMN `ID` `id_tmp` INT(11) NOT NULL AUTO_INCREMENT FIRST;');
+        $this->addSql('SET @elementId = (SELECT id FROM s_core_config_elements WHERE name="esdDownloadStrategy")');
+        $this->addSql('DELETE FROM s_core_config_values WHERE element_id = @elementId');
+        $this->addSql('DELETE FROM s_core_config_elements WHERE id = @elementId');
     }
 }
