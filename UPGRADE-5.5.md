@@ -128,6 +128,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * The `sw:es:analyze` and `sw:es:switch:alias` commands require a mapping type as a new argument.
     * Added a new mapping type argument to the constructor of the `ShopIndex`
     * Added a new mapping type argument to methods `createIndexConfiguration`, `createShopIndex` of the `IndexFactory` and the `IndexFactoryInterface`
+    * Modified attributes mapping in the product mapping. Changed type of 'raw' field to keyword (>= 6).
 
 ### Removals
 
