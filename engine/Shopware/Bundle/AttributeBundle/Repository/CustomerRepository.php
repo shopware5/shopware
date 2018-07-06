@@ -80,13 +80,13 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'number' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
-                'email' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
+                'number' => $this->getTextFieldWithRawData(),
+                'email' => $this->getTextFieldWithRawData(),
                 'active' => ['type' => 'boolean'],
-                'title' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
+                'title' => $this->getTextFieldWithRawData(),
                 'salutation' => $this->textMapping->getNotAnalyzedField(),
-                'firstname' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
-                'lastname' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
+                'firstname' => $this->getTextFieldWithRawData(),
+                'lastname' => $this->getTextFieldWithRawData(),
                 'lastLogin' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'firstLogin' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'newsletter' => ['type' => 'boolean'],
@@ -94,61 +94,13 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
                 'lockedUntil' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'accountMode' => ['type' => 'long'],
                 'shopId' => ['type' => 'long'],
-                'shopName' => array_merge(
-                    $this->textMapping->getTextField(),
-                    [
-                        'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
-                        ],
-                        'copy_to' => 'swag_all',
-                    ]
-                ),
-                'company' => array_merge(
-                    $this->textMapping->getTextField(),
-                    [
-                        'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
-                        ],
-                        'copy_to' => 'swag_all',
-                    ]
-                ),
-                'department' => array_merge(
-                    $this->textMapping->getTextField(),
-                    [
-                        'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
-                        ],
-                        'copy_to' => 'swag_all',
-                    ]
-                ),
-                'street' => array_merge(
-                    $this->textMapping->getTextField(),
-                    [
-                        'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
-                        ],
-                        'copy_to' => 'swag_all',
-                    ]
-                ),
-                'zipcode' => array_merge(
-                    $this->textMapping->getTextField(),
-                    [
-                        'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
-                        ],
-                        'copy_to' => 'swag_all',
-                    ]
-                ),
-                'city' => array_merge(
-                    $this->textMapping->getTextField(),
-                    [
-                        'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
-                        ],
-                        'copy_to' => 'swag_all',
-                    ]
-                ),
-                'phone' => array_merge($this->textMapping->getTextField(), ['copy_to' => 'swag_all']),
+                'shopName' => $this->getTextFieldWithRawData(),
+                'company' => $this->getTextFieldWithRawData(),
+                'department' => $this->getTextFieldWithRawData(),
+                'street' => $this->getTextFieldWithRawData(),
+                'zipcode' => $this->getTextFieldWithRawData(),
+                'city' => $this->getTextFieldWithRawData(),
+                'phone' => $this->getTextFieldWithRawData(),
                 'countryId' => ['type' => 'long'],
                 'countryName' => $this->textMapping->getNotAnalyzedField(),
                 'customerGroupId' => ['type' => 'long'],
@@ -165,5 +117,18 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
     public function getDomainName()
     {
         return 'customer';
+    }
+
+    private function getTextFieldWithRawData()
+    {
+        return array_merge(
+            $this->textMapping->getTextField(),
+            [
+                'fields' => [
+                    'raw' => $this->textMapping->getNotAnalyzedField(),
+                ],
+                'copy_to' => 'swag_all',
+            ]
+        );
     }
 }

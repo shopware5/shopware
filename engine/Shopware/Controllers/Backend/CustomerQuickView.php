@@ -242,6 +242,15 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
                 case 'city':
                     $sorting['property'] = 'city.raw';
                     break;
+                case 'email':
+                    $sorting['property'] = 'email.raw';
+                    break;
+                case 'firstname':
+                    $sorting['property'] = 'firstname.raw';
+                    break;
+                case 'lastname':
+                    $sorting['property'] = 'lastname.raw';
+                    break;
             }
         }
 
