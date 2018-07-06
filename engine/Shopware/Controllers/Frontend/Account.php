@@ -691,7 +691,17 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     protected function refreshBasket()
     {
-        Shopware()->Modules()->Basket()->sRefreshBasket();
+        /** @var Shopware_Components_Modules $modules */
+        $modules = $this->container->get('modules');
+        $userData = $modules->Admin()->sGetUserData();
+        $session = $this->container->get('session');
+
+        $session->offsetSet('sCountry', (int) $userData['additional']['countryShipping']['id']);
+        $session->offsetSet('sArea', (int) $userData['additional']['countryShipping']['areaID']);
+
+        $this->container->get('shopware_storefront.context_service')->initializeContext();
+
+        $modules->Basket()->sRefreshBasket();
     }
 
     /**
