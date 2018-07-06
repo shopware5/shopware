@@ -95,6 +95,26 @@ class Repository extends EntityRepository
     }
 
     /**
+     * @return array
+     */
+    public function getShopsWithValidTemplate()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        return $queryBuilder->select([
+                'configs.shop_id as arrayKey',
+                'configs.shop_id as shopId',
+                'shops.name as shopName',
+            ])
+            ->from('s_benchmark_config', 'configs')
+            ->innerJoin('configs', 's_core_shops', 'shops', 'shops.id = configs.shop_id')
+            ->where('configs.last_received > NOW() - INTERVAL 7 DAY')
+            ->andWhere('configs.cached_template IS NOT NULL')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param bool $addShopName
      *
      * @return array
