@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use League\Flysystem\FilesystemInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
-use Shopware\Bundle\SitemapBundle\SitemapNameGeneratorInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
+use Shopware\Components\Filesystem\PublicUrlGeneratorInterface;
 
 /**
  * Reads a list of files from the sitemap directory and returns structs describing those files.
@@ -34,56 +35,44 @@ use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
 class SitemapLister implements SitemapListerInterface
 {
     /**
-     * @var string
+     * @var FilesystemInterface
      */
-    private $sitemapDirectory;
+    private $filesystem;
 
     /**
-     * @var string
+     * @var PublicUrlGeneratorInterface
      */
-    private $projectDirectory;
+    private $publicUrlGenerator;
 
     /**
-     * @var SitemapNameGeneratorInterface
+     * @param FilesystemInterface         $filesystem
+     * @param PublicUrlGeneratorInterface $publicUrlGenerator
      */
-    private $nameGenerator;
-
-    /**
-     * @param string                        $sitemapDirectory
-     * @param string                        $projectDirectory
-     * @param SitemapNameGeneratorInterface $nameGenerator
-     */
-    public function __construct($sitemapDirectory, $projectDirectory, SitemapNameGeneratorInterface $nameGenerator)
+    public function __construct(FilesystemInterface $filesystem, PublicUrlGeneratorInterface $publicUrlGenerator)
     {
-        $this->sitemapDirectory = $sitemapDirectory;
-        $this->projectDirectory = $projectDirectory;
-        $this->nameGenerator = $nameGenerator;
+        $this->filesystem = $filesystem;
+        $this->publicUrlGenerator = $publicUrlGenerator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSitemaps($shopId = null)
+    public function getSitemaps($shopId)
     {
-        $iterator = new \DirectoryIterator($this->sitemapDirectory);
-
-        if ($shopId) {
-            $dir = rtrim($this->sitemapDirectory, DIRECTORY_SEPARATOR);
-            $iterator = new \GlobIterator($dir . DIRECTORY_SEPARATOR . $this->nameGenerator->getSitemapFilenameGlob($shopId));
-        }
-
+        $files = $this->filesystem->listContents('shop-' . $shopId);
         $sitemaps = [];
 
-        /** @var \SplFileInfo $file */
-        foreach ($iterator as $file) {
-            if ($file->getBasename()[0] === '.') {
+        foreach ($files as $file) {
+            if ($file['basename'][0] === '.') {
                 continue;
             }
 
+            $path = $this->publicUrlGenerator->generateUrl('sitemap/shop-' . $shopId . '/' . $file['basename']);
+
             $sitemaps[] = new Sitemap(
-                str_replace($this->projectDirectory, '', $this->sitemapDirectory) . $file->getFilename(),
+                $path,
                 0,
-                new \DateTime('@' . $file->getCTime())
+                new \DateTime('@' . $file['timestamp'])
             );
         }
 

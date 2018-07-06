@@ -24,10 +24,14 @@
 
 namespace Shopware\Tests\Unit\Bundle\SitemapBundle;
 
+use League\Flysystem\Filesystem;
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory;
 use Shopware\Bundle\SitemapBundle\Service\SitemapLister;
 use Shopware\Bundle\SitemapBundle\Service\SitemapNameGenerator;
 use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Filesystem\PublicUrlGenerator;
 
 class SitemapListenerTest extends TestCase
 {
@@ -41,40 +45,46 @@ class SitemapListenerTest extends TestCase
      */
     private $generator;
 
-    private $sitemapFolder;
+    /**
+     * @var Filesystem
+     */
+    private $fs;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->sitemapFolder = __DIR__ . '/sitemap';
-        $this->generator = new SitemapNameGenerator($this->sitemapFolder);
-        $this->listener = new SitemapLister($this->sitemapFolder, __DIR__, $this->generator);
+        $factory = new LocalAdapterFactory();
 
-        if (!file_exists($this->sitemapFolder)) {
-            mkdir($this->sitemapFolder);
-        }
+        $this->fs = new Filesystem($factory->create([
+            'root' => sys_get_temp_dir(),
+        ]));
+
+        $this->sitemapFolder = __DIR__ . '/sitemap';
+        $this->generator = new SitemapNameGenerator($this->fs);
+
+        $generator = new PublicUrlGenerator(new Container(), '', 'https//foo.de', 'foo');
+        $this->listener = new SitemapLister($this->fs, $generator, $this->generator);
     }
 
     protected function tearDown()
     {
         parent::tearDown();
-
-        array_map('unlink', glob(rtrim($this->sitemapFolder, '/') . '/*'));
-        rmdir($this->sitemapFolder);
+        $this->fs->deleteDir('shop-1');
+        $this->fs->deleteDir('shop-2');
     }
 
     public function testListEmptyFolder()
     {
-        $this->assertEmpty($this->listener->getSitemaps());
+        $this->assertEmpty($this->listener->getSitemaps(1));
     }
 
     public function testListWithSitemap()
     {
         $file = $this->generator->getSitemapFilename(1);
-        touch($file);
+        $this->fs->write($file, '');
 
-        $sitemaps = $this->listener->getSitemaps();
+        $sitemaps = $this->listener->getSitemaps(1);
         $this->assertNotEmpty($sitemaps);
 
         $this->assertInstanceOf(Sitemap::class, $sitemaps[0]);

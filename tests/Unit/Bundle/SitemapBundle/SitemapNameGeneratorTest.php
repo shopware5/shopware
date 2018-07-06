@@ -24,7 +24,9 @@
 
 namespace Shopware\Tests\Unit\Bundle\SitemapBundle;
 
+use League\Flysystem\Filesystem;
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory;
 use Shopware\Bundle\SitemapBundle\Service\SitemapNameGenerator;
 
 class SitemapNameGeneratorTest extends TestCase
@@ -34,25 +36,31 @@ class SitemapNameGeneratorTest extends TestCase
      */
     private $generator;
 
+    /**
+     * @var Filesystem
+     */
+    private $fs;
+
     protected function setUp()
     {
         parent::setUp();
-        $this->generator = new SitemapNameGenerator(__DIR__);
+        $factory = new LocalAdapterFactory();
+
+        $this->fs = new Filesystem($factory->create([
+            'root' => sys_get_temp_dir(),
+        ]));
+
+        $this->generator = new SitemapNameGenerator($this->fs);
     }
 
     public function testPathGeneration()
     {
-        $name = __DIR__ . '/sitemap-shop-1-1.xml.gz';
-        $this->assertSame($name, $this->generator->getSitemapFilename(1));
-        touch(__DIR__ . '/sitemap-shop-1-1.xml.gz');
+        $this->assertSame('shop-1/sitemap-1.xml.gz', $this->generator->getSitemapFilename(1));
 
-        $this->assertSame(__DIR__ . '/sitemap-shop-1-2.xml.gz', $this->generator->getSitemapFilename(1));
+        $this->fs->write('shop-1/sitemap-1.xml.gz', '');
 
-        unlink($name);
-    }
+        $this->assertSame('shop-1/sitemap-2.xml.gz', $this->generator->getSitemapFilename(1));
 
-    public function testGlobGeneration()
-    {
-        $this->assertSame('sitemap-shop-1-*.xml.gz', $this->generator->getSitemapFilenameGlob(1));
+        $this->fs->delete('shop-1/sitemap-1.xml.gz');
     }
 }

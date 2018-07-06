@@ -47,6 +47,7 @@ return array_replace_recursive([
             'type' => 'local',
             'config' => [
                 'root' => realpath(__DIR__ . '/../../../web/'),
+                'url' => '',
             ],
         ],
     ],
@@ -300,7 +301,6 @@ return array_replace_recursive([
     'web' => [
         'webDir' => $this->DocPath('web'),
         'cacheDir' => $this->DocPath('web_cache'),
-        'sitemapDir' => $this->DocPath('web_sitemap'),
     ],
     'mpdf' => [
         // Passed to \Mpdf\Mpdf::__construct:

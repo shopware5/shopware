@@ -81,4 +81,4 @@ Feature: View all categories on sitemap
         Given I am on the sitemap_index.xml
         Then I should see the sitemap files:
             | name                          |
-            | sitemap-shop-1-1.xml.gz       |
+            | sitemap-1.xml.gz              |

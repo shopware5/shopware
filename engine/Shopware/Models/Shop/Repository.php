@@ -349,8 +349,8 @@ class Repository extends ModelRepository
     {
         $shops = $this->getActiveShops();
 
-        foreach ($shops as $shop) {
-            $this->fixActive($shop);
+        foreach ($shops as $key => $shop) {
+            $shops[$key] = $this->fixActive($shop);
         }
 
         return $shops;

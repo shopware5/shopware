@@ -5,14 +5,13 @@
 
     <services>
         <service id="shopware_bundle_sitemap.service.sitemap_writer" class="Shopware\Bundle\SitemapBundle\Service\SitemapWriter">
-            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_name_generator" />
-            <argument type="string">%shopware.web.sitemapdir%</argument>
-            <argument type="string">%kernel.cache_dir%</argument>
+            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_name_generator"/>
+            <argument type="service" id="shopware_bundle_sitemap.service.filesystem"/>
         </service>
 
         <service id="shopware_bundle_sitemap.service.sitemap_name_generator"
                  class="Shopware\Bundle\SitemapBundle\Service\SitemapNameGenerator" >
-            <argument type="string">%shopware.web.sitemapdir%</argument>
+            <argument type="service" id="shopware_bundle_sitemap.service.filesystem"/>
         </service>
 
         <service id="shopware_bundle_sitemap.service.sitemap_exporter" class="Shopware\Bundle\SitemapBundle\Service\SitemapExporter">
@@ -24,9 +23,13 @@
         </service>
 
         <service id="shopware_bundle_sitemap.service.sitemap_lister" class="Shopware\Bundle\SitemapBundle\Service\SitemapLister">
-            <argument type="string">%shopware.web.sitemapdir%</argument>
-            <argument type="string">%shopware.app.rootdir%</argument>
-            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_name_generator"/>
+            <argument type="service" id="shopware_bundle_sitemap.service.filesystem"/>
+            <argument type="service" id="shopware.filesystem.public.url_generator"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.service.filesystem" class="Shopware\Components\Filesystem\PrefixFilesystem">
+            <argument type="service" id="shopware.filesystem.public"/>
+            <argument>sitemap</argument>
         </service>
 
         <!-- UrlProviders -->
