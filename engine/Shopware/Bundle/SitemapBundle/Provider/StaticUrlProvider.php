@@ -48,8 +48,6 @@ class StaticUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * StaticUrlProvider constructor.
-     *
      * @param Routing\Router $router
      * @param Connection     $connection
      */
@@ -118,8 +116,6 @@ class StaticUrlProvider implements UrlProviderInterface
      *
      * @param int $shopId
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return array
      */
     private function getSitesByShopId($shopId)
@@ -141,9 +137,9 @@ class StaticUrlProvider implements UrlProviderInterface
                 ->select('*')
                 ->andWhere(
                     $builder->expr()->orX(
-                        $builder->expr()->eq('sites.grouping', ':g1'),        // = gBottom
-                        $builder->expr()->like('sites.grouping', ':g2'),      //like 'gBottom|%
-                        $builder->expr()->like('sites.grouping', ':g3'),      //like '|gBottom
+                        $builder->expr()->eq('sites.grouping', ':g1'),       // = gBottom
+                        $builder->expr()->like('sites.grouping', ':g2'),     //like 'gBottom|%
+                        $builder->expr()->like('sites.grouping', ':g3'),     //like '|gBottom
                         $builder->expr()->like('sites.grouping', ':g4')      //like '|gBottom|
                     )
                 )

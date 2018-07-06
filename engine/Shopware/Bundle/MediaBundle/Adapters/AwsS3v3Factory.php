@@ -62,7 +62,7 @@ class AwsS3v3Factory implements AdapterFactoryInterface
         $options = new OptionsResolver();
 
         $options->setRequired(['credentials', 'bucket', 'region']);
-        $options->setDefined(['version', 'root', 'type', 'mediaUrl']);
+        $options->setDefined(['version', 'root', 'type', 'mediaUrl', 'url']);
 
         $options->setAllowedTypes('credentials', 'array');
         $options->setAllowedTypes('region', 'string');

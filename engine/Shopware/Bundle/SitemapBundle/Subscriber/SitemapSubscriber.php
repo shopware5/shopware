@@ -28,7 +28,6 @@ use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
-use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
@@ -43,11 +42,6 @@ class SitemapSubscriber implements SubscriberInterface
     private $config;
 
     /**
-     * @var SitemapListerInterface
-     */
-    private $sitemapLister;
-
-    /**
      * @var SitemapExporterInterface
      */
     private $sitemapExporter;
@@ -58,10 +52,7 @@ class SitemapSubscriber implements SubscriberInterface
     private $modelManager;
 
     /**
-     * SitemapSubscriber constructor.
-     *
      * @param Config                   $config
-     * @param SitemapListerInterface   $sitemapLister
      * @param SitemapExporterInterface $sitemapExporter
      * @param ModelManager             $modelManager
      */

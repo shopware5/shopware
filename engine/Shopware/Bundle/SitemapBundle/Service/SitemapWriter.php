@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use League\Flysystem\FilesystemInterface;
 use Shopware\Bundle\SitemapBundle\Exception\UnknownFileException;
 use Shopware\Bundle\SitemapBundle\SitemapWriterInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
@@ -33,14 +34,9 @@ use Shopware\Models\Shop\Shop;
 class SitemapWriter implements SitemapWriterInterface
 {
     /**
-     * @var string
+     * @var FilesystemInterface
      */
-    private $sitemapDir;
-
-    /**
-     * @var string
-     */
-    private $tempPath;
+    private $filesystem;
 
     /**
      * @var SitemapNameGenerator
@@ -59,14 +55,12 @@ class SitemapWriter implements SitemapWriterInterface
 
     /**
      * @param SitemapNameGenerator $sitemapNameGenerator
-     * @param string               $sitemapDir
-     * @param string               $tempPath
+     * @param FilesystemInterface $filesystem
      */
-    public function __construct(SitemapNameGenerator $sitemapNameGenerator, $sitemapDir, $tempPath = '/temp')
+    public function __construct(SitemapNameGenerator $sitemapNameGenerator, FilesystemInterface $filesystem)
     {
         $this->sitemapNameGenerator = $sitemapNameGenerator;
-        $this->sitemapDir = $sitemapDir;
-        $this->tempPath = $tempPath;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -83,11 +77,13 @@ class SitemapWriter implements SitemapWriterInterface
             }
 
             // Delete old sitemaps for this siteId
-            array_map('unlink', glob(rtrim($this->sitemapDir, '/') . '/sitemap-shop-' . $shopId . '-*.xml.gz'));
+            foreach ($this->filesystem->listContents(sprintf('shop-%d', $shopId)) as $file) {
+                $this->filesystem->delete($file['path']);
+            }
 
-            // Move new Sitemaps into place
+            // Move new sitemaps into place
             foreach ($sitemaps as $sitemap) {
-                rename($sitemap->getFilename(), $this->sitemapNameGenerator->getSitemapFilename($shopId));
+                $this->filesystem->write($this->sitemapNameGenerator->getSitemapFilename($shopId), file_get_contents($sitemap->getFilename()));
             }
         }
     }
@@ -170,7 +166,7 @@ class SitemapWriter implements SitemapWriterInterface
 
         $filePath = sprintf(
             '%s/sitemap-shop-%d-%s.xml.gz',
-            rtrim($this->tempPath, '/'),
+            rtrim(sys_get_temp_dir(), '/'),
             $shopId,
             microtime(true) * 10000
         );

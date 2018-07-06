@@ -71,7 +71,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Amazon Web Services
     * Google Cloud Platform
 * Added service `shopware.filesystem.public` and `shopware.filesystem.private` for file handling
-    * Documents and ESD files can be now also served from S3 or Google Cloud
+    * Documents, ESD and Sitemap files can now also served from S3 or Google Cloud
+    * Added service ``shopware.filesystem.public.url_generator`` for generating public urls
 * Added automatic prefixed filesystem service registration for plugins
     * `plugin_name.filesystem.public`
     * `plugin_name.filesystem.private`
@@ -201,6 +202,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `Shopware\Bundle\EsBackend\Subscriber\ServiceSubscriber`
     * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
 * Removed JSMin
+* Removed config option ``esdDownloadStrategy``
 
 ### Deprecations
 

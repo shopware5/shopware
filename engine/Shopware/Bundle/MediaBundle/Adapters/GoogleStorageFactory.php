@@ -67,7 +67,7 @@ class GoogleStorageFactory implements AdapterFactoryInterface
         $options = new OptionsResolver();
 
         $options->setRequired(['projectId', 'keyFilePath', 'bucket']);
-        $options->setDefined(['root', 'mediaUrl', 'type']);
+        $options->setDefined(['root', 'mediaUrl', 'type', 'url']);
 
         $options->setAllowedTypes('projectId', 'string');
         $options->setAllowedTypes('keyFilePath', 'string');

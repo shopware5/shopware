@@ -498,6 +498,20 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         ]);
     }
 
+    /**
+     * Regenerate sitemap cache
+     */
+    public function buildSitemapCacheAction()
+    {
+        $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
+
+        foreach ($shops as $shop) {
+            $this->container->get('shopware_bundle_sitemap.service.sitemap_exporter')->generate($shop);
+        }
+
+        $this->View()->assign('success', true);
+    }
+
     protected function initAcl()
     {
     }

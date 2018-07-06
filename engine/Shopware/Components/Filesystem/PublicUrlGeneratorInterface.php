@@ -22,14 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle;
+namespace Shopware\Components\Filesystem;
 
-interface SitemapNameGeneratorInterface
+/**
+ * Interface PublicUrlGeneratorInterface
+ */
+interface PublicUrlGeneratorInterface
 {
     /**
-     * @param int $shopId
+     * Generate public url for a public file
+     *
+     * @param string $path
      *
      * @return string
      */
-    public function getSitemapFilename($shopId);
+    public function generateUrl($path);
 }

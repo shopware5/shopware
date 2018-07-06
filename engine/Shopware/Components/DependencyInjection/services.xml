@@ -855,6 +855,13 @@
             <argument>%shopware.filesystem.public%</argument>
         </service>
 
+        <service id="shopware.filesystem.public.url_generator" class="Shopware\Components\Filesystem\PublicUrlGenerator">
+            <argument type="service" id="service_container"/>
+            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.filesystem.public.config.root%</argument>
+            <argument>%shopware.filesystem.public.config.url%</argument>
+        </service>
+
         <service id="shopware.filesystem.private" class="League\Flysystem\FilesystemInterface">
             <factory service="shopware.filesystem_factory" method="factory" />
             <argument>%shopware.filesystem.private%</argument>

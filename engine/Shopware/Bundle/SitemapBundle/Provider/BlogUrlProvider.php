@@ -51,7 +51,8 @@ class BlogUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * {@inheritdoc}
+     * @param ModelManager   $modelManager
+     * @param Routing\Router $router
      */
     public function __construct(ModelManager $modelManager, Routing\Router $router)
     {
@@ -60,15 +61,12 @@ class BlogUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
-            return null;
+            return [];
         }
 
         $parentId = $shopContext->getShop()->getCategory()->getId();
@@ -85,7 +83,7 @@ class BlogUrlProvider implements UrlProviderInterface
         }
 
         if (count($blogIds) === 0) {
-            return null;
+            return [];
         }
 
         $qb = $this->modelManager->getConnection()->createQueryBuilder();

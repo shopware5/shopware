@@ -24,14 +24,15 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use League\Flysystem\FilesystemInterface;
 use Shopware\Bundle\SitemapBundle\SitemapNameGeneratorInterface;
 
 class SitemapNameGenerator implements SitemapNameGeneratorInterface
 {
     /**
-     * @var string
+     * @var FilesystemInterface
      */
-    private $path;
+    private $filesystem;
 
     /**
      * @var string
@@ -39,13 +40,13 @@ class SitemapNameGenerator implements SitemapNameGeneratorInterface
     private $pattern;
 
     /**
-     * @param string $path
-     * @param string $pattern
+     * @param FilesystemInterface $filesystem
+     * @param string              $pattern
      */
-    public function __construct($path, $pattern = 'sitemap-shop-{shopId}-{number}.xml.gz')
+    public function __construct(FilesystemInterface $filesystem, $pattern = 'sitemap-{number}.xml.gz')
     {
-        $this->path = $path;
         $this->pattern = $pattern;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -57,24 +58,12 @@ class SitemapNameGenerator implements SitemapNameGeneratorInterface
     {
         $number = 1;
         do {
-            $filename = str_ireplace(
-                ['{shopId}', '{number}'],
-                [$shopId, $number], $this->pattern);
-
-            $path = sprintf('%s/%s', rtrim($this->path, '/'), $filename);
+            $path = 'shop-' . $shopId . '/' . str_ireplace(
+                ['{number}'],
+                [$number], $this->pattern);
             ++$number;
-        } while (file_exists($path));
+        } while ($this->filesystem->has($path));
 
         return $path;
-    }
-
-    /**
-     * @param int $shopId
-     *
-     * @return string
-     */
-    public function getSitemapFilenameGlob($shopId)
-    {
-        return str_ireplace(['{shopId}', '{number}'], [$shopId, '*'], $this->pattern);
     }
 }

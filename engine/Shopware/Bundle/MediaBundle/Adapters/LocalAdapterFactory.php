@@ -69,7 +69,7 @@ class LocalAdapterFactory implements AdapterFactoryInterface
         $options = new OptionsResolver();
 
         $options->setRequired(['root']);
-        $options->setDefined(['file', 'dir', 'mediaUrl', 'type', 'permissions']);
+        $options->setDefined(['file', 'dir', 'mediaUrl', 'type', 'permissions', 'url']);
 
         $options->setAllowedTypes('root', 'string');
         $options->setAllowedTypes('file', 'array');

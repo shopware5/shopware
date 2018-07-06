@@ -87,24 +87,33 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             requestUrl: '{url controller="SimilarShown" action="initSimilarShown"}',
             batchSize: 100
         },
+
         alsoBought: {
             title: '{s name=multi_request/bought}Build index for: Customers also bought{/s}',
             totalCountUrl: '{url controller="AlsoBought" action="getAlsoBoughtCount"}',
             requestUrl: '{url controller="AlsoBought" action="initAlsoBought"}',
             batchSize: 100
         },
+
         category: {
             title: '{s name=multi_request/categories}Repair categories{/s}',
             totalCountUrl: '{url controller="Performance" action="prepareTree"}',
             requestUrl: '{url controller="Performance" action="fixCategories"}',
             batchSize: 100
         },
+
         httpCacheWarmer: {
             title: '{s name=multi_request/http_cache_warmer/windowTitle}Warm up cache{/s}',
             snippetResource: 'httpCacheWarmer',
             totalCountUrl: '{url controller="Performance" action="getHttpURLs"}',
             batchSize: 10
-        }
+        },
+
+        sitemap: {
+            title: '{s name=multi_request/sitemap}Build cache for sitemap{/s}',
+            requestUrl: '{url controller="Performance" action="buildSitemapCache"}',
+            batchSize: 1
+        },
     },
 
     init: function () {

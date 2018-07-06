@@ -85,12 +85,24 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
+                    me.getRefreshButton(),
                     me.getRefreshStrategyField(),
                     me.getRefreshTimeField(),
                     me.getLastUpdateField()
                 ]
             }
         ];
+    },
+
+    /**
+     * @returns { Shopware.apps.Performance.view.tabs.settings.elements.MultiRequestButton }
+     */
+    getRefreshButton: function() {
+        return {
+            xtype: 'performance-multi-request-button',
+            event: 'sitemap',
+            title: '{s name=fieldset/sitemap/refresh}{/s}'
+        };
     },
 
     /**
