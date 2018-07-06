@@ -25,6 +25,7 @@ use Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\ProfileUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\ResetPasswordFormType;
+use Shopware\Bundle\StaticContentBundle\Exception\EsdNotFoundException;
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -358,6 +359,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function downloadAction()
     {
+        $esdService = $this->container->get('shopware_static_content.service.esd_service');
+        $downloadService = $this->container->get('shopware_static_content.service.download_service');
         $filesystem = $this->container->get('shopware.filesystem.private');
         $esdID = $this->request->getParam('esdID');
 
@@ -365,63 +368,34 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return $this->forward('downloads');
         }
 
-        $sql = '
-            SELECT file, articleID
-            FROM s_articles_esd ae, s_order_esd oe
-            WHERE ae.id=oe.esdID
-            AND oe.userID=?
-            AND oe.orderdetailsID=?
-        ';
-        $download = Shopware()->Db()->fetchRow($sql, [Shopware()->Session()->sUserId, $esdID]);
-
-        if (empty($download)) {
-            $sql = '
-                SELECT e.file, ad.articleID
-                FROM s_articles_esd e, s_order_details od, s_articles_details ad, s_order o
-                WHERE e.articledetailsID=ad.id
-                AND ad.ordernumber=od.articleordernumber
-                AND o.id=od.orderID
-                AND o.userID=?
-                AND od.id=?
-            ';
-            $download = Shopware()->Db()->fetchRow($sql, [Shopware()->Session()->sUserId, $esdID]);
+        try {
+            $download = $esdService->get(Shopware()->Session()->sUserId, $esdID);
+        } catch (EsdNotFoundException $exception) {
+            return $this->forwardDownloadError(1);
         }
 
-        if (empty($download['file'])) {
-            $this->View()->sErrorCode = 1;
-
-            return $this->forward('downloads');
+        if (empty($download->getFile())) {
+            return $this->forwardDownloadError(1);
         }
 
-        $filePath = $this->container->get('config')->offsetGet('esdKey') . '/' . $download['file'];
+        $filePath = $esdService->getLocation($download);
 
         if ($filesystem->has($filePath) === false) {
-            $this->View()->sErrorCode = 2;
-
-            return $this->forward('downloads');
+            return $this->forwardDownloadError(2);
         }
 
-        $meta = $filesystem->getMetadata($filePath);
-        $mimeType = $filesystem->getMimetype($filePath) ?: 'application/octet-stream';
-
-        @set_time_limit(0);
-
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-
-        $response = $this->Response();
-        $response->setHeader('Content-Type', $mimeType);
-        $response->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($filePath)));
-        $response->setHeader('Content-Length', $meta['size']);
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->sendHeaders();
-        $response->sendResponse();
-
-        $upstream = $filesystem->readStream($filePath);
-        $downstream = fopen('php://output', 'wb');
-
-        while (!feof($upstream)) {
-            fwrite($downstream, fread($upstream, 4096));
+        try {
+            return $downloadService->send($filePath, $filesystem);
+        } catch (\League\Flysystem\FileNotFoundException $exception) {
+            return $this->forwardDownloadError(2);
         }
+    }
+
+    private function forwardDownloadError($errorCode)
+    {
+        $this->View()->sErrorCode = (int)$errorCode;
+
+        $this->forward('downloads');
     }
 
     /**
