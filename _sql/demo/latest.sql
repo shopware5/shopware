@@ -10753,3 +10753,5 @@ TRUNCATE s_emotion_shops;
 INSERT INTO `s_emotion_shops` (`id`, `emotion_id`, `shop_id`) VALUES
 (1, 5, 1),
 (2, 9, 1);
+
+UPDATE s_articles SET taxID = 4 WHERE id IN(SELECT articleID FROM s_articles_categories_ro WHERE categoryID IN(15));
