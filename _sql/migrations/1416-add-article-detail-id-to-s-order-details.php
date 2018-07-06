@@ -21,16 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1418 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1416 extends Shopware\Components\Migrations\AbstractMigration
 {
+    /**
+     * {@inheritdoc}
+     */
     public function up($modus)
     {
-        $sql = <<<SQL
-            ALTER TABLE `s_benchmark_config`
-                ADD `shop_id` int(11) NOT NULL AFTER `id`,
-                ADD `type` varchar(20) NULL AFTER `industry`,
-                ADD UNIQUE `shop_id` (`shop_id`);
-SQL;
-        $this->addSql($sql);
+        $this->addSql('ALTER TABLE `s_order_details` ADD articleDetailID INT(11) UNSIGNED NULL');
     }
 }

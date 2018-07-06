@@ -21,13 +21,23 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1415 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1418 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * {@inheritdoc}
-     */
     public function up($modus)
     {
-        $this->addSql('ALTER TABLE `s_order_details` ADD articleDetailID INT(11) UNSIGNED NULL');
+        $sql = <<<'EOD'
+INSERT IGNORE INTO `s_core_config_elements`
+  (`name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
+VALUES
+('sitemapRefreshStrategy', 'i:3;', '', '', '', 1, 0, 0, ''),
+('sitemapRefreshTime', 'i:86400;', '', '', '', 1, 0, 0, ''),
+('sitemapLastRefresh', 'i:0;', '', '', '', 1, 0, 0, '');
+EOD;
+
+        $this->addSql($sql);
+
+        $sql = "INSERT INTO `s_crontab` (`name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `disable_on_error`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
+                ('Sitemap generation', 'SitemapGeneration', NULL, '', (CURDATE()), NULL, 86400, 0, 0, '2016-01-01 01:00:00', '', '', NULL);";
+        $this->addSql($sql);
     }
 }
