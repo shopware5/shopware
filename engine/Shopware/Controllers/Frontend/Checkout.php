@@ -25,6 +25,7 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
+use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\CSRFGetProtectionAware;
 use Shopware\Models\Customer\Address;
 
@@ -1011,14 +1012,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getBasket($mergeProportional = true)
     {
-        $shippingcosts = $this->getShippingCosts();
+        $shippingCosts = $this->getShippingCosts();
 
         $basket = $this->basket->sGetBasket();
 
         /** @var \Shopware\Models\Shop\Currency $currency */
         $currency = $this->get('shop')->getCurrency();
 
-        $positions = $this->container->get('shopware.cart.basket_helper')->getPositionPrices();
+        $positions = $this->container->get('shopware.cart.basket_helper')->getPositionPrices(
+            new DiscountContext(
+                $this->session->get('sessionId'),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            )
+        );
+
         $taxCalculator = $this->container->get('shopware.cart.proportional_tax_calculator');
         $hasDifferentTaxes = $taxCalculator->hasDifferentTaxes($positions);
 
@@ -1026,8 +1039,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $basket['sCurrencyName'] = $currency->getCurrency();
         $basket['sCurrencyFactor'] = $currency->getFactor();
 
-        if ($hasDifferentTaxes && empty($shippingcosts['taxMode']) && $this->get('config')->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
-            $taxProportional = $taxCalculator->calculate($shippingcosts['brutto'], $positions, !Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id']);
+        if ($hasDifferentTaxes && empty($shippingCosts['taxMode']) && $this->get('config')->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
+            $taxProportional = $taxCalculator->calculate($shippingCosts['brutto'], $positions, !Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id']);
 
             $basket['sShippingcostsTaxProportional'] = $taxProportional;
 
@@ -1037,36 +1050,36 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 $shippingNet += $shippingProportional->getNetPrice();
             }
 
-            $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
+            $basket['sShippingcostsWithTax'] = $shippingCosts['brutto'];
             $basket['sShippingcostsNet'] = $shippingNet;
-            $basket['sShippingcostsTax'] = $shippingcosts['tax'];
+            $basket['sShippingcostsTax'] = $shippingCosts['tax'];
 
-            $shippingcosts['netto'] = $shippingNet;
+            $shippingCosts['netto'] = $shippingNet;
         } else {
-            $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
-            $basket['sShippingcostsNet'] = $shippingcosts['netto'];
-            $basket['sShippingcostsTax'] = $shippingcosts['tax'];
+            $basket['sShippingcostsWithTax'] = $shippingCosts['brutto'];
+            $basket['sShippingcostsNet'] = $shippingCosts['netto'];
+            $basket['sShippingcostsTax'] = $shippingCosts['tax'];
         }
 
-        if (!empty($shippingcosts['brutto'])) {
-            $basket['AmountNetNumeric'] += $shippingcosts['netto'];
-            $basket['AmountNumeric'] += $shippingcosts['brutto'];
-            $basket['sShippingcostsDifference'] = $shippingcosts['difference']['float'];
+        if (!empty($shippingCosts['brutto'])) {
+            $basket['AmountNetNumeric'] += $shippingCosts['netto'];
+            $basket['AmountNumeric'] += $shippingCosts['brutto'];
+            $basket['sShippingcostsDifference'] = $shippingCosts['difference']['float'];
         }
         if (!empty($basket['AmountWithTaxNumeric'])) {
-            $basket['AmountWithTaxNumeric'] += $shippingcosts['brutto'];
+            $basket['AmountWithTaxNumeric'] += $shippingCosts['brutto'];
         }
         if (!Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id']) {
             $basket['sTaxRates'] = $this->getTaxRates($basket);
 
-            $basket['sShippingcosts'] = $shippingcosts['netto'];
+            $basket['sShippingcosts'] = $shippingCosts['netto'];
             $basket['sAmount'] = round($basket['AmountNetNumeric'], 2);
             $basket['sAmountTax'] = round($basket['AmountWithTaxNumeric'] - $basket['AmountNetNumeric'], 2);
             $basket['sAmountWithTax'] = round($basket['AmountWithTaxNumeric'], 2);
         } else {
             $basket['sTaxRates'] = $this->getTaxRates($basket);
 
-            $basket['sShippingcosts'] = $shippingcosts['brutto'];
+            $basket['sShippingcosts'] = $shippingCosts['brutto'];
             $basket['sAmount'] = $basket['AmountNumeric'];
 
             $basket['sAmountTax'] = round($basket['AmountNumeric'] - $basket['AmountNetNumeric'], 2);
