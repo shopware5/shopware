@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed the english `sOPTINREGISTER` mail template
 * Changed range slider to fix rounding problems
 * Changed opt-in setting for product and blog to be off by default
+* Changed variant search to toggle join prices with hideNoInStock configuration
 
 ## 5.4.5
 
