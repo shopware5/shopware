@@ -1040,7 +1040,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $basket['sCurrencyFactor'] = $currency->getFactor();
 
         if ($hasDifferentTaxes && empty($shippingCosts['taxMode']) && $this->get('config')->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
-            $taxProportional = $taxCalculator->calculate($shippingCosts['brutto'], $positions, !Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id']);
+            $taxProportional = $taxCalculator->calculate($shippingCosts['brutto'], $positions, false);
 
             $basket['sShippingcostsTaxProportional'] = $taxProportional;
 
