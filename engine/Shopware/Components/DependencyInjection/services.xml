@@ -819,5 +819,10 @@
         </service>
 
         <service id="shopware.components.privacy.ip_anonymizer_service" class="Shopware\Components\Privacy\IpAnonymizer" public="false"/>
+
+        <service id="shopware.components.privacy.cookie_remove_subscriber" class="Shopware\Components\Privacy\CookieRemoveSubscriber" >
+            <argument type="service" id="config"/>
+            <tag name="shopware.event_subscriber" />
+        </service>
     </services>
 </container>

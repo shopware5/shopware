@@ -109,6 +109,10 @@
         vendorPropertyDiv = document.createElement('div'),
         vendorPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
+    function hasCookiesAllowed() {
+        return !cookieRemoval || (cookieRemoval && document.cookie.indexOf('allowCookie') !== -1);
+    }
+
     /**
      * @class EventEmitter
      * @constructor
@@ -1300,6 +1304,13 @@
             });
         },
 
+        /**
+         * Returns true when user has allowed to set cookies
+         *
+         * @returns {boolean}
+         */
+        hasCookiesAllowed: hasCookiesAllowed,
+
         _getCurrentDevice: function() {
             var i = 0,
                 width = this.getViewportWidth(),
@@ -1316,6 +1327,10 @@
         },
 
         _setDeviceCookie: function() {
+            if (!hasCookiesAllowed()) {
+                return;
+            }
+
             var device = this._getCurrentDevice();
 
             document.cookie = 'x-ua-device=' + device + '; path=/';

@@ -250,6 +250,7 @@
                     { device: 'tablet', enter: 768, exit: 1259 },
                     { device: 'desktop', enter: 1260, exit: 5160 }
                 ];
+                var cookieRemoval = cookieRemoval || {config name="cookie_note_mode"};
 
             {/block}
         </script>
