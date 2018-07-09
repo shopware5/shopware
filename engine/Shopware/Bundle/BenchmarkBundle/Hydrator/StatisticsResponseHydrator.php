@@ -30,7 +30,7 @@ use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 class StatisticsResponseHydrator implements HydratorInterface
 {
     /**
-     * @param array $data
+     * {@inheritdoc}
      *
      * @throws StatisticsHydratingException
      *
@@ -43,9 +43,9 @@ class StatisticsResponseHydrator implements HydratorInterface
         }
 
         if (empty($data['responseToken'])) {
-            throw new StatisticsHydratingException('Missing field "token" from server response');
+            throw new StatisticsHydratingException('Missing field "responseToken" from server response');
         }
 
-        return new StatisticsResponse($date = new \DateTime('now'), $data['responseToken']);
+        return new StatisticsResponse($date = new \DateTime('now'), $data['responseToken'], false);
     }
 }

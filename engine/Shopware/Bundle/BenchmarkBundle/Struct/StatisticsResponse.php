@@ -37,13 +37,20 @@ class StatisticsResponse
     private $token;
 
     /**
+     * @var bool
+     */
+    private $isFinished;
+
+    /**
      * @param \DateTime $dateUpdated
      * @param string    $token
+     * @param bool      $isFinished
      */
-    public function __construct(\DateTime $dateUpdated, $token)
+    public function __construct(\DateTime $dateUpdated, $token, $isFinished)
     {
         $this->dateUpdated = $dateUpdated;
         $this->token = $token;
+        $this->isFinished = $isFinished;
     }
 
     /**
@@ -60,5 +67,13 @@ class StatisticsResponse
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return $this->isFinished;
     }
 }

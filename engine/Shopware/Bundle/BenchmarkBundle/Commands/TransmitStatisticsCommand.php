@@ -71,12 +71,12 @@ class TransmitStatisticsCommand extends ShopwareCommand
 
             $output->write(sprintf('Transmitting statistics for shop with ID %s...', $config['shopId']));
             $statistics = $this->container->get('shopware.benchmark_bundle.statistics_transmission');
-            $statistics->transmit($config['shopId']);
+            $statistics->transmit($benchmarkRepository->getConfigForShop($config['shopId']));
             $output->writeln('<info>done!</info>');
 
             $output->write(sprintf('Retrieving business intelligence for shop with ID %s...', $config['shopId']));
             $benchmark = $this->container->get('shopware.benchmark_bundle.bi_transmission');
-            $benchmark->transmit($config['shopId']);
+            $benchmark->transmit($benchmarkRepository->getConfigForShop($config['shopId']));
             $output->writeln('<info>done!</info>');
         }
     }

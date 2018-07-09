@@ -21,16 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1419 extends Shopware\Components\Migrations\AbstractMigration
+
+namespace Shopware\Bundle\BenchmarkBundle\Exception;
+
+class TransmissionNotNecessaryException extends \Exception
 {
-    public function up($modus)
-    {
-        $sql = <<<SQL
-            ALTER TABLE `s_benchmark_config`
-                ADD `shop_id` int(11) NOT NULL AFTER `id`,
-                ADD `type` varchar(20) NULL AFTER `industry`,
-                ADD UNIQUE `shop_id` (`shop_id`);
-SQL;
-        $this->addSql($sql);
-    }
 }

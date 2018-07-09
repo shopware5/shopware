@@ -151,6 +151,15 @@ class BenchmarkConfig extends ModelEntity
     private $active;
 
     /**
+     * Flag which defines if the current shop is locked for transmitting data.
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(name="locked", type="datetime", nullable=true)
+     */
+    private $locked;
+
+    /**
      * @param string $id
      */
     public function __construct($id)
@@ -357,6 +366,22 @@ class BenchmarkConfig extends ModelEntity
     public function setActive($active)
     {
         $this->active = (bool) $active;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
+     * @param \DateTime $locked
+     */
+    public function setLocked(\DateTime $locked)
+    {
+        $this->locked = $locked;
     }
 
     /**

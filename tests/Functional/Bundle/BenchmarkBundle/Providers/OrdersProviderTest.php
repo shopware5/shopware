@@ -163,10 +163,10 @@ class OrdersProviderTest extends ProviderTestCase
     {
         $this->installDemoData('orders_detailed');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1 WHERE shop_id=1;');
         $this->getBenchmarkData();
 
-        $this->assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config'));
+        $this->assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 
     /**
@@ -175,6 +175,7 @@ class OrdersProviderTest extends ProviderTestCase
     public function testGetOrdersListPerShop()
     {
         $this->installDemoData('orders_detailed');
+        $this->installDemoData('second_config');
         $provider = $this->getProvider();
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=10;');

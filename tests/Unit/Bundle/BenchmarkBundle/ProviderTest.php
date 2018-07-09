@@ -44,7 +44,16 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
 
         $result = $provider->get(new ShopContextMock());
 
-        $this->assertSame('{"id":"1","foo":{"foo":"bar","john":"doe"},"bar":{"test":"example"}}', $result);
+        $this->assertArraySubset([
+            'id' => 1,
+            'foo' => [
+                'foo' => 'bar',
+                'john' => 'doe',
+            ],
+            'bar' => [
+                'test' => 'example',
+            ],
+        ], $result);
     }
 
     /**
