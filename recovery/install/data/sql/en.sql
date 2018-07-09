@@ -962,6 +962,37 @@ WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTER';
 
 
 
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your e-mail address for your order at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+Please confirm your e-mail address using the following link:
+
+{$sConfirmLink}
+
+After the confirmation you will be directed your order overview, where you can check your order again and complete it.
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        Please confirm your e-mail address using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm e-mail</a><br/>
+        <br/>
+        After the confirmation you will be directed your order overview, where you can check your order again and complete it.<br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTERACCOUNTLESS';
+
+
+
 UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your blog article evaluation',`content` = '{include file="string:{config name=emailheaderplain}"}
 
 Hello,

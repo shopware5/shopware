@@ -11,6 +11,9 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new mail template for Double-Opt-In used by blog article evaluations: `sOPTINBLOGCOMMENT`
 * Added `sitemap.batchsize` config option to configure the amount of collected products per process in the SitemapXMLRepository
 * Added `logger.level` config option, to define log level. Default in production is level `ERROR`
+* Added new option in backend to seperate Double-Opt-In for quick orderers from the normal registration, this includes:
+    * New snippet `RegisterInfoSuccessOptinAccountless`
+    * New mail template `sOPTINREGISTERACCOUNTLESS`
 
 ### Changes
 
