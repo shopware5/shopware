@@ -178,7 +178,8 @@ class ShopIndexer implements ShopIndexerInterface
     }
 
     /**
-     * @param ShopIndex $index
+     * @param ShopIndex        $index
+     * @param MappingInterface $mapping
      */
     private function updateMapping(ShopIndex $index, MappingInterface $mapping)
     {
@@ -228,16 +229,24 @@ class ShopIndexer implements ShopIndexerInterface
      */
     private function createAlias(IndexConfiguration $configuration)
     {
-        $exist = $this->client->indices()->existsAlias(['name' => $configuration->getAlias()]);
+        $currentAlias = $configuration->getAlias();
+        $aliasExists = $this->client->indices()->existsAlias(['name' => $currentAlias]);
 
-        if ($exist) {
+        if ($aliasExists) {
             $this->switchAlias($configuration);
-        } else {
-            $this->client->indices()->putAlias([
-                'index' => $configuration->getName(),
-                'name' => $configuration->getAlias(),
-            ]);
+
+            return;
         }
+
+        $indexExists = $this->client->indices()->exists(['index' => $currentAlias]);
+        if ($indexExists) {
+            $this->client->indices()->delete(['index' => $currentAlias]);
+        }
+
+        $this->client->indices()->putAlias([
+            'index' => $configuration->getName(),
+            'name' => $configuration->getAlias(),
+        ]);
     }
 
     /**
