@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Components\CSRFWhitelistAware;
@@ -1952,10 +1951,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         foreach ($criteria->sortings as &$sorting) {
             if ($sorting['property'] === 'customerEmail') {
-                $sorting['property'] = 'email';
+                $sorting['property'] = 'email.raw';
             }
             if ($sorting['property'] === 'customerName') {
-                $sorting['property'] = 'firstname';
+                $sorting['property'] = 'lastname.raw';
+            }
+            if ($sorting['property'] === 'number') {
+                $sorting['property'] = 'number.raw';
             }
         }
 

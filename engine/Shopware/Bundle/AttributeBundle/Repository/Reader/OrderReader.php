@@ -85,8 +85,8 @@ class OrderReader extends GenericReader
             'customer.id as customerId',
             'customer.email as email',
             'customer.groupKey as groupKey',
-            'customer.firstname as firstname',
-            'customer.lastname as lastname',
+            'billing.firstName as firstname',
+            'billing.lastName as lastname',
             'payment.id as paymentId',
             'payment.description as paymentName',
             'dispatch.id as dispatchId',
@@ -115,6 +115,9 @@ class OrderReader extends GenericReader
         $query->leftJoin('entity.billing', 'billing');
         $query->leftJoin('entity.shipping', 'shipping');
         $query->leftJoin('billing.country', 'billingCountry');
+        $query->andWhere('entity.number IS NOT NULL');
+        $query->andWhere('entity.status != :cancelStatus');
+        $query->setParameter(':cancelStatus', -1);
 
         return $query;
     }

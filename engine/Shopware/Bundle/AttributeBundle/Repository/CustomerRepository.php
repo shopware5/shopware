@@ -80,13 +80,13 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'number' => $this->textMapping->getNotAnalyzedField(),
-                'email' => $this->textMapping->getNotAnalyzedField(),
+                'number' => $this->getTextFieldWithRawData(),
+                'email' => $this->getTextFieldWithRawData(),
                 'active' => ['type' => 'boolean'],
-                'title' => $this->textMapping->getNotAnalyzedField(),
+                'title' => $this->getTextFieldWithRawData(),
                 'salutation' => $this->textMapping->getNotAnalyzedField(),
-                'firstname' => $this->textMapping->getNotAnalyzedField(),
-                'lastname' => $this->textMapping->getNotAnalyzedField(),
+                'firstname' => $this->getTextFieldWithRawData(),
+                'lastname' => $this->getTextFieldWithRawData(),
                 'lastLogin' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'firstLogin' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'newsletter' => ['type' => 'boolean'],
@@ -94,17 +94,19 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
                 'lockedUntil' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'accountMode' => ['type' => 'long'],
                 'shopId' => ['type' => 'long'],
-                'shopName' => $this->textMapping->getNotAnalyzedField(),
-                'company' => $this->textMapping->getNotAnalyzedField(),
-                'department' => $this->textMapping->getNotAnalyzedField(),
-                'street' => $this->textMapping->getNotAnalyzedField(),
-                'zipcode' => $this->textMapping->getNotAnalyzedField(),
-                'city' => $this->textMapping->getNotAnalyzedField(),
-                'phone' => $this->textMapping->getNotAnalyzedField(),
+                'shopName' => $this->getTextFieldWithRawData(),
+                'company' => $this->getTextFieldWithRawData(),
+                'department' => $this->getTextFieldWithRawData(),
+                'street' => $this->getTextFieldWithRawData(),
+                'zipcode' => $this->getTextFieldWithRawData(),
+                'city' => $this->getTextFieldWithRawData(),
+                'phone' => $this->getTextFieldWithRawData(),
                 'countryId' => ['type' => 'long'],
                 'countryName' => $this->textMapping->getNotAnalyzedField(),
                 'customerGroupId' => ['type' => 'long'],
                 'customerGroupName' => $this->textMapping->getNotAnalyzedField(),
+
+                'swag_all' => $this->textMapping->getTextField(),
             ],
         ];
     }
@@ -115,5 +117,18 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
     public function getDomainName()
     {
         return 'customer';
+    }
+
+    private function getTextFieldWithRawData()
+    {
+        return array_merge(
+            $this->textMapping->getTextField(),
+            [
+                'fields' => [
+                    'raw' => $this->textMapping->getNotAnalyzedField(),
+                ],
+                'copy_to' => 'swag_all',
+            ]
+        );
     }
 }

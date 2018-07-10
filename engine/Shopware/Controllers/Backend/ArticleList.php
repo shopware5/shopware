@@ -674,7 +674,18 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $data = $this->container->get('multi_edit.product.dql_helper')
             ->getProductsForListing($ids);
 
-        return ['data' => $data, 'total' => $result->getCount()];
+        $sortedData = [];
+        foreach ($ids as $id) {
+            foreach ($data as $key => $row) {
+                if ($row['Detail_id'] == $id) {
+                    $sortedData[] = $row;
+                    unset($data[$key]);
+                    break;
+                }
+            }
+        }
+
+        return ['data' => $sortedData, 'total' => $result->getCount()];
     }
 
     /**
@@ -684,7 +695,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     private function createCriteria(Enlight_Controller_Request_Request $request)
     {
-        if ($request->has('showVariants')) {
+        if ($request->getParam('showVariants', false) === 'true') {
             $criteria = new SearchCriteria(Detail::class);
         } else {
             $criteria = new SearchCriteria(Article::class);
@@ -707,10 +718,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                     $sorting['property'] = 'number';
                     break;
                 case 'Article_name':
-                    $sorting['property'] = 'name';
+                    $sorting['property'] = 'name.raw';
                     break;
                 case 'Supplier_name':
-                    $sorting['property'] = 'supplierName';
+                    $sorting['property'] = 'supplierName.raw';
                     break;
                 case 'Article_active':
                     $sorting['property'] = 'articleActive';
@@ -722,6 +733,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                     $sorting['property'] = 'inStock';
                     break;
                 case 'Price_price':
+                    $sorting['property'] = 'price';
+                    break;
                 default:
                     unset($criteria->sortings[$index]);
                     break;

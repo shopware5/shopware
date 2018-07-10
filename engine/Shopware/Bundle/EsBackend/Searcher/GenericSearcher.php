@@ -183,7 +183,7 @@ class GenericSearcher implements SearcherInterface
      */
     protected function getSearchFields()
     {
-        return ['_all' => 1];
+        return ['swag_all' => 1];
     }
 
     /**
@@ -256,8 +256,9 @@ class GenericSearcher implements SearcherInterface
                     break;
 
                 case 'like':
+                    $value = strtolower($condition['value']);
                     $query->add(
-                        new WildcardQuery($condition['property'], '*' . $condition['value'] . '*'),
+                        new WildcardQuery($condition['property'], '*' . $value . '*'),
                         BoolQuery::MUST
                     );
                     break;

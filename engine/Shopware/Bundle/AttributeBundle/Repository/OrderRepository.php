@@ -80,7 +80,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'number' => $this->textMapping->getNotAnalyzedField(),
+                'number' => $this->getTextFieldWithRawData(),
                 'invoiceAmount' => ['type' => 'double'],
                 'invoiceShipping' => ['type' => 'double'],
                 'orderTime' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
@@ -90,10 +90,10 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'billingCountryId' => ['type' => 'long'],
                 'shippingCountryId' => ['type' => 'long'],
                 'groupKey' => $this->textMapping->getNotAnalyzedField(),
-                'email' => $this->textMapping->getNotAnalyzedField(),
+                'email' => $this->getTextFieldWithRawData(),
                 'transactionId' => $this->textMapping->getNotAnalyzedField(),
-                'firstname' => $this->textMapping->getTextField(),
-                'lastname' => $this->textMapping->getTextField(),
+                'firstname' => $this->getTextFieldWithRawData(),
+                'lastname' => $this->getTextFieldWithRawData(),
                 'paymentId' => ['type' => 'long'],
                 'paymentName' => $this->textMapping->getTextField(),
                 'dispatchId' => ['type' => 'long'],
@@ -108,6 +108,8 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'city' => $this->textMapping->getTextField(),
                 'phone' => $this->textMapping->getNotAnalyzedField(),
                 'countryName' => $this->textMapping->getTextField(),
+
+                'swag_all' => $this->textMapping->getTextField(),
             ],
         ];
     }
@@ -118,5 +120,18 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
     public function getDomainName()
     {
         return 'orders';
+    }
+
+    private function getTextFieldWithRawData()
+    {
+        return array_merge(
+            $this->textMapping->getTextField(),
+            [
+                'fields' => [
+                    'raw' => $this->textMapping->getNotAnalyzedField(),
+                ],
+                'copy_to' => 'swag_all',
+            ]
+        );
     }
 }

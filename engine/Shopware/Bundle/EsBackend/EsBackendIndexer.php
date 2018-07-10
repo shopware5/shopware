@@ -90,12 +90,27 @@ class EsBackendIndexer
         $remove = array_column($data, 'id');
         $remove = array_diff($ids, $remove);
 
+        $booleanFields = [];
+        foreach ($repository->getMapping()['properties'] as $key => $mapping) {
+            if ($mapping['type'] === 'boolean') {
+                $booleanFields[] = $key;
+            }
+        }
+
         $documents = [];
         foreach ($data as $row) {
             $documents[] = ['index' => ['_id' => $row['id']]];
             foreach ($row as $key => &$value) {
                 if ($value instanceof \DateTime) {
                     $value = $value->format('Y-m-d');
+                }
+
+                if (in_array($key, $booleanFields, true)) {
+                    $value = (bool) $value;
+                }
+
+                if (is_string($value)) {
+                    $value = strtolower($value);
                 }
             }
 

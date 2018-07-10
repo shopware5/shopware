@@ -91,13 +91,21 @@ class ProductRepository extends GenericRepository implements EsAwareRepository
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'number' => $this->textMapping->getNotAnalyzedField(),
+                'number' => array_merge($this->textMapping->getNotAnalyzedField(), ['copy_to' => 'swag_all']),
                 'categoryIds' => ['type' => 'long'],
                 'variantId' => ['type' => 'long'],
                 'taxId' => ['type' => 'long'],
                 'articleId' => ['type' => 'long'],
                 'kind' => ['type' => 'long'],
-                'name' => $this->textMapping->getNotAnalyzedField(),
+                'name' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
                 'inStock' => ['type' => 'long'],
                 'ean' => $this->textMapping->getNotAnalyzedField(),
                 'supplierNumber' => $this->textMapping->getNotAnalyzedField(),
@@ -105,7 +113,18 @@ class ProductRepository extends GenericRepository implements EsAwareRepository
                 'articleActive' => ['type' => 'boolean'],
                 'variantActive' => ['type' => 'boolean'],
                 'supplierId' => ['type' => 'long'],
-                'supplierName' => $this->textMapping->getTextField(),
+                'supplierName' => array_merge(
+                    $this->textMapping->getTextField(),
+                    [
+                        'fields' => [
+                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                        ],
+                        'copy_to' => 'swag_all',
+                    ]
+                ),
+                'price' => ['type' => 'double'],
+
+                'swag_all' => $this->textMapping->getTextField(),
             ],
         ];
     }
