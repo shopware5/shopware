@@ -96,9 +96,9 @@ class Document extends ModelEntity
     private $amount;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="docID", type="integer", nullable=false)
+     * @ORM\Column(name="docID", type="string", nullable=false)
      */
     private $documentId;
 
@@ -234,7 +234,7 @@ class Document extends ModelEntity
     /**
      * Set documentId
      *
-     * @param int $documentId
+     * @param string $documentId
      *
      * @return Document
      */
@@ -248,7 +248,7 @@ class Document extends ModelEntity
     /**
      * Get documentId
      *
-     * @return int
+     * @return string
      */
     public function getDocumentId()
     {
