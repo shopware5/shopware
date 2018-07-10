@@ -14,6 +14,10 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Added new option in backend to seperate Double-Opt-In for quick orderers from the normal registration, this includes:
     * New snippet `RegisterInfoSuccessOptinAccountless`
     * New mail template `sOPTINREGISTERACCOUNTLESS`
+* Added Cookie Modes `technical` and a `strict`
+    * `technical` allows by default only technically required cookies, other cookies will be set after permission
+    * `strict` does not allow to set cookies, until permissions are given
+* Added new method `hasCookiesAllowed` to the StateManager, to check that cookie permissions are given
 
 ### Changes
 
