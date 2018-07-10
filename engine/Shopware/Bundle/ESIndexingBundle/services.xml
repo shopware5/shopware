@@ -134,6 +134,7 @@
             <argument type="service" id="shopware_elastic_search.text_mapping" />
             <argument type="service" id="shopware_attribute.crud_service" />
             <tag name="shopware_elastic_search.mapping" />
+            <argument type="service" id="shopware_elastic_search.client"/>
         </service>
 
         <service id="shopware_elastic_search.orm_backlog_save_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSaveSubscriber">
