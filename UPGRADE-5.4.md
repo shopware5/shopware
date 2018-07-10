@@ -23,8 +23,8 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Changed error behaviour of blog article evaluations when the Double-Opt-In confirmation link is invalid
 * Changed behaviour of the notification plugin, so that it will only notify the customer if the stock is at least as high as the minimal purchase amount
-* Changed SitemapXMLRepository to collect 10.000 products in batch, because of elastic search limitations
-* Changed VariantFilter to work with MariaDB
+* Changed `SitemapXMLRepository` to collect 10.000 products in batch, because of elastic search limitations
+* Changed `VariantFilter` to work with MariaDB
 * Changed error in language handling of mail templates
 * Changed listing filters to work on mobile devices
 * Changed listing controller to load custom templates on pages containing an emotion component
@@ -32,12 +32,12 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed "My orders" in account to also show when ESD is disabled
 * Changed EnlightMailHandler to only handle errors
 * Changed `Shopware\Components\HttpCache\CacheWarmer` to log 404 as notice
-* Changed notification plugin snippets
 * Changed Zend locales to match their names
 * Changed the english `sOPTINREGISTER` mail template
 * Changed range slider to fix rounding problems
-* Changed opt-in setting for product and blog to be off by default
-* Changed variant search to toggle join prices with hideNoInStock configuration
+* Changed variant search to toggle join prices with `hideNoInStock` configuration
+* Changed Double-Opt-In setting for comments/ratings on products and blog articles to be off by default
+* Changed field `remoteaddr` in table `s_statistics_pool` to contain a hash instead of the real IP of a visitor
 
 ## 5.4.5
 
