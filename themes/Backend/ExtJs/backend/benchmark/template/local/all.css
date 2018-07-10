@@ -466,7 +466,7 @@ input:checked + .slider:before {
 }
 * {
   font-weight: 600 !important;
-  font-family: 'Asap', sans-serif !important;
+  font-family: 'Source Sans Pro', sans-serif !important;
 }
 h3 {
   padding: 0 15%;
@@ -790,7 +790,7 @@ input {
   }
 }
 body {
-  font-family: 'Asap', sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   padding: 0;
   margin: 0;
   color: #798EA3;
@@ -1034,7 +1034,7 @@ body#swag-benchmark {
   vertical-align: middle;
 }
 input.btn.primary {
-  font-family: 'Asap';
+  font-family: 'Source Sans Pro';
 }
 footer {
   font-size: 14px;
@@ -1084,34 +1084,34 @@ textarea:-ms-input-placeholder {
 .language-switch .language-separator {
   margin: 0 5px 0;
 }
-/* asap-regular - latin */
+/* source-sans-pro-regular - latin */
 @font-face {
-  font-family: 'Asap';
+  font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 400;
-  src: url('fonts/asap-v7-latin-regular.eot');
+  src: url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-regular.eot');
   /* IE9 Compat Modes */
-  src: local('Asap Regular'), local('Asap-Regular'), url('fonts/asap-v7-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('fonts/asap-v7-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('fonts/asap-v7-latin-regular.woff') format('woff'), /* Modern Browsers */ url('fonts/asap-v7-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */ url('fonts/asap-v7-latin-regular.svg#Asap') format('svg');
+  src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-regular.woff') format('woff'), /* Modern Browsers */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-regular.svg#SourceSansPro') format('svg');
   /* Legacy iOS */
 }
-/* asap-600 - latin */
+/* source-sans-pro-600 - latin */
 @font-face {
-  font-family: 'Asap';
+  font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 600;
-  src: url('fonts/asap-v7-latin-600.eot');
+  src: url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-600.eot');
   /* IE9 Compat Modes */
-  src: local('Asap SemiBold'), local('Asap-SemiBold'), url('fonts/asap-v7-latin-600.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('fonts/asap-v7-latin-600.woff2') format('woff2'), /* Super Modern Browsers */ url('fonts/asap-v7-latin-600.woff') format('woff'), /* Modern Browsers */ url('fonts/asap-v7-latin-600.ttf') format('truetype'), /* Safari, Android, iOS */ url('fonts/asap-v7-latin-600.svg#Asap') format('svg');
+  src: local('Source Sans Pro SemiBold'), local('SourceSansPro-SemiBold'), url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-600.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-600.woff2') format('woff2'), /* Super Modern Browsers */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-600.woff') format('woff'), /* Modern Browsers */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-600.ttf') format('truetype'), /* Safari, Android, iOS */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-600.svg#SourceSansPro') format('svg');
   /* Legacy iOS */
 }
-/* asap-700 - latin */
+/* source-sans-pro-700 - latin */
 @font-face {
-  font-family: 'Asap';
+  font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 700;
-  src: url('fonts/asap-v7-latin-700.eot');
+  src: url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-700.eot');
   /* IE9 Compat Modes */
-  src: local('Asap Bold'), local('Asap-Bold'), url('fonts/asap-v7-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('fonts/asap-v7-latin-700.woff2') format('woff2'), /* Super Modern Browsers */ url('fonts/asap-v7-latin-700.woff') format('woff'), /* Modern Browsers */ url('fonts/asap-v7-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */ url('fonts/asap-v7-latin-700.svg#Asap') format('svg');
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-700.woff2') format('woff2'), /* Super Modern Browsers */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-700.woff') format('woff'), /* Modern Browsers */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */ url('https://assets.shopware.com/bi/source-sans-pro/source-sans-pro-v11-latin-700.svg#SourceSansPro') format('svg');
   /* Legacy iOS */
 }
 a {
@@ -1124,7 +1124,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: 'Asap';
+  font-family: 'Source Sans Pro';
   margin: 8px 0;
   padding: 0 3%;
   font-weight: 600;
@@ -1593,6 +1593,26 @@ p {
 }
 .custom-select .select-option:first-child {
   margin-top: 10px;
+}
+.pong-start {
+  position: absolute;
+  background-color: #50E3C2;
+  color: #fff !important;
+  border: 0 none !important;
+  left: calc(50% - 60px);
+  top: 330px;
+  width: 120px;
+}
+.pong-start:hover {
+  background-color: #41aa8d;
+  cursor: pointer;
+}
+.pong-cancel-button {
+  margin-top: 30px;
+  width: 270px;
+}
+#pong-game {
+  border-radius: 7px;
 }
 body#swag-waiting {
   background-color: #213448;
