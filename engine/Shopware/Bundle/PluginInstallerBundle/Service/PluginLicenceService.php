@@ -86,7 +86,7 @@ class PluginLicenceService
         $info = \Shopware_Components_License::readLicenseInfo($licenceKey);
 
         if ($info == false) {
-            throw new \RuntimeException();
+            throw new \RuntimeException('Could not read license key');
         }
 
         return $persister->saveLicense($info, true);
