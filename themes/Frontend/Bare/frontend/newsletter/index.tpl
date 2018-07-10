@@ -90,7 +90,7 @@
                                 <div class="newsletter--subscription select-field">
                                     <select name="subscribeToNewsletter" required="required" class="field--select newsletter--checkmail">
                                         <option value="1">{s name="sNewsletterOptionSubscribe"}{/s}</option>
-                                        <option value="-1"{if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)} selected="selected"{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
+                                        <option value="-1"{if $smarty.post.subscribeToNewsletter eq -1 || (!$smarty.post.subscribeToNewsletter && $sUnsubscribe == true)} selected="selected"{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
                                     </select>
                                 </div>
                             {/block}
@@ -98,11 +98,11 @@
                             {* Email *}
                             {block name="frontend_newsletter_form_input_email"}
                                 <div class="newsletter--email">
-                                    <input name="newsletter" type="email" placeholder="{s name="sNewsletterPlaceholderMail"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{if $_POST.newsletter}{$_POST.newsletter}{elseif $_GET.sNewsletter}{$_GET.sNewsletter|escape}{/if}" class="input--field is--required{if $sStatus.sErrorFlag.newsletter} has--error{/if}"/>
+                                    <input name="newsletter" type="email" placeholder="{s name="sNewsletterPlaceholderMail"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{if $smarty.post.newsletter}{$smarty.post.newsletter|escape}{elseif $smarty.get.sNewsletter}{$smarty.get.sNewsletter|escape}{/if}" class="input--field is--required{if $sStatus.sErrorFlag.newsletter} has--error{/if}"/>
                                 </div>
                             {/block}
 
-                            {* Additonal fields *}
+                            {* Additional fields *}
                             {block name="frontend_newsletter_form_additionalfields"}
                                 {if {config name=NewsletterExtendedFields}}
                                     <div class="newsletter--additional-form">
@@ -113,9 +113,9 @@
                                         {block name="frontend_newsletter_form_input_salutation"}
                                             <div class="newsletter--salutation select-field">
                                                 <select name="salutation" class="field--select">
-                                                    <option value=""{if $_POST.salutation eq ""} selected="selected"{/if}>{s name='NewsletterRegisterPlaceholderSalutation'}{/s}</option>
+                                                    <option value=""{if $smarty.post.salutation eq ""} selected="selected"{/if}>{s name='NewsletterRegisterPlaceholderSalutation'}{/s}</option>
                                                     {foreach $salutations as $key => $label}
-                                                        <option value="{$key}"{if $_POST.salutation eq $key} selected="selected"{/if}>{$label}</option>
+                                                        <option value="{$key}"{if $smarty.post.salutation eq $key} selected="selected"{/if}>{$label}</option>
                                                     {/foreach}
                                                 </select>
                                             </div>
@@ -124,21 +124,21 @@
                                         {* Firstname *}
                                         {block name="frontend_newsletter_form_input_firstname"}
                                             <div class="newsletter--firstname">
-                                                <input name="firstname" type="text" placeholder="{s name="NewsletterRegisterPlaceholderFirstname"}{/s}" value="{$_POST.firstname|escape}" class="input--field{if $sStatus.sErrorFlag.firstname} has--error{/if}"/>
+                                                <input name="firstname" type="text" placeholder="{s name="NewsletterRegisterPlaceholderFirstname"}{/s}" value="{$smarty.post.firstname|escape}" class="input--field{if $sStatus.sErrorFlag.firstname} has--error{/if}"/>
                                             </div>
                                         {/block}
 
                                         {* Lastname *}
                                         {block name="frontend_newsletter_form_input_lastname"}
                                             <div class="newsletter--lastname">
-                                                <input name="lastname" type="text" placeholder="{s name="NewsletterRegisterPlaceholderLastname"}{/s}" value="{$_POST.lastname|escape}" class="input--field{if $sStatus.sErrorFlag.lastname} has--error{/if}"/>
+                                                <input name="lastname" type="text" placeholder="{s name="NewsletterRegisterPlaceholderLastname"}{/s}" value="{$smarty.post.lastname|escape}" class="input--field{if $sStatus.sErrorFlag.lastname} has--error{/if}"/>
                                             </div>
                                         {/block}
 
                                         {* Street *}
                                         {block name="frontend_newsletter_form_input_street"}
                                             <div class="newsletter--street">
-                                                <input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderStreet"}{/s}" value="{$_POST.street|escape}" class="input--field input--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
+                                                <input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderStreet"}{/s}" value="{$smarty.post.street|escape}" class="input--field input--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
                                             </div>
                                         {/block}
 
@@ -146,11 +146,11 @@
                                         {block name="frontend_newsletter_form_input_zip_and_city"}
                                             <div class="newsletter--zip-city">
                                                 {if {config name=showZipBeforeCity}}
-                                                    <input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderZipcode"}{/s}" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode input--spacer{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
-                                                    <input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderCityname"}{/s}" value="{$_POST.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
+                                                    <input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderZipcode"}{/s}" value="{$smarty.post.zipcode|escape}" class="input--field input--field-zipcode input--spacer{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
+                                                    <input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderCityname"}{/s}" value="{$smarty.post.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
                                                 {else}
-                                                    <input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderCityname"}{/s}" value="{$_POST.city|escape}" size="25" class="input--field input--field-city input--spacer{if $sStatus.sErrorFlag.city} has--error{/if}"/>
-                                                    <input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderZipcode"}{/s}" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
+                                                    <input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderCityname"}{/s}" value="{$smarty.post.city|escape}" size="25" class="input--field input--field-city input--spacer{if $sStatus.sErrorFlag.city} has--error{/if}"/>
+                                                    <input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingPlaceholderZipcode"}{/s}" value="{$smarty.post.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
                                                 {/if}
                                             </div>
                                         {/block}
