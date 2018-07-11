@@ -52,7 +52,8 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $this->View()->loadTemplate(sprintf('backend/benchmark/template/local/%s.tpl', $template));
 
         if ($template === 'waiting') {
-            $this->View()->assign('waitingSinceDays', $this->getWaitingTemplateId());
+            $waitingSinceDays = $this->getWaitingTemplateId();
+            $this->View()->assign('waitingSinceDays', $waitingSinceDays);
         }
 
         if ($template === 'industry_select') {
@@ -115,8 +116,8 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
 
         $dateDiff = $diff->days + 1;
 
-        if ($dateDiff > 3) {
-            $dateDiff = 3;
+        if ($dateDiff > 4) {
+            $dateDiff = 4;
         }
 
         return $dateDiff;
