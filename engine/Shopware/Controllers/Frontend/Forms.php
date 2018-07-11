@@ -240,6 +240,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         ];
 
         return array_merge($formData, [
+            'attribute' => Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_support_attributes', $formId),
             'sErrors' => $this->_errors,
             'sElements' => $this->_elements,
             'sFields' => $fields,
