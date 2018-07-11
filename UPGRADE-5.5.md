@@ -130,6 +130,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added a new mapping type argument to the constructor of the `ShopIndex`
     * Added a new mapping type argument to methods `createIndexConfiguration`, `createShopIndex` of the `IndexFactory` and the `IndexFactoryInterface`
     * Modified attributes mapping in the product mapping. Changed type of 'raw' field to keyword (>= 6).
+* Changed `ShopIndexer::createAlias`, it now deletes indexes that are named like the index alias
 
 ### Removals
 
