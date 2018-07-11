@@ -174,7 +174,7 @@ class Repository extends ModelRepository
                 'customer.firstname as customerFirstName',
                 'customer.lastname as customerLastName',
                 'customer.number as customerNumber',
-                'orderState.description as orderStatus',
+                'orderState.name as orderStatus',
                 'orderState.id as orderStatusId',
             ])
             ->from('Shopware\Models\Order\Order', 'o')
