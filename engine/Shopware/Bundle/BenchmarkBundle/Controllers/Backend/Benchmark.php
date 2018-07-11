@@ -123,18 +123,18 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function checkBenchmarksAction()
     {
         $result = new BenchmarkDataResult();
-        $message = false;
+        $message = null;
 
         try {
-            $result = $this->get('shopware.benchmark_bundle.benchmark_statistics')->sendBenchmarkData();
+            $result = $this->get('shopware.benchmark_bundle.benchmark_statistics')->handleTransmission();
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
 
         $this->View()->assign([
-            'success' => true,
-            'statistics' => $result->getStatisticsResponse(),
-            'bi' => $result->getBiResponse(),
+            'success' => $message === null,
+            'statistics' => $result->getStatisticsResponse() !== null,
+            'bi' => $result->getBiResponse() !== null,
             'message' => $message,
         ]);
     }

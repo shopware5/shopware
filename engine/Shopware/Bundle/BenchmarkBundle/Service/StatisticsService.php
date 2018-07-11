@@ -25,16 +25,19 @@
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
+use Shopware\Bundle\BenchmarkBundle\BenchmarkCollectorInterface;
+use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
 use Shopware\Bundle\BenchmarkBundle\StatisticsClientInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class StatisticsService
 {
     /**
-     * @var BenchmarkCollector
+     * @var BenchmarkCollectorInterface
      */
     private $benchmarkCollector;
 
@@ -54,13 +57,13 @@ class StatisticsService
     private $contextService;
 
     /**
-     * @param BenchmarkCollector        $benchmarkCollector
-     * @param StatisticsClientInterface $statisticsClient
-     * @param BenchmarkRepository       $benchmarkRepository
-     * @param ContextServiceInterface   $contextService
+     * @param BenchmarkCollectorInterface $benchmarkCollector
+     * @param StatisticsClientInterface   $statisticsClient
+     * @param BenchmarkRepository         $benchmarkRepository
+     * @param ContextServiceInterface     $contextService
      */
     public function __construct(
-        BenchmarkCollector $benchmarkCollector,
+        BenchmarkCollectorInterface $benchmarkCollector,
         StatisticsClientInterface $statisticsClient,
         BenchmarkRepository $benchmarkRepository,
         ContextServiceInterface $contextService
@@ -72,23 +75,35 @@ class StatisticsService
     }
 
     /**
-     * @param int $shopId
+     * @param BenchmarkConfig $config
+     *
+     * @throws TransmissionNotNecessaryException
      *
      * @return StatisticsResponse
      */
-    public function transmit($shopId)
+    public function transmit(BenchmarkConfig $config)
     {
-        $benchmarkData = $this->benchmarkCollector->get($this->contextService->createShopContext(1));
+        $benchmarkData = $this->benchmarkCollector->get($this->contextService->createShopContext($config->getShopId()));
+
+        $ordersCount = count($benchmarkData['orders']['list']);
+        $customersCount = count($benchmarkData['customers']['list']);
+        $productsCount = count($benchmarkData['products']['list']);
+
+        if ($ordersCount === 0 && $customersCount === 0 && $productsCount === 0) {
+            $config->setLastSent(new \DateTime('now', new \DateTimeZone('UTC')));
+            $this->benchmarkRepository->save($config);
+
+            throw new TransmissionNotNecessaryException();
+        }
+
+        $benchmarkData = json_encode($benchmarkData, true);
 
         $request = new StatisticsRequest($benchmarkData);
 
         /** @var StatisticsResponse $statisticsResponse */
         $statisticsResponse = $this->statisticsClient->sendStatistics($request);
 
-        $config = $this->benchmarkRepository->getConfigForShop($shopId);
-        $config->setLastSent($statisticsResponse->getDateUpdated());
         $config->setToken($statisticsResponse->getToken());
-
         $this->benchmarkRepository->save($config);
 
         return $statisticsResponse;

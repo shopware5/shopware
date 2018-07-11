@@ -174,6 +174,8 @@ class CustomersProvider implements BenchmarkProviderInterface
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
         $queryBuilder->update('s_benchmark_config')
             ->set('last_customer_id', ':customerId')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->setParameter(':customerId', $lastCustomerId)
             ->execute();
     }
@@ -187,6 +189,8 @@ class CustomersProvider implements BenchmarkProviderInterface
 
         return $configsQueryBuilder->select('configs.*')
             ->from('s_benchmark_config', 'configs')
+            ->where('configs.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetch();
     }

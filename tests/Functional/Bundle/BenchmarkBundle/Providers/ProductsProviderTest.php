@@ -121,6 +121,7 @@ class ProductsProviderTest extends ProviderTestCase
     public function testGetProductListBasicPerShop()
     {
         $this->installDemoData('products_basic');
+        $this->installDemoData('second_config');
 
         $provider = $this->getProvider();
         $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1));
@@ -174,10 +175,10 @@ class ProductsProviderTest extends ProviderTestCase
         $this->resetConfig();
         $this->installDemoData('products_basic');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_product_id=4, batch_size=1;');
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_product_id=4, batch_size=1 WHERE shop_id=1;');
 
         $this->getBenchmarkData();
 
-        $this->assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_product_id FROM s_benchmark_config'));
+        $this->assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_product_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 }

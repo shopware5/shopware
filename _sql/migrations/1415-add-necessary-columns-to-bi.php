@@ -27,11 +27,16 @@ class Migrations_Migration1415 extends Shopware\Components\Migrations\AbstractMi
     {
         // Add new 'last id' columns, e.g. for products and customers
         // Rename "orders_batch_size" to "batch_size" so it works with all entities
+        // Add 'locked' and 'type' column for locking a shop and saving the business model (e.g. 'b2b')
+        // Add 'shopId' to unique keys
         $sql = <<<SQL
             ALTER TABLE `s_benchmark_config`
                 ADD `last_customer_id` int(11) NOT NULL AFTER `last_order_id`,
-                ADD `last_product_id` int(11) NOT NULL AFTER `last_customer_id`,
-                CHANGE `orders_batch_size` `batch_size` int(11) NOT NULL AFTER `last_product_id`;
+                ADD `last_product_id` int(11) NOT NULL AFTER `last_customer_id`,ADD `shop_id` int(11) NOT NULL AFTER `id`,
+                ADD `type` varchar(20) NULL AFTER `industry`,
+                ADD `locked` DATETIME NULL AFTER `cached_template`,
+                CHANGE `orders_batch_size` `batch_size` int(11) NOT NULL AFTER `last_product_id`,
+                ADD UNIQUE `shop_id` (`shop_id`);
 SQL;
         $this->addSql($sql);
     }

@@ -61,9 +61,7 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
             $providerData[$provider->getName()] = $provider->getBenchmarkData($shopContext);
         }
 
-        $providerData = $this->moveShopData($providerData);
-
-        return json_encode($providerData, true);
+        return $this->moveShopData($providerData);
     }
 
     /**

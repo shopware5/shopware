@@ -1,6 +1,7 @@
 SET FOREIGN_KEY_CHECKS=0;
 DELETE FROM s_core_shops;
 DELETE FROM s_categories;
+DELETE FROM s_benchmark_config;
 
 INSERT INTO `s_core_shops` (`id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `base_url`, `hosts`, `secure`, `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`) VALUES
     (1,	NULL,	'Shop 1',	NULL,	0,	'myShop.de',	NULL,	NULL,	'',	0,	23,	23,	2,	1,	1,	1,	NULL,	0,	1,	1),

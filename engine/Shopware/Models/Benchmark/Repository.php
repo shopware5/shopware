@@ -162,6 +162,87 @@ class Repository extends EntityRepository
     }
 
     /**
+     * @return BenchmarkConfig|null
+     */
+    public function getNextTransmissionShopConfig()
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $yesterday = new \DateTime('now', new \DateTimeZone('UTC'));
+        $yesterday = $yesterday->modify('-1 day');
+
+        $lastHour = new \DateTime('now', new \DateTimeZone('UTC'));
+        $lastHour = $lastHour->modify('-1 hour');
+
+        return $queryBuilder->select('configs')
+            ->from(BenchmarkConfig::class, 'configs')
+            ->where('configs.lastSent < :yesterday')
+            ->andWhere('configs.active = 1')
+            ->andWhere('configs.industry != 0')
+            ->andWhere('configs.locked IS NULL OR configs.locked < :lastHour')
+            ->setParameter(':yesterday', $yesterday->format('Y-m-d H:i:s'))
+            ->setParameter(':lastHour', $lastHour->format('Y-m-d H:i:s'))
+            ->orderBy('configs.shopId', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @return BenchmarkConfig|null
+     */
+    public function getNextReceivingShopConfig()
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = $now->modify('-1 day');
+
+        return $queryBuilder->select('configs')
+            ->from(BenchmarkConfig::class, 'configs')
+            ->where('configs.lastReceived < :dateNow')
+            ->andWhere('configs.lastSent > configs.lastReceived')
+            ->andWhere('configs.active = 1')
+            ->andWhere('configs.industry != 0')
+            ->andWhere('configs.token IS NOT NULL')
+            ->setParameter(':dateNow', $now->format('Y-m-d H:i:s'))
+            ->orderBy('configs.shopId')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function lockShop($shopId)
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $queryBuilder->update('s_benchmark_config')
+            ->set('locked', ':now')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $shopId)
+            ->setParameter(':now', $now->format('Y-m-d H:i:s'))
+            ->execute();
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function unlockShop($shopId)
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $queryBuilder->update('s_benchmark_config')
+            ->set('locked', 'NULL')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $shopId)
+            ->execute();
+    }
+
+    /**
      * @return array
      */
     private function getAllViableShopIds()
