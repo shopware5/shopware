@@ -79,6 +79,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             return;
         }
 
+        $this->View()->assign('isAccountless', $this->get('session')->get('isAccountless'));
         $this->View()->assign('register', $this->getRegisterData());
         $this->View()->assign('countryList', $this->getCountries());
     }
@@ -156,7 +157,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         /** @var Address $billing */
         $billing = $billingForm->getData();
 
-        $doubleOptinRegister = $this->container->get('config')->get('optinregister');
+        $config = $this->container->get('config');
+
+        $accountMode = (int) $customer->getAccountMode();
+        $doubleOptinWithAccount = ($accountMode === 0) && $config->get('optinregister');
+        $doubleOptInAccountless = ($accountMode === 1) && $config->get('optinaccountless');
+
+        $doubleOptinRegister = $doubleOptinWithAccount || $doubleOptInAccountless;
 
         $customer->setReferer((string) $session->offsetGet('sReferer'));
         $customer->setValidation((string) $data['register']['personal']['sValidation']);
@@ -189,6 +196,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
                     'shippingID' => $customer->getDefaultShippingAddress()->getId(),
                 ]
             );
+
+            $session->offsetSet('isAccountless', $accountMode === Customer::ACCOUNT_MODE_FAST_LOGIN);
 
             $this->redirectCustomer([
                 'location' => 'register',

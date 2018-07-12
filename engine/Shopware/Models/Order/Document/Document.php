@@ -121,7 +121,7 @@ class Document extends ModelEntity
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Document\Document")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
      *
-     * @var
+     * @var \Shopware\Models\Document\Document
      */
     private $type;
 
@@ -312,7 +312,7 @@ class Document extends ModelEntity
     }
 
     /**
-     * @return
+     * @return \Shopware\Models\Document\Document
      */
     public function getType()
     {
@@ -320,7 +320,7 @@ class Document extends ModelEntity
     }
 
     /**
-     * @param  $type
+     * @param \Shopware\Models\Document\Document $type
      */
     public function setType($type)
     {
