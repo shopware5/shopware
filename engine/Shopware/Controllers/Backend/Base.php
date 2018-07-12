@@ -1100,7 +1100,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $tmpVariant = [];
 
         // Checks if an additional text is available
-        foreach ($data as $variantData) {
+        foreach ($data as &$variantData) {
             if (!empty($variantData['additionalText'])) {
                 $variantData['name'] = $variantData['name'] . ' ' . $variantData['additionalText'];
             } else {
