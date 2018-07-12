@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -256,7 +255,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $validator = $this->container->get('validator.email');
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
-                // SW-4526
+            // SW-4526
                 // Don't `continue` with next iteration without setting user's lastmailing
                 // else the mailing.status will never be set to 2
                 // and sending the mail will block
@@ -396,6 +395,14 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     public function initTemplate($mailing)
     {
         $template = clone Shopware()->Template();
+        $shop = Shopware()->Shop();
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $config = $inheritance->buildConfig(
+            $shop->getTemplate(),
+            $shop,
+            false
+        );
 
         $user = $this->getMailingUserByEmail(Shopware()->Config()->Mail);
         $template->assign('sUser', $user, true);
@@ -406,12 +413,11 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $template->assign('sCampaign', $this->getMailingDetails($mailing['id']), true);
         $template->assign('sConfig', Shopware()->Config());
         $template->assign('sBasefile', Shopware()->Config()->BaseFile);
-
-        $shop = Shopware()->Shop();
+        $template->assign('theme', $config);
 
         if (!$template->isCached($mailing['template'])) {
             $template->assign('sMailing', $mailing);
-            $template->assign('sStart', ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBasePath());
+            $template->assign('sStart', ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBaseUrl());
             $template->assign('sUserGroup', Shopware()->System()->sUSERGROUP);
             $template->assign('sUserGroupData', Shopware()->System()->sUSERGROUPDATA);
             $template->assign('sMainCategories', Shopware()->Modules()->Categories()->sGetMainCategories());

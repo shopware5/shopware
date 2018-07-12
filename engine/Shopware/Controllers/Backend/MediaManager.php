@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
@@ -346,7 +345,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         // Check if the media is loaded.
         if ($media === null || empty($media)) {
-            $this->View()->assign(['success' => false, 'message' => 'Media not found']);
+            $this->View()->assign(['success' => false, 'message' => sprintf('Media with id %s not found', $id)]);
+
+            return;
         }
 
         // Try to remove the media and the uploaded files.
@@ -858,7 +859,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 $size = $size . 'x' . $size;
             }
 
-            $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
+            $projectDir = $this->container->getParameter('shopware.app.rootdir');
+            $thumbnailDir = $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($media['type']) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
             $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
 
             $path = str_replace(Shopware()->DocPath(), '', $path);
@@ -994,11 +996,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media->setName($params['name']);
         $name = $media->getName();
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
 
         // Check if the name passed and is valid
         if (!empty($name)) {
             $path = 'media/' . strtolower($media->getType()) . '/' . $name . '.' . $media->getExtension();
-            $path = Shopware()->DocPath() . $path;
+            $path = $projectDir . $path;
 
             if ($name !== $oldName && $mediaService->has($path)) {
                 $this->View()->assign(['success' => false, 'message' => 'Name already exist']);
@@ -1011,6 +1014,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         // Check if a new album id is passed and is valid
         if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
+            /** @var Album $album */
             $album = Shopware()->Container()->get('models')->getRepository(Album::class)->find($params['newAlbumID']);
             if ($album) {
                 $media->setAlbum($album);

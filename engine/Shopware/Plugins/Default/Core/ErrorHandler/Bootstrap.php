@@ -21,11 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Monolog\Handler\BufferHandler;
 use Shopware\Components\Log\Formatter\HtmlFormatter;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
 use Shopware\Components\Log\Processor\ShopwareEnvironmentProcessor;
+use Shopware\Components\Logger;
 
 /**
  * Shopware Error Handler
@@ -39,7 +39,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * @var callback
      */
-    protected static $_origErrorHandler = null;
+    protected static $_origErrorHandler;
 
     /**
      * @var bool
@@ -49,7 +49,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * @var array
      */
-    protected $_errorHandlerMap = null;
+    protected $_errorHandlerMap;
 
     /**
      * @var array
@@ -215,12 +215,14 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
             case E_WARNING:
             case E_STRICT:
             case E_USER_NOTICE:
-            case E_USER_DEPRECATED:
             case E_CORE_WARNING:
             case E_USER_WARNING:
             case E_ERROR:
             case E_USER_ERROR:
             case E_CORE_ERROR:
+                break;
+            case E_USER_DEPRECATED:
+                $this->get('corelogger')->debug($errstr);
                 break;
             case E_RECOVERABLE_ERROR:
                 if ($this->throwOnRecoverableError) {
@@ -270,10 +272,12 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     {
         $response = $args->getSubject()->Response();
         $exceptions = $response->getException();
+
         if (empty($exceptions)) {
             return;
         }
 
+        /** @var Logger $logger */
         $logger = $this->get('corelogger');
         foreach ($exceptions as $exception) {
             $logger->error((string) $exception);
@@ -300,6 +304,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
         $mailHandler->setFormatter(new HtmlFormatter());
 
-        return new BufferHandler($mailHandler);
+        return new BufferHandler($mailHandler, 0, Logger::ERROR);
     }
 }

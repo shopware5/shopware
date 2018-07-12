@@ -170,6 +170,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
         var me = this,
             el = me.getEl();
 
+        el.removeAllListeners();
+
         el.on({
             'click': {
                 scope: me,
@@ -415,6 +417,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
             elements = me.emotion.getElements(),
             elementLayer = me.getEl().down('.x-designer-element-layer');
 
+        if (me.elements) {
+            for (var key in me.elements) {
+                if (me.elements[key].gridResizer) {
+                    me.elements[key].gridResizer.destroy();
+                }
+                me.elements[key].getEl().removeAllListeners();
+            }
+        }
+
         me.elements = {};
 
         // Clear all hidden Elements which are outside the data view
@@ -459,6 +470,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
         if (!me.settings.drop) {
             return false;
+        }
+
+        if (me.dropZone) {
+            me.dropZone.destroy();
         }
 
         me.dropZone = Ext.create('Ext.dd.DropZone', dropZonEl, {

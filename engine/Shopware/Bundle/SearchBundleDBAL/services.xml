@@ -49,6 +49,7 @@
             <argument type="service" id="config" />
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_searchdbal.search_term_helper" />
+            <argument>%shopware.search.indexer.batchsize%</argument>
         </service>
 
         <service id="shopware_searchdbal.search_term_helper" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper">
@@ -177,6 +178,10 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.productid_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ProductIdConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.product_attribute_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ProductAttributeConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>
@@ -215,6 +220,10 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.last_id_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\LastProductIdConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <!-- Sorting handler -->
         <service id="shopware_searchdbal.product_name_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductNameSortingHandler">
             <tag name="sorting_handler_dbal"/>
@@ -248,7 +257,6 @@
         <service id="shopware_searchdbal.product_stock_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductStockSortingHandler">
             <tag name="sorting_handler_dbal"/>
         </service>
-
 
         <service id="shopware_searchdbal.combined_condition_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\CombinedConditionFacetHandler">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />

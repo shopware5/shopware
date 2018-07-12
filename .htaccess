@@ -26,7 +26,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
     RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
 
     # Restrict access to root folder files
-    RedirectMatch 404 /(autoload\.php|composer\.(json|lock|phar)|README\.md|UPGRADE-(.*)\.md|CONTRIBUTING\.md|eula.*\.txt|\.gitignore|.*\.dist)$
+    RedirectMatch 404 /(autoload\.php|composer\.(json|lock|phar)|README\.md|UPGRADE-(.*)\.md|CONTRIBUTING\.md|eula.*\.txt|\.gitignore|.*\.dist|\.env.*)$
 
     # Restrict access to shop configs files
     RedirectMatch 404 /(web\/cache\/(config_\d+\.json|all.less))$
@@ -64,7 +64,7 @@ DirectoryIndex shopware.php
     AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/javascript application/json application/font-woff application/font-woff2 image/svg+xml
 </IfModule>
 
-<Files ~ "\.(jpe?g|png|gif|css|js|woff|eot)$">
+<Files ~ "\.(jpe?g|png|gif|css|js|woff|woff2|ttf|svg|eot)$">
     <IfModule mod_expires.c>
         ExpiresActive on
         ExpiresDefault "access plus 1 month"
@@ -94,7 +94,7 @@ DirectoryIndex shopware.php
 
 # Disables auto directory index
 <IfModule mod_autoindex.c>
-	Options -Indexes
+    Options -Indexes
 </IfModule>
 
 <IfModule mod_negotiation.c>

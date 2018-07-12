@@ -289,7 +289,7 @@ class PathResolver
      */
     public function formatPathToUrl($path, Shop\Shop $shop)
     {
-        return str_replace(rtrim($this->rootDir, '/'), $shop->getBasePath(), $path);
+        return str_replace([rtrim($this->rootDir, '/\\'), '\\', '//'], [$shop->getBasePath(), '/', '/'], $path);
     }
 
     /**

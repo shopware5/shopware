@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -213,8 +212,15 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $service = Shopware()->Container()->get('shopware_attribute.crud_service');
         $data = $service->getList('s_articles_attributes');
 
+        $offset = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 20);
+
         $columns = [];
-        foreach ($data as $struct) {
+        for ($i = $offset; $i <= $offset + $limit; ++$i) {
+            if (!isset($data[$i])) {
+                break;
+            }
+            $struct = $data[$i];
             if (!$struct->displayInBackend()) {
                 continue;
             }
@@ -224,7 +230,11 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             ];
         }
 
-        $this->View()->assign(['success' => true, 'data' => $columns]);
+        $this->View()->assign([
+            'success' => true,
+            'data' => $columns,
+            'total' => count($data),
+        ]);
     }
 
     public function copySelectedProductsAction()

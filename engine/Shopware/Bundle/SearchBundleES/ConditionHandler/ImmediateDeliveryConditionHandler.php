@@ -27,6 +27,7 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
+use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
@@ -51,9 +52,7 @@ class ImmediateDeliveryConditionHandler implements PartialConditionHandlerInterf
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addFilter(
-            new TermQuery('hasAvailableVariant', 1)
-        );
+        $this->handle($criteria, $search);
     }
 
     /**
@@ -65,8 +64,42 @@ class ImmediateDeliveryConditionHandler implements PartialConditionHandlerInterf
         Search $search,
         ShopContextInterface $context
     ) {
+        $this->handle($criteria, $search);
+    }
+
+    private function handle(Criteria $criteria, Search $search)
+    {
+        $groupBy = $this->buildGroupBy($criteria);
+
+        if ($groupBy) {
+            $search->addPostFilter(new TermQuery($groupBy, 1));
+
+            return;
+        }
+
         $search->addPostFilter(
             new TermQuery('hasAvailableVariant', 1)
         );
+    }
+
+    private function buildGroupBy(Criteria $criteria)
+    {
+        $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+
+        $conditions = array_filter($conditions, function (VariantCondition $condition) {
+            return $condition->expandVariants();
+        });
+
+        $groups = array_map(function (VariantCondition $condition) {
+            return $condition->getGroupId();
+        }, $conditions);
+
+        if (empty($conditions)) {
+            return null;
+        }
+
+        sort($groups, SORT_NUMERIC);
+
+        return 'availability.g' . implode('-', $groups);
     }
 }

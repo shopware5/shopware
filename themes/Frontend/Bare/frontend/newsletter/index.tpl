@@ -203,6 +203,13 @@
                                 {/if}
                             {/block}
 
+                            {* Data protection information *}
+                            {block name="frontend_newsletter_form_privacy"}
+                                {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                                    {include file="frontend/_includes/privacy.tpl"}
+                                {/if}
+                            {/block}
+
                             {* Submit button *}
                             {block name="frontend_newsletter_form_submit"}
                                 <div class="newsletter--action">

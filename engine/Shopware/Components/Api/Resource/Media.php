@@ -292,7 +292,9 @@ class Media extends Resource
      */
     public function load($url, $baseFilename = null)
     {
-        $destPath = Shopware()->DocPath('media_' . 'temp');
+        $projectDir = $this->getContainer()->getParameter('shopware.app.rootdir');
+        $destPath = $projectDir . 'media' . DIRECTORY_SEPARATOR . 'temp';
+
         if (!is_dir($destPath)) {
             mkdir($destPath, 0777, true);
         }
@@ -303,7 +305,9 @@ class Media extends Resource
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not exist.", $destPath)
             );
-        } elseif (!is_writable($destPath)) {
+        }
+
+        if (!is_writable($destPath)) {
             throw new \InvalidArgumentException(
                 sprintf("Destination directory '%s' does not have write permissions.", $destPath)
             );
@@ -327,11 +331,11 @@ class Media extends Resource
             case 'file':
                 $filename = $this->getUniqueFileName($destPath, $baseFilename);
 
-                if (!$put_handle = fopen("$destPath/$filename", 'w+')) {
+                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
                     throw new \Exception("Could not open $destPath/$filename for writing");
                 }
 
-                if (!$get_handle = fopen($url, 'r')) {
+                if (!$get_handle = fopen($url, 'rb')) {
                     throw new \Exception("Could not open $url for reading");
                 }
                 while (!feof($get_handle)) {
@@ -350,13 +354,17 @@ class Media extends Resource
     /**
      * Helper function to get a unique file name for the passed destination path.
      *
-     * @param $destPath
-     * @param null $baseFileName
+     * @param string      $destPath
+     * @param string|null $baseFileName
      *
      * @return null|string
      */
     public function getUniqueFileName($destPath, $baseFileName = null)
     {
+        if (null !== $baseFileName) {
+            $baseFileName = basename($baseFileName);
+        }
+
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         if ($baseFileName !== null && !$mediaService->has("$destPath/$baseFileName")) {
             return substr($baseFileName, 0, self::FILENAME_LENGTH);
@@ -473,17 +481,22 @@ class Media extends Resource
                 $params['name'] = pathinfo($params['file'], PATHINFO_FILENAME);
             }
             $params['name'] = $this->getUniqueFileName($params['file'], $params['name']);
+            $originalName = $params['file'];
 
             if (!file_exists($params['file'])) {
                 try {
                     $path = $this->load($params['file'], $params['name']);
+
+                    if (strpos($params['file'], 'data:image') !== false) {
+                        $originalName = $params['name'];
+                    }
                 } catch (\Exception $e) {
                     throw new \Exception(sprintf('Could not load image %s', $params['file']));
                 }
             } else {
                 $path = $params['file'];
             }
-            $params['file'] = new UploadedFile($path, $params['file']);
+            $params['file'] = new UploadedFile($path, $originalName);
         }
 
         return $params;

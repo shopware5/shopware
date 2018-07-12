@@ -25,7 +25,7 @@
 namespace Shopware\Components\ProductStream;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
+use Shopware\Bundle\SearchBundle\Condition\ProductIdCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -104,9 +104,8 @@ class Repository implements RepositoryInterface
      */
     private function prepareSelectionStream(array $productStream, Criteria $criteria)
     {
-        $ordernumbers = $this->getOrdernumbers($productStream['id']);
-
-        $criteria->addBaseCondition(new OrdernumberCondition($ordernumbers));
+        $productIds = $this->getProductIds($productStream['id']);
+        $criteria->addBaseCondition(new ProductIdCondition($productIds));
 
         $sortings = $criteria->getSortings();
         if (empty($sortings)) {
@@ -117,23 +116,17 @@ class Repository implements RepositoryInterface
     /**
      * @param int $productStreamId
      *
-     * @return string[]
+     * @return int[]
      */
-    private function getOrdernumbers($productStreamId)
+    private function getProductIds($productStreamId)
     {
-        $query = <<<'SQL'
-SELECT
-    s_articles_details.ordernumber
-FROM s_product_streams_selection
-INNER JOIN s_articles_details ON s_product_streams_selection.article_id = s_articles_details.articleID
-WHERE stream_id = :productStreamId
-AND s_articles_details.kind = 1
-SQL;
+        $query = $this->conn->createQueryBuilder();
+        $query->select('article_id')
+            ->from('s_product_streams_selection')
+            ->where('stream_id = :productStreamId')
+            ->setParameter(':productStreamId', $productStreamId);
 
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute(['productStreamId' => $productStreamId]);
-
-        return $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**

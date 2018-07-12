@@ -13,14 +13,16 @@
 {* Back to the shop button *}
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
-    {if $theme.checkoutHeader && !$toAccount}
-        <a href="{url controller='index'}"
-           class="btn is--small btn--back-top-shop is--icon-left"
-           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
-            <i class="icon--arrow-left"></i>
-            {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
-        </a>
-    {/if}
+    {block name='frontend_register_index_back_to_shop_button'}
+        {if $theme.checkoutHeader && !$toAccount}
+            <a href="{url controller='index'}"
+               class="btn is--small btn--back-top-shop is--icon-left"
+               title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
+                <i class="icon--arrow-left"></i>
+                {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
+            </a>
+        {/if}
+    {/block}
 {/block}
 
 {* Hide breadcrumb *}
@@ -113,6 +115,24 @@
             {block name='frontend_register_index_form'}
                 <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
 
+                    {* Successful optin verification *}
+                    {block name='frontend_register_index_form_optin_success'}
+                        {if $smarty.get.optinsuccess && ({config name=optinregister} || {config name=optinaccountless})}
+                            {if $isAccountless}
+                                {include file="frontend/_includes/messages.tpl" type="success" content="{s name="RegisterInfoSuccessOptinAccountless"}{/s}"}
+                            {else}
+                                {include file="frontend/_includes/messages.tpl" type="success" content="{s name="RegisterInfoSuccessOptin"}{/s}"}
+                            {/if}
+                        {/if}
+                    {/block}
+
+                    {* Invalid hash while option verification process *}
+                    {block name='frontend_register_index_form_optin_invalid_hash'}
+                        {if $smarty.get.optinhashinvalid && ({config name=optinregister} || {config name=optinaccountless})}
+                            {include file="frontend/_includes/messages.tpl" type="error" content="{s name="RegisterInfoInvalidHash"}{/s}"}
+                        {/if}
+                    {/block}
+
                     {block name='frontend_register_index_form_captcha_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$errors.captcha}
                     {/block}
@@ -132,16 +152,10 @@
                         {include file="frontend/register/shipping_fieldset.tpl" form_data=$register.shipping error_flags=$errors.shipping country_list=$countryList}
                     {/block}
 
-                    {* Privacy checkbox *}
+                    {* @deprecated Block will be excluded in 5.7 *}
+                    {* It has been replaced by "frontend_register_index_form_privacy" below *}
                     {if !$update}
-                        {if {config name=ACTDPRCHECK}}
-                            {block name='frontend_register_index_input_privacy'}
-                                <div class="register--privacy">
-                                    <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="chkbox is--required" />
-                                    <label for="dpacheckbox" class="chklabel{if isset($errors.personal.dpacheckbox)} has--error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
-                                </div>
-                            {/block}
-                        {/if}
+                        {block name='frontend_register_index_input_privacy'}{/block}
                     {/if}
 
                     {block name='frontend_register_index_form_required'}
@@ -157,6 +171,38 @@
                         {$captchaName = {config name=registerCaptcha}}
                         {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                     {/block}
+
+                    {* Data protection information *}
+                    {if !$update}
+                        {block name="frontend_register_index_form_privacy"}
+                            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                                {block name="frontend_register_index_form_privacy_title"}
+                                    <h2 class="panel--title is--underline">
+                                        {s name="PrivacyTitle" namespace="frontend/index/privacy"}{/s}
+                                    </h2>
+                                {/block}
+                                <div class="panel--body is--wide">
+                                    {block name="frontend_register_index_form_privacy_content"}
+                                        <div class="register--password-description">
+                                            {if {config name=ACTDPRCHECK}}
+                                                {* Privacy checkbox *}
+                                                {block name="frontend_register_index_form_privacy_content_checkbox"}
+                                                    <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="is--required" />
+                                                    <label for="dpacheckbox">
+                                                        {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
+                                                    </label>
+                                                {/block}
+                                            {else}
+                                                {block name="frontend_register_index_form_privacy_content_text"}
+                                                    {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
+                                                {/block}
+                                            {/if}
+                                        </div>
+                                    {/block}
+                                </div>
+                            {/if}
+                        {/block}
+                    {/if}
 
                     {block name='frontend_register_index_form_submit'}
                         {* Submit button *}

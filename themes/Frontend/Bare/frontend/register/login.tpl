@@ -39,7 +39,10 @@
                     {/if}
 
                     <form name="sLogin" method="post" action="{$url}">
-                        {if $sTarget}<input name="sTarget" type="hidden" value="{$sTarget|escape}" />{/if}
+                        {block name='frontend_register_login_form_additional_inputs'}
+                            {if $sTarget}<input name="sTarget" type="hidden" value="{$sTarget|escape}" />{/if}
+                            {if $showNoAccount}<input name="showNoAccount" type="hidden" value="true" />{/if}
+                        {/block}
 
                         {block name='frontend_register_login_description'}
                             <div class="register--login-description">{s name="LoginHeaderFields"}{/s}</div>

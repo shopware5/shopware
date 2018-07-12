@@ -31,13 +31,16 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
      * Transition method
      * Confirm action method
      *
-     * @deprecated
+     * @deprecated Will be removed in 5.5.
      */
     public function confirmAction()
     {
         // todo@all maybe this method can be deleted once all references are removed
         // transition method
         // confirm check is done via helper method isConfirmed()
+
+        trigger_error(sprintf('%s::%s() is deprecated and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->forward('index');
     }
 
@@ -49,6 +52,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $this->View()->voteConfirmed = $this->isConfirmed();
         $this->Request()->setParam('voteConfirmed', $this->View()->voteConfirmed);
         $this->View()->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
+
+        $this->front->setParam('voteConfirmed', $this->View()->voteConfirmed);
+        $this->front->setParam('optinNow', (new \DateTime())->format('Y-m-d H:i:s'));
 
         if (isset($this->Request()->sUnsubscribe)) {
             $this->View()->sUnsubscribe = true;
@@ -84,31 +90,33 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         }
 
         if (empty($config->get('sOPTINNEWSLETTER')) || $this->View()->voteConfirmed) {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
-            if ($this->View()->sStatus['code'] == 3) {
+            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter']);
+            if ($this->View()->sStatus['code'] == 3 && $this->View()->sStatus['isNewRegistration']) {
                 // Send mail to subscriber
                 $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sNEWSLETTERCONFIRMATION');
             }
         } else {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter']);
+
             if ($this->View()->sStatus['code'] == 3) {
-                Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
-                $hash = \Shopware\Components\Random::getAlphanumericString(32);
-                $data = serialize(Shopware()->System()->_POST->toArray());
+                if ($this->View()->sStatus['isNewRegistration']) {
+                    Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
+                    $hash = \Shopware\Components\Random::getAlphanumericString(32);
+                    $data = serialize(Shopware()->System()->_POST->toArray());
 
-                $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash]);
+                    $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash]);
 
-                $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
+                    $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
 
-                // Setting status-code
+                    Shopware()->Db()->query('
+                    INSERT INTO s_core_optin (datum,hash,data,type)
+                    VALUES (
+                    now(),?,?,"swNewsletter"
+                    )
+                    ', [$hash, $data]);
+                }
+
                 $this->View()->sStatus = ['code' => 3, 'message' => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation')];
-
-                Shopware()->Db()->query('
-                INSERT INTO s_core_optin (datum,hash,data)
-                VALUES (
-                now(),?,?
-                )
-                ', [$hash, $data]);
             }
         }
     }
@@ -253,6 +261,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         if (empty($getVote['data'])) {
             return false;
         }
+
+        // Needed for 'added' date
+        $this->front->setParam('optinDate', $getVote['datum']);
 
         Shopware()->System()->_POST = unserialize($getVote['data']);
 

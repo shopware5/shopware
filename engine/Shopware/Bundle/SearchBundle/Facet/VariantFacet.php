@@ -45,11 +45,16 @@ class VariantFacet implements FacetInterface
     protected $expandGroupsIds;
 
     /**
-     * @param string|array      $groupIds
+     * @param string|array|null $groupIds
      * @param string|array|null $expandGroupIds
      */
-    public function __construct($groupIds, $expandGroupIds = null)
+    public function __construct($groupIds = null, $expandGroupIds = null)
     {
+        if ($groupIds === null) {
+            $groupIds = [];
+            $expandGroupIds = [];
+        }
+
         if (is_string($groupIds)) {
             $groupIds = array_filter(explode('|', $groupIds));
         }

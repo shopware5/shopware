@@ -338,8 +338,6 @@ class Payment extends ModelEntity
     /**
      * Sets the class of a payment
      *
-     * @deprecated
-     *
      * @param string $class
      *
      * @return Payment
@@ -354,8 +352,6 @@ class Payment extends ModelEntity
     /**
      * Gets the class of a payment
      *
-     * @deprecated
-     *
      * @return string
      */
     public function getClass()
@@ -365,8 +361,6 @@ class Payment extends ModelEntity
 
     /**
      * Set the special table of a payment
-     *
-     * @deprecated
      *
      * @param string $table
      *
@@ -381,8 +375,6 @@ class Payment extends ModelEntity
 
     /**
      * Gets the table of a payment
-     *
-     * @deprecated
      *
      * @return string
      */
@@ -504,8 +496,6 @@ class Payment extends ModelEntity
     /**
      * Gets the country-surcharge-string of a payment
      *
-     * @deprecated
-     *
      * @return string
      */
     public function getSurchargeString()
@@ -612,8 +602,6 @@ class Payment extends ModelEntity
     /**
      * Sets the embed-IFrame of a payment
      *
-     * @deprecated
-     *
      * @param string $embedIFrame
      *
      * @return Payment
@@ -627,8 +615,6 @@ class Payment extends ModelEntity
 
     /**
      * Gets the embed-IFrame of a payment
-     *
-     * @deprecated
      *
      * @return string
      */

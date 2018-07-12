@@ -51,29 +51,25 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
 
     /**
      * Tests the behavior if the blog article is not activated
+     *
+     * @expectedException \Enlight_Exception
+     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
      */
     public function testDispatchNoActiveBlogItem()
     {
-        try {
-            $this->dispatch('/blog/detail/?blogArticle=3');
-        } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
-        }
-
+        $this->dispatch('/blog/detail/?blogArticle=3');
         $this->assertTrue($this->Response()->isRedirect());
     }
 
     /**
      * Tests the behavior if the BlogItem does not exist anymore
+     *
+     * @expectedException \Enlight_Exception
+     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
      */
     public function testDispatchNotExistingBlogItem()
     {
-        try {
-            $this->dispatch('/blog/detail/?blogArticle=2222');
-        } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
-        }
-
+        $this->dispatch('/blog/detail/?blogArticle=2222');
         $this->assertTrue($this->Response()->isRedirect());
     }
 

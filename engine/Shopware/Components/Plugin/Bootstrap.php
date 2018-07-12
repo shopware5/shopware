@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Config\ElementTranslation;
 use Shopware\Models\Config\Form;
@@ -930,7 +929,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Check if a given version is greater or equal to
      * the currently installed shopware version.
      *
-     * @deprecated 4.1.3 Use assertMinimumVersion instead
+     * @deprecated Since 4.1.3, will be removed in 5.5. Use assertMinimumVersion instead.
      *
      * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
      *
@@ -938,6 +937,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     protected function assertVersionGreaterThen($requiredVersion)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since version 4.1.3 and will be removed in 5.5. Use assertMinimumVersion instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->assertMinimumVersion($requiredVersion);
     }
 

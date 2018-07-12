@@ -90,7 +90,7 @@ class Thumbnail extends Extendable
     }
 
     /**
-     * @deprecated deprecated since version 5.1, please build the sourceSet in a hydrator or view
+     * @deprecated Deprecated since version 5.1 and will be removed in 5.5. Please build the sourceSet in a hydrator or view.
      *
      * @param string $imageDir
      *
@@ -98,6 +98,8 @@ class Thumbnail extends Extendable
      */
     public function getSourceSet($imageDir)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since version 5.1 and will be removed in 5.5. Please build the sourceSet in a hydrator or view.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if ($this->retinaSource !== null) {
             return sprintf('%s%s, %s%s 2x', $imageDir, $this->source, $imageDir, $this->retinaSource);
         }

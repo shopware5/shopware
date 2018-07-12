@@ -10,8 +10,8 @@
             <argument type="service" id="guzzle_http_client_factory"/>
             <argument type="collection">
                 <argument type="collection" key="defaults">
-                    <argument key="timeout">7</argument>
-                    <argument key="connect_timeout">5</argument>
+                    <argument key="timeout">%shopware.store.timeout%</argument>
+                    <argument key="connect_timeout">%shopware.store.connect_timeout%</argument>
                 </argument>
             </argument>
         </service>

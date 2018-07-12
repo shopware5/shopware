@@ -37,7 +37,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Compatibility\LegacyStructConverter;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class StructConverter
 {
@@ -57,7 +57,7 @@ class StructConverter
     private $eventManager;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -65,9 +65,9 @@ class StructConverter
      * @param LegacyStructConverter       $converter
      * @param MediaServiceInterface       $mediaService
      * @param \Enlight_Event_EventManager $eventManager
-     * @param Container                   $container
+     * @param ContainerInterface          $container
      */
-    public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, Container $container)
+    public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, ContainerInterface $container)
     {
         $this->converter = $converter;
         $this->mediaService = $mediaService;

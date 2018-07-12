@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                     mainIdField = form.down('[name=mainId]');
                     type = mainIdField.getValue() ? 'lang' : 'sub';
                     typeSwitchField.setValue(type);
-                    typeSwitchField.setDisabled(value === 1);
+                    typeSwitchField.setDisabled(value == 1);
                 }
             }
         }

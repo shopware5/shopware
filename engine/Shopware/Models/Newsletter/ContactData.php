@@ -111,9 +111,17 @@ class ContactData extends ModelEntity
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=false)
+     */
+    protected $doubleOptinConfirmed;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="deleted", type="datetime", nullable=true)
      */
     protected $deleted;
+
     /**
      * Autoincrement ID
      *
@@ -307,5 +315,21 @@ class ContactData extends ModelEntity
     public function getZipCode()
     {
         return $this->zipCode;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinConfirmed()
+    {
+        return $this->doubleOptinConfirmed;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinConfirmed
+     */
+    public function setDoubleOptinConfirmed($doubleOptinConfirmed)
+    {
+        $this->doubleOptinConfirmed = $doubleOptinConfirmed;
     }
 }

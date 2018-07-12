@@ -34,10 +34,37 @@
      */
     window.StorageManager = (function () {
         var storage = {
-                local: window.localStorage,
-                session: window.sessionStorage
-            },
-            p;
+        }, p;
+
+        var enableBlackHoleStorage = function () {
+            var blackHoleStorage = {
+                length: 0,
+                clear: function () {},
+                getItem: function () {return null;},
+                key: function () {return null;},
+                removeItem: function () {return null;},
+                setItem: function () {return null;},
+            };
+
+            storage = {
+                local: blackHoleStorage,
+                session: blackHoleStorage
+            };
+        };
+
+        try {
+            if (window.StateManager.hasCookiesAllowed()) {
+                storage = {
+                    local: window.localStorage,
+                    session: window.sessionStorage
+                };
+            } else {
+                enableBlackHoleStorage();
+            }
+        } catch (err) {
+            // User has blocked local storage in browser settings
+            enableBlackHoleStorage();
+        }
 
         /**
          * Helper function to detect if cookies are enabled.

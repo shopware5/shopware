@@ -41,12 +41,7 @@
                             {* Name *}
                             {block name="frontend_account_order_item_name"}
                                 <p class="order--name is--strong">
-                                    {* Mode 10 = Bundle Product *}
-                                    {if $article.modus == 10}
-                                        {s name="OrderItemInfoBundle"}{/s}
-                                    {else}
-                                        {$article.name}
-                                    {/if}
+                                    {$article.name}
                                 </p>
                             {/block}
 

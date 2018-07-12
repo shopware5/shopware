@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DbAdapter;
 use Shopware\Models\Plugin\Plugin;
@@ -112,10 +111,12 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      *
      * @return Enlight_Components_Snippet_Namespace
      *
-     * @deprecated  4.0 - 2012/04/01
+     * @deprecated  Since 4.0, will be removed in 5.5.
      */
     public function getSnippet($namespace = null)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since version 4.0 and will be removed in 5.5.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return parent::getNamespace($namespace);
     }
 

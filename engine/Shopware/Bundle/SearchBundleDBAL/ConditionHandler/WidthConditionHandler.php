@@ -28,20 +28,20 @@ use Shopware\Bundle\SearchBundle\Condition\WidthCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class WidthConditionHandler implements ConditionHandlerInterface
 {
     /**
-     * @var VariantHelper
+     * @var VariantHelperInterface
      */
     private $variantHelper;
 
     /**
-     * @param VariantHelper $variantHelper
+     * @param VariantHelperInterface $variantHelper
      */
-    public function __construct(VariantHelper $variantHelper)
+    public function __construct(VariantHelperInterface $variantHelper)
     {
         $this->variantHelper = $variantHelper;
     }

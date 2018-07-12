@@ -1,4 +1,4 @@
-<FilesMatch "\.(ttf|eot|svg|woff)$">
+<FilesMatch "\.(ttf|eot|svg|woff|woff2)$">
     <IfModule mod_expires.c>
         ExpiresActive on
         ExpiresDefault "access plus 1 year"

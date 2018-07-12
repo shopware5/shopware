@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
@@ -140,7 +139,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . Shopware()->System()->sUSERGROUPDATA['id'];
+        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . $context->getCurrentCustomerGroup()->getId();
         $cache = Shopware()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {

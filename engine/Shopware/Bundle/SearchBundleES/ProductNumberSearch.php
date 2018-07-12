@@ -114,11 +114,12 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return Search
      * @throws \Exception
+     *
+     * @return Search
      */
     private function buildSearch(Criteria $criteria, ShopContextInterface $context)
     {
@@ -134,7 +135,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         if ($criteria->getLimit() !== null) {
             $search->setSize($criteria->getLimit());
         }
-        $search->addSort(new FieldSort('id', 'ASC'));
+        $search->addSort(new FieldSort('id', 'asc'));
 
         return $search;
     }

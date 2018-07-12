@@ -30,7 +30,6 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as VariantModel;
@@ -41,6 +40,7 @@ use Shopware\Models\Article\Vote as VoteModel;
 use Shopware\Models\Property\Option as PropertyGroupModel;
 use Shopware\Models\Property\Value as PropertyOptionModel;
 use Shopware\Models\Tax\Tax as TaxModel;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ORMBacklogSubscriber implements EventSubscriber
 {
@@ -83,14 +83,14 @@ class ORMBacklogSubscriber implements EventSubscriber
     private $inserts = [];
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @param Container $container
+     * @param ContainerInterface $container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

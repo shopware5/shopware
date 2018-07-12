@@ -80,7 +80,7 @@ class Customer extends LazyFetchModelEntity
     protected $number = '';
 
     /**
-     * @deprecated Since 5.2 removed in 5.4 use $defaultBillingAddress
+     * @deprecated Since 5.2, will be removed in 5.5. Use $defaultBillingAddress instead.
      * INVERSE SIDE
      * The billing property is the inverse side of the association between customer and billing.
      * The association is joined over the billing userID field and the id field of the customer
@@ -93,7 +93,7 @@ class Customer extends LazyFetchModelEntity
     protected $billing;
 
     /**
-     * @deprecated Since 5.2 removed in 5.4 use $defaultShippingAddress
+     * @deprecated Since 5.2, will be removed in 5.5. Use $defaultShippingAddress instead.
      * INVERSE SIDE
      * The shipping property is the inverse side of the association between customer and shipping.
      * The association is joined over the shipping userID field and the id field of the customer.
@@ -450,6 +450,24 @@ class Customer extends LazyFetchModelEntity
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
     private $birthday;
+
+    /**
+     * @var \boolean
+     * @ORM\Column(name="doubleOptinRegister", type="boolean", nullable=false)
+     */
+    private $doubleOptinRegister;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="doubleOptinEmailSentDate", type="datetime", nullable=true)
+     */
+    private $doubleOptinEmailSentDate;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="doubleOptinConfirmDate", type="datetime", nullable=true)
+     */
+    private $doubleOptinConfirmDate;
 
     /**
      * @var string
@@ -1061,7 +1079,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @deprecated Since 5.2 removed in 5.4 use getDefaultShipping()
+     * @deprecated Since 5.2, will be removed in 5.5. Use getDefaultShipping() instead.
      * Returns the instance of the Shopware\Models\Customer\Shipping model which
      * contains all data about the customer shipping address. The association is defined over
      * the Customer.shipping property (INVERSE SIDE) and the Shipping.customer (OWNING SIDE) property.
@@ -1071,11 +1089,13 @@ class Customer extends LazyFetchModelEntity
      */
     public function getShipping()
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.2 and will be removed in 5.5. Use Shopware\Models\Customer\Customer::getDefaultShipping() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->shipping;
     }
 
     /**
-     * @deprecated Since 5.2 removed in 5.4 use setDefaultShipping()
+     * @deprecated Since 5.2, will be removed in 5.5. Use setDefaultShipping() instead.
      * Setter function for the shipping association property which contains an instance of the Shopware\Models\Customer\Shipping model which
      * contains all data about the customer shipping address. The association is defined over
      * the Customer.shipping property (INVERSE SIDE) and the Shipping.customer (OWNING SIDE) property.
@@ -1087,11 +1107,13 @@ class Customer extends LazyFetchModelEntity
      */
     public function setShipping($shipping)
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.2 and will be removed in 5.5. Use Shopware\Models\Customer\Customer::setDefaultShipping() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->setOneToOne($shipping, '\Shopware\Models\Customer\Shipping', 'shipping', 'customer');
     }
 
     /**
-     * @deprecated Since 5.2 removed in 5.4 use getDefaultBillingAddress()
+     * @deprecated Since 5.2, will be removed in 5.5. Use getDefaultBillingAddress() instead.
      * Returns the instance of the Shopware\Models\Customer\Billing model which
      * contains all data about the customer billing address. The association is defined over
      * the Customer.billing property (INVERSE SIDE) and the Billing.customer (OWNING SIDE) property.
@@ -1101,11 +1123,13 @@ class Customer extends LazyFetchModelEntity
      */
     public function getBilling()
     {
+        trigger_error(sprintf('%s::%s() is deprecated since 5.2 and will be removed in 5.5. Use Shopware\Models\Customer\Customer::getDefaultBillingAddress() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->billing;
     }
 
     /**
-     * @deprecated Since 5.2 removed in 5.4 use setDefaultBillingAddress()
+     * @deprecated Since 5.2, will be removed in 5.5. Use setDefaultBillingAddress() instead.
      * Setter function for the billing association property which contains an instance of the Shopware\Models\Customer\Billing model which
      * contains all data about the customer billing address. The association is defined over
      * the Customer.billing property (INVERSE SIDE) and the Billing.customer (OWNING SIDE) property.
@@ -1117,6 +1141,8 @@ class Customer extends LazyFetchModelEntity
      */
     public function setBilling($billing)
     {
+        trigger_error(sprintf('%s:%s() is deprecated since 5.2 and will be removed in 5.5. Use Shopware\Models\Customer\Customer::setDefaultBillingAddress() instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->setOneToOne($billing, '\Shopware\Models\Customer\Billing', 'billing', 'customer');
     }
 
@@ -1401,5 +1427,53 @@ class Customer extends LazyFetchModelEntity
     public function setAdditional($additional)
     {
         $this->additional = $additional;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDoubleOptinRegister()
+    {
+        return $this->doubleOptinRegister;
+    }
+
+    /**
+     * @param bool $doubleOptinRegister
+     */
+    public function setDoubleOptinRegister($doubleOptinRegister)
+    {
+        $this->doubleOptinRegister = $doubleOptinRegister;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinEmailSentDate()
+    {
+        return $this->doubleOptinEmailSentDate;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinEmailSentDate
+     */
+    public function setDoubleOptinEmailSentDate($doubleOptinEmailSentDate)
+    {
+        $this->doubleOptinEmailSentDate = $doubleOptinEmailSentDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDoubleOptinConfirmDate()
+    {
+        return $this->doubleOptinConfirmDate;
+    }
+
+    /**
+     * @param \DateTime $doubleOptinConfirmDate
+     */
+    public function setDoubleOptinConfirmDate($doubleOptinConfirmDate)
+    {
+        $this->doubleOptinConfirmDate = $doubleOptinConfirmDate;
     }
 }

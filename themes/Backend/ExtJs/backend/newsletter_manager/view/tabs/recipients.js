@@ -48,7 +48,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             group: '{s name=columns/group}Group{/s}',
             actions: '{s name=columns/actions}Actions{/s}',
             lastNewsletter: '{s name=columns/lastNewsletter}Last newsletter{/s}',
-            doubleOptInDate: '{s name=columns/doubleOptInDate}Double-Opt-In date{/s}'
+            doubleOptInDate: '{s name=columns/doubleOptInDate}Register date{/s}',
+            doubleOptInConfirmed: '{s name=columns/doubleOptInConfirmed}Opt-In confirmed{/s}'
         }
     },
 
@@ -218,13 +219,29 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Recipients', {
             },
             {
                 header: me.snippets.columns.doubleOptInDate,
-                dataIndex: 'address.added',
+                dataIndex: 'added',
                 flex: 1,
                 xtype: 'datecolumn',
-                renderer: function(value, metaData, record) {
-                    value = record.get('added');
-
-                    if ( typeof value === Ext.undefined ) {
+                getSortParam: function() {
+                    return 'address.added';
+                },
+                renderer: function(value) {
+                    if (!Ext.isDefined(value)) {
+                        return value;
+                    }
+                    return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
+                }
+            },
+            {
+                header: me.snippets.columns.doubleOptInConfirmed,
+                dataIndex: 'doubleOptinConfirmed',
+                flex: 1,
+                xtype: 'datecolumn',
+                getSortParam: function() {
+                    return 'address.doubleOptinConfirmed';
+                },
+                renderer: function(value) {
+                    if (!Ext.isDefined(value)) {
                         return value;
                     }
                     return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);

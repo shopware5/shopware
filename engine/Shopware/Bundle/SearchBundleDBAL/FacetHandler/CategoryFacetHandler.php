@@ -32,8 +32,8 @@ use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryDepthServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -59,7 +59,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     private $config;
 
     /**
-     * @var CategoryDepthService
+     * @var CategoryDepthServiceInterface
      */
     private $categoryDepthService;
 
@@ -72,14 +72,14 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
      * @param CategoryServiceInterface       $categoryService
      * @param QueryBuilderFactoryInterface   $queryBuilderFactory
      * @param \Shopware_Components_Config    $config
-     * @param CategoryDepthService           $categoryDepthService
+     * @param CategoryDepthServiceInterface  $categoryDepthService
      * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
      */
     public function __construct(
         CategoryServiceInterface $categoryService,
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Config $config,
-        CategoryDepthService $categoryDepthService,
+        CategoryDepthServiceInterface $categoryDepthService,
         CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
     ) {
         $this->categoryService = $categoryService;

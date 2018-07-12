@@ -2824,6 +2824,58 @@ class ArticleTest extends TestCase
     }
 
     /**
+     * Regression test for SW-21360
+     */
+    public function testUpdateLastStock()
+    {
+        $data = $this->getSimpleTestData();
+        $model = $this->resource->create($data);
+        $id = $model->getId();
+
+        $cases = [true, false, 1, 0, null];
+
+        /**
+         * Ensure that the mainDetails lastStock Attribute can be set
+         */
+        foreach ($cases as $val) {
+            $temp = $this->resource->update($id, ['mainDetail' => ['lastStock' => $val]]);
+
+            $this->assertEquals($val, $temp->getMainDetail()->getLastStock());
+        }
+
+        /**
+         * @Deprecated
+         * "lastStock" on products (s_articles) is deprecated and will be removed in Shopware 5.6
+         *
+         * This ensures compatibility with Shopware versions < 5.3 - the value given for the product should be
+         * applied to its mainDetail automatically.
+         *
+         * This can be removed with version 5.6 aswell
+         */
+        foreach ($cases as $val) {
+            $temp = $this->resource->update($id, ['lastStock' => $val]);
+
+            $this->assertEquals($val, $temp->getLastStock() && $temp->getMainDetail()->getLastStock());
+        }
+
+        /**
+         * @Deprecated
+         * "lastStock" on products (s_articles) is deprecated and will be removed in Shopware 5.6
+         *
+         * This ensures that the lastStock value is still set for the mainDetail, even when other data is provided
+         *
+         * This can be removed with version 5.6 aswell
+         */
+        foreach ($cases as $val) {
+            $temp = $this->resource->update($id, ['lastStock' => $val, 'mainDetail' => ['inStock' => 15]]);
+
+            $this->assertEquals($val, $temp->getLastStock() && $temp->getMainDetail()->getLastStock());
+        }
+
+        $this->resource->delete($id);
+    }
+
+    /**
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
      *

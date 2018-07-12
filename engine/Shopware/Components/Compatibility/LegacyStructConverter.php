@@ -31,9 +31,9 @@ use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
@@ -73,7 +73,7 @@ class LegacyStructConverter
     private $modelManager;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -90,7 +90,7 @@ class LegacyStructConverter
      * @param Connection                  $connection
      * @param ModelManager                $modelManager
      * @param CategoryServiceInterface    $categoryService
-     * @param Container                   $container
+     * @param ContainerInterface          $container
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -100,7 +100,7 @@ class LegacyStructConverter
         Connection $connection,
         ModelManager $modelManager,
         CategoryServiceInterface $categoryService,
-        Container $container
+        ContainerInterface $container
     ) {
         $this->config = $config;
         $this->contextService = $contextService;
@@ -1267,11 +1267,11 @@ class LegacyStructConverter
     /**
      * @param StoreFrontBundle\Struct\Category $category
      *
-     * @return string
+     * @return array
      */
     private function getCategoryCanonicalParams(StoreFrontBundle\Struct\Category $category)
     {
-        $page = $this->container->get('front')->Request()->getQuery('sPage');
+        $page = (int) $this->container->get('front')->Request()->getQuery('sPage');
 
         $emotion = $this->modelManager->getRepository(Emotion::class)
             ->getCategoryBaseEmotionsQuery($category->getId())
@@ -1282,8 +1282,13 @@ class LegacyStructConverter
             'sCategory' => $category->getId(),
         ];
 
-        if ($this->config->get('seoIndexPaginationLinks') && (!$emotion || $page)) {
-            $canonicalParams['sPage'] = $page ?: 1;
+        /*
+         * Only include page parameter in canonical if...
+         * a) we are on a page > 1
+         * b) we are on the page 1 and the category has a ShoppingWorld (so /category and /category?p=1 show different content
+         */
+        if ($page > 1 || ($emotion && $page === 1)) {
+            $canonicalParams['sPage'] = $page;
         }
 
         return $canonicalParams;

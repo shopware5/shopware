@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Routing\Context;
 
 /**
@@ -180,8 +179,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     Shopware()->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->sBASEFILE;
 
                     $sql = '
-                        INSERT INTO s_core_optin (datum, hash, data)
-                        VALUES (NOW(), ?, ?)
+                        INSERT INTO s_core_optin (datum, hash, data, type)
+                        VALUES (NOW(), ?, ?, "swNotification")
                     ';
                     Shopware()->Db()->query($sql, [$hash, serialize(Shopware()->System()->_POST->toArray())]);
 
@@ -304,6 +303,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 ->from('s_articles_details', 'd')
                 ->innerJoin('d', 's_articles', 'a', 'd.articleID = a.id')
                 ->where('d.ordernumber = :number')
+                ->andWhere('d.instock > 0')
+                ->andWhere('d.minpurchase <= d.instock')
                 ->setParameter('number', $notify['ordernumber'])
                 ->execute()
                 ->fetch(\PDO::FETCH_ASSOC);
@@ -314,22 +315,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 empty($product['notification']) || // or notification disabled on product
                 empty($product['active']) // or product is not active
             ) {
-                continue;
-            }
-
-            $inStock = (int) $product['instock'];
-            $minPurchase = (int) $product['minpurchase'];
-            $lastStock = $product['laststock'];
-
-            /*
-             * Consider the last stock option, for the following scenario:
-             *
-             * We have a product in our store which has the on sale (laststock) option enabled with notifications
-             * A costumer enters his email for getting notified about said product
-             * The store owner removes the laststock flag at a later time for that product.
-             * In this case the customer should be also notified since the product is considered to be available.
-             */
-            if ($lastStock && (($minPurchase > 0 && $inStock < $minPurchase) || $inStock <= 0)) {
                 continue;
             }
 

@@ -83,7 +83,7 @@ EOT
     'requirements_hide_all' => '(alles ausblenden)',
 
     'license_agreement_header' => 'Endnutzer-Lizenzbestimmungen („EULA“)',
-    'license_agreement_info' => 'Hier findest Du eine Aufstellung unserer Lizenzbestimmungen, die für eine erfolgreiche Installation bitte zu lesen und zu akzeptieren sind. Die Shopware Community Edition ist unter AGPL lizensiert, während Teile der Plugins und das Template unter der New BSD Lizenz stehen.',
+    'license_agreement_info' => 'Hier findest Du eine Aufstellung unserer Lizenzbestimmungen, die für eine erfolgreiche Installation bitte zu lesen und zu akzeptieren sind. Die Shopware Community Edition ist unter AGPL lizenziert, während Teile der Plugins und das Template unter der New BSD Lizenz stehen.',
     'license_agreement_error' => 'Sie müssen unseren Lizenzbestimmungen zustimmen',
     'license_agreement_checkbox' => 'Ich stimme den Lizenzbestimmungen zu',
 

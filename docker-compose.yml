@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  app_server:
+  appserver:
     build: dev-ops/docker/containers/app
     links:
       - app_mysql:mysql

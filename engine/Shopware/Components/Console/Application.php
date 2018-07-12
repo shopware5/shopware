@@ -67,7 +67,7 @@ class Application extends BaseApplication
     {
         $this->kernel = $kernel;
 
-        parent::__construct('Shopware', Kernel::VERSION . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
+        parent::__construct('Shopware', $kernel->getRelease()['version'] . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
