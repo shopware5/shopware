@@ -79,8 +79,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         priceGroup: '{s name=detail/base/price_group_select}Select price group{/s}',
         purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}',
         numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
-        mainDetailAdditionalText: '{s name=detail/base/main_detail_additional_text}Varianten-Zusatztext{/s}',
-        regexNumberValidation: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
+        mainDetailAdditionalText: '{s name=detail/base/main_detail_additional_text}Varianten-Zusatztext{/s}'
     },
 
     /**
@@ -180,8 +179,6 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             name: 'mainDetail[number]',
             dataIndex: 'mainDetail[number]',
             fieldLabel: me.snippets.number,
-            regex: /^[a-zA-Z0-9-_.]+$/,
-            regexText: me.snippets.regexNumberValidation,
             allowBlank: false,
             enableKeyEvents:true,
             checkChangeBuffer:700,
