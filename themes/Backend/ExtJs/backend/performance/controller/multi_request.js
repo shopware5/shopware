@@ -116,6 +116,11 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         },
     },
 
+    /**
+     * @var boolean
+     */
+    requestFailedInformationShown: false,
+
     init: function () {
         var me = this;
 
@@ -142,14 +147,19 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     onShopSelected: function(window, shopId, taskName) {
         var me = this;
 
-        var taskConfig = window.taskConfig;
+        var taskConfig = window.taskConfig,
+            params = {
+                shopId: shopId
+            };
+
+        if (window.settingsForm) {
+            params.config = JSON.stringify(window.settingsForm.getValues());
+        }
 
         Ext.Ajax.request({
             url: taskConfig.totalCountUrl,
             timeout: 4000000,
-            params: {
-                shopId: shopId
-            },
+            params: params,
             success: function(response) {
                 var json = Ext.decode(response.responseText);
                 taskConfig.totalCounts = json.data.counts;
@@ -164,17 +174,23 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     updateProgressBars: function(taskName, win) {
         var taskConfig = win.taskConfig;
 
-        win.iterateConfig(taskName, function (err, config, configName) {
-            if (err) {
-                throw err;
-            }
+        if (taskName === 'httpCache') {
+            win.progressBar.updateProgress(
+                0, Ext.String.format('{s name="progress/initialAll"}{/s}', 0, taskConfig.totalCounts.all)
+            );
+        } else {
+            win.iterateConfig(taskName, function (err, config, configName) {
+                if (err) {
+                    throw err;
+                }
 
-            if (!Ext.isEmpty(taskConfig.totalCounts[configName])) {
-                win[configName + 'Bar'].updateProgress(
-                    0, Ext.String.format(config.progressText, 0, taskConfig.totalCounts[configName])
-                );
-            }
-        });
+                if (!Ext.isEmpty(taskConfig.totalCounts[configName])) {
+                    win[configName + 'Bar'].updateProgress(
+                        0, Ext.String.format(config.progressText, 0, taskConfig.totalCounts[configName])
+                    );
+                }
+            });
+        }
     },
 
     getRequestConfig: function(win, progress, taskName, resource) {
@@ -184,13 +200,19 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             requestUrl: win[taskName][resource].requestUrl,
             totalCount: win.taskConfig.totalCounts[resource] * 1,
             snippet: win[taskName][resource].progressText,
+            current: 0,
             params: {
                 shopId: win.shopCombo.getValue()
-            }
+            },
+            name: resource
         };
 
         if (win.concurrencySizeCombo) {
             config.concurrencySize = win.concurrencySizeCombo.getValue();
+        }
+
+        for (var attrname in win.checkboxValues) {
+            config.params[attrname] = win.checkboxValues[attrname];
         }
 
         return config;
@@ -242,6 +264,12 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
     onStartHttpCacheWarmUp: function(win) {
         var me = this, configs = [];
 
+        Object.keys(win.httpCache).forEach(function (key) {
+            win.current[key] = 0;
+        });
+
+        win.checkboxValues = win.settingsForm.getValues();
+
         me.updateProgressBars('httpCache', win);
 
         win.iterateConfig('httpCache', function (err, seoConfig, seoConfigName) {
@@ -290,6 +318,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         if (currentConfig === null) {
             // Get next request configuration
             currentConfig = configs.shift();
+            me.requestFailedInformationShown = false;
         }
 
         var params = currentConfig.params;
@@ -331,12 +360,32 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             return;
         }
 
+        var current = offset + currentConfig.batchSize > currentConfig.totalCount ? currentConfig.totalCount : offset + currentConfig.batchSize;
+
+        if (currentConfig.name) {
+            dialog.current[currentConfig.name] = current;
+        }
+
         // Does the current request have a progress bar?
         if (currentConfig.progress) {
             // Updates the progress bar value and text, the last parameter is the animation flag
             currentConfig.progress.updateProgress(
-                ((offset + currentConfig.batchSize) > currentConfig.totalCount ? currentConfig.totalCount : (offset + currentConfig.batchSize)) / currentConfig.totalCount,
-                Ext.String.format(currentConfig.snippet, ((offset + currentConfig.batchSize) > currentConfig.totalCount ? currentConfig.totalCount : (offset + currentConfig.batchSize)), currentConfig.totalCount),
+                current,
+                Ext.String.format(currentConfig.snippet, current, currentConfig.totalCount),
+                true
+            );
+        }
+
+        if (dialog.progressBar && dialog.current) {
+            var min = 0;
+
+            Object.keys(dialog.current).forEach(function (key) {
+                min += dialog.current[key];
+            });
+
+            dialog.progressBar.updateProgress(
+                min / dialog.taskConfig.totalCounts.all,
+                Ext.String.format('{s name="progress/all"}{/s}', min, dialog.taskConfig.totalCounts.all, dialog.httpCache[currentConfig.name].providerLabel),
                 true
             );
         }
@@ -353,6 +402,26 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
             timeout: 4000000,
             success: function(response) {
                 var json = Ext.decode(response.responseText);
+
+                if (json.requestFailed && me.requestFailedInformationShown === false) {
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: '{s name="progress/requestFailedGrowlTitle"}{/s}',
+                        text: '{s name="progress/requestFailedGrowlContent"}{/s}',
+                        btnDetail: {
+                            text: '{s name="progress/requestFailedGrowlButton"}{/s}',
+                            callback: function () {
+                                Shopware.app.Application.addSubApplication({
+                                    name: 'Shopware.apps.Log',
+                                    params: {
+                                        mode: 'systemlogs'
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    me.requestFailedInformationShown = true;
+                }
 
                 // Start recursive call here
                 me.runRequest((offset + currentConfig.batchSize), dialog, currentConfig, configs);
