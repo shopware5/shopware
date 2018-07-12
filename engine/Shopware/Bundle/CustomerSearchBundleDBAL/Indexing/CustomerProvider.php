@@ -24,12 +24,12 @@
 
 namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
-use Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService;
+use Shopware\Bundle\StoreFrontBundle\Service\CustomerServiceInterface;
 
 class CustomerProvider implements CustomerProviderInterface
 {
     /**
-     * @var CustomerService
+     * @var CustomerServiceInterface
      */
     private $customerService;
 
@@ -39,11 +39,11 @@ class CustomerProvider implements CustomerProviderInterface
     private $customerOrderGateway;
 
     /**
-     * @param CustomerService      $customerService
-     * @param CustomerOrderGateway $customerOrderGateway
+     * @param CustomerServiceInterface $customerService
+     * @param CustomerOrderGateway     $customerOrderGateway
      */
     public function __construct(
-        CustomerService $customerService,
+        CustomerServiceInterface $customerService,
         CustomerOrderGateway $customerOrderGateway
     ) {
         $this->customerService = $customerService;
