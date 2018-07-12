@@ -573,7 +573,9 @@ Ext.onReady(function() {
             expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
             expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
             unknown_license: 'Unlicensed plugins',
-            confirm_plugin_deactivation: 'You have installed unlicensed plugins. Please buy a valid license or install and remove the plugins with help of the Plugin Manager now.'
+            confirm_plugin_deactivation: 'You have installed unlicensed plugins. Please buy a valid license or install and remove the plugins with help of the Plugin Manager now.',
+            subscription: 'Subscription',
+            subscription_hide_message: 'Would you like to hide this message for a week?',
         }
     });
 });
