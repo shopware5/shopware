@@ -154,7 +154,7 @@
         requestToken: function() {
             var me = this;
 
-            if (window.StateManager.hasCookiesAllowed() || cookieRemoval === 1) {
+            if (window.StateManager.hasCookiesAllowed() || window.cookieRemoval === 1) {
                 $.ajax({
                     url: window.csrfConfig.generateUrl,
                     success: function(response, status, xhr) {

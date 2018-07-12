@@ -190,7 +190,7 @@
          * @param {function} callback
          */
         displayCookiePermission: function(callback) {
-            if ((cookieRemoval === 2 && document.cookie.indexOf('allowCookie') !== -1) || (cookieRemoval === 1 && document.cookie.indexOf('cookieDeclined') !== -1)) {
+            if ((window.cookieRemoval === 2 && document.cookie.indexOf('allowCookie') !== -1) || (window.cookieRemoval === 1 && document.cookie.indexOf('cookieDeclined') !== -1)) {
                 callback(false);
                 return;
             }
@@ -228,12 +228,12 @@
 
             try {
                 window.localStorage.setItem(this.storageKey, 'true');
-            } catch(err) {}
+            } catch (err) {}
 
             var d = new Date();
-            d.setTime(d.getTime() + (180*24*60*60*1000));
+            d.setTime(d.getTime() + (180 * 24 * 60 * 60 * 1000));
 
-            document.cookie = 'allowCookie=1; path=/;expires='+d.toGMTString()+';';
+            document.cookie = 'allowCookie=1; path=/;expires=' + d.toGMTString() + ';';
 
             this.hideElement();
         },
@@ -261,7 +261,7 @@
         showElement: function() {
             var me = this;
 
-            if (cookieRemoval === 2) {
+            if (window.cookieRemoval === 2) {
                 $.modal.open(this.$el.html(), {
                     title: me.opts.title,
                     sizing: 'content',

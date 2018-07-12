@@ -110,7 +110,7 @@
         vendorPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
     function hasCookiesAllowed() {
-        return !cookieRemoval || (cookieRemoval && document.cookie.indexOf('allowCookie') !== -1);
+        return !window.cookieRemoval || (window.cookieRemoval && document.cookie.indexOf('allowCookie') !== -1);
     }
 
     /**
@@ -298,7 +298,7 @@
      * @type {Object}
      */
     window.StateManager = $.extend(Object.create(EventEmitter.prototype), {
-        
+
         /**
          * Constructor for Shopware EventEmitter
          *
@@ -307,7 +307,7 @@
          * @constructor
          */
         EventEmitter: EventEmitter,
-        
+
         /**
          * Collection of all registered breakpoints
          *
