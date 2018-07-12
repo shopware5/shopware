@@ -135,7 +135,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         if ($criteria->getLimit() !== null) {
             $search->setSize($criteria->getLimit());
         }
-        $search->addSort(new FieldSort('id', 'ASC'));
+        $search->addSort(new FieldSort('id', 'asc'));
 
         return $search;
     }

@@ -10,12 +10,34 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 * Added new mail template for Double-Opt-In used by blog article evaluations: `sOPTINBLOGCOMMENT`
 * Added `sitemap.batchsize` config option to configure the amount of collected products per process in the SitemapXMLRepository
+* Added `logger.level` config option, to define log level. Default in production is level `ERROR`
+* Added new option in backend to seperate Double-Opt-In for quick orderers from the normal registration, this includes:
+    * New snippet `RegisterInfoSuccessOptinAccountless`
+    * New mail template `sOPTINREGISTERACCOUNTLESS`
+* Added Cookie Modes `technical` and a `strict`
+    * `technical` allows by default only technically required cookies, other cookies will be set after permission
+    * `strict` does not allow to set cookies, until permissions are given
+* Added new method `hasCookiesAllowed` to the StateManager, to check that cookie permissions are given
 
 ### Changes
 
 * Changed error behaviour of blog article evaluations when the Double-Opt-In confirmation link is invalid
 * Changed behaviour of the notification plugin, so that it will only notify the customer if the stock is at least as high as the minimal purchase amount
-* Changed SitemapXMLRepository to collect 10.000 products in batch, because of elastic search limitations
+* Changed `SitemapXMLRepository` to collect 10.000 products in batch, because of elastic search limitations
+* Changed `VariantFilter` to work with MariaDB
+* Changed error in language handling of mail templates
+* Changed listing filters to work on mobile devices
+* Changed listing controller to load custom templates on pages containing an emotion component
+* Changed Notification plugin behaviour to also be displayed if the minimal purchase is higher than stock
+* Changed "My orders" in account to also show when ESD is disabled
+* Changed EnlightMailHandler to only handle errors
+* Changed `Shopware\Components\HttpCache\CacheWarmer` to log 404 as notice
+* Changed Zend locales to match their names
+* Changed the english `sOPTINREGISTER` mail template
+* Changed range slider to fix rounding problems
+* Changed variant search to toggle join prices with `hideNoInStock` configuration
+* Changed Double-Opt-In setting for comments/ratings on products and blog articles to be off by default
+* Changed field `remoteaddr` in table `s_statistics_pool` to contain a hash instead of the real IP of a visitor
 
 ## 5.4.5
 

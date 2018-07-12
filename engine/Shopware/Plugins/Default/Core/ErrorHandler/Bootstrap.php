@@ -25,6 +25,7 @@ use Monolog\Handler\BufferHandler;
 use Shopware\Components\Log\Formatter\HtmlFormatter;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
 use Shopware\Components\Log\Processor\ShopwareEnvironmentProcessor;
+use Shopware\Components\Logger;
 
 /**
  * Shopware Error Handler
@@ -38,7 +39,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * @var callable
      */
-    protected static $_origErrorHandler = null;
+    protected static $_origErrorHandler;
 
     /**
      * @var bool
@@ -48,7 +49,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * @var array
      */
-    protected $_errorHandlerMap = null;
+    protected $_errorHandlerMap;
 
     /**
      * @var array
@@ -271,10 +272,12 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     {
         $response = $args->getSubject()->Response();
         $exceptions = $response->getException();
+
         if (empty($exceptions)) {
             return;
         }
 
+        /** @var Logger $logger */
         $logger = $this->get('corelogger');
         foreach ($exceptions as $exception) {
             $logger->error((string) $exception);
@@ -301,6 +304,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
         $mailHandler->setFormatter(new HtmlFormatter());
 
-        return new BufferHandler($mailHandler);
+        return new BufferHandler($mailHandler, 0, Logger::ERROR);
     }
 }

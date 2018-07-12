@@ -222,10 +222,16 @@ class CacheWarmer
             $requests,
             [
                 'pool_size' => $concurrentRequests,
-                'error' => function (ErrorEvent $event) use ($shopId) {
-                    $this->logger->error(
-                        'Warm up http-cache error with shopId ' . $shopId . ' ' . $event->getException()->getMessage()
-                    );
+                'error' => function (ErrorEvent $e) use ($shopId) {
+                    if ($e->getResponse() && $e->getResponse()->getStatusCode() === 404) {
+                        $this->logger->notice(
+                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
+                        );
+                    } else {
+                        $this->logger->error(
+                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
+                        );
+                    }
                 },
             ]);
 

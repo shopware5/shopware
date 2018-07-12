@@ -701,7 +701,7 @@
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
-            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls) || me.$filterCont.is('.off-canvas.is--open')) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
