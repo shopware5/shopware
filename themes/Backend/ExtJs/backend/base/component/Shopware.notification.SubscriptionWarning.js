@@ -38,7 +38,9 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
         expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
         unknown_license: 'Unlicensed plugins',
-        confirm_open_pluginmanager: 'You have installed unlicensed plugins. Do you want to open the Plugin Manager now to check your plugins?'
+        confirm_open_pluginmanager: 'You have installed unlicensed plugins. Do you want to open the Plugin Manager now to check your plugins?',
+        subscription: 'Subscription',
+        subscription_hide_message: 'Would you like to hide this message for a week?',
     },
 
     /**
@@ -218,9 +220,26 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         var me          = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
+        if (Ext.util.Cookies.get('hideSubscriptionNotice') !== null) {
+            return;
+        }
+
         Shopware.Notification.createStickyGrowlMessage({
             text: Ext.String.format(me.snippets.subscription_warning, plugins.length, pluginNames),
-            width: 440
+            width: 440,
+            onCloseButton: function() {
+                Ext.Msg.confirm(
+                    me.snippets.subscription,
+                    me.snippets.subscription_hide_message,
+                    function(answer) {
+                        if (answer === 'yes') {
+                            var currentDate = new Date();
+                            currentDate.setDate(currentDate.getDate() + 7);
+                            Ext.util.Cookies.set('hideSubscriptionNotice', 1, currentDate);
+                        }
+                    }
+                );
+            }
         });
     },
 
