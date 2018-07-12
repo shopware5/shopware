@@ -598,7 +598,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         if (!empty($categoryContent['template'])) {
             if ($this->View()->templateExists('frontend/listing/' . $categoryContent['template'])) {
+                $vars = $this->View()->getAssign();
                 $this->View()->loadTemplate('frontend/listing/' . $categoryContent['template']);
+                $this->View()->assign($vars);
             } else {
                 $this->get('corelogger')->error(
                     'Missing category template detected. Please correct the template for category "' . $categoryContent['name'] . '".',
