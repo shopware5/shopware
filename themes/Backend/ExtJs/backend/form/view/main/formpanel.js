@@ -151,7 +151,8 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             validationUrl: '{url controller="base" action="validateEmail"}',
             validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
             allowBlank : false,
-            translatable: true
+            translatable: true,
+            supportText: '{s name="multipleReceivers"}{/s}'
         }, {
             fieldLabel:'{s name=label_subject}Subject{/s}',
             name       : 'emailSubject',
