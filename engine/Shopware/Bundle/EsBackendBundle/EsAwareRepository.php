@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend;
+namespace Shopware\Bundle\EsBackendBundle;
 
 use Shopware\Bundle\AttributeBundle\Repository\RepositoryInterface;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;

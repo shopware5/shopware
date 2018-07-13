@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend\Searcher;
+namespace Shopware\Bundle\EsBackendBundle\Searcher;
 
 use Elasticsearch\Client;
 use ONGR\ElasticsearchDSL\BuilderInterface;
@@ -36,8 +36,8 @@ use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherResult;
-use Shopware\Bundle\EsBackend\EsBackendIndexer;
-use Shopware\Bundle\EsBackend\SearchQueryBuilder;
+use Shopware\Bundle\EsBackendBundle\EsBackendIndexer;
+use Shopware\Bundle\EsBackendBundle\SearchQueryBuilder;
 
 class GenericSearcher implements SearcherInterface
 {
