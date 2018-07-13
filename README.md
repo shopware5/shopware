@@ -98,6 +98,11 @@ The test_images.zip file includes thumbnails for the new responsive theme and th
 
 If you want to have full featured demo data, you should download the respective demo data plugin in the First Run Wizard or in the Plugin Manager.
 
+# Frontend users in demo data
+
+* Customer: test@example.com / shopware
+* B2B: mustermann@b2b.de / mustermann
+
 # Get involved
 
 Shopware is available under dual license (AGPL v3 and proprietary license). If you want to contribute code (features or bugfixes), you have to create a pull request and include valid license information. You can either contribute your code under New BSD or MIT license.
