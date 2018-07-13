@@ -132,6 +132,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Modified attributes mapping in the product mapping. Changed type of 'raw' field to keyword (>= 6).
 * Changed `ShopIndexer::createAlias`, it now deletes indexes that are named like the index alias
 * Changed `Subscription expired` growl message, to hide it for a week
+* Changed form controller to allow multiple receivers comma separated
 
 ### Removals
 
