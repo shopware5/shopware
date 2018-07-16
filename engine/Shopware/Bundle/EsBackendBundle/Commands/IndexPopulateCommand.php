@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend\Commands;
+namespace Shopware\Bundle\EsBackendBundle\Commands;
 
-use Shopware\Bundle\EsBackend\EsBackendIndexer;
+use Shopware\Bundle\EsBackendBundle\EsBackendIndexer;
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

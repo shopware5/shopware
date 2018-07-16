@@ -22,11 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend\Commands;
+namespace Shopware\Bundle\EsBackendBundle\Commands;
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Bundle\EsBackend\EsAwareRepository;
-use Shopware\Bundle\EsBackend\EsBackendIndexer;
+use Shopware\Bundle\EsBackendBundle\EsAwareRepository;
+use Shopware\Bundle\EsBackendBundle\EsBackendIndexer;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\Article\Article;

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend\Searcher;
+namespace Shopware\Bundle\EsBackendBundle\Searcher;
 
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;

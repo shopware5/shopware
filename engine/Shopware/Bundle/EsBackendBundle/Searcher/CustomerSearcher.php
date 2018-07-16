@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend\Searcher;
+namespace Shopware\Bundle\EsBackendBundle\Searcher;
 
-class OrderSearcher extends GenericSearcher
+class CustomerSearcher extends GenericSearcher
 {
 }

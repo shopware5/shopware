@@ -42,8 +42,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
             * `CustomerRepository.php`
             * `OrderRepository.php`
     * Added indexing and backlog sync command
-        * `engine/Shopware/Bundle/EsBackend/Commands/IndexPopulateCommand.php`
-        * `engine/Shopware/Bundle/EsBackend/Commands/SyncBacklogCommand.php`
+        * `engine/Shopware/Bundle/EsBackendBundle/Commands/IndexPopulateCommand.php`
+        * `engine/Shopware/Bundle/EsBackendBundle/Commands/SyncBacklogCommand.php`
     * Added new templates to `themes/Backend/ExtJs/backend/search/` to split the `index.tpl`
         * `articles.tpl`
         * `customers.tpl`
@@ -204,7 +204,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass`
     * `Shopware\Components\DependencyInjection\Compiler\RouterCompilerPass`
 * Removed following unnecessary Subscriber:
-    * `Shopware\Bundle\EsBackend\Subscriber\ServiceSubscriber`
+    * `Shopware\Bundle\EsBackendBundle\Subscriber\ServiceSubscriber`
     * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
 * Removed JSMin
 * Removed config option ``esdDownloadStrategy``

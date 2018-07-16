@@ -22,8 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend\Searcher;
+namespace Shopware\Bundle\EsBackendBundle;
 
-class CustomerSearcher extends GenericSearcher
+use Shopware\Bundle\AttributeBundle\Repository\RepositoryInterface;
+
+interface EsAwareSearcher extends RepositoryInterface
 {
 }

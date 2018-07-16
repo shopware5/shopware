@@ -6,14 +6,14 @@
 
     <services>
 
-        <service class="Shopware\Bundle\EsBackend\EsBackendIndexer" id="shopware_es_backend.indexer">
+        <service class="Shopware\Bundle\EsBackendBundle\EsBackendIndexer" id="shopware_es_backend.indexer">
             <argument id="shopware_elastic_search.client" type="service"/>
             <argument type="tagged" tag="shopware_es_backend.repository" />
         </service>
 
-        <service class="Shopware\Bundle\EsBackend\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />
+        <service class="Shopware\Bundle\EsBackendBundle\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />
 
-        <service class="Shopware\Bundle\EsBackend\Searcher\OrderSearcher"
+        <service class="Shopware\Bundle\EsBackendBundle\Searcher\OrderSearcher"
                  id="shopware_es_backend.order_searcher"
                  decorates="shopware_attribute.order_searcher">
 
@@ -24,7 +24,7 @@
             <argument>%shopware.es.backend.enabled%</argument>
         </service>
 
-        <service class="Shopware\Bundle\EsBackend\Searcher\ProductSearcher"
+        <service class="Shopware\Bundle\EsBackendBundle\Searcher\ProductSearcher"
                  id="shopware_es_backend.product_searcher"
                  decorates="shopware_attribute.product_searcher">
 
@@ -35,7 +35,7 @@
             <argument>%shopware.es.backend.enabled%</argument>
         </service>
 
-        <service class="Shopware\Bundle\EsBackend\Searcher\CustomerSearcher"
+        <service class="Shopware\Bundle\EsBackendBundle\Searcher\CustomerSearcher"
                  id="shopware_es_backend.customer_searcher"
                  decorates="shopware_attribute.customer_searcher">
 
@@ -46,7 +46,7 @@
             <argument>%shopware.es.backend.enabled%</argument>
         </service>
 
-        <service class="Shopware\Bundle\EsBackend\Subscriber\OrmBacklogSubscriber"
+        <service class="Shopware\Bundle\EsBackendBundle\Subscriber\OrmBacklogSubscriber"
                  id="shopware_bundle.es_backend_subscriber.orm_backlog_subscriber">
 
             <tag name="doctrine.event_subscriber"/>
@@ -55,12 +55,12 @@
 
         <!-- Commands -->
 
-        <service class="Shopware\Bundle\EsBackend\Commands\IndexPopulateCommand"
+        <service class="Shopware\Bundle\EsBackendBundle\Commands\IndexPopulateCommand"
                  id="shopware_es_backend.commands.index_populate_command">
             <tag name="console.command"/>
         </service>
 
-        <service class="Shopware\Bundle\EsBackend\Commands\SyncBacklogCommand"
+        <service class="Shopware\Bundle\EsBackendBundle\Commands\SyncBacklogCommand"
                  id="shopware_es_backend.commands.sync_backlog_command">
             <tag name="console.command"/>
         </service>

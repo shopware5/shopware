@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend\Subscriber;
+namespace Shopware\Bundle\EsBackendBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;

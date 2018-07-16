@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 use Shopware\Bundle\AttributeBundle\Repository\Reader\ReaderInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
-use Shopware\Bundle\EsBackend\EsAwareRepository;
+use Shopware\Bundle\EsBackendBundle\EsAwareRepository;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 use Shopware\Components\Model\ModelManager;

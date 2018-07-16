@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackend;
+namespace Shopware\Bundle\EsBackendBundle;
 
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
