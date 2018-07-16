@@ -225,11 +225,11 @@ class CacheWarmer
                 'error' => function (ErrorEvent $e) use ($shopId) {
                     if ($e->getResponse() && $e->getResponse()->getStatusCode() === 404) {
                         $this->logger->notice(
-                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
+                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
                         );
                     } else {
                         $this->logger->error(
-                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
+                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
                         );
                     }
                 },
