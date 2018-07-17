@@ -98,6 +98,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             errorMessage: '{s name=article_saved/error_message}An error has occurred while saving the article:{/s}',
             errorTitle: '{s name=article_saved/error_title}Error{/s}',
             ordernumberNotMatch: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
+        },
+        graduatedPrices: {
+            title: '{s name=graduatedPrices/title}{/s}',
+            confirm: '{s name=graduatedPrices/confirm}{/s}'
         }
     },
 
@@ -151,7 +155,17 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 oldPrice = Ext.Number.toFixed(oldPrice, 2);
 
                 if (newPrice != oldPrice) {
-                    me.fireEvent('editVariantPrice', e.record, newPrice);
+                    if (e.record.getPriceStore.getCount() > 1) {
+                        Ext.Msg.confirm(me.snippets.graduatedPrices.title, me.snippets.graduatedPrices.confirm, function (answer) {
+                            if (answer === 'yes') {
+                                me.fireEvent('editVariantPrice', e.record, newPrice);
+                            } else {
+                                e.record.reject();
+                            }
+                        });
+                    } else {
+                        me.fireEvent('editVariantPrice', e.record, newPrice);
+                    }
                 }
 
             } else if (e.field === 'pseudoPrice') {
@@ -171,7 +185,17 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 }
 
                 if (newPseudoPrice !== oldPseudoPrice || newPseudoPrice === 0.00) {
-                    me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
+                    if (e.record.getPriceStore.getCount() > 1) {
+                        Ext.Msg.confirm(me.snippets.graduatedPrices.title, me.snippets.graduatedPrices.confirm, function (answer) {
+                            if (answer === 'yes') {
+                                me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
+                            } else {
+                                e.record.reject();
+                            }
+                        });
+                    } else {
+                        me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
+                    }
                 }
 
             } else {
