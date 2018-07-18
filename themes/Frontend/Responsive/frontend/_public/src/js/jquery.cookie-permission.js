@@ -40,6 +40,14 @@
             declineButtonSelector: '.cookie-permission--decline-button',
 
             /**
+             * Selector of the close button to select the button and register events on it.
+             *
+             * @property declineButtonSelector
+             * @type {string}
+             */
+            closeButtonSelector: '.cookie-permission--close-button',
+
+            /**
              * Selector of the privacy statement link "More information" to select and prepare the href property.
              *
              * @property privacyLinkSelector
@@ -253,23 +261,35 @@
         },
 
         /**
+         * Event handler for the closeButton click.
+         *
+         * @public
+         * @method onCloseButtonClick
+         */
+        onCloseButtonClick: function(event) {
+            event.preventDefault();
+
+            this.hideElement();
+        },
+
+        /**
          * Shows the cookiePermission element.
          *
          * @public
          * @method showElement
          */
         showElement: function() {
-            var me = this;
-
             if (window.cookieRemoval === 2) {
                 $.modal.open(this.$el.html(), {
-                    title: me.opts.title,
+                    title: this.opts.title,
                     sizing: 'content',
                     width: 500
                 });
 
                 this.$acceptButton = $(this.opts.acceptButtonSelector);
+                this.$closeButton = $(this.opts.closeButtonSelector);
                 this._on(this.$acceptButton, 'click', $.proxy(this.onAcceptButtonClick, this));
+                this._on(this.$closeButton, 'click', $.proxy(this.onCloseButtonClick, this));
             } else {
                 this.$el.removeClass(this.opts.isHiddenClass);
                 this.setPermissionHeight();
