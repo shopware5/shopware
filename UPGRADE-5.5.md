@@ -34,7 +34,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added ability to translate shop pages. Please rename the key of the old groups ("gLeft", "gBottom" etc.) to "left", "bottom", "bottom2", "disabled" and translate the pages.
 * Added snippets for locales in backend menus
 * Added implementation of elasticsearch backend
-    * Added EsBackend bundle to index and search products, customers and orders for the backend
+    * Added `EsBackendBundle` to index and search products, customers and orders for the backend
     * Added new searcher, reader and repositories to AttributeBundle for implementing elasticsearch backend
         * `engine/Shopware/Bundle/AttributeBundle/Repository`
             * `Reader/OrderReader.php`
@@ -154,57 +154,46 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Removals
 
-* Removed tables `s_user_billingaddress_attributes` and `s_user_shippingaddress_attributes`
 * Removed class `Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler`
-* Removed methods `getByCategory` and `getListByCategory` of interface `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface`
-* Removed `sSelfCanonical` of `Shopware\Components\Compatibility\LegacyStructConverter`
-* Removed method `getSourceSet` of `Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail`
-* Removed class `Shopware_Components_Convert_Csv`, `Shopware_Components_Convert_Excel` and `Shopware_Components_Convert_Xml`
-* Removed methods `addAttribute` and `removeAttribute` of `Shopware\Components\Model\ModelManager`
-* Removed methods `setParameters` and `addParameters` of `Shopware\Components\Model\QueryBuilder`
-* Removed method `assertVersionGreaterThen` of `Shopware_Components_Plugin_Bootstrap`
-* Removed method `getSnippet` of `Shopware_Components_Snippet_Manager`
 * Removed class `Shopware\Models\Config\Element\Shopware_Components_Form`
-* Removed method `confirmAction` of `Shopware_Controllers_Frontend_Newsletter`
+* Removed class `Shopware_Components_Convert_Csv`, `Shopware_Components_Convert_Excel` and `Shopware_Components_Convert_Xml`
+* Removed class `Shopware\Models\Customer\Billing` and `Shopware\Models\Customer\BillingRepository`
+* Removed class `Shopware\Models\Customer\Shipping`
+* Removed class `Shopware\Models\Order\Document\Type`
+* Removed methods `getByCategory` and `getListByCategory` of interface `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface`
+* Removed methods `addAttribute` and `removeAttribute` of `Shopware\Components\Model\ModelManager`
 * Removed methods `indexAction`, `listingAction`, `requestAction`, `detailAction`, `directAction`, `commitForm` of `Shopware_Controllers_Frontend_Ticket`
 * Removed methods `emotionTopSellerAction` and `emotionNewcomerAction` of `Shopware_Controllers_Widgets_Emotion`
+* Removed methods `getCategoryEmotionsQuery` and `getCategoryEmotionsQueryBuilder` of `Shopware\Models\Emotion\Repository`
+* Removed methods `getPaymentsQuery`, `getPaymentsQueryBuilder` of `Shopware\Models\Payment\Repository`
+* Removed method `getSourceSet` of `Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail`
+* Removed method `assertVersionGreaterThen` of `Shopware_Components_Plugin_Bootstrap`
+* Removed method `getSnippet` of `Shopware_Components_Snippet_Manager`
+* Removed method `confirmAction` of `Shopware_Controllers_Frontend_Newsletter`
 * Removed method `ajaxListingAction` of `Shopware_Controllers_Widgets_Listing`
 * Removed method `sGetAffectedSuppliers` of `sArticles`
-* Removed variables `$sLanguage` and `sMultishop` with method `sGetMultishop` of `sExport`
-* Removed variables `o_attr_1`, `o_attr_2`, `o_attr_3`, `o_attr_4`, `o_attr_5`, `o_attr_6` of `sOrder`
 * Removed method `sCreateRewriteTableSuppliers` of `sRewriteTable`
 * Removed method `save` of `Shopware\Models\Config\Form`
-* Removed class `Shopware\Models\Customer\Billing` and `Shopware\Models\Customer\BillingRepository`
-* Removed variables `billing` and `shipping` with methods `getShipping`, `setShipping`, `getBilling`, `setBilling` of `Shopware\Models\Customer\Customer`
-* Removed class `Shopware\Models\Customer\Shipping`
-* Removed methods `getCategoryEmotionsQuery` and `getCategoryEmotionsQueryBuilder` of `Shopware\Models\Emotion\Repository`
 * Removed method `onUpdate` of `Shopware\Models\Media\Settings`
-* Removed class `Shopware\Models\Order\Document\Type`
-* Removed constant `PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED_BY_HANSEATIC_BANK` of `Shopware\Models\Order\Status`
-* Removed variable `description` with methods `setDescription` and `getDescription` of `Shopware\Models\Order\Status`
-* Removed methods of `Shopware\Models\Payment\Payment`:
-    * `setClass`
-    * `getClass`
-    * `setTable`
-    * `getTable`
-    * `setEmbedIFrame`
-    * `getEmbedIFrame`
-* Removed methods `getPaymentsQuery`, `getPaymentsQueryBuilder` of `Shopware\Models\Payment\Repository`
+* Removed variables `billing` and `shipping` with methods `getShipping`, `setShipping`, `getBilling`, `setBilling` of `Shopware\Models\Customer\Customer`
+* Removed variables `$sLanguage` and `sMultishop` with method `sGetMultishop` of `sExport`
+* Removed variables `o_attr_1`, `o_attr_2`, `o_attr_3`, `o_attr_4`, `o_attr_5`, `o_attr_6` of `sOrder`
 * Removed variable `label` and methods `getLabel` and `setLabel` of `Shopware\Models\Widget\Widget`
-* Removed snippets `table/s_user_billingaddress_attributes` and `table/s_user_shippingaddress_attributes`
 * Removed variable `preLoadStoredEntry` of `Shopware.form.field.PagingComboBox`
-* Removed smarty block `frontend_blog_detail_comments`
-* Removed smarty block `frontend_detail_data_block_prices_headline`
-* Removed smarty block `frontend_detail_buy_variant`
-* Removed smarty block `frontend_detail_data_price_info`
-* Removed smarty block `frontend_detail_data_liveshopping`
-* Removed smarty block `frontend_index_header_css_ie`
-* Removed smarty block `frontend_index_ajax_seo_optimized`
-* Removed smarty block `frontend_index_categories_left_ul`
-* Removed smarty block `frontend_listing_box_article_actions_more`
-* Removed smarty block `frontend_listing_box_article_actions_inline`
+* Removed variable `description` with methods `setDescription` and `getDescription` of `Shopware\Models\Order\Status`
+* Removed variable `sSelfCanonical` in `Shopware\Components\Compatibility\LegacyStructConverter`
+* Removed constant `PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED_BY_HANSEATIC_BANK` of `Shopware\Models\Order\Status`
+* Removed snippets `table/s_user_billingaddress_attributes` and `table/s_user_shippingaddress_attributes`
+* Removed smarty block `frontend_blog_detail_comments` in `frontend/blog/detail.tpl`, use `frontend_blog_detail_comments_count` and `frontend_blog_detail_comments_list` instead.
+* Removed smarty block `frontend_detail_data_block_prices_headline` in `frontend/detail/block_price.tpl`
+* Removed smarty block `frontend_detail_buy_variant` in `frontend/detail/buy.tpl`
+* Removed smarty block `frontend_index_header_css_ie` in `frontend/index/header.tpl`
+* Removed smarty block `frontend_index_ajax_seo_optimized` in `frontend/index/index.tpl`
+* Removed smarty block `frontend_index_categories_left_ul` in `frontend/index/sidebar-categories.tpl`
+* Removed smarty block `frontend_listing_box_article_actions_more` in `frontend/listing/product-box/product-actions.tpl`
+* Removed smarty block `frontend_listing_box_article_actions_inline` in `frontend/listing/product-box/product-actions.tpl`
 * Removed ExtJs models `Shopware.apps.Customer.model.Billing` and `Shopware.apps.Customer.model.Shipping`
-* Removed following unnecessary CompilerPasses due Symfony `tagged` tag:
+* Removed following unnecessary CompilerPasses due to Symfony 3.0 `tagged` attribute:
     * `Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass`
     * `Shopware\Bundle\CustomerSearchBundleDBAL\DependencyInjection\Compiler\HandlerRegistryCompilerPass`
     * `Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass`
@@ -223,8 +212,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed following unnecessary Subscriber:
     * `Shopware\Bundle\EsBackendBundle\Subscriber\ServiceSubscriber`
     * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
-* Removed JSMin
+* Removed event `Shopware_Controllers_Widgets_Emotion_AddElement`
 * Removed config option ``esdDownloadStrategy``
+* Removed JSMin
 
 ### Deprecations
 

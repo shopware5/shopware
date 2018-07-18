@@ -28,9 +28,6 @@ use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-/**
- * Class IndexFactory
- */
 class IndexFactory implements IndexFactoryInterface
 {
     /**
@@ -61,8 +58,8 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop $shop
-     * @param $mappingType
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return IndexConfiguration
      */
@@ -77,8 +74,8 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop $shop
-     * @param $mappingType
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return ShopIndex
      */
@@ -106,8 +103,8 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop $shop
-     * @param $mappingType
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return string
      */
