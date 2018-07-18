@@ -34,15 +34,15 @@ class SearchIndexer implements SearchIndexerInterface
     private $connection;
 
     /**
-     * @var CustomerProvider
+     * @var CustomerProviderInterface
      */
     private $provider;
 
     /**
-     * @param Connection       $connection
-     * @param CustomerProvider $provider
+     * @param Connection                $connection
+     * @param CustomerProviderInterface $provider
      */
-    public function __construct(Connection $connection, CustomerProvider $provider)
+    public function __construct(Connection $connection, CustomerProviderInterface $provider)
     {
         $this->connection = $connection;
         $this->provider = $provider;
