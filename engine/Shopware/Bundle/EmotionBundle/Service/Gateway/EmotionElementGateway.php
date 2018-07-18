@@ -124,6 +124,8 @@ class EmotionElementGateway
         $builder->addOrderBy('emotionElementViewport.start_row', 'ASC')
                 ->addOrderBy('emotionElementViewport.start_col', 'ASC');
 
+        $builder->groupBy('emotionElementViewport.elementID');
+
         return $builder;
     }
 
