@@ -200,6 +200,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             function(response) {
                 me.hideLoadingMask();
 
+                if (response.data.binaryVersion === plugin.get('version')) {
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: '{s name="title"}{/s}',
+                        text: '{s name="subscriptionUpdate"}{/s}'
+                    });
+                    return;
+                }
+
                 var mask = me.createDownloadMask(plugin, response.data, function(fileName) {
                     me.sendAjaxRequest(
                         '{url controller=PluginManager action=extract}',
