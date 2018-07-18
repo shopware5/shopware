@@ -76,8 +76,8 @@
                         {/if}
 
                         <div class="cookie-removal--buttons">
-                            <a class="btn cookie-permission--close-button">{s name="cookiePermission/close"}{/s}</a>
-                            <a class="btn is--secondary cookie-permission--accept-button">{s name="cookiePermission/buttonText"}{/s}</a>
+                            <a class="btn is--secondary cookie-permission--accept-button is--center">{s name="cookiePermission/buttonText"}{/s}</a>
+                            <a class="btn cookie-permission--close-button is--center">{s name="cookiePermission/close"}{/s}</a>
                         </div>
                     </div>
                 {/block}
