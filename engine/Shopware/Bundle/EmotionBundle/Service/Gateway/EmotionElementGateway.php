@@ -115,13 +115,14 @@ class EmotionElementGateway
                 ->addSelect($this->fieldHelper->getEmotionElementLibraryFields());
 
         $builder->from('s_emotion_element', 'emotionElement')
-                ->innerJoin('emotionElement', 's_library_component', 'emotionLibraryComponent', 'emotionElement.componentID = emotionLibraryComponent.id');
+                ->innerJoin('emotionElement', 's_library_component', 'emotionLibraryComponent', 'emotionElement.componentID = emotionLibraryComponent.id')
+                ->innerJoin('emotionElement', 's_emotion_element_viewports', 'emotionElementViewport', 'emotionElement.id = emotionElementViewport.elementID');
 
         $builder->where('emotionElement.emotionID IN (:emotionIds)')
                 ->setParameter('emotionIds', $emotionIds, Connection::PARAM_INT_ARRAY);
 
-        $builder->addOrderBy('emotionElement.start_row', 'ASC')
-                ->addOrderBy('emotionElement.start_col', 'ASC');
+        $builder->addOrderBy('emotionElementViewport.start_row', 'ASC')
+                ->addOrderBy('emotionElementViewport.start_col', 'ASC');
 
         return $builder;
     }
