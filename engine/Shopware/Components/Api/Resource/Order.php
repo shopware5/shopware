@@ -703,12 +703,14 @@ class Order extends Resource
             ));
         }
 
-        $state = $this->getContainer()->get('models')->find(State::class, $billing['stateId']);
-        if (!$state) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Shipping State by id %s not found',
-                $billing['stateId']
-            ));
+        if($billing['stateId'] != 0){
+            $state = $this->getContainer()->get('models')->find(State::class, $billing['stateId']);
+            if (!$state) {
+                throw new ApiException\NotFoundException(sprintf(
+                    'Billing State by id %s not found',
+                    $billing['stateId']
+                ));
+            }
         }
 
         $billingAddress = new Billing();
@@ -742,12 +744,14 @@ class Order extends Resource
             ));
         }
 
-        $state = $this->getContainer()->get('models')->find(State::class, $shipping['stateId']);
-        if (!$state) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Shipping State by id %s not found',
-                $shipping['stateId']
-            ));
+        if($shipping['stateId'] != 0) {
+            $state = $this->getContainer()->get('models')->find(State::class, $shipping['stateId']);
+            if (!$state) {
+                throw new ApiException\NotFoundException(sprintf(
+                    'Shipping State by id %s not found',
+                    $shipping['stateId']
+                ));
+            }
         }
 
         $shippingAddress = new Shipping();
