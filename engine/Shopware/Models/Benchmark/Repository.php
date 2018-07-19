@@ -245,6 +245,20 @@ class Repository extends EntityRepository
     /**
      * @return array
      */
+    public function getShopIds()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        return $queryBuilder->select('configs.shop_id')
+            ->from('s_benchmark_config', 'configs')
+            ->where('configs.industry != 0')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * @return array
+     */
     private function getAllViableShopIds()
     {
         $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();

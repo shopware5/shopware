@@ -55,7 +55,7 @@ class ShopProvider implements BenchmarkProviderInterface
      */
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
-        $now = new \DateTime('now');
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
         $this->shopId = $shopContext->getShop()->getId();
 

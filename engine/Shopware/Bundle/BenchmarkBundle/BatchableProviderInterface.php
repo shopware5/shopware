@@ -26,13 +26,13 @@ namespace Shopware\Bundle\BenchmarkBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-interface BenchmarkCollectorInterface
+interface BatchableProviderInterface extends BenchmarkProviderInterface
 {
     /**
      * @param ShopContextInterface $shopContext
-     * @param int                  $batchSize   - If set, this will be used for the Orders, Customers and ProductsProvider
+     * @param int                  $batchSize
      *
-     * @return string
+     * @return array
      */
-    public function get(ShopContextInterface $shopContext, $batchSize = null);
+    public function getBenchmarkData(ShopContextInterface $shopContext, $batchSize = null);
 }

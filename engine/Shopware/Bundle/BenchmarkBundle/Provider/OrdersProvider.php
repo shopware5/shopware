@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class OrdersProvider implements BenchmarkProviderInterface
+class OrdersProvider implements BatchableProviderInterface
 {
     /**
      * @var Connection
@@ -53,26 +53,33 @@ class OrdersProvider implements BenchmarkProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getBenchmarkData(ShopContextInterface $shopContext)
+    public function getBenchmarkData(ShopContextInterface $shopContext, $batchSize = null)
     {
         $this->shopId = $shopContext->getShop()->getId();
 
         return [
-            'list' => $this->getOrdersList(),
+            'list' => $this->getOrdersList($batchSize),
         ];
     }
 
     /**
+     * @param int $batchSize
+     *
      * @return array
      */
-    private function getOrdersList()
+    private function getOrdersList($batchSize = null)
     {
         $config = $this->getOrderConfig();
         $batch = (int) $config['batch_size'];
         $lastOrderId = (int) $config['last_order_id'];
 
+        if ($batchSize !== null) {
+            $batch = $batchSize;
+        }
+
         $orderData = $this->getOrderData($batch, $lastOrderId);
         $orderData = $this->hydrateData($orderData);
+
         $lastOrder = end($orderData);
 
         if ($lastOrder) {
@@ -155,9 +162,20 @@ class OrdersProvider implements BenchmarkProviderInterface
 
         $currentHydratedOrder = [];
         foreach ($orderData as $orderId => $order) {
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $order['ordertime']);
+
             $currentHydratedOrder['orderId'] = $orderId;
             $currentHydratedOrder['currency'] = $order['currency'];
             $currentHydratedOrder['shippingCosts'] = $order['invoice_shipping'];
+            $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
+            $currentHydratedOrder['datetime'] = [
+                'year' => $dateTime->format('Y'),
+                'month' => $dateTime->format('m'),
+                'day' => $dateTime->format('d'),
+                'hours' => $dateTime->format('H'),
+                'minutes' => $dateTime->format('i'),
+                'seconds' => $dateTime->format('s'),
+            ];
             $currentHydratedOrder['customer'] = $order['customer'];
 
             $currentHydratedOrder['analytics'] = [

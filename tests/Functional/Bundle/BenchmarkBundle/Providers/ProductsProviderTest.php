@@ -82,28 +82,6 @@ class ProductsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetProductProperties()
-    {
-        $this->installDemoData('products_properties');
-
-        $benchmarkData = $this->getBenchmarkData();
-        $productsList = $benchmarkData['list'];
-
-        $this->assertArrayHasKey('Zielgruppe', $productsList[2]['properties']);
-        $this->assertArrayHasKey('Farbe', $productsList[2]['properties']);
-
-        $this->assertCount(2, $productsList[2]['properties']['Zielgruppe']);
-
-        $this->assertTrue(in_array('Kinder', $productsList[2]['properties']['Zielgruppe']));
-        $this->assertTrue(in_array('Frauen', $productsList[2]['properties']['Zielgruppe']));
-
-        $this->assertCount(1, $productsList[2]['properties']['Farbe']);
-        $this->assertArraySubset(['Rot'], $productsList[2]['properties']['Farbe']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
     public function testGetProductImages()
     {
         $this->installDemoData('products_images');

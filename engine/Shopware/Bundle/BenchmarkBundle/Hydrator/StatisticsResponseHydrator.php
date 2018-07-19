@@ -46,6 +46,6 @@ class StatisticsResponseHydrator implements HydratorInterface
             throw new StatisticsHydratingException('Missing field "responseToken" from server response');
         }
 
-        return new StatisticsResponse($date = new \DateTime('now'), $data['responseToken'], false);
+        return new StatisticsResponse($date = new \DateTime('now', new \DateTimeZone('UTC')), $data['responseToken'], false);
     }
 }

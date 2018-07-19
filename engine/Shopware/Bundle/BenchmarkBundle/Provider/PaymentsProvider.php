@@ -68,7 +68,6 @@ class PaymentsProvider implements BenchmarkProviderInterface
             'paymentsWithReduction' => $this->getPaymentsWithReduction(),
             'paymentsWithPercentagePrice' => $this->getPaymentsWithPercentagePrice(),
             'paymentsWithAbsolutePrice' => $this->getPaymentsWithAbsolutePrice(),
-            'paymentUsages' => $this->getPaymentUsages(),
         ];
     }
 
@@ -176,26 +175,6 @@ class PaymentsProvider implements BenchmarkProviderInterface
             ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchColumn();
-    }
-
-    /**
-     * @return array
-     */
-    private function getPaymentUsages()
-    {
-        $paymentIds = $this->getPossiblePaymentIds();
-
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $queryBuilder->select('payments.name, COUNT(orders.id) as usages')
-            ->from('s_order', 'orders')
-            ->leftJoin('orders', 's_core_paymentmeans', 'payments', 'payments.id = orders.paymentID')
-            ->where('payments.id IN (:paymentIds)')
-            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
-            ->groupBy('orders.paymentID')
-            ->orderBy('usages', 'DESC')
-            ->execute()
-            ->fetchAll();
     }
 
     /**
