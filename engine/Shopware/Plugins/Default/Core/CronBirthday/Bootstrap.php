@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -40,44 +39,43 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
 
         $sql = "
             SELECT
-                user_id as 'userID',
-                company,
-                department,
+                u.id AS 'userID',
                 u.salutation,
                 u.customernumber,
                 u.firstname,
                 u.lastname,
-                street,
-                zipcode,
-                city,
-                phone,
-                country_id AS 'countryID',
-                ustid,
+                u.email,
+                u.paymentID,
+                u.firstlogin,
+                u.lastlogin,
+                u.newsletter,
+                u.affiliate,
+                u.customergroup,
+                u.language,
+                u.subshopID,
+                ub.street,
+                ub.zipcode,
+                ub.city,
+                ub.phone,
+                ub.country_id AS 'countryID',
+                ub.ustid,
+                ub.company,
+                ub.department,
                 at.text1,
                 at.text2,
                 at.text3,
                 at.text4,
                 at.text5,
-                at.text6,
-                email,
-                paymentID,
-                firstlogin,
-                lastlogin,
-                newsletter,
-                affiliate,
-                customergroup,
-                language,
-                subshopID
+                at.text6
             FROM s_user u
-            LEFT JOIN s_user_addresses ub
-            ON u.default_billing_address_id = ub.id
-            AND u.id = ub.user_id
+            JOIN s_user_addresses ub
+              ON u.default_billing_address_id = ub.id
+                AND u.id = ub.user_id
             LEFT JOIN s_user_addresses_attributes at
-            ON at.address_id = ub.id
-            WHERE accountmode = 0
-            AND active = 1
-            AND user_id = u.id
-            AND birthday LIKE ?
+              ON at.address_id = ub.id
+            WHERE u.accountmode = 0
+              AND u.active = 1
+              AND u.birthday LIKE ?
         ";
         $users = Shopware()->Db()->fetchAll($sql, [
             '%-' . date('m-d'),
