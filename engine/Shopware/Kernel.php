@@ -476,7 +476,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      */
     public function terminate(SymfonyRequest $request, SymfonyResponse $response)
     {
-        if ($this->container->initialized('events')) {
+        if ($this->container && $this->container->initialized('events')) {
             $this->container->get('events')->notify(KernelEvents::TERMINATE, [
                 'postResponseEvent' => new PostResponseEvent($this, $request, $response),
                 'container' => $this->container,

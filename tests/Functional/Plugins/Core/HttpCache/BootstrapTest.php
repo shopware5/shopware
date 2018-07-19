@@ -27,6 +27,10 @@ namespace Shopware\Tests\Functional\Plugins\Core\HttpCache;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\CacheManager;
+use Shopware\Components\HttpCache\DefaultCacheTimeService;
+use Shopware\Components\HttpCache\DefaultRouteService;
+use Shopware\Components\HttpCache\DynamicCacheTimeService;
+use Shopware\Components\Plugin\CachedConfigReader;
 use ShopwarePlugins\HttpCache\CacheControl;
 
 class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
@@ -83,11 +87,6 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         }
 
         parent::tearDown();
-    }
-
-    public function getConfig($key)
-    {
-        return $this->configValues[$key];
     }
 
     public function testCacheableRoute()
@@ -226,20 +225,40 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         return null;
     }
 
-    private function resetHttpCache($configValues)
+    private function resetHttpCache($overrideConfig)
     {
-        $this->configValues = $configValues;
+        $configReader = $this->createMock(CachedConfigReader::class);
+        $configReader->method('getByPluginName')->willReturn($overrideConfig);
 
-        $config = $this->createMock(\Enlight_Config::class);
-        $config->method('get')
-            ->will($this->returnCallback([$this, 'getConfig']));
+        $cacheRouteGeneration = Shopware()->Container()->get('shopware.http_cache.cache_route_generation_service');
+        $defaultRouteService = new DefaultRouteService($configReader, $cacheRouteGeneration);
+        $defaultCacheTimeService = new DefaultCacheTimeService($defaultRouteService);
+
+        $invalidationDates = new \ArrayObject(
+            [
+                Shopware()->Container()->get('shopware.http_cache.invalidation_date.listing_date_frontend'),
+                Shopware()->Container()->get('shopware.http_cache.invalidation_date.listing_date'),
+                Shopware()->Container()->get('shopware.http_cache.invalidation_date.blog_date'),
+                Shopware()->Container()->get('shopware.http_cache.invalidation_date.blog_listing'),
+                Shopware()->Container()->get('shopware.http_cache.invalidation_date.product_date'),
+            ]
+        );
+
+        $cacheTimeService = new DynamicCacheTimeService(
+            $cacheRouteGeneration,
+            $defaultCacheTimeService,
+            $invalidationDates
+        );
 
         Shopware()->Container()->set(
             'http_cache.cache_control',
             new CacheControl(
                 Shopware()->Container()->get('session'),
-                $config,
-                Shopware()->Container()->get('events')
+                $overrideConfig,
+                Shopware()->Container()->get('events'),
+                $defaultRouteService,
+                $cacheTimeService,
+                $cacheRouteGeneration
             )
         );
 
