@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ProductsProvider implements BenchmarkProviderInterface
+class ProductsProvider implements BatchableProviderInterface
 {
     /**
      * @var Connection
@@ -53,23 +53,29 @@ class ProductsProvider implements BenchmarkProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getBenchmarkData(ShopContextInterface $shopContext)
+    public function getBenchmarkData(ShopContextInterface $shopContext, $batchSize = null)
     {
         $this->shopContext = $shopContext;
 
         return [
-            'list' => $this->getProductList(),
+            'list' => $this->getProductList($batchSize),
         ];
     }
 
     /**
+     * @param int $batchSize
+     *
      * @return array
      */
-    private function getProductList()
+    private function getProductList($batchSize = null)
     {
         $config = $this->getConfig();
         $batch = (int) $config['batch_size'];
         $lastProductId = (int) $config['last_product_id'];
+
+        if ($batchSize !== null) {
+            $batch = $batchSize;
+        }
 
         $productIds = $this->getProductIds($batch, $lastProductId);
 
@@ -78,18 +84,15 @@ class ProductsProvider implements BenchmarkProviderInterface
         $productIds = array_keys($basicProducts);
 
         $variantsPerProduct = $this->getVariantsForProducts($productIds);
-        $propertiesPerProduct = $this->getPropertiesPerProduct($productIds);
         $imagesPerProduct = $this->getImagesPerProduct($productIds);
 
         foreach ($basicProducts as $productId => &$basicProduct) {
+            $basicProduct['variants'] = [];
             if (array_key_exists($productId, $variantsPerProduct)) {
                 $basicProduct['variants'] = $variantsPerProduct[$productId];
             }
 
-            if (array_key_exists($productId, $propertiesPerProduct)) {
-                $basicProduct['properties'] = $propertiesPerProduct[$productId];
-            }
-
+            $basicProduct['images'] = [];
             if (array_key_exists($productId, $imagesPerProduct)) {
                 $basicProduct['images'] = $imagesPerProduct[$productId];
             }
@@ -165,45 +168,6 @@ class ProductsProvider implements BenchmarkProviderInterface
             ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_GROUP);
-    }
-
-    /**
-     * @param array $productIds
-     *
-     * @return array
-     */
-    private function getPropertiesPerProduct(array $productIds)
-    {
-        $properties = [];
-
-        $valueIdsQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        $valueIds = $valueIdsQueryBuilder->select('filters.articleID, GROUP_CONCAT(filters.valueID)')
-            ->from('s_filter_articles', 'filters')
-            ->where('filters.articleID IN (:productIds)')
-            ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY)
-            ->groupBy('filters.articleID')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        foreach ($valueIds as $productId => $valueIdString) {
-            $valuesQueryBuilder = $this->dbalConnection->createQueryBuilder();
-            $values = $valuesQueryBuilder->select('filterOptions.name, filterValues.value')
-                ->from('s_filter_values', 'filterValues')
-                ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterOptions.id = filterValues.optionID')
-                ->where('filterValues.id IN (:filterValues)')
-                ->setParameter(':filterValues', explode(',', $valueIdString), Connection::PARAM_INT_ARRAY)
-                ->execute()
-                ->fetchAll(\PDO::FETCH_GROUP);
-
-            foreach ($values as $optionName => $valueArray) {
-                $values[$optionName] = array_column($valueArray, 'value');
-            }
-
-            $properties[$productId] = $values;
-        }
-
-        return $properties;
     }
 
     /**

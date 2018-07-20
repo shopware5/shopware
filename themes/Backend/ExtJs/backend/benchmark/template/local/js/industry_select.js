@@ -193,7 +193,7 @@
                     return;
                 }
 
-                window.location.href = me.$saveButton.attr('data-success-url');
+                window.location.href = me.$saveButton.attr('data-success-url').replace('placeholder', window.i18n.locale);
             }
         });
     };

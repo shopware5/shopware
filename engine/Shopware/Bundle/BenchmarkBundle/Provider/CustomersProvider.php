@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CustomersProvider implements BenchmarkProviderInterface
+class CustomersProvider implements BatchableProviderInterface
 {
     /**
      * @var Connection
@@ -53,23 +53,29 @@ class CustomersProvider implements BenchmarkProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getBenchmarkData(ShopContextInterface $shopContext)
+    public function getBenchmarkData(ShopContextInterface $shopContext, $batchSize = null)
     {
         $this->shopId = $shopContext->getShop()->getId();
 
         return [
-            'list' => $this->getCustomersList(),
+            'list' => $this->getCustomersList($batchSize),
         ];
     }
 
     /**
+     * @param int $batchSize
+     *
      * @return array
      */
-    private function getCustomersList()
+    private function getCustomersList($batchSize = null)
     {
         $config = $this->getConfig();
         $batch = (int) $config['batch_size'];
         $lastCustomerId = $config['last_customer_id'];
+
+        if ($batchSize !== null) {
+            $batch = $batchSize;
+        }
 
         $customers = $this->getCustomersBasicList($batch, $lastCustomerId);
 

@@ -76,14 +76,15 @@ class StatisticsService
 
     /**
      * @param BenchmarkConfig $config
+     * @param int             $batchSize
      *
      * @throws TransmissionNotNecessaryException
      *
      * @return StatisticsResponse
      */
-    public function transmit(BenchmarkConfig $config)
+    public function transmit(BenchmarkConfig $config, $batchSize = null)
     {
-        $benchmarkData = $this->benchmarkCollector->get($this->contextService->createShopContext($config->getShopId()));
+        $benchmarkData = $this->benchmarkCollector->get($this->contextService->createShopContext($config->getShopId()), $batchSize);
 
         $ordersCount = count($benchmarkData['orders']['list']);
         $customersCount = count($benchmarkData['customers']['list']);

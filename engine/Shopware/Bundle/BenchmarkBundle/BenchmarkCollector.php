@@ -52,12 +52,17 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     /**
      * {@inheritdoc}
      */
-    public function get(ShopContextInterface $shopContext)
+    public function get(ShopContextInterface $shopContext, $batchSize = null)
     {
         $providerData = [];
 
         /** @var BenchmarkProviderInterface $provider */
         foreach ($this->providers as $provider) {
+            if ($provider instanceof BatchableProviderInterface) {
+                $providerData[$provider->getName()] = $provider->getBenchmarkData($shopContext, $batchSize);
+                continue;
+            }
+
             $providerData[$provider->getName()] = $provider->getBenchmarkData($shopContext);
         }
 

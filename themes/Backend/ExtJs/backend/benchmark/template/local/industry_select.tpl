@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="industry--save-button" style="display: none;"
-                            data-success-url="{url controller=BenchmarkOverview action=index}"
+                            data-success-url="{url controller=BenchmarkOverview action=index lang='placeholder'}"
                             data-save-url="{url controller=BenchmarkOverview action=saveIndustry}">
                             <span class="save-button--text">[[ $t('saveIndustryText') ]]</span>
                             <span class="save-button--shop-counter">0</span>
