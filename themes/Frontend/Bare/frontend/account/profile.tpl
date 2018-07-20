@@ -177,7 +177,9 @@
             </form>
         {/block}
 
+        {block name="frontend_account_profile_email_password_container"}
         <div class="profile--email-password-container" data-panel-auto-resizer="true">
+            {block name="frontend_account_profile_email_container"}
             <div class="profile-email--container">
                 {block name="frontend_account_profile_email_form"}
                     <form name="emailForm" action="{url controller=account action=saveEmail}" method="post">
@@ -279,7 +281,9 @@
                     </form>
                 {/block}
             </div>
+            {/block}
 
+            {block name="frontend_account_profile_password_container"}
             <div class="profile-password--container">
                 {block name="frontend_account_profile_password_form"}
                     <form name="passwordForm" action="{url controller=account action=savePassword}" method="post">
@@ -372,6 +376,8 @@
                     </form>
                 {/block}
             </div>
+          {/block}
         </div>
+      {/block}
     </div>
 {/block}
