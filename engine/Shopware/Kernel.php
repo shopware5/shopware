@@ -27,6 +27,7 @@ namespace Shopware;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
+use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\MatcherCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
@@ -676,6 +677,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new AddConstraintValidatorsPass());
         $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
+        $container->addCompilerPass(new MatcherCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

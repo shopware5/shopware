@@ -80,6 +80,7 @@
                  class="Shopware\Bundle\BenchmarkBundle\Provider\PaymentsProvider"
                  public="false">
             <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.benchmark_bundle.matcher_payment"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
@@ -94,6 +95,7 @@
                  class="Shopware\Bundle\BenchmarkBundle\Provider\ShipmentsProvider"
                  public="false">
             <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.benchmark_bundle.matcher_shipping"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
@@ -125,6 +127,14 @@
                  class="Shopware\Bundle\BenchmarkBundle\Service\TranslationService">
             <argument type="service" id="snippets"/>
             <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware.benchmark_bundle.matcher_shipping" class="Shopware\Bundle\BenchmarkBundle\Service\MatcherService">
+            <argument>%shopware.benchmark_bundle.shipment_mapping%</argument>
+        </service>
+
+        <service id="shopware.benchmark_bundle.matcher_payment" class="Shopware\Bundle\BenchmarkBundle\Service\MatcherService">
+            <argument>%shopware.benchmark_bundle.payment_mapping%</argument>
         </service>
 
         <!-- Transmission services -->

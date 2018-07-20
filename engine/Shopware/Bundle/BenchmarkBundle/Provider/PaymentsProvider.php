@@ -26,6 +26,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentsProvider implements BenchmarkProviderInterface
@@ -45,9 +46,15 @@ class PaymentsProvider implements BenchmarkProviderInterface
      */
     private $paymentIds = [];
 
-    public function __construct(Connection $dbalConnection)
+    /**
+     * @var MatcherService
+     */
+    private $matcherService;
+
+    public function __construct(Connection $dbalConnection, MatcherService $matcherService)
     {
         $this->dbalConnection = $dbalConnection;
+        $this->matcherService = $matcherService;
     }
 
     public function getName()
@@ -68,7 +75,40 @@ class PaymentsProvider implements BenchmarkProviderInterface
             'paymentsWithReduction' => $this->getPaymentsWithReduction(),
             'paymentsWithPercentagePrice' => $this->getPaymentsWithPercentagePrice(),
             'paymentsWithAbsolutePrice' => $this->getPaymentsWithAbsolutePrice(),
+            'paymentUsages' => $this->getMatchedPaymentUsages(),
         ];
+    }
+
+    private function getMatchedPaymentUsages()
+    {
+        $paymentUsages = $this->getPaymentUsages();
+
+        $matches = [];
+        foreach ($paymentUsages as $paymentName => $usages) {
+            $matches[$this->matcherService->matchString($paymentName)] += $usages;
+        }
+
+        return $matches;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPaymentUsages()
+    {
+        $paymentIds = $this->getPossiblePaymentIds();
+
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('payments.name, COUNT(orders.id) as usages')
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_core_paymentmeans', 'payments', 'payments.id = orders.paymentID')
+            ->where('payments.id IN (:paymentIds)')
+            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
+            ->groupBy('orders.paymentID')
+            ->orderBy('usages', 'DESC')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     /**
