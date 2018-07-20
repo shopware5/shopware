@@ -153,6 +153,7 @@ class SubscriptionService
 
             return false;
         } catch (\Exception $e) {
+
             return false;
         }
     }
@@ -190,6 +191,22 @@ class SubscriptionService
             },
             $data['plugins']
         );
+
+        if (isset($data['general']['missingLicenseWarningThreshold'])) {
+            $this->connection->update(
+                's_core_config_elements',
+                ['value' => serialize($data['general']['missingLicenseWarningThreshold'])],
+                ['name' => 'missingLicenseWarningThreshold', 'form_id' => 0]
+            );
+        }
+
+        if (isset($data['general']['missingLicenseStopThreshold'])) {
+            $this->connection->update(
+                's_core_config_elements',
+                ['value' => serialize($data['general']['missingLicenseStopThreshold'])],
+                ['name' => 'missingLicenseStopThreshold', 'form_id' => 0]
+            );
+        }
 
         $this->pluginLicenceService->updateLocalLicenseInformation($pluginInformationStructs, $domain);
 
@@ -260,8 +277,7 @@ class SubscriptionService
         $queryBuilder = $this->connection->createQueryBuilder();
 
         $queryBuilder->select(['plugin.name', 'plugin.version'])
-            ->from('s_core_plugins', 'plugin')
-            ->where('plugin.active = 1');
+            ->from('s_core_plugins', 'plugin');
 
         $builderExecute = $queryBuilder->execute();
 
