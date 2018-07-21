@@ -62,6 +62,7 @@
             <xsd:enumeration value="combo"/>
             <xsd:enumeration value="combotree"/>
             <xsd:enumeration value="button"/>
+            <xsd:enumeration value="product_stream"/>
         </xsd:restriction>
     </xsd:simpleType>
 
