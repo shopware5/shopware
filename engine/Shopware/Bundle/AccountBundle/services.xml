@@ -111,6 +111,7 @@
             <argument type="service" id="shopware.number_range_incrementer"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_account.address_service"/>
+            <argument type="service" id="front"/>
         </service>
 
         <service id="shopware_account.store_front_greeting_service" class="Shopware\Bundle\AccountBundle\Service\StoreFrontCustomerGreetingService" >

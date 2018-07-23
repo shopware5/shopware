@@ -168,6 +168,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
        | --productwithnumber   | -x    | Warm up products with number parameter   |
        | --productwithcategory | -y    | Warm up producss with category parameter |        
 * Changed visibility of `Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::getPluginInformationFromApi()` to public
+* Changed Double-Opt-In behaviour to redirect back into the checkout, if user registered from there
 
 ### Removals
 

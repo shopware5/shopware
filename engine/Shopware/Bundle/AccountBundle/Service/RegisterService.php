@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -108,7 +109,6 @@ class RegisterService implements RegisterServiceInterface
      * @param Customer     $customer
      * @param Address      $billing
      * @param Address|null $shipping
-     * @param bool         $sendOptinMail
      *
      * @throws \Exception
      */
@@ -116,14 +116,14 @@ class RegisterService implements RegisterServiceInterface
         Shop $shop,
         Customer $customer,
         Address $billing,
-        Address $shipping = null,
-        $sendOptinMail = false
+        Address $shipping = null
     ) {
         $this->modelManager->beginTransaction();
         try {
             $this->saveCustomer($shop, $customer);
             if (
-                $sendOptinMail &&
+                ($optinAttribute = $shop->getAttribute('sendOptinMail')) !== null &&
+                $optinAttribute->get('sendOptinMail') === true &&
                 $customer->getDoubleOptinRegister() &&
                 $customer->getDoubleOptinConfirmDate() === null
             ) {
@@ -307,6 +307,10 @@ class RegisterService implements RegisterServiceInterface
      */
     private function doubleOptInSaveHash(Customer $customer, $hash)
     {
+        /** @var Request $request */
+        $request = Shopware()->Container()->get('front')->Request();
+        $fromCheckout = ($request->getParam('sTarget') === 'checkout');
+
         $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`)
                 VALUES ('swRegister', ?, ?, ?)";
 
@@ -320,6 +324,7 @@ class RegisterService implements RegisterServiceInterface
                             'salutation' => $customer->getSalutation(),
                         ],
                 ],
+            'fromCheckout' => $fromCheckout,
         ];
 
         $this->connection->executeQuery($sql, [$customer->getDoubleOptinEmailSentDate()->format('Y-m-d H:i:s'), $hash, serialize($storedData)]);
