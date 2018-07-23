@@ -134,10 +134,7 @@ class StoreDownloadCommand extends StoreCommand
 
         $plugin = $this->createPluginStruct($plugin);
 
-        $this->checkLicenceManager($plugin);
-        $this->checkIonCubeLoader($plugin);
-
-        $isDummy = ($plugin->hasCapabilityDummy() || $plugin->getTechnicalName() === 'SwagLicense');
+        $isDummy = $plugin->hasCapabilityDummy();
 
         try {
             switch (true) {
@@ -261,14 +258,6 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @return bool
-     */
-    private function isIonCubeLoaderLoaded()
-    {
-        return extension_loaded('ionCube Loader');
-    }
-
-    /**
      * @param string $technicalName
      *
      * @return Plugin|null
@@ -304,51 +293,6 @@ class StoreDownloadCommand extends StoreCommand
         }
 
         return $version;
-    }
-
-    /**
-     * @param PluginStruct $struct
-     */
-    private function checkLicenceManager(PluginStruct $struct)
-    {
-        if (!$struct->hasLicenceCheck()) {
-            return;
-        }
-
-        $repo = $this->container->get('models')->getRepository(Plugin::class);
-
-        /** @var Plugin $plugin */
-        $plugin = $repo->findOneBy(['name' => 'SwagLicense']);
-
-        switch (true) {
-            case !$plugin instanceof Plugin:
-                $this->handleError(['message' => sprintf("Plugin %s contains a licence check and the licence manager doesn't exist in your system.", $struct->getLabel())]);
-                break;
-            case $plugin->getInstalled() === null:
-                $this->handleError(['message' => sprintf('Plugin %s contains a licence check and the licence manager is not installed', $struct->getLabel())]);
-                break;
-            case !$plugin->getActive():
-                $this->handleError(['message' => sprintf("Plugin %s contains a licence check and the licence manager isn't activated", $struct->getLabel())]);
-                break;
-        }
-    }
-
-    /**
-     * @param PluginStruct $plugin
-     */
-    private function checkIonCubeLoader(PluginStruct $plugin)
-    {
-        if (!$plugin->isEncrypted()) {
-            return;
-        }
-
-        if ($this->isIonCubeLoaderLoaded()) {
-            return;
-        }
-
-        $this->handleError([
-            'message' => sprintf('Plugin %s is encrypted and requires the ioncube loader extension', $plugin->getLabel()),
-        ]);
     }
 
     /**

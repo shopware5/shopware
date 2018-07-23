@@ -597,11 +597,12 @@ Ext.onReady(function() {
             expiring_license: 'Ablaufende Lizenz(en)',
             expired_license: 'Abgelaufene Lizenz(en)',
             expiring_license_warning: 'Es laufen [0]x Plugin Lizenz(en) aus.<br /><br /><b>Bald abgelaufene Lizenz(en):</b><br />[1]',
-            expired_license_warning: 'Es sind [0] Plugin Lizenz(en) abgelaufen.<br /><br /><b>Abgelaufene Lizenz(en):</b><br/>[1]',
+            expired_license_warning: 'Mindestens eine Lizenz der von Dir eingesetzten Plugins ist abgelaufen. <br> Überprüfe die Lizenzen in Deinem <a target="_blank" href="https://account.shopware.com">Shopware Account</a> unter <strong style="font-weight: bold">„Lizenzen“</strong>.',
             unknown_license: 'Nicht lizenzierte Plugins',
-            confirm_open_pluginmanager: 'Du hast nicht lizenzierte Plugins installiert. Bitte erwirb eine gültige Lizenz oder deinstalliere und entferne die Plugins über den Plugin Manager.',
             subscription: 'Subscription',
             subscription_hide_message: 'Möchtest du diese Nachricht für eine Woche ausblenden?',
+            confirm_open_pluginmanager: 'Du hast nicht lizenzierte Plugins installiert. Bitte erwirb eine gültige Lizenz oder deinstalliere und entferne die Plugins über den Plugin Manager.',
+            openPluginOverview: 'Plugin-Übersicht öffnen'
         }
     });
 });

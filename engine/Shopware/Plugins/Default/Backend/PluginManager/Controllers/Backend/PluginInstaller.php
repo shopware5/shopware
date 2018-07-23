@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\PluginInstallerBundle\Service\DownloadService;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelRepository;
@@ -140,7 +139,13 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function deletePluginAction()
     {
-        $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
+        $pluginName = $this->Request()->getParam('technicalName');
+
+        $this->container->get('dbal_connection')->delete('s_core_licenses', [
+            'module' => $pluginName,
+        ]);
+
+        $plugin = $this->getPluginModel($pluginName);
 
         switch (true) {
             case $plugin->getSource() == 'Default':
@@ -149,7 +154,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
                 return $this->View()->assign(['success' => false, 'message' => 'Installed plugins can not be deleted']);
             default:
                 try {
-                    $directory = $this->pluginManager->getPluginPath($this->Request()->getParam('technicalName'));
+                    $directory = $this->pluginManager->getPluginPath($pluginName);
                     $this->removeDirectory($directory);
                 } catch (InvalidArgumentException $e) {
                     // empty catch intended

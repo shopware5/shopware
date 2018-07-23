@@ -215,6 +215,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed event `Shopware_Controllers_Widgets_Emotion_AddElement`
 * Removed config option ``esdDownloadStrategy``
 * Removed JSMin
+* Removed Ioncube checks from PluginManager
+* Removed `SwagLicense` dependency in Plugins licenses
 
 ### Deprecations
 

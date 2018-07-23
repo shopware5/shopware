@@ -130,7 +130,6 @@ Ext.define('Shopware.apps.PluginManager', {
         'request-plugin-test-version',
         'check-store-login',
         'open-login',
-        'check-licence-plugin',
         'plugin-reloaded',
         'display-plugin-by-name',
         'load-store-listing',
@@ -223,6 +222,10 @@ Ext.define('Shopware.apps.PluginManager', {
     _destroyOtherModuleInstances: function (cb, cbArgs) {
         var me = this, activeWindows = [], subAppId = me.$subAppId;
         cbArgs = cbArgs || [];
+
+        if (!Ext.isDefined(Shopware.app.Application.subApplications)) {
+            return;
+        }
 
         Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
 
