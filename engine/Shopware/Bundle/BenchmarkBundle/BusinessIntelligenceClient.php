@@ -120,8 +120,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
             throw new BenchmarkHydratingException(sprintf('Could not retrieve BI response: %s', $data));
         }
 
-        // Deactivating Signatures for the moment
-        // $this->verifyResponseSignature($response);
+        $this->verifyResponseSignature($response);
 
         return $this->biResponseHydrator->hydrate(['html' => $data]);
     }
