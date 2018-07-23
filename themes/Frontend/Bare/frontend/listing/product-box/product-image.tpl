@@ -1,7 +1,11 @@
 {* Product image - uses the picture element for responsive retina images. *}
 <a href="{$sArticle.linkDetails}"
    title="{$sArticle.articleName|escape}"
-   class="product--image">
+   class="product--image"
+    {block name="frontend_listing_box_article_image/attributes"}
+        {if $target}target="{$target}"{/if}
+    {/block}
+   >
     {block name='frontend_listing_box_article_image_element'}
         <span class="image--element">
             {block name='frontend_listing_box_article_image_media'}
