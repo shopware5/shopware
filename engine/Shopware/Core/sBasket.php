@@ -1414,7 +1414,7 @@ class sBasket
         list($queryAdditionalInfo, $quantity) = $this->getAdditionalInfoForUpdateArticle($id, $quantity);
         $queryNewPrice = $this->getPriceForUpdateArticle($id, $quantity, $queryAdditionalInfo);
 
-        $customerGroupId = $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId();
+        $customerGroupId = $this->sSYSTEM->sUSERGROUPDATA['id'];
         if (in_array($customerGroupId, $queryAdditionalInfo['blocked_customer_groups'])) {
             // if blocked for current customer group, delete article from basket
             $this->sDeleteArticle($id);
