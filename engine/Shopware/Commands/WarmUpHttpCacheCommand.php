@@ -24,14 +24,20 @@
 
 namespace Shopware\Commands;
 
-use Symfony\Component\Console\Helper\ProgressBar;
+use Shopware\Components\HttpCache\CacheWarmer;
+use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
+use Shopware\Components\Routing\Context;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class WarmUpHttpCacheCommand extends ShopwareCommand
 {
+    private $errorMessage = false;
+
     /**
      * {@inheritdoc}
      */
@@ -39,10 +45,19 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:warm:http:cache')
-            ->setDescription('Warm up http cache')
+            ->setDescription('Warm up http cache (everything by default)')
             ->addArgument('shopId', InputArgument::OPTIONAL, 'The Id of the shop')
             ->addOption('clear-cache', 'c', InputOption::VALUE_NONE, 'Clear complete httpcache before warmup')
             ->addOption('concurrent-requests', 'b', InputOption::VALUE_OPTIONAL, 'Integer representing the maximum number of requests that are allowed to be sent concurrently. To many URLs at a time may cause script timeouts, memory issues or block your HTTP server', 1)
+            ->addOption('category', 'k', InputOption::VALUE_NONE, 'Warm up categories')
+            ->addOption('emotion', 'o', InputOption::VALUE_NONE, 'Warm up emotions')
+            ->addOption('blog', 'g', InputOption::VALUE_NONE, 'Warm up blogs')
+            ->addOption('manufacturer', 'm', InputOption::VALUE_NONE, 'Warm up manufacturers')
+            ->addOption('static', 't', InputOption::VALUE_NONE, 'Warm up static pages')
+            ->addOption('product', 'p', InputOption::VALUE_NONE, 'Warm up products')
+            ->addOption('variantswitch', 'd', InputOption::VALUE_NONE, 'Warm up variant switch of configurators')
+            ->addOption('productwithnumber', 'x', InputOption::VALUE_NONE, 'Warm up products and variants with number parameter')
+            ->addOption('productwithcategory', 'y', InputOption::VALUE_NONE, 'Warm up products with category parameter')
             ->setHelp('The <info>%command.name%</info> warms up the http cache')
         ;
     }
@@ -52,47 +67,133 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var CacheWarmer $cacheWarmer */
+        $cacheWarmer = $this->container->get('http_cache_warmer');
+
+        /** @var UrlProviderFactoryInterface $urlProviderFactory */
+        $urlProviderFactory = $this->container->get('shopware_cache_warmer.url_provider_factory');
+
+        // Get every shop to warm
         $shopId = $input->getArgument('shopId');
+        $shopRepository = $this->container->get('models')->getRepository(Shop::class);
 
         if (!empty($shopId)) {
-            $shopIds[] = $shopId;
+            $shop = $shopRepository->getById($shopId);
+
+            if (!$shop) {
+                throw new \RuntimeException(sprintf('Shop with id %d not found', $shopId));
+            }
+
+            $shops = [$shop];
         } else {
-            $shopIds = $this->container->get('db')->fetchCol('SELECT id FROM s_core_shops WHERE active = 1');
+            $shops = $shopRepository->getActiveShopsFixed();
         }
 
+        $io = new SymfonyStyle($input, $output);
+        $options = $this->prepareOptions($input->getOptions());
+
+        // Clear cache?
         if ($input->getOption('clear-cache')) {
-            $output->writeln('Clearing httpcache.');
+            $io->writeln('Clearing httpcache.');
             $this->container->get('shopware.cache_manager')->clearHttpCache();
         }
 
-        /** @var \Shopware\Components\HttpCache\CacheWarmer $cacheWarmer */
-        $cacheWarmer = $this->container->get('http_cache_warmer');
-
-        // Help message for this command may be confusing about using an equal sign. So better strip it.
+        /*
+         * Print information about concurrent requests
+         * Help message for this command may be confusing about using an equal sign. So better strip it.
+         */
         $concurrentRequests = (int) trim($input->getOption('concurrent-requests'), '=');
-        $offset = 0;
         $limit = $concurrentRequests > 10 ? $concurrentRequests : 10;
+        $io->writeln(sprintf('Calling URLs with %d concurrent requests', $concurrentRequests));
 
-        foreach ($shopIds as $shopId) {
-            $totalUrlCount = $cacheWarmer->getAllSEOUrlCount($shopId);
+        // Print warming information
+        if (!in_array(false, $options, true)) {
+            $io->write('Standard warmup - Warming every url type');
+        } else {
+            $optionsKeys = array_keys($options, function ($setting) {
+                return $setting;
+            });
+            $optionsKeys = array_map('ucfirst', $optionsKeys);
 
-            $output->writeln(sprintf("\nCalling URLs for shop with id %s with %d concurrent processes", $shopId, $concurrentRequests));
+            $io->write('Specific warmup - Warming only the following url types: ' . implode(', ', $optionsKeys));
+        }
+        $io->newLine();
 
-            $progressBar = new ProgressBar($output, $totalUrlCount);
+        $this->container->get('events')->addListener('Shopware_Components_CacheWarmer_ErrorOccured', function () {
+            $this->errorMessage = true;
+        });
+
+        $offset = 0;
+
+        /** @var Shop $shop */
+        foreach ($shops as $shop) {
+            /** @var Context $context */
+            $context = Context::createFromShop(
+                $shop,
+                $this->container->get('config')
+            );
+
+            // Gathering URLs
+            $urls = [];
+            $totalResultCount = 0;
+            foreach ($options as $resource => $active) {
+                if ($active) {
+                    $provider = $urlProviderFactory->getProvider($resource);
+                    $urls = array_merge($urls, $provider->getUrls($context));
+                    $totalResultCount += $provider->getCount($context);
+                }
+            }
+
+            // Progressbar
+            $progressBar = $io->createProgressBar($totalResultCount);
+            $io->writeln(sprintf("\nShop '%s' (ID: %s)", $shop->getName(), $shop->getId()));
             $progressBar->setBarWidth(100);
             $progressBar->setFormat('very_verbose');
             $progressBar->start();
 
-            while ($offset < $totalUrlCount) {
-                $urls = $cacheWarmer->getAllSEOUrls($shopId, $limit, $offset);
+            // Warm URL-List
+            while ($offset < $totalResultCount) {
+                $sliceUrls = array_slice($urls, $offset, $limit, true);
+                $cacheWarmer->warmUpUrls($sliceUrls, $context, $concurrentRequests);
 
-                $cacheWarmer->callUrls($urls, $shopId, $concurrentRequests);
-                $progressBar->advance(count($urls));
-                $offset += count($urls);
+                $sliceCount = count($sliceUrls);
+                $progressBar->advance($sliceCount);
+                $offset += $sliceCount;
             }
             $progressBar->finish();
+            $io->newLine();
         }
+        $io->newLine();
+        $io->success('The HttpCache is now warmed up');
+        if ($this->errorMessage === true) {
+            $snippet = 'An error has occurred while warming up the cache, please look into the backend log under “Settings > Logfile > System-Log” or the logfile located at ”/var/log”, there you will find more detailed information.';
+            $io->warning($snippet);
+        }
+    }
 
-        $output->writeln("\n The HttpCache is now warmed up");
+    /**
+     * Builds an array using input parameters, which is used to know what to warm up
+     *
+     * @param array $input
+     *
+     * @return array
+     */
+    private function prepareOptions(array $input)
+    {
+        $intersectCheck = [
+            'category' => true,
+            'emotion' => true,
+            'blog' => true,
+            'manufacturer' => true,
+            'static' => true,
+            'product' => true,
+            'variantswitch' => true,
+            'productwithcategory' => true,
+            'productwithnumber' => true,
+        ];
+
+        $options = array_intersect_key($input, $intersectCheck);
+
+        return in_array(true, $options, true) ? $options : $intersectCheck;
     }
 }

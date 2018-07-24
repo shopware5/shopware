@@ -100,6 +100,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
         - `DefaultCacheTimeService`
         - `DynamicCacheTimeService`
     * Added `invalidation_date_provider` tag to the DIC
+* Added parameter mode to Log module, to directly open the systemlogs tab
 
 ### Changes
 
@@ -120,7 +121,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     Please check your templates when you extend `cart_item.tpl`. You now have to extend one of the added subtemplates.
 * Changed `country_id` to `countryId` and `state_id` to `stateId` in `Shopware.apps.Customer.model.Address`
 * Changed xml files in `engine/Library/Zend/Locale/Data` to be more up-to-date
-* Changed rebates and vouchers to also show their icon in the cart for values >1 €
+* Changed rebates and vouchers to also show their icon in the cart for values > 1€
 * Changed basic settings option `Extended SQL query`, so users now need the `sql_rule` permission of `shipping` to edit it.
 * Changed `s_order_documents` column `ID` to `id`
 * Changed following classes constructor to accept `IteratorAggregate` instead `array` for `tagged` services collections:
@@ -151,6 +152,21 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed form controller to allow multiple receivers comma separated
 * Changed behaviour of the `HttpCache` core plugin. The max-age for the cached content of shopping-worlds, blog-categories, product detail pages and blog detail pages is now set based on the activation date of the respective resource.
 * Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressHydrator` to correctly hydrate additionalAddressLine2
+* Changed cache warmer behaviour by implementing a new procedure, which doesn't rely on SEO urls anymore, warms new url types and allows partial warming
+    * Changed HttpCacheWarmer-Module in Backend to apply the new settings
+    * Changed sw:warm:http:cache CLI command by improving the printed information and adding new parameters:
+    
+       | Parameter             | Short | Description                              |
+       | --------------------- | ----- | ---------------------------------------- |
+       | --category            | -j    | Warm up categories                       |
+       | --emotion             | -o    | Warm up emotions                         |
+       | --blog                | -g    | Warm up blog                             |
+       | --manufacturer        | -m    | Warm up manufacturer pages               |
+       | --static              | -t    | Warm up static pages                     |
+       | --product             | -p    | Warm up products                         |
+       | --variantswitch       | -d    | Warm up variant switch of configurators  |
+       | --productwithnumber   | -x    | Warm up products with number parameter   |
+       | --productwithcategory | -y    | Warm up producss with category parameter |        
 
 ### Removals
 
