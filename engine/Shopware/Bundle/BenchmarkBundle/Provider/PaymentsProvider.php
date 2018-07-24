@@ -85,16 +85,19 @@ class PaymentsProvider implements BenchmarkProviderInterface
 
         $matches = [];
         foreach ($paymentUsages as $paymentName => $usages) {
-            $matchedString = $this->matcherService->matchString($paymentName);
-            if (array_key_exists($matchedString, $matches)) {
-                $matches[$matchedString] += $usages;
-                continue;
+            $match = $this->matcherService->matchString($paymentName);
+
+            if (!isset($matches[$match])) {
+                $matches[$match] = [
+                    'name' => $match,
+                    'usages' => 0,
+                ];
             }
 
-            $matches[$matchedString] = $usages;
+            $matches[$match]['usages'] += $usages;
         }
 
-        return $matches;
+        return array_values($matches);
     }
 
     /**
