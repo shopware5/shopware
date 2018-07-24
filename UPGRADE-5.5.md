@@ -167,6 +167,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
        | --variantswitch       | -d    | Warm up variant switch of configurators  |
        | --productwithnumber   | -x    | Warm up products with number parameter   |
        | --productwithcategory | -y    | Warm up producss with category parameter |        
+* Changed visibility of `Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::getPluginInformationFromApi()` to public
 
 ### Removals
 
