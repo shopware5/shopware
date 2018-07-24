@@ -29,7 +29,12 @@ class MatcherService
     /**
      * @var array
      */
-    private $matchers = [];
+    private $matchers;
+
+    /**
+     * @var array
+     */
+    private $storage = [];
 
     public function __construct(array $matchers)
     {
@@ -43,13 +48,21 @@ class MatcherService
      */
     public function matchString($entityName)
     {
+        if (isset($this->storage[$entityName])) {
+            return $this->storage[$entityName];
+        }
+
         foreach ($this->matchers as $entityKey => $expressions) {
             foreach ($expressions as $expression) {
                 if (preg_match($expression, $entityName)) {
+                    $this->storage[$entityName] = $entityKey;
+
                     return $entityKey;
                 }
             }
         }
+
+        $this->storage[$entityName] = 'others';
 
         return 'others';
     }

@@ -95,7 +95,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
                 continue;
             }
 
-            $matches[$this->matcher->matchString($shipmentName)] = $prices;
+            $matches[$matchedName] = $prices;
         }
 
         $matches['others']['minPrice'] = min(array_column($others, 'minPrice'));
@@ -112,6 +112,8 @@ class ShipmentsProvider implements BenchmarkProviderInterface
         $shipments = $this->getShipmentUsages();
 
         $matches = [];
+        $matches['others'] = 0;
+
         foreach ($shipments as $shipmentName => $usages) {
             $matches[$this->matcher->matchString($shipmentName)] += $usages;
         }

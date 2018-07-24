@@ -81,15 +81,16 @@ class CustomersProvider implements BatchableProviderInterface
 
         $customerIds = array_keys($customers);
 
-        $turnOverPerCustomer = $this->getTurnOverPerCustomer($customerIds);
-        foreach ($turnOverPerCustomer as $customerId => $turnOver) {
+        foreach ($this->getTurnOverPerCustomer($customerIds) as $customerId => $turnOver) {
             $customers[$customerId]['turnOver'] = $turnOver;
         }
 
         $customers = array_map([$this, 'matchGenders'], array_values($customers));
 
-        if (isset($customerId)) {
-            $this->updateLastCustomerId($customerId);
+        $customerId = end($customerIds);
+
+        if ($customerId) {
+            $this->updateLastCustomerId(end($customerIds));
         }
 
         return $customers;
