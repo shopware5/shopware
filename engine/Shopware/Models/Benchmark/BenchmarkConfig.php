@@ -99,6 +99,15 @@ class BenchmarkConfig extends ModelEntity
     private $lastProductId;
 
     /**
+     * The id of the last analytics that was sent to the server
+     *
+     * @var int
+     *
+     * @ORM\Column(name="last_analytics_id", type="integer", nullable=false)
+     */
+    private $lastAnalyticsId;
+
+    /**
      * The batch size in which entities are to be transmitted
      *
      * @var int
@@ -172,6 +181,7 @@ class BenchmarkConfig extends ModelEntity
         $this->lastOrderId = 0;
         $this->lastCustomerId = 0;
         $this->lastProductId = 0;
+        $this->lastAnalyticsId = 0;
         $this->batchSize = 1000;
         $this->active = 0;
     }
@@ -270,6 +280,22 @@ class BenchmarkConfig extends ModelEntity
     public function setLastProductId($lastProductId)
     {
         $this->lastProductId = (int) $lastProductId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastAnalyticsId()
+    {
+        return (int) $this->lastAnalyticsId;
+    }
+
+    /**
+     * @param int $lastAnalyticsId
+     */
+    public function setLastAnalyticsId($lastAnalyticsId)
+    {
+        $this->lastAnalyticsId = (int) $lastAnalyticsId;
     }
 
     /**
