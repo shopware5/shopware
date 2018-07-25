@@ -437,19 +437,22 @@
          * Registers all necessary events.
          */
         registerEvents: function () {
-            this._on(this.$filterForm, 'submit', $.proxy(this.onFilterSubmit, this));
-            this._on(this.$actionForms, 'submit', $.proxy(this.onActionSubmit, this));
-            this._on(this.$actionLinks, 'click', $.proxy(this.onActionLink, this));
-            this._on(this.$filterComponents, 'onChange', $.proxy(this.onComponentChange, this));
-            this._on(this.$filterTrigger, 'click', $.proxy(this.onFilterTriggerClick, this));
+            var me = this,
+                opts = me.opts;
+            
+            me._on(me.$filterForm, 'submit', $.proxy(me.onFilterSubmit, me));
+            me._on(me.$actionForms, 'submit', $.proxy(me.onActionSubmit, me));
+            me._on(me.$actionLinks, 'click', $.proxy(me.onActionLink, me));
+            me._on(me.$filterComponents, 'onChange', $.proxy(me.onComponentChange, me));
+            me._on(me.$filterTrigger, 'click', $.proxy(me.onFilterTriggerClick, me));
 
-            this._on($body, 'click', $.proxy(this.onBodyClick, this));
+            me._on($body, 'click', $.proxy(me.onBodyClick, me));
 
-            this.$activeFilterCont.on(this.getEventName('click'), '.' + this.opts.activeFilterCls, $.proxy(this.onActiveFilterClick, this));
-            this.$listingWrapper.on(this.getEventName('submit'), this.opts.actionFormSelector, $.proxy(this.onActionSubmit, this));
-            this.$listingWrapper.on(this.getEventName('click'), this.opts.actionLinkSelector, $.proxy(this.onActionLink, this));
+            me.$activeFilterCont.on(me.getEventName('click'), '.' + opts.activeFilterCls, $.proxy(me.onActiveFilterClick, me));
+            me.$listingWrapper.on(me.getEventName('submit'), opts.actionFormSelector, $.proxy(me.onActionSubmit, me));
+            me.$listingWrapper.on(me.getEventName('click'), opts.actionLinkSelector, $.proxy(me.onActionLink, me));
 
-            $.publish('plugin/swListingActions/onRegisterEvents', [this]);
+            $.publish('plugin/swListingActions/onRegisterEvents', [me]);
         },
 
         /**
