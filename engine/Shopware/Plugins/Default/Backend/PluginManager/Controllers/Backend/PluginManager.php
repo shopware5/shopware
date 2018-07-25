@@ -503,11 +503,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $qb = $this->get('dbal_connection')->createQueryBuilder();
         $installDates = $qb->from('s_core_plugins', 'plugins')
-            ->addSelect('plugins.name, plugins.installation_date')
+            ->addSelect('plugins.name, plugins.installation_date, plugins.capability_secure_uninstall')
             ->andWhere('name IN (:names)')
             ->setParameter('names', $expiredPlugins, Connection::PARAM_STR_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(\PDO::FETCH_ASSOC | PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
 
         $context = new PluginsByTechnicalNameRequest(
             $this->getLocale(),
@@ -522,7 +522,12 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
             foreach ($plugins as $plugin) {
                 if (isset($installDates[$plugin->getTechnicalName()])) {
-                    $plugin->setInstallationDate(new DateTime($installDates[$plugin->getTechnicalName()]));
+                    $date = $installDates[$plugin->getTechnicalName()]['installation_date'];
+
+                    if ($date) {
+                        $plugin->setInstallationDate(new DateTime($date));
+                    }
+                    $plugin->setCapabilitySecureUninstall($installDates[$plugin->getTechnicalName()]['capability_secure_uninstall']);
                 }
             }
 
