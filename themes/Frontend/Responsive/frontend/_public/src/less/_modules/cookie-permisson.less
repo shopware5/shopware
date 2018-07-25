@@ -12,10 +12,57 @@
         .clearfix();
         width: 100%;
         text-align: center;
+        position: relative;
 
         .cookie-permission--button {
             margin: 0 auto;
             .unitize(margin-top, 20);
+        }
+
+        .cookie-permission--decline-button {
+            .unitize(margin-right, 5);
+        }
+    }
+}
+
+.cookie-removal--container {
+    .unitize(padding, 25);
+
+    .cookie-removal--list {
+        .unitize(margin-bottom, 20);
+        list-style-position: inside;
+    }
+    .cookie-removal--buttons {
+        .unitize(margin-top, 20);
+    }
+    .cookie-removal--buttons .btn {
+        .unitize(margin-bottom, 6);
+        display: inline-block;
+        width: 48%;
+        float: right;
+
+        &:last-child {
+            margin-right: 2%;
+        }
+    }
+}
+
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
+    .cookie-removal--container {
+        .cookie-removal--footer {
+            .clearfix();
+            .cookie-removal--buttons {
+                float: right;
+            }
+        }
+        .cookie-removal--buttons {
+            .unitize(min-width, 260);
+            margin: 0;
+        }
+
+        .privacy--notice {
+            .unitize(padding-top, 8);
+            display: inline-block;
         }
     }
 }
@@ -24,6 +71,19 @@
     .page-wrap--cookie-permission .cookie-permission--container {
         .clearfix();
         width: 100%;
+
+        &.cookie-mode--1 {
+          .cookie-permission--content {
+            width: ~"calc(100% - 230px)";
+            text-align: left;
+          }
+          .cookie-permission--button {
+              .unitize(width, 240);
+              .unitize(right, 5);
+              position: absolute;
+              top: ~"calc(50% - 21px)";
+          }
+        }
 
         .cookie-permission--content {
             .unitize(padding, 12);

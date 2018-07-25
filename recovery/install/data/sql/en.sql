@@ -910,7 +910,7 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hello,
 
 thank you for evaluating the article {$sArticle.articleName}.
-Please confirm the evaluation by clicking the following link:
+Please confirm your evaluation using the following link:
 
 {$sConfirmLink}
 
@@ -920,7 +920,7 @@ Please confirm the evaluation by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for evaluating the article {$sArticle.articleName}.<br/>
-        Please confirm the evaluation by clicking the following link:<br/>
+        Please confirm your evaluation using the following link:<br/>
         <br/>
         <a href="{$sConfirmLink}">Confirm</a>
     </p>
@@ -928,6 +928,94 @@ Please confirm the evaluation by clicking the following link:
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
   `context` = 'a:2:{s:12:"sConfirmLink";s:133:"http://shopware.example/craft-tradition/men/business-bags/165/die-zeit-5?action=rating&sConfirmation=6avE5xLF22DTp8gNPaZ8KRUfJhflnvU9";s:8:"sArticle";a:1:{s:11:"articleName";s:24:"DIE ZEIT 5 Cowhide mokka";}}'
 WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your registration at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for signing up at {$sShop}.
+Please confirm your registration by clicking the following link:
+
+{$sConfirmLink}
+
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for signing up at {$sShop}.<br/>
+        Please confirm your registration by clicking the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm registration</a><br/>
+        <br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTER';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your e-mail address for your order at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+Please confirm your e-mail address using the following link:
+
+{$sConfirmLink}
+
+After the confirmation you will be directed your order overview, where you can check your order again and complete it.
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        Please confirm your e-mail address using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm e-mail</a><br/>
+        <br/>
+        After the confirmation you will be directed your order overview, where you can check your order again and complete it.<br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTERACCOUNTLESS';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your blog article evaluation',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for evaluating the blog article "{$sArticle.title}".
+Please confirm your evaluation using the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for evaluating the blog article for "{$sArticle.title}".<br/>
+        Please confirm your evaluation using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINBLOGCOMMENT';
 
 
 

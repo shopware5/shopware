@@ -108,7 +108,6 @@ class DetailContext extends SubContext
     {
         $sql = 'UPDATE `s_articles_vote` SET `active`= 1 ORDER BY id DESC LIMIT ' . $limit;
         $this->getService('db')->exec($sql);
-        $this->getSession()->reload();
     }
 
     /**

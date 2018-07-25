@@ -226,7 +226,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      */
     public function refreshLog(Enlight_Controller_Request_Request $request)
     {
-        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
         $deviceType = $request->getDeviceType();
         $shopId = Shopware()->Shop()->getId();
         $isNewRecord = false;
@@ -260,10 +259,13 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             $isNewRecord = true;
         }
 
-        $result = Shopware()->Db()->fetchOne('SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?', [$ip]);
+        // IP is being hashed in a way to not be easily revertible
+        $userHash = md5($request->getClientIp() . $request->getHttpHost());
+
+        $result = Shopware()->Db()->fetchOne('SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?', [$userHash]);
         if (empty($result)) {
             $sql = 'INSERT INTO s_statistics_pool (`remoteaddr`, `datum`) VALUES (?, NOW())';
-            Shopware()->Db()->query($sql, [$ip]);
+            Shopware()->Db()->query($sql, [$userHash]);
 
             if ($isNewRecord === false) {
                 $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1, uniquevisits=uniquevisits+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';

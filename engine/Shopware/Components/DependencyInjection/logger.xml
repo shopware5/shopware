@@ -17,6 +17,7 @@
         <service id="monolog.handler.rotating_file" class="Monolog\Handler\RotatingFileHandler" public="false">
             <argument>%kernel.logs_dir%/core_%kernel.environment%.log</argument>
             <argument>14</argument>
+            <argument>%kernel.default_error_level%</argument>
             <call method="pushProcessor">
                 <argument type="service" id="monolog.processor.uid" />
             </call>
@@ -25,6 +26,7 @@
         <service id="monolog.handler.rotating_file.plugin" class="Monolog\Handler\RotatingFileHandler" public="false">
             <argument>%kernel.logs_dir%/plugin_%kernel.environment%.log</argument>
             <argument>14</argument>
+            <argument>%kernel.default_error_level%</argument>
             <call method="pushProcessor">
                 <argument type="service" id="monolog.processor.uid" />
             </call>
