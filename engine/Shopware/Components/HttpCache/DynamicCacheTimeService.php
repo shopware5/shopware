@@ -74,9 +74,7 @@ class DynamicCacheTimeService implements CacheTimeServiceInterface
             if ($dateProvider->supportsRoute($action) && $invalidationDate = $dateProvider->getInvalidationDate($request)) {
                 $difference = $invalidationDate->format('U') - (new DateTime())->format('U');
 
-                $differenceValid = $difference > 0 && $difference < $defaultInvalidationTime;
-
-                return $differenceValid ? $difference : $defaultInvalidationTime;
+                return $difference > 0 && $difference < $defaultInvalidationTime ? $difference : $defaultInvalidationTime;
             }
         }
 
