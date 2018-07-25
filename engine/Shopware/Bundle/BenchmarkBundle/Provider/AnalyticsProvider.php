@@ -58,28 +58,38 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     {
         $this->shopId = $shopContext->getShop()->getId();
 
-        return [
-            'list' => $this->getVisitsList(),
-            'listByDevice' => $this->getVisitsPerDevice(),
+        $config = $this->getConfig();
+
+        $returnData = [
+            'list' => $this->getVisitsList((int) $config['last_analytics_id']),
+            'listByDevice' => $this->getVisitsPerDevice((int) $config['last_analytics_id']),
         ];
+
+        $this->updateLastAnalyticsId();
+
+        return $returnData;
     }
 
     /**
+     * @param int $lastAnalyticsId
+     *
      * @return array
      */
-    private function getVisitsList()
+    private function getVisitsList($lastAnalyticsId)
     {
-        $queryBuilder = $this->getVisitsListQueryBuilder();
+        $queryBuilder = $this->getVisitsListQueryBuilder($lastAnalyticsId);
 
         return $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
+     * @param int $lastAnalyticsId
+     *
      * @return array
      */
-    private function getVisitsPerDevice()
+    private function getVisitsPerDevice($lastAnalyticsId)
     {
-        $queryBuilder = $this->getVisitsPerDeviceQueryBuilder();
+        $queryBuilder = $this->getVisitsPerDeviceQueryBuilder($lastAnalyticsId);
 
         $visitsPerDevice = $queryBuilder->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
@@ -88,9 +98,11 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     }
 
     /**
+     * @param int $lastAnalyticsId
+     *
      * @return QueryBuilder
      */
-    private function getVisitsPerDeviceQueryBuilder()
+    private function getVisitsPerDeviceQueryBuilder($lastAnalyticsId)
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
@@ -101,14 +113,18 @@ class AnalyticsProvider implements BenchmarkProviderInterface
             ->addSelect('SUM(visitors.uniquevisits) as totalUniqueVisits')
             ->from('s_statistics_visitors', 'visitors')
             ->andWhere('visitors.shopID = :shopId')
+            ->andWhere('visitors.id > :lastId')
             ->setParameter(':shopId', $this->shopId)
+            ->setParameter(':lastId', $lastAnalyticsId)
             ->groupBy('visitors.datum, visitors.deviceType');
     }
 
     /**
+     * @param int $lastAnalyticsId
+     *
      * @return QueryBuilder
      */
-    private function getVisitsListQueryBuilder()
+    private function getVisitsListQueryBuilder($lastAnalyticsId)
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
@@ -117,7 +133,39 @@ class AnalyticsProvider implements BenchmarkProviderInterface
             ->addSelect('SUM(visitors.uniquevisits) as totalUniqueVisits')
             ->from('s_statistics_visitors', 'visitors')
             ->where('visitors.shopID = :shopId')
+            ->andWhere('visitors.id > :lastId')
             ->setParameter(':shopId', $this->shopId)
+            ->setParameter(':lastId', $lastAnalyticsId)
             ->groupBy('visitors.datum');
+    }
+
+    private function updateLastAnalyticsId()
+    {
+        $lastAnalyticsId = $this->dbalConnection->fetchColumn('SELECT id FROM s_statistics_visitors WHERE shopID = ? ORDER BY id DESC LIMIT 1', [
+            $this->shopId,
+        ]);
+
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+        $queryBuilder->update('s_benchmark_config')
+            ->set('last_analytics_id', ':lastAnalyticsId')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->setParameter(':lastAnalyticsId', $lastAnalyticsId)
+            ->execute();
+    }
+
+    /**
+     * @return array
+     */
+    private function getConfig()
+    {
+        $configsQueryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $configsQueryBuilder->select('configs.*')
+            ->from('s_benchmark_config', 'configs')
+            ->where('configs.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetch();
     }
 }
