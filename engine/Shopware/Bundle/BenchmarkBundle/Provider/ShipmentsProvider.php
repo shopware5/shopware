@@ -95,13 +95,14 @@ class ShipmentsProvider implements BenchmarkProviderInterface
                 continue;
             }
 
-            $matches[$matchedName] = $prices;
+            $matches[$matchedName] = ['name' => $matchedName] + $prices;
         }
 
+        $matches['others']['name'] = 'others';
         $matches['others']['minPrice'] = min(array_column($others, 'minPrice'));
         $matches['others']['maxPrice'] = max(array_column($others, 'maxPrice'));
 
-        return $matches;
+        return array_values($matches);
     }
 
     /**
@@ -112,13 +113,20 @@ class ShipmentsProvider implements BenchmarkProviderInterface
         $shipments = $this->getShipmentUsages();
 
         $matches = [];
-        $matches['others'] = 0;
-
         foreach ($shipments as $shipmentName => $usages) {
-            $matches[$this->matcher->matchString($shipmentName)] += $usages;
+            $match = $this->matcher->matchString($shipmentName);
+
+            if (!isset($matches[$match])) {
+                $matches[$match] = [
+                    'name' => $match,
+                    'usages' => 0,
+                ];
+            }
+
+            $matches[$match]['usages'] += $usages;
         }
 
-        return $matches;
+        return array_values($matches);
     }
 
     /**
