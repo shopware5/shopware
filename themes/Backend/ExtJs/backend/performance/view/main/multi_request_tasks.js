@@ -491,7 +491,11 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
                 }
                 me.batchSizeCombo.clearInvalid();
-                me.startButton.enable();
+
+                if (me.shopCombo.value !== undefined) {
+                    me.startButton.enable();
+                }
+
                 return true;
             },
             store: Ext.create('Ext.data.Store', {
@@ -534,7 +538,10 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
                 }
                 me.concurrencySizeCombo.clearInvalid();
-                me.startButton.enable();
+
+                if (me.shopCombo.value !== undefined) {
+                    me.startButton.enable();
+                }
 
                 return true;
             },
@@ -597,7 +604,17 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                 if (me.currentType === 'seo') {
                     me.fireEvent('startSeoIndex', me);
                 } else if (me.currentType === 'httpCacheWarmer') {
-                    me.fireEvent('startHttpCacheWarmUp', me);
+                    Ext.Msg.confirm('{s name=progress/confirmCacheClearTitle}{/s}', '{s name=progress/confirmCacheClearText}{/s}', function (response) {
+                        if (response === 'yes') { // Clear cache and start
+                            me.clearHttpCacheAndStart();
+                        } else if(response === 'no') { // Just start
+                            me.fireEvent('startHttpCacheWarmUp', me);
+                        } else { // Cancel
+                            me.startButton.show();
+                            me.cancelButton.hide();
+                            me.closeButton.enable();
+                        }
+                    });
                 }
             }
         });
@@ -741,6 +758,23 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     '{s name="progress/standardSaveGrowlTitle"}{/s}',
                     '{s name="progress/standardSaveGrowlText"}{/s}'
                 );
+            }
+        });
+    },
+
+    /**
+     * Clear http cache before warming
+     */
+    clearHttpCacheAndStart: function () {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller=Cache action=clearCache cache=Config}',
+            params:{
+                'cache[http]'   : 'on',
+            },
+            success: function () {
+                me.fireEvent('startHttpCacheWarmUp', me);
             }
         });
     },
