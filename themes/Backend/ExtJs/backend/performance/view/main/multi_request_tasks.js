@@ -205,6 +205,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             unstyled: true,
             bodyPadding: 10,
             layout: 'anchor',
+            style: 'background-color: #ebedef',
             defaults: {
                 anchor: '100%'
             },
@@ -292,7 +293,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                         xtype: 'container',
                         padding: '20 0',
                         margin: '0 5 0 105',
-                        items: me.progressBar
+                        items: me.progressBar,
                     },
                     me.createBatchSizeCombo(),
                     me.createConcurrencySizeCombo()
