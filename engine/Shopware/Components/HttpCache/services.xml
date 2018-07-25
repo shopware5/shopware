@@ -71,6 +71,12 @@
             <tag name="invalidation_date_provider" />
         </service>
 
+        <service id="shopware.http_cache.invalidation_date.campaign_date" class="Shopware\Components\HttpCache\InvalidationDate\CampaignDate">
+            <argument type="service" id="dbal_connection"/>
+
+            <tag name="invalidation_date_provider" />
+        </service>
+
         <!--UrlProviderFactory-->
         <service id="shopware_cache_warmer.url_provider_factory"
                  class="Shopware\Components\HttpCache\UrlProviderFactory">

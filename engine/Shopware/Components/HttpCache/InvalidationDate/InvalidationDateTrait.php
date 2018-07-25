@@ -30,7 +30,6 @@ trait InvalidationDateTrait
 {
     /**
      * getMostRecentDate sorts an array of DateTime objects and returns the most recent one.
-     * The date found may have passed already.
      *
      * @param DateTime[] $dates
      *
@@ -38,27 +37,38 @@ trait InvalidationDateTrait
      */
     protected function getMostRecentDate(array $dates)
     {
+        $now = new DateTime();
+
+        // Convert all date-strings into DateTime-objects
+        $dates = array_map(function ($el) use ($now) {
+            if (empty($el)) {
+                return null;
+            }
+            if (!$el instanceof DateTime) {
+                $el = new DateTime($el);
+            }
+
+            return $now < $el ? $el : null;
+        }, $dates);
+
+        // Exclude empty entries
         $dates = array_filter($dates);
-
-        usort($dates, function ($firstDate, $secondDate) {
-            if (!$firstDate instanceof \DateTime) {
-                $firstDate = new \DateTime($firstDate);
-            }
-            if (!$secondDate instanceof \DateTime) {
-                $secondDate = new \DateTime($secondDate);
-            }
-
-            if ($firstDate === $secondDate) {
-                return 0;
-            }
-
-            return $firstDate < $secondDate ? -1 : 1;
-        });
 
         if (empty($dates)) {
             return null;
         }
 
-        return new \DateTime(array_shift($dates));
+        // Pop a date as reference
+        $nearest = array_pop($dates);
+
+        // Find the nearest date
+        foreach ($dates as $date) {
+            if ($now->diff($nearest) < $now->diff($date)) {
+                continue;
+            }
+            $nearest = $date;
+        }
+
+        return $nearest;
     }
 }
