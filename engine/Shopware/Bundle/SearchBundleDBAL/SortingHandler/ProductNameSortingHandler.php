@@ -37,6 +37,26 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class ProductNameSortingHandler implements SortingHandlerInterface
 {
+    const TRANSLATION_IDENTIFIER = 's:10:"txtArtikel";s:';
+
+    const TRANSLATION = 'productTranslationName';
+
+    const TRANSLATION_OBJECT_DATA = self::TRANSLATION . '.objectdata';
+
+    const TRANSLATION_OBJECT_KEY = self::TRANSLATION . '.objectkey';
+
+    const TRANSLATION_OBJECT_LANGUAGE = self::TRANSLATION . '.objectlanguage';
+
+    const TRANSLATION_OBJECT_TYPE = self::TRANSLATION . '.objecttype';
+
+    const PRODUCT = 'product';
+
+    const PRODUCT_ID = self::PRODUCT . '.id';
+
+    const PRODUCT_NAME = self::PRODUCT . '.name';
+
+    const S_CORE_TRANSLATIONS = 's_core_translations';
+
     /**
      * {@inheritdoc}
      */
@@ -54,6 +74,101 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var ProductNameSorting $sorting */
-        $query->addOrderBy('product.name', $sorting->getDirection());
+        $query->leftJoin(
+            self::PRODUCT,
+            self::S_CORE_TRANSLATIONS,
+            self::TRANSLATION,
+            $query->expr()->andX(
+                $query->expr()->eq(self::TRANSLATION_OBJECT_TYPE, $query->expr()->literal('article')),
+                $query->expr()->eq(self::TRANSLATION_OBJECT_KEY, self::PRODUCT_ID),
+                $query->expr()->eq(self::TRANSLATION_OBJECT_LANGUAGE, $context->getShop()->getId()),
+                $query->expr()->like(self::TRANSLATION_OBJECT_DATA, $query->expr()->literal('%' . self::TRANSLATION_IDENTIFIER . '%'))
+            )
+        );
+
+        $query->addOrderBy(
+            self::exprIf(
+                $query->expr()->isNull(self::TRANSLATION_OBJECT_DATA),
+                self::PRODUCT_NAME,
+                self::exprSubstringIndex(
+                    self::exprSubstring(
+                        self::TRANSLATION_OBJECT_DATA,
+                        self::exprAdd(
+                            self::exprLocate(
+                                $query->expr()->literal(':'),
+                                self::TRANSLATION_OBJECT_DATA,
+                                self::exprAdd(
+                                    self::exprLocate($query->expr()->literal(self::TRANSLATION_IDENTIFIER),
+                                    self::TRANSLATION_OBJECT_DATA),
+                                    strlen(self::TRANSLATION_IDENTIFIER)
+                                )
+                            ),
+                            '2'
+                        )
+                    ),
+                    $query->expr()->literal('"'),
+                    1
+                )
+            ),
+            $sorting->getDirection()
+        );
+    }
+
+    /**
+     * @param string $condition
+     * @param string $expression1
+     * @param string $expression2
+     * @return string
+     */
+    protected static function exprIf($condition, $expression1, $expression2)
+    {
+        return " if (($condition),($expression1),($expression2)) ";
+    }
+
+    /**
+     * @param string $haystack
+     * @param string $needle
+     * @param int    $count
+     * @return string
+     */
+    protected static function exprSubstringIndex($haystack, $needle, $count)
+    {
+        return " substring_index(($haystack),($needle),($count)) ";
+    }
+
+    /**
+     * @param string          $target
+     * @param int|string      $start
+     * @param int|string|null $count
+     * @return string
+     */
+    protected static function exprSubstring($target, $start, $length = null)
+    {
+        $length = empty($length) ? '' : ",($length)";
+
+        return " substring(($target),($start)$length) ";
+    }
+
+    /**
+     * @param string          $needle
+     * @param string          $haystack
+     * @param int|string|null $position
+     * @return string
+     */
+    protected static function exprLocate($needle, $haystack, $position = null)
+    {
+        $position = empty($position) ? '' : ",($position)";
+
+        return " locate(($needle),($haystack)$position) ";
+    }
+
+    /**
+     * @param string $expression1
+     * @param string $expression2
+     * @return string
+     */
+    protected static function exprAdd($expression1, $expression2)
+    {
+        return " (($expression1)+($expression2)) ";
     }
 }
