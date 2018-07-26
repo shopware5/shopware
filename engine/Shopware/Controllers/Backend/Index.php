@@ -80,7 +80,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             return;
         }
 
-        if (strpos($this->Request()->getPathInfo(), '/backend/') !== 0) {
+        if (strpos($this->Request()->getPathInfo(), '/backend/') !== 0
+            && strpos($this->Request()->getRequestUri(), $this->Request()->getBaseUrl(). '/backend/') !== 0) {
             $this->redirect('backend/', ['code' => 301]);
         }
     }
