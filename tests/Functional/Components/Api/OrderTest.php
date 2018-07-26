@@ -337,6 +337,34 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
+	public function testCreateOrderOnEmptyStateIdInBillingAddress()
+	{
+		// Get existing order
+		$this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+		$order = $this->resource->getOne($this->order['id']);
+
+		$order = $this->filterOrderId($order);
+		unset($order['billing']['stateId']);
+
+		$newOrder = $this->resource->create($order);
+
+		$this->assertEquals($newOrder->getBilling()->getState(), null);
+	}
+
+	public function testCreateOrderOnEmptyStateIdInShippingAddress()
+	{
+		// Get existing order
+		$this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+		$order = $this->resource->getOne($this->order['id']);
+
+		$order = $this->filterOrderId($order);
+		unset($order['shipping']['stateId']);
+
+		$newOrder = $this->resource->create($order);
+
+		$this->assertEquals($newOrder->getShipping()->getState(), null);
+	}
+
     /**
      * @expectedException \Shopware\Components\Api\Exception\NotFoundException
      */

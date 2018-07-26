@@ -693,9 +693,18 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException('billing.countryId');
         }
 
-        if (!array_key_exists('stateId', $billing)) {
-            throw new ApiException\ParameterMissingException('billing.stateId');
-        }
+	    if (empty($billing['stateId'])) {
+		    $billing['stateId'] = 0;
+	    }
+	    else {
+		    $state = $this->getContainer()->get('models')->find(State::class, $billing['stateId']);
+		    if (!$state) {
+			    throw new ApiException\NotFoundException(sprintf(
+				    'Shipping State by id %s not found',
+				    $billing['stateId']
+			    ));
+		    }
+	    }
 
         $country = $this->getContainer()->get('models')->find(CountryModel::class, $billing['countryId']);
         if (!$country) {
@@ -705,13 +714,6 @@ class Order extends Resource
             ));
         }
 
-        $state = $this->getContainer()->get('models')->find(State::class, $billing['stateId']);
-        if (!$state) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Shipping State by id %s not found',
-                $billing['stateId']
-            ));
-        }
 
         $billingAddress = new Billing();
         $billingAddress->fromArray($billing);
@@ -732,9 +734,18 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException('shipping.countryId');
         }
 
-        if (!array_key_exists('stateId', $shipping)) {
-            throw new ApiException\ParameterMissingException('shipping.stateId');
-        }
+	    if (empty($shipping['stateId'])) {
+		    $shipping['stateId'] = 0;
+	    }
+	    else {
+		    $state = $this->getContainer()->get('models')->find(State::class, $shipping['stateId']);
+		    if (!$state) {
+			    throw new ApiException\NotFoundException(sprintf(
+				    'Shipping State by id %s not found',
+				    $shipping['stateId']
+			    ));
+		    }
+	    }
 
         $country = $this->getContainer()->get('models')->find(CountryModel::class, $shipping['countryId']);
         if (!$country) {
@@ -744,13 +755,6 @@ class Order extends Resource
             ));
         }
 
-        $state = $this->getContainer()->get('models')->find(State::class, $shipping['stateId']);
-        if (!$state) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Shipping State by id %s not found',
-                $shipping['stateId']
-            ));
-        }
 
         $shippingAddress = new Shipping();
         $shippingAddress->fromArray($shipping);
