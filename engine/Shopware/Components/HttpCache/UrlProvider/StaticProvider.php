@@ -76,8 +76,14 @@ class StaticProvider implements UrlProviderInterface
                 ->setMaxResults($limit);
         }
 
+        $result = $qb->execute()->fetchAll();
+
+        if (!count($result)) {
+            return [];
+        }
+
         return $this->router->generateList(
-            array_map(
+            array_filter(array_map(
                 function ($custom) {
                     if (empty($custom['link']) || !$this->isShopwareLink($custom['link'])) {
                         return ['sViewport' => 'custom', 'sCustom' => $custom['id']];
@@ -85,10 +91,15 @@ class StaticProvider implements UrlProviderInterface
                     $parts = parse_url($custom['link']);
                     parse_str($parts['query'], $query);
 
+                    if (isset($query['sViewport,registerFC'])) {
+                        unset($query['sViewport,registerFC']);
+                        $query['sViewport'] = 'registerFC';
+                    }
+
                     return $query;
                 },
-                $qb->execute()->fetchAll()
-            ),
+                $result
+            )),
             $context
         );
     }

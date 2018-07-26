@@ -77,6 +77,12 @@ class CategoryProvider implements UrlProviderInterface
                 ->setMaxResults($limit);
         }
 
+        $result = $qb->execute()->fetchAll();
+
+        if (!count($result)) {
+            return [];
+        }
+
         return $this->router->generateList(
             array_map(
                 function ($category) use ($context) {
@@ -87,7 +93,7 @@ class CategoryProvider implements UrlProviderInterface
 
                     return ['sViewport' => $viewport, 'sCategory' => $category['id']];
                 },
-                $qb->execute()->fetchAll()
+                $result
             ),
             $context
         );

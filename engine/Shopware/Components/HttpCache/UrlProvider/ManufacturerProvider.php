@@ -75,12 +75,18 @@ class ManufacturerProvider implements UrlProviderInterface
                 ->setMaxResults($limit);
         }
 
+        $result = $qb->execute()->fetchAll();
+
+        if (!count($result)) {
+            return [];
+        }
+
         return $this->router->generateList(
             array_map(
                 function ($manufacturer) {
                     return ['sViewport' => 'listing', 'sAction' => 'manufacturer', 'sSupplier' => $manufacturer['id']];
                 },
-                $qb->execute()->fetchAll()
+                $result
             ),
             $context
         );

@@ -123,8 +123,6 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             $this->errorMessage = true;
         });
 
-        $offset = 0;
-
         /** @var Shop $shop */
         foreach ($shops as $shop) {
             /** @var Context $context */
@@ -136,6 +134,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             // Gathering URLs
             $urls = [];
             $totalResultCount = 0;
+            $offset = 0;
             foreach ($options as $resource => $active) {
                 if ($active) {
                     $provider = $urlProviderFactory->getProvider($resource);

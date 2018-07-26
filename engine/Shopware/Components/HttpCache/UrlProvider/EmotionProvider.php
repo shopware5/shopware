@@ -54,6 +54,12 @@ class EmotionProvider extends CategoryProvider
                 ->setMaxResults($limit);
         }
 
+        $result = $qb->execute()->fetchAll();
+
+        if (!count($result)) {
+            return [];
+        }
+
         return $this->router->generateList(
             array_map(
                 function ($emotion) {
@@ -67,7 +73,7 @@ class EmotionProvider extends CategoryProvider
 
                     return ['module' => 'widgets', 'sViewport' => 'emotion', 'emotionId' => $emotion['id'], 'fullPath' => true, 'controllerName' => $controllerName];
                 },
-                $qb->execute()->fetchAll()
+                $result
             ),
             $context
         );

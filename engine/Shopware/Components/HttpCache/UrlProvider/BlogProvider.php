@@ -53,12 +53,18 @@ class BlogProvider extends CategoryProvider
                 ->setMaxResults($limit);
         }
 
+        $result = $qb->execute()->fetchAll();
+
+        if (!count($result)) {
+            return [];
+        }
+
         return $this->router->generateList(
             array_map(
                 function ($blog) {
                     return ['sViewport' => 'blog', 'sAction' => 'detail', 'sCategory' => $blog['catID'], 'blogArticle' => $blog['blogID']];
                 },
-                $qb->execute()->fetchAll()
+                $result
             ),
             $context
         );
