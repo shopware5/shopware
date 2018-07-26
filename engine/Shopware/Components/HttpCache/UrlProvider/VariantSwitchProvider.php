@@ -61,6 +61,11 @@ class VariantSwitchProvider extends ProductProvider
         }
 
         $resultArray = $qb->execute()->fetchAll();
+
+        if (!count($resultArray)) {
+            return [];
+        }
+
         $variantUrls = $this->router->generateList(
             array_map(
                 function ($variant) {

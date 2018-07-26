@@ -55,12 +55,18 @@ class ProductWithCategoryProvider extends ProductProvider
                 ->setMaxResults($limit);
         }
 
+        $result = $qb->execute()->fetchAll();
+
+        if (!count($result)) {
+            return [];
+        }
+
         return $this->router->generateList(
             array_map(
                 function ($product) {
                     return ['controller' => 'detail', 'action' => 'index', 'sArticle' => $product['articleID'], 'c' => $product['catId']];
                 },
-                $qb->execute()->fetchAll()
+                $result
             ),
             $context
         );

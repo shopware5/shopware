@@ -77,12 +77,18 @@ class ProductProvider implements UrlProviderInterface
                 ->setMaxResults($limit);
         }
 
+        $result = $qb->execute()->fetchAll();
+
+        if (!count($result)) {
+            return [];
+        }
+
         return $this->router->generateList(
             array_map(
                 function ($product) {
                     return ['controller' => 'detail', 'action' => 'index', 'sArticle' => $product['articleID']];
                 },
-                $qb->execute()->fetchAll()
+                $result
             ),
             $context
         );

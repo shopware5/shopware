@@ -370,7 +370,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         if (currentConfig.progress) {
             // Updates the progress bar value and text, the last parameter is the animation flag
             currentConfig.progress.updateProgress(
-                current,
+                ((offset + currentConfig.batchSize) > currentConfig.totalCount ? currentConfig.totalCount : (offset + currentConfig.batchSize)) / currentConfig.totalCount,
                 Ext.String.format(currentConfig.snippet, current, currentConfig.totalCount),
                 true
             );
