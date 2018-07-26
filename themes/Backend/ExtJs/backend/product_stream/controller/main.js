@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
 
     onDeleteItem: function(grid, record) {
         var message = Ext.String.format('{s name=dialog_delete_stream_message}Do you really want to delete "[0]"?{/s}', record.get('name'));
-        Ext.MessageBox.confirm('{s name=dialog_delete_stream_title}Delete Prdoduct Stream{/s}', message, function (response) {
+        Ext.MessageBox.confirm('{s name=dialog_delete_stream_title}Delete Product Stream{/s}', message, function (response) {
             if (response !== 'yes') {
                 return false;
             }
