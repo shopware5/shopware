@@ -37,6 +37,12 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class ProductNameSortingHandler implements SortingHandlerInterface
 {
+    const TRANSLATION = 'productTranslationName';
+
+    const TRANSLATION_NAME = self::TRANSLATION . '.name';
+
+    const PRODUCT = 'product';
+
     /**
      * {@inheritdoc}
      */
@@ -54,6 +60,37 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var ProductNameSorting $sorting */
-        $query->addOrderBy('product.name', $sorting->getDirection());
+        $query->leftJoin(
+            self::PRODUCT,
+            's_articles_translations',
+            self::TRANSLATION,
+            $query->expr()->andX(
+                $query->expr()->eq(self::TRANSLATION . '.articleID', self::PRODUCT . '.id'),
+                $query->expr()->eq(self::TRANSLATION . '.languageID', $context->getShop()->getId()),
+                $query->expr()->isNotNull(self::TRANSLATION_NAME),
+                $query->expr()->neq(self::TRANSLATION_NAME, $query->expr()->literal(''))
+            )
+        );
+
+        $query->addOrderBy(
+            self::exprIf(
+                $query->expr()->isNull(self::TRANSLATION_NAME),
+                self::PRODUCT . '.name',
+                self::TRANSLATION_NAME
+            ),
+            $sorting->getDirection()
+        );
+    }
+
+    /**
+     * @param string $condition
+     * @param string $expression1
+     * @param string $expression2
+     *
+     * @return string
+     */
+    protected static function exprIf($condition, $expression1, $expression2)
+    {
+        return " if (($condition),($expression1),($expression2)) ";
     }
 }
