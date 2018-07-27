@@ -98,7 +98,7 @@
                             {* Email *}
                             {block name="frontend_newsletter_form_input_email"}
                                 <div class="newsletter--email">
-                                    <input name="newsletter" type="email" placeholder="{s name="sNewsletterPlaceholderMail"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{if $_POST.newsletter}{$_POST.newsletter}{elseif $_GET.sNewsletter}{$_GET.sNewsletter|escape}{/if}" class="input--field is--required{if $sStatus.sErrorFlag.newsletter} has--error{/if}"/>
+                                    <input name="newsletter" type="email" placeholder="{s name="sNewsletterPlaceholderMail"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" required="required" aria-required="true" value="{if $_POST.newsletter}{$_POST.newsletter|escape}{elseif $_GET.sNewsletter}{$_GET.sNewsletter|escape}{/if}" class="input--field is--required{if $sStatus.sErrorFlag.newsletter} has--error{/if}"/>
                                 </div>
                             {/block}
 
