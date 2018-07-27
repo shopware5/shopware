@@ -37,22 +37,12 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class ProductNameSortingHandler implements SortingHandlerInterface
 {
-    const TRANSLATIONS_TABLE = 's_articles_translations';
-
     const TRANSLATION = 'productTranslationName';
 
     const TRANSLATION_NAME = self::TRANSLATION . '.name';
 
-    const TRANSLATION_PRODUCT_ID = self::TRANSLATION . '.articleID';
-
-    const TRANSLATION_LANGUAGE = self::TRANSLATION . '.languageID';
-
     const PRODUCT = 'product';
-
-    const PRODUCT_ID = self::PRODUCT . '.id';
-
-    const PRODUCT_NAME = self::PRODUCT . '.name';
-
+    
     /**
      * {@inheritdoc}
      */
@@ -72,11 +62,11 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         /* @var ProductNameSorting $sorting */
         $query->leftJoin(
             self::PRODUCT,
-            self::TRANSLATIONS_TABLE,
+            's_articles_translations',
             self::TRANSLATION,
             $query->expr()->andX(
-                $query->expr()->eq(self::TRANSLATION_PRODUCT_ID, self::PRODUCT_ID),
-                $query->expr()->eq(self::TRANSLATION_LANGUAGE, $context->getShop()->getId()),
+                $query->expr()->eq(self::TRANSLATION . '.articleID', self::PRODUCT . '.id'),
+                $query->expr()->eq(self::TRANSLATION . '.languageID', $context->getShop()->getId()),
                 $query->expr()->isNotNull(self::TRANSLATION_NAME),
                 $query->expr()->neq(self::TRANSLATION_NAME, $query->expr()->literal(''))
             )
@@ -85,7 +75,7 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         $query->addOrderBy(
             self::exprIf(
                 $query->expr()->isNull(self::TRANSLATION_NAME),
-                self::PRODUCT_NAME,
+                self::PRODUCT . '.name',
                 self::TRANSLATION_NAME
             ),
             $sorting->getDirection()
