@@ -230,8 +230,8 @@ return array_replace_recursive([
     ],
     'bi' => [
         'endpoint' => [
-            'benchmark' => 'https://bi-staging.shopware.com/benchmark',
-            'statistics' => 'https://bi-staging.shopware.com/statistics',
+            'benchmark' => 'https://bi.shopware.com/benchmark',
+            'statistics' => 'https://bi.shopware.com/statistics',
         ],
     ],
     'session' => [
