@@ -284,7 +284,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
      */
     checkBenchmarksStatus: function () {
         Ext.TaskManager.start({
-            interval: 900000,
+            interval: 10000,
             run: function () {
                 Ext.Ajax.request({
                     url: '{url controller=benchmark action=checkBenchmarks}',
