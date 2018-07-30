@@ -89,8 +89,9 @@ class StatisticsService
         $ordersCount = count($benchmarkData['orders']['list']);
         $customersCount = count($benchmarkData['customers']['list']);
         $productsCount = count($benchmarkData['products']['list']);
+        $analyticsCount = count($benchmarkData['analytics']['list']);
 
-        if ($ordersCount === 0 && $customersCount === 0 && $productsCount === 0) {
+        if ($ordersCount === 0 && $customersCount === 0 && $productsCount === 0 && $analyticsCount === 0) {
             $config->setLastSent(new \DateTime('now', new \DateTimeZone('UTC')));
             $this->benchmarkRepository->save($config);
 

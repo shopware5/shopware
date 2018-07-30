@@ -20,27 +20,23 @@
             <div class="row">
                 <div class="col-100">
                     <div class="opener">
-                        <h1>[[ $t('waitingHeadline{$waitingSinceDays}') ]]</h1>
+                        <h1>[[ $t('waitingHeadline') ]]</h1>
                     </div>
-                    <p>[[ $t('waitingText{$waitingSinceDays}') ]]</p>
-                </div>
-
-                <div class="col-100">
-                    {if $waitingSinceDays <= 1}
-                        <div class="compare-no-apples-and-pears"></div>
-                    {elseif $waitingSinceDays <= 2}
-                        <div class="eat-fruits-while-waiting"></div>
-                    {elseif $waitingSinceDays <= 3}
-                        <div class="no-fruits-no-fun"></div>
+                    {if $waitingSinceHours >= 2}
+                        <p>[[  $t('waitingTextSince6Hours') ]]</p>
                     {else}
-                        <canvas id="pong-game" data-pong="true"></canvas>
-                        <input class="btn secondary pong-start" type="button" value="Start" />
+                        <p>[[ $t('waitingText') ]]</p>
                     {/if}
                 </div>
 
                 <div class="col-100">
-                    <button class="btn primary{if $waitingSinceDays >= 4} pong-cancel-button{/if}" onclick="window.parent.postMessage('closeWindow', window.location.origin)">
-                        [[ $t('waitingButton{$waitingSinceDays}') ]]
+                    <canvas id="pong-game" data-pong="true"></canvas>
+                    <input class="btn secondary pong-start" type="button" value="Start" />
+                </div>
+
+                <div class="col-100">
+                    <button class="btn primary pong-cancel-button" onclick="window.parent.postMessage('closeWindow', window.location.origin)">
+                        [[ $t('waitingButton') ]]
                     </button>
                 </div>
             </div>

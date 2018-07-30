@@ -152,8 +152,8 @@ ul.top-benefits li:before {
 }
 .preview-screen {
   background: url(img/preview-screen.png) center top no-repeat;
-  background-size: cover;
-  height: 400px;
+  background-size: contain;
+  height: 550px;
   width: 80%;
   margin: 0 auto;
   margin-top: 3%;
@@ -1067,7 +1067,7 @@ textarea:-ms-input-placeholder {
 }
 .language-switch {
   position: absolute;
-  top: 2%;
+  top: 25px;
   right: 5%;
   z-index: 1000;
   height: 50px;
@@ -1600,7 +1600,7 @@ p {
   color: #fff !important;
   border: 0 none !important;
   left: calc(50% - 60px);
-  top: 330px;
+  top: 380px;
   width: 120px;
 }
 .pong-start:hover {
@@ -1623,14 +1623,14 @@ body#swag-waiting {
 }
 .waiting h1 {
   font-weight: 700;
-  font-size: 60px;
+  font-size: 56px;
 }
 .waiting p {
   margin-left: auto;
   margin-right: auto;
-  width: 90%;
-  line-height: 2rem;
-  font-size: 1.25rem;
+  width: 100%;
+  line-height: 1.5rem;
+  font-size: 1.15rem;
 }
 .waiting svg.circle {
   position: absolute;
@@ -1655,15 +1655,4 @@ body#swag-waiting {
   margin: 1rem auto;
   height: 7rem;
   width: 50%;
-}
-.compare-no-apples-and-pears {
-  background: url(img/compare-no-apples-and-pears.svg) center bottom no-repeat;
-}
-.eat-fruits-while-waiting {
-  background: url(img/eat-fruits-while-waiting.svg) center bottom no-repeat;
-}
-.no-fruits-no-fun {
-  background: url(img/no-fruits-no-fun.svg) center bottom no-repeat;
-  background-size: 25%;
-  background-position-y: 85%;
 }

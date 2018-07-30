@@ -64,14 +64,12 @@ class BenchmarkStatisticsService
         BenchmarkRepository $benchmarkRepository,
         StatisticsService $statistics,
         BusinessIntelligenceService $biService,
-        DateInterval $interval = null,
-        $iterations = 100
+        DateInterval $interval = null
     ) {
         $this->benchmarkRepository = $benchmarkRepository;
         $this->statistics = $statistics;
         $this->biService = $biService;
         $this->interval = $interval ?: new DateInterval('P1D');
-        $this->sendIterations = $iterations;
     }
 
     /**
@@ -103,11 +101,7 @@ class BenchmarkStatisticsService
         $statisticsResponse = null;
 
         try {
-            for ($i = 0; $i < $this->sendIterations; ++$i) {
-                $statisticsResponse = $this->statistics->transmit($benchmarkConfig);
-
-                sleep(5);
-            }
+            $statisticsResponse = $this->statistics->transmit($benchmarkConfig);
         } catch (TransmissionNotNecessaryException $e) {
             return null;
         } finally {
