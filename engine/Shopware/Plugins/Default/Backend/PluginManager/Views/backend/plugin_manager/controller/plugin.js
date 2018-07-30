@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                         });
                     }
                 });
-            });
+            }, true);
         });
     },
 
@@ -182,8 +182,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         me.startPluginDownload(plugin, callback);
     },
 
-    startPluginDownload: function(plugin, callback) {
+    startPluginDownload: function(plugin, callback, isUpdate) {
         var me = this;
+        isUpdate = isUpdate || false;
 
         me.displayLoadingMask(plugin, '{s name="initial_download"}Initial plugin download{/s}');
 
@@ -193,7 +194,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             function(response) {
                 me.hideLoadingMask();
 
-                if (response.data.binaryVersion === plugin.get('version')) {
+                if (response.data.binaryVersion === plugin.get('version') && isUpdate) {
                     Shopware.Notification.createStickyGrowlMessage({
                         title: '{s name="title"}{/s}',
                         text: '{s name="subscriptionUpdate"}{/s}'
