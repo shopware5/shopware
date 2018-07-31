@@ -151,7 +151,6 @@ class SubscriptionService
 
             return false;
         } catch (\Exception $e) {
-
             return false;
         }
     }
@@ -164,9 +163,6 @@ class SubscriptionService
     public function getPluginInformationFromApi()
     {
         $secret = $this->getShopSecret();
-        if (empty($secret)) {
-            return false;
-        }
 
         $domain = $this->getDomain();
         $params = [
@@ -182,6 +178,10 @@ class SubscriptionService
             $params,
             $header
         );
+
+        if (empty($secret)) {
+            return false;
+        }
 
         $isShopUpgraded = $data['general']['isUpgraded'];
         $pluginInformationStructs = array_map(
