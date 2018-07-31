@@ -32,7 +32,18 @@ www.shopware.ag,
 www.shopware-ag.de,
 de.shopware.com,
 en.shopware.com";'
-WHERE s_core_config_elements.name = 'seobacklinkwhitelist';
+WHERE s_core_config_elements.name = 'seobacklinkwhitelist'
+AND MD5(s_core_config_elements.value) = '33909ef97c07e5d608fc4bcac93c24cb';
+
+UPDATE s_core_config_values
+INNER JOIN s_core_config_elements ON s_core_config_values.element_id = s_core_config_elements.id
+SET s_core_config_values.value = 's:54:"www.shopware.de,
+www.shopware.ag,
+www.shopware-ag.de,
+de.shopware.com,
+en.shopware.com";'
+WHERE s_core_config_elements.name = 'seobacklinkwhitelist'
+AND MD5(s_core_config_elements.value) = '33909ef97c07e5d608fc4bcac93c24cb';
 SQL;
         $this->addSql($sql);
     }
