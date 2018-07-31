@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
     },
 
     /**
-     * Helper method which checks for new Benchmark data periodically (every 15 minutes).
+     * Helper method which checks for new Benchmark data periodically (every 10 minutes).
      *
      * @private
      * @return void
@@ -292,7 +292,18 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         var res = Ext.decode(response.responseText);
 
                         if (res.bi) {
-                            Shopware.Notification.createGrowlMessage('{s name=title/new_benchmark}{/s}', '{s name=content/new_benchmark}{/s}');
+                            Shopware.Notification.createStickyGrowlMessage({
+                                title: '{s name=title/new_benchmark}{/s}',
+                                text: '{s name=content/new_benchmark}{/s}',
+                                btnDetail: {
+                                    text: '{s name=open}{/s}',
+                                    callback: function () {
+                                        Shopware.app.Application.addSubApplication({
+                                            name: 'Shopware.apps.Benchmark'
+                                        });
+                                    }
+                                }
+                            });
                         }
                     }
                 });
