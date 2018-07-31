@@ -36,7 +36,8 @@ class MigrationsMigrateCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('sw:migrations:migrate');
+        $this->setName('sw:migrations:migrate')
+            ->setDescription('Runs all migrations');
 
         $this->addOption(
             'mode',

@@ -88,7 +88,7 @@
         <!-- Command -->
         <service id="shopware_bundle_sitemap.commands.sitemap_generate_command"
                  class="Shopware\Bundle\SitemapBundle\Commands\SitemapGenerateCommand">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:generate:sitemap"/>
         </service>
 
         <service id="shopware_bundle_sitemap.service_subscriber" class="Shopware\Bundle\SitemapBundle\Subscriber\SitemapSubscriber">

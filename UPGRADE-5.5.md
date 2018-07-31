@@ -170,6 +170,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
        | --productwithcategory | -y    | Warm up producss with category parameter |        
 * Changed visibility of `Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::getPluginInformationFromApi()` to public
 * Changed Double-Opt-In behaviour to redirect back into the checkout, if user registered from there
+* Changed console.command tag CompilerPass to support lazy commands.
 
 ### Removals
 
@@ -244,6 +245,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Deprecated `Shopware_Controllers_Frontend_SitemapMobileXml` for mobile sitemaps. It will be removed in 5.6
 * Deprecated `Shopware\Components\SitemapXMLRepository`. It will be removed in 5.6
 * Deprecated `Shopware_Controllers_Frontend_SitemapXml` it redirects to sitemap_index.xml. Redirect will be removed with 6.0
+* Deprecated `Shopware\Components\Plugin::registerCommands`. It will be removed in 5.7, use DI tag `console.command` instead
 
 ### Elasticsearch in backend
 

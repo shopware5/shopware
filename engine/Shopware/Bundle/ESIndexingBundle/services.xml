@@ -173,29 +173,29 @@
         <!-- Commands -->
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexPopulateCommand" id="shopware_elastic_search.commands.index_populate_command">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:index:populate"/>
         </service>
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexCleanupCommand" id="shopware_elastic_search.commands.index_cleanup_command">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:index:cleanup"/>
         </service>
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogClearCommand" id="shopware_elastic_search.commands.backlog_clear_command">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:backlog:clear"/>
         </service>
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand" id="shopware_elastic_search.commands.backlog_sync_command">
             <argument>%shopware.es.batchsize%</argument>
 
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:backlog:sync"/>
         </service>
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\SwitchAliasCommand" id="shopware_elastic_search.commands.switch_alias_command">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:switch:alias"/>
         </service>
 
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\AnalyzeCommand" id="shopware_elastic_search.commands.analyze_command">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:analyze"/>
         </service>
     </services>
 </container>

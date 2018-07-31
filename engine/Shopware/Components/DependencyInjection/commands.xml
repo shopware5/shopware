@@ -1,0 +1,237 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware.commands.admin_create_command" class="Shopware\Commands\AdminCreateCommand">
+            <tag name="console.command" command="sw:admin:create"/>
+        </service>
+
+        <service id="shopware.commands.cache_clear_command" class="Shopware\Commands\CacheClearCommand">
+            <tag name="console.command" command="sw:cache:clear"/>
+        </service>
+
+        <service id="shopware.commands.clone_category_tree_command"
+                 class="Shopware\Commands\CloneCategoryTreeCommand">
+            <tag name="console.command" command="sw:clone:category:tree"/>
+        </service>
+
+        <service id="shopware.commands.cron_list_command" class="Shopware\Commands\CronListCommand">
+            <tag name="console.command" command="sw:cron:list"/>
+        </service>
+
+        <service id="shopware.commands.cron_run_command" class="Shopware\Commands\CronRunCommand">
+            <tag name="console.command" command="sw:cron:run"/>
+        </service>
+
+        <service id="shopware.commands.database_setup_command" class="Shopware\Commands\DatabaseSetupCommand">
+            <tag name="console.command" command="sw:database:setup"/>
+        </service>
+
+        <service id="shopware.commands.first_run_wizard_disable_command"
+                 class="Shopware\Commands\FirstRunWizardDisableCommand">
+            <tag name="console.command" command="sw:firstrunwizard:disable"/>
+        </service>
+
+        <service id="shopware.commands.first_run_wizard_enable_command"
+                 class="Shopware\Commands\FirstRunWizardEnableCommand">
+            <tag name="console.command" command="sw:firstrunwizard:enable"/>
+        </service>
+
+        <service id="shopware.commands.generate_attributes_command"
+                 class="Shopware\Commands\GenerateAttributesCommand">
+            <tag name="console.command" command="sw:generate:attributes"/>
+        </service>
+
+        <service id="shopware.commands.generate_product_feed_command"
+                 class="Shopware\Commands\GenerateProductFeedCommand">
+            <tag name="console.command" command="sw:product:feeds:refresh"/>
+        </service>
+
+        <service id="shopware.commands.list_product_feed_command"
+                 class="Shopware\Commands\ListProductFeedCommand">
+            <tag name="console.command" command="sw:product:feeds:list"/>
+        </service>
+
+        <service id="shopware.commands.migrate_article_attribute_translations_command"
+                 class="Shopware\Commands\MigrateArticleAttributeTranslationsCommand">
+            <tag name="console.command" command="sw:migrate:article:attribute:translations"/>
+        </service>
+
+        <service id="shopware.commands.migrations_migrate_command"
+                 class="Shopware\Commands\MigrationsMigrateCommand">
+            <tag name="console.command" command="sw:migrations:migrate"/>
+        </service>
+
+        <service id="shopware.commands.plugin_activate_command"
+                 class="Shopware\Commands\PluginActivateCommand">
+            <tag name="console.command" command="sw:plugin:activate"/>
+        </service>
+
+        <service id="shopware.commands.plugin_config_list_command"
+                 class="Shopware\Commands\PluginConfigListCommand">
+            <tag name="console.command" command="sw:plugin:config:list"/>
+        </service>
+
+        <service id="shopware.commands.plugin_config_set_command"
+                 class="Shopware\Commands\PluginConfigSetCommand">
+            <tag name="console.command" command="sw:plugin:config:set"/>
+        </service>
+
+        <service id="shopware.commands.plugin_deactivate_command"
+                 class="Shopware\Commands\PluginDeactivateCommand">
+            <tag name="console.command" command="sw:plugin:deactivate"/>
+        </service>
+
+        <service id="shopware.commands.plugin_delete_command" class="Shopware\Commands\PluginDeleteCommand">
+            <tag name="console.command" command="sw:plugin:delete"/>
+        </service>
+
+        <service id="shopware.commands.plugin_install_command" class="Shopware\Commands\PluginInstallCommand">
+            <tag name="console.command" command="sw:plugin:install"/>
+        </service>
+
+        <service id="shopware.commands.plugin_list_command" class="Shopware\Commands\PluginListCommand">
+            <tag name="console.command" command="sw:plugin:list"/>
+        </service>
+
+        <service id="shopware.commands.plugin_refresh_command" class="Shopware\Commands\PluginRefreshCommand">
+            <tag name="console.command" command="sw:plugin:refresh"/>
+        </service>
+
+        <service id="shopware.commands.plugin_reinstall_command"
+                 class="Shopware\Commands\PluginReinstallCommand">
+            <tag name="console.command" command="sw:plugin:reinstall"/>
+        </service>
+
+        <service id="shopware.commands.plugin_uninstall_command"
+                 class="Shopware\Commands\PluginUninstallCommand">
+            <tag name="console.command" command="sw:plugin:uninstall"/>
+        </service>
+
+        <service id="shopware.commands.plugin_update_command" class="Shopware\Commands\PluginUpdateCommand">
+            <tag name="console.command" command="sw:plugin:update"/>
+        </service>
+
+        <service id="shopware.commands.rebuild_category_tree_command"
+                 class="Shopware\Commands\RebuildCategoryTreeCommand">
+            <tag name="console.command" command="sw:rebuild:category:tree"/>
+        </service>
+
+        <service id="shopware.commands.rebuild_seo_index_command"
+                 class="Shopware\Commands\RebuildSeoIndexCommand">
+            <tag name="console.command" command="sw:rebuild:seo:index"/>
+        </service>
+
+        <service id="shopware.commands.refresh_search_index_command"
+                 class="Shopware\Commands\RefreshSearchIndexCommand">
+            <tag name="console.command" command="sw:refresh:search:index"/>
+        </service>
+
+        <service id="shopware.commands.session_cleanup_command"
+                 class="Shopware\Commands\SessionCleanupCommand">
+            <tag name="console.command" command="sw:session:cleanup"/>
+        </service>
+
+        <service id="shopware.commands.settings_labels_find_missing_command"
+                 class="Shopware\Commands\SettingsLabelsFindMissingCommand">
+            <tag name="console.command" command="sw:settings:label:find:missing"/>
+        </service>
+
+        <service id="shopware.commands.snippets_find_missing_command"
+                 class="Shopware\Commands\SnippetsFindMissingCommand">
+            <tag name="console.command" command="sw:snippets:find:missing"/>
+        </service>
+
+        <service id="shopware.commands.snippets_remove_command"
+                 class="Shopware\Commands\SnippetsRemoveCommand">
+            <tag name="console.command" command="sw:snippets:remove"/>
+        </service>
+
+        <service id="shopware.commands.snippets_to_db_command" class="Shopware\Commands\SnippetsToDbCommand">
+            <tag name="console.command" command="sw:snippets:to:db"/>
+        </service>
+
+        <service id="shopware.commands.snippets_to_ini_command" class="Shopware\Commands\SnippetsToIniCommand">
+            <tag name="console.command" command="sw:snippets:to:ini"/>
+        </service>
+
+        <service id="shopware.commands.snippets_to_sql_command" class="Shopware\Commands\SnippetsToSqlCommand">
+            <tag name="console.command" command="sw:snippets:to:sql"/>
+        </service>
+
+        <service id="shopware.commands.snippets_validate_command"
+                 class="Shopware\Commands\SnippetsValidateCommand">
+            <tag name="console.command" command="sw:snippets:validate"/>
+        </service>
+
+        <service id="shopware.commands.store_download_command" class="Shopware\Commands\StoreDownloadCommand">
+            <tag name="console.command" command="sw:store:download"/>
+        </service>
+
+        <service id="shopware.commands.store_list_command" class="Shopware\Commands\StoreListCommand">
+            <tag name="console.command" command="sw:store:list"/>
+        </service>
+
+        <service id="shopware.commands.store_list_domains_command"
+                 class="Shopware\Commands\StoreListDomainsCommand">
+            <tag name="console.command" command="sw:store:list:domains"/>
+        </service>
+
+        <service id="shopware.commands.store_list_integrated_command"
+                 class="Shopware\Commands\StoreListIntegratedCommand">
+            <tag name="console.command" command="sw:store:list:integrated"/>
+        </service>
+
+        <service id="shopware.commands.store_list_updates_command"
+                 class="Shopware\Commands\StoreListUpdatesCommand">
+            <tag name="console.command" command="sw:store:list:updates"/>
+        </service>
+
+        <service id="shopware.commands.stream_index_populate_command"
+                 class="Shopware\Commands\StreamIndexPopulateCommand">
+            <tag name="console.command" command="sw:customer:stream:index:populate"/>
+        </service>
+
+        <service id="shopware.commands.theme_cache_generate_command"
+                 class="Shopware\Commands\ThemeCacheGenerateCommand">
+            <tag name="console.command" command="sw:theme:cache:generate"/>
+        </service>
+
+        <service id="shopware.commands.theme_create_command" class="Shopware\Commands\ThemeCreateCommand">
+            <tag name="console.command" command="sw:theme:create"/>
+        </service>
+
+        <service id="shopware.commands.theme_dump_configuration_command"
+                 class="Shopware\Commands\ThemeDumpConfigurationCommand">
+            <tag name="console.command" command="sw:theme:dump:configuration"/>
+        </service>
+
+        <service id="shopware.commands.theme_initialize_command"
+                 class="Shopware\Commands\ThemeInitializeCommand">
+            <tag name="console.command" command="sw:theme:initialize"/>
+        </service>
+
+        <service id="shopware.commands.theme_synchronize_command"
+                 class="Shopware\Commands\ThemeSynchronizeCommand">
+            <tag name="console.command" command="sw:theme:synchronize"/>
+        </service>
+
+        <service id="shopware.commands.thumbnail_cleanup_command"
+                 class="Shopware\Commands\ThumbnailCleanupCommand">
+            <tag name="console.command" command="sw:thumbnail:cleanup"/>
+        </service>
+
+        <service id="shopware.commands.thumbnail_generate_command"
+                 class="Shopware\Commands\ThumbnailGenerateCommand">
+            <tag name="console.command" command="sw:thumbnail:generate"/>
+        </service>
+
+        <service id="shopware.commands.warm_up_http_cache_command"
+                 class="Shopware\Commands\WarmUpHttpCacheCommand">
+            <tag name="console.command" command="sw:warm:http:cache"/>
+        </service>
+    </services>
+</container>
