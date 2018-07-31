@@ -126,11 +126,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $query->leftJoin('article', 's_articles_translations', 'translation', 'article.id= translation.articleID');
         $query->leftJoin('article', 's_articles_supplier', 'manufacturer', 'article.supplierID = manufacturer.id');
 
-        /** @var \Shopware\Components\Model\SearchBuilder $builder */
-        $builder = $this->container->get('shopware.model.search_builder');
-        $builder->addSearchTerm(
-            $query,
-            $search,
+        $searchTerm = $this->get('events')->filter(
+            'Shopware_Backend_Search_GetArticles_SearchTerms',
             [
                 'article.name^3',
                 'variant.ordernumber^2',
@@ -138,9 +135,21 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 'manufacturer.name^1',
             ]
         );
+
+        /** @var \Shopware\Components\Model\SearchBuilder $builder */
+        $builder = $this->container->get('shopware.model.search_builder');
+        $builder->addSearchTerm(
+            $query,
+            $search,
+            $searchTerm
+        );
+
         $query->addGroupBy('article.id');
         $query->setFirstResult(0);
         $query->setMaxResults(5);
+
+        // add additional table joins for conditions
+        $query = $this->get('events')->filter('Shopware_Backend_Search_GetArticles_PreFetch', $query);
 
         return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -166,11 +175,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $query->from('s_user', 'user');
         $query->innerJoin('user', 's_user_addresses', 'address', 'address.user_id = user.id');
 
-        /** @var \Shopware\Components\Model\SearchBuilder $builder */
-        $builder = $this->container->get('shopware.model.search_builder');
-        $builder->addSearchTerm(
-            $query,
-            $search,
+        $searchTerm = $this->get('events')->filter(
+            'Shopware_Backend_Search_GetCustomers_SearchTerms',
             [
                 'user.email^3',
                 'user.customernumber^4',
@@ -178,9 +184,21 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 'TRIM(CONCAT(address.firstname, \' \', address.lastname))^1',
             ]
         );
+
+        /** @var \Shopware\Components\Model\SearchBuilder $builder */
+        $builder = $this->container->get('shopware.model.search_builder');
+        $builder->addSearchTerm(
+            $query,
+            $search,
+            $searchTerm
+        );
+
         $query->addGroupBy('user.id');
         $query->setFirstResult(0);
         $query->setMaxResults(5);
+
+        // add additional table joins for conditions
+        $query = $this->get('events')->filter('Shopware_Backend_Search_GetCustomers_PreFetch', $query);
 
         return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -221,21 +239,30 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
         $query->where('`order`.id != "0"');
 
-        /** @var \Shopware\Components\Model\SearchBuilder $builder */
-        $builder = $this->container->get('shopware.model.search_builder');
-        $builder->addSearchTerm(
-            $query,
-            $search,
+        $searchTerm = $this->get('events')->filter(
+            'Shopware_Backend_Search_GetOrders_SearchTerms',
             [
                 '`order`.ordernumber^3',
                 '`order`.transactionID^1',
                 '`doc`.docID^3'
             ]
         );
+
+        /** @var \Shopware\Components\Model\SearchBuilder $builder */
+        $builder = $this->container->get('shopware.model.search_builder');
+        $builder->addSearchTerm(
+            $query,
+            $search,
+            $searchTerm
+        );
+
         $query->addGroupBy('`order`.id');
         $query->orderBy('`order`.ordertime', 'DESC');
         $query->setFirstResult(0);
         $query->setMaxResults(5);
+
+        // add additional table joins for conditions
+        $query = $this->get('events')->filter('Shopware_Backend_Search_GetOrders_PreFetch', $query);
 
         return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
