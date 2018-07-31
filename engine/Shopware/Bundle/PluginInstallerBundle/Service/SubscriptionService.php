@@ -143,11 +143,9 @@ class SubscriptionService
         }
 
         try {
-            $secret = $this->getShopSecret();
-
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
-            return $this->getPluginInformationFromApi($secret);
+            return $this->getPluginInformationFromApi();
         } catch (ShopSecretException $e) {
             $this->resetShopSecret();
 
@@ -159,12 +157,17 @@ class SubscriptionService
     }
 
     /**
-     * @param string $secret
+     * Requests the plugin information from the store API and returns the parsed result.
      *
      * @return PluginInformationResultStruct|false
      */
-    private function getPluginInformationFromApi($secret)
+    public function getPluginInformationFromApi()
     {
+        $secret = $this->getShopSecret();
+        if (empty($secret)) {
+            return false;
+        }
+
         $domain = $this->getDomain();
         $params = [
             'domain' => $domain,
@@ -179,10 +182,6 @@ class SubscriptionService
             $params,
             $header
         );
-
-        if (empty($secret)) {
-            return false;
-        }
 
         $isShopUpgraded = $data['general']['isUpgraded'];
         $pluginInformationStructs = array_map(
