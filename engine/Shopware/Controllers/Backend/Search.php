@@ -126,10 +126,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $query->leftJoin('article', 's_articles_translations', 'translation', 'article.id= translation.articleID');
         $query->leftJoin('article', 's_articles_supplier', 'manufacturer', 'article.supplierID = manufacturer.id');
 
-        $builder = $this->container->get('shopware.model.search_builder');
-        $builder->addSearchTerm(
-            $query,
-            $search,
+        $searchTerm = $this->get('events')->filter(
+            'Shopware_Backend_Search_GetArticles_SearchTerms',
             [
                 'article.name^3',
                 'variant.ordernumber^2',
@@ -137,9 +135,21 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 'manufacturer.name^1',
             ]
         );
+
+        /** @var \Shopware\Components\Model\SearchBuilder $builder */
+        $builder = $this->container->get('shopware.model.search_builder');
+        $builder->addSearchTerm(
+            $query,
+            $search,
+            $searchTerm
+        );
+
         $query->addGroupBy('article.id');
         $query->setFirstResult(0);
         $query->setMaxResults(5);
+
+        // add additional table joins for conditions
+        $query = $this->get('events')->filter('Shopware_Backend_Search_GetArticles_PreFetch', $query);
 
         return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -153,30 +163,44 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getCustomers($search)
     {
-        $search2 = Shopware()->Db()->quote("$search%");
-        $search = Shopware()->Db()->quote("%$search%");
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
 
-        $sql = "
-            SELECT b.user_id as id,
-            IF(b.company != '', b.company, CONCAT(u.firstname, ' ', u.lastname)) as name,
-            CONCAT(street, ' ', zipcode, ' ', city) as description
-            FROM s_user_addresses b, s_user u
-            WHERE u.default_billing_address_id=b.id
-            AND
-            (
-                email LIKE $search
-                OR u.customernumber LIKE $search2
-                OR TRIM(CONCAT(b.company,' ', b.department)) LIKE $search
-                OR TRIM(CONCAT(b.firstname,' ',b.lastname)) LIKE $search
-            )
-            AND u.id = b.user_id
-            GROUP BY u.id
-            ORDER BY name ASC
-        ";
+        $query->select([
+            'user.id',
+            'IF(address.company != "", address.company, CONCAT(address.firstname, " ", address.lastname)) as name',
+            'CONCAT(address.street, " ", address.zipcode, " ", address.city) as description'
+        ]);
 
-        $sql = Shopware()->Db()->limit($sql, 5);
+        $query->from('s_user', 'user');
+        $query->innerJoin('user', 's_user_addresses', 'address', 'address.user_id = user.id');
 
-        return Shopware()->Db()->fetchAll($sql);
+        $searchTerm = $this->get('events')->filter(
+            'Shopware_Backend_Search_GetCustomers_SearchTerms',
+            [
+                'user.email^3',
+                'user.customernumber^4',
+                'TRIM(CONCAT(address.company, \' \', address.department))^1',
+                'TRIM(CONCAT(address.firstname, \' \', address.lastname))^1',
+            ]
+        );
+
+        /** @var \Shopware\Components\Model\SearchBuilder $builder */
+        $builder = $this->container->get('shopware.model.search_builder');
+        $builder->addSearchTerm(
+            $query,
+            $search,
+            $searchTerm
+        );
+
+        $query->addGroupBy('user.id');
+        $query->setFirstResult(0);
+        $query->setMaxResults(5);
+
+        // add additional table joins for conditions
+        $query = $this->get('events')->filter('Shopware_Backend_Search_GetCustomers_PreFetch', $query);
+
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -188,41 +212,59 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getOrders($search)
     {
-        $search = Shopware()->Db()->quote("$search%");
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
 
-        $sql = "
-            SELECT
-                o.id,
-                o.ordernumber as name,
-                o.userID,
-                o.invoice_amount as totalAmount,
-                o.transactionID,
-                o.status,
-                o.cleared,
-                d.type,
-                d.docID,
-                CONCAT(
-                    IF(b.company != '', b.company, CONCAT(b.firstname, ' ', b.lastname)),
-                    ', ',
-                    p.description
-                ) as description
-            FROM s_order o
-            LEFT JOIN s_order_documents d
-            ON d.orderID=o.id AND docID != '0'
-            LEFT JOIN s_order_billingaddress b
-            ON o.id=b.orderID
-            LEFT JOIN s_core_paymentmeans p
-            ON o.paymentID = p.id
-            WHERE o.id != '0'
-            AND (o.ordernumber LIKE $search
-            OR o.transactionID LIKE $search
-            OR docID LIKE $search)
-            GROUP BY o.id
-            ORDER BY o.ordertime DESC
-        ";
-        $sql = Shopware()->Db()->limit($sql, 5);
+        $query->select([
+            '`order`.id',
+            '`order`.ordernumber as name',
+            '`order`.userID',
+            '`order`.invoice_amount as totalAmount',
+            '`order`.transactionID',
+            '`order`.status',
+            '`order`.cleared',
+            'doc.type',
+            'doc.docID',
+            'CONCAT(
+                IF(address.company != "", address.company, CONCAT(address.firstname, " ", address.lastname)),
+                ", ",
+                payment.description
+            ) as description'
+        ]);
 
-        return Shopware()->Db()->fetchAll($sql);
+        $query->from('s_order', '`order`');
+        $query->leftJoin('`order`', 's_order_documents', 'doc', '(doc.orderID = `order`.id AND doc.docID != 0)');
+        $query->leftJoin('`order`', 's_order_billingaddress', 'address', 'address.orderID = `order`.id');
+        $query->leftJoin('`order`', 's_core_paymentmeans', 'payment', 'payment.id = `order`.paymentID');
+
+        $query->where('`order`.id != "0"');
+
+        $searchTerm = $this->get('events')->filter(
+            'Shopware_Backend_Search_GetOrders_SearchTerms',
+            [
+                '`order`.ordernumber^3',
+                '`order`.transactionID^1',
+                '`doc`.docID^3'
+            ]
+        );
+
+        /** @var \Shopware\Components\Model\SearchBuilder $builder */
+        $builder = $this->container->get('shopware.model.search_builder');
+        $builder->addSearchTerm(
+            $query,
+            $search,
+            $searchTerm
+        );
+
+        $query->addGroupBy('`order`.id');
+        $query->orderBy('`order`.ordertime', 'DESC');
+        $query->setFirstResult(0);
+        $query->setMaxResults(5);
+
+        // add additional table joins for conditions
+        $query = $this->get('events')->filter('Shopware_Backend_Search_GetOrders_PreFetch', $query);
+
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
