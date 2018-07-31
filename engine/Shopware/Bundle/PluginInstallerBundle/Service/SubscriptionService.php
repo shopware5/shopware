@@ -143,28 +143,27 @@ class SubscriptionService
         }
 
         try {
-            $secret = $this->getShopSecret();
-
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
-            return $this->getPluginInformationFromApi($secret);
+            return $this->getPluginInformationFromApi();
         } catch (ShopSecretException $e) {
             $this->resetShopSecret();
 
             return false;
         } catch (\Exception $e) {
-
             return false;
         }
     }
 
     /**
-     * @param string $secret
+     * Requests the plugin information from the store API and returns the parsed result.
      *
      * @return PluginInformationResultStruct|false
      */
-    private function getPluginInformationFromApi($secret)
+    public function getPluginInformationFromApi()
     {
+        $secret = $this->getShopSecret();
+
         $domain = $this->getDomain();
         $params = [
             'domain' => $domain,
