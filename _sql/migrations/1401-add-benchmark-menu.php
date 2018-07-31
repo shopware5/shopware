@@ -26,7 +26,7 @@ class Migrations_Migration1401 extends Shopware\Components\Migrations\AbstractMi
     public function up($modus)
     {
         $this->addSQL("INSERT IGNORE INTO `s_core_menu` (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`) VALUES
-            (69, 'Shopware BI', NULL, 'sprite-chart marketing--analyses', 1, 1, NULL, 'BenchmarkMenu', NULL, NULL);");
+            (69, 'Shopware BI', NULL, 'sprite-benchmark', 1, 1, NULL, 'BenchmarkMenu', NULL, NULL);");
 
         $this->addSQL('SET @parentId = (SELECT `id` FROM `s_core_menu` WHERE name="Shopware BI");');
 
