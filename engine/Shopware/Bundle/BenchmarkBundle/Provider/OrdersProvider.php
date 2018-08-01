@@ -143,6 +143,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->from('s_order', 'orders')
             ->where('orders.id > :lastOrderId')
             ->andWhere('orders.subshopID = :shopId')
+            ->andWhere('orders.status != -1')
             ->orderBy('orders.id', 'ASC')
             ->setMaxResults($batch)
             ->setParameter(':lastOrderId', $lastOrderId)
@@ -164,17 +165,23 @@ class OrdersProvider implements BatchableProviderInterface
         foreach ($orderData as $orderId => $order) {
             $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $order['ordertime']);
 
-            $currentHydratedOrder['orderId'] = $orderId;
+            $currentHydratedOrder['orderId'] = (int) $orderId;
+            $currentHydratedOrder['status'] = (int) $order['status'];
             $currentHydratedOrder['currency'] = $order['currency'];
-            $currentHydratedOrder['shippingCosts'] = $order['invoice_shipping'];
+            $currentHydratedOrder['shippingCosts'] = (float) $order['invoice_shipping'];
+            $currentHydratedOrder['changed'] = (string) $order['changed'];
+            $currentHydratedOrder['invoiceAmount'] = (float) $order['invoice_amount'];
+            $currentHydratedOrder['invoiceAmountNet'] = (float) $order['invoice_amount_net'];
+            $currentHydratedOrder['isTaxFree'] = (bool) $order['taxfree'];
+            $currentHydratedOrder['isNet'] = (bool) $order['net'];
             $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
             $currentHydratedOrder['datetime'] = [
-                'year' => $dateTime->format('Y'),
-                'month' => $dateTime->format('m'),
-                'day' => $dateTime->format('d'),
-                'hours' => $dateTime->format('H'),
-                'minutes' => $dateTime->format('i'),
-                'seconds' => $dateTime->format('s'),
+                'year' => (int) $dateTime->format('Y'),
+                'month' => (int) $dateTime->format('m'),
+                'day' => (int) $dateTime->format('d'),
+                'hours' => (int) $dateTime->format('H'),
+                'minutes' => (int) $dateTime->format('i'),
+                'seconds' => (int) $dateTime->format('s'),
             ];
             $currentHydratedOrder['customer'] = $order['customer'];
 
@@ -186,21 +193,41 @@ class OrdersProvider implements BatchableProviderInterface
             $currentHydratedOrder['shipment'] = [
                 'name' => $order['dispatch']['name'],
                 'cost' => [
-                    'minPrice' => $order['dispatch']['minPrice'],
-                    'maxPrice' => $order['dispatch']['maxPrice'],
+                    'minPrice' => (float) $order['dispatch']['minPrice'],
+                    'maxPrice' => (float) $order['dispatch']['maxPrice'],
                 ],
             ];
 
             $currentHydratedOrder['payment'] = [
                 'name' => $order['payment']['name'],
                 'cost' => [
-                    'percentCosts' => $order['payment']['percentCosts'],
-                    'absoluteCosts' => $order['payment']['absoluteCosts'],
-                    'absoluteCostsPerCountry' => $order['payment']['absoluteCostsPerCountry'],
+                    'percentCosts' => (float) $order['payment']['percentCosts'],
+                    'absoluteCosts' => (float) $order['payment']['absoluteCosts'],
+                    'absoluteCostsPerCountry' => (float) $order['payment']['absoluteCostsPerCountry'],
                 ],
             ];
 
             $currentHydratedOrder['items'] = $order['details'];
+
+            $isCancelOrder = $currentHydratedOrder['status'] === 4;
+
+            if (!$currentHydratedOrder['changed']) {
+                $currentHydratedOrder['changed'] = '1970-01-01 00:00:00';
+            }
+
+            if ($isCancelOrder) {
+                $currentHydratedOrder['invoiceAmount'] = 0;
+                $currentHydratedOrder['shippingCosts'] = 0;
+            }
+
+            $currentHydratedOrder['items'] = array_map(function ($item) use ($isCancelOrder) {
+                $item['detailId'] = (int) $item['detailId'];
+                $item['unitPrice'] = (float) ($isCancelOrder ? 0 : $item['unitPrice']);
+                $item['totalPrice'] = (float) ($isCancelOrder ? 0 : $item['totalPrice']);
+                $item['amount'] = (int) $item['amount'];
+
+                return $item;
+            }, $currentHydratedOrder['items']);
 
             $hydratedOrders[] = $currentHydratedOrder;
         }
@@ -220,6 +247,7 @@ class OrdersProvider implements BatchableProviderInterface
         return $orderDetailsQueryBuilder->select([
                 'details.id',
                 'details.orderID',
+                'details.id as detailId',
                 'details.price as unitPrice',
                 'details.price * details.quantity as totalPrice',
                 'details.quantity as amount',
