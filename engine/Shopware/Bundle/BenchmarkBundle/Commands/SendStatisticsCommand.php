@@ -27,6 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Commands;
 use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\Benchmark\BenchmarkConfig;
+use Shopware\Models\Benchmark\Repository;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -63,6 +64,7 @@ class SendStatisticsCommand extends ShopwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var Repository $benchmarkRepository */
         $benchmarkRepository = $this->getContainer()->get('shopware.benchmark_bundle.repository.config');
         $statisticsService = $this->getContainer()->get('shopware.benchmark_bundle.statistics_transmission');
 
@@ -80,11 +82,22 @@ class SendStatisticsCommand extends ShopwareCommand
                 continue;
             }
 
+            $locked = $shopConfig->getLocked();
+            $dateOneHourAgo = new \DateTime('now');
+            $dateOneHourAgo->sub(new \DateInterval('PT1H'));
+
+            if ($locked && $locked > $dateOneHourAgo) {
+                $output->writeln(sprintf('<comment>Shop with ID %s is currently locked, skipping.</comment>', $shopId));
+                continue;
+            }
+
             // Shop doesn't have to send data. If 'force' parameter is set, this will be ignored.
             if (!$input->getOption('force') && !$this->isShopValid($shopConfig)) {
                 $output->writeln(sprintf('<comment>No transmission currently necessary for shop with ID %s. Use \'force\' option if you still want to transmit data for this shop.</comment>', $shopId));
                 continue;
             }
+
+            $benchmarkRepository->lockShop($shopId);
 
             $output->writeln(sprintf('Sending statistics for shop with ID %s...', $shopId));
 
@@ -104,6 +117,8 @@ class SendStatisticsCommand extends ShopwareCommand
                 }
             } catch (TransmissionNotNecessaryException $e) {
                 $output->writeln('<info>Done!</info>');
+            } finally {
+                $benchmarkRepository->unlockShop($shopId);
             }
         }
     }
