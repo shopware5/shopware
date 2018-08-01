@@ -31,5 +31,12 @@ ADD `last_analytics_id` int(11) NOT NULL AFTER `last_product_id`;
 EOD;
 
         $this->addSql($sql);
+
+        // Also change menu icon of benchmark
+        $sql = <<<'EOD'
+UPDATE s_core_menu SET `class`='sprite-benchmark' WHERE `class`='sprite-chart marketing--analyses' AND controller='Benchmark';
+EOD;
+
+        $this->addSql($sql);
     }
 }
