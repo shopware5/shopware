@@ -176,8 +176,8 @@ class BenchmarkConfig extends ModelEntity
         $this->id = $id;
 
         // Default values
-        $this->lastReceived = '1990-01-01 00:00:00';
-        $this->lastSent = '1990-01-01 00:00:00';
+        $this->lastReceived = '1970-01-01 00:00:00';
+        $this->lastSent = '1970-01-01 00:00:00';
         $this->lastOrderId = 0;
         $this->lastCustomerId = 0;
         $this->lastProductId = 0;

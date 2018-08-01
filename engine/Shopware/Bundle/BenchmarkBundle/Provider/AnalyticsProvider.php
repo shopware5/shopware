@@ -79,7 +79,16 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->getVisitsListQueryBuilder($lastAnalyticsId);
 
-        return $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        $data = array_map(function ($item) {
+            $item['totalImpressions'] = (int) $item['totalImpressions'];
+            $item['totalUniqueVisits'] = (int) $item['totalUniqueVisits'];
+
+            return $item;
+        }, $data);
+
+        return $data;
     }
 
     /**
@@ -93,6 +102,13 @@ class AnalyticsProvider implements BenchmarkProviderInterface
 
         $visitsPerDevice = $queryBuilder->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
+
+        $visitsPerDevice = array_map(function ($item) {
+            $item['totalImpressions'] = (int) $item['totalImpressions'];
+            $item['totalUniqueVisits'] = (int) $item['totalUniqueVisits'];
+
+            return $item;
+        }, $visitsPerDevice);
 
         return $visitsPerDevice;
     }
