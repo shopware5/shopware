@@ -37,4 +37,9 @@ interface DataIndexerInterface
      * @param ProgressHelperInterface $progress
      */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress);
+
+    /**
+     * @return string
+     */
+    public function supports();
 }
