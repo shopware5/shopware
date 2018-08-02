@@ -42,25 +42,37 @@ class IndexConfiguration
     /**
      * @var int|null
      */
-    private $numberOfShards = null;
+    private $numberOfShards;
 
     /**
      * @var int|null
      */
-    private $numberOfReplicas = null;
+    private $numberOfReplicas;
+
+    /**
+     * @var int|null
+     */
+    private $totalFieldsLimit;
 
     /**
      * @param string   $name
      * @param string   $alias
      * @param int|null $numberOfShards
      * @param int|null $numberOfReplicas
+     * @param int|null $totalFieldsLimit
      */
-    public function __construct($name, $alias, $numberOfShards = null, $numberOfReplicas = null)
+    public function __construct(
+        $name,
+        $alias,
+        $numberOfShards = null,
+        $numberOfReplicas = null,
+        $totalFieldsLimit = null)
     {
         $this->name = $name;
         $this->alias = $alias;
         $this->numberOfShards = $numberOfShards;
         $this->numberOfReplicas = $numberOfReplicas;
+        $this->totalFieldsLimit = $totalFieldsLimit;
     }
 
     /**
@@ -109,5 +121,21 @@ class IndexConfiguration
     public function setNumberOfReplicas($numberOfReplicas)
     {
         $this->numberOfReplicas = $numberOfReplicas;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getTotalFieldsLimit()
+    {
+        return $this->totalFieldsLimit;
+    }
+
+    /**
+     * @param int|null $totalFieldsLimit
+     */
+    public function setTotalFieldsLimit($totalFieldsLimit)
+    {
+        $this->totalFieldsLimit = $totalFieldsLimit;
     }
 }

@@ -158,6 +158,11 @@ class ShopIndexer implements ShopIndexerInterface
             'settings' => [
                 'number_of_shards' => $configuration->getNumberOfShards(),
                 'number_of_replicas' => $configuration->getNumberOfReplicas(),
+                'mapping' => [
+                    'total_fields' => [
+                        'limit' => $configuration->getTotalFieldsLimit(),
+                    ],
+                ],
             ],
         ];
 
