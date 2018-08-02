@@ -387,6 +387,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $download = Shopware()->Db()->fetchRow($sql, [Shopware()->Session()->sUserId, $esdID]);
         }
 
+        // @TOOD: Re-Implement ESD download strategies
+
         if (empty($download['file'])) {
             $this->View()->sErrorCode = 1;
 
