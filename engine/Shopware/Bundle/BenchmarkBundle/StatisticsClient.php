@@ -31,6 +31,7 @@ use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsSendingException;
 use Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
 use Shopware\Components\HttpClient\HttpClientInterface;
+use Shopware\Components\HttpClient\RequestException;
 use Shopware\Components\HttpClient\Response;
 
 /**
@@ -102,15 +103,16 @@ class StatisticsClient implements StatisticsClientInterface
             'User-Agent' => 'Shopware',
         ];
 
-        /* Deactivating encryption for the moment
-        if ($this->benchmarkEncryption->isEncryptionSupported($this->encryptionMethod)) {
-            $payload = json_encode(['data' => $this->benchmarkEncryption->encryptData((string) $statisticsRequest, $this->encryptionMethod)]);
-        }*/
-
         try {
             $response = $this->client->post($this->statisticsApiEndpoint, $headers, (string) $statisticsRequest);
         } catch (\Exception $ex) {
-            $this->logger->warning(sprintf('Could not send statistics data to %s', $this->statisticsApiEndpoint), [$ex]);
+            $body = '';
+
+            if ($ex instanceof RequestException) {
+                $body = $ex->getBody();
+            }
+
+            $this->logger->warning(sprintf('Could not send statistics data to %s', $this->statisticsApiEndpoint), [$ex, $body]);
 
             throw new StatisticsSendingException('Could not send statistics data', 0, $ex);
         }
