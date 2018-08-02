@@ -76,10 +76,18 @@ class PluginsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return $queryBuilder->select('plugins.name, plugins.active')
+        $data = $queryBuilder->select('plugins.name, plugins.active')
             ->from('s_core_plugins', 'plugins')
             ->where("plugins.author = 'shopware AG'")
             ->execute()
             ->fetchAll();
+
+        $data = array_map(function ($item) {
+            $item['active'] = (bool) $item['active'];
+
+            return $item;
+        }, $data);
+
+        return $data;
     }
 }

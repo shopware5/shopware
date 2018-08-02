@@ -87,6 +87,19 @@ class CustomersProvider implements BatchableProviderInterface
 
         $customers = array_map([$this, 'matchGenders'], array_values($customers));
 
+        $customers = array_map(function ($item) {
+            $item['hasNewsletter'] = (bool) $item['hasNewsletter'];
+            $item['registered'] = (bool) $item['registered'];
+            $item['turnOver'] = (float) $item['turnOver'];
+
+            if ($item['birthMonth']) {
+                $item['birthMonth'] = (int) $item['birthMonth'];
+                $item['birthYear'] = (int) $item['birthYear'];
+            }
+
+            return $item;
+        }, $customers);
+
         $customerId = end($customerIds);
 
         if ($customerId) {

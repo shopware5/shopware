@@ -98,6 +98,37 @@ class ProductsProvider implements BatchableProviderInterface
             }
         }
 
+        $basicProducts = array_map(function ($item) {
+            $item['active'] = (bool) $item['active'];
+            $item['notificationEnabled'] = (bool) $item['notificationEnabled'];
+            $item['instock'] = (int) $item['instock'];
+            $item['instockMinimum'] = (int) $item['instockMinimum'];
+            $item['sale'] = (int) $item['sale'];
+            $item['minPurchase'] = (int) $item['minPurchase'];
+            $item['maxPurchase'] = (int) $item['maxPurchase'];
+            $item['purchaseSteps'] = (int) $item['purchaseSteps'];
+            $item['shippingReady'] = (bool) $item['shippingReady'];
+            $item['shippingFree'] = (bool) $item['shippingFree'];
+            $item['pseudoSales'] = (int) $item['pseudoSales'];
+            $item['topSeller'] = (int) $item['topSeller'];
+
+            $item['variants'] = array_map(function ($item) {
+                $item['active'] = (bool) $item['active'];
+                $item['instock'] = (int) $item['instock'];
+                $item['instockMinimum'] = (int) $item['instockMinimum'];
+                $item['sale'] = (int) $item['sale'];
+                $item['minPurchase'] = (int) $item['minPurchase'];
+                $item['maxPurchase'] = (int) $item['maxPurchase'];
+                $item['purchaseSteps'] = (int) $item['purchaseSteps'];
+                $item['shippingReady'] = (bool) $item['shippingReady'];
+                $item['shippingFree'] = (bool) $item['shippingFree'];
+
+                return $item;
+            }, $item['variants']);
+
+            return $item;
+        }, $basicProducts);
+
         $lastProductId = end($productIds);
 
         if ($lastProductId) {
