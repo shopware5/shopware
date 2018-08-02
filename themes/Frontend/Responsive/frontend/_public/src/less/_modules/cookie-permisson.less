@@ -26,19 +26,44 @@
 }
 
 .cookie-removal--container {
-    .unitize(padding, 20);
+    .unitize(padding, 25);
 
     .cookie-removal--list {
+        .unitize(margin-bottom, 20);
         list-style-position: inside;
-        .unitize(margin-bottom, 60);
     }
-    .cookie-removal--footer {
-        position: absolute;
-        .unitize(bottom, 20);
-        .unitize(left, 20);
-        .unitize(right, 20);
-        .unitize(height, 40);
-        .unitize(line-height, 40);
+    .cookie-removal--buttons {
+        .unitize(margin-top, 20);
+    }
+    .cookie-removal--buttons .btn {
+        .unitize(margin-bottom, 6);
+        display: inline-block;
+        width: 48%;
+        float: right;
+
+        &:last-child {
+            margin-right: 2%;
+        }
+    }
+}
+
+@media screen and (min-width: @phoneLandscapeViewportWidth) {
+    .cookie-removal--container {
+        .cookie-removal--footer {
+            .clearfix();
+            .cookie-removal--buttons {
+                float: right;
+            }
+        }
+        .cookie-removal--buttons {
+            .unitize(min-width, 260);
+            margin: 0;
+        }
+
+        .privacy--notice {
+            .unitize(padding-top, 8);
+            display: inline-block;
+        }
     }
 }
 
@@ -53,10 +78,10 @@
             text-align: left;
           }
           .cookie-permission--button {
-            position: absolute;
-            top: ~"calc(50% - 21px)";
-            .unitize(width, 240);
-            .unitize(right, 5);
+              .unitize(width, 240);
+              .unitize(right, 5);
+              position: absolute;
+              top: ~"calc(50% - 21px)";
           }
         }
 

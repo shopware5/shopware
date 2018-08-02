@@ -146,6 +146,25 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     }
 
     /**
+     * @param string      $name
+     * @param string|null $path
+     *
+     * @return bool
+     */
+    public function removeCookie($name, $path = null)
+    {
+        $key = $name . '-' . $path;
+
+        if (isset($this->_cookies[$key])) {
+            unset($this->_cookies[$key]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function sendCookies()
