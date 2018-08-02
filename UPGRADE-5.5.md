@@ -147,6 +147,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added a new mapping type argument to the constructor of the `ShopIndex`
     * Added a new mapping type argument to methods `createIndexConfiguration`, `createShopIndex` of the `IndexFactory` and the `IndexFactoryInterface`
     * Modified attributes mapping in the product mapping. Changed type of 'raw' field to keyword (>= 6).
+    * Added method `supports` to the `\Shopware\Bundle\ESIndexingBundle\DataIndexerInterface` to be able to distinguish which index is for which mapping type
 * Changed `ShopIndexer::createAlias`, it now deletes indexes that are named like the index alias
 * Changed `Subscription expired` growl message, to hide it for a week
 * Changed form controller to allow multiple receivers comma separated

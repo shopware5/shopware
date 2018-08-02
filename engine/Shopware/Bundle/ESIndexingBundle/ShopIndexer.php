@@ -202,7 +202,9 @@ class ShopIndexer implements ShopIndexerInterface
     private function populate(ShopIndex $index, ProgressHelperInterface $progress)
     {
         foreach ($this->indexer as $indexer) {
-            $indexer->populate($index, $progress);
+            if ($indexer->supports() === $index->getType()) {
+                $indexer->populate($index, $progress);
+            }
         }
 
         $this->client->indices()->refresh(['index' => $index->getName()]);
