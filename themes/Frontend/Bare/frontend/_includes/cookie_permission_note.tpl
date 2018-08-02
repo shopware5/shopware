@@ -62,7 +62,6 @@
                     <li>{s name="cookiePermission/productToCart"}{/s}</li>
                     <li>{s name="cookiePermission/wishList"}{/s}</li>
                     <li>{s name="cookiePermission/productRecommandations"}{/s}</li>
-                    <li>{s name="cookiePermission/more"}{/s}</li>
                 </ul>
 
                 {block name="cookie_removal_container_footer"}
@@ -70,13 +69,16 @@
                         {$privacyLink = {config name="data_privacy_statement_link"}}
                         {if $privacyLink}
                             <a title="{s name="cookiePermission/linkText"}{/s}"
-                               class="left"
+                               class="privacy--notice"
                                href="{$privacyLink}">
                                 {s name="cookiePermission/linkText"}{/s}
                             </a>
                         {/if}
 
-                        <a class="btn is--secondary right cookie-permission--accept-button">{s name="cookiePermission/buttonText"}{/s}</a>
+                        <div class="cookie-removal--buttons">
+                            <a class="btn is--secondary cookie-permission--accept-button is--center">{s name="cookiePermission/buttonText"}{/s}</a>
+                            <a class="btn cookie-permission--close-button is--center">{s name="cookiePermission/close"}{/s}</a>
+                        </div>
                     </div>
                 {/block}
             </div>

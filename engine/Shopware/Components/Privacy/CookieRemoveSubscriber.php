@@ -81,9 +81,25 @@ class CookieRemoveSubscriber implements SubscriberInterface
         $allowCookie = (int) $controller->Request()->getCookie('allowCookie');
 
         if ($allowCookie !== 1) {
-            foreach ($controller->Request()->getCookie() as $key => $value) {
+            $requestCookies = array_keys($controller->Request()->getCookie());
+            $cookiePath = $controller->Request()->getBasePath() . '/';
+
+            foreach ($controller->Response()->getCookies() as $cookie) {
+                if (!$this->isTechnicallyRequiredCookie($cookie['name']) || $this->config->get('cookie_note_mode') === self::COOKIE_MODE_ALL) {
+                    if (!in_array($cookie['name'], $requestCookies)) {
+                        $controller->Response()->removeCookie($cookie['name']);
+                        $controller->Response()->removeCookie($cookie['name'], $cookiePath);
+                    } else {
+                        $controller->Response()->setCookie($cookie['name'], null, 0);
+                        $controller->Response()->setCookie($cookie['name'], null, 0, $cookiePath);
+                    }
+                }
+            }
+
+            foreach ($requestCookies as $key) {
                 if (!$this->isTechnicallyRequiredCookie($key) || $this->config->get('cookie_note_mode') === self::COOKIE_MODE_ALL) {
                     $controller->Response()->setCookie($key, null, 0);
+                    $controller->Response()->setCookie($key, null, 0, $cookiePath);
                 }
             }
         }
