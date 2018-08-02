@@ -64,15 +64,18 @@ class Shopware extends Enlight_Application
 
     /**
      * @param Container $container
+     * @param string|null $docPath
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, $docPath = null)
     {
         // Initialize global Shopware function
         Shopware($this);
 
         $this->container = $container;
         $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->docPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
+        $this->docPath = ($docPath === null) ?
+            dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR :
+            $docPath;
 
         parent::__construct();
     }
