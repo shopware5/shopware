@@ -148,7 +148,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
             ->execute()
             ->fetchColumn();
 
-        $devicesUsed = array_filter(explode(',', $devicesUsed));
+        $devicesUsed = array_filter(explode(',', $devicesUsed), 'strlen');
 
         $deviceCounts = [];
         foreach ($devicesUsed as $device) {
