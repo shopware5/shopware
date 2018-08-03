@@ -26,6 +26,8 @@ namespace Shopware\Commands;
 
 use Shopware\Components\Snippet\QueryHandler;
 use Shopware\Models\Plugin\Plugin;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,8 +38,32 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SnippetsToSqlCommand extends ShopwareCommand
+class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'update') {
+            return ['true', 'false'];
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'file') {
+            return $this->completeInDirectory();
+        }
+
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */

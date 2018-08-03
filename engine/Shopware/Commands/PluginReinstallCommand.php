@@ -25,13 +25,35 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginReinstallCommand extends ShopwareCommand
+class PluginReinstallCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'plugin') {
+            return $this->queryPluginNames($context->getCurrentWord());
+        }
+
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */

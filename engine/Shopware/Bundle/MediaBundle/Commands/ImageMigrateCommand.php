@@ -25,6 +25,8 @@
 namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Shopware\Commands\ShopwareCommand;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,8 +36,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ImageMigrateCommand extends ShopwareCommand
+class ImageMigrateCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if (in_array($optionName, ['from', 'to'])) {
+            return array_keys($this->getContainer()->getParameter('shopware.cdn.adapters'));
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */

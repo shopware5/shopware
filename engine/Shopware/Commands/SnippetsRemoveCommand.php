@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,8 +35,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SnippetsRemoveCommand extends ShopwareCommand
+class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'folder') {
+            return $this->completeDirectoriesInDirectory($this->container->getParameter('kernel.root_dir'));
+        }
+
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */

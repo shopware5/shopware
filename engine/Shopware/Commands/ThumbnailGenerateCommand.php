@@ -24,12 +24,16 @@
 
 namespace Shopware\Commands;
 
+use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Repository;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -45,7 +49,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ThumbnailGenerateCommand extends ShopwareCommand
+class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     /**
      * @var OutputInterface
@@ -66,6 +70,41 @@ class ThumbnailGenerateCommand extends ShopwareCommand
      * @var Manager
      */
     private $generator;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'albumid') {
+            /** @var ModelRepository $albumRepository */
+            $albumRepository = $this->getContainer()->get('models')->getRepository(Album::class);
+
+            $queryBuilder = $albumRepository->createQueryBuilder('alb')
+                ->innerJoin('alb.settings', 'settings', Join::WITH, 'settings.createThumbnails = 1');
+
+            if (is_numeric($context->getCurrentWord())) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('alb.id', ':id'))
+                    ->setParameter('id', addcslashes($context->getCurrentWord(), '%_') . '%');
+            }
+
+            $result = $queryBuilder->select(['alb.id'])
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_column($result, 'id');
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        return false;
+    }
 
     /**
      * {@inheritdoc}

@@ -24,11 +24,16 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RebuildSeoIndexCommand extends ShopwareCommand
+class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     /**
      * @var \Shopware_Components_SeoIndex
@@ -59,6 +64,44 @@ class RebuildSeoIndexCommand extends ShopwareCommand
      * @var \Shopware\Components\Model\ModelManager
      */
     protected $modelManager;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'shopId') {
+            /** @var ModelManager $em */
+            $em = $this->getContainer()->get('models');
+            /** @var Repository $shopRepository */
+            $shopRepository = $em->getRepository(Shop::class);
+            $queryBuilder = $shopRepository->createQueryBuilder('shop');
+
+            if (is_numeric($context->getCurrentWord())) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('shop.id', ':id'))
+                    ->setParameter('id', addcslashes($context->getCurrentWord(), '%_') . '%');
+            }
+
+            $result = $queryBuilder->select(['shop.id'])
+                ->addOrderBy($queryBuilder->expr()->asc('shop.id'))
+                ->getQuery()
+                ->getArrayResult();
+
+            $alreadyTakenShopIds = array_filter($context->getWords(), 'is_numeric');
+
+            return array_diff(array_column($result, 'id'), $alreadyTakenShopIds);
+        }
+
+        return false;
+    }
 
     /**
      * {@inheritdoc}

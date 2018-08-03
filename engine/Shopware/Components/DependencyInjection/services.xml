@@ -885,5 +885,9 @@
         </service>
 
         <service id="shopware.components.stream_protocol_validator" class="Shopware\Components\StreamProtocolValidator"/>
+
+        <service id="shopware.console.completion_command" class="Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand">
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>

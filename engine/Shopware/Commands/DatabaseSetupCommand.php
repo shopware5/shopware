@@ -26,6 +26,8 @@ namespace Shopware\Commands;
 
 use Shopware\Components\Install\Database;
 use Shopware\Components\Migrations\Manager;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,7 +38,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class DatabaseSetupCommand extends ShopwareCommand
+class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     private $validSteps = [
         'drop',
@@ -46,6 +48,26 @@ class DatabaseSetupCommand extends ShopwareCommand
         'importDemodata',
         'setupShop',
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'steps') {
+            return $this->validSteps;
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        return false;
+    }
 
     /**
      * {@inheritdoc}

@@ -27,6 +27,8 @@ namespace Shopware\Commands;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,8 +38,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SnippetsToDbCommand extends ShopwareCommand
+class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'source') {
+            return $this->completeInDirectory($this->container->getParameter('kernel.root_dir'));
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        return false;
+    }
+
     /**
      * {@inheritdoc}
      */
