@@ -102,6 +102,7 @@ class BenchmarkStatisticsService
 
         try {
             $statisticsResponse = $this->statistics->transmit($benchmarkConfig);
+            $statisticsResponse->setShopId((int) $benchmarkConfig->getShopId());
         } catch (TransmissionNotNecessaryException $e) {
             return null;
         } finally {
@@ -122,6 +123,7 @@ class BenchmarkStatisticsService
         }
 
         $biResponse = $this->biService->transmit($benchmarkConfig);
+        $biResponse->setShopId((int) $benchmarkConfig->getShopId());
 
         return $biResponse;
     }

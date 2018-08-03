@@ -18,11 +18,19 @@ Ext.define('Shopware.apps.Benchmark.controller.Main', {
             }
         });
 
-        if (me.subApplication.params && me.subApplication.params.isTeaser) {
-            params = {
-                isTeaser: true,
-                height: 700
-            };
+        if (me.subApplication.params) {
+            if (me.subApplication.params.isTeaser) {
+                params = {
+                    isTeaser: true,
+                    height: 700
+                };
+            }
+
+            if (me.subApplication.params.shopId) {
+                params = {
+                    shopId: me.subApplication.params.shopId
+                };
+            }
         }
 
         if (this.subApplication.action === 'Settings') {

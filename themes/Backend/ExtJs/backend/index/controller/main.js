@@ -299,7 +299,10 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                                     text: '{s name=open}{/s}',
                                     callback: function () {
                                         Shopware.app.Application.addSubApplication({
-                                            name: 'Shopware.apps.Benchmark'
+                                            name: 'Shopware.apps.Benchmark',
+                                            params: {
+                                                shopId: res.shopId
+                                            }
                                         });
                                     }
                                 }
