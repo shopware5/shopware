@@ -80,6 +80,12 @@
         <name>allow_url_fopen</name><group>config</group><required>1</required>
     </requirement>
     <requirement>
+        <name>curl_exec</name><group>config</group><required>1</required>
+    </requirement>
+    <requirement>
+        <name>curl_multi_exec</name><group>config</group><required>1</required>
+    </requirement>
+    <requirement>
         <name>file_uploads</name><group>config</group><required>1</required>
     </requirement>
     <requirement>
