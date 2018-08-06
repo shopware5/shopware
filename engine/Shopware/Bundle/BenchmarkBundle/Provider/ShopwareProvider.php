@@ -27,6 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ShopwareReleaseStruct;
 
 class ShopwareProvider implements BenchmarkProviderInterface
@@ -56,7 +57,10 @@ class ShopwareProvider implements BenchmarkProviderInterface
         return 'shopware';
     }
 
-    public function getBenchmarkData()
+    /**
+     * {@inheritdoc}
+     */
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         return [
             'api' => $this->getApi(),

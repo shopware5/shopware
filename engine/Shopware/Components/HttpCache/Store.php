@@ -110,7 +110,7 @@ class Store extends BaseStore
     public function purgeByHeader($name, $value = null)
     {
         // optimized purging for x-shopware-cache-id
-        if ($this->lookupOptimization && $name == 'x-shopware-cache-id') {
+        if ($this->lookupOptimization && $name === 'x-shopware-cache-id') {
             return $this->purgeByShopwareId($value);
         }
 

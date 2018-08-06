@@ -59,6 +59,8 @@ Ext.define('Shopware.apps.Log.controller.Main', {
         stores.systemLogsStore = me.subApplication.getStore('SystemLogs');
         /* {/if} */
 
+        stores.mode = me.subApplication.params ? (me.subApplication.params.mode || '') : '';
+
         me.mainWindow = me.getView('main.Window').create(stores);
 
         this.callParent(arguments);

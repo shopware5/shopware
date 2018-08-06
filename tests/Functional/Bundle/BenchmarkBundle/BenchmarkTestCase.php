@@ -45,8 +45,8 @@ abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
     protected function installDemoData($dataName)
     {
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $fileContent = $this->openDemoDataFile($dataName);
 
+        $fileContent = $this->openDemoDataFile($dataName);
         $dbalConnection->exec($fileContent);
     }
 
@@ -62,7 +62,7 @@ abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return bool|string
      */
-    private function openDemoDataFile($fileName)
+    protected function openDemoDataFile($fileName)
     {
         $fileName .= '.sql';
         $path = $this->getAssetsFolder();

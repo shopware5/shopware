@@ -260,10 +260,23 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     {
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
-        $query = $this->getUserRepository()
-            ->getRolesQuery($offset, $limit);
+        $id = $this->Request()->getParam('id', null);
 
-        $count = Shopware()->Models()->getQueryCount($query);
+        if ($id !== null) {
+            $queryBuilder = $this->getUserRepository()->getRolesQueryBuilder();
+            $query = $queryBuilder
+                ->setFirstResult(0)
+                ->setMaxResults(1)
+                ->andWhere('roles.id = :role_id')
+                ->setParameter(':role_id', (int) $id)
+                ->getQuery();
+            $count = 1;
+        } else {
+            $query = $this->getUserRepository()
+                ->getRolesQuery($offset, $limit);
+            $count = Shopware()->Models()->getQueryCount($query);
+        }
+
         $roles = $query->getArrayResult();
 
         // Strip roles with parent id set

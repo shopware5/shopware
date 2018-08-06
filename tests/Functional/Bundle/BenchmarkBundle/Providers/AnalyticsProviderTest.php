@@ -29,14 +29,10 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class AnalyticsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.analytics';
-    const EXPECTED_KEYS_COUNT = 6;
+    const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
-        'totalVisitsYesterday' => IsType::TYPE_INT,
-        'totalViewsYesterday' => IsType::TYPE_INT,
-        'visitsByDeviceYesterday' => IsType::TYPE_ARRAY,
-        'totalVisitsByDevice' => IsType::TYPE_ARRAY,
-        'totalVisits' => IsType::TYPE_INT,
-        'averageShippingCostsPerOrder' => IsType::TYPE_FLOAT,
+        'list' => IsType::TYPE_ARRAY,
+        'listByDevice' => IsType::TYPE_ARRAY,
     ];
 
     /**
@@ -46,39 +42,9 @@ class AnalyticsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('analytics');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(492, $resultData['totalVisits']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
-    public function testGetTotalVisitsYesterday()
-    {
-        $this->installDemoData('analytics');
-
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(25, $resultData['totalVisitsYesterday']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
-    public function testGetTotalViewsYesterday()
-    {
-        $this->installDemoData('analytics');
-
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(16, $resultData['totalViewsYesterday']);
+        $this->assertSame(26, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
     }
 
     /**
@@ -88,11 +54,32 @@ class AnalyticsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('analytics');
 
+        $resultData = $this->getBenchmarkData();
+
+        $desktopRows = array_filter($resultData['listByDevice'], function ($value) {
+            return $value['deviceType'] === 'desktop';
+        });
+
+        $mobileRows = array_filter($resultData['listByDevice'], function ($value) {
+            return $value['deviceType'] === 'mobile';
+        });
+
+        $this->assertSame(12, array_sum(array_column($desktopRows, 'totalUniqueVisits')));
+        $this->assertSame(14, array_sum(array_column($mobileRows, 'totalUniqueVisits')));
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetTotalVisitsByShop()
+    {
+        $this->installDemoData('analytics');
         $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
 
-        $resultData = $provider->getBenchmarkData();
+        $this->assertSame(26, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
 
-        $this->assertSame(12, $resultData['totalVisitsByDevice']['desktop']);
-        $this->assertSame(480, $resultData['totalVisitsByDevice']['mobile']);
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(466, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
     }
 }

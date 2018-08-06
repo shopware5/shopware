@@ -40,11 +40,6 @@ class PluginLicenceService
     private $connection;
 
     /**
-     * @var InstallerService
-     */
-    private $installer;
-
-    /**
      * @var StoreClient
      */
     private $storeClient;
@@ -56,40 +51,17 @@ class PluginLicenceService
 
     /**
      * @param Connection                $connection
-     * @param InstallerService          $installer
      * @param StoreClient               $storeClient
      * @param LocalLicenseUnpackService $unpackService
      */
     public function __construct(
         Connection $connection,
-        InstallerService $installer,
         StoreClient $storeClient,
         LocalLicenseUnpackService $unpackService
     ) {
         $this->connection = $connection;
-        $this->installer = $installer;
         $this->storeClient = $storeClient;
         $this->unpackService = $unpackService;
-    }
-
-    /**
-     * @param string $licenceKey
-     *
-     * @return int
-     */
-    public function importLicence($licenceKey)
-    {
-        $persister = new \Shopware_Components_LicensePersister(
-            $this->connection
-        );
-
-        $info = \Shopware_Components_License::readLicenseInfo($licenceKey);
-
-        if ($info == false) {
-            throw new \RuntimeException();
-        }
-
-        return $persister->saveLicense($info, true);
     }
 
     /**
@@ -289,8 +261,7 @@ class PluginLicenceService
 
         $builder->select(['license.module, license.label, license.expiration, license.license'])
             ->from('s_core_licenses', 'license')
-            ->leftJoin('license', 's_core_plugins', 'plugin', 'plugin.name = license.module')
-            ->where('plugin.active = 1');
+            ->leftJoin('license', 's_core_plugins', 'plugin', 'plugin.name = license.module');
 
         $builderExecute = $builder->execute();
 

@@ -27,6 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Service;
 use Shopware\Bundle\BenchmarkBundle\BusinessIntelligenceClientInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceRequest;
 use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
+use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class BusinessIntelligenceService
@@ -54,12 +55,12 @@ class BusinessIntelligenceService
     }
 
     /**
+     * @param BenchmarkConfig $config
+     *
      * @return BusinessIntelligenceResponse
      */
-    public function transmit()
+    public function transmit(BenchmarkConfig $config)
     {
-        $config = $this->benchmarkRepository->getMainConfig();
-
         /** @var BusinessIntelligenceResponse $response */
         $response = $this->biClient->fetchBusinessIntelligence(new BusinessIntelligenceRequest($config->getToken()));
 

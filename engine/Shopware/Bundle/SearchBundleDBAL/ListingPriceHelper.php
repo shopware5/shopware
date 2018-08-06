@@ -180,8 +180,10 @@ class ListingPriceHelper
         $template = 'defaultPrice.%s';
         $switch = [];
         foreach ($this->getPriceColumns() as $column) {
-            $switch[] = sprintf($template, $column, $column, $column);
+            $switch[] = sprintf($template, $column);
         }
+        $switch[] = sprintf($template, 'articleID as product_id');
+        $switch[] = sprintf($template, 'articledetailsID as variant_id');
 
         return implode(',', $switch);
     }

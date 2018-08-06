@@ -27,6 +27,7 @@ namespace Shopware;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
+use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\MatcherCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
@@ -49,8 +50,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\TerminableInterface;
 
 /**
  * Middleware class between the old Shopware bootstrap mechanism
@@ -60,7 +64,7 @@ use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Kernel implements HttpKernelInterface
+class Kernel implements HttpKernelInterface, TerminableInterface
 {
     /**
      * @Deprecated Since 5.4, to be removed in 5.6
@@ -468,6 +472,19 @@ class Kernel implements HttpKernelInterface
         return $this->release;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function terminate(SymfonyRequest $request, SymfonyResponse $response)
+    {
+        if ($this->container && $this->container->initialized('events')) {
+            $this->container->get('events')->notify(KernelEvents::TERMINATE, [
+                'postResponseEvent' => new PostResponseEvent($this, $request, $response),
+                'container' => $this->container,
+            ]);
+        }
+    }
+
     protected function initializePlugins()
     {
         $initializer = new PluginInitializer(
@@ -643,7 +660,8 @@ class Kernel implements HttpKernelInterface
         $loader->load('SearchBundleES/services.xml');
         $loader->load('CustomerSearchBundleDBAL/services.xml');
         $loader->load('BenchmarkBundle/services.xml');
-        $loader->load('EsBackend/services.xml');
+        $loader->load('EsBackendBundle/services.xml');
+        $loader->load('SitemapBundle/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -659,6 +677,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new AddConstraintValidatorsPass());
         $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
+        $container->addCompilerPass(new MatcherCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 
@@ -717,7 +736,7 @@ class Kernel implements HttpKernelInterface
             'shopware.release.version' => $this->release['version'],
             'shopware.release.version_text' => $this->release['version_text'],
             'shopware.release.revision' => $this->release['revision'],
-            'kernel.default_error_level' => $this->debug ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
+            'kernel.default_error_level' => $this->config['logger']['level'],
         ];
     }
 

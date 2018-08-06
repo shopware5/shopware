@@ -99,6 +99,14 @@
             <tag name="shopware_media.adapter" />
         </service>
 
+        <service id="shopware_media.adapter.s3" class="Shopware\Bundle\MediaBundle\Adapters\AwsS3v3Factory">
+            <tag name="shopware_media.adapter" />
+        </service>
+
+        <service id="shopware_media.adapter.gcp" class="Shopware\Bundle\MediaBundle\Adapters\GoogleStorageFactory">
+            <tag name="shopware_media.adapter" />
+        </service>
+
         <!-- Commands -->
 
         <service id="shopware_media.commands.media_cleanup" class="Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand">

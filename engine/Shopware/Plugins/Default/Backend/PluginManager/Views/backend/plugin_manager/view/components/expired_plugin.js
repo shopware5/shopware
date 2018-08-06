@@ -263,15 +263,15 @@ Ext.define('Shopware.apps.PluginManager.view.components.ExpiredPlugin', {
 
         return Ext.create('PluginManager.container.Container', {
             cls: 'button uninstall',
-            html: '{s name="uninstall"}Uninstall{/s}',
+            html: '{s name="delete"}Delete{/s}',
             handler: function() {
-                me.uninstallPluginEvent(me.record);
+                me.deleteExpiredPluginEvent(me.record, me);
             }
         });
     },
 
     getPriceByType: function(prices, type) {
-        var me = this, price = null;
+        var price = null;
 
         prices.each(function(item) {
             if (item.get('type') == type) {

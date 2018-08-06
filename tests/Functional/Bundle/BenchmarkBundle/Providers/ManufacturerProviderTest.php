@@ -37,14 +37,16 @@ class ManufacturerProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetShouldReturnTotalAmountOfSuppliers()
+    public function testGetTotalSuppliersPerShop()
     {
         $this->installDemoData('suppliers');
 
         $provider = $this->getProvider();
 
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertSame(3, $resultData['total']);
 
-        $this->assertSame(5, $resultData['total']);
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(2, $resultData['total']);
     }
 }

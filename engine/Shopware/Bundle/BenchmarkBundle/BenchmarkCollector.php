@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 class BenchmarkCollector implements BenchmarkCollectorInterface
 {
     /**
@@ -50,18 +52,21 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     /**
      * {@inheritdoc}
      */
-    public function get()
+    public function get(ShopContextInterface $shopContext, $batchSize = null)
     {
         $providerData = [];
 
         /** @var BenchmarkProviderInterface $provider */
         foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
+            if ($provider instanceof BatchableProviderInterface) {
+                $providerData[$provider->getName()] = $provider->getBenchmarkData($shopContext, $batchSize);
+                continue;
+            }
+
+            $providerData[$provider->getName()] = $provider->getBenchmarkData($shopContext);
         }
 
-        $providerData = $this->moveShopData($providerData);
-
-        return json_encode($providerData, true);
+        return $this->moveShopData($providerData);
     }
 
     /**

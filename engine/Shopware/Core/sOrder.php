@@ -364,6 +364,8 @@ class sOrder
 
     /**
      * Create temporary order (for order cancellation reports)
+     *
+     * @throws Enlight_Exception
      */
     public function sCreateTemporaryOrder()
     {
@@ -485,6 +487,7 @@ class sOrder
                 'orderID' => $orderID,
                 'ordernumber' => 0,
                 'articleID' => $basketRow['articleID'],
+                'articleDetailID' => $basketRow['additional_details']['articleDetailsID'],
                 'articleordernumber' => $basketRow['ordernumber'],
                 'price' => $basketRow['priceNumeric'],
                 'quantity' => $basketRow['quantity'],
@@ -511,14 +514,14 @@ class sOrder
     }
 
     /**
-     * Finaly save order and send order confirmation to customer
+     * Finally save order and send order confirmation to customer
      */
     public function sSaveOrder()
     {
         $this->sComment = stripslashes($this->sComment);
         $this->sComment = stripcslashes($this->sComment);
 
-        $this->sShippingData['AmountNumeric'] = $this->sShippingData['AmountNumeric'] ? $this->sShippingData['AmountNumeric'] : '0';
+        $this->sShippingData['AmountNumeric'] = $this->sShippingData['AmountNumeric'] ?: '0';
 
         if ($this->isTransactionExist($this->bookingId)) {
             return false;
@@ -669,9 +672,10 @@ class sOrder
                 tax_rate,
                 ean,
                 unit,
-                pack_unit
+                pack_unit,
+                articleDetailID
                 )
-                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s)
+                VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s, %d)
             ';
 
             $sql = sprintf($preparedQuery,
@@ -690,7 +694,8 @@ class sOrder
                 $basketRow['tax_rate'],
                 $this->db->quote((string) $basketRow['ean']),
                 $this->db->quote((string) $basketRow['itemUnit']),
-                $this->db->quote((string) $basketRow['packunit'])
+                $this->db->quote((string) $basketRow['packunit']),
+                $basketRow['additional_details']['articleDetailsID']
             );
 
             $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailsSQL', $sql, ['subject' => $this, 'row' => $basketRow, 'user' => $this->sUserData, 'order' => ['id' => $orderID, 'number' => $orderNumber]]);
@@ -718,7 +723,7 @@ class sOrder
 
             $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
 
-            // save attributes
+            // Save attributes
             $attributeData = $this->attributeLoader->load('s_order_basket_attributes', $basketRow['id']);
 
             $attributeData = $this->eventManager->filter(

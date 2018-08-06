@@ -102,13 +102,11 @@
 
                                 {* Link to the user orders *}
                                 {block name="frontend_account_menu_link_orders"}
-                                    {if {config name=showEsd}}
-                                        <li class="navigation--entry">
-                                            <a href="{url module='frontend' controller='account' action='orders'}" title="{s name="AccountLinkPreviousOrders"}{/s}" class="navigation--link{if $sAction == 'orders'} is--active{/if}" rel="nofollow">
-                                                {s name="AccountLinkPreviousOrders"}{/s}
-                                            </a>
-                                        </li>
-                                    {/if}
+                                    <li class="navigation--entry">
+                                        <a href="{url module='frontend' controller='account' action='orders'}" title="{s name="AccountLinkPreviousOrders"}{/s}" class="navigation--link{if $sAction == 'orders'} is--active{/if}" rel="nofollow">
+                                            {s name="AccountLinkPreviousOrders"}{/s}
+                                        </a>
+                                    </li>
                                 {/block}
 
                                 {* Link to the user downloads *}

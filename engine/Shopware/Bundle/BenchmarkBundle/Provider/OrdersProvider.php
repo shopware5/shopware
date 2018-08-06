@@ -25,14 +25,20 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class OrdersProvider implements BenchmarkProviderInterface
+class OrdersProvider implements BatchableProviderInterface
 {
     /**
      * @var Connection
      */
     private $dbalConnection;
+
+    /**
+     * @var int
+     */
+    private $shopId;
 
     public function __construct(Connection $dbalConnection)
     {
@@ -45,41 +51,33 @@ class OrdersProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext, $batchSize = null)
     {
+        $this->shopId = $shopContext->getShop()->getId();
+
         return [
-            'dateTime' => date('Y-m-d H:i:s'),
-            'numbers' => $this->getOrderNumbers(),
-            'list' => $this->getOrdersList(),
+            'list' => $this->getOrdersList($batchSize),
         ];
     }
 
     /**
+     * @param int $batchSize
+     *
      * @return array
      */
-    private function getOrderNumbers()
-    {
-        return [
-            'total' => $this->getTotalOrders(),
-            'revenue' => $this->getTotalOrderAmount(),
-            'averageAmount' => $this->getAverageOrderAmount(),
-            'averageHourRange' => $this->getAverageHourRange(),
-            'firstOrderDate' => $this->getFirstOrderDate(),
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getOrdersList()
+    private function getOrdersList($batchSize = null)
     {
         $config = $this->getOrderConfig();
-        $batch = (int) $config['orders_batch_size'];
-        $lastTime = (int) $config['last_order_id'];
+        $batch = (int) $config['batch_size'];
+        $lastOrderId = (int) $config['last_order_id'];
 
-        $orderData = $this->getOrderData($batch, $lastTime);
+        if ($batchSize !== null) {
+            $batch = $batchSize;
+        }
+
+        $orderData = $this->getOrderData($batch, $lastOrderId);
         $orderData = $this->hydrateData($orderData);
 
         $lastOrder = end($orderData);
@@ -89,34 +87,6 @@ class OrdersProvider implements BenchmarkProviderInterface
         }
 
         return $orderData;
-    }
-
-    /**
-     * @return int
-     */
-    private function getTotalOrders()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return (int) $queryBuilder->select('COUNT(orders.id)')
-            ->from('s_order', 'orders')
-            ->execute()
-            ->fetchColumn();
-    }
-
-    /**
-     * @return float[]
-     */
-    private function getTotalOrderAmount()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        $prices = $queryBuilder->select('SUM(orders.invoice_amount) as totalGross, SUM(orders.invoice_amount_net) as totalNet')
-            ->from('s_order', 'orders')
-            ->execute()
-            ->fetch();
-
-        return array_map('floatval', $prices);
     }
 
     /**
@@ -130,20 +100,30 @@ class OrdersProvider implements BenchmarkProviderInterface
         $ordersBasicData = $this->getOrdersBasicData($batch, $lastOrderId);
 
         $orderIds = array_keys($ordersBasicData);
-        $dispatchIds = array_keys(array_flip(array_column($ordersBasicData, 'dispatchID')));
-        $paymentIds = array_keys(array_flip(array_column($ordersBasicData, 'paymentID')));
+        $dispatchIds = $this->getUniqueColumnValues($ordersBasicData, 'dispatchID');
+        $paymentIds = $this->getUniqueColumnValues($ordersBasicData, 'paymentID');
+        $customerIds = $this->getUniqueColumnValues($ordersBasicData, 'userID');
 
         $orderDetails = $this->getOrderDetails($orderIds);
         $dispatchData = $this->getDispatchData($dispatchIds);
         $paymentData = $this->getPaymentData($paymentIds);
+        $customerData = $this->getCustomerData($customerIds);
+        $billingCountries = $this->getBillingCountry($orderIds);
+        $shippingCountries = $this->getShippingCountry($orderIds);
 
         foreach ($orderDetails as $detailsId => $orderDetail) {
-            $ordersBasicData[$orderDetail['orderID']]['details'][] = $orderDetail;
+            $orderId = $orderDetail['orderID'];
+            unset($orderDetail['orderID']);
+            $ordersBasicData[$orderId]['details'][] = $orderDetail;
         }
 
         foreach ($ordersBasicData as $orderId => &$basicOrder) {
             $basicOrder['dispatch'] = $dispatchData[$basicOrder['dispatchID']];
             $basicOrder['payment'] = $paymentData[$basicOrder['paymentID']];
+
+            $basicOrder['customer'] = $customerData[$basicOrder['userID']];
+            $basicOrder['customer']['billing']['country'] = $billingCountries[$orderId];
+            $basicOrder['customer']['shipping']['country'] = $shippingCountries[$orderId];
         }
 
         return $ordersBasicData;
@@ -151,20 +131,23 @@ class OrdersProvider implements BenchmarkProviderInterface
 
     /**
      * @param int $batch
-     * @param int $lastId
+     * @param int $lastOrderId
      *
      * @return array
      */
-    private function getOrdersBasicData($batch, $lastId)
+    private function getOrdersBasicData($batch, $lastOrderId)
     {
         $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
 
         return $ordersQueryBuilder->select('orders.*')
             ->from('s_order', 'orders')
-            ->where('orders.id > :lastId')
+            ->where('orders.id > :lastOrderId')
+            ->andWhere('orders.subshopID = :shopId')
+            ->andWhere('orders.status != -1')
             ->orderBy('orders.id', 'ASC')
             ->setMaxResults($batch)
-            ->setParameter(':lastId', $lastId)
+            ->setParameter(':lastOrderId', $lastOrderId)
+            ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
     }
@@ -180,32 +163,71 @@ class OrdersProvider implements BenchmarkProviderInterface
 
         $currentHydratedOrder = [];
         foreach ($orderData as $orderId => $order) {
-            $currentHydratedOrder['orderId'] = $orderId;
-            $currentHydratedOrder['datetime'] = $order['ordertime'];
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $order['ordertime']);
+
+            $currentHydratedOrder['orderId'] = (int) $orderId;
+            $currentHydratedOrder['status'] = (int) $order['status'];
+            $currentHydratedOrder['currency'] = $order['currency'];
+            $currentHydratedOrder['shippingCosts'] = (float) $order['invoice_shipping'];
+            $currentHydratedOrder['changed'] = (string) $order['changed'];
+            $currentHydratedOrder['invoiceAmount'] = (float) $order['invoice_amount'];
+            $currentHydratedOrder['invoiceAmountNet'] = (float) $order['invoice_amount_net'];
+            $currentHydratedOrder['isTaxFree'] = (bool) $order['taxfree'];
+            $currentHydratedOrder['isNet'] = (bool) $order['net'];
+            $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
+            $currentHydratedOrder['datetime'] = [
+                'year' => (int) $dateTime->format('Y'),
+                'month' => (int) $dateTime->format('m'),
+                'day' => (int) $dateTime->format('d'),
+                'hours' => (int) $dateTime->format('H'),
+                'minutes' => (int) $dateTime->format('i'),
+                'seconds' => (int) $dateTime->format('s'),
+            ];
+            $currentHydratedOrder['customer'] = $order['customer'];
 
             $currentHydratedOrder['analytics'] = [
                 'device' => $order['deviceType'],
-                'referer' => $order['referer'],
+                'referer' => $order['referer'] ? true : false,
             ];
 
             $currentHydratedOrder['shipment'] = [
                 'name' => $order['dispatch']['name'],
                 'cost' => [
-                    'minPrice' => $order['dispatch']['minPrice'],
-                    'maxPrice' => $order['dispatch']['maxPrice'],
+                    'minPrice' => (float) $order['dispatch']['minPrice'],
+                    'maxPrice' => (float) $order['dispatch']['maxPrice'],
                 ],
             ];
 
             $currentHydratedOrder['payment'] = [
                 'name' => $order['payment']['name'],
                 'cost' => [
-                    'percentCosts' => $order['payment']['percentCosts'],
-                    'absoluteCosts' => $order['payment']['absoluteCosts'],
-                    'absoluteCostsPerCountry' => $order['payment']['absoluteCostsPerCountry'],
+                    'percentCosts' => (float) $order['payment']['percentCosts'],
+                    'absoluteCosts' => (float) $order['payment']['absoluteCosts'],
+                    'absoluteCostsPerCountry' => (float) $order['payment']['absoluteCostsPerCountry'],
                 ],
             ];
 
             $currentHydratedOrder['items'] = $order['details'];
+
+            $isCancelOrder = $currentHydratedOrder['status'] === 4;
+
+            if (!$currentHydratedOrder['changed']) {
+                $currentHydratedOrder['changed'] = '1970-01-01 00:00:00';
+            }
+
+            if ($isCancelOrder) {
+                $currentHydratedOrder['invoiceAmount'] = 0;
+                $currentHydratedOrder['shippingCosts'] = 0;
+            }
+
+            $currentHydratedOrder['items'] = array_map(function ($item) use ($isCancelOrder) {
+                $item['detailId'] = (int) $item['detailId'];
+                $item['unitPrice'] = (float) ($isCancelOrder ? 0 : $item['unitPrice']);
+                $item['totalPrice'] = (float) ($isCancelOrder ? 0 : $item['totalPrice']);
+                $item['amount'] = (int) $item['amount'];
+
+                return $item;
+            }, $currentHydratedOrder['items']);
 
             $hydratedOrders[] = $currentHydratedOrder;
         }
@@ -225,7 +247,7 @@ class OrdersProvider implements BenchmarkProviderInterface
         return $orderDetailsQueryBuilder->select([
                 'details.id',
                 'details.orderID',
-                'MD5(IFNULL(details.ean, details.articleordernumber)) as ean',
+                'details.id as detailId',
                 'details.price as unitPrice',
                 'details.price * details.quantity as totalPrice',
                 'details.quantity as amount',
@@ -290,6 +312,8 @@ class OrdersProvider implements BenchmarkProviderInterface
 
         return $configsQueryBuilder->select('configs.*')
             ->from('s_benchmark_config', 'configs')
+            ->where('configs.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetch();
     }
@@ -302,51 +326,115 @@ class OrdersProvider implements BenchmarkProviderInterface
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
         $queryBuilder->update('s_benchmark_config')
             ->set('last_order_id', ':lastOrderId')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->setParameter(':lastOrderId', $lastOrderId)
             ->execute();
     }
 
     /**
-     * @return float
+     * @param array $customerIds
+     *
+     * @return array
      */
-    private function getAverageOrderAmount()
+    private function getCustomerData(array $customerIds)
     {
-        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return number_format($ordersQueryBuilder->select('AVG(orders.invoice_amount_net)')
-            ->from('s_order', 'orders')
+        $customers = $queryBuilder->select([
+                'customer.id',
+                'customer.accountmode = 0 as registered',
+                'YEAR(customer.birthday) as birthYear',
+                'MONTH(customer.birthday) as birthMonth',
+                'customer.salutation as gender',
+                'customer.firstlogin as registerDate',
+                'newsletter.id IS NOT NULL as hasNewsletter',
+            ])
+            ->from('s_user', 'customer')
+            ->leftJoin('customer', 's_campaigns_mailaddresses', 'newsletter', 'newsletter.email = customer.email AND newsletter.customer = 1')
+
+            ->where('customer.id IN (:customerIds)')
+            ->setParameter(':customerIds', $customerIds, Connection::PARAM_INT_ARRAY)
+            ->orderBy('customer.id')
             ->execute()
-            ->fetchColumn(), 2, ',', '');
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+
+        return array_map([$this, 'matchGenders'], $customers);
     }
 
     /**
-     * @return string
+     * @param array $orderIds
+     *
+     * @return array
      */
-    private function getFirstOrderDate()
+    private function getBillingCountry(array $orderIds)
     {
-        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return $ordersQueryBuilder->select('orders.ordertime')
-            ->from('s_order', 'orders')
-            ->orderBy('ordertime', 'ASC')
-            ->addOrderBy('id', 'ASC')
-            ->setMaxResults(1)
+        return $queryBuilder->select('billingAddress.orderID, country.countryiso')
+            ->from('s_order_billingaddress', 'billingAddress')
+            ->innerJoin('billingAddress', 's_core_countries', 'country', 'country.id = billingAddress.countryID')
+            ->where('billingAddress.orderID IN (:orderIds)')
+            ->setParameter(':orderIds', $orderIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchColumn();
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     /**
-     * @return string
+     * @param array $orderIds
+     *
+     * @return array
      */
-    private function getAverageHourRange()
+    private function getShippingCountry(array $orderIds)
     {
-        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        $averageHour = (int) $ordersQueryBuilder->select('AVG(HOUR(orders.ordertime))')
-            ->from('s_order', 'orders')
+        return $queryBuilder->select('shippingAddress.orderID, country.countryiso')
+            ->from('s_order_shippingaddress', 'shippingAddress')
+            ->innerJoin('shippingAddress', 's_core_countries', 'country', 'country.id = shippingAddress.countryID')
+            ->where('shippingAddress.orderID IN (:orderIds)')
+            ->setParameter(':orderIds', $orderIds, Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchColumn();
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
 
-        return ($averageHour - 1) . ' - ' . ($averageHour + 1);
+    /**
+     * @param array $customer
+     *
+     * @return array
+     */
+    private function matchGenders(array $customer)
+    {
+        if ($customer['gender'] === 'mr') {
+            $customer['gender'] = 'male';
+
+            return $customer;
+        }
+
+        if (in_array($customer['gender'], ['mrs', 'ms'])) {
+            $customer['gender'] = 'female';
+
+            return $customer;
+        }
+
+        $customer['gender'] = 'unknown';
+
+        return $customer;
+    }
+
+    /**
+     * Fetches a column of an associative array and returns the unique values.
+     *
+     * @param array  $dataSet
+     * @param string $column
+     *
+     * @return array
+     */
+    private function getUniqueColumnValues(array $dataSet, $column)
+    {
+        $columnValues = array_column($dataSet, $column);
+
+        // Values unique this way, faster than array_unique
+        return array_keys(array_flip($columnValues));
     }
 }

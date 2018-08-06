@@ -26,6 +26,7 @@ use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Cart\BasketHelperInterface;
+use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
@@ -4018,13 +4019,16 @@ SQL;
 
             if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
                 $this->basketHelper->addProportionalDiscount(
-                    BasketHelperInterface::DISCOUNT_ABSOLUTE,
-                    $basket_discount,
-                    '- ' . $percent . ' % ' . $discount_basket_name,
-                    3,
-                    $discount_basket_ordernumber,
-                    $this->sSYSTEM->sCurrency['factor'],
-                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    new DiscountContext(
+                        $this->session->get('sessionId'),
+                        BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                        $basket_discount,
+                        '- ' . $percent . ' % ' . $discount_basket_name,
+                        $discount_basket_ordernumber,
+                        3,
+                        $this->sSYSTEM->sCurrency['factor'],
+                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    )
                 );
             } else {
                 $this->db->insert(
@@ -4076,13 +4080,16 @@ SQL;
 
             if (!$this->session->get('taxFree') && $this->config->get('proportionalTaxCalculation')) {
                 $this->basketHelper->addProportionalDiscount(
-                    BasketHelperInterface::DISCOUNT_ABSOLUTE,
-                    $discount,
-                    $discount_name,
-                    4,
-                    $discount_ordernumber,
-                    $this->sSYSTEM->sCurrency['factor'],
-                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    new DiscountContext(
+                        $this->session->get('sessionId'),
+                        BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                        $discount,
+                        $discount_name,
+                        $discount_ordernumber,
+                        4,
+                        $this->sSYSTEM->sCurrency['factor'],
+                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    )
                 );
             } else {
                 $this->db->insert(
@@ -4150,13 +4157,16 @@ SQL;
 
             if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
                 $this->basketHelper->addProportionalDiscount(
-                    BasketHelperInterface::DISCOUNT_ABSOLUTE,
-                    $surcharge,
-                    $surcharge_name,
-                    4,
-                    $surcharge_ordernumber,
-                    $this->sSYSTEM->sCurrency['factor'],
-                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    new DiscountContext(
+                        $this->session->get('sessionId'),
+                        BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                        $surcharge,
+                        $surcharge_name,
+                        $surcharge_ordernumber,
+                        4,
+                        $this->sSYSTEM->sCurrency['factor'],
+                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    )
                 );
             } else {
                 $this->db->insert(
@@ -4209,13 +4219,16 @@ SQL;
 
             if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
                 $this->basketHelper->addProportionalDiscount(
-                    BasketHelperInterface::DISCOUNT_PERCENT,
-                    $payment['debit_percent'],
-                    $percent_name,
-                    4,
-                    $percent_ordernumber,
-                    $this->sSYSTEM->sCurrency['factor'],
-                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    new DiscountContext(
+                        $this->session->get('sessionId'),
+                        BasketHelperInterface::DISCOUNT_PERCENT,
+                        $payment['debit_percent'],
+                        $percent_name,
+                        $percent_ordernumber,
+                        4,
+                        $this->sSYSTEM->sCurrency['factor'],
+                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                    )
                 );
             } else {
                 $this->db->insert(

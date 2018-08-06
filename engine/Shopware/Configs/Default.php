@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Logger;
+
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
@@ -36,6 +38,21 @@ if (!is_array($customConfig)) {
 return array_replace_recursive([
     'custom' => [],
     'trustedproxies' => [],
+    'filesystem' => [
+        'private' => [
+            'type' => 'local',
+            'config' => [
+                'root' => realpath(__DIR__ . '/../../../files/'),
+            ],
+        ],
+        'public' => [
+            'type' => 'local',
+            'config' => [
+                'root' => realpath(__DIR__ . '/../../../web/'),
+                'url' => '',
+            ],
+        ],
+    ],
     'cdn' => [
         'backend' => 'local',
         'strategy' => 'md5',
@@ -54,7 +71,7 @@ return array_replace_recursive([
                         'private' => 0700 & ~umask(),
                     ],
                 ],
-                'path' => realpath(__DIR__ . '/../../../'),
+                'root' => realpath(__DIR__ . '/../../../'),
             ],
             'ftp' => [
                 'type' => 'ftp',
@@ -68,6 +85,26 @@ return array_replace_recursive([
                 'passive' => true,
                 'ssl' => false,
                 'timeout' => 30,
+            ],
+            's3' => [
+                'type' => 's3',
+                'mediaUrl' => '',
+
+                'bucket' => '',
+                'region' => '',
+                'credentials' => [
+                    'key' => '',
+                    'secret' => '',
+                ],
+            ],
+            'gcp' => [
+                'type' => 'gcp',
+                'mediaUrl' => '',
+
+                'projectId' => '',
+                'keyFilePath' => '',
+                'bucket' => '',
+                'root' => '',
             ],
         ],
     ],
@@ -99,7 +136,9 @@ return array_replace_recursive([
         'write_backlog' => true,
         'number_of_replicas' => null,
         'number_of_shards' => null,
+        'total_fields_limit' => null,
         'wait_for_status' => 'green',
+        'batchsize' => 500,
         'backend' => [
             'write_backlog' => false,
             'enabled' => false,
@@ -192,8 +231,8 @@ return array_replace_recursive([
     ],
     'bi' => [
         'endpoint' => [
-            'benchmark' => 'https://bi-staging.shopware.com/benchmark',
-            'statistics' => 'https://bi-staging.shopware.com/statistics',
+            'benchmark' => 'https://bi.shopware.com/benchmark',
+            'statistics' => 'https://bi.shopware.com/statistics',
         ],
     ],
     'session' => [
@@ -204,6 +243,9 @@ return array_replace_recursive([
         'save_handler' => 'db',
         'use_trans_sid' => 0,
         'locking' => true,
+    ],
+    'sitemap' => [
+        'batchsize' => 10000,
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
@@ -316,5 +358,8 @@ return array_replace_recursive([
                 ],
             ],
         ],
+    ],
+    'logger' => [
+        'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
     ],
 ], $customConfig);

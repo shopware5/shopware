@@ -358,6 +358,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function downloadAction()
     {
+        $filesystem = $this->container->get('shopware.filesystem.private');
         $esdID = $this->request->getParam('esdID');
 
         if (empty($esdID)) {
@@ -386,57 +387,42 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $download = Shopware()->Db()->fetchRow($sql, [Shopware()->Session()->sUserId, $esdID]);
         }
 
+        // @TOOD: Re-Implement ESD download strategies
+
         if (empty($download['file'])) {
             $this->View()->sErrorCode = 1;
 
             return $this->forward('downloads');
         }
 
-        $file = 'files/' . Shopware()->Config()->get('sESDKEY') . '/' . $download['file'];
+        $filePath = $this->container->get('config')->offsetGet('esdKey') . '/' . $download['file'];
 
-        $filePath = $this->container->getParameter('shopware.app.rootdir') . $file;
-
-        if (!file_exists($filePath)) {
+        if ($filesystem->has($filePath) === false) {
             $this->View()->sErrorCode = 2;
 
             return $this->forward('downloads');
         }
 
-        switch (Shopware()->Config()->get('esdDownloadStrategy')) {
-            case 0:
-                $this->redirect($this->Request()->getBasePath() . '/' . $file);
-                break;
-            case 1:
-                @set_time_limit(0);
-                $this->Response()
-                    ->setHeader('Content-Type', 'application/octet-stream')
-                    ->setHeader('Content-Disposition', 'attachment; filename="' . $download['file'] . '"')
-                    ->setHeader('Content-Length', filesize($filePath));
+        $meta = $filesystem->getMetadata($filePath);
+        $mimeType = $filesystem->getMimetype($filePath) ?: 'application/octet-stream';
 
-                $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        @set_time_limit(0);
 
-                readfile($filePath);
-                break;
-            case 2:
-                // Apache2 + X-Sendfile
-                $this->Response()
-                    ->setHeader('Content-Type', 'application/octet-stream')
-                    ->setHeader('Content-Disposition', 'attachment; filename="' . $download['file'] . '"')
-                    ->setHeader('X-Sendfile', $filePath);
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-                $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $response = $this->Response();
+        $response->setHeader('Content-Type', $mimeType);
+        $response->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($filePath)));
+        $response->setHeader('Content-Length', $meta['size']);
+        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->sendHeaders();
+        $response->sendResponse();
 
-                break;
-            case 3:
-                // Nginx + X-Accel
-                $this->Response()
-                    ->setHeader('Content-Type', 'application/octet-stream')
-                    ->setHeader('Content-Disposition', 'attachment; filename="' . $download['file'] . '"')
-                    ->setHeader('X-Accel-Redirect', '/' . $file);
+        $upstream = $filesystem->readStream($filePath);
+        $downstream = fopen('php://output', 'wb');
 
-                $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-
-                break;
+        while (!feof($upstream)) {
+            fwrite($downstream, fread($upstream, 4096));
         }
     }
 
@@ -707,7 +693,17 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     protected function refreshBasket()
     {
-        Shopware()->Modules()->Basket()->sRefreshBasket();
+        /** @var Shopware_Components_Modules $modules */
+        $modules = $this->container->get('modules');
+        $userData = $modules->Admin()->sGetUserData();
+        $session = $this->container->get('session');
+
+        $session->offsetSet('sCountry', (int) $userData['additional']['countryShipping']['id']);
+        $session->offsetSet('sArea', (int) $userData['additional']['countryShipping']['areaID']);
+
+        $this->container->get('shopware_storefront.context_service')->initializeContext();
+
+        $modules->Basket()->sRefreshBasket();
     }
 
     /**

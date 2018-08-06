@@ -26,6 +26,8 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentsProvider implements BenchmarkProviderInterface
 {
@@ -34,9 +36,25 @@ class PaymentsProvider implements BenchmarkProviderInterface
      */
     private $dbalConnection;
 
-    public function __construct(Connection $dbalConnection)
+    /**
+     * @var int
+     */
+    private $shopId;
+
+    /**
+     * @var array
+     */
+    private $paymentIds = [];
+
+    /**
+     * @var MatcherService
+     */
+    private $matcherService;
+
+    public function __construct(Connection $dbalConnection, MatcherService $matcherService)
     {
         $this->dbalConnection = $dbalConnection;
+        $this->matcherService = $matcherService;
     }
 
     public function getName()
@@ -45,18 +63,61 @@ class PaymentsProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
+        $this->shopId = $shopContext->getShop()->getId();
+
         return [
             'activePayments' => $this->getTotalActivePayments(),
             'paymentsWithSurcharge' => $this->getPaymentsWithSurcharges(),
             'paymentsWithReduction' => $this->getPaymentsWithReduction(),
             'paymentsWithPercentagePrice' => $this->getPaymentsWithPercentagePrice(),
             'paymentsWithAbsolutePrice' => $this->getPaymentsWithAbsolutePrice(),
-            'paymentUsages' => $this->getPaymentUsages(),
+            'paymentUsages' => $this->getMatchedPaymentUsages(),
         ];
+    }
+
+    private function getMatchedPaymentUsages()
+    {
+        $paymentUsages = $this->getPaymentUsages();
+
+        $matches = [];
+        foreach ($paymentUsages as $paymentName => $usages) {
+            $match = $this->matcherService->matchString($paymentName);
+
+            if (!isset($matches[$match])) {
+                $matches[$match] = [
+                    'name' => $match,
+                    'usages' => 0,
+                ];
+            }
+
+            $matches[$match]['usages'] += $usages;
+        }
+
+        return array_values($matches);
+    }
+
+    /**
+     * @return array
+     */
+    private function getPaymentUsages()
+    {
+        $paymentIds = $this->getPossiblePaymentIds();
+
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('payments.name, COUNT(orders.id) as usages')
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_core_paymentmeans', 'payments', 'payments.id = orders.paymentID')
+            ->where('payments.id IN (:paymentIds)')
+            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
+            ->groupBy('orders.paymentID')
+            ->orderBy('usages', 'DESC')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     /**
@@ -66,9 +127,13 @@ class PaymentsProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
+        $paymentIds = $this->getPossiblePaymentIds();
+
         return (int) $queryBuilder->select('COUNT(payments.id)')
             ->from('s_core_paymentmeans', 'payments')
             ->where('payments.active = 1')
+            ->andWhere('payments.id IN (:paymentIds)')
+            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchColumn();
     }
@@ -78,9 +143,13 @@ class PaymentsProvider implements BenchmarkProviderInterface
      */
     private function getPaymentsWithSurcharges()
     {
+        $paymentIds = $this->getPossiblePaymentIds();
+
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
         $payments = $queryBuilder->select('payments.debit_percent, payments.surcharge, payments.surchargestring')
             ->from('s_core_paymentmeans', 'payments')
+            ->where('payments.id IN (:paymentIds)')
+            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll();
 
@@ -100,9 +169,13 @@ class PaymentsProvider implements BenchmarkProviderInterface
      */
     private function getPaymentsWithReduction()
     {
+        $paymentIds = $this->getPossiblePaymentIds();
+
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
         $payments = $queryBuilder->select('payments.debit_percent, payments.surcharge, payments.surchargestring')
             ->from('s_core_paymentmeans', 'payments')
+            ->where('payments.id IN (:paymentIds)')
+            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll();
 
@@ -122,11 +195,15 @@ class PaymentsProvider implements BenchmarkProviderInterface
      */
     private function getPaymentsWithPercentagePrice()
     {
+        $paymentIds = $this->getPossiblePaymentIds();
+
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
         return (int) $queryBuilder->select('COUNT(payments.id)')
             ->from('s_core_paymentmeans', 'payments')
             ->where('payments.debit_percent != 0')
+            ->andWhere('payments.id IN (:paymentIds)')
+            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchColumn();
     }
@@ -136,29 +213,17 @@ class PaymentsProvider implements BenchmarkProviderInterface
      */
     private function getPaymentsWithAbsolutePrice()
     {
+        $paymentIds = $this->getPossiblePaymentIds();
+
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
         return (int) $queryBuilder->select('COUNT(payments.id)')
             ->from('s_core_paymentmeans', 'payments')
             ->where("payments.surcharge != 0 OR payments.surchargestring != ''")
+            ->andWhere('payments.id IN (:paymentIds)')
+            ->setParameter(':paymentIds', $paymentIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchColumn();
-    }
-
-    /**
-     * @return array
-     */
-    private function getPaymentUsages()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $queryBuilder->select('orders.paymentID, payments.name, COUNT(orders.id) as usages')
-            ->from('s_order', 'orders')
-            ->leftJoin('orders', 's_core_paymentmeans', 'payments', 'payments.id = orders.paymentID')
-            ->groupBy('orders.paymentID')
-            ->orderBy('usages', 'DESC')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
     }
 
     /**
@@ -212,5 +277,27 @@ class PaymentsProvider implements BenchmarkProviderInterface
         }
 
         return [$hasSurcharge, $hasReduction];
+    }
+
+    /**
+     * @return array
+     */
+    private function getPossiblePaymentIds()
+    {
+        if (array_key_exists($this->shopId, $this->paymentIds)) {
+            return $this->paymentIds[$this->shopId];
+        }
+
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $this->paymentIds[$this->shopId] = $queryBuilder->select('DISTINCT payment.id')
+            ->from('s_core_paymentmeans', 'payment')
+            ->leftJoin('payment', 's_core_paymentmeans_subshops', 'paymentShop', 'paymentShop.paymentID = payment.id')
+            ->where('paymentShop.subshopID IS NULL or paymentShop.subshopID = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        return $this->paymentIds[$this->shopId];
     }
 }

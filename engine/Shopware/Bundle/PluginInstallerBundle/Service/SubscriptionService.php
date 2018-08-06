@@ -143,11 +143,9 @@ class SubscriptionService
         }
 
         try {
-            $secret = $this->getShopSecret();
-
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
-            return $this->getPluginInformationFromApi($secret);
+            return $this->getPluginInformationFromApi();
         } catch (ShopSecretException $e) {
             $this->resetShopSecret();
 
@@ -158,12 +156,14 @@ class SubscriptionService
     }
 
     /**
-     * @param string $secret
+     * Requests the plugin information from the store API and returns the parsed result.
      *
      * @return PluginInformationResultStruct|false
      */
-    private function getPluginInformationFromApi($secret)
+    public function getPluginInformationFromApi()
     {
+        $secret = $this->getShopSecret();
+
         $domain = $this->getDomain();
         $params = [
             'domain' => $domain,
@@ -190,6 +190,22 @@ class SubscriptionService
             },
             $data['plugins']
         );
+
+        if (isset($data['general']['missingLicenseWarningThreshold'])) {
+            $this->connection->update(
+                's_core_config_elements',
+                ['value' => serialize($data['general']['missingLicenseWarningThreshold'])],
+                ['name' => 'missingLicenseWarningThreshold', 'form_id' => 0]
+            );
+        }
+
+        if (isset($data['general']['missingLicenseStopThreshold'])) {
+            $this->connection->update(
+                's_core_config_elements',
+                ['value' => serialize($data['general']['missingLicenseStopThreshold'])],
+                ['name' => 'missingLicenseStopThreshold', 'form_id' => 0]
+            );
+        }
 
         $this->pluginLicenceService->updateLocalLicenseInformation($pluginInformationStructs, $domain);
 
@@ -260,8 +276,7 @@ class SubscriptionService
         $queryBuilder = $this->connection->createQueryBuilder();
 
         $queryBuilder->select(['plugin.name', 'plugin.version'])
-            ->from('s_core_plugins', 'plugin')
-            ->where('plugin.active = 1');
+            ->from('s_core_plugins', 'plugin');
 
         $builderExecute = $queryBuilder->execute();
 

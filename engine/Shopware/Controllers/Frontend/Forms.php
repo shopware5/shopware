@@ -118,9 +118,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mailBody = $this->replaceVariables($content['email_template']);
         $mailSubject = $this->replaceVariables($content['email_subject']);
 
+        $receivers = explode(',', $content['email']);
+        $receivers = array_map('trim', $receivers);
+
         $mail->setFrom(Shopware()->Config()->Mail);
         $mail->clearRecipients();
-        $mail->addTo($content['email']);
+        $mail->addTo($receivers);
         $mail->setBodyText($mailBody);
         $mail->setSubject($mailSubject);
 
@@ -594,7 +597,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         foreach ($fieldTranslations as $fieldTranslation) {
             $key = $fieldTranslation['objectkey'];
-            $fields[$key] = $fieldTranslation['objectdata'] + $fields[$key];
+            $translation = $fieldTranslation['objectdata'];
+
+            // If we have another field type selected in the translation and no value is translated, don't use the translation
+            if (isset($translation['typ']) && !isset($translation['value']) && $translation['typ'] !== $fields[$key]['typ']) {
+                $translation['value'] = '';
+            }
+
+            $fields[$key] = $translation + $fields[$key];
         }
 
         return $form;

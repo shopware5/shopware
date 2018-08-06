@@ -204,8 +204,19 @@ class Filter
 
         $articles = $this->getDqlHelper()->getProductsForListing($result);
 
+        $sortedData = [];
+        foreach ($result as $id) {
+            foreach ($articles as $key => $row) {
+                if ($row['Detail_id'] == $id) {
+                    $sortedData[] = $row;
+                    unset($articles[$key]);
+                    break;
+                }
+            }
+        }
+
         return [
-            'data' => $articles,
+            'data' => $sortedData,
             'total' => $totalCount,
         ];
     }

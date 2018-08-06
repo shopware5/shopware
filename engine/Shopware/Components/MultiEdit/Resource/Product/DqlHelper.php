@@ -1007,25 +1007,23 @@ class DqlHelper
             return (int) $id;
         }, $ids);
 
-        $implode = implode(',', $implode);
+        $qb = $this->em->getConnection()->createQueryBuilder();
+        $images = $qb->from('s_articles_img', 'img')
+            ->addSelect('img.articleID, img.img')
+            ->where('img.articleID IN (:ids)')
+            ->andWhere('img.main = 1')
+            ->andWhere('img.article_detail_id IS NULL')
+            ->setParameter('ids', $implode, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-        $images = $this->getDb()->fetchAll(
-            'SELECT articleID, img
-            FROM s_articles_img
-            WHERE articleID IN (?)
-            AND main = 1
-            AND article_detail_id IS NULL',
-            [$implode],
-            \PDO::FETCH_KEY_PAIR
-        );
-
-        $categories = $this->getDb()->fetchAll(
-            'SELECT DISTINCT articleID
-             FROM s_articles_categories_ro 
-             WHERE articleID IN (?)',
-            [$implode],
-            \PDO::FETCH_COLUMN
-        );
+        $qb = $this->em->getConnection()->createQueryBuilder();
+        $categories = $qb->from('s_articles_categories_ro', 'cat')
+            ->addSelect('DISTINCT articleID')
+            ->where('cat.articleID IN (:ids)')
+            ->setParameter('ids', $implode, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
 
         foreach ($articles as &$article) {
             $id = $article['Article_id'];

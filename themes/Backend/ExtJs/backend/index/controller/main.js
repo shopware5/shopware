@@ -277,14 +277,14 @@ Ext.define('Shopware.apps.Index.controller.Main', {
     },
 
     /**
-     * Helper method which checks for new Benchmark data periodically (every 15 minutes).
+     * Helper method which checks for new Benchmark data periodically (every 10 minutes).
      *
      * @private
      * @return void
      */
     checkBenchmarksStatus: function () {
         Ext.TaskManager.start({
-            interval: 900000,
+            interval: 10000,
             run: function () {
                 Ext.Ajax.request({
                     url: '{url controller=benchmark action=checkBenchmarks}',
@@ -292,7 +292,18 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         var res = Ext.decode(response.responseText);
 
                         if (res.bi) {
-                            Shopware.Notification.createGrowlMessage('{s name=title/new_benchmark}{/s}', '{s name=content/new_benchmark}{/s}');
+                            Shopware.Notification.createStickyGrowlMessage({
+                                title: '{s name=title/new_benchmark}{/s}',
+                                text: '{s name=content/new_benchmark}{/s}',
+                                btnDetail: {
+                                    text: '{s name=open}{/s}',
+                                    callback: function () {
+                                        Shopware.app.Application.addSubApplication({
+                                            name: 'Shopware.apps.Benchmark'
+                                        });
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -559,6 +570,7 @@ createShopwareVersionMessage = function() {
                     '<p><strong>Flysystem</strong><span>MIT License</span><span>&nbsp;Origin: http://flysystem.thephpleague.com</span></p>' +
                     '<p><strong>paragonie/random_compat</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/paragonie/random_compat</span></p>' +
                     '<p><strong>beberlei/assert</strong><span>License</span><span>&nbsp;Origin: https://github.com/beberlei/assert</span></p>' +
+                    '<p><strong>tedivm/jshrink</strong><span>BSD-3-Clause</span><span>&nbsp;Origin: https://github.com/tedious/JShrink</span></p>' +
                 "</p>"
         }]
     });

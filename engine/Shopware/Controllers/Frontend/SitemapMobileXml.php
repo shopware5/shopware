@@ -28,6 +28,8 @@
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ *
+ * @deprecated Will be removed in Shopware 5.6
  */
 class Shopware_Controllers_Frontend_SitemapMobileXml extends Enlight_Controller_Action
 {

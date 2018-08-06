@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Cart;
 
+use Shopware\Components\Cart\Struct\DiscountContext;
+
 /**
  * Interface BasketHelperInterface
  */
@@ -33,18 +35,16 @@ interface BasketHelperInterface
     const DISCOUNT_PERCENT = 2;
 
     /**
-     * @param int    $discountType
-     * @param float  $discountValue
-     * @param string $itemName
-     * @param int    $mode
-     * @param string $ordernumber
-     * @param float  $currencyFactor
-     * @param bool   $netPrice
+     * @param DiscountContext $discountContext
+     *
+     * @return
      */
-    public function addProportionalDiscount($discountType, $discountValue, $itemName, $mode, $ordernumber, $currencyFactor, $netPrice);
+    public function addProportionalDiscount(DiscountContext $discountContext);
 
     /**
+     * @param DiscountContext $discountContext
+     *
      * @return array
      */
-    public function getPositionPrices();
+    public function getPositionPrices(DiscountContext $discountContext);
 }

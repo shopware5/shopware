@@ -27,12 +27,12 @@ Allow: {url module=widgets controller=emotion fullPath=false}
 {/block}
 
 {block name="frontend_robots_txt_sitemap"}
-Sitemap: {url controller=index}sitemap.xml
+Sitemap: {url controller=index}sitemap_index.xml
 {/block}
 
-{block name="frontend_robots_txt_sitemap_mobile"}
-{if {config name=mobileSitemap}}
-Sitemap: {url controller=index}sitemapMobile.xml
-{/if}
-{/block}
+{*
+    @deprecated
 
+    Will be removed in 5.6 without alternative
+*}
+{block name="frontend_robots_txt_sitemap_mobile"}{/block}

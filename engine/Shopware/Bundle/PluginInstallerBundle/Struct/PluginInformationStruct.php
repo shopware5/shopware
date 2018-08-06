@@ -94,6 +94,11 @@ class PluginInformationStruct implements \JsonSerializable
     private $subscriptionUpgradeRequired = false;
 
     /**
+     * @var int
+     */
+    private $licenseQuantity;
+
+    /**
      * @param array $data
      */
     public function __construct(array $data)
@@ -109,6 +114,7 @@ class PluginInformationStruct implements \JsonSerializable
         $this->subscriptionExpiration = $data['subscriptionExpiration'];
         $this->wrongSubscription = $data['invalidVersionForSubscription'];
         $this->subscriptionUpgradeRequired = $data['pluginSubscriptionUpgradeRequired'];
+        $this->licenseQuantity = isset($data['licenseQuantity']) ? (int) $data['licenseQuantity'] : 1;
     }
 
     /**
@@ -197,6 +203,14 @@ class PluginInformationStruct implements \JsonSerializable
     public function isSubscriptionUpgradeRequired()
     {
         return $this->subscriptionUpgradeRequired;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLicenseQuantity()
+    {
+        return $this->licenseQuantity;
     }
 
     /**

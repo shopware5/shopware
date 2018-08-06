@@ -292,33 +292,15 @@ class Media extends Resource
      */
     public function load($url, $baseFilename = null)
     {
-        $projectDir = $this->getContainer()->getParameter('shopware.app.rootdir');
-        $destPath = $projectDir . 'media' . DIRECTORY_SEPARATOR . 'temp';
+        $destPath = tempnam(sys_get_temp_dir(), '');
+        unlink($destPath);
 
-        if (!is_dir($destPath)) {
-            mkdir($destPath, 0777, true);
-        }
-
-        $destPath = realpath($destPath);
-
-        if (!file_exists($destPath)) {
-            throw new \InvalidArgumentException(
-                sprintf("Destination directory '%s' does not exist.", $destPath)
-            );
-        }
-
-        if (!is_writable($destPath)) {
-            throw new \InvalidArgumentException(
-                sprintf("Destination directory '%s' does not have write permissions.", $destPath)
-            );
+        if (!@mkdir($destPath) && !is_dir($destPath)) {
+            throw new \RuntimeException(sprintf('Could not create temp directory "%s"', $destPath));
         }
 
         if (strpos($url, 'data:image') !== false) {
-            return $this->uploadBase64File(
-                $url,
-                $destPath,
-                $baseFilename
-            );
+            return $this->uploadBase64File($url, $destPath, $baseFilename);
         }
 
         $urlArray = parse_url($url);
@@ -422,7 +404,7 @@ class Media extends Resource
         $filename = $this->getUniqueFileName($destinationPath, $baseFilename);
         $filename .= '.' . $extension;
 
-        if (!$put_handle = fopen("$destinationPath/$filename", 'w+')) {
+        if (!$put_handle = fopen("$destinationPath/$filename", 'wb+')) {
             throw new \Exception("Could not open $destinationPath/$filename for writing");
         }
         while (!feof($get_handle)) {

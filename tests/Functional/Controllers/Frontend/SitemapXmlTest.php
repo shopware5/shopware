@@ -36,22 +36,6 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
     {
         $this->dispatch('/SitemapXml');
 
-        $this->assertEquals(200, $this->Response()->getHttpResponseCode());
-    }
-
-    /**
-     * Test case method
-     *
-     * @ticket 4559
-     */
-    public function testCount()
-    {
-        $response = $this->dispatch('/SitemapXml');
-        $content = $response->getBody();
-
-        $crawler = new Symfony\Component\DomCrawler\Crawler($content);
-        $crawler = $crawler->filter('url');
-
-        $this->assertGreaterThanOrEqual(40, count($crawler));
+        $this->assertEquals(302, $this->Response()->getHttpResponseCode());
     }
 }

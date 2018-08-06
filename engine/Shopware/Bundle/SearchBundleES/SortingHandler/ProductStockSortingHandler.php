@@ -53,7 +53,7 @@ class ProductStockSortingHandler implements HandlerInterface
     ) {
         /* @var ProductStockSorting $criteriaPart */
         $search->addSort(
-            new FieldSort('stock', strtolower($criteriaPart->getDirection()))
+            new FieldSort('stock', strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'keyword'])
         );
     }
 }

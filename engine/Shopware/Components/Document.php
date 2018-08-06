@@ -268,11 +268,18 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $mpdf->Output();
                 exit;
             }
-            $documentsPath = rtrim(Shopware()->Container()->getParameter('shopware.app.documentsdir'), '/');
-            $path = $documentsPath . '/' . $this->_documentHash . '.pdf';
+
+            $tmpFile = tempnam(sys_get_temp_dir(), 'document');
             $mpdf = new \Mpdf\Mpdf($mpdfConfig);
             $mpdf->WriteHTML($data);
-            $mpdf->Output($path, 'F');
+            $mpdf->Output($tmpFile, 'F');
+
+            $stream = fopen($tmpFile, 'rb');
+            $path = sprintf('documents/%s.pdf', $this->_documentHash);
+
+            $filesystem = Shopware()->Container()->get('shopware.filesystem.private');
+            $filesystem->putStream($path, $stream);
+            unlink($tmpFile);
         }
     }
 

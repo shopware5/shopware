@@ -27,6 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class AnalyticsProvider implements BenchmarkProviderInterface
 {
@@ -34,6 +35,11 @@ class AnalyticsProvider implements BenchmarkProviderInterface
      * @var Connection
      */
     private $dbalConnection;
+
+    /**
+     * @var int
+     */
+    private $shopId;
 
     public function __construct(Connection $dbalConnection)
     {
@@ -46,123 +52,136 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBenchmarkData()
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
-        return [
-            'totalVisitsYesterday' => $this->getVisitsYesterday(),
-            'totalViewsYesterday' => $this->getViewsYesterday(),
-            'visitsByDeviceYesterday' => $this->getVisitsYesterdayPerDevice(),
-            'totalVisitsByDevice' => $this->getTotalVisitsByDevice(),
-            'totalVisits' => $this->getTotalVisits(),
-            'averageShippingCostsPerOrder' => $this->getAverageShippingCostsPerOrder(),
+        $this->shopId = $shopContext->getShop()->getId();
+
+        $config = $this->getConfig();
+
+        $returnData = [
+            'list' => $this->getVisitsList((int) $config['last_analytics_id']),
+            'listByDevice' => $this->getVisitsPerDevice((int) $config['last_analytics_id']),
         ];
+
+        $this->updateLastAnalyticsId();
+
+        return $returnData;
     }
 
     /**
-     * @return int
-     */
-    private function getVisitsYesterday()
-    {
-        $queryBuilder = $this->getVisitsYesterdayQueryBuilder();
-
-        return (int) $queryBuilder->groupBy('visitors.datum')
-            ->execute()
-            ->fetchColumn();
-    }
-
-    /**
-     * @return int
-     */
-    private function getViewsYesterday()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return (int) $queryBuilder->select('SUM(visitors.pageimpressions) as pageImpressions')
-            ->from('s_statistics_visitors', 'visitors')
-            ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY')
-            ->groupBy('visitors.datum')
-            ->execute()
-            ->fetchColumn();
-    }
-
-    /**
+     * @param int $lastAnalyticsId
+     *
      * @return array
      */
-    private function getVisitsYesterdayPerDevice()
+    private function getVisitsList($lastAnalyticsId)
     {
-        $queryBuilder = $this->getVisitsYesterdayQueryBuilder();
+        $queryBuilder = $this->getVisitsListQueryBuilder($lastAnalyticsId);
 
-        $visitsPerDevice = $queryBuilder->select('visitors.deviceType, SUM(visitors.uniquevisits) as uniqueVisits')
-            ->groupBy('visitors.datum, visitors.deviceType')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $data = $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
-        $visitsPerDevice = array_map('intval', $visitsPerDevice);
+        $data = array_map(function ($item) {
+            $item['totalImpressions'] = (int) $item['totalImpressions'];
+            $item['totalUniqueVisits'] = (int) $item['totalUniqueVisits'];
+
+            return $item;
+        }, $data);
+
+        return $data;
+    }
+
+    /**
+     * @param int $lastAnalyticsId
+     *
+     * @return array
+     */
+    private function getVisitsPerDevice($lastAnalyticsId)
+    {
+        $queryBuilder = $this->getVisitsPerDeviceQueryBuilder($lastAnalyticsId);
+
+        $visitsPerDevice = $queryBuilder->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
+
+        $visitsPerDevice = array_map(function ($item) {
+            $item['totalImpressions'] = (int) $item['totalImpressions'];
+            $item['totalUniqueVisits'] = (int) $item['totalUniqueVisits'];
+
+            return $item;
+        }, $visitsPerDevice);
 
         return $visitsPerDevice;
     }
 
     /**
+     * @param int $lastAnalyticsId
+     *
      * @return QueryBuilder
      */
-    private function getVisitsYesterdayQueryBuilder()
+    private function getVisitsPerDeviceQueryBuilder($lastAnalyticsId)
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
+        return $queryBuilder
+            ->addSelect('visitors.datum as date')
+            ->addSelect('visitors.deviceType')
+            ->addSelect('SUM(visitors.pageimpressions) as totalImpressions')
+            ->addSelect('SUM(visitors.uniquevisits) as totalUniqueVisits')
             ->from('s_statistics_visitors', 'visitors')
-            ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY');
+            ->andWhere('visitors.shopID = :shopId')
+            ->andWhere('visitors.id > :lastId')
+            ->setParameter(':shopId', $this->shopId)
+            ->setParameter(':lastId', $lastAnalyticsId)
+            ->groupBy('visitors.datum, visitors.deviceType');
     }
 
     /**
-     * @return int
+     * @param int $lastAnalyticsId
+     *
+     * @return QueryBuilder
      */
-    private function getTotalVisits()
+    private function getVisitsListQueryBuilder($lastAnalyticsId)
     {
-        $queryBuilder = $this->getTotalVisitsQueryBuilder();
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return (int) $queryBuilder->execute()->fetchColumn();
+        return $queryBuilder->addSelect('visitors.datum as date')
+            ->addSelect('SUM(visitors.pageimpressions) as totalImpressions')
+            ->addSelect('SUM(visitors.uniquevisits) as totalUniqueVisits')
+            ->from('s_statistics_visitors', 'visitors')
+            ->where('visitors.shopID = :shopId')
+            ->andWhere('visitors.id > :lastId')
+            ->setParameter(':shopId', $this->shopId)
+            ->setParameter(':lastId', $lastAnalyticsId)
+            ->groupBy('visitors.datum');
+    }
+
+    private function updateLastAnalyticsId()
+    {
+        $lastAnalyticsId = $this->dbalConnection->fetchColumn('SELECT id FROM s_statistics_visitors WHERE shopID = ? ORDER BY id DESC LIMIT 1', [
+            $this->shopId,
+        ]);
+
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+        $queryBuilder->update('s_benchmark_config')
+            ->set('last_analytics_id', ':lastAnalyticsId')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->setParameter(':lastAnalyticsId', $lastAnalyticsId)
+            ->execute();
     }
 
     /**
      * @return array
      */
-    private function getTotalVisitsByDevice()
+    private function getConfig()
     {
-        $queryBuilder = $this->getTotalVisitsQueryBuilder();
+        $configsQueryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        $visitsPerDevice = $queryBuilder->select('visitors.deviceType, SUM(visitors.uniquevisits) as uniqueVisits')
-            ->groupBy('visitors.deviceType')
+        return $configsQueryBuilder->select('configs.*')
+            ->from('s_benchmark_config', 'configs')
+            ->where('configs.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        $visitsPerDevice = array_map('intval', $visitsPerDevice);
-
-        return $visitsPerDevice;
-    }
-
-    /**
-     * @return QueryBuilder
-     */
-    private function getTotalVisitsQueryBuilder()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
-            ->from('s_statistics_visitors', 'visitors');
-    }
-
-    /**
-     * @return float
-     */
-    private function getAverageShippingCostsPerOrder()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return (float) $queryBuilder->select('AVG(orders.invoice_shipping)')
-            ->from('s_order', 'orders')
-            ->execute()->fetchColumn();
+            ->fetch();
     }
 }

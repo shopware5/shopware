@@ -87,6 +87,6 @@ EOF
 
         $pluginManager->activatePlugin($plugin);
 
-        $output->writeln(sprintf('Plugin %s has been activated', $pluginName));
+        $output->writeln(sprintf('Plugin %s has been activated. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
     }
 }

@@ -197,7 +197,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         $fields = array_merge($fields, [
             'customerGroup' => ['alias' => 'groups.id', 'type' => 'int'],
             'shop' => ['alias' => 'shops.id', 'type' => 'int'],
-            'zipCode' => ['alias' => 'billing.zipcode', 'type' => 'string'],
+            'zipcode' => ['alias' => 'billing.zipcode', 'type' => 'string'],
             'city' => ['alias' => 'billing.city', 'type' => 'string'],
             'company' => ['alias' => 'billing.company', 'type' => 'string'],
         ]);
@@ -239,6 +239,18 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
                 case 'shop':
                     $sorting['property'] = 'shopId';
                     break;
+                case 'city':
+                    $sorting['property'] = 'city.raw';
+                    break;
+                case 'email':
+                    $sorting['property'] = 'email.raw';
+                    break;
+                case 'firstname':
+                    $sorting['property'] = 'firstname.raw';
+                    break;
+                case 'lastname':
+                    $sorting['property'] = 'lastname.raw';
+                    break;
             }
         }
 
@@ -249,6 +261,13 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
                     break;
                 case 'shop':
                     $condition['property'] = 'shopId';
+                    break;
+
+                case 'lastLogin':
+                case 'firstLogin':
+                    $date = new \DateTime($condition['value']);
+                    $condition['value'] = $date->format('Y-m-d');
+                    $condition['expression'] = '>=';
                     break;
             }
         }
@@ -265,6 +284,17 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
 
         $data = $query->getQuery()->getArrayResult();
 
-        return ['data' => array_values($data), 'total' => $result->getCount()];
+        $sortedData = [];
+        foreach ($ids as $id) {
+            foreach ($data as $key => $row) {
+                if ($row['id'] == $id) {
+                    $sortedData[] = $row;
+                    unset($data[$key]);
+                    break;
+                }
+            }
+        }
+
+        return ['data' => array_values($sortedData), 'total' => $result->getCount()];
     }
 }

@@ -86,7 +86,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         $groupBy = $this->buildGroupBy($criteria);
 
         if ($groupBy) {
-            $search->addPostFilter(new TermQuery($groupBy, 1));
+            $search->addPostFilter(new TermQuery($groupBy, true));
 
             /* @var VariantCondition $criteriaPart */
             $search->addPostFilter(
@@ -99,7 +99,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
             return;
         }
 
-        $search->addPostFilter(new TermQuery('isMainVariant', 1));
+        $search->addPostFilter(new TermQuery('isMainVariant', true));
 
         /* @var VariantCondition $criteriaPart */
         $search->addPostFilter(

@@ -7646,7 +7646,7 @@
 
                     // Draw all of the tick labels, tick marks, and grid lines at the correct places
                     helpers.each(itemsToDraw, function(itemToDraw, index) {
-                        // SELF
+                        // CUSTOM
                         if (isHorizontal && index % 2 === 0) {
                             var startLineValue = getLineValue(me, index, gridLines.offsetGridLines && ticks.length > 1);
                             var endLineValue = getLineValue(me, index +1, gridLines.offsetGridLines && ticks.length > 1);
@@ -7661,7 +7661,7 @@
                             context.fillRect(itemToDraw.x1, itemToDraw.y1, totalWidth, itemToDraw.y2 - itemToDraw.y1);
                             context.restore();
                         }
-                        // END SELF
+                        // END CUSTOM
 
                         if (gridLines.display) {
                             context.save();

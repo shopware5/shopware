@@ -45,6 +45,15 @@ class BenchmarkConfig extends ModelEntity
     private $id;
 
     /**
+     * The shop id for this config
+     *
+     * @var int
+     *
+     * @ORM\Column(name="shop_id", type="integer", nullable=false)
+     */
+    private $shopId;
+
+    /**
      * Defines the date and time when the statistics were sent the last time
      *
      * @var \DateTime
@@ -72,13 +81,40 @@ class BenchmarkConfig extends ModelEntity
     private $lastOrderId;
 
     /**
-     * The batch size in which orders are to be transmitted
+     * The id of the last customer that was sent to the server
      *
      * @var int
      *
-     * @ORM\Column(name="orders_batch_size", type="integer", nullable=false)
+     * @ORM\Column(name="last_customer_id", type="integer", nullable=false)
      */
-    private $ordersBatchSize;
+    private $lastCustomerId;
+
+    /**
+     * The id of the last product that was sent to the server
+     *
+     * @var int
+     *
+     * @ORM\Column(name="last_product_id", type="integer", nullable=false)
+     */
+    private $lastProductId;
+
+    /**
+     * The id of the last analytics that was sent to the server
+     *
+     * @var int
+     *
+     * @ORM\Column(name="last_analytics_id", type="integer", nullable=false)
+     */
+    private $lastAnalyticsId;
+
+    /**
+     * The batch size in which entities are to be transmitted
+     *
+     * @var int
+     *
+     * @ORM\Column(name="batch_size", type="integer", nullable=false)
+     */
+    private $batchSize;
 
     /**
      * The industry the shop is in
@@ -88,6 +124,15 @@ class BenchmarkConfig extends ModelEntity
      * @ORM\Column(name="industry", type="integer", nullable=false)
      */
     private $industry;
+
+    /**
+     * The shop type, e.g. "b2b" or "b2c"
+     *
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", nullable=false)
+     */
+    private $type;
 
     /**
      * The latest token provided by the server
@@ -115,11 +160,46 @@ class BenchmarkConfig extends ModelEntity
     private $active;
 
     /**
+     * Flag which defines if the current shop is locked for transmitting data.
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(name="locked", type="datetime", nullable=true)
+     */
+    private $locked;
+
+    /**
      * @param string $id
      */
     public function __construct($id)
     {
         $this->id = $id;
+
+        // Default values
+        $this->lastReceived = '1970-01-01 00:00:00';
+        $this->lastSent = '1970-01-01 00:00:00';
+        $this->lastOrderId = 0;
+        $this->lastCustomerId = 0;
+        $this->lastProductId = 0;
+        $this->lastAnalyticsId = 0;
+        $this->batchSize = 1000;
+        $this->active = 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
     }
 
     /**
@@ -173,17 +253,65 @@ class BenchmarkConfig extends ModelEntity
     /**
      * @return int
      */
-    public function getOrdersBatchSize()
+    public function getLastCustomerId()
     {
-        return $this->ordersBatchSize;
+        return (int) $this->lastCustomerId;
     }
 
     /**
-     * @param int $ordersBatchSize
+     * @param int $lastCustomerId
      */
-    public function setOrdersBatchSize($ordersBatchSize)
+    public function setLastCustomerId($lastCustomerId)
     {
-        $this->ordersBatchSize = (int) $ordersBatchSize;
+        $this->lastCustomerId = (int) $lastCustomerId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastProductId()
+    {
+        return (int) $this->lastProductId;
+    }
+
+    /**
+     * @param int $lastProductId
+     */
+    public function setLastProductId($lastProductId)
+    {
+        $this->lastProductId = (int) $lastProductId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastAnalyticsId()
+    {
+        return (int) $this->lastAnalyticsId;
+    }
+
+    /**
+     * @param int $lastAnalyticsId
+     */
+    public function setLastAnalyticsId($lastAnalyticsId)
+    {
+        $this->lastAnalyticsId = (int) $lastAnalyticsId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBatchSize()
+    {
+        return $this->batchSize;
+    }
+
+    /**
+     * @param int $batchSize
+     */
+    public function setBatchSize($batchSize)
+    {
+        $this->batchSize = (int) $batchSize;
     }
 
     /**
@@ -200,6 +328,22 @@ class BenchmarkConfig extends ModelEntity
     public function setIndustry($industry)
     {
         $this->industry = (int) $industry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     /**
@@ -248,6 +392,22 @@ class BenchmarkConfig extends ModelEntity
     public function setActive($active)
     {
         $this->active = (bool) $active;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
+     * @param \DateTime $locked
+     */
+    public function setLocked(\DateTime $locked)
+    {
+        $this->locked = $locked;
     }
 
     /**
