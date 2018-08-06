@@ -185,13 +185,21 @@ class OrdersProvider implements BatchableProviderInterface
             ];
             $currentHydratedOrder['customer'] = $order['customer'];
 
+            if (empty($currentHydratedOrder['customer']['shipping']['country'])) {
+                $currentHydratedOrder['customer']['shipping']['country'] = '--';
+            }
+
+            if (empty($currentHydratedOrder['customer']['billing']['country'])) {
+                $currentHydratedOrder['customer']['billing']['country'] = '--';
+            }
+
             $currentHydratedOrder['analytics'] = [
                 'device' => $order['deviceType'],
                 'referer' => $order['referer'] ? true : false,
             ];
 
             $currentHydratedOrder['shipment'] = [
-                'name' => $order['dispatch']['name'],
+                'name' => empty($order['dispatch']['name']) ? 'other' : $order['dispatch']['name'],
                 'cost' => [
                     'minPrice' => (float) $order['dispatch']['minPrice'],
                     'maxPrice' => (float) $order['dispatch']['maxPrice'],
@@ -199,7 +207,7 @@ class OrdersProvider implements BatchableProviderInterface
             ];
 
             $currentHydratedOrder['payment'] = [
-                'name' => $order['payment']['name'],
+                'name' => empty($order['payment']['name']) ? 'other' : $order['payment']['name'],
                 'cost' => [
                     'percentCosts' => (float) $order['payment']['percentCosts'],
                     'absoluteCosts' => (float) $order['payment']['absoluteCosts'],
