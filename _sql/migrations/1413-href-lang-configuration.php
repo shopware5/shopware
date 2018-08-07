@@ -46,6 +46,6 @@ class Migrations_Migration1413 extends Shopware\Components\Migrations\AbstractMi
 
         $this->addSql('SET @elementId = LAST_INSERT_ID();');
 
-        $this->addSql('INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`) VALUES (@elementId, \'2\', \'Use in href-lang language and country\', \'If this option is activated, the country is output in addition to the language, e.g. "en-GB" instead of "en"\');');
+        $this->addSql('INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`) VALUES (@elementId, \'2\', \'Use language and country in href-lang\', \'If this option is activated, the country is output in addition to the language, e.g. "en-GB" instead of "en"\');');
     }
 }
