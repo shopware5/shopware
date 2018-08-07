@@ -275,21 +275,21 @@ class DqlHelper
     }
 
     /**
-     * Returns a single row with (almost) all possibly relevant information of an article
+     * Returns a single row with (almost) all possibly relevant information of a product
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return mixed
      */
     public function getProductForListing($detailId)
     {
-        $articles = $this->getProductForListing([$detailId]);
+        $products = $this->getProductsForListing([$detailId]);
 
-        return array_shift($articles);
+        return array_shift($products);
     }
 
     /**
-     * Returns a multiple row with (almost) all possibly relevant information of articles
+     * Returns a multiple row with (almost) all possibly relevant information of products
      *
      * @param int[] $ids
      *
