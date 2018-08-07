@@ -71,6 +71,7 @@
         "ext-zend-opcache": "*"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "~5.6||~6.3",
         "phpunit/dbunit": "~2.0|| ~3.0",
         "behat/behat": "~3.4",
