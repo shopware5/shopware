@@ -848,7 +848,7 @@ class sAdmin
         $sql = '
             SELECT * FROM s_user
             WHERE password = ? AND email = ? AND id = ?
-            AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(now())-?)
+            AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(?)-?)
         ';
 
         $timeOut = $this->config->get('sUSERTIMEOUT');
@@ -860,6 +860,7 @@ class sAdmin
                 $userPassword,
                 $userMail,
                 $userId,
+                new Zend_Date(),
                 $timeOut,
             ]
         );
