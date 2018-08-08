@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Order.view.list.Navigation', {
      * Sets the width of the panel
      * @integer
      */
-    width:300,
+    width:360,
 
     /**
      * Initialed the info panel is collapsed
