@@ -511,7 +511,7 @@ class User extends ModelEntity
      *
      * @param int $roleId
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setRoleId($roleId)
     {
@@ -535,7 +535,7 @@ class User extends ModelEntity
      *
      * @param int $localeId
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setLocaleId($localeId)
     {
@@ -565,7 +565,7 @@ class User extends ModelEntity
      *
      * @param \Shopware\Models\User\Role $role
      *
-     * @return \Shopware\Models\User\User
+     * @return User
      */
     public function setRole($role)
     {
@@ -594,10 +594,14 @@ class User extends ModelEntity
 
     /**
      * @param string $encoder
+     *
+     * @return User
      */
     public function setEncoder($encoder)
     {
         $this->encoder = $encoder;
+        
+        return $this;
     }
 
     /**
