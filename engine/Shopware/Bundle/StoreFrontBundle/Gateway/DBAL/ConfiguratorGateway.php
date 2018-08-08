@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
@@ -72,7 +71,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      * @param FieldHelper                                                     $fieldHelper
      * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
-     * @param VariantHelper                                                   $variantHelper
      */
     public function __construct(
         Connection $connection,

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface;
@@ -98,7 +98,7 @@ class ProductProvider implements ProductProviderInterface
     private $configuratorService;
 
     /**
-     * @var VariantHelper
+     * @var VariantHelperInterface
      */
     private $variantHelper;
 
@@ -123,7 +123,7 @@ class ProductProvider implements ProductProviderInterface
         FieldHelper $fieldHelper,
         PropertyHydrator $propertyHydrator,
         ConfiguratorServiceInterface $configuratorService,
-        VariantHelper $variantHelper,
+        VariantHelperInterface $variantHelper,
         ProductConfigurationLoader $configurationLoader,
         ProductListingVariationLoader $visibilityLoader
     ) {
