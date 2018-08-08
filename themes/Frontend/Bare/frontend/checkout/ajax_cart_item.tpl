@@ -108,7 +108,7 @@
             <div class="item--link">
         {/if}
             {block name="frontend_checkout_ajax_cart_articlename_quantity"}
-                <span class="item--quantity">{$basketItem.quantity}x</span>
+                <span class="item--quantity">{$basketItem.quantity}{s name="AjaxCartQuantityTimes"}{/s}</span>
             {/block}
             {block name="frontend_checkout_ajax_cart_articlename_name"}
                 <span class="item--name">
