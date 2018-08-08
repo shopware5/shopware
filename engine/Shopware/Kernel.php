@@ -33,7 +33,6 @@ use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintVal
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\ConfigLoader;
-use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -43,6 +42,7 @@ use Shopware\Components\Plugin;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -645,6 +645,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $loader->load('services.xml');
         $loader->load('theme.xml');
         $loader->load('logger.xml');
+        $loader->load('commands.xml');
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Bundle/'));
         $loader->load('SearchBundle/services.xml');

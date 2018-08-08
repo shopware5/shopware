@@ -90,6 +90,8 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      * Registers Commands.
      *
      * @param Application $application An Application instance
+     *
+     * @deprecated since version 5.5, to be removed in 5.7 - Use console.command tag instead
      */
     public function registerCommands(Application $application)
     {
@@ -179,14 +181,14 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     final public function getName()
     {
-        if (null !== $this->name) {
+        if ($this->name !== null) {
             return $this->name;
         }
 
         $name = get_class($this);
         $pos = strrpos($name, '\\');
 
-        return $this->name = false === $pos ? $name : substr($name, $pos + 1);
+        return $this->name = $pos === false ? $name : substr($name, $pos + 1);
     }
 
     /**
@@ -204,7 +206,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     final public function getPath()
     {
-        if (null === $this->path) {
+        if ($this->path === null) {
             $reflected = new \ReflectionObject($this);
             $this->path = dirname($reflected->getFileName());
         }

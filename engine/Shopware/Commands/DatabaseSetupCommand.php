@@ -52,7 +52,8 @@ class DatabaseSetupCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('sw:database:setup');
+        $this->setName('sw:database:setup')
+            ->setDescription('Setups shopware database');
 
         $this->addOption(
             'steps',

@@ -139,11 +139,11 @@
 
         <!-- Transmission services -->
         <service id="shopware.benchmark_bundle.commands.send_data" class="Shopware\Bundle\BenchmarkBundle\Commands\SendStatisticsCommand">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:benchmark:send"/>
         </service>
 
         <service id="shopware.benchmark_bundle.commands.receive_data" class="Shopware\Bundle\BenchmarkBundle\Commands\ReceiveStatisticsCommand">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:benchmark:receive"/>
         </service>
 
         <service id="shopware.benchmark_bundle.bi_transmission"

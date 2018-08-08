@@ -57,12 +57,12 @@
 
         <service class="Shopware\Bundle\EsBackendBundle\Commands\IndexPopulateCommand"
                  id="shopware_es_backend.commands.index_populate_command">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:backend:index:populate"/>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Commands\SyncBacklogCommand"
                  id="shopware_es_backend.commands.sync_backlog_command">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:es:backend:sync"/>
         </service>
     </services>
 </container>

@@ -45,7 +45,8 @@ class SyncBacklogCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('sw:es:backend:sync');
+        $this->setName('sw:es:backend:sync')
+            ->setDescription('Synchronize events from the backlog to the live index.');
     }
 
     /**
