@@ -662,6 +662,30 @@ class Repository extends ModelRepository
      *
      * @return int[]
      */
+    protected function searchInOrders($term)
+    {
+        $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $query->select('orders.id');
+        $query->from('s_order', 'orders');
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'orders.ordernumber^3',
+            'orders.transactionID^1',
+            'orders.comment^0.2',
+            'orders.customercomment^0.2',
+            'orders.internalcomment^0.2',
+        ]);
+
+        $query->setMaxResults(self::SEARCH_TERM_LIMIT);
+
+        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * @param string $term
+     *
+     * @return int[]
+     */
     private function searchOrderIds($term)
     {
         $orders = $this->searchInOrders($term);
@@ -751,27 +775,4 @@ class Repository extends ModelRepository
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @param string $term
-     *
-     * @return int[]
-     */
-    private function searchInOrders($term)
-    {
-        $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $query->select('orders.id');
-        $query->from('s_order', 'orders');
-        $builder = Shopware()->Container()->get('shopware.model.search_builder');
-        $builder->addSearchTerm($query, $term, [
-            'orders.ordernumber^3',
-            'orders.transactionID^1',
-            'orders.comment^0.2',
-            'orders.customercomment^0.2',
-            'orders.internalcomment^0.2',
-        ]);
-
-        $query->setMaxResults(self::SEARCH_TERM_LIMIT);
-
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
-    }
 }
