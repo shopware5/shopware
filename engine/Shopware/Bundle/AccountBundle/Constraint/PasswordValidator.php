@@ -47,6 +47,12 @@ class PasswordValidator extends ConstraintValidator
         'default' => '',
     ];
 
+    const SNIPPET_PASSWORD_REGEX = [
+        'namespace' => 'frontend',
+        'name' => 'RegisterPasswordRegexNotMatched',
+        'default' => '',
+    ];
+
     /**
      * @var Shopware_Components_Snippet_Manager
      */
@@ -90,6 +96,14 @@ class PasswordValidator extends ConstraintValidator
 
         if (empty($password) || ($minLength && strlen($password) < $minLength)) {
             $this->addError($this->getSnippet(self::SNIPPET_PASSWORD_LENGTH));
+        }
+
+        $passwordRegex = $this->config->get('passwordRegex');
+
+        if ($passwordRegex !== '' && !empty($password) && !preg_match($passwordRegex, $password)) {
+            $regexNotMatchedError = new FormError($this->getSnippet(self::SNIPPET_PASSWORD_REGEX));
+            $regexNotMatchedError->setOrigin($form->get('password'));
+            $form->addError($regexNotMatchedError);
         }
 
         if ($form->has('passwordConfirmation') && $form->get('passwordConfirmation')->getData() !== $password) {
