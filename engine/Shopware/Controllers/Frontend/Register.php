@@ -24,6 +24,7 @@
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Shopware\Models\Customer\Address;
@@ -140,9 +141,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
 
         if ($errors['occurred']) {
-            unset($data['register']['personal']['password']);
-            unset($data['register']['personal']['passwordConfirmation']);
-            unset($data['register']['personal']['emailConfirmation']);
+            unset(
+                $data['register']['personal']['password'],
+                $data['register']['personal']['passwordConfirmation'],
+                $data['register']['personal']['emailConfirmation']
+            );
 
             $this->View()->assign('errors', $errors);
             $this->View()->assign($data);
@@ -164,6 +167,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $doubleOptInAccountless = ($accountMode === 1) && $config->get('optinaccountless');
 
         $doubleOptinRegister = $doubleOptinWithAccount || $doubleOptInAccountless;
+        $shop = $context->getShop();
+        $shop->addAttribute('sendOptinMail', new Attribute([
+            'sendOptinMail' => $doubleOptinRegister,
+        ]));
 
         $customer->setReferer((string) $session->offsetGet('sReferer'));
         $customer->setValidation((string) $data['register']['personal']['sValidation']);
@@ -173,19 +180,20 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $customer->setDoubleOptinConfirmDate(null);
 
         $registerService->register(
-            $context->getShop(),
+            $shop,
             $customer,
             $billing,
-            $shipping,
-            $doubleOptinRegister
+            $shipping
         );
 
         /*
          * Remove sensitive data before writing to the session
          */
-        unset($data['register']['personal']['password']);
-        unset($data['register']['personal']['passwordConfirmation']);
-        unset($data['register']['billing']['password']);
+        unset(
+            $data['register']['personal']['password'],
+            $data['register']['personal']['passwordConfirmation'],
+            $data['register']['billing']['password']
+        );
 
         if ($doubleOptinRegister) {
             $this->get('events')->notify(
@@ -245,7 +253,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $customer = $modelManager->find(Customer::class, $customerId);
 
         // One-Time-Account
-        if ($customer->getAccountMode() === 1) {
+        if ($data['fromCheckout'] === true || $customer->getAccountMode() === 1) {
             $redirection = [
                 'controller' => 'checkout',
                 'action' => 'confirm',

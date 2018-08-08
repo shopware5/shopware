@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Country\Country as CountryModel;
 use Shopware\Models\Country\State as StateModel;
@@ -207,9 +208,11 @@ class Customer extends Resource
         $registerService = $this->getContainer()->get('shopware_account.register_service');
         $context = $this->getContainer()->get('shopware_storefront.context_service')->getShopContext()->getShop();
 
-        $sendOptinMail = $params['sendOptinMail'] === true;
+        $context->addAttribute('sendOptinMail', new Attribute([
+            'sendOptinMail' => $params['sendOptinMail'] === true,
+        ]));
 
-        $registerService->register($context, $customer, $billing, $shipping, $sendOptinMail);
+        $registerService->register($context, $customer, $billing, $shipping);
 
         return $customer;
     }
