@@ -116,7 +116,7 @@ class AppCache extends HttpCache
         $response = parent::handle($request, $type, $catch);
 
         $response->headers->remove('cache-control');
-        $response->headers->addCacheControlDirective('no-cache');
+        $response->headers->addCacheControlDirective('no-cache, no-store');
 
         return $response;
     }
