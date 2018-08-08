@@ -4,7 +4,7 @@
         {* @deprecated *}
         {block name='frontend_detail_data_block_prices_headline'}{/block}
 
-        {$hasReferencePrice = ($sArticle.referenceprice > 0)}
+        {$hasReferencePrice = ($sArticle.referenceprice > 0 && $sArticle.referenceunit)}
 
         {block name="frontend_detail_data_block_prices_table"}
             <table class="block-prices--table">
@@ -65,7 +65,7 @@
                                                         {$blockPrice.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
                                                     </td>
                                                 {/block}
-                                                {if $hasReferencePrice}
+                                                {if $hasReferencePrice }
                                                     {block name="frontend_detail_data_block_prices_table_body_cell_reference_price"}
                                                         <td class="block-prices--cell">
                                                             {$blockPrice.referenceprice|currency}
