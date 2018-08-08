@@ -28,7 +28,7 @@ class Migrations_Migration1223 extends Shopware\Components\Migrations\AbstractMi
         $this->addSql('SET @privacyFormId = ( SELECT id FROM `s_core_config_forms` WHERE name = "Privacy" LIMIT 1 )');
 
         $sql = "INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
-                VALUES (@privacyFormId, 'anonymizeIp', '" . serialize(true) . "', 'Kunden IPs anonymisieren', 'Entfernt die letzten zwei Blöcke einer IPv4, resp. drei Blöcke einer IPv6 Adresse in Statistiken und Bestellungen, um rechtlichen Rahmenbedingungen einzuhalten.', 'boolean', 0, 40, 0);";
+                VALUES (@privacyFormId, 'anonymizeIp', '" . serialize(true) . "', 'Kunden IPs anonymisieren', 'Entfernt die letzten zwei Blöcke einer IPv4, resp. drei Blöcke einer IPv6 Adresse in Statistiken und Bestellungen, um rechtliche Rahmenbedingungen einzuhalten.', 'boolean', 0, 40, 0);";
         $this->addSql($sql);
         $this->addSql("SET @elementId = ( SELECT id FROM `s_core_config_elements` WHERE name = 'anonymizeIp' LIMIT 1 );");
 
