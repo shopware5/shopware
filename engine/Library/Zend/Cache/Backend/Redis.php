@@ -72,11 +72,6 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
     protected $_redis = null;
 
     /**
-     * @var array
-     */
-    private $release;
-
-    /**
      * @param array $options associative array of options
      *
      * @throws Zend_Cache_Exception
@@ -102,7 +97,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
             if (!array_key_exists('dbindex', $server)) {
                 $server['dbindex'] = self::DEFAULT_DBINDEX;
             }
-            if (isset($server['persistent'])) {
+            if ($server['persistent']) {
                 $result = $this->_redis->pconnect($server['host'], $server['port']);
             } else {
                 $result = $this->_redis->connect($server['host'], $server['port']);
@@ -117,7 +112,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
                 $this->_options['key_prefix'] = $options['release']->getRevision();
             }
 
-            if (isset($result)) {
+            if ($result) {
                 $this->_redis->select($server['dbindex']);
             } else {
                 $this->_redis = null;
