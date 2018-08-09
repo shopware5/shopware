@@ -168,7 +168,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from(\Shopware\Models\Site\Site::class, 'attribute')
+                      ->from('Shopware\Models\Attribute\Site', 'attribute')
                       ->where('attribute.siteId = ?1')
                       ->setParameter(1, $siteId);
 
