@@ -1010,6 +1010,8 @@
                 size = me._thumbnailOrientation === 'horizontal' ? $container.innerWidth() : $container.innerHeight();
 
             me.setThumbnailSlidePosition(me._thumbnailOffset + (size / 2), true);
+
+            $.publish('plugin/swImageSlider/onThumbnailPrevArrowClick', [ me, event ]);
         },
 
         /**
