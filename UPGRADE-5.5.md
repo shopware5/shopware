@@ -101,6 +101,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
         - `DynamicCacheTimeService`
     * Added `invalidation_date_provider` tag to the DIC
 * Added parameter mode to Log module, to directly open the systemlogs tab
+* Added a config option to set a regular expression to validate passwords during registration
 
 ### Changes
 
