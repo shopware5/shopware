@@ -186,6 +186,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         unset($data['register']['personal']['password']);
         unset($data['register']['personal']['passwordConfirmation']);
         unset($data['register']['billing']['password']);
+        unset($data['register']['billing']['passwordConfirmation']);
 
         if ($doubleOptinRegister) {
             $this->get('events')->notify(
