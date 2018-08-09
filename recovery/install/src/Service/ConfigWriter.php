@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use RuntimeException;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 
 /**
@@ -49,39 +50,31 @@ class ConfigWriter
     /**
      * @param DatabaseConnectionInformation $info
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function writeConfig(DatabaseConnectionInformation $info)
     {
-        $databaseConfigFile = $this->configPath;
-
-        $config = [
-            'db' => [],
-        ];
-
         $mapping = [
-            'databaseName' => 'dbname',
-            'hostname' => 'host',
+            'databaseName' => 'db.database',
+            'port' => 'db.port',
+            'hostname' => 'db.host',
+            'socket' => 'db.socket',
+            'username' => 'db.user',
+            'password' => 'db.password',
         ];
 
-        foreach ($info as $key => $parameter) {
-            if ($key == 'port' && empty($parameter)) {
-                continue;
-            }
-            if ($key == 'socket' && empty($parameter)) {
+        $template = file_get_contents($this->configPath . '.dist');
+
+        foreach (get_object_vars($info) as $key => $parameter) {
+            if (!isset($mapping[$key])) {
                 continue;
             }
 
-            if (isset($mapping[$key])) {
-                $key = $mapping[$key];
-            }
-
-            $config['db'][$key] = trim($parameter);
+            $template = str_replace('%' . $mapping[$key] . '%', $parameter, $template);
         }
 
-        $template = '<?php return ' . var_export($config, true) . ';';
-        if (!file_put_contents($databaseConfigFile, $template)) {
-            throw new \RuntimeException("Could not write config: $databaseConfigFile");
+        if (!file_put_contents($this->configPath, $template)) {
+            throw new RuntimeException("Could not write config: $this->configPath");
         }
     }
 }
