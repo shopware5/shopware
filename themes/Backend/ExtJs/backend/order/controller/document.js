@@ -76,30 +76,40 @@ Ext.define('Shopware.apps.Order.controller.Document', {
      * @param { Ext.data.Model } record
      */
     onDeleteDocument: function(grid, record) {
-        grid.getStore().remove(record);
-
-        Ext.Ajax.request({
-            url: '{url controller="order" action="deleteDocument"}',
-            method: 'POST',
-            params: {
-                documentId: record.get('id')
-            },
-            success: function(response) {
-                response = Ext.JSON.decode(response.responseText);
-                if (!response.success) {
-                    Shopware.Notification.createGrowlMessage(
-                        '{s name=document/attachemnt/error}Error{/s}',
-                        response.errorMessage
-                    );
+        Ext.MessageBox.confirm(
+            '{s name=document/delete/confirmation/title}Delete order document{/s}',
+            '{s name=document/delete/confirmation/message}A deleted order document cannot be restored. Do you really want to delete the document?{/s}',
+            function (clickedButton) {
+                if (clickedButton === 'no') {
+                    return;
                 }
-            },
-            failure: function(response) {
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=document/attachemnt/error}Error{/s}',
-                    response.status + '<br />' + response.statusText
-                );
+
+                grid.getStore().remove(record);
+
+                Ext.Ajax.request({
+                    url: '{url controller="order" action="deleteDocument"}',
+                    method: 'POST',
+                    params: {
+                        documentId: record.get('id')
+                    },
+                    success: function(response) {
+                        response = Ext.JSON.decode(response.responseText);
+                        if (!response.success) {
+                            Shopware.Notification.createGrowlMessage(
+                                '{s name=document/attachemnt/error}Error{/s}',
+                                response.errorMessage
+                            );
+                        }
+                    },
+                    failure: function(response) {
+                        Shopware.Notification.createGrowlMessage(
+                            '{s name=document/attachemnt/error}Error{/s}',
+                            response.status + '<br />' + response.statusText
+                        );
+                    }
+                });
             }
-        });
+        );
     },
 
     /**
@@ -141,7 +151,7 @@ Ext.define('Shopware.apps.Order.controller.Document', {
         var me = this,
             mail = Ext.create('Shopware.apps.Order.model.Mail', mail),
             documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
-        
+
         documentTypeStore.load({
             callback: function() {
                 me.mainWindow = me.getView('mail.Window').create({
