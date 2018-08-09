@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
     * `strict` does not allow to set cookies, until permissions are given
 * Added new method `hasCookiesAllowed` to the StateManager, to check that cookie permissions are given
 * Added new method `removeCookie` to `Enlight_Controller_Response_ResponseHttp` to remove specific cookie. Will be added to the interface `Enlight_Controller_Response_Response` in 5.5
+* Added support in config.php to specify TrustedHeader options for Symfony.
 
 ### Changes
 

@@ -39,6 +39,7 @@ if (!is_array($customConfig)) {
 return array_replace_recursive([
     'custom' => [],
     'trustedproxies' => [],
+    'trustedheaders' => [],
     'cdn' => [
         'backend' => 'local',
         'strategy' => 'md5',
