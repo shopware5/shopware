@@ -63,11 +63,11 @@ class Repository extends ModelRepository
             ->from($this->getEntityName(), 'form')
             ->leftJoin('form.attribute', 'attribute');
         
-        if($filter !== null) {
+        if ($filter !== null) {
             $this->addFilter($builder, $filter);
         }
         
-        if($orderBy !== null) {
+        if ($orderBy !== null) {
             $this->addOrderBy($builder, $orderBy);
         }
 
