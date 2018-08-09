@@ -113,7 +113,7 @@
             {/block}
 
             {block name='frontend_register_index_form'}
-                <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
+                <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form" id="register--form">
 
                     {* Successful optin verification *}
                     {block name='frontend_register_index_form_optin_success'}
