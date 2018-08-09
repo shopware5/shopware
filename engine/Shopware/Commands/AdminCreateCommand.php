@@ -66,7 +66,6 @@ class AdminCreateCommand extends ShopwareCommand
                 InputOption::VALUE_REQUIRED,
                 'User full name'
             )
-
             ->addOption(
                 'locale',
                 null,
@@ -80,6 +79,12 @@ class AdminCreateCommand extends ShopwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Password'
             )
+            ->addOption(
+                'password-confirm',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Password Confirmation'
+            )
         ;
     }
 
@@ -92,7 +97,8 @@ class AdminCreateCommand extends ShopwareCommand
         $this->fillOption('username', 'Username', $input, $output);
         $this->fillOption('name', 'Fullname', $input, $output);
         $this->fillOption('locale', 'Locale', $input, $output);
-        $this->fillOption('password', 'Password', $input, $output);
+        $this->fillSensitiveOption('password', 'Password', $input, $output);
+        $this->fillSensitiveOption('password-confirm', 'Password Confirmation', $input, $output);
     }
 
     /**
@@ -111,7 +117,12 @@ class AdminCreateCommand extends ShopwareCommand
         $user->setUsername($input->getOption('username'));
         $user->setName($input->getOption('name'));
         $user->setLockedUntil(new \DateTime('2010-01-01 00:00:00'));
-        $this->setPassword($user, $input->getOption('password'));
+
+        if ($this->passwordsAreValid($input)) {
+            $this->setPassword($user, $input->getOption('password'));
+        } else {
+            throw new \RuntimeException('Passwords do not match. Please try again.');
+        }
 
         $this->persistUser($user);
 
@@ -131,6 +142,22 @@ class AdminCreateCommand extends ShopwareCommand
         $input->setOption(
             $field,
             $io->ask($label, $input->getOption($field))
+        );
+    }
+
+    /**
+     * @param string          $field
+     * @param string          $label
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     */
+    private function fillSensitiveOption($field, $label, InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+
+        $input->setOption(
+            $field,
+            $io->askHidden($label, $input->getOption($field))
         );
     }
 
@@ -242,5 +269,15 @@ class AdminCreateCommand extends ShopwareCommand
         if (empty($option)) {
             throw new \InvalidArgumentException('Password is required');
         }
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return bool
+     */
+    private function passwordsAreValid(InputInterface $input)
+    {
+        return $input->getOption('password') === $input->getOption('password-confirm');
     }
 }
