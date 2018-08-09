@@ -585,7 +585,7 @@ class User extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\User|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\User
+     * @return \Shopware\Models\User\User
      */
     public function setAttribute($attribute)
     {
@@ -600,8 +600,8 @@ class User extends ModelEntity
     public function setEncoder($encoder)
     {
         $this->encoder = $encoder;
-        
-        return $this
+
+        return $this;
     }
 
     /**
