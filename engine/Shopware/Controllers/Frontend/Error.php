@@ -196,6 +196,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
     public function serviceAction()
     {
         $this->Response()->setHttpResponseCode(503);
+        $this->Response()->setHeader('Retry-After', 1800);
     }
 
     /**
