@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Country\Country as CountryModel;
 use Shopware\Models\Country\State as StateModel;
 use Shopware\Models\Customer\Address as AddressModel;
@@ -197,6 +198,8 @@ class Customer extends Resource
 
         // create models
         $customer = new CustomerModel();
+        $customer->setAttribute(new CustomerAttribute());
+
         $params = $this->prepareCustomerData($params, $customer);
         $params = $this->prepareAssociatedData($params, $customer);
         $customer->fromArray($params);
