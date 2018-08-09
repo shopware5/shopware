@@ -103,6 +103,8 @@
                  class="Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider"
                  public="false">
             <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.benchmark_bundle.matcher_payment"/>
+            <argument type="service" id="shopware.benchmark_bundle.matcher_shipping"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 

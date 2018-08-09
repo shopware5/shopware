@@ -26,6 +26,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class OrdersProvider implements BatchableProviderInterface
@@ -40,9 +41,21 @@ class OrdersProvider implements BatchableProviderInterface
      */
     private $shopId;
 
-    public function __construct(Connection $dbalConnection)
+    /**
+     * @var MatcherService
+     */
+    private $paymentMatcher;
+
+    /**
+     * @var MatcherService
+     */
+    private $shipmentMatcher;
+
+    public function __construct(Connection $dbalConnection, MatcherService $paymentMatcher, MatcherService $shipmentMatcher)
     {
         $this->dbalConnection = $dbalConnection;
+        $this->paymentMatcher = $paymentMatcher;
+        $this->shipmentMatcher = $shipmentMatcher;
     }
 
     public function getName()
@@ -199,7 +212,7 @@ class OrdersProvider implements BatchableProviderInterface
             ];
 
             $currentHydratedOrder['shipment'] = [
-                'name' => empty($order['dispatch']['name']) ? 'other' : $order['dispatch']['name'],
+                'name' => empty($order['dispatch']['name']) ? 'others' : $this->shipmentMatcher->matchString($order['dispatch']['name']),
                 'cost' => [
                     'minPrice' => (float) $order['dispatch']['minPrice'],
                     'maxPrice' => (float) $order['dispatch']['maxPrice'],
@@ -207,7 +220,7 @@ class OrdersProvider implements BatchableProviderInterface
             ];
 
             $currentHydratedOrder['payment'] = [
-                'name' => empty($order['payment']['name']) ? 'other' : $order['payment']['name'],
+                'name' => empty($order['payment']['name']) ? 'others' : $this->paymentMatcher->matchString($order['payment']['name']),
                 'cost' => [
                     'percentCosts' => (float) $order['payment']['percentCosts'],
                     'absoluteCosts' => (float) $order['payment']['absoluteCosts'],
