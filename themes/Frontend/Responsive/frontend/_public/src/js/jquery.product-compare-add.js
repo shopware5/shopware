@@ -53,12 +53,8 @@
                 return;
             }
 
-            $.overlay.open({
-                closeOnClick: false
-            });
-
             $.loadingIndicator.open({
-                openOverlay: false
+                openOverlay: true
             });
 
             $.publish('plugin/swProductCompareAdd/onAddArticleCompareBefore', [me, event]);
