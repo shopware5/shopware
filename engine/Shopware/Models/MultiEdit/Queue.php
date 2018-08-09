@@ -110,6 +110,7 @@ class Queue extends ModelEntity
     public function __construct($resource)
     {
         $this->resource = $resource;
+        $this->articleDetails = new ArrayCollection();
     }
 
     /**

@@ -311,6 +311,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $this->_shippingCosts = $this->_order['invoice_shipping'];
 
         if ($this->_shippingCostsAsPosition == true && !empty($this->_shippingCosts)) {
+            $taxes = [];
+
             if ($this->_order['taxfree']) {
                 $this->_amountNetto = $this->_amountNetto + $this->_order['invoice_shipping'];
             } else {
