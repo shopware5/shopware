@@ -38,7 +38,7 @@
                         {$url = {url controller=account action=login sTarget=$sTarget sTargetAction=$sTargetAction} }
                     {/if}
 
-                    <form name="sLogin" method="post" action="{$url}">
+                    <form name="sLogin" method="post" action="{$url}" id="login--form">
                         {block name='frontend_register_login_form_additional_inputs'}
                             {if $sTarget}<input name="sTarget" type="hidden" value="{$sTarget|escape}" />{/if}
                             {if $showNoAccount}<input name="showNoAccount" type="hidden" value="true" />{/if}
