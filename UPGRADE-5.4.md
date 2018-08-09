@@ -64,6 +64,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
   * Added Cronjob, which deletes every registered but not verified user after a configurable amount of days
   * Added two new Smarty-Blocks in `frontend/register/index.tpl`: `frontend_register_index_form_optin_success` & `frontend_register_index_form_optin_invalid_hash`
 * Added new Cronjob `OptinCleanup`, which uses the interval-setting from Double-Opt-In register to cleanup every shopware opt-in from the `s_core_optin` table except Double-Opt-In register
+* Added random sorting option to emotion products slider
 
 ### Changes
 
