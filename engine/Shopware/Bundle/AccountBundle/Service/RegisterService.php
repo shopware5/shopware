@@ -309,7 +309,7 @@ class RegisterService implements RegisterServiceInterface
     {
         /** @var Request $request */
         $request = Shopware()->Container()->get('front')->Request();
-        $fromCheckout = ($request->getParam('sTarget') === 'checkout');
+        $fromCheckout = ($request && $request->getParam('sTarget') === 'checkout');
 
         $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`)
                 VALUES ('swRegister', ?, ?, ?)";
@@ -318,11 +318,11 @@ class RegisterService implements RegisterServiceInterface
         $storedData = [
             'customerId' => $customer->getId(),
             'register' => [
-                    'billing' => [
-                            'firstname' => $customer->getFirstname(),
-                            'lastname' => $customer->getLastname(),
-                            'salutation' => $customer->getSalutation(),
-                        ],
+                'billing' => [
+                    'firstname' => $customer->getFirstname(),
+                    'lastname' => $customer->getLastname(),
+                    'salutation' => $customer->getSalutation(),
+                    ],
                 ],
             'fromCheckout' => $fromCheckout,
         ];
