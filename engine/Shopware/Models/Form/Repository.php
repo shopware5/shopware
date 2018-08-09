@@ -51,22 +51,23 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array $filter
+     * @param null $filter
      * @param null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListQueryBuilder($filter = [], $orderBy = null)
+    public function getListQueryBuilder($filter = null, $orderBy = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['form', 'attribute'])
             ->from($this->getEntityName(), 'form')
             ->leftJoin('form.attribute', 'attribute');
         
-        $this->addFilter($builder, $filter);
-
-        if($orderBy !== null)
-        {
+        if($filter !== null) {
+            $this->addFilter($builder, $filter);
+        }
+        
+        if($orderBy !== null) {
             $this->addOrderBy($builder, $orderBy);
         }
 
