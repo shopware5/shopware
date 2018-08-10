@@ -1,7 +1,7 @@
 {block name='frontend_detail_data_block_prices_start'}
     <div class="block-prices--container{if $hidden && !$sArticle.selected} is--hidden{/if} block-price--{$sArticle.ordernumber}">
 
-        {$hasReferencePrice = ($sArticle.referenceprice > 0)}
+        {$hasReferencePrice = ($sArticle.referenceprice > 0 && $sArticle.referenceunit)}
 
         {block name="frontend_detail_data_block_prices_table"}
             <table class="block-prices--table">
