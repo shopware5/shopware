@@ -40,14 +40,15 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
     /**
      * @var array List of all added prefix paths
      */
-    protected $prefixPaths = array();
+    protected $prefixPaths = [];
 
     /**
      * Returns the instance of the passed plugin name.
      *
-     * @param $name
-     * @param bool $throwException
-     * @return  Enlight_Plugin_Bootstrap
+     * @param string $name
+     * @param bool   $throwException
+     *
+     * @return Enlight_Plugin_Bootstrap
      */
     public function get($name, $throwException = true)
     {
@@ -60,9 +61,9 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
     /**
      * Adds a prefix path to the plugin namespace. Is used for the auto loading of plugins.
      *
-     * @throws  Enlight_Exception
      * @param   string $prefix
      * @param   string $path
+     *
      * @return  Enlight_Plugin_Namespace
      */
     public function addPrefixPath($prefix, $path)
@@ -70,6 +71,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
         $prefix = trim($prefix, '_');
         $path = Enlight_Loader::realpath($path) . DIRECTORY_SEPARATOR;
         $this->prefixPaths[$path] = $prefix;
+
         return $this;
     }
 
@@ -79,6 +81,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      * @param   string      $name
      * @param   string      $prefix
      * @param   string|null $file
+     *
      * @return  Enlight_Plugin_Namespace_Loader
      */
     protected function initPlugin($name, $prefix, $file = null)
@@ -96,9 +99,11 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
     /**
      * Loads a plugin in the plugin namespace by name.
      *
-     * @param   $name
-     * @param   $throwException
+     * @param   string $name
+     * @param   bool   $throwException
+     *
      * @throws  Enlight_Exception
+     *
      * @return  Enlight_Plugin_PluginCollection
      */
     public function load($name, $throwException = true)
@@ -138,5 +143,37 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
             }
         }
         return $this;
+    }
+
+    /**
+     * @return Enlight_Controller_Plugins_Json_Bootstrap
+     */
+    public function Json()
+    {
+        return $this->get(__FUNCTION__);
+    }
+
+    /**
+     * @return Enlight_Controller_Plugins_ViewRenderer_Bootstrap
+     */
+    public function ViewRenderer()
+    {
+        return $this->get(__FUNCTION__);
+    }
+
+    /**
+     * @return Enlight_Controller_Plugins_ScriptRenderer_Bootstrap
+     */
+    public function ScriptRenderer()
+    {
+        return $this->get(__FUNCTION__);
+    }
+
+    /**
+     * @return Enlight_Controller_Plugins_JsonRequest_Bootstrap
+     */
+    public function JsonRequest()
+    {
+        return $this->get(__FUNCTION__);
     }
 }
