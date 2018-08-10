@@ -431,6 +431,7 @@
 
             StateManager.updatePlugin('*[data-product-slider="true"]', 'swProductSlider');
             StateManager.updatePlugin('*[data-image-slider="true"]', 'swImageSlider');
+            StateManager.updatePlugin('*[data-modalbox="true"]', 'swModalbox');
 
             window.picturefill();
 
