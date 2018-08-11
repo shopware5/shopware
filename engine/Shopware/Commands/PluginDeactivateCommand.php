@@ -25,9 +25,11 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -49,6 +51,12 @@ class PluginDeactivateCommand extends ShopwareCommand
                 'plugin',
                 InputArgument::REQUIRED,
                 'Name of the plugin to be deactivated.'
+            )
+            ->addOption(
+                'ignore-cache',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not clear any caches that are requested by deactivate routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> deactivates a plugin.
@@ -79,8 +87,16 @@ EOF
             return 1;
         }
 
-        $pluginManager->deactivatePlugin($plugin);
-
+        $deactivationContext = $pluginManager->deactivatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
+
+        if (empty($input->getOption('ignore-cache'))) {
+            /** @var CacheManager $cacheManager */
+            $cacheManager = $this->container->get('shopware.cache_manager');
+            $cacheTags = $deactivationContext->getScheduled();
+            if ($cacheManager->clearByTags($cacheTags)) {
+                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,6 +58,12 @@ class PluginInstallCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'Activate plugin after intallation.'
             )
+            ->addOption(
+                'ignore-cache',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not clear any caches that are requested by install/activate routines'
+            )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> installs a plugin.
 EOF
@@ -86,15 +93,26 @@ EOF
             return 1;
         }
 
-        $pluginManager->installPlugin($plugin);
-
+        $installationContext = $pluginManager->installPlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been installed successfully.', $pluginName));
-        if (!$input->getOption('activate')) {
-            return;
+
+        $activationContext = null;
+
+        if ($input->getOption('activate')) {
+            $activationContext = $pluginManager->activatePlugin($plugin);
+            $output->writeln(sprintf('Plugin %s has been activated successfully. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
         }
 
-        $pluginManager->activatePlugin($plugin);
-
-        $output->writeln(sprintf('Plugin %s has been activated successfully. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
+        if (empty($input->getOption('ignore-cache'))) {
+            /** @var CacheManager $cacheManager */
+            $cacheManager = $this->container->get('shopware.cache_manager');
+            $cacheTags = array_merge(
+                $installationContext->getScheduled(),
+                is_null($activationContext) ? [] : $activationContext->getScheduled()
+            );
+            if ($cacheManager->clearByTags($cacheTags)) {
+                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+            }
+        }
     }
 }

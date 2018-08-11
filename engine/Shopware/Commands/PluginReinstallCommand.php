@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\CacheManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -44,11 +45,18 @@ class PluginReinstallCommand extends ShopwareCommand
                 'plugin',
                 InputArgument::REQUIRED,
                 'Name of the plugin to be installed.'
-            )->addOption(
+            )
+            ->addOption(
                 'removedata',
                 'r',
                 InputOption::VALUE_NONE,
                 'if supplied plugin data will be removed'
+            )
+            ->addOption(
+                'ignore-cache',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not clear any caches that are requested by uninstall/install/activate routines'
             );
     }
 
@@ -70,10 +78,23 @@ class PluginReinstallCommand extends ShopwareCommand
         }
 
         $removeData = $input->getOption('removedata');
-        $pluginManager->uninstallPlugin($plugin, $removeData);
-        $pluginManager->installPlugin($plugin);
-        $pluginManager->activatePlugin($plugin);
 
+        $uninstallationContext = $pluginManager->uninstallPlugin($plugin, $removeData);
+        $installationContext = $pluginManager->installPlugin($plugin);
+        $activationContext = $pluginManager->activatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been reinstalled successfully.', $pluginName));
+
+        if (empty($input->getOption('ignore-cache'))) {
+            /** @var CacheManager $cacheManager */
+            $cacheManager = $this->container->get('shopware.cache_manager');
+            $cacheTags = array_merge(
+                $uninstallationContext->getScheduled(),
+                $installationContext->getScheduled(),
+                $activationContext->getScheduled()
+            );
+            if ($cacheManager->clearByTags($cacheTags)) {
+                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,6 +58,12 @@ class PluginUninstallCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'Keep the saved data of the plugin. (if supported)'
             )
+            ->addOption(
+                'ignore-cache',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not clear any caches that are requested by uninstall routines'
+            )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> uninstalls a plugin.
 EOF
@@ -88,8 +95,16 @@ EOF
 
         $removeData = !(bool) $input->getOption('secure');
 
-        $pluginManager->uninstallPlugin($plugin, $removeData);
-
+        $uninstallationContext = $pluginManager->uninstallPlugin($plugin, $removeData);
         $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
+
+        if (empty($input->getOption('ignore-cache'))) {
+            /** @var CacheManager $cacheManager */
+            $cacheManager = $this->container->get('shopware.cache_manager');
+            $cacheTags = $uninstallationContext->getScheduled();
+            if ($cacheManager->clearByTags($cacheTags)) {
+                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+            }
+        }
     }
 }

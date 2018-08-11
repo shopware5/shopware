@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\CacheManager;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,6 +58,12 @@ class PluginUpdateCommand extends ShopwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Batch update several plugins. Possible values are all, inactive, active, installed, uninstalled'
             )
+            ->addOption(
+                'ignore-cache',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not clear any caches that are requested by update routines'
+            )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> updates a plugin.
 EOF
@@ -80,7 +87,7 @@ EOF
 
         if (!empty($pluginNames)) {
             foreach ($pluginNames as $pluginName) {
-                $this->updatePlugin($pluginManager, $pluginName, $output);
+                $this->updatePlugin($pluginManager, $pluginName, $output, !empty($input->getOption('ignore-cache')));
             }
 
             return 0;
@@ -152,10 +159,11 @@ EOF
      * @param InstallerService $pluginManager
      * @param string           $pluginName
      * @param OutputInterface  $output
+     * @param bool             $ignoreCache
      *
      * @return int 0 if everything went fine, or an error code
      */
-    private function updatePlugin(InstallerService $pluginManager, $pluginName, OutputInterface $output)
+    private function updatePlugin(InstallerService $pluginManager, $pluginName, OutputInterface $output, $ignoreCache)
     {
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
@@ -171,9 +179,17 @@ EOF
             return 0;
         }
 
-        $pluginManager->updatePlugin($plugin);
-
+        $updateContext = $pluginManager->updatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been updated successfully.', $pluginName));
+
+        if (!$ignoreCache) {
+            /** @var CacheManager $cacheManager */
+            $cacheManager = $this->container->get('shopware.cache_manager');
+            $cacheTags = $updateContext->getScheduled();
+            if ($cacheManager->clearByTags($cacheTags)) {
+                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+            }
+        }
 
         return 0;
     }

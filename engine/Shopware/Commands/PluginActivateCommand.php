@@ -25,9 +25,11 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -49,6 +51,12 @@ class PluginActivateCommand extends ShopwareCommand
                 'plugin',
                 InputArgument::REQUIRED,
                 'Name of the plugin to be activated.'
+            )
+            ->addOption(
+                'ignore-cache',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not clear any caches that are requested by update routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> activates a plugin.
@@ -85,8 +93,16 @@ EOF
             return 1;
         }
 
-        $pluginManager->activatePlugin($plugin);
+        $activationContext = $pluginManager->activatePlugin($plugin);
+        $output->writeln(sprintf('Plugin %s has been activated.', $pluginName));
 
-        $output->writeln(sprintf('Plugin %s has been activated. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
+        if (empty($input->getOption('ignore-cache'))) {
+            /** @var CacheManager $cacheManager */
+            $cacheManager = $this->container->get('shopware.cache_manager');
+            $cacheTags = $activationContext->getScheduled();
+            if ($cacheManager->clearByTags($cacheTags)) {
+                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+            }
+        }
     }
 }
