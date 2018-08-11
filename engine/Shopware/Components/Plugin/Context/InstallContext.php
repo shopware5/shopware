@@ -24,16 +24,40 @@
 
 namespace Shopware\Components\Plugin\Context;
 
+use Shopware\Components\CacheManager;
 use Shopware\Models\Plugin\Plugin;
 
 class InstallContext implements \JsonSerializable
 {
-    const CACHE_TAG_TEMPLATE = 'template';
-    const CACHE_TAG_CONFIG = 'config';
-    const CACHE_TAG_ROUTER = 'router';
-    const CACHE_TAG_PROXY = 'proxy';
-    const CACHE_TAG_THEME = 'theme';
-    const CACHE_TAG_HTTP = 'http';
+    /**
+     * @deprecated use Shopware\Components\CacheManager::CACHE_TAG_TEMPLATE instead
+     */
+    const CACHE_TAG_TEMPLATE = CacheManager::CACHE_TAG_TEMPLATE;
+
+    /**
+     * @deprecated use Shopware\Components\CacheManager::CACHE_TAG_CONFIG instead
+     */
+    const CACHE_TAG_CONFIG = CacheManager::CACHE_TAG_CONFIG;
+
+    /**
+     * @deprecated use Shopware\Components\CacheManager::CACHE_TAG_ROUTER instead
+     */
+    const CACHE_TAG_ROUTER = CacheManager::CACHE_TAG_ROUTER;
+
+    /**
+     * @deprecated use Shopware\Components\CacheManager::CACHE_TAG_PROXY instead
+     */
+    const CACHE_TAG_PROXY = CacheManager::CACHE_TAG_PROXY;
+
+    /**
+     * @deprecated use Shopware\Components\CacheManager::CACHE_TAG_THEME instead
+     */
+    const CACHE_TAG_THEME = CacheManager::CACHE_TAG_THEME;
+
+    /**
+     * @deprecated use Shopware\Components\CacheManager::CACHE_TAG_HTTP instead
+     */
+    const CACHE_TAG_HTTP = CacheManager::CACHE_TAG_HTTP;
 
     /**
      * pre defined list to invalidate simple caches

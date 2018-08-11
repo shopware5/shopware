@@ -34,6 +34,20 @@ use Shopware\Components\Theme\PathResolver;
  */
 class CacheManager
 {
+    const CACHE_TAG_TEMPLATE = 'template';
+
+    const CACHE_TAG_CONFIG = 'config';
+
+    const CACHE_TAG_ROUTER = 'router';
+
+    const CACHE_TAG_PROXY = 'proxy';
+
+    const CACHE_TAG_THEME = 'theme';
+
+    const CACHE_TAG_HTTP = 'http';
+
+    const CACHE_TAG_SEARCH = 'search';
+
     /**
      * @var Container
      */
@@ -446,6 +460,61 @@ class CacheManager
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * Clear caches by list of CacheManager::CACHE_TAG_* items
+     *
+     * @param string[] $tags
+     *
+     * @return int
+     */
+    public function clearByTags(array $tags)
+    {
+        $count = 0;
+
+        foreach (array_unique($tags) as $tag) {
+            $count += (int) $this->clearByTag($tag);
+        }
+
+        return $count;
+    }
+
+    /**
+     * Clear cache by its tag of CacheManager::CACHE_TAG_*
+     *
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function clearByTag($tag)
+    {
+        switch ($tag) {
+            case self::CACHE_TAG_CONFIG:
+                $this->clearConfigCache();
+                break;
+            case self::CACHE_TAG_SEARCH:
+                $this->clearSearchCache();
+                break;
+            case self::CACHE_TAG_ROUTER:
+                $this->clearRewriteCache();
+                break;
+            case self::CACHE_TAG_TEMPLATE:
+                $this->clearTemplateCache();
+                break;
+            case self::CACHE_TAG_THEME:
+            case self::CACHE_TAG_HTTP:
+                $this->clearHttpCache();
+                break;
+            case self::CACHE_TAG_PROXY:
+                $this->clearProxyCache();
+                $this->clearOpCache();
+                break;
+            default:
+                return false;
+        }
+
+        return true;
     }
 
     /**

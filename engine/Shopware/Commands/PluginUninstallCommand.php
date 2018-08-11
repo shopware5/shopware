@@ -35,13 +35,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginUninstallCommand extends ShopwareCommand
+class PluginUninstallCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:uninstall')
             ->setDescription('Uninstalls a plugin.')
@@ -87,8 +89,9 @@ EOF
 
         $removeData = !(bool) $input->getOption('secure');
 
-        $pluginManager->uninstallPlugin($plugin, $removeData);
-
+        $uninstallationContext = $pluginManager->uninstallPlugin($plugin, $removeData);
         $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
+
+        $this->clearCachesIfRequested($input, $output, $uninstallationContext);
     }
 }

@@ -34,13 +34,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginActivateCommand extends ShopwareCommand
+class PluginActivateCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:activate')
             ->setDescription('Activates a plugin.')
@@ -84,8 +86,9 @@ EOF
             return 1;
         }
 
-        $pluginManager->activatePlugin($plugin);
+        $activationContext = $pluginManager->activatePlugin($plugin);
+        $output->writeln(sprintf('Plugin %s has been activated.', $pluginName));
 
-        $output->writeln(sprintf('Plugin %s has been activated. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
+        $this->clearCachesIfRequested($input, $output, $activationContext);
     }
 }

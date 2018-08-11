@@ -35,13 +35,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginInstallCommand extends ShopwareCommand
+class PluginInstallCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:install')
             ->setDescription('Installs a plugin.')
@@ -85,15 +87,16 @@ EOF
             return 1;
         }
 
-        $pluginManager->installPlugin($plugin);
-
+        $installationContext = $pluginManager->installPlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been installed successfully.', $pluginName));
-        if (!$input->getOption('activate')) {
-            return;
+
+        $activationContext = null;
+
+        if ($input->getOption('activate')) {
+            $activationContext = $pluginManager->activatePlugin($plugin);
+            $output->writeln(sprintf('Plugin %s has been activated successfully. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
         }
 
-        $pluginManager->activatePlugin($plugin);
-
-        $output->writeln(sprintf('Plugin %s has been activated successfully. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
+        $this->clearCachesIfRequested($input, $output, $installationContext, $activationContext);
     }
 }
