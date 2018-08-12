@@ -45,12 +45,12 @@ class OrdersProviderTest extends ProviderTestCase
         $resultData = $this->getBenchmarkData();
 
         $this->assertArraySubset([
-            'orderId' => '1',
+            'orderId' => 1,
             'currency' => 'EUR',
-            'shippingCosts' => '15',
+            'shippingCosts' => 15,
             'customer' => [
-                'registered' => 1,
-                'birthYear' => 1993,
+                'registered' => '1',
+                'birthYear' => '1993',
                 'birthMonth' => 1,
                 'gender' => 'male',
                 'registerDate' => '2011-11-23',
@@ -64,33 +64,33 @@ class OrdersProviderTest extends ProviderTestCase
             ],
             'analytics' => [
                 'device' => 'mobile',
-                'referer' => null,
+                'referer' => false,
             ],
             'shipment' => [
-                'name' => 'Example dispatch 3',
+                'name' => 'others',
                 'cost' => [
-                    'minPrice' => 14.00,
-                    'maxPrice' => 14.00,
+                    'minPrice' => 14,
+                    'maxPrice' => 14,
                 ],
             ],
             'payment' => [
-                'name' => 'example4',
+                'name' => 'others',
                 'cost' => [
                     'percentCosts' => 0,
                     'absoluteCosts' => 0,
-                    'absoluteCostsPerCountry' => 'DE:4;AE:-1',
+                    'absoluteCostsPerCountry' => 0,
                 ],
             ],
             'items' => [
                 [
-                    'unitPrice' => 150.00,
-                    'totalPrice' => 150.00,
+                    'unitPrice' => 150,
+                    'totalPrice' => 150,
                     'amount' => 1,
-                    'packUnit' => '',
-                    'purchaseUnit' => '',
+                    'packUnit' => null,
+                    'purchaseUnit' => null,
                 ], [
-                    'unitPrice' => 20.00,
-                    'totalPrice' => 80.00,
+                    'unitPrice' => 20,
+                    'totalPrice' => 80,
                     'amount' => 4,
                     'packUnit' => null,
                     'purchaseUnit' => null,
