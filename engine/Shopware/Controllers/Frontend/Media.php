@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Controllers_Frontend_Media extends Enlight_Controller_Action
 {
     /**

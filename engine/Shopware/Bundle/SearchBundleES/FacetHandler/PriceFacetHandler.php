@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\StatsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;

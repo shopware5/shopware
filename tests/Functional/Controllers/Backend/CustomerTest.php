@@ -67,7 +67,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $params = [
             'id' => $customer->getId(),
             'paymentId' => $debit->getId(),
-            'changed' => $customer->getChanged()->format('c')
+            'changed' => $customer->getChanged()->format('c'),
         ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
@@ -173,11 +173,11 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             'additionalAddressLine1' => 'additionalAddressLine1',
             'additionalAddressLine2' => 'additionalAddressLine2',
             'countryId' => 3,
-            'stateId' => NULL,
+            'stateId' => null,
             'phone' => '',
             'customer' => [],
             'country' => [],
-            'state' => []
+            'state' => [],
         ];
 
         $this->reset();
@@ -246,7 +246,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
                 'iban' => '456iban654',
                 'useBillingData' => true,
             ]],
-            'changed' => $dummyData->getChanged()->format('c')
+            'changed' => $dummyData->getChanged()->format('c'),
         ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');

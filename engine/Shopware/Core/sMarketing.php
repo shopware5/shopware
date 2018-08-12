@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Models\Banner\Banner;
 
@@ -563,8 +562,8 @@ class sMarketing
         if (!$getCampaigns) {
             return false;
         }
-            // Fetch all positions
-            $sql = "
+        // Fetch all positions
+        $sql = "
             SELECT id, type, description, value FROM s_campaigns_containers
             WHERE promotionID=$id
             ORDER BY position

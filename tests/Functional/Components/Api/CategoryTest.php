@@ -224,9 +224,9 @@ class CategoryTest extends TestCase
                 2 => [
                     'shopId' => 2,
                     'description' => 'Englisch',
-                    '__attribute_attribute1' => 'Attr1'
-                ]
-            ]
+                    '__attribute_attribute1' => 'Attr1',
+                ],
+            ],
         ];
         $category = $this->resource->create($categoryData);
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -238,13 +238,13 @@ class CategoryTest extends TestCase
         }
 
         $this->assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+            $category->getId(),
         ]));
 
         $this->resource->delete($category->getId());
 
         $this->assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+            $category->getId(),
         ]));
     }
 
@@ -257,9 +257,9 @@ class CategoryTest extends TestCase
                 2 => [
                     'shopId' => 2,
                     'description' => 'Englisch',
-                    '__attribute_attribute1' => 'Attr1'
-                ]
-            ]
+                    '__attribute_attribute1' => 'Attr1',
+                ],
+            ],
         ];
         $category = $this->resource->create($categoryData);
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -271,7 +271,7 @@ class CategoryTest extends TestCase
         }
 
         $this->assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+            $category->getId(),
         ]));
 
         $categoryData = [
@@ -281,9 +281,9 @@ class CategoryTest extends TestCase
                 2 => [
                     'shopId' => 2,
                     'description' => 'Englisch2',
-                    '__attribute_attribute1' => 'Attr13'
-                ]
-            ]
+                    '__attribute_attribute1' => 'Attr13',
+                ],
+            ],
         ];
         $category = $this->resource->update($category->getId(), $categoryData);
 
@@ -296,7 +296,7 @@ class CategoryTest extends TestCase
         $this->resource->delete($category->getId());
 
         $this->assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+            $category->getId(),
         ]));
     }
 }

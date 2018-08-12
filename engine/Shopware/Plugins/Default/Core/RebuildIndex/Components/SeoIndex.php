@@ -336,7 +336,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     public function countSuppliers($shopId)
     {
         $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
-        if (null === $seoSupplierConfig || $seoSupplierConfig === false) {
+        if ($seoSupplierConfig === null || $seoSupplierConfig === false) {
             return 0;
         }
 

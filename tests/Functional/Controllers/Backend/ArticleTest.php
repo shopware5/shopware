@@ -59,6 +59,15 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
+    public function tearDown()
+    {
+        parent::tearDown();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
+
+        Shopware()->Container()->get('dbal_connection')->rollBack();
+    }
+
     /**
      * Tests whether an article cannot be overwritten by a save request that bases on outdated data. (The article in the
      * database is newer than that one the request body is based on.)
@@ -111,14 +120,5 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
 
         $this->dispatch('backend/Article/save');
         $this->assertFalse($this->View()->success);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
-
-        Shopware()->Container()->get('dbal_connection')->rollBack();
     }
 }

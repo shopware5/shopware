@@ -772,5 +772,4 @@ class Repository extends ModelRepository
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
-
 }

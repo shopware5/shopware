@@ -66,11 +66,11 @@ class GenericPage extends Page implements HelperSelectorInterface
         $elements = Helper::findElements($this, [$locator], false);
         $linkElement = $elements[$locator];
 
-        if (null !== $path && empty($linkElement)) {
+        if ($path !== null && empty($linkElement)) {
             Helper::throwException(['Link expected but not found while looking for ' . $locator]);
-        } elseif (null === $path && !empty($linkElement)) {
+        } elseif ($path === null && !empty($linkElement)) {
             Helper::throwException(['Link not expected but found while looking for ' . $locator]);
-        } elseif (null === $path && empty($linkElement)) {
+        } elseif ($path === null && empty($linkElement)) {
             return;
         }
 

@@ -48,15 +48,15 @@ class MemoryLimit
      */
     public static function convertToBytes($memoryLimit)
     {
-        if ('-1' === $memoryLimit) {
+        if ($memoryLimit === '-1') {
             return -1;
         }
 
         $memoryLimit = strtolower($memoryLimit);
         $max = strtolower(ltrim($memoryLimit, '+'));
-        if (0 === strpos($max, '0x')) {
+        if (strpos($max, '0x') === 0) {
             $max = intval($max, 16);
-        } elseif (0 === strpos($max, '0')) {
+        } elseif (strpos($max, '0') === 0) {
             $max = intval($max, 8);
         } else {
             $max = (int) $max;
@@ -64,8 +64,11 @@ class MemoryLimit
 
         switch (substr($memoryLimit, -1)) {
             case 't': $max *= 1024;
+            // no break
             case 'g': $max *= 1024;
+            // no break
             case 'm': $max *= 1024;
+            // no break
             case 'k': $max *= 1024;
         }
 

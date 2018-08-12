@@ -51,9 +51,6 @@ class PresetInstaller
         $this->slugService = $slugService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function installOrUpdate(array $presetMetaData)
     {
         $modelManager = $this->presetResource->getManager();
@@ -84,9 +81,6 @@ class PresetInstaller
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function uninstall(array $presetNames)
     {
         $modelManager = $this->presetResource->getManager();

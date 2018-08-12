@@ -108,7 +108,7 @@ trait DynamicConditionParserTrait
 
         switch (true) {
             case $operator === Condition::OPERATOR_EQ:
-                if (null === $value) {
+                if ($value === null) {
                     $query->andWhere($query->expr()->isNull($field));
                     break;
                 }
@@ -117,7 +117,7 @@ trait DynamicConditionParserTrait
                 break;
 
             case $operator === Condition::OPERATOR_NEQ:
-                if (null === $value) {
+                if ($value === null) {
                     $query->andWhere($query->expr()->isNotNull($field));
                     break;
                 }

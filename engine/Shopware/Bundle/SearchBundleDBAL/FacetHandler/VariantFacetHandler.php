@@ -113,7 +113,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         }
         $options = $this->getOptions($context, $reverted, $facet);
 
-        if (null === $options) {
+        if ($options === null) {
             return null;
         }
         $actives = $this->getFilteredValues($criteria);

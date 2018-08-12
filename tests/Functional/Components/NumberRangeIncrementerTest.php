@@ -64,7 +64,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
                 $rangeName,
             ]
         );
-        $expectedNumber += 1;
+        ++$expectedNumber;
 
         $manager = new NumberRangeIncrementer($this->connection);
 

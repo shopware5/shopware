@@ -376,7 +376,7 @@ class Mail extends ModelEntity
             return false;
         }
 
-        if (null === $this->getStatus()) {
+        if ($this->getStatus() === null) {
             return false;
         }
 
@@ -394,7 +394,7 @@ class Mail extends ModelEntity
             return false;
         }
 
-        if (null === $this->getStatus()) {
+        if ($this->getStatus() === null) {
             return false;
         }
 
@@ -488,7 +488,7 @@ class Mail extends ModelEntity
      */
     public function getContext()
     {
-        if (null === $this->context) {
+        if ($this->context === null) {
             return [];
         }
 

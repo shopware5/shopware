@@ -48,6 +48,12 @@ class FloatTaxCalculationTest extends CheckoutTest
         $this->taxId = $this->connection->lastInsertId();
     }
 
+    public function tearDown()
+    {
+        parent::tearDown();
+        $this->connection->rollBack();
+    }
+
     public function testCartWithVoucher()
     {
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 7.75), 1);
@@ -76,11 +82,5 @@ class FloatTaxCalculationTest extends CheckoutTest
         $this->hasBasketItem($sBasket['content'], 'Gutschein 10 %', -10.00, -9.281, $voucherCode);
 
         $this->setConfig('proportionalTaxCalculation', false);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-        $this->connection->rollBack();
     }
 }

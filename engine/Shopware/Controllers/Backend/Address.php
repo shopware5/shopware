@@ -21,11 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
-use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Address as AddressModel;
+use Shopware\Models\Customer\Customer;
 
 class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_Application
 {

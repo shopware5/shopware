@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Models\Shop\DetachedShop;
 use Shopware\Models\Shop\Repository;
