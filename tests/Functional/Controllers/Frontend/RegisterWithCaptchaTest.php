@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Captcha\DefaultCaptcha;
 
 class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Components_Test_Plugin_TestCase

@@ -75,7 +75,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
         $this->cacheDir = $this->container->getParameter('kernel.cache_dir') . '/productexport/';
 
         if (!is_dir($this->cacheDir)) {
-            if (false === @mkdir($this->cacheDir, 0777, true)) {
+            if (@mkdir($this->cacheDir, 0777, true) === false) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $this->cacheDir));
             }
         } elseif (!is_writable($this->cacheDir)) {
@@ -101,7 +101,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
 
             /** @var $feedModel ProductFeed */
             foreach ($activeFeeds as $feedModel) {
-                if (0 === $feedModel->getInterval()) {
+                if ($feedModel->getInterval() === 0) {
                     continue;
                 }
                 $this->generateFeed($export, $feedModel);

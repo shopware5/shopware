@@ -31,11 +31,11 @@ use GuzzleHttp\Pool;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
+use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Repository;
 use Shopware_Components_Config as Config;
-use Shopware\Components\Logger;
 
 /**
  * Shopware Application

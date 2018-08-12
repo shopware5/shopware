@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 
@@ -69,7 +68,7 @@ class Shopware_Components_Translation
             if (!is_string($value)) {
                 continue;
             }
-            if ('' === trim($value)) {
+            if (trim($value) === '') {
                 unset($tmp[$tmpKey]);
             }
         }

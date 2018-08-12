@@ -86,14 +86,14 @@ class UploadMaxSizeValidator implements SubscriberInterface
     {
         $iniMax = strtolower($this->getNormalizedIniPostMaxSize());
 
-        if ('' === $iniMax) {
+        if ($iniMax === '') {
             return;
         }
 
         $max = ltrim($iniMax, '+');
-        if (0 === strpos($max, '0x')) {
+        if (strpos($max, '0x') === 0) {
             $max = intval($max, 16);
-        } elseif (0 === strpos($max, '0')) {
+        } elseif (strpos($max, '0') === 0) {
             $max = intval($max, 8);
         } else {
             $max = (int) $max;
@@ -101,8 +101,11 @@ class UploadMaxSizeValidator implements SubscriberInterface
 
         switch (substr($iniMax, -1)) {
             case 't': $max *= 1024;
+            // no break
             case 'g': $max *= 1024;
+            // no break
             case 'm': $max *= 1024;
+            // no break
             case 'k': $max *= 1024;
         }
 

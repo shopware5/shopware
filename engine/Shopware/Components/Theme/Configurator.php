@@ -172,7 +172,7 @@ class Configurator
             if ($element instanceof Form\Interfaces\Container) {
                 $this->validateConfig($element);
 
-                //check Form\Field validation
+            //check Form\Field validation
             } elseif ($element instanceof Form\Interfaces\Validate) {
                 $element->validate();
             }

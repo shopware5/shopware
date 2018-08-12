@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 require __DIR__ . '/../../autoload.php';
 
 class TestKernel extends \Shopware\Kernel

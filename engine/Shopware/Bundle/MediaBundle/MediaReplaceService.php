@@ -81,7 +81,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
             throw new WrongMediaTypeForReplaceException($media->getType());
         }
 
-        if (false === $this->mappingService->isAllowed($uploadedFileExtension)) {
+        if ($this->mappingService->isAllowed($uploadedFileExtension) === false) {
             throw new MediaFileExtensionNotAllowedException($uploadedFileExtension);
         }
 

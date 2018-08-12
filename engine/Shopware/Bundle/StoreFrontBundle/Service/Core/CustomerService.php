@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerService implements CustomerServiceInterface

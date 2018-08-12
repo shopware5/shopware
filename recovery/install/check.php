@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 error_reporting(-1);
 ini_set('display_errors', true);
 

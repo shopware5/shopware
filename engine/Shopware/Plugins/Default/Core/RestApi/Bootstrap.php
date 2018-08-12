@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use ShopwarePlugins\RestApi\Components\BasicAuthResolver;
 use ShopwarePlugins\RestApi\Components\StaticResolver;
 

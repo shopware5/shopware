@@ -99,7 +99,7 @@ class Repository extends ModelRepository
         $builder = $this->createQueryBuilder('banner');
         $builder->select(['banner', 'attribute'])
             ->leftJoin('banner.attribute', 'attribute');
-        if (null !== $filter || !empty($filter)) {
+        if ($filter !== null || !empty($filter)) {
             //filter the displayed columns with the passed filter
             $builder->andWhere('banner.categoryId = ?1')
                 ->setParameter(1, $filter);

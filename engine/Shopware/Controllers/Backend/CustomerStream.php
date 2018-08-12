@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Api\Resource\CustomerStream as CustomerStreamApi;
 use Shopware\Models\CustomerStream\CustomerStream;
 use Shopware\Models\CustomerStream\CustomerStreamRepository;

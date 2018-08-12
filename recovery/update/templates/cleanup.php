@@ -1,4 +1,4 @@
-<?php $app->render('_header.php', ['tab' => 'cleanup']) ?>
+<?php $app->render('_header.php', ['tab' => 'cleanup']); ?>
 
 <h2><?= $language['cleanup_header']; ?></h2>
 
@@ -16,7 +16,7 @@
         <tr>
             <td <?php if ($error) {
     echo 'class="error"';
-} ?>><?= $cleanupEntry ?></td>
+} ?>><?= $cleanupEntry; ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -29,7 +29,7 @@
     <div class="actions clearfix">
         <div class="fileCounterContainer is--left">
             <div class="counter">0</div>
-            <div class="description"><?= $language['deleted_files'] ?></div>
+            <div class="description"><?= $language['deleted_files']; ?></div>
         </div>
 
         <div class="clearCacheSpinner is--right">
@@ -42,8 +42,8 @@
      </div>
 
     <div class="error-message-container alert alert-error">
-        <p><?= $language['cache_clear_error'] ?></p>
+        <p><?= $language['cache_clear_error']; ?></p>
     </div>
 </form>
 
-<?php $app->render('_footer.php') ?>
+<?php $app->render('_footer.php'); ?>

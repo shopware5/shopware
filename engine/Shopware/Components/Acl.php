@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Privilege;
 use Shopware\Models\User\Resource;

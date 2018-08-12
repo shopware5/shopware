@@ -82,9 +82,9 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria              $criteria
      * @param CriteriaPartInterface $criteriaPart
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface  $context
      *
      * @return RangeQuery
      */

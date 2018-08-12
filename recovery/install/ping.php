@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 echo 'pong';
 
 header('HTTP/1.1 200 OK');

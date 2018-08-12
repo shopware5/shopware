@@ -65,7 +65,7 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      */
     public function addListenerService($eventName, $callback, $priority = 0)
     {
-        if (!is_array($callback) || 2 !== count($callback)) {
+        if (!is_array($callback) || count($callback) !== 2) {
             throw new \InvalidArgumentException('Expected an array("service", "method") argument');
         }
 

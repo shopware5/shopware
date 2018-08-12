@@ -105,7 +105,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     ) {
         $properties = $this->getProperties($context, $reverted);
 
-        if (null === $properties) {
+        if ($properties === null) {
             return null;
         }
         $actives = $this->getFilteredValues($criteria);

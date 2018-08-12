@@ -56,7 +56,7 @@ class Requirements
     public function toArray()
     {
         $result = [
-            'hasIoncube'  => false,
+            'hasIoncube' => false,
             'hasErrors' => false,
             'hasWarnings' => false,
             'checks' => [],
@@ -74,9 +74,9 @@ class Requirements
             $check['group'] = (string) $requirement->group;
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
-            $check['version']  = (string) $requirement->version;
-            $check['check']   = (bool) (string) $requirement->result;
-            $check['error']    = (bool) $requirement->error;
+            $check['version'] = (string) $requirement->version;
+            $check['check'] = (bool) (string) $requirement->result;
+            $check['error'] = (bool) $requirement->error;
 
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
@@ -386,8 +386,10 @@ class Requirements
             case 'g':
                 $val *= 1024;
             /* @noinspection PhpMissingBreakStatementInspection */
+            // no break
             case 'm':
                 $val *= 1024;
+                // no break
             case 'k':
                 $val *= 1024;
         }
@@ -411,12 +413,16 @@ class Requirements
             /* @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
                 $val *= 1024;
+                // no break
             case 'GB':
                 $val *= 1024;
+                // no break
             case 'MB':
                 $val *= 1024;
+                // no break
             case 'KB':
                 $val *= 1024;
+                // no break
             case 'B':
                 $val = (float) $val;
         }

@@ -213,7 +213,7 @@ class Configuration extends BaseConfiguration
     public function setAttributeDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -245,7 +245,7 @@ class Configuration extends BaseConfiguration
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {

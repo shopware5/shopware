@@ -1,12 +1,12 @@
-<?php $app->render('_header.php') ?>
+<?php $app->render('_header.php'); ?>
 
-<h2><?= $t->t('database-import_header') ?></h2>
+<h2><?= $t->t('database-import_header'); ?></h2>
 
 <?php if ($error): ?>
     <div class="alert alert-error">
-        <?= $error ?>
+        <?= $error; ?>
     </div>
-<?php endif ?>
+<?php endif; ?>
 
 <div style="display: none;" class="alert alert-error">
     &nbsp;
@@ -32,21 +32,21 @@
 
     <div>
         <div class="install-buttons">
-            <form action="<?= $menuHelper->getNextUrl() ?>">
+            <form action="<?= $menuHelper->getNextUrl(); ?>">
                 <div class="actions clearfix">
-                    <a href="<?= $menuHelper->getPreviousUrl() ?>" id="back" class="btn btn-default btn-arrow-left"><?= $t->t('back') ?></a>
+                    <a href="<?= $menuHelper->getPreviousUrl(); ?>" id="back" class="btn btn-default btn-arrow-left"><?= $t->t('back'); ?></a>
                     <?php if ($hasSchema): ?>
-                        <a href="<?= $menuHelper->getNextUrl() ?>" id="skip-import" class="btn btn-default btn-arrow-right"><?= $t->t('database-import_skip_import') ?></a>
+                        <a href="<?= $menuHelper->getNextUrl(); ?>" id="skip-import" class="btn btn-default btn-arrow-right"><?= $t->t('database-import_skip_import'); ?></a>
                     <?php endif; ?>
-                    <a href="<?= $menuHelper->getNextUrl() ?>" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t('forward') ?></a>
+                    <a href="<?= $menuHelper->getNextUrl(); ?>" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t('forward'); ?></a>
                 </div>
             </form>
         </div>
 
         <div class="progress-actions actions clearfix install-buttons is--right">
-            <button id="start-ajax" class="btn btn-primary is--right"><?= $t->t('start_installation') ?></button>
+            <button id="start-ajax" class="btn btn-primary is--right"><?= $t->t('start_installation'); ?></button>
         </div>
     </div>
 </div>
 
-<?php $app->render('_footer.php') ?>
+<?php $app->render('_footer.php'); ?>
