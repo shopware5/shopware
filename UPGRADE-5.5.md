@@ -155,19 +155,21 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressHydrator` to correctly hydrate additionalAddressLine2
 * Changed cache warmer behaviour by implementing a new procedure, which doesn't rely on SEO urls anymore, warms new url types and allows partial warming
     * Changed HttpCacheWarmer-Module in Backend to apply the new settings
+    * Changed cache warmer to be extendable by implementing `Shopware\Components\HttpCache\UrlProvider\UrlProviderInterface` to your own UrlProvider
     * Changed sw:warm:http:cache CLI command by improving the printed information and adding new parameters:
     
-       | Parameter             | Short | Description                              |
-       | --------------------- | ----- | ---------------------------------------- |
-       | --category            | -j    | Warm up categories                       |
-       | --emotion             | -o    | Warm up emotions                         |
-       | --blog                | -g    | Warm up blog                             |
-       | --manufacturer        | -m    | Warm up manufacturer pages               |
-       | --static              | -t    | Warm up static pages                     |
-       | --product             | -p    | Warm up products                         |
-       | --variantswitch       | -d    | Warm up variant switch of configurators  |
-       | --productwithnumber   | -x    | Warm up products with number parameter   |
-       | --productwithcategory | -y    | Warm up producss with category parameter |        
+       | Parameter             | Short | Description                                   |
+       | --------------------- | ----- | --------------------------------------------- |
+       | --category            | -j    | Warm up categories                            |
+       | --emotion             | -o    | Warm up emotions                              |
+       | --blog                | -g    | Warm up blog                                  |
+       | --manufacturer        | -m    | Warm up manufacturer pages                    |
+       | --static              | -t    | Warm up static pages                          |
+       | --product             | -p    | Warm up products                              |
+       | --variantswitch       | -d    | Warm up variant switch of configurators       |
+       | --productwithnumber   | -z    | Warm up products with number parameter        |
+       | --productwithcategory | -y    | Warm up producss with category parameter      |
+       | --extensions          | -x    | Warm up all URLs provided by other extensions |
 * Changed visibility of `Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::getPluginInformationFromApi()` to public
 * Changed Double-Opt-In behaviour to redirect back into the checkout, if user registered from there
 * Changed console.command tag CompilerPass to support lazy commands.
