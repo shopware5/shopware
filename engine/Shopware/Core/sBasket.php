@@ -375,7 +375,7 @@ class sBasket
         $discount *= -1;
         $discount = round($discount, 2);
 
-        if(!$discount) {
+        if (!$discount) {
             return;
         }
         
