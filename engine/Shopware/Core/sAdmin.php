@@ -593,6 +593,7 @@ class sAdmin
                         'sViewport' => 'newsletter',
                         'action' => 'index',
                         'sConfirmation' => $hash,
+                        'module' => 'frontend',
                     ]
                 );
 
