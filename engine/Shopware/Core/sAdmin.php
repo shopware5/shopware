@@ -4003,52 +4003,56 @@ SQL;
             [$this->sSYSTEM->sUSERGROUPDATA['id'], $amount]
         );
 
-        if (!empty($basket_discount)) {
-            $percent = $basket_discount;
-            $basket_discount = round($basket_discount / 100 * ($amount * $currencyFactor), 2);
+        if (empty($basket_discount)) {
+            return;
+        }
 
-            if($basket_discount) {
-                if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                    $basket_discount_net = $basket_discount;
-                } else {
-                    $basket_discount_net = round($basket_discount / (100 + $discount_tax) * 100, 2);
-                }
-                $tax_rate = $discount_tax;
-                $basket_discount_net = $basket_discount_net * -1;
-                $basket_discount = $basket_discount * -1;
+        $percent = $basket_discount;
+        $basket_discount = round($basket_discount / 100 * ($amount * $currencyFactor), 2);
 
-                if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
-                    $this->basketHelper->addProportionalDiscount(
-                        new DiscountContext(
-                            $this->session->get('sessionId'),
-                            BasketHelperInterface::DISCOUNT_ABSOLUTE,
-                            $basket_discount,
-                            '-' . $percent . ' % ' . $discount_basket_name,
-                            $discount_basket_ordernumber,
-                            3,
-                            $this->sSYSTEM->sCurrency['factor'],
-                            !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
-                        )
-                    );
-                } else {
-                    $this->db->insert(
-                        's_order_basket',
-                        [
-                            'sessionID' => $this->session->offsetGet('sessionId'),
-                            'articlename' => '- ' . $percent . ' % ' . $discount_basket_name,
-                            'articleID' => 0,
-                            'ordernumber' => $discount_basket_ordernumber,
-                            'quantity' => 1,
-                            'price' => $basket_discount,
-                            'netprice' => $basket_discount_net,
-                            'tax_rate' => $tax_rate,
-                            'datum' => new Zend_Date(),
-                            'modus' => 3,
-                            'currencyFactor' => $currencyFactor,
-                        ]
-                    );
-                }
-            }
+        if (!$basket_discount) {
+            return;
+        }
+
+        if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
+            $basket_discount_net = $basket_discount;
+        } else {
+            $basket_discount_net = round($basket_discount / (100 + $discount_tax) * 100, 2);
+        }
+        $tax_rate = $discount_tax;
+        $basket_discount_net = $basket_discount_net * -1;
+        $basket_discount = $basket_discount * -1;
+
+        if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
+            $this->basketHelper->addProportionalDiscount(
+                new DiscountContext(
+                    $this->session->get('sessionId'),
+                    BasketHelperInterface::DISCOUNT_ABSOLUTE,
+                    $basket_discount,
+                    '-' . $percent . ' % ' . $discount_basket_name,
+                    $discount_basket_ordernumber,
+                    3,
+                    $this->sSYSTEM->sCurrency['factor'],
+                    !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
+                )
+            );
+        } else {
+            $this->db->insert(
+                's_order_basket',
+                [
+                    'sessionID' => $this->session->offsetGet('sessionId'),
+                    'articlename' => '- ' . $percent . ' % ' . $discount_basket_name,
+                    'articleID' => 0,
+                    'ordernumber' => $discount_basket_ordernumber,
+                    'quantity' => 1,
+                    'price' => $basket_discount,
+                    'netprice' => $basket_discount_net,
+                    'tax_rate' => $tax_rate,
+                    'datum' => new Zend_Date(),
+                    'modus' => 3,
+                    'currencyFactor' => $currencyFactor,
+                ]
+            );
         }
     }
 
