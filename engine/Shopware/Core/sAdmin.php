@@ -4041,7 +4041,7 @@ SQL;
                 's_order_basket',
                 [
                     'sessionID' => $this->session->offsetGet('sessionId'),
-                    'articlename' => '- ' . $percent . ' % ' . $discount_basket_name,
+                    'articlename' => '-' . $percent . ' % ' . $discount_basket_name,
                     'articleID' => 0,
                     'ordernumber' => $discount_basket_ordernumber,
                     'quantity' => 1,
