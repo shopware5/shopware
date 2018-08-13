@@ -62,16 +62,17 @@ class VariantHelper implements VariantHelperInterface
     /**
      * @var ReflectionHelper
      */
-    private $reflectionHelper;
+    protected $reflectionHelper;
 
     /**
      * @var \Shopware_Components_Config
      */
-    private $config;
+    protected $config;
+    
     /**
      * @var ListingPriceHelper
      */
-    private $listingPriceHelper;
+    protected $listingPriceHelper;
 
     /**
      * @param Connection                  $connection
@@ -225,7 +226,7 @@ class VariantHelper implements VariantHelperInterface
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    private function joinListingPrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria)
+    protected function joinListingPrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria)
     {
         if ($query->hasState(self::VARIANT_LISTING_PRICE_JOINED)) {
             return;
@@ -273,7 +274,7 @@ class VariantHelper implements VariantHelperInterface
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    private function joinSalePrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria)
+    protected function joinSalePrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria)
     {
         if ($query->hasState(self::VARIANT_LISTING_PRICE_JOINED)) {
             return;
@@ -340,7 +341,7 @@ class VariantHelper implements VariantHelperInterface
      *
      * @return string
      */
-    private function getOnSalePriceColums()
+    protected function getOnSalePriceColums()
     {
         $template = 'IFNULL(listing_price.%s, onsale_listing_price.%s) %s';
 
@@ -358,7 +359,7 @@ class VariantHelper implements VariantHelperInterface
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createListingPriceTable(Criteria $criteria, ShopContextInterface $context)
+    protected function createListingPriceTable(Criteria $criteria, ShopContextInterface $context)
     {
         $selection = $this->listingPriceHelper->getSelection($context);
 
@@ -422,7 +423,7 @@ class VariantHelper implements VariantHelperInterface
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createOnSaleListingPriceTable(Criteria $criteria, ShopContextInterface $context)
+    protected function createOnSaleListingPriceTable(Criteria $criteria, ShopContextInterface $context)
     {
         $selection = $this->listingPriceHelper->getSelection($context);
 
@@ -480,7 +481,7 @@ class VariantHelper implements VariantHelperInterface
      *
      * @return bool
      */
-    private function hasDifferentCustomerGroups(ShopContextInterface $context)
+    protected function hasDifferentCustomerGroups(ShopContextInterface $context)
     {
         return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId();
     }
@@ -488,7 +489,7 @@ class VariantHelper implements VariantHelperInterface
     /**
      * @param \Doctrine\DBAL\Query\QueryBuilder $query
      */
-    private function joinAvailableVariant(\Doctrine\DBAL\Query\QueryBuilder $query)
+    protected function joinAvailableVariant(\Doctrine\DBAL\Query\QueryBuilder $query)
     {
         $stockCondition = '';
         if ($this->config->get('hideNoInstock')) {
