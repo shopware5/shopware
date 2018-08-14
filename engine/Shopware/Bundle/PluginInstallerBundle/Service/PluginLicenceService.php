@@ -260,8 +260,7 @@ class PluginLicenceService
         $builder = $connection->createQueryBuilder();
 
         $builder->select(['license.module, license.label, license.expiration, license.license'])
-            ->from('s_core_licenses', 'license')
-            ->leftJoin('license', 's_core_plugins', 'plugin', 'plugin.name = license.module');
+            ->from('s_core_licenses', 'license');
 
         $builderExecute = $builder->execute();
 
