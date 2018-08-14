@@ -173,6 +173,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed visibility of `Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::getPluginInformationFromApi()` to public
 * Changed Double-Opt-In behaviour to redirect back into the checkout, if user registered from there
 * Changed console.command tag CompilerPass to support lazy commands.
+* Changed customer editing in backend to work also when customer is in optin mode
 
 ### Removals
 

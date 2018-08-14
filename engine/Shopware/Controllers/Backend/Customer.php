@@ -324,6 +324,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         //set parameter to the customer model.
         $customer->fromArray($params);
 
+        // If user will be activated, but the first login is still 0, because he was in doi-process
+        if ($customer->getActive() && $customer->getFirstLogin()->getTimestamp() === 0) {
+            $customer->setFirstLogin(new DateTime());
+        }
+
         $password = $this->Request()->getParam('newPassword', null);
 
         //encode the password with md5
@@ -725,6 +730,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $data['defaultBillingAddress']['salutationSnippet'] = $namespace->get($data['defaultBillingAddress']['salutation']);
         $data['defaultShippingAddress']['salutationSnippet'] = $namespace->get($data['defaultShippingAddress']['salutation']);
         $data['customerStreamIds'] = $this->fetchCustomerStreams($id);
+
+        if ($data['firstLogin'] instanceof \DateTime && $data['firstLogin']->getTimestamp() < 0) {
+            $data['firstLogin'] = new \DateTime('@0');
+        }
+
+        if ($data['lastLogin'] instanceof \DateTime && $data['lastLogin']->getTimestamp() < 0) {
+            $data['lastLogin'] = new \DateTime('@0');
+        }
 
         return $data;
     }

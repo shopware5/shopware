@@ -72,10 +72,10 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
                 lastname: { header: '{s name="column/last_name"}{/s}' },
                 zipcode: { header: '{s name="zip_code"}{/s}' },
                 city: { header: '{s name="city"}{/s}' },
-                firstLogin: { header: '{s name="first_login"}{/s}' },
-                lastLogin: { header: '{s name="lastLogin"}{/s}' },
+                firstLogin: { header: '{s name="first_login"}{/s}', renderer: this.dateRenderer },
+                lastLogin: { header: '{s name="lastLogin"}{/s}', renderer: this.dateRenderer },
                 accountMode: { header: '{s name="column/accountMode"}{/s}', renderer: this.accountModeRenderer },
-                lockedUntil: { header: '{s name="lockedUntil"}{/s}' },
+                lockedUntil: { header: '{s name="lockedUntil"}{/s}', renderer: this.dateRenderer },
                 birthday: { header: '{s name="birthday"}{/s}' }
             }
         };
@@ -121,6 +121,16 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
 
     onAddItem: function(view, rowIndex, colIndex, item, opts, record) {
         this.fireEvent('create', record);
+    },
+
+    dateRenderer: function (value) {
+        if (value && value instanceof Date) {
+            if (value.getTime() > 0) {
+                return Ext.Date.format(value, Ext.Date.defaultFormat)
+            }
+        }
+
+        return '';
     }
 });
 // {/block}
