@@ -2667,6 +2667,8 @@ SQL;
             $totalAmountNet += round($getArticles[$key]['amountnet'], 2);
 
             $getArticles[$key]['priceNumeric'] = $getArticles[$key]['price'];
+            $getArticles[$key]['amountNumeric'] = $getArticles[$key]['amount'];
+            $getArticles[$key]['amountnetNumeric'] = $getArticles[$key]['amountnet'];
             $getArticles[$key]['price'] = $this->moduleManager->Articles()
                 ->sFormatPrice($getArticles[$key]['price']);
             $getArticles[$key]['amount'] = $this->moduleManager->Articles()

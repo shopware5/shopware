@@ -34,6 +34,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new config flag **isCustomStore** for the `Shopware.apps.Base.view.element.Select` to create a store with a custom **"valueField"**.
 * Added new smarty block `widgets/emotion/index/classes` to file `widgets/emotion/index.tpl`
 * Added config `backward_compatibility.predictable_plugin_order` with default `false`. Enabling this loads plugins in alphabetical order instead of an undefined one.
+* Added numeric amounts for cart items in cart array structure
 
 ### Removals
 
@@ -158,7 +159,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added filter event `Legacy_Struct_Converter_Convert_Product_Price` to `Shopware\Components\Compatibility\LegacyStructConverter::convertProductPriceStruct`
 * Added filter event `Shopware_Components_Document_Render_FilterHtml` to `Shopware_Components_Document::render`
 * Added option to allow multiple documents of the same type for orders in `engine/Shopware/Components/Document.php`
-* Added new notify event `Shopware_Modules_Admin_GetDispatchBasket_QueryBuilder` to the sAdmin which will be fired for change the sGetDispatchBasket query builder. 
+* Added new notify event `Shopware_Modules_Admin_GetDispatchBasket_QueryBuilder` to the sAdmin which will be fired for change the sGetDispatchBasket query builder.
 * Added new notify event `Shopware_Modules_Basket_GetAmountArticles_QueryBuilder` to the sBasket which will be fired for change the sGetAmountArticles query builder.
 * Added new notify event `Shopware_Modules_Admin_GetPremiumDispatches_QueryBuilder` to the sAdmin which will be fired for change the sGetPremiumDispatches query builder.
 * Added support for multiple document type mail templates for every order document
@@ -221,7 +222,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Changed HttpCacheWarmer-Module in Backend to apply the new settings
     * Changed cache warmer to be extendable by implementing `Shopware\Components\HttpCache\UrlProvider\UrlProviderInterface` to your own UrlProvider
     * Changed sw:warm:http:cache CLI command by improving the printed information and adding new parameters:
-    
+
        | Parameter             | Short | Description                                   |
        | --------------------- | ----- | --------------------------------------------- |
        | --category            | -j    | Warm up categories                            |
@@ -239,7 +240,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed console.command tag CompilerPass to support lazy commands.
 * Changed customer editing in backend to work also when customer is in optin mode
 * Changed order mergeDocuments to send a valid Content-Type to fix downloads on some webserver configurations
-* Changed voucher restrictions to allow product numbers shorter then 5 characters 
+* Changed voucher restrictions to allow product numbers shorter then 5 characters
 * Changed download strategies to work only on local adapter
 * Changed installation process to generate a unique ESD key
 * Changed blog categories to also redirect requests when being linked to an external site
@@ -337,7 +338,7 @@ same service (see above) with id `legacy_documentid_converter` for that.
 The reason for this workaround is that MySQL 8 forces ids in foreign key constraints to be lower case.
 
 This is a problem in current systems since we have an uppercase `ID` in table `s_order_documents`.
-MySQL doesn't care if we use `ID` in the table and `id` in the constraint, but Doctrine needs both to be written 
+MySQL doesn't care if we use `ID` in the table and `id` in the constraint, but Doctrine needs both to be written
 in the same way. On new installations of Shopware 5.5 this is already the case, both are lowercase there.
 
 So in order to support MySQL 8 on updates from older Shopware versions we need to change the case of the `id` column
