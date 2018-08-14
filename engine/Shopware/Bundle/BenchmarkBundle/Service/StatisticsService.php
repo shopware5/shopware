@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
-use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollectorInterface;
 use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
 use Shopware\Bundle\BenchmarkBundle\StatisticsClientInterface;
@@ -57,21 +57,29 @@ class StatisticsService
     private $contextService;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param BenchmarkCollectorInterface $benchmarkCollector
      * @param StatisticsClientInterface   $statisticsClient
      * @param BenchmarkRepository         $benchmarkRepository
      * @param ContextServiceInterface     $contextService
+     * @param Connection                  $connection
      */
     public function __construct(
         BenchmarkCollectorInterface $benchmarkCollector,
         StatisticsClientInterface $statisticsClient,
         BenchmarkRepository $benchmarkRepository,
-        ContextServiceInterface $contextService
+        ContextServiceInterface $contextService,
+        Connection $connection
     ) {
         $this->benchmarkCollector = $benchmarkCollector;
         $this->statisticsClient = $statisticsClient;
         $this->benchmarkRepository = $benchmarkRepository;
         $this->contextService = $contextService;
+        $this->connection = $connection;
     }
 
     /**
@@ -98,16 +106,49 @@ class StatisticsService
             throw new TransmissionNotNecessaryException();
         }
 
-        $benchmarkData = json_encode($benchmarkData, true);
+        $benchmarkDataJson = json_encode($benchmarkData, true);
 
-        $request = new StatisticsRequest($benchmarkData);
+        $request = new StatisticsRequest($benchmarkDataJson);
 
         /** @var StatisticsResponse $statisticsResponse */
         $statisticsResponse = $this->statisticsClient->sendStatistics($request);
 
         $config->setToken($statisticsResponse->getToken());
+
+        $this->updateLastIds($config, $benchmarkData);
+
         $this->benchmarkRepository->save($config);
 
         return $statisticsResponse;
+    }
+
+    /**
+     * @param BenchmarkConfig $config
+     * @param array           $benchmarkData
+     */
+    private function updateLastIds(BenchmarkConfig $config, array $benchmarkData)
+    {
+        if (!empty($benchmarkData['orders']['list'])) {
+            $order = end($benchmarkData['orders']['list']);
+            $config->setLastOrderId($order['orderId']);
+        }
+
+        if (!empty($benchmarkData['customers']['list'])) {
+            $customer = end($benchmarkData['customers']['list']);
+            $config->setLastCustomerId($customer['customerId']);
+        }
+
+        if (!empty($benchmarkData['products']['list'])) {
+            $product = end($benchmarkData['products']['list']);
+            $config->setLastProductId($product['productId']);
+        }
+
+        if (!empty($benchmarkData['analytics']['list'])) {
+            $lastId = $this->connection->fetchColumn('SELECT id FROM s_statistics_visitors WHERE shopID = ? ORDER BY id DESC LIMIT 1', [
+                $config->getShopId(),
+            ]);
+
+            $config->setLastAnalyticsId($lastId);
+        }
     }
 }

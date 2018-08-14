@@ -65,8 +65,6 @@ class AnalyticsProvider implements BenchmarkProviderInterface
             'listByDevice' => $this->getVisitsPerDevice((int) $config['last_analytics_id']),
         ];
 
-        $this->updateLastAnalyticsId();
-
         return $returnData;
     }
 
@@ -153,21 +151,6 @@ class AnalyticsProvider implements BenchmarkProviderInterface
             ->setParameter(':shopId', $this->shopId)
             ->setParameter(':lastId', $lastAnalyticsId)
             ->groupBy('visitors.datum');
-    }
-
-    private function updateLastAnalyticsId()
-    {
-        $lastAnalyticsId = $this->dbalConnection->fetchColumn('SELECT id FROM s_statistics_visitors WHERE shopID = ? ORDER BY id DESC LIMIT 1', [
-            $this->shopId,
-        ]);
-
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-        $queryBuilder->update('s_benchmark_config')
-            ->set('last_analytics_id', ':lastAnalyticsId')
-            ->where('shop_id = :shopId')
-            ->setParameter(':shopId', $this->shopId)
-            ->setParameter(':lastAnalyticsId', $lastAnalyticsId)
-            ->execute();
     }
 
     /**

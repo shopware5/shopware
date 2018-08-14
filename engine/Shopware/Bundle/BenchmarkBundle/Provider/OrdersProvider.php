@@ -93,12 +93,6 @@ class OrdersProvider implements BatchableProviderInterface
         $orderData = $this->getOrderData($batch, $lastOrderId);
         $orderData = $this->hydrateData($orderData);
 
-        $lastOrder = end($orderData);
-
-        if ($lastOrder) {
-            $this->updateLastOrderId($lastOrder['orderId']);
-        }
-
         return $orderData;
     }
 
@@ -131,12 +125,44 @@ class OrdersProvider implements BatchableProviderInterface
         }
 
         foreach ($ordersBasicData as $orderId => &$basicOrder) {
+            // Dispatch has been deleted in meanwhile
+            if (!isset($dispatchData[$basicOrder['dispatchID']])) {
+                $dispatchData[$basicOrder['dispatchID']] = [
+                    'id' => 0,
+                    'name' => 'others',
+                    'minPrice' => 0,
+                    'maxPrice' => 0,
+                ];
+            }
+
+            if (!isset($paymentData[$basicOrder['paymentID']])) {
+                $paymentData[$basicOrder['paymentID']] = [
+                    'id' => 0,
+                    'name' => 'others',
+                    'percentCosts' => 0,
+                    'absoluteCosts' => 0,
+                    'absoluteCostsPerCountry' => 0,
+                ];
+            }
+
+            if (!isset($customerData[$basicOrder['userID']])) {
+                $customerData[$basicOrder['userID']] = [
+                    'id' => 0,
+                    'registered' => '0',
+                    'birthYear' => '1970',
+                    'birthMonth' => '01',
+                    'gender' => 'male',
+                    'registerDate' => '1970-01-01',
+                    'hasNewsletter' => '0',
+                ];
+            }
+
             $basicOrder['dispatch'] = $dispatchData[$basicOrder['dispatchID']];
             $basicOrder['payment'] = $paymentData[$basicOrder['paymentID']];
 
             $basicOrder['customer'] = $customerData[$basicOrder['userID']];
-            $basicOrder['customer']['billing']['country'] = $billingCountries[$orderId];
-            $basicOrder['customer']['shipping']['country'] = $shippingCountries[$orderId];
+            $basicOrder['customer']['billing']['country'] = isset($billingCountries[$orderId]) ? $billingCountries[$orderId] : '--';
+            $basicOrder['customer']['shipping']['country'] = isset($shippingCountries[$orderId]) ? $shippingCountries[$orderId] : '--';
         }
 
         return $ordersBasicData;
@@ -196,15 +222,8 @@ class OrdersProvider implements BatchableProviderInterface
                 'minutes' => (int) $dateTime->format('i'),
                 'seconds' => (int) $dateTime->format('s'),
             ];
+            $currentHydratedOrder['date_time'] = $order['ordertime'];
             $currentHydratedOrder['customer'] = $order['customer'];
-
-            if (empty($currentHydratedOrder['customer']['shipping']['country'])) {
-                $currentHydratedOrder['customer']['shipping']['country'] = '--';
-            }
-
-            if (empty($currentHydratedOrder['customer']['billing']['country'])) {
-                $currentHydratedOrder['customer']['billing']['country'] = '--';
-            }
 
             $currentHydratedOrder['analytics'] = [
                 'device' => $order['deviceType'],
@@ -337,20 +356,6 @@ class OrdersProvider implements BatchableProviderInterface
             ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetch();
-    }
-
-    /**
-     * @param int $lastOrderId
-     */
-    private function updateLastOrderId($lastOrderId)
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-        $queryBuilder->update('s_benchmark_config')
-            ->set('last_order_id', ':lastOrderId')
-            ->where('shop_id = :shopId')
-            ->setParameter(':shopId', $this->shopId)
-            ->setParameter(':lastOrderId', $lastOrderId)
-            ->execute();
     }
 
     /**
