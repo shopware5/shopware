@@ -582,7 +582,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * @return array of strings
      */
     getAllowedExtensions : function() {
-        return [ 'gif', 'png', 'jpeg', 'jpg' ]
+        return [ 'gif', 'png', 'jpeg', 'jpg', 'svg' ]
     }
 });
 //{/block}
