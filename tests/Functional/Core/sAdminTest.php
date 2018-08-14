@@ -1166,6 +1166,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 $this->assertArrayHasKey('ordernumber', $detail);
                 $this->assertArrayHasKey('articleID', $detail);
                 $this->assertArrayHasKey('articleordernumber', $detail);
+                $this->assertArrayHasKey('amountNumeric', $detail);
+                $this->assertArrayHasKey('priceNumeric', $detail);
             }
 
             // This tests SW-5653
