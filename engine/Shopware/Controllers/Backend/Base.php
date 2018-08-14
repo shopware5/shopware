@@ -1101,15 +1101,15 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $builder->select([
             'details.id',
-            'groups.name AS groupName',
-            'options.name AS optionName',
+            'config_groups.name AS groupName',
+            'config_options.name AS optionName',
         ]);
 
         $builder->from('s_articles_details', 'details');
 
         $builder->innerJoin('details', 's_article_configurator_option_relations', 'mapping', 'mapping.article_id = details.id');
-        $builder->innerJoin('mapping', 's_article_configurator_options', 'options', 'options.id = mapping.option_id');
-        $builder->innerJoin('options', 's_article_configurator_groups', 'groups', 'options.group_id = groups.id');
+        $builder->innerJoin('mapping', 's_article_configurator_options', 'config_options', 'config_options.id = mapping.option_id');
+        $builder->innerJoin('config_options', 's_article_configurator_groups', 'config_groups', 'config_options.group_id = config_groups.id');
 
         $builder->where('details.id IN (:detailsId)');
         $builder->setParameter('detailsId', $variantIds, Connection::PARAM_INT_ARRAY);
