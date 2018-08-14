@@ -105,11 +105,15 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added user attributes to PDF documents
 * Added shop selection to emotions, to limit emotion to a specific shop
 * Added block `frontend_account_order_item_status_value_custom` to `Bare/frontend/account/order_item.tpl`
+* Added new smarty blocks `frontend_checkout_cart_item_rebate_name_wrapper`, `themes/Frontend/Bare/frontend/checkout/items/rebate.tpl` and `frontend_checkout_cart_item_rebate_tax_price_wrapper` to `themes/Frontend/Bare/frontend/checkout/items/rebate.tpl`
 * Added event ``KernelEvents::TERMINATE``, which will be fired after the response has been sent, when the kernel terminates
 * Added event `Shopware_Emotion_Collect_Emotion_Component_Handlers` to add component handler on legacy plugin system
 * Added filter event `Legacy_Struct_Converter_Convert_Product_Price` to `Shopware\Components\Compatibility\LegacyStructConverter::convertProductPriceStruct`
 * Added filter event `Shopware_Components_Document_Render_FilterHtml` to `Shopware_Components_Document::render`
 * Added option to allow multiple documents of the same type for orders in `engine/Shopware/Components/Document.php`
+* Added new notify event `Shopware_Modules_Admin_GetDispatchBasket_QueryBuilder` to the sAdmin which will be fired for change the sGetDispatchBasket query builder. 
+* Added new notify event `Shopware_Modules_Basket_GetAmountArticles_QueryBuilder` to the sBasket which will be fired for change the sGetAmountArticles query builder.
+* Added new notify event `Shopware_Modules_Admin_GetPremiumDispatches_QueryBuilder` to the sAdmin which will be fired for change the sGetPremiumDispatches query builder.
 
 ### Changes
 

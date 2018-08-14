@@ -203,13 +203,23 @@ class sBasket
      */
     public function sGetAmountArticles()
     {
-        $result = $this->db->fetchRow(
-            'SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
-                FROM s_order_basket
-                WHERE sessionID = ? AND modus = 0
-                GROUP BY sessionID',
-            [$this->session->get('sessionId')]
+        $queryBuilder = $this->connection->createQueryBuilder();
+
+        $queryBuilder->select('SUM(b.quantity*(floor(b.price * 100 + .55)/100)) AS totalAmount')
+            ->from('s_order_basket', 'b')
+            ->where('sessionID = :sessionId')
+            ->andWhere('modus = 0')
+            ->groupBy('sessionID')
+            ->setParameter('sessionId', $this->session->get('sessionId'));
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Basket_GetAmountArticles_QueryBuilder',
+            [
+                'queryBuilder' => $queryBuilder,
+            ]
         );
+
+        $result = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
 
         return $result === false ? [] : $result;
     }
