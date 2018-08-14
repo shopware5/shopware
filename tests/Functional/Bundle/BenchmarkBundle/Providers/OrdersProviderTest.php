@@ -67,14 +67,14 @@ class OrdersProviderTest extends ProviderTestCase
                 'referer' => null,
             ],
             'shipment' => [
-                'name' => 'Example dispatch 3',
+                'name' => 'others',
                 'cost' => [
                     'minPrice' => 14.00,
                     'maxPrice' => 14.00,
                 ],
             ],
             'payment' => [
-                'name' => 'example4',
+                'name' => 'others',
                 'cost' => [
                     'percentCosts' => 0,
                     'absoluteCosts' => 0,
@@ -83,12 +83,14 @@ class OrdersProviderTest extends ProviderTestCase
             ],
             'items' => [
                 [
+                    'detailId' => 206,
                     'unitPrice' => 150.00,
                     'totalPrice' => 150.00,
                     'amount' => 1,
                     'packUnit' => '',
                     'purchaseUnit' => '',
                 ], [
+                    'detailId' => 207,
                     'unitPrice' => 20.00,
                     'totalPrice' => 80.00,
                     'amount' => 4,

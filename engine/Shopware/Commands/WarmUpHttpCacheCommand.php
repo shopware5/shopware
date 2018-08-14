@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\HttpCache\CacheWarmer;
+use Shopware\Components\HttpCache\UrlProvider\UrlProviderInterface;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Shop;
@@ -37,6 +38,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class WarmUpHttpCacheCommand extends ShopwareCommand
 {
     private $errorMessage = false;
+
+    /**
+     * List of UrlProvider-names that Shopware provides itself
+     *
+     * @var string[]
+     */
+    private $defaultProviderNames = ['blog', 'category', 'emotion', 'manufacturer', 'product', 'productwithcategory', 'productwithnumber', 'static', 'variantswitch'];
 
     /**
      * {@inheritdoc}
@@ -56,8 +64,9 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             ->addOption('static', 't', InputOption::VALUE_NONE, 'Warm up static pages')
             ->addOption('product', 'p', InputOption::VALUE_NONE, 'Warm up products')
             ->addOption('variantswitch', 'd', InputOption::VALUE_NONE, 'Warm up variant switch of configurators')
-            ->addOption('productwithnumber', 'x', InputOption::VALUE_NONE, 'Warm up products and variants with number parameter')
+            ->addOption('productwithnumber', 'z', InputOption::VALUE_NONE, 'Warm up products and variants with number parameter')
             ->addOption('productwithcategory', 'y', InputOption::VALUE_NONE, 'Warm up products with category parameter')
+            ->addOption('extensions', 'x', InputOption::VALUE_NONE, 'Warm up all URLs provided by other extensions')
             ->setHelp('The <info>%command.name%</info> warms up the http cache')
         ;
     }
@@ -90,7 +99,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
         }
 
         $io = new SymfonyStyle($input, $output);
-        $options = $this->prepareOptions($input->getOptions());
+        $options = $this->prepareOptions($input->getOptions(), $urlProviderFactory);
 
         // Clear cache?
         if ($input->getOption('clear-cache')) {
@@ -173,26 +182,32 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
     /**
      * Builds an array using input parameters, which is used to know what to warm up
      *
-     * @param array $input
+     * @param array                       $input
+     * @param UrlProviderFactoryInterface $factory
      *
      * @return array
      */
-    private function prepareOptions(array $input)
+    private function prepareOptions(array $input, UrlProviderFactoryInterface $factory)
     {
-        $intersectCheck = [
-            'category' => true,
-            'emotion' => true,
-            'blog' => true,
-            'manufacturer' => true,
-            'static' => true,
-            'product' => true,
-            'variantswitch' => true,
-            'productwithcategory' => true,
-            'productwithnumber' => true,
-        ];
+        $options = [];
+        $extensions = [];
+        /** @var UrlProviderInterface $provider */
+        foreach ($factory->getAllProviders() as $provider) {
+            $providerName = $provider->getName();
 
-        $options = array_intersect_key($input, $intersectCheck);
+            if (in_array($providerName, $this->defaultProviderNames, true)) {
+                $options[$providerName] = $input[$providerName];
+            } else {
+                $extensions[$providerName] = true;
+            }
+        }
 
-        return in_array(true, $options, true) ? $options : $intersectCheck;
+        if ($input['extensions'] === true) {
+            $options = array_merge($options, $extensions);
+        }
+
+        return (in_array(true, $options, true) || $input['extensions'] === true) ? $options : array_map(function () {
+            return true;
+        }, array_merge($options, $extensions));
     }
 }

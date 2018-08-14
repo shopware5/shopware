@@ -100,12 +100,6 @@ class CustomersProvider implements BatchableProviderInterface
             return $item;
         }, $customers);
 
-        $customerId = end($customerIds);
-
-        if ($customerId) {
-            $this->updateLastCustomerId(end($customerIds));
-        }
-
         return $customers;
     }
 
@@ -121,6 +115,7 @@ class CustomersProvider implements BatchableProviderInterface
 
         return $queryBuilder->select([
                 'customer.id',
+                'customer.id as customerId',
                 'customer.accountmode = 0 as registered',
                 'YEAR(customer.birthday) as birthYear',
                 'MONTH(customer.birthday) as birthMonth',
@@ -184,20 +179,6 @@ class CustomersProvider implements BatchableProviderInterface
         $customer['gender'] = 'unknown';
 
         return $customer;
-    }
-
-    /**
-     * @param int $lastCustomerId
-     */
-    private function updateLastCustomerId($lastCustomerId)
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-        $queryBuilder->update('s_benchmark_config')
-            ->set('last_customer_id', ':customerId')
-            ->where('shop_id = :shopId')
-            ->setParameter(':shopId', $this->shopId)
-            ->setParameter(':customerId', $lastCustomerId)
-            ->execute();
     }
 
     /**
