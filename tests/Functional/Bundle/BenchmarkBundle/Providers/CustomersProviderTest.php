@@ -147,7 +147,7 @@ class CustomersProviderTest extends ProviderTestCase
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_customer_id=4, batch_size=1 WHERE shop_id=1;');
 
-        $this->getBenchmarkData();
+        $this->sendStatistics();
 
         $this->assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_customer_id FROM s_benchmark_config WHERE shop_id=1'));
     }

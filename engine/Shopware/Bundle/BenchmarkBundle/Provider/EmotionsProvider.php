@@ -62,6 +62,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         $this->shopContext = $shopContext;
+        $this->emotionIds = [];
 
         return [
             'total' => $this->getTotalEmotions(),
