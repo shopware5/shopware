@@ -160,6 +160,7 @@
             <argument id="shopware.benchmark_bundle.statistics_client" type="service" />
             <argument id="shopware.benchmark_bundle.repository.config" type="service" />
             <argument id="shopware_storefront.context_service" type="service" />
+            <argument type="service" id="dbal_connection"/>
         </service>
 
         <service id="shopware.benchmark_bundle.benchmark_statistics"

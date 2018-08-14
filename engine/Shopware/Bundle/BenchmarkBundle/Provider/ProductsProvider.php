@@ -129,12 +129,6 @@ class ProductsProvider implements BatchableProviderInterface
             return $item;
         }, $basicProducts);
 
-        $lastProductId = end($productIds);
-
-        if ($lastProductId) {
-            $this->updateLastProductId($lastProductId);
-        }
-
         return array_values($basicProducts);
     }
 
@@ -149,6 +143,7 @@ class ProductsProvider implements BatchableProviderInterface
 
         return $queryBuilder->select([
             'details.articleID',
+            'details.articleID as productId',
             'details.active',
             'details.instock',
             'details.stockmin as instockMinimum',
@@ -290,19 +285,5 @@ class ProductsProvider implements BatchableProviderInterface
             ->setParameter(':shopId', $this->shopContext->getShop()->getId())
             ->execute()
             ->fetch();
-    }
-
-    /**
-     * @param string $lastProductId
-     */
-    private function updateLastProductId($lastProductId)
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-        $queryBuilder->update('s_benchmark_config')
-            ->set('last_product_id', ':lastProductId')
-            ->where('shop_id = :shopId')
-            ->setParameter(':shopId', $this->shopContext->getShop()->getId())
-            ->setParameter(':lastProductId', $lastProductId)
-            ->execute();
     }
 }
