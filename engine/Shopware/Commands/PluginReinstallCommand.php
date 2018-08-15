@@ -53,10 +53,10 @@ class PluginReinstallCommand extends ShopwareCommand
                 'if supplied plugin data will be removed'
             )
             ->addOption(
-                'ignore-cache',
-                null,
+                'clear-cache',
+                'cc',
                 InputOption::VALUE_NONE,
-                'Do not clear any caches that are requested by uninstall/install/activate routines'
+                'Clear any caches that are requested by uninstall/install/activate routines'
             );
     }
 
@@ -84,7 +84,7 @@ class PluginReinstallCommand extends ShopwareCommand
         $activationContext = $pluginManager->activatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been reinstalled successfully.', $pluginName));
 
-        if (empty($input->getOption('ignore-cache'))) {
+        if (!empty($input->getOption('clear-cache'))) {
             /** @var CacheManager $cacheManager */
             $cacheManager = $this->container->get('shopware.cache_manager');
             $cacheTags = array_merge(

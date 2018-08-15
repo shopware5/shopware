@@ -59,10 +59,10 @@ class PluginInstallCommand extends ShopwareCommand
                 'Activate plugin after intallation.'
             )
             ->addOption(
-                'ignore-cache',
-                null,
+                'clear-cache',
+                'cc',
                 InputOption::VALUE_NONE,
-                'Do not clear any caches that are requested by install/activate routines'
+                'Clear any caches that are requested by install/activate routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> installs a plugin.
@@ -103,7 +103,7 @@ EOF
             $output->writeln(sprintf('Plugin %s has been activated successfully. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
         }
 
-        if (empty($input->getOption('ignore-cache'))) {
+        if (!empty($input->getOption('clear-cache'))) {
             /** @var CacheManager $cacheManager */
             $cacheManager = $this->container->get('shopware.cache_manager');
             $cacheTags = array_merge(

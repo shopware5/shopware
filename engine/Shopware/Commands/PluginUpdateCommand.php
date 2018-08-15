@@ -59,10 +59,10 @@ class PluginUpdateCommand extends ShopwareCommand
                 'Batch update several plugins. Possible values are all, inactive, active, installed, uninstalled'
             )
             ->addOption(
-                'ignore-cache',
-                null,
+                'clear-cache',
+                'cc',
                 InputOption::VALUE_NONE,
-                'Do not clear any caches that are requested by update routines'
+                'Clear any caches that are requested by update routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> updates a plugin.
@@ -87,7 +87,7 @@ EOF
 
         if (!empty($pluginNames)) {
             foreach ($pluginNames as $pluginName) {
-                $this->updatePlugin($pluginManager, $pluginName, $output, !empty($input->getOption('ignore-cache')));
+                $this->updatePlugin($pluginManager, $pluginName, $output, empty($input->getOption('clear-cache')));
             }
 
             return 0;

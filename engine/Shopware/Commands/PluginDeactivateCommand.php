@@ -53,10 +53,10 @@ class PluginDeactivateCommand extends ShopwareCommand
                 'Name of the plugin to be deactivated.'
             )
             ->addOption(
-                'ignore-cache',
-                null,
+                'clear-cache',
+                'cc',
                 InputOption::VALUE_NONE,
-                'Do not clear any caches that are requested by deactivate routines'
+                'Clear any caches that are requested by deactivate routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> deactivates a plugin.
@@ -90,7 +90,7 @@ EOF
         $deactivationContext = $pluginManager->deactivatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
 
-        if (empty($input->getOption('ignore-cache'))) {
+        if (!empty($input->getOption('clear-cache'))) {
             /** @var CacheManager $cacheManager */
             $cacheManager = $this->container->get('shopware.cache_manager');
             $cacheTags = $deactivationContext->getScheduled();
