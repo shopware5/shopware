@@ -104,6 +104,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added support in `config.php` to specify TrustedHeaderSet options for Symfony
 * Added user attributes to PDF documents
 * Added shop selection to emotions, to limit emotion to a specific shop
+* Added new block `frontend_account_order_item_status_value_custom` to `Bare/frontend/account/order_item.tpl`
+* Added filter event `Legacy_Struct_Converter_Convert_Product_Price` to LegacyStructConverter
 
 ### Changes
 
@@ -176,7 +178,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed visibility of `Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::getPluginInformationFromApi()` to public
 * Changed Double-Opt-In behaviour to redirect back into the checkout, if user registered from there
 * Changed console.command tag CompilerPass to support lazy commands.
-* Added new block `frontend_account_order_item_status_value_custom` to `Bare/frontend/account/order_item.tpl`
 
 ### Removals
 

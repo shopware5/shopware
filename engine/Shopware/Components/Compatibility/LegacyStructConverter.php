@@ -392,7 +392,9 @@ class LegacyStructConverter
             $data = array_merge($data, $this->convertUnitStruct($price->getUnit()));
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Product_Price', $data, [
+            'price' => $price,
+        ]);
     }
 
     /**
