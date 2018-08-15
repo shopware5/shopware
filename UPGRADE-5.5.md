@@ -103,6 +103,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added parameter mode to Log module, to directly open the systemlogs tab
 * Added support in `config.php` to specify TrustedHeaderSet options for Symfony
 * Added user attributes to PDF documents
+* Added shop selection to emotions, to limit emotion to a specific shop
 
 ### Changes
 
