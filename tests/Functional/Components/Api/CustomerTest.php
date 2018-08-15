@@ -27,6 +27,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Address;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
 
 /**
  * @category  Shopware
@@ -593,5 +594,33 @@ class CustomerTest extends TestCase
 
         $customer = $this->resource->create($data);
         $this->assertEquals($context->getShop()->getCustomerGroup()->getKey(), $customer->getGroup()->getKey());
+    }
+
+    /**
+     * @group failing
+     */
+    public function testCreateCustomerCreatesCustomerAttribute()
+    {
+        $data = [
+            'email' => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'number' => __FUNCTION__,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'billing' => [
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'country' => '2',
+            ],
+        ];
+
+        $customer = $this->resource->create($data);
+
+        $this->assertNotNull($customer->getAttribute());
+        $this->assertInstanceOf(CustomerAttribute::class, $customer->getAttribute());
     }
 }
