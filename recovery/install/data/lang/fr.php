@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(Tout afficher)',
     'requirements_hide_all' => '(Tout masquer)',
 
-    'license_agreement_header' => 'Contrat de licence utilisateur final ("CLUF")',
-    'license_agreement_info' => 'Tu dois lire et accepter ce contrat de licence pour pouvoir compléter l\'installation. L\'édition Shopware Community possède une licence AGPL alors qu\'une partie des plugins et du template dépendent de la nouvelle licence BSD.',
-    'license_agreement_error' => 'Vous devez accepter notre contrat de licence',
-    'license_agreement_checkbox' => 'J\'accepte le contrat de licence',
+    'license_agreement_header' => 'Conditions générales de vente ("CGV")',
+    'license_agreement_info' => 'Tu dois lire et accepter ce conditions pour pouvoir compléter l\'installation. L\'édition Shopware Community possède une licence AGPL alors qu\'une partie des plugins et du template dépendent de la nouvelle licence BSD.',
+    'license_agreement_error' => 'Vous devez accepter notre conditions générales de vente',
+    'license_agreement_checkbox' => 'J\'accepte le contrat de conditions',
 
     'database-configuration_header' => 'Configurer la base de données',
     'database-configuration_field_host' => 'Serveur de la base de données:',

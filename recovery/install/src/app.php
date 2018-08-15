@@ -213,7 +213,7 @@ $app->map('/license', function () use ($app, $menuHelper, $container) {
     $menuHelper->setCurrent('license');
 
     if ($app->request()->isPost()) {
-        if ($app->request->post('eula')) {
+        if ($app->request->post('tos')) {
             $app->redirect($menuHelper->getNextUrl());
 
             return;
@@ -222,13 +222,15 @@ $app->map('/license', function () use ($app, $menuHelper, $container) {
         $app->view()->set('error', true);
     }
 
-    if ($container->offsetGet('install.language') == 'de') {
-        $eula = file_get_contents(SW_PATH . '/eula.txt');
-    } else {
-        $eula = file_get_contents(SW_PATH . '/eula_en.txt');
+    $tosUrls = $container->offsetGet('config')['tos.urls'];
+    $tosUrl = $tosUrls['en'];
+
+    if (array_key_exists($container->offsetGet('install.language'), $tosUrls)) {
+        $tosUrl = $tosUrls[$container->offsetGet('install.language')];
     }
 
-    $app->view()->setData('eula', $eula);
+    $app->view()->setData('tosUrl', $tosUrl);
+
     $app->render('/license.php');
 })->via('GET', 'POST')->name('license');
 
