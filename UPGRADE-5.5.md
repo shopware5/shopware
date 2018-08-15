@@ -101,6 +101,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
         - `DynamicCacheTimeService`
     * Added `invalidation_date_provider` tag to the DIC
 * Added parameter mode to Log module, to directly open the systemlogs tab
+* Added new filter event `Shopware_Controllers_Article_CreateConfiguratorVariants_FilterData` to article backend controller to modify variant data during generation
 
 ### Changes
 
