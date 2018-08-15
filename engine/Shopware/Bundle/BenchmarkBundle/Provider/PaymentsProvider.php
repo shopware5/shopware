@@ -68,6 +68,7 @@ class PaymentsProvider implements BenchmarkProviderInterface
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         $this->shopId = $shopContext->getShop()->getId();
+        $this->paymentIds = [];
 
         return [
             'activePayments' => $this->getTotalActivePayments(),
