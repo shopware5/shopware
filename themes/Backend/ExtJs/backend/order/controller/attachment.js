@@ -184,9 +184,14 @@ Ext.define('Shopware.apps.Order.controller.Attachment', {
     callStoreReload: function(attachmentGrid, addAsAttachment, listStore) {
         var me = this;
 
-        listStore.reload({
-            callback: Ext.bind(me.applyNewDocument, me, [attachmentGrid, addAsAttachment])
-        });
+        try {
+            listStore.reload({
+                callback: Ext.bind(me.applyNewDocument, me, [attachmentGrid, addAsAttachment])
+            });
+        } catch(e) {
+            // In this case the order overview/list might not be opened. E.g. user opened the the order via quick search in topbar.
+            // Do nothing intentionally.
+        }
     },
 
     /**
