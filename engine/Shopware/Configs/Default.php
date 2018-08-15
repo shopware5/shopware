@@ -37,7 +37,14 @@ if (!is_array($customConfig)) {
 
 return array_replace_recursive([
     'custom' => [],
+
+    /*
+     * For more information on working with reverse proxies and trusted headers see
+     * https://symfony.com/doc/current/deployment/proxies.html
+     */
     'trustedproxies' => [],
+    'trustedheaderset' => -1,
+
     'filesystem' => [
         'private' => [
             'type' => 'local',
