@@ -68,7 +68,7 @@ class VariantHelper implements VariantHelperInterface
      * @var \Shopware_Components_Config
      */
     protected $config;
-    
+
     /**
      * @var ListingPriceHelper
      */
