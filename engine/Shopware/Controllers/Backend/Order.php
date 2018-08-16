@@ -1356,6 +1356,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $hash = Random::getAlphanumericString(32);
 
         $pdf->Output($hash . '.pdf', 'D');
+
+        $this->Response()->setHeader('Content-Type', 'application/x-download');
     }
 
     /**
