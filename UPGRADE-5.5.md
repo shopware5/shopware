@@ -182,6 +182,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed console.command tag CompilerPass to support lazy commands.
 * Changed customer editing in backend to work also when customer is in optin mode
 * Changed order mergeDocuments to send a valid Content-Type to fix downloads on some webserver configurations
+* Changed voucher restrictions to allow product numbers shorter then 5 characters 
 
 ### Removals
 
