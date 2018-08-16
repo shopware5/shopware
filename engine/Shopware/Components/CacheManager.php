@@ -486,7 +486,7 @@ class CacheManager
      *
      * @return bool
      */
-    public function clearByTag(array $tag)
+    public function clearByTag($tag)
     {
         switch ($tag) {
             case self::CACHE_TAG_CONFIG:

@@ -25,11 +25,8 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\CacheManager;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -37,13 +34,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginDeactivateCommand extends ShopwareCommand
+class PluginDeactivateCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:deactivate')
             ->setDescription('Deactivates a plugin.')
@@ -51,12 +50,6 @@ class PluginDeactivateCommand extends ShopwareCommand
                 'plugin',
                 InputArgument::REQUIRED,
                 'Name of the plugin to be deactivated.'
-            )
-            ->addOption(
-                'clear-cache',
-                'cc',
-                InputOption::VALUE_NONE,
-                'Clear any caches that are requested by deactivate routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> deactivates a plugin.
@@ -90,13 +83,6 @@ EOF
         $deactivationContext = $pluginManager->deactivatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
 
-        if (!empty($input->getOption('clear-cache'))) {
-            /** @var CacheManager $cacheManager */
-            $cacheManager = $this->container->get('shopware.cache_manager');
-            $cacheTags = $deactivationContext->getScheduled();
-            if ($cacheManager->clearByTags($cacheTags)) {
-                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
-            }
-        }
+        $this->clearCachesIfRequested($input, $output, $deactivationContext);
     }
 }

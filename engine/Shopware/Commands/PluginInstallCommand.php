@@ -25,8 +25,6 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\CacheManager;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,13 +35,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginInstallCommand extends ShopwareCommand
+class PluginInstallCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:install')
             ->setDescription('Installs a plugin.')
@@ -57,12 +57,6 @@ class PluginInstallCommand extends ShopwareCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Activate plugin after intallation.'
-            )
-            ->addOption(
-                'clear-cache',
-                'cc',
-                InputOption::VALUE_NONE,
-                'Clear any caches that are requested by install/activate routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> installs a plugin.
@@ -103,16 +97,6 @@ EOF
             $output->writeln(sprintf('Plugin %s has been activated successfully. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
         }
 
-        if (!empty($input->getOption('clear-cache'))) {
-            /** @var CacheManager $cacheManager */
-            $cacheManager = $this->container->get('shopware.cache_manager');
-            $cacheTags = array_merge(
-                $installationContext->getScheduled(),
-                is_null($activationContext) ? [] : $activationContext->getScheduled()
-            );
-            if ($cacheManager->clearByTags($cacheTags)) {
-                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
-            }
-        }
+        $this->clearCachesIfRequested($input, $output, $installationContext, $activationContext);
     }
 }

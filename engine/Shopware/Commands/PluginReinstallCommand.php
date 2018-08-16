@@ -25,19 +25,20 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\CacheManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginReinstallCommand extends ShopwareCommand
+class PluginReinstallCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:reinstall')
             ->setDescription('Reinstalls the provided plugin')
@@ -52,12 +53,7 @@ class PluginReinstallCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'if supplied plugin data will be removed'
             )
-            ->addOption(
-                'clear-cache',
-                'cc',
-                InputOption::VALUE_NONE,
-                'Clear any caches that are requested by uninstall/install/activate routines'
-            );
+        ;
     }
 
     /**
@@ -84,17 +80,6 @@ class PluginReinstallCommand extends ShopwareCommand
         $activationContext = $pluginManager->activatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been reinstalled successfully.', $pluginName));
 
-        if (!empty($input->getOption('clear-cache'))) {
-            /** @var CacheManager $cacheManager */
-            $cacheManager = $this->container->get('shopware.cache_manager');
-            $cacheTags = array_merge(
-                $uninstallationContext->getScheduled(),
-                $installationContext->getScheduled(),
-                $activationContext->getScheduled()
-            );
-            if ($cacheManager->clearByTags($cacheTags)) {
-                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
-            }
-        }
+        $this->clearCachesIfRequested($input, $output, $uninstallationContext, $installationContext, $activationContext);
     }
 }

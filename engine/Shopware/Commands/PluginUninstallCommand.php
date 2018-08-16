@@ -25,8 +25,6 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\CacheManager;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,13 +35,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginUninstallCommand extends ShopwareCommand
+class PluginUninstallCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:uninstall')
             ->setDescription('Uninstalls a plugin.')
@@ -57,12 +57,6 @@ class PluginUninstallCommand extends ShopwareCommand
                 'S',
                 InputOption::VALUE_NONE,
                 'Keep the saved data of the plugin. (if supported)'
-            )
-            ->addOption(
-                'clear-cache',
-                'cc',
-                InputOption::VALUE_NONE,
-                'Clear any caches that are requested by uninstall routines'
             )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> uninstalls a plugin.
@@ -98,13 +92,6 @@ EOF
         $uninstallationContext = $pluginManager->uninstallPlugin($plugin, $removeData);
         $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
 
-        if (!empty($input->getOption('clear-cache'))) {
-            /** @var CacheManager $cacheManager */
-            $cacheManager = $this->container->get('shopware.cache_manager');
-            $cacheTags = $uninstallationContext->getScheduled();
-            if ($cacheManager->clearByTags($cacheTags)) {
-                $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
-            }
-        }
+        $this->clearCachesIfRequested($input, $output, $uninstallationContext);
     }
 }
