@@ -18,7 +18,7 @@
         </parallel>
     </target>
 
-    <target name="build-continuous" depends="unit-shopware-continuous"/>
+    <target name="build-continuous" depends="check-code-style, unit-shopware-continuous"/>
     <target name="build-unit" depends="build-composer-install, build-cache-dir, build-config, build-database, build-snippets-deploy, build-theme-initialize,build-create-admin-account, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
@@ -109,6 +109,16 @@
             <arg value="composer.phar" />
             <arg value="update" />
             <arg value="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="check-code-style" depends="build-composer-install">
+        <exec executable="${script.php}" failonerror="true">
+            <arg value="vendor/bin/php-cs-fixer" />
+            <arg value="fix" />
+            <arg value="--dry-run" />
+            <arg value="--stop-on-violation" />
+            <arg value="-v" />
         </exec>
     </target>
 
