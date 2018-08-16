@@ -61,6 +61,7 @@ class CategoriesProvider implements BenchmarkProviderInterface
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         $this->shopContext = $shopContext;
+        $this->categoryIds = [];
 
         return [
             'products' => $this->getCategoryProductData(),

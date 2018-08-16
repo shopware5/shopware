@@ -27,7 +27,7 @@ namespace Shopware\Components\Emotion;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 
-class DeviceConfiguration
+class DeviceConfiguration implements DeviceConfigurationInterface
 {
     /**
      * @var Connection
@@ -43,9 +43,7 @@ class DeviceConfiguration
     }
 
     /**
-     * @param int $categoryId
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function get($categoryId)
     {
@@ -58,9 +56,11 @@ class DeviceConfiguration
             'emotion.fullscreen',
             'emotion.customer_stream_ids',
             'emotion.replacement',
+            'GROUP_CONCAT(shops.shop_id SEPARATOR \',\') as shopIds',
         ]);
 
         $query->from('s_emotion', 'emotion')
+            ->leftJoin('emotion', 's_emotion_shops', 'shops', 'shops.emotion_id = emotion.id')
             ->andWhere('emotion.active = 1')
             ->andWhere('emotion.is_landingpage = 0')
             ->andWhere('(emotion.valid_to   >= NOW() OR emotion.valid_to IS NULL)')
@@ -85,6 +85,7 @@ class DeviceConfiguration
 
         $emotions = array_map(function ($emotion) {
             $emotion['devicesArray'] = explode(',', $emotion['devices']);
+            $emotion['shopIds'] = array_filter(explode(',', $emotion['shopIds']));
 
             return $emotion;
         }, $emotions);
@@ -93,11 +94,7 @@ class DeviceConfiguration
     }
 
     /**
-     * @param $emotionId
-     *
-     * @throws \Exception
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getById($emotionId)
     {
@@ -120,11 +117,7 @@ class DeviceConfiguration
     }
 
     /**
-     * @param $id
-     *
-     * @throws \Exception
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getLandingPage($id)
     {
@@ -149,11 +142,7 @@ class DeviceConfiguration
     }
 
     /**
-     * Get shops of landingpage by emotion id.
-     *
-     * @param $emotionId
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getLandingPageShops($emotionId)
     {

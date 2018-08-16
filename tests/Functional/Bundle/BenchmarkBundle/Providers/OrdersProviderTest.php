@@ -141,6 +141,9 @@ class OrdersProviderTest extends ProviderTestCase
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
         $firstResult = $this->getBenchmarkData();
+
+        $this->sendStatistics();
+
         $secondResult = $this->getBenchmarkData();
 
         $this->assertSame(5, $firstResult['list'][0]['orderId']);
@@ -148,6 +151,9 @@ class OrdersProviderTest extends ProviderTestCase
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=2;');
         $thirdResultSet = $this->getBenchmarkData();
+
+        $this->sendStatistics();
+
         $forthResultSet = $this->getBenchmarkData();
 
         $this->assertSame(5, $thirdResultSet['list'][0]['orderId']);
@@ -166,7 +172,7 @@ class OrdersProviderTest extends ProviderTestCase
         $this->installDemoData('orders_detailed');
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1 WHERE shop_id=1;');
-        $this->getBenchmarkData();
+        $this->sendStatistics();
 
         $this->assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config WHERE shop_id=1'));
     }

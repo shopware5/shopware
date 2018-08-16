@@ -171,7 +171,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         }
 
         if ($trustedProxies = $this->config['trustedproxies']) {
-            SymfonyRequest::setTrustedProxies($trustedProxies);
+            SymfonyRequest::setTrustedProxies($trustedProxies, $this->config['trustedheaderset']);
         }
     }
 

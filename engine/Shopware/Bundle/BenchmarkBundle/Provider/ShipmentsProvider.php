@@ -71,6 +71,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         $this->shopContext = $shopContext;
+        $this->shipmentIds = [];
 
         return [
             'list' => $this->getMatchedShipmentList(),
