@@ -61,6 +61,8 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
                 }
                 break;
             case 'cat':
+                $request->setControllerName('listing')->setDispatched(false);
+                break;
             case 'supplier':
                 $request->setControllerName('listing')->setActionName('manufacturer')->setDispatched(false);
                 break;
