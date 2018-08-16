@@ -68,8 +68,8 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
         errorMessage: '{s name=sent_error_message}An error has occurred while sending the status mail:{/s}',
 
         confirmation: {
-            title: '{s name=mail_template_change/confirmation/title}Discard changes?{/s}',
-            message: '{s name=mail_template_change/confirmation/message}You have made changes to the mail content. Do you want to discard the changes?{/s}'
+            title: '{s name=mail_template_change/confirmation/title}Change mail template?{/s}',
+            message: '{s name=mail_template_change/confirmation/message}You have changed the content of the e-mail, if you change the mail template these changes will be lost. Do you still want to change the template?{/s}'
         }
     },
 
@@ -84,10 +84,10 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
         me.control({
             'order-mail-window order-mail-form': {
                 sendMail: me.onSendMail,
-                changeMailTemplateComboBox: this.onChangeMailTemplateComboBox,
+                changeMailTemplateComboBox: this.onChangeMailTemplateComboBox
             },
             'order-mail-window order-mail-attachment': {
-                'selectionModel-selection-change': this.onAttachmentSelectionChange,
+                'selectionModel-selection-change': this.onAttachmentSelectionChange
             }
         });
 
@@ -148,12 +148,16 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
     onChangeMailTemplateComboBox: function (mailFormPanel, comboBox, newValue, oldValue) {
         var callback = function (clickedButton) {
             if (clickedButton !== 'yes') {
-                mailFormPanel.mailTemplateComboBox.setRawValue(oldValue);
+                // Temporarily suspending events to not toggle the "modified" attribute
+                mailFormPanel.mailTemplateComboBox.suspendEvents();
+                mailFormPanel.mailTemplateComboBox.setValue(oldValue);
+                mailFormPanel.mailTemplateComboBox.resumeEvents();
 
                 return;
             }
 
             mailFormPanel.setLoading(true);
+
             Ext.Ajax.request({
                 url: '{url controller=order action=createMail}',
                 method: 'POST',
@@ -161,21 +165,24 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
                     orderId: mailFormPanel.order.get('id'),
                     mailTemplateName: newValue
                 },
+
                 success: function (response) {
                     var decodedResponse = Ext.JSON.decode(response.responseText);
                     var mail = Ext.create('Shopware.apps.Order.model.Mail', decodedResponse.mail);
                     mailFormPanel.loadRecord(mail);
                 },
+
                 failure: function (response) {
                     Shopware.Notification.createGrowlMessage(
                         '{s name=document/attachemnt/error}Error{/s}',
                         response.status + '<br />' + response.statusText
                     );
                 },
+
                 callback: function (options, success, response) {
                     mailFormPanel.setLoading(false);
                 },
-                scope: this,
+                scope: this
             });
         };
 

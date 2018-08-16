@@ -65,10 +65,9 @@ Ext.define('Shopware.apps.Order.controller.Document', {
      * @param { Shopware.apps.Order.model.Receipt } record
      */
     openMail: function(record) {
-        var me = this;
-
-        var order = me.getDocumentWindow().record;
-        var documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
+        var me = this,
+            order = me.getDocumentWindow().record,
+            documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
 
         // The window depends on a completely loaded documentTypeStore. So we load it here and open the window
         // after successful loading.
@@ -79,7 +78,7 @@ Ext.define('Shopware.apps.Order.controller.Document', {
                     order: order,
                     preSelectedAttachment: record,
                     documentTypeStore: documentTypeStore,
-                    listStore: this.listStore
+                    listStore: this.getListing().listStore
                 }).show();
             }
         });
@@ -116,6 +115,6 @@ Ext.define('Shopware.apps.Order.controller.Document', {
                 );
             }
         });
-    },
+    }
 });
 //{/block}

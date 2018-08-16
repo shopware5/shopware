@@ -114,6 +114,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new notify event `Shopware_Modules_Admin_GetDispatchBasket_QueryBuilder` to the sAdmin which will be fired for change the sGetDispatchBasket query builder. 
 * Added new notify event `Shopware_Modules_Basket_GetAmountArticles_QueryBuilder` to the sBasket which will be fired for change the sGetAmountArticles query builder.
 * Added new notify event `Shopware_Modules_Admin_GetPremiumDispatches_QueryBuilder` to the sAdmin which will be fired for change the sGetPremiumDispatches query builder.
+* Added support for multiple document type mail templates for every order document
+    * Added `Shopware_Controllers_Backend_Order::getMailTemplatesAction`
+    * Added `Shopware\Models\Mail\Mail::isDocumentMail`
+    * Added `Shopware\Models\Mail\Repository::getMailsListQueryBuilder`
 
 ### Changes
 

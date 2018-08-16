@@ -32,7 +32,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects a list of all mails.
      *
-     * @param $mailId
+     * @param int $mailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -47,7 +47,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getMailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $mailId
+     * @param int $mailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -55,7 +55,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['mails', 'attribute'])
-                ->from('Shopware\Models\Mail\Mail', 'mails')
+                ->from(\Shopware\Models\Mail\Mail::class, 'mails')
                 ->leftJoin('mails.attribute', 'attribute')
                 ->where('mails.id = ?1')
                 ->setParameter(1, $mailId);
@@ -67,7 +67,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the attribute model
      * for the passed mail id.
      *
-     * @param $mailId
+     * @param int $mailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -82,7 +82,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $mailId
+     * @param int $mailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -90,7 +90,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from('Shopware\Models\Attribute\Mail', 'attribute')
+                      ->from(\Shopware\Models\Attribute\Mail::class, 'attribute')
                       ->where('attribute.mailId = ?1')
                       ->setParameter(1, $mailId);
 
@@ -101,8 +101,8 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search for mails with
      * the passed name. The passed mail id will be excluded.
      *
-     * @param $name
-     * @param $mailId
+     * @param string   $name
+     * @param null|int $mailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -117,16 +117,17 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateNameQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $name
-     * @param null $mailId
+     * @param string   $name
+     * @param null|int $mailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getValidateNameQueryBuilder($name, $mailId = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['mail'])
-                ->from('Shopware\Models\Mail\Mail', 'mail')
+                ->from(\Shopware\Models\Mail\Mail::class, 'mail')
                 ->where('mail.name = :name')
                 ->setParameter('name', $name);
 
@@ -139,13 +140,29 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param array $filter
-     * @param array|null $order
-     * @param null|int $offset
-     * @param null|int $limit
-     * @return QueryBuilder
+     * @param array[]      $filter
+     * @param null|array[] $order
+     * @param null|int     $offset
+     * @param null|int     $limit
+     *
+     * @return \Doctrine\ORM\Query
      */
-    public function getMailsListQueryBuilder(array $filter = array(), array $order = null, $offset = null, $limit = null)
+    public function getMailListQuery(array $filter = [], array $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->getMailsListQueryBuilder($filter, $order, $offset, $limit)->getQuery();
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * @param array      $filter
+     * @param array|null $order
+     * @param null|int   $offset
+     * @param null|int   $limit
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getMailsListQueryBuilder(array $filter = [], array $order = null, $offset = null, $limit = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
@@ -154,7 +171,7 @@ class Repository extends ModelRepository
             ->select('mail')
             ->from(Mail::class, 'mail');
 
-        if ($filter !== null) {
+        if (!empty($filter)) {
             $builder->addFilter($filter);
         }
         if ($order !== null) {

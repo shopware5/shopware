@@ -93,10 +93,24 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
 
     /**
      * Constructor parameters
+     *
+     * @type { Shopware.apps.Order.model.Order }
      */
     order: null,
+
+    /**
+     * @type { Shopware.apps.Order.model.Receipt }
+     */
     preSelectedAttachment: null,
+
+    /**
+     * @type { Shopware.apps.Order.store.DocType }
+     */
     documentTypeStore: null,
+
+    /**
+     * @type { Shopware.apps.Order.store.Order }
+     */
     listStore: null,
 
     /**
@@ -114,7 +128,7 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
             order: this.order,
             preSelectedAttachment: this.preSelectedAttachment,
             listStore: this.listStore,
-            documentTypeStore: this.documentTypeStore,
+            documentTypeStore: this.documentTypeStore
         });
 
         me.items = me.form;

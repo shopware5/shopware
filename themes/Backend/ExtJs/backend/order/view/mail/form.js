@@ -153,7 +153,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
                 var documentType = this.documentTypeStore.getById(this.preSelectedAttachment.get('typeId'));
                 this.mailTemplateComboBox.selectTemplateByDocumentType(documentType);
             },
-            scope: this,
+            scope: this
         });
     },
 
@@ -166,8 +166,8 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         this.mailTemplateStore = Ext.create('Shopware.apps.Order.store.MailTemplate', {
             filters: [{
                 property: 'mailtype',
-                value: 4,
-            }],
+                value: 4
+            }]
         });
     },
 
@@ -217,10 +217,9 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
                 fieldLabel: me.snippets.subject,
                 listeners: {
                     change: function () {
-                        this.modified = true;
-                    },
-                    scope: this,
-                },
+                        me.modified = true;
+                    }
+                }
             },
             this.createTextContentEditor(),
             this.createHtmlContentEditor()
@@ -229,8 +228,9 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         me.attachmentGrid = Ext.create('Shopware.apps.Order.view.mail.Attachment', {
             preSelectedAttachment: me.preSelectedAttachment,
             order: me.order,
+            record: me.order,
             documentTypeStore: this.documentTypeStore,
-            listStore: this.listStore,
+            listStore: this.listStore
         });
 
         // adds at last the attachment panel
@@ -255,7 +255,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
                 change: function(comboBox, newValue, oldValue) {
                     this.fireEvent('changeMailTemplateComboBox', this, comboBox, newValue, oldValue);
                 },
-                scope: this,
+                scope: this
             },
             selectTemplateByDocumentType: function (documentType) {
                 var templateName = 'sORDERDOCUMENTS';
@@ -287,8 +287,8 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
                 change: function () {
                     this.modified = true;
                 },
-                scope: this,
-            },
+                scope: this
+            }
         });
 
         return this.textContentTextField;
@@ -307,11 +307,15 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
             disabled: true,
             hidden: true,
             listeners: {
-                change: function () {
-                    this.modified = true;
+                // Attaching a change event on tinymce directy
+                afterrendereditor: function (editor, tinymce) {
+                    var me = this;
+                    tinymce.onChange.add(function() {
+                        me.modified = true;
+                    });
                 },
-                scope: this,
-            },
+                scope: this
+            }
         });
 
         return this.htmlContentTextField;
@@ -332,6 +336,6 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         this.htmlContentTextField.setDisabled(!isHtml);
         this.textContentTextField.setVisible(!isHtml);
         this.textContentTextField.setDisabled(isHtml);
-    },
+    }
 });
 //{/block}

@@ -34,9 +34,19 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
 
     /**
      * Constructor parameters
+     *
+     * @type { Shopware.apps.Order.model.Order }
      */
     order: null,
+
+    /**
+     * @type { Shopware.apps.Order.model.Receipt }
+     */
     preSelectedAttachment: null,
+
+    /**
+     * @type { Shopware.apps.Order.store.Order }
+     */
     listStore: null,
 
     /**
@@ -259,7 +269,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
 
         return Ext.create('Ext.button.Split', {
             text: '{s name=attachment/panel/split/button/create/and/add}{/s}',
-            handler: function() {
+            handler: function () {
                 me.fireEvent(
                     'create-and-add-document',
                     me,
