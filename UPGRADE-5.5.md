@@ -180,6 +180,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed Double-Opt-In behaviour to redirect back into the checkout, if user registered from there
 * Changed console.command tag CompilerPass to support lazy commands.
 * Changed customer editing in backend to work also when customer is in optin mode
+* Changed order mergeDocuments to send a valid Content-Type to fix downloads on some webserver configurations
 
 ### Removals
 
