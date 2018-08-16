@@ -367,7 +367,8 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
                 scope: me,
                 afterrender: this.disableAutocompleteAndSpellcheck,
                 change: me.enableMailField
-            }
+            },
+            disableLoadingSelectedName: true
         });
     },
 
@@ -383,7 +384,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             store = me.store;
 
         // If no option is selected, this is also considered as valid
-        if (!selectedValue || !selectedValue.length) {
+        if (!selectedValue || !selectedValue.length || selectedValue === me.snippets.selectOption) {
             return recordFound;
         }
         // Validate the typed/selected option. Verify that is indeed a store option
