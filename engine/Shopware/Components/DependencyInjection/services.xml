@@ -865,5 +865,11 @@
             <argument type="service" id="config"/>
             <tag name="shopware.event_subscriber" />
         </service>
+
+        <service id="shopware.esd.public.url_generator" class="Shopware\Components\Filesystem\PublicUrlGenerator">
+            <argument type="service" id="service_container"/>
+            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.filesystem.private.config.root%</argument>
+        </service>
     </services>
 </container>
