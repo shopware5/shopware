@@ -330,11 +330,16 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 'sArticle' => $product['articleID'],
                 'number' => $product['ordernumber'],
             ]);
+            
+            $sContext = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext($notify['language']);
+            $product_information = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($notify['ordernumber'], $sContext);
+            $product_information = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStruct($product_information);
 
             $context = [
                 'sArticleLink' => $link,
                 'sOrdernumber' => $notify['ordernumber'],
                 'sData' => $job['data'],
+                'product' => $product_information,
             ];
 
             $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
