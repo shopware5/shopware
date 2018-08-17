@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(alles weergeven)',
     'requirements_hide_all' => '(alles verbergen)',
 
-    'license_agreement_header' => 'Gebruiksrechtovereenkomst ("EULA")',
-    'license_agreement_info' => 'Hierin vind je een verklaring van onze licentievoorwaarden, die je moet lezen en accepteren voor een geslaagde installatie. De Shopware Community-versie is gelicentieerd onder AGPL, terwijl delen van de plug-ins en de sjabloon onder licentie van New BSD vallen.',
-    'license_agreement_error' => 'Je moet akkoord gaan met onze licentievoorwaarden',
-    'license_agreement_checkbox' => 'Ik ga akkoord met de licentievoorwaarden',
+    'license_agreement_header' => 'Algemene voorwaarden',
+    'license_agreement_info' => 'Hierin vind je een verklaring van onze algemene voorwaarden, die je moet lezen en accepteren voor een geslaagde installatie. De Shopware Community-versie is gelicentieerd onder AGPL, terwijl delen van de plug-ins en de sjabloon onder licentie van New BSD vallen.',
+    'license_agreement_error' => 'Je moet akkoord gaan met onze algemene voorwaarden',
+    'license_agreement_checkbox' => 'Ik ga akkoord met de algemene voorwaarden',
 
     'database-configuration_header' => 'Database configureren',
     'database-configuration_field_host' => 'Databaseserver:',

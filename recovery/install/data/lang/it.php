@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(mostra tutto)',
     'requirements_hide_all' => '(nascondi tutto)',
 
-    'license_agreement_header' => 'Condizioni di licenza utente finale ("EULA")',
-    'license_agreement_info' => 'Qui sono indicate le nostre condizioni di licenza che devono essere lette e accettate per portare a termine l\'installazione. Shopware Community Edition è soggetto a licenza AGPL, mentre i componenti dei plugin e il template sono soggetti a licenza New BSD.',
-    'license_agreement_error' => 'Accetta le nostre condizioni di licenza',
-    'license_agreement_checkbox' => 'Accetto le condizioni di licenza',
+    'license_agreement_header' => 'Condizioni generali ("CG")',
+    'license_agreement_info' => 'Qui sono indicate le nostre condizioni generali che devono essere lette e accettate per portare a termine l\'installazione. Shopware Community Edition è soggetto a licenza AGPL, mentre i componenti dei plugin e il template sono soggetti a licenza New BSD.',
+    'license_agreement_error' => 'Accetta le nostre condizioni generali',
+    'license_agreement_checkbox' => 'Accetto le condizioni generali',
 
     'database-configuration_header' => 'Configura banca dati',
     'database-configuration_field_host' => 'Server banca dati:',

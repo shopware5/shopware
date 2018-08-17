@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(show all)',
     'requirements_hide_all' => '(hide all)',
 
-    'license_agreement_header' => 'End user licence agreement ("EULA")',
-    'license_agreement_info' => 'Here you will find a summary of our licence terms, which you must read and accept for successful installation. The Shopware Community Edition is licensed under AGPL, while parts of the plug-ins and the template are under the New BSD licence.',
-    'license_agreement_error' => 'You must agree to our licence terms',
-    'license_agreement_checkbox' => 'I agree to the licence terms',
+    'license_agreement_header' => 'Terms of service ("TOS")',
+    'license_agreement_info' => 'Here you will find a summary of our terms of service, which you must read and accept for successful installation. The Shopware Community Edition is licensed under AGPL, while parts of the plug-ins and the template are under the New BSD licence.',
+    'license_agreement_error' => 'You must agree to our terms of service',
+    'license_agreement_checkbox' => 'I agree to the terms of service',
 
     'database-configuration_header' => 'Configure database',
     'database-configuration_field_host' => 'Database server:',

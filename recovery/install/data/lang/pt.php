@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(mostrar tudo)',
     'requirements_hide_all' => '(ocultar tudo)',
 
-    'license_agreement_header' => 'Termos da licença de utilizador final ("EULA")',
-    'license_agreement_info' => 'Encontra aqui uma listagem dos termos da nossa licença, que deverá ler atentamente e aceitar para que a instalação possa ser concluída. A Shopware Community Edition está licenciada de acordo com AGPL e parte dos plugins e o modelo estão licenciados de acordo com a licença New BSD.',
-    'license_agreement_error' => 'É necessário que aceite os nossos termos de licença',
-    'license_agreement_checkbox' => 'Concordo com os termos da licença',
+    'license_agreement_header' => 'Termos e Condições',
+    'license_agreement_info' => 'Encontra aqui uma listagem dos termos e condições, que deverá ler atentamente e aceitar para que a instalação possa ser concluída. A Shopware Community Edition está licenciada de acordo com AGPL e parte dos plugins e o modelo estão licenciados de acordo com a licença New BSD.',
+    'license_agreement_error' => 'É necessário que aceite os nossos termos e condições',
+    'license_agreement_checkbox' => 'Concordo com os termos e condições',
 
     'database-configuration_header' => 'Configurar a base de dados',
     'database-configuration_field_host' => 'Servidor da base de dados:',
