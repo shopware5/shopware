@@ -39,49 +39,54 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
     /**
      * Based on Ext.panel.Panel
      */
-    extend:'Ext.container.Container',
+    extend: 'Ext.container.Container',
+
     /**
      * Alias for easy creation
      */
-    alias:'widget.shipping-view-edit-country',
+    alias: 'widget.shipping-view-edit-country',
 
     /**
      * Name of this view
      */
-    name:'shipping-view-edit-country',
+    name: 'shipping-view-edit-country',
+
     /**
      * Title as shown in the tab from the panel
      */
-    title:'{s name=country_selection_tab_title}Lock categories{/s}',
+    title: '{s name=country_selection_tab_title}Lock categories{/s}',
 
     /**
      * Display the the contents of this tab immediately
      */
-    autoShow:true,
+    autoShow: true,
 
     /**
      * Use the full height
      */
-    height:'100%',
+    height: '100%',
 
     /**
      * Uses the column layout
      */
-    layout:{
-        type:'column',
-        align:'stretch',
-        padding:5
+    layout: {
+        type: 'column',
+        align: 'stretch',
+        padding: 5
     },
+
     /**
      * Defaults
      */
-    defaults:{
-        columnWidth:1
+    defaults: {
+        columnWidth: 1
     },
+
     /**
      * Stores the data dragged into the right hand side grid and the data already assigned to this dispatch
      */
     usedCountriesStore: null,
+
     /**
      * Contains all known countries
      */
@@ -94,7 +99,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
         var me = this,
             ids = [];
 
-        // store the already assigned countries to the usedCountriesStore
+        // Store the already assigned countries to the usedCountriesStore
         me.usedCountriesStore = me.record.getCountries();
 
         // Build a list of ids to filter them out of the available country store - this is done
@@ -104,17 +109,20 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
         });
         me.availableCountries.filters.clear();
         me.availableCountries.filter('usedIds', ids);
+        me.availableCountries.sort('position', 'ASC');
+        me.usedCountriesStore.sort('position', 'ASC');
 
         // Create the view
         me.items = me.getItems();
         me.callParent(arguments);
     },
+
     /**
      * Returns all needed items to the parent container
      *
      * @return Array
      */
-    getItems:function () {
+    getItems: function () {
         var me = this;
         return [
             {
@@ -130,14 +138,14 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
                  *
                  * @string
                  */
-                fromTitle:'{s name=tab/country/from_title}Available{/s}',
+                fromTitle: '{s name=tab/country/from_title}Available{/s}',
 
                 /**
                  * toTitle which holds Title on the Right Side
                  *
                  * @string
                  */
-                toTitle:'{s name=tab/country/to_title}Selected{/s}'
+                toTitle: '{s name=tab/country/to_title}Selected{/s}'
             }
         ];
     }
