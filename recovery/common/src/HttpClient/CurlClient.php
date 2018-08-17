@@ -115,7 +115,7 @@ class CurlClient implements Client
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         curl_close($curl);
-        if (false === $content) {
+        if ($content === false) {
             throw new ClientException($errmsg, $error);
         }
 

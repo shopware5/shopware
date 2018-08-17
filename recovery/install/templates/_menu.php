@@ -7,7 +7,7 @@
                 <?= ($entry['active']) ? 'is--active' : ''; ?>
                 <?= ($entry['complete']) ? 'is--complete' : ''; ?>
             ">
-            <span class="navigation--link"><?= $entry['label'] ?></span>
+            <span class="navigation--link"><?= $entry['label']; ?></span>
         </li>
     <?php endforeach; ?>
     </ul>

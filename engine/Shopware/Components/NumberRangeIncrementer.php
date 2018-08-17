@@ -60,7 +60,7 @@ class NumberRangeIncrementer implements NumberRangeIncrementerInterface
             }
 
             $this->connection->executeUpdate('UPDATE s_order_number SET number = number + 1 WHERE name = ?', [$name]);
-            $number += 1;
+            ++$number;
             $this->connection->commit();
         } catch (\Exception $e) {
             $this->connection->rollBack();

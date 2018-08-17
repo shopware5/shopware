@@ -89,7 +89,7 @@ class ModelManager extends EntityManager
     /**
      * Serialize an entity or an array of entities to an array
      *
-     * @param   $entity
+     * @param $entity
      *
      * @return array
      */
@@ -299,7 +299,7 @@ class ModelManager extends EntityManager
      * @see        http://borisguery.github.com/bgylibrary
      * @see         https://gist.github.com/1034079#file_serializable_entity.php
      *
-     * @param   $entity
+     * @param $entity
      *
      * @return array
      */

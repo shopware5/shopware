@@ -50,7 +50,6 @@ class Category extends Resource
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
 
-
     /**
      * @return \Shopware\Models\Category\Repository
      */
@@ -108,7 +107,6 @@ class Category extends Resource
                     $category['translations'][$shop['id']] += $attributeTranslation;
                 }
             }
-
         } else {
             $category = $category[0];
         }
@@ -254,12 +252,12 @@ class Category extends Resource
 
         $this->getManager()->getConnection()->delete('s_core_translations', [
             'objecttype' => 'category',
-            'objectkey' => $id
+            'objectkey' => $id,
         ]);
 
         $this->getManager()->getConnection()->delete('s_core_translations', [
             'objecttype' => 's_categories_attributes',
-            'objectkey' => $id
+            'objectkey' => $id,
         ]);
 
         return $category;
@@ -299,7 +297,7 @@ class Category extends Resource
                     return null;
                 }
 
-                if (null === $parent) {
+                if ($parent === null) {
                     /** @var \Shopware\Models\Category\Category $parent */
                     $parent = $this->getRepository()->find($parentId);
                     if (!$parent) {
@@ -322,6 +320,34 @@ class Category extends Resource
         }
 
         return $categoryModel;
+    }
+
+    /**
+     * @param int   $categoryId
+     * @param array $translations
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    public function writeTranslations($categoryId, $translations)
+    {
+        $attributes = $this->getAttributeProperties();
+
+        foreach ($translations as $translation) {
+            $shop = $this->getManager()->find(\Shopware\Models\Shop\Shop::class, $translation['shopId']);
+            if (!$shop) {
+                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
+            }
+
+            $attributeTranslation = array_intersect_key($translation, array_flip($attributes));
+
+            $this->translationComponent->write($shop->getId(), 'category', $categoryId, array_diff_key($translation, array_flip($attributes)));
+
+            if (!empty($attributeTranslation)) {
+                $this->translationComponent->write($shop->getId(), 's_categories_attributes', $categoryId, $attributeTranslation);
+            }
+        }
     }
 
     private function prepareCategoryData($params)
@@ -393,35 +419,6 @@ class Category extends Resource
         unset($data['media']);
 
         return $data;
-    }
-
-    /**
-     * @param int   $categoryId
-     * @param array $translations
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     */
-    public function writeTranslations($categoryId, $translations)
-    {
-        $attributes = $this->getAttributeProperties();
-
-        foreach ($translations as $translation) {
-            $shop = $this->getManager()->find(\Shopware\Models\Shop\Shop::class, $translation['shopId']);
-            if (!$shop) {
-                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
-            }
-
-            $attributeTranslation = array_intersect_key($translation, array_flip($attributes));
-
-            $this->translationComponent->write($shop->getId(), 'category', $categoryId, array_diff_key($translation, array_flip($attributes)));
-
-            if (!empty($attributeTranslation)) {
-                $this->translationComponent->write($shop->getId(), 's_categories_attributes', $categoryId, $attributeTranslation);
-            }
-
-        }
     }
 
     /**

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Snippet\Snippet;
 
 /**
@@ -425,7 +424,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
         $filePath = tempnam($destPath, 'snippets_');
 
-        if (false === move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $filePath) === false) {
             echo json_encode([
                 'success' => false,
                 'message' => sprintf('Could not move %s to %s.', $_FILES['file']['tmp_name'], $filePath),

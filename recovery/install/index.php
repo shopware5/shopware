@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 $lockFile = __DIR__ . '/data/' . 'install.lock';
 if (is_file($lockFile)) {
     header('Content-type: text/html; charset=utf-8', true, 503);

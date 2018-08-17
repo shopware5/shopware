@@ -27,7 +27,6 @@ namespace Shopware\Models\Category;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Models\Translation\Translation;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number

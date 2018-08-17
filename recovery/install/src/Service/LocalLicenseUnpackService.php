@@ -39,8 +39,9 @@ use Shopware\Recovery\Install\Struct\ShopwareEdition;
 class LocalLicenseUnpackService implements LicenseUnpackService
 {
     /**
-     * @param  LicenseUnpackRequest $request
-     * @param  TranslationService $translation
+     * @param LicenseUnpackRequest $request
+     * @param TranslationService   $translation
+     *
      * @throws LicenseHostException
      * @throws LicenseProductKeyException
      * @throws LicenseInvalidException

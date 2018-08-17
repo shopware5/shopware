@@ -768,8 +768,8 @@ class Media extends ModelEntity
      * passed file name. The file name have to be passed, because on update the internal
      * file name property is already changed to the new name.
      *
-     * @param   $thumbnailSizes
-     * @param   $fileName
+     * @param $thumbnailSizes
+     * @param $fileName
      */
     public function removeAlbumThumbnails($thumbnailSizes, $fileName)
     {

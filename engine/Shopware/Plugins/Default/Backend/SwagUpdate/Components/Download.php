@@ -93,7 +93,7 @@ class Download
      */
     public function downloadFile($sourceUri, $destinationUri, $totalSize, $hash)
     {
-        if (false === ($destination = fopen($destinationUri, 'a+'))) {
+        if (($destination = fopen($destinationUri, 'a+')) === false) {
             throw new \Exception('Destination is invalid.');
         }
 

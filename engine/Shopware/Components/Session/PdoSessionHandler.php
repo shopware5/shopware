@@ -187,7 +187,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
     public function __construct($pdoOrDsn = null, array $options = [])
     {
         if ($pdoOrDsn instanceof \PDO) {
-            if (\PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
+            if ($pdoOrDsn->getAttribute(\PDO::ATTR_ERRMODE) !== \PDO::ERRMODE_EXCEPTION) {
                 throw new \InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION))', __CLASS__));
             }
 
@@ -275,7 +275,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
      */
     public function open($savePath, $sessionName)
     {
-        if (null === $this->pdo) {
+        if ($this->pdo === null) {
             $this->connect($this->dsn ?: $savePath);
         }
 
@@ -339,7 +339,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
         try {
             // We use a single MERGE SQL query when supported by the database.
             $mergeStmt = $this->getMergeStatement($sessionId, $data, $maxlifetime);
-            if (null !== $mergeStmt) {
+            if ($mergeStmt !== null) {
                 $mergeStmt->execute();
 
                 return true;
@@ -371,7 +371,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
                     $insertStmt->execute();
                 } catch (\PDOException $e) {
                     // Handle integrity violation SQLSTATE 23000 (or a subclass like 23505 in Postgres) for duplicate keys
-                    if (0 === strpos($e->getCode(), '23')) {
+                    if (strpos($e->getCode(), '23') === 0) {
                         $updateStmt->execute();
                     } else {
                         throw $e;
@@ -409,7 +409,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
             $stmt->execute();
         }
 
-        if (false !== $this->dsn) {
+        if ($this->dsn !== false) {
             $this->pdo = null; // only close lazy-connection
         }
 
@@ -423,7 +423,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
      */
     protected function getConnection()
     {
-        if (null === $this->pdo) {
+        if ($this->pdo === null) {
             $this->connect($this->dsn ?: ini_get('session.save_path'));
         }
 
@@ -457,10 +457,10 @@ class PdoSessionHandler implements \SessionHandlerInterface
     private function beginTransaction()
     {
         if (!$this->inTransaction) {
-            if ('sqlite' === $this->driver) {
+            if ($this->driver === 'sqlite') {
                 $this->pdo->exec('BEGIN IMMEDIATE TRANSACTION');
             } else {
-                if ('mysql' === $this->driver) {
+                if ($this->driver === 'mysql') {
                     $this->pdo->exec('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
                 }
                 $this->pdo->beginTransaction();
@@ -477,7 +477,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
         if ($this->inTransaction) {
             try {
                 // commit read-write transaction which also releases the lock
-                if ('sqlite' === $this->driver) {
+                if ($this->driver === 'sqlite') {
                     $this->pdo->exec('COMMIT');
                 } else {
                     $this->pdo->commit();
@@ -501,7 +501,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
         // in a transaction when not using the transactional locking behavior or when
         // two callbacks (e.g. destroy and write) are invoked that both fail.
         if ($this->inTransaction) {
-            if ('sqlite' === $this->driver) {
+            if ($this->driver === 'sqlite') {
                 $this->pdo->exec('ROLLBACK');
             } else {
                 $this->pdo->rollBack();
@@ -524,7 +524,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
     {
         $this->sessionExpired = false;
 
-        if (self::LOCK_ADVISORY === $this->lockMode) {
+        if ($this->lockMode === self::LOCK_ADVISORY) {
             $this->unlockStatements[] = $this->doAdvisoryLock($sessionId);
         }
 
@@ -546,7 +546,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
                 return is_resource($sessionRows[0][0]) ? stream_get_contents($sessionRows[0][0]) : $sessionRows[0][0];
             }
 
-            if (self::LOCK_TRANSACTIONAL === $this->lockMode && 'sqlite' !== $this->driver) {
+            if ($this->lockMode === self::LOCK_TRANSACTIONAL && $this->driver !== 'sqlite') {
                 // Exclusive-reading of non-existent rows does not block, so we need to do an insert to block
                 // until other connections to the session are committed.
                 try {
@@ -561,7 +561,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
                 } catch (\PDOException $e) {
                     // Catch duplicate key error because other connection created the session already.
                     // It would only not be the case when the other connection destroyed the session.
-                    if (0 === strpos($e->getCode(), '23')) {
+                    if (strpos($e->getCode(), '23') === 0) {
                         // Retrieve finished session data written by concurrent connection by restarting the loop.
                         // We have to start a new transaction as a failed query will mark the current transaction as
                         // aborted in PostgreSQL and disallow further queries within it.
@@ -649,7 +649,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
      */
     private function getSelectSql()
     {
-        if (self::LOCK_TRANSACTIONAL === $this->lockMode) {
+        if ($this->lockMode === self::LOCK_TRANSACTIONAL) {
             $this->beginTransaction();
 
             switch ($this->driver) {
@@ -683,36 +683,36 @@ class PdoSessionHandler implements \SessionHandlerInterface
     {
         $mergeSql = null;
         switch (true) {
-            case 'mysql' === $this->driver:
+            case $this->driver === 'mysql':
                 $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time) " .
                     "ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->expiryCol = VALUES($this->expiryCol), $this->timeCol = VALUES($this->timeCol)";
                 break;
-            case 'oci' === $this->driver:
+            case $this->driver === 'oci':
                 // DUAL is Oracle specific dummy table
                 $mergeSql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) " .
                     "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->expiryCol = ?, $this->timeCol = ?";
                 break;
-            case 'sqlsrv' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
+            case $this->driver === 'sqlsrv' && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
                 // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
                 // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
                 $mergeSql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) " .
                     "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->expiryCol = ?, $this->timeCol = ?;";
                 break;
-            case 'sqlite' === $this->driver:
+            case $this->driver === 'sqlite':
                 $mergeSql = "INSERT OR REPLACE INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time)";
                 break;
-            case 'pgsql' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '9.5', '>='):
+            case $this->driver === 'pgsql' && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '9.5', '>='):
                 $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time) " .
                     "ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->expiryCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->expiryCol, EXCLUDED.$this->timeCol)";
                 break;
         }
 
-        if (null !== $mergeSql) {
+        if ($mergeSql !== null) {
             $mergeStmt = $this->pdo->prepare($mergeSql);
 
-            if ('sqlsrv' === $this->driver || 'oci' === $this->driver) {
+            if ($this->driver === 'sqlsrv' || $this->driver === 'oci') {
                 $mergeStmt->bindParam(1, $sessionId, \PDO::PARAM_STR);
                 $mergeStmt->bindParam(2, $sessionId, \PDO::PARAM_STR);
                 $mergeStmt->bindParam(3, $data, \PDO::PARAM_LOB);

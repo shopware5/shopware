@@ -136,7 +136,7 @@ class Shopware_Components_StringCompiler
             return $value;
         }
 
-        if (null === $context) {
+        if ($context === null) {
             $context = $this->getContext();
         }
 

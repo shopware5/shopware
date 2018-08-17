@@ -179,7 +179,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      */
     public static function getInstance()
     {
-        if (null === self::$_instance) {
+        if (self::$_instance === null) {
             self::$_instance = new self();
         }
 
