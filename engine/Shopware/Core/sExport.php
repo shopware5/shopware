@@ -606,7 +606,8 @@ class sExport
                     if ($attribute->isIdentifier()) {
                         continue;
                     }
-                    $map[CrudService::EXT_JS_PREFIX . $attribute->getColumnName()] = $attribute->getColumnName();
+                    $columnName = $attribute->getColumnName();
+                    $map[CrudService::EXT_JS_PREFIX . $columnName] = $columnName;
                 }
                 break;
             case 'link':

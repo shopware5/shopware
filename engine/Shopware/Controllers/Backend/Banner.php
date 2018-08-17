@@ -119,7 +119,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     public function init()
     {
         parent::init();
-        if (!is_null(self::$testRepository)) {
+        if (self::$testRepository !== null) {
             $this->repository = self::$testRepository;
         } else {
             $this->repository = Shopware()->Models()->getRepository(Banner::class);

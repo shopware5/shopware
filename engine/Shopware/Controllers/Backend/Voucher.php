@@ -503,9 +503,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $numberOfStringValues = substr_count($codePattern, '%s');
         $numberOfDigitValues = substr_count($codePattern, '%d');
 
-        $numberOfDigitValues = pow(10, $numberOfDigitValues);
+        $numberOfDigitValues = 10 ** $numberOfDigitValues;
         $numberOfDigitValues = $numberOfDigitValues == 1 ? 0 : $numberOfDigitValues;
-        $numberOfStringValues = pow(26, $numberOfStringValues);
+        $numberOfStringValues = 26 ** $numberOfStringValues;
         $numberOfStringValues = $numberOfStringValues == 1 ? 0 : $numberOfStringValues;
         if (empty($numberOfDigitValues)) {
             $numberOfPossibleCodes = $numberOfStringValues;

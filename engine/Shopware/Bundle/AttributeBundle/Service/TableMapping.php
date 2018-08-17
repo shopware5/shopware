@@ -166,7 +166,7 @@ class TableMapping
     public function getDependingTables($table)
     {
         if (!$this->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Table %s is no supported attribute table'));
+            throw new \Exception(sprintf('Table %s is no supported attribute table', $table));
         }
 
         return $this->tables[$table]['dependingTables'];

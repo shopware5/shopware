@@ -159,7 +159,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $supplierModel->setChanged();
 
         $mediaData = $this->Request()->get('media-manager-selection');
-        if (!empty($mediaData) && !is_null($mediaData)) {
+        if (!empty($mediaData) && $mediaData !== null) {
             $supplierModel->setImage($this->Request()->get('media-manager-selection'));
         }
 

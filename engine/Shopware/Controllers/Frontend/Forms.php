@@ -166,8 +166,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         /* @var $field Field */
         foreach ($form->getFields() as $field) {
-            $this->_elements[$field->getId()] = [
-                'id' => (string) $field->getId(), // intended string cast to keep compatibility
+            $fieldId = $field->getId();
+            $this->_elements[$fieldId] = [
+                'id' => (string) $fieldId, // intended string cast to keep compatibility
                 'name' => $field->getName(),
                 'note' => $field->getNote(),
                 'typ' => $field->getTyp(),

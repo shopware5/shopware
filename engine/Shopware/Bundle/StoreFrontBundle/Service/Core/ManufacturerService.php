@@ -97,10 +97,11 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     {
         $links = [];
         foreach ($manufacturers as $manufacturer) {
-            $links[$manufacturer->getId()] = [
+            $manufacturerId = $manufacturer->getId();
+            $links[$manufacturerId] = [
                 'controller' => 'listing',
                 'action' => 'manufacturer',
-                'sSupplier' => $manufacturer->getId(),
+                'sSupplier' => $manufacturerId,
             ];
         }
 

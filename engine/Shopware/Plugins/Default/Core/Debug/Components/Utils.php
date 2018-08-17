@@ -82,7 +82,7 @@ class Utils
         }
         $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
 
-        return @number_format($size / pow(1024, ($i = floor(log($size, 1024)))), 2, '.', '') . ' ' . $unit[$i];
+        return @number_format($size / (1024 ** ($i = floor(log($size, 1024)))), 2, '.', '') . ' ' . $unit[$i];
     }
 
     /**

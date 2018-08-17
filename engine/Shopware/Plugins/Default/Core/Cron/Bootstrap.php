@@ -52,7 +52,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
     public function authorizeCronAction($request)
     {
         // If called using CLI, always execute the cron tasks
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI === 'cli') {
             return true;
         }
 

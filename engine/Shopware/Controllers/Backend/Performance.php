@@ -576,9 +576,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     protected function getPerformanceCheckData()
     {
         $descriptionPHPVersion = '';
-        if (version_compare(phpversion(), self::PHP_RECOMMENDED_VERSION, '>=')) {
+        if (version_compare(PHP_VERSION, self::PHP_RECOMMENDED_VERSION, '>=')) {
             $validPHPVersion = self::PERFORMANCE_VALID;
-        } elseif (version_compare(phpversion(), self::PHP_MINIMUM_VERSION, '>=')) {
+        } elseif (version_compare(PHP_VERSION, self::PHP_MINIMUM_VERSION, '>=')) {
             $validPHPVersion = self::PERFORMANCE_WARNING;
             $descriptionPHPVersion = Shopware()->Snippets()->getNamespace('backend/performance/main')
                 ->get('cache/php_version/description_eol');
@@ -602,7 +602,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             [
                 'id' => 4,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/php_version'),
-                'value' => phpversion(),
+                'value' => PHP_VERSION,
                 'valid' => $validPHPVersion,
                 'description' => $descriptionPHPVersion,
             ],

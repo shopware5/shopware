@@ -222,7 +222,7 @@ class WildfireFormatter extends BaseWildfireFormatter
                     return '** Recursion (' . get_class($object) . ') **';
                 }
             }
-            array_push($this->objectStack, $object);
+            $this->objectStack[] = $object;
 
             $return['__className'] = $class = get_class($object);
 
