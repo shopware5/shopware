@@ -101,6 +101,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 }
             }
 
+            /*{if {acl_is_allowed privilege=manage resource=benchmark}}*/
             if (biOverviewEnabled) {
                 Ext.Function.defer(function() {
                     Shopware.app.Application.addSubApplication({
@@ -111,6 +112,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                     });
                 }, 2000);
             }
+            /* {/if} */
         }
     },
 
