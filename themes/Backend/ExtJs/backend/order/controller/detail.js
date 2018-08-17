@@ -741,7 +741,13 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     }
                 }
                 // reload the order list
-                me.getOrderList().store.load();
+                try {
+                    me.getOrderList().getStore().load();
+                } catch(e) {
+                    // In this case the order overview/list might not be opened. E.g. user opened the the order via quick search in topbar.
+                    // Do nothing intentionally.
+                }
+
             }
         });
     },
@@ -763,7 +769,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         record.get('id')
                     ],
                     record: record,
-                    listStore: me.getOrderList().getStore(),
+                    listStore: me.getOrderList() ? me.getOrderList().getStore() : null,
                     documentTypeStore: documentTypeStore,
                     mail: mail
                 }).show();
