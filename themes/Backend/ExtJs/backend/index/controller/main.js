@@ -572,7 +572,6 @@ createShopwareVersionMessage = function() {
                     '<p><strong>Flysystem</strong><span>MIT License</span><span>&nbsp;Origin: http://flysystem.thephpleague.com</span></p>' +
                     '<p><strong>paragonie/random_compat</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/paragonie/random_compat</span></p>' +
                     '<p><strong>beberlei/assert</strong><span>License</span><span>&nbsp;Origin: https://github.com/beberlei/assert</span></p>' +
-                    '<p><strong>tedivm/jshrink</strong><span>BSD-3-Clause</span><span>&nbsp;Origin: https://github.com/tedious/JShrink</span></p>' +
                 "</p>"
         }]
     });
