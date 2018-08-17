@@ -167,7 +167,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     'success' => false,
                     'overwriteAble' => true,
                     'data' => $this->getArticle($article->getId()),
-                    'message' => $namespace->get('article_has_been_changed', 'The article has been changed in the meantime. To prevent overwriting these changes, saving the article was aborted. Please close the article and re-open it.')
+                    'message' => $namespace->get('article_has_been_changed', 'The article has been changed in the meantime. To prevent overwriting these changes, saving the article was aborted. Please close the article and re-open it.'),
                 ]);
 
                 return;

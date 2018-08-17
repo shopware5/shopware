@@ -136,7 +136,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
 
     protected function printExitMessage()
     {
-        if (0 === count($this->errors)) {
+        if (count($this->errors) === 0) {
             $this->output->writeln('<info>Thumbnail generation finished successfully</info>');
 
             return;

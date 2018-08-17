@@ -128,7 +128,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      */
     public function takeScreenshotAfterFailedStep(AfterStepScope $scope)
     {
-        if (TestResult::FAILED === $scope->getTestResult()->getResultCode()) {
+        if ($scope->getTestResult()->getResultCode() === TestResult::FAILED) {
             $this->takeScreenshot();
             $this->logRequest();
         }

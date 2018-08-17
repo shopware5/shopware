@@ -57,7 +57,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
 
     public function testAbsoluteVoucher()
     {
-        $this->setVoucherTax('absolut','default');
+        $this->setVoucherTax('absolut', 'default');
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00), 1);
         Shopware()->Modules()->Basket()->sAddVoucher('absolut');
 

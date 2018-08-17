@@ -55,7 +55,7 @@ class SitemapWriter implements SitemapWriterInterface
 
     /**
      * @param SitemapNameGenerator $sitemapNameGenerator
-     * @param FilesystemInterface $filesystem
+     * @param FilesystemInterface  $filesystem
      */
     public function __construct(SitemapNameGenerator $sitemapNameGenerator, FilesystemInterface $filesystem)
     {

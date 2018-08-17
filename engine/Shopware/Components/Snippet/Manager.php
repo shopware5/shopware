@@ -177,7 +177,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
-     * @param   $dir
+     * @param $dir
      *
      * @return Shopware_Components_Snippet_Manager
      */

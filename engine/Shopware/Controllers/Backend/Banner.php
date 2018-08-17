@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Banner\Banner;
 
 /**
@@ -191,7 +190,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         }
 
         // check if there are more than one media is submitted
-        if (false !== strpos($this->Request()->get('media-manager-selection'), ',')) {
+        if (strpos($this->Request()->get('media-manager-selection'), ',') !== false) {
             $this->View()->assign([
                 'success' => false,
                 'errorMsg' => $this

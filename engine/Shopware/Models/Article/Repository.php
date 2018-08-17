@@ -1963,7 +1963,7 @@ class Repository extends ModelRepository
         $builder->leftJoin('supplier.articles', 'articles');
         $builder->groupBy('supplier.id');
 
-        if (is_array($filter) && ('name' == $filter[0]['property'])) {
+        if (is_array($filter) && ($filter[0]['property'] == 'name')) {
             //filter the displayed columns with the passed filter
             $builder
                 ->where('supplier.name LIKE ?1') //Search only the beginning of the customer number.

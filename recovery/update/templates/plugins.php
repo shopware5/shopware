@@ -1,4 +1,4 @@
-<?php $app->render('_header.php', ['tab' => 'start']) ?>
+<?php $app->render('_header.php', ['tab' => 'start']); ?>
 
 <table>
     <thead>
@@ -12,19 +12,19 @@
     <tbody>
     <?php foreach ($plugins as $plugin): ?>
         <tr>
-            <td><?= $plugin['plugin_name'] ?></td>
-            <td><?= $plugin['in_store'] ?></td>
-            <td><?= $plugin['compatible'] ?></td>
+            <td><?= $plugin['plugin_name']; ?></td>
+            <td><?= $plugin['in_store']; ?></td>
+            <td><?= $plugin['compatible']; ?></td>
         </tr>
-    <?php endforeach ?>
+    <?php endforeach; ?>
     </tbody>
 </table>
 
-<form action="<?= $app->urlFor('dbmigration') ?>" method="get">
+<form action="<?= $app->urlFor('dbmigration'); ?>" method="get">
     <div class="actions clearfix">
-        <a href="<?= $app->urlFor('checks'); ?>" class="btn btn-default btn-arrow-left"><?= $language['back'] ?></a>
-        <button type="submit" class="btn btn-primary btn-arrow-right is--right"><?= $language['forward'] ?></button>
+        <a href="<?= $app->urlFor('checks'); ?>" class="btn btn-default btn-arrow-left"><?= $language['back']; ?></a>
+        <button type="submit" class="btn btn-primary btn-arrow-right is--right"><?= $language['forward']; ?></button>
     </div>
 </form>
 
-<?php $app->render('_footer.php') ?>
+<?php $app->render('_footer.php'); ?>

@@ -144,7 +144,7 @@ class DatabaseInteractor
         $question = new Question(sprintf('Please enter database host (%s): ', $defaultHostname), $defaultHostname);
         $question->setValidator(
             function ($answer) {
-                if ('' === trim($answer)) {
+                if (trim($answer) === '') {
                     throw new \Exception('The database user can not be empty');
                 }
 
@@ -173,7 +173,7 @@ class DatabaseInteractor
 
         $question->setValidator(
             function ($answer) {
-                if ('' === trim($answer)) {
+                if (trim($answer) === '') {
                     throw new \Exception('The database user can not be empty');
                 }
 
@@ -215,7 +215,7 @@ class DatabaseInteractor
         $question = new Question(sprintf('Please enter database port (%s): ', $defaultPort), $defaultPort);
         $question->setValidator(
             function ($answer) {
-                if ('' === trim($answer)) {
+                if (trim($answer) === '') {
                     throw new \Exception('The database port can not be empty');
                 }
 

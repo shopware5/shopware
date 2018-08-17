@@ -212,7 +212,7 @@ abstract class ModelEntity
                 //if the item is an array without an id, create a new model.
             } elseif (is_array($item)) {
                 $attribute = new $model();
-                //if the item is no array, it could be an instance of the expected object.
+            //if the item is no array, it could be an instance of the expected object.
             } else {
                 $attribute = $item;
             }

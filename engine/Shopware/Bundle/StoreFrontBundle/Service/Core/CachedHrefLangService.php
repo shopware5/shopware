@@ -42,7 +42,7 @@ class CachedHrefLangService implements HrefLangServiceInterface
 
     /**
      * @param HrefLangServiceInterface $hrefLangService
-     * @param Cache $cache
+     * @param Cache                    $cache
      */
     public function __construct(HrefLangServiceInterface $hrefLangService, Cache $cache)
     {

@@ -26,8 +26,6 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
-use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
-use Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;

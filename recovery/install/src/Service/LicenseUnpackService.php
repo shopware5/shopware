@@ -35,8 +35,9 @@ use Shopware\Recovery\Install\Struct\LicenseUnpackRequest;
 interface LicenseUnpackService
 {
     /**
-     * @param  LicenseUnpackRequest $request
-     * @param TranslationService $translation
+     * @param LicenseUnpackRequest $request
+     * @param TranslationService   $translation
+     *
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request, TranslationService $translation);

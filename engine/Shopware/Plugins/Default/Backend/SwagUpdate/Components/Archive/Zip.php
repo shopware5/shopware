@@ -53,7 +53,7 @@ class Zip extends Adapter
         $this->stream = new ZipArchive();
 
         if ($fileName != null) {
-            if (true !== ($retval = $this->stream->open($fileName, $flags))) {
+            if (($retval = $this->stream->open($fileName, $flags)) !== true) {
                 throw new \RuntimeException($this->getErrorMessage($retval, $fileName), $retval);
             }
             $this->position = 0;

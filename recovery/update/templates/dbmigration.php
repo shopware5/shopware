@@ -1,4 +1,4 @@
-<?php $app->render('_header.php', ['tab' => 'dbmigration']) ?>
+<?php $app->render('_header.php', ['tab' => 'dbmigration']); ?>
 
 <h2><?= $language['migration_header']; ?></h2>
 
@@ -33,4 +33,4 @@
     </div>
 </form>
 
-<?php $app->render('_footer.php') ?>
+<?php $app->render('_footer.php'); ?>

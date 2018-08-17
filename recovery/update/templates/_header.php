@@ -15,11 +15,11 @@
 
     <title><?= $language['title']; ?></title>
 
-    <link rel="shortcut icon" href="<?= $baseUrl ?>../common/assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?= $baseUrl; ?>../common/assets/images/favicon.ico" type="image/x-icon" />
 
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/reset.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/icons.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/style.css?<?= $version ?>" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl; ?>../common/assets/styles/reset.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl; ?>../common/assets/styles/icons.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl; ?>../common/assets/styles/style.css?<?= $version; ?>" media="all"/>
 
     <script>
         var shopwareTranslations = {
@@ -31,16 +31,16 @@
     </script>
 </head>
 
-<body class="<?= (!UPDATE_IS_MANUAL && $tab == 'dbmigration' || !UPDATE_IS_MANUAL && $tab == 'done') ? 'auto' : '' ?>">
+<body class="<?= (!UPDATE_IS_MANUAL && $tab == 'dbmigration' || !UPDATE_IS_MANUAL && $tab == 'done') ? 'auto' : ''; ?>">
 <div class="page--wrap">
 
     <!-- Header -->
     <header class="header--main">
-        <img src="<?= $baseUrl ?>assets/images/logo.png" alt="Shopware 5 Updater">
-        <img src="<?= $baseUrl ?>../common/assets/images/logo-sw5.png" alt="Shopware 5" class="header-shopware5-logo is--right">
+        <img src="<?= $baseUrl; ?>assets/images/logo.png" alt="Shopware 5 Updater">
+        <img src="<?= $baseUrl; ?>../common/assets/images/logo-sw5.png" alt="Shopware 5" class="header-shopware5-logo is--right">
 
         <div class="version--notice">
-            <?= $version ?>
+            <?= $version; ?>
         </div>
     </header>
 
@@ -48,23 +48,23 @@
         <!-- Navigation list -->
         <nav class="navigation--main block">
             <ul class="navigation--list">
-                <li class="navigation--entry <?= ($tab == 'start') ? 'is--active' : '' ?>">
+                <li class="navigation--entry <?= ($tab == 'start') ? 'is--active' : ''; ?>">
                     <span class="navigation--link"><?= $language['tab_start']; ?></span>
                 </li>
 
-                <li class="navigation--entry  <?= ($tab == 'system') ? 'is--active' : '' ?>">
+                <li class="navigation--entry  <?= ($tab == 'system') ? 'is--active' : ''; ?>">
                     <span class="navigation--link"><?= $language['tab_check']; ?></span>
                 </li>
 
-                <li class="navigation--entry  <?= ($tab == 'dbmigration') ? 'is--active' : '' ?>">
+                <li class="navigation--entry  <?= ($tab == 'dbmigration') ? 'is--active' : ''; ?>">
                     <span class="navigation--link"><?= $language['tab_migration']; ?></span>
                 </li>
 
-                <li class="navigation--entry <?= ($tab == 'cleanup') ? 'is--active' : '' ?>">
+                <li class="navigation--entry <?= ($tab == 'cleanup') ? 'is--active' : ''; ?>">
                     <span class="navigation--link"><?= $language['tab_cleanup']; ?></span>
                 </li>
 
-                <li class="navigation--entry <?= ($tab == 'done') ? 'is--active' : '' ?>">
+                <li class="navigation--entry <?= ($tab == 'done') ? 'is--active' : ''; ?>">
                     <span class="navigation--link"><?= $language['tab_done']; ?></span>
                 </li>
             </ul>

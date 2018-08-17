@@ -169,7 +169,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     public function deleteCostsMatrixEntryAction()
     {
         $costsId = $this->Request()->getParam('id', null);
-        if (null === $costsId) {
+        if ($costsId === null) {
             $this->View()->assign(['success' => false, 'errorMsg' => 'No ID given to delete']);
         }
         try {
@@ -346,7 +346,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
     /**
      * Get all countries who are selected for this dispatch id
-
      */
     public function getHolidaysAction()
     {
