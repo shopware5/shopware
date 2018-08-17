@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Logger;
 
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
@@ -204,7 +203,7 @@ return array_replace_recursive([
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
         'display_errors' => 0,
-        'date.timezone' => 'Europe/Berlin',
+        'date.timezone' => date_default_timezone_get() ?: 'Europe/Berlin',
     ],
     'cache' => [
         'frontendOptions' => [
@@ -260,6 +259,6 @@ return array_replace_recursive([
         'cacheDir' => $this->DocPath('web_cache'),
     ],
     'logger' => [
-        'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR
-    ]
+        'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
+    ],
 ], $customConfig);

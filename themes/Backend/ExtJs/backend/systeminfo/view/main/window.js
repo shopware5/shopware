@@ -77,6 +77,9 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                         xtype: 'systeminfo-main-encoder',
                         encoderStore: me.encoderStore
                     },{
+                        xtype: 'systeminfo-main-timezone',
+                        encoderStore: me.encoderStore
+                    },{
                         xtype: 'systeminfo-main-configlist'
                     }]
                 },{
