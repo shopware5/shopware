@@ -699,7 +699,7 @@ class Order extends Resource
             ));
         }
 
-        if (array_key_exists('stateId', $billing)) {
+        if (array_key_exists('stateId', $billing) && !empty($billing['stateId'])) {
             $state = $this->getContainer()->get('models')->find(State::class, $billing['stateId']);
             if (!$state) {
                 throw new ApiException\NotFoundException(sprintf(
@@ -739,7 +739,7 @@ class Order extends Resource
             ));
         }
 
-        if (array_key_exists('stateId', $shipping)) {
+        if (array_key_exists('stateId', $shipping) && !empty($shipping['stateId'])) {
             $state = $this->getContainer()->get('models')->find(State::class, $shipping['stateId']);
             if (!$state) {
                 throw new ApiException\NotFoundException(sprintf(
