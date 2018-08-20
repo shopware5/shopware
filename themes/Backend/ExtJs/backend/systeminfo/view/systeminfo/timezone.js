@@ -76,9 +76,8 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Timezone', {
             url:'{url controller="Systeminfo" action="getTimezone"}',
             scope: me,
             success: function (record) {
-                console.log(record);
                 var decodedResponse = Ext.JSON.decode(record.responseText),
-                    snippet = '{s name=no_encoder_information}No information wether encoder is installed or not{/s}';
+                    snippet = '';
                 if (!decodedResponse.offset) {
                     snippet = '{s name=no_difference}Database and php dates are the same.{/s}';
                     block.items.items[0].removeCls('notice');
