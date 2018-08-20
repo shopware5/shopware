@@ -1842,8 +1842,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $upstream = $filesystem->readStream($path);
         $downstream = fopen('php://output', 'wb');
 
+        ob_end_clean();
+
         while (!feof($upstream)) {
             fwrite($downstream, fread($upstream, 4096));
+            flush();
         }
     }
 
