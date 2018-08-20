@@ -45,6 +45,7 @@
             <argument type="tagged" tag="shopware_emotion.component_handler" />
             <argument type="service" id="shopware_emotion.emotion_element_gateway" />
             <argument type="service" id="shopware_emotion.data_collection_resolver" />
+            <argument type="service" id="events"/>
         </service>
 
         <service id="shopware_emotion.emotion_struct_converter" class="Shopware\Bundle\EmotionBundle\Service\StructConverter">

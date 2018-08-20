@@ -81,7 +81,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Sitemaps will be now served from cache and compressed with gzip
     * Added new DI tag ``sitemap_url_provider`` to add custom sitemap url provider
     * Added new interface ``Shopware\Bundle\SitemapBundle\UrlProviderInterface`` for url providers
-* Added new event ``KernelEvents::TERMINATE``, which will be fired after the response has been sent, when the kernel terminates
 * Added new DIC parameter `shopware.es.batchsize` (configurable via `config.php`) to change the number of products that are send to elasticsearch in one batch
 * Added confirm dialog when changing variant price with a price scale
 * Added services and classes to support dynamic (time-based) cache invalidation via the HttpCache plugin
@@ -104,7 +103,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added support in `config.php` to specify TrustedHeaderSet options for Symfony
 * Added user attributes to PDF documents
 * Added shop selection to emotions, to limit emotion to a specific shop
-* Added new block `frontend_account_order_item_status_value_custom` to `Bare/frontend/account/order_item.tpl`
+* Added block `frontend_account_order_item_status_value_custom` to `Bare/frontend/account/order_item.tpl`
+* Added event ``KernelEvents::TERMINATE``, which will be fired after the response has been sent, when the kernel terminates
+* Added event `Shopware_Emotion_Collect_Emotion_Component_Handlers` to add component handler on legacy plugin system
 * Added filter event `Legacy_Struct_Converter_Convert_Product_Price` to `Shopware\Components\Compatibility\LegacyStructConverter::convertProductPriceStruct`
 * Added filter event `Shopware_Components_Document_Render_FilterHtml` to `Shopware_Components_Document::render`
 * Added option to allow multiple documents of the same type for orders in `engine/Shopware/Components/Document.php`
