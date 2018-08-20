@@ -216,6 +216,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         $action = $args->getSubject();
 
+        $db = $this->get('db');
+
         $action->View()->NotifyValid = false;
         $action->View()->NotifyInvalid = false;
 
@@ -225,10 +227,11 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             ', [$action->Request()->sNotificationConfirmation]);
 
             $notificationConfirmed = false;
+            $json_data = [];
             if (!empty($getConfirmation['hash'])) {
                 $notificationConfirmed = true;
                 $json_data = unserialize($getConfirmation['data']);
-                Shopware()->Db()->query('DELETE FROM s_core_optin WHERE hash=?', [$action->Request()->sNotificationConfirmation]);
+                $db->query('DELETE FROM s_core_optin WHERE hash=?', [$action->Request()->sNotificationConfirmation]);
             }
             if ($notificationConfirmed) {
                 $sql = '
@@ -244,14 +247,27 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                         ?, NOW(), ?, ?, ?, 0
                     );
                 ';
-                Shopware()->Db()->query($sql, [
+                $db->query($sql, [
                     $json_data['notifyOrdernumber'],
                     $json_data['sNotificationEmail'],
                     $json_data['sLanguage'],
                     $json_data['sShopPath'],
                 ]);
+
+                $insertId = $db->lastInsertId();
+
+                $db->insert(
+                    's_articles_notification_attributes',
+                    [
+                        'notificationID' => $insertId,
+                    ]
+                );
+
+                $eventManager = $this->get('events');
+                $eventManager->notify('Shopware_Notification_Notification_Saved', ['id' => $insertId, 'data' => $json_data]);
+
                 $action->View()->NotifyValid = true;
-                Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
+                $this->get('session')->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
             } else {
                 $action->View()->NotifyInvalid = true;
             }
@@ -277,6 +293,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         $notifications = $conn->createQueryBuilder()
             ->select(
+                'n.id',
                 'n.ordernumber',
                 'n.mail',
                 'n.language'
@@ -325,6 +342,10 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 continue;
             }
 
+            /** @var Shopware\Bundle\AttributeBundle\Service\DataLoader $attributeLoader */
+            $attributeLoader = $this->get('shopware_attribute.data_loader');
+            $notify['attribute'] = $attributeLoader->load('s_articles_notification_attributes', $notify['id']);
+
             /* @var $shop \Shopware\Models\Shop\Shop */
             $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($notify['language']);
             $shop->registerResources();
@@ -339,6 +360,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             ]);
 
             $context = [
+                'sNotifyData' => $notify,
                 'sArticleLink' => $link,
                 'sOrdernumber' => $notify['ordernumber'],
                 'sData' => $job['data'],
