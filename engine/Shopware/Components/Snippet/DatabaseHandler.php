@@ -109,6 +109,7 @@ class DatabaseHandler
         $finder = new Finder();
         $finder->files()->in($snippetsDir);
         $defaultLocale = $localeRepository->findOneBy(['locale' => 'en_GB']);
+        $defaultShopId = 1;
 
         $snippetCount = $this->em->getConnection()->fetchArray('SELECT * FROM s_core_snippets LIMIT 1');
         $databaseWriter->setUpdate((bool) $snippetCount);
@@ -129,15 +130,22 @@ class DatabaseHandler
             ]);
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
-                if ($index == 'default') {
+                if (strpos($index, '/') !== false) {
+                    list($shopId, $locale) = explode('/', $index);
+                } else {
+                    $shopId = $defaultShopId;
+                    $locale = $index;
+                }
+
+                if ($locale == 'default') {
                     $locale = $defaultLocale;
                 } else {
-                    $locale = $localeRepository->findOneBy(['locale' => $index]);
+                    $locale = $localeRepository->findOneBy(['locale' => $locale]);
                 }
 
                 // Only write entry if locale was found
                 if ($locale) {
-                    $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
+                    $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), $shopId);
 
                     $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
                 }
@@ -179,34 +187,49 @@ class DatabaseHandler
             'sectionColumn' => ['localeID', 'shopID'],
         ]);
 
-        $namespaces = array_map(
+        $shopsIds = array_map(
             function ($result) {
-                return $result['namespace'];
+                return $result['shopId'];
             },
-            $snippetRepository->getDistinctNamespacesQuery($locale->getId())->getArrayResult()
+            $snippetRepository->getDistinctShopsQueryQuery($locale->getId())->getArrayResult()
         );
 
-        if (count($namespaces) == 0) {
-            $this->printWarning('<error>No snippets found for the given locale(s)</error>');
+        foreach ($shopsIds as $shopId) {
+            $namespaces = array_map(
+                function ($result) {
+                    return $result['namespace'];
+                },
+                $snippetRepository->getDistinctNamespacesQuery($locale->getId(), $shopId)->getArrayResult()
+            );
 
-            return;
-        }
+            if (count($namespaces) == 0) {
+                $this->printWarning('<error>No snippets found for the given locale(s)</error>');
 
-        $data = [];
+                return;
+            }
 
-        foreach ($namespaces as $namespace) {
-            if (!array_key_exists($namespace, $data)) {
-                $data[$namespace] = true;
-                $content = new \Enlight_Components_Snippet_Namespace([
-                    'adapter' => $inputAdapter,
-                    'name' => $namespace,
-                    'section' => [
-                        $locale->getId(),
-                    ],
-                ]);
+            $data = [];
 
-                $content->setSection($locale->getLocale());
-                $outputAdapter->write($content, true);
+            foreach ($namespaces as $namespace) {
+                if (!array_key_exists($namespace, $data)) {
+                    $data[$namespace] = true;
+                    $content = new \Enlight_Components_Snippet_Namespace([
+                        'adapter' => $inputAdapter,
+                        'name' => $namespace,
+                        'section' => [
+                            $locale->getId(),
+                            $shopId,
+                        ],
+                    ]);
+
+                    $sectionName = $locale->getLocale();
+                    if ($shopId !== 1) {
+                        $sectionName = $shopId . '/' . $sectionName;
+                    }
+
+                    $content->setSection($sectionName);
+                    $outputAdapter->write($content, true);
+                }
             }
         }
     }

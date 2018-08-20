@@ -112,6 +112,21 @@ class SnippetValidator
             FROM `s_core_locales`'
         )->fetchAll(\PDO::FETCH_COLUMN);
 
-        return $locales;
+        $shops = $this->db->executeQuery(
+            'SELECT id
+            FROM `s_core_shops`'
+        )->fetchAll(\PDO::FETCH_COLUMN);
+        $return = [];
+
+        foreach ($locales as $locale) {
+            $return[$locale] = 1;
+            foreach ($shops as $shop) {
+                $return[$shop . '/' . $locale] = 1;
+            }
+        }
+
+        $return = array_keys($return);
+
+        return $return;
     }
 }

@@ -31,14 +31,14 @@ use Shopware\Components\Model\ModelRepository;
  */
 class SnippetRepository extends ModelRepository
 {
-    public function getDistinctNamespacesQuery($locales = null, $limit = null, $offset = null)
+    public function getDistinctNamespacesQuery($locales = null, $shopIds = null, $limit = null, $offset = null)
     {
-        $builder = $this->getDistinctNamespacesQueryBuilder($locales, $limit, $offset);
+        $builder = $this->getDistinctNamespacesQueryBuilder($locales, $shopIds, $limit, $offset);
 
         return $builder->getQuery();
     }
 
-    public function getDistinctNamespacesQueryBuilder($locales = null, $limit = null, $offset = null)
+    public function getDistinctNamespacesQueryBuilder($locales = null, $shopIds = null, $limit = null, $offset = null)
     {
         $builder = $this->createQueryBuilder('snippet')
             ->select([
@@ -46,11 +46,32 @@ class SnippetRepository extends ModelRepository
             ]);
         if ($locales) {
             $builder
-                ->where('snippet.localeId IN (:locales)')->setParameter('locales', $locales);
+                ->andWhere('snippet.localeId IN (:locales)')->setParameter('locales', $locales);
+        }
+        if ($shopIds) {
+            $builder
+                ->andWhere('snippet.shopId = (:shopIds)')->setParameter('shopIds', $shopIds);
         }
 
         $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
+
+        return $builder;
+    }
+
+    public function getDistinctShopsQueryQuery($localeId)
+    {
+        $builder = $this->getDistinctShopsQueryBuilder($localeId);
+
+        return $builder->getQuery();
+    }
+
+    public function getDistinctShopsQueryBuilder($localeId)
+    {
+        $builder = $this->createQueryBuilder('snippet')
+            ->select([
+                'DISTINCT snippet.shopId as shopId',
+            ])->where('snippet.localeId = :localeId')->setParameter('localeId', $localeId);
 
         return $builder;
     }

@@ -53,4 +53,35 @@ class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Com
 
         $this->assertEmpty($validationResult, "Snippet validation errors detected: \n" . implode("\n", $validationResult));
     }
+
+    /**
+     * Test case
+     */
+    public function testShopSpecificSnippetsStructure()
+    {
+        $source = Shopware()->Container()->getParameter('kernel.root_dir') . '/snippets';
+
+        $validator = Shopware()->Container()->get('shopware.snippet_validator');
+
+        // try to find snippet for special subshop
+        $snippetFakeData = Shopware()->Db()->fetchRow('select * from s_core_snippets where shopID="2" and localeID="1" limit 1');
+
+        // insert new faked snippet translation for a special subshop for locale 1 if not already found
+        if ($snippetFakeData === false) {
+            $snippetFakeData = Shopware()->Db()->fetchRow('select * from s_core_snippets where localeID="1" limit 1');
+            unset($snippetFakeData['id']);
+            $snippetFakeData['shopID'] = '2';
+            Shopware()->Db()->insert('s_core_snippets', $snippetFakeData);
+        }
+
+        // export snippets to snippet folder
+        /** @var $databaseLoader \Shopware\Components\Snippet\DatabaseHandler */
+        $databaseLoader = Shopware()->Container()->get('shopware.snippet_database_handler');
+        $databaseLoader->dumpFromDatabase('snippets', 'de_DE');
+
+        // validate snippets
+        $validationResult = $validator->validate($source);
+
+        $this->assertEmpty($validationResult, "Snippet validation errors detected: \n" . implode("\n", $validationResult));
+    }
 }
