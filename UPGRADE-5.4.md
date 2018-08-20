@@ -39,6 +39,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 * Changed variant search to toggle join prices with `hideNoInStock` configuration
 * Changed Double-Opt-In setting for comments/ratings on products and blog articles to be off by default
 * Changed field `remoteaddr` in table `s_statistics_pool` to contain a hash instead of the real IP of a visitor
+* Changed order api to allow creating orders without stateId
 
 ## 5.4.5
 
