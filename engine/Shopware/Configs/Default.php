@@ -203,7 +203,7 @@ return array_replace_recursive([
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
         'display_errors' => 0,
-        'date.timezone' => date_default_timezone_get() ?: 'Europe/Berlin',
+        'date.timezone' => 'Europe/Berlin',
     ],
     'cache' => [
         'frontendOptions' => [
