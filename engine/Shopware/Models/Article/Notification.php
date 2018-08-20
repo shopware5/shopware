@@ -26,6 +26,7 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware Notification Model
@@ -58,6 +59,17 @@ class Notification extends LazyFetchModelEntity
      * @ORM\JoinColumn(name="mail", referencedColumnName="email")
      */
     protected $customer;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @var \Shopware\Models\Attribute\ArticleNotification
+     *
+     * @Assert\Valid
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleNotification", mappedBy="articleNotification", cascade={"persist"})
+     */
+    protected $attribute;
     /**
      * @var int
      *
@@ -213,6 +225,40 @@ class Notification extends LazyFetchModelEntity
     public function getShopLink()
     {
         return $this->shopLink;
+    }
+
+    /**
+     * @param string $articleNumber
+     */
+    public function setArticleNumber(string $articleNumber)
+    {
+        $this->articleNumber = $articleNumber;
+    }
+
+    /**
+     * @param string $mail
+     */
+    public function setMail(string $mail)
+    {
+        $this->mail = $mail;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\ArticleNotification
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\ArticleNotification $attribute
+     *
+     * @return Notification
+     */
+    public function setAttribute(\Shopware\Models\Attribute\ArticleNotification $attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleNotification', 'attribute', 'articleNotification');
     }
 
     /**

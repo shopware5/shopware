@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.Attributes.model.Table', {
         s_emarketing_vouchers_attributes: '{s name="table/s_emarketing_vouchers_attributes"}{/s}',
         s_user_addresses_attributes: '{s name="table/s_user_addresses_attributes"}{/s}',
         s_customer_streams_attributes: '{s name="table/s_customer_streams_attributes"}{/s}',
+        s_articles_notification_attributes: '{s name="table/s_articles_notification_attributes"}{/s}',
     },
 
     fields: [
