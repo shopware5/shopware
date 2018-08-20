@@ -64,8 +64,9 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
 
-        $this->componentHandlers = iterator_to_array($componentHandlers, false);
-        $this->componentHandlers = $this->registerComponentHandlers();
+        $this->componentHandlers = $this->registerComponentHandlers(
+            iterator_to_array($componentHandlers, false)
+        );
         $this->rootDir = $rootDir;
     }
 
@@ -194,9 +195,11 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
+     * @param array $defaultComponentHandlers
+     *
      * @return array
      */
-    private function registerComponentHandlers()
+    private function registerComponentHandlers(array $defaultComponentHandlers)
     {
         $componentHandlers = new ArrayCollection();
         $componentHandlers = $this->eventManager->collect(
@@ -204,7 +207,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
             $componentHandlers
         );
 
-        return array_merge($this->componentHandlers, $componentHandlers->toArray());
+        return array_merge($defaultComponentHandlers, $componentHandlers->toArray());
     }
 
     /**

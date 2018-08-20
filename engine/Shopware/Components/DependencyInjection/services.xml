@@ -643,7 +643,7 @@
             <argument type="service" id="shopware.emotion.preset_data_synchronizer" />
             <argument type="service" id="shopware.api.emotionpreset" />
             <argument type="service" id="shopware_media.media_service" />
-            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.app.rootdir%</argument>
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.slug" />
         </service>
@@ -679,7 +679,7 @@
             <argument type="service" id="events" />
             <!--preset element handlers-->
             <argument type="tagged" tag="shopware.emotion.preset_component_handler" />
-            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.app.rootdir%</argument>
         </service>
 
         <service id="shopware.emotion.preset_banner_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerComponentHandler">
@@ -851,7 +851,7 @@
 
         <service id="shopware.filesystem.public.url_generator" class="Shopware\Components\Filesystem\PublicUrlGenerator">
             <argument type="service" id="service_container"/>
-            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.app.rootdir%</argument>
             <argument>%shopware.filesystem.public.config.root%</argument>
             <argument>%shopware.filesystem.public.config.url%</argument>
         </service>

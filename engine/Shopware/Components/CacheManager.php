@@ -380,7 +380,7 @@ class CacheManager
      */
     public function getDirectoryInfo($dir)
     {
-        $docRoot = $this->container->getParameter('kernel.root_dir') . '/';
+        $docRoot = $this->container->getParameter('shopware.app.rootdir') . '/';
 
         $info = [];
         $info['dir'] = str_replace($docRoot, '', $dir);
