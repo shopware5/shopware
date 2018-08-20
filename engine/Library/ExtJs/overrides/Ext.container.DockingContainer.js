@@ -20,6 +20,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/dockingContainer"}
 Ext.override(Ext.container.DockingContainer, {
+    //{block name="extjs/overrides/dockingContainer/dockedItems"}
     dockedItems: []
+    //{/block}
 });
+//{/block}
