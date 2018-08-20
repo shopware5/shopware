@@ -6978,7 +6978,7 @@ INSERT INTO `s_emotion_element_value` (`id`, `emotionID`, `elementID`, `componen
 (4227, 10, 1498, 4, 5, ''),
 (4228, 10, 1498, 4, 8, 'random_article'),
 (4229, 10, 1499, 3, 3, 'media/image/Teaser-Banner504091a2365ee.jpg'),
-(4230, 10, 1499, 3, 7, 'null'),
+(4230, 10, 1499, 3, 7, '[{"x":0,"y":0,"width":"240","height":"211","link":"SW10178","resizerIndex":0,"linkLocation":"internal","title":"","as_tooltip":0,"path":""},{"x":"0","y":"212","width":"240","height":"166","link":"SW10170","resizerIndex":1,"linkLocation":"internal","title":"","as_tooltip":0,"path":""},{"x":"0","y":"379","width":"240","height":"166","link":"SW10153.1","resizerIndex":2,"linkLocation":"internal","title":"","as_tooltip":0,"path":""}]'),
 (4231, 10, 1499, 3, 47, ''),
 (4232, 7, 1500, 3, 3, 'media/image/sommerwelten_top.jpg'),
 (4233, 7, 1500, 3, 7, '[{"x":158,"y":27,"width":198,"height":150,"link":"SW10170","resizerIndex":17,"path":""},{"x":515,"y":26,"width":208,"height":183,"link":"SW10159","resizerIndex":18,"path":""},{"x":47,"y":207,"width":227,"height":173,"link":"SW10178","resizerIndex":19,"path":""},{"x":263,"y":354,"width":183,"height":175,"link":"SW10172","resizerIndex":20,"path":""},{"x":291,"y":511,"width":210,"height":81,"link":"SW10172","resizerIndex":21,"path":""},{"x":580,"y":481,"width":151,"height":241,"link":"SW10150","resizerIndex":22,"path":""},{"x":517,"y":686,"width":159,"height":56,"link":"SW10150","resizerIndex":23,"path":""},{"x":54,"y":560,"width":212,"height":147,"link":"SW10155.1","resizerIndex":24,"path":""},{"x":"456","y":"238","width":"111","height":"62","link":"SW10098","resizerIndex":25,"path":""},{"x":"505","y":"239","width":"173","height":"227","link":"SW10098","resizerIndex":26,"path":""}]'),
