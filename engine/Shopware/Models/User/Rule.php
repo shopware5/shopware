@@ -48,7 +48,7 @@ class Rule extends ModelEntity
     /**
      * The role property is the owning side of the association between rule and permission.
      *
-     * @var \Shopware\Models\User\Role
+     * @var Role
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="rules", fetch="EAGER")
      * @ORM\JoinColumn(name="roleID", referencedColumnName="id")
      */
@@ -57,7 +57,7 @@ class Rule extends ModelEntity
     /**
      * The resource property is the owning side of the association between rule and permission.
      *
-     * @var \Shopware\Models\User\Resource
+     * @var Resource
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Resource", fetch="EAGER")
      * @ORM\JoinColumn(name="resourceID", referencedColumnName="id", nullable=true)
      */
@@ -66,7 +66,7 @@ class Rule extends ModelEntity
     /**
      * The privilege property is the owning side of the association between rule and permission.
      *
-     * @var \Shopware\Models\User\Privilege
+     * @var Privilege
      * @ORM\OneToOne(targetEntity="\Shopware\Models\User\Privilege", fetch="EAGER")
      * @ORM\JoinColumn(name="privilegeID", referencedColumnName="id", nullable=true)
      */
@@ -97,7 +97,7 @@ class Rule extends ModelEntity
      * Returns the instance of the Shopware\Models\User\Role model which
      * contains all data about the assigned role.
      *
-     * @return \Shopware\Models\User\Role
+     * @return Role
      */
     public function getRole()
     {
@@ -108,7 +108,7 @@ class Rule extends ModelEntity
      * Returns the instance of the Shopware\Models\User\Resource model which
      * contains all data about the assigned resource.
      *
-     * @return \Shopware\Models\User\Resource
+     * @return Resource
      */
     public function getResource()
     {
@@ -119,7 +119,7 @@ class Rule extends ModelEntity
      * Returns the instance of the Shopware\Models\User\Privilege model which
      * contains all data about the assigned privilege.
      *
-     * @return \Shopware\Models\User\Privilege
+     * @return Privilege
      */
     public function getPrivilege()
     {
@@ -175,7 +175,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\User\Role $role
+     * @param Role $role
      */
     public function setRole($role)
     {
@@ -183,7 +183,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\User\Resource $resource
+     * @param Resource $resource
      */
     public function setResource($resource)
     {
@@ -191,7 +191,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\User\Privilege $privilege
+     * @param Privilege $privilege
      */
     public function setPrivilege($privilege)
     {
