@@ -92,7 +92,7 @@ class AdminCreateCommand extends ShopwareCommand
         $this->fillOption('username', 'Username', $input, $output);
         $this->fillOption('name', 'Fullname', $input, $output);
         $this->fillOption('locale', 'Locale', $input, $output);
-        $this->fillOption('password', 'Password', $input, $output);
+        $this->fillOption('password', 'Password', $input, $output, true);
     }
 
     /**
@@ -123,14 +123,15 @@ class AdminCreateCommand extends ShopwareCommand
      * @param string          $label
      * @param InputInterface  $input
      * @param OutputInterface $output
+     * @param bool            $hidden
      */
-    private function fillOption($field, $label, InputInterface $input, OutputInterface $output)
+    private function fillOption($field, $label, InputInterface $input, OutputInterface $output, $hidden = false)
     {
         $io = new SymfonyStyle($input, $output);
 
         $input->setOption(
             $field,
-            $io->ask($label, $input->getOption($field))
+            $hidden ? $io->askHidden($label) : $io->ask($label, $input->getOption($field))
         );
     }
 
