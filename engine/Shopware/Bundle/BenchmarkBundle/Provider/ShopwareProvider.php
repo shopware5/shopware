@@ -147,7 +147,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
     private function getMemoryLimit()
     {

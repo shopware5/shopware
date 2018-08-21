@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
 
         $this->View()->assign('benchmarkTranslations', json_encode(
             $this->get('shopware.benchmark_bundle.components.translation')->getAll(),
-            JSON_HEX_APOS
+            JSON_HEX_TAG
         ));
 
         $this->View()->assign('benchmarkDefaultLanguage', $this->Request()->getParam('lang', 'de'));
@@ -113,7 +113,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $now = new DateTime('now');
         $diff = $now->diff($this->getWaitingSinceDate());
 
-        return $diff->h + ($diff->days * 24);
+        return (int) ($diff->h + ($diff->days * 24));
     }
 
     /**

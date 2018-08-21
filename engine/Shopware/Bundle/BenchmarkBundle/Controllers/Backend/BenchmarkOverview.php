@@ -218,7 +218,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $em = $this->get('models');
         $repo = $em->getRepository(Menu::class);
 
-        /** @var Menu $menuEntry */
+        /** @var Menu|null $menuEntry */
         $menuEntry = $repo->findOneBy(['controller' => 'Benchmark', 'action' => 'Settings']);
         if ($menuEntry) {
             $menuEntry->setActive(true);
