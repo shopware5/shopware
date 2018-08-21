@@ -47,7 +47,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private $connection;
 
     /**
-     * @var KeywordFinder
+     * @var KeywordFinderInterface
      */
     private $keywordFinder;
 
