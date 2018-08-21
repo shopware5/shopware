@@ -99,7 +99,7 @@ class Discount extends ModelEntity
      *
      * @param Group $group
      *
-     * @return discount
+     * @return Discount
      */
     public function setGroup($group)
     {
@@ -143,7 +143,7 @@ class Discount extends ModelEntity
      *
      * @param float $discount
      *
-     * @return discount
+     * @return Discount
      */
     public function setDiscount($discount)
     {
@@ -167,7 +167,7 @@ class Discount extends ModelEntity
      *
      * @param float $start
      *
-     * @return discount
+     * @return Discount
      */
     public function setStart($start)
     {

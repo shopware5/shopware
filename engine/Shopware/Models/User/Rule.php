@@ -119,7 +119,7 @@ class Rule extends ModelEntity
      * Returns the instance of the Shopware\Models\User\Privilege model which
      * contains all data about the assigned privilege.
      *
-     * @return \Shopware\Models\User\privilege
+     * @return \Shopware\Models\User\Privilege
      */
     public function getPrivilege()
     {
