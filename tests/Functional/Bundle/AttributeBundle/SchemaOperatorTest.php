@@ -32,7 +32,7 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
             'string' => 'test123',
             'integer' => 123,
             'float' => 123,
-            'boolean' => 1,
+            'boolean' => true,
             'date' => '2010-01-01',
             'datetime' => '2010-01-01 10:00:00',
             'text' => 'test123',
