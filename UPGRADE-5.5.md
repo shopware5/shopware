@@ -189,7 +189,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Removals
 
-* Removed class `Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler`
 * Removed class `Shopware\Models\Config\Element\Shopware_Components_Form`
 * Removed class `Shopware_Components_Convert_Csv`, `Shopware_Components_Convert_Excel` and `Shopware_Components_Convert_Xml`
 * Removed class `Shopware\Models\Customer\Billing` and `Shopware\Models\Customer\BillingRepository`
@@ -249,7 +248,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `Shopware\Bundle\ESIndexingBundle\Subscriber\ServiceSubscriber`
 * Removed event `Shopware_Controllers_Widgets_Emotion_AddElement`
 * Removed Ioncube checks from PluginManager
-* Removed `SwagLicense` dependency in Plugins licenses
+* Removed `SwagLicense` dependency in plugin licenses
 
 ### Deprecations
 
