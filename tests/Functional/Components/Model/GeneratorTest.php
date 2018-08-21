@@ -99,9 +99,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->addAndEvaluateInitialization(
             'boolean',
-            'integer',
-            'integer',
-            1
+            'bool',
+            'boolean',
+            true
         );
     }
 
@@ -109,9 +109,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->addAndEvaluateInitialization(
             'boolean',
-            'integer',
-            'integer',
-            0
+            'bool',
+            'boolean',
+            false
         );
     }
 
