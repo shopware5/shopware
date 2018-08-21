@@ -256,13 +256,8 @@ Ext.define('Shopware.grid.plugin.Translation', {
         var me = this;
 
         if (!me.hasActionColumnTranslationItem(actionColumn)) {
-            if (actionColumn.rendered) {
-                actionColumn.setWidth(actionColumn.getWidth() + 30);
-                actionColumn.add(me.createTranslationActionColumnItem());
-            } else {
-                actionColumn.items.push(me.createTranslationActionColumnItem());
-                actionColumn.width = actionColumn.width + 30;
-            }
+            actionColumn.items.push(me.createTranslationActionColumnItem());
+            actionColumn.width = actionColumn.width + 30;
         }
     },
 
