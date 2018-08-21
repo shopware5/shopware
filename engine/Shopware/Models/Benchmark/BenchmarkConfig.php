@@ -119,7 +119,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * The industry the shop is in
      *
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="industry", type="integer", nullable=false)
      */

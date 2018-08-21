@@ -56,7 +56,6 @@ class BenchmarkStatisticsService
      * @param StatisticsService           $statistics
      * @param BusinessIntelligenceService $biService
      * @param DateInterval|null           $interval
-     * @param int                         $iterations
      *
      * @throws \Exception
      */
