@@ -44,6 +44,7 @@
         <service id="shopware_emotion.emotion_element_service" class="Shopware\Bundle\EmotionBundle\Service\EmotionElementService">
             <argument type="tagged" tag="shopware_emotion.component_handler" />
             <argument type="service" id="shopware_emotion.emotion_element_gateway" />
+            <argument type="service" id="shopware_emotion.component_handler.event_fallback"/>
             <argument type="service" id="shopware_emotion.data_collection_resolver" />
             <argument type="service" id="events"/>
         </service>
@@ -55,8 +56,12 @@
             <argument type="service" id="service_container" />
         </service>
 
-
         <!-- ComponentHandler -->
+        <service id="shopware_emotion.component_handler.event_fallback" class="Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler">
+            <argument type="service" id="events" />
+            <tag name="shopware_emotion.component_handler"/>
+        </service>
+
         <service id="shopware_emotion.component_handler.article" class="Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler">
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="config" />
