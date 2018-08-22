@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Shopware\Components\CacheManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Components\Plugin\ConfigWriter;
@@ -341,7 +342,21 @@ class InstallerService
         }
 
         if (array_key_exists('invalidateCache', $result)) {
-            $context->scheduleClearCache($result['invalidateCache']);
+            foreach ($result['invalidateCache'] as $cacheTag) {
+                if ($cacheTag === 'frontend') {
+                    $cacheTags[] = CacheManager::CACHE_TAG_CONFIG;
+                    $cacheTags[] = CacheManager::CACHE_TAG_TEMPLATE;
+                    $cacheTags[] = CacheManager::CACHE_TAG_THEME;
+                    $cacheTags[] = CacheManager::CACHE_TAG_HTTP;
+                } elseif ($cacheTag === 'backend') {
+                    $cacheTags[] = CacheManager::CACHE_TAG_CONFIG;
+                    $cacheTags[] = CacheManager::CACHE_TAG_TEMPLATE;
+                } else {
+                    $cacheTags[] = $cacheTag;
+                }
+            }
+
+            $context->scheduleClearCache($cacheTags);
         }
 
         if (array_key_exists('message', $result)) {

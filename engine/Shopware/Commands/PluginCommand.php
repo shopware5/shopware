@@ -29,6 +29,7 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class PluginCommand extends ShopwareCommand
 {
@@ -55,7 +56,7 @@ abstract class PluginCommand extends ShopwareCommand
     protected function clearCachesIfRequested(InputInterface $input, OutputInterface $output, ...$contexts)
     {
         if (!empty($input->getOption('clear-cache'))) {
-            $this->clearCaches($output, ...$contexts);
+            $this->clearCaches($input, $output, ...$contexts);
         } elseif (!empty($this->getScheduledCaches(...$contexts))) {
             $output->writeln([
                 'Consider sw:cache:clear to refresh the installation to keep up to the current changes.',
@@ -65,16 +66,27 @@ abstract class PluginCommand extends ShopwareCommand
     }
 
     /**
+     * @param InputInterface   $input
      * @param OutputInterface  $output
      * @param InstallContext[] ...$contexts
      */
-    protected function clearCaches(OutputInterface $output, ...$contexts)
+    protected function clearCaches(InputInterface $input, OutputInterface $output, ...$contexts)
     {
         /** @var CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
-        $cacheTags = $this->getScheduledCaches(...$contexts);
-        if ($cacheManager->clearByTags($cacheTags)) {
-            $output->writeln(sprintf('Caches cleared (%s).', join(', ', $cacheTags)));
+        $io = new SymfonyStyle($input, $output);
+
+        $scheduledCaches = $this->getScheduledCaches(...$contexts);
+
+        $successfulCaches = $cacheManager->clearByTags($scheduledCaches);
+        $failedCaches = array_diff($scheduledCaches, $successfulCaches);
+
+        if (!empty($failedCaches)) {
+            $io->warning(sprintf('Failed to clear caches: %s.', join(', ', $failedCaches)));
+        }
+
+        if (!empty($successfulCaches)) {
+            $io->success(sprintf('Successfully cleared caches: %s.', join(', ', $successfulCaches)));
         }
     }
 
