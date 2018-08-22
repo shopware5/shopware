@@ -61,7 +61,7 @@ function smarty_function_flink($params, $template)
 
         // Some cleanup code
         if (strpos($file, $docPath) === 0) {
-            $file = substr($file, strlen($docPath));
+            $file = '/' . substr($file, strlen($docPath));
         }
 
         // Make sure we have the right separator for the web context
@@ -82,8 +82,14 @@ function smarty_function_flink($params, $template)
         $file = $request->getBasePath() . '/';
     }
 
-    if ($request !== null && !empty($params['fullPath']) && strpos($file, '/') === 0) {
-        $file = $request->getScheme() . '://' . $request->getHttpHost() . $file;
+    if (!empty($params['fullPath']) && strpos($file, '/') === 0) {
+        if ($request === null) {
+            $baseUrl = Shopware()->Container()->get('router')->assemble();
+        } else {
+            $baseUrl = $request->getScheme() . '://' . $request->getHttpHost();
+        }
+
+        $file = $baseUrl . $file;
     }
 
     return $file;
