@@ -81,7 +81,7 @@ class Group extends ModelEntity
      *
      * @param string $name
      *
-     * @return group
+     * @return Group
      */
     public function setName($name)
     {
