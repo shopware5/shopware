@@ -126,16 +126,30 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         $message = null;
 
         try {
+            /** @var BenchmarkDataResult $result */
             $result = $this->get('shopware.benchmark_bundle.benchmark_statistics')->handleTransmission();
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
 
+        $statisticsResponseSuccess = $result->getStatisticsResponse() !== null;
+        $bIResponseSuccess = $result->getBiResponse() !== null;
+
+        $shopId = 0;
+        if ($statisticsResponseSuccess) {
+            $shopId = $result->getStatisticsResponse()->getShopId();
+        }
+
+        if ($bIResponseSuccess) {
+            $shopId = $result->getBiResponse()->getShopId();
+        }
+
         $this->View()->assign([
             'success' => $message === null,
-            'statistics' => $result->getStatisticsResponse() !== null,
-            'bi' => $result->getBiResponse() !== null,
+            'statistics' => $statisticsResponseSuccess,
+            'bi' => $bIResponseSuccess,
             'message' => $message,
+            'shopId' => $shopId,
         ]);
     }
 
