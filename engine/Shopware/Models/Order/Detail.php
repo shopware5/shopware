@@ -626,15 +626,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * If an position is added, the order amount has to be recalculated
-     *
-     * @ORM\PrePersist
-     */
-    public function beforeInsert()
-    {
-    }
-
-    /**
      * If an position is added, the stock of the article will be reduced by the ordered quantity.
      *
      * @ORM\PostPersist
