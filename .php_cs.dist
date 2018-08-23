@@ -1,9 +1,11 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__.'/engine/Shopware')
-    ->in(__DIR__.'/tests')
-    ->in(__DIR__.'/recovery')
+    ->in(__DIR__ . '/engine/Shopware')
+    ->in(__DIR__ . '/tests')
+    ->in(__DIR__ . '/recovery')
+    ->exclude('Plugins/Community')
+    ->exclude('Plugins/Local')
     ->notPath('LegacyPhpDumper.php')
 ;
 
