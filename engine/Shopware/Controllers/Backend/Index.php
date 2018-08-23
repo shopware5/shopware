@@ -153,6 +153,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
         $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
         $this->View()->assign('biOverviewEnabled', $this->isBIOverviewEnabled());
+        $this->View()->assign('biIsActive', $this->isBIActive());
     }
 
     public function authAction()
@@ -339,10 +340,23 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
 
         /** @var \Shopware\Models\Benchmark\Repository $configRepository */
-        $configRepository = $this->get('models')->getRepository(\Shopware\Models\Benchmark\BenchmarkConfig::class);
+        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
 
         $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
 
         return !in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true) && $configRepository->getConfigsCount() === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isBIActive()
+    {
+        /** @var \Shopware\Models\Benchmark\Repository $configRepository */
+        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
+
+        $validShopCount = count($configRepository->getValidShops());
+
+        return $validShopCount > 0;
     }
 }

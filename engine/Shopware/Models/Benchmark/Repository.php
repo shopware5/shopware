@@ -149,6 +149,22 @@ class Repository extends EntityRepository
     }
 
     /**
+     * Only returns valid and active shops.
+     *
+     * @return array
+     */
+    public function getValidShops()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        return $queryBuilder->select('configs.id')
+            ->from('s_benchmark_config', 'configs')
+            ->where('configs.active = 1 AND configs.industry != 0')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
      * @return int
      */
     public function getConfigsCount()

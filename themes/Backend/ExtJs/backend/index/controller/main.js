@@ -131,7 +131,9 @@ Ext.define('Shopware.apps.Index.controller.Main', {
         me.addKeyboardEvents();
         me.checkLoginStatus();
         /*{if {acl_is_allowed privilege=submit resource=benchmark}}*/
-        me.checkBenchmarksStatus();
+        if (me.subApplication.biIsActive) {
+            me.checkBenchmarksStatus();
+        }
         /*{/if}*/
     },
 
@@ -279,20 +281,27 @@ Ext.define('Shopware.apps.Index.controller.Main', {
     },
 
     /**
-     * Helper method which checks for new Benchmark data periodically (every 10 minutes).
+     * Helper method which checks for new Benchmark data periodically (every 10 seconds).
      *
      * @private
      * @return void
      */
     checkBenchmarksStatus: function () {
-        Ext.TaskManager.start({
-            interval: 10000,
-            run: function () {
+        var interval = 10000,
+            checkBenchmarksFn = function () {
                 Ext.Ajax.request({
                     url: '{url controller=benchmark action=checkBenchmarks}',
                     success: function(response) {
                         var res = Ext.decode(response.responseText);
 
+                        interval = 10000;
+
+                        // Set interval to 5 minutes if all data was sent
+                        if (!res.statistics && res.bi) {
+                            interval = 300000;
+                        }
+
+                        // If we received new BI statistics, we print a growl message
                         if (res.bi) {
                             Shopware.Notification.createStickyGrowlMessage({
                                 title: '{s name=title/new_benchmark}{/s}',
@@ -307,10 +316,18 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                                 }
                             });
                         }
+
+                        // If neither sending nor receiving is necessary, set interval to 12 hours
+                        if (!res.statistics && !res.bi) {
+                            interval = 43200000;
+                        }
+
+                        window.setTimeout(checkBenchmarksFn, interval);
                     }
                 });
-            }
-        });
+            };
+
+        window.setTimeout(checkBenchmarksFn, interval);
     }
 });
 
