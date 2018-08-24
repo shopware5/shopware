@@ -5,17 +5,17 @@
                 {* Sidebar navigation headline *}
                 {block name="frontend_account_menu_title"}
                     {if {config name=useSltCookie} && $userInfo}
-                        <h2 class="navigation--headline">
+                        <span class="navigation--headline">
                             {block name="frontend_account_menu_greeting"}
                                 {s name="AccountGreetingBefore"}{/s}
                                 {$userInfo['firstname']}
                                 {s name="AccountGreetingAfter"}{/s}
                             {/block}
-                        </h2>
+                        </span>
                     {else}
-                        <h2 class="navigation--headline">
+                        <span class="navigation--headline">
                             {s name="AccountHeaderNavigation"}{/s}
-                        </h2>
+                        </span>
                     {/if}
                 {/block}
 
