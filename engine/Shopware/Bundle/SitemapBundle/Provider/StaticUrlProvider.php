@@ -37,6 +37,7 @@ class StaticUrlProvider implements UrlProviderInterface
      * @var Routing\Router
      */
     private $router;
+
     /**
      * @var Connection
      */
@@ -135,15 +136,13 @@ class StaticUrlProvider implements UrlProviderInterface
             $builder = $this->connection->createQueryBuilder();
             $current = $builder->from('s_cms_static', 'sites')
                 ->select('*')
-                ->where(
-                    $builder->expr()->eq('sites.active', ':active')      //like = true
-                )
+                ->where('sites.active = 1')
                 ->andWhere(
                     $builder->expr()->orX(
-                        $builder->expr()->eq('sites.grouping', ':g1'),       // = gBottom
-                        $builder->expr()->like('sites.grouping', ':g2'),     //like 'gBottom|%
-                        $builder->expr()->like('sites.grouping', ':g3'),     //like '|gBottom
-                        $builder->expr()->like('sites.grouping', ':g4')      //like '|gBottom|
+                        $builder->expr()->eq('sites.grouping', ':g1'),   //  = bottom
+                        $builder->expr()->like('sites.grouping', ':g2'), // like 'bottom|%
+                        $builder->expr()->like('sites.grouping', ':g3'), // like '|bottom
+                        $builder->expr()->like('sites.grouping', ':g4')  // like '|bottom|
                     )
                 )
                 ->andWhere(
@@ -152,7 +151,6 @@ class StaticUrlProvider implements UrlProviderInterface
                         $builder->expr()->isNull('sites.shop_ids')
                     )
                 )
-                ->setParameter('active', true)
                 ->setParameter('g1', $key)
                 ->setParameter('g2', $key . '|%')
                 ->setParameter('g3', '%|' . $key)

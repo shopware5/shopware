@@ -230,7 +230,7 @@ class SitemapXMLRepository
     {
         $blogs = [];
 
-        $categoryRepository = $this->em->getRepository('Shopware\Models\Category\Category');
+        $categoryRepository = $this->em->getRepository(\Shopware\Models\Category\Category::class);
         $query = $categoryRepository->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 
@@ -324,9 +324,8 @@ class SitemapXMLRepository
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
-                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
-                ->andwhere('sites.active = :active')
-                ->setParameter('active', true)
+                ->from(\Shopware\Models\Site\Site::class, 'sites', 'sites.id')
+                ->andWhere('sites.active = 1')
                 ->getQuery()
                 ->getArrayResult();
 
