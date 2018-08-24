@@ -2973,21 +2973,21 @@ class sAdmin
         ";
 
         $dispatches = $this->db->fetchAll(
-            $sql, 
+            $sql,
             [
                 'billingAddressId' => $this->getBillingAddressId(),
                 'shippingAddressId' => $this->getShippingAddressId(),
             ]
         );
-        
+
         $surcharge = $this->calculateDispatchSurcharge($basket, $dispatches);
- 
+
         $surcharge = $this->eventManager->filter(
             'Shopware_Modules_Admin_sGetPremiumDispatchSurcharge_FilterSurcharge',
             $surcharge,
             ['subject' => $this, 'dispatches' => $dispatches]
         );
-        
+
         return $surcharge;
     }
 
