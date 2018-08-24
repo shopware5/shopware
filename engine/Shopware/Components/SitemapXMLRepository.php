@@ -325,6 +325,8 @@ class SitemapXMLRepository
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
                 ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->andwhere('sites.active = :active')
+                ->setParameter('active', true)
                 ->getQuery()
                 ->getArrayResult();
 
