@@ -74,10 +74,10 @@ class Repository extends ModelRepository
             'g.active as active',
             'm.id as mappingId',
         ]);
-        if ($filterBy !== null) {
+        if (null !== $filterBy) {
             $builder->addFilter($filterBy);
         }
-        if ($orderBy !== null) {
+        if (null !== $orderBy) {
             $builder->addOrderBy($orderBy);
         }
 
@@ -168,7 +168,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from('Shopware\Models\Attribute\Site', 'attribute')
+                      ->from(\Shopware\Models\Attribute\Site::class, 'attribute')
                       ->where('attribute.siteId = ?1')
                       ->setParameter(1, $siteId);
 
