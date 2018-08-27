@@ -25,6 +25,7 @@
 namespace Shopware\Models\Mail;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 class Repository extends ModelRepository
 {
@@ -132,6 +133,36 @@ class Repository extends ModelRepository
         if ($mailId) {
             $builder->andWhere('mail.id != :id');
             $builder->setParameter('id', $mailId);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @param array $filter
+     * @param array|null $order
+     * @param null|int $offset
+     * @param null|int $limit
+     * @return QueryBuilder
+     */
+    public function getMailsListQueryBuilder(array $filter = array(), array $order = null, $offset = null, $limit = null)
+    {
+        /** @var QueryBuilder $builder */
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder
+            ->setAlias('mail')
+            ->select('mail')
+            ->from(Mail::class, 'mail');
+
+        if ($filter !== null) {
+            $builder->addFilter($filter);
+        }
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+        if ($offset !== null) {
+            $builder->setFirstResult($offset);
+            $builder->setMaxResults($limit);
         }
 
         return $builder;

@@ -49,7 +49,8 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
      */
     refs: [
         { ref: 'mailWindow', selector: 'order-mail-window' },
-        { ref: 'attachmentGrid', selector: 'order-mail-attachment' }
+        { ref: 'attachmentGrid', selector: 'order-mail-attachment' },
+        { ref: 'mailForm', selector: 'order-mail-form' }
     ],
 
     /**
@@ -64,7 +65,12 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
         successMessage: '{s name=sent_success_message}Email sent to customer [0]{/s}',
 
         errorTitle: '{s name=sent_error_title}Email could not be sent.{/s}',
-        errorMessage: '{s name=sent_error_message}An error has occurred while sending the status mail:{/s}'
+        errorMessage: '{s name=sent_error_message}An error has occurred while sending the status mail:{/s}',
+
+        confirmation: {
+            title: '{s name=mail_template_change/confirmation/title}Discard changes?{/s}',
+            message: '{s name=mail_template_change/confirmation/message}You have made changes to the mail content. Do you want to discard the changes?{/s}'
+        }
     },
 
     /**
@@ -77,7 +83,11 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
 
         me.control({
             'order-mail-window order-mail-form': {
-                sendMail: me.onSendMail
+                sendMail: me.onSendMail,
+                changeMailTemplateComboBox: this.onChangeMailTemplateComboBox,
+            },
+            'order-mail-window order-mail-attachment': {
+                'selectionModel-selection-change': this.onAttachmentSelectionChange,
             }
         });
 
@@ -125,6 +135,83 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
                 win.destroy();
             }
         });
+    },
+
+    /**
+     * Method is called when the user selects another mail template with the combo box
+     *
+     * @param { Shopware.apps.Order.view.mail.Form } mailFormPanel
+     * @param { Ext.form.field.ComboBox } comboBox
+     * @param { string } newValue
+     * @param { string } oldValue
+     */
+    onChangeMailTemplateComboBox: function (mailFormPanel, comboBox, newValue, oldValue) {
+        var callback = function (clickedButton) {
+            if (clickedButton !== 'yes') {
+                mailFormPanel.mailTemplateComboBox.setRawValue(oldValue);
+
+                return;
+            }
+
+            mailFormPanel.setLoading(true);
+            Ext.Ajax.request({
+                url: '{url controller=order action=createMail}',
+                method: 'POST',
+                params: {
+                    orderId: mailFormPanel.order.get('id'),
+                    mailTemplateName: newValue
+                },
+                success: function (response) {
+                    var decodedResponse = Ext.JSON.decode(response.responseText);
+                    var mail = Ext.create('Shopware.apps.Order.model.Mail', decodedResponse.mail);
+                    mailFormPanel.loadRecord(mail);
+                },
+                failure: function (response) {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name=document/attachemnt/error}Error{/s}',
+                        response.status + '<br />' + response.statusText
+                    );
+                },
+                callback: function (options, success, response) {
+                    mailFormPanel.setLoading(false);
+                },
+                scope: this,
+            });
+        };
+
+        if (mailFormPanel.modified) {
+            Ext.Msg.confirm(this.snippets.confirmation.title, this.snippets.confirmation.message, callback, this);
+        } else {
+            Ext.callback(callback, this, ['yes']);
+        }
+    },
+
+    /**
+     * Select the correct mail template depending on which document the user has selected in the attachment list
+     *
+     * @param { Shopware.apps.Order.store.DocumentRegistry } attachmentsStore
+     * @param { Ext.selection.CheckboxModel } selectionModel
+     * @param { Shopware.apps.Order.model.Receipt } selected
+     */
+    onAttachmentSelectionChange: function (attachmentsStore, selectionModel, selected) {
+        if (this.getMailForm().modified) {
+            // Don't change the template if the user has already typed stuff in the form
+            return;
+        }
+        if (selected.length === 0) {
+            // Don't change the template if no document is selected currently
+            return;
+        }
+        if (selected.length === 1) {
+            // Select the mail template fitting to the document type
+            var documentType = this.getMailForm().documentTypeStore.getById(selected[0].get('typeId'));
+            this.getMailForm().mailTemplateComboBox.selectTemplateByDocumentType(documentType);
+
+            return;
+        }
+
+        // For multiple selected documents switch to the default mail template
+        this.getMailForm().mailTemplateComboBox.selectTemplateByDocumentType(null);
     }
 });
 //{/block}
