@@ -147,15 +147,19 @@ class OrdersProvider implements BatchableProviderInterface
 
             if (!isset($customerData[$basicOrder['userID']])) {
                 $customerData[$basicOrder['userID']] = [
-                    'id' => 0,
-                    'registered' => '0',
-                    'birthYear' => '1970',
-                    'birthMonth' => '01',
+                    'registered' => false,
+                    'birthYear' => 0,
+                    'birthMonth' => 0,
                     'gender' => 'male',
                     'registerDate' => '1970-01-01',
-                    'hasNewsletter' => '0',
+                    'hasNewsletter' => false,
                 ];
             }
+
+            $customerData[$basicOrder['userID']]['registered'] = (bool) $customerData[$basicOrder['userID']]['registered'];
+            $customerData[$basicOrder['userID']]['hasNewsletter'] = (bool) $customerData[$basicOrder['userID']]['hasNewsletter'];
+            $customerData[$basicOrder['userID']]['birthYear'] = (int) $customerData[$basicOrder['userID']]['birthYear'];
+            $customerData[$basicOrder['userID']]['birthMonth'] = (int) $customerData[$basicOrder['userID']]['birthMonth'];
 
             $basicOrder['dispatch'] = $dispatchData[$basicOrder['dispatchID']];
             $basicOrder['payment'] = $paymentData[$basicOrder['paymentID']];
@@ -226,7 +230,7 @@ class OrdersProvider implements BatchableProviderInterface
             $currentHydratedOrder['customer'] = $order['customer'];
 
             $currentHydratedOrder['analytics'] = [
-                'device' => $order['deviceType'],
+                'device' => empty($order['deviceType']) ? 'desktop' : $order['deviceType'],
                 'referer' => $order['referer'] ? true : false,
             ];
 
@@ -291,8 +295,8 @@ class OrdersProvider implements BatchableProviderInterface
                 'details.price as unitPrice',
                 'details.price * details.quantity as totalPrice',
                 'details.quantity as amount',
-                'details.pack_unit as packUnit',
-                'details.unit as purchaseUnit',
+                'IFNULL(details.pack_unit, "") as packUnit',
+                'IFNULL(details.unit, "") as purchaseUnit',
             ])
             ->from('s_order_details', 'details')
             ->where('details.orderID IN (:orderIds)')

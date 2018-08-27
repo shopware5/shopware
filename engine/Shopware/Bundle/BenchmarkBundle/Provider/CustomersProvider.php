@@ -95,6 +95,9 @@ class CustomersProvider implements BatchableProviderInterface
             if ($item['birthMonth']) {
                 $item['birthMonth'] = (int) $item['birthMonth'];
                 $item['birthYear'] = (int) $item['birthYear'];
+            } else {
+                $item['birthMonth'] = 0;
+                $item['birthYear'] = 0;
             }
 
             return $item;
