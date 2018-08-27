@@ -87,7 +87,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
                     $hash = \Shopware\Components\Random::getAlphanumericString(32);
                     $data = serialize(Shopware()->System()->_POST->toArray());
 
-                    $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash]);
+                    $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'index', 'sConfirmation' => $hash]);
 
                     $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
 
