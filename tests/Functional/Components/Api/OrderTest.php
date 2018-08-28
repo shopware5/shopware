@@ -337,33 +337,48 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-	public function testCreateOrderOnEmptyStateIdInBillingAddress()
-	{
-		// Get existing order
-		$this->resource->setResultMode(Resource::HYDRATE_ARRAY);
-		$order = $this->resource->getOne($this->order['id']);
+    public function testCreateOrderOnEmptyStateIdInBillingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
 
-		$order = $this->filterOrderId($order);
-		unset($order['billing']['stateId']);
+        $order = $this->filterOrderId($order);
+        unset($order['billing']['stateId']);
 
-		$newOrder = $this->resource->create($order);
+        $newOrder = $this->resource->create($order);
 
-		$this->assertEquals($newOrder->getBilling()->getState(), null);
-	}
+        $this->assertEquals($newOrder->getBilling()->getState(), null);
+    }
 
-	public function testCreateOrderOnEmptyStateIdInShippingAddress()
-	{
-		// Get existing order
-		$this->resource->setResultMode(Resource::HYDRATE_ARRAY);
-		$order = $this->resource->getOne($this->order['id']);
+    public function testCreateOrderOnEmptyStateIdInShippingAddress()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
 
-		$order = $this->filterOrderId($order);
-		unset($order['shipping']['stateId']);
+        $order = $this->filterOrderId($order);
+        unset($order['shipping']['stateId']);
 
-		$newOrder = $this->resource->create($order);
+        $newOrder = $this->resource->create($order);
 
-		$this->assertEquals($newOrder->getShipping()->getState(), null);
-	}
+        $this->assertEquals($newOrder->getShipping()->getState(), null);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
+     */
+    public function testCreateOrderOnInvalidStateId()
+    {
+        // Get existing order
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        $order = $this->filterOrderId($order);
+        $order['shipping']['stateId'] = 9999;
+
+        $this->resource->create($order);
+    }
 
     /**
      * @expectedException \Shopware\Components\Api\Exception\NotFoundException
