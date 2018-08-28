@@ -41,7 +41,10 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         confirm_open_pluginmanager: 'You have installed unlicensed plugins. Do you want to open the Plugin Manager now to check your plugins?',
         subscription: 'Subscription',
         subscription_hide_message: 'Would you like to hide this message for a week?',
-        openPluginOverview: 'Open plugin overview'
+        openPluginOverview: 'Open plugin overview',
+        importantInformation: 'Important Information',
+        noShopSecretWarning: 'In order to receive information about updates and install plugins, you need to log in to your Shopware account. If you don\'t have a Shopware account yet, you can easily register.',
+        login: 'Login now'
     },
 
     /**
@@ -147,6 +150,25 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
 
                 if (!responseData || Ext.isEmpty(responseData.data)) {
                     return;
+                }
+
+                if (responseData.data.shopSecretMissing) {
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: me.snippets.importantInformation,
+                        text: me.snippets.noShopSecretWarning,
+                        width: 330,
+                        btnDetail: {
+                            text: me.snippets.login,
+                            callback: function () {
+                                Shopware.app.Application.addSubApplication({
+                                    name: 'Shopware.apps.PluginManager',
+                                    params: {
+                                        openLogin: true
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
 
                 if (responseData.success === true && responseData.data) {

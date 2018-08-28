@@ -602,7 +602,10 @@ Ext.onReady(function() {
             subscription: 'Subscription',
             subscription_hide_message: 'Möchtest du diese Nachricht für eine Woche ausblenden?',
             confirm_open_pluginmanager: 'Du hast nicht lizenzierte Plugins installiert. Bitte erwirb eine gültige Lizenz oder deinstalliere und entferne die Plugins über den Plugin Manager.',
-            openPluginOverview: 'Plugin-Übersicht öffnen'
+            openPluginOverview: 'Plugin-Übersicht öffnen',
+            importantInformation: 'Wichtiger Hinweis',
+            noShopSecretWarning: 'Damit Du Informationen zu Updates erhältst und Plugins installieren kannst, musst Du Dich in Deinen Shopware Account einloggen.<br> Solltest Du noch keinen Shopware Account besitzen, kannst Du Dich ganz einfach registrieren.',
+            login: 'Jetzt anmelden'
         }
     });
 });
