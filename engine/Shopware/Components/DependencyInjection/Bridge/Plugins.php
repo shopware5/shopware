@@ -25,6 +25,7 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Plugin\Configuration\CachedReader;
 
 class Plugins
 {
@@ -40,7 +41,8 @@ class Plugins
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
 
-        $configReader = $container->get(\Shopware\Components\Plugin\CachedConfigReader::class);
+        /** @var CachedReader $configReader */
+        $configReader = $container->get(CachedReader::class);
 
         foreach (['Core', 'Frontend', 'Backend'] as $namespace) {
             $namespace = new \Shopware_Components_Plugin_Namespace(

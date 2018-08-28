@@ -122,8 +122,28 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param string $value
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * Set shop id
      *
+     * @param int $shopId
+     *
+     * @return Value
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+
+        return $this;
+    }
+
+    /**
      * @return Value
      */
     public function setValue($value)

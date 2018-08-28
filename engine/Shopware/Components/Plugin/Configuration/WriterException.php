@@ -22,21 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Components\Plugin\Configuration;
 
-use Shopware\Models\Shop\Shop;
+use Exception;
 
-/**
- * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
- */
-interface ConfigReader
+class WriterException extends Exception
 {
-    /**
-     * @param string $pluginName
-     *
-     * @return array
-     *
-     * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
-     */
-    public function getByPluginName($pluginName, Shop $shop = null);
 }

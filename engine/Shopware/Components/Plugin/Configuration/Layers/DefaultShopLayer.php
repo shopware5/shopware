@@ -22,35 +22,32 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Components\Plugin\Configuration\Layers;
 
-use Shopware\Components\Plugin\Configuration\ReaderInterface;
-use Shopware\Models\Shop\Shop;
+use Doctrine\DBAL\Query\QueryBuilder;
 
-/**
- * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
- */
-class DBALConfigReader implements ConfigReader
+class DefaultShopLayer extends AbstractShopConfigurationLayer
 {
-    /**
-     * @var ReaderInterface
-     */
-    private $reader;
-
-    public function __construct(ReaderInterface $reader)
+    public function readValues(string $pluginName, ?int $shopId): array
     {
-        $this->reader = $reader;
+        return parent::readValues($pluginName, 1);
     }
 
-    /**
-     * @param string $pluginName
-     *
-     * @return array
-     *
-     * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
-     */
-    public function getByPluginName($pluginName, Shop $shop = null)
+    protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder
     {
-        return $this->reader->getByPluginName($pluginName, is_null($shop) ? null : $shop->getId());
+        $shopIdKey = 'shopId' . crc32(strval($shopId) ?? '');
+        $pluginNameKey = 'pluginName' . crc32($pluginName);
+
+        return $builder
+            ->andWhere($builder->expr()->eq('corePlugins.name', ':' . $pluginNameKey))
+            ->andWhere($builder->expr()->eq('coreConfigValues.shop_id', ':' . $shopIdKey))
+            ->setParameter($pluginNameKey, $pluginName)
+            ->setParameter($shopIdKey, $shopId)
+        ;
+    }
+
+    protected function isLayerResponsibleForShopId(?int $shopId): bool
+    {
+        return $shopId === 1 || is_null($shopId);
     }
 }

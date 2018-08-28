@@ -24,100 +24,48 @@
 
 namespace Shopware\Components\Plugin;
 
-use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Config\Element;
-use Shopware\Models\Config\Form;
-use Shopware\Models\Config\Value;
+use Shopware\Components\Plugin\Configuration\WriterInterface;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
+/**
+ * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\WriterInterface` instead
+ */
 class ConfigWriter
 {
     /**
-     * @var ModelManager
+     * @var WriterInterface
      */
-    private $em;
+    private $writer;
 
-    /**
-     * @var \Doctrine\ORM\EntityRepository
-     */
-    private $elementRepository;
-
-    /**
-     * @var \Doctrine\ORM\EntityRepository
-     */
-    private $formRepository;
-
-    /**
-     * @var \Doctrine\ORM\EntityRepository
-     */
-    private $valueRepository;
-
-    public function __construct(ModelManager $em)
+    public function __construct(WriterInterface $writer)
     {
-        $this->em = $em;
-
-        $this->elementRepository = $this->em->getRepository(Element::class);
-        $this->formRepository = $this->em->getRepository(Form::class);
-        $this->valueRepository = $this->em->getRepository(Value::class);
+        $this->writer = $writer;
     }
 
     /**
      * @param array $elements
+     *
+     * @deprecated Use since 5.6 and removed in 5.8. `Shopware\Components\Plugin\Configuration\WriterInterface`::setByPluginName instead
      */
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop)
     {
-        foreach ($elements as $name => $value) {
-            $this->saveConfigElement($plugin, $name, $value, $shop);
-        }
+        $this->writer->setByPluginName($plugin->getName(), $elements, $shop->getId());
     }
 
     /**
      * @param string $name
      *
      * @throws \Exception
+     *
+     * @deprecated Use since 5.6 and removed in 5.8. `Shopware\Components\Plugin\Configuration\WriterInterface`::setByPluginName instead
      */
     public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop)
     {
-        /** @var Form $form */
-        $form = $this->formRepository->findOneBy(['pluginId' => $plugin->getId()]);
-
-        /** @var Element|null $element */
-        $element = $this->elementRepository->findOneBy(['form' => $form, 'name' => $name]);
-        if (!$element) {
-            throw new \Exception(sprintf('Config element "%s" not found.', $name));
-        }
-
-        if ($element->getScope() == 0 && $shop->getId() !== 1) {
-            throw new \InvalidArgumentException(sprintf("Element '%s' is not writeable for shop %s", $element->getName(), $shop->getId()));
-        }
-
-        $defaultValue = $element->getValue();
-
-        /** @var Value|null $valueModel */
-        $valueModel = $this->valueRepository->findOneBy(['shop' => $shop, 'element' => $element]);
-
-        if (!$valueModel) {
-            if ($value == $defaultValue || $value === null) {
-                return;
-            }
-
-            $valueModel = new Value();
-            $valueModel->setElement($element);
-            $valueModel->setShop($shop);
-            $valueModel->setValue($value);
-
-            $this->em->persist($valueModel);
-            $this->em->flush($valueModel);
-
-            return;
-        }
-
-        if ($value == $defaultValue || $value === null) {
-            $this->em->remove($valueModel);
-        } else {
-            $valueModel->setValue($value);
-        }
-        $this->em->flush($valueModel);
+        $this->writer->setByPluginName(
+            $plugin->getName(),
+            [$name => $value],
+            $shop->getId()
+        );
     }
 }
