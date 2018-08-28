@@ -451,7 +451,7 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
         ]);
         $locale = $_SESSION['parameters']['c_config_shop_language'] ?: 'de_DE';
 
-        $shopService = new ShopService($db);
+        $shopService = new ShopService($db, $container['uniqueid.generator']);
         $currencyService = new CurrencyService($db);
         $adminService = new AdminService($db);
         $localeSettingsService = new LocaleSettingsService($db, $container);

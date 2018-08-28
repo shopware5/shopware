@@ -148,7 +148,7 @@ class InstallCommand extends Command
             $adminUser = $this->getAdminInfoFromInteractiveShell($adminUser);
         }
 
-        $shopService = new ShopService($conn);
+        $shopService = new ShopService($conn, $container['uniqueid.generator']);
         $shopService->updateShop($shop);
         $shopService->updateConfig($shop);
 

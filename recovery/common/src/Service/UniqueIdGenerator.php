@@ -66,7 +66,7 @@ class UniqueIdGenerator
      *
      * @return string
      */
-    private function generateUniqueId($length = 32, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    public function generateUniqueId($length = 32, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
         $str = '';
         $max = mb_strlen($keyspace, '8bit') - 1;
