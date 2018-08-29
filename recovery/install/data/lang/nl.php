@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Shopware-licentie',
     'menuitem_configuration' => 'Configuratie',
     'menuitem_finish' => 'Gereed',
-    'menuitem_license' => 'Eindgebruikerslicentie',
+    'menuitem_license' => 'Algemene voorwaarden',
 
     'license_incorrect' => 'De ingevoerde licentiesleutel lijkt niet geldig te zijn',
     'license_does_not_match' => 'De ingevoerde licentiesleutel hoort bij geen enkele commerciële Shopware-versie',
@@ -73,7 +73,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => '<h3 class="alert-heading">Let op!</h3>Er is niet aan alle vereisten voor een geslaagde installatie voldaan',
     'requirements_success' => '<h3 class="alert-heading">Gefeliciteerd</h3>Er is aan alle vereisten voor een geslaagde installatie voldaan',
-    'requirements_ioncube' => '<small><strong>* Opmerking:</strong> De coderingssoftware ionCube is niet op jouw systeem geïnstalleerd. Deze software is alleen vereist als je later via onze <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a> uitbreidingen wilt installeren die met ionCube versleuteld zijn. Je kunt ionCube altijd later nog installeren.</small>',
     'requirements_php_info' => 'Je server moet aan de volgende systeemvereisten voldoen om Shopware te kunnen gebruiken',
     'requirements_system_colcheck' => 'Vereiste',
     'requirements_system_colrequired' => 'Vereist',

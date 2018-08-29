@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Shopware licence',
     'menuitem_configuration' => 'Configuration',
     'menuitem_finish' => 'Done',
-    'menuitem_license' => 'End user licence',
+    'menuitem_license' => 'General terms and conditions',
 
     'license_incorrect' => 'The licence key entered does not appear to be valid',
     'license_does_not_match' => 'The licence key entered does not match a commercial Shopware version',
@@ -73,7 +73,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => '<h3 class="alert-heading">Warning!</h3>Not all of the requirements for successful installation have been met',
     'requirements_success' => '<h3 class="alert-heading">Congratulations!</h3>All of the requirements for successful installation have been met',
-    'requirements_ioncube' => '<small><strong>* Hint:</strong> The ionCube encoding software is not installed on your system. This will only be needed if later on you want to install extensions via our <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a> that are encrypted with ionCube. You can install ionCube at any time.</small>',
     'requirements_php_info' => 'Your server must meet the following system requirements in order to run Shopware',
     'requirements_system_colcheck' => 'Requirement',
     'requirements_system_colrequired' => 'Required',

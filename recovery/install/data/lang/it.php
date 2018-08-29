@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Licenza Shopware',
     'menuitem_configuration' => 'Configurazione',
     'menuitem_finish' => 'Pronto',
-    'menuitem_license' => 'Licenza utente finale',
+    'menuitem_license' => 'Condizioni generali di vendita',
 
     'license_incorrect' => 'Il codice di licenza immesso sembra non essere valido',
     'license_does_not_match' => 'Il codice di licenza immesso non corrisponde a nessuna versione commerciale di Shopware',
@@ -73,7 +73,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Stato',
     'requirements_error' => '<h3 class="alert-heading">Attenzione!</h3>Non tutti i requisiti per l\'installazione sono soddisfatti',
     'requirements_success' => '<h3 class="alert-heading">Esito positivo!</h3>Tutti i requisiti per l\'installazione sono soddisfatti',
-    'requirements_ioncube' => '<small><strong>* Nota:</strong> In questo sistema non è installato il software di codifica ionCube. Questo software serve per installare successivamente espansioni del nostro <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a> codificate con ionCube. L\'installazione di ionCube può essere effettuata in qualsiasi momento successivo.</small>',
     'requirements_php_info' => 'Per consentire l\'utilizzo di Shopware, il tuo server deve soddisfare i requisiti di sistema seguenti.',
     'requirements_system_colcheck' => 'Requisito',
     'requirements_system_colrequired' => 'Obbligatorio',
