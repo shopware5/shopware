@@ -190,6 +190,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed order mergeDocuments to send a valid Content-Type to fix downloads on some webserver configurations
 * Changed voucher restrictions to allow product numbers shorter then 5 characters 
 * Changed download strategies to work only on local adapter
+* Changed installation process to generate a unique ESD key
 
 ### Removals
 
