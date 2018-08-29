@@ -51,7 +51,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
 
             $tax = $net * ($taxRate / 100);
 
-            $taxes[] = new Price($priceForTax, $isNetPrice ? $priceForTax : $net, $taxRate, $tax);
+            $taxes[] = new Price($isNetPrice ? $net : $priceForTax, $net, $taxRate, $tax);
         }
 
         return $taxes;
@@ -116,7 +116,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
             } else {
                 $taxPrice = 0;
             }
-            $taxPrice += $price->getPrice();
+            $taxPrice += $price->getNetPrice();
 
             $sum[$key] = $taxPrice;
         }

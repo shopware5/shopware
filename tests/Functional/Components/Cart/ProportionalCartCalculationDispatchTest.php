@@ -100,7 +100,7 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         $this->assertEquals(8.9000000000000004, $sBasket['sShippingcosts']);
         $this->assertEquals(8.9000000000000004, $sBasket['sShippingcostsWithTax']);
         $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(7.8983743029922255, $sBasket['sShippingcostsNet']);
+        $this->assertEquals(7.9206424112941871, $sBasket['sShippingcostsNet']);
 
         $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
         $this->assertCount(2, $sBasket['sTaxRates']);
@@ -159,14 +159,14 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         $this->assertEquals(3.9, $sBasket['sShippingcosts']);
         $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
         $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.4610853687269296, $sBasket['sShippingcostsNet']);
+        $this->assertEquals(3.4708433038255415, $sBasket['sShippingcostsNet']);
 
         $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
         $this->assertCount(2, $sBasket['sTaxRates']);
 
         $this->assertCount(4, $sBasket['content']);
 
-        $this->hasBasketItem($sBasket['content'], 'Warenkorbrabatt (19%)', -1, -0.84033613445378, 'SHIPPINGDISCOUNT');
-        $this->hasBasketItem($sBasket['content'], 'Warenkorbrabatt (7%)', -1, -0.93457943925234, 'SHIPPINGDISCOUNT');
+        $this->hasBasketItem($sBasket['content'], 'Warenkorbrabatt (19%)', -0.95, -0.79571651669517, 'SHIPPINGDISCOUNT');
+        $this->hasBasketItem($sBasket['content'], 'Warenkorbrabatt (7%)', -1.05, -0.98420312629229, 'SHIPPINGDISCOUNT');
     }
 }

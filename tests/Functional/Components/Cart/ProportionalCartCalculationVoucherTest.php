@@ -105,7 +105,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
         $this->assertEquals(3.9, $sBasket['sShippingcosts']);
         $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
         $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.4610853687269296, $sBasket['sShippingcostsNet']);
+        $this->assertEquals(3.4708433038255415, $sBasket['sShippingcostsNet']);
 
         $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
         $this->assertCount(2, $sBasket['sTaxRates']);
@@ -136,15 +136,15 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
         $this->assertEquals(3.9, $sBasket['sShippingcosts']);
         $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
         $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.4610853687269296, $sBasket['sShippingcostsNet']);
+        $this->assertEquals(3.4708433038255415, $sBasket['sShippingcostsNet']);
 
         $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
         $this->assertCount(2, $sBasket['sTaxRates']);
 
         $this->assertCount(4, $sBasket['content']);
 
-        $this->hasBasketItem($sBasket['content'], 'Gutschein (7%)', -2.5, -2.3364485981308, 'GUTABS');
-        $this->hasBasketItem($sBasket['content'], 'Gutschein (19%)', -2.5, -2.1008403361345, 'GUTABS');
+        $this->hasBasketItem($sBasket['content'], 'Gutschein (7%)', -2.63, -2.4605078157307, 'GUTABS');
+        $this->hasBasketItem($sBasket['content'], 'Gutschein (19%)', -2.37, -1.9892912917379, 'GUTABS');
     }
 
     public function testPercentVoucher()
@@ -228,7 +228,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
         $this->assertEquals(3.9, $sBasket['sShippingcosts']);
         $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
         $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.4610853687269296, $sBasket['sShippingcostsNet']);
+        $this->assertEquals(3.4708433038255415, $sBasket['sShippingcostsNet']);
 
         $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
         $this->assertCount(2, $sBasket['sTaxRates']);
