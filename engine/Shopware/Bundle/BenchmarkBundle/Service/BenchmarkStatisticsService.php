@@ -56,7 +56,6 @@ class BenchmarkStatisticsService
      * @param StatisticsService           $statistics
      * @param BusinessIntelligenceService $biService
      * @param DateInterval|null           $interval
-     * @param int                         $iterations
      *
      * @throws \Exception
      */
@@ -101,7 +100,7 @@ class BenchmarkStatisticsService
         $statisticsResponse = null;
 
         try {
-            $statisticsResponse = $this->statistics->transmit($benchmarkConfig);
+            $statisticsResponse = $this->statistics->transmit($benchmarkConfig, $benchmarkConfig->getBatchSize());
             $statisticsResponse->setShopId((int) $benchmarkConfig->getShopId());
         } catch (TransmissionNotNecessaryException $e) {
             return null;

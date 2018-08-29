@@ -108,6 +108,15 @@
             <tag name="shopware.benchmark_provider" />
         </service>
 
+        <service id="shopware.benchmark_bundle.providers.updated_orders"
+                 class="Shopware\Bundle\BenchmarkBundle\Provider\UpdatedOrdersProvider"
+                 public="false">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.benchmark_bundle.matcher_payment"/>
+            <argument type="service" id="shopware.benchmark_bundle.matcher_shipping"/>
+            <tag name="shopware.benchmark_provider" />
+        </service>
+
         <!-- Subscriber -->
         <service id="shopware.benchmark_bundle.controller_subscriber"
                  class="Shopware\Bundle\BenchmarkBundle\DependencyInjection\EventListener\ControllerSubscriber">

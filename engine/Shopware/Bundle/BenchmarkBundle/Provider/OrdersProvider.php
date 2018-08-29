@@ -34,12 +34,12 @@ class OrdersProvider implements BatchableProviderInterface
     /**
      * @var Connection
      */
-    private $dbalConnection;
+    protected $dbalConnection;
 
     /**
      * @var int
      */
-    private $shopId;
+    protected $shopId;
 
     /**
      * @var MatcherService
@@ -76,6 +76,31 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
+     * @param array $config
+     * @param int   $batch
+     *
+     * @return array
+     */
+    protected function getOrdersBasicData(array $config, $batch)
+    {
+        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $lastOrderId = (int) $config['last_order_id'];
+
+        return $ordersQueryBuilder->select('orders.*')
+            ->from('s_order', 'orders')
+            ->where('orders.id > :lastOrderId')
+            ->andWhere('orders.subshopID = :shopId')
+            ->andWhere('orders.status != -1')
+            ->orderBy('orders.id', 'ASC')
+            ->setMaxResults($batch)
+            ->setParameter(':lastOrderId', $lastOrderId)
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param int $batchSize
      *
      * @return array
@@ -84,27 +109,26 @@ class OrdersProvider implements BatchableProviderInterface
     {
         $config = $this->getOrderConfig();
         $batch = (int) $config['batch_size'];
-        $lastOrderId = (int) $config['last_order_id'];
 
         if ($batchSize !== null) {
             $batch = $batchSize;
         }
 
-        $orderData = $this->getOrderData($batch, $lastOrderId);
+        $orderData = $this->getOrderData($config, $batch);
         $orderData = $this->hydrateData($orderData);
 
         return $orderData;
     }
 
     /**
-     * @param int $batch
-     * @param int $lastOrderId
+     * @param array $config
+     * @param int   $batch
      *
      * @return array
      */
-    private function getOrderData($batch, $lastOrderId)
+    private function getOrderData(array $config, $batch)
     {
-        $ordersBasicData = $this->getOrdersBasicData($batch, $lastOrderId);
+        $ordersBasicData = $this->getOrdersBasicData($config, $batch);
 
         $orderIds = array_keys($ordersBasicData);
         $dispatchIds = $this->getUniqueColumnValues($ordersBasicData, 'dispatchID');
@@ -173,29 +197,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param int $batch
-     * @param int $lastOrderId
-     *
-     * @return array
-     */
-    private function getOrdersBasicData($batch, $lastOrderId)
-    {
-        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $ordersQueryBuilder->select('orders.*')
-            ->from('s_order', 'orders')
-            ->where('orders.id > :lastOrderId')
-            ->andWhere('orders.subshopID = :shopId')
-            ->andWhere('orders.status != -1')
-            ->orderBy('orders.id', 'ASC')
-            ->setMaxResults($batch)
-            ->setParameter(':lastOrderId', $lastOrderId)
-            ->setParameter(':shopId', $this->shopId)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
-    }
-
-    /**
      * @param array $orderData
      *
      * @return array
@@ -218,14 +219,7 @@ class OrdersProvider implements BatchableProviderInterface
             $currentHydratedOrder['isTaxFree'] = (bool) $order['taxfree'];
             $currentHydratedOrder['isNet'] = (bool) $order['net'];
             $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
-            $currentHydratedOrder['datetime'] = [
-                'year' => (int) $dateTime->format('Y'),
-                'month' => (int) $dateTime->format('m'),
-                'day' => (int) $dateTime->format('d'),
-                'hours' => (int) $dateTime->format('H'),
-                'minutes' => (int) $dateTime->format('i'),
-                'seconds' => (int) $dateTime->format('s'),
-            ];
+            $currentHydratedOrder['datetime'] = $dateTime->format('Y-m-d H:i:s');
             $currentHydratedOrder['date_time'] = $order['ordertime'];
             $currentHydratedOrder['customer'] = $order['customer'];
 

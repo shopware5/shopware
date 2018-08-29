@@ -12,7 +12,7 @@ INSERT INTO `s_categories` (`id`, `parent`, `path`, `description`, `position`, `
     (2, 1, NULL, 'Example Parent 1', 0, 0, 0, 0, '2012-08-27 22:28:52', '2012-08-27 22:28:52', NULL, '', '', '', NULL, 1, 0, '', 0, 0, NULL, NULL, '', NULL, 0, NULL, NULL, ''),
     (3, 1, NULL, 'Example Parent 2', 0, 0, 0, 0, '2012-08-27 22:28:52', '2012-08-27 22:28:52', NULL, '', '', '', NULL, 1, 0, '', 0, 0, NULL, NULL, '', NULL, 0, NULL, NULL, '');
 
-INSERT INTO `s_benchmark_config` (`id`, `shop_id`, `active`, `last_sent`, `last_received`, `last_order_id`, `last_customer_id`, `last_product_id`, `batch_size`, `industry`, `type`, `response_token`, `cached_template`)
-VALUES (UNHEX(''), '1', '1', '1990-01-01 00:00:00', '1990-01-01 00:00:00', '0', '0', '0', '1000', '3', 'b2c', NULL, NULL);
+INSERT INTO `s_benchmark_config` (`id`, `shop_id`, `active`, `last_sent`, `last_received`, `last_order_id`, `last_customer_id`, `last_product_id`, `last_updated_orders_date`, `batch_size`, `industry`, `type`, `response_token`, `cached_template`, `locked`)
+VALUES (UNHEX(''), '1', '1', '1990-01-01 00:00:00', '1990-01-01 00:00:00', '0', '0', '0', '1970-01-01 00:00:00', '1000', '3', 'b2c', NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS=1;
