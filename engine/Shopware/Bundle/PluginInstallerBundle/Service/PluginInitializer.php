@@ -68,7 +68,7 @@ class PluginInitializer
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
 
-        $stmt = $this->connection->query('SELECT name, version, namespace FROM s_core_plugins WHERE active = 1 AND installation_date IS NOT NULL;');
+        $stmt = $this->connection->query('SELECT name, version, namespace FROM s_core_plugins WHERE active = 1 AND installation_date IS NOT NULL ORDER BY name ASC;');
         $this->activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
 
         foreach ($this->activePlugins as $pluginName => &$pluginData) {
@@ -110,6 +110,7 @@ class PluginInitializer
                 $plugins[$plugin->getName()] = $plugin;
             }
         }
+        ksort($plugins);
 
         return $plugins;
     }
