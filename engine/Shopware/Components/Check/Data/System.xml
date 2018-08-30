@@ -4,10 +4,6 @@
         <name>php</name><group>core</group><required>5.6.4</required>
     </requirement>
     <requirement>
-        <name>ionCube Loader</name><group>core</group><required>5.0</required>
-        <notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
-    </requirement>
-    <requirement>
         <name>mod_rewrite</name><group>core</group><required>1</required>
         <notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
     </requirement>

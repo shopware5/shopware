@@ -102,17 +102,4 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
         $this->assertArrayHasKey('name', $jsonBody['data'][0]);
         $this->assertArrayHasKey('version', $jsonBody['data'][0]);
     }
-
-    public function testGetEncoder()
-    {
-        $response = $this->dispatch('backend/systeminfo/getEncoder');
-
-        $this->assertTrue($this->View()->success);
-
-        $body = $response->getBody();
-        $jsonBody = Zend_Json::decode($body);
-
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-    }
 }
