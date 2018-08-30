@@ -70,6 +70,7 @@ class PluginInitializer
 
         $stmt = $this->connection->query('SELECT name, version, namespace FROM s_core_plugins WHERE active = 1 AND installation_date IS NOT NULL;');
         $this->activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
+        ksort($this->activePlugins);
 
         foreach ($this->activePlugins as $pluginName => &$pluginData) {
             if (in_array($pluginData['namespace'], ['ShopwarePlugins', 'ProjectPlugins'], true)) {
@@ -110,6 +111,7 @@ class PluginInitializer
                 $plugins[$plugin->getName()] = $plugin;
             }
         }
+        ksort($plugins);
 
         return $plugins;
     }
