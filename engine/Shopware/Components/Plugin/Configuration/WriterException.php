@@ -22,21 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Components\Plugin\Configuration;
 
-use Shopware\Models\Shop\Shop;
+use Exception;
 
-/**
- * @deprecated Use `shopware.plugin.configuration.reader` instead
- */
-interface ConfigReader
+class WriterException extends Exception
 {
-    /**
-     * @param string $pluginName
-     *
-     * @return array
-     *
-     * @deprecated Use `shopware.plugin.configuration.reader`::getByPluginName instead
-     */
-    public function getByPluginName($pluginName, Shop $shop = null);
 }

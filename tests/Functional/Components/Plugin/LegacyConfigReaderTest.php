@@ -28,9 +28,10 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Plugin\Configuration\ReaderInterface;
+use Shopware\Components\Plugin\DBALConfigReader;
+use Shopware\Models\Shop\Shop;
 
-class ConfigReaderTest extends TestCase
+class LegacyConfigReaderTest extends TestCase
 {
     const PLUGIN_NAME = 'swConfigReaderPluginTest';
 
@@ -47,7 +48,7 @@ class ConfigReaderTest extends TestCase
     private $modelManager;
 
     /**
-     * @var ReaderInterface
+     * @var DBALConfigReader
      */
     private $configReader;
 
@@ -57,19 +58,19 @@ class ConfigReaderTest extends TestCase
     private $configElementId;
 
     /**
-     * @var int
+     * @var Shop
      */
-    private $installationShopId;
+    private $installationShop;
 
     /**
-     * @var int
+     * @var Shop
      */
-    private $subShopId;
+    private $subShop;
 
     /**
-     * @var int
+     * @var Shop
      */
-    private $languageShopId;
+    private $languageShop;
 
     public function setUp()
     {
@@ -120,7 +121,7 @@ class ConfigReaderTest extends TestCase
 
         // setup shops
         // assume shop by id 1 exists
-        $this->installationShopId = 1;
+        $this->installationShop = $this->modelManager->find(Shop::class, 1);
 
         $this->connection->insert('s_core_shops', [
             'name' => 'Sub Shop',
@@ -131,7 +132,7 @@ class ConfigReaderTest extends TestCase
             '`default`' => 0,
             'active' => 1,
         ]);
-        $this->subShopId = $this->connection->lastInsertId();
+        $this->subShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
 
         $this->connection->insert('s_core_shops', [
             'name' => 'Sub Shop',
@@ -141,11 +142,11 @@ class ConfigReaderTest extends TestCase
             'customer_scope' => 0,
             '`default`' => 0,
             'active' => 1,
-            'main_id' => $this->subShopId,
+            'main_id' => $this->subShop->getId(),
         ]);
-        $this->languageShopId = $this->connection->lastInsertId();
+        $this->languageShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
 
-        $this->configReader = Shopware()->Container()->get('shopware.plugin.configuration.reader');
+        $this->configReader = new DBALConfigReader(Shopware()->Container()->get('shopware.plugin.configuration.reader'));
     }
 
     public function tearDown()
@@ -163,7 +164,7 @@ class ConfigReaderTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 1]
         );
     }
@@ -173,7 +174,7 @@ class ConfigReaderTest extends TestCase
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
             'value' => serialize(2),
-            'shop_id' => $this->installationShopId,
+            'shop_id' => $this->installationShop->getId(),
         ]);
 
         $this->assertArraySubset(
@@ -182,17 +183,17 @@ class ConfigReaderTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
     }
@@ -202,13 +203,13 @@ class ConfigReaderTest extends TestCase
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
             'value' => serialize(2),
-            'shop_id' => $this->installationShopId,
+            'shop_id' => $this->installationShop->getId(),
         ]);
 
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
             'value' => serialize(3),
-            'shop_id' => $this->subShopId,
+            'shop_id' => $this->subShop->getId(),
         ]);
 
         $this->assertArraySubset(
@@ -217,17 +218,17 @@ class ConfigReaderTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
     }
@@ -237,19 +238,19 @@ class ConfigReaderTest extends TestCase
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
             'value' => serialize(2),
-            'shop_id' => $this->installationShopId,
+            'shop_id' => $this->installationShop->getId(),
         ]);
 
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
             'value' => serialize(3),
-            'shop_id' => $this->subShopId,
+            'shop_id' => $this->subShop->getId(),
         ]);
 
         $this->connection->insert('s_core_config_values', [
             'element_id' => $this->configElementId,
             'value' => serialize(4),
-            'shop_id' => $this->languageShopId,
+            'shop_id' => $this->languageShop->getId(),
         ]);
 
         $this->assertArraySubset(
@@ -258,17 +259,17 @@ class ConfigReaderTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => 4]
         );
     }

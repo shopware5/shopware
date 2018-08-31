@@ -25,69 +25,33 @@
 namespace Shopware\Components\Plugin;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Models\Shop\Shop;
 
+/**
+ * @deprecated Use `shopware.plugin.configuration.reader` instead
+ */
 class DBALConfigReader implements ConfigReader
 {
     /**
-     * @var Connection
+     * @var ReaderInterface
      */
-    private $connection;
+    private $reader;
 
-    public function __construct(Connection $connection)
+    public function __construct(ReaderInterface $reader)
     {
-        $this->connection = $connection;
+        $this->reader = $reader;
     }
 
     /**
      * @param string $pluginName
      *
      * @return array
+     *
+     * @deprecated Use `shopware.plugin.configuration.reader`::getByPluginName instead
      */
     public function getByPluginName($pluginName, Shop $shop = null)
     {
-        $sql = <<<'SQL'
-SELECT
-  ce.name,
-  COALESCE(currentShop.value, parentShop.value, fallbackShop.value, ce.value) as value
-
-FROM s_core_plugins p
-
-INNER JOIN s_core_config_forms cf
-  ON cf.plugin_id = p.id
-
-INNER JOIN s_core_config_elements ce
-  ON ce.form_id = cf.id
-
-LEFT JOIN s_core_config_values currentShop
-  ON currentShop.element_id = ce.id
-  AND currentShop.shop_id = :currentShopId
-
-LEFT JOIN s_core_config_values parentShop
-  ON parentShop.element_id = ce.id
-  AND parentShop.shop_id = :parentShopId
-
-LEFT JOIN s_core_config_values fallbackShop
-  ON fallbackShop.element_id = ce.id
-  AND fallbackShop.shop_id = :fallbackShopId
-
-WHERE p.name=:pluginName
-SQL;
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'fallbackShopId' => 1, //Shop parent id
-            'parentShopId' => $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
-            'currentShopId' => $shop !== null ? $shop->getId() : null,
-            'pluginName' => $pluginName,
-        ]);
-
-        $config = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        foreach ($config as $key => $value) {
-            $config[$key] = !empty($value) ? @unserialize($value, ['allowed_classes' => false]) : null;
-        }
-
-        return $config;
+        return $this->reader->getByPluginName($pluginName, is_null($shop) ? null : $shop->getId());
     }
 }

@@ -28,6 +28,9 @@ use Shopware\Components\CacheManager;
 use Shopware\Models\Shop\Shop;
 use Zend_Cache_Core as Cache;
 
+/**
+ * @deprecated Use `shopware.plugin.configuration.reader` instead
+ */
 class CachedConfigReader implements ConfigReader
 {
     /**

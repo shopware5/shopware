@@ -28,12 +28,12 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Plugin\Configuration\ReaderInterface;
-use Shopware\Components\Plugin\Configuration\WriterInterface;
+use Shopware\Components\Plugin\ConfigWriter;
+use Shopware\Components\Plugin\DBALConfigReader;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
-class ConfigWriterTest extends TestCase
+class LegacyConfigWriterTest extends TestCase
 {
     const PLUGIN_NAME = 'swConfigWriterPluginTest';
 
@@ -52,32 +52,37 @@ class ConfigWriterTest extends TestCase
     private $modelManager;
 
     /**
+     * @var Plugin
+     */
+    private $plugin;
+
+    /**
      * @var int
      */
     private $configElementId;
 
     /**
-     * @var int
+     * @var Shop
      */
-    private $installationShopId;
+    private $installationShop;
 
     /**
-     * @var int
+     * @var Shop
      */
-    private $subShopId;
+    private $subShop;
 
     /**
-     * @var int
+     * @var Shop
      */
-    private $languageShopId;
+    private $languageShop;
 
     /**
-     * @var WriterInterface
+     * @var ConfigWriter
      */
     private $configWriter;
 
     /**
-     * @var ReaderInterface
+     * @var DBALConfigReader
      */
     private $configReader;
 
@@ -101,8 +106,7 @@ class ConfigWriterTest extends TestCase
             'capability_enable' => 1,
             'capability_secure_uninstall' => 1,
         ]);
-        /** @var Plugin $plugin */
-        $plugin = $this->modelManager->find(Plugin::class, $this->connection->lastInsertId());
+        $this->plugin = $this->modelManager->find(Plugin::class, $this->connection->lastInsertId());
 
         // setup plugin configuration
         $parentFormId = $this->connection
@@ -113,7 +117,7 @@ class ConfigWriterTest extends TestCase
             'name' => self::PLUGIN_NAME,
             'label' => 'This is a config reader test plugin',
             'position' => 0,
-            'plugin_id' => $plugin->getId(),
+            'plugin_id' => $this->plugin->getId(),
             'parent_id' => $parentFormId,
         ]);
         $formId = $this->connection->lastInsertId();
@@ -131,7 +135,7 @@ class ConfigWriterTest extends TestCase
 
         // setup shops
         // assume shop by id 1 exists
-        $this->installationShopId = 1;
+        $this->installationShop = $this->modelManager->find(Shop::class, 1);
 
         $this->connection->insert('s_core_shops', [
             'name' => 'Sub Shop',
@@ -142,7 +146,7 @@ class ConfigWriterTest extends TestCase
             '`default`' => 0,
             'active' => 1,
         ]);
-        $this->subShopId = $this->connection->lastInsertId();
+        $this->subShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
 
         $this->connection->insert('s_core_shops', [
             'name' => 'Sub Shop',
@@ -152,12 +156,12 @@ class ConfigWriterTest extends TestCase
             'customer_scope' => 0,
             '`default`' => 0,
             'active' => 1,
-            'main_id' => $this->subShopId,
+            'main_id' => $this->subShop->getId(),
         ]);
-        $this->languageShopId = $this->connection->lastInsertId();
+        $this->languageShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
 
-        $this->configWriter = Shopware()->Container()->get('shopware.plugin.configuration.writer');
-        $this->configReader = Shopware()->Container()->get('shopware.plugin.configuration.reader');
+        $this->configWriter = new ConfigWriter(Shopware()->Container()->get('shopware.plugin.configuration.writer'));
+        $this->configReader = new DBALConfigReader(Shopware()->Container()->get('shopware.plugin.configuration.reader'));
     }
 
     public function tearDown()
@@ -169,11 +173,7 @@ class ConfigWriterTest extends TestCase
 
     public function testWriteValueForInstallation()
     {
-        $this->configWriter->setByPluginName(
-            self::PLUGIN_NAME,
-            [self::NUMBER_CONFIGURATION_NAME => 2],
-            $this->installationShopId
-        );
+        $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->installationShop);
 
         $this->assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
@@ -181,18 +181,14 @@ class ConfigWriterTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
     }
 
     public function testWriteValueForSubShop()
     {
-        $this->configWriter->setByPluginName(
-            self::PLUGIN_NAME,
-            [self::NUMBER_CONFIGURATION_NAME => 2],
-            $this->subShopId
-        );
+        $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->subShop);
 
         $this->assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
@@ -200,23 +196,19 @@ class ConfigWriterTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
     }
 
     public function testWriteValueForLanguageShop()
     {
-        $this->configWriter->setByPluginName(
-            self::PLUGIN_NAME,
-            [self::NUMBER_CONFIGURATION_NAME => 2],
-            $this->languageShopId
-        );
+        $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->languageShop);
 
         $this->assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
@@ -224,34 +216,25 @@ class ConfigWriterTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
     }
 
     public function testWriteDefaultValueForSubShop()
     {
-        $this->configWriter->setByPluginName(
-            self::PLUGIN_NAME,
-            [self::NUMBER_CONFIGURATION_NAME => 2],
-            $this->installationShopId
-        );
-
-        $this->configWriter->setByPluginName(
-            self::PLUGIN_NAME,
-            [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE],
-            $this->subShopId
-        );
+        $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->installationShop);
+        $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, self::ELEMENT_DEFAULT_VALUE, $this->subShop);
 
         $this->assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
@@ -259,34 +242,25 @@ class ConfigWriterTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
     }
 
     public function testWriteDefaultValueForLanguageShop()
     {
-        $this->configWriter->setByPluginName(
-            self::PLUGIN_NAME,
-            [self::NUMBER_CONFIGURATION_NAME => 2],
-            $this->subShopId
-        );
-
-        $this->configWriter->setByPluginName(
-            self::PLUGIN_NAME,
-            [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE],
-            $this->languageShopId
-        );
+        $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->subShop);
+        $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, self::ELEMENT_DEFAULT_VALUE, $this->languageShop);
 
         $this->assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
@@ -294,17 +268,17 @@ class ConfigWriterTest extends TestCase
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
         $this->assertArraySubset(
-            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
+            $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
     }
