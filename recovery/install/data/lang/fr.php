@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Licence Shopware',
     'menuitem_configuration' => 'Configuration',
     'menuitem_finish' => 'Terminé',
-    'menuitem_license' => 'Conditions générales de vente',
+    'menuitem_license' => 'Conditions générales',
 
     'license_incorrect' => 'Échec de la vérification de la clé de licence saisie',
     'license_does_not_match' => 'La clé de licence saisie ne correspond à aucune version Shopware commerciale',
