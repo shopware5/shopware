@@ -118,6 +118,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added `Shopware_Controllers_Backend_Order::getMailTemplatesAction`
     * Added `Shopware\Models\Mail\Mail::isDocumentMail`
     * Added `Shopware\Models\Mail\Repository::getMailsListQueryBuilder`
+* Added new notify event `Shopware_CronJob_Notification_Product_QueryBuilder` to the notification plugin which will be fired for change the product query builder.
 
 ### Changes
 

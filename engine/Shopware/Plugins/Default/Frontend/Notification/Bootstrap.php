@@ -290,7 +290,9 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             ->fetchAll();
 
         foreach ($notifications as $notify) {
-            $product = $conn->createQueryBuilder()
+            $queryBuilder = $conn->createQueryBuilder();
+
+            $queryBuilder
                 ->select(
                     'a.id AS articleID',
                     'a.active',
@@ -305,9 +307,16 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 ->where('d.ordernumber = :number')
                 ->andWhere('d.instock > 0')
                 ->andWhere('d.minpurchase <= d.instock')
-                ->setParameter('number', $notify['ordernumber'])
-                ->execute()
-                ->fetch(\PDO::FETCH_ASSOC);
+                ->setParameter('number', $notify['ordernumber']);
+
+            Shopware()->Container()->get('events')->notify(
+                'Shopware_CronJob_Notification_Product_QueryBuilder',
+                [
+                    'queryBuilder' => $queryBuilder,
+                ]
+            );
+
+            $product = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
 
             if (
                 empty($product) || //No product associated with the specified order number (empty result set)
