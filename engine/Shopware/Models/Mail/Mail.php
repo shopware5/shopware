@@ -55,6 +55,7 @@ class Mail extends ModelEntity
     const MAILTYPE_USER = 1;
     const MAILTYPE_SYSTEM = 2;
     const MAILTYPE_STATE = 3;
+    const MAILTYPE_DOCUMENT = 4;
 
     /**
      * OWNING SIDE
@@ -419,6 +420,16 @@ class Mail extends ModelEntity
     public function isUserMail()
     {
         return $this->getMailtype() == self::MAILTYPE_USER;
+    }
+
+    /**
+     * Returns whether or not this is a mail for sending documents.
+     *
+     * @return bool
+     */
+    public function isDocumentMail()
+    {
+        return $this->getMailtype() == self::MAILTYPE_DOCUMENT;
     }
 
     /**

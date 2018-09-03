@@ -422,7 +422,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             store.remove(positions);
             store.getProxy().extraParams = {
                 orderID: orderId,
-                changed: order.get('changed'),
+                changed: order.get('changed')
             };
             store.sync({
                 callback:function (batch, operation) {
@@ -750,6 +750,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * Opens the status mail window
      *
      * @param mail
+     * @param record
      */
     showOrderMail: function(mail, record) {
         var me = this,

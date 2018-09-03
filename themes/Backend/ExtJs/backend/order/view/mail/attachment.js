@@ -33,6 +33,23 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
     title: '{s name=attachment/panel/title}{/s}',
 
     /**
+     * Constructor parameters
+     *
+     * @type { Shopware.apps.Order.model.Order }
+     */
+    order: null,
+
+    /**
+     * @type { Shopware.apps.Order.model.Receipt }
+     */
+    preSelectedAttachment: null,
+
+    /**
+     * @type { Shopware.apps.Order.store.Order }
+     */
+    listStore: null,
+
+    /**
      * Init the attachmentGridPanel
      */
     initComponent: function() {
@@ -66,7 +83,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
         var me = this,
             tmpStore = Ext.create('Shopware.apps.Order.store.DocumentRegistry');
 
-        me.receiptStore.each(function(item) {
+        me.order.getReceipt().each(function(item) {
             tmpStore.add(item);
         });
 
@@ -252,7 +269,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
 
         return Ext.create('Ext.button.Split', {
             text: '{s name=attachment/panel/split/button/create/and/add}{/s}',
-            handler: function() {
+            handler: function () {
                 me.fireEvent(
                     'create-and-add-document',
                     me,
@@ -369,17 +386,15 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
 
         me.documentTypeSelection.select(me.documentTypeStore.getAt(0));
 
-        if (!me.hasOwnProperty('attached')) {
+        if (!me.preSelectedAttachment) {
             return;
         }
 
-        Ext.Array.each(me.attached, function(id) {
-            record = me.store.getDocumentById(id);
-            if (record) {
-                record.set('active', true);
-                me.selectDocument(record);
-            }
-        });
+        record = me.store.getDocumentById(me.preSelectedAttachment.get('id'));
+        if (record) {
+            record.set('active', true);
+            me.selectDocument(record);
+        }
     },
 
     /**

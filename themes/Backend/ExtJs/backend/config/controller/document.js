@@ -58,9 +58,6 @@ Ext.define('Shopware.apps.Config.controller.Document', {
         { ref: 'detail', selector: 'config-base-detail' }
     ],
 
-    /**
-     *
-     */
     init: function () {
         var me = this;
 
@@ -73,7 +70,7 @@ Ext.define('Shopware.apps.Config.controller.Document', {
                         styleField = elementFieldSet.down('textarea[name$=Style]');
 
                     Ext.each(elementFieldSet.items.items, function(item){
-                        if(item.xtype == 'tinymce' || item.xtype == 'textarea'){
+                        if(item.xtype === 'tinymce' || item.xtype === 'textarea'){
                             item.hide();
                             item.setValue(null);
                         }

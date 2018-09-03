@@ -92,6 +92,28 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
     title: '{s name=mail/title}Send an email to the customer{/s}',
 
     /**
+     * Constructor parameters
+     *
+     * @type { Shopware.apps.Order.model.Order }
+     */
+    order: null,
+
+    /**
+     * @type { Shopware.apps.Order.model.Receipt }
+     */
+    preSelectedAttachment: null,
+
+    /**
+     * @type { Shopware.apps.Order.store.DocType }
+     */
+    documentTypeStore: null,
+
+    /**
+     * @type { Shopware.apps.Order.store.Order }
+     */
+    listStore: null,
+
+    /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
      * The initComponent method of the class being created is called first,
@@ -103,18 +125,13 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
         var me = this;
 
         me.form = Ext.create('Shopware.apps.Order.view.mail.Form', {
-            attached: me.attached,
-            mail: me.mail,
-            record: me.record,
-            listStore: me.listStore,
-            documentTypeStore: me.documentTypeStore
+            order: this.order,
+            preSelectedAttachment: this.preSelectedAttachment,
+            listStore: this.listStore,
+            documentTypeStore: this.documentTypeStore
         });
 
         me.items = me.form;
-
-        if (me.mail instanceof Ext.data.Model) {
-            me.form.loadRecord(me.mail);
-        }
 
         me.callParent(arguments);
     },
