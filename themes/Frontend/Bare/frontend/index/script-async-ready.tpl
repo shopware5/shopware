@@ -1,6 +1,8 @@
 {literal}
 <script type="text/javascript">
-    // Wrap the replacement code into a function to call it from the outside to replace the method when necessary
+    /**
+     * Wrap the replacement code into a function to call it from the outside to replace the method when necessary
+     */
     var replaceAsyncReady = window.replaceAsyncReady = function() {
         document.asyncReady = function (callback) {
             if (typeof callback === 'function') {
