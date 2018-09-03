@@ -424,6 +424,7 @@ class ProductListingVariationLoader
         $subPriceQuery->from('s_articles_details', 'details');
         $subPriceQuery->leftJoin('details', '(' . $priceListingQuery . ')', 'prices', 'details.id = prices.articledetailsID');
         $subPriceQuery->leftJoin('details', '(' . $onSalePriceListingQuery . ')', 'onsalePriceList', 'details.id = onsalePriceList.articledetailsID');
+        $subPriceQuery->andWhere('details.id IN (:variants)');
 
         $query->innerJoin('availableVariant', '(' . $subPriceQuery . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
 
