@@ -377,7 +377,7 @@
                 if (!pluginData) {
                     if (typeof plugin === 'function') {
                         /* eslint new-cap: "off" */
-                        pluginData = new plugin();
+                        pluginData = new plugin(name, element, options);
                     } else {
                         var Plugin = function () {
                             PluginBase.call(this, name, element, options);
