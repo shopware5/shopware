@@ -12,11 +12,8 @@
 <?php if (!$error): ?>
     <div class="alert alert-success">
         <span class="icon-checkmark huge"></span>
-        <?= $t->t('requirements_success'); ?><?php if (!$ioncube): ?>*<?php endif; ?>
+        <?= $t->t('requirements_success'); ?>
     </div>
-<?php endif; ?>
-<?php if (!$ioncube && !$error): ?>
-    <?= $t->t('requirements_ioncube'); ?>
 <?php endif; ?>
 
 <h4 class="<?php if (!$pathError): ?>success<?php endif; ?><?php if ($pathError): ?>error<?php endif; ?>"><?= $t->t('requirements_header_files'); ?> <small><a href="#permissions" data-shown="<?= $t->t('requirements_hide_all'); ?>" data-hidden="<?= $t->t('requirements_show_all'); ?>"><?= $t->t('requirements_show_all'); ?></a></small></h4>

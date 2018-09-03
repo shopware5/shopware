@@ -56,7 +56,6 @@ class Requirements
     public function toArray()
     {
         $result = [
-            'hasIoncube' => false,
             'hasErrors' => false,
             'hasWarnings' => false,
             'checks' => [],
@@ -86,10 +85,6 @@ class Requirements
                 $result['hasWarnings'] = true;
             } else {
                 $check['status'] = 'ok';
-
-                if (strtolower($check['name']) === 'ioncube loader') {
-                    $result['hasIoncube'] = true;
-                }
             }
             unset($check['check'], $check['error']);
 
@@ -178,24 +173,6 @@ class Requirements
         }
 
         return $requiredValue == $value;
-    }
-
-    /**
-     * Checks the ion cube loader
-     *
-     * @return bool|string
-     */
-    private function checkIonCubeLoader()
-    {
-        if (!extension_loaded('ionCube Loader')) {
-            return false;
-        }
-
-        if (!function_exists('ioncube_loader_version')) {
-            return false;
-        }
-
-        return ioncube_loader_version();
     }
 
     /**
@@ -378,8 +355,9 @@ class Requirements
      */
     private function decodePhpSize($val)
     {
-        $val = trim($val);
-        $last = strtolower($val[strlen($val) - 1]);
+        $val = strtolower(trim($val));
+        $last = substr($val, -1);
+
         $val = (float) $val;
         switch ($last) {
             /* @noinspection PhpMissingBreakStatementInspection */

@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Licença de Shopware',
     'menuitem_configuration' => 'Configuração',
     'menuitem_finish' => 'Terminado',
-    'menuitem_license' => 'Licença de utilizador final',
+    'menuitem_license' => 'Termos e Condições ',
 
     'license_incorrect' => 'Aparentemente o código da licença introduzido não é válido',
     'license_does_not_match' => 'O código de licença introduzido não corresponde a qualquer versão de Shopware comercial',
@@ -73,7 +73,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Estado',
     'requirements_error' => '<h3 class="alert-heading">Atenção!</h3>Não estão satisfeitos todos os requisitos necessários para uma instalação correta',
     'requirements_success' => '<h3 class="alert-heading">Parabéns!</h3>Estão satisfeitos todos os requisitos para uma instalação correta',
-    'requirements_ioncube' => '<small><strong>* Nota:</strong> O software de encriptação ionCube não está instalado no seu sistema. Este só é necessário se, posteriormente, pretender instalar extensões encriptadas com o ionCube através da nossa <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a>. Pode realizar a instalação do ionCube a qualquer momento.</small>',
     'requirements_php_info' => 'O seu servidor deve satisfazer os seguintes requisitos de sistema para que possa executar o Shopware',
     'requirements_system_colcheck' => 'Requisitos',
     'requirements_system_colrequired' => 'Necessário',

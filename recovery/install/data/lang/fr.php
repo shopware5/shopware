@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Licence Shopware',
     'menuitem_configuration' => 'Configuration',
     'menuitem_finish' => 'Terminé',
-    'menuitem_license' => 'Licence d\'utilisateur final',
+    'menuitem_license' => 'Conditions générales de vente',
 
     'license_incorrect' => 'Échec de la vérification de la clé de licence saisie',
     'license_does_not_match' => 'La clé de licence saisie ne correspond à aucune version Shopware commerciale',
@@ -73,7 +73,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Statut',
     'requirements_error' => '<h3 class="alert-heading">Attention!</h3>L\'installation ne peut être réalisée car la configuration requise n\'est pas satisfaite',
     'requirements_success' => '<h3 class="alert-heading">Félicitations!</h3>L\'installation peut être réalisée car la configuration requise est satisfaite',
-    'requirements_ioncube' => '<small><strong>* Remarque:</strong> Le chiffrage Software ionCube n\'est pas installé sur ton système. Celui-ci est uniquement nécessaire pour installer les extensions sur <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a>. Ces extensions sont codées avec ionCube. Tu peux récupérer l\'installation d\'ionCube à tout moment.</small>',
     'requirements_php_info' => 'Afin que Shopware soit fonctionnel, ton serveur doit disposer de la configuration requise suivante',
     'requirements_system_colcheck' => 'Configuration requise',
     'requirements_system_colrequired' => 'Nécessaire',

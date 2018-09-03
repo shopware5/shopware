@@ -43,7 +43,6 @@ if (!$token
 }
 
 $result = [
-    'ioncubeLoader' => checkIonCubeLoader(),
     'phpversion' => phpversion(),
 ];
 
@@ -51,22 +50,4 @@ if (defined(JSON_PRETTY_PRINT)) {
     echo json_encode($result, JSON_PRETTY_PRINT);
 } else {
     echo json_encode($result, JSON_PRETTY_PRINT);
-}
-
-/**
- * Checks the ion cube loader
- *
- * @return bool|string
- */
-function checkIonCubeLoader()
-{
-    if (!extension_loaded('ionCube Loader')) {
-        return false;
-    }
-
-    if (!function_exists('ioncube_loader_version')) {
-        return false;
-    }
-
-    return ioncube_loader_version();
 }

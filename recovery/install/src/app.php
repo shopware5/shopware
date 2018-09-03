@@ -242,7 +242,6 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $shopwareSystemCheck = $container->offsetGet('install.requirements');
     $systemCheckResults = $shopwareSystemCheck->toArray();
 
-    $app->view()->setData('ioncube', (bool) $systemCheckResults['hasIoncube']);
     $app->view()->setData('warning', (bool) $systemCheckResults['hasWarnings']);
     $app->view()->setData('error', (bool) $systemCheckResults['hasErrors']);
     $app->view()->setData('systemError', (bool) $systemCheckResults['hasErrors']);
