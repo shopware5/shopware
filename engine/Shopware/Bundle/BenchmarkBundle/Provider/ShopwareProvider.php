@@ -123,7 +123,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return string
+     * @return string|false
      */
     private function getPhpVersion()
     {
@@ -147,7 +147,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
     private function getMemoryLimit()
     {

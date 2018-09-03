@@ -106,7 +106,7 @@ class StatisticsService
             throw new TransmissionNotNecessaryException();
         }
 
-        $benchmarkDataJson = json_encode($benchmarkData, true);
+        $benchmarkDataJson = json_encode($benchmarkData, JSON_HEX_TAG);
 
         $request = new StatisticsRequest($benchmarkDataJson);
 
