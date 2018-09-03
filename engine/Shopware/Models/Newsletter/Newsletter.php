@@ -61,7 +61,7 @@ class Newsletter extends ModelEntity
     /**
      * Date of the newsletter
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
@@ -137,7 +137,7 @@ class Newsletter extends ModelEntity
     private $status = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
@@ -191,7 +191,7 @@ class Newsletter extends ModelEntity
     /**
      * Should the mail delivered in future?
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
      */
@@ -214,7 +214,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -222,7 +222,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -294,7 +294,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTime $locked
+     * @param \DateTimeInterface $locked
      */
     public function setLocked($locked)
     {
@@ -302,7 +302,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLocked()
     {
@@ -496,7 +496,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function getTimedDelivery()
     {
@@ -504,7 +504,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTime $timedDelivery
+     * @param \DateTimeInterface $timedDelivery
      */
     public function setTimedDelivery($timedDelivery)
     {

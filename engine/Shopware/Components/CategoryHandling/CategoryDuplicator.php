@@ -89,8 +89,7 @@ class CategoryDuplicator
 
         $originalCategory['parent'] = $parentId;
 
-        unset($originalCategory['id']);
-        unset($originalCategory['path']);
+        unset($originalCategory['id'], $originalCategory['path']);
 
         $valuePlaceholders = array_fill(0, count($originalCategory), '?');
         $insertStmt = $this->connection->prepare(
@@ -98,7 +97,7 @@ class CategoryDuplicator
             VALUES (' . implode($valuePlaceholders, ', ') . ')'
         );
         $insertStmt->execute(array_values($originalCategory));
-        $newCategoryId = $this->connection->lastInsertId();
+        $newCategoryId = (int) $this->connection->lastInsertId();
 
         $this->rebuildPath($newCategoryId);
 

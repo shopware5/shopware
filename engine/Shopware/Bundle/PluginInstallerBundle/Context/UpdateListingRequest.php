@@ -39,7 +39,7 @@ class UpdateListingRequest extends BaseRequest
     /**
      * @param string $domain
      * @param string $locale
-     * @param string $plugins
+     * @param array  $plugins
      * @param string $shopwareVersion
      */
     public function __construct(

@@ -30,7 +30,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 class SubscriptionStateStruct implements \JsonSerializable
 {
     /**
-     * @var int
+     * @var bool
      */
     private $isShopUpgraded;
 

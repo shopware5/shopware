@@ -359,7 +359,7 @@ class Repository extends ModelRepository
     /**
      * @param \Enlight_Controller_Request_Request $request
      *
-     * @return DetachedShop
+     * @return DetachedShop|null
      */
     public function getActiveByRequest($request)
     {

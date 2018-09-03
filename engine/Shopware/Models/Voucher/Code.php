@@ -74,12 +74,15 @@ class Code extends ModelEntity
 
     /**
      * @var \Shopware\Models\Voucher\Voucher
+     *
      * @ORM\ManyToOne(targetEntity="Voucher", inversedBy="codes")
      * @ORM\JoinColumn(name="voucherID", referencedColumnName="id")
      */
     private $voucher;
+
     /**
      * @var \Shopware\Models\Voucher\Voucher
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */

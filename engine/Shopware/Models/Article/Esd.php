@@ -125,7 +125,7 @@ class Esd extends ModelEntity
     private $maxdownloads = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
@@ -180,6 +180,8 @@ class Esd extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Article $article
+     *
+     * @throws \Exception
      */
     public function setArticle($article)
     {
@@ -212,13 +214,13 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param null|\DateTime|string $date
+     * @param null|\DateTimeInterface|string $date
      *
      * @return Esd
      */
     public function setDate($date = null)
     {
-        if ($date !== null && !($date instanceof \DateTime)) {
+        if ($date !== null && !($date instanceof \DateTimeInterface)) {
             $this->date = new \DateTime($date);
         } else {
             $this->date = $date;
@@ -228,7 +230,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {

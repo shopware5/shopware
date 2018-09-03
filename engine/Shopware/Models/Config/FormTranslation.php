@@ -83,6 +83,7 @@ class FormTranslation extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="locale_id", type="integer", nullable=false)
      */
     private $localeId;

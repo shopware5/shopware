@@ -35,7 +35,7 @@ class AccessTokenStruct implements \JsonSerializable
     private $token;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $expire;
 
@@ -55,15 +55,15 @@ class AccessTokenStruct implements \JsonSerializable
     private $shopwareId;
 
     /**
-     * @param string    $token
-     * @param \DateTime $expire
-     * @param string    $shopwareId
-     * @param int       $userId
-     * @param string    $locale
+     * @param string             $token
+     * @param \DateTimeInterface $expire
+     * @param string             $shopwareId
+     * @param int                $userId
+     * @param string             $locale
      */
     public function __construct(
         $token,
-        \DateTime $expire,
+        \DateTimeInterface $expire,
         $shopwareId,
         $userId,
         $locale
@@ -92,7 +92,7 @@ class AccessTokenStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getExpire()
     {

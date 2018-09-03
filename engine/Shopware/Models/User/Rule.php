@@ -49,6 +49,7 @@ class Rule extends ModelEntity
      * The role property is the owning side of the association between rule and permission.
      *
      * @var \Shopware\Models\User\Role
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="rules", fetch="EAGER")
      * @ORM\JoinColumn(name="roleID", referencedColumnName="id")
      */
@@ -58,6 +59,7 @@ class Rule extends ModelEntity
      * The resource property is the owning side of the association between rule and permission.
      *
      * @var \Shopware\Models\User\Resource
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Resource", fetch="EAGER")
      * @ORM\JoinColumn(name="resourceID", referencedColumnName="id", nullable=true)
      */
@@ -67,6 +69,7 @@ class Rule extends ModelEntity
      * The privilege property is the owning side of the association between rule and permission.
      *
      * @var \Shopware\Models\User\Privilege
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\User\Privilege", fetch="EAGER")
      * @ORM\JoinColumn(name="privilegeID", referencedColumnName="id", nullable=true)
      */

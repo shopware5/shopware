@@ -44,9 +44,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var \Shopware\Models\Shop\Repository
@@ -61,16 +61,19 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * @var Repository
      */
-    protected $repository = null;
+    protected $repository;
 
-    protected $format = null;
+    /**
+     * @var string
+     */
+    protected $format;
 
     public function preDispatch()
     {
         if ($this->Request()->has('format')) {
             $this->format = $this->Request()->getParam('format');
 
-            //remove limit parameter to export all data.
+            // Remove limit parameter to export all data.
             $this->Request()->setParam('limit', null);
         }
         parent::preDispatch();
@@ -128,7 +131,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getShopRepository()
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = $this->getManager()->getRepository('Shopware\Models\Shop\Shop');
+            $this->shopRepository = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class);
         }
 
         return $this->shopRepository;
@@ -200,7 +203,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        //sets the correct limit
+        // Sets the correct limit
         $limit = 25;
         if (strtolower($this->format) == 'csv') {
             $limit = count($data);
@@ -286,7 +289,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getReferrerRevenueAction()
     {
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault();
         $shop->registerResources();
 
         $result = $this->getRepository()->getReferrerRevenue(
@@ -446,7 +449,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
+        /** @var array<string, mixed> $customers */
         $customers = [];
+        /** @var array<string, mixed> $users */
         $users = [];
 
         foreach ($result->getData() as $row) {
@@ -892,7 +897,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * Internal helper function to get access to the entity manager.
      *
-     * @return null|\Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     private function getManager()
     {
@@ -1041,14 +1046,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * helper to get the from date in the right format
      *
-     * return \DateTime | fromDate
+     * return \DateTimeInterface | fromDate
      */
     private function getFromDate()
     {
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
-            $fromDate = $fromDate->sub(new DateInterval('P1M'));
+            $fromDate = $fromDate->sub(new \DateInterval('P1M'));
         } else {
             $fromDate = new \DateTime($fromDate);
         }
@@ -1071,8 +1076,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $toDate = new \DateTime($toDate);
         }
         //to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
-        $toDate = $toDate->add(new DateInterval('P1D'));
-        $toDate = $toDate->sub(new DateInterval('PT1S'));
+        $toDate = $toDate->add(new \DateInterval('P1D'));
+        $toDate = $toDate->sub(new \DateInterval('PT1S'));
 
         return $toDate;
     }

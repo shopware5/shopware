@@ -215,7 +215,10 @@ class Premium extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, ['number' => $this->orderNumber]);
+        /** @var \Shopware\Models\Article\Detail $return */
+        $return = $this->fetchLazy($this->articleDetail, ['number' => $this->orderNumber]);
+
+        return $return;
     }
 
     /**

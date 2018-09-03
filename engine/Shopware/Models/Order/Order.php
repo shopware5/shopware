@@ -145,9 +145,9 @@ class Order extends ModelEntity
     protected $paymentStatus;
 
     /**
-     * @var \Shopware\Models\Order\Status
-     *
      * @Assert\NotBlank
+     *
+     * @var \Shopware\Models\Order\Status
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
@@ -232,7 +232,7 @@ class Order extends ModelEntity
     /**
      * Time of the last modification of the order
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
@@ -340,7 +340,7 @@ class Order extends ModelEntity
     private $invoiceShippingTaxRate;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="ordertime", type="datetime", nullable=false)
      */
@@ -407,7 +407,7 @@ class Order extends ModelEntity
     private $referer;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="cleareddate", type="datetime", nullable=true)
      */
@@ -497,7 +497,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {
@@ -643,13 +643,13 @@ class Order extends ModelEntity
     /**
      * Set orderTime
      *
-     * @param \DateTime|string $orderTime
+     * @param \DateTimeInterface|string $orderTime
      *
      * @return Order
      */
     public function setOrderTime($orderTime)
     {
-        if (!$orderTime instanceof \DateTime && is_string($orderTime)) {
+        if (!$orderTime instanceof \DateTimeInterface && is_string($orderTime)) {
             $orderTime = new \DateTime($orderTime);
         }
         $this->orderTime = $orderTime;
@@ -660,7 +660,7 @@ class Order extends ModelEntity
     /**
      * Get orderTime
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getOrderTime()
     {
@@ -862,13 +862,13 @@ class Order extends ModelEntity
     /**
      * Set clearedDate
      *
-     * @param \DateTime|string $clearedDate
+     * @param \DateTimeInterface|string $clearedDate
      *
      * @return Order
      */
     public function setClearedDate($clearedDate)
     {
-        if (!$clearedDate instanceof \DateTime && is_string($clearedDate)) {
+        if (!$clearedDate instanceof \DateTimeInterface && is_string($clearedDate)) {
             $clearedDate = new \DateTime($clearedDate);
         }
         $this->clearedDate = $clearedDate;
@@ -879,7 +879,7 @@ class Order extends ModelEntity
     /**
      * Get clearedDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getClearedDate()
     {

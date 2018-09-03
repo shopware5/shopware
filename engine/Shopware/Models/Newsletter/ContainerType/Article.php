@@ -200,6 +200,9 @@ class Article extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, ['number' => $this->number]);
+        /** @var \Shopware\Models\Article\Detail $detail */
+        $detail = $this->fetchLazy($this->articleDetail, ['number' => $this->number]);
+
+        return $detail;
     }
 }

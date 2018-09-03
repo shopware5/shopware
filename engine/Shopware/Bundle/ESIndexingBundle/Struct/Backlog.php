@@ -40,18 +40,18 @@ class Backlog
     private $event;
 
     /**
-     * @var string
+     * @var array
      */
     private $payload;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $time;
 
     /**
      * @param string   $event
-     * @param string   $payload
+     * @param array    $payload
      * @param string   $time
      * @param null|int $id
      */
@@ -80,7 +80,7 @@ class Backlog
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getPayload()
     {
@@ -88,7 +88,7 @@ class Backlog
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getTime()
     {

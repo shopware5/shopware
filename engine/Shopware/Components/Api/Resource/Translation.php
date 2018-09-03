@@ -441,17 +441,15 @@ class Translation extends Resource implements BatchInterface
      *
      * @param array $data
      *
-     * @throws ApiException\CustomValidationException
-     * @throws ApiException\ParameterMissingException
-     *
      * @return array|TranslationModel|null
      */
     protected function saveTranslation(array $data)
     {
+        /** @var array $existing */
         $existing = $this->getObjectTranslation(
-            $data['type'], //translation object type
-            $data['key'], //identifier of the translatable entity (s_articles.id)
-            $data['shopId'] //identifier of the shop object
+            $data['type'], // Translation object type
+            $data['key'], // Identifier of the translatable entity (s_articles.id)
+            $data['shopId'] // Identifier of the shop object
         );
 
         if (!$existing) {

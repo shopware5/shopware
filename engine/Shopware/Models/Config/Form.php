@@ -191,7 +191,7 @@ class Form extends ModelEntity
      *
      * @param string $description
      *
-     * @return string
+     * @return Form
      */
     public function setDescription($description)
     {
@@ -229,7 +229,7 @@ class Form extends ModelEntity
     /**
      * @param string $name
      *
-     * @return Element
+     * @return Element|null
      */
     public function getElement($name)
     {

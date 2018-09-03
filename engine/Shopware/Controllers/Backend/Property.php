@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $manager;
 
@@ -44,7 +44,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     protected $propertyRepository;
 
     /**
-     * returns the groups for the sets grids
+     * Returns the groups for the sets grids
      */
     public function getSetsAction()
     {
@@ -65,7 +65,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     }
 
     /**
-     * returns the groups for the sets grids
+     * Returns the groups for the sets grids
      */
     public function getSetAssignsAction()
     {
@@ -575,6 +575,8 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
     /**
      * Internal helper function to get access to the entity manager.
+     *
+     * @return \Shopware\Components\Model\ModelManager
      */
     private function getManager()
     {

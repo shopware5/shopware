@@ -88,7 +88,7 @@ class Banner extends ModelEntity
     /**
      * Defines the date and time when this banner should be displayed
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_from", type="datetime", nullable=false)
      */
@@ -97,7 +97,7 @@ class Banner extends ModelEntity
     /**
      * Defines the date and time when this banner should not more displayed
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_to", type="datetime", nullable=false)
      */
@@ -191,7 +191,7 @@ class Banner extends ModelEntity
      *
      * This field may be null or empty
      *
-     * @param \DateTime|string $validFrom
+     * @param \DateTimeInterface|string $validFrom
      *
      * @return Banner
      */
@@ -201,7 +201,7 @@ class Banner extends ModelEntity
             $validFrom = null;
         }
         // If the date isn't null try to transform it to a DateTime Object.
-        if (!$validFrom instanceof \DateTime && $validFrom !== null) {
+        if (!$validFrom instanceof \DateTimeInterface && $validFrom !== null) {
             $validFrom = new \DateTime($validFrom);
         }
 
@@ -213,7 +213,7 @@ class Banner extends ModelEntity
     /**
      * Returns a datetime object containing the date this banner should displayed.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -223,7 +223,7 @@ class Banner extends ModelEntity
     /**
      * Sets the date and time this banner should stopped to been displayed
      *
-     * @param \DateTime|string $validTo
+     * @param \DateTimeInterface|string $validTo
      *
      * @return Banner
      */
@@ -233,7 +233,7 @@ class Banner extends ModelEntity
             $validTo = null;
         }
         // If the date isn't null try to transform it to a DateTime Object.
-        if (!$validTo instanceof \DateTime && $validTo !== null) {
+        if (!$validTo instanceof \DateTimeInterface && $validTo !== null) {
             $validTo = new \DateTime($validTo);
         }
         $this->validTo = $validTo;
@@ -244,7 +244,7 @@ class Banner extends ModelEntity
     /**
      * Returns a dateTime object with the datetime on which this banner should no more displayed
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidTo()
     {

@@ -1142,7 +1142,7 @@ SQL;
      * @throws \Enlight_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return void|false False on failure, null on success
+     * @return false|null|void False on failure, null on success
      */
     public function sInsertSurchargePercent()
     {
@@ -1265,7 +1265,7 @@ SQL;
      */
     public function sCountBasket()
     {
-        return $this->db->fetchOne(
+        return (int) $this->db->fetchOne(
             'SELECT COUNT(*) FROM s_order_basket WHERE modus = 0 AND sessionID = ?',
             [$this->session->get('sessionId')]
         );
@@ -1795,7 +1795,7 @@ SQL;
      * @throws \Enlight_Event_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return int|false Id of the inserted basket entry, or false on failure
+     * @return int|false|void Id of the inserted basket entry, or false on failure
      */
     public function sAddArticle($id, $quantity = 1)
     {
@@ -1911,7 +1911,7 @@ SQL;
         if (!$result) {
             throw new Enlight_Exception(sprintf('BASKET-INSERT #02 SQL-Error%s', $sql));
         }
-        $insertId = $this->db->lastInsertId();
+        $insertId = (int) $this->db->lastInsertId();
 
         $this->db->insert(
             's_order_basket_attributes',

@@ -99,7 +99,7 @@ class Requirements
     /**
      * Returns the check list
      *
-     * @return \SimpleXMLElement[]
+     * @return \SimpleXMLElement
      */
     private function runChecks()
     {

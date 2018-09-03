@@ -159,7 +159,7 @@ abstract class Resource
     /**
      * @param \Shopware_Components_Acl $acl
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     public function setAcl(\Shopware_Components_Acl $acl)
     {
@@ -179,7 +179,7 @@ abstract class Resource
     /**
      * @param string|\Zend_Acl_Role_Interface $role
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     public function setRole($role)
     {
@@ -487,6 +487,7 @@ abstract class Resource
         }
 
         foreach ($conditions as $condition) {
+            /** @var null|ModelEntity $instance */
             $instance = $repo->findOneBy($condition);
             if ($instance) {
                 return $instance;

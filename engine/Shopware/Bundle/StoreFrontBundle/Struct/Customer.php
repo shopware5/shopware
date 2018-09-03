@@ -64,12 +64,12 @@ class Customer extends Extendable
     protected $paymentId;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $firstLogin;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $lastLogin;
 
@@ -124,7 +124,7 @@ class Customer extends Extendable
     protected $failedLogins;
 
     /**
-     * @var \DateTime|null
+     * @var \DateTimeInterface|null
      */
     protected $lockedUntil;
 
@@ -159,7 +159,7 @@ class Customer extends Extendable
     protected $lastname;
 
     /**
-     * @var \DateTime|null
+     * @var \DateTimeInterface|null
      */
     protected $birthday;
 
@@ -296,7 +296,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getFirstLogin()
     {
@@ -304,7 +304,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param \DateTime $firstLogin
+     * @param \DateTimeInterface $firstLogin
      */
     public function setFirstLogin($firstLogin)
     {
@@ -312,7 +312,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastLogin()
     {
@@ -320,7 +320,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param \DateTime $lastLogin
+     * @param \DateTimeInterface $lastLogin
      */
     public function setLastLogin($lastLogin)
     {
@@ -488,7 +488,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function getLockedUntil()
     {
@@ -496,7 +496,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param \DateTime|null $lockedUntil
+     * @param \DateTimeInterface|null $lockedUntil
      */
     public function setLockedUntil($lockedUntil)
     {
@@ -600,7 +600,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function getBirthday()
     {
@@ -608,7 +608,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param \DateTime|null $birthday
+     * @param \DateTimeInterface|null $birthday
      */
     public function setBirthday($birthday)
     {

@@ -112,14 +112,14 @@ class Voucher extends ModelEntity
     private $bindToSupplier;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_from", type="date", nullable=true)
      */
     private $validFrom = null;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_to", type="date", nullable=true)
      */
@@ -154,7 +154,7 @@ class Voucher extends ModelEntity
     private $numOrder;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="customergroup", type="integer", nullable=true)
      */
@@ -376,13 +376,13 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validFrom field from the Model
      *
-     * @param \DateTime|string $validFrom
+     * @param \DateTimeInterface|string $validFrom
      *
      * @return Voucher
      */
     public function setValidFrom($validFrom)
     {
-        if (!$validFrom instanceof \DateTime && strlen($validFrom) > 0) {
+        if (!$validFrom instanceof \DateTimeInterface && $validFrom !== '') {
             $validFrom = new \DateTime($validFrom);
         }
         $this->validFrom = $validFrom;
@@ -393,7 +393,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidFrom field from the Model
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -403,13 +403,13 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validTo field from the Model
      *
-     * @param \DateTime|string $validTo
+     * @param \DateTimeInterface|string $validTo
      *
      * @return Voucher
      */
     public function setValidTo($validTo)
     {
-        if (!$validTo instanceof \DateTime && strlen($validTo) > 0) {
+        if (!$validTo instanceof \DateTimeInterface && $validTo !== '') {
             $validTo = new \DateTime($validTo);
         }
         $this->validTo = $validTo;
@@ -420,7 +420,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidTo field from the Model
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidTo()
     {
@@ -652,9 +652,9 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Voucher\Code[]|null $codes
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>|array|null $codes
      *
-     * @return Voucher
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>
      */
     public function setCodes($codes)
     {

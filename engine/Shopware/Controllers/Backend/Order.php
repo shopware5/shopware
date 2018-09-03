@@ -472,7 +472,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         // Prepares the associated data of an order.
-        $data = $this->getAssociatedData($data, $order, $billing, $shipping);
+        $data = $this->getAssociatedData($data);
 
         // Before we can create the status mail, we need to save the order data. Otherwise
         // the status mail would be created with the old order status and amount.

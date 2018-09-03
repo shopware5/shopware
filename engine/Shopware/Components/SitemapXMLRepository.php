@@ -123,8 +123,10 @@ class SitemapXMLRepository
      */
     private function readCategoryUrls($parentId)
     {
-        $categoryRepository = $this->em->getRepository(Category::class);
-        $categories = $categoryRepository->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
+        /** @var array<array<string, mixed>> $categories */
+        $categories = $this->em
+            ->getRepository(Category::class)
+            ->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
 
         foreach ($categories as &$category) {
             $category['show'] = empty($category['external']);

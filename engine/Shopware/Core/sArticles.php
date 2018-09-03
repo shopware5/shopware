@@ -420,7 +420,7 @@ class sArticles
      *
      * @param int $supplierID Supplier id (s_articles.supplierID)
      *
-     * @return array
+     * @return array|void
      */
     public function sGetArticlesBySupplier($supplierID = null)
     {
@@ -551,7 +551,7 @@ class sArticles
     /**
      * @param int $taxId
      *
-     * @return float|false
+     * @return string|false
      */
     public function getTaxRateByConditions($taxId)
     {
@@ -780,7 +780,7 @@ class sArticles
      * @param array  $articleData   current product
      * @param bool   $ignore        deprecated
      *
-     * @return array|float|null
+     * @return array|float|false|void
      */
     public function sGetPricegroupDiscount(
         $customergroup,
@@ -849,7 +849,6 @@ class sArticles
                 }
 
                 if ($matchingPercent) {
-                    //echo "Percent discount via pricegroup $groupID - $matchingPercent Discount\n";
                     return $listprice / 100 * (100 - $matchingPercent);
                 }
             } else {
@@ -1211,7 +1210,7 @@ class sArticles
     /**
      * @param string $ordernumber
      *
-     * @return array
+     * @return array|false
      */
     public function sGetProductByOrdernumber($ordernumber)
     {
@@ -1241,7 +1240,7 @@ class sArticles
      * @param int    $value     product id / ordernumber for firmly definied products
      * @param bool   $withImage
      *
-     * @return array
+     * @return array|false
      */
     public function sGetPromotionById($mode, $category = 0, $value = 0, $withImage = false)
     {
@@ -1482,7 +1481,7 @@ class sArticles
      *
      * @param string $ordernumber
      *
-     * @return int $id or false
+     * @return int|false $id or false
      */
     public function sGetArticleIdByOrderNumber($ordernumber)
     {
@@ -1505,7 +1504,7 @@ class sArticles
      * @param bool   $returnAll   Return only name or additional data, too
      * @param bool   $translate   Disables the translation of the product if set to false
      *
-     * @return string or array
+     * @return string|array|false
      */
     public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false, $translate = true)
     {
@@ -1595,7 +1594,7 @@ class sArticles
      *
      * @param int $id product id
      *
-     * @return float tax or false
+     * @return float|false tax or false
      */
     public function sGetArticleTaxById($id)
     {
@@ -2056,7 +2055,7 @@ class sArticles
     /**
      * @param int $categoryId
      *
-     * @return int|null
+     * @return string|null
      */
     private function getStreamIdOfCategory($categoryId)
     {

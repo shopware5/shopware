@@ -151,7 +151,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getFormattedCreatedAt()
     {
@@ -159,7 +159,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param int $formattedCreatedAt
+     * @param string $formattedCreatedAt
      */
     public function setFormattedCreatedAt($formattedCreatedAt)
     {
@@ -167,7 +167,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getFormattedUpdatedAt()
     {
@@ -175,7 +175,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param int $formattedUpdatedAt
+     * @param string $formattedUpdatedAt
      */
     public function setFormattedUpdatedAt($formattedUpdatedAt)
     {
@@ -183,7 +183,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getFormattedReleaseDate()
     {
@@ -191,7 +191,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param int $formattedReleaseDate
+     * @param string $formattedReleaseDate
      */
     public function setFormattedReleaseDate($formattedReleaseDate)
     {

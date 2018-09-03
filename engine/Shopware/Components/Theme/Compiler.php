@@ -67,7 +67,7 @@ class Compiler
     private $eventManager;
 
     /**
-     * @var Js
+     * @var CompressorInterface
      */
     private $jsCompressor;
 

@@ -37,40 +37,41 @@ class Esd extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\EsdSerial
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\EsdSerial", inversedBy="esdOrder")
      * @ORM\JoinColumn(name="serialID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\EsdSerial
      */
     protected $serial;
 
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Order\Order
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Order", inversedBy="esd")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Order
      */
     protected $order;
 
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Order\Detail
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Detail", inversedBy="esd")
      * @ORM\JoinColumn(name="orderdetailsID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Detail
      */
     protected $orderDetail;
 
     /**
+     * @var \Shopware\Models\Customer\Customer
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Customer\Customer
      */
     protected $customer;
+
     /**
      * @var int
      *
@@ -81,11 +82,11 @@ class Esd extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
-    private $date = null;
+    private $date;
 
     /**
      * @return int
@@ -96,7 +97,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article $order
+     * @param \Shopware\Models\Order\Order $order
      */
     public function setOrder($order)
     {
@@ -112,7 +113,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail $orderDetail
+     * @param \Shopware\Models\Order\Detail $orderDetail
      */
     public function setOrderDetail($orderDetail)
     {
@@ -125,5 +126,21 @@ class Esd extends ModelEntity
     public function getOrderDetail()
     {
         return $this->orderDetail;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
     }
 }

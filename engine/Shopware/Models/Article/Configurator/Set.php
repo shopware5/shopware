@@ -102,7 +102,7 @@ class Set extends ModelEntity
     private $name;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="public", type="boolean", nullable=false)
      */
@@ -152,7 +152,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getPublic()
     {
@@ -160,7 +160,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param int $public
+     * @param bool $public
      */
     public function setPublic($public)
     {
@@ -168,7 +168,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Group>
      */
     public function getGroups()
     {
@@ -176,7 +176,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Group[]|null $groups
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Group> $groups
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */
@@ -228,7 +228,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Option[]|null $options
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option> $options
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */

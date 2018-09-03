@@ -110,7 +110,7 @@ class Vote extends ModelEntity
     private $points;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -138,7 +138,7 @@ class Vote extends ModelEntity
     private $answer;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="answer_date", type="datetime", nullable=true)
      */
@@ -254,7 +254,7 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the vote
      *
-     * @param \DateTime $datum
+     * @param \DateTimeInterface $datum
      *
      * @return Vote
      */
@@ -268,7 +268,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the vote
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDatum()
     {
@@ -352,13 +352,13 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the answer
      *
-     * @param \DateTime|string $answer_date
+     * @param \DateTimeInterface|string $answer_date
      *
      * @return Vote
      */
     public function setAnswerDate($answer_date)
     {
-        if (!$answer_date instanceof \DateTime) {
+        if (!$answer_date instanceof \DateTimeInterface) {
             $answer_date = new \DateTime($answer_date);
         }
         $this->answer_date = $answer_date;
@@ -369,7 +369,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the answer
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAnswerDate()
     {

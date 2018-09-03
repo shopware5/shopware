@@ -183,7 +183,7 @@ class TypeMapping
     }
 
     /**
-     * @return string[]
+     * @return array<array>
      */
     public function getEntities()
     {

@@ -146,7 +146,7 @@ class Manager
      *
      * @param int $currentVersion
      *
-     * @return AbstractMigration
+     * @return AbstractMigration|null
      */
     public function getNextMigrationForVersion($currentVersion)
     {

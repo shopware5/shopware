@@ -123,11 +123,14 @@ class CombinedConditionFacet implements FacetInterface
         if (empty($serialized)) {
             return [];
         }
+        /** @var array<int, ConditionInterface> $sortings */
         $sortings = [];
         foreach ($serialized as $className => $arguments) {
             $className = explode('|', $className);
             $className = $className[0];
-            $sortings[] = $reflector->createInstanceFromNamedArguments($className, $arguments);
+            /** @var ConditionInterface $condition */
+            $condition = $reflector->createInstanceFromNamedArguments($className, $arguments);
+            $sortings[] = $condition;
         }
 
         return $sortings;

@@ -25,7 +25,6 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\HttpCache\CacheWarmer;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
@@ -740,10 +739,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     private function getPluginByName($name)
     {
-        /** @var ModelRepository $repo */
-        $repo = $this->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
+        /** @var null|Plugin $return */
+        $return = $this->get('models')
+            ->getRepository(\Shopware\Models\Plugin\Plugin::class)
+            ->findOneBy(['name' => $name]);
 
-        return $repo->findOneBy(['name' => $name]);
+        return $return;
     }
 
     /**

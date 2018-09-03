@@ -335,7 +335,7 @@ class sCategories
      *
      * @param int $id
      *
-     * @return array
+     * @return array|null
      */
     public function sGetCategoryContent($id)
     {
@@ -355,7 +355,7 @@ class sCategories
     /**
      * @param int $categoryId
      *
-     * @return int
+     * @return int|string
      */
     public function getProductBoxLayout($categoryId)
     {

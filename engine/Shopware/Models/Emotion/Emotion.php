@@ -189,7 +189,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_from", type="datetime", nullable=true)
      */
@@ -227,7 +227,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_to", type="datetime", nullable=true)
      */
@@ -236,7 +236,7 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="create_date", type="datetime", nullable=false)
      */
@@ -245,7 +245,7 @@ class Emotion extends ModelEntity
     /**
      * Date of the last edit.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="modified", type="datetime", nullable=false)
      */
@@ -253,6 +253,7 @@ class Emotion extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="`rows`", type="integer", nullable=false)
      */
     private $rows;
@@ -385,8 +386,8 @@ class Emotion extends ModelEntity
             $this->attribute = $newAttribute;
         }
 
-        $this->elements = $elements;
-        $this->categories = $categories;
+        $this->elements = new \Doctrine\Common\Collections\ArrayCollection($elements);
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection($categories);
     }
 
     /**
@@ -422,11 +423,11 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @param \DateTime|string $createDate
+     * @param null|\DateTimeInterface|string $createDate
      */
     public function setCreateDate($createDate = 'now')
     {
-        if ($createDate !== null && !($createDate instanceof \DateTime)) {
+        if ($createDate !== null && !($createDate instanceof \DateTimeInterface)) {
             $this->createDate = new \DateTime($createDate);
         } else {
             $this->createDate = $createDate;
@@ -436,7 +437,7 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreateDate()
     {
@@ -447,11 +448,11 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime|string $validFrom
+     * @param null|\DateTimeInterface|string $validFrom
      */
     public function setValidFrom($validFrom)
     {
-        if ($validFrom !== null && !($validFrom instanceof \DateTime)) {
+        if ($validFrom !== null && !($validFrom instanceof \DateTimeInterface)) {
             $this->validFrom = new \DateTime($validFrom);
         } else {
             $this->validFrom = $validFrom;
@@ -462,7 +463,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -473,11 +474,11 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime|string $validTo
+     * @param null|\DateTimeInterface|string $validTo
      */
     public function setValidTo($validTo)
     {
-        if ($validTo !== null && !($validTo instanceof \DateTime)) {
+        if ($validTo !== null && !($validTo instanceof \DateTimeInterface)) {
             $this->validTo = new \DateTime($validTo);
         } else {
             $this->validTo = $validTo;
@@ -488,7 +489,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidTo()
     {
@@ -522,7 +523,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getModified()
     {
@@ -530,11 +531,11 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param \DateTime|string $modified
+     * @param null|\DateTimeInterface|string $modified
      */
     public function setModified($modified)
     {
-        if ($modified !== null && !($modified instanceof \DateTime)) {
+        if ($modified !== null && !($modified instanceof \DateTimeInterface)) {
             $this->modified = new \DateTime($modified);
         } else {
             $this->modified = $modified;

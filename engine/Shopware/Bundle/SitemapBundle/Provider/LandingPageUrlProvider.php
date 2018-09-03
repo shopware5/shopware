@@ -121,8 +121,8 @@ class LandingPageUrlProvider implements UrlProviderInterface
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param null|\DateTime $from
-     * @param null|\DateTime $to
+     * @param null|\DateTimeInterface $from
+     * @param null|\DateTimeInterface $to
      *
      * @return bool
      */

@@ -64,7 +64,7 @@ class Category extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
-     * @return array|\Shopware\Models\Category\Category
+     * @return \Shopware\Models\Category\Category
      */
     public function getOne($id)
     {
@@ -76,7 +76,7 @@ class Category extends Resource
 
         $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
 
-        /** @var \Shopware\Models\Category\Category $category */
+        /** @var array $category */
         $category = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$category) {
@@ -108,6 +108,7 @@ class Category extends Resource
                 }
             }
         } else {
+            /** @var \Shopware\Models\Category\Category $category */
             $category = $category[0];
         }
 
@@ -291,6 +292,7 @@ class Category extends Resource
                 break;
             }
 
+            /** @var \Shopware\Models\Category\Category $categoryModel */
             $categoryModel = $this->getRepository()->findOneBy(['name' => $categoryName, 'parentId' => $parentId]);
             if (!$categoryModel) {
                 if (!$create) {

@@ -150,7 +150,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Set
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Set>
      */
     public function getSets()
     {
@@ -158,7 +158,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Set $sets
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Set> $sets
      */
     public function setSets($sets)
     {
@@ -166,7 +166,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>
      */
     public function getOptions()
     {

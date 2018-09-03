@@ -48,23 +48,28 @@ class Group extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="`key`", type="string", nullable=false)
      */
     private $key;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = true;
 
     /**
+     * @var \Shopware\Models\Site\Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Site\Group")
      * @ORM\JoinColumn(name="mapping_id", nullable=true, referencedColumnName="id")
      */

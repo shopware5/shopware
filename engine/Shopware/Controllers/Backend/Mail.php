@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * @var \Shopware\Models\Mail\Repository
      */
-    protected $repository = null;
+    protected $repository;
 
     /**
      * Returns available mails
@@ -44,7 +44,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         /** @var Enlight_Components_Snippet_Namespace $namespace */
         $snippet = Shopware()->Snippets()->getNamespace('backend/mail/view/navigation');
 
-        // if id is provided return a single mail instead of a collection
+        // If id is provided return a single mail instead of a collection
         $id = $this->Request()->getParam('id');
         if (!empty($id) && is_numeric($id)) {
             $this->getSingleMail($id);
@@ -642,12 +642,12 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * Internal helper function to get access to the mail repository.
      *
-     * @return null|Shopware\Models\Mail\Repository
+     * @return \Shopware\Models\Mail\Repository
      */
     private function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail');
+            $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Mail\Mail::class);
         }
 
         return $this->repository;

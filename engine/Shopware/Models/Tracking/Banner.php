@@ -63,7 +63,7 @@ class Banner extends ModelEntity
      * Date when the banner has been shown or has been clicked.
      * Part one of the composite primary key
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="display_date", type="date", nullable=false)
      */
@@ -112,7 +112,7 @@ class Banner extends ModelEntity
     /**
      * Returns the date
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDisplayDate()
     {
@@ -122,7 +122,7 @@ class Banner extends ModelEntity
     /**
      * Set the Date on when the event happened
      *
-     * @param \DateTime $displayDate
+     * @param \DateTimeInterface $displayDate
      *
      * @return Banner
      */

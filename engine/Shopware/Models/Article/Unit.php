@@ -138,7 +138,7 @@ class Unit extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>|\Shopware\Models\Article\Detail[]|null $articles
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>|null $articles
      */
     public function setArticles($articles)
     {

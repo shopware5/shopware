@@ -31,6 +31,7 @@ class PluginStruct implements \JsonSerializable
 {
     /**
      * @var int
+     *
      * @unique
      * @optional
      */
@@ -38,6 +39,7 @@ class PluginStruct implements \JsonSerializable
 
     /**
      * @var string
+     *
      * @unique
      * @required
      */
@@ -71,7 +73,7 @@ class PluginStruct implements \JsonSerializable
     /**
      * @var string
      */
-    private $version = null;
+    private $version;
 
     /**
      * @var string
@@ -79,14 +81,14 @@ class PluginStruct implements \JsonSerializable
     private $exampleUrl;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
-    private $installationDate = null;
+    private $installationDate;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
-    private $updateDate = null;
+    private $updateDate;
 
     /**
      * @var bool
@@ -96,7 +98,7 @@ class PluginStruct implements \JsonSerializable
     /**
      * @var string
      */
-    private $availableVersion = null;
+    private $availableVersion;
 
     /**
      * @var bool
@@ -302,7 +304,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getInstallationDate()
     {
@@ -310,7 +312,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @param \DateTime $installationDate
+     * @param \DateTimeInterface $installationDate
      */
     public function setInstallationDate($installationDate)
     {
@@ -710,7 +712,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getUpdateDate()
     {
@@ -718,7 +720,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @param \DateTime $updateDate
+     * @param \DateTimeInterface $updateDate
      */
     public function setUpdateDate($updateDate)
     {

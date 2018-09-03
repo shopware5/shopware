@@ -83,7 +83,7 @@ class CustomerStream extends ModelEntity
     private $static = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @Assert\DateTime
      *
@@ -148,7 +148,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function getFreezeUp()
     {
@@ -156,7 +156,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param \DateTime|string|null $freezeUp
+     * @param \DateTimeInterface|string|null $freezeUp
      */
     public function setFreezeUp($freezeUp)
     {

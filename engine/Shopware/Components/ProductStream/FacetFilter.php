@@ -27,6 +27,7 @@ namespace Shopware\Components\ProductStream;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
@@ -98,7 +99,7 @@ class FacetFilter implements FacetFilterInterface
      * @param string   $class
      * @param Criteria $criteria
      *
-     * @return FacetResultInterface[]
+     * @return CriteriaPartInterface[]
      */
     private function getBaseConditionsByClass($class, Criteria $criteria)
     {
@@ -116,7 +117,7 @@ class FacetFilter implements FacetFilterInterface
      * @param FacetResultInterface[] $facets
      * @param string                 $name
      *
-     * @return FacetResultInterface
+     * @return null|FacetResultInterface
      */
     private function getFacetByName(array $facets, $name)
     {
@@ -162,7 +163,7 @@ class FacetFilter implements FacetFilterInterface
         /** @var RangeFacetResult $facet */
         $facet = $this->getFacetByName($facets, 'price');
 
-        if ($criteria->hasBaseCondition('price') && $facet) {
+        if ($facet && $criteria->hasBaseCondition('price')) {
             /** @var PriceCondition $condition */
             $condition = $criteria->getBaseCondition('price');
 

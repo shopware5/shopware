@@ -41,7 +41,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * Customer repository. Declared for an fast access to the customer repository.
      * Initialed in the init() function.
      *
-     * @var \Shopware\Models\Customer\Repository
+     * @var \Shopware\Models\Customer\Repository|null
      */
     public static $repository;
 
@@ -343,7 +343,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $paymentData = new PaymentData();
             $customer->addPaymentData($paymentData);
             $paymentData->setPaymentMean(
-                $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
+                $this->getManager()->getRepository(\Shopware\Models\Payment\Payment::class)->find($paymentId)
             );
         }
 
@@ -549,12 +549,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Customer\Repository
+     * @return Shopware\Models\Customer\Repository
      */
     protected function getRepository()
     {
         if (self::$repository === null) {
-            self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+            self::$repository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Customer::class);
         }
 
         return self::$repository;
@@ -580,7 +580,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getShopRepository()
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $this->shopRepository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         }
 
         return $this->shopRepository;
@@ -594,7 +594,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getGroupRepository()
     {
         if ($this->groupRepository === null) {
-            $this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
+            $this->groupRepository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Group::class);
         }
 
         return $this->groupRepository;
@@ -749,8 +749,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $data = array_merge($orderInfo, $data[0]);
         $birthday = $data['birthday'];
 
-        /** @var \DateTime $birthday */
-        if ($birthday instanceof \DateTime) {
+        /** @var \DateTimeInterface $birthday */
+        if ($birthday instanceof \DateTimeInterface) {
             $data['birthday'] = $birthday->format('d.m.Y');
         }
 
@@ -759,11 +759,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $data['defaultShippingAddress']['salutationSnippet'] = $namespace->get($data['defaultShippingAddress']['salutation']);
         $data['customerStreamIds'] = $this->fetchCustomerStreams($id);
 
-        if ($data['firstLogin'] instanceof \DateTime && $data['firstLogin']->getTimestamp() < 0) {
+        if ($data['firstLogin'] instanceof \DateTimeInterface && $data['firstLogin']->getTimestamp() < 0) {
             $data['firstLogin'] = new \DateTime('@0');
         }
 
-        if ($data['lastLogin'] instanceof \DateTime && $data['lastLogin']->getTimestamp() < 0) {
+        if ($data['lastLogin'] instanceof \DateTimeInterface && $data['lastLogin']->getTimestamp() < 0) {
             $data['lastLogin'] = new \DateTime('@0');
         }
 

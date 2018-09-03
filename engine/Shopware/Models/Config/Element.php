@@ -98,7 +98,7 @@ class Element extends ModelEntity
     private $required = false;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -296,7 +296,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $position
+     * @param int $position
      *
      * @return Element
      */
@@ -308,7 +308,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPosition()
     {
@@ -376,7 +376,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param Value[] $values
+     * @param \Doctrine\Common\Collections\ArrayCollection<Value> $values
      *
      * @return Element
      */

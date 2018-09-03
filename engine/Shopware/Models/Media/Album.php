@@ -305,7 +305,7 @@ class Album extends ModelEntity
     /**
      * Sets the associated media
      *
-     * @param array|\Doctrine\Common\Collections\ArrayCollection $media
+     * @param ArrayCollection<\Shopware\Models\Media\Media> $media
      */
     public function setMedia($media)
     {

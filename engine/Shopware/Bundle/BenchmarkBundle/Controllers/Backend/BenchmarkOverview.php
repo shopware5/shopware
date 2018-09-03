@@ -157,11 +157,11 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is younger than 24 hours.
      *
-     * @param \DateTime $lastReceived
+     * @param \DateTimeInterface $lastReceived
      *
      * @return bool
      */
-    private function hasFreshStatistics(\DateTime $lastReceived)
+    private function hasFreshStatistics(\DateTimeInterface $lastReceived)
     {
         $today = new \DateTime('now');
 
@@ -176,11 +176,11 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is older than 7 days.
      *
-     * @param \DateTime $lastReceived
+     * @param \DateTimeInterface $lastReceived
      *
      * @return bool
      */
-    private function hasOutdatedStatistics(\DateTime $lastReceived)
+    private function hasOutdatedStatistics(\DateTimeInterface $lastReceived)
     {
         $today = new \DateTime('now');
 

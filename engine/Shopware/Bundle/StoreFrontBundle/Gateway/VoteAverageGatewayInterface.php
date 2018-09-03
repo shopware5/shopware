@@ -42,7 +42,7 @@ interface VoteAverageGatewayInterface
      * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
      *
-     * @return Struct\Product\VoteAverage Indexed by the product order number
+     * @return array<string, Struct\Product\VoteAverage> Indexed by the product order number
      */
     public function getList($products, Struct\ShopContextInterface $context);
 

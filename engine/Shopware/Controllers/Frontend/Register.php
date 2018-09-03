@@ -256,7 +256,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
         $customerId = (int) $data['customerId'];
 
-        /** @var \DateTime $date */
+        /** @var \DateTimeInterface $date */
         $date = new \DateTime();
 
         /** @var Customer $customer */

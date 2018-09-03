@@ -371,26 +371,24 @@ class sOrder
     {
         $this->sShippingData['AmountNumeric'] = $this->sShippingData['AmountNumeric'] ? $this->sShippingData['AmountNumeric'] : '0';
         if (!$this->sShippingcostsNumeric) {
-            $this->sShippingcostsNumeric = '0';
+            $this->sShippingcostsNumeric = 0.;
         }
         if (!$this->sBasketData['AmountWithTaxNumeric']) {
             $this->sBasketData['AmountWithTaxNumeric'] = $this->sBasketData['AmountNumeric'];
         }
 
+        $net = '0';
         if ($this->isTaxFree(
             $this->sSYSTEM->sUSERGROUPDATA['tax'],
             $this->sSYSTEM->sUSERGROUPDATA['id']
         )) {
             $net = '1';
-        } else {
-            $net = '0';
         }
 
+        $dispatchId = '0';
         $this->sBasketData['AmountNetNumeric'] = round($this->sBasketData['AmountNetNumeric'], 2);
         if ($this->dispatchId) {
             $dispatchId = $this->dispatchId;
-        } else {
-            $dispatchId = '0';
         }
 
         $this->sBasketData['AmountNetNumeric'] = round($this->sBasketData['AmountNetNumeric'], 2);
@@ -536,7 +534,7 @@ class sOrder
         $this->sOrderNumber = $orderNumber;
 
         if (!$this->sShippingcostsNumeric) {
-            $this->sShippingcostsNumeric = '0';
+            $this->sShippingcostsNumeric = 0.;
         }
 
         if (!$this->sBasketData['AmountWithTaxNumeric']) {
@@ -1262,7 +1260,10 @@ class sOrder
             $mail->addBcc($this->config->OrderStateMailAck);
         }
 
-        return $mail->send();
+        /** @var Enlight_Components_Mail $return */
+        $return = $mail->send();
+
+        return $return;
     }
 
     /**
@@ -1272,7 +1273,7 @@ class sOrder
      * @param int    $statusId
      * @param string $templateName
      *
-     * @return Enlight_Components_Mail
+     * @return Enlight_Components_Mail|void
      */
     public function createStatusMail($orderId, $statusId, $templateName = null)
     {

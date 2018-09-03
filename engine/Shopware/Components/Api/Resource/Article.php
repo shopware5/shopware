@@ -175,7 +175,7 @@ class Article extends Resource implements BatchInterface
             ->where('article.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var ProductModel|array $product */
+        /* @var array $product */
         $product = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$product) {
@@ -183,7 +183,6 @@ class Article extends Resource implements BatchInterface
         }
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
-            /* @var array $article */
             $product['images'] = $this->getArticleImages($id);
             $product['configuratorSet'] = $this->getArticleConfiguratorSet($id);
             $product['links'] = $this->getArticleLinks($id);
@@ -754,7 +753,10 @@ class Article extends Resource implements BatchInterface
      */
     protected function getVariantResource()
     {
-        return $this->getResource('Variant');
+        /** @var Variant $return */
+        $return = $this->getResource('Variant');
+
+        return $return;
     }
 
     /**
@@ -762,7 +764,10 @@ class Article extends Resource implements BatchInterface
      */
     protected function getTranslationResource()
     {
-        return $this->getResource('Translation');
+        /** @var Translation $return */
+        $return = $this->getResource('Translation');
+
+        return $return;
     }
 
     /**
@@ -770,7 +775,10 @@ class Article extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        return $this->getResource('Media');
+        /** @var Media $return */
+        $return = $this->getResource('Media');
+
+        return $return;
     }
 
     /**

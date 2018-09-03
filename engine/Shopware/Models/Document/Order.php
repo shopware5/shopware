@@ -38,7 +38,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Metadata of the order
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_order;
 
@@ -59,42 +59,42 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Metadata of the user (email,customergroup etc. s_user.*)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_user;
 
     /**
      * Billingdata for this order / user (s_order_billingaddress)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_billing;
 
     /**
      * Shippingdata for this order / user (s_order_shippingaddress)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_shipping;
 
     /**
      * Payment information for this order (s_core_paymentmeans)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_payment;
 
     /**
      * Payment instances information for this order (s_core_payment_instance)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_paymentInstances;
 
     /**
      * Information about the dispatch for this order
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_dispatch;
 
@@ -136,7 +136,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Currency information (s_core_currencies)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_currency;
 
@@ -537,7 +537,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                         $getTaxRate = Shopware()->Db()->fetchOne("
                         SELECT tax FROM s_core_tax WHERE id = $temporaryTax
                         ");
-                        $position['tax'] = $getTaxRate['tax'];
+                        $position['tax'] = $getTaxRate;
                     } else {
                         $position['tax'] = 0;
                     }
@@ -692,7 +692,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         ", [$this->_order['dispatchID']]);
 
         if (empty($this->_dispatch)) {
-            $this->_dispatch = [];
+            $this->_dispatch = new ArrayObject();
         }
         $this->_dispatch = new ArrayObject($this->_dispatch, ArrayObject::ARRAY_AS_PROPS);
     }

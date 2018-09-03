@@ -84,7 +84,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="company", type="string", length=255, nullable=true)
      */
-    protected $company = null;
+    protected $company;
 
     /**
      * Contains the department name of the address address company
@@ -93,7 +93,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="department", type="string", length=35, nullable=true)
      */
-    protected $department = null;
+    protected $department;
 
     /**
      * Contains the customer salutation (Mr, Ms, Company)
@@ -163,7 +163,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="phone", type="string", length=40, nullable=true)
      */
-    protected $phone = null;
+    protected $phone;
 
     /**
      * Contains the vat id of the address
@@ -172,7 +172,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="ustid", type="string", length=50, nullable=true)
      */
-    protected $vatId = null;
+    protected $vatId;
 
     /**
      * Contains the additional address line data

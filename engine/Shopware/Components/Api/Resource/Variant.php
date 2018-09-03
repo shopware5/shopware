@@ -489,7 +489,10 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getArticleResource()
     {
-        return $this->getResource('Article');
+        /** @var Article $return */
+        $return = $this->getResource('Article');
+
+        return $return;
     }
 
     /**
@@ -497,7 +500,10 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        return $this->getResource('Media');
+        /** @var Media $return */
+        $return = $this->getResource('Media');
+
+        return $return;
     }
 
     /**
@@ -871,6 +877,7 @@ class Variant extends Resource implements BatchInterface
         $unitRepository = $this->getManager()->getRepository(Unit::class);
 
         // Try to find an existing unit by the passed conditions "id", "name" or "unit"
+        /** @var Unit $unit */
         $unit = $unitRepository->findOneBy(
             $this->getUnitFindCondition($unitData)
         );
@@ -990,21 +997,21 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed group data is already existing in the passed array collection.
      * The group data are checked for "id" and "name".
      *
-     * @param Collection|array $availableGroups
-     * @param array            $groupData
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Group> $availableGroups
+     * @param array                                                                                     $groupData
      *
-     * @return bool|Group
+     * @return false|Group
      */
     private function getAvailableGroup($availableGroups, array $groupData)
     {
-        //Convert string to lower case to avoid problems with case insensitivity in database
-        //vs case sensitivity in PHP
+        // Convert string to lower case to avoid problems with case insensitivity in database
+        // vs case sensitivity in PHP
         $groupName = mb_strtolower($groupData['name']);
 
-        /** @var Option $availableGroup */
+        /** @var Group $availableGroup */
         foreach ($availableGroups as $availableGroup) {
-            if ((mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)
-                || ((int) $availableGroup->getId() === (int) $groupData['id']) && $groupData['id'] !== null) {
+            if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id']) ||
+                (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
                 return $availableGroup;
             }
         }
@@ -1016,15 +1023,15 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed option data is already existing in the passed array collection.
      * The option data are checked for "id" and "name".
      *
-     * @param Collection|array $availableOptions
-     * @param array            $optionData
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option> $availableOptions
+     * @param array                                                                                      $optionData
      *
      * @return bool|Option
      */
     private function getAvailableOption($availableOptions, array $optionData)
     {
-        //Convert string to lower case to avoid problems with case insensitivity in database
-        //vs case sensitivity in PHP
+        // Convert string to lower case to avoid problems with case insensitivity in database
+        // vs case sensitivity in PHP
         $optionName = mb_strtolower($optionData['name']);
 
         /** @var Option $availableOption */

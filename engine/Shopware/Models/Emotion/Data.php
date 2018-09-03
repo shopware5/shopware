@@ -202,7 +202,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return Library\Field
+     * @return \Shopware\Models\Emotion\Library\Field
      */
     public function getField()
     {
@@ -210,7 +210,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param Library\Field $field
+     * @param \Shopware\Models\Emotion\Library\Field $field
      */
     public function setField($field)
     {
@@ -218,7 +218,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return Library\Component
+     * @return \Shopware\Models\Emotion\Library\Component
      */
     public function getComponent()
     {
@@ -226,7 +226,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param Library\Component $component
+     * @param \Shopware\Models\Emotion\Library\Component $component
      */
     public function setComponent($component)
     {

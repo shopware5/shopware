@@ -69,7 +69,7 @@ class Partner extends ModelEntity
     private $idCode;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="date", nullable=false)
      */
@@ -230,13 +230,13 @@ class Partner extends ModelEntity
     }
 
     /**
-     * @param \DateTime|string $date
+     * @param null|\DateTimeInterface|string $date
      *
      * @return Partner
      */
     public function setDate($date)
     {
-        if ($date !== null && !($date instanceof \DateTime)) {
+        if ($date !== null && !($date instanceof \DateTimeInterface)) {
             $this->date = new \DateTime($date);
         } else {
             $this->date = $date;
@@ -246,7 +246,7 @@ class Partner extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
