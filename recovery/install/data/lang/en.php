@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Shopware licence',
     'menuitem_configuration' => 'Configuration',
     'menuitem_finish' => 'Done',
-    'menuitem_license' => 'General terms and conditions',
+    'menuitem_license' => 'Terms of service',
 
     'license_incorrect' => 'The licence key entered does not appear to be valid',
     'license_does_not_match' => 'The licence key entered does not match a commercial Shopware version',

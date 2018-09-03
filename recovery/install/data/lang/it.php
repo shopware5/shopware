@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Licenza Shopware',
     'menuitem_configuration' => 'Configurazione',
     'menuitem_finish' => 'Pronto',
-    'menuitem_license' => 'Condizioni generali di vendita',
+    'menuitem_license' => 'Condizioni generali',
 
     'license_incorrect' => 'Il codice di licenza immesso sembra non essere valido',
     'license_does_not_match' => 'Il codice di licenza immesso non corrisponde a nessuna versione commerciale di Shopware',
