@@ -92,16 +92,16 @@ class ProportionalTaxCalculatorTest extends \Enlight_Components_Test_TestCase
         $this->assertCount(2, $calculatedProportional);
 
         // 19%
-        $this->assertEquals(5, $calculatedProportional[0]->getPrice());
-        $this->assertEquals(4.2016806722689, $calculatedProportional[0]->getNetPrice());
+        $this->assertEquals(4.734272300469484, $calculatedProportional[0]->getPrice());
+        $this->assertEquals(3.978380084428138, $calculatedProportional[0]->getNetPrice());
         $this->assertEquals(19, $calculatedProportional[0]->getTaxRate());
-        $this->assertEquals(0.79831932773109, $calculatedProportional[0]->getTax());
+        $this->assertEquals(0.7558922160413462, $calculatedProportional[0]->getTax());
 
         // 7%
-        $this->assertEquals(5, $calculatedProportional[1]->getPrice());
-        $this->assertEquals(4.6728971962617, $calculatedProportional[1]->getNetPrice());
+        $this->assertEquals(5.2657276995305, $calculatedProportional[1]->getPrice());
+        $this->assertEquals(4.9212408406827, $calculatedProportional[1]->getNetPrice());
         $this->assertEquals(7, $calculatedProportional[1]->getTaxRate());
-        $this->assertEquals(0.32710280373832, $calculatedProportional[1]->getTax());
+        $this->assertEquals(0.34448685884779, $calculatedProportional[1]->getTax());
     }
 
     public function testPercentCalculationWithOneTax()

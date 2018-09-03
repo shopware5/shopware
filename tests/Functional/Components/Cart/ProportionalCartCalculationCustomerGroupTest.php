@@ -100,15 +100,15 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
         $this->assertEquals(3.9, $sBasket['sShippingcosts']);
         $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
         $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.4151417576376346, $sBasket['sShippingcostsNet']);
+        $this->assertEquals(3.424412889920227, $sBasket['sShippingcostsNet']);
 
         $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
         $this->assertCount(2, $sBasket['sTaxRates']);
 
         $this->assertCount(4, $sBasket['content']);
 
-        $this->hasBasketItem($sBasket['content'], 'Mindermengenzuschlag (7%)', 1.88, 1.7523364485981, 'sw-surcharge');
-        $this->hasBasketItem($sBasket['content'], 'Mindermengenzuschlag (19%)', 3.13, 2.6260504201681, 'sw-surcharge');
+        $this->hasBasketItem($sBasket['content'], 'Mindermengenzuschlag (7%)', 2, 1.870206613302, 'sw-surcharge');
+        $this->hasBasketItem($sBasket['content'], 'Mindermengenzuschlag (19%)', 3, 2.5200663224931, 'sw-surcharge');
     }
 
     public function testCustomerGroupDiscountNormal()
@@ -160,7 +160,7 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
         $this->assertEquals(3.9, $sBasket['sShippingcosts']);
         $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
         $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.4610853687269296, $sBasket['sShippingcostsNet']);
+        $this->assertEquals(3.4708433038255415, $sBasket['sShippingcostsNet']);
 
         $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
         $this->assertCount(2, $sBasket['sTaxRates']);
