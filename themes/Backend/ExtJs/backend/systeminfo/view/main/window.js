@@ -74,9 +74,6 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     overflowY: 'scroll',
                     title: '{s name=window/tabpanel/config_tab/title}Server-Configs{/s}',
                     items: [{
-                        xtype: 'systeminfo-main-encoder',
-                        encoderStore: me.encoderStore
-                    },{
                         xtype: 'systeminfo-main-configlist'
                     }]
                 },{

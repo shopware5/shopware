@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
 
         foreach ($result['checks'] as $key => &$config) {
             // Those configs mustn't be displayed in the grid
-            if ($config['name'] == 'ionCube Loader' || $config['name'] == 'mod_rewrite') {
+            if ($config['name'] == 'mod_rewrite') {
                 unset($result['checks'][$key]);
             }
         }
@@ -118,30 +118,6 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         array_unshift($rows, ['name' => 'Shopware', 'version' => Shopware()->Config()->Version]);
 
         $this->View()->assign(['success' => true, 'data' => $rows]);
-    }
-
-    /**
-     * Function to get the active encoders
-     */
-    public function getEncoderAction()
-    {
-        $result = $this->get('shopware.requirements')->toArray();
-        $data = $result['checks'];
-
-        foreach ($data as $key => &$config) {
-            if ($config['name'] != 'ionCube Loader') {
-                continue;
-            }
-            if ($config['name'] === 'ionCube Loader' && $config['result'] === true) {
-                $encoder = $config;
-                break;
-            }
-        }
-        if (empty($encoder)) {
-            $encoder = 'none';
-        }
-
-        $this->View()->assign(['success' => true, 'data' => $encoder]);
     }
 
     /**
