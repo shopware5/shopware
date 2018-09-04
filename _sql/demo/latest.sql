@@ -6131,26 +6131,6 @@ INSERT INTO `s_core_units` (`id`, `unit`, `description`) VALUES
 (9, 'Stck.', 'Stück'),
 (10, 'ml', 'Milliliter');
 
-TRUNCATE TABLE `s_core_widgets`;
-INSERT INTO `s_core_widgets` (`id`, `name`, `label`) VALUES
-(1, 'swag-sales-widget', 'Umsatz Heute und Gestern'),
-(2, 'swag-upload-widget', 'Drag and Drop Upload'),
-(3, 'swag-visitors-customers-widget', 'Besucher online'),
-(4, 'swag-last-orders-widget', 'Letzte Bestellungen'),
-(5, 'swag-notice-widget', 'Notizzettel'),
-(6, 'swag-merchant-widget', 'Händlerfreischaltung'),
-(7, 'swag-shopware-news-widget', 'shopware News');
-
-TRUNCATE TABLE `s_core_widget_views`;
-INSERT INTO `s_core_widget_views` (`id`, `widget_id`, `auth_id`, `column`, `position`) VALUES
-(7, 6, 50, 0, 1),
-(8, 1, 50, 0, 2),
-(9, 2, 50, 1, 1),
-(10, 3, 50, 1, 2),
-(11, 4, 50, 2, 1),
-(12, 5, 50, 2, 2),
-(13, 7, 50, 3, 1);
-
 TRUNCATE TABLE `s_emarketing_banners`;
 TRUNCATE TABLE `s_emarketing_banners_attributes`;
 TRUNCATE TABLE `s_emarketing_banners_statistics`;
