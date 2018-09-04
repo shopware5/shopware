@@ -132,7 +132,10 @@ class InstallerService
     public function getPluginByName($pluginName)
     {
         /** @var Plugin $plugin */
-        $plugin = $this->pluginRepository->findOneBy(['name' => $pluginName, 'capabilityEnable' => 1]);
+        $plugin = $this->pluginRepository->findOneBy([
+            'name' => $pluginName,
+            'capabilityEnable' => 1,
+        ]);
 
         if ($plugin === null) {
             throw new \Exception(sprintf('Unknown plugin "%s".', $pluginName));
