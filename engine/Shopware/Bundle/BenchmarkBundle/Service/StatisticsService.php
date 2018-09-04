@@ -133,7 +133,7 @@ class StatisticsService
      */
     private function updateLastIds(BenchmarkConfig $config, array $benchmarkData)
     {
-        if (!empty($benchmarkData['orders']['list']) && !$benchmarkData['updated_orders']['moved']) {
+        if (!empty($benchmarkData['orders']['list']) && (!array_key_exists('moved', $benchmarkData['updated_orders']) || !$benchmarkData['updated_orders']['moved'])) {
             $order = end($benchmarkData['orders']['list']);
             $config->setLastOrderId($order['orderId']);
         }
