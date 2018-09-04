@@ -71,7 +71,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      *
      * @return
      */
-    public static function onPostDispatch(Enlight_Event_EventArgs $args)
+    public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         $request = $args->getSubject()->Request();
         $response = $args->getSubject()->Response();
@@ -118,7 +118,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      *
      * @return
      */
-    public static function onNotifyAction(Enlight_Event_EventArgs $args)
+    public function onNotifyAction(Enlight_Event_EventArgs $args)
     {
         $args->setProcessed(true);
 
@@ -131,7 +131,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $action->View()->NotifyEmailError = false;
         $notifyOrderNumber = $action->Request()->notifyOrdernumber;
         if (!empty($notifyOrderNumber)) {
-            $validator = Shopware()->Container()->get('validator.email');
+            $validator = $this->get('validator.email');
             if (empty($email) || !$validator->isValid($email)) {
                 $sError = true;
                 $action->View()->NotifyEmailError = true;
@@ -212,7 +212,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      *
      * @return
      */
-    public static function onNotifyConfirmAction(Enlight_Event_EventArgs $args)
+    public function onNotifyConfirmAction(Enlight_Event_EventArgs $args)
     {
         $args->setProcessed(true);
 
@@ -271,11 +271,11 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      *
      * @param Shopware_Components_Cron_CronJob $job
      */
-    public static function onRunCronJob(Shopware_Components_Cron_CronJob $job)
+    public function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = $this->get('models');
 
-        $conn = Shopware()->Container()->get('dbal_connection');
+        $conn = $this->get('dbal_connection');
 
         $notifications = $conn->createQueryBuilder()
             ->select(
@@ -309,7 +309,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 ->andWhere('d.minpurchase <= d.instock')
                 ->setParameter('number', $notify['ordernumber']);
 
-            Shopware()->Container()->get('events')->notify(
+            $this->get('events')->notify(
                 'Shopware_CronJob_Notification_Product_QueryBuilder',
                 [
                     'queryBuilder' => $queryBuilder,
@@ -331,8 +331,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($notify['language']);
             $shop->registerResources();
 
-            $shopContext = Context::createFromShop($shop, Shopware()->Container()->get('config'));
-            Shopware()->Container()->get('router')->setContext($shopContext);
+            $shopContext = Context::createFromShop($shop, $this->get('config'));
+            $this->get('router')->setContext($shopContext);
 
             $link = Shopware()->Front()->Router()->assemble([
                 'sViewport' => 'detail',
