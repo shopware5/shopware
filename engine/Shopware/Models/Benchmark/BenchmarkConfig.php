@@ -108,6 +108,15 @@ class BenchmarkConfig extends ModelEntity
     private $lastAnalyticsId;
 
     /**
+     * The most recent date to figure out which orders have been updated since they have last been transmitted
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_updated_orders_date", type="datetime", nullable=true)
+     */
+    private $lastUpdatedOrdersDate;
+
+    /**
      * The batch size in which entities are to be transmitted
      *
      * @var int
@@ -296,6 +305,22 @@ class BenchmarkConfig extends ModelEntity
     public function setLastAnalyticsId($lastAnalyticsId)
     {
         $this->lastAnalyticsId = (int) $lastAnalyticsId;
+    }
+
+    /**#
+     * @return \DateTime
+     */
+    public function getLastUpdatedOrdersDate()
+    {
+        return $this->lastUpdatedOrdersDate;
+    }
+
+    /**
+     * @param \DateTime $lastUpdatedOrdersDate
+     */
+    public function setLastUpdatedOrdersDate(\DateTime $lastUpdatedOrdersDate)
+    {
+        $this->lastUpdatedOrdersDate = $lastUpdatedOrdersDate;
     }
 
     /**

@@ -34,6 +34,24 @@ class OrdersProviderTest extends ProviderTestCase
         'list' => IsType::TYPE_ARRAY,
     ];
 
+    public function testGetArrayKeysFit()
+    {
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $basicContent = $this->openDemoDataFile('basic_setup');
+        $dbalConnection->exec($basicContent);
+
+        parent::testGetArrayKeysFit();
+    }
+
+    public function testGetValidateTypes()
+    {
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $basicContent = $this->openDemoDataFile('basic_setup');
+        $dbalConnection->exec($basicContent);
+
+        parent::testGetValidateTypes();
+    }
+
     /**
      * @group BenchmarkBundle
      */

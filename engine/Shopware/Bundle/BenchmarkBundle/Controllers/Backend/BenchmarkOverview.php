@@ -112,7 +112,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     }
 
     /**
-     * @param BenchmarkConfig $settings
+     * @param null|BenchmarkConfig $config
      */
     private function handleSettings(BenchmarkConfig $config = null)
     {

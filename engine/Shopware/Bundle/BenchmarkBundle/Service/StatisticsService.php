@@ -99,10 +99,15 @@ class StatisticsService
         $productsCount = count($benchmarkData['products']['list']);
         $analyticsCount = count($benchmarkData['analytics']['list']);
 
-        if ($ordersCount === 0 && $customersCount === 0 && $productsCount === 0 && $analyticsCount === 0) {
+        // If all entity counts are below the batch size (or the batch size is null), we are likely to be in the last iteration
+        if ($batchSize === null ||
+            ($ordersCount < $batchSize && $customersCount < $batchSize && $productsCount < $batchSize && $analyticsCount < $batchSize)) {
             $config->setLastSent(new \DateTime('now', new \DateTimeZone('UTC')));
             $this->benchmarkRepository->save($config);
+        }
 
+        // If literally all entities are 0, we do not need to send any data at all
+        if ($ordersCount === 0 && $customersCount === 0 && $productsCount === 0 && $analyticsCount === 0) {
             throw new TransmissionNotNecessaryException();
         }
 
@@ -128,7 +133,7 @@ class StatisticsService
      */
     private function updateLastIds(BenchmarkConfig $config, array $benchmarkData)
     {
-        if (!empty($benchmarkData['orders']['list'])) {
+        if (!empty($benchmarkData['orders']['list']) && !$benchmarkData['updated_orders']['moved']) {
             $order = end($benchmarkData['orders']['list']);
             $config->setLastOrderId($order['orderId']);
         }
@@ -150,5 +155,36 @@ class StatisticsService
 
             $config->setLastAnalyticsId($lastId);
         }
+
+        $this->handleLastUpdatedOrdersDate($config, $benchmarkData);
+    }
+
+    /**
+     * @param BenchmarkConfig $config
+     * @param array           $benchmarkData
+     */
+    private function handleLastUpdatedOrdersDate(BenchmarkConfig $config, array $benchmarkData)
+    {
+        // If the column is still NULL, set it to "NOW()" for the first time
+        if ($config->getLastUpdatedOrdersDate() === null) {
+            $config->setLastUpdatedOrdersDate(new \DateTime('now'));
+        }
+
+        if (!array_key_exists('moved', $benchmarkData['updated_orders']) || !$benchmarkData['updated_orders']['moved'] || !$benchmarkData['orders']['list']) {
+            return;
+        }
+
+        $ordersCount = count($benchmarkData['orders']['list']);
+
+        // Set the last_updated column to the most recent date of all updated orders if chances are high that another batch of orders
+        // is necessary
+        if ($ordersCount >= $config->getBatchSize()) {
+            $mostRecentChangedOrder = end($benchmarkData['orders']['list']);
+            $config->setLastUpdatedOrdersDate(\DateTime::createFromFormat('Y-m-d H:i:s', $mostRecentChangedOrder['changed']));
+
+            return;
+        }
+
+        $config->setLastUpdatedOrdersDate(new \DateTime('now'));
     }
 }
