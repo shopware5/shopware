@@ -195,13 +195,12 @@
             <argument type="string">%shopware.bi.endpoint.statistics%</argument>
             <argument id="shopware.benchmark_bundle.client" type="service" />
             <argument id="shopware.benchmark_bundle.hydrator.statistics_response_hydrator" type="service" />
-            <argument id="shopware_benchmark_bundle.benchmark_encryption" type="service" />
             <argument id="corelogger" type="service"/>
+            <argument id="dbal_connection" type="service"/>
         </service>
 
         <service id="shopware.benchmark_bundle.hydrator.statistics_response_hydrator"
-                 class="Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator"
-                 public="false" />
+                 class="Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator"/>
 
         <service id="shopware.benchmark_bundle.hydrator.bi_response_hydrator"
                  class="Shopware\Bundle\BenchmarkBundle\Hydrator\BusinessIntelligenceResponseHydrator"
