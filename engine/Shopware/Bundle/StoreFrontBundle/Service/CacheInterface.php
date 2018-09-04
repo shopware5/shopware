@@ -45,8 +45,8 @@ interface CacheInterface
      *
      * @param string $id       the cache id
      * @param mixed  $data     the cache entry/data
-     * @param int    $lifeTime The cache lifetime.
-     *                         If != 0, sets a specific lifetime for this cache entry (0 => infinite lifeTime).
+     * @param int    $lifeTime the cache lifetime.
+     *                         If != 0, sets a specific lifetime for this cache entry (0 => infinite lifeTime)
      *
      * @return bool tRUE if the entry was successfully stored in the cache, FALSE otherwise
      */
