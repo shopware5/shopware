@@ -70,6 +70,8 @@ class ResourceSubscriber implements SubscriberInterface
         if ($files) {
             return new ArrayCollection($files);
         }
+
+        return null;
     }
 
     /**
@@ -81,6 +83,8 @@ class ResourceSubscriber implements SubscriberInterface
         if ($files) {
             return new ArrayCollection($files);
         }
+
+        return null;
     }
 
     /**
@@ -100,7 +104,7 @@ class ResourceSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param string $baseDir resource basedirectory
+     * @param string $baseDir resource base directory
      * @param string $type    `css` or `js`
      *
      * @return string[]

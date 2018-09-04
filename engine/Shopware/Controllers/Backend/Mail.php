@@ -709,6 +709,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * are used for this.
      *
      * @param string $mailName
+     *
      * @return string
      */
     private function getFriendlyNameOfDocumentEmail($mailName)
