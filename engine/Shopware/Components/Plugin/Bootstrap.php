@@ -683,7 +683,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *     @var string $xType              Required; Ext JS xtype for the backend module component
      *     @var string $cls                Optional; $cls Css class which used in the frontend emotion
      *     @var string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
-     *     @var string $description        Optional; Description field for the component, which displayed in the backend module.
+     *     @var string $description        optional; Description field for the component, which displayed in the backend module.
      * }
      *
      * @return Component
