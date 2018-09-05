@@ -3412,15 +3412,19 @@ SQL;
      * Called when provided user data is incorrect
      * Handles account lockdown detection and brute force protection
      *
-     * @param $addScopeSql
-     * @param $email
-     * @param $sErrorMessages
-     * @param $password
+     * @param string        $addScopeSql
+     * @param string        $email
+     * @param null|string[] $sErrorMessages
+     * @param string        $password
      *
      * @return array
      */
     private function failedLoginUser($addScopeSql, $email, $sErrorMessages, $password)
     {
+        if ($sErrorMessages === null) {
+            $sErrorMessages = [];
+        }
+
         // Check if account is disabled or not verified yet
         $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation
                 FROM s_user
@@ -3485,7 +3489,7 @@ SQL;
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Login_Failure',
-            ['subject' => $this, 'email' => $getUser['email'], 'password' => $password, 'error' => $sErrorMessages]
+            ['subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages]
         );
 
         $this->session->offsetUnset('sUserMail');

@@ -196,6 +196,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed download strategies to work only on local adapter
 * Changed installation process to generate a unique ESD key
 * Changed blog categories to also redirect requests when being linked to an external site
+* Changed event `Shopware_Modules_Admin_Login_Failure` to always contain parameter `email`
 
 ### Removals
 
