@@ -113,7 +113,7 @@ class StatisticsService
 
         $benchmarkDataJson = json_encode($benchmarkData, true);
 
-        $request = new StatisticsRequest($benchmarkDataJson);
+        $request = new StatisticsRequest($benchmarkDataJson, $config);
 
         /** @var StatisticsResponse $statisticsResponse */
         $statisticsResponse = $this->statisticsClient->sendStatistics($request);
