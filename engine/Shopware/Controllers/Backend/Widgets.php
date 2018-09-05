@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\User\User;
+use Shopware\Models\Widget\View;
+use Shopware\Models\Widget\Widget;
 
 /**
  * Backend widget controller
@@ -49,7 +52,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Container()->get('models')->createQueryBuilder();
         $builder->select(['widget', 'view', 'plugin'])
-            ->from('Shopware\Models\Widget\Widget', 'widget')
+            ->from(Widget::class, 'widget')
             ->leftJoin('widget.views', 'view', 'WITH', 'view.authId = ?1')
             ->leftJoin('widget.plugin', 'plugin')
             ->orderBy('view.position')
@@ -129,7 +132,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function addWidgetViewAction()
     {
-        $auth = Shopware()->Container()->get('auth');
+        $auth = $this->get('auth');
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(['success' => false]);
@@ -141,22 +144,24 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $userID = (int) $identity->id;
 
         $request = $this->Request();
-        $widgetId = $request->getParam('id');
+        $widgetId = (int) $request->getParam('id');
         $column = $request->getParam('column');
         $position = $request->getParam('position');
+        $data = $request->getParam('data', []);
 
-        $model = new \Shopware\Models\Widget\View();
+        $model = new View();
         $model->setWidget(
-            Shopware()->Container()->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
+            $this->get('models')->find(Widget::class, $widgetId)
         );
         $model->setAuth(
-            Shopware()->Container()->get('models')->find('Shopware\Models\User\User', $userID)
+            $this->get('models')->find(User::class, $userID)
         );
         $model->setColumn($column);
         $model->setPosition($position);
+        $model->setData($data);
 
-        Shopware()->Container()->get('models')->persist($model);
-        Shopware()->Container()->get('models')->flush();
+        $this->get('models')->persist($model);
+        $this->get('models')->flush();
         $viewId = $model->getId();
 
         $this->View()->assign(['success' => !empty($viewId), 'viewId' => $viewId]);

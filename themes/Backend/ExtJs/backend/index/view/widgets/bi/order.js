@@ -20,22 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-//{block name="backend/index/model/widget_settings"}
-
-Ext.define('Shopware.apps.Index.model.WidgetSettings', {
-
-    extend: 'Ext.data.Model',
-
-    fields: [
-        'authId',
-        'height',
-        'columnsShown',
-        'dock',
-        'pinned',
-        'minimized',
-        { name: 'data', type: 'auto' }
-    ]
+Ext.define('Shopware.apps.Index.view.widgets.bi.Order', {
+    extend: 'Shopware.apps.Index.view.widgets.bi.Base',
+    alias: 'widget.swag-bi-order',
+    widgetName: 'order',
 });
-
-//{/block}

@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,22 +21,21 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+class Migrations_Migration1438 extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up($modus)
+    {
+        $widgets = [
+            'turnover',
+            'conversion',
+            'order',
+            'visitor',
+        ];
 
-//{block name="backend/index/model/widget_settings"}
+        foreach ($widgets as $widget) {
+            $this->addSql(sprintf('INSERT INTO `s_core_widgets` (`name`, `label`, `plugin_id`) VALUES (\'swag-bi-%s\', NULL, NULL);', $widget));
+        }
 
-Ext.define('Shopware.apps.Index.model.WidgetSettings', {
-
-    extend: 'Ext.data.Model',
-
-    fields: [
-        'authId',
-        'height',
-        'columnsShown',
-        'dock',
-        'pinned',
-        'minimized',
-        { name: 'data', type: 'auto' }
-    ]
-});
-
-//{/block}
+        $this->addSql('ALTER TABLE `s_core_widget_views` ADD `data` text NULL;');
+    }
+}

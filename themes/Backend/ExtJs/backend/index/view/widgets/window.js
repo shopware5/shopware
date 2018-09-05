@@ -171,6 +171,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         me.widgetStore.each(me.createWidgets.bind(me));
 
         me.onDesktopResize(me.desktop, me.desktop.getWidth(), me.desktop.getHeight());
+
+        window.addEventListener('message', Ext.bind(me.onPostMessage, me), false);
     },
 
     /**
@@ -404,7 +406,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     newPanel = me.createWidget(panel.xtype, panel.widgetId, {
                         id: panel.viewId,
                         column: newColumn,
-                        position: newRow
+                        position: newRow,
+                        data: panel.widgetRecord.data
                     }, panel.title);
 
                 target.insert(newRow, newPanel);
@@ -515,7 +518,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     columnId: record.column,
                     rowId: record.position
                 },
-                draggable: me.createWidgetDragZone()
+                draggable: me.createWidgetDragZone(),
+                widgetRecord: record
             };
 
         return Ext.widget(name, config);
@@ -858,16 +862,18 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             items = [];
 
         me.widgetStore.each(function (widget) {
-            items.push({
-                text: widget.get('label'),
-                widgetId: widget.get('id'),
-                iconCls: 'sprite-plus-circle-frame',
-                listeners: {
-                    click: function (menuItem) {
-                        me.fireEvent('addWidget', me, widget.get('name'), menuItem);
+            if (widget.get('name').indexOf('swag-bi') === -1) {
+                items.push({
+                    text: widget.get('label'),
+                    widgetId: widget.get('id'),
+                    iconCls: 'sprite-plus-circle-frame',
+                    listeners: {
+                        click: function (menuItem) {
+                            me.fireEvent('addWidget', me, widget.get('name'), menuItem);
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
         return items;
@@ -1002,6 +1008,45 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             pos = positions[allowedHandles[i]];
 
             resizer[pos].show();
+        }
+    },
+
+    /**
+     * Adds a widget by name
+     *
+     * @param { object } configuration
+     */
+    addWidgetByName: function (configuration) {
+        this.fireEvent('addWidget', this, configuration.name, null, configuration.data);
+    },
+
+    /**
+     * Custom post message receiver
+     *
+     * @param { MessageEvent } message
+     */
+    onPostMessage: function (message) {
+        var me = this,
+            data = message.data;
+
+        if (typeof data === 'string' && (data.indexOf('swag-bi') >= 0) || data.indexOf('openBenchmarkModule') >= 0) {
+            var widgetInfo = data.split('|');
+
+            if (widgetInfo[0] === 'openBenchmarkModule') {
+                Shopware.app.Application.addSubApplication({
+                    name: 'Shopware.apps.Benchmark',
+                    params: {
+                        shopId: widgetInfo[1]
+                    }
+                });
+            } else {
+                me.addWidgetByName({
+                    name: widgetInfo[0],
+                    data: {
+                        shopId: widgetInfo[1]
+                    }
+                })
+            }
         }
     }
 });

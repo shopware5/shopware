@@ -280,7 +280,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         return Ext.create('Shopware.form.field.ArticleSearch', {
             name: 'details.articleNumber',
             fieldLabel: me.snippets.article,
-            store: Ext.create('Shopware.apps.Base.store.Variant')
+            store: Ext.create('Shopware.apps.Base.store.Variant'),
+            anchor: '99%'
         });
     },
 
