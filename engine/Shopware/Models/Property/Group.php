@@ -86,9 +86,9 @@ class Group extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Option")
      * @ORM\JoinTable(name="s_filter_relations",
-     *      joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
+     * )
      */
     private $options;
 
@@ -291,7 +291,7 @@ class Group extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\PropertyGroup|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\PropertyGroup
+     * @return Group
      */
     public function setAttribute($attribute)
     {

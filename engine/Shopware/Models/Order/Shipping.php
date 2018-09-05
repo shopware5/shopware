@@ -69,7 +69,7 @@ class Shipping extends ModelEntity
      * @var string
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine1 = null;
+    protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
@@ -77,7 +77,7 @@ class Shipping extends ModelEntity
      * @var string
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine2 = null;
+    protected $additionalAddressLine2;
 
     /**
      * The customer property is the owning side of the association between customer and shipping.
@@ -149,7 +149,7 @@ class Shipping extends ModelEntity
      * @var int
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
-    private $stateId = null;
+    private $stateId;
 
     /**
      * If of the associated customer. Used as foreign key for the
@@ -158,7 +158,7 @@ class Shipping extends ModelEntity
      * @var int
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
-    private $customerId = null;
+    private $customerId;
 
     /**
      * Contains the name of the shipping address company
@@ -555,7 +555,7 @@ class Shipping extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $attribute
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Shipping
      */
     public function setAttribute($attribute)
     {

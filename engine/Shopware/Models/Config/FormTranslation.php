@@ -62,13 +62,13 @@ class FormTranslation extends ModelEntity
      * @var string
      * @ORM\Column(name="label", type="string", nullable=true)
      */
-    private $label = null;
+    private $label;
 
     /**
      * @var string
      * @ORM\Column(name="description", type="string", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var int

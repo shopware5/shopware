@@ -58,9 +58,9 @@ class Blog extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_blog_assigned_articles",
-     *      joinColumns={@ORM\JoinColumn(name="blog_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="blog_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")}
+     * )
      */
     protected $assignedArticles;
 
@@ -102,7 +102,7 @@ class Blog extends ModelEntity
      *
      * @ORM\Column(name="author_id", type="integer", nullable=true)
      */
-    private $authorId = null;
+    private $authorId;
 
     /**
      * Flag which shows if the blog is active or not. 1= active otherwise inactive
@@ -131,7 +131,7 @@ class Blog extends ModelEntity
      *
      * @ORM\Column(name="views", type="integer", nullable=true)
      */
-    private $views = null;
+    private $views;
 
     /**
      * @var \DateTime
@@ -145,7 +145,7 @@ class Blog extends ModelEntity
      *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
-    private $categoryId = null;
+    private $categoryId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
@@ -382,7 +382,7 @@ class Blog extends ModelEntity
     /**
      * Set Tags
      *
-     * @param ArrayCollection
+     * @param ArrayCollection $tags
      */
     public function setTags($tags)
     {
@@ -424,7 +424,7 @@ class Blog extends ModelEntity
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $media
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Blog
      */
     public function setMedia($media)
     {
@@ -506,7 +506,7 @@ class Blog extends ModelEntity
      *
      * @param \Shopware\Models\Attribute\Blog|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Blog
+     * @return Blog
      */
     public function setAttribute($attribute)
     {
@@ -524,7 +524,7 @@ class Blog extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $comments
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Blog
      */
     public function setComments($comments)
     {

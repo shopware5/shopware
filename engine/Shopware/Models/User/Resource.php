@@ -102,7 +102,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      *
      * @param string $name
      *
-     * @return resource
+     * @return self
      */
     public function setName($name)
     {

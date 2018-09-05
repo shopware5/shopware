@@ -59,7 +59,7 @@ class Tax extends ModelEntity
 
     /**
      * @var float
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @ORM\Column(name="tax", type="decimal", nullable=false)
      */
     private $tax;
@@ -67,7 +67,7 @@ class Tax extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $name;
@@ -77,6 +77,7 @@ class Tax extends ModelEntity
      * The association is joined over the id field and the groupID field of the tax rule.
      *
      * @var Rule[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Rule", mappedBy="group", orphanRemoval=true, cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="groupID")
      */
@@ -149,7 +150,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return Rule[]|ArrayCollection
      */
     public function getRules()
     {
@@ -157,7 +158,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @param array $rules
+     * @param Rule[]|ArrayCollection $rules
      */
     public function setRules($rules)
     {

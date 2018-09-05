@@ -115,14 +115,14 @@ class Voucher extends ModelEntity
      *
      * @ORM\Column(name="valid_from", type="date", nullable=true)
      */
-    private $validFrom = null;
+    private $validFrom;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="valid_to", type="date", nullable=true)
      */
-    private $validTo = null;
+    private $validTo;
 
     /**
      * @var string
@@ -153,7 +153,7 @@ class Voucher extends ModelEntity
     private $numOrder;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="customergroup", type="integer", nullable=true)
      */
@@ -653,7 +653,7 @@ class Voucher extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $codes
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Voucher
      */
     public function setCodes($codes)
     {
@@ -671,7 +671,7 @@ class Voucher extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Voucher|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Voucher
+     * @return Voucher
      */
     public function setAttribute($attribute)
     {

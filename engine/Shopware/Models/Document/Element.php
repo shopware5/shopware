@@ -53,7 +53,7 @@ class Element extends ModelEntity
      * @var int
      * @ORM\Column(name="documentID", type="integer", nullable=false)
      */
-    private $documentId = '';
+    private $documentId;
 
     /**
      * Contains the name of the document.

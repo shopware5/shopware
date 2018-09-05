@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\ProductFeed;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -39,7 +40,7 @@ use Shopware\Components\Model\ModelEntity;
 class ProductFeed extends ModelEntity
 {
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="dirty", type="boolean")
      */
@@ -53,6 +54,7 @@ class ProductFeed extends ModelEntity
      * @var \Shopware\Models\Attribute\ProductFeed
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -70,7 +72,7 @@ class ProductFeed extends ModelEntity
     private $name;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_export", type="datetime", nullable=false)
      */
@@ -105,7 +107,7 @@ class ProductFeed extends ModelEntity
     private $countArticles;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="expiry", type="datetime", nullable=false)
      */
@@ -126,7 +128,7 @@ class ProductFeed extends ModelEntity
     private $formatId = 1;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_change", type="datetime", nullable=false)
      */
@@ -259,7 +261,7 @@ class ProductFeed extends ModelEntity
     private $shopId;
 
     /**
-     * @var string
+     * @var DateTime
      *
      * @ORM\Column(name="cache_refreshed", type="datetime", nullable=true)
      */
@@ -277,8 +279,8 @@ class ProductFeed extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Supplier")
      * @ORM\JoinTable(name="s_export_suppliers",
-     *      joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="supplierID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="supplierID", referencedColumnName="id")}
      * )
      */
     private $suppliers;
@@ -288,8 +290,8 @@ class ProductFeed extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="\Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_export_articles",
-     *      joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
      * )
      */
     private $articles;
@@ -298,9 +300,9 @@ class ProductFeed extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_export_categories",
-     *      joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id")}
+     * )
      */
     private $categories;
 
@@ -341,14 +343,14 @@ class ProductFeed extends ModelEntity
     /**
      * Set lastExport
      *
-     * @param \DateTime|string $lastExport
+     * @param DateTime|string $lastExport
      *
      * @return ProductFeed
      */
     public function setLastExport($lastExport)
     {
-        if (!$lastExport instanceof \DateTime) {
-            $lastExport = new \DateTime($lastExport);
+        if (!$lastExport instanceof DateTime) {
+            $lastExport = new DateTime($lastExport);
         }
         $this->lastExport = $lastExport;
 
@@ -358,7 +360,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get lastExport
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastExport()
     {
@@ -464,14 +466,14 @@ class ProductFeed extends ModelEntity
     /**
      * Set expiry
      *
-     * @param \DateTime|string $expiry
+     * @param DateTime|string $expiry
      *
      * @return ProductFeed
      */
     public function setExpiry($expiry)
     {
-        if (!$expiry instanceof \DateTime) {
-            $expiry = new \DateTime($expiry);
+        if (!$expiry instanceof DateTime) {
+            $expiry = new DateTime($expiry);
         }
         $this->expiry = $expiry;
 
@@ -481,7 +483,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get expiry
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpiry()
     {
@@ -539,14 +541,14 @@ class ProductFeed extends ModelEntity
     /**
      * Set lastChange
      *
-     * @param \DateTime|string $lastChange
+     * @param DateTime|string $lastChange
      *
      * @return ProductFeed
      */
     public function setLastChange($lastChange)
     {
-        if (!$lastChange instanceof \DateTime) {
-            $lastChange = new \DateTime($lastChange);
+        if (!$lastChange instanceof DateTime) {
+            $lastChange = new DateTime($lastChange);
         }
         $this->lastChange = $lastChange;
 
@@ -556,7 +558,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get lastChange
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastChange()
     {
@@ -1082,7 +1084,7 @@ class ProductFeed extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\ProductFeed|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ProductFeed
+     * @return ProductFeed
      */
     public function setAttribute($attribute)
     {
@@ -1092,14 +1094,14 @@ class ProductFeed extends ModelEntity
     /**
      * Set cache refreshed datetime
      *
-     * @param \DateTime|string $cacheRefreshed
+     * @param DateTime|string $cacheRefreshed
      *
      * @return ProductFeed
      */
     public function setCacheRefreshed($cacheRefreshed)
     {
-        if (!$cacheRefreshed instanceof \DateTime) {
-            $cacheRefreshed = new \DateTime($cacheRefreshed);
+        if (!$cacheRefreshed instanceof DateTime) {
+            $cacheRefreshed = new DateTime($cacheRefreshed);
         }
         $this->cacheRefreshed = $cacheRefreshed;
 
@@ -1109,7 +1111,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get cache refreshed datetime
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCacheRefreshed()
     {

@@ -43,7 +43,7 @@ class Price extends LazyFetchModelEntity
      * @var \Shopware\Models\Article\Detail
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="prices")
      * @ORM\JoinColumn(name="articledetailsID", referencedColumnName="id")
-     * @ORM\OrderBy({"customerGroupKey" = "ASC", "from" = "ASC"})
+     * @ORM\OrderBy({"customerGroupKey": "ASC", "from": "ASC"})
      */
     protected $detail;
 
@@ -99,7 +99,7 @@ class Price extends LazyFetchModelEntity
     private $from = 1;
 
     /**
-     * @var int
+     * @var int|string|null
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
@@ -215,7 +215,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param int|null $to
+     * @param int|null|string $to
      *
      * @return Price
      */
@@ -232,7 +232,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get to
      *
-     * @return int|null
+     * @return int|string|null
      */
     public function getTo()
     {

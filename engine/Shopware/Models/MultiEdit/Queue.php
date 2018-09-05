@@ -110,7 +110,7 @@ class Queue extends ModelEntity
     {
         $this->resource = $resource;
 
-        $this->details = new ArrayCollection();
+        $this->articleDetails = new ArrayCollection();
     }
 
     /**

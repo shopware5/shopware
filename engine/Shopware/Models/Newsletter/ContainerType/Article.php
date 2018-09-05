@@ -74,13 +74,13 @@ class Article extends LazyFetchModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Ordernumber of the article
      *
      * @var string
-     * @ORM\Column(name="articleordernumber", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
     private $number = '';
 
@@ -89,7 +89,7 @@ class Article extends LazyFetchModelEntity
      * "Zufall" for random articles - else the article's name
      *
      * @var string
-     * @ORM\Column(name="name", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="name", type="string", length=16777215, nullable=false)
      */
     private $name;
 
@@ -97,7 +97,7 @@ class Article extends LazyFetchModelEntity
      * Type of the container - "random" or "fix"
      *
      * @var string
-     * @ORM\Column(name="type", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="type", type="string", length=255, nullable=false)
      */
     private $type;
 
@@ -105,7 +105,7 @@ class Article extends LazyFetchModelEntity
      * Position of this container
      *
      * @var int
-     * @ORM\Column(name="position", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="position", type="string", length=255, nullable=false)
      */
     private $position;
 

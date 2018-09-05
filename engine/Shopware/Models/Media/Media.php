@@ -137,6 +137,7 @@ class Media extends ModelEntity
      * Unique identifier
      *
      * @var int
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -147,6 +148,7 @@ class Media extends ModelEntity
      * Id of the assigned album
      *
      * @var int
+     *
      * @ORM\Column(name="albumID", type="integer", nullable=false)
      */
     private $albumId;
@@ -155,6 +157,7 @@ class Media extends ModelEntity
      * Name of the media, also used as a file name
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -163,6 +166,7 @@ class Media extends ModelEntity
      * Description for the media.
      *
      * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
@@ -171,6 +175,7 @@ class Media extends ModelEntity
      * Path of the uploaded file.
      *
      * @var string
+     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
     private $path;
@@ -179,6 +184,7 @@ class Media extends ModelEntity
      * Flag for the media type.
      *
      * @var string
+     *
      * @ORM\Column(name="type", type="string", length=50, nullable=false)
      */
     private $type;
@@ -187,6 +193,7 @@ class Media extends ModelEntity
      * Extension of the uploaded file
      *
      * @var string
+     *
      * @ORM\Column(name="extension", type="string", length=20, nullable=false)
      */
     private $extension;
@@ -195,6 +202,7 @@ class Media extends ModelEntity
      * Id of the user, who uploaded the file.
      *
      * @var int
+     *
      * @ORM\Column(name="userID", type="integer", nullable=false)
      */
     private $userId;
@@ -203,6 +211,7 @@ class Media extends ModelEntity
      * Creation date of the media
      *
      * @var \DateTime
+     *
      * @ORM\Column(name="created", type="date", nullable=false)
      */
     private $created;
@@ -210,7 +219,7 @@ class Media extends ModelEntity
     /**
      * Internal container for the uploaded file.
      *
-     * @var UploadedFile
+     * @var File
      */
     private $file;
 
@@ -218,6 +227,7 @@ class Media extends ModelEntity
      * Filesize of the file in bytes
      *
      * @var int
+     *
      * @ORM\Column(name="file_size", type="integer", nullable=false)
      */
     private $fileSize;
@@ -306,7 +316,7 @@ class Media extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setName($name)
     {
@@ -330,7 +340,7 @@ class Media extends ModelEntity
      *
      * @param string $description
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setDescription($description)
     {
@@ -354,7 +364,7 @@ class Media extends ModelEntity
      *
      * @param string $path
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setPath($path)
     {
@@ -378,7 +388,7 @@ class Media extends ModelEntity
      *
      * @param string $type
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setType($type)
     {
@@ -402,7 +412,7 @@ class Media extends ModelEntity
      *
      * @param string $extension
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setExtension($extension)
     {
@@ -426,7 +436,7 @@ class Media extends ModelEntity
      *
      * @param int $userId
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setUserId($userId)
     {
@@ -450,7 +460,7 @@ class Media extends ModelEntity
      *
      * @param \DateTime $created
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setCreated($created)
     {
@@ -472,9 +482,9 @@ class Media extends ModelEntity
     /**
      * Sets the memory size of the file.
      *
-     * @param float $fileSize
+     * @param int $fileSize
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setFileSize($fileSize)
     {
@@ -501,6 +511,7 @@ class Media extends ModelEntity
     public function getFormattedFileSize()
     {
         $size = $this->fileSize;
+        $filesize = 0;
 
         if ($size < 1024) {
             $filesize = $size . ' bytes';
@@ -528,7 +539,7 @@ class Media extends ModelEntity
      *
      * @param  $album
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setAlbum(Album $album)
     {
@@ -553,7 +564,7 @@ class Media extends ModelEntity
      *
      * @param File $file
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setFile(File $file)
     {
@@ -977,7 +988,7 @@ class Media extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Media|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Media
+     * @return Media
      */
     public function setAttribute($attribute)
     {
@@ -1015,7 +1026,7 @@ class Media extends ModelEntity
      */
     private function updateAssociations()
     {
-        /** @var $article \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $article */
         foreach ($this->articles as $article) {
             $article->setPath($this->getName());
             Shopware()->Models()->persist($article);

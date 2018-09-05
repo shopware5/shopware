@@ -56,7 +56,7 @@ class Code extends ModelEntity
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
-    private $customerId = null;
+    private $customerId;
 
     /**
      * @var string

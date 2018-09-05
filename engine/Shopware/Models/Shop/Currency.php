@@ -59,9 +59,9 @@ class Currency extends ModelEntity
     private $name;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="standard", type="integer", nullable=false)
+     * @ORM\Column(name="standard", type="boolean", nullable=false)
      */
     private $default = false;
 
@@ -154,7 +154,7 @@ class Currency extends ModelEntity
     /**
      * Set default
      *
-     * @param int $default
+     * @param bool $default
      *
      * @return Currency
      */
@@ -168,7 +168,7 @@ class Currency extends ModelEntity
     /**
      * Get default
      *
-     * @return int
+     * @return bool
      */
     public function getDefault()
     {

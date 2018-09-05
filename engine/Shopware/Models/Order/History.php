@@ -87,7 +87,7 @@ class History extends ModelEntity
      * @var int
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
-    private $userId = null;
+    private $userId;
 
     /**
      * The $previousOrderStatusId property contains the id of the previous order status of the order.
@@ -96,7 +96,7 @@ class History extends ModelEntity
      * @var int
      * @ORM\Column(name="previous_order_status_id", type="integer", nullable=true)
      */
-    private $previousOrderStatusId = null;
+    private $previousOrderStatusId;
 
     /**
      * The $orderStatusId property contains the id of the current order status of the order.
@@ -105,7 +105,7 @@ class History extends ModelEntity
      * @var int
      * @ORM\Column(name="order_status_id", type="integer", nullable=true)
      */
-    private $orderStatusId = null;
+    private $orderStatusId;
 
     /**
      * The $previousPaymentStatusId property contains the id of the previous payment status of the order.
@@ -114,7 +114,7 @@ class History extends ModelEntity
      * @var int
      * @ORM\Column(name="previous_payment_status_id", type="integer", nullable=true)
      */
-    private $previousPaymentStatusId = null;
+    private $previousPaymentStatusId;
 
     /**
      * The $paymentStatusId property contains the id of the current payment status of the order.
@@ -123,7 +123,7 @@ class History extends ModelEntity
      * @var int
      * @ORM\Column(name="payment_status_id", type="integer", nullable=true)
      */
-    private $paymentStatusId = null;
+    private $paymentStatusId;
 
     /**
      * The $comment property allows the user to add a comment for the status change.

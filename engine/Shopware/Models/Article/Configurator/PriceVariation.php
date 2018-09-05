@@ -71,7 +71,7 @@ class PriceVariation extends ModelEntity
      * @var int
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
-    private $configuratorSetId = null;
+    private $configuratorSetId;
 
     /**
      * @return int

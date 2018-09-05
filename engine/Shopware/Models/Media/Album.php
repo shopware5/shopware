@@ -102,7 +102,7 @@ class Album extends ModelEntity
      * @var int
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
-    private $parentId = null;
+    private $parentId;
 
     /**
      * Position of the album to configure the display order
@@ -125,7 +125,7 @@ class Album extends ModelEntity
      *
      * @var
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Media\Album", mappedBy="parent")
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     private $children;
 
@@ -136,7 +136,7 @@ class Album extends ModelEntity
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      */
-    private $parent = null;
+    private $parent;
 
     /**
      * An album can be assigned to multiple media.

@@ -82,7 +82,7 @@ class Address extends ModelEntity
      * @var string
      * @ORM\Column(name="company", type="string", length=255, nullable=true)
      */
-    protected $company = null;
+    protected $company;
 
     /**
      * Contains the department name of the address address company
@@ -90,7 +90,7 @@ class Address extends ModelEntity
      * @var string
      * @ORM\Column(name="department", type="string", length=35, nullable=true)
      */
-    protected $department = null;
+    protected $department;
 
     /**
      * Contains the customer salutation (Mr, Ms, Company)
@@ -152,7 +152,7 @@ class Address extends ModelEntity
      * @var string
      * @ORM\Column(name="phone", type="string", length=40, nullable=true)
      */
-    protected $phone = null;
+    protected $phone;
 
     /**
      * Contains the vat id of the address
@@ -160,7 +160,7 @@ class Address extends ModelEntity
      * @var string
      * @ORM\Column(name="ustid", type="string", length=50, nullable=true)
      */
-    protected $vatId = null;
+    protected $vatId;
 
     /**
      * Contains the additional address line data
@@ -168,7 +168,7 @@ class Address extends ModelEntity
      * @var string
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine1 = null;
+    protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
@@ -176,7 +176,7 @@ class Address extends ModelEntity
      * @var string
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine2 = null;
+    protected $additionalAddressLine2;
 
     /**
      * Contains the id of the country.
@@ -192,7 +192,7 @@ class Address extends ModelEntity
      * @var int
      * @ORM\Column(name="state_id", type="integer", nullable=true)
      */
-    protected $stateId = null;
+    protected $stateId;
 
     /**
      * OWNING SIDE

@@ -52,12 +52,12 @@ class Payment extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Country\Country", inversedBy="payments")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="countryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="countryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $countries;
@@ -179,21 +179,21 @@ class Payment extends ModelEntity
     private $position = 0;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="esdactive", type="boolean", nullable=false)
      */
     private $esdActive = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
      */
@@ -218,33 +218,33 @@ class Payment extends ModelEntity
      *
      * @ORM\Column(name="action", type="string", length=255, nullable=true)
      */
-    private $action = null;
+    private $action;
 
     /**
      * @var int
      *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
-    private $pluginId = null;
+    private $pluginId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="source", type="integer", nullable=true)
      */
-    private $source = null;
+    private $source;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_core_paymentmeans_subshops",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
-     *      )},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
-     *      }
-     * )
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
+     *         )},
+     *         inverseJoinColumns={
+     *             @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
+     *         }
+     *     )
      */
     private $shops;
 
@@ -803,7 +803,7 @@ class Payment extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Payment|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Payment
+     * @return Payment
      */
     public function setAttribute($attribute)
     {

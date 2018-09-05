@@ -36,7 +36,7 @@ trait AttributeCleanerTrait
      * @param string   $var      Value to be cleaned
      * @param callable $callback Function that we will used to perform the cleaning on the attributes
      *
-     * @return string The filtered string
+     * @return string|mixed The filtered string
      */
     protected function cleanup($var, callable $callback = null)
     {

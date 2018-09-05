@@ -85,7 +85,7 @@ class Component extends ModelEntity
      *
      * @ORM\Column(name="convert_function", type="string", length=255, nullable=true)
      */
-    private $convertFunction = null;
+    private $convertFunction;
     /**
      * Contains the component description which displayed in the backend
      * module of
@@ -127,7 +127,7 @@ class Component extends ModelEntity
      * @var int
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
-    private $pluginId = null;
+    private $pluginId;
 
     /**
      * Private var that holds the max position value of the form fields
@@ -135,7 +135,7 @@ class Component extends ModelEntity
      *
      * @var int
      */
-    private $maxFieldPositionValue = null;
+    private $maxFieldPositionValue;
 
     /**
      * Class constructor.
@@ -169,7 +169,7 @@ class Component extends ModelEntity
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $fields
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Component
      */
     public function setFields($fields)
     {

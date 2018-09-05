@@ -60,6 +60,7 @@ class Data extends ModelEntity
      * @ORM\JoinColumn(name="fieldID", referencedColumnName="id")
      */
     protected $field;
+
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -74,7 +75,7 @@ class Data extends ModelEntity
     /**
      * Contains the id of the emotion
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="emotionID", type="integer", nullable=false)
      */
@@ -83,7 +84,7 @@ class Data extends ModelEntity
     /**
      * Contains the name of the emotion.
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="elementID", type="integer", nullable=false)
      */
@@ -92,13 +93,13 @@ class Data extends ModelEntity
     /**
      * Contains the id of the assigned element component
      *
-     * @var int
+     * @var int|null
      * @ORM\Column(name="componentID", type="integer", nullable=false)
      */
     private $componentId;
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="fieldID", type="integer", nullable=false)
      */
     private $fieldId;
@@ -107,7 +108,7 @@ class Data extends ModelEntity
      * @var string
      * @ORM\Column(name="value", type="text", nullable=true)
      */
-    private $value = null;
+    private $value;
 
     public function __clone()
     {
@@ -129,7 +130,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getComponentId()
     {
@@ -145,7 +146,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getElementId()
     {
@@ -161,7 +162,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getFieldId()
     {
@@ -223,7 +224,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEmotionId()
     {

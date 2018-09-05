@@ -339,7 +339,7 @@ class Order extends ModelEntity
      *
      * @ORM\Column(name="ordertime", type="datetime", nullable=false)
      */
-    private $orderTime = null;
+    private $orderTime;
 
     /**
      * @var string
@@ -406,7 +406,7 @@ class Order extends ModelEntity
      *
      * @ORM\Column(name="cleareddate", type="datetime", nullable=true)
      */
-    private $clearedDate = null;
+    private $clearedDate;
 
     /**
      * @var string
@@ -469,7 +469,7 @@ class Order extends ModelEntity
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_proportional_calculation",type="boolean", nullable=false)
+     * @ORM\Column(name="is_proportional_calculation", type="boolean", nullable=false)
      */
     private $isProportionalCalculation = false;
 
@@ -1108,7 +1108,7 @@ class Order extends ModelEntity
     /**
      * @param \Shopware\Models\Order\Shipping|array|null $shipping
      *
-     * @return \Shopware\Models\Order\Shipping
+     * @return Order
      */
     public function setShipping($shipping)
     {
@@ -1126,7 +1126,7 @@ class Order extends ModelEntity
     /**
      * @param \Shopware\Models\Order\Billing|array|null $billing
      *
-     * @return \Shopware\Models\Order\Billing
+     * @return Order
      */
     public function setBilling($billing)
     {
@@ -1144,7 +1144,7 @@ class Order extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $details
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Order
      */
     public function setDetails($details)
     {
@@ -1177,7 +1177,7 @@ class Order extends ModelEntity
         $invoiceAmountNet = 0;
 
         //iterate order details to recalculate the amount.
-        /** @var $detail Detail */
+        /** @var Detail $detail */
         foreach ($this->getDetails() as $detail) {
             $price = round($detail->getPrice(), 2);
 
@@ -1260,7 +1260,7 @@ class Order extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $documents
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Order
      */
     public function setDocuments($documents)
     {
@@ -1348,8 +1348,8 @@ class Order extends ModelEntity
     }
 
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
      */
     public function updateChangedTimestamp()
     {

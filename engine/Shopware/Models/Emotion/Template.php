@@ -46,6 +46,7 @@ class Template extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="template")
      */
     protected $emotions;
+
     /**
      * Unique identifier field for the shopware emotion.
      *

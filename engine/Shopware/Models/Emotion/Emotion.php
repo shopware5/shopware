@@ -50,15 +50,15 @@ class Emotion extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned grid will be displayed in front of the categories.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection|array
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category", inversedBy="emotions")
      * @ORM\JoinTable(name="s_emotion_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $categories;
@@ -81,7 +81,7 @@ class Emotion extends ModelEntity
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Element", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection|array
      */
     protected $elements;
 
@@ -104,7 +104,7 @@ class Emotion extends ModelEntity
      * @var
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
-    protected $templateId = null;
+    protected $templateId;
 
     /**
      * @var Template
@@ -128,7 +128,7 @@ class Emotion extends ModelEntity
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
-    private $parentId = null;
+    private $parentId;
 
     /**
      * Is this emotion active
@@ -199,21 +199,21 @@ class Emotion extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_title", type="string",length=255, nullable=false)
+     * @ORM\Column(name="seo_title", type="string", length=255, nullable=false)
      */
     private $seoTitle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_keywords", type="string",length=255, nullable=false)
+     * @ORM\Column(name="seo_keywords", type="string", length=255, nullable=false)
      */
     private $seoKeywords;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_description", type="string",length=255, nullable=false)
+     * @ORM\Column(name="seo_description", type="string", length=255, nullable=false)
      */
     private $seoDescription;
 
@@ -282,13 +282,13 @@ class Emotion extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_emotion_shops",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id"
-     *      )},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
-     *      }
-     * )
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="emotion_id", referencedColumnName="id"
+     *         )},
+     *         inverseJoinColumns={
+     *             @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     *         }
+     *     )
      */
     private $shops;
 
@@ -353,13 +353,13 @@ class Emotion extends ModelEntity
         }
 
         $elements = [];
-        /** @var $element Element */
+        /** @var Element $element */
         foreach ($this->getElements() as $element) {
             $newElement = clone $element;
             $newElement->setEmotion($this);
 
             if ($newElement->getData()) {
-                /** @var $data Data */
+                /** @var Data $data */
                 foreach ($newElement->getData() as $data) {
                     $data->setEmotion($this);
                 }
@@ -369,7 +369,7 @@ class Emotion extends ModelEntity
         }
 
         if ($attribute = $this->getAttribute()) {
-            /** @var Shopware\Models\Attribute\Emotion $newAttribute */
+            /** @var \Shopware\Models\Attribute\Emotion $newAttribute */
             $newAttribute = clone $attribute;
             $newAttribute->setEmotion($this);
             $this->attribute = $newAttribute;
@@ -554,7 +554,7 @@ class Emotion extends ModelEntity
      * The element model contains the configuration about the size and position of the element
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection|array
      */
     public function getElements()
     {
@@ -569,7 +569,7 @@ class Emotion extends ModelEntity
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $elements
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Emotion
      */
     public function setElements($elements)
     {
@@ -657,7 +657,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection|array
      */
     public function getCategories()
     {

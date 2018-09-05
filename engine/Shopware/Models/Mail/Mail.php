@@ -62,7 +62,7 @@ class Mail extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Status", inversedBy="mail")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      *
      * @var \Shopware\Models\Order\Status
      */
@@ -200,7 +200,7 @@ class Mail extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setName($name)
     {
@@ -225,7 +225,7 @@ class Mail extends ModelEntity
      *
      * @param string $fromMail
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setFromMail($fromMail)
     {
@@ -249,7 +249,7 @@ class Mail extends ModelEntity
      *
      * @param string $fromName
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setFromName($fromName)
     {
@@ -273,7 +273,7 @@ class Mail extends ModelEntity
      *
      * @param string $subject
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setSubject($subject)
     {
@@ -297,7 +297,7 @@ class Mail extends ModelEntity
      *
      * @param string $content
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setContent($content)
     {
@@ -321,7 +321,7 @@ class Mail extends ModelEntity
      *
      * @param string $contentHtml
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setContentHtml($contentHtml)
     {
@@ -345,7 +345,7 @@ class Mail extends ModelEntity
      *
      * @param bool $isHtml
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setIsHtml($isHtml = true)
     {
@@ -357,7 +357,7 @@ class Mail extends ModelEntity
     /**
      * isHtml-Mail
      *
-     * @return int
+     * @return bool
      */
     public function isHtml()
     {
@@ -435,7 +435,7 @@ class Mail extends ModelEntity
     /**
      * @param int $mailtype
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setMailtype($mailtype)
     {
@@ -457,7 +457,7 @@ class Mail extends ModelEntity
      *
      * @param array $translation
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setTranslation($translation)
     {
@@ -485,7 +485,7 @@ class Mail extends ModelEntity
     /**
      * @param array $context
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Mail
      */
     public function setContext($context)
     {
@@ -559,7 +559,7 @@ class Mail extends ModelEntity
     /**
      * @param \Shopware\Models\Order\Status|array|null $status
      *
-     * @return \Shopware\Models\Order\Status
+     * @return Mail
      */
     public function setStatus($status)
     {
@@ -569,7 +569,7 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return array
      */
     public function getAttachments()
     {
@@ -579,7 +579,7 @@ class Mail extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $attachments
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Mail
      */
     public function setAttachments($attachments)
     {
@@ -597,7 +597,7 @@ class Mail extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Mail|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Mail
+     * @return Mail
      */
     public function setAttribute($attribute)
     {

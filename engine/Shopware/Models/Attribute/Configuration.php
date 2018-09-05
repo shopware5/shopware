@@ -117,7 +117,7 @@ class Configuration extends ModelEntity
      * @var string
      * @ORM\Column(name="array_store", type="text", nullable=true)
      */
-    private $arrayStore = null;
+    private $arrayStore;
 
     /**
      * @return int

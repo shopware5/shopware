@@ -128,7 +128,7 @@ class Esd extends ModelEntity
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
-    private $date = null;
+    private $date;
 
     /**
      * Class constructor.

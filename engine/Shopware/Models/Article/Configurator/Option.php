@@ -37,12 +37,12 @@ class Option extends ModelEntity
     /**
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="configuratorOptions")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     *     }
      * )
      *
      * @var ArrayCollection
@@ -76,7 +76,7 @@ class Option extends ModelEntity
      * @var int
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    private $groupId = null;
+    private $groupId;
 
     /**
      * @var string

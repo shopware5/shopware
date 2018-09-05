@@ -123,7 +123,7 @@ class Dispatch extends ModelEntity
     /**
      * Active flag
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -353,9 +353,9 @@ class Dispatch extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="\Shopware\Models\Country\Country")
      * @ORM\JoinTable(name="s_premium_dispatch_countries",
-     *      joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")}
+     * )
      */
     private $countries;
 
@@ -366,8 +366,8 @@ class Dispatch extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_premium_dispatch_categories",
-     *      joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id")}
      * )
      */
     private $categories;
@@ -379,8 +379,8 @@ class Dispatch extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment")
      * @ORM\JoinTable(name="s_premium_dispatch_paymentmeans",
-     *      joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
      * )
      */
     private $payments;
@@ -392,8 +392,8 @@ class Dispatch extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Dispatch\Holiday")
      * @ORM\JoinTable(name="s_premium_dispatch_holidays",
-     *      joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="holidayID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="dispatchID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="holidayID", referencedColumnName="id")}
      * )
      */
     private $holidays;
@@ -1151,7 +1151,7 @@ class Dispatch extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $costsMatrix
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Dispatch
      */
     public function setCostsMatrix($costsMatrix)
     {

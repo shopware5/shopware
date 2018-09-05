@@ -76,11 +76,11 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @param esd $esd
+     * @param Esd $esd
      *
      * @return \Shopware\Models\Article\EsdSerial
      */
-    public function setEsd(\Shopware\Models\Article\Esd $esd)
+    public function setEsd(Esd $esd)
     {
         $this->esd = $esd;
 
@@ -88,7 +88,7 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Esd
+     * @return Esd
      */
     public function getEsd()
     {

@@ -43,6 +43,7 @@ class Plugin extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
      */
     protected $emotionComponents;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -201,7 +202,7 @@ class Plugin extends ModelEntity
      * @var \Shopware\Models\Config\Form[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
-     * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC", "id": "ASC"})
      */
     private $configForms;
 
@@ -211,7 +212,7 @@ class Plugin extends ModelEntity
      * @var \Shopware\Models\Menu\Menu[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Menu\Menu", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
-     * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC", "id": "ASC"})
      */
     private $menuItems;
 
@@ -221,7 +222,7 @@ class Plugin extends ModelEntity
      * @var \Shopware\Models\Payment\Payment[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Payment\Payment", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"id": "ASC"})
      */
     private $payments;
 
@@ -231,7 +232,7 @@ class Plugin extends ModelEntity
      * @var \Shopware\Models\Shop\Template[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Shop\Template", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"id": "ASC"})
      */
     private $templates;
 
@@ -241,14 +242,14 @@ class Plugin extends ModelEntity
      * @var \Shopware\Models\Widget\Widget[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"id": "ASC"})
      */
     private $widgets;
 
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
-     * @ORM\OrderBy({"type" = "ASC"})
+     * @ORM\OrderBy({"type": "ASC"})
      */
     private $licenses;
 
@@ -538,7 +539,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Config\Form[]
+     * @return \Shopware\Models\Config\Form[]|ArrayCollection
      */
     public function getConfigForms()
     {
@@ -546,7 +547,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
+     * @param \Shopware\Models\Config\Form[]|ArrayCollection $configForms
      */
     public function setConfigForms($configForms)
     {

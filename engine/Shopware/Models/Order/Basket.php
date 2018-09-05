@@ -38,21 +38,21 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
-    protected $customerId = null;
+    protected $customerId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="articleID", type="integer", nullable=true)
      */
-    protected $articleId = null;
+    protected $articleId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
-    protected $orderNumber = null;
+    protected $orderNumber;
 
     /**
      * @var float
@@ -90,7 +90,7 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="partnerID", type="string", length=45, nullable=true)
      */
-    private $partnerId = null;
+    private $partnerId;
 
     /**
      * @var string
@@ -132,7 +132,7 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
-    private $date = null;
+    private $date;
 
     /**
      * @var int
@@ -187,7 +187,7 @@ class Basket extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\OrderBasket|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\OrderBasket
+     * @return Basket
      */
     public function setAttribute($attribute)
     {

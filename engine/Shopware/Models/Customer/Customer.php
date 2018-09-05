@@ -227,7 +227,7 @@ class Customer extends LazyFetchModelEntity
      * @var int
      * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
      */
-    private $priceGroupId = null;
+    private $priceGroupId;
 
     /**
      * If this property is set, set password will be encoded with md5 on save.
@@ -250,7 +250,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @var string
      */
-    private $rawPassword = null;
+    private $rawPassword;
 
     /**
      * Contains the md5 encoded password
@@ -263,10 +263,10 @@ class Customer extends LazyFetchModelEntity
     /**
      * Flag whether the customer account is activated.
      *
-     * @var int
+     * @var bool
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active = 0;
+    private $active = false;
 
     /**
      * Contains the customer email address which is used to send the order confirmation mail
@@ -353,7 +353,7 @@ class Customer extends LazyFetchModelEntity
      * @var string
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
-    private $languageId = 1;
+    private $languageId = '1';
 
     /**
      * OWNING SIDE
@@ -393,7 +393,7 @@ class Customer extends LazyFetchModelEntity
      * @var \DateTime
      * @ORM\Column(name="lockedUntil", type="datetime", nullable=true)
      */
-    private $lockedUntil = null;
+    private $lockedUntil;
 
     /**
      * @var string
@@ -429,13 +429,14 @@ class Customer extends LazyFetchModelEntity
     private $lastname;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|string[null
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
     private $birthday;
 
     /**
-     * @var \boolean
+     * @var bool
+     *
      * @ORM\Column(name="doubleOptinRegister", type="boolean", nullable=false)
      */
     private $doubleOptinRegister;
@@ -498,7 +499,7 @@ class Customer extends LazyFetchModelEntity
     public function setPassword($password)
     {
         // Force hashPassword to change with the password
-        $this->hashPassword = null;
+        $this->hashPassword = '';
         $this->password = $password;
 
         return $this;
@@ -523,7 +524,7 @@ class Customer extends LazyFetchModelEntity
     public function setRawPassword($rawPassword)
     {
         // Force hashPassword to change with the rawPassword
-        $this->hashPassword = null;
+        $this->hashPassword = '';
         $this->rawPassword = $rawPassword;
     }
 
@@ -1273,7 +1274,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getBirthday()
     {
@@ -1405,8 +1406,8 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
      */
     public function updateChangedTimestamp()
     {

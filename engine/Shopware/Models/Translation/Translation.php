@@ -59,7 +59,7 @@ class Translation extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @ORM\Column(name="objecttype", type="string", nullable=false)
      */
     private $type;
@@ -67,7 +67,7 @@ class Translation extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @ORM\Column(name="objectdata", type="string", nullable=false)
      */
     private $data;
@@ -75,7 +75,7 @@ class Translation extends ModelEntity
     /**
      * @var int
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @ORM\Column(name="objectkey", type="integer", nullable=false)
      */
     private $key;
@@ -86,7 +86,7 @@ class Translation extends ModelEntity
      *
      * @var int
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @ORM\Column(name="objectlanguage", type="integer", nullable=false)
      */
     private $shopId;

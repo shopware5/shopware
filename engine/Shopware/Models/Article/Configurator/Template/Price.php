@@ -39,7 +39,7 @@ class Price extends LazyFetchModelEntity
      * @var \Shopware\Models\Article\Configurator\Template\Template
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", inversedBy="prices")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
-     * @ORM\OrderBy({"customerGroupKey" = "ASC", "from" = "ASC"})
+     * @ORM\OrderBy({"customerGroupKey": "ASC", "from": "ASC"})
      */
     protected $template;
 
@@ -80,7 +80,7 @@ class Price extends LazyFetchModelEntity
     private $from;
 
     /**
-     * @var int
+     * @var string|null
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
@@ -130,7 +130,7 @@ class Price extends LazyFetchModelEntity
      *
      * @param $customerGroup
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setCustomerGroup($customerGroup)
     {
@@ -154,7 +154,7 @@ class Price extends LazyFetchModelEntity
      *
      * @param $from
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setFrom($from)
     {
@@ -176,9 +176,9 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param $to
+     * @param string|null $to
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setTo($to)
     {
@@ -193,7 +193,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get to
      *
-     * @return int|null
+     * @return string|null
      */
     public function getTo()
     {
@@ -205,7 +205,7 @@ class Price extends LazyFetchModelEntity
      *
      * @param $price
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setPrice($price)
     {
@@ -229,7 +229,7 @@ class Price extends LazyFetchModelEntity
      *
      * @param $pseudoPrice
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setPseudoPrice($pseudoPrice)
     {
@@ -253,7 +253,7 @@ class Price extends LazyFetchModelEntity
      *
      * @param float $percent
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setPercent($percent)
     {

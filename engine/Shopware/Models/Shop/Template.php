@@ -42,13 +42,13 @@ class Template extends ModelEntity
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected $parent = null;
+    protected $parent;
 
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\Shop",
-     *      mappedBy="template"
+     *     targetEntity="Shopware\Models\Shop\Shop",
+     *     mappedBy="template"
      * )
      */
     protected $shops;
@@ -56,10 +56,10 @@ class Template extends ModelEntity
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $elements;
@@ -67,24 +67,26 @@ class Template extends ModelEntity
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $layouts;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Set[]
+     *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $configSets;
+
     /**
      * @var int
      *
@@ -159,13 +161,13 @@ class Template extends ModelEntity
     private $emotion = false;
 
     /**
-     * @var string
+     * @var int
      * @ORM\Column(name="version", type="integer")
      */
     private $version = 1;
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
@@ -178,7 +180,7 @@ class Template extends ModelEntity
     private $plugin;
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId = null;
@@ -480,7 +482,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return Set[]
+     * @return ArrayCollection|Set[]
      */
     public function getConfigSets()
     {
@@ -488,7 +490,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param Set[] $configSets
+     * @param ArrayCollection|Set[] $configSets
      */
     public function setConfigSets($configSets)
     {

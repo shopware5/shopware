@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Category;
 
-use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -62,7 +62,7 @@ class Repository extends ModelRepository
             return '';
         }
 
-        /** @var $category Category */
+        /** @var Category $category */
         $category = $this->find($id);
 
         $before = $this->getCategoryPathBefore($category, $field, $separator);
@@ -189,7 +189,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy = [], $limit = null, $offset = null, $selectOnlyActive = true)
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->createQueryBuilder('c');
         $builder->select([
             'c.id as id',
@@ -531,7 +531,7 @@ class Repository extends ModelRepository
      * @param null|int $offset
      * @param null|int $limit
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBlogCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
     {
@@ -586,7 +586,7 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getBlogCategoryTreeListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBlogCategoryTreeListBuilder()
     {
@@ -616,7 +616,7 @@ class Repository extends ModelRepository
      * @param string   $field
      * @param $separator
      *
-     * @return array|string
+     * @return array|string|null
      */
     protected function getCategoryPathBefore($category, $field, $separator)
     {
@@ -700,7 +700,7 @@ class Repository extends ModelRepository
      */
     protected function getActiveQueryBuilder($customerGroupId = null)
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from($this->getEntityName(), 'c')
                 ->select([

@@ -45,10 +45,10 @@ class Element extends ModelEntity
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
-     *      mappedBy="element",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
+     *     mappedBy="element",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $values;
@@ -81,19 +81,19 @@ class Element extends ModelEntity
      * @var
      * @ORM\Column(name="selection", type="array", nullable=true)
      */
-    protected $selection = null;
+    protected $selection;
 
     /**
      * @var
      * @ORM\Column(name="field_label", type="string", nullable=true)
      */
-    protected $fieldLabel = null;
+    protected $fieldLabel;
 
     /**
      * @var
      * @ORM\Column(name="support_text", type="string", nullable=true)
      */
-    protected $supportText = null;
+    protected $supportText;
 
     /**
      * @var
@@ -260,7 +260,7 @@ class Element extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $values
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return Element
      */
     public function setValues($values)
     {

@@ -27,6 +27,7 @@ namespace Shopware\Models\Category;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Article;
 use Shopware\Models\ProductStream\ProductStream;
 
 /**
@@ -46,12 +47,12 @@ class Category extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_categories_avoid_customergroups",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
+     *     }
      * )
      */
     protected $customerGroups;
@@ -70,12 +71,12 @@ class Category extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="categories")
      * @ORM\JoinTable(name="s_emotion_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $emotions;
@@ -129,12 +130,6 @@ class Category extends ModelEntity
     private $parentId;
 
     /**
-     * @var int
-     * @ORM\Column(name="stream_id", type="integer", nullable=true)
-     */
-    private $streamId;
-
-    /**
      * @var ProductStream
      * @ORM\ManyToOne(targetEntity="Shopware\Models\ProductStream\ProductStream")
      * @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
@@ -183,7 +178,7 @@ class Category extends ModelEntity
     /**
      * Keeps the meta keywords which are displayed in the HTML page.
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="metakeywords", type="text", nullable=true)
      */
@@ -241,7 +236,7 @@ class Category extends ModelEntity
      *
      * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
      */
-    private $productBoxLayout = null;
+    private $productBoxLayout;
 
     /**
      * @var bool
@@ -278,7 +273,7 @@ class Category extends ModelEntity
     /**
      * Should any filter shown on the category page be hidden?
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="hidefilter", type="boolean", nullable=false)
      */
@@ -287,7 +282,7 @@ class Category extends ModelEntity
     /**
      * Should the top part of that category be displayed?
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="hidetop", type="boolean", nullable=false)
      */
@@ -296,39 +291,39 @@ class Category extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection|Category[]
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent", cascade={"all"}))
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     private $children;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Article[]
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     }
      * )
      */
     private $articles;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Article[]
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories_ro",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     }
      * )
      */
     private $allArticles;
@@ -452,7 +447,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param Category[] $children
+     * @param Category[]|ArrayCollection $children
      *
      * @return Category
      */
@@ -469,7 +464,7 @@ class Category extends ModelEntity
     /**
      * Get parents category id
      *
-     * @return Category[]
+     * @return ArrayCollection|Category[]
      */
     public function getChildren()
     {
@@ -573,7 +568,7 @@ class Category extends ModelEntity
     /**
      * Set the meta keywords.
      *
-     * @param string $metaKeywords
+     * @param string|null $metaKeywords
      *
      * @return Category
      */
@@ -987,7 +982,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getProductBoxLayout()
     {
@@ -995,7 +990,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param int $productBoxLayout
+     * @param string $productBoxLayout
      *
      * @return Category
      */

@@ -53,7 +53,7 @@ class ModelRepository extends EntityRepository
      */
     public function createQueryBuilder($alias, $indexBy = null)
     {
-        /** @var QueryBuilder $builder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = parent::createQueryBuilder($alias, $indexBy);
         $builder->setAlias($alias);
 

@@ -120,7 +120,7 @@ class Menu extends ModelEntity
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Menu", mappedBy="parent", cascade={"all"}))
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     private $children;
 
@@ -313,7 +313,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param Menu[] $children
+     * @param ArrayCollection $children
      */
     public function setChildren($children)
     {

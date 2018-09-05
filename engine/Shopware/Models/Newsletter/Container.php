@@ -24,8 +24,10 @@
 
 namespace   Shopware\Models\Newsletter;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Newsletter\ContainerType\Link;
 
 /**
  * Shopware container model represents a newsletter container.
@@ -103,7 +105,7 @@ class Container extends ModelEntity
      *
      * @ORM\Column(name="promotionID", type="integer", length=11, nullable=true)
      */
-    private $newsletterId = null;
+    private $newsletterId;
 
     /**
      * value of the container
@@ -203,7 +205,6 @@ class Container extends ModelEntity
     public function setNewsletter($newsletter)
     {
         $this->newsletter = $newsletter;
-//        $this->setManyToOne($newsletter, '\Shopware\Models\Newsletter\Newsletter', 'newsletter');
     }
 
     /**
@@ -233,7 +234,7 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Text $text
      *
-     * @return \Shopware\Models\Newsletter\ContainerType\Text
+     * @return Container
      */
     public function setText($text)
     {
@@ -254,7 +255,7 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Article $articles
      *
-     * @return \Shopware\Models\Newsletter\ContainerType\Article
+     * @return Container
      */
     public function setArticles($articles)
     {
@@ -265,7 +266,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\ContainerType\Article
+     * @return ArrayCollection
      */
     public function getArticles()
     {
@@ -275,7 +276,7 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Banner $banner
      *
-     * @return \Shopware\Models\Newsletter\ContainerType\Banner
+     * @return Container
      */
     public function setBanner($banner)
     {
@@ -296,7 +297,7 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Link $links
      *
-     * @return \Shopware\Models\Newsletter\ContainerType\Link
+     * @return Container
      */
     public function setLinks($links)
     {
@@ -307,7 +308,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\ContainerType\Link
+     * @return ArrayCollection
      */
     public function getLinks()
     {

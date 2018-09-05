@@ -26,7 +26,6 @@ namespace Shopware\Models\Article;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Model\QueryBuilder;
 
 class Repository extends ModelRepository
 {
@@ -1041,7 +1040,8 @@ class Repository extends ModelRepository
      */
     public function getConfiguratorDependenciesQueryBuilder($configuratorSetId)
     {
-        $builder = $this->getEntityManager()->createQueryBuilder($configuratorSetId);
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
         $builder->select(['dependencies', 'dependencyParent', 'dependencyChild'])
                 ->from('Shopware\Models\Article\Configurator\Dependency', 'dependencies')
                 ->leftJoin('dependencies.parentOption', 'dependencyParent')
@@ -2812,7 +2812,7 @@ class Repository extends ModelRepository
      * Returns the detail query builder for variants.
      * This query builder should be used to read the whole variant data.
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getVariantDetailQuery()
     {

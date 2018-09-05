@@ -279,21 +279,6 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of \Doctrine\ORM\Query object which selects a
-     * list of countries for the passed area id.
-     *
-     * @param $stateId
-     *
-     * @return \Doctrine\ORM\Query
-     */
-    public function getStateAttributesQuery($stateId)
-    {
-        $builder = $this->getShopsQueryBuilder($stateId);
-
-        return $builder->getQuery();
-    }
-
-    /**
      * Helper function to create the query builder for the "getShopsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *

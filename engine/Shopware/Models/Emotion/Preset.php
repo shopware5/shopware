@@ -70,7 +70,7 @@ class Preset extends ModelEntity
      *
      * @var string
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -111,7 +111,9 @@ class Preset extends ModelEntity
      * Contains the thumbnail path
      *
      * @var string
-     * @Assert\NotBlank()
+     *
+     * @Assert\NotBlank
+     *
      * @ORM\Column(name="preset_data", type="text", nullable=false)
      */
     private $presetData;
@@ -119,7 +121,8 @@ class Preset extends ModelEntity
     /**
      * Contains the asset data for imports
      *
-     * @var string
+     * @var bool
+     *
      * @ORM\Column(name="assets_imported", type="boolean", nullable=false)
      */
     private $assetsImported = true;
@@ -127,13 +130,15 @@ class Preset extends ModelEntity
     /**
      * Contains the info if preset is hidden for internal im/export use.
      *
-     * @var string
+     * @var bool
+     *
      * @ORM\Column(name="hidden", type="boolean", nullable=false)
      */
     private $hidden = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="emotion_translations", type="text", nullable=false)
      */
     private $emotionTranslations;
@@ -306,7 +311,7 @@ class Preset extends ModelEntity
     /**
      * @param array $translations
      *
-     * @return ModelEntity
+     * @return Preset
      */
     public function setTranslations(array $translations)
     {

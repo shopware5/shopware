@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware text model represents a link container type.
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="s_campaigns_links")
  */
 class Link extends ModelEntity
@@ -63,7 +63,7 @@ class Link extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Description of the link / link text

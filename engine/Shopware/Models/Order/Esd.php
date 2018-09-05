@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Order;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -81,11 +82,11 @@ class Esd extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
-    private $date = null;
+    private $date;
 
     /**
      * @return int
@@ -96,7 +97,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article $order
+     * @param Order $order
      */
     public function setOrder($order)
     {
@@ -112,7 +113,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail $orderDetail
+     * @param Detail $orderDetail
      */
     public function setOrderDetail($orderDetail)
     {
@@ -125,5 +126,21 @@ class Esd extends ModelEntity
     public function getOrderDetail()
     {
         return $this->orderDetail;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param DateTime $date
+     */
+    public function setDate(DateTime $date)
+    {
+        $this->date = $date;
     }
 }

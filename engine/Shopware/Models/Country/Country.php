@@ -181,8 +181,8 @@ class Country extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
      * )
      */
     private $payments;
@@ -478,7 +478,7 @@ class Country extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $states
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Country
      */
     public function setStates($states)
     {
@@ -529,7 +529,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param int $displayStateInRegistration
+     * @param bool $displayStateInRegistration
      */
     public function setDisplayStateInRegistration($displayStateInRegistration)
     {
@@ -537,7 +537,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getDisplayStateInRegistration()
     {

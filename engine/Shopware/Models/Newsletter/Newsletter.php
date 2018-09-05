@@ -63,7 +63,7 @@ class Newsletter extends ModelEntity
      *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
-    private $date = null;
+    private $date;
 
     /**
      * groups
@@ -93,7 +93,7 @@ class Newsletter extends ModelEntity
      * Name of the sender
      *
      * @var string
-     * @ORM\Column(name="sendername", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="sendername", type="string", length=16777215, nullable=false)
      */
     private $senderName = '';
 
@@ -134,7 +134,7 @@ class Newsletter extends ModelEntity
      * @var \DateTime
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
-    private $locked = null;
+    private $locked;
 
     /**
      * Number of recipients
@@ -182,7 +182,7 @@ class Newsletter extends ModelEntity
      * @var \DateTime
      * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
      */
-    private $timedDelivery = null;
+    private $timedDelivery;
 
     /**
      * INVERSE SIDE

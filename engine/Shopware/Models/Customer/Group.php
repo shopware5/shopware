@@ -108,7 +108,7 @@ class Group extends ModelEntity
      * Contains the tax value for the customer group.
      * Column property for the database field tax
      *
-     * @var int
+     * @var bool
      * @ORM\Column(name="tax", type="boolean", nullable=false)
      */
     private $tax;
@@ -117,7 +117,7 @@ class Group extends ModelEntity
      * Contains the customer group tax input.
      * Column property for the database field taxinput
      *
-     * @var int
+     * @var bool
      * @ORM\Column(name="taxinput", type="boolean", nullable=false)
      */
     private $taxInput;
@@ -287,7 +287,7 @@ class Group extends ModelEntity
      * Setter function for the mode property which is
      * a column property for the database field mode.
      *
-     * @param int $mode
+     * @param bool $mode
      *
      * @return Group
      */
@@ -302,7 +302,7 @@ class Group extends ModelEntity
      * Getter function for the mode property which is
      * a column property for the database field mode.
      *
-     * @return int
+     * @return bool
      */
     public function getMode()
     {

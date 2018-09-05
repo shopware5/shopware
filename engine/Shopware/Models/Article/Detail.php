@@ -40,7 +40,7 @@ class Detail extends ModelEntity
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="details")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     protected $article;
 
@@ -77,12 +77,12 @@ class Detail extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="articles")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     *     }
      * )
      *
      * @var ArrayCollection
@@ -112,7 +112,7 @@ class Detail extends ModelEntity
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     protected $images;
 
@@ -133,18 +133,11 @@ class Detail extends ModelEntity
     private $articleId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="unitID", type="integer", nullable=true)
-     */
-    private $unitId = null;
-
-    /**
      * @var string
      * @Assert\NotBlank
      * @Assert\Regex("/^[a-zA-Z0-9-_.]+$/")
      *
-     * @ORM\Column(name="ordernumber", type="string", nullable=false, unique = true)
+     * @ORM\Column(name="ordernumber", type="string", nullable=false, unique=true)
      */
     private $number = '';
 
@@ -170,7 +163,7 @@ class Detail extends ModelEntity
     private $additionalText = null;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -191,7 +184,7 @@ class Detail extends ModelEntity
     private $stockMin = null;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="laststock", type="boolean", nullable=false)
      */
@@ -224,7 +217,8 @@ class Detail extends ModelEntity
     private $height = null;
 
     /**
-     * @var string ean
+     * @var string
+     *
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
     private $ean = null;
@@ -282,7 +276,7 @@ class Detail extends ModelEntity
     private $packUnit = null;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
      */
@@ -422,9 +416,9 @@ class Detail extends ModelEntity
     /**
      * Set active
      *
-     * @param int $active
+     * @param bool $active
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return self
      */
     public function setActive($active)
     {
@@ -436,7 +430,7 @@ class Detail extends ModelEntity
     /**
      * Get active
      *
-     * @return int
+     * @return bool
      */
     public function getActive()
     {
@@ -494,9 +488,9 @@ class Detail extends ModelEntity
     /**
      * Set lastStock
      *
-     * @param int $lastStock
+     * @param bool $lastStock
      *
-     * @return Detail
+     * @return self
      */
     public function setLastStock($lastStock)
     {
@@ -508,7 +502,7 @@ class Detail extends ModelEntity
     /**
      * Get lastStock
      *
-     * @return int
+     * @return bool
      */
     public function getLastStock()
     {
@@ -602,7 +596,7 @@ class Detail extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Article|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Article
+     * @return self
      */
     public function setAttribute($attribute)
     {
@@ -620,7 +614,7 @@ class Detail extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $prices
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return self
      */
     public function setPrices($prices)
     {
@@ -742,7 +736,7 @@ class Detail extends ModelEntity
     /**
      * Set shippingFree
      *
-     * @param int $shippingFree
+     * @param bool $shippingFree
      *
      * @return Detail
      */
@@ -756,7 +750,7 @@ class Detail extends ModelEntity
     /**
      * Get shippingFree
      *
-     * @return int
+     * @return bool
      */
     public function getShippingFree()
     {
@@ -953,7 +947,7 @@ class Detail extends ModelEntity
     /**
      * @param \Shopware\Models\Article\Unit|array|null $unit
      *
-     * @return \Shopware\Models\Article\Article
+     * @return self
      */
     public function setUnit($unit)
     {

@@ -70,7 +70,7 @@ class Billing extends ModelEntity
      * @var string
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine1 = null;
+    protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
@@ -78,7 +78,7 @@ class Billing extends ModelEntity
      * @var string
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine2 = null;
+    protected $additionalAddressLine2;
 
     /**
      * INVERSE SIDE
@@ -116,7 +116,7 @@ class Billing extends ModelEntity
      * @var int
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
-    private $customerId = null;
+    private $customerId;
 
     /**
      * Contains the id of the country. Used for the billing - country association.
@@ -132,7 +132,7 @@ class Billing extends ModelEntity
      * @var int
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
-    private $stateId = null;
+    private $stateId;
 
     /**
      * Contains the name of the billing address company
@@ -627,7 +627,7 @@ class Billing extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\OrderBilling|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\OrderBilling
+     * @return Billing
      */
     public function setAttribute($attribute)
     {

@@ -43,11 +43,12 @@ use Shopware\Components\Model\ModelEntity;
 class Snippet extends ModelEntity
 {
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="dirty", type="boolean", nullable=false)
      */
     protected $dirty = false;
+
     /**
      * @var int
      *
@@ -314,7 +315,7 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @param int $dirty
+     * @param bool $dirty
      */
     public function setDirty($dirty)
     {
@@ -322,7 +323,7 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getDirty()
     {

@@ -76,13 +76,15 @@ class ProductStream extends ModelEntity
     private $sorting;
 
     /**
-     * @var array
+     * @var string|null
+     *
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
-    private $conditions = true;
+    private $conditions;
 
     /**
-     * @var int
+     * @var int|null
+     *
      * @ORM\Column(name="sorting_id", type="integer", nullable=true)
      */
     private $sortingId;
@@ -128,7 +130,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return string|null
      */
     public function getConditions()
     {
@@ -136,7 +138,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @param array $conditions
+     * @param string|null $conditions
      */
     public function setConditions($conditions)
     {
@@ -190,7 +192,7 @@ class ProductStream extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\ProductStream|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ProductStream
+     * @return ProductStream
      */
     public function setAttribute($attribute)
     {
@@ -198,7 +200,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getSortingId()
     {
@@ -206,7 +208,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @param int $sortingId
+     * @param int|null $sortingId
      */
     public function setSortingId($sortingId)
     {

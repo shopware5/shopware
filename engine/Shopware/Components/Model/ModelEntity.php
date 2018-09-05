@@ -42,7 +42,7 @@ abstract class ModelEntity
      * @param array $array
      * @param array $fillable optional property whitelist for mass-assignment
      *
-     * @return ModelEntity
+     * @return $this
      */
     public function fromArray(array $array = [], array $fillable = [])
     {
@@ -95,7 +95,7 @@ abstract class ModelEntity
      * @param string                 $property  Name of the association property, example: 'orders'
      * @param string|null            $reference Name of the reference property, example: 'customer'
      *
-     * @return ModelEntity
+     * @return $this
      */
     public function setOneToOne($data, $model, $property, $reference = null)
     {
@@ -177,7 +177,7 @@ abstract class ModelEntity
      * @param string     $property  Name of the association property, example: 'orders'
      * @param string     $reference Name of the reference property, example: 'customer'
      *
-     * @return ModelEntity
+     * @return $this
      */
     public function setOneToMany($data, $model, $property, $reference = null)
     {
@@ -278,7 +278,7 @@ abstract class ModelEntity
      *
      * @throws \InvalidArgumentException
      *
-     * @return ModelEntity
+     * @return $this
      */
     public function setManyToOne($data, $model, $property)
     {
@@ -328,7 +328,7 @@ abstract class ModelEntity
      * @param \Doctrine\Common\Collections\ArrayCollection|array $collection
      * @param int                                                $id
      *
-     * @return null|ModelEntity
+     * @return null|$this
      */
     private function getArrayCollectionElementById($collection, $id)
     {

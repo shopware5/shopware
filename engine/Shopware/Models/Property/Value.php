@@ -44,6 +44,7 @@ class Value extends ModelEntity
      * @var \Shopware\Models\Attribute\PropertyValue
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -79,7 +80,7 @@ class Value extends ModelEntity
     private $optionId;
 
     /**
-     * @var string
+     * @var Option
      *
      * @ORM\ManyToOne(targetEntity="Option", inversedBy="values", cascade={"persist"})
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id")
@@ -91,8 +92,8 @@ class Value extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="propertyValues")
      * @ORM\JoinTable(name="s_filter_articles",
-     *      joinColumns={@ORM\JoinColumn(name="valueID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="valueID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
      * )
      */
     private $articles;
@@ -101,7 +102,7 @@ class Value extends ModelEntity
      * @var int
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
-    private $mediaId = null;
+    private $mediaId;
 
     /**
      * @var Media
@@ -224,7 +225,7 @@ class Value extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\PropertyValue|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\PropertyValue
+     * @return Value
      */
     public function setAttribute($attribute)
     {

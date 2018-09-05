@@ -45,7 +45,7 @@ class Element extends ModelEntity
      * The element model is the owning side (primary key in this table) of the association between
      * emotion and grid elements.
      *
-     * @var \Shopware\Models\Emotion\Emotion
+     * @var \Shopware\Models\Emotion\Emotion|null
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Emotion", inversedBy="elements", cascade={"persist"})
      * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
      */
@@ -67,7 +67,7 @@ class Element extends ModelEntity
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Data", mappedBy="element", orphanRemoval=true, cascade={"persist"})
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection|array
      */
     protected $data;
 
@@ -76,7 +76,7 @@ class Element extends ModelEntity
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\ElementViewport", mappedBy="element", orphanRemoval=true, cascade={"persist"})
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection|array
      */
     protected $viewports;
     /**
@@ -95,7 +95,7 @@ class Element extends ModelEntity
      * The emotion contains all defined grid elements which defined
      * over the emotion backend module.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="emotionID", type="integer", nullable=false)
      */
@@ -321,7 +321,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection|array
      */
     public function getData()
     {
@@ -331,7 +331,7 @@ class Element extends ModelEntity
     /**
      * @param array $data
      *
-     * @return ModelEntity
+     * @return Element
      */
     public function setData($data)
     {
@@ -349,7 +349,7 @@ class Element extends ModelEntity
     /**
      * @param array $viewports
      *
-     * @return ModelEntity
+     * @return Element
      */
     public function setViewports($viewports)
     {

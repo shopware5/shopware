@@ -47,7 +47,7 @@ class Image extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true, cascade={"persist"})
      *
      * @var \Shopware\Models\Attribute\ArticleImage
      */
@@ -94,13 +94,13 @@ class Image extends ModelEntity
      * @var int
      * @ORM\Column(name="articleID", type="integer", nullable=true)
      */
-    private $articleId = null;
+    private $articleId;
 
     /**
      * @var int
      * @ORM\Column(name="article_detail_id", type="integer", nullable=true)
      */
-    private $articleDetailId = null;
+    private $articleDetailId;
 
     /**
      * @var string
@@ -112,7 +112,7 @@ class Image extends ModelEntity
      * @var string path
      * @ORM\Column(name="img", type="string", length=100, nullable=true)
      */
-    private $path = null;
+    private $path;
 
     /**
      * @var int
@@ -154,18 +154,19 @@ class Image extends ModelEntity
      * @var int
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
-    private $parentId = null;
+    private $parentId;
 
     /**
      * @var int
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
-    private $mediaId = null;
+    private $mediaId;
 
     /**
-     * The parent category
+     * The parent image
      *
-     * @var Category
+     * @var Image
+     *
      * @ORM\ManyToOne(targetEntity="Image", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
@@ -369,7 +370,7 @@ class Image extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $mappings
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return Image
      */
     public function setMappings($mappings)
     {

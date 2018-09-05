@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware text model represents a text container type.
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="s_campaigns_html")
  */
 class Text extends ModelEntity
@@ -63,7 +63,7 @@ class Text extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Headline of the element
@@ -77,25 +77,25 @@ class Text extends ModelEntity
      * (HTML) content of the model
      *
      * @var string
-     * @ORM\Column(name="html", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="html", type="string", length=16777215, nullable=false)
      */
     private $content;
 
     /**
      * @var string
-     * @ORM\Column(name="image", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="image", type="string", length=255, nullable=false)
      */
     private $image;
 
     /**
      * @var string
-     * @ORM\Column(name="link", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="link", type="string", length=255, nullable=false)
      */
     private $link;
 
     /**
      * @var string
-     * @ORM\Column(name="alignment", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="alignment", type="string", length=255, nullable=false)
      */
     private $alignment;
 

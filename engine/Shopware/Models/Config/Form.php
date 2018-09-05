@@ -103,14 +103,14 @@ class Form extends ModelEntity
     /**
      * @var Element[]
      * @ORM\OneToMany(targetEntity="Element", mappedBy="form", cascade={"all"})
-     * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC", "id": "ASC"})
      */
     private $elements;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Form", mappedBy="parent", cascade={"all"}))
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     private $children;
 
@@ -182,7 +182,7 @@ class Form extends ModelEntity
      *
      * @param string $description
      *
-     * @return string
+     * @return Form
      */
     public function setDescription($description)
     {
@@ -224,7 +224,7 @@ class Form extends ModelEntity
      */
     public function getElement($name)
     {
-        /* @var $value Element */
+        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 return $element;
@@ -243,7 +243,7 @@ class Form extends ModelEntity
      */
     public function setElement($type, $name, $options = null)
     {
-        /* @var $value Element */
+        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 $element->setType($type);

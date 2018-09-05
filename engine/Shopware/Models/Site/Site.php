@@ -184,7 +184,7 @@ class Site extends ModelEntity
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Site", mappedBy="parent")
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     private $children;
 
@@ -545,7 +545,7 @@ class Site extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Site|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Site
+     * @return Site
      */
     public function setAttribute($attribute)
     {

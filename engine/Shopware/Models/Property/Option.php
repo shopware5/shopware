@@ -37,7 +37,7 @@ use Shopware\Components\Model\ModelEntity;
 class Option extends ModelEntity
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Value", mappedBy="option", cascade={"remove"}))
      */
@@ -46,11 +46,12 @@ class Option extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyOption", mappedBy="propertyOption", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\PropertyOption
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyOption", mappedBy="propertyOption", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -77,17 +78,18 @@ class Option extends ModelEntity
     /**
      * ManyToMany to Group (Inverse Side)
      *
-     * @var Group[]Doctrine\Common\Collections\ArrayCollection
+     * @var Group[]|ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Group")
      * @ORM\JoinTable(name="s_filter_relations",
-     *      joinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")}
+     * )
      */
     private $groups;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Relation", mappedBy="option")
      */
@@ -162,7 +164,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getValues()
     {
@@ -170,7 +172,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Property\Group[]
+     * @return Group[]|ArrayCollection
      */
     public function getGroups()
     {
@@ -178,7 +180,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getRelations()
     {
@@ -196,7 +198,7 @@ class Option extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\PropertyOption|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\PropertyOption
+     * @return Option
      */
     public function setAttribute($attribute)
     {

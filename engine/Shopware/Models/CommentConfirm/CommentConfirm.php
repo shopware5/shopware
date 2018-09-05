@@ -143,7 +143,7 @@ class CommentConfirm extends ModelEntity
     /**
      * Get CreationDate
      *
-     * @return string
+     * @return \DateTime
      */
     public function getCreationDate()
     {

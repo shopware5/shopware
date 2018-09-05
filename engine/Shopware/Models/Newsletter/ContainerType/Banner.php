@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware text model represents a banner container type.
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="s_campaigns_banner")
  */
 class Banner extends ModelEntity
@@ -63,7 +63,7 @@ class Banner extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Image of the banner

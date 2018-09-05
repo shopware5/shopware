@@ -46,19 +46,19 @@ class Dependency extends ModelEntity
      * @var int
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
-    private $configuratorSetId = null;
+    private $configuratorSetId;
 
     /**
      * @var int
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
-    private $parentId = null;
+    private $parentId;
 
     /**
      * @var int
      * @ORM\Column(name="child_id", type="integer", nullable=true)
      */
-    private $childId = null;
+    private $childId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="dependencyParents")

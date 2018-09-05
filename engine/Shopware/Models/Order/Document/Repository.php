@@ -53,7 +53,7 @@ class Repository extends ModelRepository
      */
     public function getListQuery($orderId, $filter = null, $orderBy = null, $limit = null, $offset = null)
     {
-        /** @var $builder \Doctrine\ORM\QueryBuilder */
+        /** @var \Doctrine\ORM\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder = $this->selectListQuery($builder);
 

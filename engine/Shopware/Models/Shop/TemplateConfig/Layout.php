@@ -55,8 +55,8 @@ class Layout extends ModelEntity
     /**
      * @var Element
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\Template",
-     *      inversedBy="layouts"
+     *     targetEntity="Shopware\Models\Shop\Template",
+     *     inversedBy="layouts"
      * )
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
@@ -79,7 +79,7 @@ class Layout extends ModelEntity
 
     /**
      * @var string
-     * @ORM\Column()
+     * @ORM\Column
      */
     protected $title;
 

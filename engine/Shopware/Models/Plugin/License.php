@@ -126,7 +126,7 @@ class License extends ModelEntity
     private $active;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
@@ -181,7 +181,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $creation
+     * @param \DateTime $creation
      */
     public function setCreation($creation)
     {
@@ -189,7 +189,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getCreation()
     {
@@ -197,7 +197,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $expiration
+     * @param \DateTime $expiration
      */
     public function setExpiration($expiration)
     {

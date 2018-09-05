@@ -57,14 +57,14 @@ class Area extends ModelEntity
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    private $name = null;
+    private $name;
 
     /**
      * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
-    private $active = null;
+    private $active;
 
     /**
      * Get id
@@ -135,7 +135,7 @@ class Area extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $countries
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Area
      */
     public function setCountries($countries)
     {

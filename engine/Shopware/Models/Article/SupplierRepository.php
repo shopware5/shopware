@@ -26,6 +26,7 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository class for Supplier entity
@@ -144,11 +145,11 @@ class SupplierRepository extends ModelRepository
      * @param null  $limit
      * @param null  $offset
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['supplier'])
             ->from('Shopware\Models\Article\Supplier', 'supplier');

@@ -26,6 +26,10 @@ namespace Shopware\Models\Tax;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Country\Area;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Country\State;
+use Shopware\Models\Customer\Group;
 
 /**
  * The Shopware Model represents the Taxes.
@@ -63,38 +67,39 @@ class Rule extends ModelEntity
     private $name;
 
     /**
-     * @var string
+     * @var float
      *
      * @ORM\Column(name="tax", type="float", nullable=false)
      */
     private $tax = 0;
 
     /**
-     * @var string
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active = false;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="areaID", type="integer", nullable=true)
      */
-    private $areaId = null;
+    private $areaId;
+
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="countryID", type="integer", nullable=true)
      */
-    private $countryId = null;
+    private $countryId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
-    private $stateId = null;
+    private $stateId;
 
     /**
      * @var int
@@ -114,7 +119,8 @@ class Rule extends ModelEntity
      * The area property is the owning side of the association between tax rule and area.
      * The association is joined over the tax rule areaID field and the id field of the area.
      *
-     * @var \Shopware\Models\Country\Area
+     * @var Area|null
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Area")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
      */
@@ -124,7 +130,8 @@ class Rule extends ModelEntity
      * The country property is the owning side of the association between tax rule and country.
      * The association is joined over the tax rule countryID field and the id field of the country.
      *
-     * @var \Shopware\Models\Country\Country
+     * @var Country|null
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Country")
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
      */
@@ -134,7 +141,8 @@ class Rule extends ModelEntity
      * The state property is the owning side of the association between tax rule and state.
      * The association is joined over the tax rule stateID field and the id field of the state.
      *
-     * @var \Shopware\Models\Country\State
+     * @var State|null
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
      */
@@ -144,14 +152,16 @@ class Rule extends ModelEntity
      * The group property is the owning side of the association between tax rule and group.
      * The association is joined over the tax rule groupID field and the id field of the group.
      *
-     * @var \Shopware\Models\Tax\Tax
-     * @ORM\ManyToOne(targetEntity="Tax", inversedBy="rules")
+     * @var Tax
+     *
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Tax\Tax", inversedBy="rules")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
      */
     private $group;
 
     /**
-     * @var \Shopware\Models\Customer\Group
+     * @var Group
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_groupID", referencedColumnName="id")
      */
@@ -200,7 +210,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Area $area
+     * @param Area $area
      */
     public function setArea($area)
     {
@@ -208,7 +218,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Country\Area
+     * @return Area
      */
     public function getArea()
     {
@@ -232,7 +242,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Country $country
+     * @param Country $country
      */
     public function setCountry($country)
     {
@@ -240,7 +250,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Country\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -264,7 +274,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Tax\Tax $group
+     * @param Tax $group
      */
     public function setGroup($group)
     {
@@ -272,7 +282,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Tax\Tax
+     * @return Tax
      */
     public function getGroup()
     {
@@ -296,7 +306,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\State $state
+     * @param State $state
      */
     public function setState($state)
     {
@@ -304,7 +314,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Country\State
+     * @return State
      */
     public function getState()
     {
@@ -328,7 +338,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param string $tax
+     * @param float $tax
      */
     public function setTax($tax)
     {
@@ -336,7 +346,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getTax()
     {
@@ -344,7 +354,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Customer\Group
+     * @return Group
      */
     public function getCustomerGroup()
     {
@@ -352,7 +362,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Customer\Group $customerGroup
+     * @param Group $customerGroup
      */
     public function setCustomerGroup($customerGroup)
     {

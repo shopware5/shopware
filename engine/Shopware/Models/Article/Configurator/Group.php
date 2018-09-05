@@ -25,6 +25,7 @@
 namespace Shopware\Models\Article\Configurator;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -35,7 +36,7 @@ use Shopware\Components\Model\ModelEntity;
 class Group extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Article\Configurator\Set
+     * @var \Shopware\Models\Article\Configurator\Set|Collection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="groups")
      */
     protected $sets;
@@ -74,7 +75,7 @@ class Group extends ModelEntity
      * @var string
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var int
@@ -190,7 +191,7 @@ class Group extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\ConfiguratorGroup|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ConfiguratorGroup
+     * @return Group
      */
     public function setAttribute($attribute)
     {

@@ -25,26 +25,6 @@ use Shopware\Components\Cart\Struct\Price;
 
 /**
  * Order model for document generation
- *
- * @property int id;
- * @property array order;
- * @property ArrayObject positions;
- * @property int userID;
- * @property array user;
- * @property array billing;
- * @property array shipping;
- * @property array payment;
- * @property array paymentInstances;
- * @property array dispatch;
- * @property bool net;
- * @property bool summaryNet;
- * @property float amountNetto;
- * @property float amount;
- * @property array tax;
- * @property array currency;
- * @property float shippingCosts;
- * @property bool shippingCostsAsPosition;
- * @property mixed discount;
  */
 class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Hook
 {
@@ -57,7 +37,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Metadata of the order
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_order;
     /**
@@ -75,37 +55,37 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Metadata of the user (email,customergroup etc. s_user.*)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_user;
     /**
      * Billingdata for this order / user (s_order_billingaddress)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_billing;
     /**
      * Shippingdata for this order / user (s_order_shippingaddress)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_shipping;
     /**
      * Payment information for this order (s_core_paymentmeans)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_payment;
     /**
      * Payment instances information for this order (s_core_payment_instance)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_paymentInstances;
     /**
      * Information about the dispatch for this order
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_dispatch;
     /**
@@ -141,7 +121,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Currency information (s_core_currencies)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_currency;
     /**
@@ -156,6 +136,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      * @var bool
      */
     protected $_shippingCostsAsPosition;
+    /**
+     * @var float
+     */
     protected $_discount;
 
     /** @var \Shopware\Models\Tax\Repository */
@@ -311,6 +294,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $this->_shippingCosts = $this->_order['invoice_shipping'];
 
         if ($this->_shippingCostsAsPosition == true && !empty($this->_shippingCosts)) {
+            $taxes = [];
+
             if ($this->_order['taxfree']) {
                 $this->_amountNetto = $this->_amountNetto + $this->_order['invoice_shipping'];
             } else {
@@ -532,9 +517,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                         // Fix defined tax
                         $temporaryTax = (int) $ticketResult['taxconfig'];
                         $getTaxRate = Shopware()->Db()->fetchOne("
-                        SELECT tax FROM s_core_tax WHERE id = $temporaryTax
+                            SELECT tax FROM s_core_tax WHERE id = $temporaryTax
                         ");
-                        $position['tax'] = $getTaxRate['tax'];
+                        $position['tax'] = $getTaxRate;
                     } else {
                         $position['tax'] = 0;
                     }
@@ -689,7 +674,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         ", [$this->_order['dispatchID']]);
 
         if (empty($this->_dispatch)) {
-            $this->_dispatch = [];
+            $this->_dispatch = new ArrayObject();
         }
         $this->_dispatch = new ArrayObject($this->_dispatch, ArrayObject::ARRAY_AS_PROPS);
     }

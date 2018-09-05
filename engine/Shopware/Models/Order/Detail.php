@@ -63,7 +63,7 @@ class Detail extends ModelEntity
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\DetailStatus")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
      *
-     * @var \Shopware\Models\Order\Status
+     * @var \Shopware\Models\Order\DetailStatus
      */
     protected $status;
 
@@ -217,7 +217,7 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
-    private $releaseDate = null;
+    private $releaseDate;
 
     /**
      * @var int
@@ -568,7 +568,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return Status
+     * @return \Shopware\Models\Order\DetailStatus
      */
     public function getStatus()
     {
@@ -689,7 +689,7 @@ class Detail extends ModelEntity
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[0])) {
-                /** @var $oldArticle \Shopware\Models\Article\Detail */
+                /** @var \Shopware\Models\Article\Detail $oldArticle */
                 $oldArticle = $repository->findOneBy(['number' => $articleChange[0]]);
             }
 
@@ -698,7 +698,7 @@ class Detail extends ModelEntity
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[1])) {
-                /** @var $newArticle \Shopware\Models\Article\Detail */
+                /** @var \Shopware\Models\Article\Detail $newArticle */
                 $newArticle = $repository->findOneBy(['number' => $articleChange[1]]);
             }
 
@@ -739,7 +739,7 @@ class Detail extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\OrderDetail|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\OrderDetail
+     * @return Detail
      */
     public function setAttribute($attribute)
     {

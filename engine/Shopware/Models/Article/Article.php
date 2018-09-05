@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Category\Category as ArticleCategory;
+use Shopware\Models\Property\Group;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -60,12 +61,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $categories;
@@ -75,12 +76,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories_ro",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $allCategories;
@@ -88,10 +89,10 @@ class Article extends ModelEntity
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Article\SeoCategory",
-     *      mappedBy="article",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Article\SeoCategory",
+     *     mappedBy="article",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $seoCategories;
@@ -101,12 +102,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_articles_avoid_customergroups",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
+     *     }
      * )
      */
     protected $customerGroups;
@@ -116,12 +117,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\ProductStream\ProductStream")
      * @ORM\JoinTable(name="s_product_streams_articles",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $relatedProductStreams;
@@ -129,7 +130,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var ArrayCollection
+     * @var Group
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Property\Group", inversedBy="articles")
      * @ORM\JoinColumn(name="filtergroupID", referencedColumnName="id")
@@ -141,12 +142,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_relationships",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
+     *     }
      * )
      */
     protected $related;
@@ -156,12 +157,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_similar",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
+     *     }
      * )
      */
     protected $similar;
@@ -186,7 +187,7 @@ class Article extends ModelEntity
      * @Assert\Valid
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="article", cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     protected $details;
 
@@ -233,7 +234,7 @@ class Article extends ModelEntity
      * @Assert\Valid
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="article", orphanRemoval=true, cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"position": "ASC"})
      */
     protected $images;
 
@@ -282,12 +283,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinTable(name="s_filter_articles",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="valueID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="valueID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $propertyValues;
@@ -323,42 +324,42 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="main_detail_id", type="integer", nullable=true)
      */
-    private $mainDetailId = null;
+    private $mainDetailId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="supplierID", type="integer", nullable=true)
      */
-    private $supplierId = null;
+    private $supplierId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="taxID", type="integer", nullable=true)
      */
-    private $taxId = null;
+    private $taxId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
      */
-    private $priceGroupId = null;
+    private $priceGroupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="filtergroupID", type="integer", nullable=true)
      */
-    private $filterGroupId = null;
+    private $filterGroupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
-    private $configuratorSetId = null;
+    private $configuratorSetId;
 
     /**
      * @var string
@@ -374,26 +375,26 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description_long", type="text", nullable=true)
      */
-    private $descriptionLong = null;
+    private $descriptionLong;
 
     /**
      * @var \DateTime
      *
-     * @Assert\DateTime()
+     * @Assert\DateTime
      *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
-    private $added = null;
+    private $added;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -407,7 +408,7 @@ class Article extends ModelEntity
     private $pseudoSales = 0;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="topseller", type="boolean", nullable=false)
      */
@@ -418,31 +419,31 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
      */
-    private $keywords = null;
+    private $keywords;
 
     /**
      * @var string
      *
      * @ORM\Column(name="metaTitle", type="string", length=255, nullable=true)
      */
-    private $metaTitle = null;
+    private $metaTitle;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="changetime", type="datetime", nullable=false)
      */
-    private $changed = 'now';
+    private $changed;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="pricegroupActive", type="boolean", nullable=false)
      */
     private $priceGroupActive = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @deprecated Since version 5.4, to be removed in 6.0
      * @ORM\Column(name="laststock", type="boolean", nullable=false)
@@ -450,14 +451,14 @@ class Article extends ModelEntity
     private $lastStock = false;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="crossbundlelook", type="integer", nullable=false)
+     * @ORM\Column(name="crossbundlelook", type="boolean", nullable=false)
      */
     private $crossBundleLook = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="notification", type="boolean", nullable=false)
      */
@@ -482,14 +483,14 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="available_from", type="datetime", nullable=true)
      */
-    private $availableFrom = null;
+    private $availableFrom;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="available_to", type="datetime", nullable=true)
      */
-    private $availableTo = null;
+    private $availableTo;
 
     /**
      * Class constructor.
@@ -674,7 +675,7 @@ class Article extends ModelEntity
     /**
      * Set highlight
      *
-     * @param int $highlight
+     * @param bool $highlight
      *
      * @return Article
      */
@@ -688,7 +689,7 @@ class Article extends ModelEntity
     /**
      * Get highlight
      *
-     * @return int
+     * @return bool
      */
     public function getHighlight()
     {
@@ -774,7 +775,7 @@ class Article extends ModelEntity
     /**
      * Set priceGroupActive
      *
-     * @param int $priceGroupActive
+     * @param bool $priceGroupActive
      *
      * @return Article
      */
@@ -788,7 +789,7 @@ class Article extends ModelEntity
     /**
      * Get priceGroupActive
      *
-     * @return int
+     * @return bool
      */
     public function getPriceGroupActive()
     {
@@ -798,7 +799,7 @@ class Article extends ModelEntity
     /**
      * Set lastStock
      *
-     * @param int $lastStock
+     * @param bool $lastStock
      *
      * @return Article
      */
@@ -812,7 +813,7 @@ class Article extends ModelEntity
     /**
      * Get lastStock
      *
-     * @return int
+     * @return bool
      */
     public function getLastStock()
     {
@@ -822,7 +823,7 @@ class Article extends ModelEntity
     /**
      * Set notification
      *
-     * @param int $notification
+     * @param bool $notification
      *
      * @return Article
      */
@@ -836,7 +837,7 @@ class Article extends ModelEntity
     /**
      * Get notification
      *
-     * @return int
+     * @return bool
      */
     public function getNotification()
     {
@@ -1109,7 +1110,7 @@ class Article extends ModelEntity
     /**
      * @param \Shopware\Models\Article\Supplier|array|null $supplier
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return Article
      */
     public function setSupplier($supplier)
     {
@@ -1145,11 +1146,12 @@ class Article extends ModelEntity
     /**
      * @param \Shopware\Models\Article\Detail|array|null $mainDetail
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Article
      */
     public function setMainDetail($mainDetail)
     {
         $return = $this->setOneToOne($mainDetail, '\Shopware\Models\Article\Detail', 'mainDetail', 'article');
+
         if ($this->mainDetail instanceof \Shopware\Models\Article\Detail) {
             $this->mainDetail->setKind(1);
         }
@@ -1214,7 +1216,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getCrossBundleLook()
     {
@@ -1222,7 +1224,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param int $crossBundleLook
+     * @param bool $crossBundleLook
      *
      * @return Article
      */
@@ -1288,9 +1290,7 @@ class Article extends ModelEntity
      */
     public function setConfiguratorSet($configuratorSet)
     {
-        $this->setManyToOne($configuratorSet, '\Shopware\Models\Article\Configurator\Set', 'configuratorSet');
-
-        return $this;
+        return $this->setManyToOne($configuratorSet, '\Shopware\Models\Article\Configurator\Set', 'configuratorSet');
     }
 
     /**
@@ -1344,7 +1344,7 @@ class Article extends ModelEntity
     /**
      * @param ArrayCollection $seoCategories
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return Article
      */
     public function setSeoCategories($seoCategories)
     {
@@ -1373,8 +1373,8 @@ class Article extends ModelEntity
     }
 
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
      */
     public function updateChangedTimestamp()
     {

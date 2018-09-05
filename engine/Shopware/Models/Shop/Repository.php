@@ -26,8 +26,8 @@ namespace Shopware\Models\Shop;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Model\QueryBuilder;
 
 class Repository extends ModelRepository
 {
@@ -359,7 +359,7 @@ class Repository extends ModelRepository
     /**
      * @param \Enlight_Controller_Request_Request $request
      *
-     * @return DetachedShop
+     * @return DetachedShop|null
      */
     public function getActiveByRequest($request)
     {
@@ -399,11 +399,11 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -437,11 +437,11 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getActiveQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->getQueryBuilder()
             ->where('shop.active = 1');
     }
@@ -624,11 +624,11 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     private function getActiveMainShopQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -654,11 +654,11 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     private function getActiveSubShopQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 

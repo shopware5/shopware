@@ -71,7 +71,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the creation date of the media.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getCreated()
     {
@@ -85,7 +85,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the id of the user, who uploaded the file.
      *
-     * @return int
+     * @return int|null
      */
     public function getUserId()
     {
@@ -169,7 +169,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the id of the assigned album.
      *
-     * @return int
+     * @return int|null
      */
     public function getAlbumId()
     {
@@ -197,7 +197,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the memory size of the file.
      *
-     * @return float
+     * @return float|string
      */
     public function getFileSize()
     {
@@ -211,7 +211,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the memory size of the file.
      *
-     * @return float
+     * @return string|int
      */
     public function getFormattedFileSize()
     {

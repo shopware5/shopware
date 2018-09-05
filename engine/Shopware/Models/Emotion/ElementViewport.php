@@ -38,14 +38,14 @@ use Shopware\Components\Model\ModelEntity;
 class ElementViewport extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Emotion\Element
+     * @var \Shopware\Models\Emotion\Element|null
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Element", inversedBy="viewports")
      * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
      */
     protected $element;
 
     /**
-     * @var \Shopware\Models\Emotion\Emotion
+     * @var \Shopware\Models\Emotion\Emotion|null
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
      * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
      */
@@ -64,7 +64,7 @@ class ElementViewport extends ModelEntity
     /**
      * Id of the associated \Shopware\Models\Emotion\Element
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="elementID", type="integer", nullable=false)
      */
@@ -73,7 +73,7 @@ class ElementViewport extends ModelEntity
     /**
      * Id of the associated \Shopware\Models\Emotion\Emotion model.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="emotionID", type="integer", nullable=false)
      */
@@ -233,7 +233,7 @@ class ElementViewport extends ModelEntity
     }
 
     /**
-     * @return Element
+     * @return Element|null
      */
     public function getElement()
     {
@@ -249,7 +249,7 @@ class ElementViewport extends ModelEntity
     }
 
     /**
-     * @return Emotion
+     * @return Emotion|null
      */
     public function getEmotion()
     {

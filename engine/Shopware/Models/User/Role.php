@@ -123,7 +123,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * The children inherits all privileges from his parent.
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="\Shopware\Models\User\Role", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="parent")
      */
     private $children;
 
@@ -131,8 +131,8 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * The parent property contains the instance of the inherited Shopware\Models\User\Role
      * model. The Role inherits all privileges from his parent.
      *
-     * @var null|\Shopware\Models\User\Role
-     * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="children")
+     * @var null|Role
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      */
     private $parent;
@@ -321,7 +321,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users
      *
-     * @return \Shopware\Models\User\Role
+     * @return Role
      */
     public function setUsers($users)
     {
@@ -365,7 +365,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      *
      * @param $children \Doctrine\Common\Collections\ArrayCollection
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Role
      */
     public function setChildren($children)
     {
@@ -379,7 +379,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * contains the inherited parent role. The association is defined over
      * the Role.id property and the Role.parentId property.
      *
-     * @return \Shopware\Models\User\Role
+     * @return Role
      */
     public function getParent()
     {
@@ -392,7 +392,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * contains the inherited parent role. The association is defined over
      * the Role.id property and the Role.parentId property.
      *
-     * @param $parent \Shopware\Models\User\Role
+     * @param $parent Role
      */
     public function setParent($parent)
     {
