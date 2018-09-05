@@ -386,6 +386,14 @@
             <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
+        <service id="legacy_documentid_converter" class="Shopware\Components\Compatibility\LegacyDocumentIdConverter">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="legacy_mysql8_migration_command" class="Shopware\Components\Compatibility\MigrateMysql8Command">
+            <tag name="console.command" command="sw:migrate:mysql8" />
+        </service>
+
         <service id="query_alias_mapper" class="Shopware\Components\QueryAliasMapper">
             <factory class="Shopware\Components\QueryAliasMapper" method="createFromConfig" />
             <argument type="service" id="config" />
