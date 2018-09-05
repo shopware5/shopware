@@ -220,7 +220,6 @@ class OrdersProvider implements BatchableProviderInterface
             $currentHydratedOrder['isNet'] = (bool) $order['net'];
             $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
             $currentHydratedOrder['datetime'] = $dateTime->format('Y-m-d H:i:s');
-            $currentHydratedOrder['date_time'] = $order['ordertime'];
             $currentHydratedOrder['customer'] = $order['customer'];
 
             $currentHydratedOrder['analytics'] = [
@@ -245,7 +244,7 @@ class OrdersProvider implements BatchableProviderInterface
                 ],
             ];
 
-            $currentHydratedOrder['items'] = $order['details'];
+            $currentHydratedOrder['items'] = isset($order['details']) ? $order['details'] : [];
 
             $isCancelOrder = $currentHydratedOrder['status'] === 4;
 
