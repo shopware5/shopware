@@ -187,6 +187,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             return;
         }
 
+        if (Ext.isDefined(me.subApplication.params) && Ext.isDefined(me.subApplication.params.openLogin) && me.subApplication.params.openLogin) {
+            Shopware.app.Application.fireEvent('open-login', Ext.emptyFn);
+        }
+
         if (me.subApplication.action === 'PremiumPlugins') {
             Shopware.app.Application.fireEvent('display-premium-plugins');
             return;

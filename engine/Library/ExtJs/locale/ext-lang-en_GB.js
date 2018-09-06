@@ -577,7 +577,10 @@ Ext.onReady(function() {
             confirm_open_pluginmanager: 'You have installed unlicensed plugins. Do you want to open the Plugin Manager now to check your plugins?',
             subscription: 'Subscription',
             subscription_hide_message: 'Would you like to hide this message for a week?',
-            openPluginOverview: 'Plugin overview'
+            openPluginOverview: 'Plugin overview',
+            importantInformation: 'Important Information',
+            noShopSecretWarning: 'In order to receive information about updates and install plugins, you need to log in to your Shopware account. If you don\'t have a Shopware account yet, you can easily register.',
+            login: 'Login now'
         }
     });
 });

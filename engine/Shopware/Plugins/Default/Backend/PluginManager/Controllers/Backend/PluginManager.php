@@ -223,6 +223,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             }
 
             $data = $pluginInformation->jsonSerialize();
+
+            $data['shopSecretMissing'] = $subscriptionService->getException() instanceof StoreException;
             $data['live'] = false;
 
             $this->View()->assign('data', $data);

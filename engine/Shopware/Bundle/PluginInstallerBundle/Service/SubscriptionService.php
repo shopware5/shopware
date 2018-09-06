@@ -33,6 +33,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopwareReleaseStruct;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Class SubscriptionService
@@ -63,6 +64,11 @@ class SubscriptionService
      * @var ShopwareReleaseStruct
      */
     private $release;
+
+    /**
+     * @var \Exception
+     */
+    private $exception;
 
     /**
      * @param Connection            $connection
@@ -108,8 +114,7 @@ class SubscriptionService
 
         $statement = $queryBuilder->execute();
 
-        $secret = $statement->fetchColumn();
-        $secret = unserialize($secret);
+        $secret = unserialize($statement->fetchColumn());
 
         return $secret;
     }
@@ -147,10 +152,13 @@ class SubscriptionService
 
             return $this->getPluginInformationFromApi();
         } catch (ShopSecretException $e) {
+            $this->exception = $e;
             $this->resetShopSecret();
 
             return false;
         } catch (\Exception $e) {
+            $this->exception = $e;
+
             return false;
         }
     }
@@ -179,10 +187,6 @@ class SubscriptionService
             $header
         );
 
-        if (empty($secret)) {
-            return false;
-        }
-
         $isShopUpgraded = $data['general']['isUpgraded'];
         $pluginInformationStructs = array_map(
             function ($plugin) {
@@ -210,6 +214,14 @@ class SubscriptionService
         $this->pluginLicenceService->updateLocalLicenseInformation($pluginInformationStructs, $domain);
 
         return new PluginInformationResultStruct($pluginInformationStructs, $isShopUpgraded);
+    }
+
+    /**
+     * @return \Exception
+     */
+    public function getException()
+    {
+        return $this->exception;
     }
 
     /**
@@ -245,7 +257,7 @@ class SubscriptionService
      */
     private function getDomain()
     {
-        $repo = $this->models->getRepository(\Shopware\Models\Shop\Shop::class);
+        $repo = $this->models->getRepository(Shop::class);
 
         $default = $repo->getActiveDefault();
 
