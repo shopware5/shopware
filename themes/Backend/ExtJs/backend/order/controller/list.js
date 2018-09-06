@@ -184,6 +184,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
                     listStore: me.getOrderListGrid().getStore(),
                     mail: mail,
                     record: record,
+                    order: record,
                     documentTypeStore: documentTypeStore
                 }).show();
             }
