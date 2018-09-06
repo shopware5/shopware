@@ -87,7 +87,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return FacetHandlerInterface[]
+     * @return FacetHandlerInterface[]|PartialFacetHandlerInterface[]
      */
     public function registerFacetHandlers()
     {

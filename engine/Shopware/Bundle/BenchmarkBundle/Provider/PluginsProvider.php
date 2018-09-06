@@ -70,7 +70,7 @@ class PluginsProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return int
+     * @return array
      */
     private function getShopwarePlugins()
     {

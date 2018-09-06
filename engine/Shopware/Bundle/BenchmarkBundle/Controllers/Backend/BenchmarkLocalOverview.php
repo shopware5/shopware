@@ -113,7 +113,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $now = new DateTime('now');
         $diff = $now->diff($this->getWaitingSinceDate());
 
-        return $diff->h + ($diff->days * 24);
+        return (int) ($diff->h + ($diff->days * 24));
     }
 
     /**
