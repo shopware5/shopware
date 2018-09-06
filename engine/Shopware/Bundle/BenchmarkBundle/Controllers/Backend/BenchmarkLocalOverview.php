@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
 
         $this->View()->assign('benchmarkTranslations', json_encode(
             $this->get('shopware.benchmark_bundle.components.translation')->getAll(),
-            JSON_HEX_TAG
+            JSON_HEX_APOS
         ));
 
         $this->View()->assign('benchmarkDefaultLanguage', $this->Request()->getParam('lang', 'de'));
