@@ -39,9 +39,6 @@
  */
 //{namespace name=backend/article/view/main}
 //{block name="backend/article/view/detail/window"}
-Ext.override(Ext.container.DockingContainer, {
-    dockedItems: []
-});
 Ext.define('Shopware.apps.Article.view.detail.Window', {
     /**
      * Define that the order main window is an extension of the enlight application window
