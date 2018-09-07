@@ -321,7 +321,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         }
 
                         // If neither sending nor receiving is necessary, set interval to 12 hours
-                        if (!res.statistics && !res.bi) {
+                        if (!res.statistics && !res.bi && !res.message) {
                             interval = 43200000;
                         }
 
