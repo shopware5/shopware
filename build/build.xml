@@ -118,7 +118,8 @@
             <arg value="fix" />
             <arg value="--dry-run" />
             <arg value="--stop-on-violation" />
-            <arg value="-v" />
+            <arg value="--verbose" />
+            <arg value="--show-progress=dots" />
         </exec>
     </target>
 
