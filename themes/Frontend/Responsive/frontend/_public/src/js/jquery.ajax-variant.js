@@ -151,19 +151,28 @@
                     $.publish('plugin/swAjaxVariant/onRequestData', [me, response, values, stateObj.location]);
 
                     if (pushState && me.hasHistorySupport) {
-                        var location = stateObj.location + '?number=' + ordernumber;
-
-                        if (stateObj.params.hasOwnProperty('c')) {
-                            location += '&c=' + stateObj.params.c;
-                        }
-
-                        window.history.pushState(stateObj.state, stateObj.title, location);
+                        me.pushState(stateObj);
                     }
                 },
                 complete: function () {
                     $.loadingIndicator.close();
                 }
             });
+        },
+        
+        /**
+         * Push state to browser history.
+         */
+        pushState: function(stateObj) {
+            var me = this;
+            
+            var location = stateObj.location + '?number=' + ordernumber;
+
+            if (stateObj.params.hasOwnProperty('c')) {
+                location += '&c=' + stateObj.params.c;
+            }
+
+            window.history.pushState(stateObj.state, stateObj.title, location);
         },
 
         /**
