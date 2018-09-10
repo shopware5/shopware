@@ -25,17 +25,7 @@ class Migrations_Migration1438 extends Shopware\Components\Migrations\AbstractMi
 {
     public function up($modus)
     {
-        $widgets = [
-            'turnover',
-            'conversion',
-            'order',
-            'visitor',
-        ];
-
-        foreach ($widgets as $widget) {
-            $this->addSql(sprintf('INSERT INTO `s_core_widgets` (`name`, `label`, `plugin_id`) VALUES (\'swag-bi-%s\', NULL, NULL);', $widget));
-        }
-
+        $this->addSql('INSERT INTO `s_core_widgets` (`name`, `label`, `plugin_id`) VALUES (\'swag-bi-base\', NULL, NULL);');
         $this->addSql('ALTER TABLE `s_core_widget_views` ADD `data` text NULL;');
     }
 }

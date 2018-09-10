@@ -876,6 +876,19 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             }
         });
 
+        items.push({
+            text: '{s name=shopware_bi namespace=backend/index/view/widgets}{/s}',
+            widgetId: null,
+            iconCls: 'sprite-plus-circle-frame',
+            listeners: {
+                click: function () {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Benchmark'
+                    });
+                }
+            }
+        });
+
         return items;
     },
 
@@ -1043,7 +1056,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 me.addWidgetByName({
                     name: widgetInfo[0],
                     data: {
-                        shopId: widgetInfo[1]
+                        shopId: widgetInfo[1],
+                        name: widgetInfo[2],
+                        title: widgetInfo[3]
                     }
                 })
             }
