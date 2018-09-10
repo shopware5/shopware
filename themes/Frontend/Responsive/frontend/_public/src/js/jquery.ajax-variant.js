@@ -164,8 +164,6 @@
          * Push state to browser history.
          */
         pushState: function(stateObj) {
-            var me = this;
-            
             var location = stateObj.location + '?number=' + ordernumber;
 
             if (stateObj.params.hasOwnProperty('c')) {
