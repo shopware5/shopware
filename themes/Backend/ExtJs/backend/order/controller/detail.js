@@ -764,6 +764,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         record.get('id')
                     ],
                     record: record,
+                    order: record,
                     listStore: me.getOrderList().getStore(),
                     documentTypeStore: documentTypeStore,
                     mail: mail

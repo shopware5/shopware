@@ -123,6 +123,10 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         me.dockedItems = me.getToolbar();
 
         me.callParent(arguments);
+
+        if (me.mail) {
+            me.loadRecord(me.mail);
+        }
     },
 
     /**
@@ -150,8 +154,10 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         // Select the correct mail template for the clicked document
         this.mailTemplateStore.load({
             callback: function () {
-                var documentType = this.documentTypeStore.getById(this.preSelectedAttachment.get('typeId'));
-                this.mailTemplateComboBox.selectTemplateByDocumentType(documentType);
+                if (this.preSelectedAttachment) {
+                    var documentType = this.documentTypeStore.getById(this.preSelectedAttachment.get('typeId'));
+                    this.mailTemplateComboBox.selectTemplateByDocumentType(documentType);
+                }
             },
             scope: this
         });
@@ -205,7 +211,6 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         var me = this;
 
         var fields = [
-            this.createMailTemplateComboBox(),
             {
                 xtype: 'textfield',
                 name: 'to',
@@ -224,6 +229,10 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
             this.createTextContentEditor(),
             this.createHtmlContentEditor()
         ];
+
+        if (!this.mail) {
+            fields = Ext.Array.insert(fields, 0, [this.createMailTemplateComboBox()]);
+        }
 
         me.attachmentGrid = Ext.create('Shopware.apps.Order.view.mail.Attachment', {
             preSelectedAttachment: me.preSelectedAttachment,
@@ -279,7 +288,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
      * @return { Ext.form.field.Text }
      */
     createTextContentEditor: function () {
-        this.textContentTextField = Ext.create('Ext.form.field.Text', {
+        this.textContentTextField = Ext.create('Ext.form.field.TextArea', {
             name: 'content',
             minHeight: 90,
             flex: 1,

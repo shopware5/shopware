@@ -128,7 +128,8 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
             order: this.order,
             preSelectedAttachment: this.preSelectedAttachment,
             listStore: this.listStore,
-            documentTypeStore: this.documentTypeStore
+            documentTypeStore: this.documentTypeStore,
+            mail: this.mail
         });
 
         me.items = me.form;

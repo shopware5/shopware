@@ -1910,7 +1910,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function getMailForOrder($orderId, $statusId, $documentTypeId = null)
     {
-        $templateName = $this->getTemplateNameForDocumentTypeId($documentTypeId);
+        $templateName = null;
+
+        if ($documentTypeId !== null) {
+            $templateName = $this->getTemplateNameForDocumentTypeId($documentTypeId);
+        }
 
         /** @var $mail Enlight_Components_Mail */
         $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, (int) $statusId, $templateName);

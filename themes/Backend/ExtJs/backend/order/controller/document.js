@@ -75,6 +75,7 @@ Ext.define('Shopware.apps.Order.controller.Document', {
             scope: me,
             callback: function() {
                 this.getView('mail.Window').create({
+                    record: order,
                     order: order,
                     preSelectedAttachment: record,
                     documentTypeStore: documentTypeStore,

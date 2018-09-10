@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
      * @param { Shopware.apps.Order.model.Receipt } selected
      */
     onAttachmentSelectionChange: function (attachmentsStore, selectionModel, selected) {
-        if (this.getMailForm().modified) {
+        if (this.getMailForm().modified || !Ext.isDefined(this.getMailForm().mailTemplateComboBox)) {
             // Don't change the template if the user has already typed stuff in the form
             return;
         }
