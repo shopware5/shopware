@@ -25,12 +25,26 @@ class Migrations_Migration1411 extends Shopware\Components\Migrations\AbstractMi
 {
     public function up($modus)
     {
-        /**
+        /*
          * Column case change does not flush cache and we still get in the constraint upper case column name
          * We need to rename it to a another name and then back
          * @ticket: https://jira.mariadb.org/browse/MDEV-13671
          */
-        $this->addSql('ALTER TABLE `s_order_documents_attributes` DROP FOREIGN KEY `s_order_documents_attributes_ibfk_1`;');
-        $this->addSql('ALTER TABLE `s_order_documents` CHANGE COLUMN `ID` `id_tmp` INT(11) NOT NULL AUTO_INCREMENT FIRST;');
+        if ($modus === self::MODUS_UPDATE) {
+            return;
+        }
+
+        $this->addSql(
+            'ALTER TABLE `s_order_documents_attributes` DROP FOREIGN KEY `s_order_documents_attributes_ibfk_1`;'
+        );
+        $this->addSql(
+            'ALTER TABLE `s_order_documents` CHANGE COLUMN `ID` `id_tmp` INT(11) NOT NULL AUTO_INCREMENT FIRST;'
+        );
+        $this->addSql(
+            'ALTER TABLE `s_order_documents` CHANGE COLUMN `id_tmp` `id` INT(11) NOT NULL AUTO_INCREMENT FIRST;'
+        );
+        $this->addSql(
+            'ALTER TABLE `s_order_documents_attributes` ADD CONSTRAINT `s_order_documents_attributes_ibfk_1` FOREIGN KEY (`documentID`) REFERENCES `s_order_documents` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE;'
+        );
     }
 }

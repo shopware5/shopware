@@ -275,3 +275,30 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 To activate elasticsearch in backend you have to enable the `es => backend => enabled` parameter in the `config.php` and start a indexation
 of the backend entities with `sw:es:backend:index:populate`.
+
+### MySQL 8 workaround
+
+Due to a mixture of MySQL 8 and Doctrine constraints, the column `s_core_documents.ID` will be renamed to
+`s_core_documents.id` on the fly if MySQL 8 is being used. To be able to do that, the service `\Shopware\Components\Compatibility\LegacyDocumentIdConverter`
+was introduced, which is checked in the file `engine/Shopware/Models/Order/Document/Document.php` to determine if
+a Doctrine model with uppercase or lowercase `id` needs to be used.
+
+If you need to reference this column in your own model, we recommend to use the same workaround there. You can use the
+same service (see above) with id `legacy_documentid_converter` for that.
+
+The reason for this workaround is that MySQL 8 forces Ids in foreign key constraints to be lower case.
+
+This is a problem since we have (in current systems) an uppercase "ID" in table `s_order_documents`.
+MySQL doesn't care if we use "ID" in the table and "id" in the constraint, but Doctrine needs both to be written 
+in the same way. On new installations of Shopware 5.5 this is already the case, both are lowercase there.
+
+So in order to support MySQL 8 on updates from older Shopware versions we need to change the case of the `id` column
+in `s_order_documents`, which breaks support of blue/green deployments as older versions of Shopware (< 5.5) need
+that column to be uppercase.
+
+Since this change is only really necessary if you are using MySQL 8, it is only enforced when a MySQL 8 server is
+detected. A downgrade to an older Shopware installation wouldn't be possible anyway in that case, as Shopware 5.4
+does not support MySQL 8 yet.
+
+If you want to make this migration offline, there is the command `sw:migrate:mysql8` to check if the migration was
+executed and do so if you want.
