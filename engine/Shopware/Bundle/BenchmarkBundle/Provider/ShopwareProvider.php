@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\License\Service\LicenseUnpackServiceInterface;
 use Shopware\Components\ShopwareReleaseStruct;
 
 class ShopwareProvider implements BenchmarkProviderInterface
@@ -43,13 +44,23 @@ class ShopwareProvider implements BenchmarkProviderInterface
     private $releaseStruct;
 
     /**
-     * @param Connection            $connection
-     * @param ShopwareReleaseStruct $releaseStruct
+     * @var LicenseUnpackServiceInterface
      */
-    public function __construct(Connection $connection, ShopwareReleaseStruct $releaseStruct)
-    {
+    private $licenseUnpackService;
+
+    /**
+     * @param Connection                    $connection
+     * @param ShopwareReleaseStruct         $releaseStruct
+     * @param LicenseUnpackServiceInterface $licenseUnpackService
+     */
+    public function __construct(
+        Connection $connection,
+        ShopwareReleaseStruct $releaseStruct,
+        LicenseUnpackServiceInterface $licenseUnpackService
+    ) {
         $this->connection = $connection;
         $this->releaseStruct = $releaseStruct;
+        $this->licenseUnpackService = $licenseUnpackService;
     }
 
     public function getName()
@@ -202,10 +213,19 @@ class ShopwareProvider implements BenchmarkProviderInterface
         $license = $this->connection->fetchColumn('SELECT license FROM s_core_licenses WHERE active=1 AND module = "SwagCommercial"');
 
         if (!$license) {
-            $license = 'community';
+            return 'ce';
         }
 
-        return $license;
+        try {
+            $licenseInfo = $this->licenseUnpackService->readLicenseInfo($license);
+
+            if (isset($licenseInfo['product'])) {
+                return strtolower($licenseInfo['product']);
+            }
+        } catch (\Exception $e) {
+        }
+
+        return 'ce';
     }
 
     /**
