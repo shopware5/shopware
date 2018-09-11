@@ -156,7 +156,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                     Shopware.Notification.createStickyGrowlMessage({
                         title: me.snippets.importantInformation,
                         text: me.snippets.noShopSecretWarning,
-                        width: 330,
+                        width: 460,
                         btnDetail: {
                             text: me.snippets.login,
                             callback: function () {
