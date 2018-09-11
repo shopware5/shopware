@@ -22,6 +22,7 @@
  */
 Ext.define('Shopware.apps.Index.view.widgets.bi.Base', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
+    alias: 'widget.swag-bi-base',
     layout: 'fit',
     height: 480,
     bodyPadding: '1 0 0 0',
@@ -45,11 +46,12 @@ Ext.define('Shopware.apps.Index.view.widgets.bi.Base', {
         }
 
         me.widgetRecord.data.shopId = parseInt(me.widgetRecord.data.shopId);
+        me.widgetRecord.data.title = me.widgetRecord.data.title || '';
 
         me.items = [
             {
                 xtype: 'container',
-                html: '<iframe frameborder="0" scrolling="no" src="{url controller=BenchmarkOverview action=render fullPath}?shopId=' + me.widgetRecord.data.shopId + '&name=' + me.widgetName + '&mode=widget"></iframe>'
+                html: '<iframe frameborder="0" scrolling="no" src="{url controller=BenchmarkOverview action=render fullPath}?shopId=' + me.widgetRecord.data.shopId + '&name=' + me.widgetRecord.data.name + '&mode=widget"></iframe>'
             }
         ];
 
@@ -66,9 +68,7 @@ Ext.define('Shopware.apps.Index.view.widgets.bi.Base', {
                 }
             })
         } else {
-            if (me.title.indexOf(record.get('name')) === -1) {
-                me.title = record.get('name') + ' - ' + me.title;
-            }
+            me.title = record.get('name') + ' - ' + me.widgetRecord.data.title;
         }
 
         me.callParent();
@@ -79,8 +79,6 @@ Ext.define('Shopware.apps.Index.view.widgets.bi.Base', {
      * @param { string } name
      */
     updateTitle: function (name) {
-        if (this.title.indexOf(name) === -1) {
-            this.setTitle(name + ' - ' + this.title);
-        }
+        this.setTitle(name + ' - ' + this.widgetRecord.data.title);
     }
 });

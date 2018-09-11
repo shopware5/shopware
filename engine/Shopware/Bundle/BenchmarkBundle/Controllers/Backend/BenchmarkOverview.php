@@ -93,13 +93,15 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
 
         $shops[$currentShop]['active'] = 1;
 
+        $widgetsAllowed = (int) $this->_isAllowed('swag-bi-base', 'widgets');
+
         $this->View()->assign([
             'shops' => $shops,
             'shopSwitchUrl' => $this->Front()->Router()->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
                 'shopId' => 'replaceShopId',
-            ]),
+            ]) . '?widgetAllowed=' . $widgetsAllowed,
         ]);
     }
 
@@ -196,11 +198,15 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $cachingHandler = $this->get('shopware.benchmark_bundle.components.template_caching_handler');
 
         if ($cachingHandler->isTemplateCached()) {
-            $this->redirect([
+            $link = $this->get('router')->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
                 'shopId' => $this->getShopId(),
             ]);
+
+            $widgetsAllowed = (int) $this->_isAllowed('swag-bi-base', 'widgets');
+
+            $this->redirect($link . '?widgetAllowed=' . $widgetsAllowed);
 
             return;
         }

@@ -168,6 +168,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         $controller = parent::getController();
 
         Shopware()->Container()->set('auth', new AuthMock());
+        Shopware()->Plugins()->Backend()->Auth()->onInitResourceAuth(new \Enlight_Event_EventArgs());
 
         return $controller;
     }
