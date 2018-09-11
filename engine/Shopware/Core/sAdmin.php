@@ -1913,26 +1913,35 @@ class sAdmin
             if (!empty($value[0]) && isset($value[1])) {
                 $number = (int) str_ireplace('attr', '', $value[0]);
 
-                $sql = "
-                    SELECT s_articles_attributes.id
-                    FROM s_order_basket, s_articles_attributes, s_articles_details
-                    WHERE s_order_basket.sessionID = ?
-                    AND s_order_basket.modus = 0
-                    AND (
-                        s_order_basket.ordernumber = s_articles_details.ordernumber
-                        OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
-                    )
-                    AND s_articles_details.id = s_articles_attributes.articledetailsID
-                    AND s_articles_attributes.attr{$number} = ?
-                    LIMIT 1
-                ";
+                $sql_productOrdernumber = $this->connection->createQueryBuilder()
+                   ->select(['s_articles_attributes.id'])
+                   ->from('s_order_basket, s_articles_attributes, s_articles_details')
+                   ->where('s_order_basket.sessionID = :sessionID')
+                   ->andWhere('s_order_basket.modus = 0')
+                   ->andWhere('s_order_basket.ordernumber = s_articles_details.ordernumber')
+                   ->andWhere('s_articles_details.id = s_articles_attributes.articledetailsID')
+                   ->andWhere('s_articles_attributes.attr' . $number . ' = :attrValue')
+                   ->setParameters([
+                       'attrValue' => $value[1],
+                       'sessionID' => $this->session->offsetGet('sessionId'),
+                   ])
+                   ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                $checkProduct = $this->db->fetchOne(
-                    $sql,
-                    [$this->session->offsetGet('sessionId'), $value[1]]
-                );
+                $sql_productId = $this->connection->createQueryBuilder()
+                  ->select(['s_articles_attributes.id'])
+                  ->from('s_order_basket, s_articles_attributes, s_articles_details')
+                  ->where('s_order_basket.sessionID = :sessionID')
+                  ->andWhere('s_order_basket.modus = 0')
+                  ->andWhere('s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1')
+                  ->andWhere('s_articles_details.id = s_articles_attributes.articledetailsID')
+                  ->andWhere('s_articles_attributes.attr' . $number . ' = :attrValue')
+                  ->setParameters([
+                      'attrValue' => $value[1],
+                      'sessionID' => $this->session->offsetGet('sessionId'),
+                  ])
+                  ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                return (bool) $checkProduct;
+                return (bool) $sql_productOrdernumber || (bool) $sql_productId;
             }
 
             return false;
@@ -1955,29 +1964,35 @@ class sAdmin
             if (!empty($value[0]) && isset($value[1])) {
                 $number = (int) str_ireplace('attr', '', $value[0]);
 
-                $sql = "
-                SELECT s_articles_attributes.id
-                FROM s_order_basket, s_articles_attributes, s_articles_details
-                WHERE
-                s_order_basket.sessionID=?
-                AND s_order_basket.modus=0
-                AND (
-                s_order_basket.ordernumber = s_articles_details.ordernumber
-                OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
-                )
-                AND s_articles_details.id = s_articles_attributes.articledetailsID
-                AND s_articles_attributes.attr{$number}!= ?
-                LIMIT 1
-                ";
-                $checkProduct = $this->db->fetchOne(
-                    $sql,
-                    [
-                        $this->session->offsetGet('sessionId'),
-                        $value[1],
-                    ]
-                );
+                $sql_productOrdernumber = $this->connection->createQueryBuilder()
+                   ->select(['s_articles_attributes.id'])
+                   ->from('s_order_basket, s_articles_attributes, s_articles_details')
+                   ->where('s_order_basket.sessionID = :sessionID')
+                   ->andWhere('s_order_basket.modus = 0')
+                   ->andWhere('s_order_basket.ordernumber = s_articles_details.ordernumber')
+                   ->andWhere('s_articles_details.id = s_articles_attributes.articledetailsID')
+                   ->andWhere('s_articles_attributes.attr' . $number . ' != :attrValue')
+                   ->setParameters([
+                       'attrValue' => $value[1],
+                       'sessionID' => $this->session->offsetGet('sessionId'),
+                   ])
+                   ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                return (bool) $checkProduct;
+                $sql_productId = $this->connection->createQueryBuilder()
+                  ->select(['s_articles_attributes.id'])
+                  ->from('s_order_basket, s_articles_attributes, s_articles_details')
+                  ->where('s_order_basket.sessionID = :sessionID')
+                  ->andWhere('s_order_basket.modus = 0')
+                  ->andWhere('s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1')
+                  ->andWhere('s_articles_details.id = s_articles_attributes.articledetailsID')
+                  ->andWhere('s_articles_attributes.attr' . $number . ' != :attrValue')
+                  ->setParameters([
+                      'attrValue' => $value[1],
+                      'sessionID' => $this->session->offsetGet('sessionId'),
+                  ])
+                  ->execute()->fetch(\PDO::FETCH_ASSOC);
+
+                return (bool) $sql_productOrdernumber || (bool) $sql_productId;
             }
 
             return false;
