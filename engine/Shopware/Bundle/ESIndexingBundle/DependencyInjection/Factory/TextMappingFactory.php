@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
 use Elasticsearch\Client;
+use Exception;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
@@ -33,15 +34,29 @@ use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 class TextMappingFactory
 {
     /**
+     * @var bool
+     */
+    private $esEnabled;
+
+    public function __construct($esEnabled = false)
+    {
+        $this->esEnabled = $esEnabled;
+    }
+
+    /**
      * @param Client $client
      *
      * @return TextMappingInterface
      */
-    public static function factory(Client $client)
+    public function factory(Client $client)
     {
+        if (!$this->esEnabled) {
+            return new TextMappingES2();
+        }
+
         try {
-            $info = $client->info([]);
-        } catch (\Exception $e) {
+            $info = $client->info();
+        } catch (Exception $e) {
             return new TextMappingES2();
         }
 

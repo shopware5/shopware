@@ -5,156 +5,182 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="shopware_elastic_search.client" class="Elasticsearch\Client" >
-            <factory class="Shopware\Bundle\ESIndexingBundle\ClientFactory" method="createClient" />
+        <service id="shopware_elastic_search.client" class="Elasticsearch\Client">
+            <factory class="Shopware\Bundle\ESIndexingBundle\ClientFactory" method="createClient"/>
             <argument>%shopware.es.client%</argument>
         </service>
 
-        <service id="shopware_elastic_search.shop_indexer_factory" class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\ShopIndexerFactory" >
-            <argument type="tagged" tag="shopware_elastic_search.data_indexer" />
-            <argument type="tagged" tag="shopware_elastic_search.mapping" />
-            <argument type="tagged" tag="shopware_elastic_search.settings" />
+        <service id="shopware_elastic_search.shop_indexer_factory"
+                 class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\ShopIndexerFactory">
+            <argument type="tagged" tag="shopware_elastic_search.data_indexer"/>
+            <argument type="tagged" tag="shopware_elastic_search.mapping"/>
+            <argument type="tagged" tag="shopware_elastic_search.settings"/>
         </service>
 
         <service id="shopware_elastic_search.shop_indexer" class="Shopware\Bundle\ESIndexingBundle\ShopIndexer">
-            <factory service="shopware_elastic_search.shop_indexer_factory" method="factory" />
-            <argument type="service" id="service_container" />
+            <factory service="shopware_elastic_search.shop_indexer_factory" method="factory"/>
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="shopware_elastic_search.field_mapping" class="Shopware\Bundle\ESIndexingBundle\FieldMapping">
-            <argument type="service" id="shopware_elastic_search.shop_analyzer" />
-            <argument type="service" id="shopware_elastic_search.text_mapping" />
+            <argument type="service" id="shopware_elastic_search.shop_analyzer"/>
+            <argument type="service" id="shopware_elastic_search.text_mapping"/>
         </service>
 
-        <service id="shopware_elastic_search.text_mapping" class="Shopware\Bundle\ESIndexingBundle\TextMappingInterface">
-            <factory class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory" method="factory" />
-            <argument type="service" id="shopware_elastic_search.client" />
+        <service id="shopware_elastic_search.text_mapping"
+                 class="Shopware\Bundle\ESIndexingBundle\TextMappingInterface">
+            <factory service="shopware_elastic_search.text_mapping_factory" method="factory"/>
+            <argument type="service" id="shopware_elastic_search.client"/>
         </service>
 
-        <service id="shopware_elastic_search.index_factory" class="Shopware\Bundle\ESIndexingBundle\IndexFactory" >
+        <service id="shopware_elastic_search.text_mapping_factory"
+                 class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory">
+            <argument>%shopware.es.enabled%</argument>
+        </service>
+
+        <service id="shopware_elastic_search.index_factory" class="Shopware\Bundle\ESIndexingBundle\IndexFactory">
             <argument>%shopware.es.prefix%</argument>
             <argument>%shopware.es.number_of_shards%</argument>
             <argument>%shopware.es.number_of_replicas%</argument>
             <argument>%shopware.es.total_fields_limit%</argument>
         </service>
 
-        <service id="shopware_elastic_search.shop_analyzer" class="Shopware\Bundle\ESIndexingBundle\ShopAnalyzer" />
+        <service id="shopware_elastic_search.shop_analyzer" class="Shopware\Bundle\ESIndexingBundle\ShopAnalyzer"/>
 
-        <service id="shopware_elastic_search.product_query_factory" class="Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactory">
-            <argument type="service" id="dbal_connection" />
+        <service id="shopware_elastic_search.product_query_factory"
+                 class="Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactory">
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
-        <service id="shopware_elastic_search.property_query_factory" class="Shopware\Bundle\ESIndexingBundle\Property\PropertyQueryFactory">
-            <argument type="service" id="dbal_connection" />
+        <service id="shopware_elastic_search.property_query_factory"
+                 class="Shopware\Bundle\ESIndexingBundle\Property\PropertyQueryFactory">
+            <argument type="service" id="dbal_connection"/>
         </service>
 
-        <service id="shopware_elastic_search.identifier_selector" class="Shopware\Bundle\ESIndexingBundle\IdentifierSelector">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
+        <service id="shopware_elastic_search.identifier_selector"
+                 class="Shopware\Bundle\ESIndexingBundle\IdentifierSelector">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.shop_gateway_dbal"/>
         </service>
 
-        <service id="shopware_elastic_search.composite_synchronizer_factory" class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory" >
-            <argument type="tagged" tag="shopware_elastic_search.synchronizer" />
+        <service id="shopware_elastic_search.composite_synchronizer_factory"
+                 class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory">
+            <argument type="tagged" tag="shopware_elastic_search.synchronizer"/>
         </service>
 
-        <service id="shopware_elastic_search.composite_synchronizer" class="Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer">
-            <factory service="shopware_elastic_search.composite_synchronizer_factory" method="factory" />
-            <argument type="service" id="service_container" />
+        <service id="shopware_elastic_search.composite_synchronizer"
+                 class="Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer">
+            <factory service="shopware_elastic_search.composite_synchronizer_factory" method="factory"/>
+            <argument type="service" id="service_container"/>
         </service>
 
-        <service id="shopware_elastic_search.backlog_processor" class="Shopware\Bundle\ESIndexingBundle\BacklogProcessor">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_elastic_search.composite_synchronizer" />
+        <service id="shopware_elastic_search.backlog_processor"
+                 class="Shopware\Bundle\ESIndexingBundle\BacklogProcessor">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_elastic_search.composite_synchronizer"/>
         </service>
 
         <service id="shopware_elastic_search.backlog_reader" class="Shopware\Bundle\ESIndexingBundle\BacklogReader">
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="dbal_connection"/>
         </service>
 
-        <service id="shopware_elastic_search.property_indexer" class="Shopware\Bundle\ESIndexingBundle\Property\PropertyIndexer">
-            <argument type="service" id="shopware_elastic_search.client" />
-            <argument type="service" id="shopware_elastic_search.property_query_factory" />
-            <argument type="service" id="shopware_elastic_search.property_provider" />
-            <tag name="shopware_elastic_search.data_indexer" />
+        <service id="shopware_elastic_search.property_indexer"
+                 class="Shopware\Bundle\ESIndexingBundle\Property\PropertyIndexer">
+            <argument type="service" id="shopware_elastic_search.client"/>
+            <argument type="service" id="shopware_elastic_search.property_query_factory"/>
+            <argument type="service" id="shopware_elastic_search.property_provider"/>
+            <tag name="shopware_elastic_search.data_indexer"/>
         </service>
 
-        <service id="shopware_elastic_search.property_synchronizer" class="Shopware\Bundle\ESIndexingBundle\Property\PropertySynchronizer">
-            <argument type="service" id="shopware_elastic_search.property_indexer" />
-            <tag name="shopware_elastic_search.synchronizer" />
+        <service id="shopware_elastic_search.property_synchronizer"
+                 class="Shopware\Bundle\ESIndexingBundle\Property\PropertySynchronizer">
+            <argument type="service" id="shopware_elastic_search.property_indexer"/>
+            <tag name="shopware_elastic_search.synchronizer"/>
             <argument type="service" id="shopware_elastic_search.index_factory"/>
         </service>
 
-        <service id="shopware_elastic_search.property_provider" class="Shopware\Bundle\ESIndexingBundle\Property\PropertyProvider">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.context_service" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_storefront.property_hydrator_dbal" />
+        <service id="shopware_elastic_search.property_provider"
+                 class="Shopware\Bundle\ESIndexingBundle\Property\PropertyProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.property_hydrator_dbal"/>
         </service>
 
-        <service id="shopware_elastic_search.property_mapping" class="Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping">
-            <argument type="service" id="shopware_elastic_search.field_mapping" />
-            <tag name="shopware_elastic_search.mapping" />
+        <service id="shopware_elastic_search.property_mapping"
+                 class="Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping">
+            <argument type="service" id="shopware_elastic_search.field_mapping"/>
+            <tag name="shopware_elastic_search.mapping"/>
         </service>
 
-        <service id="shopware_elastic_search.product_indexer" class="Shopware\Bundle\ESIndexingBundle\Product\ProductIndexer">
-            <argument type="service" id="shopware_elastic_search.client" />
-            <argument type="service" id="shopware_elastic_search.product_provider" />
-            <argument type="service" id="shopware_elastic_search.product_query_factory" />
+        <service id="shopware_elastic_search.product_indexer"
+                 class="Shopware\Bundle\ESIndexingBundle\Product\ProductIndexer">
+            <argument type="service" id="shopware_elastic_search.client"/>
+            <argument type="service" id="shopware_elastic_search.product_provider"/>
+            <argument type="service" id="shopware_elastic_search.product_query_factory"/>
 
-            <tag name="shopware_elastic_search.data_indexer" />
+            <tag name="shopware_elastic_search.data_indexer"/>
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
-        <service id="shopware_elastic_search.product_synchronizer" class="Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer">
-            <argument type="service" id="shopware_elastic_search.product_query_factory" />
-            <argument type="service" id="shopware_elastic_search.product_indexer" />
-            <tag name="shopware_elastic_search.synchronizer" />
+        <service id="shopware_elastic_search.product_synchronizer"
+                 class="Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer">
+            <argument type="service" id="shopware_elastic_search.product_query_factory"/>
+            <argument type="service" id="shopware_elastic_search.product_indexer"/>
+            <tag name="shopware_elastic_search.synchronizer"/>
             <argument type="service" id="shopware_elastic_search.index_factory"/>
         </service>
 
-        <service id="shopware_elastic_search.product_provider" class="Shopware\Bundle\ESIndexingBundle\Product\ProductProvider">
-            <argument type="service" id="shopware_storefront.list_product_gateway" />
-            <argument type="service" id="shopware_storefront.cheapest_price_service" />
-            <argument type="service" id="shopware_storefront.vote_service" />
-            <argument type="service" id="shopware_storefront.context_service" />
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_elastic_search.identifier_selector" />
-            <argument type="service" id="shopware_storefront.price_calculation_service" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_storefront.property_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.configurator_service" />
+        <service id="shopware_elastic_search.product_provider"
+                 class="Shopware\Bundle\ESIndexingBundle\Product\ProductProvider">
+            <argument type="service" id="shopware_storefront.list_product_gateway"/>
+            <argument type="service" id="shopware_storefront.cheapest_price_service"/>
+            <argument type="service" id="shopware_storefront.vote_service"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_elastic_search.identifier_selector"/>
+            <argument type="service" id="shopware_storefront.price_calculation_service"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.property_hydrator_dbal"/>
+            <argument type="service" id="shopware_storefront.configurator_service"/>
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
             <argument type="service" id="shopware_elastic_search.product_configuration_loader"/>
             <argument type="service" id="shopware_elastic_search.product_listing_variation_loader"/>
         </service>
 
-        <service id="shopware_elastic_search.product_mapping" class="Shopware\Bundle\ESIndexingBundle\Product\ProductMapping">
-            <argument type="service" id="shopware_elastic_search.identifier_selector" />
-            <argument type="service" id="shopware_elastic_search.field_mapping" />
-            <argument type="service" id="shopware_elastic_search.text_mapping" />
-            <argument type="service" id="shopware_attribute.crud_service" />
-            <tag name="shopware_elastic_search.mapping" />
+        <service id="shopware_elastic_search.product_mapping"
+                 class="Shopware\Bundle\ESIndexingBundle\Product\ProductMapping">
+            <argument type="service" id="shopware_elastic_search.identifier_selector"/>
+            <argument type="service" id="shopware_elastic_search.field_mapping"/>
+            <argument type="service" id="shopware_elastic_search.text_mapping"/>
+            <argument type="service" id="shopware_attribute.crud_service"/>
+            <tag name="shopware_elastic_search.mapping"/>
             <argument type="service" id="shopware_elastic_search.client"/>
         </service>
 
-        <service id="shopware_elastic_search.orm_backlog_save_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSaveSubscriber">
-            <argument type="service" id="shopware_elastic_search.orm_backlog_subscriber" />
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_subscriber" />
+        <service id="shopware_elastic_search.orm_backlog_save_subscriber"
+                 class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSaveSubscriber">
+            <argument type="service" id="shopware_elastic_search.orm_backlog_subscriber"/>
+            <argument type="service" id="service_container"/>
+            <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="shopware_elastic_search.orm_backlog_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSubscriber" public="false">
-            <argument type="service" id="service_container" />
-            <tag name="doctrine.event_subscriber" />
+        <service id="shopware_elastic_search.orm_backlog_subscriber"
+                 class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSubscriber"
+                 public="false">
+            <argument type="service" id="service_container"/>
+            <tag name="doctrine.event_subscriber"/>
         </service>
 
-        <service id="shopware_elastic_search.domain_backlog_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\DomainBacklogSubscriber">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_subscriber" />
+        <service id="shopware_elastic_search.domain_backlog_subscriber"
+                 class="Shopware\Bundle\ESIndexingBundle\Subscriber\DomainBacklogSubscriber">
+            <argument type="service" id="service_container"/>
+            <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service class="Shopware\Bundle\ESIndexingBundle\Product\ProductListingVariationLoader" id="shopware_elastic_search.product_listing_variation_loader">
+        <service class="Shopware\Bundle\ESIndexingBundle\Product\ProductListingVariationLoader"
+                 id="shopware_elastic_search.product_listing_variation_loader">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_elastic_search.identifier_selector"/>
             <argument type="service" id="shopware_storefront.context_service"/>
@@ -162,8 +188,8 @@
             <argument type="service" id="config"/>
         </service>
 
-
-        <service class="Shopware\Bundle\ESIndexingBundle\Product\ProductConfigurationLoader" id="shopware_elastic_search.product_configuration_loader">
+        <service class="Shopware\Bundle\ESIndexingBundle\Product\ProductConfigurationLoader"
+                 id="shopware_elastic_search.product_configuration_loader">
             <argument id="dbal_connection" type="service"/>
             <argument id="shopware_storefront.configurator_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.field_helper_dbal" type="service"/>
@@ -172,29 +198,35 @@
 
         <!-- Commands -->
 
-        <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexPopulateCommand" id="shopware_elastic_search.commands.index_populate_command">
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexPopulateCommand"
+                 id="shopware_elastic_search.commands.index_populate_command">
             <tag name="console.command" command="sw:es:index:populate"/>
         </service>
 
-        <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexCleanupCommand" id="shopware_elastic_search.commands.index_cleanup_command">
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\IndexCleanupCommand"
+                 id="shopware_elastic_search.commands.index_cleanup_command">
             <tag name="console.command" command="sw:es:index:cleanup"/>
         </service>
 
-        <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogClearCommand" id="shopware_elastic_search.commands.backlog_clear_command">
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogClearCommand"
+                 id="shopware_elastic_search.commands.backlog_clear_command">
             <tag name="console.command" command="sw:es:backlog:clear"/>
         </service>
 
-        <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand" id="shopware_elastic_search.commands.backlog_sync_command">
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand"
+                 id="shopware_elastic_search.commands.backlog_sync_command">
             <argument>%shopware.es.batchsize%</argument>
 
             <tag name="console.command" command="sw:es:backlog:sync"/>
         </service>
 
-        <service class="Shopware\Bundle\ESIndexingBundle\Commands\SwitchAliasCommand" id="shopware_elastic_search.commands.switch_alias_command">
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\SwitchAliasCommand"
+                 id="shopware_elastic_search.commands.switch_alias_command">
             <tag name="console.command" command="sw:es:switch:alias"/>
         </service>
 
-        <service class="Shopware\Bundle\ESIndexingBundle\Commands\AnalyzeCommand" id="shopware_elastic_search.commands.analyze_command">
+        <service class="Shopware\Bundle\ESIndexingBundle\Commands\AnalyzeCommand"
+                 id="shopware_elastic_search.commands.analyze_command">
             <tag name="console.command" command="sw:es:analyze"/>
         </service>
     </services>
