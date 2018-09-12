@@ -89,7 +89,7 @@ INSERT IGNORE INTO s_core_config_mails (
 
 Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
-thank you for your order at {config name=shopName}. In the attachments of this email you will find the your order documents in PDF format.
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
 
 {include file="string:{config name=emailfooterplain}"}',
         '<div style="font-family:arial; font-size:12px;">
@@ -98,7 +98,7 @@ thank you for your order at {config name=shopName}. In the attachments of this e
     <p>
         Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
         <br/>
-        thank you for your order at {config name=shopName}. In the attachments of this email you will find the your order documents in PDF format.
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',
@@ -117,7 +117,7 @@ thank you for your order at {config name=shopName}. In the attachments of this e
 
 Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
-thank you for your order at {config name=shopName}. In the attachments of this email you will find the your delivery note in PDF format.
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your delivery note in PDF format.
 
 {include file="string:{config name=emailfooterplain}"}',
         '<div style="font-family:arial; font-size:12px;">
@@ -126,7 +126,7 @@ thank you for your order at {config name=shopName}. In the attachments of this e
     <p>
         Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
         <br/>
-        thank you for your order at {config name=shopName}. In the attachments of this email you will find the your delivery note in PDF format.
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your delivery note in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',
@@ -145,7 +145,7 @@ thank you for your order at {config name=shopName}. In the attachments of this e
 
 Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
-thank you for your order at {config name=shopName}. In the attachments of this email you will find the your credit note in PDF format.
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your credit note in PDF format.
 
 {include file="string:{config name=emailfooterplain}"}',
         '<div style="font-family:arial; font-size:12px;">
@@ -154,7 +154,7 @@ thank you for your order at {config name=shopName}. In the attachments of this e
     <p>
         Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
         <br/>
-        thank you for your order at {config name=shopName}. In the attachments of this email you will find the your credit note in PDF format.
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your credit note in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',
@@ -173,7 +173,7 @@ thank you for your order at {config name=shopName}. In the attachments of this e
 
 Dear {$sUser.salutation|salutation} {$sUser.lastname},
 
-thank you for your order at {config name=shopName}. In the attachments of this email you will find the your cancellation invoice in PDF format.
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your cancellation invoice in PDF format.
 
 {include file="string:{config name=emailfooterplain}"}',
     '<div style="font-family:arial; font-size:12px;">
@@ -182,7 +182,7 @@ thank you for your order at {config name=shopName}. In the attachments of this e
     <p>
         Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
         <br/>
-        thank you for your order at {config name=shopName}. In the attachments of this email you will find the your cancellation invoice in PDF format.
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your cancellation invoice in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',
