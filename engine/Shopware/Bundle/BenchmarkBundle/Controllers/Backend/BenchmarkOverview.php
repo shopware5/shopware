@@ -196,12 +196,13 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     {
         /** @var TemplateCachingHandler $cachingHandler */
         $cachingHandler = $this->get('shopware.benchmark_bundle.components.template_caching_handler');
+        $shopId = $this->getShopId();
 
-        if ($cachingHandler->isTemplateCached()) {
+        if ($cachingHandler->isTemplateCached($shopId)) {
             $link = $this->get('router')->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
-                'shopId' => $this->getShopId(),
+                'shopId' => $shopId,
             ]);
 
             $widgetsAllowed = (int) $this->_isAllowed('swag-bi-base', 'widgets');
