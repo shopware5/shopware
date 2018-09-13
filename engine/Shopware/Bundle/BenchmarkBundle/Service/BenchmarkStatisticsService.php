@@ -89,6 +89,8 @@ class BenchmarkStatisticsService
             return null;
         }
 
+        $this->benchmarkRepository->synchronizeShops();
+
         $benchmarkConfig = $this->benchmarkRepository->getNextTransmissionShopConfig();
 
         if (!$benchmarkConfig) {

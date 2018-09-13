@@ -25,6 +25,7 @@
 namespace Shopware\Models\Benchmark;
 
 use Doctrine\ORM\EntityRepository;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Repository
@@ -146,6 +147,44 @@ class Repository extends EntityRepository
         }
 
         return $queryBuilder->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Synchronizes benchmark config
+     */
+    public function synchronizeShops()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $shopIds = $queryBuilder->select('id')
+            ->from('s_core_shops', 'shop')
+            ->where('shop.main_id IS NULL')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $configs = $this->findAll();
+
+        $benchmarkShopIds = array_map(function ($config) {
+            return $config->getShopid();
+        }, $configs);
+
+        /** @var BenchmarkConfig $config */
+        foreach ($configs as $config) {
+            if (!in_array($config->getShopId(), $shopIds)) {
+                // Shop does not exist anymore
+                $this->getEntityManager()->remove($config);
+            }
+        }
+
+        foreach ($shopIds as $shopId) {
+            if (!in_array($shopId, $benchmarkShopIds)) {
+                $config = new BenchmarkConfig(Uuid::uuid4());
+                $config->setShopId($shopId);
+                $this->getEntityManager()->persist($config);
+            }
+        }
+
+        $this->getEntityManager()->flush();
     }
 
     /**
