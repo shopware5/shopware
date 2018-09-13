@@ -45,17 +45,10 @@
         <xsd:sequence>
             <xsd:element name="blacklist" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-        <xsd:attribute name="pluginName" type="xsd:string"/>
+        <xsd:attribute name="pluginName" type="xsd:string"  use="required" />
         <xsd:attribute name="minVersion" type="xsd:string"/>
         <xsd:attribute name="maxVersion" type="xsd:string"/>
     </xsd:complexType>
-
-    <xsd:simpleType name="scope">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="local"/>
-            <xsd:enumeration value="shop"/>
-        </xsd:restriction>
-    </xsd:simpleType>
 
     <xsd:complexType name="translatableString">
         <xsd:simpleContent>

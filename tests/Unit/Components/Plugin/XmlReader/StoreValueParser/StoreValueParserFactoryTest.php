@@ -22,32 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Components\Plugin;
+namespace Shopware\Tests\Unit\Components\Plugin\XmlReader\StoreValueParser;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreExtjsValueParser;
+use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactory;
+use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreXmlValueParser;
 
-class XmlPluginInfoReaderTest extends TestCase
+class StoreValueParserFactoryTest extends TestCase
 {
     /**
-     * @var XmlPluginInfoReader
+     * @covers \Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactory::create()
      */
-    private $SUT;
-
-    protected function setUp()
+    public function testThatFactoryReturnsCorrectInstance()
     {
-        $this->SUT = new XmlPluginInfoReader();
-    }
-
-    public function testCanReadAndVerifyMinimalExample()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/plugin_minimal.xml');
-        $this->assertInternalType('array', $result);
-    }
-
-    public function testCanReadAndVerify()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/plugin.xml');
-        $this->assertInternalType('array', $result);
+        self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create(''));
+        self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create('xml'));
+        self::assertInstanceOf(StoreExtjsValueParser::class, StoreValueParserFactory::create('extjs'));
     }
 }
