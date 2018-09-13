@@ -4,6 +4,13 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 [View all changes from v5.4.6...v5.5.0](https://github.com/shopware/shopware/compare/v5.4.6...v5.5.0)
 
+## 5.5.1
+
+### Changes
+* Changed controller and action names in controllerAction and controllerName smarty function
+
+## 5.5.0
+
 ### Additions
 
 * Added unique identifier to `s_core_documents` for document types in order to create a unique, settable property for plugin developers and enabling risk free user editing of the name field
