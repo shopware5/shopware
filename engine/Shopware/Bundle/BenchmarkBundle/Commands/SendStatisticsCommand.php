@@ -68,6 +68,8 @@ class SendStatisticsCommand extends ShopwareCommand
         $benchmarkRepository = $this->getContainer()->get('shopware.benchmark_bundle.repository.config');
         $statisticsService = $this->getContainer()->get('shopware.benchmark_bundle.statistics_transmission');
 
+        $benchmarkRepository->synchronizeShops();
+
         $shopIds = $input->getArgument('shopIds');
         if (!$shopIds) {
             $shopIds = $benchmarkRepository->getShopIds();

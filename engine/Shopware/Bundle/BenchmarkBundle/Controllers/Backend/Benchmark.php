@@ -32,6 +32,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         try {
             /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+            $benchmarkRepository->synchronizeShops();
 
             $this->View()->assign([
                 'success' => true,
