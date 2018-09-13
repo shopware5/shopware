@@ -883,5 +883,7 @@
         <service id="shopware.components.state_translator" class="Shopware\Components\StateTranslatorService">
             <argument type="service" id="snippets"/>
         </service>
+
+        <service id="shopware.components.stream_protocol_validator" class="Shopware\Components\StreamProtocolValidator"/>
     </services>
 </container>

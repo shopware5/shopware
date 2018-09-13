@@ -41,8 +41,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     public function __destruct()
     {
-        if (!empty($this->uploadedFilePath) && file_exists($this->uploadedFilePath)) {
-            @unlink($this->uploadedFilePath);
+        if (!empty($this->uploadedFilePath)) {
+            $this->get('shopware.components.stream_protocol_validator')->validate($this->uploadedFilePath);
+            if (file_exists($this->uploadedFilePath)) {
+                @unlink($this->uploadedFilePath);
+            }
         }
     }
 
