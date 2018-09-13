@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Changes
 
 * Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
+* Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
 
 ## 5.5.1
 
