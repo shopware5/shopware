@@ -216,6 +216,8 @@
                 opts = me.opts,
                 $el = me.$el;
 
+            me.applyDataAttributes();
+
             me.$personalEmail = $el.find(opts.personalEmailSelector);
             me.$personalPassword = $el.find(opts.personalPasswordSelector);
             me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
