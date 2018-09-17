@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.2
+
+[View all changes from v5.5.1...v5.5.2](https://github.com/shopware/shopware/compare/v5.5.1...v5.5.2)
+
+### Changes
+
+* Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
+
 ## 5.5.1
 
 [View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
