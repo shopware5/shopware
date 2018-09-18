@@ -2,6 +2,16 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.1
+
+[View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
+
+### Changes
+
+* Changed the loading of shopping worlds to fix issues with missing shopping worlds
+
+## 5.5.0
+
 [View all changes from v5.4.6...v5.5.0](https://github.com/shopware/shopware/compare/v5.4.6...v5.5.0)
 
 ### Additions

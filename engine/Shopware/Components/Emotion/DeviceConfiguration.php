@@ -68,6 +68,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->andWhere('emotion.preview_id IS NULL')
             ->addOrderBy('emotion.position', 'ASC')
             ->addOrderBy('emotion.id', 'ASC')
+            ->groupBy('emotion.id')
             ->setParameter(':categoryId', $categoryId);
 
         $query->innerJoin(
