@@ -58,7 +58,7 @@ class AttributeHydrator extends Hydrator
     {
         $attribute = new Struct\Attribute();
         $translation = $this->getTranslation($data, null);
-        $translation = $this->extractFields('___attribute_', $translation);
+        $translation = $this->extractFields('__attribute_', $translation);
         unset($data['translation']);
         unset($data['translation_fallback']);
 
