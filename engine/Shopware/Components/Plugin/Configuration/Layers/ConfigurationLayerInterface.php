@@ -22,25 +22,30 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin\Configuration;
+namespace Shopware\Components\Plugin\Configuration\Layers;
 
-use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
+use Shopware\Components\Plugin\Configuration\WriterException;
 
-class Writer implements WriterInterface
+interface ConfigurationLayerInterface
 {
-    /** @var ConfigurationLayerInterface */
-    private $lastLayer;
-
-    public function __construct(ConfigurationLayerInterface $lastLayer)
-    {
-        $this->lastLayer = $lastLayer;
-    }
+    /**
+     * Read the values attached to this layer by shop and plugin name
+     *
+     * @param int|null $shopId
+     * @param string   $pluginName
+     *
+     * @return array
+     */
+    public function readValues($shopId, $pluginName);
 
     /**
-     * {@inheritdoc}
+     * Write the values attached to this layer by shop and plugin name
+     *
+     * @param int|null $shopId
+     * @param string   $pluginName
+     * @param array    $data
+     *
+     * @throws WriterException
      */
-    public function setByPluginName($pluginName, array $elements, $shopId = 1)
-    {
-        return $this->lastLayer->writeValues($shopId, $pluginName, $elements);
-    }
+    public function writeValues($shopId, $pluginName, array $data);
 }

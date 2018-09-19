@@ -22,25 +22,41 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin\Configuration;
+namespace Shopware\Components\Plugin\Configuration\Layers;
 
-use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
+use Doctrine\DBAL\Query\QueryBuilder;
 
-class Writer implements WriterInterface
+class DefaultShopLayer extends AbstractShopConfigurationLayer
 {
-    /** @var ConfigurationLayerInterface */
-    private $lastLayer;
-
-    public function __construct(ConfigurationLayerInterface $lastLayer)
+    /**
+     * {@inheritdoc}
+     */
+    public function readValues($shopId, $pluginName)
     {
-        $this->lastLayer = $lastLayer;
+        return parent::readValues(1, $pluginName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setByPluginName($pluginName, array $elements, $shopId = 1)
+    protected function configureQuery(QueryBuilder $builder, $shopId, $pluginName)
     {
-        return $this->lastLayer->writeValues($shopId, $pluginName, $elements);
+        $shopIdKey = 'shopId' . crc32($shopId);
+        $pluginNameKey = 'pluginName' . crc32($pluginName);
+
+        return $builder
+            ->andWhere($builder->expr()->eq('corePlugins.name', ':' . $pluginNameKey))
+            ->andWhere($builder->expr()->eq('coreConfigValues.shop_id', ':' . $shopIdKey))
+            ->setParameter($pluginNameKey, $pluginName)
+            ->setParameter($shopIdKey, $shopId)
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function isLayerResponsibleForShopId($shopId)
+    {
+        return $shopId === 1 || is_null($shopId);
     }
 }

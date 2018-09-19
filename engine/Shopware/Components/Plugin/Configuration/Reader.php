@@ -24,18 +24,16 @@
 
 namespace Shopware\Components\Plugin\Configuration;
 
-use Doctrine\DBAL\Connection;
+use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
 
 class Reader implements ReaderInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    /** @var ConfigurationLayerInterface */
+    private $layer;
 
-    public function __construct(Connection $connection)
+    public function __construct(ConfigurationLayerInterface $lastLayer)
     {
-        $this->connection = $connection;
+        $this->layer = $lastLayer;
     }
 
     /**
@@ -43,56 +41,6 @@ class Reader implements ReaderInterface
      */
     public function getByPluginName($pluginName, $shopId = null)
     {
-        $mainShop = $this->connection->createQueryBuilder()
-            ->from('s_core_shops', 'shop')
-            ->select(['shop.main_id'])
-            ->where('shop.id = :shopId')
-            ->setParameter('shopId', $shopId ?: 1)
-            ->execute()
-            ->fetchColumn() ?: 1;
-
-        $sql = <<<'SQL'
-SELECT
-  ce.name,
-  COALESCE(currentShop.value, parentShop.value, fallbackShop.value, ce.value) as value
-
-FROM s_core_plugins p
-
-INNER JOIN s_core_config_forms cf
-  ON cf.plugin_id = p.id
-
-INNER JOIN s_core_config_elements ce
-  ON ce.form_id = cf.id
-
-LEFT JOIN s_core_config_values currentShop
-  ON currentShop.element_id = ce.id
-  AND currentShop.shop_id = :currentShopId
-
-LEFT JOIN s_core_config_values parentShop
-  ON parentShop.element_id = ce.id
-  AND parentShop.shop_id = :parentShopId
-
-LEFT JOIN s_core_config_values fallbackShop
-  ON fallbackShop.element_id = ce.id
-  AND fallbackShop.shop_id = :fallbackShopId
-
-WHERE p.name=:pluginName
-SQL;
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'fallbackShopId' => 1, //Shop parent id
-            'parentShopId' => $mainShop,
-            'currentShopId' => $shopId,
-            'pluginName' => $pluginName,
-        ]);
-
-        $config = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        foreach ($config as $key => $value) {
-            $config[$key] = !empty($value) ? @unserialize($value) : null;
-        }
-
-        return $config;
+        return $this->layer->readValues($shopId, $pluginName);
     }
 }

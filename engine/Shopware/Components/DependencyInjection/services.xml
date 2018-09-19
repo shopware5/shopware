@@ -515,11 +515,33 @@
         </service>
 
         <service id="shopware.plugin.configuration.writer" class="Shopware\Components\Plugin\Configuration\Writer">
-            <argument type="service" id="models" />
+            <argument type="service" id="shopware.plugin.configuration.language_shop_layer" />
         </service>
 
         <service id="shopware.plugin.configuration.reader" class="Shopware\Components\Plugin\Configuration\Reader">
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.plugin.configuration.language_shop_layer"/>
+        </service>
+
+        <service id="shopware.plugin.configuration.default_layer" class="Shopware\Components\Plugin\Configuration\Layers\DefaultLayer">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="shopware.plugin.configuration.default_shop_layer" class="Shopware\Components\Plugin\Configuration\Layers\DefaultShopLayer">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware.plugin.configuration.default_layer"/>
+        </service>
+
+        <service id="shopware.plugin.configuration.sub_shop_layer" class="Shopware\Components\Plugin\Configuration\Layers\SubShopLayer">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware.plugin.configuration.default_shop_layer"/>
+        </service>
+
+        <service id="shopware.plugin.configuration.language_shop_layer" class="Shopware\Components\Plugin\Configuration\Layers\LanguageShopLayer">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware.plugin.configuration.sub_shop_layer"/>
         </service>
 
         <service id="shopware_product_stream.criteria_factory" class="Shopware\Components\ProductStream\CriteriaFactory">
