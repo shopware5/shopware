@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.2
+
+[View all changes from v5.5.1...v5.5.2](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
+
+### Additions
+
+* Added `endpoint` option to `AwsS3v3Factory` to set the S3 endpoint specifically (e.g. non-AWS S3)
+
 ## 5.5.1
 
 [View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)

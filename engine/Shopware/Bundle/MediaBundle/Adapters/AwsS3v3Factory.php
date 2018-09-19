@@ -62,7 +62,7 @@ class AwsS3v3Factory implements AdapterFactoryInterface
         $options = new OptionsResolver();
 
         $options->setRequired(['credentials', 'bucket', 'region']);
-        $options->setDefined(['version', 'root', 'type', 'mediaUrl', 'url']);
+        $options->setDefined(['version', 'root', 'type', 'mediaUrl', 'url', 'endpoint']);
 
         $options->setAllowedTypes('credentials', 'array');
         $options->setAllowedTypes('region', 'string');
@@ -71,6 +71,7 @@ class AwsS3v3Factory implements AdapterFactoryInterface
 
         $options->setDefault('version', 'latest');
         $options->setDefault('root', '');
+        $options->setDefault('endpoint', null);
 
         $config = $options->resolve($definition);
         $config['credentials'] = $this->resolveCredentialsOptions($config['credentials']);
