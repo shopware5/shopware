@@ -87,13 +87,16 @@ class User extends Resource
             throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
         }
 
-        if (is_array($user)) {
-            unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
-        } else {
-            $user->setApiKey('');
-            $user->setSessionId('');
-            $user->setPassword('');
-            $user->setEncoder('');
+        if (!$this->hasPrivilege('create', 'usermanager') &&
+            !$this->hasPrivilege('update', 'usermanager')) {
+            if (is_array($user)) {
+                unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
+            } else {
+                $user->setApiKey('');
+                $user->setSessionId('');
+                $user->setPassword('');
+                $user->setEncoder('');
+            }
         }
 
         return $user;
