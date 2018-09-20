@@ -59,6 +59,11 @@ function smarty_function_flink($params, $template)
             }
         }
 
+        //Cleanup vendor paths if is composer project
+        if (strpos($file, 'vendor/shopware/shopware') !== false) {
+            $file = substr($file, strlen($docPath . 'vendor/shopware/shopware'));
+        }
+
         // Some cleanup code
         if (strpos($file, $docPath) === 0) {
             $file = substr($file, strlen($docPath));
