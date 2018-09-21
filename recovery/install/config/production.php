@@ -35,7 +35,7 @@ return [
         'en' => 'https://api.shopware.com/gtc/en_GB.html',
     ],
 
-    'languages' => ['de', 'en', 'nl', 'it', 'fr', 'es', 'pt'],
+    'languages' => ['de', 'en', 'nl', 'it', 'fr', 'es', 'pt', 'pl'],
 
     'slim' => [
         'log.level' => \Slim\Log::DEBUG,
