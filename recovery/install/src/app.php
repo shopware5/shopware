@@ -136,6 +136,8 @@ function localeForLanguage($language)
             return 'es_ES';
         case 'pt':
             return 'pt_PT';
+        case 'pl':
+            return 'pl_PL';
     }
 
     return strtolower($language) . '_' . strtoupper($language);
