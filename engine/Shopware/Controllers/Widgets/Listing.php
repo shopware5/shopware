@@ -194,10 +194,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         $categoryId = (int) $this->Request()->getParam('sCategory');
-        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
-        if ($productStreamId) {
-            $result = $this->fetchStreamListing($categoryId, $productStreamId);
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+
+        $category = $this->container->get('shopware_storefront.category_gateway')->get([$categoryId], $context);
+
+        $productStream = $category->getProductStream();
+
+        if ($productStream) {
+            $result = $this->fetchStreamListing($categoryId, $productStream->getId());
             $this->setSearchResultResponse($result);
 
             return;
@@ -280,25 +285,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             ->setParameter(':parentId', $categoryId);
 
         return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
-    }
-
-    /**
-     * @param int $categoryId
-     *
-     * @return int|null
-     */
-    private function findStreamIdByCategoryId($categoryId)
-    {
-        $streamId = $this->get('dbal_connection')->fetchColumn(
-            'SELECT stream_id FROM s_categories WHERE id = :id',
-            ['id' => $categoryId]
-        );
-
-        if ($streamId) {
-            return (int) $streamId;
-        }
-
-        return null;
     }
 
     /**
