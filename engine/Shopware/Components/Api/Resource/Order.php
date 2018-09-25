@@ -517,6 +517,9 @@ class Order extends Resource
                 $detailModel->setShipped($detail['shipped']);
             }
 
+            // Set attributes
+            (isset($detail['attribute'])) ? $detailModel->setAttribute($detail['attribute']) : $detailModel->setAttribute([null]);
+
             $violations = $this->getManager()->validate($detailModel);
             if ($violations->count() > 0) {
                 throw new ApiException\ValidationException($violations);
@@ -610,6 +613,7 @@ class Order extends Resource
             'status',
             'shipped',
             'id',
+            'attribute',
         ];
 
         $details = $params['details'];
@@ -657,6 +661,11 @@ class Order extends Resource
             // Set shipped flag
             if (isset($detail['shipped'])) {
                 $detailModel->setShipped($detail['shipped']);
+            }
+
+            // Set attributes
+            if (isset($detail['attribute'])) {
+                $detailModel->setAttribute($detail['attribute']);
             }
 
             $detail = $detailModel;
