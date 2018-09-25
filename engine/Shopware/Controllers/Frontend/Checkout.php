@@ -535,7 +535,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if ($this->Request()->getParam('sAddAccessories')) {
             $this->forward('addAccessories');
         } else {
-            $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
+            $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'cart')]);
         }
     }
 
@@ -552,7 +552,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $this->Request()->getParam('sAddAccessoriesQuantity')
         );
 
-        $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
+        $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'cart')]);
     }
 
     /**
@@ -566,7 +566,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if ($this->Request()->getParam('sDelete')) {
             $this->basket->sDeleteArticle($this->Request()->getParam('sDelete'));
         }
-        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
+        $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'index')]);
     }
 
     /**
