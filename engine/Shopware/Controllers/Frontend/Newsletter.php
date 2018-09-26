@@ -219,11 +219,11 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $context['sUser'][$key] = $value;
         }
 
-        $context = $this->eventManager->filter('Shopware_Controllers_Frontend_Newsletter_sendMail_FilterVariables', $context, new Enlight_Event_EventArgs([
+        $context = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Newsletter_sendMail_FilterVariables', $context, [
             'template' => $template,
             'recipient' => $recipient,
             'optin' => $optin
-        ]));
+        ]);
 
         $mail = Shopware()->TemplateMail()->createMail($template, $context);
         $mail->addTo($recipient);

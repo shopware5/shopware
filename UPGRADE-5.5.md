@@ -11,6 +11,16 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
 * Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
 
+### Additions
+
+* Added the following events for newsletter un/subscription
+    * filter:
+        * `Shopware_Controllers_Frontend_Newsletter_sendMail_FilterVariables`
+        * `Shopware_Modules_Admin_sendMail_FilterVariables`
+    * notify:
+        * `Shopware_Modules_Admin_Newsletter_Unsubscribe`
+        * `Shopware_Modules_Admin_sUpdateNewsletter_Subscribe`
+
 ## 5.5.1
 
 [View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
