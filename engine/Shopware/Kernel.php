@@ -497,6 +497,10 @@ class Kernel implements HttpKernelInterface, TerminableInterface
 
         $this->plugins = $initializer->initializePlugins();
 
+        if ($this->config['backward_compatibility']['disable_plugin_sorting'] !== true) {
+            ksort($this->plugins);
+        }
+
         $this->activePlugins = $initializer->getActivePlugins();
 
         $this->pluginHash = $this->createPluginHash($this->plugins);
