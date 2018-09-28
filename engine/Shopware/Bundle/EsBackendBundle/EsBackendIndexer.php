@@ -131,6 +131,24 @@ class EsBackendIndexer
     }
 
     /**
+     * Removes unused indices
+     */
+    public function cleanupIndices()
+    {
+        $prefix = self::INDEX_NAME;
+        $aliases = $this->client->indices()->getAliases();
+        foreach ($aliases as $index => $indexAliases) {
+            if (strpos($index, $prefix) !== 0) {
+                continue;
+            }
+
+            if (empty($indexAliases['aliases'])) {
+                $this->client->indices()->delete(['index' => $index]);
+            }
+        }
+    }
+
+    /**
      * @param string $index
      */
     private function createIndex($index)

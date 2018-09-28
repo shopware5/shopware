@@ -64,6 +64,11 @@
                  id="shopware_es_backend.commands.sync_backlog_command">
             <tag name="console.command" command="sw:es:backend:sync"/>
         </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\Commands\IndexCleanupCommand"
+                 id="shopware_es_backend.commands.index_cleanup_command">
+            <tag name="console.command" command="sw:es:backend:index:cleanup"/>
+        </service>
     </services>
 </container>
 
