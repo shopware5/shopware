@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * notify:
         * `Shopware_Modules_Admin_Newsletter_Unsubscribe`
         * `Shopware_Modules_Admin_sUpdateNewsletter_Subscribe`
+* Added possibility to edit index.max_result_window for ES via `config.php`
 
 ## 5.5.1
 

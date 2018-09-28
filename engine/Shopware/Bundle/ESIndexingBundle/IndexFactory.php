@@ -51,17 +51,24 @@ class IndexFactory implements IndexFactoryInterface
     private $totalFieldsLimit;
 
     /**
+     * @var int|null
+     */
+    private $maxResultWindow;
+
+    /**
      * @param string   $prefix
      * @param int|null $numberOfShards
      * @param int|null $numberOfReplicas
      * @param int|null $totalFieldsLimit
+     * @param int|null $maxResultWindow
      */
-    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null, $totalFieldsLimit = null)
+    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null, $totalFieldsLimit = null, $maxResultWindow = null)
     {
         $this->prefix = $prefix;
         $this->numberOfShards = $numberOfShards;
         $this->numberOfReplicas = $numberOfReplicas;
         $this->totalFieldsLimit = $totalFieldsLimit;
+        $this->maxResultWindow = $maxResultWindow;
     }
 
     /**
@@ -77,7 +84,8 @@ class IndexFactory implements IndexFactoryInterface
             $this->getIndexName($shop, $mappingType),
             $this->numberOfShards,
             $this->numberOfReplicas,
-            $this->totalFieldsLimit
+            $this->totalFieldsLimit,
+            $this->maxResultWindow
         );
     }
 

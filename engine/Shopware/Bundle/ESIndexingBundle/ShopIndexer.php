@@ -163,6 +163,7 @@ class ShopIndexer implements ShopIndexerInterface
                         'limit' => $configuration->getTotalFieldsLimit(),
                     ],
                 ],
+                'max_result_window' => $configuration->getMaxResultWindow(),
             ],
         ];
 
