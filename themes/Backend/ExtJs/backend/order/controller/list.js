@@ -197,6 +197,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
         //open the order listing window
         me.mainWindow = me.getView('batch.Window').create({
             orderStatusStore: grid.orderStatusStore,
+            paymentStatusStore: grid.paymentStatusStore,
             records: records
         }).show();
     },

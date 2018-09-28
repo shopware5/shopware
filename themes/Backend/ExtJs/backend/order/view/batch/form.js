@@ -342,33 +342,27 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
      */
     createPaymentStatusField: function () {
         var me = this,
-            store = Ext.create(
-                'Shopware.store.PaymentStatus',
-                {
-                    pageSize: 5
-                }
-            );
+            store = me.paymentStatusStore;
 
-        return Ext.create('Shopware.form.field.PagingComboBox', {
-            pageSize: 5,
+        return Ext.create('Ext.form.field.ComboBox', {
             name: 'paymentStatus',
-            typeAhead: true,
-            editable: true,
-            emptyText: me.snippets.selectOption,
             triggerAction: 'all',
+            queryMode: 'local',
+            editable: true,
             fieldLabel: me.snippets.paymentStatus,
             store: store,
-            snippets: me.snippets,
             displayField: 'description',
             valueField: 'id',
+            emptyText: me.snippets.selectOption,
+            mode: 'local',
             validateOnBlur: true,
+            snippets: me.snippets,
             validator: me.validateComboboxSelection,
             listeners: {
                 scope: me,
                 afterrender: this.disableAutocompleteAndSpellcheck,
                 change: me.enableMailField
-            },
-            disableLoadingSelectedName: true
+            }
         });
     },
 

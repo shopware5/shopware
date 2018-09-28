@@ -628,7 +628,7 @@ class Shop extends ModelEntity
         $config = $container->get('Config');
         $config->setShop($this);
 
-        /** @var $snippets \Shopware_Components_Config */
+        /** @var $snippets \Shopware_Components_Snippet_Manager */
         $snippets = $container->get('Snippets');
         $snippets->setShop($this);
 

@@ -218,8 +218,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
 
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'orders.cleared',
-            pageSize: 7,
-            queryMode: 'remote',
+            queryMode: 'local',
             store: me.paymentStatusStore,
             valueField: 'id',
             displayField: 'description',
