@@ -30,12 +30,12 @@
 /** Grid with row editor */
 .#{$prefix}grid-row-editor {
 
-	/** Reset  */
-	td.#{$prefix}form-item-body {
-		@include reset-border-radius;
-		padding: 0;
-		background: transparent;
-	}
+    /** Reset  */
+    td.#{$prefix}form-item-body {
+        @include reset-border-radius;
+        padding: 0;
+        background: transparent;
+    }
 
     .#{$prefix}search-article-live {
         top: 4px !important;
@@ -76,22 +76,22 @@
     /** Numberfield */
     table.#{$prefix}form-trigger-wrap {
 
-		.#{$prefix}form-spinner-up, .#{$prefix}form-spinner-down {
-			width: 20px !important;
-			height: 10px !important;
-			background-position: 0 0 !important;
-		}
+        .#{$prefix}form-spinner-up, .#{$prefix}form-spinner-down {
+            width: 20px !important;
+            height: 10px !important;
+            background-position: 0 0 !important;
+        }
 
-		/** Numberfield Button Up - Normal state */
-		.#{$prefix}form-spinner-up {
-			height: 9px !important;
-			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMCAIAAAAPshHVAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAvUlEQVQoU2P4/OXrwyfPSEIPnjy7cfc+w+/ff75++04q+vT5C8P/////kQVAOv+SDoC6QDp/4wDTZ89t6+rFKgXV+fPXL0w0a/4iC2cvSxfv7olTMGWhOr//+ImGZs1f7OQX7heb7heX4RwQ2T91BpoCqE60cJs2a56Vm693VHJYehEQ+USn2rj7d/dPRlYD1QmMUjT08yfIPWgA6Ei4AqjOD58+k4qgOt++/0Aqgup8/fb963fvQSTRCKgLAI9icJeR+wD8AAAAAElFTkSuQmCC") no-repeat;
-		}
+        /** Numberfield Button Up - Normal state */
+        .#{$prefix}form-spinner-up {
+            height: 9px !important;
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMCAIAAAAPshHVAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAvUlEQVQoU2P4/OXrwyfPSEIPnjy7cfc+w+/ff75++04q+vT5C8P/////kQVAOv+SDoC6QDp/4wDTZ89t6+rFKgXV+fPXL0w0a/4iC2cvSxfv7olTMGWhOr//+ImGZs1f7OQX7heb7heX4RwQ2T91BpoCqE60cJs2a56Vm693VHJYehEQ+USn2rj7d/dPRlYD1QmMUjT08yfIPWgA6Ei4AqjOD58+k4qgOt++/0Aqgup8/fb963fvQSTRCKgLAI9icJeR+wD8AAAAAElFTkSuQmCC") no-repeat;
+        }
 
-		/** Numberfield Button Down - Normal state */
-		.#{$prefix}form-spinner-down {
-			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAKCAIAAADZ6/LIAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAqUlEQVQoU2P4////X9IBUBcDEP8mHUB1/vz1i1QE1fn9x09kNHXGbF0zG2NbZ1MHdzMHd2NbFz1z27buPmQ1UJ1fv31HQwuWrnQPifOLTQcij9D4qbMXAJX9+v0brgCq8/OXr5ho+brNYelFQDRnySqIj5BloTo/fPqMFS1fv2XusjVABT9+/kKTgup8+/4DLvT1+/fvP35gikN1vnn3gVQE1UkG+P3nDwDe4we5hEuNyQAAAABJRU5ErkJggg==") no-repeat;
-		}
-	}
+        /** Numberfield Button Down - Normal state */
+        .#{$prefix}form-spinner-down {
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAKCAIAAADZ6/LIAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAqUlEQVQoU2P4////X9IBUBcDEP8mHUB1/vz1i1QE1fn9x09kNHXGbF0zG2NbZ1MHdzMHd2NbFz1z27buPmQ1UJ1fv31HQwuWrnQPifOLTQcij9D4qbMXAJX9+v0brgCq8/OXr5ho+brNYelFQDRnySqIj5BloTo/fPqMFS1fv2XusjVABT9+/kKTgup8+/4DLvT1+/fvP35gikN1vnn3gVQE1UkG+P3nDwDe4we5hEuNyQAAAABJRU5ErkJggg==") no-repeat;
+        }
+    }
 
 }

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 div[id*=form], .shopware-form {
-	& > .#{$prefix}panel-body {
-		background: #f0f2f4;
-	}
+    & > .#{$prefix}panel-body {
+        background: #f0f2f4;
+    }
 }

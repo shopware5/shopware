@@ -9,56 +9,56 @@ It contains the viewport specific styles inside media queries.
 */
 
 .navigation-main {
-	background: #fff;
+    background: #fff;
     display: none;
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
-	.navigation-main {
+    .navigation-main {
         border-bottom: 1px solid @brand-primary;
-		display: block;
-		position: relative;
+        display: block;
+        position: relative;
 
-		.navigation--list {
-			.clearfix();
+        .navigation--list {
+            .clearfix();
             .unitize-padding(0, 10);
             margin: 0;
             position: relative;
             white-space: nowrap;
-		}
+        }
 
-		.navigation--entry {
+        .navigation--entry {
             display: inline-block;
             -ms-touch-action: none;
-		}
+        }
 
-		.navigation--link {
+        .navigation--link {
             .transition(none);
-			.unitize-padding(8, 14);
+            .unitize-padding(8, 14);
             .unitize(font-size, 16);
-			.border-radius-multi(3px, 3px, 0, 0);
-			margin: 0;
-			display: block;
-			cursor: pointer;
-			color: @text-color;
+            .border-radius-multi(3px, 3px, 0, 0);
+            margin: 0;
+            display: block;
+            cursor: pointer;
+            color: @text-color;
 
-			&:hover { color: @brand-primary; }
-		}
+            &:hover { color: @brand-primary; }
+        }
 
-		.is--active .navigation--link {
-			.primary-gradient();
-			font-weight: @font-bold-weight;
-			color: #fff;
+        .is--active .navigation--link {
+            .primary-gradient();
+            font-weight: @font-bold-weight;
+            color: #fff;
 
             &:hover { color: #fff; }
-		}
-	}
+        }
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
-	.navigation-main {
+    .navigation-main {
         .navigation--list {
             padding: 0;
         }
-	}
+    }
 }

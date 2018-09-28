@@ -30,30 +30,30 @@ $input-color: #6c818f;
 
 /** Default label after style */
 .#{$prefix}form-cb-label-after {
-	margin: 0 0 0 12px;
+    margin: 0 0 0 12px;
 }
 
 /** Default label style */
 .#{$prefix}form-item-label {
-	font-weight: bold;
-	color: $font-color;
-	margin-top: 5px;
+    font-weight: bold;
+    color: $font-color;
+    margin-top: 5px;
     font-size: 11px;
 }
 
 /** Checkbox label style */
 .#{$prefix}form-cb-label {
-	color: $font-color;
-	text-shadow: 0 1px 0 #fff;
+    color: $font-color;
+    text-shadow: 0 1px 0 #fff;
 }
 
 /** Support text styling */
 .#{$prefix}form-support-text, .#{$prefix}global-notice-text {
-	color: #8698A3;
-	font-size: 11px;
-	font-style: italic;
-	margin: 3px 0 0 3px;
-	text-shadow: 0 1px 0 #fff;
+    color: #8698A3;
+    font-size: 11px;
+    font-style: italic;
+    margin: 3px 0 0 3px;
+    text-shadow: 0 1px 0 #fff;
 }
 .#{$prefix}global-notice-text {
     margin: 0 0 15px;
@@ -80,43 +80,43 @@ $input-color: #6c818f;
 
 /** Basic form item style - Needs to adjust for the different types of form elements */
 td.#{$prefix}form-item-body {
-	@include border-radius(3px);
-	padding: 2px;
-	background: darken(#dce1e5, 2%);
-	display: block;
+    @include border-radius(3px);
+    padding: 2px;
+    background: darken(#dce1e5, 2%);
+    display: block;
 
-	.#{$prefix}form-field {
-		@include border-radius(3px);
-		//@include single-box-shadow(darken(#d4d9dc, 5%), 1px, 1px, 1px, false, true);
-		@include form-item-focus;
-		border-color: #a6b0b7;
-		border-bottom-color: #d9dee2;
-		border-right-color: #d9dee2;
-		color: lighten($font-color, 15%);
-		padding: 2px 6px;
-		font-size: 11px;
-		height: 24px;
+    .#{$prefix}form-field {
+        @include border-radius(3px);
+        //@include single-box-shadow(darken(#d4d9dc, 5%), 1px, 1px, 1px, false, true);
+        @include form-item-focus;
+        border-color: #a6b0b7;
+        border-bottom-color: #d9dee2;
+        border-right-color: #d9dee2;
+        color: lighten($font-color, 15%);
+        padding: 2px 6px;
+        font-size: 11px;
+        height: 24px;
 
-		/** Styling the empty text */
-		&::-webkit-input-placeholder { color: lighten($font-color, 35%) }
-		&:-moz-placeholder { color: lighten($font-color, 35%) }
-	}
-	textarea.#{$prefix}form-field {
-		height: auto;
-	}
+        /** Styling the empty text */
+        &::-webkit-input-placeholder { color: lighten($font-color, 35%) }
+        &:-moz-placeholder { color: lighten($font-color, 35%) }
+    }
+    textarea.#{$prefix}form-field {
+        height: auto;
+    }
 }
 /** Exceptions for the basic style */
 td[id*=displayfield], td.#{$prefix}form-checkboxgroup-body {
-	padding: 0 !important;
-	background: transparent;
+    padding: 0 !important;
+    background: transparent;
 }
 table[id*=hiddenfield] { display: none !important }
 
 /** Disable the default border around check- and radioboxes */
 td.#{$prefix}form-cb-wrap, td[id^=fieldcontainer] {
-	@include border-radius(0);
+    @include border-radius(0);
 
-	background: transparent;
+    background: transparent;
 }
 
 /** Include the default widgets */

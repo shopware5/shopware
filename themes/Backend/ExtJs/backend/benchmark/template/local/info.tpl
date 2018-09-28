@@ -3,7 +3,7 @@
 {block name="benchmark_index_title"}Shopware BI - Fragen und Antworten{/block}
 
 {block name="benchmark_index_head"}
-	{$smarty.block.parent}
+    {$smarty.block.parent}
     <script type="text/javascript">
         function enableButton() {
             var checkBox = document.getElementById("confirmation-check"),

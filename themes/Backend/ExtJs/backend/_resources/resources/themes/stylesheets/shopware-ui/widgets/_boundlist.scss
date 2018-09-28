@@ -27,25 +27,25 @@
  * @author shopware AG
  */
 .#{$prefix}boundlist {
-	border-color: lighten($font-color, 35%);
+    border-color: lighten($font-color, 35%);
 
-	/** Normal state */
-	.#{$prefix}boundlist-item {
-		border-style: solid;
-		font-size: 11px;
-		color: $font-color;
-		padding: 4px 6px;
+    /** Normal state */
+    .#{$prefix}boundlist-item {
+        border-style: solid;
+        font-size: 11px;
+        color: $font-color;
+        padding: 4px 6px;
 
-		&:last-child {
-			border-bottom-style: none !important;
-		}
-	}
+        &:last-child {
+            border-bottom-style: none !important;
+        }
+    }
 
-	/** Hover state */
-	.#{$prefix}boundlist-item-over {
-		background: #DDEDF7;
-		border-style: solid;
-		border-left-color: #fff;
-		border-right-color: #fff;
-	}
+    /** Hover state */
+    .#{$prefix}boundlist-item-over {
+        background: #DDEDF7;
+        border-style: solid;
+        border-left-color: #fff;
+        border-right-color: #fff;
+    }
 }

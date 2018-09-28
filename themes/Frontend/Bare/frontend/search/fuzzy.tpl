@@ -51,9 +51,9 @@
                 </h1>
             {/block}
 
-			{block name="frontend_search_sidebar"}
+            {block name="frontend_search_sidebar"}
                 {include file='frontend/listing/sidebar.tpl'}
-			{/block}
+            {/block}
 
             {block name="frontend_search_results"}
                 <div class="search--results">

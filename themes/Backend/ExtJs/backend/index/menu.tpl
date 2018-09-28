@@ -1,9 +1,9 @@
 {block name="backend/index/menu/function"}
     {function name=backend_menu level=0}
         [{foreach $menu as $category}
-		    {$isNotDetailAction=$category['action'] && $category['action']|lower !== 'detail'}
-		    {$isDetailActionAndHasPrivilege=$category['action']|lower == 'detail' && {acl_is_allowed privilege=create resource=$category['controller']|lower}}
-		    {$hasReadPrivilegeForController={acl_is_allowed privilege=read resource=$category['controller']|lower}}
+            {$isNotDetailAction=$category['action'] && $category['action']|lower !== 'detail'}
+            {$isDetailActionAndHasPrivilege=$category['action']|lower == 'detail' && {acl_is_allowed privilege=create resource=$category['controller']|lower}}
+            {$hasReadPrivilegeForController={acl_is_allowed privilege=read resource=$category['controller']|lower}}
 
             {if ($category['onclick'] || $isNotDetailAction || $isDetailActionAndHasPrivilege || $category['children']) && $hasReadPrivilegeForController}
             {

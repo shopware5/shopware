@@ -28,9 +28,9 @@
  */
 table[id^=mediafield] {
 
-	.#{$prefix}form-trigger-wrap {
-		@include border-radius(3px);
-		padding: 2px;
-		background: darken(#dce1e5, 2%);
-	}
+    .#{$prefix}form-trigger-wrap {
+        @include border-radius(3px);
+        padding: 2px;
+        background: darken(#dce1e5, 2%);
+    }
 }

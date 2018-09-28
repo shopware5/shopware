@@ -27,29 +27,29 @@
  * @author shopware AG
  */
 .#{$prefix}progress {
-	@include border-radius(2px);
-	@include single-box-shadow(#b5c0c7, 0, 0, 4px);
-	border-color: #b5c0c7;
-	overflow: visible;
-	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAASCAIAAAAVNSPrAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAJ0lEQVQIHQXBgQ0AAAjDoKX/3yxCaFss07ZYyNZZ6Ih1dDTrrKM7D9KDJfc8DkCSAAAAAElFTkSuQmCC") repeat-x;
+    @include border-radius(2px);
+    @include single-box-shadow(#b5c0c7, 0, 0, 4px);
+    border-color: #b5c0c7;
+    overflow: visible;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAASCAIAAAAVNSPrAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAJ0lEQVQIHQXBgQ0AAAjDoKX/3yxCaFss07ZYyNZZ6Ih1dDTrrKM7D9KDJfc8DkCSAAAAAElFTkSuQmCC") repeat-x;
 
-	/** Background text */
-	.#{$prefix}progress-text-back {
-		color: #3c81b6;
-	}
+    /** Background text */
+    .#{$prefix}progress-text-back {
+        color: #3c81b6;
+    }
 
-	/** The actual bar */
-	.#{$prefix}progress-bar {
-		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAASCAIAAAAVNSPrAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAK0lEQVQIW2NIePSf6d0fBqZb7xmY/v1lYPoPwv/QaCBm+IcmDsQMUHGgPgDs0yDjUYa+3gAAAABJRU5ErkJggg==") repeat-x;
-		border: 1px solid #1068e5;
-		top: -1px;
-		height: 20px;
+    /** The actual bar */
+    .#{$prefix}progress-bar {
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAASCAIAAAAVNSPrAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAK0lEQVQIW2NIePSf6d0fBqZb7xmY/v1lYPoPwv/QaCBm+IcmDsQMUHGgPgDs0yDjUYa+3gAAAABJRU5ErkJggg==") repeat-x;
+        border: 1px solid #1068e5;
+        top: -1px;
+        height: 20px;
 
-		/** Foreground text */
-		.#{$prefix}progress-text {
-			text-shadow: 0 1px 0 darken(#207ab7, 10%);
-		}
-	}
+        /** Foreground text */
+        .#{$prefix}progress-text {
+            text-shadow: 0 1px 0 darken(#207ab7, 10%);
+        }
+    }
 }
 
 /** IE 9 specific */

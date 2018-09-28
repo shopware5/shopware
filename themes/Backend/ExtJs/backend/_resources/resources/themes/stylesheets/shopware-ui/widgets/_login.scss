@@ -39,22 +39,22 @@
     -o-transition: opacity ease-out 0.8s;
     transition: opacity ease-out 0.8s;
 
-	// Enable transition
+    // Enable transition
     &.loggedin {
         opacity: 0;
     }
 
-	// Toolbar footer
+    // Toolbar footer
     .#{$prefix}toolbar-footer {
         @include single-box-shadow('none');
         border-left: 0 none;
         border-right: 0 none;
-    	background: transparent !important;
-    	overflow: visible;
+        background: transparent !important;
+        overflow: visible;
 
-    	.#{$prefix}box-inner {
-    		overflow: visible;
-    	}
+        .#{$prefix}box-inner {
+            overflow: visible;
+        }
     }
 
     h1 {
@@ -70,7 +70,7 @@
         padding: 0 50px;
     }
 
-	// Form elements - field labels
+    // Form elements - field labels
     .#{$prefix}form-item-label {
         color: #475c6a;
         font-weight: 700;
@@ -78,7 +78,7 @@
         padding: 8px 0 0;
     }
 
-	// Form elements - text fields
+    // Form elements - text fields
     .#{$prefix}form-item-body {
         @include border-radius(3px);
         border: 1px solid rgba(255, 255, 255, 0.8);
@@ -120,7 +120,7 @@
         }
     }
 
-	// Form elements - combobox fields
+    // Form elements - combobox fields
     .#{$prefix}form-combo {
         .#{$prefix}form-text {
             width: 246px !important

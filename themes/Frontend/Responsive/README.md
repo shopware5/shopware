@@ -39,7 +39,7 @@ Using it is as easy as adding your files to the ```$javascript``` array in your 
 
 ```
 protected $javascript = [
-	'src/js/jquery.your-plugin.js'
+    'src/js/jquery.your-plugin.js'
 ];
 ```
 
@@ -51,7 +51,7 @@ We provide the ability adding additional CSS files to your theme. Using it is as
 
 ```
 protected $css = [
-	'src/css/my-style.css'
+    'src/css/my-style.css'
 ];
 ```
 

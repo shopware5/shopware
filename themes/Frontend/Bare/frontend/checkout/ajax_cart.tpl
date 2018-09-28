@@ -62,11 +62,11 @@
                             <span class="prices--articles-amount">{$sBasket.Amount|currency}</span>
                         </div>
                     {/block}
-					{block name='frontend_checkout_ajax_cart_prices_info'}
+                    {block name='frontend_checkout_ajax_cart_prices_info'}
                         <p class="prices--tax">
-							{s name="DetailDataPriceInfo" namespace="frontend/detail/data"}{/s}
+                            {s name="DetailDataPriceInfo" namespace="frontend/detail/data"}{/s}
                         </p>
-					{/block}
+                    {/block}
                 </div>
             {/if}
         {/block}

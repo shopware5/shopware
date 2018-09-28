@@ -115,115 +115,115 @@ $default-index: 10000;
     }
 }
 
-/*	INLINE BLOCK MESSAGES
-	-------------------------------------------- */
+/*    INLINE BLOCK MESSAGES
+    -------------------------------------------- */
 .block-message {
-	margin: 0 0 8px;
+    margin: 0 0 8px;
 
-	/** General styles */
-	.success, .error, .notice {
-		margin: 0 !important;
-		text-align: center;
-		color: #fff;
-		display: block;
-		text-shadow: 0 0 5px rgba(0,0,0,.3);
-		font-weight: bold;
-		font-size: 16px;
-		padding: 15px 20px !important;
-	}
+    /** General styles */
+    .success, .error, .notice {
+        margin: 0 !important;
+        text-align: center;
+        color: #fff;
+        display: block;
+        text-shadow: 0 0 5px rgba(0,0,0,.3);
+        font-weight: bold;
+        font-size: 16px;
+        padding: 15px 20px !important;
+    }
 
-	/** Success message - green */
-	.success {
-		background-color: #2ecc71;
-	}
+    /** Success message - green */
+    .success {
+        background-color: #2ecc71;
+    }
 
-	/** Error message - red */
-	.error {
-		background-color: #e74c3c;
-	}
+    /** Error message - red */
+    .error {
+        background-color: #e74c3c;
+    }
 
-	/** Notice message - yellow */
-	.notice {
-		background-color: #f1c40f;
-	}
+    /** Notice message - yellow */
+    .notice {
+        background-color: #f1c40f;
+    }
 }
 
-/*	GROWL LIKE MESSAGE
-	-------------------------------------------- */
+/*    GROWL LIKE MESSAGE
+    -------------------------------------------- */
 .growl-msg {
     @include single-transition(opacity, 0.2s);
-	@include opacity(0);
-	position: fixed;
-	top: 50px;
-	z-index: 99999;
-	width: 300px;
+    @include opacity(0);
+    position: fixed;
+    top: 50px;
+    z-index: 99999;
+    width: 300px;
 
-	& > .#{$prefix}panel-body {
-		@include border-radius(3px);
-		@include single-box-shadow($font-color, 0, 0, 5px);
-		background: #17181a url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAIAAACw1AcgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAATElEQVQIHQXBwRECMQDEsI275MODxpmjj9hIvN4ftvF9fmRscc6hpEaLGduo0EuNkm14L22obEOlpEZKi5SKioqSiowWKik1tqioSP+tqFiZ0owZ3AAAAABJRU5ErkJggg==") repeat-x;
-		border: 1px solid #000;
-	}
+    & > .#{$prefix}panel-body {
+        @include border-radius(3px);
+        @include single-box-shadow($font-color, 0, 0, 5px);
+        background: #17181a url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAIAAACw1AcgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAATElEQVQIHQXBwRECMQDEsI275MODxpmjj9hIvN4ftvF9fmRscc6hpEaLGduo0EuNkm14L22obEOlpEZKi5SKioqSiowWKik1tqioSP+tqFiZ0owZ3AAAAABJRU5ErkJggg==") repeat-x;
+        border: 1px solid #000;
+    }
 
-	.alert {
-		@include border-radius(3px);
-		@include inner-border(1px 1px 0 1px, #53585c);
-		padding: 8px 12px;
-		color: #fff;
-		text-shadow: 0 1px 0 #000;
-		font-size: 11px;
-	}
+    .alert {
+        @include border-radius(3px);
+        @include inner-border(1px 1px 0 1px, #53585c);
+        padding: 8px 12px;
+        color: #fff;
+        text-shadow: 0 1px 0 #000;
+        font-size: 11px;
+    }
 
     a { color: #fff; text-shadow: 0 1px 0 #000; text-decoration: underline }
 
-	.title { font-weight: bold; margin: 0 0 4px }
+    .title { font-weight: bold; margin: 0 0 4px }
 }
-/*	GROWL STICKY NOTIFICATION
-	-------------------------------------------- */
+/*    GROWL STICKY NOTIFICATION
+    -------------------------------------------- */
 .growl-msg-sticky-notification > .#{$prefix}panel-body {
-	@include inner-border(1px 1px 0 1px, #53585c);
+    @include inner-border(1px 1px 0 1px, #53585c);
 }
 .growl-msg-sticky-notification {
-	display: block;
+    display: block;
 
-	.alert {
-		-webkit-box-shadow: 0 0 0 transparent;
-		-moz-box-shadow: 0 0 0 transparent;
-		box-shadow: 0 0 0 transparent;
-	}
+    .alert {
+        -webkit-box-shadow: 0 0 0 transparent;
+        -moz-box-shadow: 0 0 0 transparent;
+        box-shadow: 0 0 0 transparent;
+    }
 
-	.growl-msg-btn-content {
-		padding: 8px 12px 8px 0;
-	}
+    .growl-msg-btn-content {
+        padding: 8px 12px 8px 0;
+    }
 
-	.#{$prefix}btn-growl-sticky-small {
-		@include border-radius(3px);
-		@include inner-border(1px 1px 0 1px, #53585c);
-		@include box-shadow(0 1px 1px #5b5b5b);
+    .#{$prefix}btn-growl-sticky-small {
+        @include border-radius(3px);
+        @include inner-border(1px 1px 0 1px, #53585c);
+        @include box-shadow(0 1px 1px #5b5b5b);
 
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                       svg-color-stop(#4c4c4c, 0%, 1),
                       svg-color-stop(#242424, 100%, 1)
                     )) center center no-repeat transparent;
 
-		background-color: #4c4c4c;
-		display: block;
-		padding: 4px 10px;
-		border: 1px solid #000;
-		margin: 0 2px 4px;
+        background-color: #4c4c4c;
+        display: block;
+        padding: 4px 10px;
+        border: 1px solid #000;
+        margin: 0 2px 4px;
 
-		&:hover {
+        &:hover {
           background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                         svg-color-stop(#242424, 0%, 1),
                         svg-color-stop(#4c4c4c, 100%, 1)
                       )) center center no-repeat transparent;
-		}
-	}
+        }
+    }
 
-	.#{$prefix}btn-growl-sticky-small button {
-		color: #fff;
-		text-shadow: 0 1px 0 #000;
-		font-size: 9px;
-		font-weight: bold;
-	}
+    .#{$prefix}btn-growl-sticky-small button {
+        color: #fff;
+        text-shadow: 0 1px 0 #000;
+        font-size: 9px;
+        font-weight: bold;
+    }
 }
