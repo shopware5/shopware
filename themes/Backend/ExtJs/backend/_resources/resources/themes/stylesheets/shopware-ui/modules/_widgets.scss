@@ -66,15 +66,15 @@
         .#{$prefix}tool-refresh:hover { background-position: 0 16px; }
     }
 
-	.#{$prefix}window-body.can-scroll:after {
+    .#{$prefix}window-body.can-scroll:after {
         @include single-box-shadow(rgba(0,0,0,0.1), 0, -14px, 4px, -8px);
         content: "";
-		position: absolute;
-		bottom: -25px;
-		left: 0;
-		right: 0;
-		height: 25px;
-	}
+        position: absolute;
+        bottom: -25px;
+        left: 0;
+        right: 0;
+        height: 25px;
+    }
 
     .#{$prefix}widget-toolbar {
       border-bottom: 1px solid rgba(255,255,255,0.18) !important;
@@ -172,32 +172,32 @@
     border: 0 none !important;
     padding: 0;
 
-	/** Header */
-	.#{$prefix}panel-header {
-		@include border-radius(0);
-		@include reset-box-shadow;
+    /** Header */
+    .#{$prefix}panel-header {
+        @include border-radius(0);
+        @include reset-box-shadow;
         padding: 5px 4px 4px 0;
         border: 1px solid rgba(0, 5, 33, 0.15);
-		background: rgba(0, 0, 0, 0.17) !important;
+        background: rgba(0, 0, 0, 0.17) !important;
 
-		/** Header text */
-		.#{$prefix}panel-header-text {
-			padding-left: 27px;
-			font-size: 14px;
-			color: #fff;
-			font-weight: normal;
-		}
-	}
+        /** Header text */
+        .#{$prefix}panel-header-text {
+            padding-left: 27px;
+            font-size: 14px;
+            color: #fff;
+            font-weight: normal;
+        }
+    }
 
-	/** Body */
+    /** Body */
     .#{$prefix}toolbar,
-	.#{$prefix}panel-body {
-		border: 0 none !important;
+    .#{$prefix}panel-body {
+        border: 0 none !important;
         background: transparent;
-	}
+    }
 
-	/** Basic grid styling */
-	.#{$prefix}grid-with-row-lines {
+    /** Basic grid styling */
+    .#{$prefix}grid-with-row-lines {
         border: 0 none !important;
 
         .#{$prefix}action-col-cell .#{$prefix}grid-cell-inner {
@@ -218,21 +218,21 @@
         }
     }
 
-	.#{$prefix}grid-header-ct .#{$prefix}column-header-text {
+    .#{$prefix}grid-header-ct .#{$prefix}column-header-text {
          font-size: 12px;
     }
 
     .#{$prefix}grid-header-ct,
     .#{$prefix}grid-header-ct *  {
-		background: transparent !important;
-		border: 0 none;
+        background: transparent !important;
+        border: 0 none;
         color: #fff !important;
         text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-	}
+    }
 
     .#{$prefix}grid-body .#{$prefix}grid-row-alt {
-		background: rgba(157,165,173,0.2);
-	}
+        background: rgba(157,165,173,0.2);
+    }
 
     .#{$prefix}panel .#{$prefix}grid-row-selected .#{$prefix}grid-cell {
         background: rgba(0,0,0,0.1) !important;
@@ -263,62 +263,62 @@ div[id^=swag-sales-widget] {
         width: 100% !important;
     }
 
-	/** Conversation rate */
-	.conversation-rate {
-		@include user-select;
-		margin: 20px 0 0;
+    /** Conversation rate */
+    .conversation-rate {
+        @include user-select;
+        margin: 20px 0 0;
 
-		* {
+        * {
             text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-			font-size: 12px;
-			color: #fff;
-			text-align: center;
-			display: block;
-		}
-		.title {
+            font-size: 12px;
+            color: #fff;
+            text-align: center;
+            display: block;
+        }
+        .title {
             color: #b2bfc7;
             margin: 0 0 12px;
             text-align: left;
         }
-		.rate {
-			font-size: 30px;
-			line-height: 28px;
-			font-weight: bold;
+        .rate {
+            font-size: 30px;
+            line-height: 28px;
+            font-weight: bold;
             text-align: left;
-		}
-	}
+        }
+    }
 }
 /** Visitors and customers widget */
 div[id^=swag-visitors-customers-widget] {
-	.visitors-online {
-		@include user-select;
-		margin: 10px 0 0;
+    .visitors-online {
+        @include user-select;
+        margin: 10px 0 0;
 
-		* {
+        * {
             text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
             font-size: 11px;
-			color: #fff;
-			text-align: left;
-			display: block;
-		}
-		.visitors {
-			font-size: 30px;
-			line-height: 28px;
-			font-weight: bold;
-		}
+            color: #fff;
+            text-align: left;
+            display: block;
+        }
+        .visitors {
+            font-size: 30px;
+            line-height: 28px;
+            font-weight: bold;
+        }
         .title {
             font-weight: normal;
             margin-top: 5px;
             font-size: 12px;
         }
-	}
+    }
 }
 /** Grid styling for the specific widgets */
 div[id^=swag-visitors-customers-widget], div[id^=swag-sales-widget] {
-	.#{$prefix}grid-body .#{$prefix}grid-row .#{$prefix}grid-cell, .#{$prefix}grid-row-selected .#{$prefix}grid-cell, .#{$prefix}grid-body .#{$prefix}grid-row * {
-		border: 0 none;
-		background: transparent !important;
-	}
+    .#{$prefix}grid-body .#{$prefix}grid-row .#{$prefix}grid-cell, .#{$prefix}grid-row-selected .#{$prefix}grid-cell, .#{$prefix}grid-body .#{$prefix}grid-row * {
+        border: 0 none;
+        background: transparent !important;
+    }
 }
 
 /** Upload widget */
@@ -343,7 +343,7 @@ div[id^=swag-upload-widget] {
         }
 
         .inner-dropzone {
-		    padding: 38px 0;
+            padding: 38px 0;
 
             span {
                 color: #fff;
@@ -352,14 +352,14 @@ div[id^=swag-upload-widget] {
                 text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
             }
         }
-	}
+    }
 }
 
 /**  */
 div[id^=swag-notice-widget] {
-	.#{$prefix}toolbar-docked-bottom {
-		background: transparent !important;
-		border: 0 none;
+    .#{$prefix}toolbar-docked-bottom {
+        background: transparent !important;
+        border: 0 none;
         padding: 0 28px 16px 28px;
 
         .#{$prefix}btn {
@@ -381,10 +381,10 @@ div[id^=swag-notice-widget] {
         }
     }
 
-	.#{$prefix}panel-body {
-		border-bottom: 0 none;
-		background: transparent;
-	}
+    .#{$prefix}panel-body {
+        border-bottom: 0 none;
+        background: transparent;
+    }
 
     textarea.#{$prefix}form-field {
         border-radius: 0;
@@ -401,10 +401,10 @@ div[id^=swag-notice-widget] {
         }
     }
 
-	td.#{$prefix}form-item-body {
-		background: transparent;
-		padding: 0;
-	}
+    td.#{$prefix}form-item-body {
+        background: transparent;
+        padding: 0;
+    }
 }
 
 div[id^=swag-shopware-news-widget] .#{$prefix}grid-cell {

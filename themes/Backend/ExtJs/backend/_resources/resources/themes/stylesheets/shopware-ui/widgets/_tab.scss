@@ -33,29 +33,29 @@
         svg-color-stop(#f7f7f7, 0%, 1),
         svg-color-stop(#e5e6e9, 100%, 1)
     )) center center no-repeat transparent;
-	border-color: $font-color;
+    border-color: $font-color;
 
-	.#{$prefix}tab-bar-body {
-		height: 33px !important;
-		padding: 9px 5px 3px;
-	}
+    .#{$prefix}tab-bar-body {
+        height: 33px !important;
+        padding: 9px 5px 3px;
+    }
 }
 
 /** Tabbar Styling - Plain */
 .#{$prefix}tab-bar-default-plain {
-	background: transparent;
+    background: transparent;
 
-	.#{$prefix}box-inner {
-		height: 33px !important;
-	}
+    .#{$prefix}box-inner {
+        height: 33px !important;
+    }
 
-	.#{$prefix}tab-bar-body {
-		padding-top: 10px;
-	}
+    .#{$prefix}tab-bar-body {
+        padding-top: 10px;
+    }
 
-	.#{$prefix}tab-default-top {
-		top: 0px !important;
-	}
+    .#{$prefix}tab-default-top {
+        top: 0px !important;
+    }
 }
 .#{$prefix}ie9 .#{$prefix}tab-bar-default-plain {
     filter: none;
@@ -63,19 +63,19 @@
 
 /** Tabbar strip */
 .#{$prefix}tab-bar-top .#{$prefix}tab-bar-strip {
-	background: #1681d3;
+    background: #1681d3;
     border: 0 none;
-	top: 31px;
+    top: 31px;
 }
 
 .#{$prefix}tab-bar-strip-default-plain {
-	height: 3px !important;
+    height: 3px !important;
 }
 
 /** Tabs */
 /** Tab Styling - Default */
 .#{$prefix}nlg .#{$prefix}tab-default-top, .#{$prefix}tab-default-top {
-	@include border-radius(5px 5px 0 0);
+    @include border-radius(5px 5px 0 0);
     -webkit-box-shadow: transparent 0 0 0 !important;
     -moz-box-shadow: transparent 0 0 0 !important;
     -ms-box-shadow: transparent 0 0 0 !important;
@@ -86,18 +86,18 @@
         svg-color-stop(rgba(127,152,169,1), 100%, 1)
     )) center center no-repeat transparent !important;
     border-color: #8896a6;
-	margin: 0 5px;
+    margin: 0 5px;
 
-	button .#{$prefix}tab-inner {
+    button .#{$prefix}tab-inner {
         font-weight: normal;
         padding-top: 1px;
-		color: #fff;
-		text-shadow: 0 1px 0 #8190a3;
-		margin: 0 !important; /** Fixes the alignment of the text in FF */
-	}
+        color: #fff;
+        text-shadow: 0 1px 0 #8190a3;
+        margin: 0 !important; /** Fixes the alignment of the text in FF */
+    }
 
-	/** Tab Styling - Hover */
-	&:hover {
+    /** Tab Styling - Hover */
+    &:hover {
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(198,209,217,1), 0%, 1),
             svg-color-stop(rgba(147,168,183,1), 100%, 1)
@@ -121,10 +121,10 @@
         )) center center no-repeat transparent !important;
     }
 
-	button .#{$prefix}tab-inner {
-		color: #fff;
-		text-shadow: 0 1px 0 #0941e2;
-	}
+    button .#{$prefix}tab-inner {
+        color: #fff;
+        text-shadow: 0 1px 0 #0941e2;
+    }
 }
 
 /** Tab Styling - Disable */
@@ -142,14 +142,14 @@
         )) center center no-repeat transparent !important;
     }
 
-	button {
-		color: #8596a2 !important;
-	}
+    button {
+        color: #8596a2 !important;
+    }
 
-	.#{$prefix}tab-inner {
-		color: #8596a2 !important;
-		text-shadow: 0 1px 0 #fff !important;
-	}
+    .#{$prefix}tab-inner {
+        color: #8596a2 !important;
+        text-shadow: 0 1px 0 #fff !important;
+    }
 
 }
 
@@ -207,5 +207,5 @@
 }
 
 .#{$prefix}tabpanel-child .#{$prefix}panel-body-default {
-	background: transparent;
+    background: transparent;
 }

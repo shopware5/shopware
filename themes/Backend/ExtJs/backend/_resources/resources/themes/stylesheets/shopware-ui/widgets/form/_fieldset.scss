@@ -27,46 +27,46 @@
  * @author shopware AG
  */
 .#{$prefix}fieldset {
-	color: $fieldset-base-color;
-	border-color: $fieldset-base-border-color;
-	font-size: $fieldset-base-font-size;
-	padding: 12px 20px;
+    color: $fieldset-base-color;
+    border-color: $fieldset-base-border-color;
+    font-size: $fieldset-base-font-size;
+    padding: 12px 20px;
 
-	// Header
-	.#{$prefix}fieldset-header {
-		padding: 0 5px 1px;
+    // Header
+    .#{$prefix}fieldset-header {
+        padding: 0 5px 1px;
 
-		.#{$prefix}fieldset-header-text {
-			color: $fieldset-base-color;
-			font-size: $fieldset-base-font-size;
-		}
+        .#{$prefix}fieldset-header-text {
+            color: $fieldset-base-color;
+            font-size: $fieldset-base-font-size;
+        }
 
-		.#{$prefix}tool {
-			@include border-radius(3px);
-			@include transition-property(border-color);
-			@include transition-duration(500ms);
-			@include border-radius(3px);
-			border: 2px solid #afd9f7;;
-			width: 19px !important;
-			height: 19px !important;
-		}
-	}
+        .#{$prefix}tool {
+            @include border-radius(3px);
+            @include transition-property(border-color);
+            @include transition-duration(500ms);
+            @include border-radius(3px);
+            border: 2px solid #afd9f7;;
+            width: 19px !important;
+            height: 19px !important;
+        }
+    }
 
-	// Checkbox Header
-	.#{$prefix}fieldset-header-checkbox {
-		margin: 1px 3px 0 0;
-		line-height: 20px;
-	}
+    // Checkbox Header
+    .#{$prefix}fieldset-header-checkbox {
+        margin: 1px 3px 0 0;
+        line-height: 20px;
+    }
 
-	// Modify the text to match the new height
-	.#{$prefix}fieldset-header-checkbox + .#{$prefix}fieldset-header-text,
-	.#{$prefix}fieldset-header .#{$prefix}tool + .#{$prefix}fieldset-header-text {
-		padding: 4px 0 1px;
-	}
+    // Modify the text to match the new height
+    .#{$prefix}fieldset-header-checkbox + .#{$prefix}fieldset-header-text,
+    .#{$prefix}fieldset-header .#{$prefix}tool + .#{$prefix}fieldset-header-text {
+        padding: 4px 0 1px;
+    }
 }
 
 // Active style for the collasible fieldset
 .#{$prefix}fieldset-collapsed .#{$prefix}fieldset-header .#{$prefix}tool {
-	border-color: #dfe3e6
+    border-color: #dfe3e6
 }
 
