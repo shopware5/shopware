@@ -4,7 +4,7 @@
         {include file="frontend/_includes/product_slider.tpl"
                  sliderMode="ajax"
                  sliderInitOnEvent="onShowContent-productStreamSliderId-{$relatedProductStream.id}"
-                 sliderAjaxCtrlUrl="{url module=widgets controller=emotion action=productStreamArticleSlider streamId=$relatedProductStream.id articleId=$sArticle.articleID productBoxLayout="slider"}"
+                 sliderAjaxCtrlUrl="{url module=widgets controller=emotion action=productStreamArticleSlider streamId=$relatedProductStream.id skippedArticleId=$sArticle.articleID productBoxLayout="slider"}"
                  sliderAjaxMaxShow="40"}
     </div>
 {/block}

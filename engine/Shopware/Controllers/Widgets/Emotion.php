@@ -164,9 +164,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $limit = 0;
         }
 
-        $articleId = $this->Request()->getParam('articleId');
+        $skippedArticleId = $this->Request()->getParam('skippedArticleId');
 
-        $values = $this->getProductStream($streamId, $offset, $limit, $articleId);
+        $values = $this->getProductStream($streamId, $offset, $limit, $skippedArticleId);
 
         $this->View()->assign('articles', $values['values']);
         $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
@@ -252,7 +252,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return ['values' => $data, 'pages' => $pages];
     }
 
-    private function getProductStream($productStreamId, $offset = 0, $limit = 100, $articleId = null)
+    private function getProductStream($productStreamId, $offset = 0, $limit = 100, $skippedArticleId = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
@@ -262,8 +262,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $criteria->offset($offset)
                  ->limit($limit);
 
-        if ($articleId) {
-            $criteria->addBaseCondition(new SkipProductIdCondition([$articleId]));
+        if ($skippedArticleId) {
+            $criteria->addBaseCondition(new SkipProductIdCondition([$skippedArticleId]));
         }
 
         /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
