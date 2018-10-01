@@ -291,6 +291,7 @@ class VariantHelper implements VariantHelperInterface
         ];
 
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
+
         /** @var VariantCondition $condition */
         foreach ($conditions as $condition) {
             if ($condition->expandVariants()) {
@@ -307,7 +308,6 @@ class VariantHelper implements VariantHelperInterface
         $priceTable = $this->createListingPriceTable($criteria, $context);
         $onSalePriceTable = $this->createOnSaleListingPriceTable($criteria, $context);
 
-        $subQuery->addSelect($query->getQueryPart('select'));
         $subQuery->addSelect([$this->getOnSalePriceColums()]);
         $subQuery->addSelect([
             'IFNULL(listing_price.cheapest_price, onsale_listing_price.cheapest_price) AS cheapest_price',
