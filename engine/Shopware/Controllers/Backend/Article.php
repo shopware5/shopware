@@ -158,9 +158,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($this->Request()->has('id')) {
             /** @var Article $article */
             $article = $this->getRepository()->find((int) $this->Request()->getParam('id'));
+
             // Check whether the article has been modified in the meantime
-            $lastChanged = new \DateTime($data['changed']);
-            if ($article->getChanged()->getTimestamp() != $lastChanged->getTimestamp()) {
+            try {
+                $lastChanged = new \DateTime($data['changed']);
+            } catch (Exception $e) {
+                // If we have a invalid date caused by product imports
+                $lastChanged = $article->getChanged();
+            }
+
+            if ($article->getChanged()->getTimestamp() !== $lastChanged->getTimestamp()) {
                 $namespace = Shopware()->Snippets()->getNamespace('backend/article/controller/main');
 
                 $this->View()->assign([
