@@ -204,6 +204,15 @@ class Shop extends ModelEntity
     protected $children;
 
     /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Shop", mappedBy="shop", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Shop
+     */
+    protected $attribute;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -570,6 +579,24 @@ class Shop extends ModelEntity
     public function setPages($pages)
     {
         $this->pages = $pages;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\Shop
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\Shop|array|null $attribute
+     *
+     * @return \Shopware\Models\Shop\Shop
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Shop', 'attribute', 'shop');
     }
 
     /**

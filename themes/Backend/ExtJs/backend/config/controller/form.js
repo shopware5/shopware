@@ -156,7 +156,8 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         { ref: 'table', selector: 'config-base-table' },
         { ref: 'deleteButton', selector: 'config-base-table button[action=delete]' },
         { ref: 'taxRuleAddButton', selector: 'config-tax-rule toolbar button' },
-        { ref: 'discountAddButton', selector: 'config-pricegroup-discount toolbar button' }
+        { ref: 'discountAddButton', selector: 'config-pricegroup-discount toolbar button' },
+        { ref: 'attributeForm', selector: 'config-base-detail shopware-attribute-form' }
     ],
 
     messages: {
@@ -418,8 +419,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
             activeRecord.set('style', values[fieldName + '_Style']);
         }
 
-        formPanel.disable();
-        formPanel.loadRecord();
+        me.getAttributeForm().saveAttribute(record.get('id'));
 
         record.associations.each(function(association) {
             var store = record[association.name]();
@@ -571,6 +571,8 @@ Ext.define('Shopware.apps.Config.controller.Form', {
                     }
                 }
             });
+
+            me.getAttributeForm().loadAttribute(record.get('id'));
         }
     },
 

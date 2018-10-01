@@ -128,6 +128,7 @@ class ShopGateway implements ShopGatewayInterface
             ->addSelect($this->fieldHelper->getMediaFields());
 
         $query->from('s_core_shops', 'shop')
+            ->leftJoin('shop', 's_core_shops_attributes', 'shopAttribute', 'shopAttribute.shopID = shop.id')
             ->leftJoin('shop', 's_core_currencies', 'currency', 'currency.id = shop.currency_id')
             ->leftJoin('shop', 's_core_templates', 'template', 'shop.template_id = template.id')
             ->leftJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
