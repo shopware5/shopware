@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
 * Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
 * Changed product saving to handle invalid changetime dates
+* Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
 
 ### Additions
 
@@ -22,6 +23,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
         * `Shopware_Modules_Admin_Newsletter_Unsubscribe`
         * `Shopware_Modules_Admin_sUpdateNewsletter_Subscribe`
 * Added possibility to edit index.max_result_window for ES via `config.php`
+
 
 ## 5.5.1
 
