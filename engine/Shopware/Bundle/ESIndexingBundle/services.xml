@@ -43,6 +43,7 @@
             <argument>%shopware.es.number_of_shards%</argument>
             <argument>%shopware.es.number_of_replicas%</argument>
             <argument>%shopware.es.total_fields_limit%</argument>
+            <argument>%shopware.es.max_result_window%</argument>
         </service>
 
         <service id="shopware_elastic_search.shop_analyzer" class="Shopware\Bundle\ESIndexingBundle\ShopAnalyzer"/>

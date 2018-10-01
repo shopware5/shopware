@@ -55,24 +55,32 @@ class IndexConfiguration
     private $totalFieldsLimit;
 
     /**
+     * @var int|null
+     */
+    private $maxResultWindow;
+
+    /**
      * @param string   $name
      * @param string   $alias
      * @param int|null $numberOfShards
      * @param int|null $numberOfReplicas
      * @param int|null $totalFieldsLimit
+     * @param int|null $maxResultWindow
      */
     public function __construct(
         $name,
         $alias,
         $numberOfShards = null,
         $numberOfReplicas = null,
-        $totalFieldsLimit = null)
+        $totalFieldsLimit = null,
+        $maxResultWindow = null)
     {
         $this->name = $name;
         $this->alias = $alias;
         $this->numberOfShards = $numberOfShards;
         $this->numberOfReplicas = $numberOfReplicas;
         $this->totalFieldsLimit = $totalFieldsLimit;
+        $this->maxResultWindow = $maxResultWindow;
     }
 
     /**
@@ -137,5 +145,21 @@ class IndexConfiguration
     public function setTotalFieldsLimit($totalFieldsLimit)
     {
         $this->totalFieldsLimit = $totalFieldsLimit;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMaxResultWindow()
+    {
+        return $this->maxResultWindow;
+    }
+
+    /**
+     * @param int|null $maxResultWindow
+     */
+    public function setMaxResultWindow($maxResultWindow)
+    {
+        $this->maxResultWindow = $maxResultWindow;
     }
 }
