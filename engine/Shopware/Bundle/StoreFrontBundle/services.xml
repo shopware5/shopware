@@ -409,6 +409,7 @@
         </service>
 
         <service id="shopware_storefront.shop_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.template_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.category_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.locale_hydrator_dbal" />
