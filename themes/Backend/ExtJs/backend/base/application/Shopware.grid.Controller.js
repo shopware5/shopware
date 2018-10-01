@@ -492,7 +492,7 @@ Ext.define('Shopware.grid.Controller', {
              */
             me.getEventName('after-edit-item')
 
-          );
+        );
     },
 
     /**
@@ -565,7 +565,8 @@ Ext.define('Shopware.grid.Controller', {
     onDeleteItems: function (grid, records, button) {
         var me = this, window,
             text = me.deleteConfirmText,
-            title = me.deleteConfirmTitle;
+            title = me.deleteConfirmTitle,
+            count = records.length;
 
         if (!Shopware.app.Application.fireEvent('before-delete-items', me, records, grid, title, text)) {
             return false;
@@ -604,13 +605,29 @@ Ext.define('Shopware.grid.Controller', {
 
             //reload store after all items deleted.
             Shopware.app.Application.on('grid-process-done', function() {
-                grid.getStore().load();
+                me.reloadStoreAfterDelete(grid.getStore(), count);
             }, me, { single: true });
 
             window.show();
         });
     },
 
+    /**
+     * @param store { Ext.data.Store  }
+     * @param itemCount int
+     */
+    reloadStoreAfterDelete: function(store, itemCount) {
+        switch(true) {
+            case (store.data.length !== itemCount):
+            case store.currentPage === 1:
+                store.load();
+                return;
+            case store.currentPage > 1 && store.data.length === itemCount:
+                store.currentPage -= 1;
+                store.load();
+                return
+        }
+    },
 
     /**
      * Event listener function of the { @link Shopware.grid.Panel.deleteColumn }.
@@ -644,7 +661,7 @@ Ext.define('Shopware.grid.Controller', {
 
             record.destroy({
                 success: function (result, operation) {
-                    grid.getStore().load();
+                    me.reloadStoreAfterDelete(grid.getStore(), 1);
                 }
             });
         });
