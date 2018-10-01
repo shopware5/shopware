@@ -78,6 +78,8 @@
                     // Check if error thrown
                     if (data.indexOf('data-max-reached="true"') !== -1) {
                         $.loadingIndicator.close(function () {
+                            $.overlay.close();
+
                             $.modal.open(data, {
                                 sizing: 'content'
                             });
