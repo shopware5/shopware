@@ -32,10 +32,11 @@
                                         <div class="banner-slider--banner">
 
                                             {block name="frontend_widgets_banner_slider_banner_picture"}
+                                                {$srcSet = ''}
+                                                {$itemSize = ''}
+                                                
                                                 {if $banner.thumbnails}
                                                     {$baseSource = $banner.thumbnails[0].source}
-                                                    {$srcSet = ''}
-                                                    {$itemSize = ''}
 
                                                     {foreach $element.viewports as $viewport}
                                                         {$cols = ($viewport.endCol - $viewport.startCol) + 1}
