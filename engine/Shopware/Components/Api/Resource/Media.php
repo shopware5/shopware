@@ -465,7 +465,7 @@ class Media extends Resource
             $params['name'] = $this->getUniqueFileName($params['file'], $params['name']);
             $originalName = $params['file'];
 
-            if (!file_exists($params['file'])) {
+            if (!file_exists($params['file']) || strpos($params['file'], 'ftp://') === 0) {
                 try {
                     $path = $this->load($params['file'], $params['name']);
 
