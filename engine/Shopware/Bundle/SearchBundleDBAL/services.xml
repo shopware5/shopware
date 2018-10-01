@@ -180,6 +180,10 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.skip_productid_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SkipProductIdConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.product_attribute_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ProductAttributeConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>

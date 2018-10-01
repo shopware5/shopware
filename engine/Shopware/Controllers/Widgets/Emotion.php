@@ -23,6 +23,7 @@
  */
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
+use Shopware\Bundle\SearchBundle\Condition\SkipProductIdCondition;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
@@ -163,7 +164,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $limit = 0;
         }
 
-        $values = $this->getProductStream($streamId, $offset, $limit);
+        $articleId = $this->Request()->getParam('articleId');
+
+        $values = $this->getProductStream($streamId, $offset, $limit, $articleId);
 
         $this->View()->assign('articles', $values['values']);
         $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
@@ -249,7 +252,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return ['values' => $data, 'pages' => $pages];
     }
 
-    private function getProductStream($productStreamId, $offset = 0, $limit = 100)
+    private function getProductStream($productStreamId, $offset = 0, $limit = 100, $articleId = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
@@ -258,6 +261,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $criteria = $factory->createBaseCriteria([$category], $context);
         $criteria->offset($offset)
                  ->limit($limit);
+
+        if ($articleId) {
+            $criteria->addBaseCondition(new SkipProductIdCondition([$articleId]));
+        }
 
         /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
         $streamRepository = $this->get('shopware_product_stream.repository');
