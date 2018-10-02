@@ -161,9 +161,10 @@ class Address extends Resource
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\CustomValidationException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
      *
      * @return \Shopware\Models\Customer\Address
      */

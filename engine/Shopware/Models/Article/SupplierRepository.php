@@ -36,7 +36,10 @@ class SupplierRepository extends ModelRepository
      * Query to fetch all suppliers that can be used
      * to generate friendly routes
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param null|int $offset
+     * @param null|int $limit
+     *
+     * @return Query
      */
     public function getFriendlyUrlSuppliersQuery($offset = null, $limit = null)
     {
@@ -46,6 +49,9 @@ class SupplierRepository extends ModelRepository
     /**
      * Query builder to fetch all suppliers that can be used
      * to generate friendly routes
+     *
+     * @param null|int $offset
+     * @param null|int $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -138,7 +144,7 @@ class SupplierRepository extends ModelRepository
      * @param null  $limit
      * @param null  $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {

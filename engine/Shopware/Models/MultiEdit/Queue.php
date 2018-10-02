@@ -103,6 +103,8 @@ class Queue extends ModelEntity
 
     /**
      * Class constructor.
+     *
+     * @param string $resource
      */
     public function __construct($resource)
     {

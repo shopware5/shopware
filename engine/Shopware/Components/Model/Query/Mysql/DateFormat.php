@@ -39,6 +39,10 @@ class DateFormat extends FunctionNode
 
     /**
      * @override
+     *
+     * @param \Doctrine\ORM\Query\SqlWalker $sqlWalker
+     *
+     * @return string
      */
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
@@ -51,6 +55,10 @@ class DateFormat extends FunctionNode
 
     /**
      * @override
+     *
+     * @param \Doctrine\ORM\Query\Parser $parser
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
      */
     public function parse(\Doctrine\ORM\Query\Parser $parser)
     {

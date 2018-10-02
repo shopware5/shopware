@@ -1237,8 +1237,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
     /**
      * @param array $elementData
-     *
-     * @throws \Doctrine\DBAL\DBALException
      */
     private function createSalutationSnippets($elementData)
     {

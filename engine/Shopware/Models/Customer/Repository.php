@@ -215,8 +215,9 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search for customers
      * with the passed email address. The passed customer id is excluded.
      *
-     * @param null $email
-     * @param null $customerId
+     * @param null|string $email
+     * @param null|int    $customerId
+     * @param null|int    $shopId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -231,8 +232,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateEmailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $email
-     * @param null $customerId
+     * @param null|string $email
+     * @param null|int    $customerId
+     * @param null|int    $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

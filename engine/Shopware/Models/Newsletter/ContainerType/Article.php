@@ -119,8 +119,6 @@ class Article extends LazyFetchModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
-     *
-     * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)
     {

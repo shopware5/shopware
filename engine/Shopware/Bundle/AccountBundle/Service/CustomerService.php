@@ -58,8 +58,7 @@ class CustomerService implements CustomerServiceInterface
      * @param Customer $customer
      *
      * @throws ValidationException
-     *
-     * @return Customer
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function update(Customer $customer)
     {

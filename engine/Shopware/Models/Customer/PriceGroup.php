@@ -116,7 +116,7 @@ class PriceGroup extends ModelEntity
      *
      * @param string $name
      *
-     * @return Group
+     * @return PriceGroup
      */
     public function setName($name)
     {

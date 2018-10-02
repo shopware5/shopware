@@ -103,6 +103,10 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * Initials the top seller data.
      * This function is used from the backend controller when the user
      * want to refresh the top seller data manuel.
+     *
+     * @param null|int $limit
+     *
+     * @throws Zend_Db_Adapter_Exception
      */
     public function initTopSeller($limit = null)
     {

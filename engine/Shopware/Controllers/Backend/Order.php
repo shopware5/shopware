@@ -2037,8 +2037,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * @param int|null $documentTypeId
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return string
      */
     private function getTemplateNameForDocumentTypeId($documentTypeId = null)

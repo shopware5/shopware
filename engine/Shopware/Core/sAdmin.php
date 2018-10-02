@@ -4108,6 +4108,11 @@ SQL;
      * @param float $currencyFactor
      * @param array $dispatch
      * @param float $discount_tax
+     *
+     * @throws Zend_Date_Exception
+     * @throws Zend_Db_Adapter_Exception
+     *
+     * @return array
      */
     private function handlePaymentMeanSurcharge($country, $payment, $currencyFactor, $dispatch, $discount_tax)
     {

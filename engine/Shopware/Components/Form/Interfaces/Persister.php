@@ -36,8 +36,6 @@ interface Persister
      *
      * @param Form\Interfaces\Container $container
      * @param $reference
-     *
-     * @return
      */
     public function save(Form\Interfaces\Container $container, $reference);
 }

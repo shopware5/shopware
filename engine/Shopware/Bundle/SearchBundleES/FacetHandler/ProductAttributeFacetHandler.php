@@ -357,6 +357,8 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
     /**
      * @param array $aggregation
+     *
+     * @return array
      */
     private function formatDates(array $aggregation)
     {

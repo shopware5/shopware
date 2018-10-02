@@ -131,7 +131,7 @@ class DataCollectionResolver implements DataCollectionResolverInterface
      * @param PrepareDataCollection $prepareDataCollection
      * @param ShopContextInterface  $context
      *
-     * @return \Shopware\Bundle\SearchBundle\BatchProductNumberSearchResult
+     * @return \Shopware\Bundle\SearchBundle\BatchProductSearchResult
      */
     private function resolveBatchRequest(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
     {

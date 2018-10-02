@@ -156,10 +156,10 @@ class Media extends Resource
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\PrivilegeException
      *
      * @return MediaModel
      */

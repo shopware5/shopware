@@ -87,7 +87,7 @@ class Shopware_Bootstrap
      * @param string $name
      * @param mixed  $resource
      *
-     * @return Enlight_Bootstrap
+     * @return Shopware_Bootstrap
      */
     public function registerResource($name, $resource)
     {
@@ -181,7 +181,7 @@ class Shopware_Bootstrap
      *
      * @param string $name
      *
-     * @return Enlight_Bootstrap
+     * @return Shopware_Bootstrap
      */
     public function resetResource($name)
     {

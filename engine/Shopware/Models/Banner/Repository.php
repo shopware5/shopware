@@ -92,7 +92,7 @@ class Repository extends ModelRepository
      *
      * @param null $filter
      *
-     * @return \Doctrine\ORM\Query
+     * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getBannerMainQuery($filter = null)
     {

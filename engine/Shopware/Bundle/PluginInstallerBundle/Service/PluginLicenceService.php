@@ -67,7 +67,9 @@ class PluginLicenceService
     /**
      * @param UpdateLicencesRequest $request
      *
-     * @return array
+     * @throws \Exception
+     *
+     * @return \Shopware\Components\HttpClient\Response
      */
     public function updateLicences(UpdateLicencesRequest $request)
     {

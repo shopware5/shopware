@@ -70,6 +70,8 @@ class ChromePhpHandler extends BaseChromePhpHandler
 
     /**
      * Adds the headers to the response once it's created
+     *
+     * @param \Enlight_Controller_EventArgs $args
      */
     public function onRouteStartUp(\Enlight_Controller_EventArgs $args)
     {

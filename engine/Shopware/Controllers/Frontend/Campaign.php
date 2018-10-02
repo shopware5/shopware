@@ -27,7 +27,6 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
      * Renders a shopping world as a landingpage.
      *
      * @throws \Exception
-     * @throws \Enlight_Controller_Exception
      */
     public function indexAction()
     {

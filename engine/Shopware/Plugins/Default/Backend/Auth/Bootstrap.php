@@ -384,7 +384,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      *
      * @throws \Exception
      * @throws \SmartyException
-     * @throws \Enlight_Exception
      *
      * @return \Zend_Auth
      */

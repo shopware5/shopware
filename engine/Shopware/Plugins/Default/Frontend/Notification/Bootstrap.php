@@ -68,8 +68,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * @static
      *
      * @param Enlight_Event_EventArgs $args
-     *
-     * @return
      */
     public static function onPostDispatch(Enlight_Event_EventArgs $args)
     {
@@ -115,6 +113,9 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * @static
      *
      * @param Enlight_Event_EventArgs $args
+     *
+     * @throws Enlight_Exception
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return
      */
@@ -209,6 +210,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * @static
      *
      * @param Enlight_Event_EventArgs $args
+     *
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return
      */

@@ -392,6 +392,8 @@ class CrudService
     /**
      * @param string                $type
      * @param null|string|int|float $defaultValue
+     *
+     * @return null|string|int|float
      */
     private function parseDefaultValue($type, $defaultValue)
     {

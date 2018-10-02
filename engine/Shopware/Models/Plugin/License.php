@@ -42,82 +42,82 @@ class License extends ModelEntity
     private $id;
 
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="module", type="string", nullable=false)
      */
     private $module;
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="host", type="string", nullable=false)
      */
     private $host;
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="label", type="string", nullable=false)
      */
     private $label;
 
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="license", type="string", nullable=false)
      */
     private $license;
 
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="version", type="string", nullable=false)
      */
     private $version;
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="notation", type="string", nullable=false)
      */
     private $notation;
 
     /**
-     * @var
+     * @var int
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
     private $type;
 
     /**
-     * @var
+     * @var int
      * @ORM\Column(name="source", type="integer", nullable=false)
      */
     private $source;
 
     /**
-     * @var
+     * @var \DateTime
      * @ORM\Column(name="added", type="date", nullable=true)
      */
     private $added;
 
     /**
-     * @var
+     * @var \DateTime
      * @ORM\Column(name="creation", type="date", nullable=true)
      */
     private $creation;
 
     /**
-     * @var
+     * @var \DateTime
      * @ORM\Column(name="expiration", type="date", nullable=true)
      */
     private $expiration;
 
     /**
-     * @var
+     * @var int
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
     private $active;
 
     /**
-     * @var
+     * @var int
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
-     * @var
+     * @var \Shopware\Models\Plugin\Plugin
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="licenses")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
      */
@@ -140,7 +140,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return int
      */
     public function getActive()
     {
@@ -156,7 +156,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return \DateTime
      */
     public function getAdded()
     {
@@ -172,7 +172,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getCreation()
     {
@@ -188,7 +188,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return \DateTime
      */
     public function getExpiration()
     {
@@ -204,7 +204,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getHost()
     {
@@ -220,7 +220,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getLabel()
     {
@@ -236,7 +236,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getLicense()
     {
@@ -252,7 +252,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getModule()
     {
@@ -268,7 +268,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getNotation()
     {
@@ -284,7 +284,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return Plugin
      */
     public function getPlugin()
     {
@@ -300,7 +300,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return int
      */
     public function getSource()
     {
@@ -316,7 +316,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return int
      */
     public function getType()
     {
@@ -332,7 +332,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getVersion()
     {

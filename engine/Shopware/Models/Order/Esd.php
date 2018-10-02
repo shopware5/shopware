@@ -104,7 +104,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return Order
      */
     public function getOrder()
     {
@@ -120,7 +120,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getOrderDetail()
     {

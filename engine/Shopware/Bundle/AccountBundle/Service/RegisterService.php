@@ -255,8 +255,6 @@ class RegisterService implements RegisterServiceInterface
      * @param Shop     $shop
      * @param Customer $customer
      * @param string   $hash
-     *
-     * @throws \Doctrine\ORM\ORMException
      */
     private function doubleOptInVerificationMail(Shop $shop, Customer $customer, $hash)
     {

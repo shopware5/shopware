@@ -26,6 +26,7 @@ namespace Shopware\Models\Shop\TemplateConfig;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Template;
 
 /**
  * @ORM\Table(name="s_core_templates_config_set")
@@ -141,7 +142,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Template
+     * @return Template
      */
     public function getTemplate()
     {
@@ -149,7 +150,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Template $template
+     * @param Template $template
      */
     public function setTemplate($template)
     {

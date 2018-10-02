@@ -439,8 +439,9 @@ class Translation extends Resource implements BatchInterface
      *
      * @param array $data
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws \Doctrine\DBAL\DBALException
      *
      * @return null|object
      */

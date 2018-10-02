@@ -220,7 +220,9 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\Group $group
+     * @param \Shopware\Models\Newsletter\Group $newsletterGroup
+     *
+     * @return Address
      */
     public function setNewsletterGroup($newsletterGroup)
     {

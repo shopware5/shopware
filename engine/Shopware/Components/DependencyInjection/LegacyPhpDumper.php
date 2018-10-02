@@ -105,6 +105,8 @@ class LegacyPhpDumper extends Dumper
 
     /**
      * Sets the dumper to be used when dumping proxies in the generated container.
+     *
+     * @param ProxyDumper $proxyDumper
      */
     public function setProxyDumper(ProxyDumper $proxyDumper)
     {
@@ -121,9 +123,9 @@ class LegacyPhpDumper extends Dumper
      *  * namespace:  The class namespace
      *  * as_files:   To split the container in several files
      *
-     * @return string|array A PHP class representing the service container or an array of PHP files if the "as_files" option is set
+     * @param array $options
      *
-     * @throws EnvParameterException When an env var exists but has not been dumped
+     * @return string|array A PHP class representing the service container or an array of PHP files if the "as_files" option is set
      */
     public function dump(array $options = array())
     {
@@ -302,6 +304,11 @@ EOF;
     /**
      * Generates Service local temp variables.
      *
+     * @param string            $cId
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
+     * @param \SplObjectStorage $allInlinedDefinitions
+     *
      * @return string
      */
     private function addServiceLocalTempVariables($cId, Definition $definition, \SplObjectStorage $inlinedDefinitions, \SplObjectStorage $allInlinedDefinitions)
@@ -436,6 +443,10 @@ EOTXT;
     /**
      * Generates the require_once statement for service includes.
      *
+     * @param string            $cId
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
+     *
      * @return string
      */
     private function addServiceInclude($cId, Definition $definition, \SplObjectStorage $inlinedDefinitions)
@@ -484,10 +495,13 @@ EOTXT;
     /**
      * Generates the inline definition of a service.
      *
+     * @param string            $id
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
+     * @param                   $isSimpleInstance
+     *
      * @return string
      *
-     * @throws RuntimeException                  When the factory definition is incomplete
-     * @throws ServiceCircularReferenceException When a circular reference is detected
      */
     private function addServiceInlinedDefinitions($id, Definition $definition, \SplObjectStorage $inlinedDefinitions, &$isSimpleInstance)
     {
@@ -664,9 +678,13 @@ EOTXT;
     /**
      * Generates the inline definition setup.
      *
+     * @param string            $id
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
+     * @param                   $isSimpleInstance
+     *
      * @return string
      *
-     * @throws ServiceCircularReferenceException when the container contains a circular reference
      */
     private function addServiceInlinedDefinitionsSetup($id, Definition $definition, \SplObjectStorage $inlinedDefinitions, $isSimpleInstance)
     {
@@ -1571,6 +1589,13 @@ EOF;
 
     /**
      * Builds service calls from arguments.
+     *
+     * @param array  $arguments
+     * @param array  $calls
+     * @param bool   $isPreInstance
+     * @param string $callerId
+     * @param array  $behavior
+     * @param int    $step
      */
     private function getServiceCallsFromArguments(array $arguments, array &$calls, $isPreInstance, $callerId, array &$behavior = array(), $step = 1)
     {
