@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
 * Changed product saving to handle invalid changetime dates
 * Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
+* Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
 
 ### Additions
 
@@ -24,7 +25,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
         * `Shopware_Modules_Admin_sUpdateNewsletter_Subscribe`
 * Added possibility to edit index.max_result_window for ES via `config.php`
 
-
 ## 5.5.1
 
 [View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
@@ -36,13 +36,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ## 5.5.0
 
 [View all changes from v5.4.6...v5.5.0](https://github.com/shopware/shopware/compare/v5.4.6...v5.5.0)
-
-## 5.5.1
-
-### Changes
-* Changed controller and action names in controllerAction and controllerName smarty function
-
-## 5.5.0
 
 ### Additions
 
