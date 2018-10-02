@@ -499,7 +499,7 @@ class ProductListingVariationLoader
             $availabilityResult = [];
             foreach ($productAvailability as &$currentAvailability) {
                 $availabilityResult[$currentAvailability['variant_id']]['variant_id'] = (int) $currentAvailability['variant_id'];
-                $availabilityResult[$currentAvailability['variant_id']]['availability'] = $currentAvailability['availability'];
+                $availabilityResult[$currentAvailability['variant_id']]['availability'] = (boolean) $currentAvailability['availability'];
 
                 $availabilityResult[$currentAvailability['variant_id']]['options'][] = (int) $currentAvailability['option_id'];
                 $availabilityResult[$currentAvailability['variant_id']]['groups'][] = (int) $currentAvailability['group_id'];

@@ -97,7 +97,8 @@ td.head  {
                         <p class="sender">{$Containers.Header_Sender.value}</p>
                     {/block}
                     {block name="document_index_address_base"}
-                        {$User.$address.company}<br />
+                        {if $User.$address.company}{$User.$address.company}<br />{/if}
+                        {if $User.$address.department}{$User.$address.department}<br />{/if}
                         {$User.$address.salutation|salutation}
                         {if {config name="displayprofiletitle"}}
                             {$User.$address.title}<br/>

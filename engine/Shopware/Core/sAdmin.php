@@ -369,7 +369,7 @@ class sAdmin
      */
     public function sGetPaymentMeans()
     {
-        $isMobile = ($this->front->Request()->getDeviceType() == 'mobile');
+        $isMobile = $this->front->Request()->getDeviceType() === 'mobile';
 
         $user = $this->sGetUserData();
 
@@ -462,7 +462,7 @@ class sAdmin
             $getPaymentMeans[$payKey] = $this->sGetPaymentTranslation($getPaymentMeans[$payKey]);
         }
 
-        //if no payment is left use always the fallback payment no matter if it has any restrictions too
+        // If no payment is left use always the fallback payment no matter if it has any restrictions too
         if (!count($getPaymentMeans)) {
             $fallBackPayment = $this->db->fetchRow(
                 'SELECT * FROM s_core_paymentmeans WHERE id = ?',
@@ -575,6 +575,10 @@ class sAdmin
                 's_campaigns_mailaddresses',
                 ['email = ?' => $email]
             );
+            $this->eventManager->notify(
+                'Shopware_Modules_Admin_Newsletter_Unsubscribe',
+                ['email' => $email]
+            );
         } else {
             // Check if mail address is already subscribed, return
             if ($this->db->fetchOne(
@@ -615,6 +619,7 @@ class sAdmin
             if (!$groupID) {
                 $groupID = '0';
             }
+
             // Insert email into database
             if (!empty($customer)) {
                 $this->db->insert(
@@ -627,6 +632,11 @@ class sAdmin
                     ['groupID' => $groupID, 'email' => $email, 'added' => $this->getCurrentDateFormatted()]
                 );
             }
+
+            $this->eventManager->notify(
+                'Shopware_Modules_Admin_sUpdateNewsletter_Subscribe',
+                ['email' => $email]
+            );
         }
 
         return true;
@@ -636,7 +646,7 @@ class sAdmin
      * Updates the payment mean of the user
      * Used in the Frontend Account controller
      *
-     * @param null $paymentId
+     * @param null|int $paymentId
      *
      * @throws Enlight_Exception On database error
      *
@@ -1019,7 +1029,7 @@ class sAdmin
      * Also includes fallback translations
      * Used internally in sAdmin
      *
-     * @param null $state
+     * @param null|array $state
      *
      * @return array States translations
      */
@@ -1585,7 +1595,7 @@ class sAdmin
     }
 
     /**
-     * function to execute risk rules
+     * Function to execute risk rules
      *
      * @param string $rule
      * @param array  $user
@@ -1856,8 +1866,7 @@ class sAdmin
      */
     public function sRiskNEWCUSTOMER($user, $order, $value)
     {
-        return
-            date('Y-m-d') == $user['additional']['user']['firstlogin']
+        return date('Y-m-d') == $user['additional']['user']['firstlogin']
             || !$user['additional']['user']['firstlogin'];
     }
 
@@ -1872,8 +1881,7 @@ class sAdmin
      */
     public function sRiskORDERPOSITIONSMORE($user, $order, $value)
     {
-        return
-            is_array($order['content']) ? count($order['content']) : $order['content'] >= $value;
+        return is_array($order['content']) ? count($order['content']) : $order['content'] >= $value;
     }
 
     /**
@@ -2235,7 +2243,7 @@ class sAdmin
      */
     public function sRiskCURRENCIESISOIS($user, $order, $value)
     {
-        return strtolower($this->sSYSTEM->sCurrency['currency']) == strtolower($value);
+        return strtolower($this->sSYSTEM->sCurrency['currency']) === strtolower($value);
     }
 
     /**
@@ -2249,7 +2257,7 @@ class sAdmin
      */
     public function sRiskCURRENCIESISOISNOT($user, $order, $value)
     {
-        return strtolower($this->sSYSTEM->sCurrency['currency']) != strtolower($value);
+        return strtolower($this->sSYSTEM->sCurrency['currency']) !== strtolower($value);
     }
 
     /**
@@ -2394,6 +2402,10 @@ class sAdmin
             }
         } elseif (!empty($unsubscribe)) {
             $this->connection->delete('s_campaigns_maildata', ['email' => $email, 'groupID' => $groupID]);
+            $this->eventManager->notify(
+                'Shopware_Modules_Admin_Newsletter_Unsubscribe',
+                ['email' => $email]
+            );
         }
 
         return $result;
@@ -2417,7 +2429,7 @@ class sAdmin
      * Get country from its id or iso code
      * Used internally in sAdmin::sGetPremiumShippingcosts()
      *
-     * @param int $country Country id or iso code
+     * @param int|string $country Country id or iso code
      *
      * @return array|false Array with country information, including area, or false if empty argument
      */
@@ -2453,7 +2465,7 @@ class sAdmin
      * Get a specific payment
      * Used internally in sAdmin::sGetPremiumShippingcosts()
      *
-     * @param int $payment Payment mean id or name
+     * @param int|string $payment Payment mean id or name
      *
      * @return array|false Array with payment mean information, including area, or false if empty argument
      */
@@ -2819,8 +2831,8 @@ class sAdmin
      * Get dispatch surcharge value for current basket and shipping method
      * Used internally in sAdmin::sGetPremiumShippingcosts()
      *
-     * @param $basket
-     * @param $type
+     * @param array $basket
+     * @param int   $type
      *
      * @return array|false
      */
@@ -2949,7 +2961,7 @@ class sAdmin
      * Get shipping costs
      * Used in sBasket and Checkout controller
      *
-     * @param array $country Array with a single country details
+     * @param array $country Array with details for a single country
      *
      * @return array|false Array with shipping costs data, or false on failure
      */
@@ -3128,13 +3140,13 @@ class sAdmin
      * Called when provided user data is correct
      * Logs in the user
      *
-     * @param $getUser
-     * @param $email
-     * @param $password
-     * @param $isPreHashed
-     * @param $encoderName
-     * @param $plaintext
-     * @param $hash
+     * @param array  $getUser
+     * @param string $email
+     * @param string $password
+     * @param bool   $isPreHashed
+     * @param string $encoderName
+     * @param string $plaintext
+     * @param string $hash
      */
     protected function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
     {
@@ -3196,9 +3208,9 @@ class sAdmin
      * Sends a mail to the given recipient with a given template.
      * If the opt in parameter is set, the sConfirmLink variable will be filled by the opt in link.
      *
-     * @param        $recipient
-     * @param        $template
-     * @param string $optIn
+     * @param string                            $recipient
+     * @param string|\Shopware\Models\Mail\Mail $template
+     * @param string                            $optIn
      */
     private function sendMail($recipient, $template, $optIn = '')
     {
@@ -3207,6 +3219,16 @@ class sAdmin
         if (!empty($optIn)) {
             $context['sConfirmLink'] = $optIn;
         }
+
+        $context = $this->eventManager->filter(
+            'Shopware_Modules_Admin_sendMail_FilterVariables',
+            $context,
+            [
+                'template' => $template,
+                'recipient' => $recipient,
+                'optin' => $optIn,
+            ]
+        );
 
         $mail = Shopware()->TemplateMail()->createMail($template, $context);
         $mail->addTo($recipient);
@@ -3229,7 +3251,7 @@ class sAdmin
         session_regenerate_id(true);
         $newSessionId = session_id();
 
-        // close and restart session to make sure the db session handler writes updates.
+        // Close and restart session to make sure the db session handler writes updates.
         session_write_close();
         session_start();
 
@@ -3270,7 +3292,7 @@ class sAdmin
      */
     private function overwriteBillingAddress(array $userData)
     {
-        // temporarily overwrite billing address
+        // Temporarily overwrite billing address
         if (!$this->session->offsetGet('checkoutBillingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
             return $userData;
         }
@@ -3286,7 +3308,7 @@ class sAdmin
             $userData['billingaddress'] = array_merge($userData['billingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData);
         } catch (\Exception $ex) {
-            // no need to overwrite default billing address
+            // No need to overwrite default billing address
             $this->session->offsetUnset('checkoutBillingAddressId');
         }
 
@@ -3302,7 +3324,7 @@ class sAdmin
      */
     private function overwriteShippingAddress(array $userData)
     {
-        // temporarily overwrite shipping address
+        // Temporarily overwrite shipping address
         if (!$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
             return $userData;
         }
@@ -3318,7 +3340,7 @@ class sAdmin
             $userData['shippingaddress'] = array_merge($userData['shippingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData, true);
         } catch (\Exception $ex) {
-            // no need to overwrite default shipping address
+            // No need to overwrite default shipping address
             $this->session->offsetUnset('checkoutShippingAddressId');
         }
 
@@ -3393,11 +3415,11 @@ SQL;
             ->executeQuery('SELECT *, name as statename FROM s_core_countries_states WHERE id = ?', [$userData[$addressKey]['stateID']])
             ->fetch(\PDO::FETCH_ASSOC);
 
-        // get translations
+        // Get translations
         $userData['additional'][$countryKey] = $this->sGetCountryTranslation($userData['additional'][$countryKey]);
         $userData['additional'][$stateKey] = $this->sGetCountryStateTranslation($userData['additional'][$stateKey]);
 
-        // session
+        // Session
         if ($isShippingAddress) {
             $this->session->offsetSet('sCountry', $userData['additional'][$countryKey]['id']);
             $this->session->offsetSet('sState', $userData['additional'][$stateKey]['id']);
@@ -3428,10 +3450,10 @@ SQL;
         // Check if account is disabled or not verified yet
         $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation
                 FROM s_user
-                WHERE email=? AND active=0' . $addScopeSql;
+                WHERE email=? AND active=0 ' . $addScopeSql;
         $getUser = $this->db->fetchRow($sql, [$email]);
 
-        // if the verification process is active, the customer has an email sent date, but no confirm date
+        // If the verification process is active, the customer has an email sent date, but no confirm date
         if ($getUser['doubleOptinRegister'] && $getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
             $hash = \Shopware\Components\Random::getAlphanumericString(32);
 
@@ -3483,8 +3505,8 @@ SQL;
                         DATE_ADD(NOW(), INTERVAL (failedlogins + 1) * 30 SECOND),
                         NULL
                     )
-                WHERE email = ? ' . $addScopeSql;
-            $this->db->query($sql, [$email]);
+                WHERE email = ? AND accountmode=? ' . $addScopeSql;
+            $this->db->query($sql, [$email, Customer::ACCOUNT_MODE_CUSTOMER]);
         }
 
         $this->eventManager->notify(
@@ -3512,7 +3534,7 @@ SQL;
                 AND type = "swRegister"';
         $result = $this->db->fetchAll($sql, [$user['doubleOptinEmailSentDate']]);
 
-        // most times iterates only once
+        // Most times iterates only once
         foreach ($result as $row) {
             $data = unserialize($row['data']);
             $optInId = $row['id'];
@@ -3589,11 +3611,11 @@ SQL;
     /**
      * Helper method for sAdmin::sGetOpenOrderData()
      *
-     * @param $orderValue
-     * @param $getOrders
-     * @param $orderKey
+     * @param array  $orderValue
+     * @param array  $getOrders
+     * @param string $orderKey
      *
-     * @return mixed
+     * @return array
      */
     private function processOpenOrderDetails($orderValue, $getOrders, $orderKey)
     {
@@ -3738,9 +3760,9 @@ SQL;
      * Helper function for sAdmin::sGetUserData()
      * Gets user shipping data (address, payment)
      *
-     * @param $userId
-     * @param $userData
-     * @param $countryQuery
+     * @param int    $userId
+     * @param array  $userData
+     * @param string $countryQuery
      *
      * @return mixed
      */
@@ -3812,8 +3834,8 @@ SQL;
      * Helper method for sAdmin::sNewsletterSubscription
      * Subscribes the provided email address to the newsletter group
      *
-     * @param $email
-     * @param $groupID
+     * @param string $email
+     * @param int    $groupID
      *
      * @return array|int
      */
@@ -3891,8 +3913,8 @@ SQL;
      * Helper method for sAdmin::sGetPremiumDispatchSurcharge()
      * Calculates the surcharge for the current basket and dispatches
      *
-     * @param $basket
-     * @param $dispatches
+     * @param array $basket
+     * @param array $dispatches
      *
      * @return float
      */
@@ -3937,7 +3959,6 @@ SQL;
             }
             $surcharge += $result['value'];
             if (!empty($result['factor'])) {
-                //die($result["factor"].">".$from);
                 $surcharge += $result['factor'] / 100 * $from;
             }
         }
@@ -3949,9 +3970,9 @@ SQL;
      * Helper method for sAdmin::sGetPremiumShippingcosts()
      * Calculates basket discount
      *
-     * @param $amount
-     * @param $currencyFactor
-     * @param $discount_tax
+     * @param float $amount
+     * @param float $currencyFactor
+     * @param float $discount_tax
      */
     private function handleBasketDiscount($amount, $currencyFactor, $discount_tax)
     {
@@ -4020,9 +4041,9 @@ SQL;
      * Helper method for sAdmin::sGetPremiumShippingcosts()
      * Calculates dispatch discount
      *
-     * @param $basket
-     * @param $currencyFactor
-     * @param $discount_tax
+     * @param array $basket
+     * @param float $currencyFactor
+     * @param float $discount_tax
      */
     private function handleDispatchDiscount($basket, $currencyFactor, $discount_tax)
     {
@@ -4081,11 +4102,11 @@ SQL;
      * Helper method for sAdmin::sGetPremiumShippingcosts()
      * Calculates payment mean surcharge
      *
-     * @param $country
-     * @param $payment
-     * @param $currencyFactor
-     * @param $dispatch
-     * @param $discount_tax
+     * @param array $country
+     * @param array $payment
+     * @param float $currencyFactor
+     * @param array $dispatch
+     * @param float $discount_tax
      */
     private function handlePaymentMeanSurcharge($country, $payment, $currencyFactor, $dispatch, $discount_tax)
     {
@@ -4301,7 +4322,7 @@ SQL;
     }
 
     /**
-     * @param $config
+     * @param \Shopware_Components_Config $config
      *
      * @return bool
      */
