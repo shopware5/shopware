@@ -3226,7 +3226,7 @@ class sAdmin
             [
                 'template' => $template,
                 'recipient' => $recipient,
-                'optin' => $optIn
+                'optin' => $optIn,
             ]
         );
 

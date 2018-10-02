@@ -222,7 +222,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $context = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Newsletter_sendMail_FilterVariables', $context, [
             'template' => $template,
             'recipient' => $recipient,
-            'optin' => $optin
+            'optin' => $optin,
         ]);
 
         $mail = Shopware()->TemplateMail()->createMail($template, $context);
