@@ -12,13 +12,14 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
 * Changed product saving to handle invalid changetime dates
 * Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
-* Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
 * Changed FormSynchronizer to consider sorting from config.xml
 * Changed the `instock` column in the product variants list to be sortable
 * Changed `emotion/components/component_banner_slider.tpl` to reset thumbnail URLs correctly
 * Changed Symfony library to version 3.4.17
 * Changed jQuery plugin `swRegister` to correctly use data attributes
 * Changed VariantHelper to work also on search page
+* Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
+* Changed session name validator to be more rigid
 
 ### Additions
 

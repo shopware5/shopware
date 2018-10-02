@@ -87,8 +87,7 @@ class Session
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $container->get('Shop');
 
-        $name = 'session-' . $shop->getId();
-        $sessionOptions['name'] = $name;
+        $sessionOptions['name'] = 'session-' . $shop->getId();
 
         $mainShop = $shop->getMain() ?: $shop;
         if ($mainShop->getSecure()) {
