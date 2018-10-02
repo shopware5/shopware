@@ -44,6 +44,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.skip_productid_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\SkipProductIdConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.customer_group_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CustomerGroupConditionHandler" >
             <tag name="shopware_search_es.search_handler" />
         </service>

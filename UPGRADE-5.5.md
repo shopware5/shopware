@@ -6,14 +6,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 [View all changes from v5.5.1...v5.5.2](https://github.com/shopware/shopware/compare/v5.5.1...v5.5.2)
 
-### Changes
-
-* Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
-* Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
-* Changed product saving to handle invalid changetime dates
-* Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
-* Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
-
 ### Additions
 
 * Added the following events for newsletter un/subscription
@@ -24,6 +16,17 @@ This changelog references changes done in Shopware 5.5 patch versions.
         * `Shopware_Modules_Admin_Newsletter_Unsubscribe`
         * `Shopware_Modules_Admin_sUpdateNewsletter_Subscribe`
 * Added possibility to edit index.max_result_window for ES via `config.php`
+* Added new product stream condition `SkipProductIdCondition`
+* Added new product stream condition handler `SkipProductIdConditionHandler`
+
+### Changes
+
+* Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
+* Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
+* Changed product saving to handle invalid changetime dates
+* Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
+* Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
+* Changed product stream result on detail pages. The currently displayed article is no longer part of the stream.
 
 ## 5.5.1
 
