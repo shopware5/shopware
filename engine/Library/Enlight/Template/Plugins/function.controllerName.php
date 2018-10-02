@@ -31,8 +31,10 @@
  *
  * @param                          $params
  * @param Enlight_Template_Default $template
- * @return string
+ *
  * @throws Exception
+ *
+ * @return string
  */
 function smarty_function_controllerName($params, Enlight_Template_Default $template)
 {
@@ -47,5 +49,5 @@ function smarty_function_controllerName($params, Enlight_Template_Default $templ
         throw $e;
     }
 
-    return $request->getControllerName();
+    return preg_replace('/[^a-zA-Z0-9]/', '', $request->getControllerName());
 }
