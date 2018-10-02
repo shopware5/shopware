@@ -51,11 +51,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $emotionIds = [(int) $this->Request()->getParam('emotionId')];
 
-        if (!$emotionIds) {
-            $categoryId = (int) $this->Request()->getParam('categoryId');
-            $emotionIds = $this->getEmotionsByCategoryId($categoryId);
-        }
-
         $emotions = $emotionService->getList($emotionIds, $shopContext);
 
         if (!count($emotions)) {
@@ -96,11 +91,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $limit = (int) $this->Request()->getParam('limit', 5);
         $sort = $this->Request()->getParam('sort', 'newcomer');
-        $pages = $this->Request()->getParam('pages');
+        $pages = (int) $this->Request()->getParam('pages');
         $offset = (int) $this->Request()->getParam('start', $limit * ($pages - 1));
-        $max = $this->Request()->getParam('max');
+        $max = (int) $this->Request()->getParam('max');
 
-        if ($limit != 0) {
+        if ($limit !== 0) {
             $maxPages = round($max / $limit);
         } else {
             $maxPages = 0;
@@ -122,7 +117,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     public function previewAction()
     {
-        $emotionId = $this->Request()->getParam('emotionId');
+        $emotionId = (int) $this->Request()->getParam('emotionId');
 
         $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
 
@@ -131,7 +126,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $viewAssignments['emotion'] = $emotion;
         $viewAssignments['previewSecret'] = $this->Request()->getParam('secret');
-        $viewAssignments['hasEmotion'] = (!empty($emotion));
+        $viewAssignments['hasEmotion'] = !empty($emotion);
 
         $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
 
@@ -150,14 +145,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
         $limit = (int) $this->Request()->getParam('limit', 5);
 
-        $streamId = $this->Request()->getParam('streamId');
+        $streamId = (int) $this->Request()->getParam('streamId');
 
-        $pages = $this->Request()->getParam('pages', 1);
+        $pages = (int) $this->Request()->getParam('pages', 1);
         $offset = (int) $this->Request()->getParam('start', $limit * ($pages - 1));
 
         $maxPages = 0;
-        $max = $this->Request()->getParam('max');
-        if ($limit != 0) {
+        $max = (int) $this->Request()->getParam('max');
+        if ($limit !== 0) {
             $maxPages = round($max / $limit);
         } else {
             $limit = 0;
@@ -170,29 +165,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
         $this->View()->assign('pages', $values['pages'] > $maxPages ? $maxPages : $values['pages']);
         $this->View()->assign('sPerPage', $limit);
-    }
-
-    /**
-     * @param int $categoryId
-     *
-     * @return int[]
-     */
-    private function getEmotionsByCategoryId($categoryId)
-    {
-        $builder = $this->container->get('dbal_connection')->createQueryBuilder();
-        $builder->select('emotion.id')
-                ->from('s_emotion_categories', 'emotion_categories')
-                ->innerJoin('emotion_categories', 's_emotion', 'emotion', 'emotion_categories.emotion_id = emotion.id')
-                ->andWhere('emotion_categories.category_id = :categoryId')
-                ->andWhere('(emotion.valid_from <= :now OR emotion.valid_from IS NULL)')
-                ->andWhere('(emotion.valid_to >= :now OR emotion.valid_to IS NULL)')
-                ->andWhere('emotion.is_landingpage = 0 ')
-                ->andWhere('emotion.active = 1 ')
-                ->andWhere('emotion.preview_id IS NULL')
-                ->setParameter('categoryId', $categoryId)
-                ->setParameter('now', new \DateTime());
-
-        return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -236,19 +208,26 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
-        if ($limit != 0) {
+        if ($limit !== 0) {
             $pages = round($count / $limit);
         } else {
             $pages = 0;
         }
 
-        if ($pages == 0 && $count > 0) {
+        if ($pages === 0 && $count > 0) {
             $pages = 1;
         }
 
         return ['values' => $data, 'pages' => $pages];
     }
 
+    /**
+     * @param int $productStreamId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     */
     private function getProductStream($productStreamId, $offset = 0, $limit = 100)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
@@ -269,13 +248,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $count = $result->getTotalCount();
 
-        if ($limit != 0) {
+        if ($limit !== 0) {
             $pages = round($count / $limit);
         } else {
             $pages = 0;
         }
 
-        if ($pages == 0 && $count > 0) {
+        if ($pages === 0 && $count > 0) {
             $pages = 1;
         }
 

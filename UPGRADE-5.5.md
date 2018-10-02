@@ -38,6 +38,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Removals
 
 * Removed trailing slash from LESS variable `@font-directory`
+* Removed private method `Shopware_Controllers_Widgets_Emotion::getEmotionsByCategoryId`
 
 ## 5.5.1
 
