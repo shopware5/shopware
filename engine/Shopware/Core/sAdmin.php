@@ -2524,12 +2524,20 @@ class sAdmin
             $addSelect[] = $premiumShippingBasketSelect;
         }
 
-        $calculations = $this->connection->createQueryBuilder()
+        $calculationQueryBuilder = $this->connection->createQueryBuilder()
             ->select(['id', 'calculation_sql'])
             ->from('s_premium_dispatch')
             ->where('active = 1')
-            ->andWhere('calculation = 3')
-            ->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->andWhere('calculation = 3');
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Admin_GetDispatchBasket_Calculation_QueryBuilder',
+            [
+                'queryBuilder' => $calculationQueryBuilder,
+            ]
+        );
+
+        $calculations = $calculationQueryBuilder->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
 
         if (!empty($calculations)) {
             foreach ($calculations as $dispatchID => $calculation) {
