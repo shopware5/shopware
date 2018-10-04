@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Order.controller.Document', {
             '{s name=document/delete/confirmation/title}Delete order document{/s}',
             '{s name=document/delete/confirmation/message}A deleted order document cannot be restored. Do you really want to delete the document?{/s}',
             function (clickedButton) {
-                if (clickedButton === 'no') {
+                if (clickedButton === 'no' || clickedButton === 'cancel') {
                     return;
                 }
 
