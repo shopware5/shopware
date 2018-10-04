@@ -30,6 +30,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added `Retry-After` header for maintenance mode
 * Added new config flag **isCustomStore** for the `Shopware.apps.Base.view.element.Select` to create a store with a custom **"valueField"**.
 
+### Removals
+
+* Removed trailing slash from LESS variable `@font-directory`
+
 ## 5.5.1
 
 [View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
