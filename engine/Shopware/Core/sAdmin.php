@@ -2531,9 +2531,9 @@ class sAdmin
             ->andWhere('calculation = 3');
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_GetDispatchBasketCalculation_QueryBuilder',
+            'Shopware_Modules_Admin_GetDispatchBasket_Calculation_QueryBuilder',
             [
-                'queryBuilder' => $calculationQueryBuilder
+                'queryBuilder' => $calculationQueryBuilder,
             ]
         );
 
