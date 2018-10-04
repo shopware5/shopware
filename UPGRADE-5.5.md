@@ -27,6 +27,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new block `frontend_listing_box_article_image_attributes` in `listing/product-box/product-image.tpl`
 * Added `Retry-After` header for maintenance mode
 
+### Removals
+
+* Removed trailing slash from LESS variable `@font-directory`
+
 ## 5.5.1
 
 [View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
