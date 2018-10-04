@@ -230,10 +230,38 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
      * @param stores
      */
     onStoresLoaded: function(article, stores) {
-        var me = this;
+        var me = this,
+            defaultShopId;
+
         me.article = article;
         me.shopStore = stores['shops'];
         me.shopComboBox.bindStore(me.shopStore);
+
+        defaultShopId = me.getDefaultShopId();
+
+        if (defaultShopId !== null) {
+            me.shopComboBox.setValue(defaultShopId);
+        }
+    },
+
+    /**
+     * Iterates through the shopStore and searches for the default shop.
+     *
+     * @returns number
+     */
+    getDefaultShopId: function() {
+        var me = this,
+            defaultShop = null;
+
+        me.shopStore.each(function(record) {
+            if (record.get('default') === true) {
+                defaultShop = record.get('id');
+
+                return;
+            }
+        });
+
+        return defaultShop;
     }
 });
 //{/block}
