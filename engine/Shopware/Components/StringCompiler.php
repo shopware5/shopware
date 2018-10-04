@@ -171,7 +171,7 @@ class Shopware_Components_StringCompiler
 
             if (stripos($errorMessage, 'Syntax Error in template') === 0) {
                 // Strip away filepath which is a md5sum
-                $errorMessage = 'Syntax Error ' . substr($errorMessage, 69);
+                $errorMessage = sprintf('Syntax Error %s', substr($errorMessage, 69));
             }
 
             throw new \Enlight_Exception($errorMessage, 0, $e);

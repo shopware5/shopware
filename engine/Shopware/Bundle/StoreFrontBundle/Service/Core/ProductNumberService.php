@@ -76,7 +76,7 @@ class ProductNumberService implements ProductNumberServiceInterface
         $number = $statement->fetch(\PDO::FETCH_COLUMN);
 
         if (!$number) {
-            throw new \RuntimeException('No valid product number found');
+            throw new \RuntimeException(sprintf('No valid product number found by id %d', $productId));
         }
 
         return $number;
@@ -89,11 +89,11 @@ class ProductNumberService implements ProductNumberServiceInterface
     {
         $productId = $this->getProductIdByNumber($number);
         if (!$productId) {
-            throw new \RuntimeException('No valid product id found');
+            throw new \RuntimeException(sprintf('No valid product id found by product number "%s"', $number));
         }
 
         if (!$this->isProductAvailableInShop($productId, $context->getShop())) {
-            throw new \RuntimeException('Product not available in current shop');
+            throw new \RuntimeException(sprintf('Product with number "%s" is not available in current shop', $number));
         }
 
         $selected = null;
@@ -111,7 +111,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         $selected = $this->findFallbackById($productId);
         if (!$selected) {
-            throw new \RuntimeException('No active product variant found');
+            throw new \RuntimeException(sprintf('No active product variant found by product with number "%s"', $number));
         }
 
         return $selected;

@@ -81,7 +81,7 @@ class DataPersister
             throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$foreignKey) {
-            throw new \Exception(sprintf('No foreign key provided'));
+            throw new \Exception('No foreign key provided');
         }
         $data = $this->filter($table, $data);
 
@@ -113,7 +113,7 @@ class DataPersister
             throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception(sprintf('No foreign key provided'));
+            throw new \Exception('No foreign key provided');
         }
         $data = $this->dataLoader->load($table, $sourceForeignKey);
 
@@ -139,7 +139,7 @@ class DataPersister
             throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception(sprintf('No foreign key provided'));
+            throw new \Exception('No foreign key provided');
         }
 
         $translations = $this->dataLoader->loadTranslations($table, $sourceForeignKey);

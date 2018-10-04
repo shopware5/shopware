@@ -448,7 +448,7 @@ class sOrder
             $affectedRows = $this->db->insert('s_order', $data);
             $orderID = $this->db->lastInsertId();
         } catch (Exception $e) {
-            throw new Enlight_Exception('##sOrder-sTemporaryOrder-#01:' . $e->getMessage(), 0, $e);
+            throw new Enlight_Exception(sprintf('##sOrder-sTemporaryOrder-#01:%s', $e->getMessage()), 0, $e);
         }
         if (!$affectedRows || !$orderID) {
             throw new Enlight_Exception('##sOrder-sTemporaryOrder-#01: No rows affected or no order id saved', 0);
@@ -504,7 +504,7 @@ class sOrder
                 $this->db->insert('s_order_details', $data);
                 $orderDetailId = $this->db->lastInsertId();
             } catch (Exception $e) {
-                throw new Enlight_Exception('##sOrder-sTemporaryOrder-Position-#02:' . $e->getMessage(), 0, $e);
+                throw new Enlight_Exception(sprintf('##sOrder-sTemporaryOrder-Position-#02:%s', $e->getMessage()), 0, $e);
             }
 
             // Create order detail attributes
@@ -617,11 +617,11 @@ class sOrder
             $this->db->commit();
         } catch (Exception $e) {
             $this->db->rollBack();
-            throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER['HTTP_HOST']} :" . $e->getMessage(), 0, $e);
+            throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s :%s', $_SERVER['HTTP_HOST'], $e->getMessage()), 0, $e);
         }
 
         if (!$affectedRows || !$orderID) {
-            throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER['HTTP_HOST']} : No rows affected or no order id created.", 0);
+            throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s : No rows affected or no order id created.', $_SERVER['HTTP_HOST']), 0);
         }
 
         try {
@@ -718,7 +718,7 @@ class sOrder
                 $this->db->executeUpdate($sql);
                 $orderdetailsID = $this->db->lastInsertId();
             } catch (Exception $e) {
-                throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER['HTTP_HOST']} :" . $e->getMessage(), 0, $e);
+                throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s :%s', $_SERVER['HTTP_HOST'], $e->getMessage()), 0, $e);
             }
 
             $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;

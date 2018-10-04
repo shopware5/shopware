@@ -78,7 +78,7 @@ class Customer extends Resource
         $id = $builder->getQuery()->getOneOrNullResult();
 
         if (!$id) {
-            throw new ApiException\NotFoundException("Customer by number {$number} not found");
+            throw new ApiException\NotFoundException(sprintf('Customer by number %s not found', $number));
         }
 
         return $id['id'];
@@ -147,7 +147,7 @@ class Customer extends Resource
         $customer = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Customer by id %d not found', $id));
         }
 
         return $customer;
@@ -258,7 +258,7 @@ class Customer extends Resource
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer with id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Customer by id %d not found', $id));
         }
 
         $this->setupContext($customer->getShop()->getId());
@@ -320,7 +320,7 @@ class Customer extends Resource
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Customer by id %d not found', $id));
         }
 
         $this->getManager()->remove($customer);

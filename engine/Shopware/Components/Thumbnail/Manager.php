@@ -97,8 +97,10 @@ class Manager
      */
     public function createMediaThumbnail(Media $media, $thumbnailSizes = [], $keepProportions = false)
     {
+        $imagePath = $media->getPath();
+
         if ($media->getType() !== $media::TYPE_IMAGE) {
-            throw new \Exception('File is not an image.');
+            throw new \Exception('File %s is not an image.', $imagePath);
         }
 
         if (empty($thumbnailSizes)) {
@@ -118,8 +120,6 @@ class Manager
         }
 
         $thumbnailSizes = $this->uniformThumbnailSizes($thumbnailSizes);
-
-        $imagePath = $media->getPath();
 
         $parameters = [
             'path' => $imagePath,

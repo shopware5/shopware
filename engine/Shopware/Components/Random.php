@@ -82,9 +82,7 @@ abstract class Random
     public static function getInteger($min, $max)
     {
         if ($min > $max) {
-            throw new \DomainException(
-                'The min parameter must be lower than max parameter'
-            );
+            throw new \DomainException('The min parameter must be lower than max parameter');
         }
 
         return random_int($min, $max);

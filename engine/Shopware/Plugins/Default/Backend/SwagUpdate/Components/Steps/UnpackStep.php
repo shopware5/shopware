@@ -74,7 +74,7 @@ class UnpackStep
             $source->seek($offset);
         } catch (\Exception $e) {
             @unlink($this->source);
-            throw new \Exception('Could not open update package:<br>' . $e->getMessage(), 0, $e);
+            throw new \Exception(sprintf('Could not open update package:<br>%s', $e->getMessage()), 0, $e);
         }
 
         /** @var ZipEntry $entry */

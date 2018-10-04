@@ -61,7 +61,7 @@ class Manager
         $name = strtolower(trim($encoder->getName()));
 
         if (isset($this->encoder[$name])) {
-            throw new \Exception("Encoder by name {$name} already registered");
+            throw new \Exception(sprintf('Encoder by name %s already registered', $name));
         }
 
         $this->encoder[$name] = $encoder;
@@ -79,13 +79,13 @@ class Manager
         $name = strtolower(trim($name));
 
         if (!isset($this->encoder[$name])) {
-            throw new \Exception("Encoder by name {$name} not found");
+            throw new \Exception(sprintf('Encoder by name %s not found', $name));
         }
 
         $encoder = $this->encoder[$name];
 
         if (method_exists($encoder, 'isCompatible') && !$encoder->isCompatible()) {
-            throw new \Exception("Encoder by name {$name} is not compatible with your system");
+            throw new \Exception(sprintf('Encoder by name %s is not compatible with your system', $name));
         }
 
         return $encoder;

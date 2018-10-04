@@ -301,7 +301,7 @@ class Configuration extends BaseConfiguration
         }
 
         if (!class_exists($provider)) {
-            throw new \Exception('Doctrine cache provider "' . $provider . "' not found failure.");
+            throw new \Exception(sprintf('Doctrine cache provider "%s" not found failure.', $provider));
         }
 
         return new $provider();

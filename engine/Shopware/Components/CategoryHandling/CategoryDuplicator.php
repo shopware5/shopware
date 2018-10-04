@@ -78,7 +78,7 @@ class CategoryDuplicator
         $originalCategory = $originalCategoryStmt->fetch(\PDO::FETCH_ASSOC);
 
         if (empty($originalCategory)) {
-            throw new \RuntimeException('Category ' . $originalCategoryId . ' not found');
+            throw new \RuntimeException(sprintf('Category "%s" not found', $originalCategoryId));
         }
 
         $newPosStmt = $this->connection

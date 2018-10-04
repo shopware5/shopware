@@ -937,7 +937,7 @@ class DqlHelper
                 );
         }
 
-        throw new \RuntimeException("Foreign table {$foreignPrefix} not defined, yet. Please report this error.");
+        throw new \RuntimeException(sprintf('Foreign table %s not defined, yet. Please report this error.', $foreignPrefix));
     }
 
     /**

@@ -72,7 +72,7 @@ class CustomerGroup extends Resource
         $result = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$result) {
-            throw new ApiException\NotFoundException("CustomerGroup by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('CustomerGroup by id %d not found', $id));
         }
 
         return $result;
@@ -170,7 +170,7 @@ class CustomerGroup extends Resource
         $result = $this->getRepository()->find($id);
 
         if (!$result) {
-            throw new ApiException\NotFoundException("CustomerGroup by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('CustomerGroup by id %d not found', $id));
         }
 
         $params = $this->prepareCustomerGroupData($params, $result);
@@ -212,7 +212,7 @@ class CustomerGroup extends Resource
         $result = $this->getRepository()->find($id);
 
         if (!$result) {
-            throw new ApiException\NotFoundException("CustomerGroup by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('CustomerGroup by id %d not found', $id));
         }
 
         $this->getManager()->remove($result);

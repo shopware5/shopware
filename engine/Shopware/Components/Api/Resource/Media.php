@@ -74,7 +74,7 @@ class Media extends Resource
         $media = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$media) {
-            throw new ApiException\NotFoundException("Media by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Media by id %d not found', $id));
         }
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
@@ -214,7 +214,7 @@ class Media extends Resource
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
-            throw new ApiException\NotFoundException("Media by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Media by id %d not found', $id));
         }
 
         $this->getManager()->remove($media);
@@ -312,13 +312,14 @@ class Media extends Resource
             case 'https':
             case 'file':
                 $filename = $this->getUniqueFileName($destPath, $baseFilename);
+                $destFilePath = sprintf('%s/%s', $destPath, $filename);
 
-                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
-                    throw new \Exception("Could not open $destPath/$filename for writing");
+                if (!$put_handle = fopen($destFilePath, 'wb+')) {
+                    throw new \Exception(sprintf('Could not open %s for writing', $destFilePath));
                 }
 
                 if (!$get_handle = fopen($url, 'rb')) {
-                    throw new \Exception("Could not open $url for reading");
+                    throw new \Exception(sprintf('Could not open %s for reading', $url));
                 }
                 while (!feof($get_handle)) {
                     fwrite($put_handle, fgets($get_handle, 4096));
@@ -326,10 +327,10 @@ class Media extends Resource
                 fclose($get_handle);
                 fclose($put_handle);
 
-                return "$destPath/$filename";
+                return $destFilePath;
         }
         throw new \InvalidArgumentException(
-            sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
+            sprintf('Unsupported schema "%s".', $urlArray['scheme'])
         );
     }
 
@@ -392,17 +393,17 @@ class Media extends Resource
     protected function uploadBase64File($url, $destinationPath, $baseFilename)
     {
         if (!$get_handle = fopen($url, 'r')) {
-            throw new \Exception("Could not open $url for reading");
+            throw new \Exception(sprintf('Could not open %s for reading', $url));
         }
 
         $meta = stream_get_meta_data($get_handle);
         if (!strpos($meta['mediatype'], 'image/') === false) {
-            throw new ApiException\CustomValidationException('No valid media type passed for the article image : ' . $url);
+            throw new ApiException\CustomValidationException(sprintf('No valid media type passed for the article image: %s', $url));
         }
 
         $extension = str_replace('image/', '', $meta['mediatype']);
-        $filename = $this->getUniqueFileName($destinationPath, $baseFilename);
-        $filename .= '.' . $extension;
+        $filename = $this->getUniqueFileName($destinationPath, $baseFilename) . '.' . $extension;
+        $destinationFilePath = sprintf('%s/%s', $destinationPath, $filename);
 
         if (!$put_handle = fopen("$destinationPath/$filename", 'wb+')) {
             throw new \Exception("Could not open $destinationPath/$filename for writing");
@@ -413,7 +414,7 @@ class Media extends Resource
         fclose($get_handle);
         fclose($put_handle);
 
-        return "$destinationPath/$filename";
+        return $destinationFilePath;
     }
 
     /**

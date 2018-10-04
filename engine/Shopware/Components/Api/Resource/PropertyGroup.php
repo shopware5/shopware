@@ -66,7 +66,7 @@ class PropertyGroup extends Resource
         $property = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$property) {
-            throw new ApiException\NotFoundException("Property group by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         return $property;
@@ -149,7 +149,7 @@ class PropertyGroup extends Resource
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
-            throw new ApiException\NotFoundException("Property group by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         $params = $this->preparePropertyData($params, $propertyGroup);
@@ -185,7 +185,7 @@ class PropertyGroup extends Resource
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
-            throw new ApiException\NotFoundException("PropertyGroup by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         $this->getManager()->remove($propertyGroup);

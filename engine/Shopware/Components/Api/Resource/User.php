@@ -268,20 +268,20 @@ class User extends Resource
         }
 
         if (!$this->getAcl()->has($resource)) {
-            $message = sprintf('No resource "%s" found', $resource);
-            throw new ApiException\PrivilegeException($message);
+            throw new ApiException\PrivilegeException(sprintf('No resource "%s" found', $resource));
         }
 
         $role = $this->getRole();
 
         if (!$this->getAcl()->isAllowed($role, $resource, $privilege)) {
-            $message = sprintf(
-                'Role "%s" is not allowed to "%s" on resource "%s"',
-                is_string($role) ? $role : $role->getRoleId(),
-                $privilege,
-                is_string($resource) ? $resource : $resource->getResourceId()
+            throw new ApiException\PrivilegeException(
+                sprintf(
+                    'Role "%s" is not allowed to "%s" on resource "%s"',
+                    is_string($role) ? $role : $role->getRoleId(),
+                    $privilege,
+                    is_string($resource) ? $resource : $resource->getResourceId()
+                )
             );
-            throw new ApiException\PrivilegeException($message);
         }
     }
 

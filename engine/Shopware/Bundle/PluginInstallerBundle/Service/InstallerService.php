@@ -135,7 +135,7 @@ class InstallerService
         $plugin = $this->pluginRepository->findOneBy(['name' => $pluginName, 'capabilityEnable' => 1]);
 
         if ($plugin === null) {
-            throw new \Exception(sprintf('Unknown plugin: %s.', $pluginName));
+            throw new \Exception(sprintf('Unknown plugin "%s".', $pluginName));
         }
 
         return $plugin;
@@ -241,7 +241,7 @@ class InstallerService
         }
 
         if (!$plugin->getInstalled()) {
-            throw new \Exception('Plugin has to be installed first.');
+            throw new \Exception(sprintf('Plugin "%s" has to be installed first.', $plugin->getName()));
         }
 
         if (!$plugin->isLegacyPlugin()) {

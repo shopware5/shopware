@@ -329,7 +329,9 @@ class %className% extends ModelEntity
         $file = $this->getPath() . $className . '.php';
 
         if (file_exists($file) && !is_writable($file)) {
-            throw new \Exception('File: ' . $file . " isn't writable, please check the file permissions for this model!", 501);
+            throw new \Exception(
+                sprintf('File: "%s" isn\'t writable, please check the file permissions for this model!', $file), 501
+            );
         }
 
         $result = file_put_contents($file, $sourceCode);

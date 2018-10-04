@@ -132,7 +132,7 @@ class Grammar
                     )) {
                         $attributes[$formattedColumn] = $event->getReturn();
                     } else {
-                        throw new \RuntimeException("Column with type {$type} was not configured, yet");
+                        throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
                     }
             }
         }

@@ -80,7 +80,7 @@ class Category extends Resource
         $category = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         if ($this->getResultMode() === Resource::HYDRATE_ARRAY) {
@@ -203,7 +203,7 @@ class Category extends Resource
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         $params = $this->prepareCategoryData($params);
@@ -244,7 +244,7 @@ class Category extends Resource
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         $this->getManager()->remove($category);

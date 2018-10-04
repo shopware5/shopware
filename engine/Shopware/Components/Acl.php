@@ -153,7 +153,7 @@ class Shopware_Components_Acl extends Zend_Acl
     {
         // Check if resource already exists
         if ($this->hasResourceInDatabase($resourceName)) {
-            throw new Enlight_Exception("Resource $resourceName already exists");
+            throw new Enlight_Exception(sprintf('Resource "%s" already exists', $resourceName));
         }
 
         $resource = new Resource();

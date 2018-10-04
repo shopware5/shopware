@@ -203,7 +203,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             }
 
             if (empty($document->_subshop['id'])) {
-                throw new Enlight_Exception("Could not load template path for order $orderID");
+                throw new Enlight_Exception(sprintf('Could not load template path for order "%s"', $orderID));
             }
             if (!empty($config['_allowMultipleDocuments'])) {
                 $document->_allowMultipleDocuments = $config['_allowMultipleDocuments'];
