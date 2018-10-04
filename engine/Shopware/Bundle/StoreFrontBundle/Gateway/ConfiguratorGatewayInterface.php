@@ -72,28 +72,13 @@ interface ConfiguratorGatewayInterface
 
     /**
      * Returns all possible configurator combinations for the provided product.
-     * The returned array contains as array key the id of the configurator option.
-     * The array value contains an imploded array with all possible configurator option ids
-     * which can be combined with the option.
-     *
-     * Example (written with the configurator option names)
-     * array(
-     *     'white' => array('XL', 'L'),
-     *     'red'   => array('S', ...)
-     * )
-     *
-     * If the configurator contains only one group the function has to return an array indexed
-     * by the ids, which are selectable:
-     *
-     * Example (written with the configurator option names)
-     * array(
-     *     'white' => array(),
-     *     'red'   => array()
-     * )
+     * The returned array contains all combinations that are reachable by
+     * changing one of the group options in the given selection.
      *
      * @param Struct\BaseProduct $product
+     * @param int[]              $currentSelection
      *
      * @return array Indexed by the option id
      */
-    public function getProductCombinations(Struct\BaseProduct $product);
+    public function getProductCombinations(Struct\BaseProduct $product, array $currentSelection);
 }

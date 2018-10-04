@@ -88,7 +88,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         array $selection
     ) {
         $configurator = $this->configuratorGateway->get($product, $context);
-        $combinations = $this->configuratorGateway->getProductCombinations($product);
+        $combinations = $this->configuratorGateway->getProductCombinations($product, $selection);
 
         $media = [];
         if ($configurator->getType() === self::CONFIGURATOR_TYPE_PICTURE) {
@@ -98,34 +98,15 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
             );
         }
 
-        $onlyOneGroup = count($configurator->getGroups()) === 1;
-
         foreach ($configurator->getGroups() as $group) {
-            $group->setSelected(
-                isset($selection[$group->getId()])
-            );
+            $group->setSelected(isset($selection[$group->getId()]));
 
             foreach ($group->getOptions() as $option) {
-                $option->setSelected(
-                    in_array($option->getId(), $selection)
-                );
-
-                $isValid = $this->isCombinationValid(
-                    $group,
-                    $combinations[$option->getId()],
-                    $selection
-                );
-
-                $option->setActive(
-                    $isValid
-                    ||
-                    ($onlyOneGroup && isset($combinations[$option->getId()]))
-                );
+                $option->setSelected(in_array($option->getId(), $selection));
+                $option->setActive($option->isSelected() || $this->isOptionInCombinations($group, $option, $combinations));
 
                 if (isset($media[$option->getId()])) {
-                    $option->setMedia(
-                        $media[$option->getId()]
-                    );
+                    $option->setMedia($media[$option->getId()]);
                 }
             }
         }
@@ -133,28 +114,17 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         return $configurator;
     }
 
-    /**
-     * Checks if the passed combination is compatible with the provided customer configurator
-     * selection.
-     *
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group $group
-     * @param array                                                       $combinations
-     * @param $selection
-     *
-     * @return bool
-     */
-    private function isCombinationValid(Struct\Configurator\Group $group, $combinations, $selection)
-    {
-        if (empty($combinations)) {
-            return false;
-        }
-
-        foreach ($selection as $selectedGroup => $selectedOption) {
-            if (!in_array($selectedOption, $combinations) && $selectedGroup !== $group->getId()) {
-                return false;
+    protected function isOptionInCombinations(
+        Struct\Configurator\Group $group,
+        Struct\Configurator\Option $option,
+        array $combinations
+    ) {
+        foreach ($combinations as $combination) {
+            if ($combination[$group->getId()] === $option->getId()) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }
