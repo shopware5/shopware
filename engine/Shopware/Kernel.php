@@ -497,6 +497,13 @@ class Kernel implements HttpKernelInterface, TerminableInterface
 
         $this->plugins = $initializer->initializePlugins();
 
+        /*
+         * @deprecated since 5.5, sorting will be default in Shopware 5.6
+         */
+        if ($this->config['backward_compatibility']['predictable_plugin_order'] !== false) {
+            ksort($this->plugins);
+        }
+
         $this->activePlugins = $initializer->getActivePlugins();
 
         $this->pluginHash = $this->createPluginHash($this->plugins);

@@ -367,6 +367,12 @@ return array_replace_recursive([
             ],
         ],
     ],
+    'backward_compatibility' => [
+        /*
+         * @deprecated since 5.5, sorting will be default and this parameter will be removed with Shopware 5.6
+         */
+        'predictable_plugin_order' => false,
+    ],
     'logger' => [
         'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
     ],
