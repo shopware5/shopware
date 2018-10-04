@@ -25,6 +25,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
         * `Shopware_Modules_Admin_sUpdateNewsletter_Subscribe`
 * Added possibility to edit index.max_result_window for ES via `config.php`
 * Added new block `frontend_listing_box_article_image_attributes` in `listing/product-box/product-image.tpl`
+* Added `Retry-After` header for maintenance mode
 
 ## 5.5.1
 
