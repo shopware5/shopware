@@ -77,7 +77,7 @@ class Order extends Resource
         $orderModel = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$orderModel) {
-            throw new ApiException\NotFoundException("Order by number {$number} not found");
+            throw new ApiException\NotFoundException(sprintf('Order by number %s not found', $number));
         }
 
         return $orderModel->getId();
@@ -120,7 +120,7 @@ class Order extends Resource
         $order = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$order) {
-            throw new ApiException\NotFoundException("Order by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Order by id %d not found', $id));
         }
 
         if (is_array($order)) {
@@ -277,7 +277,7 @@ class Order extends Resource
         $order = $this->getRepository()->find($id);
 
         if (!$order) {
-            throw new ApiException\NotFoundException("Order by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Order by id %d not found', $id));
         }
 
         $params = $this->prepareOrderData($params);
@@ -413,10 +413,9 @@ class Order extends Resource
             $params['partner'] = $this->getContainer()->get('models')->find(Partner::class, $params['partnerId']);
 
             if (empty($params['partner'])) {
-                throw new ApiException\NotFoundException(sprintf(
-                    'Partner by id %s not found',
-                    $params['partnerId']
-                ));
+                throw new ApiException\NotFoundException(
+                    sprintf('Partner by id %s not found', $params['partnerId'])
+                );
             }
 
             unset($params['partnerId']);

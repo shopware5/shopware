@@ -132,10 +132,11 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
      */
     private function verifyResponseSignature(Response $response)
     {
-        $signature = $response->getHeader('x-shopware-signature');
+        $signatureHeaderName = 'x-shopware-signature';
+        $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException('Signature not found in x-shopware-signature header');
+            throw new \RuntimeException(sprintf('Signature not found in %s header', $signatureHeaderName));
         }
 
         if (!$this->benchmarkEncryption->isSignatureSupported()) {

@@ -94,7 +94,7 @@ class Article extends Resource implements BatchInterface
         $articleDetail = $this->getDetailRepository()->findOneBy(['number' => $number]);
 
         if (!$articleDetail) {
-            throw new ApiException\NotFoundException("Article by number {$number} not found");
+            throw new ApiException\NotFoundException(sprintf('Article by number %s not found', $number));
         }
 
         return $articleDetail
@@ -166,7 +166,7 @@ class Article extends Resource implements BatchInterface
         $article = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $id));
         }
 
         if ($this->getResultMode() == self::HYDRATE_ARRAY) {
@@ -421,7 +421,7 @@ class Article extends Resource implements BatchInterface
         $article = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
         if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $id));
         }
 
         $translations = [];
@@ -483,7 +483,7 @@ class Article extends Resource implements BatchInterface
         $article = $this->getRepository()->find($id);
 
         if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $id));
         }
 
         // Delete associated data
@@ -1424,8 +1424,9 @@ class Article extends Resource implements BatchInterface
                     $category = $this->getResource('Category')->findCategoryByPath($categoryData['path'], true);
 
                     if (!$category) {
-                        throw new ApiException\CustomValidationException(sprintf('Could not find or create category by path: %s.',
-                            $categoryData['path']));
+                        throw new ApiException\CustomValidationException(
+                            sprintf('Could not find or create category by path: %s.', $categoryData['path'])
+                        );
                     }
 
                     if (isset($categoryIds[$category->getId()])) {
@@ -1530,7 +1531,7 @@ class Article extends Resource implements BatchInterface
 
             if (!$existing) {
                 throw new ApiException\CustomValidationException(
-                    sprintf("Seo category isn't assigned as normal article category. Only assigned categories can be used as seo category")
+                    sprintf('Seo category isn\'t assigned as normal article category. Only assigned categories can be used as seo category')
                 );
             }
 
@@ -1730,7 +1731,7 @@ class Article extends Resource implements BatchInterface
         }
 
         if (!$propertyGroup instanceof \Shopware\Models\Property\Group) {
-            throw new ApiException\CustomValidationException(sprintf('There is no propertyGroup specified'));
+            throw new ApiException\CustomValidationException('There is no propertyGroup specified');
         }
 
         $models = [];
@@ -1796,14 +1797,14 @@ class Article extends Resource implements BatchInterface
                             $option = $relation->getOption();
                         }
                     } else {
-                        throw new ApiException\CustomValidationException('A property option need to be given for each property value');
+                        throw new ApiException\CustomValidationException('A property option needs to be given for each property value');
                     }
                     $option->fromArray($valueData['option']);
                     if ($option->isFilterable() === null) {
                         $option->setFilterable(false);
                     }
                 } else {
-                    throw new ApiException\CustomValidationException('A property option need to be given for each property value');
+                    throw new ApiException\CustomValidationException('A property option needs to be given for each property value');
                 }
                 // create the value
                 // If there is a filter value with matching name and option, load this value, else create a new one
@@ -1939,7 +1940,7 @@ class Article extends Resource implements BatchInterface
                 if (!$available) {
                     $property = $option['id'] ? $option['id'] : $option['name'];
                     throw new ApiException\CustomValidationException(
-                        sprintf('Passed option %s do not exist in the configurator set of the article', $property)
+                        sprintf('Passed option %s does not exist in the configurator set of the article', $property)
                     );
                 }
 
@@ -2386,7 +2387,9 @@ class Article extends Resource implements BatchInterface
                 try { //persist the model into the model manager
                     $this->getManager()->persist($media);
                 } catch (\Doctrine\ORM\ORMException $e) {
-                    throw new ApiException\CustomValidationException(sprintf('Some error occured while loading your image'));
+                    throw new ApiException\CustomValidationException(
+                        sprintf('Some error occured while loading your image from link "%s"', $downloadData['link'])
+                    );
                 }
 
                 $download->setFile($media->getPath());

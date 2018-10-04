@@ -205,12 +205,12 @@ EOD;
     {
         if (!is_writable($this->pathResolver->getFrontendThemeDirectory())) {
             throw new \Exception(
-                "Theme directory isn't writable"
+                sprintf('Theme directory %s isn\'t writable', $this->pathResolver->getFrontendThemeDirectory())
             );
         }
         if (!isset($data['template']) || empty($data['template'])) {
             throw new \Exception(
-                "Passed data array contains no valid theme name under the array key 'template'."
+                'Passed data array contains no valid theme name under the array key "template".'
             );
         }
 

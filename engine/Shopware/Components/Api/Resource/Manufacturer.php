@@ -68,7 +68,7 @@ class Manufacturer extends Resource
         $manufacturer = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException("Manufacturer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         return $manufacturer;
@@ -157,7 +157,7 @@ class Manufacturer extends Resource
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException("Manufacturer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         $params = $this->prepareManufacturerData($params);
@@ -194,7 +194,7 @@ class Manufacturer extends Resource
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException("Manufacturer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         $this->getManager()->remove($manufacturer);

@@ -520,7 +520,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $path = $this->Path() . 'Controllers/' . ucfirst($module) . '/' . ucfirst($controller) . '.php';
 
         if (!file_exists($path)) {
-            throw new Enlight_Exception('Controller "' . $controller . '" can\'t load failure');
+            throw new Enlight_Exception(sprintf('Controller "%s" can\'t load failure', $controller));
         }
 
         //register plugin model directory

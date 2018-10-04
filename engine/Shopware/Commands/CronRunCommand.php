@@ -162,13 +162,14 @@ EOF
 
         if (strpos($action, 'Shopware_') !== 0) {
             $action = str_replace(' ', '', ucwords(str_replace('_', ' ', $action)));
-            $job = $manager->getJobByAction('Shopware_CronJob_' . $action);
+            $action = 'Shopware_CronJob_' . $action;
+            $job = $manager->getJobByAction($action);
         }
 
         if ($job != null) {
             return $job;
         }
 
-        throw new \RuntimeException('Cron not found by given action name.');
+        throw new \RuntimeException(sprintf('Cron not found by action name "%s".', $action));
     }
 }

@@ -99,7 +99,7 @@ class Variant extends Resource implements BatchInterface
         $variant = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$variant) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
@@ -179,7 +179,7 @@ class Variant extends Resource implements BatchInterface
         $articleDetail = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$articleDetail) {
-            throw new ApiException\NotFoundException("Variant by number {$number} not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by number %s not found', $number));
         }
 
         return $articleDetail->getId();
@@ -220,7 +220,7 @@ class Variant extends Resource implements BatchInterface
         $articleDetail = $this->getRepository()->find($id);
 
         if (!$articleDetail) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         if ($articleDetail->getKind() === 1) {
@@ -274,7 +274,7 @@ class Variant extends Resource implements BatchInterface
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         $variant = $this->internalUpdate($id, $params, $variant->getArticle());
@@ -313,7 +313,7 @@ class Variant extends Resource implements BatchInterface
         $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
 
         if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $articleId not found");
+            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $articleId));
         }
 
         $variant = $this->internalCreate($params, $article);
@@ -355,7 +355,7 @@ class Variant extends Resource implements BatchInterface
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         $variant->setArticle($article);

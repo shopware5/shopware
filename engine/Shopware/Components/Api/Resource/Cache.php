@@ -253,7 +253,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
                 $this->cacheManager->clearOpCache();
                 break;
             default:
-                throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");
+                throw new ApiException\NotFoundException(sprintf('Cache "%s" is not a valid cache id.', $cache));
         }
 
         if (!empty($capabilities['tags'])) {
@@ -296,7 +296,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
                 $cacheInfo = $this->cacheManager->getOpCacheCacheInfo();
                 break;
             default:
-                throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");
+                throw new ApiException\NotFoundException(sprintf('Cache "%s" is not a valid cache id.', $cache));
         }
 
         $cacheInfo['id'] = $cache;

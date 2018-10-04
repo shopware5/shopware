@@ -314,9 +314,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $payload = json_encode($payload);
         $projectDir = $this->container->getParameter('shopware.app.rootdir');
+        $updateFilePath = $projectDir . 'files/update/update.json';
 
-        if (!file_put_contents($projectDir . 'files/update/update.json', $payload)) {
-            throw new \Exception('Could not write update.json');
+        if (!file_put_contents($updateFilePath, $payload)) {
+            throw new \Exception(sprintf('Could not write file %s', $updateFilePath));
         }
 
         $this->redirect($base . '/recovery/update/index.php');

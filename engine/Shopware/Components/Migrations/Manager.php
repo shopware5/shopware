@@ -201,7 +201,7 @@ class Manager
             }
 
             if (!($migrationClass instanceof AbstractMigration)) {
-                throw new \Exception("$migrationClassName is not instanceof AbstractMigration");
+                throw new \Exception(sprintf('%s is not instanceof AbstractMigration', $migrationClassName));
             }
 
             if ($migrationClass->getVersion() != $result['0']) {

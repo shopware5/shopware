@@ -1693,7 +1693,7 @@ SQL;
                 );
 
                 if (!$update || !$updatedPrice) {
-                    throw new Enlight_Exception('Basket Update ##01 Could not update quantity' . $sql);
+                    throw new Enlight_Exception(sprintf('Basket Update ##01 Could not update quantity%s', $sql));
                 }
             }
         }
@@ -1900,7 +1900,7 @@ SQL;
         $result = $this->db->query($sql, $params);
 
         if (!$result) {
-            throw new Enlight_Exception('BASKET-INSERT #02 SQL-Error' . $sql);
+            throw new Enlight_Exception(sprintf('BASKET-INSERT #02 SQL-Error%s', $sql));
         }
         $insertId = $this->db->lastInsertId();
 

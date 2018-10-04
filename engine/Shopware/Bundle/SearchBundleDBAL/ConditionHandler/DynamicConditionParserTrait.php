@@ -51,8 +51,7 @@ trait DynamicConditionParserTrait
         $field = trim($field);
 
         if (empty($field)) {
-            $msg = 'Condition class requires a defined attribute field!';
-            throw new \InvalidArgumentException($msg, 1);
+            throw new \InvalidArgumentException('Condition class requires a defined attribute field!', 1);
         }
 
         /**
@@ -63,7 +62,7 @@ trait DynamicConditionParserTrait
             ->listTableColumns($table);
 
         if (empty($columns)) {
-            throw new \RuntimeException("Could not retrieve columns from '$table'");
+            throw new \RuntimeException(sprintf('Could not retrieve columns from "%s".', $table));
         }
 
         $names = array_map(function (\Doctrine\DBAL\Schema\Column $column) {
@@ -71,7 +70,7 @@ trait DynamicConditionParserTrait
         }, $columns);
 
         if (!array_key_exists(strtolower($field), $names)) {
-            throw new \InvalidArgumentException("Invalid column name specified '$field'", 1);
+            throw new \InvalidArgumentException(sprintf('Invalid column name "%s" specified.', $field), 1);
         }
 
         $validOperators = [

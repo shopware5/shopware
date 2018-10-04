@@ -81,7 +81,7 @@ class Address extends Resource
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         return $address;
@@ -130,7 +130,7 @@ class Address extends Resource
 
         $customer = $this->getContainer()->get('models')->find(CustomerModel::class, $customerId);
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer by id $customerId not found");
+            throw new ApiException\NotFoundException(sprintf('Customer by id %s not found', $customerId));
         }
 
         $this->setupContext($customer->getShop()->getId());
@@ -179,7 +179,7 @@ class Address extends Resource
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->setupContext($address->getCustomer()->getShop()->getId());
@@ -220,7 +220,7 @@ class Address extends Resource
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->addressService->delete($address);

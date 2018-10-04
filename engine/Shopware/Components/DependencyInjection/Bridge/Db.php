@@ -75,7 +75,7 @@ class Db
                 $message
             );
 
-            throw new \RuntimeException('Could not connect to database. Message from SQL Server: ' . $message, $e->getCode());
+            throw new \RuntimeException(sprintf('Could not connect to database. Message from SQL Server: %s', $message), $e->getCode());
         }
 
         return $conn;

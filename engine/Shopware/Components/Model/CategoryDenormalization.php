@@ -603,12 +603,12 @@ class CategoryDenormalization
     {
         $count = (int) $count;
         if ($count <= 0) {
-            throw new \Exception("LIMIT argument count=$count is not valid");
+            throw new \Exception(sprintf('LIMIT argument count=%s is not valid', $count));
         }
 
         $offset = (int) $offset;
         if ($offset < 0) {
-            throw new \Exception("LIMIT argument offset=$offset is not valid");
+            throw new \Exception(sprintf('LIMIT argument offset=%s is not valid', $offset));
         }
 
         $sql .= " LIMIT $count";

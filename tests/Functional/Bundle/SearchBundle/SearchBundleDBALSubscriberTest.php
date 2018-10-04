@@ -61,7 +61,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage No handlers provided in \Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber
+     * @expectedExceptionMessage No handlers provided in Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber
      */
     public function testEmptyArray()
     {

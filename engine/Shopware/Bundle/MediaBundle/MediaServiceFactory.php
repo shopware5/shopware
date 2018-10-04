@@ -75,7 +75,7 @@ class MediaServiceFactory
     public function factory($backendName)
     {
         if (!isset($this->cdnConfig['adapters'][$backendName])) {
-            throw new \Exception("Configuration '" . $backendName . "' not found");
+            throw new \Exception(sprintf('Configuration "%s" not found', $backendName));
         }
 
         // Filesystem
@@ -109,7 +109,7 @@ class MediaServiceFactory
         $adapter = $adapters->first();
 
         if (!$adapter) {
-            throw new \Exception("CDN Adapter '" . $config['type'] . "' not found.");
+            throw new \Exception(sprintf('CDN Adapter "%s" not found.', $config['type']));
         }
 
         return $adapter;

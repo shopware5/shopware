@@ -184,7 +184,7 @@ class Shopware_Components_TemplateMail
                 ['name' => $modelName]
             );
             if (!$mailModel) {
-                throw new \Enlight_Exception("Mail-Template with name '{$modelName}' could not be found.");
+                throw new \Enlight_Exception(sprintf('Mail-Template with name "%s" could not be found.', $modelName));
             }
         }
 

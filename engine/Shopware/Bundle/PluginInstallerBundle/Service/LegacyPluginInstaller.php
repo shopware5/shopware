@@ -193,7 +193,7 @@ class LegacyPluginInstaller
         $result = is_bool($result) ? ['success' => $result] : $result;
 
         if ($result['success'] == false) {
-            throw new \Exception('Not allowed to enable plugin.');
+            throw new \Exception(sprintf('Not allowed to enable plugin %s.', $plugin->getName()));
         }
 
         $plugin->setActive(true);
@@ -211,7 +211,7 @@ class LegacyPluginInstaller
         $result = is_bool($result) ? ['success' => $result] : $result;
 
         if ($result['success'] == false) {
-            throw new \Exception('Not allowed to disable plugin.');
+            throw new \Exception(sprintf('Not allowed to disable plugin %s.', $plugin->getName()));
         }
 
         $plugin->setActive(false);
@@ -247,10 +247,12 @@ class LegacyPluginInstaller
                     $name = $dir->getFilename();
 
                     if ($this->validateIonCube($file)) {
-                        throw new \Exception(sprintf(
-                            'Plugin %s is encrypted but ioncube Loader extension is not installed',
-                            $name
-                        ));
+                        throw new \Exception(
+                            sprintf(
+                                'Plugin %s is encrypted but the ionCube Loader extension is not installed',
+                                $name
+                            )
+                        );
                     }
 
                     $plugin = $collection->get($name);

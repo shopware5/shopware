@@ -471,12 +471,12 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset', 0);
         $filterArray = json_decode($filterArray, true);
         if ($filterArray === false) {
-            throw new RuntimeException("Could not decode '{$this->Request()->getParam('filterArray')}'");
+            throw new RuntimeException(sprintf('Could not decode "%s"', $this->Request()->getParam('filterArray')));
         }
 
         $operations = json_decode($operations, true);
         if ($operations === false) {
-            throw new RuntimeException("Could not decode '{$this->Request()->getParam('operations')}'");
+            throw new RuntimeException(sprintf('Could not decode "%s"', $this->Request()->getParam('operations')));
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */

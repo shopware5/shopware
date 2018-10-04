@@ -38,8 +38,17 @@ class StatisticsResponseHydrator implements HydratorInterface
      */
     public function hydrate(array $data)
     {
-        if ($data['message'] !== 'Success') {
-            throw new StatisticsHydratingException(sprintf('Expected field "message" to be "success", was "%s"', $data['message']));
+        $messageDataArrayKey = 'message';
+        $messageDataSuccessValue = 'Success';
+        if ($data[$messageDataArrayKey] !== $messageDataSuccessValue) {
+            throw new StatisticsHydratingException(
+                sprintf(
+                    'Expected field "%s" to be "%s", was "%s"',
+                    $messageDataArrayKey,
+                    $messageDataSuccessValue,
+                    $data[$messageDataArrayKey]
+                )
+            );
         }
 
         if (empty($data['responseToken'])) {
