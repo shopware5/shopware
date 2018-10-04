@@ -27,20 +27,20 @@
  * @author shopware AG
  */
 .#{$prefix}tip {
-	border: 0 none;
-	background: #111;
-	background: rgba(0, 0, 0, 0.85);
-	overflow: visible;
+    border: 0 none;
+    background: #111;
+    background: rgba(0, 0, 0, 0.85);
+    overflow: visible;
 
-	/** Generell styling */
-	.#{$prefix}tip-header-text, .#{$prefix}tip-body {
-		color: #fff !important;
-		text-shadow: 0 1px 0 #000;
-		padding: 4px;
-	}
+    /** Generell styling */
+    .#{$prefix}tip-header-text, .#{$prefix}tip-body {
+        color: #fff !important;
+        text-shadow: 0 1px 0 #000;
+        padding: 4px;
+    }
 
-	/** Body styling */
-	.#{$prefix}tip-body {
-		line-height: 16px;
-	}
+    /** Body styling */
+    .#{$prefix}tip-body {
+        line-height: 16px;
+    }
 }

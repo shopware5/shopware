@@ -39,7 +39,7 @@
     }
 
     .#{$prefix}desktop-switcher-control, .add-desktop {
-    	@include single-transition(all, 0.2s, linear);
+        @include single-transition(all, 0.2s, linear);
         @include border-radius(3px 3px 0 0);
         @include user-select(none);
         cursor: pointer;

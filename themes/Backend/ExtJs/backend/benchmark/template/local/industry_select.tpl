@@ -3,7 +3,7 @@
 {block name="benchmark_index_title"}Shopware BI - Branche wählen{/block}
 
 {block name="benchmark_index_head_scripts"}
-	{$smarty.block.parent}
+    {$smarty.block.parent}
     <script src="{link file='backend/benchmark/template/local/js/industry_select.js'}"></script>
 {/block}
 

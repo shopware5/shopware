@@ -35,15 +35,15 @@
                   svg-color-stop(#e5e6e8, 100%, 1)
                 )) center center no-repeat transparent;
 
-	.#{$prefix}panel-header-text-default {
-		font-weight: normal;
-		font-size: 11px;
-		text-shadow: 1px 1px 0 #fff;
-	}
+    .#{$prefix}panel-header-text-default {
+        font-weight: normal;
+        font-size: 11px;
+        text-shadow: 1px 1px 0 #fff;
+    }
 }
 
 .#{$prefix}panel-header-default-top {
-	outline: #fff solid 1px;
+    outline: #fff solid 1px;
 }
 
 // Collapsed panel
@@ -53,89 +53,89 @@
                   svg-color-stop(#e6e6e8, 100%, 1)
                 )) center center no-repeat transparent;
 
-	border-left: 1px solid $border-color !important;
-	border-bottom: 0 none;
+    border-left: 1px solid $border-color !important;
+    border-bottom: 0 none;
 
-	// Tools
-	.#{$prefix}tool img {
-		background-image: theme-image($theme, 'tool-sprites.png');
-	}
+    // Tools
+    .#{$prefix}tool img {
+        background-image: theme-image($theme, 'tool-sprites.png');
+    }
 }
 
 // Panel body
 .#{$prefix}window-body-default .#{$prefix}panel-body-default {
-	border-width: 1px;
+    border-width: 1px;
 }
 
 // Special detail view
 .detail-view {
-	.#{$prefix}panel-header {
-	   	padding: 8px 4px 9px 10px;
+    .#{$prefix}panel-header {
+           padding: 8px 4px 9px 10px;
         box-shadow: none;
         border-top: 0 none;
         border-bottom: 0 none;
-    	background: theme-image($theme, 'window_list_header_bg.png') repeat-x;
-    	border-left: 1px solid $light-blue;
-    	border-right: 1px solid $light-blue;
+        background: theme-image($theme, 'window_list_header_bg.png') repeat-x;
+        border-left: 1px solid $light-blue;
+        border-right: 1px solid $light-blue;
 
-    	// Header text
-    	.#{$prefix}panel-header-text {
-    		font-size: 12px;
-    		color: #fff;
-    		font-weight: normal;
-    		text-shadow: 1px 1px 1px $dark-blue;
-    	}
+        // Header text
+        .#{$prefix}panel-header-text {
+            font-size: 12px;
+            color: #fff;
+            font-weight: normal;
+            text-shadow: 1px 1px 1px $dark-blue;
+        }
 
-    	// Tools
-    	.#{$prefix}tool {
-    	    top: 0px !important;
+        // Tools
+        .#{$prefix}tool {
+            top: 0px !important;
 
-    	    img { top: 0 !important }
+            img { top: 0 !important }
 
-    		.#{$prefix}tool-collapse-right {
-				background-image: theme-image($theme, 'window_detail_right.png');
-				background-position: 0 0;
-			}
-    	}
+            .#{$prefix}tool-collapse-right {
+                background-image: theme-image($theme, 'window_detail_right.png');
+                background-position: 0 0;
+            }
+        }
     }
 
     // Panel body
     .#{$prefix}panel-body {
-    	border-top: 0 none;
-    	border-bottom: 0 none;
-    	border-right-color: $light-border-color;
-    	padding: 12px;
+        border-top: 0 none;
+        border-bottom: 0 none;
+        border-right-color: $light-border-color;
+        padding: 12px;
         background: #fff;
 
-    	.supplier-logo {
-			@include border-radius(3px);
-			width: 175px;
-			margin: 0 auto;
-			border: 1px solid #dfe6e9;
-			display: table-cell;
-			vertical-align: middle;
-			text-align: center;
-			margin: 0 auto;
+        .supplier-logo {
+            @include border-radius(3px);
+            width: 175px;
+            margin: 0 auto;
+            border: 1px solid #dfe6e9;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 auto;
 
-			img {
-				margin: 0 auto;
-				display: block;
-			}
-		}
+            img {
+                margin: 0 auto;
+                display: block;
+            }
+        }
 
-		.supplier-info {
-			padding: 8px;
-			color: #6c818f;
-			font-size: 11px;
+        .supplier-info {
+            padding: 8px;
+            color: #6c818f;
+            font-size: 11px;
 
-			.action {
-				margin: 8px 0 0;
+            .action {
+                margin: 8px 0 0;
 
-				a {
-					color: $link-color;
-				}
-			}
-		}
+                a {
+                    color: $link-color;
+                }
+            }
+        }
     }
 }
 .#{$prefix}more-info {

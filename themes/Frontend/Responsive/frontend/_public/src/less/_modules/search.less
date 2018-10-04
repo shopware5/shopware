@@ -20,15 +20,15 @@ It contains the viewport specific styles inside media queries.
 .search--cat-filter {
     .unitize-margin(0, 0, 20, 0);
 
-	.cat-filter--headline {
-		.unitize-padding(0, 0, 5, 0);
-		.unitize-margin(0, 0, 20, 0);
-		.unitize(font-size, 16);
-		.unitize(line-height, 24);
-		border-bottom: 1px solid @border-color;
-	}
+    .cat-filter--headline {
+        .unitize-padding(0, 0, 5, 0);
+        .unitize-margin(0, 0, 20, 0);
+        .unitize(font-size, 16);
+        .unitize(line-height, 24);
+        border-bottom: 1px solid @border-color;
+    }
 
-	.cat-filter--reset {
+    .cat-filter--reset {
         &:extend(.filter--active);
         .unitize-margin(0, 0, 15, 0);
         .unitize(line-height, 24);
@@ -40,54 +40,54 @@ It contains the viewport specific styles inside media queries.
             .unitize(font-size, 8);
             position: relative;
         }
-	}
+    }
 
-	.cat-filter--active-path {
-		.unitize-margin(0, 0, 20, 0);
-	}
+    .cat-filter--active-path {
+        .unitize-margin(0, 0, 20, 0);
+    }
 
-	.cat-filter--label {
-		.unitize-margin(0, 10, 0, 0);
-		font-weight: @font-bold-weight;
-	}
+    .cat-filter--label {
+        .unitize-margin(0, 10, 0, 0);
+        font-weight: @font-bold-weight;
+    }
 
-	.cat-filter--path {
-		white-space: nowrap;
+    .cat-filter--path {
+        white-space: nowrap;
 
-		[class^="icon--"] {
-			.unitize-margin(0, 20);
-			.unitize(font-size, 10);
-		}
-	}
+        [class^="icon--"] {
+            .unitize-margin(0, 20);
+            .unitize(font-size, 10);
+        }
+    }
 
-	.cat-filter--link,
-	.cat-filter--sub-cat {
-		color: @text-color;
+    .cat-filter--link,
+    .cat-filter--sub-cat {
+        color: @text-color;
 
-		&:hover {
-			color: @link-color;
-		}
+        &:hover {
+            color: @link-color;
+        }
 
-		.checkbox {
-			.unitize-margin(0, 5, 0, 0);
-			.unitize(-1, 16, top);
-			position: relative;
-		}
-	}
+        .checkbox {
+            .unitize-margin(0, 5, 0, 0);
+            .unitize(-1, 16, top);
+            position: relative;
+        }
+    }
 
-	.cat-filter--sub-cat {
-		.unitize-width(180);
-		.unitize(line-height, 24);
-		.unitize-margin(0, 10, 0, 0);
-		display: block;
-	}
+    .cat-filter--sub-cat {
+        .unitize-width(180);
+        .unitize(line-height, 24);
+        .unitize-margin(0, 10, 0, 0);
+        display: block;
+    }
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-	.search--cat-filter {
-		.unitize-margin(0, 0, 40, 0);
-	}
+    .search--cat-filter {
+        .unitize-margin(0, 0, 40, 0);
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {

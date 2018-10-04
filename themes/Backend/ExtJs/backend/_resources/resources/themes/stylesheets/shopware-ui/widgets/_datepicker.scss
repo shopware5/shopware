@@ -27,12 +27,12 @@
  * @author shopware AG
  */
 .#{$prefix}datepicker {
-	border: 1px solid #b5c0c7;
-	border-top: 0 none;
+    border: 1px solid #b5c0c7;
+    border-top: 0 none;
 
-	/** Header */
-	.#{$prefix}datepicker-header {
-		border: 1px solid #3980a9;
+    /** Header */
+    .#{$prefix}datepicker-header {
+        border: 1px solid #3980a9;
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(46,181,249,1), 0%, 1),
             svg-color-stop(rgba(22,129,211,1), 100%, 1)
@@ -40,49 +40,49 @@
 
         .#{$prefix}datepicker-month {
 
-			.#{$prefix}btn-split-right {
-				background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAFCAYAAACJmvbYAAAAaElEQVR42m2KwQpAQABE9z/cJJHDFuK73J04aM8Se/IHfIADJ5zVRvmYsbtlS5mapt4bkvQ3/pJKTiIu4JbLRzjFjJgLKbsTPttgZYPickcEbIfiBICuV62w80kfX2Zk2F6g9QHaCCMfPcFo6Klg/LQAAAAASUVORK5CYII=");
-			}
+            .#{$prefix}btn-split-right {
+                background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAFCAYAAACJmvbYAAAAaElEQVR42m2KwQpAQABE9z/cJJHDFuK73J04aM8Se/IHfIADJ5zVRvmYsbtlS5mapt4bkvQ3/pJKTiIu4JbLRzjFjJgLKbsTPttgZYPickcEbIfiBICuV62w80kfX2Zk2F6g9QHaCCMfPcFo6Klg/LQAAAAASUVORK5CYII=");
+            }
 
-			button {
-				text-shadow: 0 1px 0 darken(#207ab7, 10%);
+            button {
+                text-shadow: 0 1px 0 darken(#207ab7, 10%);
 
-				.#{$prefix}btn-inner {
-					font-weight: bold;
-				}
-			}
-		}
-	}
+                .#{$prefix}btn-inner {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
 
-	/** Body */
-	table.#{$prefix}datepicker-inner {
-		th {
-			border-bottom: 1px solid #b5c0c7;
-			color: $font-color;
-			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAALUlEQVQIHQXBsRHAMBAEoZvtv185egyh971267bmsuWEbCEnE3LaxDpC27q7H8pxK9yXeDBmAAAAAElFTkSuQmCC") repeat-x;
-		}
+    /** Body */
+    table.#{$prefix}datepicker-inner {
+        th {
+            border-bottom: 1px solid #b5c0c7;
+            color: $font-color;
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAIAAADDbMD2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAALUlEQVQIHQXBsRHAMBAEoZvtv185egyh971267bmsuWEbCEnE3LaxDpC27q7H8pxK9yXeDBmAAAAAElFTkSuQmCC") repeat-x;
+        }
 
-		/** Selected day */
-		.#{$prefix}datepicker-selected a {
-			text-shadow: 0 1px 0 darken(#207ab7, 10%);
-			border-color: #0d71ff;
-			color: darken(#fff, 5%);
+        /** Selected day */
+        .#{$prefix}datepicker-selected a {
+            text-shadow: 0 1px 0 darken(#207ab7, 10%);
+            border-color: #0d71ff;
+            color: darken(#fff, 5%);
             background: svg-linear-gradient(0%, 0%, 0%, 100%, (
                 svg-color-stop(rgba(46,181,249,1), 0%, 1),
                 svg-color-stop(rgba(22,129,211,1), 100%, 1)
             )) center center no-repeat transparent;
-		}
-	}
+        }
+    }
 
-	/** Footer */
-	.#{$prefix}datepicker-footer {
-		padding: 4px 0;
-		border-top: 1px solid #b5c0c7;
+    /** Footer */
+    .#{$prefix}datepicker-footer {
+        padding: 4px 0;
+        border-top: 1px solid #b5c0c7;
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgb(246, 247, 246), 0%, 1),
             svg-color-stop(rgb(231, 232, 234), 100%, 1)
         )) center center no-repeat transparent;
-	}
+    }
 
     /** Monthpicker */
     .#{$prefix}monthpicker {
