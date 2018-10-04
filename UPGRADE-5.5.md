@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added `Retry-After` header for maintenance mode
 * Added new config flag **isCustomStore** for the `Shopware.apps.Base.view.element.Select` to create a store with a custom **"valueField"**.
 * Added new smarty block `widgets/emotion/index/classes` to file `widgets/emotion/index.tpl`
+* Added config `backward_compatibility.predictable_plugin_order` with default `false`. Enabling this loads plugins in alphabetical order instead of an undefined one.
 
 ### Removals
 
