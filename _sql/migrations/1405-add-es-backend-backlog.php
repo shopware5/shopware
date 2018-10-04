@@ -26,7 +26,7 @@ class Migrations_Migration1405 extends Shopware\Components\Migrations\AbstractMi
     public function up($modus)
     {
         $sql = <<<'EOF'
-CREATE TABLE `s_es_backend_backlog` (
+CREATE TABLE IF NOT EXISTS `s_es_backend_backlog` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `entity` varchar(500) NOT NULL,
   `entity_id` int NOT NULL,
