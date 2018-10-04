@@ -36,6 +36,10 @@ class Migrations_Migration705 extends Shopware\Components\Migrations\AbstractMig
             $templates = unserialize($serializedValue);
 
             foreach (explode(";", $templates) as $template) {
+                if (strpos($template, ":") === false) {
+                    continue;
+                }
+                
                 list($file, $name) = explode(":", $template);
 
                 if (in_array($file, $templateBlacklist) || empty($name)) {
