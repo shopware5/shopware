@@ -26,7 +26,7 @@
             {/block}
 
             {block name="widgets/emotion/index/emotion"}
-                <section class="emotion--container emotion--column-{$emotionCols} emotion--mode-{$emotionMode} emotion--{$emotion@index}"
+                <section class="{block name="widgets/emotion/index/classes"}emotion--container emotion--column-{$emotionCols} emotion--mode-{$emotionMode} emotion--{$emotion@index}{/block}"
                          data-emotion="true"
                          data-gridMode="{$emotionGridMode}"
                          data-fullscreen="{if $emotionFullscreen}true{else}false{/if}"
