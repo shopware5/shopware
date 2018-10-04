@@ -207,6 +207,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                     oldValue = e.record.get('number');
                     newValue = e.record.get('details.number') || e.record.get('number')
                 }
+                
+               if (e.field === 'details.inStock') {
+                   oldValue = e.record.get('inStock');
+               }
 
                 if(e.field === 'details.number' &&  (!newValue || !newValue.match(/^[a-zA-Z0-9-_. ]+$/))) {
                     Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
@@ -221,6 +225,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
                 if (e.field === 'details.number') {
                     e.record.set('number', newValue);
+                }
+                
+                if (e.field === 'details.inStock') {
+                    e.record.set('inStock', newValue);
                 }
 
                 me.fireEvent('saveVariant', e.record);
@@ -347,8 +355,8 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         standardColumns = [
             {
                 header: me.snippets.columns.stock,
-                dataIndex: 'inStock',
-                sortable: false,
+                dataIndex: 'details.inStock',
+                sortable: true,
                 flex: 1,
                 renderer: me.stockColumnRenderer,
                 editor: {
