@@ -231,11 +231,13 @@ Ext.define('Shopware.apps.Article.view.detail.Toolbar', {
      */
     onStoresLoaded: function(article, stores) {
         var me = this,
-            defaultShopId = me.getDefaultShopId();
+            defaultShopId;
 
         me.article = article;
         me.shopStore = stores['shops'];
         me.shopComboBox.bindStore(me.shopStore);
+
+        defaultShopId = me.getDefaultShopId();
 
         if (defaultShopId !== null) {
             me.shopComboBox.setValue(defaultShopId);
