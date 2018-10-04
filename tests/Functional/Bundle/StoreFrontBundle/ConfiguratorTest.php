@@ -185,6 +185,31 @@ class ConfiguratorTest extends TestCase
         $this->assertInactiveOptions($configurator, ['M', 'S']);
     }
 
+    public function testSelectionConfiguratorOnMissingVariant()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getProductWithMissingVariant($number, $context, [['A2', 'A4', 'A6']]);
+        $configuratorService = Shopware()->Container()->get('shopware_storefront.configurator_service');
+
+        $this->helper->createArticle($data);
+
+        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
+            ->get($number, $context);
+
+        $selection = $this->createSelection($product, []);
+        $configurator = $configuratorService->getProductConfigurator($product, $context, $selection);
+        $this->assertInactiveOptions($configurator, []);
+
+        $selection = $this->createSelection($product, ['A2']);
+        $configurator = $configuratorService->getProductConfigurator($product, $context, $selection);
+        $this->assertInactiveOptions($configurator, []);
+
+        $selection = $this->createSelection($product, ['A2', 'A4']);
+        $configurator = $configuratorService->getProductConfigurator($product, $context, $selection);
+        $this->assertInactiveOptions($configurator, ['A6']);
+    }
+
     protected function getProduct(
         $number,
         ShopContext $context,
@@ -208,6 +233,46 @@ class ConfiguratorTest extends TestCase
         return $product;
     }
 
+    protected function getProductWithMissingVariant(
+        $number,
+        ShopContext $context,
+        array $missingCombinations = [],
+        Category $category = null
+    ) {
+        $product = parent::getProduct($number, $context, $category);
+
+        $configurator = $this->helper->getConfigurator(
+            $context->getCurrentCustomerGroup(),
+            $number,
+            [
+                'G1' => ['A1', 'A2'],
+                'G2' => ['A3', 'A4'],
+                'G3' => ['A5', 'A6'],
+            ]
+        );
+
+        foreach ($missingCombinations as $combination) {
+            $configurator['variants'] = array_values(array_filter($configurator['variants'], function (array $variant) use ($combination) {
+                $matchingCombinations = [];
+
+                foreach ($variant['configuratorOptions'] as $option) {
+                    foreach ($combination as $optionName) {
+                        if ($option['option'] == $optionName) {
+                            $matchingCombinations[] = $optionName;
+                            break;
+                        }
+                    }
+                }
+
+                return count($matchingCombinations) !== count($combination);
+            }));
+        }
+
+        $product = array_merge($product, $configurator);
+
+        return $product;
+    }
+
     private function createSelection(ListProduct $listProduct, array $optionNames)
     {
         $options = $this->helper->getProductOptionsByName(
@@ -217,8 +282,8 @@ class ConfiguratorTest extends TestCase
 
         $selection = [];
         foreach ($options as $option) {
-            $groupId = $option['group_id'];
-            $selection[$groupId] = $option['id'];
+            $groupId = (int) $option['group_id'];
+            $selection[$groupId] = (int) $option['id'];
         }
 
         return $selection;
