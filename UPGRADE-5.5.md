@@ -14,7 +14,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
 * Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
 * Changed FormSynchronizer to consider sorting from config.xml
-* Changed the instock column in the product variants list to be sortable
+* Changed the `instock` column in the product variants list to be sortable
+* Changed `emotion/components/component_banner_slider.tpl` to reset thumbnail URLs correctly
 
 ### Additions
 
