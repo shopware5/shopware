@@ -28,6 +28,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added possibility to edit index.max_result_window for ES via `config.php`
 * Added new block `frontend_listing_box_article_image_attributes` in `listing/product-box/product-image.tpl`
 * Added `Retry-After` header for maintenance mode
+* Added new config flag **isCustomStore** for the `Shopware.apps.Base.view.element.Select` to create a store with a custom **"valueField"**.
 
 ## 5.5.1
 
