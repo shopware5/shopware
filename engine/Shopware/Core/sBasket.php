@@ -455,6 +455,17 @@ class sBasket
                 )
             );
         } else {
+            $params = $this->eventManager->filter(
+                'Shopware_Modules_Basket_InsertDiscount_FilterParams',
+                $params,
+                [
+                    'subject' => $this,
+                    'getDiscounts' => $getDiscounts,
+                    'basketAmount' => $basketAmount,
+                    'basketDiscount' => $basketDiscount,
+                ]
+            );
+
             $this->db->insert('s_order_basket', $params);
         }
     }

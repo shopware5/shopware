@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed Symfony library to version 3.4.17
 * Changed jQuery plugin `swRegister` to correctly use data attributes
 * Changed VariantHelper to work also on search page
+* Added a new filter event `Shopware_Modules_Basket_InsertDiscount_FilterParams` to the basket discount functionality
 
 ### Additions
 
