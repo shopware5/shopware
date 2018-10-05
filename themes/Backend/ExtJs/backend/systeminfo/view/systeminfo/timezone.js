@@ -46,12 +46,8 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Timezone', {
     ui: 'shopware-ui',
     height: 60,
 
-    /**
-     * ID to access the component out of other components
-     */
-    id: 'systeminfo-main-timezone',
-    layout: 'fit'
-,
+    layout: 'fit',
+
     /**
     * Alias name for the view. Could be used to get an instance
     * of the view through Ext.widget('systeminfo-main-encoder')
@@ -68,13 +64,13 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Timezone', {
     style: 'margin-left: 15px; margin-right: 15px; margin-top: 15px;',
 
     initComponent: function(){
-        var me = this;
-        var block = Shopware.Notification.createBlockMessage('', 'notice');
+        var me = this,
+            block = Shopware.Notification.createBlockMessage('', 'notice');
+
         me.items = block;
 
         Ext.Ajax.request({
             url:'{url controller="Systeminfo" action="getTimezone"}',
-            scope: me,
             success: function (record) {
                 var decodedResponse = Ext.JSON.decode(record.responseText),
                     snippet = '';
@@ -92,7 +88,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Timezone', {
             }
         });
 
-        this.callParent(arguments);
+        me.callParent(arguments);
     }
 });
 //{/block}
