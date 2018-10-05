@@ -93,6 +93,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
             message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
         },
+        overwriteDocument: {
+            title: '{s name=document/overwrite/confirmation/title}{/s}',
+            message: '{s name=document/overwrite/confirmation/message}{/s}',
+        },
         growlMessage: '{s name=growlMessage}Order{/s}'
     },
 
@@ -573,13 +577,45 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      *
      * @param [Ext.data.Model]          The record of the detail page (Shopware.apps.Order.model.Order)
      * @param [Ext.data.Model]          The configuration record of the document form (Shopware.apps.Order.model.Configuration)
-     * @param [Ext.container.Container] me
+     * @param [Ext.container.Container] The panel
      */
     onCreateDocument: function(order, config, panel) {
         var me = this,
-            store = Ext.create('Shopware.apps.Order.store.Configuration');
+            documentAlreadyCreated = false;
 
         panel.setLoading(true);
+
+        order.getReceiptStore.each(function (record) {
+            if (record.get('typeId') === config.get('documentType')) {
+                documentAlreadyCreated = true;
+            }
+        });
+
+        if (documentAlreadyCreated) {
+            Ext.MessageBox.confirm(
+                me.snippets.overwriteDocument.title,
+                me.snippets.overwriteDocument.message,
+                function (clickedButton) {
+                    if (clickedButton === 'no' || clickedButton === 'cancel') {
+                        panel.setLoading(false);
+                        return;
+                    }
+                    me.createDocument(order, config, panel);
+                }
+            );
+        } else {
+            me.createDocument(order, config, panel);
+        }
+    },
+
+    /**
+     * @param [Ext.data.Model]          The record of the detail page (Shopware.apps.Order.model.Order)
+     * @param [Ext.data.Model]          The configuration record of the document form (Shopware.apps.Order.model.Configuration)
+     * @param [Ext.container.Container] The panel
+     */
+    createDocument: function(order, config, panel) {
+        var me = this,
+            store = Ext.create('Shopware.apps.Order.store.Configuration');
 
         config.set('orderId', order.get('id'));
         store.add(config);
