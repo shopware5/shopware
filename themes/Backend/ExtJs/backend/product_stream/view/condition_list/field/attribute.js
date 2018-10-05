@@ -110,6 +110,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
                 { name: '{s name=attribute_condition/greater_than}greater than{/s}', value: '>' },
                 { name: '{s name=attribute_condition/greater_than_equals}greater than equals{/s}', value: '>=' },
                 { name: '{s name=attribute_condition/in}in{/s}', value: 'IN' },
+                { name: '{s name=attribute_condition/not_in}not in{/s}', value: 'NOT IN' },
                 { name: '{s name=attribute_condition/starts_with}starts with{/s}', value: 'STARTS_WITH' },
                 { name: '{s name=attribute_condition/ends_with}ends with{/s}', value: 'ENDS_WITH' },
                 { name: '{s name=attribute_condition/like}like{/s}', value: 'CONTAINS' }
@@ -184,6 +185,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
             }
         } else if (value.operator == 'IN') {
             value.value = value.value.split(",");
+        } else if (value.operator === 'NOT IN') {
+          value.value = value.value.split(",")
         }
 
         var result = {};
