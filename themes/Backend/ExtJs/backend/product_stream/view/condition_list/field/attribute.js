@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
             allowBlank: false,
             listeners: {
                 change: function(field, value) {
-                    if (value == 'BETWEEN') {
+                    if (value === 'BETWEEN') {
                         me.betweenContainer.show();
                         me.valueField.hide();
                     } else {
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
 
             me.operatorSelection.setValue(value.operator);
 
-            if (value.operator == 'BETWEEN') {
+            if (value.operator === 'BETWEEN') {
                 me.fromField.setValue(value.value.min);
                 me.toField.setValue(value.value.max);
             } else {
@@ -178,15 +178,13 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
             value: this.valueField.getValue()
         };
 
-        if (value.operator == 'BETWEEN') {
+        if (value.operator === 'BETWEEN') {
             value.value = {
                 min: this.fromField.getValue(),
                 max: this.toField.getValue()
             }
-        } else if (value.operator == 'IN') {
+        } else if (value.operator === 'IN' || value.operator === 'NOT IN') {
             value.value = value.value.split(",");
-        } else if (value.operator === 'NOT IN') {
-          value.value = value.value.split(",")
         }
 
         var result = {};
