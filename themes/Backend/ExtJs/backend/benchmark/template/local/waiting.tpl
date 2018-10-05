@@ -1,8 +1,8 @@
 {extends file="backend/benchmark/template/local/index.tpl"}
 
 {block name="benchmark_index_head_scripts"}
-	{$smarty.block.parent}
-	<script type="text/javascript" src="{link file="backend/base/frame/postmessage-api.js"}"></script>
+    {$smarty.block.parent}
+    <script type="text/javascript" src="{link file="backend/base/frame/postmessage-api.js"}"></script>
 {/block}
 
 {block name="benchmark_index_title"}Shopware BI - Waiting{/block}

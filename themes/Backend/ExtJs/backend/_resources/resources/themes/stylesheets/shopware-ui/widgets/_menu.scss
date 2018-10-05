@@ -116,7 +116,7 @@
         border: 0 none;
 
         .#{$prefix}menu-item-text {
-	        color: #035a9b;
+            color: #035a9b;
         }
     }
 
@@ -146,13 +146,13 @@
 
     /** Using a CSS pseudo element to place the arrow under the menu */
     &:after {
-    	position: absolute;
-    	bottom: -8px;
-    	display: block;
-    	content: '';
-    	width: 124px;
-    	height: 8px;
-    	background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_cap.png') no-repeat 0 bottom;
+        position: absolute;
+        bottom: -8px;
+        display: block;
+        content: '';
+        width: 124px;
+        height: 8px;
+        background: theme-image($theme, 'btn_taskbar_cap_fenster_tooltip_cap.png') no-repeat 0 bottom;
     }
 
     .#{$prefix}menu-body {

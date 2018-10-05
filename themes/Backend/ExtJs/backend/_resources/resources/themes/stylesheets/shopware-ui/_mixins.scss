@@ -37,27 +37,27 @@
  * @param [string] delay - delay of the animation
  */
 @mixin single-transition($type: all, $duration: 0.5s, $easing: linear) {
-	-webkit-transition: $type $easing $duration;
-	-moz-transition:$type $easing $duration;
-	-ms-transition: $type $easing $duration;
-	-o-transition: $type $easing $duration;
-	transition: $type $easing $duration;
+    -webkit-transition: $type $easing $duration;
+    -moz-transition:$type $easing $duration;
+    -ms-transition: $type $easing $duration;
+    -o-transition: $type $easing $duration;
+    transition: $type $easing $duration;
 }
 
 /**
  * Cross Browser mixin which provides the default focus behavior.
  */
 @mixin form-item-focus($border-color: rgba(82, 168, 236, 0.8), $box-shadow-inset-color: rgba(0, 0, 0, 0.075), $box-shadow-outer-color: rgba(82, 168, 236, 0.6)) {
-	 -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+     -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
      -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
      -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
      -o-transition: border linear 0.2s, box-shadow linear 0.2s;
      transition: border linear 0.2s, box-shadow linear 0.2s;
 
      &:focus {
-     	@include box-shadow(inset 0 1px 1px $box-shadow-inset-color, 0 0 8px $box-shadow-outer-color);
-		border-color: $border-color;
-	}
+         @include box-shadow(inset 0 1px 1px $box-shadow-inset-color, 0 0 8px $box-shadow-outer-color);
+        border-color: $border-color;
+    }
 }
 
 /**
@@ -67,22 +67,22 @@
  * @param [string] select - selection model for the element
  */
 @mixin user-select($select: none) {
-	-webkit-user-select: $select;
-	-moz-user-select: $select;
-	-ms-user-select: $select;
-	user-select: $select;
+    -webkit-user-select: $select;
+    -moz-user-select: $select;
+    -ms-user-select: $select;
+    user-select: $select;
 }
 
 @mixin reset-border-radius {
-	@include border-radius(0);
+    @include border-radius(0);
 }
 
 @mixin reset-box-shadow {
-	-webkit-box-shadow: 0 0 0 0 transparent;
-	-moz-box-shadow: 0 0 0 0 transparent;
-	-ms-box-shadow: 0 0 0 0 transparent;
-	-o-box-shadow: 0 0 0 0 transparent;
-	box-shadow: 0 0 0 0 transparent;
+    -webkit-box-shadow: 0 0 0 0 transparent;
+    -moz-box-shadow: 0 0 0 0 transparent;
+    -ms-box-shadow: 0 0 0 0 transparent;
+    -o-box-shadow: 0 0 0 0 transparent;
+    box-shadow: 0 0 0 0 transparent;
 }
 
 

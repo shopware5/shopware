@@ -29,23 +29,23 @@
 
 /** Masking layer */
 .#{$prefix}mask {
-	background: lighten($font-color, 35%);
+    background: lighten($font-color, 35%);
 }
 
 /** Loading mask */
 .#{$prefix}mask-msg {
-	@include border-radius(3px);
+    @include border-radius(3px);
     @include box-shadow(0 2px 5px rgba(0, 55, 110, 0.2));
-	background: #fff;
-	border-color: #919da6;
-	padding: 6px;
+    background: #fff;
+    border-color: #919da6;
+    padding: 6px;
 
-	div {
-		padding: 8px 18px 8px 38px;
-		border: 0 none;
-		background-position: 16px center;
-		background-color: #f0f2f4;
-		color: $font-color;
-		text-shadow: 0 1px 0 #fff;
-	}
+    div {
+        padding: 8px 18px 8px 38px;
+        border: 0 none;
+        background-position: 16px center;
+        background-color: #f0f2f4;
+        color: $font-color;
+        text-shadow: 0 1px 0 #fff;
+    }
 }
