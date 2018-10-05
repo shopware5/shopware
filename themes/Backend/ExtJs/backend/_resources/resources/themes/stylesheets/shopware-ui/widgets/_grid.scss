@@ -73,7 +73,7 @@
         border-bottom: 1px solid #d4d4d4;
         border-right: 1px solid #fff;
 
-        .#{$prefix}grid-row-checker    {
+        .#{$prefix}grid-row-checker {
             background-image: theme-image($theme, 'unchecked.png');
         }
     }
@@ -113,8 +113,6 @@
         }
     }
 
-
-
     // Marked rows
     .#{$prefix}grid-row-selected {
 
@@ -128,7 +126,7 @@
             background-color: #e6f2f8 !important;
             border-right: 1px solid #d1e0ec;
 
-            .#{$prefix}grid-row-checker    {
+            .#{$prefix}grid-row-checker {
                 background-image: theme-image($theme, 'checked.png');
             }
         }

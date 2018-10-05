@@ -282,7 +282,7 @@
         }
         .#{$prefix}btn-icon {
             left: auto;
-            right: 0px;
+            right: 0;
             top: 7px;
             width: 14px;
             height: 14px;
@@ -389,7 +389,8 @@
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(rgba(253,254,254,1), 0%, 1),
             svg-color-stop(rgba(183,206,231,1), 100%, 1)
-        )) center center no-repeat transparent;    }
+        )) center center no-repeat transparent;
+    }
 
     /** Toolbar button style - Disabled state */
     .#{$prefix}btn-disabled {
@@ -432,7 +433,7 @@
             @include user-select(none);
             color: #fff;
             font-weight: normal;
-            text-shadow: 0px 1px 1px #475c6a;
+            text-shadow: 0 1px 1px #475c6a;
             font-size: 12px;
             margin: 0 !important; /** Align the button text in FF */
         }
@@ -524,7 +525,8 @@
         background: svg-linear-gradient(0%, 0%, 0%, 100%, (
             svg-color-stop(#e4ebf0, 0%, 1),
             svg-color-stop(#c8d4de, 100%, 1)
-        )) center center no-repeat transparent;    }
+        )) center center no-repeat transparent;
+    }
 
 
     /** Small primary button style - Normal state */
