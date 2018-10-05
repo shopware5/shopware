@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -39,15 +38,15 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatcher
 {
     /**
-     * @var string Current directory of the controller.
-     *             Will be set in the getControllerClass method or in the getControllerPath method.
+     * @var string current directory of the controller.
+     *             Will be set in the getControllerClass method or in the getControllerPath method
      */
     protected $curDirectory;
 
     /**
-     * @var string Contains the current module.
+     * @var string contains the current module.
      *             Will be set in the getControllerClass method or in the getControllerPath method.
-     *             If the property is set by the getControllerPath method, the string is formatted.
+     *             If the property is set by the getControllerPath method, the string is formatted
      */
     protected $curModule;
 
@@ -210,7 +209,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $module = $file->getFilename();
 
             // Don't use SCCS directories as modules
-            if (preg_match('/^[^a-z]/i', $module) || ('CVS' == $module)) {
+            if (preg_match('/^[^a-z]/i', $module) || ($module == 'CVS')) {
                 continue;
             }
 
@@ -505,7 +504,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         if (!$this->isDispatchable($request)) {
             throw new Enlight_Controller_Exception(
-                'Controller "' . $request->getControllerName() . '" not found',
+                'Controller "' . $request->getControllerName() . '" not found for request url ' . $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri(),
                 Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
             );
         }
