@@ -66,6 +66,9 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
         me.fieldLabel = me.fieldLabel || me.snippets.fields.streamFieldLabel;
         me.emptyText = me.emptyText || me.snippets.fields.streamFieldEmptyText;
 
+        // Fix translation label
+        me.initialConfig.fieldLabel = me.fieldLabel;
+
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
         me.store = factory.createEntitySearchStore("Shopware\\Models\\ProductStream\\ProductStream");
         me.searchStore = factory.createEntitySearchStore("Shopware\\Models\\ProductStream\\ProductStream");
