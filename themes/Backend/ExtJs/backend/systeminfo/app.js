@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Systeminfo', {
     * Required views for controller
     * @array
     */
-    views: [ 'main.Window','systeminfo.Configlist', 'systeminfo.Pathlist', 'systeminfo.Filelist', 'systeminfo.Versionlist','systeminfo.Phpinfo' ],
+    views: [ 'main.Window','systeminfo.Configlist', 'systeminfo.Pathlist', 'systeminfo.Filelist', 'systeminfo.Versionlist','systeminfo.Phpinfo', 'systeminfo.Timezone' ],
     /**
     * Required stores for controller
     * @array
@@ -78,7 +78,8 @@ Ext.define('Shopware.apps.Systeminfo', {
     * @array
     */
     controllers : [ 'Systeminfo', 'Main' ],
-        /**
+
+    /**
      * Returns the main application window for this is expected
      * by the Enlight.app.SubApplication class.
      * The class sets a new event listener on the "destroy" event of

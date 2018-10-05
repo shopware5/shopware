@@ -121,6 +121,32 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     }
 
     /**
+     * Function to get timezone diff
+     */
+    public function getTimezoneAction()
+    {
+        $offset = 0;
+        try {
+            $sql = 'SELECT @@system_time_zone;';
+            $timezone = $this->container->get('dbal_connection')->query($sql)->fetchColumn(0);
+            $datebaseZone = timezone_open(timezone_name_from_abbr($timezone));
+            $phpZone = timezone_open(date_default_timezone_get());
+            $databaseTime = new DateTime('now', $datebaseZone);
+
+            if (!empty($timezone) && timezone_name_from_abbr($timezone)) {
+                $offset = abs($datebaseZone->getOffset(new DateTime()) - $phpZone->getOffset($databaseTime));
+            }
+        } catch (\PDOException $e) {
+        }
+        if (empty($offset)) {
+            $sql = 'SELECT UNIX_TIMESTAMP()-' . time();
+            $offset = $this->container->get('dbal_connection')->query($sql)->fetchColumn(0);
+        }
+
+        $this->View()->assign(['success' => true, 'offset' => $offset < 60 ? 0 : round($offset / 60)]);
+    }
+
+    /**
      * Function to display the phpinfo
      */
     public function infoAction()
