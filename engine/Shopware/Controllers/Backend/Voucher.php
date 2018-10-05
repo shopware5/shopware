@@ -23,6 +23,7 @@
  */
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Random;
 use Shopware\Models\Tax\Tax;
 use Shopware\Models\Voucher\Code;
 use Shopware\Models\Voucher\Voucher;
@@ -531,7 +532,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     {
         $allPatternsReplaced = false;
         while (!$allPatternsReplaced) {
-            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[mt_rand(1, count($range) - 1)], $generatedCode, 1);
+            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[Random::getInteger(1, count($range) - 1)], $generatedCode, 1);
             $allPatternsReplaced = substr_count($generatedCode, $pattern) == 0;
         }
 

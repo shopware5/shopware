@@ -360,7 +360,7 @@ class Zend_Cache_Core
 
         // automatic cleaning
         if ($this->_options['automatic_cleaning_factor'] > 0) {
-            $rand = rand(1, $this->_options['automatic_cleaning_factor']);
+            $rand = Shopware\Components\Random::getInteger(1, $this->_options['automatic_cleaning_factor']);
             if ($rand == 1) {
                 //  new way                 || deprecated way
                 if ($this->_extendedBackend || method_exists($this->_backend, 'isAutomaticCleaningAvailable')) {
