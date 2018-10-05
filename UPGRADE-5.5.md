@@ -18,6 +18,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `emotion/components/component_banner_slider.tpl` to reset thumbnail URLs correctly
 * Changed Symfony library to version 3.4.17
 * Changed jQuery plugin `swRegister` to correctly use data attributes
+* Changed VariantHelper to work also on search page
 
 ### Additions
 
