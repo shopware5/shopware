@@ -36,8 +36,6 @@ interface BasketHelperInterface
 
     /**
      * @param DiscountContext $discountContext
-     *
-     * @return
      */
     public function addProportionalDiscount(DiscountContext $discountContext);
 

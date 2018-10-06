@@ -709,8 +709,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @param $viewId
      * @param $position
      * @param $column
-     *
-     * @throws \Doctrine\ORM\ORMException
      */
     private function setWidgetPosition($viewId, $position, $column)
     {

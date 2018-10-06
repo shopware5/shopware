@@ -87,7 +87,8 @@ class ConfiguratorOptionsGateway
     /**
      * Get groups with options by optionids
      *
-     * @param array $optionIds
+     * @param array                $optionIds
+     * @param ShopContextInterface $context
      *
      * @return Struct\Configurator\Group[]
      */

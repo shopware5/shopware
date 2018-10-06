@@ -833,6 +833,11 @@ class sOrder
 
     /**
      * send order confirmation mail
+     *
+     * @param array $variables
+     *
+     * @throws Enlight_Event_Exception
+     * @throws Enlight_Exception
      */
     public function sendMail($variables)
     {

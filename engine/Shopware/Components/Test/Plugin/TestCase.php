@@ -123,7 +123,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param $pluginName
      * @param $status
      *
-     * @return int
+     * @throws \Exception
      */
     private static function restorePluginState($pluginName, $status)
     {

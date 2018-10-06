@@ -395,9 +395,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param $discounts \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Customer\Discount[]
-     *
-     * @return Group
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Customer\Discount[] $discounts
      */
     public function setDiscounts($discounts)
     {

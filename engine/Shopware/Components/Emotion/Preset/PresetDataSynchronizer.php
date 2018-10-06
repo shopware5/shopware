@@ -58,6 +58,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
      * @param ModelManager                $modelManager
      * @param \Enlight_Event_EventManager $eventManager
      * @param IteratorAggregate           $componentHandlers
+     * @param string                      $rootDir
      */
     public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, IteratorAggregate $componentHandlers, $rootDir)
     {
@@ -157,7 +158,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
      * @param Preset $preset
      * @param array  $element
      *
-     * @throws PresetAssetImportException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function synchronizeData(Preset $preset, array $element)
     {

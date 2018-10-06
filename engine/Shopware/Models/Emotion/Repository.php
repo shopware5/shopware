@@ -466,7 +466,7 @@ class Repository extends ModelRepository
     /**
      * @param int $id
      *
-     * @return \Doctrine\ORM\Query
+     * @return QueryBuilder
      */
     public function getEmotionById($id)
     {

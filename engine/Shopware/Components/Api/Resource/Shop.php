@@ -142,10 +142,11 @@ class Shop extends Resource
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\OrmException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
+     * @throws ApiException\ValidationException
      *
      * @return \Shopware\Models\Shop\Shop
      */

@@ -302,8 +302,6 @@ class FormSynchronizer
      * @param Form   $form
      * @param string $translationArray
      * @param Locale $locale
-     *
-     * @return array
      */
     private function addFormTranslation(Form $form, $translationArray, Locale $locale)
     {

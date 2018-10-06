@@ -96,7 +96,6 @@ class MediaServiceFactory
      *
      * @param array $config
      *
-     * @throws \Enlight_Event_Exception
      * @throws \Exception
      *
      * @return AdapterInterface

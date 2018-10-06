@@ -354,7 +354,8 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
+     * @param ShopContextInterface $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -418,7 +419,8 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
+     * @param ShopContextInterface $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

@@ -248,7 +248,7 @@ class Shopware_Components_TemplateMail
      * @param Mail                     $mailModel
      * @param array                    $overrideConfig
      *
-     * @throws \Enlight_Exception
+     * @throws Zend_Mail_Exception
      *
      * @return \Enlight_Components_Mail
      */

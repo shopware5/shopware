@@ -50,7 +50,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     /**
      * Returns all Shipping Costs
      *
-     * @return array
+     * @throws Exception
      */
     public function getShippingCostsAction()
     {

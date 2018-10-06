@@ -166,9 +166,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      *
      * @param int $shopId
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
-     *
      * @return int
      */
     public function countBlogs($shopId)
@@ -327,9 +324,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * Get the number of supplier which friendly url will be updated
      *
      * @param int $shopId
-     *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return int
      */

@@ -58,6 +58,9 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
      * @param string $assetPath
      * @param int    $albumId
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
      * @return Media
      */
     protected function doAssetImport($assetPath, $albumId = -3)

@@ -134,6 +134,7 @@ class Basic implements GeneratorInterface
      * method for the image extension
      *
      * @param string $fileContent
+     * @param string $imagePath
      *
      * @throws \RuntimeException
      *

@@ -138,8 +138,6 @@ class Unit extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $articles
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setArticles($articles)
     {

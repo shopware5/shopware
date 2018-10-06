@@ -549,6 +549,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     /**
      * Redirects after registration to the corresponding controllers and actions
+     *
+     * @param array $params
+     *
+     * @throws Exception
      */
     private function redirectCustomer(array $params = [])
     {

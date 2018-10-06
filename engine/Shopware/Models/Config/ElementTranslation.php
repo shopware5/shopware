@@ -153,7 +153,7 @@ class ElementTranslation extends ModelEntity
      *
      * @param \Shopware\Models\Config\Element $element
      *
-     * @return Element
+     * @return ElementTranslation
      */
     public function setElement($element)
     {

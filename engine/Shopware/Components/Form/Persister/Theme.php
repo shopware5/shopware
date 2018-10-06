@@ -54,6 +54,8 @@ class Theme implements Form\Interfaces\Persister
      *
      * @param \Shopware\Components\Form\Interfaces\Container $container
      * @param Template                                       $reference
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save(Form\Interfaces\Container $container, $reference)
     {

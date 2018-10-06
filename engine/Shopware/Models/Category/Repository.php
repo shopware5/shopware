@@ -183,7 +183,7 @@ class Repository extends ModelRepository
      * @param null  $offset
      * @param bool  $selectOnlyActive
      *
-     * @return \Doctrine\ORM\Query
+     * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy = [], $limit = null, $offset = null, $selectOnlyActive = true)
     {
@@ -478,7 +478,7 @@ class Repository extends ModelRepository
      *
      * @param Category|int $category
      *
-     * @return int
+     * @return array|null
      */
     public function getActiveArticleIdByCategoryId($category)
     {
@@ -584,7 +584,7 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getBlogCategoryTreeListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @return \Doctrine\ORM\Query
+     * @return \Shopware\Components\Model\QueryBuilder
      */
     public function getBlogCategoryTreeListBuilder()
     {

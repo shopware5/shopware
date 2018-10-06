@@ -95,8 +95,6 @@ class ShopIndexerFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
-     *
      * @return DataIndexerInterface[]
      */
     private function collectIndexer()
@@ -111,8 +109,6 @@ class ShopIndexerFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
-     *
      * @return MappingInterface[]
      */
     private function collectMappings()
@@ -127,8 +123,6 @@ class ShopIndexerFactory
     }
 
     /**
-     * @throws \Enlight_Event_Exception
-     *
      * @return SettingsInterface[]
      */
     private function collectSettings()

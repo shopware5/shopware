@@ -240,6 +240,8 @@ class Theme
      *      $container->addTab($tab);
      *  }
      * </code>
+     *
+     * @param Form\Container\TabContainer $container
      */
     public function createConfig(Form\Container\TabContainer $container)
     {

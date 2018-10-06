@@ -283,8 +283,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
 
     /**
      * Returns a list of all blog detail templates for the blog templates combobox
-     *
-     * @return array
      */
     public function getTemplatesAction()
     {
@@ -416,8 +414,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      *
      * @param $data
      * @param $blogModel
-     *
-     * @return array
      */
     protected function prepareTagAssociatedData($data, $blogModel)
     {
@@ -457,8 +453,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      * Helper method to delete all old tags mappings by the given blogId
      *
      * @param $blogId
-     *
-     * @return array
      */
     protected function deleteOldTags($blogId)
     {

@@ -40,6 +40,11 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      * of articles.
      * The articles are used for the aggregate query which is
      * faster if an constant where condition is used.
+     *
+     * @param null $offset
+     * @param null $limit
+     *
+     * @throws Zend_Db_Adapter_Exception
      */
     public function initAlsoBought($offset = null, $limit = null)
     {

@@ -1741,8 +1741,6 @@ SQL;
      * Used in multiple locations
      *
      * @param int $id Id of the basket line
-     *
-     * @throws Enlight_Exception If entry could not be deleted from the database
      */
     public function sDeleteArticle($id)
     {

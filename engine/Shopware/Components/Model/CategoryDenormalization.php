@@ -88,17 +88,11 @@ class CategoryDenormalization
         return $this->enableTransactions;
     }
 
-    /**
-     * @return CategoryDenormalization
-     */
     public function enableTransactions()
     {
         $this->enableTransactions = true;
     }
 
-    /**
-     * @return CategoryDenormalization
-     */
     public function disableTransactions()
     {
         $this->enableTransactions = false;

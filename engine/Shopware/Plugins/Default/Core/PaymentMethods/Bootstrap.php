@@ -80,6 +80,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     /**
      * Standard plugin update method to register all required components.
      *
+     * @param string $version
+     *
      * @return bool success
      */
     public function update($version)

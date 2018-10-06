@@ -65,8 +65,6 @@ class Shopware_Components_Config implements ArrayAccess
 
     /**
      * @param array $config
-     *
-     * @throws Zend_Cache_Exception
      */
     public function __construct(array $config)
     {

@@ -105,6 +105,8 @@ class LegacyPhpDumper extends Dumper
 
     /**
      * Sets the dumper to be used when dumping proxies in the generated container.
+     *
+     * @param ProxyDumper $proxyDumper
      */
     public function setProxyDumper(ProxyDumper $proxyDumper)
     {
@@ -121,9 +123,9 @@ class LegacyPhpDumper extends Dumper
      *  * namespace:  The class namespace
      *  * as_files:   To split the container in several files
      *
-     * @throws EnvParameterException When an env var exists but has not been dumped
-     *
      * @return string|array A PHP class representing the service container or an array of PHP files if the "as_files" option is set
+     *
+     * @param array $options
      */
     public function dump(array $options = [])
     {
@@ -394,6 +396,11 @@ EOF;
     /**
      * Generates the require_once statement for service includes.
      *
+     * @param string            $cId
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
+     * @param \SplObjectStorage $allInlinedDefinitions
+     *
      * @return string
      */
     private function addServiceInclude($cId, Definition $definition)
@@ -446,6 +453,10 @@ EOF;
      *
      * @throws InvalidArgumentException
      * @throws RuntimeException
+     *
+     * @param string            $cId
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
      *
      * @return string
      */
@@ -530,6 +541,11 @@ EOF;
      *
      * @param Definition $definition
      * @param string     $variableName
+     *
+     * @param string            $id
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
+     * @param                   $isSimpleInstance
      *
      * @return string
      */
@@ -810,6 +826,11 @@ EOTXT
 
     /**
      * Adds multiple services.
+     *
+     * @param string            $id
+     * @param Definition        $definition
+     * @param \SplObjectStorage $inlinedDefinitions
+     * @param                   $isSimpleInstance
      *
      * @return string
      */

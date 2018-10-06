@@ -36,7 +36,7 @@ class OptimizerService implements OptimizerServiceInterface
     private $optimizers = [];
 
     /**
-     * @param OptimizerInterface[] $optimizers
+     * @param IteratorAggregate $optimizers
      */
     public function __construct(IteratorAggregate $optimizers)
     {

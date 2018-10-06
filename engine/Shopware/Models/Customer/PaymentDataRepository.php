@@ -32,7 +32,8 @@ use Shopware\Components\Model\ModelRepository;
 class PaymentDataRepository extends ModelRepository
 {
     /**
-     * @param null $userId
+     * @param null   $userId
+     * @param string $paymentName
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

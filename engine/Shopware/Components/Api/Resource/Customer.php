@@ -58,8 +58,9 @@ class Customer extends Resource
      *
      * @param $number
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return int
      */
@@ -87,8 +88,10 @@ class Customer extends Resource
     /**
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return array|\Shopware\Models\Customer\Customer
      */
@@ -102,8 +105,10 @@ class Customer extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return array|\Shopware\Models\Customer\Customer
      */
@@ -159,6 +164,8 @@ class Customer extends Resource
      * @param array $criteria
      * @param array $orderBy
      *
+     * @throws ApiException\PrivilegeException
+     *
      * @return array
      */
     public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
@@ -189,6 +196,9 @@ class Customer extends Resource
 
     /**
      * @param array $params
+     *
+     * @throws ApiException\CustomValidationException
+     * @throws ApiException\PrivilegeException
      *
      * @return \Shopware\Models\Customer\Customer
      */
@@ -224,9 +234,11 @@ class Customer extends Resource
      * @param string $number
      * @param array  $params
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\OrmException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
      *
      * @return \Shopware\Models\Customer\Customer
      */
@@ -241,8 +253,11 @@ class Customer extends Resource
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\CustomValidationException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\OrmException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
      *
      * @return \Shopware\Models\Customer\Customer
      */
@@ -288,8 +303,10 @@ class Customer extends Resource
     /**
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\OrmException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
      *
      * @return \Shopware\Models\Customer\Customer
      */
@@ -303,8 +320,10 @@ class Customer extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\OrmException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\PrivilegeException
      *
      * @return \Shopware\Models\Customer\Customer
      */
@@ -332,6 +351,8 @@ class Customer extends Resource
     /**
      * @param array                              $data
      * @param \Shopware\Models\Customer\Customer $customer
+     *
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */

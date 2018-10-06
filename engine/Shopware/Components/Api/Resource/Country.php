@@ -265,9 +265,11 @@ class Country extends Resource
     /**
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\CustomValidationException
+     * @throws ApiException\NotFoundException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return array
      */
