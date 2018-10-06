@@ -499,16 +499,14 @@ class Repository
      * The data result contains the executed search term, the count of request
      * which sends this search term and how many result are returned for this term.
      *
-     * @param int       $offset numeric value which defines the query start page
-     * @param int       $limit  numeric value which defines the query limit
+     * @param int       $offset  numeric value which defines the query start page
+     * @param int       $limit   numeric value which defines the query limit
      * @param \DateTime $from
      * @param \DateTime $to
      * @param array     $sort
+     * @param array     $shopIds
      *
-     * @internal param array $orderBy Expects a two dimensional array with additionally order by conditions
-     *
-     * @return Result
-     *                array (
+     * @return Result array (
      *                'countRequests' => '90',
      *                'searchterm' => 'iphone',
      *                'countResults' => '1401',

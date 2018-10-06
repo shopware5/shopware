@@ -4118,6 +4118,8 @@ SQL;
      * @param float $currencyFactor
      * @param array $dispatch
      * @param float $discount_tax
+     *
+     * @return array
      */
     private function handlePaymentMeanSurcharge($country, $payment, $currencyFactor, $dispatch, $discount_tax)
     {

@@ -86,6 +86,8 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     /**
      * Helper function to read all static pages of a shop from the database
      *
+     * @param int $shopId
+     *
      * @return array
      */
     private function getSitesByShopId($shopId)

@@ -178,6 +178,8 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     }
 
     /**
+     * @param string $key
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getPriceCountQuery($key)

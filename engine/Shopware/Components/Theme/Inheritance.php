@@ -373,6 +373,7 @@ class Inheritance
      * @param int     $templateId
      * @param array   $templates
      * @param array[] $configs
+     * @param bool    $lessCompatible
      *
      * @return array
      */

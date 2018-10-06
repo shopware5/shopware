@@ -106,10 +106,17 @@ class Product implements ResourceInterface
 
     /**
      * Returns products matching a given filter
+     *
+     * @param array $tokens
+     * @param int   $offset
+     * @param int   $limit
+     * @param null  $orderBy
+     *
+     * @return array
      */
-    public function filter($ast, $offset, $limit, $orderBy = null)
+    public function filter($tokens, $offset, $limit, $orderBy = null)
     {
-        return $this->filter->filter($ast, $offset, $limit, $orderBy);
+        return $this->filter->filter($tokens, $offset, $limit, $orderBy);
     }
 
     /**

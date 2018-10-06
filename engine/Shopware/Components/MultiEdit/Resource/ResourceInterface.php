@@ -50,14 +50,14 @@ interface ResourceInterface
     /**
      * Needs to return an array of entities matching the given filter
      *
-     * @param $ast
-     * @param $offset
-     * @param $limit
-     * @param $orderBy
+     * @param array $tokens
+     * @param int   $offset
+     * @param int   $limit
+     * @param null  $orderBy
      *
      * @return mixed
      */
-    public function filter($ast, $offset, $limit, $orderBy = null);
+    public function filter($tokens, $offset, $limit, $orderBy = null);
 
     /**
      * Returns columns to be shown in the batchProcess window

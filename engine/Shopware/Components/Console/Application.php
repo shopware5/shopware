@@ -36,7 +36,6 @@ use Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @category  Shopware
@@ -77,7 +76,7 @@ class Application extends BaseApplication
     /**
      * Gets the Kernel associated with this Console.
      *
-     * @return KernelInterface A KernelInterface instance
+     * @return \Shopware\Kernel
      */
     public function getKernel()
     {

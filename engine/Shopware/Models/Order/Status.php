@@ -239,7 +239,7 @@ class Status extends ModelEntity
     /**
      * @param \Shopware\Models\Mail\Mail|array|null $mail
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Status
      */
     public function setMail($mail)
     {

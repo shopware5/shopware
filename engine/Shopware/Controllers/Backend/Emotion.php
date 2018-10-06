@@ -67,8 +67,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Event listener function of the listing store of the emotion backend module.
      * Returns an array of all defined emotions.
-     *
-     * @return array
      */
     public function listAction()
     {
@@ -444,8 +442,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Event listener function of the library store.
-     *
-     * @return array
      */
     public function libraryAction()
     {
@@ -1549,7 +1545,7 @@ EOD;
     }
 
     /**
-     * @param Emotion
+     * @param Emotion $emotion
      */
     private function generateEmotionSeoUrls(Emotion $emotion)
     {

@@ -68,8 +68,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * @static
      *
      * @param Enlight_Event_EventArgs $args
-     *
-     * @return
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {

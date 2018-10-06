@@ -208,7 +208,7 @@ class Repository extends ModelRepository
      */
     public function getShippingCostsMatrixQuery($dispatchId = null, $filter = null, $limit = null, $offset = null)
     {
-        $builder = $this->getShippingCostsMatrixQueryBuilder($dispatchId, $filter);
+        $builder = $this->getShippingCostsMatrixQueryBuilder($dispatchId);
 
         return $builder->getQuery();
     }
@@ -218,12 +218,10 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param $dispatchId - If this parameter is given, only one data set will be returned
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getShippingCostsMatrixQueryBuilder($dispatchId = null, $filter = null, $limit = null)
+    public function getShippingCostsMatrixQueryBuilder($dispatchId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from('Shopware\Models\Dispatch\ShippingCost', 'shippingcosts')->select(['shippingcosts']);

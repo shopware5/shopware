@@ -391,6 +391,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      * Init template method
      *
      * Initializes the template using the mailing data.
+     *
+     * @param array $mailing
+     *
+     * @return Enlight_Template_Manager
      */
     public function initTemplate($mailing)
     {

@@ -430,8 +430,6 @@ class Configurator
      *
      * @param Theme                       $theme
      * @param Form\Container\TabContainer $container
-     *
-     * @return Form\Container\TabContainer
      */
     private function injectConfig(Theme $theme, Form\Container\TabContainer $container)
     {

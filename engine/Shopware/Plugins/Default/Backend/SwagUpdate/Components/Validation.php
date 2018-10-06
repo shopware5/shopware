@@ -61,6 +61,7 @@ class Validation
 
     /**
      * @param \Enlight_Components_Snippet_Namespace $namespace
+     * @param array                                 $checks
      */
     public function __construct(\Enlight_Components_Snippet_Namespace $namespace, array $checks)
     {

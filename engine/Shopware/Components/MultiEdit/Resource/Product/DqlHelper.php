@@ -643,7 +643,7 @@ class DqlHelper
      *
      * @param $tokens
      *
-     * @return string
+     * @return array
      */
     public function getDqlFromTokens($tokens)
     {
@@ -967,6 +967,10 @@ class DqlHelper
     /**
      * Returns all columns for a given entity prefixed
      * eg.g \Shopware\Models\Article\Article => array('id', 'name', …)
+     *
+     * @param string $entity
+     *
+     * @return array
      */
     protected function getPrefixedColumns($entity)
     {

@@ -264,7 +264,7 @@ class Comment extends ModelEntity
     /**
      * Get points
      *
-     * @return \Shopware\Models\Blog\double
+     * @return float
      */
     public function getPoints()
     {
