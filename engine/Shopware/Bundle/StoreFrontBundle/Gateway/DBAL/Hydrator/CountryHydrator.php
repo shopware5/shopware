@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Models\Country\Area;
 
 /**
  * @category  Shopware
@@ -50,7 +49,7 @@ class CountryHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Area
+     * @return Struct\Country\Area
      */
     public function hydrateArea(array $data)
     {

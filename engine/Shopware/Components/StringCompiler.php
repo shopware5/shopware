@@ -61,7 +61,7 @@ class Shopware_Components_StringCompiler
     /**
      * @param array $context
      *
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_StringCompiler
      */
     public function setContext($context)
     {
@@ -91,7 +91,7 @@ class Shopware_Components_StringCompiler
     /**
      * @param Enlight_Template_Manager $view
      *
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_StringCompiler
      */
     public function setView(\Enlight_Template_Manager $view)
     {
@@ -103,7 +103,7 @@ class Shopware_Components_StringCompiler
     /**
      * @param bool $isCompatibilityMode
      *
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_StringCompiler
      */
     public function setIsCompatibilityMode($isCompatibilityMode = true)
     {

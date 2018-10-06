@@ -138,7 +138,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @param array $positions
+     * @param array $shopPositions
      *
      * @return array
      */

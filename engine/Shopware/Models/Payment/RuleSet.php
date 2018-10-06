@@ -80,7 +80,7 @@ class RuleSet extends ModelEntity
     private $value2;
 
     /**
-     * @var
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="ruleSets")
      * @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
@@ -220,7 +220,7 @@ class RuleSet extends ModelEntity
     /**
      * Gets the corresponding payment-model.
      *
-     * @return
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPayment()
     {

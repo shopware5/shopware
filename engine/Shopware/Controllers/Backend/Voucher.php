@@ -520,6 +520,12 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
 
     /**
      * replaced all matching patterns
+     *
+     * @param string $generatedCode
+     * @param array  $range
+     * @param string $pattern
+     *
+     * @return null|string|string[]
      */
     private function replaceAllMatchingPatterns($generatedCode, $range, $pattern)
     {

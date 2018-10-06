@@ -81,7 +81,7 @@ class Area extends ModelEntity
      *
      * @param string $name
      *
-     * @return Country
+     * @return Area
      */
     public function setName($name)
     {
@@ -105,7 +105,7 @@ class Area extends ModelEntity
      *
      * @param int $active
      *
-     * @return Country
+     * @return Area
      */
     public function setActive($active)
     {

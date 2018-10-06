@@ -74,8 +74,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @param $value
      * @param $taxId
-     * @param int    $percent
-     * @param string $taxConfig
+     * @param int $percent
      *
      * @return string
      */

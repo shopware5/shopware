@@ -80,7 +80,7 @@ class SubscriptionStateStruct implements \JsonSerializable
     }
 
     /**
-     * @return []
+     * @return array
      */
     public function getNotUpgradedPlugins()
     {
@@ -88,7 +88,7 @@ class SubscriptionStateStruct implements \JsonSerializable
     }
 
     /**
-     * @return []
+     * @return array
      */
     public function getWrongVersionPlugins()
     {
@@ -96,7 +96,7 @@ class SubscriptionStateStruct implements \JsonSerializable
     }
 
     /**
-     * @return []
+     * @return array
      */
     public function getExpiredPluginSubscriptions()
     {

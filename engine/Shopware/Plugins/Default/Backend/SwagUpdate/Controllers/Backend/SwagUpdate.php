@@ -257,9 +257,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
-    /**
-     * @return array('success' => true, 'data' => array('...'))
-     */
     public function popupAction()
     {
         $config = $this->getPluginConfig();

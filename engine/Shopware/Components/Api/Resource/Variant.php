@@ -693,14 +693,14 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param $data
+     * @param                                  $data
      * @param \Shopware\Models\Article\Article $article
      * @param \Shopware\Models\Article\Detail  $variant
      * @param \Shopware\Models\Tax\Tax         $tax
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return array
+     * @return Collection
      */
     protected function preparePriceAssociation($data, ArticleModel $article, Detail $variant, Tax $tax)
     {
@@ -754,7 +754,7 @@ class Variant extends Resource implements BatchInterface
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return Collection
+     * @return array
      */
     protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
     {

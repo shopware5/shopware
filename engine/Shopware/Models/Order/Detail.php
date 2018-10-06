@@ -568,7 +568,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\DetailStatus
+     * @return Status
      */
     public function getStatus()
     {

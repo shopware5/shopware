@@ -63,7 +63,8 @@ class Html5VideoComponentHandler extends AbstractComponentHandler
     }
 
     /**
-     * @param array $element
+     * @param array        $element
+     * @param ParameterBag $syncData
      *
      * @return array
      */

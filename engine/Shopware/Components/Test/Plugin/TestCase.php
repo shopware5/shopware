@@ -122,8 +122,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param $pluginName
      * @param $status
-     *
-     * @return int
      */
     private static function restorePluginState($pluginName, $status)
     {

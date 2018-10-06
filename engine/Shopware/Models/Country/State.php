@@ -112,7 +112,7 @@ class State extends ModelEntity
      *
      * @param string $name
      *
-     * @return Country
+     * @return State
      */
     public function setName($name)
     {
@@ -136,7 +136,7 @@ class State extends ModelEntity
      *
      * @param string $shortCode
      *
-     * @return Country
+     * @return State
      */
     public function setShortCode($shortCode)
     {
@@ -160,7 +160,7 @@ class State extends ModelEntity
      *
      * @param int $active
      *
-     * @return Country
+     * @return State
      */
     public function setActive($active)
     {

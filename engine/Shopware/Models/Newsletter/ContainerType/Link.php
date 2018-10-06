@@ -172,7 +172,6 @@ class Link extends ModelEntity
     {
         $this->container = $container;
         $container->setType('ctLinks');
-        //        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
     }
 
     /**

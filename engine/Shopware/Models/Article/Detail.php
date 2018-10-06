@@ -696,7 +696,7 @@ class Detail extends ModelEntity
      *
      * @param float $purchasePrice
      *
-     * @return Article
+     * @return Detail
      */
     public function setPurchasePrice($purchasePrice)
     {
@@ -720,7 +720,7 @@ class Detail extends ModelEntity
      *
      * @param string $shippingTime
      *
-     * @return Article
+     * @return Detail
      */
     public function setShippingTime($shippingTime)
     {
@@ -744,7 +744,7 @@ class Detail extends ModelEntity
      *
      * @param int $shippingFree
      *
-     * @return Article
+     * @return Detail
      */
     public function setShippingFree($shippingFree)
     {
@@ -796,7 +796,7 @@ class Detail extends ModelEntity
      *
      * @param int $minPurchase
      *
-     * @return Article
+     * @return Detail
      */
     public function setMinPurchase($minPurchase)
     {
@@ -824,7 +824,7 @@ class Detail extends ModelEntity
      *
      * @param int $purchaseSteps
      *
-     * @return Article
+     * @return Detail
      */
     public function setPurchaseSteps($purchaseSteps)
     {
@@ -848,7 +848,7 @@ class Detail extends ModelEntity
      *
      * @param int $maxPurchase
      *
-     * @return Article
+     * @return Detail
      */
     public function setMaxPurchase($maxPurchase)
     {
@@ -872,7 +872,7 @@ class Detail extends ModelEntity
      *
      * @param float $purchaseUnit
      *
-     * @return Article
+     * @return Detail
      */
     public function setPurchaseUnit($purchaseUnit)
     {
@@ -896,7 +896,7 @@ class Detail extends ModelEntity
      *
      * @param float $referenceUnit
      *
-     * @return Article
+     * @return Detail
      */
     public function setReferenceUnit($referenceUnit)
     {
@@ -920,7 +920,7 @@ class Detail extends ModelEntity
      *
      * @param string $packUnit
      *
-     * @return Article
+     * @return Detail
      */
     public function setPackUnit($packUnit)
     {

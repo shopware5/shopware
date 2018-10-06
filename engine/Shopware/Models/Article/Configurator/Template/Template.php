@@ -488,7 +488,7 @@ class Template extends ModelEntity
     /**
      * @param $article
      *
-     * @return \Shopware\Models\Article\Article
+     * @return Template
      */
     public function setArticle($article)
     {
@@ -602,7 +602,7 @@ class Template extends ModelEntity
      *
      * @param float $purchasePrice
      *
-     * @return Article
+     * @return Template
      */
     public function setPurchasePrice($purchasePrice)
     {
