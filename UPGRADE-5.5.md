@@ -40,6 +40,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
 * Changed session name validator to be more rigid
 * Changed VariantFilter to work with different customer group then fallback customer group
+* Changed `detailAction` method of `Emotion` backend controller to not add the shop base URL to media URLs again if it's already set
 
 ### Removals
 
