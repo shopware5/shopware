@@ -145,6 +145,12 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                 flex:1
             },
             {
+                header: '{s name=list/column/active}Active{/s}',
+                dataIndex: 'active',
+                width: 50,
+                renderer:me.activeColumnRenderer
+            },
+            {
                 header:'{s name=list/column/last_export}Last export{/s}',
                 dataIndex:'lastExport',
                 flex:1,
@@ -271,6 +277,17 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
         /*{else}*/
         return value;
         /*{/if}*/
-    }
+    },
+
+     /**
+      * @param [object] - value
+      */
+     activeColumnRenderer: function(value) {
+         var cls = 'sprite-ui-check-box';
+         if (!value) {
+            cls = 'sprite-cross-small';
+         }
+         return '<div class="'+cls+'" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
+     }
 });
 //{/block}
