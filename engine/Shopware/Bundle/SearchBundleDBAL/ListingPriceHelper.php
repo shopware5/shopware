@@ -167,6 +167,9 @@ class ListingPriceHelper
             $switch[] = sprintf($template, $column, $column, $column);
         }
 
+        $switch[] = 'defaultPrice.articleID as product_id';
+        $switch[] = 'defaultPrice.articledetailsID as variant_id';
+
         return implode(',', $switch);
     }
 

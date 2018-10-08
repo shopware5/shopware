@@ -20,6 +20,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed VariantHelper to work also on search page
 * Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
 * Changed session name validator to be more rigid
+* Changed VariantFilter to work with different customer group then fallback customer group
 
 ### Additions
 

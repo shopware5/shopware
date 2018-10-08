@@ -236,6 +236,71 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['D2', 'A4']);
     }
 
+    public function testMultiNotExpandOptionSortByPriceWithMultipleCustomerGroups()
+    {
+        $this->groups = $this->helper->insertConfiguratorData(
+            [
+                'color' => ['red', 'green', 'blue'],
+                'size' => ['s', 'm', 'l', 'xl'],
+            ]
+        );
+
+        $conditionColor = $this->createCondition(['red', 'green'], 'color');
+        $conditionSize = $this->createCondition(['l', 'xl'], 'size');
+        $sorting = new PriceSorting();
+        $sorting->setDirection(PriceSorting::SORT_ASC);
+
+        $context = $this->getContext();
+        $context->getCurrentCustomerGroup()->setKey('EK');
+        $context->getCurrentCustomerGroup()->setId(1);
+
+        $result = $this->search(
+            [
+                'A' => ['groups' => $this->buildConfigurator(['color' => ['red', 'green'], 'size' => ['l', 'xl']]),
+                    'graduationPrices' => [
+                        [60, 50],
+                        [60, 40],
+                        [70, 30],
+                        [80, 40],
+                    ],
+                    'inStock' => [0, 0, 0],
+                ],
+                'B' => ['groups' => $this->buildConfigurator(['color' => ['green'], 'size' => ['s', 'xl']]),
+                    'graduationPrices' => [
+                        [60, 50],
+                        [60, 40],
+                    ],
+                    'inStock' => [10, 0],
+                ],
+                'C' => ['groups' => $this->buildConfigurator(['color' => ['blue', 'green']]),
+                    'graduationPrices' => [
+                        [60, 50],
+                        [60, 10],
+                    ],
+                ],
+                'D' => ['groups' => $this->buildConfigurator(['color' => ['blue', 'green'], 'size' => ['s', 'l', 'xl']]),
+                    'graduationPrices' => [
+                        [60, 50],
+                        [60, 20],
+                        [70, 30],
+                        [80, 40],
+                    ],
+                    'inStock' => [0, 10, 0, 0],
+                ],
+            ],
+            ['A4', 'D2'],
+            null,
+            [$conditionColor, $conditionSize],
+            [],
+            [$sorting],
+            $context,
+            ['useLastGraduationForCheapestPrice' => true],
+            true
+        );
+
+        $this->assertNotEmpty($result);
+    }
+
     public function testSingleExpandOptionSortByPrice()
     {
         $this->groups = $this->helper->insertConfiguratorData(
