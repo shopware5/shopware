@@ -166,6 +166,8 @@ class ProductMapping implements MappingInterface
 
                 'attributes' => $this->getAttributeMapping(),
                 'configuration' => $this->getVariantOptionsMapping($shop),
+
+                'voteAverage' => $this->getVoteAverageMapping(),
             ],
         ];
     }
@@ -387,6 +389,20 @@ class ProductMapping implements MappingInterface
                         'name' => $this->fieldMapping->getLanguageField($shop),
                         'description' => $this->fieldMapping->getLanguageField($shop),
                     ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getVoteAverageMapping()
+    {
+        return [
+            'properties' => [
+                'average' => [
+                    'type' => 'double',
                 ],
             ],
         ];
