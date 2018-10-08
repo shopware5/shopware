@@ -750,6 +750,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $parentSettings = $data['parent']->getSettings();
 
             $thumbnailSizes = $parentSettings->getThumbnailSize();
+            $thumbnailHighDpi = $parentSettings->isThumbnailHighDpi();
+            $thumbnailHighDpiQuality = $parentSettings->getThumbnailHighDpiQuality();
+            $thumbnailQuality = $parentSettings->getThumbnailQuality();
             $createThumbnails = $parentSettings->getCreateThumbnails();
         }
 
