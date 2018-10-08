@@ -134,12 +134,6 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                 flex:1
             },
             {
-                header: '{s name=list/column/active}Active{/s}',
-                dataIndex: 'active',
-                flex: 1,
-                renderer:me.activeColumnRenderer
-            },
-            {
                 header:'{s name=list/column/file_name}File name{/s}',
                 dataIndex:'fileName',
                 renderer:me.fileNameRenderer,
@@ -149,6 +143,12 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                 header:'{s name=list/column/count_articles}Number of articles{/s}',
                 dataIndex:'countArticles',
                 flex:1
+            },
+            {
+                header: '{s name=list/column/active}Active{/s}',
+                dataIndex: 'active',
+                width: 50,
+                renderer:me.activeColumnRenderer
             },
             {
                 header:'{s name=list/column/last_export}Last export{/s}',
@@ -283,11 +283,11 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
       * @param [object] - value
       */
      activeColumnRenderer: function(value) {
-         if (value) {
-            return '<div class="sprite-tick"  style="width: 25px; height: 25px">&nbsp;</div>';
-         } else {
-            return '<div class="sprite-cross" style="width: 25px; height: 25px">&nbsp;</div>';
+         var cls = 'sprite-ui-check-box';
+         if (!value) {
+            cls = 'sprite-cross-small';
          }
+         return '<div class="'+cls+'" style="width: 16px; height: 16px; margin-left: 9px;">&nbsp;</div>';
      }
 });
 //{/block}
