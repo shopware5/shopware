@@ -6,22 +6,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 [View all changes from v5.5.1...v5.5.2](https://github.com/shopware/shopware/compare/v5.5.1...v5.5.2)
 
-### Changes
-
-* Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
-* Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
-* Changed product saving to handle invalid changetime dates
-* Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
-* Changed FormSynchronizer to consider sorting from config.xml
-* Changed the `instock` column in the product variants list to be sortable
-* Changed `emotion/components/component_banner_slider.tpl` to reset thumbnail URLs correctly
-* Changed Symfony library to version 3.4.17
-* Changed jQuery plugin `swRegister` to correctly use data attributes
-* Changed VariantHelper to work also on search page
-* Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
-* Changed session name validator to be more rigid
-* Changed VariantFilter to work with different customer group then fallback customer group
-
 ### Additions
 
 * Added the following events for newsletter un/subscription
@@ -39,6 +23,23 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added config `backward_compatibility.predictable_plugin_order` with default `false`. Enabling this loads plugins in alphabetical order instead of an undefined one.
 * Added command `sw:es:backend:index:cleanup` to delete old ES backend indices
 * Added numeric amounts for order details in the account orders action
+* Added pagination to backend order filter shipping country and billing country
+
+### Changes
+
+* Changed thumbnail variable on detail page for href-attribute from `sArticle.image.src.1` to `sArticle.image.source`
+* Changed failed login behaviour by only increasing the failedlogin-count of active customer accounts, not guest accounts
+* Changed product saving to handle invalid changetime dates
+* Changed document template `themes/Frontend/Bare/documents/index.tpl` to also render a `department` if it is part of the address
+* Changed FormSynchronizer to consider sorting from config.xml
+* Changed the `instock` column in the product variants list to be sortable
+* Changed `emotion/components/component_banner_slider.tpl` to reset thumbnail URLs correctly
+* Changed Symfony library to version 3.4.17
+* Changed jQuery plugin `swRegister` to correctly use data attributes
+* Changed VariantHelper to work also on search page
+* Changed `controllerAction` and `controllerName` Smarty functions to sanitize action and controller names
+* Changed session name validator to be more rigid
+* Changed VariantFilter to work with different customer group then fallback customer group
 
 ### Removals
 

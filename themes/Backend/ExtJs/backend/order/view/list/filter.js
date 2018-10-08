@@ -347,7 +347,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             valueField: 'id',
             queryMode: 'remote',
             displayField: 'name',
-            fieldLabel: this.snippets.shipping
+            fieldLabel: this.snippets.shipping,
+            pageSize: 7
         });
     },
 
@@ -359,7 +360,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             valueField: 'id',
             queryMode: 'remote',
             displayField: 'name',
-            fieldLabel: this.snippets.billing
+            fieldLabel: this.snippets.billing,
+            pageSize: 7
         });
     },
 
