@@ -476,7 +476,7 @@ class Media extends Resource
                     throw new \Exception(sprintf('Could not load image %s', $params['file']));
                 }
             } else {
-                $path = $params['file'];
+                $path = str_replace('file://', '', $params['file']);
             }
             $params['file'] = new UploadedFile($path, $originalName);
         }
