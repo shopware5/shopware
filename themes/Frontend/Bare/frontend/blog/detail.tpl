@@ -19,6 +19,7 @@
                     {/if}
 
                     <meta itemprop="wordCount" content="{$sArticle.description|strip_tags|count_words}">
+                    <meta itemprop="dateCreated" content="{$sArticle.displayDate|date_format:"%F%Z%R%z"}">
                 {/block}
 
                 {* Detail Box Header *}
@@ -43,7 +44,7 @@
 
                                 {* Date *}
                                 {block name='frontend_blog_detail_date'}
-                                    <span class="blog--metadata-date blog--metadata{if !$sArticle.author.name} is--first{/if}" itemprop="dateCreated">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
+                                    <span class="blog--metadata-date blog--metadata{if !$sArticle.author.name} is--first{/if}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
                                 {/block}
 
                                 {* Category *}
