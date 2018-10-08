@@ -37,6 +37,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new smarty block `widgets/emotion/index/classes` to file `widgets/emotion/index.tpl`
 * Added config `backward_compatibility.predictable_plugin_order` with default `false`. Enabling this loads plugins in alphabetical order instead of an undefined one.
 * Added command `sw:es:backend:index:cleanup` to delete old ES backend indices
+* Added numeric amounts for order details in the account orders action
 
 ### Removals
 

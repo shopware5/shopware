@@ -3649,8 +3649,10 @@ SQL;
         }
 
         foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
+            $getOrderDetails[$orderDetailsKey]['amountNumeric'] = round($orderDetailsValue['price'] * $orderDetailsValue['quantity'], 2);
+            $getOrderDetails[$orderDetailsKey]['priceNumeric'] = $orderDetailsValue['price'];
             $getOrderDetails[$orderDetailsKey]['amount'] = $this->moduleManager->Articles()
-                ->sFormatPrice(round($orderDetailsValue['price'] * $orderDetailsValue['quantity'], 2));
+                ->sFormatPrice($getOrderDetails[$orderDetailsKey]['amountNumeric']);
             $getOrderDetails[$orderDetailsKey]['price'] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderDetailsValue['price']);
             $getOrderDetails[$orderDetailsKey]['active'] = 0;
