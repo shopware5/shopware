@@ -42,6 +42,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed session name validator to be more rigid
 * Changed VariantFilter to work with different customer group then fallback customer group
 * Changed `detailAction` method of `Emotion` backend controller to not add the shop base URL to media URLs again if it's already set
+* Changed statistic call to also encode `&` in `referer` parameter
 
 ### Removals
 
