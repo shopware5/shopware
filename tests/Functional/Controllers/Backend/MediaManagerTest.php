@@ -79,6 +79,9 @@ class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Compon
         $newAlbum = $parentNode['data'][count($parentNode['data']) - 1];
 
         $this->assertEquals($parentNode['thumbnailSize'], $newAlbum['thumbnailSize']);
+        $this->assertEquals($parentNode['thumbnailHighDpi'], $newAlbum['thumbnailHighDpi']);
+        $this->assertEquals($parentNode['thumbnailHighDpiQuality'], $newAlbum['thumbnailHighDpiQuality']);
+        $this->assertEquals($parentNode['thumbnailQuality'], $newAlbum['thumbnailQuality']);
         $this->assertEquals($parentNode['createThumbnails'], $newAlbum['createThumbnails']);
         $this->assertEquals($parentNode['id'], $newAlbum['parentId']);
         $this->assertEquals(1, $newAlbum['leaf']);
