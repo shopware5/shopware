@@ -72,6 +72,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $this->View()->assign('userInfo', $this->get('shopware_account.store_front_greeting_service')->fetch());
         $this->View()->assign('sUserData', $this->admin->sGetUserData());
         $this->View()->assign('sAction', $this->Request()->getActionName());
+        $this->View()->assign('sOneTimeAccount', $this->isOneTimeAccount());
     }
 
     /**
@@ -491,5 +492,14 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             'sTarget' => $this->Request()->getParam('sTarget'),
             'sTargetAction' => $this->Request()->getParam('sTargetAction'),
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    private function isOneTimeAccount()
+    {
+        return $this->container->get('session')->offsetGet('sOneTimeAccount')
+            || $this->View()->sUserData['additional']['user']['accountmode'] == 1;
     }
 }
