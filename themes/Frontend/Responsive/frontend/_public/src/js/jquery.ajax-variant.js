@@ -151,19 +151,29 @@
                     $.publish('plugin/swAjaxVariant/onRequestData', [me, response, values, stateObj.location]);
 
                     if (pushState && me.hasHistorySupport) {
-                        var location = stateObj.location + '?number=' + ordernumber;
-
-                        if (stateObj.params.hasOwnProperty('c')) {
-                            location += '&c=' + stateObj.params.c;
-                        }
-
-                        window.history.pushState(stateObj.state, stateObj.title, location);
+                        me.pushState(stateObj, ordernumber);
                     }
                 },
                 complete: function () {
                     $.loadingIndicator.close();
                 }
             });
+        },
+
+        /**
+         * Push state to browser history.
+         *
+         * @param {Object} stateObj
+         * @param {String} ordernumber
+         */
+        pushState: function(stateObj, ordernumber) {
+            var location = stateObj.location + '?number=' + ordernumber;
+
+            if (stateObj.params.hasOwnProperty('c')) {
+                location += '&c=' + stateObj.params.c;
+            }
+
+            window.history.pushState(stateObj.state, stateObj.title, location);
         },
 
         /**
