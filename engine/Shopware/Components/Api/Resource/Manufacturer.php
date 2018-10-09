@@ -259,7 +259,7 @@ class Manufacturer extends Resource
             }
         }
 
-        $manufacturerModel->setImage($media ? $media->getPath() : "");
+        $manufacturerModel->setImage($media ? $media->getPath() : '');
         unset($data['image']);
 
         return $data;
