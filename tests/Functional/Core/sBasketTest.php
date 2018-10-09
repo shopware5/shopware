@@ -1797,6 +1797,57 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(1, $result['Quantity']);
     }
 
+    public function testsGetBasketDataHasNumericCartItemAmounts()
+    {
+        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+        try {
+            $article = $resourceHelper->createArticle([
+                'name' => 'Testartikel',
+                'description' => 'Test description',
+                'active' => true,
+                'mainDetail' => [
+                    'number' => 'swTEST' . uniqid(rand()),
+                    'inStock' => 15,
+                    'lastStock' => true,
+                    'unitId' => 1,
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'EK',
+                            'from' => 1,
+                            'to' => '-',
+                            'price' => 29.97,
+                        ],
+                    ],
+                ],
+                'taxId' => 4,
+                'supplierId' => 2,
+                'categories' => [10],
+            ]);
+            $customerGroup = $resourceHelper->createCustomerGroup();
+            $customer = $this->createDummyCustomer();
+            $this->session['sUserId'] = $customer->getId();
+            $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+            $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+            $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $customerGroup->getId();
+
+            // Add the article to the basket
+            $this->module->sAddArticle($article->getMainDetail()->getNumber(), 2);
+            $this->module->sRefreshBasket();
+            $basketData = $this->module->sGetBasketData();
+
+            // Assert that a valid basket was returned
+            $this->assertNotEmpty($basketData);
+            // Assert that there is a numeric basket amount
+            $this->assertArrayHasKey('amountNumeric', $basketData['content'][0], 'amountNumeric for cart item should exist');
+            $this->assertArrayHasKey('amountnetNumeric', $basketData['content'][0], 'amountnetNumeric for cart item should exist');
+            $this->assertGreaterThan(0, $basketData['content'][0]['amountNumeric']);
+            $this->assertGreaterThan(0, $basketData['content'][0]['amountnetNumeric']);
+            $this->assertEquals(29.97 * 2, $basketData['content'][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity', 0.001);
+        } finally {
+            $resourceHelper->cleanUp();
+        }
+    }
+
     /**
      * Assert that rounding basket totals works correctly for a basket that has a decimal-binary conversion inaccuracies
      * which results in a total that is very slightly below zero.

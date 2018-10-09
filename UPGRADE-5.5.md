@@ -24,6 +24,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added command `sw:es:backend:index:cleanup` to delete old ES backend indices
 * Added numeric amounts for order details in the account orders action
 * Added pagination to backend order filter shipping country and billing country
+* Added numeric amounts for cart items in cart array structure
 
 ### Changes
 
