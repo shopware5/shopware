@@ -422,8 +422,8 @@ class ProductListingVariationLoader
         $subPriceQuery->addSelect('IFNULL(prices.articledetailsID, onsalePriceList.articledetailsID) as articledetailsID');
         $subPriceQuery->addSelect('IFNULL(prices.price, onsalePriceList.price) as price');
         $subPriceQuery->from('s_articles_details', 'details');
-        $subPriceQuery->leftJoin('details', '(' . $priceListingQuery . ')', 'prices', 'details.id = prices.articledetailsID');
-        $subPriceQuery->leftJoin('details', '(' . $onSalePriceListingQuery . ')', 'onsalePriceList', 'details.id = onsalePriceList.articledetailsID');
+        $subPriceQuery->innerJoin('details', '(' . $priceListingQuery . ')', 'prices', 'details.id = prices.articledetailsID');
+        $subPriceQuery->innerJoin('details', '(' . $onSalePriceListingQuery . ')', 'onsalePriceList', 'details.id = onsalePriceList.articledetailsID');
 
         $query->innerJoin('availableVariant', '(' . $subPriceQuery . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
 
