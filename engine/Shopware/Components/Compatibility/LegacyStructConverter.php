@@ -556,7 +556,7 @@ class LegacyStructConverter
     public function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
     {
         $data = [
-            'average' => round($average->getAverage()),
+            'average' => round($average->getAverage(), 1),
             'count' => $average->getCount(),
             'pointCount' => $average->getPointCount(),
             'attributes' => $average->getAttributes(),
