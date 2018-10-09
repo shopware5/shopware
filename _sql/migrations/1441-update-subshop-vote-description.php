@@ -39,7 +39,7 @@ EOD;
         // Translation
         $sql = <<<'EOD'
             INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
-            VALUES ( @elementId, 2, 'Display only shop specific ratings', 'Defines whether only the ratings from the corresponding shop should be displayed for an article.' );
+            VALUES ( @elementId, 2, 'Display only shop specific ratings', 'Defines whether only the ratings from the corresponding shop should be displayed for a product.' );
 EOD;
         $this->addSql($sql);
     }
