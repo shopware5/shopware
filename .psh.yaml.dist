@@ -14,18 +14,10 @@ paths:
   - dev-ops/common/actions
 
 templates:
-  - source: "dev-ops/docker/docker-compose.override.yml"
-    destination: "docker-compose.override.yml"
   - source: "dev-ops/common/templates/build.properties"
     destination: "build/build.properties"
   - source: "dev-ops/common/templates/behat.yml.dist"
     destination: "tests/Mink/behat.yml"
-  - source: "dev-ops/docker/templates/Dockerfile-app"
-    destination: "dev-ops/docker/containers/app/Dockerfile"
-  - source: "dev-ops/docker/templates/Dockerfile-mysql"
-    destination: "dev-ops/docker/containers/mysql/Dockerfile"
-  - source: "dev-ops/docker/templates/Dockerfile-elasticsearch"
-    destination: "dev-ops/docker/containers/elasticsearch/Dockerfile"
 
 const:
   DB_USER: "app"
@@ -50,6 +42,16 @@ environments:
   docker:
     paths:
       - "dev-ops/docker/actions"
+    templates:
+      - source: "dev-ops/docker/docker-compose.override.yml"
+        destination: "./docker-compose.override.yml"
+      - source: "dev-ops/docker/templates/Dockerfile-app"
+        destination: "dev-ops/docker/containers/app/Dockerfile"
+      - source: "dev-ops/docker/templates/Dockerfile-mysql"
+        destination: "dev-ops/docker/containers/mysql/Dockerfile"
+      - source: "dev-ops/docker/templates/Dockerfile-elasticsearch"
+        destination: "dev-ops/docker/containers/elasticsearch/Dockerfile"
+
   bamboo:
     paths:
       - "dev-ops/bamboo.shopware.com/actions"
