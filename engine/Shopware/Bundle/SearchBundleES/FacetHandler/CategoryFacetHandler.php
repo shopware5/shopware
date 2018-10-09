@@ -143,9 +143,10 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             $categoryFacet
         );
 
-        if($facet instanceof FacetResultInterface){
-            $result->addFacet($facet);
+        if (!$facet instanceof FacetResultInterface) {
+            return;
         }
+        $result->addFacet($facet);
     }
 
     /**
