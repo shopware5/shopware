@@ -93,7 +93,10 @@
             delegateConSelector: '.listing--wrapper',
 
             /** @string addArticleSelector - selector for the jquery.add-article plugin to enable support for the off canvas cart */
-            addArticleSelector: '*[data-add-article="true"]'
+            addArticleSelector: '*[data-add-article="true"]',
+
+            /** @string pageShortParameter - the short name for the "sPage" parameter */
+            pageShortParameter: 'p'
         },
 
         /**
@@ -173,31 +176,31 @@
             me.urlBasicMode = false;
 
             // if no seo url is provided, use the url basic push mode
-            if (!me.params.p) {
+            if (!me.params[me.opts.pageShortParameter]) {
                 me.basicModeSegments = window.location.pathname.split('/');
                 me.basicModePageKey = $.inArray('sPage', me.basicModeSegments);
                 me.basicModePageValue = me.basicModeSegments[me.basicModePageKey + 1];
 
                 if (me.basicModePageValue) {
                     me.urlBasicMode = true;
-                    me.params.p = me.basicModePageValue;
-                    me.upperParams.p = me.basicModePageValue;
+                    me.params[me.opts.pageShortParameter] = me.basicModePageValue;
+                    me.upperParams[me.opts.pageShortParameter] = me.basicModePageValue;
                 }
             }
 
             // set page index to one if not assigned
-            if (!me.params.p) {
-                me.params.p = 1;
+            if (!me.params[me.opts.pageShortParameter]) {
+                me.params[me.opts.pageShortParameter] = 1;
             }
 
             // set start page
-            me.startPage = me.params.p;
+            me.startPage = me.params[me.opts.pageShortParameter];
 
             // holds the current listing url with all params
             me.currentPushState = '';
 
             // Check if there is/are previous pages
-            if (me.params.p && me.params.p > 1) {
+            if (me.params[me.opts.pageShortParameter] && me.params[me.opts.pageShortParameter] > 1) {
                 me.showLoadPrevious();
             }
 
@@ -243,7 +246,7 @@
                 bufferSize = fetchPoint.height(),
                 triggerPoint = fetchPointOffset - bufferSize;
 
-            if (docTop > triggerPoint && (me.params.p < me.maxPages)) {
+            if (docTop > triggerPoint && (me.params[me.opts.pageShortParameter] < me.maxPages)) {
                 me.fetchNewPage();
             }
 
@@ -264,12 +267,12 @@
             delete tmpParams.c;
 
             // setting actual page index
-            if (!tmpParams.p || !tmpPageIndex) {
-                tmpParams.p = me.startPage;
+            if (!tmpParams[me.opts.pageShortParameter] || !tmpPageIndex) {
+                tmpParams[me.opts.pageShortParameter] = me.startPage;
             }
 
             if (tmpPageIndex) {
-                tmpParams.p = tmpPageIndex;
+                tmpParams[me.opts.pageShortParameter] = tmpPageIndex;
             }
 
             var tmpPushState = me.baseUrl + '?' + $.param(tmpParams);
@@ -306,7 +309,7 @@
             var me = this;
 
             // Quit here if all pages rendered
-            if (me.isFinished || me.params.p >= me.maxPages) {
+            if (me.isFinished || me.params[me.opts.pageShortParameter] >= me.maxPages) {
                 return;
             }
 
@@ -333,7 +336,7 @@
             me.openLoadingIndicator();
 
             // increase page index for further page loading
-            me.params.p++;
+            me.params[me.opts.pageShortParameter]++;
 
             // increase fetch count for preventing auto fetching
             me.fetchCount++;
@@ -436,17 +439,17 @@
                 tmpParams.c = me.opts.categoryId;
             }
 
-            tmpParams.p = tmpParams.p - 1;
+            tmpParams[me.opts.pageShortParameter] = tmpParams[me.opts.pageShortParameter] - 1;
 
             $.publish('plugin/swInfiniteScrolling/onBeforeFetchPreviousPage', [ me ]);
 
-            me.previousLoadPage = tmpParams.p;
+            me.previousLoadPage = tmpParams[me.opts.pageShortParameter];
 
             callback = function(response) {
                 me.prependListing(response);
 
                 // Set load previous button if we aren't already on page one
-                if (tmpParams.p > 1) {
+                if (tmpParams[me.opts.pageShortParameter] > 1) {
                     me.showLoadPrevious();
                 }
             };
@@ -491,7 +494,7 @@
             me.isLoading = false;
 
             // check if last page reached
-            if (me.params.p >= me.maxPages) {
+            if (me.params[me.opts.pageShortParameter] >= me.maxPages) {
                 me.isFinished = true;
             }
 
