@@ -314,7 +314,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
 
         operators = me.filterableColumns[record.get('name')];
         Ext.each(operators, function(operator) {
-            if (operator != 'IN' ) {
+            if (operator != 'IN' || operator != 'NOT IN' ) {
                 operatorStore.add({ name: operator });
             }
         });

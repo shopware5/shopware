@@ -104,11 +104,11 @@ class Grammar
                 case 'integer':
                 case 'decimal':
                 case 'float':
-                    $attributes[$formattedColumn] = ['>', '>=', '<', '<=', '=', '!=', 'ISNULL'];
+                    $attributes[$formattedColumn] = ['>', '>=', '<', '<=', '=', '!=', 'ISNULL', 'IN', 'NOT IN'];
                     break;
                 case 'text':
                 case 'string':
-                    $attributes[$formattedColumn] = ['=', '~', '!~', 'IN', '!=', 'ISNULL'];
+                    $attributes[$formattedColumn] = ['=', '~', '!~', 'IN', '!=', 'ISNULL', 'NOT IN'];
                     break;
                 case 'boolean':
                     $attributes[$formattedColumn] = ['ISTRUE', 'ISFALSE', 'ISNULL'];
@@ -163,6 +163,7 @@ class Grammar
             ],
             'binaryOperators' => [
                 'IN' => ['('],
+                'NOT IN' => ['('],
                 '>=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
                 '=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
                 '!=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
