@@ -40,7 +40,8 @@
             data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
             data-categoryId="{$Shop->getCategory()->getId()}"
             data-pages="{$pages}"
-            data-threshold="{$theme.infiniteThreshold}"{/if}>
+            data-threshold="{$theme.infiniteThreshold}"{/if}
+            data-pageShortParameter="{$shortParameters.sPage}">
 
         {* Actual listing *}
         {block name="frontend_listing_list_inline"}
