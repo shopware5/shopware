@@ -152,6 +152,8 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
             $view->assign('sHrefLinks', $this->get('shopware_storefront.cached_href_lang_service')->getUrls($request->getParams(), $context));
         }
+
+        $view->assign('SeoDescriptionMaxLength', (int) $this->get('config')->get('metaDescriptionLength'));
     }
 
     /**
