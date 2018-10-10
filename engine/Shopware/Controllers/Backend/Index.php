@@ -344,7 +344,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
 
         $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
 
-        return !in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true) && $configRepository->getConfigsCount() === 0;
+        return $shopwareVersionText !== '___VERSION_TEXT___' && $configRepository->getConfigsCount() === 0;
     }
 
     /**
