@@ -79,6 +79,10 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
             $criteria->ids = json_decode($criteria->ids, true);
         }
 
+        if ($id = $request->getParam('id')) {
+            $criteria->ids = [$id];
+        }
+
         return $criteria;
     }
 }
