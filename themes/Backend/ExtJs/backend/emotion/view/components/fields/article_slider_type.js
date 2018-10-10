@@ -43,7 +43,8 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
             'topseller': '{s name=article_slider_type/store/topseller}{/s}',
             'price_asc': '{s name=article_slider_type/store/price_asc}{/s}',
             'price_desc': '{s name=article_slider_type/store/price_desc}{/s}',
-            'product_stream': '{s name=article_slider_type/store/product_stream}{/s}'
+            'product_stream': '{s name=article_slider_type/store/product_stream}{/s}',
+            'random_product': '{s name=article_slider_type/store/random_product}{/s}'
         }
     },
 
@@ -102,6 +103,9 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
             }, {
                 value: 'product_stream',
                 display: snippets.product_stream
+            }, {
+                value: 'random_product',
+                display: snippets.random_product
             }]
         });
     }
