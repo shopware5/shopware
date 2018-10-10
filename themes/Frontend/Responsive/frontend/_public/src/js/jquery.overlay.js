@@ -148,9 +148,7 @@
             me.isOpen = false;
 
             me.$overlay.removeClass(me.options.openClass + ' ' + me.options.closableClass);
-            if (!$renderElement.hasClass(me.options.relativeClass)) {
-                $renderElement.removeClass(me.options.relativeClass);
-            }
+            $renderElement.removeClass(me.options.relativeClass);
 
             me.$overlay.one('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function() {
                 me.$overlay.off(me.options.events).prop('style', '').remove();
