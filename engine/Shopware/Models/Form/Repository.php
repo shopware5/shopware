@@ -31,10 +31,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all list of forms.
      *
-     * @param null $filter
-     * @param null $orderBy
-     * @param      $offset
-     * @param      $limit
+     * @param null|array $filter
+     * @param null|array $orderBy
+     * @param int        $offset
+     * @param int        $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -51,8 +51,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $orderBy
+     * @param null|array $filter
+     * @param null|array $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -62,11 +62,11 @@ class Repository extends ModelRepository
         $builder->select(['form', 'attribute'])
             ->from($this->getEntityName(), 'form')
             ->leftJoin('form.attribute', 'attribute');
-        
+
         if ($filter !== null) {
             $this->addFilter($builder, $filter);
         }
-        
+
         if ($orderBy !== null) {
             $this->addOrderBy($builder, $orderBy);
         }
@@ -118,7 +118,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['forms', 'fields', 'attribute'])
-            ->from('Shopware\Models\Form\Form', 'forms')
+            ->from(\Shopware\Models\Form\Form::class, 'forms')
             ->leftJoin('forms.fields', 'fields')
             ->leftJoin('forms.attribute', 'attribute')
             ->where('forms.id = :form_id')
@@ -160,7 +160,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-            ->from('Shopware\Models\Attribute\Form', 'attribute')
+            ->from(\Shopware\Models\Attribute\Form::class, 'attribute')
             ->where('attribute.formId = ?1')
             ->setParameter(1, $formId);
 
