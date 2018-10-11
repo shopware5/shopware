@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -33,31 +32,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
- * NOTICE:  When doing changes on this file, please remember to do those changes in the CheapestPriceESGateway as well!
- *          Otherwise there could be problems with the ES Indexing
+ * NOTICE:  When doing changes on this file, please remember to do those changes in the CheapestPriceGateway as well!
  */
-class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
+class CheapestPriceESGateway extends CheapestPriceGateway
 {
-    /**
-     * @var Hydrator\PriceHydrator
-     */
-    private $priceHydrator;
-
-    /**
-     * The FieldHelper class is used for the
-     * different table column definitions.
-     *
-     * This class helps to select each time all required
-     * table data for the store front.
-     *
-     * Additionally the field helper reduce the work, to
-     * select in a second step the different required
-     * attribute tables for a parent table.
-     *
-     * @var FieldHelper
-     */
-    private $fieldHelper;
-
     /**
      * @var \Shopware_Components_Config
      */
@@ -80,72 +58,15 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         Hydrator\PriceHydrator $priceHydrator,
         \Shopware_Components_Config $config
     ) {
+        parent::__construct($connection, $fieldHelper, $priceHydrator, $config);
         $this->connection = $connection;
-        $this->priceHydrator = $priceHydrator;
-        $this->fieldHelper = $fieldHelper;
         $this->config = $config;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function get(
-        Struct\BaseProduct $product,
-        Struct\ShopContextInterface $context,
-        Struct\Customer\Group $customerGroup
-    ) {
-        $prices = $this->getList([$product], $context, $customerGroup);
-
-        return array_shift($prices);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList(
-        $products,
-        Struct\ShopContextInterface $context,
-        Struct\Customer\Group $customerGroup
-    ) {
-        /**
-         * Contains the cheapest price logic which product price should be selected.
-         */
-        $ids = $this->getCheapestPriceIds($products, $customerGroup);
-
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select($this->fieldHelper->getPriceFields())
-            ->addSelect($this->fieldHelper->getUnitFields());
-
-        $query->from('s_articles_prices', 'price')
-            ->innerJoin('price', 's_articles_details', 'variant', 'variant.id = price.articledetailsID')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
-            ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
-            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id')
-            ->andWhere('price.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-
-        $this->fieldHelper->addUnitTranslation($query, $context);
-        $this->fieldHelper->addProductTranslation($query, $context);
-        $this->fieldHelper->addVariantTranslation($query, $context);
-        $this->fieldHelper->addPriceTranslation($query, $context);
-
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $prices = [];
-        foreach ($data as $row) {
-            $product = $row['__price_articleID'];
-            $prices[$product] = $this->priceHydrator->hydrateCheapestPrice($row);
-        }
-
-        return $prices;
-    }
-
-    /**
      * Pre selection of the cheapest prices ids.
+     * This method misses the laststock subquery where-condition as laststock-products would be indexed without prices otherwise
+     * what would lead to broken price filters when ES is used
      *
      * @param Struct\BaseProduct[]  $products
      * @param Struct\Customer\Group $customerGroup
@@ -206,20 +127,6 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             ->andWhere($graduation)
             ->andWhere('variant.active = 1')
             ->andWhere('prices.articleID = outerPrices.articleID');
-
-        /*
-         * This part of the query handles the closeout products.
-         *
-         * The `laststock` column contains "1" if the product is a closeout product.
-         * In the case that the product contains the closeout flag,
-         * the stock and minpurchase are used as they defined in the database
-         *
-         * In the case that the product isn't a closeout product,
-         * the stock and minpurchase are set to 0
-         */
-        $subQuery->andWhere(
-            '(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)'
-        );
 
         $subQuery->setMaxResults(1);
 

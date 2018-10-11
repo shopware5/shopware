@@ -106,6 +106,11 @@
             <argument type="service" id="config" />
         </service>
 
+        <service id="shopware_storefront.cheapest_price_es_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
+            <argument type="service" id="shopware_storefront.cheapest_price_es_gateway"/>
+            <argument type="service" id="config" />
+        </service>
+
         <service id="shopware_storefront.media_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService">
             <argument type="service" id="shopware_storefront.media_gateway"/>
             <argument type="service" id="shopware_storefront.product_media_gateway"/>
@@ -212,6 +217,13 @@
         </service>
 
         <service id="shopware_storefront.cheapest_price_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CheapestPriceGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
+            <argument type="service" id="config" />
+        </service>
+
+        <service id="shopware_storefront.cheapest_price_es_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CheapestPriceESGateway">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>

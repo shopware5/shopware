@@ -136,7 +136,7 @@
         <service id="shopware_elastic_search.product_provider"
                  class="Shopware\Bundle\ESIndexingBundle\Product\ProductProvider">
             <argument type="service" id="shopware_storefront.list_product_gateway"/>
-            <argument type="service" id="shopware_storefront.cheapest_price_service"/>
+            <argument type="service" id="shopware_storefront.cheapest_price_es_service"/>
             <argument type="service" id="shopware_storefront.vote_service"/>
             <argument type="service" id="shopware_storefront.context_service"/>
             <argument type="service" id="dbal_connection"/>
