@@ -103,7 +103,7 @@
     {if $sArticle.sBlockPrices && (!$sArticle.sConfigurator || $sArticle.pricegroupActive)}
         {foreach $sArticle.sBlockPrices as $blockPrice}
             {if $blockPrice.from == 1}
-                <input id="price_{$sArticle.ordernumber}" type="hidden" value="{$blockPrice.price|replace:",":"."}">
+                <input id="price_{$sArticle.ordernumber}" type="hidden" value="{$blockPrice.price.price_numeric}">
             {/if}
         {/foreach}
     {/if}

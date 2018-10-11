@@ -5,7 +5,7 @@
 
 {* Meta opengraph tags *}
 {block name='frontend_index_header_meta_tags_opengraph'}
-    <meta property="og:type" content="product" />
+    <meta property="og:type" content="product.item" />
     <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
     <meta property="og:url" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" />
     <meta property="og:title" content="{$sArticle.articleName|escapeHtml}" />
@@ -13,8 +13,8 @@
     <meta property="og:image" content="{$sArticle.image.source}" />
 
     <meta property="product:brand" content="{$sArticle.supplierName|escapeHtml}" />
-    <meta property="product:price" content="{$sArticle.price}" />
-    <meta property="product:product_link" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" />
+    <meta property="product:price:amount" content="{$sArticle.price.price_numeric}" />
+    <meta property="product:price:currency" content="{$sArticle.price|currency}" />
 
     <meta name="twitter:card" content="product" />
     <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
