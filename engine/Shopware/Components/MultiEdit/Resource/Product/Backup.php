@@ -203,8 +203,8 @@ class Backup
     /**
      * Restores a backup from zip archive. Will only run one sql file per query
      *
-     * @param $id
-     * @param $offset
+     * @param int $id
+     * @param int $offset
      *
      * @throws \RuntimeException
      *

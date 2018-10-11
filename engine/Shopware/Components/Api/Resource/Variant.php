@@ -74,7 +74,6 @@ class Variant extends Resource implements BatchInterface
      * @param array $options
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
      * @return array|\Shopware\Models\Article\Detail
@@ -141,10 +140,10 @@ class Variant extends Resource implements BatchInterface
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the article data
+        // Returns the article data
         $variants = $paginator->getIterator()->getArrayCopy();
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
@@ -161,7 +160,7 @@ class Variant extends Resource implements BatchInterface
     /**
      * Little helper function for the ...ByNumber methods
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -254,7 +253,7 @@ class Variant extends Resource implements BatchInterface
     /**
      * Updates a single variant entity.
      *
-     * @param $id
+     * @param int   $id
      * @param array $params
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException

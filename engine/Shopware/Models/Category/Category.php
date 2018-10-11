@@ -107,6 +107,7 @@ class Category extends ModelEntity
      * @ORM\Column(name="facet_ids", type="string", nullable=true)
      */
     protected $facetIds;
+
     /**
      * Identifier for a single category. This is an autoincrement value.
      *
@@ -1096,8 +1097,8 @@ class Category extends ModelEntity
     /**
      * Helper function for the isChildOf function. This function is used for a recursive call.
      *
-     * @param $category Category
-     * @param $searched Category
+     * @param Category $category
+     * @param Category $searched
      *
      * @return bool
      */

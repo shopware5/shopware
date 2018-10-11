@@ -130,11 +130,11 @@ class Queue
     /**
      * Create queue for a given filter array. If an queueId is passed, the existing queue will be used
      *
-     * @param $filterArray
-     * @param $operations
-     * @param $offset
-     * @param $limit
-     * @param $queueId
+     * @param array  $filterArray
+     * @param string $operations
+     * @param int    $offset
+     * @param int    $limit
+     * @param int    $queueId
      *
      * @throws \RuntimeException
      *
@@ -151,7 +151,7 @@ class Queue
 
         if (!empty($queueId)) {
             $newBackup = false;
-            $queue = $entityManager->find('\Shopware\Models\MultiEdit\Queue', $queueId);
+            $queue = $entityManager->find(\Shopware\Models\MultiEdit\Queue::class, $queueId);
             if (!$queue) {
                 throw new \RuntimeException("Queue with id {$queueId} not found");
             }
@@ -175,16 +175,17 @@ class Queue
         // Tested this with ~140k products - compared with pure SQL this is reasonable fast
         // In most cases the filter query will be the bottleneck
         $i = 0;
+        $model = null;
         foreach ($results as $detailId) {
             // Flush after 20 entities
-            if (($i++ % 20) == 0) {
+            if (($i++ % 20) === 0) {
                 $entityManager->flush($model);
                 $entityManager->clear();
 
-                $queue = $entityManager->getReference('\Shopware\Models\MultiEdit\Queue', $queueId);
+                $queue = $entityManager->getReference(\Shopware\Models\MultiEdit\Queue::class, $queueId);
             }
 
-            $detail = $entityManager->getReference('Shopware\Models\Article\Detail', $detailId);
+            $detail = $entityManager->getReference(\Shopware\Models\Article\Detail::class, $detailId);
 
             $model = new QueueArticle();
             $model->setQueue($queue);

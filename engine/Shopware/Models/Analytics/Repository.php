@@ -222,8 +222,8 @@ class Repository
     /**
      * Returns a result object which displays all referrers url and the call count.
      *
-     * @param $offset
-     * @param $limit
+     * @param int       $offset
+     * @param int       $limit
      * @param \DateTime $from
      * @param \DateTime $to
      *
@@ -269,8 +269,8 @@ class Repository
     /**
      * Returns a result which displays the revenue of each partner
      *
-     * @param $offset
-     * @param $limit
+     * @param int       $offset
+     * @param int       $limit
      * @param \DateTime $from
      * @param \DateTime $to
      *
@@ -292,8 +292,8 @@ class Repository
     /**
      * Returns a result which displays the sell count of each product.
      *
-     * @param $offset
-     * @param $limit
+     * @param int       $offset
+     * @param int       $limit
      * @param \DateTime $from
      * @param \DateTime $to
      *
@@ -326,8 +326,8 @@ class Repository
     /**
      * Returns a result which displays which kind of user created at which time orders.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @internal param array $shopIds
      *
@@ -360,9 +360,9 @@ class Repository
     /**
      * Returns a result object which displays the customer age.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      */
@@ -384,7 +384,7 @@ class Repository
      * date range.
      * The "categoryId" allows to restrict the result to a specify category level.
      *
-     * @param $categoryId
+     * @param int       $categoryId
      * @param \DateTime $from
      * @param \DateTime $to
      *
@@ -427,8 +427,8 @@ class Repository
     /**
      * Returns a result which displays which the order count of each manufacturer product.
      *
-     * @param null      $offset
-     * @param null      $limit
+     * @param null|int  $offset
+     * @param null|int  $limit
      * @param \DateTime $from
      * @param \DateTime $to
      *
@@ -464,9 +464,9 @@ class Repository
     /**
      * Returns a result which displays count and purchase amount of order for each device type.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -499,14 +499,15 @@ class Repository
      * The data result contains the executed search term, the count of request
      * which sends this search term and how many result are returned for this term.
      *
-     * @param int       $offset  numeric value which defines the query start page
-     * @param int       $limit   numeric value which defines the query limit
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $sort
-     * @param array     $shopIds
+     * @param int            $offset  numeric value which defines the query start page
+     * @param int            $limit   numeric value which defines the query limit
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $sort
+     * @param array          $shopIds
      *
-     * @return Result array (
+     * @return Result
+     *                array (
      *                'countRequests' => '90',
      *                'searchterm' => 'iphone',
      *                'countResults' => '1401',
@@ -558,9 +559,9 @@ class Repository
     /**
      * Returns a result object which displays all referrers url and the call count.
      *
-     * @param $referrer
-     * @param $offset
-     * @param $limit
+     * @param string $referrer
+     * @param int    $offset
+     * @param int    $limit
      *
      * @return Result
      *                array (
@@ -586,10 +587,7 @@ class Repository
     /**
      * Returns a result object which displays all referrers url and the call count.
      *
-     * @param $referrer
-     *
-     * @internal param $offset
-     * @internal param $limit
+     * @param string $referrer
      *
      * @return Result
      *                array (
@@ -621,12 +619,12 @@ class Repository
      * The described [shopId] placeholder, will be replaced with the passed shop id.
      * The sort parameter allows to sort the data result by different conditions.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param $offset
-     * @param $limit
-     * @param array $sort
-     * @param array $shopIds
+     * @param int            $offset
+     * @param int            $limit
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $sort
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -701,9 +699,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -737,9 +735,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -773,9 +771,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -809,9 +807,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -855,9 +853,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -901,9 +899,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -946,9 +944,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -990,12 +988,12 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param $offset
-     * @param $limit
-     * @param array $sort
-     * @param array $shopIds
+     * @param int            $offset
+     * @param int            $limit
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $sort
+     * @param array          $shopIds
      *
      * @return Result
      *                array (
@@ -1050,9 +1048,9 @@ class Repository
     /**
      * Returns a result which displays the total order amount per customer gorup.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return Result
      */
@@ -1137,8 +1135,8 @@ class Repository
      *      $turnover = $repository->getDailyTurnover(... , ...);
      *      $turnover = array_map('reset', $turnover->getData());
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1170,8 +1168,8 @@ class Repository
      *      $visitors = $repository->getDailyVisitors(... , ...);
      *      $visitors = array_map('reset', $visitors->getData());
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1203,8 +1201,8 @@ class Repository
      *      $registrations = $repository->getDailyRegistrations(... , ...);
      *      $registrations = array_map('reset', $registrations->getData());
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1233,8 +1231,8 @@ class Repository
     /**
      * Returns a result which displays the impressions of each product.
      *
-     * @param $offset
-     * @param $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $sort
      *
      * @return DBALQueryBuilder
@@ -1265,8 +1263,8 @@ class Repository
      * This function creates a DBAL query builder, which used to determine the product sale value per order.
      * This is used to display, for example, how much revenue bring the products to a category or a manufacturer.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1296,9 +1294,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return DBALQueryBuilder
      *                          array (
@@ -1345,11 +1343,11 @@ class Repository
      * in the passed date range.
      * The sort parameter allows to sort the data result by different conditions.
      *
-     * @param $offset
-     * @param $limit
-     * @param array     $sort
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param int            $offset
+     * @param int            $limit
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $sort
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -1382,9 +1380,9 @@ class Repository
     /**
      * Returns a query builder which selects the age of each customer.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return DBALQueryBuilder
      */
@@ -1417,8 +1415,8 @@ class Repository
     /**
      * Returns a query which displays how many orders are each customer done.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1446,8 +1444,8 @@ class Repository
     /**
      * Returns a query which selects the sell count of each product.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1474,8 +1472,8 @@ class Repository
     /**
      * Returns a query which selects the revenue of each partner.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1503,9 +1501,9 @@ class Repository
     /**
      * Returns a query which selects the revenue of each referrer.
      *
-     * @param Shop      $shop
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param Shop           $shop
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1538,8 +1536,8 @@ class Repository
     /**
      * Returns a query which displays how many visits comes from each referrer.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
      *
      * @return DBALQueryBuilder
      */
@@ -1562,9 +1560,9 @@ class Repository
     /**
      * Returns a query which selects the total order amount of each customer group.
      *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array     $shopIds
+     * @param null|\DateTime $from
+     * @param null|\DateTime $to
+     * @param array          $shopIds
      *
      * @return DBALQueryBuilder
      *                          array (
@@ -1591,9 +1589,9 @@ class Repository
      * Helper function which adds the date range condition to an aggregate order query.
      *
      * @param DBALQueryBuilder $builder
-     * @param \DateTime        $from
-     * @param \DateTime        $to
-     * @param $column
+     * @param null|\DateTime   $from
+     * @param null|\DateTime   $to
+     * @param null|string      $column
      *
      * @return $this
      */
@@ -1615,9 +1613,9 @@ class Repository
      * Helper function which iterates all sort arrays and at them as order by condition.
      *
      * @param DBALQueryBuilder $builder
-     * @param $sort
+     * @param array            $sort
      *
-     * @return $this
+     * @return Repository
      */
     private function addSort(DBALQueryBuilder $builder, $sort)
     {
@@ -1639,10 +1637,10 @@ class Repository
      * Small helper function which adds the first and max result to the query builder.
      *
      * @param DBALQueryBuilder $builder
-     * @param $offset
-     * @param $limit
+     * @param int              $offset
+     * @param int              $limit
      *
-     * @return $this
+     * @return Repository
      */
     private function addPagination(DBALQueryBuilder $builder, $offset, $limit)
     {

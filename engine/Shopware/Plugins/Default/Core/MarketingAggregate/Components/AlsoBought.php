@@ -41,8 +41,8 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      * The articles are used for the aggregate query which is
      * faster if an constant where condition is used.
      *
-     * @param null $offset
-     * @param null $limit
+     * @param null|int $offset
+     * @param null|int $limit
      */
     public function initAlsoBought($offset = null, $limit = null)
     {
@@ -74,13 +74,13 @@ class Shopware_Components_AlsoBought extends Enlight_Class
             VALUES (:article_id, :related_article_id, :sales);
         ');
 
-        //iterate all selected articles which has to be initialed
+        // Iterate all selected articles which has to be initialed
         foreach ($articles as $articleId) {
-            //now we select all bought articles for the current article id
+            // Now we select all bought articles for the current article id
             $preparedSelect->execute(['articleId' => $articleId]);
             $combinations = $preparedSelect->fetchAll();
 
-            //at least we have to insert each combination in the aggregate s_articles_also_bought_ro table.
+            // At least we have to insert each combination in the aggregate s_articles_also_bought_ro table.
             foreach ($combinations as $combination) {
                 $preparedInsert->execute($combination);
             }

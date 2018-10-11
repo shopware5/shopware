@@ -35,17 +35,17 @@ class SubscriptionStateStruct implements \JsonSerializable
     private $isShopUpgraded;
 
     /**
-     * @var []
+     * @var array
      */
     private $notUpgradedPlugins;
 
     /**
-     * @var []
+     * @var array
      */
     private $wrongVersionPlugins;
 
     /**
-     * @var []
+     * @var array
      */
     private $expiredPluginSubscriptions;
 

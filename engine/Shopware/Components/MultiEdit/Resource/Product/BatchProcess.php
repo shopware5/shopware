@@ -281,7 +281,7 @@ class BatchProcess
     /**
      * Batch processes a given queue
      *
-     * @param $queueId
+     * @param int $queueId
      *
      * @throws \RuntimeException
      *

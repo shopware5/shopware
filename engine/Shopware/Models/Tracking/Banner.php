@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Tracking;
+namespace Shopware\Models\Tracking;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -224,7 +224,7 @@ class Banner extends ModelEntity
     /**
      * Increases the number of times the banner has been clicked by one.
      *
-     * @internal param int $views
+     * @internal param int $clicks
      *
      * @return Banner
      */

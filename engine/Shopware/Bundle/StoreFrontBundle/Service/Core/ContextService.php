@@ -327,7 +327,7 @@ class ContextService implements ContextServiceInterface
      * @param null|int    $areaId
      * @param null|int    $countryId
      * @param null|int    $stateId
-     * @param array       $streamIds
+     * @param int[]       $streamIds
      *
      * @return ShopContext
      */
@@ -400,7 +400,7 @@ class ContextService implements ContextServiceInterface
     /**
      * @param int $customerId
      *
-     * @return array
+     * @return string[]
      */
     private function getStreamsOfCustomerId($customerId)
     {
@@ -429,6 +429,9 @@ class ContextService implements ContextServiceInterface
         return $this->getStreamsOfCustomerId($customerId);
     }
 
+    /**
+     * @return int|null
+     */
     private function getStoreFrontCustomerId()
     {
         $session = $this->container->get('session');
