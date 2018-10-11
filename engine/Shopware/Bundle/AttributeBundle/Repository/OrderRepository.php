@@ -91,6 +91,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'shippingCountryId' => ['type' => 'long'],
                 'groupKey' => $this->textMapping->getNotAnalyzedField(),
                 'email' => $this->getTextFieldWithRawData(),
+                'orderDocuments' => $this->getTextFieldWithRawData(),
                 'transactionId' => $this->textMapping->getNotAnalyzedField(),
                 'firstname' => $this->getTextFieldWithRawData(),
                 'lastname' => $this->getTextFieldWithRawData(),
