@@ -1656,8 +1656,15 @@
                 $prevArr = me._$thumbnailArrowPrev,
                 $nextArr = me._$thumbnailArrowNext,
                 activeCls = me.opts.activeStateClass,
-                pos = $slide.position(),
-                orientation = me.getThumbnailOrientation();
+                pos,
+                orientation;
+
+            if (!$slide) {
+                return;
+            } 
+
+            pos = $slide.position();
+            orientation = me.getThumbnailOrientation();
 
             if (me._thumbnailOrientation !== orientation) {
                 $prevArr
