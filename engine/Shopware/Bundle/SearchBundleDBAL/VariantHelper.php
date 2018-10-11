@@ -316,8 +316,8 @@ class VariantHelper implements VariantHelperInterface
             'IFNULL(listing_price.product_id, onsale_listing_price.product_id) AS product_id',
         ]);
 
-        $subQuery->leftJoin('variant', '(' . $priceTable->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
-        $subQuery->leftJoin('variant', '(' . $onSalePriceTable->getSQL() . ')', 'onsale_listing_price', implode(' AND ', $variantOnSaleCondition));
+        $subQuery->innerJoin('variant', '(' . $priceTable->getSQL() . ')', 'listing_price', implode(' AND ', $variantCondition));
+        $subQuery->innerJoin('variant', '(' . $onSalePriceTable->getSQL() . ')', 'onsale_listing_price', implode(' AND ', $variantOnSaleCondition));
         $subQuery->resetQueryPart('groupBy');
 
         $query->addSelect('listing_price.*');
