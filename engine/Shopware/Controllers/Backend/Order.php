@@ -427,17 +427,32 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         // Get all passed order data
         $data = $this->Request()->getParams();
 
-        $changed = new \DateTime($data['changed']);
-        // Check whether the order has been modified in the meantime
-        if ($order->getChanged() !== null && $order->getChanged()->getTimestamp() != $changed->getTimestamp()) {
-            $this->View()->assign([
-                'success' => false,
-                'data' => $this->getOrder($order->getId()),
-                'overwriteAble' => true,
-                'message' => $namespace->get('order_has_been_changed', 'The order has been changed in the meantime. To prevent overwriting these changes, saving the order was aborted. Please close the order and re-open it.'),
-            ]);
+        if ($order->getChanged() !== null) {
+            try {
+                $changed = new \DateTime($data['changed']);
+            } catch (Exception $e) {
+                // If we have a invalid date caused by imports
+                $changed = $order->getChanged();
+            }
 
-            return;
+            if ($changed->getTimestamp() < 0 && $changed->getChanged()->getTimestamp() < 0) {
+                $changed = $order->getChanged();
+            }
+
+            // We have timestamp conversion issues on Windows Users
+            $diff = abs($order->getChanged()->getTimestamp() - $changed->getTimestamp());
+
+            // Check whether the order has been modified in the meantime
+            if ($diff > 1) {
+                $this->View()->assign([
+                    'success' => false,
+                    'data' => $this->getOrder($order->getId()),
+                    'overwriteAble' => true,
+                    'message' => $namespace->get('order_has_been_changed', 'The order has been changed in the meantime. To prevent overwriting these changes, saving the order was aborted. Please close the order and re-open it.'),
+                ]);
+
+                return;
+            }
         }
 
         // Prepares the associated data of an order.

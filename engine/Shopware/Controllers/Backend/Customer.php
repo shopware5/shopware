@@ -278,24 +278,40 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 return;
             }
 
+            /** @var Customer $customer */
             $customer = $this->getRepository()->find($id);
-            $paymentData = $this->getManager()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
+            $paymentData = $this->getManager()->getRepository(PaymentData::class)->findOneBy(
                 ['customer' => $customer, 'paymentMean' => $paymentId]
             );
 
-            // Check whether the customer has been modified in the meantime
-            $changed = new \DateTime($params['changed']);
-            if ($customer->getChanged() !== null && $customer->getChanged()->getTimestamp() != $changed->getTimestamp()) {
-                $namespace = Shopware()->Snippets()->getNamespace('backend/customer/controller/main');
+            if ($customer->getChanged() !== null) {
+                // Check whether the customer has been modified in the meantime
+                try {
+                    $changed = new \DateTime($params['changed']);
+                } catch (Exception $e) {
+                    // If we have a invalid date caused by imports
+                    $changed = $customer->getChanged();
+                }
 
-                $this->View()->assign([
-                    'success' => false,
-                    'data' => $this->getCustomer($customer->getId()),
-                    'overwriteAble' => true,
-                    'message' => $namespace->get('customer_has_been_changed', 'The customer has been changed in the meantime. To prevent overwriting these changes, saving the customer was aborted. Please close the customer and re-open it.'),
-                ]);
+                if ($changed->getTimestamp() < 0 && $customer->getChanged()->getTimestamp() < 0) {
+                    $changed = $customer->getChanged();
+                }
 
-                return;
+                $diff = abs($customer->getChanged()->getTimestamp() - $changed->getTimestamp());
+
+                // We have timestamp conversion issues on Windows Users
+                if ($diff > 1) {
+                    $namespace = Shopware()->Snippets()->getNamespace('backend/customer/controller/main');
+
+                    $this->View()->assign([
+                        'success' => false,
+                        'data' => $this->getCustomer($customer->getId()),
+                        'overwriteAble' => true,
+                        'message' => $namespace->get('customer_has_been_changed', 'The customer has been changed in the meantime. To prevent overwriting these changes, saving the customer was aborted. Please close the customer and re-open it.'),
+                    ]);
+
+                    return;
+                }
             }
         } else {
             //check if the user has the rights to create a new customer
