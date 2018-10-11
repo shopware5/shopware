@@ -122,8 +122,6 @@ class DqlHelper
     protected $columnInfo = [];
 
     /**
-     * Constructor
-     *
      * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
      * @param ModelManager                             $em
      * @param \Enlight_Event_EventManager              $eventManager
@@ -169,7 +167,7 @@ class DqlHelper
     }
 
     /**
-     * Returns all entities as an array of entites ([0]) and their alias ([1])
+     * Returns all entities as an array of entities ([0]) and their alias ([1])
      *
      * @return array
      */
@@ -182,7 +180,7 @@ class DqlHelper
      * Returns the column name for a given attribute. This basically means, that the case of the attribute is fixed
      * e.g. ARTICLE.ID => id
      *
-     * @param $attribute
+     * @param string $attribute
      *
      * @return mixed
      */
@@ -197,7 +195,7 @@ class DqlHelper
      * Returns the doctrine entity associated to an attribute
      * e.g. ARTICLE.ID => \Shopware\Models\Article\Article
      *
-     * @param $attribute
+     * @param string $attribute
      *
      * @return mixed
      */
@@ -213,15 +211,14 @@ class DqlHelper
      */
     public function getMainEntity()
     {
-        return 'Shopware\Models\Article\Detail';
+        return \Shopware\Models\Article\Detail::class;
     }
 
     /**
      * Returns the prefix for a given entity.
      * e.g. article => \Showpare\Models\Article\Article
      *
-     *
-     * @param $prefix
+     * @param string $prefix
      *
      * @return mixed
      */
@@ -234,7 +231,7 @@ class DqlHelper
      * Returns the prefix for a given entity
      * e.g. \Shopware\Models\Article\Article => article
      *
-     * @param $entity
+     * @param string $entity
      *
      * @return mixed
      */
@@ -417,7 +414,7 @@ class DqlHelper
 
         foreach ($this->getEntities() as $entityArray) {
             list($entity, $prefix) = $entityArray;
-            if ($prefix == 'price') {
+            if ($prefix === 'price') {
                 continue;
             }
             $entityShort = ucfirst($prefix);
@@ -433,7 +430,7 @@ class DqlHelper
                 $result[$key] = [
                     'entity' => $entityShort,
                     'field' => $name,
-                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax' && $entity != 'Shopware\Models\Article\Supplier',
+                    'editable' => substr($name, -2) !== 'Id' && $name !== 'id' && substr($name, -2) !== 'ID' && $entity !== \Shopware\Models\Tax\Tax::class && $entity !== \Shopware\Models\Article\Supplier::class,
                     'type' => $config['type'],
                     'precision' => $config['precision'],
                     'nullable' => (bool) $config['nullable'],
@@ -551,37 +548,38 @@ class DqlHelper
     {
         // Some custom references
         switch ($entity) {
-            case 'Shopware\Models\Category\Category':
+            case \Shopware\Models\Category\Category::class:
                 return 'article.allCategories';
                 break;
-            case 'Shopware\Models\Article\Image':
+
+            case \Shopware\Models\Article\Image::class:
                 return 'article.images';
                 break;
         }
 
         // Some generic searching for the association
-        $metaData = $this->getEntityManager()->getClassMetadata('Shopware\Models\Article\Detail');
+        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Article\Detail::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'detail.' . $mapping['fieldName'];
             }
         }
 
-        $metaData = $this->getEntityManager()->getClassMetadata('Shopware\Models\Article\Article');
+        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Article\Article::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'article.' . $mapping['fieldName'];
             }
         }
 
-        $metaData = $this->getEntityManager()->getClassMetadata('Shopware\Models\Article\Configurator\Set');
+        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Article\Configurator\Set::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'configuratorSet.' . $mapping['fieldName'];
             }
         }
 
-        $metaData = $this->getEntityManager()->getClassMetadata('Shopware\Models\Property\Group');
+        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Property\Group::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'propertySet.' . $mapping['fieldName'];
@@ -600,7 +598,7 @@ class DqlHelper
     {
         $join = [];
         foreach ($tokens as $token) {
-            if ($token['type'] == 'attribute') {
+            if ($token['type'] === 'attribute') {
                 $entity = $this->getEntityForAttribute($token['token']);
                 // Do not allow main entity to be joined
                 if ($entity == $this->getMainEntity()) {
@@ -620,9 +618,9 @@ class DqlHelper
 
                 // Default: Join the associated entity
                 $join[$entity] = $entity;
-            } elseif ($token['token'] == 'HASBLOCKPRICE') {
+            } elseif ($token['token'] === 'HASBLOCKPRICE') {
                 $join['Shopware\Models\Article\Price'] = 'Shopware\Models\Article\Price';
-            } elseif ($token['token'] == 'HASIMAGE' || $token['token'] == 'HASNOIMAGE') {
+            } elseif ($token['token'] === 'HASIMAGE' || $token['token'] === 'HASNOIMAGE') {
                 $join['Shopware\Models\Article\Image'] = 'Shopware\Models\Article\Image';
             }
         }
@@ -641,9 +639,9 @@ class DqlHelper
      * Returns DQL for the token list. Will basically fix the case of the attributes and replace some
      * convenient operators with proper expressions understood by DQL
      *
-     * @param $tokens
+     * @param array $tokens
      *
-     * @return string
+     * @return array
      */
     public function getDqlFromTokens($tokens)
     {
@@ -681,14 +679,14 @@ class DqlHelper
 
             // RegExp handling
             $lastToken = $tokens[$key - 1]['token'];
-            if ($lastToken == '~' || $lastToken == '!~') {
+            if ($lastToken === '~' || $lastToken === '!~') {
                 // Pop the last operator (~ OR !~)
                 array_pop($newTokens);
                 // Pop the attribute
                 $attribute = array_pop($newTokens);
 
                 // As we are in the where-clause, we need a comparison
-                $mode = $lastToken == '~' ? 1 : 0;
+                $mode = $lastToken === '~' ? 1 : 0;
 
                 // Build the DQL Token - we've registered our own RegExp DoctrineExtension before
                 $newTokens[] = ' RegExp (?' . count($params) . ", {$attribute}) = {$mode}";
@@ -698,7 +696,7 @@ class DqlHelper
             }
 
             // Quoting value tokens:
-            if ($token['type'] == 'values') {
+            if ($token['type'] === 'values') {
                 $newTokens[] = '?' . count($params);
                 // Non-numeric tokens will become their quotes removed:
                 if (!is_numeric($token['token'])) {
@@ -709,8 +707,8 @@ class DqlHelper
                 }
                 continue;
             }
-            // Get the correct column name based on the attribtue name
-            if ($token['type'] == 'attribute') {
+            // Get the correct column name based on the attribute name
+            if ($token['type'] === 'attribute') {
                 $newTokens[] = $this->getColumnForAttribute($token['token']);
                 continue;
             }
@@ -788,7 +786,7 @@ class DqlHelper
         }
 
         $type = $info['type'];
-        if ($value && $type == 'decimal' || $type == 'integer' || $type == 'float') {
+        if ($value && ($type === 'decimal' || $type === 'integer' || $type === 'float')) {
             $value = str_replace(',', '.', $value);
         }
 
@@ -798,9 +796,8 @@ class DqlHelper
     /**
      * This method will return a list of IDs of a given foreign entity which is connected to a given $detailId
      *
-     *
-     * @param $foreignPrefix
-     * @param $detailIds
+     * @param string $foreignPrefix
+     * @param array  $detailIds
      *
      * @return mixed
      */
@@ -822,8 +819,8 @@ class DqlHelper
     /**
      * Internal method that will return a list of IDs of a given foreign entity which is connected to a given $detailIds
      *
-     * @param $foreignPrefix
-     * @param $detailIds
+     * @param string $foreignPrefix
+     * @param int[]  $detailIds
      *
      * @return mixed
      */
@@ -836,10 +833,13 @@ class DqlHelper
                 return $this->getDb()->fetchCol(
                     'SELECT id FROM s_articles_attributes WHERE articledetailsID IN ' . $quoted
                 );
+
             case 'article':
                 return $this->getDb()->fetchCol('SELECT articleID FROM s_articles_details WHERE id  IN ' . $quoted);
+
             case 'detail':
                 return $detailIds;
+
             case 'supplier':
                 return $this->getDb()->fetchCol(
                     'SELECT supplierID
@@ -848,12 +848,14 @@ class DqlHelper
                         ON s_articles.id = s_articles_details.articleID
                      WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'price':
                 return $this->getDb()->fetchCol(
                     'SELECT s_articles_prices.id
                     FROM s_articles_prices
                     WHERE s_articles_prices.articledetailsID  IN ' . $quoted
                 );
+
             case 'vote':
                 return $this->getDb()->fetchCol(
                     'SELECT s_articles_vote.id
@@ -862,6 +864,7 @@ class DqlHelper
                         ON s_articles_vote.articleID = s_articles_details.articleID
                     WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'tax':
                 return $this->getDb()->fetchCol(
                     'SELECT taxID
@@ -870,6 +873,7 @@ class DqlHelper
                         ON s_articles.id = s_articles_details.articleID
                      WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'category':
                 return $this->getDb()->fetchCol(
                     'SELECT s_articles_categories_ro.categoryID
@@ -879,6 +883,7 @@ class DqlHelper
 
                     WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'configuratorset':
                 return $this->getDb()->fetchCol(
                     'SELECT configurator_set_id
@@ -887,6 +892,7 @@ class DqlHelper
                         ON s_articles.id = s_articles_details.articleID
                      WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'configuratorgroup':
                 return $this->getDb()->fetchCol(
                     'SELECT group_id
@@ -897,12 +903,14 @@ class DqlHelper
                         ON s_articles.configurator_set_id = s_article_configurator_set_group_relations.set_id
                      WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'configuratoroption':
                 return $this->getDb()->fetchCol(
                     'SELECT option_id
                      FROM s_article_configurator_option_relations
                      WHERE article_id  IN ' . $quoted
                 );
+
             case 'propertyset':
                 return $this->getDb()->fetchCol(
                     'SELECT filtergroupID
@@ -911,6 +919,7 @@ class DqlHelper
                         ON s_articles.id = s_articles_details.articleID
                      WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'propertygroup':
                 return $this->getDb()->fetchCol(
                     'SELECT optionID
@@ -921,6 +930,7 @@ class DqlHelper
                         ON groupID = s_articles.filtergroupID
                      WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'propertyoption':
                 return $this->getDb()->fetchCol(
                     'SELECT valueID
@@ -929,6 +939,7 @@ class DqlHelper
                         ON s_filter_articles.articleID = s_articles_details.articleID
                      WHERE s_articles_details.id  IN ' . $quoted
                 );
+
             case 'unit':
                 return $this->getDb()->fetchCol(
                     'SELECT unitID
@@ -943,7 +954,7 @@ class DqlHelper
     /**
      * Groups a given list of operations by the entity they operate on
      *
-     * @param $operations
+     * @param array $operations
      *
      * @return array
      */
@@ -967,6 +978,10 @@ class DqlHelper
     /**
      * Returns all columns for a given entity prefixed
      * eg.g \Shopware\Models\Article\Article => array('id', 'name', …)
+     *
+     * @param string $entity
+     *
+     * @return array
      */
     protected function getPrefixedColumns($entity)
     {
@@ -1047,7 +1062,7 @@ class DqlHelper
      * Use the filter event SwagMultiEdit_Product_DqlHelper_getColumnsForProductListing_filterColumns
      * in order to overwrite the selectable columns
      *
-     * @param $column
+     * @param array $column
      *
      * @return bool
      */

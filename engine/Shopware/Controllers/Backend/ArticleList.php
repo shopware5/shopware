@@ -470,12 +470,12 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $queueId = $this->Request()->getParam('queueId', null);
         $offset = $this->Request()->getParam('offset', 0);
         $filterArray = json_decode($filterArray, true);
-        if ($filterArray == false) {
+        if ($filterArray === false) {
             throw new RuntimeException("Could not decode '{$this->Request()->getParam('filterArray')}'");
         }
 
         $operations = json_decode($operations, true);
-        if ($operations == false) {
+        if ($operations === false) {
             throw new RuntimeException("Could not decode '{$this->Request()->getParam('operations')}'");
         }
 
@@ -493,8 +493,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Event listener function of the article store of the backend module.
-     *
-     * @return mixed
      */
     public function deleteProductAction()
     {
@@ -527,7 +525,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Normalize filter
      *
-     * @param $filter
+     * @param string $filter
      *
      * @return string
      */
@@ -539,7 +537,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Translate filter name and description
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return mixed
      */
@@ -562,7 +560,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     private function getDetailRepository()
     {
-        return Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        return Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
     }
 
     /**
@@ -644,7 +642,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $service = $this->get('shopware_storefront.additional_text_service');
 
         /** @var \Shopware\Models\Shop\Repository $shopRepo */
-        $shopRepo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepo = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
 
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $shopRepo->getActiveDefault();

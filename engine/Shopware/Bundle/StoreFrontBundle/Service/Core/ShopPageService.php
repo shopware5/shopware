@@ -71,8 +71,6 @@ class ShopPageService implements Service\ShopPageServiceInterface
 
     /**
      * @param Struct\ShopPage[] $shopPages
-     *
-     * @return Struct\ShopPage[]
      */
     private function resolveShops(array $shopPages)
     {

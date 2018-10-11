@@ -27,7 +27,6 @@ namespace Shopware\Models\Category;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
-use Shopware\Models\Article\Article;
 use Shopware\Models\ProductStream\ProductStream;
 
 /**
@@ -108,6 +107,7 @@ class Category extends ModelEntity
      * @ORM\Column(name="facet_ids", type="string", nullable=true)
      */
     protected $facetIds;
+
     /**
      * Identifier for a single category. This is an autoincrement value.
      *
@@ -537,7 +537,7 @@ class Category extends ModelEntity
      *
      * @param \DateTime|string $changed
      *
-     * @return Article
+     * @return Category
      */
     public function setChanged($changed = 'now')
     {
@@ -1097,8 +1097,8 @@ class Category extends ModelEntity
     /**
      * Helper function for the isChildOf function. This function is used for a recursive call.
      *
-     * @param $category Category
-     * @param $searched Category
+     * @param Category $category
+     * @param Category $searched
      *
      * @return bool
      */

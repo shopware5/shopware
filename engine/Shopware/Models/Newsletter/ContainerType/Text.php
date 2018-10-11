@@ -118,14 +118,11 @@ class Text extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\Container $container
      * @param string                                $type
-     *
-     * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container, $type = 'ctText')
     {
         $this->container = $container;
         $container->setType($type);
-        //        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
     }
 
     /**

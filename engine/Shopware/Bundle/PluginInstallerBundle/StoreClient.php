@@ -183,7 +183,7 @@ class StoreClient
      *
      * @throws \Exception
      *
-     * @return array
+     * @return string
      */
     public function doAuthGetRequestRaw(
         AccessTokenStruct $accessToken,

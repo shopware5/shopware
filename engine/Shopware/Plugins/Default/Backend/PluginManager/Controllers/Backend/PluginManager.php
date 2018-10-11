@@ -874,6 +874,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     /**
      * @param string $orderNumber
      * @param array  $positions
+     *
+     * @return null|string
      */
     private function getTechnicalNameOfOrderNumber($orderNumber, array $positions)
     {

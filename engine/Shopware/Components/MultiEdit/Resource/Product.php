@@ -31,6 +31,7 @@ use Shopware\Components\MultiEdit\Resource\Product\Filter;
 use Shopware\Components\MultiEdit\Resource\Product\Grammar;
 use Shopware\Components\MultiEdit\Resource\Product\Queue;
 use Shopware\Components\MultiEdit\Resource\Product\Value;
+use Shopware\Models\Article\Detail;
 
 /**
  * The main product resource will delegate the controller requests to the corresponding classes
@@ -44,26 +45,32 @@ class Product implements ResourceInterface
      * @var Product\DqlHelper
      */
     private $dqlHelper;
+
     /**
      * @var Product\Grammar
      */
     private $grammar;
+
     /**
      * @var Product\Value
      */
     private $value;
+
     /**
      * @var Product\Filter
      */
     private $filter;
+
     /**
      * @var Product\BatchProcess
      */
     private $batchProcess;
+
     /**
      * @var Product\Queue
      */
     private $queue;
+
     /**
      * @var Product\Backup
      */
@@ -81,9 +88,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Returns the grammar for the product resource
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getGrammar()
     {
@@ -91,13 +96,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Returns suggested values for a given field
-     *
-     * @param $attribute
-     * @param $operator
-     * @param $queryConfig
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getValuesFor($attribute, $operator, $queryConfig)
     {
@@ -105,17 +104,15 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Returns products matching a given filter
+     * {@inheritdoc}
      */
-    public function filter($ast, $offset, $limit, $orderBy = null)
+    public function filter($tokens, $offset, $limit, $orderBy = null)
     {
-        return $this->filter->filter($ast, $offset, $limit, $orderBy);
+        return $this->filter->filter($tokens, $offset, $limit, $orderBy);
     }
 
     /**
-     * Returns columns to be shown in the batchProcess window
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getBatchColumns()
     {
@@ -123,11 +120,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * The actual batch processing
-     *
-     * @param $queueId
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function batchProcess($queueId)
     {
@@ -135,15 +128,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Create a queue from a given filterArray
-     *
-     * @param $filterArray
-     * @param $operations
-     * @param $offset
-     * @param $limit
-     * @param $queueId
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function createQueue($filterArray, $operations, $offset, $limit, $queueId)
     {
@@ -151,9 +136,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Needs to return the columns that can be shown as well as their data type.
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getColumnConfig()
     {
@@ -161,11 +144,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Saves a single modified instance of the entity
-     *
-     * @param $params
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function save($params)
     {
@@ -178,7 +157,7 @@ class Product implements ResourceInterface
         foreach ($params as $key => $info) {
             $prefix = strtolower($info['entity']);
             $groups[$prefix][] = $info;
-            if ($info['field'] == 'id') {
+            if ($info['field'] === 'id') {
                 $primaryIdentifiers[$prefix] = $info['value'];
             }
         }
@@ -190,7 +169,7 @@ class Product implements ResourceInterface
             $entity = $this->dqlHelper->getEntityForPrefix($prefix);
 
             // All models except price
-            if ($prefix != 'price') {
+            if ($prefix !== 'price') {
                 $model = $entityManager->find($entity, $primaryIdentifiers[$prefix]);
                 foreach ($fields as $field) {
                     // Do not persist non-editable fields
@@ -207,7 +186,7 @@ class Product implements ResourceInterface
                 $entityManager->persist($model);
             // price_model
             } else {
-                $detailModel = $entityManager->find('\Shopware\Models\Article\Detail', $primaryIdentifiers['detail']);
+                $detailModel = $entityManager->find(Detail::class, $primaryIdentifiers['detail']);
                 // store net prices
                 $tax = $detailModel->getArticle()->getTax()->getTax() / 100 + 1;
                 $priceModel = $entityManager->getRepository($entity)->findOneBy(
@@ -234,12 +213,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Returns a list of available backups
-     *
-     * @param $offset
-     * @param $limit
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function listBackups($offset, $limit)
     {
@@ -247,12 +221,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Restores a given backup
-     *
-     * @param $id
-     * @param $offset
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function restoreBackup($id, $offset)
     {
@@ -260,11 +229,7 @@ class Product implements ResourceInterface
     }
 
     /**
-     * Delete a given backup
-     *
-     * @param $id
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function deleteBackup($id)
     {

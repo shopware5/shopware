@@ -206,7 +206,7 @@ class Template extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Template
      */
     public function setName($name)
     {
@@ -336,7 +336,7 @@ class Template extends ModelEntity
     /**
      * @param bool $emotion
      *
-     * @return Template
+     * @return bool
      */
     public function getEmotion($emotion)
     {

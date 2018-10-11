@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Payment;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -248,7 +249,7 @@ class Payment extends ModelEntity
     private $shops;
 
     /**
-     * @var
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\RuleSet", mappedBy="payment")
      * @ORM\JoinColumn(name="id", referencedColumnName="paymentID")

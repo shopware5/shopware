@@ -295,6 +295,8 @@ class ProductNumberService implements ProductNumberServiceInterface
      *
      * @param int  $productId
      * @param Shop $shop
+     *
+     * @return null|string
      */
     private function isProductAvailableInShop($productId, $shop)
     {

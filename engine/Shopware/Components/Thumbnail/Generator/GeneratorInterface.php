@@ -50,8 +50,6 @@ interface GeneratorInterface
      * @param int    $maxHeight       - height in pixel
      * @param bool   $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
      * @param int    $quality         - JPEG quality
-     *
-     * @return
      */
     public function createThumbnail($image, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90);
 }

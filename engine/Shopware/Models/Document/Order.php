@@ -231,11 +231,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Magic getter
      *
-     * @param  $var_name
+     * @param string $var_name
      *
      * @throws Enlight_Exception
-     *
-     * @return
      */
     public function __get($var_name)
     {
