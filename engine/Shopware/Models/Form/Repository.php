@@ -62,9 +62,14 @@ class Repository extends ModelRepository
         $builder->select(['form', 'attribute'])
             ->from($this->getEntityName(), 'form')
             ->leftJoin('form.attribute', 'attribute');
-
-        $this->addFilter($builder, $filter);
-        $this->addOrderBy($builder, $orderBy);
+        
+        if ($filter !== null) {
+            $this->addFilter($builder, $filter);
+        }
+        
+        if ($orderBy !== null) {
+            $this->addOrderBy($builder, $orderBy);
+        }
 
         return $builder;
     }
