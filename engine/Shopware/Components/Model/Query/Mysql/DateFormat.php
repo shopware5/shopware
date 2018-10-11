@@ -38,7 +38,7 @@ class DateFormat extends FunctionNode
     public $secondDateExpression;
 
     /**
-     * @override
+     * {@inheritdoc}
      */
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
@@ -50,7 +50,7 @@ class DateFormat extends FunctionNode
     }
 
     /**
-     * @override
+     * {@inheritdoc}
      */
     public function parse(\Doctrine\ORM\Query\Parser $parser)
     {

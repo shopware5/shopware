@@ -833,6 +833,8 @@ class sOrder
 
     /**
      * send order confirmation mail
+     *
+     * @param array $variables
      */
     public function sendMail($variables)
     {

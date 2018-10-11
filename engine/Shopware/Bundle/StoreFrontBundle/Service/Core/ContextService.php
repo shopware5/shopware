@@ -327,6 +327,7 @@ class ContextService implements ContextServiceInterface
      * @param null|int    $areaId
      * @param null|int    $countryId
      * @param null|int    $stateId
+     * @param array       $streamIds
      *
      * @return ShopContext
      */

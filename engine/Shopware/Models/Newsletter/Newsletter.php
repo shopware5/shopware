@@ -444,10 +444,11 @@ class Newsletter extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $containers
+     *
+     * @return ModelEntity
      */
     public function setContainers($containers)
     {
-        //        $this->containers = $containers;
         return $this->setOneToMany($containers, '\Shopware\Models\Newsletter\Container', 'containers', 'newsletter');
     }
 

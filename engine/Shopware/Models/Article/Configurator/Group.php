@@ -173,8 +173,6 @@ class Group extends ModelEntity
 
     /**
      * @param $options
-     *
-     * @return Group
      */
     public function setOptions($options)
     {

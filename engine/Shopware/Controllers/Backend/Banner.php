@@ -150,8 +150,6 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      *
      * This call will have NO impact on the generated statistic - this method
      * should be uses for backend operations only!
-     *
-     * @return \Doctrine\ORM\Query
      */
     public function getAllBannersAction()
     {

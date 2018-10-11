@@ -408,10 +408,12 @@ abstract class Resource
 
     /**
      * @param Collection|array $collection
-     * @param $property
-     * @param $value
+     * @param                  $property
+     * @param                  $value
      *
      * @throws \Exception
+     *
+     * @return mixed|null
      */
     protected function getCollectionElementByProperty($collection, $property, $value)
     {
@@ -435,6 +437,8 @@ abstract class Resource
     /**
      * @param Collection $collection
      * @param array      $conditions
+     *
+     * @return mixed|null
      */
     protected function getCollectionElementByProperties(Collection $collection, array $conditions)
     {

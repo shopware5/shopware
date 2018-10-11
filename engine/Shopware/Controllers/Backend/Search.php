@@ -415,6 +415,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
     /**
      * @param $ids
+     *
+     * @return array
      */
     private function getCategories($ids)
     {

@@ -95,7 +95,7 @@ class FormTranslation extends ModelEntity
     /**
      * @param $label
      *
-     * @return Form
+     * @return FormTranslation
      */
     public function setLabel($label)
     {

@@ -27,7 +27,7 @@ namespace Shopware\Components\Emotion\Preset;
 interface PresetLoaderInterface
 {
     /**
-     * @param int $id
+     * @param int $presetId
      *
      * @return string $presetData
      */

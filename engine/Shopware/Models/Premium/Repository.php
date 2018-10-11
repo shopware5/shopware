@@ -38,9 +38,10 @@ class Repository extends ModelRepository
     /**
      * Function to get all premium-articles and the subshop-name and the article-name
      *
-     * @param $start
-     * @param $limit
-     * @param null $filterValue
+     * @param int    $start
+     * @param int    $limit
+     * @param string $order
+     * @param null   $filterValue
      *
      * @return \Doctrine\ORM\Query
      */

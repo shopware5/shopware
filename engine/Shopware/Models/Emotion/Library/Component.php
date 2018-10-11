@@ -212,7 +212,7 @@ class Component extends ModelEntity
      * Contains the component description which displayed in the backend
      * module of
      *
-     * @return
+     * @return string
      */
     public function getDescription()
     {
@@ -438,8 +438,6 @@ class Component extends ModelEntity
      *     @var string $defaultValue       Optional; date string in format Y-m-d
      * }
      *
-     * @param array $options
-     *
      * @return Field
      */
     public function createDateField(array $options)
@@ -464,8 +462,6 @@ class Component extends ModelEntity
      *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
-     *
-     * @param array $options
      *
      * @return Field
      */

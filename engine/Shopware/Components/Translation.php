@@ -274,8 +274,6 @@ class Shopware_Components_Translation
      * @param int    $language
      * @param string $type
      * @param int    $key
-     *
-     * @return array
      */
     public function delete($language, $type, $key = 1)
     {
@@ -338,8 +336,6 @@ class Shopware_Components_Translation
      * @param bool   $merge
      *
      * @throws \Zend_Db_Adapter_Exception
-     *
-     * @return int|bool
      */
     public function write($language, $type, $key = 1, $data = null, $merge = false)
     {
