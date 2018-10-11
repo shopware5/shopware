@@ -879,5 +879,9 @@
             <argument>%kernel.root_dir%</argument>
             <argument>%shopware.filesystem.private.config.root%</argument>
         </service>
+
+        <service id="shopware.components.state_translator" class="Shopware\Components\StateTranslatorService">
+            <argument type="service" id="snippets"/>
+        </service>
     </services>
 </container>

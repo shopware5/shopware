@@ -23,6 +23,7 @@
  */
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Document\Document;
 use Shopware\Models\Shop\Locale;
 
@@ -338,6 +339,14 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         // Select all shop as array
         $data = $query->getArrayResult();
 
+        /** @var \Shopware\Components\StateTranslatorServiceInterface $stateTranslator */
+        $stateTranslator = $this->get('shopware.components.state_translator');
+        $data = array_map(function ($paymentStateItem) use ($stateTranslator) {
+            $paymentStateItem = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $paymentStateItem);
+
+            return $paymentStateItem;
+        }, $data);
+
         // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
@@ -366,6 +375,14 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         // Select all shop as array
         $data = $query->getArrayResult();
+
+        /** @var \Shopware\Components\StateTranslatorServiceInterface $stateTranslator */
+        $stateTranslator = $this->get('shopware.components.state_translator');
+        $data = array_map(function ($orderStateItem) use ($stateTranslator) {
+            $orderStateItem = $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $orderStateItem);
+
+            return $orderStateItem;
+        }, $data);
 
         // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);

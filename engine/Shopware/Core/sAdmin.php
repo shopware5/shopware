@@ -1322,10 +1322,11 @@ class sAdmin
         $limitEnd = Shopware()->Db()->quote($perPage);
 
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS o.*, cu.templatechar as currency_html, cu.symbol_position as currency_position, DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum
+            SELECT SQL_CALC_FOUND_ROWS o.*, cu.templatechar as currency_html, cu.symbol_position as currency_position, DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum, state.name as stateName
             FROM s_order o
             LEFT JOIN s_core_currencies as cu
             ON o.currency = cu.currency
+            LEFT JOIN s_core_states as state ON state.id = o.status
             WHERE userID = ? AND status != -1
             AND subshopID = ?
             ORDER BY ordertime DESC

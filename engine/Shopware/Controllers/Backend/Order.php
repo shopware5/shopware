@@ -27,6 +27,7 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Random;
+use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Article\Detail as ArticleDetail;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -156,15 +157,29 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function loadListAction()
     {
         $filters = [['property' => 'status.id', 'expression' => '!=', 'value' => '-1']];
-        $orderStatus = $this->getRepository()->getOrderStatusQuery($filters)->getArrayResult();
-        $paymentStatus = $this->getRepository()->getPaymentStatusQuery()->getArrayResult();
+        $orderState = $this->getRepository()->getOrderStatusQuery($filters)->getArrayResult();
+        $paymentState = $this->getRepository()->getPaymentStatusQuery()->getArrayResult();
         $positionStatus = $this->getRepository()->getDetailStatusQuery()->getArrayResult();
+
+        $stateTranslator = $this->get('shopware.components.state_translator');
+
+        $orderState = array_map(function ($orderStateItem) use ($stateTranslator) {
+            $orderStateItem = $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $orderStateItem);
+
+            return $orderStateItem;
+        }, $orderState);
+
+        $paymentState = array_map(function ($paymentStateItem) use ($stateTranslator) {
+            $paymentStateItem = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $paymentStateItem);
+
+            return $paymentStateItem;
+        }, $paymentState);
 
         $this->View()->assign([
             'success' => true,
             'data' => [
-                'orderStatus' => $orderStatus,
-                'paymentStatus' => $paymentStatus,
+                'orderStatus' => $orderState,
+                'paymentStatus' => $paymentState,
                 'positionStatus' => $positionStatus,
             ],
         ]);
@@ -733,7 +748,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $addAttachments = $this->request->getParam('addAttachments') === 'true';
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = $this->get('snippets')->getNamespace('backend/order');
 
         if (empty($orders)) {
             $this->View()->assign([
@@ -745,6 +760,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
+        $modelManager = $this->get('models');
+        /** @var \Shopware\Components\StateTranslatorServiceInterface $stateTranslator */
+        $stateTranslator = $this->get('shopware.components.state_translator');
+
+        $previousLocale = $this->getCurrentLocale();
         foreach ($orders as $key => $data) {
             $orders[$key]['mail'] = null;
             $orders[$key]['languageSubShop'] = null;
@@ -754,7 +774,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
 
             /** @var $order \Shopware\Models\Order\Order */
-            $order = Shopware()->Models()->find(Order::class, $data['id']);
+            $order = $modelManager->find(Order::class, $data['id']);
             if (!$order) {
                 continue;
             }
@@ -769,14 +789,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             // Refresh the status models to return the new status data which will be displayed in the batch list
             if (!empty($data['status']) || $data['status'] === 0) {
-                $order->setOrderStatus(Shopware()->Models()->find(Status::class, $data['status']));
+                $order->setOrderStatus($modelManager->find(Status::class, $data['status']));
             }
             if (!empty($data['cleared'])) {
-                $order->setPaymentStatus(Shopware()->Models()->find(Status::class, $data['cleared']));
+                $order->setPaymentStatus($modelManager->find(Status::class, $data['cleared']));
             }
 
             try {
-                Shopware()->Models()->flush($order);
+                $modelManager->flush($order);
             } catch (Exception $e) {
                 continue;
             }
@@ -789,8 +809,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $this->createOrderDocuments($documentType, $documentMode, $order);
             }
 
-            $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
-            $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
+            if ($previousLocale) {
+                // This is necessary, since the "checkOrderStatus" method might change the locale due to translation issues
+                // when sending an order status mail. Therefore we reset it here to the chosen backend language.
+                $this->get('snippets')->setLocale($previousLocale);
+            }
+
+            $data['paymentStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $modelManager->toArray($order->getPaymentStatus()));
+            $data['orderStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $modelManager->toArray($order->getOrderStatus()));
 
             $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
             // Return the modified data array.
@@ -1244,11 +1270,18 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')->getNamespace('frontend/salutation');
 
+        /** @var \Shopware\Components\StateTranslatorServiceInterface $stateTranslator */
+        $stateTranslator = $this->get('shopware.components.state_translator');
+
         $numbers = [];
-        foreach ($orders as $order) {
+        foreach ($orders as $orderKey => $order) {
             $temp = array_column($order['details'], 'articleNumber');
             $numbers = array_merge($numbers, (array) $temp);
+
+            $orders[$orderKey]['orderStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $order['orderStatus']);
+            $orders[$orderKey]['paymentStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $order['paymentStatus']);
         }
+
         $stocks = $this->getVariantsStock($numbers);
 
         $result = [];
@@ -2062,5 +2095,15 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         return $templateName;
+    }
+
+    /**
+     * @return \Shopware\Models\Shop\Locale
+     */
+    private function getCurrentLocale()
+    {
+        $user = $this->get('Auth')->getIdentity();
+
+        return $user->locale;
     }
 }
