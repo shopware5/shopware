@@ -403,6 +403,18 @@ class Repository extends ModelRepository
      */
     public function getList($ids)
     {
+        $query = $this->getListQueryBuilder();
+        $query->where('orders.id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getListQueryBuilder()
+    {
         $query = $this->getEntityManager()->createQueryBuilder();
 
         $query->select([
@@ -438,10 +450,8 @@ class Repository extends ModelRepository
         $query->leftJoin('billing.state', 'billingState');
         $query->leftJoin('orders.shop', 'shop');
         $query->leftJoin('orders.dispatch', 'dispatch');
-        $query->where('orders.id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
     }
 
     /**
