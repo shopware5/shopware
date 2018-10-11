@@ -340,7 +340,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
 
     createDeliveryCountrySelection: function() {
         var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
-        return Ext.create('Ext.form.field.ComboBox', {
+        return Ext.create('Shopware.form.field.PagingComboBox', {
             name: 'shipping.countryId',
             store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
             valueField: 'id',
@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
 
     createBillingCountrySelection: function() {
         var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
-        return Ext.create('Ext.form.field.ComboBox', {
+        return Ext.create('Shopware.form.field.PagingComboBox', {
             name: 'billing.countryId',
             store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
             valueField: 'id',
