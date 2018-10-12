@@ -47,7 +47,9 @@ Ext.define('Shopware.apps.Voucher.model.Tax', {
     */
     fields: [
         //{block name="backend/voucher/model/tax/fields"}{/block}
-        'id', 'name' ],
+        { name: 'id', type: 'string' },
+        { name: 'name', type: 'string' },
+    ],
     /**
     * Configure the data communication
     * @object
