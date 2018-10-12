@@ -257,8 +257,23 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $orderStatus = $this->getOrderStatusQuery()->getArrayResult();
-        $paymentStatus = $this->getRepository()->getPaymentStatusQuery()->getArrayResult();
+        $stateTranslator = $this->get('shopware.components.state_translator');
+
+        $orderState = $this->getOrderStatusQuery()->getArrayResult();
+        $paymentState = $this->getRepository()->getPaymentStatusQuery()->getArrayResult();
+
+        $orderState = array_map(function ($orderStateItem) use ($stateTranslator) {
+            $orderStateItem = $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $orderStateItem);
+
+            return $orderStateItem;
+        }, $orderState);
+
+        $paymentState = array_map(function ($paymentStateItem) use ($stateTranslator) {
+            $paymentStateItem = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $paymentStateItem);
+
+            return $paymentStateItem;
+        }, $paymentState);
+
         $shops = $this->getShopRepository()->getBaseListQuery()->getArrayResult();
         $countries = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
         $payments = $this->getPaymentRepository()->getAllPaymentsQuery()->getArrayResult();
@@ -268,8 +283,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $this->View()->assign([
             'success' => true,
             'data' => [
-                'orderStatus' => $orderStatus,
-                'paymentStatus' => $paymentStatus,
+                'orderStatus' => $orderState,
+                'paymentStatus' => $paymentState,
                 'shops' => $shops,
                 'countries' => $countries,
                 'payments' => $payments,
