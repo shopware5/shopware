@@ -8,11 +8,21 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Additions
 
+* Added the following new blocks to `themes/Frontend/Bare/widgets/captcha/custom_captcha.tpl`
+    * `frontend_widgets_captcha_custom_captcha_config`
+    * `frontend_widgets_captcha_custom_captcha_honeypot`
 * Added dependency to Symfony Expression Language, this allows using something like `container.initialized('shop') ? service('shop') : null` in `services.xml`
 * Added deleteDocument acl privilege to order
 
 ### Changes
 
+* Changed `themes/Frontend/Bare/widgets/captcha/custom_captcha.tpl` to also include the honeypot captcha template if the corresponding option is active
+* Changed `themes/Frontend/Responsive/frontend/_public/src/js/jquery.captcha.js`, so the plugin won't try to fetch the honeypot captcha template via AJAX
+* Changed the following templates to include the `custom_captcha.tpl` template, if any other captcha method than "legacy" is active:
+    * `themes/Frontend/Bare/frontend/blog/comment/form.tpl`
+    * `themes/Frontend/Bare/frontend/detail/comment/form.tpl`
+    * `themes/Frontend/Bare/frontend/newsletter/index.tpl`
+    * `themes/Frontend/Bare/frontend/tellafriend/index.tpl`
 * Changed Symfony library to version 3.4.18
 
 ## 5.5.3

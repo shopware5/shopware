@@ -60,7 +60,10 @@
 
             me.applyDataAttributes(true);
 
-            if (!me.opts.src.length) {
+            var hasSource = me.opts.src.length > 0,
+                isHoneypot = me.opts.src.indexOf('honeypot') >= 0;
+
+            if (!hasSource || isHoneypot) {
                 return;
             }
 
