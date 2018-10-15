@@ -531,7 +531,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     {
         $allPatternsReplaced = false;
         while (!$allPatternsReplaced) {
-            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[mt_rand(1, count($range) - 1)], $generatedCode, 1);
+            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[random_int(1, count($range) - 1)], $generatedCode, 1);
             $allPatternsReplaced = substr_count($generatedCode, $pattern) == 0;
         }
 

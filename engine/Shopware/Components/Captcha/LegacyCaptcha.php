@@ -140,15 +140,15 @@ class LegacyCaptcha implements CaptchaInterface
 
         if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); ++$i) {
-                $rand1 = rand(35, 40);
-                $rand2 = rand(15, 20);
-                $rand3 = rand(60, 70);
+                $rand1 = random_int(35, 40);
+                $rand2 = random_int(15, 20);
+                $rand3 = random_int(60, 70);
                 imagettftext($im, $rand1, $rand2, ($i + 1) * 15, $rand3, $black, $font, substr($string, $i, 1));
                 imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, substr($string, $i, 1));
             }
             for ($i = 0; $i < 8; ++$i) {
-                imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
-                imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
+                imageline($im, random_int(30, 70), random_int(0, 50), random_int(100, 150), random_int(20, 100), $black);
+                imageline($im, random_int(30, 70), random_int(0, 50), random_int(100, 150), random_int(20, 100), $black);
             }
         } else {
             $white = imagecolorallocate($im, 255, 255, 255);
