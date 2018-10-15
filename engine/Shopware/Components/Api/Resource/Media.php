@@ -179,14 +179,14 @@ class Media extends Resource
         }
 
         if (!empty($params['file'])) {
-            $tmpFile = $this->saveAsTempMediaFile($params['file']);
-            $file = new UploadedFile($tmpFile, $params['file']);
+            $path = $this->load($params['file'], $media->getFileName());
+            $file = new UploadedFile($path, $params['file']);
 
             try {
                 $this->getContainer()->get('shopware_media.replace_service')->replace($id, $file);
-                @unlink($tmpFile);
+                @unlink($path);
             } catch (\Exception $exception) {
-                @unlink($tmpFile);
+                @unlink($path);
                 throw new ApiException\CustomValidationException($exception->getMessage());
             }
         }
@@ -303,34 +303,27 @@ class Media extends Resource
             return $this->uploadBase64File($url, $destPath, $baseFilename);
         }
 
-        $urlArray = parse_url($url);
-        $urlArray['path'] = explode('/', $urlArray['path']);
-        switch ($urlArray['scheme']) {
-            case 'ftp':
-            case 'ftps':
-            case 'http':
-            case 'https':
-            case 'file':
-                $filename = $this->getUniqueFileName($destPath, $baseFilename);
+        $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($url);
 
-                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
-                    throw new \Exception("Could not open $destPath/$filename for writing");
-                }
+        $filename = $this->getUniqueFileName($destPath, $baseFilename);
+        $filePath = sprintf('%s/%s', $destPath, $filename);
 
-                if (!$get_handle = fopen($url, 'rb')) {
-                    throw new \Exception("Could not open $url for reading");
-                }
-                while (!feof($get_handle)) {
-                    fwrite($put_handle, fgets($get_handle, 4096));
-                }
-                fclose($get_handle);
-                fclose($put_handle);
-
-                return "$destPath/$filename";
+        if (!$put_handle = fopen($filePath, 'wb+')) {
+            throw new \Exception(sprintf('Could not open %s for writing', $filePath));
         }
-        throw new \InvalidArgumentException(
-            sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
-        );
+
+        if (!$get_handle = fopen($url, 'rb')) {
+            throw new \Exception(sprintf('Could not open %s for reading', $url));
+        }
+
+        while (!feof($get_handle)) {
+            fwrite($put_handle, fgets($get_handle, 4096));
+        }
+
+        fclose($get_handle);
+        fclose($put_handle);
+
+        return sprintf('%s/%s', $destPath, $filename);
     }
 
     /**
@@ -465,6 +458,8 @@ class Media extends Resource
             $params['name'] = $this->getUniqueFileName($params['file'], $params['name']);
             $originalName = $params['file'];
 
+            $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($params['file']);
+
             if (!file_exists($params['file']) || strpos($params['file'], 'ftp://') === 0) {
                 try {
                     $path = $this->load($params['file'], $params['name']);
@@ -503,29 +498,5 @@ class Media extends Resource
         }
 
         return $oldPath;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @throws \RuntimeException
-     *
-     * @return string
-     */
-    private function saveAsTempMediaFile($url)
-    {
-        $tmpFile = tempnam(sys_get_temp_dir(), 'media_update');
-        $localStream = fopen($tmpFile, 'wb');
-
-        if (!$remoteStream = fopen($url, 'rb')) {
-            throw new \RuntimeException(sprintf('Could not open url for reading: %s', $url));
-        }
-
-        stream_copy_to_stream($remoteStream, $localStream);
-
-        fclose($remoteStream);
-        fclose($localStream);
-
-        return $tmpFile;
     }
 }
