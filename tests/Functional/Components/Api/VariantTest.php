@@ -751,35 +751,31 @@ class VariantTest extends TestCase
         }
     }
 
-    /**
-     * @return void
-     */
     public function testCreateEsdVariant()
     {
-        $params = array(
+        $params = [
             'name' => 'My awesome liquor',
             'description' => 'hmmmmm',
             'active' => true,
-            'taxId'      => 1,
-            'mainDetail' => array(
+            'taxId' => 1,
+            'mainDetail' => [
                 'number' => 'brand1' . uniqid(rand()),
                 'inStock' => 15,
                 'active' => true,
 
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
-                        'from'  => 1,
-                        'price' => 50
-                    )
-                ),
+                        'from' => 1,
+                        'price' => 50,
+                    ],
+                ],
                 'esd' => [
-                    'link' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
+                    'file' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
                     'reuse' => true,
                 ],
-
-            )
-        );
+            ],
+        ];
 
         $article = $this->resourceArticle->create($params);
 
@@ -787,53 +783,49 @@ class VariantTest extends TestCase
         $this->assertEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
     }
 
-    /**
-     * @return void
-     */
     public function testCreateEsdWithSerialsVariant()
     {
-        $params = array(
+        $params = [
             'name' => 'My awesome liquor',
             'description' => 'hmmmmm',
             'active' => true,
-            'taxId'      => 1,
-            'mainDetail' => array(
+            'taxId' => 1,
+            'mainDetail' => [
                 'number' => 'brand2' . uniqid(rand()),
                 'inStock' => 15,
                 'active' => true,
 
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
-                        'from'  => 1,
-                        'price' => 50
-                    )
-                ),
+                        'from' => 1,
+                        'price' => 50,
+                    ],
+                ],
                 'esd' => [
-                    'link' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
+                    'file' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
                     'reuse' => true,
                     'hasSerials' => true,
                     'serials' => [
                         [
-                            'serialnumber' => '1000'
+                            'serialnumber' => '1000',
                         ],
                         [
-                            'serialnumber' => '1001'
+                            'serialnumber' => '1001',
                         ],
                         [
-                            'serialnumber' => '1002'
+                            'serialnumber' => '1002',
                         ],
                         [
-                            'serialnumber' => '1003'
+                            'serialnumber' => '1003',
                         ],
                         [
-                            'serialnumber' => '1004'
+                            'serialnumber' => '1004',
                         ],
-                    ]
+                    ],
                 ],
-
-            )
-        );
+            ],
+        ];
 
         $article = $this->resourceArticle->create($params);
 
@@ -845,51 +837,49 @@ class VariantTest extends TestCase
 
     /**
      * @depends testCreateEsdVariant
-     * @return void
      */
     public function testCreateEsdReuseVariant()
     {
-        $params = array(
+        $params = [
             'name' => 'My awesome liquor',
             'description' => 'hmmmmm',
             'active' => true,
-            'taxId'      => 1,
-            'mainDetail' => array(
+            'taxId' => 1,
+            'mainDetail' => [
                 'number' => 'brand2' . uniqid(rand()),
                 'inStock' => 15,
                 'active' => true,
 
-                'prices' => array(
-                    array(
+                'prices' => [
+                    [
                         'customerGroupKey' => 'EK',
-                        'from'  => 1,
-                        'price' => 50
-                    )
-                ),
+                        'from' => 1,
+                        'price' => 50,
+                    ],
+                ],
                 'esd' => [
-                    'link' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
+                    'file' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
                     'hasSerials' => true,
                     'serials' => [
                         [
-                            'serialnumber' => '1000'
+                            'serialnumber' => '1000',
                         ],
                         [
-                            'serialnumber' => '1001'
+                            'serialnumber' => '1001',
                         ],
                         [
-                            'serialnumber' => '1002'
+                            'serialnumber' => '1002',
                         ],
                         [
-                            'serialnumber' => '1003'
+                            'serialnumber' => '1003',
                         ],
                         [
-                            'serialnumber' => '1004'
+                            'serialnumber' => '1004',
                         ],
-                    ]
+                    ],
                 ],
-
-            )
-        );
+            ],
+        ];
 
         $article = $this->resourceArticle->create($params);
 

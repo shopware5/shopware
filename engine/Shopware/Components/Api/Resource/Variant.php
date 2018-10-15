@@ -1057,8 +1057,9 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param $data
+     * @param array  $data
      * @param Detail $variant
+     *
      * @return array
      */
     private function prepareEsdAssociation($data, Detail $variant)
@@ -1076,10 +1077,10 @@ class Variant extends Resource implements BatchInterface
                 $esd->setArticleDetail($variant);
             }
 
-            if (isset($data['esd']['link'])) {
-                $file = $this->getMediaResource()->load($data['esd']['link']);
-                $fileName = pathinfo($data['esd']['link'], PATHINFO_FILENAME);
-                $fileExt = pathinfo($data['esd']['link'], PATHINFO_EXTENSION);
+            if (isset($data['esd']['file'])) {
+                $file = $this->getMediaResource()->load($data['esd']['file']);
+                $fileName = pathinfo($data['esd']['file'], PATHINFO_FILENAME);
+                $fileExt = pathinfo($data['esd']['file'], PATHINFO_EXTENSION);
 
                 $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
 
@@ -1113,7 +1114,8 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * @param array $data
-     * @param Esd $esd
+     * @param Esd   $esd
+     *
      * @return array
      */
     private function prepareEsdSerialsAssociation($data, Esd $esd)
@@ -1144,6 +1146,7 @@ class Variant extends Resource implements BatchInterface
             foreach ($esd->getSerials() as $serial) {
                 if ($newSerial['serialnumber'] === $serial->getSerialnumber()) {
                     $found = true;
+                    break;
                 }
             }
 
