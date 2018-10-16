@@ -177,6 +177,20 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
+     * Resets the currently set shop of the SnippetManager
+     *
+     * @return $this
+     */
+    public function resetShop()
+    {
+        $this->shop = null;
+        $this->namespaces = [];
+        $this->extends = [];
+
+        return $this;
+    }
+
+    /**
      * @param $dir
      *
      * @return Shopware_Components_Snippet_Manager

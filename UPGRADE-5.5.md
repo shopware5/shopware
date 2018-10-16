@@ -27,7 +27,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added numeric amounts for cart items in cart array structure
 * Added new notify event `Shopware_CronJob_Notification_Product_QueryBuilder` to the notification plugin to be able to change the QueryBuilder
 * Added new filter event `Shopware_Modules_Basket_InsertDiscount_FilterParams` to the basket discount functionality
-* Added service `\Shopware\Components\StreamProtocolValidator` (service id: `shopware.components.stream_protocol_validator`) to validate stream protocols in URLs 
+* Added service `\Shopware\Components\StreamProtocolValidator` (service id: `shopware.components.stream_protocol_validator`) to validate stream protocols in URLs
+* Added method `resetShop` to `Shopware/Components/Snippet/Manager.php` to reset the assigned shop
 
 ### Changes
 

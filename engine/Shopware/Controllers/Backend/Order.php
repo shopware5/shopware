@@ -843,6 +843,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 // This is necessary, since the "checkOrderStatus" method might change the locale due to translation issues
                 // when sending an order status mail. Therefore we reset it here to the chosen backend language.
                 $this->get('snippets')->setLocale($previousLocale);
+                $this->get('snippets')->resetShop();
             }
 
             $data['paymentStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $modelManager->toArray($order->getPaymentStatus()));
