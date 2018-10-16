@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Attribute extends Struct implements \JsonSerializable
+class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
 {
     /**
      * Internal storage which contains all struct data.
@@ -41,12 +41,12 @@ class Attribute extends Struct implements \JsonSerializable
     /**
      * @param array $data
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function __construct($data = [])
     {
         if (!$this->isValid($data)) {
-            throw new \Exception('Class values should be serializable');
+            throw new \InvalidArgumentException('Class values should be serializable');
         }
         $this->storage = $data;
     }
@@ -71,12 +71,12 @@ class Attribute extends Struct implements \JsonSerializable
      * @param string $name
      * @param mixed  $value
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function set($name, $value)
     {
         if (!$this->isValid($value)) {
-            throw new \Exception('Class values should be serializable');
+            throw new \InvalidArgumentException('Class values should be serializable');
         }
 
         $this->storage[$name] = $value;
@@ -136,5 +136,40 @@ class Attribute extends Struct implements \JsonSerializable
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($offset)
+    {
+        return $this->exists($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->set($offset, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        if ($this->exists($offset)) {
+            unset($this->storage[$offset]);
+        }
     }
 }
