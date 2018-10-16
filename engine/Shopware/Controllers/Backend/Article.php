@@ -535,7 +535,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $id = $this->Request()->getParam('articleId');
         $priceGroups = $this->getRepository()->getPriceGroupQuery()->getArrayResult();
         $suppliers = $this->getRepository()->getSuppliersQuery()->getArrayResult();
-        $shops = $this->getShopRepository()->createQueryBuilder('shops')->getQuery()->getArrayResult();
+        $shops = $this->getShopRepository()->createQueryBuilder('shops')->andWhere('shops.active = 1')->getQuery()->getArrayResult();
         $taxes = $this->getRepository()->getTaxesQuery()->getArrayResult();
         $templates = $this->getTemplates();
         $units = $this->getRepository()->getUnitsQuery()->getArrayResult();
