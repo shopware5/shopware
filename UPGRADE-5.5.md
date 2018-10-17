@@ -27,7 +27,29 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added numeric amounts for cart items in cart array structure
 * Added new notify event `Shopware_CronJob_Notification_Product_QueryBuilder` to the notification plugin to be able to change the QueryBuilder
 * Added new filter event `Shopware_Modules_Basket_InsertDiscount_FilterParams` to the basket discount functionality
-* Added service `\Shopware\Components\StreamProtocolValidator` (service id: `shopware.components.stream_protocol_validator`) to validate stream protocols in URLs 
+* Added service `\Shopware\Components\StreamProtocolValidator` (service id: `shopware.components.stream_protocol_validator`) to validate stream protocols in URLs
+* Added method `resetShop` to `Shopware/Components/Snippet/Manager.php` to reset the assigned shop
+* Added event `Shopware_Modules_Admin_GetDispatchBasket_Calculation_QueryBuilder` to change the possible dispatches for the basket (SW-22646)
+* Added confirmation dialog when deleting or overwriting a order document
+* Added streamId translation of categories
+* Added "not in" compare to product stream attributes
+* Added information to systeminfo to show time difference between MySQL and PHP
+* Added Polish language to installer
+* Added amountNumeric and priceNumeric to order items in template
+* Added numeric amounts for basket items
+* Added column "active" for product feed-list in the backend
+* Added mapping for `voteAverage.average` for elastic search indexing
+* Added proper helpText to 'displayOnlySubShopVotes' configuration
+* Added possibility to remove supplier images via REST API
+* Added unit test for manufacturers api resource
+* Added instance check for ES category facet
+* Added random sorting option to emotion products slider
+* Added support for configurable lengths of the meta description
+* Added `getListQueryBuilder` method to `Shopware/Models/Order/Repository.php`
+* Added plugin manager reloading on plugin update failure
+* Added `CheapestPriceESGateway` to be able to use the price filter with ES
+* Added new filter event `Shopware_Controllers_Article_CreateConfiguratorVariants_FilterData` to article backend controller to modify variant data during generation
+* Added new property `pageShortParameter` in `jquery.infinite-scrolling.js` to add compatibility with a custom sPage query alias in the product listings
 
 ### Changes
 
@@ -46,13 +68,21 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed VariantFilter to work with different customer group then fallback customer group
 * Changed `detailAction` method of `Emotion` backend controller to not add the shop base URL to media URLs again if it's already set
 * Changed statistic call to also encode `&` in `referer` parameter
-* Changed fixed page query parameter in `themes/Frontend/Bare/frontend/listing/actions/action-pagination.tpl` with it's dynamic alias.
 * Changed menu-scroller to hide scrollbar on IE 11
+* Changed Media Resource of REST API to deal with uploads that contain a ftp file-path
+* Changed product module preview combobox to preselect the default shop
+* Changed API media resource to support `file://` paths
+* Changed sub-albums to inherit thumbnail settings on creation
+* Changed ajax variant jquery plugin have a own function for pushing history states
+* Changed default value of required in config.xsd to match `XmlConfigDefinitionReader`
+* Changed `JsonRequest` to use `getRawBody()` instead of `php://input`
+* Changed `Shopware.apps.Voucher.model.Tax` to explicit define field types
 
 ### Removals
 
 * Removed trailing slash from LESS variable `@font-directory`
 * Removed private method `Shopware_Controllers_Widgets_Emotion::getEmotionsByCategoryId`
+* Remove unused `ajax_validate_billing` case in `jquery.register.js`
 
 ## 5.5.1
 
@@ -180,7 +210,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * Added `Shopware_Controllers_Backend_Order::getMailTemplatesAction`
     * Added `Shopware\Models\Mail\Mail::isDocumentMail`
     * Added `Shopware\Models\Mail\Repository::getMailsListQueryBuilder`
-* Added new filter event `Shopware_Controllers_Article_CreateConfiguratorVariants_FilterData` to article backend controller to modify variant data during generation
 
 ### Changes
 
