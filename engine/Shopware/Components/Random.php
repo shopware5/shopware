@@ -200,7 +200,7 @@ abstract class Random
             $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
         }
         if (in_array('d', $availableSets)) {
-            $sets[] = '23456789';
+            $sets[] = '0123456789';
         }
         if (in_array('s', $availableSets)) {
             $sets[] = '!@#$%&*?';
