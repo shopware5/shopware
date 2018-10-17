@@ -290,9 +290,7 @@ class sAdmin
         }
 
         // Check additional rules
-        if ($this->sManageRisks($data['id'], null, $user)
-            && $data['id'] != $user['additional']['user']['paymentpreset']
-        ) {
+        if ($this->sManageRisks($data['id'], null, $user)) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
