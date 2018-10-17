@@ -156,6 +156,7 @@
                 },
                 complete: function () {
                     $.loadingIndicator.close();
+                    $.publish('plugin/swAjaxVariant/onRequestDataComplete');
                 }
             });
         },
