@@ -27,6 +27,7 @@ use Shopware\Components\Emotion\EmotionExporter;
 use Shopware\Components\Emotion\Exception\MappingRequiredException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
+use Shopware\Models\Emotion\Data;
 use Shopware\Models\Emotion\Element;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
@@ -1541,7 +1542,14 @@ EOD;
      */
     private function getElementIdentifier(Element $el)
     {
-        return $el->getStartCol() . $el->getStartRow() . $el->getEndCol() . $el->getEndRow();
+        $data = array_map(function (Data $data) {
+            /** @var Field $field */
+            $field = $data->getField();
+
+            return $field->getName() . $data->getValue();
+        }, $el->getData()->toArray());
+
+        return md5(implode($data));
     }
 
     /**
