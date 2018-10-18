@@ -103,7 +103,7 @@
         {/block}
 
         {block name="frontend_index_footer_column_newsletter_content"}
-            <div class="column--content">
+            <div class="column--content" data-newsletter="true">
                 <p class="column--desc">
                     {s name="sFooterNewsletter"}{/s}
                 </p>
