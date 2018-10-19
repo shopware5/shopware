@@ -1945,6 +1945,40 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         }
     }
 
+    public function testsGetBasketWithInvalidProduct()
+    {
+        $this->assertEquals([], $this->module->sGetBasket());
+
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        $randomArticle = $this->db->fetchRow(
+            'SELECT * FROM s_articles_details detail
+            INNER JOIN s_articles article
+              ON article.id = detail.articleID
+            WHERE detail.active = 1
+            LIMIT 1'
+        );
+
+        $this->db->insert(
+            's_order_basket',
+            [
+                'price' => 2,
+                'quantity' => 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => $randomArticle['ordernumber'],
+                'articleID' => $randomArticle['articleID'],
+            ]
+        );
+
+        $this->assertEquals(1, count($this->module->sGetBasket()['content']));
+
+        $this->db->delete('s_articles_details', ['articleID = ?' => $randomArticle['articleID']]);
+        $this->db->delete('s_articles', ['id = ?' => $randomArticle['articleID']]);
+
+        $this->assertEquals([], $this->module->sGetBasket());
+    }
+
     /**
      * @covers \sBasket::sAddNote
      */
