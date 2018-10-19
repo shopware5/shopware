@@ -2897,6 +2897,10 @@ SQL;
             $additionalInfo = $cartItem->getAdditionalInfo();
             $priceResult = [];
 
+            if ($prices === null) {
+                continue;
+            }
+
             foreach ($prices as $price) {
                 if ($additionalInfo['pricegroupActive'] && $price['from'] === '1') {
                     $priceResult[$price['pricegroup']] = $price;
