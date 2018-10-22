@@ -267,27 +267,25 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             'subject' => $this,
         ]);
 
-        $paperFormat = 'A4';
-        $paperFormat = $eventManager->filter(
-            'Shopware_Document_Render_Get_Paper_Format',
-            $paperFormat,
-            [
-                'template' => $this->_document['template'],
-                'document' => $this->_document
-            ]
-        );
-
         if ($this->_renderer === 'html' || !$this->_renderer) {
             echo $html;
         } elseif ($this->_renderer === 'pdf') {
+            $defaultConfig = Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig');
+            $defaultConfig = $eventManager->filter(
+                'Shopware_Components_Document_Render_FilterMpdfConfig',
+                $defaultConfig,
+                [
+                    'template' => $this->_document['template'],
+                    'document' => $this->_document,
+                ]
+            );
             $mpdfConfig = array_replace_recursive(
-                Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig'),
+                $defaultConfig,
                 [
                     'margin_left' => $this->_document['left'],
                     'margin_right' => $this->_document['right'],
                     'margin_top' => $this->_document['top'],
                     'margin_bottom' => $this->_document['bottom'],
-                    'format' => $paperFormat,
                 ]
             );
             if ($this->_preview == true || !$this->_documentHash) {
@@ -308,7 +306,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $filesystem = Shopware()->Container()->get('shopware.filesystem.private');
             $filesystem->putStream($path, $stream);
             unlink($tmpFile);
-
         }
     }
 
