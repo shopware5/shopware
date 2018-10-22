@@ -61,7 +61,7 @@ class MarketingService implements Service\MarketingServiceInterface
         $marker = (int) $this->config->get('markAsNew');
 
         $attribute->setIsNew(
-            ($diff->days <= $marker || $product->getCreatedAt() > $today)
+            (($diff && $diff->days <= $marker) || $product->getCreatedAt() > $today)
         );
 
         $attribute->setComingSoon(
