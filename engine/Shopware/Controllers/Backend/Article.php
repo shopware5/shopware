@@ -43,80 +43,80 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @var \Shopware\Models\Article\Repository
      */
-    protected $repository;
+    protected $repository = null;
 
     /**
      * Repository for the shop model
      *
      * @var Repository
      */
-    protected $shopRepository;
+    protected $shopRepository = null;
 
     /**
      * Repository for the customer model
      *
      * @var \Shopware\Models\Customer\Repository
      */
-    protected $customerRepository;
+    protected $customerRepository = null;
 
     /**
      * Repository for the category model
      *
      * @var \Shopware\Models\Category\Repository
      */
-    protected $categoryRepository;
+    protected $categoryRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $articleDetailRepository;
+    protected $articleDetailRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $customerGroupRepository;
+    protected $customerGroupRepository = null;
 
     /**
      * Entity Manager
      *
      * @var null
      */
-    protected $manager;
+    protected $manager = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $configuratorDependencyRepository;
+    protected $configuratorDependencyRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $configuratorPriceVariationRepository;
+    protected $configuratorPriceVariationRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $configuratorGroupRepository;
+    protected $configuratorGroupRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $configuratorOptionRepository;
+    protected $configuratorOptionRepository = null;
 
     /**
      * @var Shopware_Components_Translation
      */
-    protected $translation;
+    protected $translation = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $configuratorSetRepository;
+    protected $configuratorSetRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $propertyValueRepository;
+    protected $propertyValueRepository = null;
 
     public function initAcl()
     {
@@ -155,7 +155,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function saveAction()
     {
         $data = $this->Request()->getParams();
-
         if ($this->Request()->has('id')) {
             /** @var Article $article */
             $article = $this->getRepository()->find((int) $this->Request()->getParam('id'));
@@ -168,15 +167,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $lastChanged = $article->getChanged();
             }
 
-            if ($lastChanged->getTimestamp() < 0 && $article->getChanged()->getTimestamp() < 0) {
-                $lastChanged = $article->getChanged();
-            }
-
-            $diff = abs($article->getChanged()->getTimestamp() - $lastChanged->getTimestamp());
-
-            // We have timestamp conversion issues on Windows Users
-            if ($diff > 1) {
-                $namespace = $this->get('snippets')->getNamespace('backend/article/controller/main');
+            if ($article->getChanged()->getTimestamp() !== $lastChanged->getTimestamp()) {
+                $namespace = Shopware()->Snippets()->getNamespace('backend/article/controller/main');
 
                 $this->View()->assign([
                     'success' => false,
