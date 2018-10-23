@@ -74,6 +74,16 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         ];
     }
 
+    public function indexAction()
+    {
+        parent::indexAction();
+
+        $this->View()->assign(
+            'serverTimeZoneOffsetToUtcInSeconds',
+            (new DateTime())->getOffset()
+        );
+    }
+
     /**
      * Returns all supported detail status as an array. The status are used on the detail
      * page in the position grid to edit or create an order position.
