@@ -2,6 +2,18 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.3
+
+[View all changes from v5.5.2...v5.5.3](https://github.com/shopware/shopware/compare/v5.5.2...v5.5.3)
+
+### Additions
+
+* Added ESD Article support for REST API
+
+### Changes
+
+### Removals
+
 ## 5.5.2
 
 [View all changes from v5.5.1...v5.5.2](https://github.com/shopware/shopware/compare/v5.5.1...v5.5.2)

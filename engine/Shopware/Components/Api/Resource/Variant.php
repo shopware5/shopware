@@ -32,6 +32,8 @@ use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Esd;
+use Shopware\Models\Article\EsdSerial;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
@@ -544,6 +546,9 @@ class Variant extends Resource implements BatchInterface
         if (isset($data['images'])) {
             $data = $this->prepareImageAssociation($data, $article, $variant);
         }
+        if (isset($data['esd'])) {
+            $data = $this->prepareEsdAssociation($data, $variant);
+        }
 
         if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
             $connection = Shopware()->Container()->get('dbal_connection');
@@ -1049,5 +1054,113 @@ class Variant extends Resource implements BatchInterface
         }
 
         throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
+    }
+
+    /**
+     * @param array  $data
+     * @param Detail $variant
+     *
+     * @return array
+     */
+    private function prepareEsdAssociation($data, Detail $variant)
+    {
+        if (is_array($data['esd'])) {
+            $esd = $variant->getEsd();
+
+            // Use already uploaded download file
+            if (!isset($data['esd']['reuse'])) {
+                $data['esd']['reuse'] = false;
+            }
+
+            if (!$esd) {
+                $esd = new Esd();
+                $esd->setArticleDetail($variant);
+            }
+
+            if (isset($data['esd']['file'])) {
+                $file = $this->getMediaResource()->load($data['esd']['file']);
+                $fileName = pathinfo($data['esd']['file'], PATHINFO_FILENAME);
+                $fileExt = pathinfo($data['esd']['file'], PATHINFO_EXTENSION);
+
+                $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
+
+                // File already exists?
+                if (file_exists($esdDir . '/' . $fileName . '.' . $fileExt) && !$data['esd']['reuse']) {
+                    $saveFileName = uniqid($fileName) . '.' . $fileExt;
+                } else {
+                    $saveFileName = $fileName . '.' . $fileExt;
+                }
+                $saveFile = $esdDir . '/' . $saveFileName;
+
+                copy($file, $saveFile);
+                @unlink($file);
+                $data['esd']['file'] = $saveFileName;
+            }
+
+            if (isset($data['esd']['serials'])) {
+                $data = $this->prepareEsdSerialsAssociation($data, $esd);
+            }
+
+            $esd->fromArray($data['esd']);
+            $variant->setEsd($esd);
+        } elseif (is_null($data['esd'])) {
+            $variant->setEsd(null);
+        }
+
+        unset($data['esd']);
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param Esd   $esd
+     *
+     * @return array
+     */
+    private function prepareEsdSerialsAssociation($data, Esd $esd)
+    {
+        // remove old serials
+        /** @var EsdSerial $serial */
+        foreach ($esd->getSerials() as $serial) {
+            $found = false;
+            foreach ($data['esd']['serials'] as $newSerial) {
+                if ($newSerial['serialnumber'] === $serial->getSerialnumber()) {
+                    $serial->fromArray($newSerial);
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->manager->remove($serial);
+                $esd->getSerials()->removeElement($serial);
+            }
+        }
+
+        // add new items
+        foreach ($data['esd']['serials'] as $newSerial) {
+            $found = false;
+
+            /** @var EsdSerial $serial */
+            foreach ($esd->getSerials() as $serial) {
+                if ($newSerial['serialnumber'] === $serial->getSerialnumber()) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $newSerialModel = new EsdSerial();
+                $newSerialModel->fromArray($newSerial);
+                $newSerialModel->setEsd($esd);
+                $this->getManager()->persist($newSerialModel);
+                $esd->getSerials()->add($newSerialModel);
+            }
+        }
+
+        unset($data['esd']['serials']);
+
+        return $data;
     }
 }
