@@ -145,16 +145,13 @@ class User extends Resource
     /**
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     *
      * @return UserModel
      */
     public function create(array $params)
     {
         $this->checkPrivilege('create', 'usermanager');
 
-        // create models
+        // Create models
         $user = new UserModel();
         $params = $this->prepareAssociatedData($params, $user);
         $user->fromArray($params);
@@ -173,10 +170,8 @@ class User extends Resource
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\ValidationException
      *
      * @return UserModel
      */
@@ -200,7 +195,7 @@ class User extends Resource
             ->where('user.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $user UserModel */
+        /** @var UserModel $user */
         $user = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
         if (!$user) {
@@ -236,7 +231,7 @@ class User extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $user UserModel */
+        /** @var UserModel $user */
         $user = $this->getRepository()->find($id);
 
         if (!$user) {
@@ -312,7 +307,7 @@ class User extends Resource
      */
     protected function prepareAssociatedData(array $data, UserModel $user)
     {
-        // check if a role id or role name is passed and load the role model or set the role parameter to null.
+        // Check if a role id or role name is passed and load the role model or set the role parameter to null.
         if (!empty($data['roleId'])) {
             $data['role'] = $this->getManager()->find(Role::class, $data['roleId']);
 
@@ -330,7 +325,7 @@ class User extends Resource
             unset($data['role']);
         }
 
-        // check if a locale id or name is passed.
+        // Check if a locale id or name is passed.
         if (!empty($data['localeId'])) {
             if (!$this->isLocaleId($data['localeId'])) {
                 throw new ApiException\CustomValidationException(sprintf('Locale by id %s not found', $data['localeId']));

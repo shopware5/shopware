@@ -43,7 +43,7 @@ class Manufacturer extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Article\Supplier');
+        return $this->getManager()->getRepository(\Shopware\Models\Article\Supplier::class);
     }
 
     /**
@@ -64,7 +64,7 @@ class Manufacturer extends Resource
 
         $query = $this->getRepository()->getDetailQuery($id);
 
-        /** @var $manufacturer \Shopware\Models\Article\Supplier */
+        /** @var \Shopware\Models\Article\Supplier $manufacturer */
         $manufacturer = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$manufacturer) {
@@ -91,10 +91,10 @@ class Manufacturer extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the manufacturer data
+        // Returns the manufacturer data
         $manufacturers = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $manufacturers, 'total' => $totalResult];
@@ -119,7 +119,7 @@ class Manufacturer extends Resource
         $manufacturer->fromArray($params);
 
         if (isset($params['id'])) {
-            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Supplier');
+            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor(\Shopware\Models\Article\Supplier::class);
             $metaData->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $manufacturer->setPrimaryIdentifier($params['id']);
         }
@@ -153,7 +153,7 @@ class Manufacturer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $manufacturer \Shopware\Models\Article\Supplier */
+        /** @var \Shopware\Models\Article\Supplier $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
@@ -190,7 +190,7 @@ class Manufacturer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $manufacturer \Shopware\Models\Article\Supplier */
+        /** @var \Shopware\Models\Article\Supplier $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
@@ -250,7 +250,7 @@ class Manufacturer extends Resource
             $media = $resource->internalCreateMediaByFileLink($data['image']['link'], Album::ALBUM_SUPPLIER);
         } elseif (!empty($data['image']['mediaId'])) {
             $media = $this->getManager()->find(
-                'Shopware\Models\Media\Media',
+                \Shopware\Models\Media\Media::class,
                 (int) $data['image']['mediaId']
             );
 

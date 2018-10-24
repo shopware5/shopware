@@ -315,7 +315,7 @@ class %className% extends ModelEntity
      */
     public function createModelFile($table, $sourceCode)
     {
-        //at least we need a file name for the current table object.
+        // At least we need a file name for the current table object.
         $className = $this->getClassNameOfTableName($table->getName());
         if (strpos($table->getName(), '_attributes')) {
             $tableName = str_replace('_attributes', '', $table->getName());

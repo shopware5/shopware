@@ -121,11 +121,11 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * Convenient method
+     * Convenience method
      *
      * Abstracts optional $context and compatibilityMode
      *
-     * @param $value string
+     * @param string     $value
      * @param null|array $context
      *
      * @return string
@@ -151,8 +151,8 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * @param $value string
-     * @param $context array
+     * @param string $value
+     * @param array  $context
      *
      * @throws Enlight_Exception
      *
@@ -181,8 +181,8 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * @param $value string
-     * @param $context array
+     * @param string $value
+     * @param array  $context
      *
      * @return string
      */

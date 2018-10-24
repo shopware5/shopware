@@ -56,7 +56,7 @@ class CacheClearCommand extends ShopwareCommand
         $filesystem = $this->getContainer()->get('file_system');
 
         if (!is_writable($realCacheDir)) {
-            throw new \RuntimeException(sprintf('Unable to write in directory "%s"', $realCacheDir));
+            throw new \RuntimeException(sprintf('Unable to write into directory "%s"', $realCacheDir));
         }
 
         if ($filesystem->exists($oldCacheDir)) {

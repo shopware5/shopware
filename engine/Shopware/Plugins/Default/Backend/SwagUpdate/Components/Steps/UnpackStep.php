@@ -56,7 +56,7 @@ class UnpackStep
     }
 
     /**
-     * @param $offset
+     * @param int $offset
      *
      * @throws \RuntimeException
      * @throws \Exception
@@ -86,7 +86,7 @@ class UnpackStep
                 $fs->dumpFile($targetName, $entry->getContents());
             }
 
-            if (time() - $requestTime >= 20 || ($position + 1) % 1000 == 0) {
+            if (time() - $requestTime >= 20 || ($position + 1) % 1000 === 0) {
                 $source->close();
 
                 return new ValidResult($position + 1, $count);

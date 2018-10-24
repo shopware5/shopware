@@ -87,7 +87,7 @@ class JavascriptCollector
 
             $theme = $definition->getTheme();
 
-            // not all definitions are associated with a specific theme (e.g. plugins)
+            // Not all definitions are associated with a specific theme (e.g. plugins)
             if ($theme) {
                 $themeClassName = get_class($theme);
                 $discardJs = array_merge($discardJs, $theme->getDiscardedJavascriptThemes());
@@ -111,7 +111,7 @@ class JavascriptCollector
     }
 
     /**
-     * @param $inheritance
+     * @param array $inheritance
      *
      * @throws \Exception
      *
@@ -166,11 +166,11 @@ class JavascriptCollector
     }
 
     /**
-     * @param $definitions
+     * @param JavascriptDefinition[] $definitions
      *
      * @return array
      */
-    private function getUniqueFiles($definitions)
+    private function getUniqueFiles(array $definitions)
     {
         $files = [];
         /** @var JavascriptDefinition $definition */

@@ -146,7 +146,7 @@ class Status extends ModelEntity
     {
         $this->id = $id;
     }
-    
+
     /**
      * @return string
      */

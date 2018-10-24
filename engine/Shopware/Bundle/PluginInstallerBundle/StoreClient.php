@@ -525,7 +525,7 @@ class StoreClient
         $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException(sprintf('Signature not found in %s header', $signatureHeaderName));
+            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->openSSLVerifier->isSystemSupported()) {

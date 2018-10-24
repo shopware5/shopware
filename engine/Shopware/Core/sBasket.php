@@ -1693,7 +1693,7 @@ SQL;
                 );
 
                 if (!$update || !$updatedPrice) {
-                    throw new Enlight_Exception(sprintf('Basket Update ##01 Could not update quantity%s', $sql));
+                    throw new Enlight_Exception(sprintf('Basket Update ##01 Could not update quantity %s', $sql));
                 }
             }
         }

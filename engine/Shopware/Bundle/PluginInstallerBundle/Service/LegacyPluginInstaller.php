@@ -92,22 +92,22 @@ class LegacyPluginInstaller
     {
         $bootstrap = $this->getPluginBootstrap($plugin);
 
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
+        /** @var \Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $bootstrap->Collection();
 
         try {
             $result = $namespace->installPlugin($bootstrap);
         } catch (\Exception $e) {
-            throw new \Exception(sprintf("Unable to install, got exception:\n%s\n", $e->getMessage()), 0, $e);
+            throw new \Exception(sprintf("Unable to install '%s', got exception:\n%s\n", $plugin->getName(), $e->getMessage()), 0, $e);
         }
 
         $result = is_bool($result) ? ['success' => $result] : $result;
 
         if (!$result['success']) {
             if (isset($result['message'])) {
-                throw new \Exception(sprintf("Unable to install, got message:\n%s\n", $result['message']));
+                throw new \Exception(sprintf("Unable to install '%s', got message:\n'%s'\n", $plugin->getName(), $result['message']));
             }
-            throw new \Exception(sprintf('Unable to install %s, an unknown error occured.', $plugin->getName()));
+            throw new \Exception(sprintf('Unable to install "%s", an unknown error occured.', $plugin->getName()));
         }
 
         return $result;
@@ -125,20 +125,20 @@ class LegacyPluginInstaller
     {
         $bootstrap = $this->getPluginBootstrap($plugin);
 
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
+        /** @var \Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $bootstrap->Collection();
 
         try {
             $result = $namespace->uninstallPlugin($bootstrap, $removeData);
         } catch (\Exception $e) {
-            throw new \Exception(sprintf("Unable to uninstall, got exception:\n%s\n", $e->getMessage()), 0, $e);
+            throw new \Exception(sprintf("Unable to uninstall '%s', got exception:\n%s\n", $plugin->getName(), $e->getMessage()), 0, $e);
         }
 
         $result = is_bool($result) ? ['success' => $result] : $result;
 
         if (!$result['success']) {
             if (isset($result['message'])) {
-                throw new \Exception(sprintf("Unable to uninstall, got message:\n%s\n", $result['message']));
+                throw new \Exception(sprintf("Unable to uninstall '%s', got message:\n%s\n", $plugin->getName(), $result['message']));
             }
             throw new \Exception(sprintf('Unable to uninstall %s, an unknown error occured.', $plugin->getName()));
         }
@@ -157,22 +157,22 @@ class LegacyPluginInstaller
     {
         $bootstrap = $this->getPluginBootstrap($plugin);
 
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
+        /** @var \Shopware_Components_Plugin_Namespace $namespace */
         $namespace = $bootstrap->Collection();
 
         try {
             $result = $namespace->updatePlugin($bootstrap);
         } catch (\Exception $e) {
-            throw new \Exception(sprintf("Unable to update, got exception:\n%s\n", $e->getMessage()), 0, $e);
+            throw new \Exception(sprintf("Unable to update '%s', got exception:\n'%s'\n", $plugin->getName(), $e->getMessage()), 0, $e);
         }
 
         $result = is_bool($result) ? ['success' => $result] : $result;
 
         if (!$result['success']) {
             if (isset($result['message'])) {
-                throw new \Exception(sprintf("Unable to update, got message:\n%s\n", $result['message']));
+                throw new \Exception(sprintf("Unable to update '%s', got message:\n%s\n", $plugin->getName(), $result['message']));
             }
-            throw new \Exception(sprintf('Unable to update %s, an unknown error occured.', $plugin->getName()));
+            throw new \Exception(sprintf('Unable to update "%s", an unknown error occured.', $plugin->getName()));
         }
 
         return $result;
@@ -193,7 +193,7 @@ class LegacyPluginInstaller
         $result = is_bool($result) ? ['success' => $result] : $result;
 
         if ($result['success'] == false) {
-            throw new \Exception(sprintf('Not allowed to enable plugin %s.', $plugin->getName()));
+            throw new \Exception(sprintf('Not allowed to enable plugin "%s".', $plugin->getName()));
         }
 
         $plugin->setActive(true);
@@ -203,6 +203,13 @@ class LegacyPluginInstaller
         return $result;
     }
 
+    /**
+     * @param Plugin $plugin
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return array
+     */
     public function deactivatePlugin(Plugin $plugin)
     {
         $bootstrap = $this->getPluginBootstrap($plugin);
@@ -211,7 +218,7 @@ class LegacyPluginInstaller
         $result = is_bool($result) ? ['success' => $result] : $result;
 
         if ($result['success'] == false) {
-            throw new \Exception(sprintf('Not allowed to disable plugin %s.', $plugin->getName()));
+            throw new \Exception(sprintf('Not allowed to disable plugin "%s".', $plugin->getName()));
         }
 
         $plugin->setActive(false);
@@ -220,16 +227,21 @@ class LegacyPluginInstaller
         return $result;
     }
 
+    /**
+     * @param \DateTimeInterface $refreshDate
+     *
+     * @throws \Enlight_Config_Exception
+     */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
-        /** @var $collection \Shopware_Components_Plugin_Namespace */
+        /** @var \Shopware_Components_Plugin_Namespace $collection */
         foreach ($this->plugins as $namespace => $collection) {
             if (!$collection instanceof \Shopware_Components_Plugin_Namespace) {
                 continue;
             }
 
             foreach ($this->pluginDirectories as $source => $path) {
-                $path = $path . $namespace;
+                $path .= $namespace;
                 if (!is_dir($path)) {
                     continue;
                 }
@@ -249,7 +261,7 @@ class LegacyPluginInstaller
                     if ($this->validateIonCube($file)) {
                         throw new \Exception(
                             sprintf(
-                                'Plugin %s is encrypted but the ionCube Loader extension is not installed',
+                                'Plugin "%s" is encrypted but the ionCube Loader extension is not installed',
                                 $name
                             )
                         );

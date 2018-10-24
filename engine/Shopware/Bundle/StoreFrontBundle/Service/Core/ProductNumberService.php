@@ -70,10 +70,7 @@ class ProductNumberService implements ProductNumberServiceInterface
             ->where('variant.articleID = :id')
             ->setParameter(':id', $productId);
 
-        /** @var $statement \PDOStatement */
-        $statement = $query->execute();
-
-        $number = $statement->fetch(\PDO::FETCH_COLUMN);
+        $number = $query->execute()->fetch(\PDO::FETCH_COLUMN);
 
         if (!$number) {
             throw new \RuntimeException(sprintf('No valid product number found by id %d', $productId));
@@ -89,7 +86,7 @@ class ProductNumberService implements ProductNumberServiceInterface
     {
         $productId = $this->getProductIdByNumber($number);
         if (!$productId) {
-            throw new \RuntimeException(sprintf('No valid product id found by product number "%s"', $number));
+            throw new \RuntimeException(sprintf('No valid product id found for product with number "%s"', $number));
         }
 
         if (!$this->isProductAvailableInShop($productId, $context->getShop())) {
@@ -111,7 +108,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         $selected = $this->findFallbackById($productId);
         if (!$selected) {
-            throw new \RuntimeException(sprintf('No active product variant found by product with number "%s"', $number));
+            throw new \RuntimeException(sprintf('No active product variant found for product with number "%s" and id "%s"', $number, $productId));
         }
 
         return $selected;
@@ -152,10 +149,7 @@ class ProductNumberService implements ProductNumberServiceInterface
             ->where('variant.ordernumber = :number')
             ->setParameter(':number', $number);
 
-        /** @var $statement \PDOStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -195,7 +189,7 @@ class ProductNumberService implements ProductNumberServiceInterface
             $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
         }
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_COLUMN);

@@ -96,7 +96,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @param $shop
+     * @param Shop $shop
      *
      * @return \Shopware_Components_TemplateMail
      */
@@ -179,7 +179,7 @@ class Shopware_Components_TemplateMail
 
         if (!($mailModel instanceof Mail)) {
             $modelName = $mailModel;
-            /* @var $mailModel Mail */
+            /* @var Mail $mailModel */
             $mailModel = $this->getModelManager()->getRepository(Mail::class)->findOneBy(
                 ['name' => $modelName]
             );
@@ -286,7 +286,7 @@ class Shopware_Components_TemplateMail
             $mail->setBodyHtml($stringCompiler->compileString($mailModel->getContentHtml()));
         }
 
-        /** @var $attachment \Shopware\Models\Mail\Attachment */
+        /** @var \Shopware\Models\Mail\Attachment $attachment */
         foreach ($mailModel->getAttachments() as $attachment) {
             if ($attachment->getShopId() !== null
                 && ($this->getShop() === null || $attachment->getShopId() !== $this->getShop()->getId())) {

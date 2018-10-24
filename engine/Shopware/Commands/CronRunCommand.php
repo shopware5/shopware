@@ -156,7 +156,7 @@ EOF
     {
         $job = $manager->getJobByAction($action);
 
-        if ($job != null) {
+        if ($job !== null) {
             return $job;
         }
 

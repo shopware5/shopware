@@ -66,7 +66,7 @@ class SnippetValidator
         $invalidSnippets = [];
         $validLocales = $this->getValidLocales();
 
-        /** @var $entry \SplFileInfo */
+        /** @var \SplFileInfo $entry */
         foreach ($iterator as $entry) {
             if (!$entry->isFile() || substr($entry->getFilename(), -4) !== '.ini') {
                 continue;

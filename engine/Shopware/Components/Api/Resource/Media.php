@@ -70,7 +70,7 @@ class Media extends Resource
         $filters = [['property' => 'media.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getMediaListQuery($filters, [], 1);
 
-        /** @var $media MediaModel */
+        /** @var MediaModel $media */
         $media = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$media) {
@@ -100,10 +100,10 @@ class Media extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the category data
+        // Returns the category data
         $media = $paginator->getIterator()->getArrayCopy();
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
@@ -142,8 +142,8 @@ class Media extends Resource
         $this->getManager()->persist($media);
         $this->flush();
 
-        if ($media->getType() == MediaModel::TYPE_IMAGE) {
-            /** @var $manager Manager */
+        if ($media->getType() === MediaModel::TYPE_IMAGE) {
+            /** @var Manager $manager */
             $manager = $this->getContainer()->get('thumbnail_manager');
 
             $manager->createMediaThumbnail($media, [], true);
@@ -156,7 +156,6 @@ class Media extends Resource
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
@@ -210,7 +209,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $media MediaModel */
+        /** @var MediaModel $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
@@ -227,8 +226,8 @@ class Media extends Resource
      * Internal helper function which is used to upload the passed image link
      * to the server and create a media object for the image.
      *
-     * @param $link
-     * @param $albumId
+     * @param string $link
+     * @param int    $albumId
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
@@ -252,7 +251,7 @@ class Media extends Resource
         $media->setCreated(new \DateTime());
         $media->setUserId(0);
 
-        /** @var $album Album */
+        /** @var Album $album */
         $album = $this->getManager()->find(Album::class, $albumId);
         if (!$album) {
             throw new ApiException\CustomValidationException(
@@ -263,16 +262,16 @@ class Media extends Resource
         $media->setAlbum($album);
 
         try {
-            //persist the model into the model manager this uploads and resizes the image
+            // Persist the model into the model manager this uploads and resizes the image
             $this->getManager()->persist($media);
         } catch (\Doctrine\ORM\ORMException $e) {
             throw new ApiException\CustomValidationException(
-                sprintf('Some error occurred while loading your image')
+                sprintf('Some error occurred while persisting your media')
             );
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
-            /** @var $manager Manager */
+            /** @var Manager $manager */
             $manager = Shopware()->Container()->get('thumbnail_manager');
 
             $manager->createMediaThumbnail($media, [], true);
@@ -373,9 +372,9 @@ class Media extends Resource
      * If the passed baseFilename already exists in the destination path,
      * the function creates a unique file name.
      *
-     * @param $url
-     * @param $destinationPath
-     * @param $baseFilename
+     * @param string $url
+     * @param string $destinationPath
+     * @param string $baseFilename
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Exception
@@ -417,9 +416,9 @@ class Media extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Exception
      *
-     * @return mixed
+     * @return array
      */
-    private function prepareMediaData($params, $media = null)
+    private function prepareMediaData(array $params, $media = null)
     {
         // in create mode, album is a required param
         if (!$media && (!isset($params['album']) || empty($params['album']))) {

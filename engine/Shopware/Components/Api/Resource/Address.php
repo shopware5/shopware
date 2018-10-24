@@ -56,7 +56,7 @@ class Address extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Customer\Address');
+        return $this->getManager()->getRepository(\Shopware\Models\Customer\Address::class);
     }
 
     /**
@@ -77,7 +77,7 @@ class Address extends Resource
 
         $query = $this->getRepository()->getOne($id);
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var $address \Shopware\Models\Customer\Address $address */
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
@@ -104,10 +104,10 @@ class Address extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the address data
+        // Returns the address data
         $addresses = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $addresses, 'total' => $totalResult];
@@ -175,7 +175,7 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var \Shopware\Models\Customer\Address $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
@@ -216,7 +216,7 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var \Shopware\Models\Customer\Address $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {

@@ -241,7 +241,7 @@ class InstallerService
         }
 
         if (!$plugin->getInstalled()) {
-            throw new \Exception(sprintf('Plugin "%s" has to be installed first.', $plugin->getName()));
+            throw new \Exception(sprintf('Plugin "%s" has to be installed first before it can be activated.', $plugin->getName()));
         }
 
         if (!$plugin->isLegacyPlugin()) {

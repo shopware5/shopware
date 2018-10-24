@@ -214,8 +214,8 @@ EOD;
             );
         }
 
-        //ensure that the first character is upper case.
-        //required for the directory structure and php namespace
+        // Ensure that the first character is upper case.
+        // Required for the directory structure and php namespace
         $data['template'] = ucfirst($data['template']);
 
         $this->createThemeDirectory($data['template']);
@@ -239,7 +239,7 @@ EOD;
     }
 
     /**
-     * @param $directory
+     * @param string $directory
      */
     private function movePreviewImage($directory)
     {
@@ -256,7 +256,7 @@ EOD;
     /**
      * Generates the theme directory in engine/Shopware/Themes
      *
-     * @param $name
+     * @param string $name
      */
     private function createThemeDirectory($name)
     {
@@ -273,7 +273,7 @@ EOD;
      * Helper function to generate the full theme directory name.
      * example: /var/www/engine/Shopware/Themes/MyTheme
      *
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -345,8 +345,8 @@ EOD;
     /**
      * Generates the whole theme structure tree.
      *
-     * @param $directory
-     * @param $baseDir
+     * @param string[] $directory
+     * @param string   $baseDir
      */
     private function generateStructure($directory, $baseDir)
     {
@@ -356,7 +356,7 @@ EOD;
 
                 $this->generateStructure($value, $baseDir . DIRECTORY_SEPARATOR . $key);
             } else {
-                //switch between create file or create directory
+                // Switch between create file or create directory
                 if (strpos($value, '.') !== false) {
                     $output = new \SplFileObject(
                         $baseDir . DIRECTORY_SEPARATOR . $value,

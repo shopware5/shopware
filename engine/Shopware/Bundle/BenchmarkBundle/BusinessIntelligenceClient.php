@@ -136,7 +136,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
         $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException(sprintf('Signature not found in %s header', $signatureHeaderName));
+            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->benchmarkEncryption->isSignatureSupported()) {

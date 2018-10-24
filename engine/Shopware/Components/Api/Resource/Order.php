@@ -60,7 +60,7 @@ class Order extends Resource
     /**
      * Little helper function for the ...ByNumber methods
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -73,7 +73,7 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $orderModel OrderModel */
+        /** @var OrderModel $orderModel */
         $orderModel = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$orderModel) {
@@ -116,7 +116,7 @@ class Order extends Resource
 
         $filters = [['property' => 'orders.id', 'expression' => '=', 'value' => $id]];
         $builder = $this->getRepository()->getOrdersQueryBuilder($filters);
-        /** @var $order OrderModel */
+        /** @var OrderModel $order */
         $order = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$order) {
@@ -161,10 +161,10 @@ class Order extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the order data
+        // Returns the order data
         $orders = $paginator->getIterator()->getArrayCopy();
 
         foreach ($orders as &$order) {
@@ -242,10 +242,6 @@ class Order extends Resource
      * @param string $number
      * @param array  $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     *
      * @return OrderModel
      */
     public function updateByNumber($number, $params)
@@ -273,7 +269,7 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $order OrderModel */
+        /** @var OrderModel $order */
         $order = $this->getRepository()->find($id);
 
         if (!$order) {
@@ -496,7 +492,7 @@ class Order extends Resource
             $detailModel = new Detail();
             $detailModel->fromArray($detail);
 
-            /** @var $status DetailStatus */
+            /** @var DetailStatus $status */
             $status = $this->getContainer()->get('models')->find(DetailStatus::class, $detail['statusId']);
             if (!$status) {
                 throw new ApiException\NotFoundException(sprintf('DetailStatus by id %s not found', $detail['statusId']));
@@ -640,7 +636,7 @@ class Order extends Resource
             }
 
             if (isset($detail['status'])) {
-                /** @var $status DetailStatus */
+                /** @var DetailStatus $status */
                 $status = Shopware()->Models()->find(DetailStatus::class, $detail['status']);
 
                 if (!$status) {

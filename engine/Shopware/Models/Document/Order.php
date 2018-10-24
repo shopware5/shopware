@@ -241,7 +241,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         if (property_exists($this, $var_name)) {
             return $this->$var_name;
         }
-        throw new Enlight_Exception(sprintf('Property %s does not exists', $var_name));
+        throw new Enlight_Exception(sprintf('Property %s does not exist', $var_name));
     }
 
     /**

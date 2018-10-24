@@ -55,7 +55,7 @@ class Variant extends Resource implements BatchInterface
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Article\Detail');
+        return $this->getManager()->getRepository(\Shopware\Models\Article\Detail::class);
     }
 
     /**
@@ -95,7 +95,7 @@ class Variant extends Resource implements BatchInterface
                 ->addOrderBy('prices.from', 'ASC')
                 ->setParameter('variantId', $id);
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $articleDetail */
         $variant = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$variant) {
@@ -175,7 +175,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $articleDetail */
         $articleDetail = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$articleDetail) {
@@ -238,10 +238,6 @@ class Variant extends Resource implements BatchInterface
      *
      * @param string $number
      * @param array  $params
-     *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
      * @return Detail
      */
@@ -309,8 +305,8 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException('Passed parameter array does not contain an articleId property');
         }
 
-        /** @var $article ArticleModel */
-        $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
+        /** @var ArticleModel $article */
+        $article = $this->getManager()->find(\Shopware\Models\Article\Article::class, $articleId);
 
         if (!$article) {
             throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $articleId));
@@ -351,7 +347,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $variant Detail */
+        /** @var Detail $variant */
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
@@ -474,7 +470,7 @@ class Variant extends Resource implements BatchInterface
             return false;
         }
 
-        $model = $this->getManager()->find('Shopware\Models\Article\Detail', $id);
+        $model = $this->getManager()->find(\Shopware\Models\Article\Detail::class, $id);
 
         if ($model) {
             return $id;
@@ -569,13 +565,13 @@ class Variant extends Resource implements BatchInterface
      * or over the link property which can contain a image link.
      * This image will be added automatically to the article.
      *
-     * @param $data
+     * @param array        $data
      * @param ArticleModel $article
      * @param Detail       $variant
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return mixed
+     * @return array
      */
     protected function prepareImageAssociation($data, ArticleModel $article, Detail $variant)
     {
@@ -601,20 +597,20 @@ class Variant extends Resource implements BatchInterface
             true
         );
         foreach ($data['images'] as $imageData) {
-            //check if a media id was passed.
+            // Check if a media id was passed.
             if (isset($imageData['mediaId'])) {
-                //first check if the media object is already assigned to the article
+                // First check if the media object is already assigned to the article
                 $image = $this->getAvailableMediaImage(
                     $article->getImages(),
                     $imageData['mediaId']
                 );
 
-                //media image isn't assigned to the article?
+                // Media image isn't assigned to the article?
                 if (!$image) {
-                    //find the media object and convert it to an article image.
-                    /** @var $media MediaModel */
+                    // Find the media object and convert it to an article image.
+                    /** @var MediaModel $media */
                     $media = $this->getManager()->find(
-                        'Shopware\Models\Media\Media',
+                        \Shopware\Models\Media\Media::class,
                         (int) $imageData['mediaId']
                     );
 
@@ -629,7 +625,7 @@ class Variant extends Resource implements BatchInterface
                     );
                 }
             } elseif (isset($imageData['link'])) {
-                //check if an url passed and upload the passed image url and create a new article image.
+                // Check if an url passed and upload the passed image url and create a new article image.
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
                     $imageData['link']
                 );
@@ -637,7 +633,7 @@ class Variant extends Resource implements BatchInterface
                     $article, $media
                 );
             } else {
-                throw new ApiException\CustomValidationException("One of the passed variant images doesn't contains a mediaId or link property!");
+                throw new ApiException\CustomValidationException("One of the passed variant images doesn't contain a mediaId or link property!");
             }
 
             $variantImage = $this->createVariantImage(
@@ -672,11 +668,11 @@ class Variant extends Resource implements BatchInterface
     {
         $parent = $image->getParent();
 
-        /** @var $mapping Image\Mapping */
+        /** @var Image\Mapping $mapping */
         foreach ($parent->getMappings() as $mapping) {
             $match = true;
 
-            /** @var $rule Image\Rule */
+            /** @var Image\Rule $rule */
             foreach ($mapping->getRules() as $rule) {
                 $option = $this->getCollectionElementByProperty(
                     $variant->getConfiguratorOptions(),
@@ -697,7 +693,7 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param                                  $data
+     * @param array                            $data
      * @param \Shopware\Models\Article\Article $article
      * @param \Shopware\Models\Article\Detail  $variant
      * @param \Shopware\Models\Tax\Tax         $tax
@@ -711,11 +707,11 @@ class Variant extends Resource implements BatchInterface
         $prices = $this->checkDataReplacement($variant->getPrices(), $data, 'prices', true);
 
         foreach ($data['prices'] as &$priceData) {
-            /** @var $price Price */
+            /** @var Price $price */
             $price = $this->getOneToManySubElement(
                 $prices,
                 $priceData,
-                '\Shopware\Models\Article\Price'
+                \Shopware\Models\Article\Price::class
             );
 
             if (empty($priceData['customerGroupKey'])) {
@@ -726,9 +722,9 @@ class Variant extends Resource implements BatchInterface
                 $priceData['from'] = 1;
             }
 
-            // load the customer group of the price definition
+            // Load the customer group of the price definition
             $customerGroup = $this->getManager()
-                ->getRepository('Shopware\Models\Customer\Group')
+                ->getRepository(\Shopware\Models\Customer\Group::class)
                 ->findOneBy(['key' => $priceData['customerGroupKey']]);
 
             /** @var CustomerGroup $customerGroup */
@@ -776,12 +772,12 @@ class Variant extends Resource implements BatchInterface
                 'name' => $optionData['group'],
             ]);
 
-            //group is in the article configurator set configured?
+            // Group is in the article configurator set configured?
             if (!$availableGroup) {
                 continue;
             }
 
-            //check if the option is available in the configured article configurator set.
+            // Check if the option is available in the configured article configurator set.
             $option = $this->getAvailableOption($availableGroup->getOptions(), [
                 'id' => $optionData['optionId'],
                 'name' => $optionData['option'],
@@ -812,11 +808,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param $data
+     * @param array        $data
      * @param ArticleModel $article
      * @param Detail       $variant
      *
-     * @return mixed
+     * @return array
      */
     protected function prepareAttributeAssociation($data, ArticleModel $article, Detail $variant)
     {
@@ -837,11 +833,11 @@ class Variant extends Resource implements BatchInterface
      * Prepares the base variant data to save over doctrine.
      * Resolves the foreign keys for the passed unit data.
      *
-     * @param $data
+     * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return mixed
+     * @return array
      */
     protected function prepareUnitAssociation($data)
     {
@@ -866,7 +862,7 @@ class Variant extends Resource implements BatchInterface
      * If no unit reference found, the function creates a new Unit entity.
      * The passed unit data will be assigned to the created or found Unit entity.
      *
-     * @param $unitData
+     * @param array $unitData
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
@@ -876,17 +872,17 @@ class Variant extends Resource implements BatchInterface
     {
         $unitRepository = $this->getManager()->getRepository(\Shopware\Models\Article\Unit::class);
 
-        //try to find an existing unit by the passed conditions "id", "name" or "unit"
+        // Try to find an existing unit by the passed conditions "id", "name" or "unit"
         $unit = $unitRepository->findOneBy(
             $this->getUnitFindCondition($unitData)
         );
 
-        //unit identifier send and unit not found? throw exception => Not allowed to create a new unit in this case
+        // Unit identifier send and unit not found? throw exception => Not allowed to create a new unit in this case
         if (!$unit && isset($unitData['id'])) {
             throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
         }
 
-        //to create a new unit, the unit name and unit is required. Otherwise we throw an exception
+        // To create a new unit, the unit name and unit is required. Otherwise we throw an exception
         if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
             $unit = new Unit();
         } elseif (!$unit) {
@@ -898,7 +894,14 @@ class Variant extends Resource implements BatchInterface
         return $unit;
     }
 
-    private function considerTaxInput($variant)
+    /**
+     * @param array $variant
+     *
+     * @throws ApiException\CustomValidationException
+     *
+     * @return array
+     */
+    private function considerTaxInput(array $variant)
     {
         $tax = Shopware()->Db()->fetchOne(
             'SELECT tax
@@ -925,7 +928,7 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * @param Collection|array $availableImages
-     * @param $mediaId
+     * @param int              $mediaId
      *
      * @return bool|Image
      */
@@ -944,14 +947,14 @@ class Variant extends Resource implements BatchInterface
     /**
      * Calculates and merges the numeric values of the Price entity
      *
-     * @param $priceData
-     * @param $tax
+     * @param array $priceData
+     * @param Tax   $tax
      *
      * @throws ApiException\CustomValidationException
      *
      * @return mixed
      */
-    private function mergePriceData($priceData, $tax)
+    private function mergePriceData(array $priceData, Tax $tax)
     {
         if (array_key_exists('from', $priceData)) {
             $priceData['from'] = (int) $priceData['from'];
@@ -1033,13 +1036,13 @@ class Variant extends Resource implements BatchInterface
      * Helper function returns the findOneBy condition
      * for the passed unit data.
      *
-     * @param $data
+     * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
      * @return array
      */
-    private function getUnitFindCondition($data)
+    private function getUnitFindCondition(array $data)
     {
         if (isset($data['id'])) {
             return ['id' => $data['id']];
@@ -1120,7 +1123,7 @@ class Variant extends Resource implements BatchInterface
      */
     private function prepareEsdSerialsAssociation($data, Esd $esd)
     {
-        // remove old serials
+        // Remove old serials
         /** @var EsdSerial $serial */
         foreach ($esd->getSerials() as $serial) {
             $found = false;
@@ -1138,7 +1141,7 @@ class Variant extends Resource implements BatchInterface
             }
         }
 
-        // add new items
+        // Add new items
         foreach ($data['esd']['serials'] as $newSerial) {
             $found = false;
 

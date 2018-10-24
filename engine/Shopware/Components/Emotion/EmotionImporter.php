@@ -117,7 +117,7 @@ class EmotionImporter implements EmotionImporterInterface
         $zip = new \ZipArchive();
 
         if ($zip->open($filePath) !== true) {
-            throw new EmotionImportException(sprintf('Could not open zip file in %s!', $filePath));
+            throw new EmotionImportException(sprintf('Could not open zip file "%s"!', $filePath));
         }
 
         if ($zip->locateName('emotion.json') === false) {
