@@ -212,6 +212,7 @@ class TypeMapping
             'Shopware\Models\Newsletter\Newsletter',
             'Shopware\Models\Partner\Partner',
             'Shopware\Models\Shop\Shop',
+            'Shopware\Models\Site\Site',
         ];
 
         $result = [];
