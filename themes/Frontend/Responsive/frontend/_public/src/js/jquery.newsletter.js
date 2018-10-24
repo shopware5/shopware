@@ -12,7 +12,11 @@
 
             checkMailSelector: '.newsletter--checkmail',
 
-            additionalFormSelector: '.newsletter--additional-form'
+            additionalFormSelector: '.newsletter--additional-form',
+
+            formSelector: 'form',
+
+            submitButtonSelector: 'button[type=submit]',
         },
 
         init: function () {
@@ -23,9 +27,12 @@
             me.$checkMail = me.$el.find(me.opts.checkMailSelector);
             me.$addionalForm = me.$el.find(me.opts.additionalFormSelector);
             me.$captchaForm = me.$el.find(me.opts.captchaFormSelector);
+            me.$form = me.$el.find(me.opts.formSelector);
 
             me._on(me.$checkMail, 'change', $.proxy(me.refreshAction, me));
             $.subscribe(me.getEventName('plugin/swCaptcha/onSendRequestSuccess'), $.proxy(me.onCaptchaLoaded, me));
+
+            me._on(me.$form, 'submit', $.proxy(me.submit, me));
 
             $.publish('plugin/swNewsletter/onRegisterEvents', [ me ]);
 
@@ -58,6 +65,12 @@
             }
 
             $.publish('plugin/swNewsletter/onRefreshAction', [ me ]);
+        },
+
+        submit: function() {
+            var me = this;
+
+            me.$el.find(me.opts.submitButtonSelector).attr('disabled', 'disabled').addClass('disabled');
         },
 
         onCaptchaLoaded: function () {
