@@ -270,8 +270,17 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         if ($this->_renderer === 'html' || !$this->_renderer) {
             echo $html;
         } elseif ($this->_renderer === 'pdf') {
+            $defaultConfig = Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig');
+            $defaultConfig = $eventManager->filter(
+                'Shopware_Components_Document_Render_FilterMpdfConfig',
+                $defaultConfig,
+                [
+                    'template' => $this->_document['template'],
+                    'document' => $this->_document,
+                ]
+            );
             $mpdfConfig = array_replace_recursive(
-                Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig'),
+                $defaultConfig,
                 [
                     'margin_left' => $this->_document['left'],
                     'margin_right' => $this->_document['right'],
