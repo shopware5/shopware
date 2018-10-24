@@ -168,7 +168,7 @@ class CacheControl
 
         $controller = $this->cacheRouteGeneration->getControllerRoute($request);
 
-        return $controller === 'widgets/checkout' && (!empty($this->session->offsetGet('sBasketQuantity')) || !empty($this->session->offsetGet('sNotesQuantity')));
+        return $controller === 'widgets/checkout';
     }
 
     /**
