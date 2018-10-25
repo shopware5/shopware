@@ -428,7 +428,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             self::AGGREGATE_STRATEGY_LIVE
         );
 
-        if (!($this->isTopSellerActivated()) || $strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
+        if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
             return true;
         }
 
