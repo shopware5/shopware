@@ -43,6 +43,10 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
         $date = $this->Request()->date;
         $delivery_date = $this->Request()->delivery_date;
         $bid = $this->Request()->bid;
+        $renderer = strtolower($this->Request()->getParam('renderer', 'pdf')); // html / pdf
+        if (!in_array($renderer, ['html', 'pdf'])) {
+            $renderer = 'pdf';
+        }
         $this->View()->setTemplate();
         $document = Shopware_Components_Document::initDocument(
             $id,
@@ -54,7 +58,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
                 'date' => $date,
                 'delivery_date' => $delivery_date,
                 'shippingCostsAsPosition' => true,
-                '_renderer' => 'pdf',
+                '_renderer' => $renderer,
                 '_preview' => $this->Request()->preview,
                 '_previewForcePagebreak' => $this->Request()->pagebreak,
                 '_previewSample' => $this->Request()->sampleData,
