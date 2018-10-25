@@ -2,16 +2,20 @@
 /**
  * Shopware 5
  * Copyright (c) shopware AG
+ *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
+ *
  * The texts of the GNU Affero General Public License with an additional
  * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
+ *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
@@ -21,20 +25,21 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Models\Payment\Payment as PaymentModel;
 use Shopware\Models\Country\Country as CountryModel;
+use Shopware\Models\Payment\Payment as PaymentModel;
 use Shopware\Models\Plugin\Plugin;
 
 /**
  * Payment API Resource
  *
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PaymentMethods extends Resource
 {
     /**
-     * @return \Shopware\Models\Media\Repository
+     * @return \Shopware\Models\Payment\Repository
      */
     public function getRepository()
     {
@@ -43,9 +48,11 @@ class PaymentMethods extends Resource
 
     /**
      * @param int $id
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @return array|MediaModel
+     *
+     * @return array|PaymentModel
      */
     public function getOne($id)
     {
@@ -55,31 +62,32 @@ class PaymentMethods extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        $filters = [['property' => 'p.id', 'expression' => '=', 'value' => $id]];
-        $query = $this->getRepository()->getAllPaymentsQuery($filters, [], 1);
+        $filters = [['property' => 'payment.id', 'expression' => '=', 'value' => $id]];
+        $query = $this->getRepository()->getListQuery($filters, [], 0, 1);
 
-        /** @var $media MediaModel */
+        /** @var $media PaymentModel */
         $payment = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$payment) {
-            throw new ApiException\NotFoundException("Payment by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Payment by id %d not found', $id));
         }
 
         return $payment;
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $filter
      * @param array $orderBy
+     *
      * @return array
      */
     public function getList($offset = 0, $limit = 25, array $filter = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
-        $query = $this->getRepository()->getAllPaymentsQuery($filter, $orderBy, $offset, $limit);
+        $query = $this->getRepository()->getListQuery($filter, $orderBy, $offset, $limit);
         $query->setHydrationMode($this->resultMode);
 
         $paginator = $this->getManager()->createPaginator($query);
@@ -95,8 +103,10 @@ class PaymentMethods extends Resource
 
     /**
      * @param array $params
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
+     *
      * @return PaymentModel
      */
     public function create(array $params)
@@ -124,12 +134,13 @@ class PaymentMethods extends Resource
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
      * @return PaymentModel
      */
     public function update($id, array $params)
@@ -163,8 +174,10 @@ class PaymentMethods extends Resource
 
     /**
      * @param int $id
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
      * @return PaymentModel
      */
     public function delete($id)
@@ -190,8 +203,10 @@ class PaymentMethods extends Resource
 
     /**
      * @param array $params
-     * @return array
+     *
      * @throws ApiException\NotFoundException
+     *
+     * @return array
      */
     protected function preparePaymentData($params)
     {
@@ -212,6 +227,7 @@ class PaymentMethods extends Resource
             'action',
             'pluginId',
             'countries',
+            'shops',
             'attribute',
         ];
 
@@ -222,12 +238,30 @@ class PaymentMethods extends Resource
                 $countryModel = $this->getContainer()->get('models')->find(CountryModel::class, $country['countryId']);
                 if (!$countryModel) {
                     throw new ApiException\NotFoundException(sprintf(
-                        'Country by id %s not found',
+                        'Country by id %d not found',
                         $country['countryId']
                     ));
                 }
 
                 $country = $countryModel;
+
+                unset($country);
+            }
+        }
+
+        if (isset($params['shops'])) {
+            foreach ($params['shops'] as &$shop) {
+                $shopModel = $this->getContainer()->get('models')->find(\Shopware\Models\Shop\Shop::class, $shop['shopId']);
+                if (!$shopModel) {
+                    throw new ApiException\NotFoundException(sprintf(
+                        'Shop by id %d not found',
+                        $shop['shopId']
+                    ));
+                }
+
+                $shop = $shopModel;
+
+                unset($shop);
             }
         }
 
