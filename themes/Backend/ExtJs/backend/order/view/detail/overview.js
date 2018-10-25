@@ -774,10 +774,6 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                 store: me.paymentStatusStore,
                 displayField: 'description',
                 valueField: 'id'
-            },
-            {
-                xtype: 'hiddenfield',
-                name: 'changed'
             }
         ];
     },
