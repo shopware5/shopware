@@ -110,7 +110,7 @@ class Backup
             }
 
             if (!is_dir($this->backupPath)) {
-                throw new \RuntimeException("Could not find nor create '{$this->backupPath}'");
+                throw new \RuntimeException(sprintf('Could not find nor create "%s"', $this->backupPath));
             }
         }
     }
@@ -217,7 +217,7 @@ class Backup
         $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
 
         if (!$backup) {
-            throw new \RuntimeException("Backup by id {$id} not found");
+            throw new \RuntimeException(sprintf('Backup by id %d not found', $id));
         }
 
         $path = $backup->getPath();
@@ -228,7 +228,7 @@ class Backup
             $zip->open($path);
             $success = $zip->extractTo($dir);
             if (!$success) {
-                throw new \RuntimeException("Could not extract {$path} to {$dir}");
+                throw new \RuntimeException(sprintf('Could not extract %s to %s', $path, $dir));
             }
             $zip->close();
         }
@@ -295,7 +295,7 @@ class Backup
         $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
 
         if (!$backup) {
-            throw new \RuntimeException("Backup by id {$id} not found");
+            throw new \RuntimeException(sprintf('Backup by id %d not found', $id));
         }
 
         $dir = dirname($backup->getPath());
@@ -450,7 +450,7 @@ class Backup
         $prefix = $this->affectedTables[$table]['prefix'];
 
         if (!$prefix) {
-            throw new \RuntimeException("Empty prefix for {$table}");
+            throw new \RuntimeException(sprintf('Empty prefix for %s', $table));
         }
 
         return $prefix;
@@ -470,7 +470,7 @@ class Backup
         $columns = $this->affectedTables[$table]['columns'];
 
         if (!$columns) {
-            throw new \RuntimeException("Empty column for {$table}");
+            throw new \RuntimeException(sprintf('Empty column for %s', $table));
         }
 
         return $columns;
@@ -644,7 +644,7 @@ class Backup
         $zip = new \ZipArchive();
 
         if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
-            throw new \RuntimeException("Could not open {$zipPath}, please check the permissions. ");
+            throw new \RuntimeException(sprintf('Could not open %s, please check the permissions.', $zipPath));
         }
 
         $files = $this->getDirectoryList($this->outputPath);

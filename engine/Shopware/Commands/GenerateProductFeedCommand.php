@@ -76,22 +76,22 @@ class GenerateProductFeedCommand extends ShopwareCommand
 
         if (!is_dir($this->cacheDir)) {
             if (@mkdir($this->cacheDir, 0777, true) === false) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $this->cacheDir));
+                throw new \RuntimeException(sprintf("Unable to create directory '%s'\n", $this->cacheDir));
             }
         } elseif (!is_writable($this->cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $this->cacheDir));
+            throw new \RuntimeException(sprintf("Unable to write in directory '%s'\n", $this->cacheDir));
         }
 
         $feedId = (int) $input->getOption('feed-id');
 
-        /** @var $export sExport */
+        /** @var sExport $export */
         $export = $this->container->get('modules')->Export();
 
         $export->sSYSTEM = $this->container->get('system');
 
         $this->sSmarty = $this->container->get('template');
 
-        // prevent notices to clutter generated files
+        // Prevent notices to clutter generated files
         $this->registerErrorHandler($output);
 
         /** @var Repository $productFeedRepository */
@@ -99,7 +99,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
         if (empty($feedId)) {
             $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
 
-            /** @var $feedModel ProductFeed */
+            /** @var ProductFeed $feedModel */
             foreach ($activeFeeds as $feedModel) {
                 if ($feedModel->getInterval() === 0) {
                     continue;
@@ -120,6 +120,10 @@ class GenerateProductFeedCommand extends ShopwareCommand
         $this->output->writeln(sprintf('Product feed cache successfully refreshed'));
     }
 
+    /**
+     * @param \sExport    $export
+     * @param ProductFeed $feedModel
+     */
     private function generateFeed($export, ProductFeed $feedModel)
     {
         $this->output->writeln(sprintf('Refreshing cache for ' . $feedModel->getName()));

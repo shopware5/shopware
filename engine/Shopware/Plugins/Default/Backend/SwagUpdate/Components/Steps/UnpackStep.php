@@ -56,7 +56,7 @@ class UnpackStep
     }
 
     /**
-     * @param $offset
+     * @param int $offset
      *
      * @throws \RuntimeException
      * @throws \Exception
@@ -74,7 +74,7 @@ class UnpackStep
             $source->seek($offset);
         } catch (\Exception $e) {
             @unlink($this->source);
-            throw new \Exception('Could not open update package:<br>' . $e->getMessage(), 0, $e);
+            throw new \Exception(sprintf('Could not open update package:<br>%s', $e->getMessage()), 0, $e);
         }
 
         /** @var ZipEntry $entry */
@@ -86,7 +86,7 @@ class UnpackStep
                 $fs->dumpFile($targetName, $entry->getContents());
             }
 
-            if (time() - $requestTime >= 20 || ($position + 1) % 1000 == 0) {
+            if (time() - $requestTime >= 20 || ($position + 1) % 1000 === 0) {
                 $source->close();
 
                 return new ValidResult($position + 1, $count);

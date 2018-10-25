@@ -72,7 +72,7 @@ class ReflectionHelper
 
             if (!isset($arguments[$paramName])) {
                 if (!$constructorParam->isOptional()) {
-                    throw new \RuntimeException(sprintf("Required constructor Parameter Missing: '$%s'.", $paramName));
+                    throw new \RuntimeException(sprintf('Required constructor parameter missing: "$%s".', $paramName));
                 }
                 $newParams[] = $constructorParam->getDefaultValue();
 
@@ -100,11 +100,10 @@ class ReflectionHelper
     {
         $fileName = $class->getFileName();
         $fileDir = substr($fileName, 0, strlen($docPath));
-        /*
-         * Trying to execute a class outside of the Shopware DocumentRoot
-         */
+
+        // Trying to execute a class outside of the Shopware DocumentRoot
         if ($fileDir !== $docPath) {
-            throw new \InvalidArgumentException('Class out of scope', 1);
+            throw new \InvalidArgumentException(sprintf('Class "%s" out of scope', $class->getFileName()), 1);
         }
         if (empty($directories)) {
             return;
@@ -115,8 +114,7 @@ class ReflectionHelper
         $error = true;
 
         foreach ($directories as $directory) {
-            $directory = trim($directory, DIRECTORY_SEPARATOR);
-            $directory = strtolower($directory);
+            $directory = strtolower(trim($directory, DIRECTORY_SEPARATOR));
 
             $classDir = substr($fileName, 0, strlen($directory));
             $classDir = trim($classDir, DIRECTORY_SEPARATOR);
@@ -129,7 +127,7 @@ class ReflectionHelper
         }
 
         if ($error) {
-            throw new \InvalidArgumentException('Class out of scope', 2);
+            throw new \InvalidArgumentException(sprintf('Class "%s" out of scope', $class->getFileName()), 2);
         }
     }
 }

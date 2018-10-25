@@ -30,6 +30,7 @@ use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
@@ -113,6 +114,15 @@ class CustomerStream extends Resource
         $this->criteriaFactory = $criteriaFactory;
     }
 
+    /**
+     * @param null|int $id
+     * @param int      $offset
+     * @param null     $limit
+     * @param array    $conditions
+     * @param string   $sortings
+     *
+     * @return \Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult
+     */
     public function getOne($id = null, $offset = 0, $limit = null, $conditions, $sortings)
     {
         $this->checkPrivilege('read');
@@ -124,10 +134,12 @@ class CustomerStream extends Resource
         foreach ($conditions as $condition) {
             $criteria->addCondition($condition);
         }
-        $sortings = json_decode($sortings, true);
+        $decodedSortings = json_decode($sortings, true);
         if (!empty($sortings)) {
-            $sortings = $this->reflectionHelper->unserialize($sortings, '');
-            foreach ($sortings as $sorting) {
+            /** @var SortingInterface[] $unserializedSortings */
+            $unserializedSortings = $this->reflectionHelper->unserialize($decodedSortings, '');
+
+            foreach ($unserializedSortings as $sorting) {
                 $criteria->addSorting($sorting);
             }
         }
@@ -138,6 +150,14 @@ class CustomerStream extends Resource
         return $this->customerNumberSearch->search($criteria);
     }
 
+    /**
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $criteria
+     * @param array $orderBy
+     *
+     * @return array
+     */
     public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
@@ -188,6 +208,14 @@ class CustomerStream extends Resource
         return ['data' => $data, 'total' => $total];
     }
 
+    /**
+     * @param array $data
+     * @param bool  $index
+     *
+     * @throws CustomValidationException
+     *
+     * @return CustomerStreamEntity
+     */
     public function create(array $data, $index = false)
     {
         $this->checkPrivilege('save');
@@ -218,6 +246,17 @@ class CustomerStream extends Resource
         return $stream;
     }
 
+    /**
+     * @param int   $id
+     * @param array $data
+     * @param bool  $index
+     *
+     * @throws NotFoundException
+     * @throws ParameterMissingException
+     * @throws ValidationException
+     *
+     * @return CustomerStreamEntity
+     */
     public function update($id, array $data, $index = false)
     {
         $this->checkPrivilege('save');
@@ -230,7 +269,7 @@ class CustomerStream extends Resource
         $stream = $this->getManager()->find(CustomerStreamEntity::class, $id);
 
         if (!$stream) {
-            throw new NotFoundException("Customer Stream with id $id not found");
+            throw new NotFoundException(sprintf('Customer Stream by id %d not found', $id));
         }
 
         $data = $this->prepareData($data);
@@ -257,6 +296,9 @@ class CustomerStream extends Resource
         return $stream;
     }
 
+    /**
+     * @param int $id
+     */
     public function delete($id)
     {
         $this->checkPrivilege('delete');
@@ -272,6 +314,12 @@ class CustomerStream extends Resource
         );
     }
 
+    /**
+     * @param int  $lastId
+     * @param bool $full
+     *
+     * @return int[]
+     */
     public function buildSearchIndex($lastId, $full)
     {
         $this->checkPrivilege('search_index');
@@ -296,6 +344,13 @@ class CustomerStream extends Resource
         $this->searchIndexer->cleanupIndex();
     }
 
+    /**
+     * @param CustomerStreamEntity $stream
+     * @param null|int             $offset
+     * @param null|int             $limit
+     *
+     * @throws \Shopware\Components\Api\Exception\PrivilegeException
+     */
     public function indexStream(CustomerStreamEntity $stream, $offset = null, $limit = null)
     {
         $this->checkPrivilege('save');
@@ -328,7 +383,7 @@ class CustomerStream extends Resource
     /**
      * Returns true if frozen state has changed
      *
-     * @param $streamId
+     * @param int            $streamId
      * @param \DateTime|null $freezeUp
      * @param string         $conditions
      *
@@ -356,7 +411,13 @@ class CustomerStream extends Resource
         return $params;
     }
 
-    private function getConditions($streamId, $conditions = [])
+    /**
+     * @param int   $streamId
+     * @param array $conditions
+     *
+     * @return array
+     */
+    private function getConditions($streamId, array $conditions = [])
     {
         if (!empty($conditions)) {
             return $this->reflectionHelper->unserialize(
@@ -426,7 +487,7 @@ class CustomerStream extends Resource
      *
      * @throws CustomValidationException
      */
-    private function validateStream($stream)
+    private function validateStream(CustomerStreamEntity $stream)
     {
         if (!$stream->isStatic()) {
             if (!$stream->getConditions()) {

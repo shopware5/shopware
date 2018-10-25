@@ -153,7 +153,7 @@ class Queue
             $newBackup = false;
             $queue = $entityManager->find(\Shopware\Models\MultiEdit\Queue::class, $queueId);
             if (!$queue) {
-                throw new \RuntimeException("Queue with id {$queueId} not found");
+                throw new \RuntimeException(sprintf('Queue with ID %s not found', $queueId));
             }
         } else {
             $newBackup = true;

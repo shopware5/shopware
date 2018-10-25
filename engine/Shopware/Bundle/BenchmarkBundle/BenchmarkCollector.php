@@ -90,12 +90,13 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
      */
     private function moveShopData(array $providerData)
     {
-        if (!array_key_exists('shop', $providerData)) {
-            throw new \Exception('Necessary data with name \'shop\' not provided.');
+        $shopDataArrayKey = 'shop';
+        if (!array_key_exists($shopDataArrayKey, $providerData)) {
+            throw new \Exception(sprintf('Necessary data with name \'%s\' not provided.', $shopDataArrayKey));
         }
 
-        $providerData = $providerData['shop'] + $providerData;
-        unset($providerData['shop']);
+        $providerData = $providerData[$shopDataArrayKey] + $providerData;
+        unset($providerData[$shopDataArrayKey]);
 
         return $providerData;
     }

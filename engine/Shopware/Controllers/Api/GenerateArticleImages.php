@@ -55,11 +55,11 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
             throw new ApiException\CustomValidationException('Invalid article id');
         }
 
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var \Shopware\Models\Article\Article $article */
         $article = $this->resource->getRepository()->find($id);
 
         if (!$article) {
-            throw new ApiException\NotFoundException("Article with id \"$id\" was not found");
+            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $id));
         }
 
         $this->resource->generateImages($article, (bool) $this->Request()->getParam('force', 0));

@@ -437,7 +437,7 @@ class Compiler
 
         foreach ($collection as $temp) {
             if (!is_array($temp)) {
-                throw new \Exception("The passed plugin less config isn't an array!");
+                throw new \Exception('The passed plugin less config isn\'t an array!');
             }
             $config = array_merge($config, $temp);
         }

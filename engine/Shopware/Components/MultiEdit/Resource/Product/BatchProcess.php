@@ -153,7 +153,7 @@ class BatchProcess
                     $attributes[$attribute] = ['set'];
                     break;
                 default:
-                    throw new \RuntimeException("Column with type {$type} was not configured, yet");
+                    throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
             }
             // Technically we're able to process DQL here. This should not be enabled by default and is quite limited
             if (false) {
@@ -296,7 +296,7 @@ class BatchProcess
         $queue = $entityManager->find('\Shopware\Models\MultiEdit\Queue', $queueId);
 
         if (!$queue) {
-            throw new \RuntimeException("Queue with ID {$queueId} not found");
+            throw new \RuntimeException(sprintf('Queue with ID %s not found', $queueId));
         }
 
         $operations = json_decode($queue->getOperations(), true);
@@ -314,7 +314,7 @@ class BatchProcess
             }
         } catch (\Exception $e) {
             $connection->rollBack();
-            throw new \RuntimeException("Error updating details: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException(sprintf('Error updating details: %s', $e->getMessage()), 0, $e);
         }
         $remaining = $queue->getArticleDetails()->count();
 

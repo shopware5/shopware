@@ -103,7 +103,7 @@ class Util
         if (!file_exists($file)) {
             throw new \Exception(sprintf(
                 'Theme directory %s contains no Theme.php',
-                $template->getTemplate()
+                $directory
             ));
         }
 
@@ -132,7 +132,7 @@ class Util
         if (!file_exists($file)) {
             throw new \Exception(sprintf(
                 'Theme directory %s contains no Theme.php',
-                $directory->getFilename()
+                $directory->getPathname()
             ));
         }
 

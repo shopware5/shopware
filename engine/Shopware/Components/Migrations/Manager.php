@@ -130,7 +130,7 @@ class Manager
     }
 
     /**
-     * Returns current schma version found in database
+     * Returns current schema version found in database
      *
      * @return int
      */
@@ -194,14 +194,14 @@ class Manager
             }
 
             try {
-                /** @var $migrationClass AbstractMigration */
+                /** @var AbstractMigration $migrationClass */
                 $migrationClass = new $migrationClassName($this->getConnection());
             } catch (\Exception $e) {
                 throw new \Exception('Could not instantiate Object');
             }
 
             if (!($migrationClass instanceof AbstractMigration)) {
-                throw new \Exception("$migrationClassName is not instanceof AbstractMigration");
+                throw new \Exception(sprintf('%s is not instanceof AbstractMigration', $migrationClassName));
             }
 
             if ($migrationClass->getVersion() != $result['0']) {

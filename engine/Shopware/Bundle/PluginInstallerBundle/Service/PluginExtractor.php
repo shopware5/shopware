@@ -67,9 +67,7 @@ class PluginExtractor
         $destination = $this->pluginDir;
 
         if (!is_writable($destination)) {
-            throw new \Exception(
-                'Destination directory is not writable'
-            );
+            throw new \Exception(sprintf('Destination directory "%s" is not writable', $destination));
         }
 
         $prefix = $this->getPluginPrefix($archive);
@@ -164,9 +162,7 @@ class PluginExtractor
     private function assertNoDirectoryTraversal($filename)
     {
         if (strpos($filename, '../') !== false) {
-            throw new \RuntimeException(
-                sprintf('Directory Traversal detected')
-            );
+            throw new \RuntimeException('Directory Traversal detected');
         }
     }
 

@@ -199,7 +199,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     private function createMediaThumbnails(Media $media)
     {
         if (!$this->imageExists($media)) {
-            throw new \Exception('Base image file does not exist: ' . $media->getPath());
+            throw new \Exception(sprintf('Base image file "%s" does not exist', $media->getPath()));
         }
 
         $thumbnails = $media->getThumbnailFilePaths();

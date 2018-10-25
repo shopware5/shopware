@@ -36,7 +36,6 @@ class Shopware_Tests_Models_Order_StatusTest extends Enlight_Components_Test_Tes
         $order->setPosition(123456789);
         $order->setSendMail(0);
         $order->setName('prettyIgnorableNameForThisTest');
-        $order->setDescription('prettyIgnorableNameForThisTest');
         $order->setGroup(\Shopware\Models\Order\Status::GROUP_PAYMENT);
 
         Shopware()->Models()->persist($order);

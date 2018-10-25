@@ -203,7 +203,7 @@ class Store extends BaseStore
             $content[$cacheKey] = $headerKey;
 
             if (!false === $this->save($key, json_encode($content))) {
-                throw new \RuntimeException("Could not write cacheKey $key");
+                throw new \RuntimeException(sprintf('Could not write cacheKey "%s"', $key));
             }
         }
 

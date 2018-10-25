@@ -165,10 +165,7 @@ class AdminCreateCommand extends ShopwareCommand
             return $locales[$locale];
         }
 
-        throw new \RuntimeException(sprintf(
-            'Backend Locale not supported (%s)',
-            $locale
-        ));
+        throw new \RuntimeException(sprintf('Backend Locale "%s" not supported', $locale));
     }
 
     /**
@@ -235,7 +232,7 @@ class AdminCreateCommand extends ShopwareCommand
 
         $option = $input->getOption('locale');
         if (empty($option)) {
-            throw new \InvalidArgumentException('Locle is required');
+            throw new \InvalidArgumentException('Locale is required');
         }
 
         $option = $input->getOption('password');

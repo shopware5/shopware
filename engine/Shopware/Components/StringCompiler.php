@@ -121,11 +121,11 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * Convenient method
+     * Convenience method
      *
      * Abstracts optional $context and compatibilityMode
      *
-     * @param $value string
+     * @param string     $value
      * @param null|array $context
      *
      * @return string
@@ -151,8 +151,8 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * @param $value string
-     * @param $context array
+     * @param string $value
+     * @param array  $context
      *
      * @throws Enlight_Exception
      *
@@ -171,7 +171,7 @@ class Shopware_Components_StringCompiler
 
             if (stripos($errorMessage, 'Syntax Error in template') === 0) {
                 // Strip away filepath which is a md5sum
-                $errorMessage = 'Syntax Error ' . substr($errorMessage, 69);
+                $errorMessage = sprintf('Syntax Error %s', substr($errorMessage, 69));
             }
 
             throw new \Enlight_Exception($errorMessage, 0, $e);
@@ -181,8 +181,8 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * @param $value string
-     * @param $context array
+     * @param string $value
+     * @param array  $context
      *
      * @return string
      */

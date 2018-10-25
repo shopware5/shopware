@@ -37,9 +37,7 @@ class LegacyPluginExtractor
     public function extract($archive, $destination)
     {
         if (!is_writable($destination)) {
-            throw new \Exception(
-                'Destination directory is not writable'
-            );
+            throw new \Exception(sprintf('Destination directory "%s" is not writable', $destination));
         }
 
         $this->validatePluginZip($archive);
@@ -141,9 +139,7 @@ class LegacyPluginExtractor
     private function assertNoDirectoryTraversal($filename)
     {
         if (strpos($filename, '../') !== false) {
-            throw new \RuntimeException(
-                sprintf('Directory Traversal detected')
-            );
+            throw new \RuntimeException('Directory Traversal detected');
         }
     }
 }

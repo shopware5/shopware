@@ -56,7 +56,7 @@ class Address extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Customer\Address');
+        return $this->getManager()->getRepository(\Shopware\Models\Customer\Address::class);
     }
 
     /**
@@ -77,11 +77,11 @@ class Address extends Resource
 
         $query = $this->getRepository()->getOne($id);
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var $address \Shopware\Models\Customer\Address $address */
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         return $address;
@@ -104,10 +104,10 @@ class Address extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the address data
+        // Returns the address data
         $addresses = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $addresses, 'total' => $totalResult];
@@ -130,7 +130,7 @@ class Address extends Resource
 
         $customer = $this->getContainer()->get('models')->find(CustomerModel::class, $customerId);
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer by id $customerId not found");
+            throw new ApiException\NotFoundException(sprintf('Customer by id %s not found', $customerId));
         }
 
         $this->setupContext($customer->getShop()->getId());
@@ -175,11 +175,11 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var \Shopware\Models\Customer\Address $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->setupContext($address->getCustomer()->getShop()->getId());
@@ -216,11 +216,11 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var \Shopware\Models\Customer\Address $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->addressService->delete($address);
