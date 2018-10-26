@@ -421,6 +421,7 @@ class FieldHelper
             'country.iso3 as __country_iso3',
             'country.display_state_in_registration as __country_display_state_in_registration',
             'country.force_state_in_registration as __country_force_state_in_registration',
+            'country.allow_shipping as __country_allow_shipping',
         ];
 
         $fields = array_merge(

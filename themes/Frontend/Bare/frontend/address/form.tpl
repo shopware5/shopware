@@ -3,6 +3,9 @@
 {* Error messages *}
 {block name="frontend_address_error_messages"}
     {include file="frontend/register/error_message.tpl" error_messages=$error_messages}
+    {if $countryNotAvailableForShipping}
+        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="CountryNotAvailableForShipping" namespace="frontend/address/index"}{/s}"}
+    {/if}
 {/block}
 
 {block name="frontend_address_form_input_prefix"}
@@ -248,9 +251,11 @@
                             <option disabled="disabled" value="" selected="selected">{s name='RegisterBillingPlaceholderCountry' namespace="frontend/register/billing_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
                             {foreach $countryList as $country}
                                 {block name="frontend_address_form_input_country_option"}
-                                    <option value="{$country.id}" {if $country.id eq $formData.country.id}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
-                                        {$country.countryname}
-                                    </option>
+                                    {if $isShipping && $country.allow_shipping || !$isShipping}
+                                        <option value="{$country.id}" {if $country.id eq $formData.country.id}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
+                                            {$country.countryname}
+                                        </option>
+                                    {/if}
                                 {/block}
                             {/foreach}
                         </select>

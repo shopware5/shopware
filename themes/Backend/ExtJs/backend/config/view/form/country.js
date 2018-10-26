@@ -95,6 +95,10 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
             translatable: true,
             fieldLabel: '{s name=country/detail/active_label}Active{/s}'
         },{
+            xtype: 'config-element-boolean',
+            name: 'allowShipping',
+            fieldLabel: '{s name=country/detail/allow_shipping}Allow the usage as shipping country{/s}'
+        },{
             xtype: 'config-element-select',
             name: 'areaId',
             fieldLabel: '{s name=country/detail/area_label}Area{/s}',

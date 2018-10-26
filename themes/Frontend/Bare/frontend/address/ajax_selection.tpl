@@ -14,6 +14,15 @@
                         <a href="{url controller=address action=create}"
                            title="{s name="CreateNewAddressTitle"}{/s}"
                            data-address-editor="true"
+                            {if $extraData.sessionKey}
+                                data-sessionKey="{$extraData.sessionKey}"
+                            {/if}
+                            {if $extraData.setDefaultBillingAddress}
+                                data-setDefaultBillingAddress="{$extraData.setDefaultBillingAddress}"
+                            {/if}
+                            {if $extraData.setDefaultShippingAddress}
+                                data-setDefaultShippingAddress="{$extraData.setDefaultShippingAddress}"
+                            {/if}
                            data-showSelectionOnClose="true">{s name="CreateNewAddressLinkText"}{/s}</a>.
                     </p>
                 {/block}
@@ -44,28 +53,39 @@
                                                 </div>
                                             {/block}
 
-                                            {block name='frontend_address_selection_modal_container_item_actions'}
-                                                <div class="panel--actions">
-                                                    <form class="address-manager--selection-form" action="{url controller=address action=handleExtra}" method="post">
-                                                        <input type="hidden" name="id" value="{$address.id}" />
+                                            {block name='frontend_address_selection_modal_container_item_actions_wrapper'}
+                                                {if !$isShippingRequest || ($isShippingRequest && $address.country.allowShipping)}
+                                                    {block name='frontend_address_selection_modal_container_item_actions'}
+                                                        <div class="panel--actions">
+                                                            <form class="address-manager--selection-form" action="{url controller=address action=handleExtra}" method="post">
+                                                                <input type="hidden" name="id" value="{$address.id}" />
 
-                                                        {block name="frontend_address_selection_modal_container_item_extra_data"}
-                                                            {foreach $extraData as $key => $val}
-                                                                <input type="hidden" name="extraData[{$key}]" value="{$val}" />
-                                                            {/foreach}
-                                                        {/block}
+                                                                {block name="frontend_address_selection_modal_container_item_extra_data"}
+                                                                    {foreach $extraData as $key => $val}
+                                                                        <input type="hidden" name="extraData[{$key}]" value="{$val}" />
+                                                                    {/foreach}
+                                                                {/block}
 
-                                                        {block name="frontend_address_selection_modal_container_item_select_button"}
-                                                            <button class="btn is--block is--primary is--icon-right"
-                                                                    type="submit"
-                                                                    data-checkFormIsValid="false"
-                                                                    data-preloader-button="true">
-                                                                {s name="SelectAddressButton"}Use this address{/s}
-                                                                <span class="icon--arrow-right"></span>
-                                                            </button>
-                                                        {/block}
-                                                    </form>
-                                                </div>
+                                                                {block name="frontend_address_selection_modal_container_item_select_button"}
+                                                                    <button class="btn is--block is--primary is--icon-right"
+                                                                            type="submit"
+                                                                            data-checkFormIsValid="false"
+                                                                            data-preloader-button="true">
+                                                                        {s name="SelectAddressButton"}Use this address{/s}
+                                                                        <span class="icon--arrow-right"></span>
+                                                                    </button>
+                                                                {/block}
+                                                            </form>
+                                                        </div>
+                                                    {/block}
+                                                {else}
+                                                    {block name='frontend_address_selection_modal_container_item_invalid_country'}
+                                                        <div class="panel--actions">
+                                                            {s name="CountryNotAvailableForShipping" namespace="frontend/address/index" assign="WarningMessage"}{/s}
+                                                            {include file="frontend/_includes/messages.tpl" type="warning" content=$WarningMessage}
+                                                        </div>
+                                                    {/block}
+                                                {/if}
                                             {/block}
                                         </div>
                                     </div>

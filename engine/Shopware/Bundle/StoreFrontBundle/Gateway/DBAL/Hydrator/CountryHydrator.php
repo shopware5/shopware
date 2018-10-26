@@ -100,6 +100,10 @@ class CountryHydrator extends Hydrator
             $country->setRequiresStateSelection((bool) $data['__country_force_state_in_registration']);
         }
 
+        if (isset($data['__country_allow_shipping'])) {
+            $country->setAllowShipping((bool) $data['__country_allow_shipping']);
+        }
+
         if (isset($data['__country_taxfree'])) {
             $country->setTaxFree((bool) $data['__country_taxfree']);
         }

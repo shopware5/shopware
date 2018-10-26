@@ -128,7 +128,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                 $this->addressService->setDefaultBillingAddress($address);
             }
 
-            if (!empty($address->getAdditional()['setDefaultShippingAddress'])) {
+            if ($this->isValidShippingAddress($address) && !empty($address->getAdditional()['setDefaultShippingAddress'])) {
                 $this->addressService->setDefaultShippingAddress($address);
             }
 
@@ -163,7 +163,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($this->Request());
 
-        if ($form->isValid()) {
+        if ($form->isValid() && $this->isValidShippingAddress($address)) {
             $this->addressService->update($address);
 
             if (!empty($address->getAdditional()['setDefaultBillingAddress'])) {
@@ -190,6 +190,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             return;
         }
 
+        $this->View()->assign('countryNotAvailableForShipping', !$this->isValidShippingAddress($address));
         $this->View()->assign($this->getFormViewData($form));
     }
 
@@ -235,7 +236,13 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             return;
         }
 
-        $this->addressService->setDefaultShippingAddress($address);
+        $additional = $address->getAdditional();
+        $additional['setDefaultShippingAddress'] = 1;
+        $address->setAdditional($additional);
+
+        if ($this->isValidShippingAddress($address)) {
+            $this->addressService->setDefaultShippingAddress($address);
+        }
 
         $this->redirect(['action' => 'index', 'success' => 'default_shipping']);
     }
@@ -266,10 +273,10 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function ajaxSelectionAction()
     {
-        $addressRepository = Shopware()->Models()->getRepository(Address::class);
+        $extraData = $this->Request()->getParam('extraData', []);
+        $addressRepository = $this->getModelManager()->getRepository(Address::class);
         $addresses = $addressRepository->getListArray($this->get('session')->get('sUserId'));
         $activeAddressId = $this->Request()->getParam('id', null);
-        $extraData = $this->Request()->getParam('extraData', []);
 
         if (!empty($activeAddressId)) {
             foreach ($addresses as $key => $address) {
@@ -288,6 +295,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $this->View()->assign('addresses', $addresses);
         $this->View()->assign('activeAddressId', $activeAddressId);
         $this->View()->assign('extraData', $extraData);
+        $this->View()->assign('isShippingRequest', $this->isShippingRequest());
     }
 
     /**
@@ -306,6 +314,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $form = $this->createForm(AddressFormType::class, $address);
         $this->View()->assign($this->getFormViewData($form));
+        $this->View()->assign('isShipping', $this->isShippingRequest());
     }
 
     /**
@@ -455,7 +464,13 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         }
 
         if (!empty($extraData['setDefaultShippingAddress'])) {
-            $this->addressService->setDefaultShippingAddress($address);
+            $additional = $address->getAdditional();
+            $additional['setDefaultShippingAddress'] = 1;
+            $address->setAdditional($additional);
+
+            if ($this->isValidShippingAddress($address)) {
+                $this->addressService->setDefaultShippingAddress($address);
+            }
         }
     }
 
@@ -491,5 +506,31 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             'sTarget' => $this->Request()->getParam('sTarget'),
             'sTargetAction' => $this->Request()->getParam('sTargetAction'),
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    private function isShippingRequest()
+    {
+        $extraData = $this->Request()->getParam('extraData', []);
+        $keys = array_filter(explode(';', $extraData['sessionKey']));
+
+        return $extraData['setDefaultShippingAddress'] === '1' ||
+            in_array('checkoutShippingAddressId', $keys, true);
+    }
+
+    /**
+     * @param Address $address
+     *
+     * @return bool
+     */
+    private function isValidShippingAddress(Address $address)
+    {
+        if (empty($address->getAdditional()['setDefaultShippingAddress']) && $address->getId() !== $address->getCustomer()->getDefaultShippingAddress()->getId()) {
+            return true;
+        }
+
+        return $address->getCountry()->getAllowShipping();
     }
 }

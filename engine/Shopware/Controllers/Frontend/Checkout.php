@@ -145,7 +145,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->sCountryList = $this->getCountryList();
         $this->View()->sPayments = $this->getPayments();
         $this->View()->sDispatches = $this->getDispatches();
-        $this->View()->sDispatchNoOrder = $this->getDispatchNoOrder();
+        $this->View()->sDispatchNoOrder = ($this->View()->sUserData['additional']['user']['accountmode'] == 0 && $this->getDispatchNoOrder());
         $this->View()->sState = $this->getSelectedState();
 
         $this->View()->sUserData = $this->getUserData();
@@ -274,16 +274,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
             $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
         }
-
         if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
             $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
         }
 
+        $activeBillingAddressId = (int) $activeBillingAddressId;
+        $activeShippingAddressId = (int) $activeShippingAddressId;
+
         $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
         $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
 
-        $this->View()->assign('invalidBillingAddress', !$this->isValidAddress($activeBillingAddressId));
-        $this->View()->assign('invalidShippingAddress', !$this->isValidAddress($activeShippingAddressId));
+        $this->View()->assign('invalidBillingAddress', !$this->isValidAddress($activeBillingAddressId, $activeShippingAddressId === $activeBillingAddressId));
+        $this->View()->assign('invalidShippingAddress', !$this->isValidAddress($activeShippingAddressId, true));
     }
 
     /**
@@ -400,7 +402,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $activeShippingAddressId = $this->View()->sUserData['additional']['user']['default_shipping_address_id'];
         }
 
-        if (!$this->isValidAddress($activeBillingAddressId) || !$this->isValidAddress($activeShippingAddressId)) {
+        $activeBillingAddressId = (int) $activeBillingAddressId;
+        $activeShippingAddressId = (int) $activeShippingAddressId;
+
+        if (!$this->isValidAddress($activeBillingAddressId, false) || !$this->isValidAddress($activeShippingAddressId, true)) {
             $this->forward('confirm');
 
             return;
@@ -457,10 +462,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function paymentAction()
     {
+        $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
+
         if (empty($this->session['sOrderVariables'])
                 || $this->getMinimumCharge()
                 || $this->getEsdNote()
-                || $this->getDispatchNoOrder()) {
+                || ($accountMode === 0 && $this->getDispatchNoOrder())) {
             return $this->forward('confirm');
         }
 
@@ -760,7 +767,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $sErrorFlag = [];
         $sErrorMessages = [];
 
-        if ($dispatch === null && Shopware()->Config()->get('premiumshippingnoorder') === true && !$this->getDispatches($payment)) {
+        $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
+
+        if ($dispatch === null && Shopware()->Config()->get('premiumshippingnoorder') === true && !$this->getDispatches($payment) && $accountMode === 0) {
             $sErrorFlag['sDispatch'] = true;
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
                 ->get('ShippingPaymentSelectShipping', 'Please select a shipping method');
@@ -1599,7 +1608,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view->sAmountTax = $basket['sAmountTax'];
         $view->sAmountNet = $basket['AmountNetNumeric'];
         $view->sDispatches = $this->getDispatches();
-        $view->sDispatchNoOrder = $this->getDispatchNoOrder();
+        $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
+        $view->sDispatchNoOrder = ($accountMode === 0 && $this->getDispatchNoOrder());
     }
 
     /**
@@ -1923,13 +1933,20 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Validates the given address id with current shop configuration
      *
-     * @param int $addressId
+     * @param int  $addressId
+     * @param bool $isShippingAddress
      *
      * @return bool
      */
-    private function isValidAddress($addressId)
+    private function isValidAddress($addressId, $isShippingAddress = false)
     {
         $address = $this->get('models')->find(Address::class, $addressId);
+
+        if ($address && $isShippingAddress && !$address->getCountry()->getAllowShipping()) {
+            $this->View()->assign('invalidShippingCountry', true);
+
+            return false;
+        }
 
         return $this->get('shopware_account.address_validator')->isValid($address);
     }
