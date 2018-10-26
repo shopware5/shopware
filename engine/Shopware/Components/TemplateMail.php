@@ -219,9 +219,15 @@ class Shopware_Components_TemplateMail
                 $defaultContext['theme'] = $theme;
             }
 
-            $isoCode = $this->getShop()->get('isocode');
+            $isoCode = $this->getShop()->getId();
             $translationReader = $this->getTranslationReader();
-            $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+
+            if ($fallback = $this->getShop()->getFallback()) {
+                $translation = $translationReader->readWithFallback($isoCode, $fallback->getId(), 'config_mails', $mailModel->getId());
+            } else {
+                $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+            }
+
             $mailModel->setTranslation($translation);
         } else {
             $defaultContext = [
