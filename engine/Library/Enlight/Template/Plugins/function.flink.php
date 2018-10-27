@@ -60,8 +60,9 @@ function smarty_function_flink($params, $template)
         }
 
         //Cleanup vendor paths if is composer project
-        if (strpos($file, 'vendor/shopware/shopware') !== false) {
-            $file = substr($file, strlen($docPath . 'vendor/shopware/shopware'));
+        $vendorPath = 'vendor' . DIRECTORY_SEPARATOR . 'shopware' . DIRECTORY_SEPARATOR . 'shopware';
+        if (strpos($file, $vendorPath) !== false) {
+            $file = str_replace($vendorPath, '', $file);
         }
 
         // Some cleanup code
