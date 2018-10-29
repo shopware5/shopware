@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added ESD Article support for REST API
 
 ### Changes
+* Change backend session loading to fix issues with Incomplete locale object
 
 ### Removals
 
