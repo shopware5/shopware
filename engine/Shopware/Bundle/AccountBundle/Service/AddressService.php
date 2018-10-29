@@ -124,6 +124,7 @@ class AddressService implements AddressServiceInterface
     public function setDefaultShippingAddress(Address $address)
     {
         $customer = $address->getCustomer();
+
         $customer->setDefaultShippingAddress($address);
 
         $this->update($address);

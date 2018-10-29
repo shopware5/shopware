@@ -122,6 +122,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $shippingForm = $this->createShippingForm($data['register']['shipping']);
             $shipping = $shippingForm->getData();
             $errors['shipping'] = $this->getFormErrors($shippingForm);
+        } else {
+            /** @var Address $billing */
+            $billing = $billingForm->getData();
+
+            if (!$billing->getCountry()->getAllowShipping()) {
+                $errors['billing']['country'] = $this->get('snippets')->getNamespace('frontend/register/index')->get('CountryNotAvailableForShipping');
+            }
         }
 
         $validCaptcha = $this->validateCaptcha($this->get('config')->get('registerCaptcha'), $this->request);

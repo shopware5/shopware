@@ -27,6 +27,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Address;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Components\Random;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 
 /**
@@ -40,6 +41,12 @@ class CustomerTest extends TestCase
      * @var Customer
      */
     protected $resource;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        Shopware()->Container()->get('dbal_connection')->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
+    }
 
     /**
      * @return Customer
@@ -58,6 +65,39 @@ class CustomerTest extends TestCase
             'password' => 'fooobar',
             'active' => true,
             'email' => 'test@example.com',
+
+            'billing' => [
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'additionalAddressLine1' => 'Address Billing Addition 1',
+                'additionalAddressLine2' => 'Address Billing Addition 2',
+                'country' => '2',
+                'attribute' => [
+                    'text1' => 'Freitext1',
+                    'text2' => 'Freitext2',
+                ],
+            ],
+
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'additionalAddressLine1' => 'Address Shipping Addition 1',
+                'additionalAddressLine2' => 'Address Shipping Addition 2',
+                'country' => '2',
+                'street' => 'Musterstr. 123',
+                'zipcode' => '12345',
+                'city' => 'Mustercity',
+                'attribute' => [
+                    'text1' => 'Freitext1',
+                    'text2' => 'Freitext2',
+                ],
+            ],
         ];
 
         $this->resource->create($testData);
@@ -76,7 +116,7 @@ class CustomerTest extends TestCase
 
         $testData = [
             'password' => 'fooobar',
-            'email' => uniqid(rand()) . 'test@foobar.com',
+            'email' => Random::getAlphanumericString(5) . 'test@foobar.com',
             'number' => 'testnumber' . uniqid(),
             'firstlogin' => $firstlogin,
             'lastlogin' => $lastlogin,
@@ -253,7 +293,6 @@ class CustomerTest extends TestCase
     {
         $testData = [
             'active' => true,
-            'email' => true,
             'firstname' => 'Max',
             'lastname' => 'Mustermann',
             'email' => 'max@mustermann.de',
@@ -275,7 +314,7 @@ class CustomerTest extends TestCase
     {
         $testData = [
             'active' => true,
-            'email' => uniqid(rand()) . 'update@foobar.com',
+            'email' => Random::getAlphanumericString(5) . 'update@foobar.com',
             'billing' => [
                 'firstname' => 'Max Update',
                 'lastname' => 'Mustermann Update',
@@ -317,7 +356,7 @@ class CustomerTest extends TestCase
 
         $testData = [
             'active' => true,
-            'email' => uniqid(rand()) . 'update@foobar.com',
+            'email' => Random::getAlphanumericString(5) . 'update@foobar.com',
             'billing' => [
                 'firstname' => 'Max Update',
                 'lastname' => 'Mustermann Update',
@@ -413,7 +452,7 @@ class CustomerTest extends TestCase
         $requestData = [
             'password' => 'fooobar',
             'active' => true,
-            'email' => uniqid(rand()) . 'test1@foobar.com',
+            'email' => Random::getAlphanumericString(5) . 'test1@foobar.com',
 
             'firstlogin' => $firstlogin,
             'lastlogin' => $lastlogin,
@@ -486,7 +525,7 @@ class CustomerTest extends TestCase
         $requestData = [
             'password' => 'fooobar',
             'active' => true,
-            'email' => uniqid(rand()) . 'test2@foobar.com',
+            'email' => Random::getAlphanumericString(5) . 'test2@foobar.com',
 
             'firstlogin' => $firstlogin,
             'lastlogin' => $lastlogin,
@@ -549,7 +588,7 @@ class CustomerTest extends TestCase
     {
         $data = [
             'password' => 'fooobar',
-            'email' => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
             'number' => __FUNCTION__,
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -576,7 +615,7 @@ class CustomerTest extends TestCase
         $data = [
             'shopId' => 1,
             'password' => 'fooobar',
-            'email' => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
             'number' => __FUNCTION__,
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -602,7 +641,7 @@ class CustomerTest extends TestCase
     public function testCreateCustomerCreatesCustomerAttribute()
     {
         $data = [
-            'email' => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
             'number' => __FUNCTION__,
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -622,5 +661,100 @@ class CustomerTest extends TestCase
 
         $this->assertNotNull($customer->getAttribute());
         $this->assertInstanceOf(CustomerAttribute::class, $customer->getAttribute());
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
+     * @expectedExceptionMessage Country by id 25 is not available for shipping
+     */
+    public function testCreateCustomerWithInvalidShippingCountryInBilling()
+    {
+        $data = [
+            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
+            'number' => __FUNCTION__,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'billing' => [
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'country' => '25',
+            ],
+        ];
+
+        $this->resource->create($data);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
+     * @expectedExceptionMessage Country by id 25 is not available for shipping
+     */
+    public function testCreateCustomerWithInvalidShippingCountry()
+    {
+        $data = [
+            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
+            'number' => __FUNCTION__,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'billing' => [
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'country' => '2',
+            ],
+            'shipping' => [
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'country' => '25',
+            ],
+        ];
+
+        $this->resource->create($data);
+    }
+
+    /**
+     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
+     * @expectedExceptionMessage Country by id 25 is not available for shipping
+     */
+    public function testCreateCustomerAndUpdateWithInvalidShipping()
+    {
+        $data = [
+            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
+            'number' => __FUNCTION__,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'billing' => [
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'country' => '2',
+            ],
+        ];
+
+        $customer = $this->resource->create($data);
+
+        $this->assertNotEmpty($customer);
+
+        $this->resource->update($customer->getId(), [
+            'defaultBillingAddress' => [
+                'country' => '25',
+            ],
+        ]);
     }
 }

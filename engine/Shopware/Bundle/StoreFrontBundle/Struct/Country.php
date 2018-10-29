@@ -99,6 +99,11 @@ class Country extends Extendable
     protected $requiresStateSelection;
 
     /**
+     * @var bool
+     */
+    protected $allowShipping;
+
+    /**
      * @var State[] indexed by id
      */
     protected $states;
@@ -240,6 +245,14 @@ class Country extends Extendable
     }
 
     /**
+     * @param bool $allowShipping
+     */
+    public function setAllowShipping($allowShipping)
+    {
+        $this->allowShipping = (bool) $allowShipping;
+    }
+
+    /**
      * @return bool
      */
     public function isTaxFree()
@@ -277,6 +290,14 @@ class Country extends Extendable
     public function requiresStateSelection()
     {
         return $this->requiresStateSelection;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowShipping()
+    {
+        return $this->allowShipping;
     }
 
     /**

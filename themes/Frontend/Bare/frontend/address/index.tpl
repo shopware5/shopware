@@ -83,7 +83,7 @@
                                             <div class="address--actions-set-defaults">
 
                                                 {block name="frontend_address_item_content_set_default_shipping"}
-                                                    {if $sUserData.additional.user.default_shipping_address_id != $address.id}
+                                                    {if $sUserData.additional.user.default_shipping_address_id != $address.id && $address.country.allowShipping}
                                                         <form action="{url controller="address" action="setDefaultShippingAddress"}" method="post">
                                                             <input type="hidden" name="addressId" value="{$address.id}" />
                                                             <button type="submit" class="btn is--link is--small">{s name="AddressesSetAsDefaultShippingAction"}{/s}</button>

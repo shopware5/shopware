@@ -5241,6 +5241,7 @@ INSERT INTO `s_core_countries` (`id`, `countryname`, `countryiso`, `areaID`, `co
 (35, 'Rum&auml;nien', 'RO', 3, 'ROMANIA', 10, '', 0, 0, 0, 0, 'ROU', 0, 0),
 (36, 'Brasilien', 'BR', 2, 'BRAZIL', 10, '', 0, 0, 0, 0, 'BRA', 0, 0),
 (37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 'ISR', 0, 0);
+UPDATE `s_core_countries` SET `allow_shipping` = 1;
 
 TRUNCATE TABLE `s_core_countries_areas`;
 INSERT INTO `s_core_countries_areas` (`id`, `name`, `active`) VALUES

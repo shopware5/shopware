@@ -157,18 +157,25 @@ class Country extends ModelEntity
     private $iso3;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="display_state_in_registration", type="boolean", nullable=false)
      */
     private $displayStateInRegistration = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="force_state_in_registration", type="boolean", nullable=false)
      */
     private $forceStateInRegistration = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="allow_shipping", type="boolean", nullable=false)
+     */
+    private $allowShipping = false;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -551,5 +558,21 @@ class Country extends ModelEntity
     public function getForceStateInRegistration()
     {
         return $this->forceStateInRegistration;
+    }
+
+    /**
+     * @param bool $allowShipping
+     */
+    public function setAllowShipping($allowShipping)
+    {
+        $this->allowShipping = $allowShipping;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAllowShipping()
+    {
+        return $this->allowShipping;
     }
 }

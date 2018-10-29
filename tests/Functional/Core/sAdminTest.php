@@ -1250,6 +1250,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'display_state_in_registration' => '0',
                         'force_state_in_registration' => '0',
                         'countryarea' => 'welt',
+                        'allow_shipping' => '1',
                     ],
                     'countryShipping' => [
                         'id' => '20',
@@ -1267,6 +1268,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'display_state_in_registration' => '0',
                         'force_state_in_registration' => '0',
                         'countryarea' => 'welt',
+                        'allow_shipping' => '1',
                     ],
                     'stateShipping' => ['id' => 0],
                 ],

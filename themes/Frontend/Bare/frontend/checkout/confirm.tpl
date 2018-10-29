@@ -267,7 +267,11 @@
 
                                                             {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_invalid_data"}
                                                                 {if $invalidBillingAddress}
-                                                                    {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidAddress'}{/s}"}
+                                                                    {if $invalidShippingCountry}
+                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content="{s namespace="frontend/address/index" name='CountryNotAvailableForShipping'}{/s}"}
+                                                                    {else}
+                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidAddress'}{/s}"}
+                                                                    {/if}
                                                                 {else}
                                                                     {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_set_as_default"}
                                                                         {if $activeBillingAddressId != $sUserData.additional.user.default_billing_address_id || $activeShippingAddressId != $sUserData.additional.user.default_shipping_address_id}
@@ -469,7 +473,11 @@
 
                                                     {block name="frontend_checkout_confirm_information_addresses_shipping_panel_body_invalid_data"}
                                                         {if $invalidShippingAddress}
-                                                            {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidShippingAddress'}{/s}"}
+                                                            {if $invalidShippingCountry}
+                                                                {include file='frontend/_includes/messages.tpl' type="warning" content="{s namespace="frontend/address/index" name='CountryNotAvailableForShipping'}{/s}"}
+                                                                    {else}
+                                                                {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidShippingAddress'}{/s}"}
+                                                            {/if}
                                                         {else}
                                                             {block name="frontend_checkout_confirm_information_addresses_shipping_panel_body_set_as_default"}
                                                                 {if $activeShippingAddressId != $sUserData.additional.user.default_shipping_address_id}
