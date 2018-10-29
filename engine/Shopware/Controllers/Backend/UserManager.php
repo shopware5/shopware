@@ -321,9 +321,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $user->fromArray($params);
 
-        // Do logout
-        // $user->setSessionId('');
-
         Shopware()->Models()->persist($user);
         Shopware()->Models()->flush();
 
@@ -342,6 +339,25 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
                 'success' => true,
                 'data' => Shopware()->Models()->toArray($user),
         ]);
+    }
+
+    /**
+     * Unlocks a backend user
+     */
+    public function unlockUserAction()
+    {
+        $userId = (int) $this->Request()->getParam('userId');
+
+        try {
+            $connection = $this->container->get('dbal_connection');
+            $connection->executeQuery('UPDATE s_core_auth SET lockedUntil = NOW(), failedLogins = 0 WHERE id = ?', [$userId]);
+        } catch (Exception $e) {
+            $this->View()->assign('success', false);
+
+            return;
+        }
+
+        $this->View()->assign('success', true);
     }
 
     /**

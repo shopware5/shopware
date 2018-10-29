@@ -136,17 +136,6 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
      *
      * @return
      */
-    getUserPermissions: function(){
-       /*return Ext.create('Ext.panel.Panel',{
-           title: '{s name="create_user/tab_permissions"}Permissions{/s}',
-           html: 'Test'
-       });*/
-    },
-
-    /**
-     *
-     * @return
-     */
     getUserForm: function(){
         var me = this;
 
@@ -233,7 +222,8 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                                allowBlank: this.edit,
                                vtype: 'password'
                            },
-                           this.getUserPasswordFieldRepeat()
+                           this.getUserPasswordFieldRepeat(),
+                           this.createUnlockField()
                        ]
                   }
                   ]
@@ -257,6 +247,50 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
             supportText: '{s name=create_user/repeat_password_info}Repeat your password{/s}',
             vtype: 'passwordRepeat'
         });
+    },
+
+    createUnlockField: function() {
+        var me = this,
+            disabled = true;
+
+        if (me.record.get('locked')) {
+            disabled = false;
+        }
+
+        me.unlockContainer = Ext.create('Ext.container.Container', {
+            items: [
+                {
+                    xtype: 'displayfield',
+                    fieldLabel: '{s name="create_user/locked_until"}Locked until{/s}',
+                    labelAlign: 'left',
+                    margin: '0 0 5 0',
+                    name: 'lockedUntil',
+                    fieldStyle: 'margin-top: 5px',
+                    renderer: function (val) {
+                        if (disabled) {
+                            return '';
+                        }
+
+                        return Ext.util.Format.date(val) + ' ' + Ext.util.Format.date(val, timeFormat)
+                    }
+                }, {
+                    xtype: 'button',
+                    text: '{s name="create_user/unlock"}Unlock{/s}',
+                    iconCls: 'sprite-key--pencil',
+                    anchor: '100%',
+                    cls: 'small secondary',
+                    margin: '0 0 0 105',
+                    disabled: disabled,
+                    handler: Ext.bind(me.onClickUnlock, me)
+                }
+            ]
+        });
+
+        return me.unlockContainer;
+    },
+
+    onClickUnlock: function () {
+        this.fireEvent('unlockUser', this.unlockContainer, this.record, this.formPanel);
     },
 
     randomString: function() {
