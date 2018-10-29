@@ -8,12 +8,27 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Additions
 
+* Added shipping country restrictions
 * Added ESD Article support for REST API
+* Added where-Condition for ES SubPriceQuery to improve indexing speed with active variant filter
+* Added filter event `Shopware_Components_Document_Render_FilterMpdfConfig` to be able to filter the mpdf config for document rendering
+* Added the `renderer=html` GET-parameter to be able to debug documents
+* Added button to unlock backend users in the detail view
+* Added new payment api resource
+* Added fileSize column to table view of media manager
+* Added possibility to use boolean keywords when defining boolean attributes
+* Added shop site as possible entities in attributes
+* Added translation fallback for mails
 
 ### Changes
-* Change backend session loading to fix issues with Incomplete locale object
 
-### Removals
+* Change order overwrite protection to fix false positive message
+* Changed backend session loading to fix issues with incomplete locale object
+* Changed model definition of order status to allow setting id
+* Changed multi select entities in attributes to allow shop sites
+* Changed "Save" on newsletter page is now being disabled on submit
+* Changed Shopware RSS Feed to use php default stream context
+* Changed topseller generation so it now also works when topseller are deactivated
 
 ## 5.5.2
 
