@@ -31,9 +31,9 @@
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-Ext.define('Enlight.form.Field',
+Ext.define('Enlight.form.field.HtmlEditor',
     {
-        override: 'Ext.form.Field',
+        override: 'Ext.form.field.HtmlEditor',
 
         afterRender: function () {
             var me = this;
@@ -43,5 +43,5 @@ Ext.define('Enlight.form.Field',
 
     }, function()
     {
-        Ext.form.Field.mixin('helpSupportElems', Enlight.form.mixin.HelpSupportElements);
+        Ext.form.field.HtmlEditor.mixin('helpSupportElems', Enlight.form.mixin.HelpSupportElements);
 });
