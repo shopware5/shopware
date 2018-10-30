@@ -135,7 +135,7 @@ class CustomerStream extends Resource
             $criteria->addCondition($condition);
         }
         $decodedSortings = json_decode($sortings, true);
-        if (!empty($sortings)) {
+        if (!empty($decodedSortings)) {
             /** @var SortingInterface[] $unserializedSortings */
             $unserializedSortings = $this->reflectionHelper->unserialize($decodedSortings, '');
 
@@ -412,12 +412,12 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param int   $streamId
-     * @param array $conditions
+     * @param int        $streamId
+     * @param array|null $conditions
      *
      * @return array
      */
-    private function getConditions($streamId, array $conditions = [])
+    private function getConditions($streamId, $conditions = [])
     {
         if (!empty($conditions)) {
             return $this->reflectionHelper->unserialize(
