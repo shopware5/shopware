@@ -165,6 +165,9 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
                 $cacheWarmer->warmUpUrls($sliceUrls, $context, $concurrentRequests);
 
                 $sliceCount = count($sliceUrls);
+                if ($sliceCount === 0) {
+                    break;
+                }
                 $progressBar->advance($sliceCount);
                 $offset += $sliceCount;
             }
