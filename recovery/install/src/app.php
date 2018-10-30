@@ -69,10 +69,10 @@ if (isset($_SESSION['databaseConnectionInfo'])) {
         $databaseFactory = new DatabaseFactory();
         $connection = $databaseFactory->createPDOConnection($connectionInfo);
 
-        // init db in container
+        // Init db in container
         $container->offsetSet('db', $connection);
     } catch (\Exception $e) {
-        // jump to form
+        // Jump to form
         throw $e;
     }
 }
@@ -144,7 +144,7 @@ function localeForLanguage($language)
 }
 
 /**
- * @param $app
+ * @param \Slim\Slim $app
  */
 function prefixSessionVars(\Slim\Slim $app)
 {
@@ -163,12 +163,12 @@ $translations = require __DIR__ . "/../data/lang/$selectedLanguage.php";
 
 $container->offsetSet('translations', $translations);
 
-/** @var $translationService TranslationService */
+/** @var TranslationService $translationService */
 $translationService = $container->offsetGet('translation.service');
 
 $container->offsetSet('install.language', $selectedLanguage);
 
-/** @var $helper MenuHelper */
+/** @var MenuHelper $helper */
 $menuHelper = $container->offsetGet('menu.helper');
 
 // Set global variables
@@ -319,7 +319,7 @@ $app->map('/database-configuration/', function () use ($app, $container, $menuHe
     $_SESSION['databaseConnectionInfo'] = $connectionInfo;
 
     try {
-        /** @var $configWriter ConfigWriter */
+        /** @var ConfigWriter $configWriter */
         $configWriter = $container->offsetGet('config.writer');
         $configWriter->writeConfig($connectionInfo);
     } catch (\Exception $e) {
@@ -375,7 +375,7 @@ $app->map('/edition/', function () use ($app, $translations, $container, $menuHe
         return;
     }
 
-    /** @var $licenseUnpackService LocalLicenseUnpackService */
+    /** @var LocalLicenseUnpackService $licenseUnpackService */
     $licenseUnpackService = $container->offsetGet('license.service');
 
     if ($app->request()->isPost()) {
@@ -402,7 +402,7 @@ $app->map('/edition/', function () use ($app, $translations, $container, $menuHe
                 return;
             }
 
-            /** @var $licenseInstaller LicenseInstaller */
+            /** @var LicenseInstaller $licenseInstaller */
             $licenseInstaller = $container->offsetGet('license.installer');
             $licenseInstaller->installLicense($licenseInformation);
 
@@ -538,26 +538,26 @@ $app->map('/database-import/importDatabase', function () use ($app, $container) 
     $response->header('Content-Type', 'application/json');
     $response->status(200);
 
-    /** @var $db \PDO */
+    /** @var \PDO $db */
     $db = $container->offsetGet('db');
 
-    /** @var $dump \Shopware\Recovery\Common\DumpIterator */
+    /** @var \Shopware\Recovery\Common\DumpIterator $dump */
     $dump = $container->offsetGet('database.dump_iterator');
 
     $offset = (int) $request->get('offset', 0);
     $totalCount = (int) $request->get('totalCount', 0);
 
-    if ($offset == 0) {
+    if ($offset === 0) {
         $totalCount = $dump->count();
     }
 
-    // how many queries should be executed per http request?
+    // How many queries should be executed per http request?
     $batchSize = 100;
 
     /** @var Shopware\Recovery\Install\Service\DatabaseService $databaseService */
     $databaseService = $container->offsetGet('database.service');
 
-    //For end users, we hide the error if we can not create the database or alter it.
+    // For end users, we hide the error if we can not create the database or alter it.
     try {
         $databaseService->createDatabase($_SESSION['parameters']['c_database_schema']);
     } catch (\Exception $e) {
@@ -623,16 +623,16 @@ $app->map('/database-import/importSnippets', function () use ($app, $container) 
     $response->header('Content-Type', 'application/json');
     $response->status(200);
 
-    /** @var $dump \Shopware\Recovery\Common\DumpIterator */
+    /** @var \Shopware\Recovery\Common\DumpIterator $dump */
     $dump = $container->offsetGet('database.snippet_dump_iterator');
-    $offset = $app->request()->get('offset');
+    $offset = (int) $app->request()->get('offset', 0);
     $totalCount = (int) $app->request()->get('totalCount', 0);
 
-    if ($offset == 0) {
+    if ($offset === 0) {
         $totalCount = $dump->count();
     }
 
-    /** @var $conn \PDO */
+    /** @var \PDO $conn */
     $conn = $container->offsetGet('db');
 
     $preSql = '
@@ -704,13 +704,13 @@ $app->post('/check-database-connection', function () use ($container, $app) {
         return;
     }
 
-    // init db in container
+    // Init db in container
     $container->offsetSet('db', $connection);
 
-    /** @var $databaseService DatabaseService */
+    /** @var DatabaseService $databaseService */
     $databaseService = $container->offsetGet('database.service');
 
-    //No need for listing the following schemas
+    // No need for listing the following schemas
     $omitSchemas = ['information_schema', 'performance_schema', 'sys', 'mysql'];
     $databaseNames = $databaseService->getSchemas($omitSchemas);
 

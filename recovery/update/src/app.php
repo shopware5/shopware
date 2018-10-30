@@ -55,7 +55,7 @@ $app->hook('slim.before.dispatch', function () use ($app, $container) {
 
     session_set_cookie_params(7200, $baseUrl);
 
-    //Silence errors during session start, Work around session_start(): ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
+    // Silence errors during session start, Work around session_start(): ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
     @session_start();
     @set_time_limit(0);
 
@@ -190,7 +190,7 @@ $app->get('/redirect/:target', function ($target) use ($app) {
     $url = str_replace('/index.php', '', $app->request()->getRootUri());
     $url = str_replace('/recovery/update', '/', $url);
     if ($target == 'backend') {
-        $url = $url . 'backend';
+        $url .= 'backend';
     }
 
     session_destroy();
