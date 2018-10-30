@@ -21,11 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1405 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1600 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql('ALTER TABLE `s_articles_attributes` DROP FOREIGN KEY `s_articles_attributes_ibfk_1`;');
-        $this->addSql('ALTER TABLE `s_articles_attributes` DROP COLUMN `articleID`;');
+        if ($modus === \Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL) {
+            $this->addSql('ALTER TABLE `s_articles_attributes` DROP FOREIGN KEY `s_articles_attributes_ibfk_1`;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` DROP COLUMN `articleID`;');
+        }
     }
 }

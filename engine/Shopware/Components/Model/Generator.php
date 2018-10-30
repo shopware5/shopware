@@ -295,6 +295,7 @@ class %className% extends ModelEntity
             }
 
             $table = $this->getSchemaManager()->listTableDetails($tableName);
+
             $sourceCode = $this->generateModel($table);
             $result = $this->createModelFile($table, $sourceCode);
             if ($result === false) {
@@ -563,6 +564,10 @@ class %className% extends ModelEntity
         $columns = [];
         /** @var $column \Doctrine\DBAL\Schema\Column */
         foreach ($table->getColumns() as $column) {
+            if ($table->getName() === 's_articles_attributes' && $column->getName() === 'articleID') {
+                continue;
+            }
+
             $columns[] = $this->getColumnProperty($table, $column);
         }
 
@@ -729,6 +734,10 @@ class %className% extends ModelEntity
         $associations = [];
         /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
         foreach ($table->getForeignKeys() as $foreignKey) {
+            if ($table->getName() === 's_articles_attributes' && $foreignKey->getColumns()[0] === 'articleID') {
+                continue;
+            }
+
             $associations[] = $this->getAssociationProperty($table, $foreignKey);
         }
 
@@ -886,6 +895,10 @@ class %className% extends ModelEntity
         $columns = [];
         /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
         foreach ($table->getForeignKeys() as $foreignKey) {
+            if ($table->getName() === 's_articles_attributes' && $foreignKey->getColumns()[0] === 'articleID') {
+                continue;
+            }
+
             $columns[] = $this->getAssociationFunctions($foreignKey);
         }
 
