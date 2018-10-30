@@ -45,7 +45,6 @@
                                placeholder="{s name='RegisterLabelTaxId'}{/s}{if {config name=vatcheckrequired}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                id="register_billing_vatid"
                                value="{$form_data.vatId|escape}"
-                                {if {config name=vatcheckrequired}} required="required" aria-required="true"{/if}
                                class="register--field{if isset($error_flags.vatId)} has--error{/if}{if {config name=vatcheckrequired}} is--required{/if}"/>
                     </div>
                 {/block}
