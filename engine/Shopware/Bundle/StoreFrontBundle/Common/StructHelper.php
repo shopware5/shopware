@@ -61,6 +61,7 @@ class StructHelper
         $product->setWidth($listProduct->getWidth());
         $product->setPriceGroup($listProduct->getPriceGroup());
         $product->setCreatedAt($listProduct->getCreatedAt());
+        $product->setUpdatedAt($listProduct->getUpdatedAt());
         $product->setPriceRules($listProduct->getPriceRules());
         $product->setCheapestPriceRule($listProduct->getCheapestPriceRule());
         $product->setManufacturerNumber($listProduct->getManufacturerNumber());

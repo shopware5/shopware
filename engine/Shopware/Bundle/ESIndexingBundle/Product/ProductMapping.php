@@ -154,6 +154,7 @@ class ProductMapping implements MappingInterface
 
                 // Dates
                 'formattedCreatedAt' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
+                'formattedUpdatedAt' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'formattedReleaseDate' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
 
                 // Nested structs
