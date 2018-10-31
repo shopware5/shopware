@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Components\Random;
 use Shopware\Models\Article\Image;
 
 /**
@@ -2873,6 +2874,28 @@ class ArticleTest extends TestCase
         }
 
         $this->resource->delete($id);
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testInvalidProductInBatch()
+    {
+        $minimalTestArticle = [
+            'id' => 2,
+            'images' => [
+                [
+                    'mediaId' => 10,
+                    'description' => null,
+                ],
+            ],
+        ];
+
+        $result = $this->resource->batch([$minimalTestArticle, $minimalTestArticle]);
+
+        $this->assertEquals(false, $result[0]['success']);
+        $this->assertTrue(Shopware()->Models()->isOpen());
     }
 
     /**

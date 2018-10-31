@@ -587,10 +587,10 @@ abstract class Resource
     protected function resetEntityManager()
     {
         $this->getContainer()->reset('models')
-                                  ->reset('db_connection')
+                                  ->reset('dbal_connection')
                                   ->load('models');
 
-        $this->getContainer()->load('db_connection');
+        $this->getContainer()->load('dbal_connection');
 
         $this->setManager($this->container->get('models'));
     }
