@@ -388,7 +388,7 @@ class ProductListingVariationLoader
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
         $priceTable->andWhere('defaultPrice.articledetailsID IN (:variants)');
 
-        $priceListingQuery->select('prices.`articledetailsID` as articledetailsID');
+        $priceListingQuery->select('DISTINCT prices.`articledetailsID` as articledetailsID');
         $priceListingQuery->addSelect('prices.`articleID` as articleID');
         $priceListingQuery->addSelect($this->listingPriceHelper->getSelection($context) . 'as price');
         $priceListingQuery->from('s_articles', 'product');
