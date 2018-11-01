@@ -116,7 +116,7 @@ class Download
             return 0;
         }
 
-        $range = $size . '-' . $totalSize;
+        $range = $size . '-' . ($totalSize - 1);
 
         if (!function_exists('curl_init')) {
             throw new \Exception('PHP Extension "curl" is required to download a file');
