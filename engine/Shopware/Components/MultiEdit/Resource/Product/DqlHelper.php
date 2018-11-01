@@ -25,6 +25,7 @@
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Attribute\Configuration;
 
 /**
  * The dql helper class holds some general helper methods used by various components
@@ -407,15 +408,22 @@ class DqlHelper
             $metadata = $this->getEntityManager()->getClassMetadata($entity);
 
             $fields = $metadata->fieldMappings;
+            if ($entityShort === 'Attribute') {
+                $fields = $this->loadReadOnlyAttribute($fields);
+            }
 
             foreach ($fields as $name => $config) {
                 $alias = $entityShort . '_' . $name;
                 $key = $entityShort . ucfirst($name);
                 $mapping = $metadata->getFieldMapping($name);
+                $editable = substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID'
+                    && $entity != 'Shopware\Models\Tax\Tax' && $entity != 'Shopware\Models\Article\Supplier'
+                    && (!isset($config['readonly']) || $config['readonly'] !== true);
+
                 $result[$key] = [
                     'entity' => $entityShort,
                     'field' => $name,
-                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax' && $entity != 'Shopware\Models\Article\Supplier',
+                    'editable' => $editable,
                     'type' => $config['type'],
                     'precision' => $config['precision'],
                     'nullable' => (bool) $config['nullable'],
@@ -1026,5 +1034,24 @@ class DqlHelper
         }
 
         return $show;
+    }
+
+    private function loadReadOnlyAttribute(array $fields) {
+        $fieldnames = array_keys($fields);
+
+        $builder = $this->em->createQueryBuilder();
+        $builder
+            ->select(['config.columnName', 'config.readonly'])
+            ->from(Configuration::class, 'config')
+            ->where('config.tableName = :tablename')
+            ->andWhere($builder->expr()->in('config.columnName', $fieldnames))
+            ->indexBy('config', 'config.columnName');
+
+        $result = $builder->getQuery()->execute(['tablename' => 's_articles_attributes'], Query::HYDRATE_ARRAY);
+
+        foreach ($result as $column => $field) {
+            $fields[$column]['readonly'] = $field['readonly'];
+        }
+        return $fields;
     }
 }
