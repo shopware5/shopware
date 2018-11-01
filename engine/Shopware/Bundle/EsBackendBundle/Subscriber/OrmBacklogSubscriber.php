@@ -156,7 +156,7 @@ class OrmBacklogSubscriber implements EventSubscriber
         $time = (new \DateTime())->format('Y-m-d H:i:s');
         foreach ($queue as $row) {
             $row['time'] = $time;
-            $this->container->get('dbal_connection')->insert('es_backend_backlog', $row);
+            $this->container->get('dbal_connection')->insert('s_es_backend_backlog', $row);
         }
     }
 }
