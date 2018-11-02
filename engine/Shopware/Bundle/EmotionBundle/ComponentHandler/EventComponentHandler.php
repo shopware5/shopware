@@ -54,8 +54,6 @@ class EventComponentHandler implements ComponentHandlerInterface
      */
     public function supports(Element $element)
     {
-        $this->deprecationLog($element);
-
         return false;
     }
 
