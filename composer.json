@@ -111,7 +111,9 @@
         "exclude-from-classmap": [
             "engine/Shopware/Plugins/Community/",
             "engine/Shopware/Plugins/Local/",
-            "custom/plugins/"
+            "custom/plugins/",
+            "vendor/doctrine/orm/lib/Doctrine/ORM/Persisters/Entity/BasicEntityPersister.php",
+            "vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php"
         ]
     },
     "autoload-dev": {
@@ -121,7 +123,14 @@
             "Shopware\\Tests\\Unit\\": "tests/Unit",
             "Shopware\\Tests\\Functional\\": "tests/Functional"
         },
-        "files": ["tests/dbunit_shims.php"]
+        "files": ["tests/dbunit_shims.php"],
+        "exclude-from-classmap": [
+            "engine/Shopware/Plugins/Community/",
+            "engine/Shopware/Plugins/Local/",
+            "custom/plugins/",
+            "vendor/doctrine/orm/lib/Doctrine/ORM/Persisters/Entity/BasicEntityPersister.php",
+            "vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php"
+        ]
     },
     "config": {
         "autoloader-suffix": "Shopware",
