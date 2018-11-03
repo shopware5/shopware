@@ -9,7 +9,8 @@
     {* Pagination - Frist page *}
     {block name="frontend_listing_actions_paging_first"}
         {if $sPage > 1}
-            <a href="{$baseUrl}?{$shortParameters.sPage}=1" title="{"{s name='ListingLinkFirst'}{/s}"|escape}" class="paging--link paging--prev" data-action-link="true">
+            {s name="ListingLinkFirst" assign="snippetListingLinkFirst"}{/s}
+            <a href="{$baseUrl}?{$shortParameters.sPage}=1" title="{$snippetListingLinkFirst|escape}" class="paging--link paging--prev" data-action-link="true">
                 <i class="icon--arrow-left"></i>
                 <i class="icon--arrow-left"></i>
             </a>
@@ -19,7 +20,8 @@
     {* Pagination - Previous page *}
     {block name='frontend_listing_actions_paging_previous'}
         {if $sPage > 1}
-            <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage-1}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="paging--link paging--prev" data-action-link="true">
+            {s name="ListingLinkPrevious" assign="snippetListingLinkPrevious"}{/s}
+            <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage-1}" title="{$snippetListingLinkPrevious|escape}" class="paging--link paging--prev" data-action-link="true">
                 <i class="icon--arrow-left"></i>
             </a>
         {/if}
@@ -35,7 +37,8 @@
     {* Pagination - Next page *}
     {block name='frontend_listing_actions_paging_next'}
         {if $sPage < $pages}
-            <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage+1}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="paging--link paging--next" data-action-link="true">
+            {s name="ListingLinkNext" assign="snippetListingLinkNext"}{/s}
+            <a href="{$baseUrl}?{$shortParameters.sPage}={$sPage+1}" title="{$snippetListingLinkNext|escape}" class="paging--link paging--next" data-action-link="true">
                 <i class="icon--arrow-right"></i>
             </a>
         {/if}
@@ -44,7 +47,8 @@
     {* Pagination - Last page *}
     {block name="frontend_listing_actions_paging_last"}
         {if $sPage < $pages}
-            <a href="{$baseUrl}?{$shortParameters.sPage}={$pages}" title="{"{s name='ListingLinkLast'}{/s}"|escape}" class="paging--link paging--next" data-action-link="true">
+            {s name="ListingLinkLast" assign="snippetListingLinkLast"}{/s}
+            <a href="{$baseUrl}?{$shortParameters.sPage}={$pages}" title="{$snippetListingLinkLast|escape}" class="paging--link paging--next" data-action-link="true">
                 <i class="icon--arrow-right"></i>
                 <i class="icon--arrow-right"></i>
             </a>

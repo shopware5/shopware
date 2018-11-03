@@ -68,7 +68,8 @@
             {else}
                 {* Error message *}
                 {block name='frontend_newsletter_listing_error_message'}
-                    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='NewsletterListingInfoEmpty'}{/s}"}
+                    {s name="NewsletterListingInfoEmpty" assign="snippetNewsletterListingInfoEmpty"}{/s}
+                    {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetNewsletterListingInfoEmpty}
                 {/block}
             {/if}
 

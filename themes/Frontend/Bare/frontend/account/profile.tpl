@@ -3,7 +3,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb[] = ['name' => "{s name="ProfileHeadline"}{/s}", 'link' => {url}]}
+    {s name="ProfileHeadline" assign="snippetProfileHeadline"}{/s}
+    {$sBreadcrumb[] = ['name' => $snippetProfileHeadline, 'link' => {url}]}
 {/block}
 
 {* Main content *}
@@ -25,14 +26,16 @@
 
                                 {block name="frontend_account_profile_profile_success"}
                                     {if $section == 'profile' && $success}
-                                        {include file="frontend/_includes/messages.tpl" type="success" content="{s name="ProfileSaveSuccessMessage"}{/s}"}
+                                        {s name="ProfileSaveSuccessMessage" assign="snippetProfileSaveSuccessMessage"}{/s}
+                                        {include file="frontend/_includes/messages.tpl" type="success" content=$snippetProfileSaveSuccessMessage}
                                     {/if}
                                 {/block}
 
                                 {* Error messages *}
                                 {block name="frontend_account_profile_profile_errors"}
                                     {if $section == 'profile' && $errorMessages}
-                                        {include file="frontend/register/error_message.tpl" error_messages=["{s name="ErrorFillIn" namespace="frontend/account/internalMessages"}{/s}"]}
+                                        {s name="ErrorFillIn" namespace="frontend/account/internalMessages" assign="snippetErrorFillIn"}{/s}
+                                        {include file="frontend/register/error_message.tpl" error_messages=[$snippetErrorFillIn]}
                                     {/if}
                                 {/block}
 
@@ -196,7 +199,8 @@
 
                                         {block name="frontend_account_profile_email_success"}
                                             {if $section == 'email' && $success}
-                                                {include file="frontend/_includes/messages.tpl" type="success" content="{s name="EmailSaveSuccessMessage"}{/s}"}
+                                                {s name="EmailSaveSuccessMessage" assign="snippetEmailSaveSuccessMessage"}{/s}
+                                                {include file="frontend/_includes/messages.tpl" type="success" content=$snippetEmailSaveSuccessMessage}
                                             {/if}
                                         {/block}
 
@@ -300,7 +304,8 @@
 
                                         {block name="frontend_account_profile_password_success"}
                                             {if $section == 'password' && $success}
-                                                {include file="frontend/_includes/messages.tpl" type="success" content="{s name="PasswordSaveSuccessMessage"}{/s}"}
+                                                {s name="PasswordSaveSuccessMessage" assign="snippetPasswordSaveSuccessMessage"}{/s}
+                                                {include file="frontend/_includes/messages.tpl" type="success" content=$snippetPasswordSaveSuccessMessage}
                                             {/if}
                                         {/block}
 

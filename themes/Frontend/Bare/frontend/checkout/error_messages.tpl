@@ -14,39 +14,45 @@
 
 {block name="frontend_checkout_error_payment_blocked"}
     {if $paymentBlocked}
-        {include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmInfoPaymentBlocked'}{/s}"}
+        {s name="ConfirmInfoPaymentBlocked" assign="snippetConfirmInfoPaymentBlocked"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetConfirmInfoPaymentBlocked}
     {/if}
 {/block}
 
 {block name="frontend_checkout_error_messages_esd_note"}
     {if $sShowEsdNote}
-        {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='ConfirmInfoPaymentNotCompatibleWithESD'}{/s}"}
+        {s name="ConfirmInfoPaymentNotCompatibleWithESD" assign="snippetConfirmInfoPaymentNotCompatibleWithESD"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetConfirmInfoPaymentNotCompatibleWithESD}
     {/if}
 {/block}
 
 {block name='frontend_checkout_error_messages_no_shipping'}
     {if $sDispatchNoOrder}
-        {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='ConfirmInfoNoDispatch'}{/s}"}
+        {s name="ConfirmInfoNoDispatch" assign="snippetConfirmInfoNoDispatch"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetConfirmInfoNoDispatch}
     {/if}
 {/block}
     
 {* Minimum sum not reached *}
 {block name='frontend_checkout_error_messages_minimum_not_reached'}
     {if $sMinimumSurcharge}
-        {include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmInfoMinimumSurcharge'}{/s}"}
+        {s name="ConfirmInfoMinimumSurcharge" assign="snippetConfirmInfoMinimumSurcharge"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetConfirmInfoMinimumSurcharge}
     {/if}
 {/block}
 
 {* Service article tos not accepted *}
 {block name='frontend_checkout_error_messages_service_error'}
     {if $agreementErrors && $agreementErrors.serviceError}
-        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="ServiceErrorMessage"}{/s}"}
+        {s name="ServiceErrorMessage" assign="snippetServiceErrorMessage"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetServiceErrorMessage}
     {/if}
 {/block}
 
 {* ESD article tos not accepted *}
 {block name='frontend_checkout_error_messages_esd_error'}
     {if $agreementErrors && $agreementErrors.esdError && {config name="showEsdWarning"}}
-        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="EsdErrorMessage"}{/s}"}
+        {s name="EsdErrorMessage" assign="snippetEsdErrorMessage"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetEsdErrorMessage}
     {/if}
 {/block}

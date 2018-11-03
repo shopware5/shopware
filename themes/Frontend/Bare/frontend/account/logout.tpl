@@ -5,7 +5,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb = [['name' => "{s name='AccountLogoutTitle'}{/s}", 'link' => {url}]]}
+    {s name="AccountLogoutTitle" assign="snippetAccountLogoutTitle"}{/s}
+    {$sBreadcrumb = [['name' => $snippetAccountLogoutTitle, 'link' => {url}]]}
 {/block}
 
 {block name='frontend_index_content'}
@@ -26,10 +27,12 @@
 
                 {block name="frontend_account_logout_info_actions"}
                     <div class="panel--actions is--wide">
-                        <a class="btn is--secondary is--icon-left" href="{url controller='index'}" title="{"{s name='AccountLogoutButton'}{/s}"|escape}">
+                        {s name="AccountLogoutButton" assign="snippetAccountLogoutButton"}{/s}
+                        <a class="btn is--secondary is--icon-left" href="{url controller='index'}" title="{$snippetAccountLogoutButton|escape}">
                             <i class="icon--arrow-left"></i>{s name="AccountLogoutButton"}{/s}
                         </a>
-                        <a class="btn is--primary is--icon-right" href="{url controller='account'}" title="{"{s name='AccountLogoutAccountButton'}{/s}"|escape}">
+                        {s name="AccountLogoutAccountButton" assign="snippetAccountLogoutAccountButton"}{/s}
+                        <a class="btn is--primary is--icon-right" href="{url controller='account'}" title="{$snippetAccountLogoutAccountButton|escape}">
                             <i class="icon--arrow-right"></i>{s name="AccountLogoutAccountButton"}{/s}
                         </a>
                     </div>

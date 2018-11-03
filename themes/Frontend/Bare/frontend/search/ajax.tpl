@@ -24,7 +24,8 @@
                                     {if $search_result.image.thumbnails[0]}
                                         <img srcset="{$search_result.image.thumbnails[0].sourceSet}" alt="{$search_result.name|escape}" class="media--image">
                                     {else}
-                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{"{s name='ListingBoxNoPicture'}{/s}"|escape}" class="media--image">
+                                        {s name="ListingBoxNoPicture" assign="snippetListingBoxNoPicture"}{/s}
+                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$snippetListingBoxNoPicture|escape}" class="media--image">
                                     {/if}
                                 </span>
                             {/block}

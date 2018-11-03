@@ -3,9 +3,11 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {if $sRequests.sSearchOrginal}
-        {$sBreadcrumb = [['name' => "{s name="SearchResultsFor"}{/s}"]]}
+        {s name="SearchResultsFor" assign="snippetSearchResultsFor"}{/s}
+        {$sBreadcrumb = [['name' => $snippetSearchResultsFor]]}
     {else}
-        {$sBreadcrumb = [['name' => "{s name="SearchResultsEmpty"}{/s}"]]}
+        {s name="SearchResultsEmpty" assign="snippetSearchResultsEmpty"}{/s}
+        {$sBreadcrumb = [['name' => $snippetSearchResultsEmpty]]}
     {/if}
     {$smarty.block.parent}
 {/block}
@@ -20,13 +22,15 @@
 
                     {* No results found *}
                     {block name='frontend_search_message_no_results'}
-                        {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SearchFuzzyHeadlineNoResult'}{/s}"}
+                        {s name="SearchFuzzyHeadlineNoResult" assign="snippetSearchFuzzyHeadlineNoResult"}{/s}
+                        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetSearchFuzzyHeadlineNoResult}
                     {/block}
                 {else}
 
                     {* Given search term is too short *}
                     {block name='frontend_search_message_shortterm'}
-                        {include file="frontend/_includes/messages.tpl" type="error" content="{s name='SearchFuzzyInfoShortTerm'}{/s}"}
+                        {s name="SearchFuzzyInfoShortTerm" assign="snippetSearchFuzzyInfoShortTerm"}{/s}
+                        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetSearchFuzzyInfoShortTerm}
                     {/block}
                 {/if}
             {/if}
