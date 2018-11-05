@@ -4,7 +4,8 @@
 {* Breadcrumb *}
 {block name="frontend_index_start"}
     {$smarty.block.parent}
-    {$sBreadcrumb[] = ["name" => "{s name="AddressesTitleEdit"}Change address{/s}", "link" => {url id=$formData.id}]}
+    {s name="AddressesTitleEdit" assign="snippetAddressesTitleEdit"}Change address{/s}
+    {$sBreadcrumb[] = ["name" => $snippetAddressesTitleEdit, "link" => {url id=$formData.id}]}
 {/block}
 
 {* Main content *}

@@ -3,7 +3,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb = [['name' => "{s name='NewsletterTitle'}{/s}", 'link' => {url}]]}
+    {s name="NewsletterTitle" assign="snippetNewsletterTitle"}{/s}
+    {$sBreadcrumb = [['name' => $snippetNewsletterTitle, 'link' => {url}]]}
 {/block}
 
 {* Meta description *}

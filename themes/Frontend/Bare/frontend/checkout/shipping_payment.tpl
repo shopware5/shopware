@@ -13,9 +13,10 @@
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
     {if $theme.checkoutHeader}
+        {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish" assign="snippetFinishButtonBackToShop"}{/s}
         <a href="{url controller='index'}"
            class="btn is--small btn--back-top-shop is--icon-left"
-           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
+           title="{$snippetFinishButtonBackToShop|escape}">
             <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
         </a>

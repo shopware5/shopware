@@ -95,7 +95,8 @@
                     {/block}
                 {else}
                     {block name="frontend_address_select_address_modal_empty_addresses"}
-                        {include file='frontend/_includes/messages.tpl' type="info" content="{s name='EmptyAddressesText'}{/s}"}
+                        {s name="EmptyAddressesText" assign="snippetEmptyAddressesText"}{/s}
+                        {include file='frontend/_includes/messages.tpl' type="info" content=$snippetEmptyAddressesText}
                     {/block}
                 {/if}
             </div>

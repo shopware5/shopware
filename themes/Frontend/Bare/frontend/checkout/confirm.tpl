@@ -4,9 +4,10 @@
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
     {if $theme.checkoutHeader}
+        {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish" assign="snippetFinishButtonBackToShop"}{/s}
         <a href="{url controller='index'}"
            class="btn is--small btn--back-top-shop is--icon-left"
-           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}"
+           title="{$snippetFinishButtonBackToShop|escape}"
            xmlns="http://www.w3.org/1999/html">
             <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
@@ -268,9 +269,11 @@
                                                             {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_invalid_data"}
                                                                 {if $invalidBillingAddress}
                                                                     {if $invalidShippingCountry}
-                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content="{s namespace="frontend/address/index" name='CountryNotAvailableForShipping'}{/s}"}
+                                                                        {s namespace="frontend/address/index" name="CountryNotAvailableForShipping" assign="snippetCountryNotAvailableForShipping"}{/s}
+                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content=$snippetCountryNotAvailableForShipping}
                                                                     {else}
-                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidAddress'}{/s}"}
+                                                                        {s name="ConfirmAddressInvalidAddress" assign="snippetConfirmAddressInvalidAddress"}{/s}
+                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content=$snippetConfirmAddressInvalidAddress}
                                                                     {/if}
                                                                 {else}
                                                                     {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_set_as_default"}
@@ -387,7 +390,8 @@
 
                                                     {block name="frontend_checkout_confirm_information_addresses_billing_panel_body_invalid_data"}
                                                         {if $invalidBillingAddress}
-                                                            {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidBillingAddress'}{/s}"}
+                                                            {s name="ConfirmAddressInvalidBillingAddress" assign="snippetConfirmAddressInvalidBillingAddress"}{/s}
+                                                            {include file='frontend/_includes/messages.tpl' type="warning" content=$snippetConfirmAddressInvalidBillingAddress}
                                                         {else}
                                                             {block name="frontend_checkout_confirm_information_addresses_billing_panel_body_set_as_default"}
                                                                 {if $activeBillingAddressId != $sUserData.additional.user.default_billing_address_id}
@@ -474,9 +478,11 @@
                                                     {block name="frontend_checkout_confirm_information_addresses_shipping_panel_body_invalid_data"}
                                                         {if $invalidShippingAddress}
                                                             {if $invalidShippingCountry}
-                                                                {include file='frontend/_includes/messages.tpl' type="warning" content="{s namespace="frontend/address/index" name='CountryNotAvailableForShipping'}{/s}"}
-                                                                    {else}
-                                                                {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidShippingAddress'}{/s}"}
+                                                                {s namespace="frontend/address/index" name="CountryNotAvailableForShipping" assign="snippetCountryNotAvailableForShipping"}{/s}
+                                                                {include file='frontend/_includes/messages.tpl' type="warning" content=$snippetCountryNotAvailableForShipping}
+                                                            {else}
+                                                                {s name="ConfirmAddressInvalidShippingAddress" assign="snippetConfirmAddressInvalidShippingAddress"}{/s}
+                                                                {include file='frontend/_includes/messages.tpl' type="warning" content=$snippetConfirmAddressInvalidShippingAddress}
                                                             {/if}
                                                         {else}
                                                             {block name="frontend_checkout_confirm_information_addresses_shipping_panel_body_set_as_default"}
@@ -604,7 +610,8 @@
                                         {/block}
 
                                         {block name='frontend_checkout_confirm_add_voucher_field'}
-                                            <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{"{s name='CheckoutFooterAddVoucherLabelInline' namespace='frontend/checkout/cart_footer'}{/s}"|escape}" />
+                                            {s name="CheckoutFooterAddVoucherLabelInline" namespace="frontend/checkout/cart_footer" assign="snippetCheckoutFooterAddVoucherLabelInline"}{/s}
+                                            <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{$snippetCheckoutFooterAddVoucherLabelInline|escape}" />
                                         {/block}
 
                                         {block name='frontend_checkout_confirm_add_voucher_button'}
@@ -693,11 +700,13 @@
                     <div class="main--actions">
                         {if $sLaststock.hideBasket}
                             {block name='frontend_checkout_confirm_stockinfo'}
-                                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmErrorStock'}{/s}"}
+                                {s name="ConfirmErrorStock" assign="snippetConfirmErrorStock"}{/s}
+                                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetConfirmErrorStock}
                             {/block}
                         {elseif ($invalidBillingAddress || $invalidShippingAddress)}
                             {block name='frontend_checkout_confirm_addressinfo'}
-                                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmErrorInvalidAddress'}{/s}"}
+                                {s name="ConfirmErrorInvalidAddress" assign="snippetConfirmErrorInvalidAddress"}{/s}
+                                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetConfirmErrorInvalidAddress}
                             {/block}
                         {else}
                             {block name='frontend_checkout_confirm_submit'}

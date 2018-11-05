@@ -17,7 +17,8 @@
             {* Success message *}
             {block name='frontend_account_password_success'}
                 <div class="password--success">
-                    {include file="frontend/_includes/messages.tpl" type="success" content="{s name='PasswordInfoSuccess'}{/s}"}
+                    {s name="PasswordInfoSuccess" assign="snippetPasswordInfoSuccess"}{/s}
+                    {include file="frontend/_includes/messages.tpl" type="success" content=$snippetPasswordInfoSuccess}
                 </div>
                 <a href="{url controller='account' action='password'}"
                    class="btn is--secondary is--icon-left">

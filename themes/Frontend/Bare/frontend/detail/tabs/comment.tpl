@@ -4,7 +4,8 @@
 {block name='frontend_detail_rating_buttons_offcanvas'}
     <div class="buttons--off-canvas">
         {block name='frontend_detail_rating_buttons_offcanvas_inner'}
-            <a href="#" title="{"{s name="OffcanvasCloseMenu" namespace="frontend/detail/description"}{/s}"|escape}" class="close--off-canvas">
+            {s name="OffcanvasCloseMenu" namespace="frontend/detail/description" assign="snippetOffcanvasCloseMenu"}{/s}
+            <a href="#" title="{$snippetOffcanvasCloseMenu|escape}" class="close--off-canvas">
                 <i class="icon--arrow-left"></i>
                 {s name="OffcanvasCloseMenu" namespace="frontend/detail/description"}{/s}
             </a>
@@ -21,21 +22,21 @@
                 {if $sErrorFlag['sCaptcha']}
                     {$file = 'frontend/_includes/messages.tpl'}
                     {$type = 'error'}
-                    {$content = "{s name='DetailCommentInfoFillOutCaptcha'}{/s}"}
+                    {s name="DetailCommentInfoFillOutCaptcha" assign="content"}{/s}
                 {else}
                     {$file = 'frontend/_includes/messages.tpl'}
                     {$type = 'error'}
-                    {$content = "{s name='DetailCommentInfoFillOutFields'}{/s}"}
+                    {s name="DetailCommentInfoFillOutFields" assign="content"}{/s}
                 {/if}
             {else}
                 {if {config name="OptinVote"} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
                     {$file = 'frontend/_includes/messages.tpl'}
                     {$type = 'success'}
-                    {$content = "{s name='DetailCommentInfoSuccessOptin'}{/s}"}
+                    {s name="DetailCommentInfoSuccessOptin" assign="content"}{/s}
                 {else}
                     {$file = 'frontend/_includes/messages.tpl'}
                     {$type = 'success'}
-                    {$content = "{s name='DetailCommentInfoSuccess'}{/s}"}
+                    {s name="DetailCommentInfoSuccess" assign="content"}{/s}
                 {/if}
             {/if}
 

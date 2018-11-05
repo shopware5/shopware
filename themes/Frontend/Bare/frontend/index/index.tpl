@@ -28,7 +28,8 @@
             {* Message if javascript is disabled *}
             {block name="frontend_index_no_script_message"}
                 <noscript class="noscript-main">
-                    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name="IndexNoscriptNotice"}{/s}" borderRadius=false}
+                    {s name="IndexNoscriptNotice" assign="snippetIndexNoscriptNotice"}{/s}
+                    {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetIndexNoscriptNotice borderRadius=false}
                 </noscript>
             {/block}
 

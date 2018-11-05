@@ -120,10 +120,11 @@
                     {if {config name="compareShow"}}
                         <div class="note--compare">
                             <form action="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" method="post">
+                                {s name="ListingBoxLinkCompare" assign="snippetListingBoxLinkCompare"}{/s}
                                 <button type="submit"
                                    data-product-compare-add="true"
                                    class="compare--link"
-                                   title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}">
+                                   title="{$snippetListingBoxLinkCompare|escape}">
                                     <i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
                                 </button>
                             </form>
@@ -136,7 +137,8 @@
         {* Remove article *}
         {block name="frontend_note_item_delete"}
             <form action="{url controller='note' action='delete' sDelete=$sBasketItem.id}" method="post">
-                <button type="submit" title="{"{s name='NoteLinkDelete'}{/s}"|escape}" class="note--delete">
+                {s name="NoteLinkDelete" assign="snippetNoteLinkDelete"}{/s}
+                <button type="submit" title="{$snippetNoteLinkDelete|escape}" class="note--delete">
                     <i class="icon--cross"></i>
                 </button>
             </form>
