@@ -14,6 +14,11 @@
 
                 {* Rich snippets *}
                 {block name='frontend_blog_detail_rich_snippets'}
+                    <meta itemprop="image" content="{if $sArticle.preview.thumbnails[1].source}{$sArticle.preview.thumbnails[1].source}{else}{link file=$theme.desktopLogo fullPath}{/if}">
+                    <meta itemprop="dateModified" content="{$sArticle.displayDate->format(DateTime::ATOM)|escapeHtml}">
+                    <meta itemprop="description" content="{$sArticle.shortDescription}">
+                    <meta itemprop="mainEntityOfPage" content="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}">
+
                     <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
                         <meta itemprop="name" content="{{config name=sShopname}|escapeHtml}">
                         <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
@@ -29,7 +34,8 @@
 
                         {* Article name *}
                         {block name='frontend_blog_detail_title'}
-                            <h1 class="blog--detail-headline" itemprop="headline">{$sArticle.title}</h1>
+                            <h1 class="blog--detail-headline" itemprop="name">{$sArticle.title}</h1>
+                            <meta itemprop="headline" content="{$sArticle.title}">
                         {/block}
 
                         {* Metadata *}
