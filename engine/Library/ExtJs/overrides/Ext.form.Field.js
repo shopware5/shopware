@@ -38,7 +38,7 @@ Ext.define('Enlight.form.Field',
         afterRender: function () {
             var me = this;
             me.callParent(arguments);
-            me.initHelpSupportElemes();
+            me.initHelpSupportElements();
         },
 
     }, function()

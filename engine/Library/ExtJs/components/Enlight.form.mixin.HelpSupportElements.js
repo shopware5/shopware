@@ -93,7 +93,7 @@ Ext.define('Enlight.form.mixin.HelpSupportElements',
      * @private
      * @return void
      */
-    initHelpSupportElemes: function () {
+    initHelpSupportElements: function () {
         var me = this;
 
         if(me.helpText) {
