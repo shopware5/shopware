@@ -107,8 +107,10 @@ class MediaSubscriber implements EventSubscriber
                     break;
 
                 case Media::TYPE_VECTOR:
-                    if ($media->getExtension() === 'svg') {
-                        $xml = simplexml_load_string($mediaService->read($media->getPath()));
+                    if (
+                        $media->getExtension() === 'svg' &&
+                        $xml = simplexml_load_string($mediaService->read($media->getPath()))
+                    ) {
                         $attr = $xml->attributes();
 
                         if ($attr->width > 0 && $attr->height > 0) {
