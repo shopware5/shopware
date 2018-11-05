@@ -1,5 +1,5 @@
 {block name="frontend_listing_box_article_includes"}
-
+    {$path = ''}
     {if $productBoxLayout == 'minimal'}
         {$path = "frontend/listing/product-box/box-minimal.tpl"}
 
