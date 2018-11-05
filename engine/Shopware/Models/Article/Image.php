@@ -168,14 +168,14 @@ class Image extends ModelEntity
      *
      * @var Image
      *
-     * @ORM\ManyToOne(targetEntity="Image", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Image", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Image", mappedBy="parent")
+     * @var Image[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="Image", mappedBy="parent", orphanRemoval=true, cascade={"persist"})
      */
     private $children;
 
