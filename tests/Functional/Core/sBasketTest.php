@@ -1952,13 +1952,31 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
-        $randomArticle = $this->db->fetchRow(
-            'SELECT * FROM s_articles_details detail
-            INNER JOIN s_articles article
-              ON article.id = detail.articleID
-            WHERE detail.active = 1
-            LIMIT 1'
-        );
+        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+
+        // Setup article for the first basket position - an article that costs EUR 29.97
+        $product = $resourceHelper->createArticle([
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => [
+                'number' => 'swTEST' . Random::getAlphanumericString(12),
+                'inStock' => 15,
+                'lastStock' => true,
+                'unitId' => 1,
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 29.97,
+                    ],
+                ],
+            ],
+            'taxId' => 4,
+            'supplierId' => 2,
+            'categories' => [10],
+        ]);
 
         $this->db->insert(
             's_order_basket',
@@ -1966,15 +1984,15 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'price' => 2,
                 'quantity' => 1,
                 'sessionID' => $this->session->get('sessionId'),
-                'ordernumber' => $randomArticle['ordernumber'],
-                'articleID' => $randomArticle['articleID'],
+                'ordernumber' => $product->getMainDetail()->getNumber(),
+                'articleID' => $product->getId(),
             ]
         );
 
         $this->assertEquals(1, count($this->module->sGetBasket()['content']));
 
-        $this->db->delete('s_articles_details', ['articleID = ?' => $randomArticle['articleID']]);
-        $this->db->delete('s_articles', ['id = ?' => $randomArticle['articleID']]);
+        $this->db->delete('s_articles_details', ['articleID = ?' => $product->getId()]);
+        $this->db->delete('s_articles', ['id = ?' => $product->getId()]);
 
         $this->assertEquals([], $this->module->sGetBasket());
     }
