@@ -21,10 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration1441 extends AbstractMigration
+class Migrations_Migration1444 extends AbstractMigration
 {
     /**
      * {@inheritdoc}

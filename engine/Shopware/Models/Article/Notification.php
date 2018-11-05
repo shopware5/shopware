@@ -70,6 +70,7 @@ class Notification extends LazyFetchModelEntity
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleNotification", mappedBy="articleNotification", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -122,8 +123,6 @@ class Notification extends LazyFetchModelEntity
     private $shopLink;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -132,13 +131,11 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set date
-     *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      *
      * @return Notification
      */
-    public function setDate($date)
+    public function setDate(\DateTimeInterface $date)
     {
         $this->date = $date;
 
@@ -146,9 +143,7 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get date
-     *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -156,8 +151,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set send
-     *
      * @param int $send
      *
      * @return Notification
@@ -170,8 +163,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get send
-     *
      * @return int
      */
     public function getSend()
@@ -180,8 +171,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set language
-     *
      * @param string $language
      *
      * @return Notification
@@ -194,8 +183,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get language
-     *
      * @return string
      */
     public function getLanguage()
@@ -204,8 +191,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set shopLink
-     *
      * @param string $shopLink
      *
      * @return Notification
@@ -218,8 +203,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get shopLink
-     *
      * @return string
      */
     public function getShopLink()
@@ -230,7 +213,7 @@ class Notification extends LazyFetchModelEntity
     /**
      * @param string $articleNumber
      */
-    public function setArticleNumber(string $articleNumber)
+    public function setArticleNumber($articleNumber)
     {
         $this->articleNumber = $articleNumber;
     }
@@ -238,7 +221,7 @@ class Notification extends LazyFetchModelEntity
     /**
      * @param string $mail
      */
-    public function setMail(string $mail)
+    public function setMail($mail)
     {
         $this->mail = $mail;
     }
@@ -252,11 +235,11 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleNotification $attribute
+     * @param array|\Shopware\Models\Attribute\ArticleNotification $attribute
      *
      * @return Notification
      */
-    public function setAttribute(\Shopware\Models\Attribute\ArticleNotification $attribute)
+    public function setAttribute($attribute)
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleNotification', 'attribute', 'articleNotification');
     }
