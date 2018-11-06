@@ -36,6 +36,8 @@ Ext.define('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
 
     alias: 'widget.base-element-product-box-layout-select',
 
+    editable: false,
+
     storeConfig: {},
 
     listConfig: {
