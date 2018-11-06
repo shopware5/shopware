@@ -370,9 +370,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
             $productInformation = $this->get('shopware_storefront.list_product_service')->get($notify['ordernumber'], $sContext);
 
-            if (
-                empty($productInformation)
-            ) {
+            if (empty($productInformation)) {
                 continue;
             }
 
