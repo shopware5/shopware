@@ -33,6 +33,7 @@ use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintVal
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\ConfigLoader;
+use Shopware\Components\DependencyInjection\Compiler\ConfigureApiResourcesPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -686,6 +687,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new MatcherCompilerPass());
+        $container->addCompilerPass(new ConfigureApiResourcesPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

@@ -606,7 +606,7 @@
             <argument type="service" id="service_container" />
         </service>
 
-        <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false" />
+        <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false" abstract="true" />
         <service id="shopware.api.address" class="Shopware\Components\Api\Resource\Address" shared="false" />
         <service id="shopware.api.article" class="Shopware\Components\Api\Resource\Article" shared="false">
             <argument type="service" id="translation" />
