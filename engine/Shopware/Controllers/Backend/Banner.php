@@ -34,9 +34,6 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 {
     /**
      * Test repository injection variable
-     *
-     * @var
-     * @scope private
      */
     public static $testRepository = null;
 
@@ -59,7 +56,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      */
     public function getListAction()
     {
-        /** @var $filter array */
+        /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
         $node = (int) $this->Request()->getParam('node');
         $preselectedNodes = $this->Request()->getParam('preselected');
@@ -69,7 +66,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
 
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->getListQuery(
+        $query = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class)->getListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', null),
@@ -126,7 +123,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $query = $this->repository->getBanners($filter);
         $banners = $query->getArrayResult();
 
-        // restructures the data to better fit extjs model
+        // Restructures the data to better fit extjs model
         $nodes = $this->prepareBannerData($banners);
         $this->View()->assign(['success' => !empty($nodes), 'data' => $nodes]);
     }
@@ -173,7 +170,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             return;
         }
 
-        // check if there are more than one media is submitted
+        // Check if there are more than one media is submitted
         if (strpos($this->Request()->get('media-manager-selection'), ',') !== false) {
             $this->View()->assign([
                 'success' => false,
@@ -186,7 +183,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $errorMsg = null;
         $createMode = false;
 
-        // add or edit detection
+        // Add or edit detection
         $tmpId = $this->Request()->get('id');
 
         // Collecting form data
@@ -218,12 +215,12 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         // Get media manager
         $mediaManagerData = $this->Request()->get('media-manager-selection');
 
-        // update database entries
+        // Update database entries
         if (!$createMode) {
-            // load model from db
+            // Load model from db
             $bannerModel = $this->repository->find($id);
         } else {
-            // check if there are none files submitted
+            // Check if there are none files submitted
             if (empty($mediaManagerData)) {
                 $this->View()->assign([
                     'success' => false,
@@ -233,19 +230,19 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             }
             $bannerModel = new Banner();
         }
-        // read data
+        // Read data
         $bannerModel->fromArray($params);
 
-        // set new image and extension if necessary
+        // Set new image and extension if necessary
         if (!empty($mediaManagerData)) {
             $bannerModel->setImage($mediaManagerData);
         }
 
-        // strip full qualified url
+        // Strip full qualified url
         $mediaService = $this->get('shopware_media.media_service');
         $bannerModel->setImage($mediaService->normalize($bannerModel->getImage()));
 
-        // write model to db
+        // Write model to db
         try {
             Shopware()->Models()->persist($bannerModel);
             Shopware()->Models()->flush();
@@ -269,7 +266,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $bannerRequestData = empty($multipleBanner) ? [['id' => $this->Request()->id]] : $multipleBanner;
         try {
             foreach ($bannerRequestData as $banner) {
-                $model = Shopware()->Models()->find('Shopware\Models\Banner\Banner', $banner['id']);
+                $model = Shopware()->Models()->find(\Shopware\Models\Banner\Banner::class, $banner['id']);
                 Shopware()->Models()->remove($model);
             }
             Shopware()->Models()->flush();
@@ -301,7 +298,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      * Build an array and reformats the date for a banner.
      * If the second parameter is set true, every banner will be tracked.
      *
-     * @param $banners
+     * @param array $banners
      *
      * @return array|null
      */
@@ -312,12 +309,12 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($banners as $banner) {
-            // we have to split the datetime to date and time
+            // We have to split the datetime to date and time
             if (!empty($banner['validFrom'])) {
                 $banner['validFromDate'] = $banner['validFrom']->format('d.m.Y');
                 $banner['validFromTime'] = $banner['validFrom']->format('H:i');
             }
-            // we have to split the datetime to date and time
+            // We have to split the datetime to date and time
             if (!empty($banner['validTo'])) {
                 $banner['validToDate'] = $banner['validTo']->format('d.m.Y');
                 $banner['validToTime'] = $banner['validTo']->format('H:i');
@@ -334,8 +331,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     /**
      * Transforms a ISO Date in to an easy processable dateTime Object.
      *
-     * @param $date
-     * @param $time
+     * @param string $date
+     * @param string $time
      *
      * @return DateTime
      */

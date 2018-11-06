@@ -22,6 +22,29 @@
  * our trademarks remain entirely with us.
  */
 use Shopware\Components\Random;
+/*
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+use Shopware\Models\Blog\Blog;
 
 /**
  * Shopware Frontend Controller for the Blog
@@ -85,7 +108,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog');
+            $this->repository = Shopware()->Models()->getRepository(Blog::class);
         }
 
         return $this->repository;
@@ -193,19 +216,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
 
         foreach ($blogArticles as $key => $blogArticle) {
-            //adding number of comments to the blog article
+            // Adding number of comments to the blog article
             $blogArticles[$key]['numberOfComments'] = count($blogArticle['comments']);
 
-            //adding tags and tag filter links to the blog article
+            // Adding tags and tag filter links to the blog article
             $tagsQuery = $this->repository->getTagsByBlogId($blogArticle['id']);
             $tagsData = $tagsQuery->getArrayResult();
             $blogArticles[$key]['tags'] = $this->addLinksToFilter($tagsData, 'sFilterTags', 'name', false);
 
-            //adding average vote data to the blog article
+            // Adding average vote data to the blog article
             $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticle['id']);
             $blogArticles[$key]['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
-            //adding thumbnails to the blog article
+            // Adding thumbnails to the blog article
             if (empty($blogArticle['media'][0]['mediaId'])) {
                 continue;
             }
@@ -216,14 +239,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 continue;
             }
 
-            /** @var $media \Shopware\Bundle\StoreFrontBundle\Struct\Media */
+            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\Media $media */
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
 
             $blogArticles[$key]['media'] = $media;
         }
 
-        //RSS and ATOM Feed part
+        // RSS and ATOM Feed part
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
             $this->Response()->setHeader('Content-Type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
@@ -324,7 +347,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
 
-        //adding thumbnails to the blog article
+        // Adding thumbnails to the blog article
         foreach ($blogArticleData['media'] as &$media) {
             $mediaId = $media['mediaId'];
             $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($mediaStructs[$mediaId]);
@@ -350,13 +373,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
         if (!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
             // Update the views count
-            /* @var $blogModel Shopware\Models\Blog\Blog */
+            /* @var Shopware\Models\Blog\Blog $blogModel */
             $blogModel = $this->getRepository()->find($blogArticleId);
             if ($blogModel) {
                 $blogModel->setViews($blogModel->getViews() + 1);
                 Shopware()->Models()->flush($blogModel);
 
-                //save it to the session
+                // Save it to the session
                 $visitedBlogItems[] = $blogArticleId;
                 Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
             }
@@ -444,7 +467,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 if (!empty(Shopware()->Config()->sOPTINVOTE) && empty(Shopware()->Session()->sUserId)) {
                     $hash = Random::getAlphanumericString(32);
 
-                    //save comment confirm for the optin
+                    // Save comment confirm for the optin
                     $blogCommentModel = new \Shopware\Models\CommentConfirm\CommentConfirm();
                     $blogCommentModel->setCreationDate(new DateTime('now'));
                     $blogCommentModel->setHash($hash);
@@ -460,7 +483,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $mail->addTo($this->Request()->getParam('eMail'));
                     $mail->send();
                 } else {
-                    //save comment
+                    //Save comment
                     $commentData = $this->Request()->getPost();
                     $this->sSaveComment($commentData, $blogArticleId);
                 }
