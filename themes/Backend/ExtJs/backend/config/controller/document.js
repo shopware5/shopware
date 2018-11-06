@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Config.controller.Document', {
             return;
         }
         var showDocumentBoxesFieldSet = record.get('id') !== 0;
-        formPanel.down('[name=elementFieldSet]').setVisible(showDocumentBoxesFieldSet);
+        formPanel.down('[name=elementFieldSet]').setDisabled(!showDocumentBoxesFieldSet);
     }
 
 });
