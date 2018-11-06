@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Translation Controller
@@ -46,8 +47,8 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
             'value' => $node,
         ];
 
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = 'Shopware\Models\Shop\Shop';
+        /** @var Shopware\Models\Shop\Repository $repository */
+        $repository = Shop::class;
         $repository = Shopware()->Models()->getRepository($repository);
 
         $query = $repository->getListQuery($filter, $sort);
@@ -97,6 +98,9 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
         ]);
     }
 
+    /**
+     * @return Shopware_Components_Translation
+     */
     protected function getTranslation()
     {
         if (!isset($this->translation)) {

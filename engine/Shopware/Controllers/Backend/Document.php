@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
     {
         $id = $this->Request()->id;
         $netto = $this->Request()->ust_free;
-        if ($netto == 'false') {
+        if ($netto === 'false') {
             $netto = false;
         }
         $typ = $this->Request()->typ;

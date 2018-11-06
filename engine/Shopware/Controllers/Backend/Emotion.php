@@ -447,7 +447,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['components', 'fields'])
-            ->from('Shopware\Models\Emotion\Library\Component', 'components')
+            ->from(\Shopware\Models\Emotion\Library\Component::class, 'components')
             ->leftJoin('components.fields', 'fields')
             ->orderBy('components.id', 'ASC')
             ->addOrderBy('fields.position', 'ASC');
@@ -622,15 +622,15 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     public function deleteAction()
     {
         try {
-            //get posted customers
+            // Get posted customers
             $emotions = $this->Request()->getParam('emotions', [['id' => $this->Request()->getParam('id')]]);
 
-            //iterate the customers and add the remove action
+            // Iterate the customers and add the remove action
             foreach ($emotions as $emotion) {
                 if (empty($emotion['id'])) {
                     continue;
                 }
-                /** @var $entity Emotion */
+                /** @var Emotion $entity */
                 $entity = $this->getRepository()->find($emotion['id']);
 
                 /** @var \Shopware\Models\Emotion\Element $element */
@@ -638,13 +638,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                     $this->getTranslation()->delete(null, 'emotionElement', $element->getId());
                 }
 
-                // delete created previews
+                // Delete created previews
                 $this->removePreview($entity->getId());
 
                 Shopware()->Models()->remove($entity);
             }
 
-            // delete corresponding translations
+            // Delete corresponding translations
             $this->deleteTranslations($emotions);
 
             Shopware()->Models()->flush();
@@ -674,7 +674,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         /** @var Emotion $emotion */
-        $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $emotionId);
+        $emotion = Shopware()->Models()->find(\Shopware\Models\Emotion\Emotion::class, $emotionId);
 
         if (!$emotion) {
             $this->View()->assign(['success' => false]);
@@ -992,7 +992,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *  array('success' => false, 'error' => An error message)
      *
      *
-     * @param null $id
+     * @param null|int $id
      *
      * @return array
      */
@@ -1031,17 +1031,17 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * Failure case:
      *  array('success' => false, 'error' => An error message)
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
     protected function saveTemplate($data)
     {
         try {
-            //we have to remove the emotions to prevent an assignment from this side!
+            // We have to remove the emotions to prevent an assignment from this side!
             unset($data['emotions']);
             if (!empty($data['id'])) {
-                $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['id']);
+                $template = Shopware()->Models()->find(\Shopware\Models\Emotion\Template::class, $data['id']);
             } else {
                 $template = new \Shopware\Models\Emotion\Template();
             }
@@ -1080,7 +1080,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['template'])
-            ->from('Shopware\Models\Emotion\Template', 'template')
+            ->from(\Shopware\Models\Emotion\Template::class, 'template')
             ->where('template.id = :id')
             ->setParameter('id', $id);
 
@@ -1264,8 +1264,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         foreach ($emotionElements as &$item) {
             if (!empty($item['componentId'])) {
-                /** @var $component \Shopware\Models\Emotion\Library\Component */
-                $component = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Component', $item['componentId']);
+                /** @var \Shopware\Models\Emotion\Library\Component $component */
+                $component = Shopware()->Models()->find(\Shopware\Models\Emotion\Library\Component::class, $item['componentId']);
 
                 if ($component !== null) {
                     $item['component'] = $component;
@@ -1428,7 +1428,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 continue;
             }
 
-            $data['name'] = $data['name'] . ' - Copy';
+            $data['name'] .= ' - Copy';
             $this->getTranslation()->write($id, 'emotion', $newId, $data);
         }
     }
