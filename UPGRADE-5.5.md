@@ -2,6 +2,18 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.4
+
+[View all changes from v5.5.3...v5.5.4](https://github.com/shopware/shopware/compare/v5.5.3...v5.5.4)
+
+### Additions
+
+* Added dependency to Symfony Expression Language, this allows using something like `container.initialized('shop') ? service('shop') : null` in `services.xml`
+
+### Changes
+
+* Changed Symfony library to version 3.4.18
+
 ## 5.5.3
 
 [View all changes from v5.5.2...v5.5.3](https://github.com/shopware/shopware/compare/v5.5.2...v5.5.3)
