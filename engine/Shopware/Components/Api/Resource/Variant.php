@@ -37,6 +37,7 @@ use Shopware\Models\Article\EsdSerial;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
+use Shopware\Models\Attribute\Article as ArticleAttributeModel;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Tax\Tax;
@@ -816,15 +817,10 @@ class Variant extends Resource implements BatchInterface
      */
     protected function prepareAttributeAssociation($data, ArticleModel $article, Detail $variant)
     {
-        if (!$variant->getAttribute()) {
-            $data['attribute']['article'] = $article;
+        if (!isset($data['attribute']) && !$variant->getAttribute()) {
+            // Create empty attributes if none provided
+            $data['attribute'] = new ArticleAttributeModel();
         }
-
-        if (!isset($data['attribute'])) {
-            return $data;
-        }
-
-        $data['attribute']['article'] = $article;
 
         return $data;
     }

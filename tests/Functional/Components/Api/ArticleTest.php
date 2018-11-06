@@ -187,6 +187,8 @@ class ArticleTest extends TestCase
         $this->assertEquals($article->getMetaTitle(), $testData['metaTitle']);
 
         $this->assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
+
+        // Check attributes of main variant
         $this->assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr1(),
             $testData['mainDetail']['attribute']['attr1']
@@ -194,6 +196,19 @@ class ArticleTest extends TestCase
         $this->assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr2(),
             $testData['mainDetail']['attribute']['attr2']
+        );
+
+        // Check attributes of non-main variant
+        $variant = $article->getDetails()->matching(\Doctrine\Common\Collections\Criteria::create()->where(
+            \Doctrine\Common\Collections\Criteria::expr()->eq('number', $testData['variants'][0]['number'])
+        ));
+        $this->assertEquals(
+            $variant->first()->getAttribute()->getAttr3(),
+            $testData['variants'][0]['attribute']['attr3']
+        );
+        $this->assertEquals(
+            $variant->first()->getAttribute()->getAttr4(),
+            $testData['variants'][0]['attribute']['attr4']
         );
 
         $propertyValues = $article->getPropertyValues()->getValues();
@@ -276,6 +291,56 @@ class ArticleTest extends TestCase
         $this->assertEquals($article->getMainDetail()->getUnit()->getId(), $secondArticle->getMainDetail()->getUnit()->getId());
 
         return $article->getId();
+    }
+
+    /*
+     * Test that empty article attributes are created
+     */
+    public function testCreateWithoutAttributes()
+    {
+        $configurator = $this->getSimpleConfiguratorSet(2, 5);
+
+        $testData = [
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'taxId' => 1,
+            'supplierId' => 1,
+            'mainDetail' => [
+                'number' => 'swAttr1' . uniqid(rand()),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => [
+                    ['customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400],
+                ],
+                'configuratorOptions' => $this->getVariantOptionsOfSet($configurator),
+            ],
+            'variants' => [
+                [
+                    'number' => 'swAttr2' . uniqid(rand()),
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'prices' => [
+                        ['customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400],
+                    ],
+                    'configuratorOptions' => $this->getVariantOptionsOfSet($configurator),
+                ],
+            ],
+            'configuratorSet' => $configurator,
+        ];
+
+        $article = $this->resource->create($testData);
+
+        // Load actual database model
+        $this->resource->setResultMode(Article::HYDRATE_OBJECT);
+        $data = $this->resource->getOne($article->getId());
+
+        $this->assertEquals(2, $data->getDetails()->count());
+        foreach ($data->getDetails() as $variant) {
+            $this->assertNotNull($variant->getAttribute());
+            $this->assertNull($variant->getAttribute()->getAttr1());
+        }
     }
 
     /**
@@ -2873,6 +2938,126 @@ class ArticleTest extends TestCase
         }
 
         $this->resource->delete($id);
+    }
+
+    public function testDeletingAnArticleAlsoDeletesDetailsAndAttributes()
+    {
+        /** @var Shopware\Components\Model\ModelManager $entityManager */
+        $entityManager = Shopware()->Models();
+        $articleRepository = $entityManager->getRepository(\Shopware\Models\Article\Article::class);
+        $detailRepository = $entityManager->getRepository(\Shopware\Models\Article\Detail::class);
+        $attributeRepository = $entityManager->getRepository(\Shopware\Models\Attribute\Article::class);
+
+        // Test preparation
+
+        /* Create an article with one main detail and two additional details
+         * (variants). */
+        $testData = $this->getSimpleTestData();
+        $configurator = $this->getSimpleConfiguratorSet(1, 2);
+        $variants = array_map(
+            // Add attribute values to each variant.
+            /* While the values are not relevant to the test, and attributes
+             * would still be created without them, this test should still work
+             * should the logic around when to create attributes change. */
+            function ($variant) {
+                $variant['attribute'] = [
+                    'attr1' => 'Free form text 1',
+                    'attr2' => 'Free form text 2',
+                ];
+
+                return $variant;
+            },
+            // Automatically generate variants:
+            $this->createConfiguratorVariants($configurator['groups'])
+        );
+        $testData['configuratorSet'] = $configurator;
+        $testData['variants'] = $variants;
+
+        /* Save the article, so that we can later test its removal and the
+         * removal of its details and attributes. */
+        $createdArticleId = $this->resource->create($testData)->getId();
+
+        // Retrieve identifiers from the database which we need for this test.
+        try {
+            $createdArticle = $articleRepository->find($createdArticleId);
+            $this->assertNotNull($createdArticle);
+            $createdDetails = array_merge(
+                $createdArticle->getDetails()->toArray(),
+                [$createdArticle->getMainDetail()]
+            );
+
+            /* The identifiers of the details the removal of which we will
+             * later verify. */
+            $createdDetailIds = array_unique(array_map(
+                function ($createdDetail) {
+                    return $createdDetail->getId();
+                },
+                $createdDetails
+            ));
+
+            $createdAttributes = array_map(
+                function ($createdDetail) { return $createdDetail->getAttribute(); },
+                $createdDetails
+            );
+            // Verify we did not break our test setup.
+            $this->assertCount(3, $createdDetailIds);
+
+            /* The identifiers of the attributes the removal of which we will
+             * later verify. */
+            $createdAttributeIds = array_unique(array_map(
+                function ($createdAttribute) { return $createdAttribute->getId(); },
+                $createdAttributes
+            ));
+            $this->assertCount(3, $createdAttributeIds);
+
+            // Verify created article's details match test setup assumptions.
+            $this->assertCount(count($createdDetailIds), $detailRepository->findBy([
+                'id' => $createdDetailIds,
+            ]));
+            // Verify created article's attributes match test setup assumptions.
+            $this->assertCount(count($createdAttributeIds), $attributeRepository->findBy([
+                'id' => $createdAttributeIds,
+            ]));
+        } finally {
+            // Even if the test setup fails, delete the test's created article.
+
+            // Tested action:
+            $this->resource->delete($createdArticleId);
+        }
+
+        $this->assertNull(
+            $articleRepository->find($createdArticleId),
+            sprintf(
+                'Deletion of the article (id = %s) itself failed.',
+                $createdArticleId
+            )
+        );
+
+        // Test assertions
+        $this->assertCount(
+            0,
+            $detailRepository->findBy([
+                'id' => $createdDetailIds,
+            ]),
+            sprintf(
+                'Deletion of the article\'s (id = %s) details (%s) failed.',
+                $createdArticleId,
+                implode(', ', $createdDetailIds)
+            )
+        );
+        $this->assertCount(
+            0,
+            $attributeRepository->findBy([
+                'id' => $createdAttributeIds,
+            ]),
+            sprintf(
+                'Deletion of the article\'s (id = %s) details\' (%s) '
+                . 'attributes (%s) failed.',
+                $createdArticleId,
+                implode(', ', $createdDetailIds),
+                implode(', ', $createdAttributeIds)
+            )
+        );
     }
 
     /**
