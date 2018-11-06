@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\DependencyInjection\Compiler;
 
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -42,10 +41,8 @@ class ConfigureApiResourcesPass implements CompilerPassInterface
         foreach ($container->getServiceIds() as $id) {
             if (strpos($id, 'shopware.api.') === 0) {
                 $definition = $container->getDefinition($id);
-                if (in_array(ContainerAwareInterface::class, class_implements($definition->getClass()))) {
-                    $definition->addMethodCall('setContainer', [new Reference('service_container')]);
-                }
 
+                $definition->addMethodCall('setContainer', [new Reference('service_container')]);
                 $definition->addMethodCall('setManager', [new Reference('models')]);
             }
         }
