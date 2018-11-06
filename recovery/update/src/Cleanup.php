@@ -27,6 +27,7 @@ namespace Shopware\Recovery\Update;
 use DirectoryIterator;
 use FilesystemIterator;
 use RecursiveIteratorIterator;
+use Shopware\Recovery\Update\Results\DeleteResult;
 
 class Cleanup
 {

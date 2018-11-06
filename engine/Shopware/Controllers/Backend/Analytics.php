@@ -1001,7 +1001,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-
     private function getCsvFileName()
     {
         $name = $this->Request()->getActionName();
