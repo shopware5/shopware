@@ -160,7 +160,7 @@ class sCms
      *
      * @return array
      */
-    public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'gLeft')
+    public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'left')
     {
         $menu = [];
 
