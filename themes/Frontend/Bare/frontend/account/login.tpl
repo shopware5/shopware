@@ -51,8 +51,8 @@
                         <input name="email" type="email" autocomplete="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="text {if $sErrorFlag.email}instyle_error{/if}" />
                     </p>
                     <p class="none">
-                        <label for="passwort">{s name="LoginLabelPassword"}{/s}</label>
-                        <input name="password" type="password" autocomplete="current-password" tabindex="2" id="passwort" class="text {if $sErrorFlag.password}instyle_error{/if}" />
+                        <label for="password">{s name="LoginLabelPassword"}{/s}</label>
+                        <input name="password" type="password" autocomplete="current-password" tabindex="2" id="password" class="text {if $sErrorFlag.password}instyle_error{/if}" />
                     </p>
                 </fieldset>
 
