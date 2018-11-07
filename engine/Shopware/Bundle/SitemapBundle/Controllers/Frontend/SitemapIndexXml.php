@@ -24,12 +24,14 @@
 
 namespace Shopware\Bundle\SitemapBundle\Controller;
 
+use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
+use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
 
 class SitemapIndexXml extends \Enlight_Controller_Action
 {
     /**
-     * Show also the sitemap, if the user request /sitemapindex.xml
+     * Redirect to sitemap_index.xml if the old sitemap is being requested
      */
     public function preDispatch()
     {
@@ -40,16 +42,35 @@ class SitemapIndexXml extends \Enlight_Controller_Action
         }
     }
 
-    /**
-     * Index action method
-     */
     public function indexAction()
     {
         /** @var SitemapListerInterface $sitemap */
         $sitemapLister = $this->get('shopware_bundle_sitemap.service.sitemap_lister');
+        $sitemaps = $sitemapLister->getSitemaps($this->get('shop')->getId());
+
+        $config = $this->get('config');
+        $lastGenerated = $config->get('sitemapLastRefresh');
+        $refreshInterval = $config->get('sitemapRefreshTime');
+
+        // If there are no sitemaps yet (or they are too old) and the generation strategy is "live", generate sitemaps
+        if ((empty($sitemaps) || time() > $refreshInterval + $lastGenerated) &&
+            $this->get('config')->get('sitemapRefreshStrategy') === SitemapExporterInterface::STRATEGY_LIVE) {
+            // Close session to prevent session locking from waiting in case there is another request coming in
+            session_write_close();
+
+            /** @var SitemapExporterInterface $exporter */
+            $exporter = $this->get('shopware_bundle_sitemap.service.sitemap_exporter');
+
+            try {
+                $exporter->generate($this->get('shop'));
+            } catch (AlreadyLockedException $exception) {
+                // Silent catch, lock couldn't be acquired. Some other process already generates the sitemap.
+            }
+
+            $sitemaps = $sitemapLister->getSitemaps($this->get('shop')->getId());
+        }
 
         $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
-
-        $this->View()->sitemaps = $sitemapLister->getSitemaps($this->get('shop')->getId());
+        $this->View()->assign('sitemaps', $sitemaps);
     }
 }

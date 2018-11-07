@@ -24,22 +24,29 @@
 
 namespace Shopware\Bundle\SitemapBundle;
 
-use Shopware\Bundle\SitemapBundle\Struct\Url;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Models\Shop\Shop;
 
-interface UrlProviderInterface
+interface SitemapLockInterface
 {
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
+     * @param Shop $shop
      *
-     * @return null|Url[]
+     * @return bool
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);
+    public function isLocked(Shop $shop);
 
     /**
-     * Resets the provider for next sitemap generation
+     * @param Shop $shop
+     * @param int  $lifeTime Maximum lifetime of lock in seconds
+     *
+     * @return bool
      */
-    public function reset();
+    public function doLock(Shop $shop, $lifeTime = 3600);
+
+    /**
+     * @param Shop $shop
+     *
+     * @return bool
+     */
+    public function unLock(Shop $shop);
 }

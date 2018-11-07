@@ -64,7 +64,7 @@ class SitemapListenerTest extends TestCase
         $this->generator = new SitemapNameGenerator($this->fs);
 
         $generator = new PublicUrlGenerator(new Container(), '', 'https//foo.de', 'foo');
-        $this->listener = new SitemapLister($this->fs, $generator, $this->generator);
+        $this->listener = new SitemapLister($this->fs, $generator);
     }
 
     protected function tearDown()

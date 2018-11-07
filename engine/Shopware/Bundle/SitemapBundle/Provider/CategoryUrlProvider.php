@@ -82,7 +82,7 @@ class CategoryUrlProvider implements UrlProviderInterface
                 'title' => $category['name'],
             ];
 
-            if ($category['blog']) {
+            if (array_key_exists('blog', $category)) {
                 $category['urlParams']['sViewport'] = 'blog';
             }
         }
