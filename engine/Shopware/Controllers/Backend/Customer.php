@@ -24,6 +24,7 @@
 use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
@@ -133,6 +134,16 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $shop = $this->getShopRepository()->getBaseListQuery()->getArrayResult();
         $country = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
         $customerGroups = $this->getRepository()->getCustomerGroupsQuery()->getArrayResult();
+
+        /** @var \Shopware\Components\StateTranslatorServiceInterface $stateTranslator */
+        $stateTranslator = $this->get('shopware.components.state_translator');
+        $orderStatus = array_map(function ($orderStateItem) use ($stateTranslator) {
+            return $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $orderStateItem);
+        }, $orderStatus);
+
+        $paymentStatus = array_map(function ($paymentStateItem) use ($stateTranslator) {
+            return $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $paymentStateItem);
+        }, $paymentStatus);
 
         $this->View()->assign([
             'success' => true,
