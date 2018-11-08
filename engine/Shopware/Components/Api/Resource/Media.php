@@ -254,6 +254,8 @@ class Media extends Resource
         /** @var Album $album */
         $album = $this->getManager()->find(Album::class, $albumId);
         if (!$album) {
+            unlink($file);
+            rmdir(dirname($file));
             throw new ApiException\CustomValidationException(
                 sprintf('Album by id %s not found', $albumId)
             );
@@ -268,6 +270,9 @@ class Media extends Resource
             throw new ApiException\CustomValidationException(
                 sprintf('Some error occurred while persisting your media')
             );
+        } finally {
+            unlink($file);
+            rmdir(dirname($file));
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
