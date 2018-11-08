@@ -31,7 +31,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added possibility to use boolean keywords when defining boolean attributes
 * Added shop site as possible entities in attributes
 * Added translation fallback for mails
-* Added media optimizer overview to backend systeminfo
 
 ### Changes
 
