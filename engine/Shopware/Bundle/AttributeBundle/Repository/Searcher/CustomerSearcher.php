@@ -45,6 +45,7 @@ class CustomerSearcher extends GenericSearcher
         $builder->from(Customer::class, 'entity');
         $builder->innerJoin('entity.defaultBillingAddress', 'billing');
         $builder->innerJoin('entity.group', 'customerGroup');
+        $builder->leftJoin('entity.attribute', 'attribute');
         $builder->setAlias('entity');
 
         if ($criteria->params && $criteria->params['streamId']) {
