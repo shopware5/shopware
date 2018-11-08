@@ -254,6 +254,8 @@ class Media extends Resource
         /** @var Album $album */
         $album = $this->getManager()->find(Album::class, $albumId);
         if (!$album) {
+            unlink($file);
+            rmdir(dirname($file));
             throw new ApiException\CustomValidationException(
                 sprintf('Album by id %s not found', $albumId)
             );
@@ -265,6 +267,8 @@ class Media extends Resource
             // Persist the model into the model manager this uploads and resizes the image
             $this->getManager()->persist($media);
         } catch (\Doctrine\ORM\ORMException $e) {
+            unlink($file);
+            rmdir(dirname($file));
             throw new ApiException\CustomValidationException(
                 sprintf('Some error occurred while persisting your media')
             );
@@ -277,6 +281,8 @@ class Media extends Resource
             $manager->createMediaThumbnail($media, [], true);
         }
 
+        unlink($file);
+        rmdir(dirname($file));
         return $media;
     }
 
