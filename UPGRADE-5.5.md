@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Additions
 
 * Added dependency to Symfony Expression Language, this allows using something like `container.initialized('shop') ? service('shop') : null` in `services.xml`
+* Added deleteDocument acl privilege to order
 
 ### Changes
 

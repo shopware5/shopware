@@ -115,6 +115,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $this->addAclPermission('createDocument', 'update', 'Insufficient Permissions');
         $this->addAclPermission('batchProcess', 'update', 'Insufficient Permissions');
         $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
+        $this->addAclPermission('deleteDocument', 'deleteDocument', 'Insufficient Permissions');
     }
 
     /**
