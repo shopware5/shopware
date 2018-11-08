@@ -219,8 +219,6 @@ class Customer extends Resource
         $billing = $this->createAddress($params['billing']) ?: new AddressModel();
         $shipping = $this->createAddress($params['shipping']);
 
-        $this->validateShippingCountry($params);
-
         $registerService = $this->getContainer()->get('shopware_account.register_service');
         $context = $this->getContainer()->get('shopware_storefront.context_service')->getShopContext()->getShop();
 
@@ -289,10 +287,6 @@ class Customer extends Resource
         $customerValidator->validate($customer);
         $addressValidator->validate($customer->getDefaultBillingAddress());
         $addressValidator->validate($customer->getDefaultShippingAddress());
-
-        if (!$customer->getDefaultShippingAddress()->getCountry()->getAllowShipping()) {
-            throw new ApiException\CustomValidationException(sprintf('Country by id %d is not available for shipping', $customer->getDefaultShippingAddress()->getCountry()->getId()));
-        }
 
         $addressService->update($customer->getDefaultBillingAddress());
         $addressService->update($customer->getDefaultShippingAddress());
@@ -580,39 +574,5 @@ class Customer extends Resource
         $customer->getDefaultShippingAddress()->fromArray($shippingData);
 
         return $params;
-    }
-
-    /**
-     * @param array $params
-     *
-     * @throws ApiException\CustomValidationException
-     */
-    private function validateShippingCountry(array $params)
-    {
-        if (!empty($params['shipping']) && $this->isCountryAvailableForShipping($params['shipping']['country'])) {
-            return;
-        }
-
-        if (empty($params['shipping']) && $this->isCountryAvailableForShipping($params['billing']['country'])) {
-            return;
-        }
-
-        $id = !empty($params['shipping']['country']) ? $params['shipping']['country'] : $params['billing']['country'];
-
-        throw new ApiException\CustomValidationException(sprintf('Country by id %d is not available for shipping', $id));
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool
-     */
-    private function isCountryAvailableForShipping($id)
-    {
-        if ($id instanceof Country) {
-            $id = $id->getId();
-        }
-
-        return (bool) $this->getContainer()->get('dbal_connection')->fetchColumn('SELECT allow_shipping FROM s_core_countries WHERE id = ?', [$id]);
     }
 }

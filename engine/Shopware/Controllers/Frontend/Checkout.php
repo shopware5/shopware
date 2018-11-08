@@ -1942,7 +1942,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $address = $this->get('models')->find(Address::class, $addressId);
 
-        if ($address && $isShippingAddress && !$address->getCountry()->getAllowShipping()) {
+        $context = $this->get('shopware_storefront.context_service')->getContext();
+        $country = $this->get('shopware_storefront.country_gateway')->getCountry($address->getCountry()->getId(), $context);
+
+        if ($address && $isShippingAddress && !$country->allowShipping()) {
             $this->View()->assign('invalidShippingCountry', true);
 
             return false;
