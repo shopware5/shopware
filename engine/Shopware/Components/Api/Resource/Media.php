@@ -267,11 +267,12 @@ class Media extends Resource
             // Persist the model into the model manager this uploads and resizes the image
             $this->getManager()->persist($media);
         } catch (\Doctrine\ORM\ORMException $e) {
-            unlink($file);
-            rmdir(dirname($file));
             throw new ApiException\CustomValidationException(
                 sprintf('Some error occurred while persisting your media')
             );
+        } finally {
+            unlink($file);
+            rmdir(dirname($file));
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
@@ -281,8 +282,6 @@ class Media extends Resource
             $manager->createMediaThumbnail($media, [], true);
         }
 
-        unlink($file);
-        rmdir(dirname($file));
         return $media;
     }
 
