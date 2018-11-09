@@ -221,11 +221,11 @@
 
     Ext.Loader.require = function(expressions, fn, scope, excludes) {
         var Manager = Ext.ClassManager;
-        var filePath, expression, exclude, className, excluded = {},
+        var expression, exclude, className, excluded = {},
             excludedClassNames = [],
             possibleClassNames = [],
             possibleClassName, classNames = [],
-            namespaces = {}, separatedPath, prefix,
+            namespaces = {},
             i, j, ln, subLn;
 
         if(!this.getConfig('disableCachingValue')) {
@@ -309,20 +309,7 @@
             className = classNames[i];
 
             if (!this.isFileLoaded.hasOwnProperty(className) || !this.isFileLoaded[className]) {
-                this.isFileLoaded[className] = false;
-
-                prefix = this.getPrefix(className);
-                separatedPath = this.getPath(className, prefix);
-                filePath = separatedPath.join('');
-
-                this.numPendingFiles++;
-
-                // Collect and sort bulk loaded files by prefix
-                if(!namespaces[prefix]) {
-                    namespaces[prefix] = { 'prefix': prefix, 'path': separatedPath[0], 'files': [], 'classNames': [] };
-                }
-                namespaces[prefix]['files'].push(separatedPath[1]);
-                namespaces[prefix]['classNames'].push(className);
+                namespaces = this.loadNamespaces(className, namespaces);
             } else {
                 // Asynchrounous request, with already loaded deoendency:
                 // Process queue to ensure the callback is executed.
@@ -340,6 +327,58 @@
         }
 
         return this;
+    };
+
+    /**
+     * @param { string } className
+     * @param { Object } namespaces
+     * @returns { Object }
+     */
+    Ext.Loader.loadNamespaces = function (className, namespaces) {
+        this.isFileLoaded[className] = false;
+
+        var prefix = this.getPrefix(className),
+            separatedPath = this.getPath(className, prefix),
+            substring = className.substring(prefix.length + 1);
+
+        // If Shopware.apps.Example.store.Foo is requested, but Shopware.apps.Example was never loaded before
+        if (this.isMainAppMissing(substring, prefix)) {
+            var rightPart = substring.split('.')[0];
+
+            // Load main app
+            namespaces = this.loadNamespaces('Shopware.apps.' + rightPart, namespaces);
+            loadNamespacedClasses(namespaces);
+
+            // Reset all variables like main app has already existed, since it does now
+            namespaces = {};
+            prefix = this.getPrefix(className);
+            separatedPath = this.getPath(className, prefix);
+        }
+
+        this.numPendingFiles++;
+
+        // Collect and sort bulk loaded files by prefix
+        if (!namespaces[prefix]) {
+            namespaces[prefix] = { 'prefix': prefix, 'path': separatedPath[0], 'files': [], 'classNames': [] };
+        }
+
+        namespaces[prefix]['files'].push(separatedPath[1]);
+        namespaces[prefix]['classNames'].push(className);
+
+        return namespaces;
+    };
+
+    /**
+     * @param { string } substring
+     * @param { string } prefix
+     * @returns { boolean }
+     */
+    Ext.Loader.isMainAppMissing = function (substring, prefix) {
+        if (prefix === 'Shopware.apps' && substring.split('.').length > 1) {
+            return true;
+        }
+
+        return false;
     };
 
 

@@ -25,6 +25,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added service `\Doctrine\Common\Annotations\Reader` as `models.annotations_reader`
 * Added `shopware.controller.blacklisted_controllers` parameter to the DI container to blacklist controllers for dispatching
 * Added default table options of Doctrine to config
+* Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
 
 ### Changes
 
@@ -73,6 +74,18 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getNotAnalyzedField`. It will be removed in 5.7, use the getKeywordField instead.
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead.
+
+### Improved ExtJS auto-loading
+
+Previous to Shopware 5.6, only ExtJS files from the `Shopware.apps.Base` were loaded globally, so you can use them globally in your apps. 
+Additional to that, when loading up a module like e.g. "ProductStream", all files from `Shopware.apps.ProductStream` were loaded on top.
+Using files from others apps, such as `Shopware.apps.Article` inside of the `Shopware.apps.ProductStream` application, required you to implement some special code in order to do so.
+Also, when using an ExtJS store in your plugin configuration, you were only able to use stores from `Shopware.apps.Base`, none of the other stores.
+
+We've improved our auto-loading of ExtJS files, so you don't have to worry about this anymore.
+Instead of failing, because you used files of an application, that didn't get loaded yet, we're simply loading the missing application now.
+This way you don't have to worry about using others applications files anymore, as well as worrying about which stores can be used
+in your plugin configuration.
 
 ### Controller Registration using DI-Tag
 
