@@ -209,6 +209,7 @@ class DataPersister
     {
         /** @var TableMapping $mapping */
         $columns = $this->mapping->getTableColumns($table);
+        $readOnly = $this->getReadOnlyColumns($table);
 
         $result = [];
         foreach ($columns as $column) {
@@ -216,6 +217,9 @@ class DataPersister
                 continue;
             }
             if (!array_key_exists($column->getName(), $data)) {
+                continue;
+            }
+            if (in_array($column->getName(), $readOnly)) {
                 continue;
             }
             $value = $data[$column->getName()];
@@ -254,5 +258,24 @@ class DataPersister
     private function isDateColumn(Column $column)
     {
         return $column->getType() instanceof DateStringType || $column->getType() instanceof DateTimeStringType;
+    }
+
+    /**
+     * @param string $table
+     *
+     * @return string[]
+     */
+    private function getReadOnlyColumns($table)
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $builder
+            ->select(['config.column_name'])
+            ->from('s_attribute_configuration', 'config')
+            ->where('config.table_name = :tablename')
+            ->andWhere('config.readonly = 1')
+            ->setParameter('tablename', $table)
+        ;
+
+        return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

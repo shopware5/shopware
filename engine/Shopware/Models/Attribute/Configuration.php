@@ -85,6 +85,12 @@ class Configuration extends ModelEntity
     private $label;
 
     /**
+     * @var bool
+     * @ORM\Column(name="readonly", type="boolean", nullable=false)
+     */
+    private $readonly = false;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="help_text", type="string", nullable=true)
@@ -203,6 +209,22 @@ class Configuration extends ModelEntity
     public function setLabel($label)
     {
         $this->label = $label;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReadonly()
+    {
+        return $this->readonly;
+    }
+
+    /**
+     * @param bool $readonly
+     */
+    public function setReadonly($readonly)
+    {
+        $this->readonly = $readonly;
     }
 
     /**
