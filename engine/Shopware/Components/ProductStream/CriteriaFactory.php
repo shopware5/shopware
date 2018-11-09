@@ -45,9 +45,9 @@ class CriteriaFactory implements CriteriaFactoryInterface
     /**
      * @param StoreFrontCriteriaFactoryInterface $criteriFactory
      */
-    public function __construct(StoreFrontCriteriaFactoryInterface $criteriFactory)
+    public function __construct(StoreFrontCriteriaFactoryInterface $criteriaFactory)
     {
-        $this->criteriaFactory = $criteriFactory;
+        $this->criteriaFactory = $criteriaFactory;
     }
 
     /**
