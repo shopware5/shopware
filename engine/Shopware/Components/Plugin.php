@@ -65,7 +65,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     /**
      * @param bool $isActive
      */
-    final public function __construct($isActive)
+    public function __construct($isActive)
     {
         $this->isActive = (bool) $isActive;
     }
