@@ -155,6 +155,7 @@
 
         <service id="shopware_search_es.product_attribute_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ProductAttributeFacetHandler">
             <argument type="service" id="shopware_attribute.crud_service" />
+            <argument type="service" id="shopware_elastic_search.product_mapping"/>
             <tag name="shopware_search_es.search_handler" />
         </service>
 
