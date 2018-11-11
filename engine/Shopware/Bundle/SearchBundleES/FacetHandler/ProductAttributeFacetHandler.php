@@ -32,6 +32,7 @@ use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
+use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -63,13 +64,19 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     private $crudService;
 
     /**
+     * @var MappingInterface
+     */
+    private $productMappingService;
+
+    /**
      * ProductAttributeFacetHandler constructor.
      *
      * @param CrudService $crudService
      */
-    public function __construct(CrudService $crudService)
+    public function __construct(CrudService $crudService, MappingInterface $productMappingService)
     {
         $this->crudService = $crudService;
+        $this->productMappingService = $productMappingService;
     }
 
     /**
@@ -90,7 +97,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         ShopContextInterface $context
     ) {
         /** @var ProductAttributeFacet $criteriaPart */
-        $field = 'attributes.core.' . $criteriaPart->getField();
+        $field = $this->getAggregationField($criteriaPart, $context);
         $this->criteriaParts[] = $criteriaPart;
 
         switch ($criteriaPart->getMode()) {
@@ -369,5 +376,46 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         }, $aggregation['buckets']);
 
         return $aggregation;
+    }
+
+    /**
+     * According to https://www.elastic.co/guide/en/elasticsearch/reference/5.6/_executing_aggregations.html
+     * aggregations for text fields shall use a keyword field, so according to the shopware elasticsearch product
+     * mapping we need to use the *.raw field for the aggregation.
+     *
+     * @param CriteriaPartInterface $criteriaPart
+     * @param ShopContextInterface  $context
+     *
+     * @return string
+     */
+    private function getAggregationField(CriteriaPartInterface $criteriaPart, ShopContextInterface $context)
+    {
+        /** @var ProductAttributeFacet $criteriaPart */
+        $field = 'attributes.core.' . $criteriaPart->getField();
+
+        if ($this->isTextAttribute($criteriaPart, $context)) {
+            $field .= '.raw';
+        }
+
+        return $field;
+    }
+
+    /**
+     * @param CriteriaPartInterface $criteriaPart
+     * @param ShopContextInterface  $context
+     *
+     * @return bool
+     */
+    private function isTextAttribute(CriteriaPartInterface $criteriaPart, ShopContextInterface $context)
+    {
+        /** @var ProductAttributeFacet $criteriaPart */
+        $productMappingService = $this->productMappingService->get($context->getShop());
+
+        if (isset($productMappingService['properties']['attributes']['properties']['core']['properties'][$criteriaPart->getField()]['type'])
+            && $productMappingService['properties']['attributes']['properties']['core']['properties'][$criteriaPart->getField()]['type'] == 'text') {
+            return true;
+        }
+
+        return false;
     }
 }
