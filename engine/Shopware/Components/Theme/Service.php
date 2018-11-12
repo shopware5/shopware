@@ -407,6 +407,11 @@ class Service
                     $element['attributes']['helpText'],
                     $namespace
                 );
+
+                $element['attributes']['boxLabel'] = $this->convertSnippet(
+                    $element['attributes']['boxLabel'],
+                    $namespace
+                );
             }
 
             if (isset($element['selection'])) {
