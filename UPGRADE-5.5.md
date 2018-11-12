@@ -44,6 +44,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed default groupKey to get correct subpages of custom pages in mobile menu
 * Changed some mailer options to combo boxes to avoid wrong entries
 * Changed CSV import of snippets to only remove one apostrophe from the beginning of a line 
+* New countries created via programming interfaces default to allowing shipping to restore backwards compatibility to versions before Shopware 5.5.3.
 
 ## 5.5.3
 
