@@ -274,8 +274,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function ajaxSelectionAction()
     {
         $extraData = $this->Request()->getParam('extraData', []);
-        $addressRepository = $this->getModelManager()->getRepository(Address::class);
-        $addresses = $addressRepository->getListArray($this->get('session')->get('sUserId'));
+        $addresses = $this->getModelManager()->getRepository(Address::class)->getListArray($this->get('session')->get('sUserId'));
         $activeAddressId = $this->Request()->getParam('id', null);
 
         if (!empty($activeAddressId)) {
@@ -285,6 +284,8 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                 }
             }
         }
+
+        $addresses = $this->translateCountries($addresses);
 
         /** @var string $data */
         $extraData = array_map(function ($data) {
@@ -531,6 +532,32 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             return true;
         }
 
-        return $address->getCountry()->getAllowShipping();
+        $context = $this->get('shopware_storefront.context_service')->getContext();
+        $country = $this->get('shopware_storefront.country_gateway')->getCountry($address->getCountry()->getId(), $context);
+
+        return $country->allowShipping();
+    }
+
+    /**
+     * @param array $addresses
+     *
+     * @return array
+     */
+    private function translateCountries(array $addresses)
+    {
+        $countryIds = array_map(function ($address) {
+            return $address['country']['id'];
+        }, $addresses);
+
+        $context = $this->get('shopware_storefront.context_service')->getContext();
+        $countries = $this->get('shopware_storefront.country_gateway')->getCountries($countryIds, $context);
+        $countries = $this->get('legacy_struct_converter')->convertCountryStructList($countries);
+
+        foreach ($addresses as &$address) {
+            $address['country'] = array_merge($address['country'], $countries[$address['country']['id']]);
+        }
+        unset($address);
+
+        return $addresses;
     }
 }

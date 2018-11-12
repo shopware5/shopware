@@ -1101,11 +1101,17 @@ class sAdmin
                 }
                 $countryList[$key]['states'] = $states;
             }
+
             if (!empty($countryTranslations[$country['id']]['countryname'])) {
                 $countryList[$key]['countryname'] = $countryTranslations[$country['id']]['countryname'];
             }
+
             if (!empty($countryTranslations[$country['id']]['notice'])) {
                 $countryList[$key]['notice'] = $countryTranslations[$country['id']]['notice'];
+            }
+
+            if (!empty($countryTranslations[$country['id']]['allow_shipping'])) {
+                $countryList[$key]['allow_shipping'] = $countryTranslations[$country['id']]['allow_shipping'];
             }
 
             $countryList[$key]['flag'] =
