@@ -81,10 +81,10 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Timezone', {
                         '{s name=time/difference_detected}Difference between database time and php time is [0] minutes{/s}',
                         decodedResponse.offset
                     );
+                    block.items.items[0].update({
+                        text: snippet
+                    });
                 }
-                block.items.items[0].update({
-                    text: snippet
-                });
             }
         });
 
