@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Elasticsearch\Client;
+use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
@@ -63,6 +64,11 @@ class ShopIndexer implements ShopIndexerInterface
     private $indexFactory;
 
     /**
+     * @var EvaluationHelperInterface
+     */
+    private $evaluation;
+
+    /**
      * @var BacklogProcessorInterface
      */
     private $backlogProcessor;
@@ -87,6 +93,7 @@ class ShopIndexer implements ShopIndexerInterface
         BacklogReaderInterface $backlogReader,
         BacklogProcessorInterface $backlogProcessor,
         IndexFactoryInterface $indexFactory,
+        EvaluationHelperInterface $evaluation,
         array $indexer,
         array $mappings,
         array $settings,
@@ -100,6 +107,7 @@ class ShopIndexer implements ShopIndexerInterface
         $this->mappings = $mappings;
         $this->settings = $settings;
         $this->configuration = $configuration;
+        $this->evaluation = $evaluation;
     }
 
     /**
@@ -205,6 +213,7 @@ class ShopIndexer implements ShopIndexerInterface
         foreach ($this->indexer as $indexer) {
             if ($indexer->supports() === $index->getType()) {
                 $indexer->populate($index, $progress);
+                $this->evaluation->finish();
             }
         }
 

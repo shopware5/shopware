@@ -41,5 +41,6 @@ parameters:
         - '#Call to method [a-zA-Z\\]+\(\) on an unknown class Shopware\\Models\\Attribute\\[a-zA-Z\\]+#'
         - '#does not call parent constructor from Enlight_Class#'
         - '#Binary operation "|=" between string and string results in an error.#'
+        - '#does not call parent constructor from Elasticsearch#'
 
     reportUnmatchedIgnoredErrors: false

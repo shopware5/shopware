@@ -48,6 +48,8 @@ class IndexPopulateCommand extends ShopwareCommand
             ->setName('sw:es:index:populate')
             ->setDescription('Reindex all shops into a new index and switch the live-system alias after the index process.')
             ->addOption('shopId', null, InputOption::VALUE_OPTIONAL)
+            ->addOption('no-evaluation', null, InputOption::VALUE_NONE, 'Disable evaluation for each index')
+            ->addOption('stop-on-error', null, InputOption::VALUE_NONE, 'Abort indexing if an error occurs')
         ;
     }
 
@@ -66,6 +68,11 @@ class IndexPopulateCommand extends ShopwareCommand
         $indexer = $this->container->get('shopware_elastic_search.shop_indexer');
 
         $helper = new ConsoleProgressHelper($output);
+
+        $evaluation = $this->container->get('shopware_elastic_search.console.console_evaluation_helper');
+        $evaluation->setOutput($output)
+            ->setActive(!$input->getOption('no-evaluation'))
+            ->setStopOnError($input->getOption('stop-on-error'));
 
         /** @var Shop $shop */
         foreach ($shops as $shop) {
