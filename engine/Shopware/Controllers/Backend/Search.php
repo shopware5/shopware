@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,6 +24,9 @@
  */
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Value;
 
 /**
  * Backend search controller
@@ -147,7 +151,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * Queries the customers from the database based on the passed search term
      *
-     * @param $search
+     * @param string $search
      *
      * @return array
      */
@@ -182,7 +186,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * Queries the orders from the database based on the passed search term
      *
-     * @param $search
+     * @param string $search
      *
      * @return array
      */
@@ -238,26 +242,26 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             ->from($entity, 'entity');
 
         switch ($entity) {
-            case 'Shopware\Models\Article\Article':
+            case Article::class:
                 $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
                     ->innerJoin('entity.mainDetail', 'mainDetail')
                     ->leftJoin('entity.details', 'details');
                 break;
 
-            case 'Shopware\Models\Property\Value':
+            case Value::class:
                 if ($groupId = $this->Request()->getParam('groupId')) {
                     $query->andWhere('entity.optionId = :optionId')
                         ->setParameter(':optionId', $this->Request()->getParam('groupId'));
                 }
                 break;
 
-            case 'Shopware\Models\Property\Option':
+            case Option::class:
                 if ($setId = $this->Request()->getParam('setId')) {
                     $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
                         ->setParameter(':setId', $setId);
                 }
                 break;
-            case 'Shopware\Models\Category\Category':
+            case Category::class:
                 $query->andWhere('entity.parent IS NOT NULL')
                     ->addOrderBy('entity.parentId')
                     ->addOrderBy('entity.position');
@@ -300,7 +304,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }, $data);
 
         switch ($entity) {
-            case 'Shopware\Models\Category\Category':
+            case Category::class:
                 $data = $this->resolveCategoryPath($data);
                 break;
         }
@@ -360,21 +364,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * Creates a custom search term condition
-     *
-     * @param string $entity
-     * @param string $column
-     *
-     * @return string
-     */
-    private function createCustomFieldToSearchTermCondition($entity, $column)
-    {
-        $field = $entity . '.' . $column;
-
-        return $field . ' LIKE :search';
-    }
-
-    /**
      * @param \Doctrine\ORM\QueryBuilder $query
      * @param int[]                      $ids
      */
@@ -414,7 +403,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $ids
+     * @param int[] $ids
      *
      * @return array
      */

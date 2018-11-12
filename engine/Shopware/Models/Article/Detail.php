@@ -224,7 +224,7 @@ class Detail extends ModelEntity
     private $height = null;
 
     /**
-     * @var float ean
+     * @var string ean
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
     private $ean = null;
@@ -676,7 +676,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getEan()
     {
@@ -684,7 +684,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param float $ean
+     * @param string $ean
      */
     public function setEan($ean)
     {

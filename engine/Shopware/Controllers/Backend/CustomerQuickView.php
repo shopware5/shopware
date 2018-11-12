@@ -139,7 +139,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
 
         if ($search) {
             $builder = $this->container->get('shopware.model.search_builder');
-            $builder->addSearchTerm($query, $search, [
+            $searchfields = [
                 'customer.number^2',
                 'customer.email^2',
                 'customer.firstname^3',
@@ -147,7 +147,12 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
                 'billing.zipcode^0.5',
                 'billing.city^0.5',
                 'billing.company^0.5',
-            ]);
+            ];
+            $searchfields = $this->get('events')->filter(
+                'Shopware_Controllers_Backend_CustomerQuickView_listQuerySearchFields',
+                $searchfields
+            );
+            $builder->addSearchTerm($query, $search, $searchfields);
         }
 
         return $query;

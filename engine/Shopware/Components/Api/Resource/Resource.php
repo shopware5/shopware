@@ -29,6 +29,7 @@ use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
@@ -41,7 +42,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Resource
+abstract class Resource implements ContainerAwareInterface
 {
     /* Hydration mode constants */
     /**
@@ -58,7 +59,7 @@ abstract class Resource
      *
      * @var ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var bool
@@ -73,17 +74,17 @@ abstract class Resource
     /**
      * @var \Shopware_Components_Acl
      */
-    protected $acl = null;
+    protected $acl;
 
     /**
      * Contains the current role
      *
      * @var string|\Zend_Acl_Role_Interface
      */
-    protected $role = null;
+    protected $role;
 
     /** @var Container */
-    protected $container = null;
+    protected $container;
 
     /**
      * @return Container
@@ -98,9 +99,9 @@ abstract class Resource
     }
 
     /**
-     * @param $container
+     * @param Container $container
      */
-    public function setContainer($container)
+    public function setContainer(Container $container = null)
     {
         $this->container = $container;
     }
@@ -587,10 +588,10 @@ abstract class Resource
     protected function resetEntityManager()
     {
         $this->getContainer()->reset('models')
-                                  ->reset('db_connection')
+                                  ->reset('dbal_connection')
                                   ->load('models');
 
-        $this->getContainer()->load('db_connection');
+        $this->getContainer()->load('dbal_connection');
 
         $this->setManager($this->container->get('models'));
     }

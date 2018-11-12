@@ -535,7 +535,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $id = $this->Request()->getParam('articleId');
         $priceGroups = $this->getRepository()->getPriceGroupQuery()->getArrayResult();
         $suppliers = $this->getRepository()->getSuppliersQuery()->getArrayResult();
-        $shops = $this->getShopRepository()->createQueryBuilder('shops')->getQuery()->getArrayResult();
+        $shops = $this->getShopRepository()->createQueryBuilder('shops')->andWhere('shops.active = 1')->getQuery()->getArrayResult();
         $taxes = $this->getRepository()->getTaxesQuery()->getArrayResult();
         $templates = $this->getTemplates();
         $units = $this->getRepository()->getUnitsQuery()->getArrayResult();
@@ -4344,21 +4344,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
     }
 
-    /**
-     * Helper function to get a one or null result over the pagination extension
-     *
-     * @param \Doctrine\ORM\Query $query
-     *
-     * @return array
-     */
-    private function getOneOrNullResult($query)
-    {
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $paginator = $this->getModelManager()->createPaginator($query);
-
-        return $paginator->getIterator()->getArrayCopy();
-    }
 
     /**
      * @param array $detailData

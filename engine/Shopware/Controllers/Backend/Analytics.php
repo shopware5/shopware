@@ -1001,22 +1001,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-    private function isTimestamp($input)
-    {
-        if (strlen($input) != 11) {
-            return false;
-        }
-
-        if (is_int($input)) {
-            return true;
-        }
-
-        if (is_string($input)) {
-            return ctype_digit($input);
-        }
-
-        return false;
-    }
 
     private function getCsvFileName()
     {

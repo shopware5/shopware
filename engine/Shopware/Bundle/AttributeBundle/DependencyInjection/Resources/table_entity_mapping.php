@@ -360,4 +360,12 @@ return [
         'coreAttributes' => [],
         'dependingTables' => [],
     ],
+    's_articles_notification_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Article\ArticleNotification',
+        'identifiers' => ['id', 'notificationid'],
+        'foreignKey' => 'notificationid',
+        'coreAttributes' => [],
+        'dependingTables' => [],
+    ],
 ];

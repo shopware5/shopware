@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
+use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
 
@@ -56,11 +58,13 @@ class OrderReader extends GenericReader
     public function getList($identifiers)
     {
         $data = parent::getList($identifiers);
+        $documents = $this->getDocuments($data);
 
         $namespace = $this->snippets->getNamespace('backend/static/order_status');
 
         foreach ($data as &$row) {
             $row['orderStateName'] = $namespace->get($row['orderStateKey']);
+            $row['orderDocuments'] = $this->getOrderDocuments($documents, $row);
         }
 
         return $data;
@@ -120,5 +124,34 @@ class OrderReader extends GenericReader
         $query->setParameter(':cancelStatus', -1);
 
         return $query;
+    }
+
+    /**
+     * @param array $orders
+     *
+     * @return array
+     */
+    private function getDocuments(array $orders)
+    {
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select('documents.orderID', 'documents.docID');
+        $query->from('s_order_documents', 'documents');
+        $query->where('documents.orderID IN (:ids)');
+        $query->setParameter(':ids', array_keys($orders), Connection::PARAM_INT_ARRAY);
+
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param array $documents
+     * @param array $row
+     *
+     * @return array
+     */
+    private function getOrderDocuments(array $documents, array $row)
+    {
+        return array_values(array_filter(array_column(array_filter($documents, function (array $document) use ($row) {
+            return (int) $document['orderID'] === (int) $row['id'];
+        }), 'docID')));
     }
 }

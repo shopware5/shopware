@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Api;
 
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
@@ -53,13 +52,10 @@ class Manager
 
             /** @var $resource Resource\Resource */
             $resource = new $class();
-        }
 
-        if ($resource instanceof ContainerAwareInterface) {
             $resource->setContainer($container);
+            $resource->setManager($container->get('models'));
         }
-
-        $resource->setManager($container->get('models'));
 
         if ($container->initialized('Auth')) {
             $resource->setAcl($container->get('acl'));
