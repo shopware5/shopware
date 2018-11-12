@@ -175,7 +175,7 @@ class Country extends ModelEntity
      *
      * @ORM\Column(name="allow_shipping", type="boolean", nullable=false)
      */
-    private $allowShipping = false;
+    private $allowShipping = true;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
