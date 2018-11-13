@@ -14,6 +14,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Changes
 
 * Changed Symfony library to version 3.4.18
+* Changed CSV import of snippets to only remove one apostrophe from the beginning of a line 
 
 ## 5.5.3
 
