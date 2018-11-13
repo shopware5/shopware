@@ -85,7 +85,9 @@
                                         </div>
                                     {/block}
                                 {else}
-                                    <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if $sError} data-hasError="true"{/if}></div>
+                                    {$captchaName = {config name=captchaMethod}}
+                                    {$captchaHasError = $sError}
+                                    {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                                 {/if}
                             </div>
                         {/block}
