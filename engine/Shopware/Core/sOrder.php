@@ -258,9 +258,9 @@ class sOrder
     /**
      * Check each basket row for instant downloads
      *
-     * @param $basketRow
-     * @param $orderID
-     * @param $orderDetailsID
+     * @param array $basketRow
+     * @param int   $orderID
+     * @param int   $orderDetailsID
      *
      * @return array
      */
@@ -646,10 +646,10 @@ class sOrder
 
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
-        unset($attributes['id']);
-        unset($attributes['orderID']);
+        unset($attributes['id'], $attributes['orderID']);
 
         $position = 0;
+        $esdOrder = null;
         foreach ($this->sBasketData['content'] as $key => $basketRow) {
             ++$position;
 
@@ -738,8 +738,7 @@ class sOrder
 
             $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderdetailsID);
             $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID);
-            unset($detailAttributes['id']);
-            unset($detailAttributes['detailID']);
+            unset($detailAttributes['id'], $detailAttributes['detailID']);
             $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
 
             // Update sales and stock
@@ -1231,6 +1230,7 @@ class sOrder
     {
         $statusId = (int) $statusId;
         $orderId = (int) $orderId;
+        $dispatch = null;
 
         if (empty($templateName)) {
             $templateName = 'sORDERSTATEMAIL' . $statusId;
@@ -1278,7 +1278,7 @@ class sOrder
             $order['payment_description'] = $payment['description'];
         }
 
-        /* @var $mailModel \Shopware\Models\Mail\Mail */
+        /* @var \Shopware\Models\Mail\Mail $mailModel */
         $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
             ['name' => $templateName]
         );
@@ -1567,7 +1567,7 @@ EOT;
     /**
      * Replacement for: Shopware()->Api()->Export()->sOrderCustomers(array('orderID' => $orderId));
      *
-     * @param $orderId
+     * @param int $orderId
      *
      * @return array|false
      */
@@ -1706,7 +1706,7 @@ EOT;
     /**
      * Helper function which returns all available esd serials for the passed esd id.
      *
-     * @param $esdId
+     * @param int $esdId
      *
      * @return array
      */
@@ -1748,8 +1748,8 @@ EOT;
     /**
      * Checks if the current customer should see net prices.
      *
-     * @param $taxId
-     * @param $customerGroupId
+     * @param int $taxId
+     * @param int $customerGroupId
      *
      * @return bool
      */
@@ -1789,9 +1789,9 @@ EOT;
      * Helper function which reserves individual voucher codes for the
      * passed user.
      *
-     * @param $orderCode
-     * @param $customerId
-     * @param $voucherCodeId
+     * @param string $orderCode
+     * @param int    $customerId
+     * @param int    $voucherCodeId
      */
     private function reserveVoucher($orderCode, $customerId, $voucherCodeId)
     {
@@ -1868,7 +1868,7 @@ EOT;
      * Additionally to the order details rows, this function returns
      * the order detail attributes for each position.
      *
-     * @param $orderId
+     * @param int $orderId
      *
      * @return array
      */

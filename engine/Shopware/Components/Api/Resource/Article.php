@@ -162,7 +162,7 @@ class Article extends Resource implements BatchInterface
             ->where('article.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var \Shopware\Models\Article\Article $article */
         $article = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$article) {
@@ -170,7 +170,7 @@ class Article extends Resource implements BatchInterface
         }
 
         if ($this->getResultMode() == self::HYDRATE_ARRAY) {
-            /* @var $article array */
+            /* @var array $article */
             $article['images'] = $this->getArticleImages($id);
             $article['configuratorSet'] = $this->getArticleConfiguratorSet($id);
             $article['links'] = $this->getArticleLinks($id);
@@ -207,7 +207,7 @@ class Article extends Resource implements BatchInterface
             }
 
             if (isset($options['language']) && !empty($options['language'])) {
-                /** @var $shop Shop */
+                /** @var Shop $shop */
                 $shop = $this->findEntityByConditions(\Shopware\Models\Shop\Shop::class, [
                     ['id' => $options['language']],
                     ['shop' => $options['language']],
@@ -292,7 +292,7 @@ class Article extends Resource implements BatchInterface
         if ($this->getResultMode() === self::HYDRATE_ARRAY
             && isset($options['language'])
             && !empty($options['language'])) {
-            /** @var $shop Shop */
+            /** @var Shop $shop */
             $shop = $this->findEntityByConditions(\Shopware\Models\Shop\Shop::class, [
                 ['id' => $options['language']],
             ]);
@@ -591,7 +591,7 @@ class Article extends Resource implements BatchInterface
         foreach ($mappings as $mapping) {
             $builder = $this->getArticleVariantQuery($article->getId());
 
-            /** @var $rule Image\Rule */
+            /** @var Image\Rule $rule */
             foreach ($mapping->getRules() as $rule) {
                 $option = $rule->getOption();
                 $alias = 'option' . $option->getId();
@@ -1405,8 +1405,11 @@ class Article extends Resource implements BatchInterface
 
         $this->resetArticleCategoryAssignment($data, $article);
 
+        /** @var ArrayCollection<\Shopware\Models\Category\Category> $categories */
         $categories = $article->getCategories();
+
         $categoryIds = $categories->map(function ($category) {
+            /* @var \Shopware\Models\Category\Category $category */
             return $category->getId();
         });
 
@@ -1421,7 +1424,9 @@ class Article extends Resource implements BatchInterface
 
             if (!$category) {
                 if (!empty($categoryData['path'])) {
-                    $category = $this->getResource('Category')->findCategoryByPath($categoryData['path'], true);
+                    /** @var \Shopware\Components\Api\Resource\Category $categoryResource */
+                    $categoryResource = $this->getResource('Category');
+                    $category = $categoryResource->findCategoryByPath($categoryData['path'], true);
 
                     if (!$category) {
                         throw new ApiException\CustomValidationException(
@@ -1467,7 +1472,7 @@ class Article extends Resource implements BatchInterface
         );
 
         foreach ($data['seoCategories'] as $categoryData) {
-            /** @var $seoCategory \Shopware\Models\Article\SeoCategory */
+            /** @var \Shopware\Models\Article\SeoCategory $seoCategory */
             $seoCategory = $this->getOneToManySubElement(
                 $categories,
                 $categoryData,
@@ -1475,7 +1480,7 @@ class Article extends Resource implements BatchInterface
             );
 
             if (isset($categoryData['shopId'])) {
-                /** @var $shop \Shopware\Models\Shop\Shop */
+                /** @var \Shopware\Models\Shop\Shop $shop */
                 $shop = $this->manager->find(
                     'Shopware\Models\Shop\Shop',
                     $categoryData['shopId']
@@ -1497,7 +1502,7 @@ class Article extends Resource implements BatchInterface
             }
 
             if (isset($categoryData['categoryId'])) {
-                /** @var $category \Shopware\Models\Category\Category */
+                /** @var \Shopware\Models\Category\Category $category */
                 $category = $this->manager->find(
                     \Shopware\Models\Category\Category::class,
                     $categoryData['categoryId']
@@ -1625,7 +1630,7 @@ class Article extends Resource implements BatchInterface
                 );
             }
 
-            /* @var $relatedArticle ArticleModel */
+            /* @var ArticleModel $relatedArticle */
             if ($relatedData['cross']) {
                 $relatedArticle->getRelated()->add($article);
             }
@@ -1689,7 +1694,7 @@ class Article extends Resource implements BatchInterface
                 );
             }
 
-            /* @var $similarArticle ArticleModel */
+            /* @var ArticleModel $similarArticle */
             if ($similarData['cross']) {
                 $similarArticle->getSimilar()->add($article);
             }
@@ -1834,7 +1839,7 @@ class Article extends Resource implements BatchInterface
      * Returns a query builder to select all article images with mappings and rules.
      * Used to generate the variant images.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
@@ -1862,7 +1867,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function isVariantImageExist(Detail $variant, Image $image)
     {
-        /** @var $variantImage Image */
+        /** @var Image $variantImage */
         foreach ($variant->getImages() as $variantImage) {
             if ($variantImage->getParent()->getId() == $image->getId()) {
                 return true;
@@ -1876,7 +1881,7 @@ class Article extends Resource implements BatchInterface
      * Small helper function which creates a query builder to select
      * all article variants.
      *
-     * @param $id
+     * @param int $id
      *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
@@ -2065,8 +2070,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed values array with the passed shop entity.
      *
-     * @param $values
-     * @param Shop $shop
+     * @param array $values
+     * @param Shop  $shop
      *
      * @return mixed
      */
@@ -2100,8 +2105,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed supplier data.
      *
-     * @param $supplier
-     * @param Shop $shop
+     * @param array $supplier
+     * @param Shop  $shop
      *
      * @return array
      */
@@ -2129,8 +2134,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed property group data.
      *
-     * @param $groupData
-     * @param Shop $shop
+     * @param array $groupData
+     * @param Shop  $shop
      *
      * @return array
      */
@@ -2161,8 +2166,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed variants array and all associated data.
      *
-     * @param $details
-     * @param Shop $shop
+     * @param array $details
+     * @param Shop  $shop
      *
      * @return mixed
      */
@@ -2221,8 +2226,8 @@ class Article extends Resource implements BatchInterface
      * existing data object. This function merges only values, which already
      * exist in the original data array.
      *
-     * @param $data
-     * @param $translation
+     * @param array $data
+     * @param array $translation
      *
      * @return array
      */
@@ -2239,9 +2244,9 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which translates associated array data.
      *
-     * @param array $association
-     * @param Shop  $shop
-     * @param $type
+     * @param array  $association
+     * @param Shop   $shop
+     * @param string $type
      *
      * @return array
      */
@@ -2265,9 +2270,9 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function to get a single translation.
      *
-     * @param $type
-     * @param $shopId
-     * @param $key
+     * @param string $type
+     * @param int    $shopId
+     * @param string $key
      *
      * @return array
      */
@@ -2435,7 +2440,7 @@ class Article extends Resource implements BatchInterface
         $images = $this->checkDataReplacement($article->getImages(), $data, 'images', false);
 
         foreach ($data['images'] as &$imageData) {
-            /** @var $image Image */
+            /** @var Image $image */
             $image = $this->getOneToManySubElement(
                 $images,
                 $imageData,
@@ -2443,7 +2448,7 @@ class Article extends Resource implements BatchInterface
             );
 
             if (isset($imageData['link'])) {
-                /** @var $media MediaModel */
+                /** @var MediaModel $media */
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
                     $imageData['link']
                 );
@@ -2477,7 +2482,7 @@ class Article extends Resource implements BatchInterface
 
             // if image is set as main set other images to secondary
             if ($image->getMain() == 1) {
-                /** @var $otherImage Image */
+                /** @var Image $otherImage */
                 foreach ($images as $otherImage) {
                     //only update existing images which are not the current processed image.
                     //otherwise the main flag won't be changed.

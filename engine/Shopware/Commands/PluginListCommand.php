@@ -130,6 +130,6 @@ class PluginListCommand extends ShopwareCommand
         $table->setHeaders(['Plugin', 'Label', 'Version', 'Author', 'Active', 'Installed'])
               ->setRows($rows);
 
-        $table->render($output);
+        $table->render();
     }
 }

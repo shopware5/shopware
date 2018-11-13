@@ -190,7 +190,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function getOrdersAction()
     {
         if (!$this->_isAllowed('read', 'order')) {
-            /** @var $namespace Enlight_Components_Snippet_Namespace */
+            /** @var Enlight_Components_Snippet_Namespace $namespace */
             $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
             $this->View()->assign([
@@ -211,19 +211,19 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $defaultSort = ['0' => ['property' => 'orderTime', 'direction' => 'DESC']];
 
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 20);
+        $offset = (int) $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', $defaultSort);
         $filter = $this->Request()->getParam('filter');
         $filter = $filter[0]['value'];
 
-        //get access on the customer getRepository()
+        // Get access on the customer getRepository()
         $query = $this->getRepository()->getOrdersQuery($customerId, $filter, $sort, $limit, $offset);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $this->getManager()->getQueryCount($query);
 
-        //returns the customer data
+        // Returns the customer data
         $orders = $query->getArrayResult();
 
         $this->View()->assign(['success' => true, 'data' => $orders, 'total' => $totalResult]);
@@ -236,7 +236,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function getOrderChartAction()
     {
         if (!$this->_isAllowed('read', 'order')) {
-            /** @var $namespace Enlight_Components_Snippet_Namespace */
+            /** @var Enlight_Components_Snippet_Namespace $namespace */
             $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
             $this->View()->assign([
@@ -248,7 +248,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             return;
         }
 
-        //customer id passed?
+        // Customer id passed?
         $customerId = $this->Request()->getParam('customerID');
         if ($customerId === null || $customerId === 0) {
             $this->View()->assign(['success' => false, 'message' => 'No customer id passed']);
@@ -272,13 +272,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $id = $this->Request()->getParam('id');
         $paymentId = $this->Request()->getParam('paymentId');
         $params = $this->Request()->getParams();
+        $paymentData = null;
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
-        //customer id passed? If this is the case the customer was edited
+        // Customer id passed? If this is the case the customer was edited
         if (!empty($id)) {
-            //check if the user has the rights to update an existing customer
+            // Check if the user has the rights to update an existing customer
             if (!$this->_isAllowed('update', 'customer')) {
                 $this->View()->assign([
                     'success' => false,
@@ -290,9 +291,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             }
 
             /** @var Customer $customer */
-            $customer = $this->getRepository()->find($id);
+            $customer = $this->getRepository()->find((int) $id);
             $paymentData = $this->getManager()->getRepository(PaymentData::class)->findOneBy(
-                ['customer' => $customer, 'paymentMean' => $paymentId]
+                ['customer' => $customer, 'paymentMean' => (int) $paymentId]
             );
 
             if ($customer->getChanged() !== null) {
@@ -325,7 +326,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 }
             }
         } else {
-            //check if the user has the rights to create a new customer
+            // Check if the user has the rights to create a new customer
             if (!$this->_isAllowed('create', 'customer')) {
                 $this->View()->assign([
                     'success' => false,
@@ -348,7 +349,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $params = $this->prepareCustomerData($params, $customer, $paymentData);
 
-        //set parameter to the customer model.
+        // Set parameter to the customer model.
         $customer->fromArray($params);
 
         // If user will be activated, but the first login is still 0, because he was in doi-process
@@ -358,7 +359,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $password = $this->Request()->getParam('newPassword');
 
-        //encode the password with md5
+        // Encode the password with md5
         if (!empty($password)) {
             $customer->setPassword($password);
         }
@@ -445,7 +446,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             return;
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
+        /** @var Shopware\Models\Shop\Repository $repository */
         $repository = $this->getShopRepository();
         $shop = $repository->getActiveById($user['language']);
 
@@ -495,18 +496,18 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             ]
         );
 
-        //don't trust anyone without this information
+        // Don't trust anyone without this information
         if (empty($shopId) || empty($sessionId) || empty($hash) || $hash !== $this->createPerformOrderRedirectHash($userPasswordHash)) {
             return;
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
+        /** @var Shopware\Models\Shop\Repository $repository */
         $repository = $this->getShopRepository();
         $shop = $repository->getActiveById($shopId);
 
         $path = rtrim($shop->getBasePath(), '/') . '/';
 
-        //update right domain cookies
+        // Update right domain cookies
         $this->Response()->setCookie('shop', $shopId, 0, $path);
         $this->Response()->setCookie('session-' . $shopId, $sessionId, 0, '/');
 
@@ -564,11 +565,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     protected function initAcl()
     {
-        $this->addAclPermission('getList', 'read', 'no_list_rights', 'You do not have sufficient rights to view the list of customers.');
-        $this->addAclPermission('getDetail', 'detail', 'no_detail_rights', 'You do not have sufficient rights to view the customer detail page.');
-        $this->addAclPermission('getOrders', 'read', 'no_order_rights', 'You do not have sufficient rights to view customer orders.');
-        $this->addAclPermission('getOrderChart', 'read', 'no_order_rights', 'You do not have sufficient rights to view customer orders.');
-        $this->addAclPermission('delete', 'delete', 'no_delete_rights', 'You do not have sufficient rights to delete a customers.');
+        $this->addAclPermission('getList', 'read', 'You do not have sufficient rights to view the list of customers.');
+        $this->addAclPermission('getDetail', 'detail', 'You do not have sufficient rights to view the customer detail page.');
+        $this->addAclPermission('getOrders', 'read', 'You do not have sufficient rights to view customer orders.');
+        $this->addAclPermission('getOrderChart', 'read', 'You do not have sufficient rights to view customer orders.');
+        $this->addAclPermission('delete', 'delete', 'You do not have sufficient rights to delete a customers.');
     }
 
     /**
@@ -660,23 +661,23 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * If the date of the first founded order not equals with the fromDate, an empty row will be prepend.
      * If the date of the last founded order  not equals with the fromDate, an empty row will be append.
      *
-     * @param $customerId
+     * @param int $customerId
      *
      * @return array
      */
     private function getChartData($customerId)
     {
-        //if a from date passed, format it over the \DateTime object. Otherwise create a new date with today - 1 year
+        // If a from date passed, format it over the \DateTime object. Otherwise create a new date with today - 1 year
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
-            $fromDate->setDate($fromDate->format('Y') - 1, $fromDate->format('m'), $fromDate->format('d'));
+            $fromDate->setDate((int) $fromDate->format('Y') - 1, $fromDate->format('m'), $fromDate->format('d'));
         } else {
             $fromDate = new \DateTime($fromDate);
         }
         $fromDateFilter = $fromDate->format('Y-m-d');
 
-        //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
+        // If a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
             $toDate = new \DateTime();
@@ -697,22 +698,22 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             GROUP by YEAR(ordertime), MONTH(ordertime)
         ";
 
-        //select the orders from the database
+        // Select the orders from the database
         $orders = Shopware()->Db()->fetchAll($sql, [$customerId, $fromDateFilter, $toDateFilter]);
 
         if (!empty($orders)) {
             $first = new \DateTime($orders[0]['date']);
             $last = new \DateTime($orders[count($orders) - 1]['date']);
 
-            //to display the whole time range the user inserted, check if the date of the first order equals the fromDate parameter
+            // To display the whole time range the user inserted, check if the date of the first order equals the fromDate parameter
             if ($fromDate->format('Y-m') !== $first->format('Y-m')) {
-                //create a new dummy order with amount 0 and the date the user inserted.
+                // Create a new dummy order with amount 0 and the date the user inserted.
                 $fromDate->setDate($fromDate->format('Y'), $fromDate->format('m'), 1);
                 $emptyOrder = ['amount' => '0.00', 'date' => $fromDate->format('Y-m-d')];
                 array_unshift($orders, $emptyOrder);
             }
 
-            //to display the whole time range the user inserted, check if the date of the last order equals the toDate parameter
+            // To display the whole time range the user inserted, check if the date of the last order equals the toDate parameter
             if ($toDate->format('Y-m') !== $last->format('Y-m')) {
                 $toDate->setDate($toDate->format('Y'), $toDate->format('m'), 1);
                 $orders[] = ['amount' => '0.00', 'date' => $toDate->format('Y-m-d')];
@@ -725,7 +726,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Internal helper function to get a single customer
      *
-     * @param $id
+     * @param int $id
      *
      * @return array|mixed
      */
@@ -748,7 +749,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $data = array_merge($orderInfo, $data[0]);
         $birthday = $data['birthday'];
 
-        /** @var $birthday \DateTime */
+        /** @var \DateTime $birthday */
         if ($birthday instanceof \DateTime) {
             $data['birthday'] = $birthday->format('d.m.Y');
         }
@@ -772,9 +773,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Helper method to prepare the customer for saving
      *
-     * @param array                             $params
-     * @param Shopware\Models\Customer\Customer $customer
-     * @param array                             $paymentData
+     * @param array                                 $params
+     * @param Shopware\Models\Customer\Customer     $customer
+     * @param \Shopware\Models\Customer\PaymentData $paymentData
      *
      * @return array
      */
@@ -787,12 +788,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         if (!empty($params['languageId'])) {
-            /** @var $shopRepository \Shopware\Models\Shop\Repository */
+            /** @var \Shopware\Models\Shop\Repository $shopRepository */
             $shopRepository = $this->getShopRepository();
             $params['languageSubShop'] = $shopRepository->find($params['languageId']);
         } else {
-            unset($params['languageSubShop']);
-            unset($params['shop']);
+            unset($params['languageSubShop'], $params['shop']);
         }
 
         if (!empty($params['priceGroupId'])) {
@@ -801,13 +801,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['priceGroup'] = null;
         }
 
-        //If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
+        // If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
         if ($customer->getPaymentId() !== $params['paymentId']) {
             $params['paymentPreset'] = $params['paymentId'];
         }
 
         if (empty($params['shipping'][0]['firstName']) && empty($params['shipping'][0]['lastName'])) {
-            //shipping params are empty use the billing ones
+            // Shipping params are empty use the billing ones
             $params['shipping'][0] = $params['billing'][0];
         }
 
@@ -815,8 +815,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $paymentData->fromArray(array_shift($params['paymentData']));
         }
 
-        unset($params['paymentData']);
-        unset($params['attribute']);
+        unset($params['paymentData'], $params['attribute']);
 
         if (isset($params['billing'])) {
             $params['billing'] = $params['billing'][0];
@@ -835,7 +834,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * generates a hash value for the performOrderRedirectAction
      *
-     * @param $userPasswordHash
+     * @param string $userPasswordHash
      *
      * @return string
      */

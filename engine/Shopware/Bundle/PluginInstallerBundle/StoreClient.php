@@ -156,9 +156,9 @@ class StoreClient
     }
 
     /**
-     * @param $resource
-     * @param array $params
-     * @param array $headers
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
@@ -247,8 +247,8 @@ class StoreClient
 
     /**
      * @param AccessTokenStruct $accessToken
-     * @param $resource
-     * @param $params
+     * @param string            $resource
+     * @param array             $params
      *
      * @throws \Exception
      *
@@ -305,7 +305,7 @@ class StoreClient
     }
 
     /**
-     * @param $resource
+     * @param string                 $resource
      * @param array                  $params
      * @param array                  $headers
      * @param accessTokenStruct|null $token
@@ -332,6 +332,8 @@ class StoreClient
             $header = array_merge($header, $headers);
         }
 
+        $response = null;
+
         try {
             $response = $this->httpClient->get($url, $header);
             $this->verifyResponseSignature($response);
@@ -343,7 +345,7 @@ class StoreClient
     }
 
     /**
-     * @param $resource
+     * @param string            $resource
      * @param array             $params
      * @param array             $headers
      * @param AccessTokenStruct $token
@@ -366,6 +368,7 @@ class StoreClient
             $header = array_merge($header, $headers);
         }
 
+        $response = null;
         try {
             $response = $this->httpClient->post(
                 $url,

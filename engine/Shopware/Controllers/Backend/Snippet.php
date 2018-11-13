@@ -583,6 +583,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             echo implode($header, ';');
             echo "\r\n";
 
+            $encoding = null;
+
             if ($format === 'csv') {
                 $encoding = 'utf-8';
             } elseif ($format === 'csvexcel') {
@@ -607,6 +609,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
             $sql = 'SELECT * FROM s_core_snippets ORDER BY namespace';
             $result = Shopware()->Db()->query($sql);
+            $rows = null;
 
             echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
@@ -713,8 +716,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     /**
      * Read xml row action
      *
-     * @param unknown_type $xml
-     * @param array        $keys
+     * @param array $xml
+     * @param array $keys
      *
      * @return array
      */
@@ -824,7 +827,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     /**
      * Recursive function that transforms the namespaced array values into a tree-structure
      *
-     * @param $item
+     * @param array $item
      *
      * @return array
      */

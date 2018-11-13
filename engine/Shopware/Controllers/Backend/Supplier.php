@@ -144,7 +144,8 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
             return;
         }
-
+        /** @var \Shopware\Models\Article\Supplier $supplierModel */
+        $supplierModel = null;
         $id = (int) $this->Request()->get('id');
         if ($id > 0) {
             $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
@@ -188,7 +189,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     /**
      * Returns all known Suppliers from the database. there are ordered by there name
      *
-     * @return mixed
+     * @return array
      */
     public function getAllSupplier()
     {
@@ -209,7 +210,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     /**
      * Gets a single supplier
      *
-     * @param $id
+     * @param int $id
      */
     protected function getSingleSupplier($id)
     {

@@ -247,18 +247,19 @@ class sBasket
             [$this->session->get('sessionId')]
         );
         $hideBasket = false;
+        $products = [];
         foreach ($result as $article) {
             if (empty($article['active'])
                 || (!empty($article['laststock']) && $article['diffStock'] < 0)
             ) {
                 $hideBasket = true;
-                $articles[$article['ordernumber']]['OutOfStock'] = true;
+                $products[$article['ordernumber']]['OutOfStock'] = true;
             } else {
-                $articles[$article['ordernumber']]['OutOfStock'] = false;
+                $products[$article['ordernumber']]['OutOfStock'] = false;
             }
         }
 
-        return ['hideBasket' => $hideBasket, 'articles' => $articles];
+        return ['hideBasket' => $hideBasket, 'articles' => $products];
     }
 
     /**
@@ -368,6 +369,8 @@ class sBasket
         if (!$basketAmount) {
             return;
         }
+
+        $basketDiscount = 0.;
 
         // Iterate through discounts and find nearly one
         foreach ($getDiscounts as $discountRow) {
@@ -676,8 +679,7 @@ SQL;
             return false;
         }
 
-        $voucherCode = stripslashes($voucherCode);
-        $voucherCode = strtolower($voucherCode);
+        $voucherCode = strtolower(stripslashes($voucherCode));
 
         // Load the voucher details
         $voucherDetails = $this->db->fetchRow(
@@ -692,6 +694,8 @@ SQL;
             [$voucherCode]
         ) ?: [];
 
+        $individualCode = false;
+        $usedVoucherCount = [];
         $userId = $this->session->get('sUserId');
 
         // Check if voucher has already been cashed
@@ -717,7 +721,6 @@ SQL;
                 [$voucherCode]
             );
 
-            $individualCode = false;
             if ($voucherCodeDetails && $voucherCodeDetails['voucherID']) {
                 $voucherDetails = $this->db->fetchRow(
                     'SELECT description, numberofunits, customergroup, value, restrictarticles,
@@ -850,10 +853,11 @@ SQL;
             ->getNamespace('backend/static/discounts_surcharges')
             ->get('voucher_name', 'Voucher');
 
+        $voucherValue = 0.;
         if ($voucherDetails['percental']) {
-            $value = $voucherDetails['value'];
-            $voucherName .= ' ' . $value . ' %';
-            $voucherDetails['value'] = ($amount['totalAmount'] / 100) * (float) $value;
+            $voucherValue = $voucherDetails['value'];
+            $voucherName .= ' ' . $voucherValue . ' %';
+            $voucherDetails['value'] = ($amount['totalAmount'] / 100) * (float) $voucherValue;
         }
 
         // Tax calculation for vouchers
@@ -877,7 +881,7 @@ SQL;
             $hasMultipleTaxes = $taxCalculator->hasDifferentTaxes($prices);
 
             if ($voucherDetails['percental']) {
-                $voucherPrices = $taxCalculator->recalculatePercentageDiscount('-' . $value, $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
+                $voucherPrices = $taxCalculator->recalculatePercentageDiscount('-' . $voucherValue, $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
             } else {
                 $voucherPrices = $taxCalculator->calculate($voucherDetails['value'], $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
             }
@@ -1487,7 +1491,7 @@ SQL;
             ->buildAdditionalTextLists($products, $context);
 
         $promotions = [];
-        /** @var $product ListProduct */
+        /** @var ListProduct $product */
         foreach ($products as $product) {
             $note = $notes[$product->getNumber()];
             $promotion = $this->convertListProductToNote($product, $note);
@@ -1747,7 +1751,7 @@ SQL;
      * Delete a certain position from the basket
      * Used in multiple locations
      *
-     * @param int $id Id of the basket line
+     * @param int|string $id Id of the basket line
      *
      * @throws Enlight_Exception If entry could not be deleted from the database
      */
@@ -1766,7 +1770,7 @@ SQL;
                 's_order_basket',
                 [
                     'sessionID = ?' => $this->session->get('sessionId'),
-                    'id = ?' => $id,
+                    'id = ?' => (int) $id,
                 ]
             );
         }
@@ -2157,7 +2161,7 @@ SQL;
             ]
         );
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $builder->execute();
 
         return $statement->fetch() ?: [];
@@ -2238,6 +2242,8 @@ SQL;
         $sErrorMessages = [];
 
         if (!empty($voucherDetails['customergroup'])) {
+            $queryCustomerGroup = [];
+
             if (!empty($userId)) {
                 // Get customer group
                 $queryCustomerGroup = $this->db->fetchRow(
@@ -2248,6 +2254,7 @@ SQL;
                     [$userId]
                 );
             }
+
             $customerGroup = $queryCustomerGroup['customergroup'];
             if ($customerGroup != $voucherDetails['customergroup']
                 && $voucherDetails['customergroup'] != $queryCustomerGroup['id']
@@ -2343,7 +2350,7 @@ SQL;
     }
 
     /**
-     * @param $voucherDetails
+     * @param array $voucherDetails
      *
      * @return array
      */
@@ -2555,6 +2562,8 @@ SQL;
                 $getArticles[$key]['additional_details'] = $additionalDetails[$getArticles[$key]['ordernumber']];
             }
 
+            $getUnitData = [];
+
             // If unitID is set, query it
             if (!empty($getArticles[$key]['unitID'])) {
                 $getUnitData = $this->moduleManager->Articles()->sGetUnit($getArticles[$key]['unitID']);
@@ -2649,7 +2658,7 @@ SQL;
             }
 
             if ($getArticles[$key]['modus'] == 2) {
-                // Gutscheine
+                // Vouchers
                 if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
                     $getArticles[$key]['amountnet'] = $quantity * round($price, 2);
                 } else {
@@ -2855,7 +2864,7 @@ SQL;
     /**
      * Gets article base price info for sUpdateArticle
      *
-     * @param array CartItemStruct[] $cartItems
+     * @param \Shopware\Components\Cart\Struct\CartItemStruct[] $cartItems
      *
      * @throws \Enlight_Event_Exception
      */

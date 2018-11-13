@@ -335,8 +335,7 @@ class sAdmin
         if ($resetPayment && $user['additional']['user']['id']) {
             $this->eventManager->notify(
                 'Shopware_Modules_Admin_Payment_Fallback',
-                $data,
-                ['userId' => $user['additional']['user']['id'], 'paymentId' => $resetPayment]
+                $data
             );
 
             $this->db->update(
@@ -539,6 +538,8 @@ class sAdmin
 
         $user = $this->sGetUserData();
         $paymentData = $this->sGetPaymentMeanById($paymentId, $user);
+        $checkPayment = null;
+        $sPaymentObject = null;
 
         if (!count($paymentData)) {
             throw new Enlight_Exception('sValidateStep3 #01: Could not load paymentmean');
@@ -724,6 +725,9 @@ class sAdmin
             return false;
         }
 
+        $sErrorFlag = null;
+        $sErrorMessages = null;
+
         // If fields are not set, markup these fields
         $email = strtolower($this->front->Request()->getPost('email'));
         if (empty($email)) {
@@ -790,6 +794,9 @@ class sAdmin
         }
 
         $getUser = $this->db->fetchRow($sql, [$email]) ?: [];
+        $hash = null;
+        $plaintext = null;
+        $encoderName = null;
 
         if (!count($getUser)) {
             $isValidLogin = false;
@@ -1417,8 +1424,7 @@ class sAdmin
             // Next page
             if ($destinationPage != $numberOfPages) {
                 $pagesStructure['next'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                        $additionalParams + ['sPage' => $destinationPage + 1],
-                        false
+                    $additionalParams + ['sPage' => $destinationPage + 1]
                     );
             } else {
                 $pagesStructure['next'] = null;
@@ -2850,7 +2856,7 @@ class sAdmin
      * @param array $basket
      * @param int   $type
      *
-     * @return array|false
+     * @return float|false
      */
     public function sGetPremiumDispatchSurcharge($basket, $type = 2)
     {
@@ -3550,6 +3556,8 @@ SQL;
                 AND type = "swRegister"';
         $result = $this->db->fetchAll($sql, [$user['doubleOptinEmailSentDate']]);
 
+        $customerId = null;
+
         // Most times iterates only once
         foreach ($result as $row) {
             $data = unserialize($row['data']);
@@ -3588,6 +3596,7 @@ SQL;
         $sql = 'UPDATE `s_user`
                 SET doubleOptinEmailSentDate = ?
                 WHERE id = ?';
+
         $this->db->executeQuery($sql, [$dateString, $customerId]);
         $this->db->commit();
     }
@@ -3735,8 +3744,8 @@ SQL;
      * Helper function for sAdmin::sGetUserData()
      * Gets user country data
      *
-     * @param $userData
-     * @param $userId
+     * @param array $userData
+     * @param int   $userId
      *
      * @return array
      */
@@ -4061,9 +4070,9 @@ SQL;
      *
      * @param array $basket
      * @param float $currencyFactor
-     * @param float $discount_tax
+     * @param float $discountTax
      */
-    private function handleDispatchDiscount($basket, $currencyFactor, $discount_tax)
+    private function handleDispatchDiscount($basket, $currencyFactor, $discountTax)
     {
         $discount_ordernumber = $this->config->get('sSHIPPINGDISCOUNTNUMBER', 'SHIPPINGDISCOUNT');
         $discount_name = $this->snippetManager
@@ -4078,9 +4087,9 @@ SQL;
             if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
                 $discount_net = $discount;
             } else {
-                $discount_net = round($discount / (100 + $discount_tax) * 100, 2);
+                $discount_net = round($discount / (100 + $discountTax) * 100, 2);
             }
-            $tax_rate = $discount_tax;
+            $tax_rate = $discountTax;
 
             if (!$this->session->get('taxFree') && $this->config->get('proportionalTaxCalculation')) {
                 $this->basketHelper->addProportionalDiscount(

@@ -189,6 +189,24 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
+     * @param int $lastNewsletterId
+     */
+    public function setLastNewsletterId($lastNewsletterId)
+    {
+        $this->lastNewsletterId = $lastNewsletterId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastNewsletterId()
+    {
+        return $this->lastNewsletterId;
+    }
+
+    /**
+     * @deprecated Use `setLastNewsletterId()` instead
+     *
      * @param int $lastMailingId
      */
     public function setLastMailingId($lastMailingId)
@@ -197,6 +215,8 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
+     * @deprecated Use `getLastNewsletterId()` instead
+     *
      * @return int
      */
     public function getLastMailingId()

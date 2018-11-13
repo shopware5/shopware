@@ -83,6 +83,6 @@ class StoreListUpdatesCommand extends StoreCommand
         $table->setHeaders(['Id', 'Technical name', 'Label',  'CurrentVersion', 'AvailableVersion'])
               ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

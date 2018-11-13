@@ -102,14 +102,12 @@ class sExport
 
     /**
      * @param ContextServiceInterface                               $contextService
-     * @param AdditionalTextServiceInterface                        $additionalTextService
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql               $db
      * @param Shopware_Components_Config                            $config
      * @param StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService
      */
     public function __construct(
         ContextServiceInterface $contextService = null,
-        AdditionalTextServiceInterface $additionalTextService = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
         StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null
@@ -124,7 +122,7 @@ class sExport
     }
 
     /**
-     * @param $currency
+     * @param int|string $currency
      *
      * @return array
      */
@@ -192,7 +190,7 @@ class sExport
     {
         $hash = $this->db->quote($this->sHash);
 
-        /** @var $shopRepository \Shopware\Models\Shop\Repository */
+        /** @var \Shopware\Models\Shop\Repository $shopRepository */
         $shopRepository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $sql = "
@@ -571,15 +569,15 @@ class sExport
      * @param int $articleId
      * @param int $filterGroupId
      *
-     * @return string
+     * @return array
      */
     public function sGetArticleProperties($articleId, $filterGroupId)
     {
         if (empty($articleId) || empty($filterGroupId)) {
-            return '';
+            return [];
         }
 
-        return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
+        return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId);
     }
 
     /**
@@ -590,6 +588,8 @@ class sExport
      */
     public function sMapTranslation($object, $objectData)
     {
+        $map = [];
+
         switch ($object) {
             case 'detail':
             case 'article':
@@ -680,6 +680,7 @@ class sExport
         $sql_add_join = [];
         $sql_add_select = [];
         $sql_add_where = [];
+        $sql_add_article_detail_join_condition = '';
 
         $skipBackend = $this->shop->get('skipbackend');
         $isoCode = $this->shop->get('isocode');
@@ -1167,6 +1168,7 @@ class sExport
 
         $articleCategoryId = $this->sSYSTEM->sMODULES['sCategories']->sGetCategoryIdByArticleId($articleID, $categoryID);
         $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($articleCategoryId));
+        $breadcrumbs = [];
 
         foreach ($breadcrumb as $breadcrumbObj) {
             $breadcrumbs[] = $breadcrumbObj['name'];
@@ -1779,6 +1781,7 @@ class sExport
      */
     private function getShopData($id)
     {
+        $sql = null;
         static $cache = [];
 
         if (isset($cache[$id])) {

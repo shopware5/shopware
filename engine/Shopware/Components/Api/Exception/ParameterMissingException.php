@@ -44,6 +44,7 @@ class ParameterMissingException extends \Enlight_Exception
     public function __construct($param = '')
     {
         $this->setMissingParam($param);
+        parent::__construct(sprintf('Missing parameter %s', $param));
     }
 
     /**

@@ -45,7 +45,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         $request = $this->Request();
         $response = $this->Response();
 
-        /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
+        /** @var Shopware_Plugins_Frontend_Statistics_Bootstrap $plugin */
         $plugin = Shopware()->Plugins()->Frontend()->Statistics();
         $plugin->updateLog($request, $response);
     }
@@ -55,9 +55,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function menuAction()
     {
-        $this->View()->sGroup = $this->Request()->getParam('group');
+        $this->View()->assign('sGroup', $this->Request()->getParam('group'));
         $plugin = Shopware()->Plugins()->Core()->ControllerBase();
-        $this->View()->sMenu = $plugin->getMenu();
+        $this->View()->assign('sMenu', $plugin->getMenu());
     }
 
     /**
@@ -69,9 +69,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
         Shopware()->Models()->detach($main);
 
-        $this->View()->shop = $shop;
+        $this->View()->assign('shop', $shop);
         if (!$this->Request()->getParam('hideCurrency', false)) {
-            $this->View()->currencies = $shop->getCurrencies();
+            $this->View()->assign('currencies', $shop->getCurrencies());
         }
         $languages = $shop->getChildren()->toArray();
         foreach ($languages as $languageKey => $language) {
@@ -81,6 +81,6 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
             }
         }
         array_unshift($languages, $main);
-        $this->View()->languages = $languages;
+        $this->View()->assign('languages', $languages);
     }
 }

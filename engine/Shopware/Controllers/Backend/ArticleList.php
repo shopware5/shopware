@@ -23,6 +23,7 @@
  */
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 
@@ -411,10 +412,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function saveFilterAction()
     {
         $data = $this->Request()->getParams();
-        $id = $this->Request()->get('id', null);
+        $id = $this->Request()->getParam('id', null);
 
         if ($id) {
-            $filter = $this->getMultiEditRepository()->find($id);
+            $filter = $this->getMultiEditRepository()->find((int) $id);
         } else {
             $filter = new Shopware\Models\MultiEdit\Filter();
         }
@@ -498,7 +499,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $id = (int) $this->Request()->getParam('Detail_id');
 
-        /** @var $articleDetail Detail */
+        /** @var Detail $articleDetail */
         $articleDetail = $this->getDetailRepository()->find($id);
         if (!is_object($articleDetail)) {
             $this->View()->assign([

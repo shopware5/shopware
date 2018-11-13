@@ -75,6 +75,11 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     public function replace($mediaId, UploadedFile $file)
     {
         $media = $this->modelManager->find(Media::class, $mediaId);
+
+        if ($media === null) {
+            throw new \InvalidArgumentException(sprintf('Media with id %s not found', $mediaId));
+        }
+
         $uploadedFileExtension = $this->getExtension($file);
 
         if ($media->getType() !== $this->mappingService->getType($uploadedFileExtension)) {
@@ -92,7 +97,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
         $media->setExtension($this->getExtension($file));
         $media->setFileSize(filesize($file->getRealPath()));
 
-        if ($media->getType() === $media::TYPE_IMAGE) {
+        if ($media->getType() === Media::TYPE_IMAGE) {
             $imageSize = getimagesize($file->getRealPath());
 
             if ($imageSize) {
