@@ -113,7 +113,7 @@ class SnippetsToDbCommand extends ShopwareCommand
     }
 
     /**
-     * @param $pluginName
+     * @param string $pluginName
      *
      * @return null|\Shopware\Components\Plugin
      */

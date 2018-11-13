@@ -102,7 +102,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
 
         $query = $this->getQuery($ids, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
@@ -116,7 +116,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
-     * @param $ids
+     * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder

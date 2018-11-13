@@ -44,11 +44,12 @@ class Form extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
+     * @var ArrayCollection<\Shopware\Models\Config\FormTranslation>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
      */
     protected $translations;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -101,14 +102,14 @@ class Form extends ModelEntity
     private $position = 0;
 
     /**
-     * @var Element[]
+     * @var ArrayCollection<Element>
      * @ORM\OneToMany(targetEntity="Element", mappedBy="form", cascade={"all"})
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
     private $elements;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<Element>
      * @ORM\OneToMany(targetEntity="Form", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
      */
@@ -158,7 +159,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param $label
+     * @param string $label
      *
      * @return Form
      */
@@ -224,7 +225,7 @@ class Form extends ModelEntity
      */
     public function getElement($name)
     {
-        /* @var $value Element */
+        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 return $element;
@@ -243,7 +244,7 @@ class Form extends ModelEntity
      */
     public function setElement($type, $name, $options = null)
     {
-        /* @var $value Element */
+        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 $element->setType($type);
@@ -345,7 +346,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Element>
      */
     public function getChildren()
     {
@@ -353,7 +354,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $children
+     * @param ArrayCollection<Element> $children
      */
     public function setChildren($children)
     {
@@ -361,7 +362,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Config\FormTranslation>
      */
     public function getTranslations()
     {
@@ -369,7 +370,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param $translation FormTranslation
+     * @param ArrayCollection<\Shopware\Models\Config\FormTranslation> $translation
      *
      * @return \Shopware\Models\Config\Form
      */

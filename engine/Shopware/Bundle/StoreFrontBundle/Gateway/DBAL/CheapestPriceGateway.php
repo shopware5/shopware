@@ -130,7 +130,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $this->fieldHelper->addVariantTranslation($query, $context);
         $this->fieldHelper->addPriceTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

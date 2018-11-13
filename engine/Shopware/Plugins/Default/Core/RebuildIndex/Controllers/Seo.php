@@ -273,9 +273,9 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      * passed shop id. The offset and limit parameter are used
      * to update only an offset of article urls.
      *
-     * @param $offset int
-     * @param $limit int
-     * @param $shop Shopware\Models\Shop\Shop
+     * @param int                       $offset
+     * @param int                       $limit
+     * @param Shopware\Models\Shop\Shop $shop
      */
     protected function seoArticle($offset, $limit, $shop)
     {

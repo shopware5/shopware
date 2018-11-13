@@ -66,7 +66,7 @@ interface ListProductGatewayInterface
      * - Manufacturer
      * - Unit of the variant
      *
-     * @param $number
+     * @param string                      $number
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\ListProduct

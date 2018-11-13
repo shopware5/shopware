@@ -228,7 +228,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
     }
 
     /**
-     * @param $identity
+     * @param null|mixed $identity
      *
      * @return bool|string
      */

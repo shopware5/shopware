@@ -64,7 +64,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      * Returns a single attribute struct element of this class.
      * The passed name is used as unique identifier.
      *
-     * @param $name
+     * @param string $name
      *
      * @return Attribute
      */
@@ -77,7 +77,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      * Helper function which checks if an associated
      * attribute exists.
      *
-     * @param $name
+     * @param string $name
      *
      * @return bool
      */

@@ -96,8 +96,8 @@ class DatabaseInteractor
     }
 
     /**
-     * @param $databaseName
-     * @param \PDO $pdo
+     * @param string $databaseName
+     * @param \PDO   $pdo
      *
      * @return bool
      */

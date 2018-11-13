@@ -67,7 +67,7 @@ class CacheKeywordFinder implements KeywordFinderInterface
     }
 
     /**
-     * @param $term
+     * @param string $term
      *
      * @return Keyword[]
      */

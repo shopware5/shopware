@@ -226,8 +226,8 @@ class CategoryDenormalization
     /**
      * Rebuilds the path for a single category
      *
-     * @param $categoryId
-     * @param $categoryPath
+     * @param int         $categoryId
+     * @param null|string $categoryPath
      *
      * @return int
      */

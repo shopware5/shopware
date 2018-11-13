@@ -169,7 +169,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         $query = $repository->getShopsWithThemes(['shop.id' => $shopId]);
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $query->getResult(
             AbstractQuery::HYDRATE_OBJECT
         )[0];
@@ -187,7 +187,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
 
         try {
-            /** @var $compiler \Shopware\Components\Theme\Compiler */
+            /** @var \Shopware\Components\Theme\Compiler $compiler */
             $compiler = $this->container->get('theme_compiler');
             $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
             $compiler->compileLess('new', $shop->getTemplate(), $shop);
@@ -204,7 +204,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
     public function moveThemeFilesAction()
     {
-        /** @var $repository \Shopware\Models\Shop\Repository */
+        /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');

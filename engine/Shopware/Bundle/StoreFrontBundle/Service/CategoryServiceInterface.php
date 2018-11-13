@@ -39,7 +39,7 @@ interface CategoryServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::getList()
      *
-     * @param $ids
+     * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Category[] indexed by the category id
@@ -52,7 +52,7 @@ interface CategoryServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
-     * @param $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Category

@@ -178,19 +178,19 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     }
 
     /**
-     * @param $numbers
+     * @param string[] $numbers
      *
      * @return array
      */
     private function extractNumbers($numbers)
     {
-        //collect all numbers to send a single list product request.
+        // Collect all numbers to send a single list product request.
         $related = [];
         foreach ($numbers as $value) {
             $related = array_merge($related, $value);
         }
 
-        //filter duplicate numbers to prevent duplicate data requests and iterations.
+        // Filter duplicate numbers to prevent duplicate data requests and iterations.
         $unique = array_unique($related);
 
         return array_values($unique);

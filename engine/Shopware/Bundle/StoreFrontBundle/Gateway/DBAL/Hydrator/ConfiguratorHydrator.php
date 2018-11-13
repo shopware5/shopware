@@ -94,7 +94,7 @@ class ConfiguratorHydrator extends Hydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return Struct\Configurator\Set
      */

@@ -31,7 +31,7 @@ interface SearchTermQueryBuilderInterface
 {
     /**
      * @param ShopContextInterface $context
-     * @param $term
+     * @param string               $term
      *
      * @return BoolQuery
      */

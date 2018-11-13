@@ -50,7 +50,7 @@ interface CustomerGroupGatewayInterface
      * - Customer group base data
      * - Core attribute of the customer group
      *
-     * @param $key
+     * @param string $key
      *
      * @return Struct\Customer\Group
      */

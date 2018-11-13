@@ -56,7 +56,7 @@ class Download
     }
 
     /**
-     * @param $callback
+     * @param callable $callback
      *
      * @throws \Exception
      */

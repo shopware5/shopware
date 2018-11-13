@@ -254,7 +254,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      * - set the correct icon
      * - match the surcharges to the countries
      *
-     * @param $results
+     * @param array $results
      *
      * @return mixed
      */

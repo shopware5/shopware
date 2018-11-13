@@ -40,7 +40,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of voucher
      * codes for the passed voucher id.
      *
-     * @param null $voucherId
+     * @param int  $voucherId
      * @param null $filter
      * @param null $order
      * @param null $offset
@@ -63,7 +63,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getVoucherCodeListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $voucherId
+     * @param int  $voucherId
      * @param null $filter
      * @param null $order
      *
@@ -104,7 +104,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select
      * the count of voucher codes for the passed voucher id.
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -119,7 +119,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getVoucherCodeCountQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -137,7 +137,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -152,7 +152,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getVoucherCodeDeleteByVoucherIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -171,7 +171,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select all data for the passed
      * voucher id.
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -186,7 +186,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getVoucherDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -206,8 +206,8 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search for vouchers
      * with the passed voucher code. The passed voucher id will be excluded.
      *
-     * @param      $code
-     * @param null $voucherId
+     * @param string $code
+     * @param int    $voucherId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -222,8 +222,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateVoucherCodeQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $code
-     * @param null $voucherId
+     * @param string $code
+     * @param int    $voucherId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -246,8 +246,8 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search vouchers
      * with the passed code. The passed voucher id will be excluded.
      *
-     * @param      $code
-     * @param null $voucherId
+     * @param string $code
+     * @param int    $voucherId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -262,8 +262,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateVoucherCodeQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $code
-     * @param null $voucherId
+     * @param string $code
+     * @param int    $voucherId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

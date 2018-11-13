@@ -260,7 +260,7 @@ class Country extends ModelEntity
     /**
      * Set en
      *
-     * @param $isoName
+     * @param string $isoName
      *
      * @return Country
      */

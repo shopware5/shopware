@@ -101,7 +101,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param $name string
+     * @param string $name
      */
     public function setName($name)
     {
@@ -149,7 +149,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param $freezeUp \DateTime|string|null
+     * @param \DateTime|string|null $freezeUp
      */
     public function setFreezeUp($freezeUp)
     {
@@ -168,7 +168,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param $static bool
+     * @param bool $static
      */
     public function setStatic($static)
     {

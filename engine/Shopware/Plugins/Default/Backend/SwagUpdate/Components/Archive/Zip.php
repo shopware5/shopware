@@ -90,7 +90,7 @@ class Zip extends Adapter
     }
 
     /**
-     * @param $position
+     * @param int $position
      *
      * @return mixed
      */

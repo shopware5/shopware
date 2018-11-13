@@ -82,7 +82,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      * Required table fields:
      *  - product_id : id of the product, used as join
      *
-     * @param $term
+     * @param string $term
      *
      * @return QueryBuilder|null
      */
@@ -133,7 +133,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      * Generates a single query builder from the provided keywords array.
      *
      * @param Keyword[] $keywords
-     * @param $tables
+     * @param array     $tables
      *
      * @return QueryBuilder
      */

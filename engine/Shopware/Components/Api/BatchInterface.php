@@ -42,7 +42,7 @@ interface BatchInterface
      * If your resource supports other kinds of IDs, too, you should identify
      * your entity by these IDs and return the primary ID of that entity.
      *
-     * @param $data
+     * @param array $data
      *
      * @return int|bool Return the primary ID of the entity, if it exists
      *                  Return false, if no existing entity matches $data

@@ -332,7 +332,7 @@ EOD;
     {
         $placeholder = strtoupper($placeholder);
 
-        if (!isset($content) || empty($content)) {
+        if (empty($content)) {
             $content = $default;
         }
 

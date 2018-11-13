@@ -248,9 +248,9 @@ SQL;
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param $shopId
+     * @param string $field
+     * @param string $value
+     * @param int    $shopId
      */
     private function updateShopConfig($field, $value, $shopId)
     {

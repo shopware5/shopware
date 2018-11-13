@@ -24,7 +24,7 @@
 class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Payment
+     * @var Shopware\Components\Api\Resource\PaymentMethods
      */
     protected $resource = null;
 
@@ -38,8 +38,8 @@ class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_R
      */
     public function indexAction()
     {
-        $limit = $this->Request()->getParam('limit', 1000);
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 1000);
+        $offset = (int) $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);
 

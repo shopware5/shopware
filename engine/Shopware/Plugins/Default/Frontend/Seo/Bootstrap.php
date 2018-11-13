@@ -79,7 +79,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $config = $this->get('config');
 
-        /** @var $mapper QueryAliasMapper */
+        /** @var QueryAliasMapper $mapper */
         $mapper = $this->get('query_alias_mapper');
 
         $controllerBlacklist = preg_replace('#\s#', '', $config['sSEOVIEWPORTBLACKLIST']);

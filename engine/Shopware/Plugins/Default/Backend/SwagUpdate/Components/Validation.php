@@ -103,7 +103,7 @@ class Validation
     }
 
     /**
-     * @param $requirement
+     * @param array $requirement
      *
      * @return array
      */

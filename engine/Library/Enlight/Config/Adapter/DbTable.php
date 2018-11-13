@@ -351,8 +351,8 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     }
 
     /**
-     * @param $name
-     * @param $section
+     * @param string $name
+     * @param string $section
      *
      * @return array
      */

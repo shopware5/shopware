@@ -215,7 +215,7 @@ class Media extends Extendable
     }
 
     /**
-     * @param $index
+     * @param string $index
      *
      * @return Thumbnail
      */

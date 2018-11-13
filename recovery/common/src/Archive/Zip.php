@@ -70,7 +70,7 @@ class Zip extends Adapter
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return resource
      */
@@ -80,7 +80,7 @@ class Zip extends Adapter
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return mixed
      */
@@ -90,7 +90,7 @@ class Zip extends Adapter
     }
 
     /**
-     * @param $position
+     * @param int $position
      *
      * @return mixed
      */

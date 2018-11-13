@@ -36,7 +36,7 @@ interface ProductServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::get()
      *
-     * @param $numbers
+     * @param string[]                       $numbers
      * @param Struct\ProductContextInterface $context
      *
      * @return Struct\Product[] Indexed by the product order number
@@ -47,7 +47,7 @@ interface ProductServiceInterface
      * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\Product object.
      * A product struct contains all data about one single product.
      *
-     * @param $number
+     * @param string                         $number
      * @param Struct\ProductContextInterface $context
      *
      * @return Struct\Product

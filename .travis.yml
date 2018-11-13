@@ -22,3 +22,12 @@ notifications:
     email: false
     irc: "chat.freenode.net#shopware-dev"
 
+jobs:
+    include:
+    - stage: lint
+      php: 7.2
+      install:
+      - composer require "phpstan/phpstan"
+      script:
+      # Static analyzer check
+      - ./vendor/bin/phpstan analyze -c .phpstan.neon --no-interaction

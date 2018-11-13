@@ -54,8 +54,8 @@ class Thumbnail extends Extendable
     /**
      * @param string      $source
      * @param string|null $retinaSource
-     * @param $maxWidth
-     * @param $maxHeight
+     * @param int         $maxWidth
+     * @param int         $maxHeight
      */
     public function __construct($source, $retinaSource, $maxWidth, $maxHeight)
     {

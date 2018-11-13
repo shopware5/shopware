@@ -120,7 +120,7 @@ class PriceHydrator extends Hydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return Struct\Product\PriceGroup
      */

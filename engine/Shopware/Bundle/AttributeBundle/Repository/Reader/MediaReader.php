@@ -79,7 +79,7 @@ class MediaReader extends GenericReader
     }
 
     /**
-     * @param $media
+     * @param array $media
      *
      * @return null|string
      */

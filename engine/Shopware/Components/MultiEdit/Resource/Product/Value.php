@@ -37,7 +37,7 @@ class Value
     protected $dqlHelper;
 
     /**
-     * @param $dqlHelper DqlHelper
+     * @param DqlHelper $dqlHelper
      */
     public function __construct(DqlHelper $dqlHelper)
     {

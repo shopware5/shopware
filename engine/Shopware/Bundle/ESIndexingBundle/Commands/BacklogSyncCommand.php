@@ -74,7 +74,7 @@ class BacklogSyncCommand extends ShopwareCommand
             return;
         }
 
-        /** @var $last Backlog */
+        /** @var Backlog $last */
         $last = $backlogs[count($backlogs) - 1];
         $reader->setLastBacklogId($last->getId());
 

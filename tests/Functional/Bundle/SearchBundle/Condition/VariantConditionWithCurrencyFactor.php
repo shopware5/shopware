@@ -333,7 +333,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
     /**
      * Get products and set the graduated prices and inStock of the variants.
      *
-     * @param $number
+     * @param string      $number
      * @param TestContext $context
      * @param Category    $category
      * @param array       $data

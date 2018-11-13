@@ -111,7 +111,7 @@ class Cleanup
     /**
      * Deletes the old cache directories
      *
-     * @param $deletedFileCount
+     * @param int $deletedFileCount
      *
      * @return DeleteResult
      */
@@ -131,9 +131,9 @@ class Cleanup
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 
-            /** @var $path \SplFileInfo */
+            /** @var \SplFileInfo $path */
             foreach ($iterator as $path) {
-                if ($path->getFilename() == '.gitkeep') {
+                if ($path->getFilename() === '.gitkeep') {
                     continue;
                 }
 
@@ -155,7 +155,7 @@ class Cleanup
     /**
      * Deletes the temporary backup files of this update
      *
-     * @param $deletedFileCount
+     * @param int $deletedFileCount
      *
      * @return DeleteResult
      */
@@ -179,7 +179,7 @@ class Cleanup
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 
-            /** @var $path \SplFileInfo */
+            /** @var \SplFileInfo $path */
             foreach ($iterator as $path) {
                 $this->delete($path, $deleteResult);
 
@@ -211,7 +211,7 @@ class Cleanup
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return array|DirectoryIterator
      */

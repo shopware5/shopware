@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 
 /**
@@ -78,7 +77,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         $data['disable_on_error'] = $job->getDisableOnError() ? '1' : '0';
         $data['name'] = $job->getName();
 
-        if (null === $job->getId()) {
+        if ($job->getId() === null) {
             $this->connection->insert($this->tableName, $data);
         } else {
             $this->connection->update(
@@ -196,8 +195,8 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     /**
      * Internal helper method to grep data based on a given column name.
      *
-     * @param $column
-     * @param $value
+     * @param string $column
+     * @param string $value
      *
      * @return Enlight_Components_Cron_Job|null
      */

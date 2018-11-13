@@ -295,7 +295,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $base = $this->Request()->getBaseUrl();
         $user = Shopware()->Container()->get('Auth')->getIdentity();
 
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
 
         $payload = [
@@ -413,7 +413,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $fs = new Filesystem();
 
-        /** @var $file \SplFileInfo */
+        /** @var \SplFileInfo $file */
         foreach ($iterator as $file) {
             $sourceFile = $file->getPathname();
             $destinationFile = Shopware()->DocPath() . str_replace($fileDir, '', $file->getPathname());
@@ -588,7 +588,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      */
     private function getUserLanguage(stdClass $user)
     {
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $locale = strtolower($locale->getLocale());
 

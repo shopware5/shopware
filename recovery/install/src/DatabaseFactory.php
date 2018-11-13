@@ -64,7 +64,7 @@ class DatabaseFactory
     }
 
     /**
-     * @param $conn
+     * @param \PDO $conn
      */
     protected function setNonStrictSQLMode(\PDO $conn)
     {

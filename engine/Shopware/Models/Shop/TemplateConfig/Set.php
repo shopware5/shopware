@@ -44,31 +44,36 @@ class Set extends ModelEntity
     protected $id;
 
     /**
-     * @var
+     * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=false)
      */
     protected $templateId;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     protected $name;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     protected $description;
 
     /**
-     * @var
+     * @var array
+     *
      * @ORM\Column(name="element_values", type="array", nullable=false)
      */
     protected $values;
 
     /**
      * @var Template
+     *
      * @ORM\ManyToOne(
      *      targetEntity="Shopware\Models\Shop\Template",
      *      inversedBy="configSets"
@@ -94,7 +99,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -102,7 +107,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -110,7 +115,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param mixed $description
+     * @param string $description
      */
     public function setDescription($description)
     {
@@ -118,7 +123,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDescription()
     {
@@ -126,7 +131,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param mixed $values
+     * @param array $values
      */
     public function setValues($values)
     {
@@ -134,7 +139,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getValues()
     {

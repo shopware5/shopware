@@ -217,7 +217,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
             'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
         );
 
-        /** @var $repository Shopware\Models\Shop\Repository */
+        /** @var Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         $shop = $repository->getActiveById($user['language']);
 

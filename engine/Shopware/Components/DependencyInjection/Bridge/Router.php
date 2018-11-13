@@ -83,13 +83,13 @@ class Router
      */
     public function onAfterRegisterShop(\Enlight_Event_EventArgs $args)
     {
-        /** @var $container Container */
+        /** @var Container $container */
         $container = $args->getSubject();
-        /** @var $router RouterInterface */
+        /** @var RouterInterface $router */
         $router = $container->get('router');
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('shop');
-        /** @var $config \Shopware_Components_Config */
+        /** @var \Shopware_Components_Config $config */
         $config = $container->get('config');
         // Register the shop (we're to soon)
         $config->setShop($shop);
@@ -113,10 +113,10 @@ class Router
      */
     public function onPreDispatch(\Enlight_Controller_EventArgs $args)
     {
-        /** @var $front \Enlight_Controller_Front */
+        /** @var \Enlight_Controller_Front $front */
         $front = $args->getSubject();
         $request = $front->Request();
-        /** @var $router RouterInterface */
+        /** @var RouterInterface $router */
         $router = $front->Router();
         // Fix context on forward
         $context = $router->getContext();

@@ -74,9 +74,9 @@ class ProductAttributeFacet implements FacetInterface
     protected $digits;
 
     /**
-     * @param string $field
-     * @param string $mode
-     * @param $formFieldName
+     * @param string      $field
+     * @param string      $mode
+     * @param string      $formFieldName
      * @param string      $label
      * @param string|null $template
      * @param string      $suffix

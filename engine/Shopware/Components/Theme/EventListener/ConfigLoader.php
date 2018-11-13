@@ -64,14 +64,14 @@ class ConfigLoader implements SubscriberInterface
      */
     public function onDispatch(\Enlight_Event_EventArgs $args)
     {
-        /** @var $controller \Enlight_Controller_Action */
+        /** @var \Enlight_Controller_Action $controller */
         $controller = $args->get('subject');
 
         if (!$controller->View() || !$controller->View()->hasTemplate()) {
             return;
         }
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         $shop = $this->container->get('shop');
 
         $inheritance = $this->container->get('theme_inheritance');

@@ -152,7 +152,7 @@ class Basic implements GeneratorInterface
     /**
      * Returns the extension of the file with passed path
      *
-     * @param string
+     * @param string $path
      *
      * @return string
      */

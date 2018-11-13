@@ -170,7 +170,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $media MediaModel */
+        /** @var MediaModel $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {

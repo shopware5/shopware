@@ -79,8 +79,8 @@ class ElementConfig implements \JsonSerializable
     }
 
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed  $value
      */
     public function set($name, $value)
     {

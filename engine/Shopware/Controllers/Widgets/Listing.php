@@ -56,7 +56,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
                 $this->Request()->setParam('sSort', $default);
             }
 
-            /** @var $articleModule \sArticles */
+            /** @var \sArticles $articleModule */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($orderNumber, $categoryId, $this->Request());
 

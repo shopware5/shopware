@@ -378,7 +378,7 @@ class ListProduct extends BaseProduct
     /**
      * Adds a new product state.
      *
-     * @param $state
+     * @param array $state
      */
     public function addState($state)
     {
@@ -404,7 +404,7 @@ class ListProduct extends BaseProduct
     /**
      * Checks if the product has a specify state.
      *
-     * @param $state
+     * @param string $state
      *
      * @return bool
      */

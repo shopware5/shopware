@@ -52,7 +52,7 @@ class Template
         array $securityConfig,
         array $backendOptions
     ) {
-        /** @var $template \Enlight_Template_Manager */
+        /** @var \Enlight_Template_Manager $template */
         $template = \Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
 
         $template->enableSecurity(

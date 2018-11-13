@@ -97,13 +97,13 @@ class ManufacturerFacetTest extends TestCase
             [new ManufacturerFacet()]
         );
 
-        /** @var $facet ValueListFacetResult */
+        /** @var ValueListFacetResult $facet */
         $facet = $result->getFacets()[0];
         $this->assertCount(2, $facet->getValues());
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param ShopContext                        $context
      * @param \Shopware\Models\Category\Category $category
      * @param Supplier                           $manufacturer

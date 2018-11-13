@@ -533,7 +533,7 @@ class sRewriteTable
             $blogCategoryIds[] = $blogCategory['id'];
         }
 
-        /** @var $repository \Shopware\Models\Blog\Repository */
+        /** @var \Shopware\Models\Blog\Repository $repository */
         $blogArticlesQuery = $this->modelManager->getRepository(\Shopware\Models\Blog\Blog::class)
             ->getListQuery($blogCategoryIds, $offset, $limit);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -590,7 +590,7 @@ class sRewriteTable
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
-        /** @var $repo \Shopware\Models\Emotion\Repository */
+        /** @var \Shopware\Models\Emotion\Repository $repo */
         $repo = $this->modelManager->getRepository(\Shopware\Models\Emotion\Emotion::class);
         $queryBuilder = $repo->getListQueryBuilder();
 

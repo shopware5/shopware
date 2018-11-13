@@ -102,7 +102,7 @@ class Manager
     /**
      * Log string to stdout
      *
-     * @param $str
+     * @param string $str
      */
     public function log($str)
     {

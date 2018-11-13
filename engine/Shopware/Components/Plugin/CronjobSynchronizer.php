@@ -65,7 +65,7 @@ class CronjobSynchronizer
 
     /**
      * @param Plugin $plugin
-     * @param $cronjob
+     * @param array  $cronjob
      */
     private function addCronjob(Plugin $plugin, $cronjob)
     {

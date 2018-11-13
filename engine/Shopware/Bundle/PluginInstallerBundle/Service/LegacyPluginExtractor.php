@@ -134,7 +134,7 @@ class LegacyPluginExtractor
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      */
     private function assertNoDirectoryTraversal($filename)
     {

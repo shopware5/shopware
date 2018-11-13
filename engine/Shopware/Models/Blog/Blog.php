@@ -39,23 +39,24 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Tag", mappedBy="blog", orphanRemoval=true)
+     * @var ArrayCollection<\Shopware\Models\Blog\Tag>
      *
-     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Tag", mappedBy="blog", orphanRemoval=true)
      */
     protected $tags;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
      */
     protected $media;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_blog_assigned_articles",
      *      joinColumns={@ORM\JoinColumn(name="blog_id", referencedColumnName="id")},
@@ -76,11 +77,12 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Comment", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Comment>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Blog\Comment Objects
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Comment", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
      */
     protected $comments;
+
     /**
      * @var int
      *
@@ -108,6 +110,7 @@ class Blog extends ModelEntity
      * Flag which shows if the blog is active or not. 1= active otherwise inactive
      *
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
@@ -148,6 +151,8 @@ class Blog extends ModelEntity
     private $categoryId = null;
 
     /**
+     * @var \Shopware\Models\Category\Category
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
@@ -184,14 +189,13 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
+     * @var \Shopware\Models\User\User
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User", inversedBy="blog")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->media = new ArrayCollection();
@@ -382,7 +386,7 @@ class Blog extends ModelEntity
     /**
      * Set Tags
      *
-     * @param ArrayCollection
+     * @param ArrayCollection $tags
      */
     public function setTags($tags)
     {
@@ -424,7 +428,7 @@ class Blog extends ModelEntity
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $media
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Blog|ModelEntity
      */
     public function setMedia($media)
     {
@@ -506,7 +510,7 @@ class Blog extends ModelEntity
      *
      * @param \Shopware\Models\Attribute\Blog|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Blog
+     * @return \Shopware\Models\Attribute\Blog|ModelEntity
      */
     public function setAttribute($attribute)
     {
@@ -514,7 +518,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Comment>
      */
     public function getComments()
     {
@@ -522,9 +526,9 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $comments
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Comment>|array|null $comments
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Blog|ModelEntity
      */
     public function setComments($comments)
     {
@@ -532,9 +536,9 @@ class Blog extends ModelEntity
     }
 
     /**
-     * returns the author
+     * Returns the author
      *
-     * @return mixed
+     * @return \Shopware\Models\User\User
      */
     public function getAuthor()
     {
@@ -542,9 +546,9 @@ class Blog extends ModelEntity
     }
 
     /**
-     * sets the author
+     * Sets the author
      *
-     * @param $author
+     * @param \Shopware\Models\User\User $author
      */
     public function setAuthor($author)
     {
@@ -552,7 +556,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * set the metaTitle
+     * Set the metaTitle
      *
      * @param string $metaTitle
      */
@@ -562,7 +566,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * returns the metaTitle
+     * Returns the metaTitle
      *
      * @return string
      */

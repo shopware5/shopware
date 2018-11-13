@@ -172,7 +172,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param $options
+     * @param ArrayCollection $options
      */
     public function setOptions($options)
     {

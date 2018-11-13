@@ -119,7 +119,7 @@ class PluginConfigSetCommand extends ShopwareCommand
      * Casts a given string into the proper type.
      * Works only for some types, see return.
      *
-     * @param $value
+     * @param string $value
      *
      * @return bool|int|null|string
      */

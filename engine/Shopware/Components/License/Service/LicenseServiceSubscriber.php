@@ -69,7 +69,7 @@ class LicenseServiceSubscriber implements SubscriberInterface
      */
     public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $args)
     {
-        /** @var $view Enlight_View_Default */
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
         $view->assign('product', ShopwareEdition::CE);
 

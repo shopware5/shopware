@@ -88,7 +88,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
             );
         }
 
-        //add state to the product which can be used to check if the prices are already calculated.
+        // Add state to the product which can be used to check if the prices are already calculated.
         $product->addState(Struct\ListProduct::STATE_PRICE_CALCULATED);
     }
 
@@ -139,17 +139,17 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     ) {
         $price = new Struct\Product\Price($rule);
 
-        //calculates the normal price of the struct.
+        // Calculates the normal price of the struct.
         $price->setCalculatedPrice(
             $this->priceCalculatorService->calculatePrice($rule->getPrice(), $tax, $context)
         );
 
-        //check if a pseudo price is defined and calculates it too.
+        // Check if a pseudo price is defined and calculates it too.
         $price->setCalculatedPseudoPrice(
             $this->priceCalculatorService->calculatePrice($rule->getPseudoPrice(), $tax, $context)
         );
 
-        //check if the product has unit definitions and calculate the reference price for the unit.
+        // Check if the product has unit definitions and calculate the reference price for the unit.
         if ($price->getUnit() && $price->getUnit()->getPurchaseUnit()) {
             $price->setCalculatedReferencePrice(
                 $this->calculateReferencePrice($price)

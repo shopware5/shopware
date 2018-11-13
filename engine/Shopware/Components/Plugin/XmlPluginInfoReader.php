@@ -120,7 +120,7 @@ class XmlPluginInfoReader
 
     /**
      * @param \DOMNode $node
-     * @param $name
+     * @param string   $name
      *
      * @return null|\DOMElement
      */
@@ -154,7 +154,7 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param $requiredPlugins
+     * @param array $requiredPlugins
      *
      * @return array
      */

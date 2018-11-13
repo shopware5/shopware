@@ -103,7 +103,7 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $types
+     * @param array $types
      *
      * @throws \Exception
      */

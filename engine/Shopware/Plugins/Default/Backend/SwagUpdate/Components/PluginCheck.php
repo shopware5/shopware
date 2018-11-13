@@ -152,7 +152,7 @@ class PluginCheck
             ->setParameter(':source', 'Default')
             ->setParameter(':names', ['PluginManager', 'StoreApi'], Connection::PARAM_STR_ARRAY);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

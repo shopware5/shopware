@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media;
 
 /**
@@ -76,11 +77,12 @@ class Image extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var
+     * @var \Shopware\Models\Media\Media
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="articles")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      */
     protected $media;
+
     /**
      * @var int
      *

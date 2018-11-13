@@ -37,7 +37,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 class Manager
 {
     /**
-     * @param $name
+     * @param string $name
      *
      * @return Resource\Resource
      */
@@ -45,13 +45,13 @@ class Manager
     {
         $container = Shopware()->Container();
         try {
-            /** @var $resource Resource\Resource */
+            /** @var Resource\Resource $resource */
             $resource = $container->get('shopware.api.' . strtolower($name));
         } catch (ServiceNotFoundException $e) {
             $name = ucfirst($name);
             $class = __NAMESPACE__ . '\\Resource\\' . $name;
 
-            /** @var $resource Resource\Resource */
+            /** @var Resource\Resource $resource */
             $resource = new $class();
         }
 

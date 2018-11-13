@@ -30,8 +30,9 @@ use Shopware\Models\ProductFeed\ProductFeed;
  */
 class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /** @var $model ProductFeed */
+    /** @var ProductFeed $repository */
     protected $repository = null;
+
     /**
      * feed dummy data
      *

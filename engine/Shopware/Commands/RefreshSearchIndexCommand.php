@@ -63,7 +63,7 @@ class RefreshSearchIndexCommand extends ShopwareCommand
             $connection->delete('s_search_keywords', ['*']);
         }
         $output->writeln('Creating the search index. This may take a while depending on the shop size.');
-        /* @var $indexer \Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface; */
+        /* @var \Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface; $indexer */
         $indexer = $this->container->get('shopware_searchdbal.search_indexer');
         $indexer->build();
 

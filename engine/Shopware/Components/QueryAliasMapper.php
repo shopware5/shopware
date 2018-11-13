@@ -148,7 +148,7 @@ class QueryAliasMapper
      *    'foo' => 'bar'
      * ]
      *
-     * @param string[]
+     * @param string[] $params
      *
      * @return string[]
      */
@@ -182,7 +182,7 @@ class QueryAliasMapper
      *   'foo'   => 'bar,
      * ]
      *
-     * @param string[]
+     * @param string[] $params
      *
      * @return string[]
      */

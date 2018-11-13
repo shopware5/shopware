@@ -54,7 +54,7 @@ class Attribute extends Struct implements \JsonSerializable
     /**
      * Checks if a storage key exists
      *
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */
@@ -68,8 +68,8 @@ class Attribute extends Struct implements \JsonSerializable
      * The attribute storage allows only serializable
      * values which allows shopware to serialize the struct elements.
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed  $value
      *
      * @throws \Exception
      */
@@ -95,7 +95,7 @@ class Attribute extends Struct implements \JsonSerializable
     /**
      * Returns a single storage value.
      *
-     * @param $name
+     * @param string $name
      *
      * @return mixed
      */

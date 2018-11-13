@@ -112,7 +112,7 @@ class XmlMenuReader
 
     /**
      * @param \DOMNode $node
-     * @param $name
+     * @param string   $name
      *
      * @return null|string
      */

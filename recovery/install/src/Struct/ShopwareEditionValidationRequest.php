@@ -43,7 +43,7 @@ class ShopwareEditionValidationRequest
 
     /**
      * @param ShopwareEdition $edition
-     * @param $host
+     * @param string          $host
      */
     private function __construct(ShopwareEdition $edition, $host)
     {

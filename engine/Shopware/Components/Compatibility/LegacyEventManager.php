@@ -67,8 +67,8 @@ class LegacyEventManager
      * Following events are deprecated and only implemented for backward compatibility to shopware 4
      * Removed with shopware 5.1
      *
-     * @param array $result
-     * @param $categoryId
+     * @param array      $result
+     * @param int        $categoryId
      * @param \sArticles $module
      *
      * @return mixed

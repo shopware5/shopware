@@ -43,7 +43,7 @@ interface SearchTermQueryBuilderInterface
      *
      * Returns null if no keywords or search tables are found
      *
-     * @param $term
+     * @param string $term
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder|null
      */

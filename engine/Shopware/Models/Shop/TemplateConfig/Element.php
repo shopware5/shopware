@@ -37,13 +37,15 @@ class Element extends ModelEntity
 {
     /**
      * @var Template
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Template", inversedBy="elements")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
     protected $template;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Value>
+     *
      * @ORM\OneToMany(
      *      targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
      *      mappedBy="element",
@@ -54,77 +56,90 @@ class Element extends ModelEntity
     protected $values;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     protected $type;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     protected $name;
 
     /**
-     * @var
+     * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     protected $position = 0;
 
     /**
-     * @var
+     * @var array
+     *
      * @ORM\Column(name="default_value", type="array", nullable=false)
      */
     protected $defaultValue;
 
     /**
-     * @var
+     * @var array
+     *
      * @ORM\Column(name="selection", type="array", nullable=true)
      */
     protected $selection = null;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="field_label", type="string", nullable=true)
      */
     protected $fieldLabel = null;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="support_text", type="string", nullable=true)
      */
     protected $supportText = null;
 
     /**
-     * @var
+     * @var bool
+     *
      * @ORM\Column(name="allow_blank", type="boolean", nullable=false)
      */
     protected $allowBlank = true;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="less_compatible", type="boolean", nullable=false)
      */
     protected $lessCompatible = true;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="attributes", type="array", nullable=false)
      */
     protected $attributes;
 
     /**
      * @var Layout
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\TemplateConfig\Layout", inversedBy="elements")
      * @ORM\JoinColumn(name="container_id", referencedColumnName="id")
      */
     protected $container;
 
     /**
-     * @var
+     * @var int
+     *
      * @ORM\Column(name="container_id", type="integer", nullable=false)
      */
     protected $containerId;
+
     /**
      * @var int
      *
@@ -135,7 +150,8 @@ class Element extends ModelEntity
     private $id;
 
     /**
-     * @var
+     * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=false)
      */
     private $templateId;
@@ -146,7 +162,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -154,7 +170,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -162,7 +178,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $position
+     * @param int $position
      */
     public function setPosition($position)
     {
@@ -170,7 +186,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getPosition()
     {
@@ -178,7 +194,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $supportText
+     * @param string $supportText
      */
     public function setSupportText($supportText)
     {
@@ -186,7 +202,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSupportText()
     {
@@ -210,7 +226,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $allowBlank
+     * @param bool $allowBlank
      */
     public function setAllowBlank($allowBlank)
     {
@@ -218,7 +234,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getAllowBlank()
     {
@@ -226,7 +242,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $defaultValue
+     * @param array $defaultValue
      */
     public function setDefaultValue($defaultValue)
     {
@@ -234,7 +250,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getDefaultValue()
     {
@@ -242,7 +258,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $fieldLabel
+     * @param string $fieldLabel
      */
     public function setFieldLabel($fieldLabel)
     {
@@ -250,7 +266,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFieldLabel()
     {
@@ -281,7 +297,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -289,7 +305,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getType()
     {
@@ -326,7 +342,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getSelection()
     {
@@ -334,7 +350,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $selection
+     * @param array $selection
      */
     public function setSelection($selection)
     {
@@ -342,7 +358,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param mixed $container
+     * @param \Shopware\Models\Shop\TemplateConfig\Layout $container
      */
     public function setContainer($container)
     {
@@ -350,7 +366,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Shop\TemplateConfig\Layout
      */
     public function getContainer()
     {

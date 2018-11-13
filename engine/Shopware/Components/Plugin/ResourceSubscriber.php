@@ -121,7 +121,7 @@ class ResourceSubscriber implements SubscriberInterface
         $finder->files()->name('*.' . $type)->in($directory);
         $finder->sortByName();
 
-        /** @var File $file */
+        /** @var \SplFileInfo $file */
         foreach ($finder as $file) {
             $files[] = $file->getRealPath();
         }

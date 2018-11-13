@@ -99,7 +99,7 @@ class ProductHydrator extends Hydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -187,7 +187,7 @@ class ProductHydrator extends Hydrator
      * data to the product. (data of s_articles)
      *
      * @param Struct\ListProduct $product
-     * @param $data
+     * @param array              $data
      */
     private function assignProductData(Struct\ListProduct $product, array $data)
     {
@@ -257,7 +257,7 @@ class ProductHydrator extends Hydrator
      * Iterates the attribute data and assigns the attribute struct to the product.
      *
      * @param Struct\ListProduct $product
-     * @param $data
+     * @param array              $data
      */
     private function assignAttributeData(Struct\ListProduct $product, array $data)
     {

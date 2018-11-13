@@ -160,7 +160,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     }
 
     /**
-     * @param $request
+     * @param \Enlight_Controller_Request_Request $request
      *
      * @return bool
      */
@@ -318,10 +318,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             return;
         }
         $shopId = Shopware()->Shop()->getId();
-        /** @var $repository \Shopware\Models\Tracking\Repository */
+        /** @var \Shopware\Models\Tracking\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Tracking\ArticleImpression::class);
         $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId, null, $deviceType);
-        /** @var $articleImpression \Shopware\Models\Tracking\ArticleImpression */
+        /** @var \Shopware\Models\Tracking\ArticleImpression $articleImpression */
         $articleImpression = $articleImpressionQuery->getOneOrNullResult();
 
         // If no Entry for this day exists - create a new one

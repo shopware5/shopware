@@ -53,8 +53,8 @@ class VariantCondition implements ConditionInterface, \JsonSerializable
 
     /**
      * @param int[] $optionIds
-     * @param $expandVariants
-     * @param $groupId
+     * @param bool  $expandVariants
+     * @param int   $groupId
      */
     public function __construct(array $optionIds, $expandVariants, $groupId)
     {

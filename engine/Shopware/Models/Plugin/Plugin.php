@@ -602,7 +602,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Plugin\License>
      */
     public function getLicenses()
     {
@@ -610,7 +610,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param $licenses
+     * @param ArrayCollection<\Shopware\Models\Plugin\License> $licenses
      */
     public function setLicenses($licenses)
     {

@@ -36,7 +36,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -51,7 +51,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -75,7 +75,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -90,7 +90,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -112,7 +112,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -127,7 +127,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -145,7 +145,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -155,7 +155,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -178,7 +178,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -193,7 +193,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -216,7 +216,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -231,7 +231,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -258,7 +258,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -273,7 +273,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -296,7 +296,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -311,7 +311,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -334,7 +334,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -349,7 +349,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -371,7 +371,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -386,7 +386,7 @@ class Repository extends ModelRepository
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -413,7 +413,7 @@ class Repository extends ModelRepository
      * links and downloads of the article, selected tax, associated article images and the attributes for the different models.
      * The query is used for the article detail page of the article backend module to load the article data into the view.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -428,7 +428,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -484,8 +484,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
-     * @param $options
+     * @param int   $articleId
+     * @param array $options
      *
      * @return \Doctrine\ORM\Query
      */
@@ -500,8 +500,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailsForOptionIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
-     * @param $options
+     * @param int   $articleId
+     * @param array $options
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -533,7 +533,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -548,7 +548,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleImageDataQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -566,7 +566,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -581,7 +581,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDeleteImageChildrenQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -598,7 +598,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -613,7 +613,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleImageQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -635,7 +635,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which selects the defined configurator set
      * with the groups and options for the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -650,7 +650,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleConfiguratorSetByArticleIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -674,7 +674,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -689,7 +689,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleConfiguratorSetByArticleIdIndexedByIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -712,8 +712,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
-     * @param $optionId
+     * @param int $articleId
+     * @param int $optionId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -728,8 +728,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleDetailByConfiguratorOptionIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
-     * @param $optionId
+     * @param int $articleId
+     * @param int $optionId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -758,7 +758,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $optionsIds
+     * @param int[] $optionsIds
      *
      * @return \Doctrine\ORM\Query
      */
@@ -773,7 +773,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorGroupsAndOptionsByOptionsIdsIndexedByOptionIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $optionsIds
+     * @param int[] $optionsIds
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -791,11 +791,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
-     * @param $firstOptionId
-     * @param $secondOptionId
-     * @param $article
-     * @param $customerGroupKey
+     * @param int     $articleId
+     * @param int     $firstOptionId
+     * @param int     $secondOptionId
+     * @param Article $article
+     * @param string  $customerGroupKey
      *
      * @return \Doctrine\ORM\Query
      */
@@ -810,11 +810,11 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleDetailForTableConfiguratorOptionCombinationQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
-     * @param $firstOptionId
-     * @param $secondOptionId
-     * @param $article Article
-     * @param $customerGroupKey
+     * @param int     $articleId
+     * @param int     $firstOptionId
+     * @param int     $secondOptionId
+     * @param Article $article
+     * @param string  $customerGroupKey
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -850,7 +850,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -865,7 +865,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleWithVariantsAndOptionsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -885,9 +885,9 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
-     * @param $customerGroupKey
-     * @param $article
+     * @param int           $articleId
+     * @param string        $customerGroupKey
+     * @param array|Article $article
      *
      * @return \Doctrine\ORM\Query
      */
@@ -902,9 +902,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorTablePreSelectionQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
-     * @param $customerGroupKey
-     * @param $article
+     * @param int           $articleId
+     * @param string        $customerGroupKey
+     * @param array|Article $article
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -935,7 +935,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return \Doctrine\ORM\Query
      */
@@ -950,7 +950,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorSetsWithExcludedIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -982,7 +982,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -997,7 +997,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorSetQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1020,7 +1020,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1035,13 +1035,13 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorDependenciesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfiguratorDependenciesQueryBuilder($configuratorSetId)
     {
-        $builder = $this->getEntityManager()->createQueryBuilder($configuratorSetId);
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['dependencies', 'dependencyParent', 'dependencyChild'])
                 ->from('Shopware\Models\Article\Configurator\Dependency', 'dependencies')
                 ->leftJoin('dependencies.parentOption', 'dependencyParent')
@@ -1055,7 +1055,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1070,7 +1070,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorDependenciesIndexedByParentIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1089,7 +1089,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1104,7 +1104,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorPriceVariationsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1124,7 +1124,7 @@ class Repository extends ModelRepository
      * Without this function, the getArticleConfiguratorSetQueryBuilder needs to join the s_articles_details
      * to filter the articleId.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return array
      */
@@ -1179,7 +1179,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1194,7 +1194,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getFirstArticleDetailWithKindTwoQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1251,7 +1251,7 @@ class Repository extends ModelRepository
      * of the configurator. To display the options in the listing the configurator listing needs
      * an id query to allow an store paging.
      *
-     * @param      $articleId
+     * @param int  $articleId
      * @param null $filter
      * @param null $sort
      * @param null $offset
@@ -1274,7 +1274,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorListIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $articleId
+     * @param int  $articleId
      * @param null $filter
      * @param null $sort
      *
@@ -1309,8 +1309,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects the article details
      *
-     * @param      $ids
-     * @param null $sort
+     * @param int[] $ids
+     * @param null  $sort
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1325,8 +1325,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailsByArticleIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $ids
-     * @param null $sort
+     * @param int[] $ids
+     * @param null  $sort
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1469,7 +1469,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which selects
      * the defined configurator template for the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1484,7 +1484,7 @@ class Repository extends ModelRepository
      * Helper function which creates the query builder object to select
      * all configurator template data for the passed article id.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1506,7 +1506,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which selects the prices for the passed article detail id.
      * Used for the article detail page in the article backend module.
      *
-     * @param $articleDetailId
+     * @param int $articleDetailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1521,7 +1521,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPricesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleDetailId
+     * @param int $articleDetailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1543,7 +1543,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the image attributes for the passed
      * image id. Used for the article backend module in the save article function.
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1558,7 +1558,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getImageAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $imageId
+     * @param int $imageId
      *
      * @internal param $articleDetailId
      *
@@ -1578,7 +1578,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the attributes for the passed
      * article link id. Used for the article backend module in the save article function.
      *
-     * @param $linkId
+     * @param int $linkId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1593,7 +1593,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getLinkAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $linkId
+     * @param int $linkId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1611,7 +1611,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the attributes for the passed
      * article download id. Used for the article backend module in the save article function.
      *
-     * @param $downloadId
+     * @param int $downloadId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1626,7 +1626,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDownloadAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $downloadId
+     * @param int $downloadId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1644,7 +1644,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the attributes for the passed
      * article detail id. Used for the article backend module in the save article function.
      *
-     * @param $articleDetailId
+     * @param int $articleDetailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1659,7 +1659,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleDetailId
+     * @param int $articleDetailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1677,7 +1677,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the attributes for the passed
      * article price id. Used for the article backend module in the save article function.
      *
-     * @param $priceId
+     * @param int $priceId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1692,7 +1692,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPriceAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $priceId
+     * @param int $priceId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1710,8 +1710,8 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search for article details with the same
      * article oder number like the passed number.
      *
-     * @param $number
-     * @param $articleDetailId
+     * @param string $number
+     * @param int    $articleDetailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1726,8 +1726,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateNumberQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $number
-     * @param $articleDetailId
+     * @param string $number
+     * @param int    $articleDetailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1747,10 +1747,10 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select article ids and names.
      * The passed article ids are excluded.
      *
-     * @param null $ids
-     * @param null $filter
-     * @param null $offset
-     * @param null $limit
+     * @param null|int[] $ids
+     * @param null       $filter
+     * @param null|int   $offset
+     * @param null|int   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1769,8 +1769,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticlesWithExcludedIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $ids
-     * @param null $filter
+     * @param null|int[] $ids
+     * @param null       $filter
      *
      * @internal param null $filter
      *
@@ -1807,7 +1807,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects a list of all mails.
      *
-     * @param $supplierId
+     * @param int $supplierId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1822,7 +1822,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getMailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $supplierId
+     * @param int $supplierId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1869,10 +1869,10 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which selects supplier ids, names and
      * description. The passed supplier ids are excluded.
      *
-     * @param $ids
-     * @param $filter
-     * @param $offset
-     * @param $limit
+     * @param null|int[] $ids
+     * @param null       $filter
+     * @param null|int   $offset
+     * @param null|int   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1891,8 +1891,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getSuppliersWithExcludedIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $ids
-     * @param $filter
+     * @param null|int[] $ids
+     * @param null|array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1920,10 +1920,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of supplier.
      *
-     * @param array $filter
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
+     * @param array    $filter
+     * @param array    $orderBy
+     * @param null|int $limit
+     * @param null|int $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1981,10 +1981,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of article votes.
      *
-     * @param null $filter
-     * @param null $offset
-     * @param null $limit
-     * @param null $order
+     * @param null|array $filter
+     * @param null|array $offset
+     * @param null|int   $limit
+     * @param null|int   $order
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2003,8 +2003,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getVoteListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
-     * @param $order
+     * @param string $filter
+     * @param array  $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2042,11 +2042,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all articles with registered notifications
      *
-     * @param null $filter
-     * @param null $offset
-     * @param null $limit
-     * @param null $order
-     * @param null $summarize
+     * @param null      $filter
+     * @param null      $offset
+     * @param null|int  $limit
+     * @param null      $order
+     * @param null|bool $summarize
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2065,9 +2065,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticlesWithRegisteredNotificationsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
-     * @param $order
-     * @param $summarize
+     * @param array $filter
+     * @param array $order
+     * @param bool  $summarize
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2090,8 +2090,8 @@ class Repository extends ModelRepository
 
         $builder->groupBy('notification.articleNumber');
 
-        //search part
-        if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
+        // Search part
+        if (isset($filter[0]['property']) && $filter[0]['property'] === 'search') {
             $builder->where('notification.articleNumber LIKE :search')
                     ->orWhere('article.name LIKE :search')
                     ->setParameter('search', $filter[0]['value']);
@@ -2109,11 +2109,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all notification customers by the given articleOrderNumber
      *
-     * @param $articleOrderNumber
-     * @param $filter
-     * @param $offset
-     * @param $limit
-     * @param $order
+     * @param string $articleOrderNumber
+     * @param array  $filter
+     * @param int    $offset
+     * @param int    $limit
+     * @param array  $order
      *
      * @internal param $articleOrderNumber
      *
@@ -2134,9 +2134,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getNotificationCustomerByArticleQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleOrderNumber
-     * @param $filter
-     * @param $order
+     * @param string $articleOrderNumber
+     * @param array  $filter
+     * @param array  $order
      *
      * @internal param $articleOrderNumber
      *
@@ -2159,7 +2159,7 @@ class Repository extends ModelRepository
                 ->where('notification.articleNumber = :orderNumber')
                 ->setParameter('orderNumber', $articleOrderNumber);
 
-        //search part
+        // Search part
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
             $builder->andWhere('(
                         notification.mail LIKE :search
@@ -2182,11 +2182,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all ESD by the given articleId
      *
-     * @param $articleId
-     * @param $filter
-     * @param $offset
-     * @param $limit
-     * @param $order
+     * @param int   $articleId
+     * @param array $filter
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $order
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2205,9 +2205,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getEsdByArticleQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
-     * @param $filter
-     * @param $order
+     * @param int   $articleId
+     * @param array $filter
+     * @param array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2259,11 +2259,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all serials by the given esdId
      *
-     * @param $esdId
-     * @param $filter
-     * @param $offset
-     * @param $limit
-     * @param $order
+     * @param int   $esdId
+     * @param array $filter
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $order
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2282,9 +2282,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getSerialsByEsdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $esdId
-     * @param $filter
-     * @param $order
+     * @param int   $esdId
+     * @param array $filter
+     * @param array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2326,7 +2326,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all free serials by the given esdId
      *
-     * @param $esdId
+     * @param int $esdId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2341,7 +2341,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getFreeSerialsCountByEsdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $esdId
+     * @param int $esdId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2361,7 +2361,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all unused serials by the given esdId
      *
-     * @param $esdId
+     * @param int $esdId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2376,7 +2376,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getUnusedSerialsByEsdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $esdId
+     * @param int $esdId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2396,9 +2396,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
-     *
-     * @internal param int $main
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2413,7 +2411,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleCoverImageQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2439,7 +2437,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @internal param $article
      *
@@ -2456,7 +2454,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleFallbackCoverQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @internal param $article
      *
@@ -2482,9 +2480,9 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $number
-     * @param $offset
-     * @param $limit
+     * @param string $number
+     * @param int    $offset
+     * @param int    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2503,7 +2501,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getVariantImagesByArticleNumberQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $number
+     * @param string $number
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2542,7 +2540,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2557,7 +2555,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleImagesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2581,7 +2579,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete prices associated
      * with the given article
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2596,7 +2594,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRemovePricesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2614,7 +2612,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete attributes
      * associated with the given articleId
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2629,7 +2627,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRemoveAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2646,7 +2644,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete esd articles
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2661,7 +2659,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRemoveESDQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2679,7 +2677,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove translations associated
      * with the given articleId
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2694,7 +2692,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRemoveArticleTranslationsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2713,7 +2711,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove translations associated
      * with the given articleDetailId
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2728,7 +2726,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRemoveVariantTranslationsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2747,7 +2745,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove images associated
      * with the given articleDetailId
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2762,7 +2760,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRemoveImageQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -2779,7 +2777,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove a given article detail
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2794,7 +2792,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRemoveDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

@@ -100,9 +100,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @param $parentOption
-     *
-     * @internal param \Shopware\Models\Article\Configurator\Option $parent
+     * @param \Shopware\Models\Article\Configurator\Option $parentOption
      */
     public function setParentOption($parentOption)
     {
@@ -118,9 +116,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @param $childOption
-     *
-     * @internal param \Shopware\Models\Article\Configurator\Option $child
+     * @param \Shopware\Models\Article\Configurator\Option $childOption
      */
     public function setChildOption($childOption)
     {
@@ -136,7 +132,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @param  $configuratorSet
+     * @param \Shopware\Models\Article\Configurator\Set $configuratorSet
      */
     public function setConfiguratorSet($configuratorSet)
     {

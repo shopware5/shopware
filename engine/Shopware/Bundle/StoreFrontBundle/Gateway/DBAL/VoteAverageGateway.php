@@ -107,7 +107,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
             $query->setParameter(':shopId', $context->getShop()->getId());
         }
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);

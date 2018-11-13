@@ -58,7 +58,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     /**
      * Helper function to refresh the top seller data for a single article.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @throws Exception
      */
@@ -150,7 +150,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * Refresh the elapsed top seller data of the s_articles_top_seller table.
      * This function is used
      *
-     * @param $limit int Limit the update count
+     * @param int $limit Limit the update count
      */
     public function updateElapsedTopSeller($limit = null)
     {

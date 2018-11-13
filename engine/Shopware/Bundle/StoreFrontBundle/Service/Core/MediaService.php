@@ -82,7 +82,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @param $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media
@@ -93,7 +93,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @param $ids
+     * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media[] Indexed by the media id

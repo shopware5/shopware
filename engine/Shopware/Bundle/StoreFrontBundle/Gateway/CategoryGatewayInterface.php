@@ -53,7 +53,7 @@ interface CategoryGatewayInterface
      * - Assigned media object
      * - Core attribute of the media object
      *
-     * @param $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Category

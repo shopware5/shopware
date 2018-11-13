@@ -91,8 +91,8 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      * This function is used to insert or update the bought articles table
      * for a single buy combination of two articles.
      *
-     * @param $articleId
-     * @param $relatedArticleId
+     * @param int $articleId
+     * @param int $relatedArticleId
      */
     public function refreshBoughtArticles($articleId, $relatedArticleId)
     {

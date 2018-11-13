@@ -285,7 +285,7 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param $provider
+     * @param string $provider
      *
      * @throws \Exception
      *

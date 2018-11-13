@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
      * data. The full article data stack is defined in the
      * Shopware_Controller_Backend_Article::getArticle function
      *
-     * @param $configuratorSetId
+     * @param int $configuratorSetId
      *
      * @return array
      */

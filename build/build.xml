@@ -18,7 +18,7 @@
         </parallel>
     </target>
 
-    <target name="build-continuous" depends="check-code-style, unit-shopware-continuous"/>
+    <target name="build-continuous" depends="check-code-style, phpstan, unit-shopware-continuous"/>
     <target name="build-unit" depends="build-composer-install, build-cache-dir, build-config, build-database, build-snippets-deploy, build-theme-initialize,build-create-admin-account, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
@@ -388,5 +388,18 @@
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/media_selection/editor_plugin.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/fullscreen/editor_plugin.js" />
         </concat>
+    </target>
+
+    <target name="phpstan" description="PHP Static Analysis Tool">
+        <mkdir dir="${basedir}/build"/>
+        <get src="https://github.com/phpstan/phpstan/releases/download/0.10.5/phpstan.phar"
+             dest="${basedir}/build/phpstan.phar" skipexisting="true"/>
+        <exec executable="php" searchpath="true" resolveexecutable="true" failonerror="true">
+            <arg value="${basedir}/build/artifacts/phpstan.phar"/>
+            <arg value="analyse"/>
+            <arg value="-c"/>
+            <arg value=".phpstan.neon"/>
+            <arg value="--no-progress"/>
+        </exec>
     </target>
 </project>

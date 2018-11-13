@@ -415,7 +415,7 @@ class Shopware_Components_Translation
     /**
      * Returns mapping for a translation type
      *
-     * @param $type
+     * @param string $type
      *
      * @return array|bool
      */

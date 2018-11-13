@@ -86,8 +86,8 @@ class ShopwareEdition
     }
 
     /**
-     * @param $edition
-     * @param $licence
+     * @param string $edition
+     * @param string $licence
      *
      * @return ShopwareEdition
      */

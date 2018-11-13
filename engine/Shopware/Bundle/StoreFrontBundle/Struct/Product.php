@@ -121,7 +121,7 @@ class Product extends ListProduct
      */
     public function getThumbnailsBySize($index)
     {
-        /** @var $media Media */
+        /** @var Media $media */
         $result = array_filter($this->media, function (Media $media) {
             return $media->getType() === Media::TYPE_IMAGE;
         });

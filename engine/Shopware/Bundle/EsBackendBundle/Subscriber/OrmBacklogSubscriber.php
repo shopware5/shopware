@@ -121,7 +121,7 @@ class OrmBacklogSubscriber implements EventSubscriber
      */
     private function trace(OnFlushEventArgs $eventArgs)
     {
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 

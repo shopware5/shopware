@@ -87,10 +87,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $shopId = $this->Request()->getParam('shopId');
 
-        /** @var $theme Template */
+        /** @var Template $theme */
         $theme = $this->getRepository()->find($themeId);
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
         $shop->registerResources();
 
@@ -126,7 +126,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             return;
         }
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById(
             $shopId
         );
@@ -215,7 +215,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Saves the passed theme configuration.
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -239,7 +239,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     public function uploadAction()
     {
-        /** @var $file UploadedFile */
+        /** @var UploadedFile $file */
         $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('fileId');
         $system = new Filesystem();
 
@@ -322,10 +322,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     protected function getAdditionalDetailData(array $data)
     {
-        /** @var $template Template */
+        /** @var Template $template */
         $template = $this->getRepository()->find($data['id']);
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         $shop = $this->getManager()->find(
             'Shopware\Models\Shop\Shop',
             $this->Request()->getParam('shopId')
@@ -367,11 +367,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $data = parent::getList(null, null, $sort, $filter, $wholeParams);
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $wholeParams['shopId']);
 
         foreach ($data['data'] as &$theme) {
-            /** @var $instance Template */
+            /** @var Template $instance */
             $instance = $this->getRepository()->find($theme['id']);
 
             $theme['screen'] = $this->container->get('theme_util')->getPreviewImage(
@@ -425,7 +425,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      * Helper function to decompress zip files.
      *
      * @param UploadedFile $file
-     * @param $targetDirectory
+     * @param string       $targetDirectory
      *
      * @throws Exception
      */
@@ -446,7 +446,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     private function hasTemplateConfigSet(Template $template)
     {
-        /** @var $theme \Shopware\Components\Theme */
+        /** @var \Shopware\Components\Theme $theme */
         $theme = $this->get('theme_util')->getThemeByTemplate($template);
 
         if ($template->getConfigSets()->count() > 0) {
@@ -478,7 +478,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     private function getThemeInfo(Template $template)
     {
         $user = $this->get('Auth')->getIdentity();
-        /** @var $locale Locale */
+        /** @var Locale $locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 

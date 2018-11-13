@@ -38,7 +38,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
     public function indexAction()
     {
-        /** @var $context ShopContextInterface */
+        /** @var ShopContextInterface $context */
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 

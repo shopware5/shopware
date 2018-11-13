@@ -139,7 +139,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group $group
      * @param array                                                       $combinations
-     * @param $selection
+     * @param array                                                       $selection
      *
      * @return bool
      */

@@ -123,7 +123,7 @@ class CategorySubscriber implements BaseEventSubscriber
             return;
         }
 
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 
@@ -135,19 +135,19 @@ class CategorySubscriber implements BaseEventSubscriber
         // Entity deletions
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
             if ($entity instanceof Category) {
-                /* @var $entity Category */
+                /* @var Category $entity */
                 $this->backlogRemoveCategory($entity->getId());
             }
 
             if ($entity instanceof Article) {
-                /* @var $entity Article */
+                /* @var Article $entity */
                 $this->backlogRemoveArticle($entity->getId());
             }
         }
 
         // Entity Insertions
         foreach ($uow->getScheduledEntityInsertions() as $category) {
-            /* @var $category Category */
+            /* @var Category $category */
             if (!($category instanceof Category)) {
                 continue;
             }
@@ -160,7 +160,7 @@ class CategorySubscriber implements BaseEventSubscriber
 
         // Entity updates
         foreach ($uow->getScheduledEntityUpdates() as $category) {
-            /* @var $category Category */
+            /* @var Category $category */
             if (!($category instanceof Category)) {
                 continue;
             }
@@ -190,7 +190,7 @@ class CategorySubscriber implements BaseEventSubscriber
             $this->addPendingMove($category);
         }
 
-        /* @var $col \Doctrine\ORM\PersistentCollection */
+        /* @var \Doctrine\ORM\PersistentCollection $col */
         foreach ($uow->getScheduledCollectionDeletions() as $col) {
             if (!$col->getOwner() instanceof Article) {
                 continue;
@@ -201,16 +201,16 @@ class CategorySubscriber implements BaseEventSubscriber
                     continue;
                 }
 
-                /** @var $article Article */
+                /** @var Article $article */
                 $article = $col->getOwner();
                 $this->addPendingRemoveAssignment($article, $category);
             }
         }
 
-        /* @var $col \Doctrine\ORM\PersistentCollection */
+        /* @var \Doctrine\ORM\PersistentCollection $col */
         foreach ($uow->getScheduledCollectionUpdates() as $col) {
             if ($col->getOwner() instanceof Article) {
-                /** @var $article Article */
+                /** @var Article $article */
                 $article = $col->getOwner();
 
                 foreach ($col->getInsertDiff() as $category) {
@@ -231,7 +231,7 @@ class CategorySubscriber implements BaseEventSubscriber
             }
 
             if ($col->getOwner() instanceof Category) {
-                /* @var $category Category */
+                /* @var Category $category */
                 $category = $col->getOwner();
 
                 foreach ($col->getInsertDiff() as $article) {
@@ -273,25 +273,25 @@ class CategorySubscriber implements BaseEventSubscriber
         }
 
         foreach ($this->pendingRemoveAssignments as $pendingRemove) {
-            /** @var $category Category */
+            /** @var Category $category */
             $category = $pendingRemove['category'];
-            /** @var $article Article */
+            /** @var Article $article */
             $article = $pendingRemove['article'];
 
             $this->backlogRemoveAssignment($article->getId(), $category->getId());
         }
 
         foreach ($this->pendingAddAssignments as $pendingAdd) {
-            /** @var $category Category */
+            /** @var Category $category */
             $category = $pendingAdd['category'];
-            /** @var $article Article */
+            /** @var Article $article */
             $article = $pendingAdd['article'];
 
             $this->backlogAddAssignment($article->getId(), $category->getId());
         }
 
         foreach ($this->pendingMoves as $pendingMove) {
-            /** @var $category Category */
+            /** @var Category $category */
             $category = $pendingMove['category'];
             $this->backlogMoveCategory($category->getId());
         }

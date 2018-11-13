@@ -32,8 +32,8 @@ namespace Shopware\Components\Routing;
 interface GeneratorInterface
 {
     /**
-     * @param array|string $params
-     * @param Context      $context
+     * @param array   $params
+     * @param Context $context
      *
      * @return array|string
      */

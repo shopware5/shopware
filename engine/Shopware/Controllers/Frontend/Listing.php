@@ -123,7 +123,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
-        /** @var $context ProductContextInterface */
+        /** @var ProductContextInterface $context */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
@@ -142,7 +142,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $this->setDefaultSorting($sortings);
         }
 
-        /** @var $criteria Criteria */
+        /** @var Criteria $criteria */
         $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createListingCriteria($this->Request(), $context);
 
@@ -157,7 +157,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria
         );
 
-        /** @var $manufacturer Manufacturer */
+        /** @var Manufacturer $manufacturer */
         $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
             $manufacturerId,
             $this->get('shopware_storefront.context_service')->getShopContext()
@@ -256,7 +256,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if ($streamId) {
             $criteria = $this->createCategoryStreamCriteria($categoryId, $streamId);
         } else {
-            /** @var $criteria Criteria */
+            /** @var Criteria $criteria */
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
                 ->createListingCriteria($this->Request(), $context);
         }
@@ -302,10 +302,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
             $location = ['controller' => 'index'];
         } elseif ($checkRedirect && $this->get('config')->get('categoryDetailLink')) {
-            /** @var $context ShopContextInterface */
+            /** @var ShopContextInterface $context */
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-            /** @var $factory StoreFrontCriteriaFactoryInterface */
+            /** @var StoreFrontCriteriaFactoryInterface $factory */
             $factory = $this->get('shopware_search.store_front_criteria_factory');
             $criteria = $factory->createListingCriteria($this->Request(), $context);
 
@@ -316,11 +316,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 ->limit(2)
                 ->setFetchCount(false);
 
-            /** @var $result ProductNumberSearchResult */
+            /** @var ProductNumberSearchResult $result */
             $result = $this->get('shopware_search.product_number_search')->search($criteria, $context);
 
             if (count($result->getProducts()) === 1) {
-                /** @var $first \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct */
+                /** @var \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct $first */
                 $first = array_shift($result->getProducts());
                 $location = ['controller' => 'detail', 'sArticle' => $first->getId()];
             }
@@ -370,7 +370,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        /** @var $repository \Shopware\Models\Category\Repository */
+        /** @var \Shopware\Models\Category\Repository $repository */
         $categoryRepository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         $categoryPath = $categoryRepository->getPathById($categoryId);
 
@@ -531,7 +531,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if ($categoryContent['streamId']) {
             $criteria = $this->createCategoryStreamCriteria($categoryId, $categoryContent['streamId']);
         } else {
-            /** @var $criteria Criteria */
+            /** @var Criteria $criteria */
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
                 ->createListingCriteria($this->Request(), $context);
         }

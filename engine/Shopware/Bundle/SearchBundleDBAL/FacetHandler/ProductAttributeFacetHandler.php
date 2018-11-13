@@ -164,7 +164,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         $this->addTranslations($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $result = $statement->fetchAll();
         if (empty($result)) {
@@ -172,7 +172,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         }
 
         $actives = [];
-        /** @var $condition ProductAttributeCondition */
+        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $actives = $condition->getValue();
         }
@@ -229,7 +229,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             'MAX(' . $sqlField . ') as maxValues',
         ]);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -247,7 +247,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $result['minValues'];
         $activeMax = $result['maxValues'];
 
-        /** @var $condition ProductAttributeCondition */
+        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $data = $condition->getValue();
             $activeMin = $data['min'];
@@ -286,7 +286,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         $query->select('COUNT(' . $sqlField . ')');
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $result = $statement->fetch(\PDO::FETCH_COLUMN);
 

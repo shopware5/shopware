@@ -115,7 +115,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function dispatch($url = null)
     {
         $request = $this->Request();
-        if (null !== $url) {
+        if ($url !== null) {
             $request->setRequestUri($url);
         }
         $request->setPathInfo(null);
@@ -128,7 +128,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 
         $front->dispatch();
 
-        /** @var $viewRenderer Enlight_Controller_Plugins_ViewRenderer_Bootstrap */
+        /** @var Enlight_Controller_Plugins_ViewRenderer_Bootstrap $viewRenderer */
         $viewRenderer = $front->Plugins()->get('ViewRenderer');
         $this->_view = $viewRenderer->Action()->View();
 
@@ -155,9 +155,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         $this->_front = null;
 
         $app->Plugins()->reset();
-        //$app->Hooks()->resetHooks();
         $app->Events()->reset();
-        //$app->Db()->getProfiler()->clear();
 
         $container = Shopware()->Container();
 
@@ -167,15 +165,8 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
                 ->reset('Plugins')
                 ->reset('Front')
                 ->reset('Router')
-//            ->reset('Template')
-//            ->reset('Snippets')
                 ->reset('System')
                 ->reset('Modules')
-//                ->reset('Models')
-//            ->reset('Config')
-//            ->reset('Shop');
-//            ->reset('Session')
-//            ->reset('Auth');
         ;
 
         $container->load('Front');
@@ -225,7 +216,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function Front()
     {
-        if (null === $this->_front) {
+        if ($this->_front === null) {
             $this->_front = Shopware()->Container()->get('Front');
         }
 
@@ -239,7 +230,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function Template()
     {
-        if (null === $this->_template) {
+        if ($this->_template === null) {
             $this->_template = Shopware()->Container()->get('Template');
         }
 
@@ -263,7 +254,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function Request()
     {
-        if (null === $this->_request) {
+        if ($this->_request === null) {
             $this->_request = new Enlight_Controller_Request_RequestTestCase();
         }
 
@@ -277,7 +268,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function Response()
     {
-        if (null === $this->_response) {
+        if ($this->_response === null) {
             $this->_response = new Enlight_Controller_Response_ResponseTestCase();
         }
 

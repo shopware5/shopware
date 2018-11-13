@@ -244,7 +244,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             throw new \Enlight_Controller_Exception('Unauthorized', 401);
         }
 
-        /** @var $menu \Shopware\Models\Menu\Repository */
+        /** @var \Shopware\Models\Menu\Repository $menu */
         $menu = Shopware()->Models()->getRepository(\Shopware\Models\Menu\Menu::class);
         $nodes = $menu->createQueryBuilder('m')
             ->select('m')

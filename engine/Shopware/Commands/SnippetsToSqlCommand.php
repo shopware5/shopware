@@ -91,7 +91,7 @@ class SnippetsToSqlCommand extends ShopwareCommand
 
         $output->writeln(sprintf('<info>Writing to file "%s".</info>', $input->getArgument('file')));
 
-        /** @var $queryLoader QueryHandler */
+        /** @var QueryHandler $queryLoader */
         $queryLoader = $this->container->get('shopware.snippet_query_handler');
 
         $this->exportCoreSnippets($input, $output, $queryLoader);

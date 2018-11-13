@@ -87,7 +87,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
             ->andWhere('variant.shippingfree = 1')
             ->setMaxResults(1);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);

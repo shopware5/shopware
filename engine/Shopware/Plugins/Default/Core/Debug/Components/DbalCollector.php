@@ -76,7 +76,7 @@ class DbalCollector implements CollectorInterface
             return;
         }
 
-        /** @var $query Zend_Db_Profiler_Query */
+        /** @var \Zend_Db_Profiler_Query $query */
         foreach ($queries as $query) {
             $id = md5($query['sql']);
             $totalTime += $query['executionMS'];

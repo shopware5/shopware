@@ -169,7 +169,7 @@ EOF
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param $optionKey
+     * @param string          $optionKey
      *
      * @return mixed
      */

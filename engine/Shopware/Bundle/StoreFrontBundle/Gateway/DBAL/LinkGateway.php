@@ -106,7 +106,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
 
         $this->fieldHelper->addLinkTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

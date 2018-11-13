@@ -56,9 +56,9 @@ class BaseProduct extends Extendable
     protected $number;
 
     /**
-     * @param $id
-     * @param $variantId
-     * @param $number
+     * @param int    $id
+     * @param int    $variantId
+     * @param string $number
      */
     public function __construct($id, $variantId, $number)
     {

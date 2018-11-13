@@ -405,7 +405,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     /**
      * helper function to build children of a node $nodeName
      *
-     * @param $nodeName
+     * @param string $nodeName
      *
      * @return array|bool
      */
@@ -432,21 +432,21 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     /**
      * helper function to build the final array to be handed to the view
      *
-     * @param $idPrefix
-     * @param Site $site
+     * @param string $idPrefix
+     * @param Site   $site
      *
      * @return array
      */
     private function getSiteNode($idPrefix, Site $site)
     {
-        //set icons
+        // Set icons
         if ($site->getLink()) {
             $iconCls = 'sprite-chain-small';
         } else {
             $iconCls = 'sprite-blue-document-text';
         }
 
-        //build the structure
+        // Build the structure
         $node = [
             'id' => $idPrefix . $site->getId(),
             'active' => $site->getActive(),
@@ -474,7 +474,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             'leaf' => true,
         ];
 
-        //if the site has children, append them
+        // If the site has children, append them
         if ($site->getChildren()->count() > 0) {
             $children = [];
             foreach ($site->getChildren() as $child) {

@@ -57,7 +57,7 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
         $compiler = $this->container->get('theme_compiler');
         $rootDir = $this->container->getParameter('shopware.app.rootdir');
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         foreach ($shops as $shop) {
             $configuration = $compiler->getThemeConfiguration($shop);
             $file = $this->dumpConfiguration($shop, $configuration);

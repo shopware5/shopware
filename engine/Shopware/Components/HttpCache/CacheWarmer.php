@@ -35,6 +35,7 @@ use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
 use Shopware_Components_Config as Config;
 
 /**

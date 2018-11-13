@@ -29,8 +29,9 @@
  */
 class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /** @var $model \Shopware\Models\Voucher\Voucher */
+    /** @var \Shopware\Models\Voucher\Voucher $repository */
     protected $repository = null;
+
     /**
      * Voucher dummy data
      *

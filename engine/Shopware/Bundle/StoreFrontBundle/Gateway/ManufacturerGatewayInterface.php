@@ -54,7 +54,7 @@ interface ManufacturerGatewayInterface
      * Required translation in the provided context language:
      * - Manufacturer
      *
-     * @param $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Manufacturer

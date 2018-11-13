@@ -94,7 +94,7 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @param  $image
+     * @param \Shopware\Models\Article\Image $image
      */
     public function setImage($image)
     {

@@ -70,7 +70,7 @@ class FirstRunWizardDisableCommand extends ShopwareCommand
             $conn->insert('s_core_config_values', $data);
         }
 
-        /** @var $cacheManager \Shopware\Components\CacheManager */
+        /** @var \Shopware\Components\CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
         $cacheManager->clearConfigCache();
 

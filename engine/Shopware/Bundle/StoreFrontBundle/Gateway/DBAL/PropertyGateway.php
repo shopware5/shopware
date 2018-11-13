@@ -138,7 +138,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         $this->fieldHelper->addPropertyGroupTranslation($query, $context);
         $this->fieldHelper->addPropertyOptionTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 

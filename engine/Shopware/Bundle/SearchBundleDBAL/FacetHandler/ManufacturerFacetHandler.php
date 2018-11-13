@@ -107,7 +107,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
         $query->groupBy('product.id');
         $query->select('DISTINCT product.supplierID as id');
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $ids = $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -184,7 +184,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
             return [];
         }
 
-        /** @var $condition Condition\ManufacturerCondition */
+        /** @var Condition\ManufacturerCondition $condition */
         $condition = $criteria->getCondition('manufacturer');
 
         return $condition->getManufacturerIds();

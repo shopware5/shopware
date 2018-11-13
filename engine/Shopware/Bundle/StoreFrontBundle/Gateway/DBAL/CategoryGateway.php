@@ -158,7 +158,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $this->fieldHelper->addProductStreamTranslation($query, $context);
         $this->fieldHelper->addCategoryMainDataTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

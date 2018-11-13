@@ -39,7 +39,7 @@ interface MediaServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
-     * @param $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media
@@ -52,7 +52,7 @@ interface MediaServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
-     * @param $ids
+     * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media[] Indexed by the media id

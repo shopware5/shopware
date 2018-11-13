@@ -30,8 +30,9 @@ use Shopware\Models\Category\Category;
  */
 class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /** @var $model Category */
+    /** @var Category $repository */
     protected $repository = null;
+
     /**
      * dummy data
      *

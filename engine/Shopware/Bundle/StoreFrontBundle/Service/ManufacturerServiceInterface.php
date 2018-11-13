@@ -52,7 +52,7 @@ interface ManufacturerServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface::get()
      *
-     * @param $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Manufacturer

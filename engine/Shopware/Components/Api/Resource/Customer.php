@@ -56,7 +56,7 @@ class Customer extends Resource
     /**
      * Little helper function for the ...ByNumber methods
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -143,7 +143,7 @@ class Customer extends Resource
             ->where('customer.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $customer \Shopware\Models\Customer\Customer */
+        /** @var \Shopware\Models\Customer\Customer $customer */
         $customer = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$customer) {
@@ -265,7 +265,7 @@ class Customer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $customer \Shopware\Models\Customer\Customer */
+        /** @var \Shopware\Models\Customer\Customer $customer */
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {

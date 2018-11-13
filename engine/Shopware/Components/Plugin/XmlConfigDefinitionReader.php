@@ -29,9 +29,9 @@ use Symfony\Component\Config\Util\XmlUtils;
 class XmlConfigDefinitionReader
 {
     /**
-     * @param $file string
+     * @param string $file
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      *
      * @return array
      */

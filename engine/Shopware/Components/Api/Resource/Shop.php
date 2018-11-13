@@ -68,7 +68,7 @@ class Shop extends Resource
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
-        /** @var $category \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $category */
         $shop = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$shop) {
@@ -157,7 +157,7 @@ class Shop extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $this->getRepository()->find($id);
 
         if (!$shop) {
@@ -193,7 +193,7 @@ class Shop extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $this->getRepository()->find($id);
 
         if (!$shop) {

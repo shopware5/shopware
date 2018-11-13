@@ -186,7 +186,7 @@ class Form extends ModelEntity
     {
         $clonedForm = clone $this;
 
-        /* @var $field \Shopware\Models\Form\Field */
+        /* @var \Shopware\Models\Form\Field $field */
         foreach ($this->getFields() as $field) {
             $clonedField = clone $field;
             $clonedForm->fields->add($clonedField);

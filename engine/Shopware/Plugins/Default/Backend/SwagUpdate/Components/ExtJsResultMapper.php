@@ -36,7 +36,7 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
 class ExtJsResultMapper
 {
     /**
-     * @param $result ValidResult|FinishResult|ErrorResult
+     * @param ValidResult|FinishResult|ErrorResult $result
      *
      * @throws \Exception
      *

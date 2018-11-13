@@ -78,7 +78,7 @@ class PluginLocalService
         $query->setFirstResult($context->getOffset())
             ->setMaxResults($context->getLimit());
 
-        /** @var PDOStatement $statement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -120,7 +120,7 @@ class PluginLocalService
                 Connection::PARAM_STR_ARRAY
             );
 
-        /** @var $statement PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -138,7 +138,7 @@ class PluginLocalService
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.capability_update = 1');
 
-        /** @var $statement PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);

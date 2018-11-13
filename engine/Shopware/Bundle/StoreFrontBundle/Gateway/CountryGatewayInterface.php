@@ -106,7 +106,7 @@ interface CountryGatewayInterface
      * Required translation in the provided context language:
      * - Country state base data
      *
-     * @param $id
+     * @param int                         $id
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Country\State

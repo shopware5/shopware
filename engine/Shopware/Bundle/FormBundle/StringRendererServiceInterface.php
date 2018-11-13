@@ -28,9 +28,9 @@ namespace Shopware\Bundle\FormBundle;
 interface StringRendererServiceInterface
 {
     /**
-     * @param $string
-     * @param array $viewVariables
-     * @param array $sElement
+     * @param string $string
+     * @param array  $viewVariables
+     * @param array  $sElement
      *
      * @return string
      */

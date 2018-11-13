@@ -261,7 +261,7 @@ class AppCache extends HttpCache
     {
         $this->getKernel()->boot();
 
-        /** @var $container \Shopware\Components\DependencyInjection\Container */
+        /** @var \Shopware\Components\DependencyInjection\Container $container */
         $container = $this->getKernel()->getContainer();
         $container->set('HttpCache', $this);
 

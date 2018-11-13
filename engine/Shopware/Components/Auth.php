@@ -37,14 +37,14 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Adapter that is current active - has a valid user session
      *
-     * @var null
+     * @var \Zend_Auth_Adapter_Interface
      */
     protected $_baseAdapter = null; // Current active adapter
 
     /**
      * Get all adapters or certain one
      *
-     * @param null $index
+     * @param null|string $index
      *
      * @return array|Zend_Auth_Adapter_Interface
      */
@@ -102,7 +102,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Set current active adapter
      *
-     * @param $adapter
+     * @param \Zend_Auth_Adapter_Interface $adapter
      *
      * @return \Shopware_Components_Auth
      */
@@ -116,7 +116,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Get current active adapter
      *
-     * @return Zend_Auth_Adapter_Interface
+     * @return \Zend_Auth_Adapter_Interface
      */
     public function getBaseAdapter()
     {

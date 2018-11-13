@@ -60,14 +60,14 @@ class SwitchAliasCommand extends ShopwareCommand
         $type = $input->getArgument('type');
         $indexName = $input->getArgument('index');
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
 
-        /** @var $index ShopIndex */
+        /** @var ShopIndex $index */
         $index = $this->container->get('shopware_elastic_search.index_factory')
             ->createShopIndex($shop, $type);
 
-        /** @var $client Client */
+        /** @var Client $client */
         $client = $this->container->get('shopware_elastic_search.client');
 
         $exist = $client->indices()->exists(['index' => $indexName]);

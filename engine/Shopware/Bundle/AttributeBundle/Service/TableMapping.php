@@ -97,7 +97,7 @@ class TableMapping
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
      * @return null|string
      */
@@ -121,7 +121,7 @@ class TableMapping
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
      * @return string
      */

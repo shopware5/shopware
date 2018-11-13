@@ -57,7 +57,7 @@ class ProductMediaTest extends TestCase
 
             $this->assertCount(3, $productMediaList);
 
-            /** @var $media Struct\Media */
+            /** @var Struct\Media $media */
             foreach ($productMediaList as $media) {
                 if ($media->isPreview()) {
                     $this->assertMediaFile('sasse-korn', $media);

@@ -348,7 +348,7 @@ class Shop extends Extendable
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getHosts()
     {
@@ -356,7 +356,7 @@ class Shop extends Extendable
     }
 
     /**
-     * @param \string[] $hosts
+     * @param string[] $hosts
      */
     public function setHosts($hosts)
     {

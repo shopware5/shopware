@@ -40,10 +40,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the frontend list
      *
-     * @param $blogCategoryIds
-     * @param null  $offset
-     * @param null  $limit
-     * @param array $filter
+     * @param int[]      $blogCategoryIds
+     * @param null|int   $offset
+     * @param null|int   $limit
+     * @param null|array $filter
      *
      * @internal param $blogCategory
      *
@@ -66,10 +66,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogCategoryIds
+     * @param int[] $blogCategoryIds
      * @param array $filter
-     *
-     * @internal param $blogCategoryIds
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -111,7 +109,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the backend list
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -126,7 +124,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAverageVoteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -147,7 +145,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the backend list
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -162,7 +160,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getTagsByBlogId" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -182,8 +180,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog date filter
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -198,8 +196,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDisplayDateFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -218,8 +216,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog author filter
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -234,8 +232,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAuthorFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -255,8 +253,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog tags filter
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -271,8 +269,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getTagsFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -293,8 +291,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDisplayDateFilterQueryBuilder, getAuthorFilterQueryBuilder, getTagsFilterQueryBuilder" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -323,21 +321,21 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog author filter
      *
-     * @param $blogCategoryIds
-     * @param array|null $filter
-     * @param null       $order
-     * @param null       $offset
-     * @param null       $limit
+     * @param int[]       $blogCategoryIds
+     * @param array|null  $filter
+     * @param null|string $order
+     * @param null|int    $offset
+     * @param null|int    $limit
      *
      * @return \Doctrine\ORM\Query
      */
     public function getBackendListQuery($blogCategoryIds, array $filter = null, $order = null, $offset = null, $limit = null)
     {
         $builder = $this->getBackendListQueryBuilder($blogCategoryIds, $filter, $order);
-        if (!empty($offset)) {
+        if ($offset !== null) {
             $builder->setFirstResult($offset);
         }
-        if (!empty($limit)) {
+        if ($limit !== null) {
             $builder->setMaxResults($limit);
         }
 
@@ -348,9 +346,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBackendListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogCategoryIds
-     * @param $filter
-     * @param $order
+     * @param int[]  $blogCategoryIds
+     * @param array  $filter
+     * @param string $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -391,7 +389,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article for the detail page
      *
-     * @param $blogArticleId
+     * @param int $blogArticleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -406,7 +404,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogArticleId
+     * @param int $blogArticleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -432,7 +430,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article for the detail page
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -447,7 +445,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBackendDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -468,11 +466,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article comments
      *
-     * @param $blogId
-     * @param $filter
-     * @param $order
-     * @param $offset
-     * @param $limit
+     * @param int    $blogId
+     * @param array  $filter
+     * @param string $order
+     * @param int    $offset
+     * @param int    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -493,12 +491,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBlogCommentsById" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
-     * @param $filter
-     * @param $order
-     *
-     * @internal param $offset
-     * @internal param $limit
+     * @param int    $blogId
+     * @param array  $filter
+     * @param string $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -536,7 +531,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the all blog tags
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -551,7 +546,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBlogTagsById" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

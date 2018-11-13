@@ -501,6 +501,7 @@ class Media extends ModelEntity
     public function getFormattedFileSize()
     {
         $size = $this->fileSize;
+        $filesize = 'unknown';
 
         if ($size < 1024) {
             $filesize = $size . ' bytes';
@@ -526,7 +527,7 @@ class Media extends ModelEntity
     /**
      * Sets the assigned album.
      *
-     * @param  $album
+     * @param \Shopware\Models\Media\Album $album
      *
      * @return \Shopware\Models\Media\Media
      */
@@ -768,8 +769,8 @@ class Media extends ModelEntity
      * passed file name. The file name have to be passed, because on update the internal
      * file name property is already changed to the new name.
      *
-     * @param $thumbnailSizes
-     * @param $fileName
+     * @param array  $thumbnailSizes
+     * @param string $fileName
      */
     public function removeAlbumThumbnails($thumbnailSizes, $fileName)
     {
@@ -1010,12 +1011,10 @@ class Media extends ModelEntity
 
     /**
      * Internal helper function which updates all associated data which has the image path as own property.
-     *
-     * @internal param $name
      */
     private function updateAssociations()
     {
-        /** @var $article \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $article */
         foreach ($this->articles as $article) {
             $article->setPath($this->getName());
             Shopware()->Models()->persist($article);

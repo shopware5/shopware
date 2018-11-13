@@ -191,7 +191,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
-     * @param $dir
+     * @param string $dir
      *
      * @return Shopware_Components_Snippet_Manager
      */
@@ -299,7 +299,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
                     $pluginThemePath
                 );
 
-                /** @var $directory \DirectoryIterator */
+                /** @var \DirectoryIterator $directory */
                 foreach ($directories as $directory) {
                     //check valid directory
                     if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() === '_cache') {

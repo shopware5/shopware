@@ -121,7 +121,7 @@ class IOHelper
     /**
      * Write a message to STDOUT without trailing newline
      *
-     * @param $message
+     * @param string $message
      */
     public function write($message)
     {
@@ -131,7 +131,7 @@ class IOHelper
     /**
      * Write a message to STDOUT with trailing newline
      *
-     * @param $message
+     * @param string $message
      */
     public function writeln($message)
     {

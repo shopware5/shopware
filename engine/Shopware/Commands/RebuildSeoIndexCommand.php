@@ -105,7 +105,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         foreach ($shops as $shopId) {
             $output->writeln('Rebuilding SEO index for shop ' . $shopId);
 
-            /** @var $repository \Shopware\Models\Shop\Repository */
+            /** @var \Shopware\Models\Shop\Repository $repository */
             $repository = $this->modelManager->getRepository(\Shopware\Models\Shop\Shop::class);
             $shop = $repository->getActiveById($shopId);
 

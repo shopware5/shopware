@@ -112,7 +112,7 @@ class VoteHydrator extends Hydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      */
     private function sortByPointsDescending($data)
     {

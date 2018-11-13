@@ -111,7 +111,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     {
         $categoryId = $shopContext->getShop()->getCategory()->getId();
 
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name', 'manufacturer.changed']);
 
@@ -122,7 +122,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
 
         $query->groupBy('manufacturer.id');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

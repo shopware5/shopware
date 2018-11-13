@@ -34,7 +34,7 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTerm\Keyword;
 interface KeywordFinderInterface
 {
     /**
-     * @param $term
+     * @param string $term
      *
      * @return Keyword[]
      */

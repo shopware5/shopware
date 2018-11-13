@@ -123,7 +123,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
             $findBy['form'] = $form;
         }
 
-        /** @var $element \Shopware\Models\Config\Element */
+        /** @var \Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy($findBy);
 
         $defaultValue = $element->getValue();

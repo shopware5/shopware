@@ -84,7 +84,7 @@ class Session
             \Enlight_Components_Session::writeClose();
         }
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('Shop');
 
         $sessionOptions['name'] = 'session-' . $shop->getId();

@@ -48,7 +48,7 @@ class Widget extends ModelEntity
     private $name;
 
     /**
-     * @var
+     * @var \Shopware\Models\Widget\View[]
      * @ORM\OneToMany(targetEntity="Shopware\Models\Widget\View", mappedBy="widget")
      */
     private $views;

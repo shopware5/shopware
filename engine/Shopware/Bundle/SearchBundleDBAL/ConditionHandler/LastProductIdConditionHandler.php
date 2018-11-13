@@ -48,7 +48,7 @@ class LastProductIdConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /* @var $condition LastProductIdCondition */
+        /* @var LastProductIdCondition $condition */
         $query
             ->andWhere('product.id > :lastId')
             ->setParameter('lastId', $condition->getLastId());

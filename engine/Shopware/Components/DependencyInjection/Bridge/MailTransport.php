@@ -86,7 +86,7 @@ class MailTransport
         } else {
             $transport = \Enlight_Class::Instance($transportName);
         }
-        /* @var $transport \Zend_Mail_Transport_Abstract */
+        /* @var \Zend_Mail_Transport_Abstract $transport */
         \Enlight_Components_Mail::setDefaultTransport($transport);
 
         if (!isset($options['from']) && !empty($config->Mail)) {

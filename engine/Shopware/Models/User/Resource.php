@@ -160,7 +160,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * the Resource.privileges property (INVERSE SIDE) and the Privilege.resource (OWNING SIDE) property.
      * The privilege data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @param $privileges \Doctrine\Common\Collections\ArrayCollection
+     * @param \Doctrine\Common\Collections\ArrayCollection $privileges
      */
     public function setPrivileges($privileges)
     {

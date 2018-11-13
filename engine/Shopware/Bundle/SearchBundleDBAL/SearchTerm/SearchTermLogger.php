@@ -66,7 +66,7 @@ class SearchTermLogger implements SearchTermLoggerInterface
             return;
         }
 
-        /* @var $condition SearchTermCondition */
+        /* @var SearchTermCondition $condition */
         $condition = $criteria->getCondition('search');
 
         $now = new \DateTime();

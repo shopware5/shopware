@@ -111,7 +111,7 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
         $query->select('product.id')
             ->setMaxResults(1);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);

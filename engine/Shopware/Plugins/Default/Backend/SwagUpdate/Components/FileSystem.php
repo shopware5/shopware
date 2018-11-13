@@ -83,7 +83,7 @@ class FileSystem
             return $errors;
         }
 
-        /** @var $fileInfo \DirectoryIterator */
+        /** @var \DirectoryIterator $fileInfo */
         foreach (new \DirectoryIterator($directory) as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;

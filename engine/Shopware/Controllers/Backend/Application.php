@@ -387,13 +387,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * If the save process was successfully, the function returns a success array with the
      * updated model data.
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
     public function save($data)
     {
-        /* @var $model \Shopware\Components\Model\ModelEntity */
+        /* @var \Shopware\Components\Model\ModelEntity $model */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {
@@ -406,7 +406,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         $violations = $this->getManager()->validate($model);
         $errors = [];
-        /** @var $violation Symfony\Component\Validator\ConstraintViolation */
+        /** @var Symfony\Component\Validator\ConstraintViolation $violation */
         foreach ($violations as $violation) {
             $errors[] = [
                 'message' => $violation->getMessage(),
@@ -437,7 +437,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *   => Delete was successfully.
      *
      *
-     * @param $id
+     * @param int $id
      *
      * @return array
      */
@@ -472,12 +472,12 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Important: This function works only for associations of the configured {@link #model} property.
      * If you want to reload association listings of other models, you have to override this function.
      *
-     * @param $id
-     * @param $associationKey
-     * @param $offset
-     * @param $limit
-     * @param array $sort
-     * @param array $filter
+     * @param int    $id
+     * @param string $associationKey
+     * @param int    $offset
+     * @param int    $limit
+     * @param array  $sort
+     * @param array  $filter
      *
      * @return array
      */
@@ -700,7 +700,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *          return $builder;
      *      }
      *
-     * @param $id
+     * @param int $id
      *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
@@ -721,9 +721,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * model and if the $search parameter contains a search value, the function creates an orWhere
      * condition for each model field with a like operation.
      *
-     * @param $association
-     * @param $model
-     * @param $search
+     * @param string $association
+     * @param string $model
+     * @param string $search
      *
      * @return QueryBuilder
      */
@@ -750,9 +750,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Creates the query builder object for the {@link #reloadAssociation} function.
      *
-     * @param $model - Full model class name which will be selected
-     * @param $alias - Query alias for the selected model
-     * @param $fieldName - Property name of the foreign key column in the associated model
+     * @param string $model     - Full model class name which will be selected
+     * @param string $alias     - Query alias for the selected model
+     * @param string $fieldName - Property name of the foreign key column in the associated model
      *
      * @return QueryBuilder
      */
@@ -791,7 +791,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *      => This function iterates the association property and resolves each foreign key value with the corresponding doctrine model
      *      => 'article' => array('id' => 1, 'categories' => array($this->getManager()->find(Model, 1), $this->getManager()->find(Model, 2), ...)
      *
-     * @param $data
+     * @param array $data
      *
      * @return mixed
      */
@@ -932,8 +932,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Helper function which return the model name of an association for
      * the passed model and property name.
      *
-     * @param $model
-     * @param $property
+     * @param string $model
+     * @param string $property
      *
      * @return string
      */
@@ -950,8 +950,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * This function is used to reload association listings over the {@link #reloadAssociation}
      * function.
      *
-     * @param $model
-     * @param $property
+     * @param string $model
+     * @param string $property
      *
      * @return array
      */
@@ -987,10 +987,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Shopware resolves the passed Ext JS name over this function and use the alias of the field
      * to sort the query builder.
      *
-     * @param array $sort
-     * @param $model
-     * @param $alias
-     * @param array $whiteList
+     * @param array  $sort
+     * @param string $model
+     * @param string $alias
+     * @param array  $whiteList
      *
      * @return array
      */
@@ -1046,10 +1046,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *      ),
      *  )
      *
-     * @param $filters - List of filter conditions in Ext JS format
-     * @param $model - Full name of the selected model
-     * @param $alias - Query alias of the FROM query path
-     * @param array $whiteList - Array of filterable fields, or an empty array
+     * @param array  $filters   - List of filter conditions in Ext JS format
+     * @param string $model     - Full name of the selected model
+     * @param string $alias     - Query alias of the FROM query path
+     * @param array  $whiteList - Array of filterable fields, or an empty array
      *
      * @return array
      */

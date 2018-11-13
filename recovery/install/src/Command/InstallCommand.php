@@ -95,7 +95,7 @@ class InstallCommand extends Command
             $this->getHelper('question')
         );
 
-        /** @var $container Container */
+        /** @var Container $container */
         $container = $this->container = $this->getApplication()->getContainer();
 
         $container->offsetGet('shopware.notify')->doTrackEvent('Installer started');
@@ -112,7 +112,7 @@ class InstallCommand extends Command
             $connectionInfo
         );
 
-        /** @var $configWriter ConfigWriter */
+        /** @var ConfigWriter $configWriter */
         $configWriter = $this->container->offsetGet('config.writer');
         $configWriter->writeConfig($connectionInfo);
 
@@ -170,10 +170,10 @@ class InstallCommand extends Command
             $this->IOHelper->cls();
             $this->IOHelper->writeln('<info>=== License Information ===</info>');
 
-            /** @var $licenseService LicenseUnpackService */
+            /** @var LicenseUnpackService $licenseService */
             $licenseService = $container->offsetGet('license.service');
 
-            /** @var $licenseInstaller LicenseInstaller */
+            /** @var LicenseInstaller $licenseInstaller */
             $licenseInstaller = $container->offsetGet('license.installer');
 
             $this->askShopwareEdition($shop, $licenseService, $licenseInstaller);
@@ -204,7 +204,7 @@ class InstallCommand extends Command
      */
     protected function webserverCheck(Container $container, Shop $shop)
     {
-        /** @var $webserverCheck WebserverCheck */
+        /** @var WebserverCheck $webserverCheck */
         $webserverCheck = $container->offsetGet('webserver.check');
         $pingUrl = $webserverCheck->buildPingUrl($shop);
         try {
@@ -509,7 +509,7 @@ class InstallCommand extends Command
     /**
      * Loads config.php content as an array, or false if the file doesn't exist
      *
-     * @param $configPath
+     * @param string $configPath
      *
      * @return array|bool
      */
@@ -676,7 +676,7 @@ class InstallCommand extends Command
      */
     private function importDatabase()
     {
-        /** @var $conn \PDO */
+        /** @var \PDO $conn */
         $conn = $this->getContainer()->offsetGet('db');
 
         $this->IOHelper->cls();
@@ -690,7 +690,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 EOT;
         $conn->query($preSql);
 
-        /** @var $dump DumpIterator */
+        /** @var DumpIterator $dump */
         $dump = $this->getContainer()->offsetGet('database.dump_iterator');
         $this->dumpProgress($conn, $dump);
     }
@@ -699,7 +699,7 @@ EOT;
     {
         $this->IOHelper->writeln('<info>=== Import Snippets ===</info>');
 
-        /** @var $conn \PDO */
+        /** @var \PDO $conn */
         $conn = $this->getContainer()->offsetGet('db');
 
         $preSql = '
@@ -712,7 +712,7 @@ EOT;
 
         $conn->query($preSql);
 
-        /** @var $dump DumpIterator */
+        /** @var DumpIterator $dump */
         $dump = $this->getContainer()->offsetGet('database.snippet_dump_iterator');
         $this->dumpProgress($conn, $dump);
     }

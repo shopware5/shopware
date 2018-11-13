@@ -44,8 +44,8 @@ class Grammar
     protected $eventManager;
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $eventManager \Enlight_Event_EventManager
+     * @param DqlHelper                   $dqlHelper
+     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct($dqlHelper, $eventManager)
     {

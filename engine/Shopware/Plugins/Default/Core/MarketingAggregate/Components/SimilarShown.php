@@ -162,8 +162,8 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      * This function is used to insert or update the similar shown table
      * for a single buy combination of two articles.
      *
-     * @param $articleId
-     * @param $relatedArticleId
+     * @param int $articleId
+     * @param int $relatedArticleId
      */
     public function refreshSimilarShown($articleId, $relatedArticleId)
     {

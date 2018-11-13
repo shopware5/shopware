@@ -84,7 +84,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getListAction()
     {
-        /** @var $filter array */
+        /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
         $node = (int) $this->Request()->getParam('node');
         $preselectedNodes = $this->Request()->getParam('preselected');
@@ -407,7 +407,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $offset = $this->Request()->getParam('start', null);
         $limit = $this->Request()->getParam('limit', 20);
 
-        /** @var $customerRepository \Shopware\Models\Customer\Repository */
+        /** @var \Shopware\Models\Customer\Repository $customerRepository */
         $customerRepository = $this->getCustomerRepository();
         $dataQuery = $customerRepository->getCustomerGroupsWithoutIdsQuery($usedIds, $offset, $limit);
 
@@ -426,7 +426,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $itemId = (int) $this->Request()->getParam('id');
         $parentId = (int) $this->Request()->getParam('parentId', 1);
 
-        /** @var $item Category */
+        /** @var Category $item */
         $item = $this->getRepository()->find($itemId);
         if ($item === null) {
             $this->View()->assign([
@@ -437,7 +437,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             return;
         }
 
-        /** @var $parent Category */
+        /** @var Category $parent */
         $parent = $this->getRepository()->find($parentId);
         if ($parent === null) {
             $this->View()->assign([
@@ -489,7 +489,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $ids = json_decode($this->Request()->getParam('ids'));
         foreach ($ids as $key => $categoryId) {
-            /** @var $category Category */
+            /** @var Category $category */
             $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
             $category->setPosition($key);
         }
@@ -521,7 +521,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             // If Leaf-Category gets childcategory move all assignments to new childcategory
             if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
-                /** @var $article \Shopware\Models\Article\Article * */
+                /** @var \Shopware\Models\Article\Article $article */
                 foreach ($parentCategory->getArticles() as $article) {
                     $article->removeCategory($parentCategory);
                     $article->addCategory($categoryModel);
@@ -855,7 +855,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * This method finds the mediaId by the media path to save it in the right way
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -901,7 +901,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * This method loads the customer group models for the passed ids in the "customerGroups" parameter.
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */

@@ -77,7 +77,7 @@ class Address extends Resource
 
         $query = $this->getRepository()->getOne($id);
 
-        /** @var $address \Shopware\Models\Customer\Address $address */
+        /** @var \Shopware\Models\Customer\Address $address $address */
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {

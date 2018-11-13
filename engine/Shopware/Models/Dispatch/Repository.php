@@ -38,10 +38,10 @@ use Shopware\Models\Customer;
 class Repository extends ModelRepository
 {
     /**
-     * @param $filter
-     * @param $order
-     * @param $offset
-     * @param $limit
+     * @param null|array        $filter
+     * @param null|string|array $order
+     * @param null|int          $offset
+     * @param null|int          $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -60,8 +60,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDispatchesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param null|array        $filter
+     * @param null|string|array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -87,11 +87,11 @@ class Repository extends ModelRepository
     /**
      * Returns all info about known shipping and dispatch settings
      *
-     * @param $dispatchId - If this parameter is given, only one data set will be returned
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
-     * @param null  $limit  - Reduce the number of returned data sets
-     * @param null  $offset - Start the output based on that offset
+     * @param int      $dispatchId - If this parameter is given, only one data set will be returned
+     * @param null     $filter     - Used to search in the name and description of the dispatch data set
+     * @param array    $order      - Name of the field which should considered as sorting field
+     * @param null|int $limit      - Reduce the number of returned data sets
+     * @param null|int $offset     - Start the output based on that offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -111,10 +111,10 @@ class Repository extends ModelRepository
     /**
      * Returns basic info about known shipping and dispatch settings
      *
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
-     * @param null  $limit  - Reduce the number of returned data sets
-     * @param null  $offset - Start the output based on that offset
+     * @param null     $filter - Used to search in the name and description of the dispatch data set
+     * @param array    $order  - Name of the field which should considered as sorting field
+     * @param null|int $limit  - Reduce the number of returned data sets
+     * @param null|int $offset - Start the output based on that offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -135,9 +135,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShippingCostsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $dispatchId - If this parameter is given, only one data set will be returned
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
+     * @param int   $dispatchId - If this parameter is given, only one data set will be returned
+     * @param null  $filter     - Used to search in the name and description of the dispatch data set
+     * @param array $order      - Name of the field which should considered as sorting field
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -217,7 +217,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShippingCostsMatrixQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $dispatchId - If this parameter is given, only one data set will be returned
+     * @param int $dispatchId - If this parameter is given, only one data set will be returned
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -254,10 +254,10 @@ class Repository extends ModelRepository
     /**
      * Receives all known means of payment, even disabled ones
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param null     $filter
+     * @param null     $order
+     * @param null|int $limit
+     * @param null|int $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -441,8 +441,8 @@ class Repository extends ModelRepository
      * Helper function which set the orderBy path for the order list query.
      *
      * @param \Doctrine\ORM\QueryBuilder $builder
-     * @param $modelPrefix
-     * @param $orderBy
+     * @param string                     $modelPrefix
+     * @param array                      $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
