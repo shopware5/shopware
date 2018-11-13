@@ -411,7 +411,7 @@ class Order extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="trackingcode", type="string", length=255, nullable=false)
+     * @ORM\Column(name="trackingcode", type="text", nullable=false)
      */
     private $trackingCode;
 
