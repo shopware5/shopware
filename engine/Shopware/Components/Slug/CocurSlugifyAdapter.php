@@ -27,7 +27,7 @@ namespace Shopware\Components\Slug;
 use Cocur\Slugify\SlugifyInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

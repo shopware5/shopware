@@ -27,7 +27,7 @@ namespace Shopware\Components\Compatibility;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

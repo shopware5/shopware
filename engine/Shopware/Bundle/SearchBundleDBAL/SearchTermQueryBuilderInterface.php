@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

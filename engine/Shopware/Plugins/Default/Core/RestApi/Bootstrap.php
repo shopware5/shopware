@@ -25,7 +25,7 @@ use ShopwarePlugins\RestApi\Components\BasicAuthResolver;
 use ShopwarePlugins\RestApi\Components\StaticResolver;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

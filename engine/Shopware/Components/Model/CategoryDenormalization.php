@@ -36,7 +36,7 @@ namespace Shopware\Components\Model;
  *
  * Most write operations take place in s_articles_categories_ro.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

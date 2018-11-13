@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

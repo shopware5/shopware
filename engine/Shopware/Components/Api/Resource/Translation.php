@@ -42,7 +42,7 @@ use Shopware\Models\Translation\Translation as TranslationModel;
 /**
  * Translation API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

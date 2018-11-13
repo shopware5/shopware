@@ -29,7 +29,7 @@ use Shopware\Models\Customer\Customer;
 use Shopware\Models\CustomerStream\Mapping;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

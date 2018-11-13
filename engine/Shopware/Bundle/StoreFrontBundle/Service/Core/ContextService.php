@@ -38,7 +38,7 @@ use Shopware\Models;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

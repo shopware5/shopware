@@ -32,7 +32,7 @@ use Shopware\Models\Media\Media;
  * Displays all data in an Ext JS TreePanel and allows to delete,
  * add and edit items. On the detail page the category data is displayed and can be edited
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

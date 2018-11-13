@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 use Shopware\Models\Premium\Premium;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

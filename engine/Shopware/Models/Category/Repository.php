@@ -43,7 +43,7 @@ use Shopware\Components\Model\ModelRepository;
  *  - s_articles
  *  - s_articles_categories
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

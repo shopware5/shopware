@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Shopware Article Model
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *

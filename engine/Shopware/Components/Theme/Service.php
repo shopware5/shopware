@@ -37,7 +37,7 @@ use Shopware\Models\Theme\Settings;
  * It supports to get translated data, nested configuration
  * and shop configuration.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

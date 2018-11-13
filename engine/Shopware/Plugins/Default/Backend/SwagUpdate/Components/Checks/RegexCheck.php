@@ -28,7 +28,7 @@ use Enlight_Components_Snippet_Namespace as SnippetNamespace;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

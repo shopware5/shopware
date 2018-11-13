@@ -32,7 +32,7 @@ use Shopware\Models\ProductStream\ProductStream;
 /**
  * Shopware Categories
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *

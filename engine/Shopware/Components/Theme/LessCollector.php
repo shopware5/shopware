@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

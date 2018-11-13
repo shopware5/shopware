@@ -44,7 +44,7 @@ use Shopware\Models\Tax\Tax;
 /**
  * Variant API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

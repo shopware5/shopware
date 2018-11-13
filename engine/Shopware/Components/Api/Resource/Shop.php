@@ -29,7 +29,7 @@ use Shopware\Components\Api\Exception as ApiException;
 /**
  * Shop API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -31,7 +31,7 @@ use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Esd;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

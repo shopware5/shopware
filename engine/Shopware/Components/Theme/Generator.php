@@ -30,7 +30,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Class to generate shopware themes.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

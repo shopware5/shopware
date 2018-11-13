@@ -32,7 +32,7 @@ use Shopware\Components\Routing\Router as RoutingRouter;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

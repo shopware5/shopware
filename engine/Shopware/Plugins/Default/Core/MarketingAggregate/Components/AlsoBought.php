@@ -28,7 +28,7 @@
  * This components refresh and initials the Also bought data
  * in the s_articles_also_bought_ro
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

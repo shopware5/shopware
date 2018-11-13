@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

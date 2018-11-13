@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

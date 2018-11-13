@@ -28,7 +28,7 @@ use Shopware\Models\Site\Site;
  *
  * The site backend controller handles all actions concerning the Site backend module
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -29,7 +29,7 @@ use Enlight_Event_EventArgs as EventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

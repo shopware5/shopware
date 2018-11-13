@@ -40,7 +40,7 @@ use Shopware\Models\Shop;
  * uses the Theme\Configurator class to synchronize the
  * theme configuration with the database.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

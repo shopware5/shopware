@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Global Manager which is responsible for initializing the adapter classes.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

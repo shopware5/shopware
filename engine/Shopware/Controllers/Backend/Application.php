@@ -54,7 +54,7 @@ use Shopware\Components\Model\QueryBuilder;
  *  - For example you can limit the sortable fields by using the $sortFields property
  *  - Or you can limit the filterable fields by using the $filterFields property.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

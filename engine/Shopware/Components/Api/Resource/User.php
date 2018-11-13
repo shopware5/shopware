@@ -35,7 +35,7 @@ use Shopware\Models\User\User as UserModel;
 /**
  * User API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

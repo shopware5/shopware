@@ -32,7 +32,7 @@ use Shopware\Models\Plugin\Plugin;
 /**
  * Payment API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -31,7 +31,7 @@ use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 /**
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

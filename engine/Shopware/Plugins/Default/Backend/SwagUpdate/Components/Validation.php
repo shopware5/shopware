@@ -27,7 +27,7 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 /**
  * Used for plugin and system requirement validation.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

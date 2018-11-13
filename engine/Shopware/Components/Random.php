@@ -29,7 +29,7 @@ namespace Shopware\Components;
  *
  * This class is highly based on Rand.php of Component_ZendMath
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @see      https://github.com/zendframework/zf2/blob/master/library/Zend/Math/Rand.php
  * @see      https://github.com/ircmaxell/RandomLib

@@ -40,7 +40,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
  *
  * @runInSeparateProcess
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

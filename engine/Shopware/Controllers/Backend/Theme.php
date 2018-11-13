@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Backend controller for the theme manager 2.0
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -25,7 +25,7 @@
 /**
  * Shopware SwagAboCommerce Plugin - Bootstrap
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */

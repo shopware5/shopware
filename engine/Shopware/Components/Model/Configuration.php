@@ -38,7 +38,7 @@ use Doctrine\ORM\Repository\RepositoryFactory;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

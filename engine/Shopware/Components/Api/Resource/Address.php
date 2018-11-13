@@ -35,7 +35,7 @@ use Shopware\Models\Shop\Shop as ShopModel;
 /**
  * Address API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

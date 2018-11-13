@@ -25,7 +25,7 @@ use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

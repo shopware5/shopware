@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelRepository;
 /**
  * Shopware SwagAboCommerce Plugin - Repository
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

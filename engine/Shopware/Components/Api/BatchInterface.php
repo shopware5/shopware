@@ -30,7 +30,7 @@ namespace Shopware\Components\Api;
  * This will allow the user, to create/update multiple entities in one request.
  * If an entity needs an update or a creation, will be determined automatically
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

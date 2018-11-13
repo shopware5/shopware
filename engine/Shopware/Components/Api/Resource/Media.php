@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Media API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

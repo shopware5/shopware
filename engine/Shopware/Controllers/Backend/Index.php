@@ -26,7 +26,7 @@ use Shopware\Components\CSRFWhitelistAware;
 /**
  * Shopware Backend Controller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

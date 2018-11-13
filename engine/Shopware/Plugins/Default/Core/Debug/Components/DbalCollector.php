@@ -29,7 +29,7 @@ use Shopware\Components\Logger;
 use Shopware\Components\Model\Configuration;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -27,7 +27,7 @@
  * The plugin bootstrap of the marketing data plugin registers all events
  * and configurations for the shopware aggregate functions within shopware.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

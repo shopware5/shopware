@@ -33,7 +33,7 @@ use Shopware\Models\Article\Supplier;
 /**
  * Deprecated Shopware Class that handles url rewrites
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

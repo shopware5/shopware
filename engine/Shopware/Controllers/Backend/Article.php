@@ -32,7 +32,7 @@ use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -4352,7 +4352,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             );
         }
     }
-
 
     /**
      * @param array $detailData

@@ -36,7 +36,7 @@ use Shopware\Components\QueryAliasMapper;
 /**
  * Shopware Class that handle articles
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -28,7 +28,7 @@
  * This components refresh and initials the similar shown data
  * in the s_articles_similar_shown_ro
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

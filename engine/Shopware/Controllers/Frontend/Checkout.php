@@ -30,7 +30,7 @@ use Shopware\Components\CSRFGetProtectionAware;
 use Shopware\Models\Customer\Address;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

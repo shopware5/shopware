@@ -31,7 +31,7 @@ use Shopware\Models\Article\Image;
 use Shopware\Models\Category\Category;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

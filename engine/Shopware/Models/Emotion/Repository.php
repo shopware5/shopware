@@ -30,7 +30,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

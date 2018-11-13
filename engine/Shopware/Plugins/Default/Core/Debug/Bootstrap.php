@@ -35,7 +35,7 @@ use Shopware\Plugin\Debug\Components\TemplateVarCollector;
 use Shopware\Plugin\Debug\Components\Utils;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

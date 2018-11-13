@@ -31,7 +31,7 @@ use ShopwarePlugins\HttpCache\CacheIdCollector;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -28,7 +28,7 @@
  * This components refresh and initials the top seller data
  * in the s_articles_top_seller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

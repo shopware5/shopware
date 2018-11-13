@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\User;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -28,7 +28,7 @@ use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

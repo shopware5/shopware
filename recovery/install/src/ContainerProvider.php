@@ -41,7 +41,7 @@ use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Service\WebserverCheck;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

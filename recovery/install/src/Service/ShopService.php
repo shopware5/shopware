@@ -28,7 +28,7 @@ use Shopware\Recovery\Common\Service\UniqueIdGenerator;
 use Shopware\Recovery\Install\Struct\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
