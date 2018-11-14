@@ -108,11 +108,17 @@ class ShopProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return (string) $queryBuilder->select('type')
+        $type = (string) $queryBuilder->select('type')
             ->from('s_benchmark_config', 'config')
             ->where('config.shop_id = :shopId')
             ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetchColumn();
+
+        if (!in_array($type, ['b2b', 'b2c'])) {
+            $type = 'b2c';
+        }
+
+        return $type;
     }
 }

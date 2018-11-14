@@ -151,7 +151,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
 
         $devicesUsed = array_filter(explode(',', $devicesUsed), 'strlen');
 
-        $deviceCounts = [];
+        $deviceCounts = [0, 0, 0, 0, 0];
         foreach ($devicesUsed as $device) {
             if (array_key_exists($device, $deviceCounts)) {
                 ++$deviceCounts[$device];
