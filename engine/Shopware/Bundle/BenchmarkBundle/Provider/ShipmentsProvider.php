@@ -100,8 +100,8 @@ class ShipmentsProvider implements BenchmarkProviderInterface
         }
 
         $matches['others']['name'] = 'others';
-        $matches['others']['minPrice'] = min(array_column($others, 'minPrice'));
-        $matches['others']['maxPrice'] = max(array_column($others, 'maxPrice'));
+        $matches['others']['minPrice'] = (float) min(array_column($others, 'minPrice'));
+        $matches['others']['maxPrice'] = (float) max(array_column($others, 'maxPrice'));
 
         return array_values($matches);
     }
