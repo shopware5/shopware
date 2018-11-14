@@ -72,6 +72,14 @@ class Enlight_Template_Manager extends Smarty
 
         $this->start_time = microtime(true);
 
+        if (!isset($backendOptions['cache_file_perm'])) {
+            $backendOptions['cache_file_perm'] = 0666 & ~umask();
+        }
+
+        if (!isset($backendOptions['hashed_directory_perm'])) {
+            $backendOptions['hashed_directory_perm'] = 0777 & ~umask();
+        }
+
         $this->_file_perms = $backendOptions['cache_file_perm'];
         $this->_dir_perms = $backendOptions['hashed_directory_perm'];
 
