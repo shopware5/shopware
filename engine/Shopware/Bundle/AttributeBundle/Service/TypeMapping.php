@@ -213,6 +213,7 @@ class TypeMapping
             'Shopware\Models\Partner\Partner',
             'Shopware\Models\Shop\Shop',
             'Shopware\Models\Site\Site',
+            'Shopware\Models\Country\Country',
         ];
 
         $result = [];

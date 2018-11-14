@@ -79,6 +79,9 @@ Ext.define('Shopware.apps.Config.controller.Document', {
             },
             'config-base-detail combo[name=elements]': {
                 change: me.onSelectElement
+            },
+            'config-form-document config-base-detail': {
+                recordchange: me.onRecordChange
             }
         });
 
@@ -119,6 +122,20 @@ Ext.define('Shopware.apps.Config.controller.Document', {
         newStyleField.show();
         newContentField.setValue(newRecord.get('value'));
         newStyleField.setValue(newRecord.get('style'));
+    },
+
+    /**
+     * Hide the document boxes field set when creating a new document
+     *
+     * @param { Ext.form.Panel } formPanel
+     * @param { Shopware.apps.Config.model.form.Document } record
+     */
+    onRecordChange: function (formPanel, record) {
+        if (!record) {
+            return;
+        }
+        var showDocumentBoxesFieldSet = record.get('id') !== 0;
+        formPanel.down('[name=elementFieldSet]').setDisabled(!showDocumentBoxesFieldSet);
     }
 
 });

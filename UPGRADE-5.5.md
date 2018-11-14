@@ -12,7 +12,14 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `frontend_widgets_captcha_custom_captcha_config`
     * `frontend_widgets_captcha_custom_captcha_honeypot`
 * Added dependency to Symfony Expression Language, this allows using something like `container.initialized('shop') ? service('shop') : null` in `services.xml`
-* Added deleteDocument acl privilege to order
+* Added `deleteDocument` ACL privilege to order
+* Added new event `Shopware_Controllers_Backend_CustomerQuickView_listQuerySearchFields`
+* Added forwarding to manufacturer listing for old supplier urls
+* Add support for own product box layouts via an ExtJS Plugin
+* Add aws endpoint configuration
+* Add product notification attributes
+* Added `DISTINCT` for `priceListingQuery` to improve ES indexing performance with activated variant filter
+* Added media optimizer overview to backend systeminfo
 
 ### Changes
 
@@ -24,6 +31,17 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `themes/Frontend/Bare/frontend/newsletter/index.tpl`
     * `themes/Frontend/Bare/frontend/tellafriend/index.tpl`
 * Changed Symfony library to version 3.4.18
+* Changed seo product query to clarify select statement
+* Changed document view to hide document boxes on new entry
+* Changed `CronjobSynchronizer` to consider action names without Cronjob Prefix
+* Changed `Enlight_Template_Manager` to allow overriding file permissions
+* Changed api variant resource to compare configuration groups in lowercase
+* Changed type annotation on a product's EAN field
+* Changed ES backend `OrmBacklogSubscriber` to insert right table
+* Changed adding items to the cart to use laststock from variant
+* Changed structured data properties on blog article page to meet the requirements
+* Changed default groupKey to get correct subpages of custom pages in mobile menu
+* Changed some mailer options to combo boxes to avoid wrong entries
 * Changed CSV import of snippets to only remove one apostrophe from the beginning of a line 
 
 ## 5.5.3

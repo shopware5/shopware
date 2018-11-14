@@ -602,7 +602,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function getBilling()
     {
         $this->_billing = new ArrayObject(Shopware()->Db()->fetchRow('
-        SELECT sob.*,sub.ustid,u.customernumber FROM s_order_billingaddress AS sob
+        SELECT sob.*,IF(sob.ustid IS NULL OR sob.ustid = "", sub.ustid, sob.ustid) as ustid,u.customernumber FROM s_order_billingaddress AS sob
         LEFT JOIN s_user_addresses AS sub ON sub.id = ?
         LEFT JOIN s_user u ON u.id = sub.user_id
         WHERE sob.userID = ? AND

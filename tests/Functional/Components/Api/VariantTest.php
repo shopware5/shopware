@@ -386,6 +386,14 @@ class VariantTest extends TestCase
                 'inStock' => 2000,
                 'number' => $variantData['number'] . '-Updated',
                 'unitId' => $this->getRandomId('s_core_units'),
+                // Make sure conf. options and groups work in a case insensitive way, just like in the DB
+                'configuratorOptions' => [[
+                    'group' => 'farbe',
+                    'option' => 'Grün',
+                ], [
+                    'group' => 'Gräße',
+                    'option' => 'xl',
+                ]],
             ];
             $variant = $this->resource->update($variantData['id'], $updateData);
 

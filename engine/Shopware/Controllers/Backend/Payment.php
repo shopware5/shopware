@@ -21,7 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Country\Country;
 use Shopware\Models\Payment\Payment;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Payment Controller
@@ -101,7 +103,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         try {
             $params = $this->Request()->getParams();
             unset($params['action']);
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
             $existingModel = $repository->findByName($params['name']);
 
             if ($existingModel) {
@@ -115,14 +117,14 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             $countries = $params['countries'];
             $countryArray = [];
             foreach ($countries as $country) {
-                $countryArray[] = Shopware()->Models()->find('Shopware\Models\Country\Country', $country['id']);
+                $countryArray[] = Shopware()->Models()->find(\Shopware\Models\Country\Country::class, $country['id']);
             }
             $params['countries'] = $countryArray;
 
             $shops = $params['shops'];
             $shopArray = [];
             foreach ($shops as $shop) {
-                $shopArray[] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
+                $shopArray[] = Shopware()->Models()->find(\Shopware\Models\Shop\Shop::class, $shop['id']);
             }
             $params['shops'] = $shopArray;
 
@@ -146,8 +148,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     {
         try {
             $id = $this->Request()->getParam('id', null);
-            /** @var $payment Payment */
-            $payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $id);
+            /** @var Payment $payment */
+            $payment = Shopware()->Models()->find(Payment::class, $id);
             $action = $payment->getAction();
             $data = $this->Request()->getParams();
             $data['surcharge'] = str_replace(',', '.', $data['surcharge']);
@@ -155,10 +157,10 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
 
             $countries = new \Doctrine\Common\Collections\ArrayCollection();
             if (!empty($data['countries'])) {
-                //clear all countries, to save the old and new ones then
+                // Clear all countries, to save the old and new ones then
                 $payment->getCountries()->clear();
                 foreach ($data['countries'] as $country) {
-                    $model = Shopware()->Models()->find('Shopware\Models\Country\Country', $country['id']);
+                    $model = Shopware()->Models()->find(Country::class, $country['id']);
                     $countries->add($model);
                 }
                 $data['countries'] = $countries;
@@ -166,10 +168,10 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
 
             $shops = new \Doctrine\Common\Collections\ArrayCollection();
             if (!empty($data['shops'])) {
-                //clear all shops, to save the old and new ones then
+                // Clear all shops, to save the old and new ones then
                 $payment->getShops()->clear();
                 foreach ($data['shops'] as $shop) {
-                    $model = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
+                    $model = Shopware()->Models()->find(Shop::class, $shop['id']);
                     $shops->add($model);
                 }
                 $data['shops'] = $shops;
@@ -178,15 +180,15 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
 
             $payment->fromArray($data);
 
-            //A default parameter "action" is sent
-            //To prevent "updatePayment" written into the database
+            // A default parameter "action" is sent
+            // To prevent "updatePayment" written into the database
             if (empty($action)) {
                 $payment->setAction('');
             } else {
                 $payment->setAction($action);
             }
 
-            //ExtJS transforms null to 0
+            // ExtJS transforms null to 0
             if ($payment->getSource() == 0) {
                 $payment->setSource(null);
             }
@@ -218,7 +220,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         }
         $repository = Shopware()->Models()->getRepository(Payment::class);
         $id = $this->Request()->get('id');
-        /** @var $model Payment */
+        /** @var Payment $model */
         $model = $repository->find($id);
         if ($model->getSource() == 1) {
             try {
@@ -234,18 +236,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Internal helper function to get access to the entity manager.
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
      * Internal helper function to get access to the country repository.
      *
      * @return null|Shopware\Models\Country\Repository
@@ -253,7 +243,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     private function getCountryRepository()
     {
         if ($this->countryRepository === null) {
-            $this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+            $this->countryRepository = Shopware()->Models()->getRepository(Country::class);
         }
 
         return $this->countryRepository;
@@ -280,7 +270,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             $result['text'] = $result['description'] . ' (' . $result['id'] . ')';
             $result['leaf'] = true;
 
-            //Matches the surcharges with the countries
+            // Matches the surcharges with the countries
             if (!empty($result['surchargeString'])) {
                 $surchargeString = $result['surchargeString'];
                 $surcharges = explode(';', $surchargeString);

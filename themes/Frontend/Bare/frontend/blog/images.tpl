@@ -21,8 +21,7 @@
                           src="{$sArticle.preview.thumbnails[1].source}"
                           class="blog--image panel has--border is--rounded"
                           alt="{$alt}"
-                          title="{$alt|truncate:160}"
-                          itemprop="image" />
+                          title="{$alt|truncate:160}"/>
                 </a>
             </div>
         {/block}

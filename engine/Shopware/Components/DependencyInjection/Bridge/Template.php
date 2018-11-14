@@ -40,6 +40,7 @@ class Template
      * @param EscaperInterface                     $escaper
      * @param array                                $templateConfig
      * @param array                                $securityConfig
+     * @param array                                $backendOptions
      *
      * @return \Enlight_Template_Manager
      */
@@ -48,10 +49,11 @@ class Template
         \Enlight_Components_Snippet_Resource $snippetResource,
         EscaperInterface $escaper,
         array $templateConfig,
-        array $securityConfig
+        array $securityConfig,
+        array $backendOptions
     ) {
         /** @var $template \Enlight_Template_Manager */
-        $template = \Enlight_Class::Instance('Enlight_Template_Manager');
+        $template = \Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
 
         $template->enableSecurity(
             new Security($template, $securityConfig)

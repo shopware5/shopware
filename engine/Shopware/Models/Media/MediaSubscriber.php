@@ -93,32 +93,64 @@ class MediaSubscriber implements EventSubscriber
     {
         $media = $eventArgs->getEntity();
 
-        if (!($media instanceof Media)) {
-            return;
-        }
-
-        if ($media->getType() !== Media::TYPE_IMAGE) {
+        if (!$this->isFormatSupported($media)) {
             return;
         }
 
         $mediaService = $this->container->get('shopware_media.media_service');
 
         if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->has($media->getPath())) {
-            list($width, $height) = getimagesizefromstring($mediaService->read($media->getPath()));
 
-            if ($media->getId()) {
-                $eventArgs->getEntityManager()->getConnection()->executeUpdate(
-                    'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
-                    [
-                        ':width' => $width,
-                        ':height' => $height,
-                        ':id' => $media->getId(),
-                    ]
-                );
+            switch ($media->getType()) {
+                case Media::TYPE_IMAGE:
+                    list($width, $height) = getimagesizefromstring($mediaService->read($media->getPath()));
+                    break;
+
+                case Media::TYPE_VECTOR:
+                    if (
+                        $media->getExtension() === 'svg' &&
+                        $xml = simplexml_load_string($mediaService->read($media->getPath()))
+                    ) {
+                        $attr = $xml->attributes();
+
+                        if ($attr->width > 0 && $attr->height > 0) {
+                            $width = (int)$attr->width;
+                            $height = (int)$attr->height;
+                        } elseif ($attr->viewBox && count($size = explode(' ', $attr->viewBox)) === 4) {
+                            $width = (int)$size[2];
+                            $height = (int)$size[3];
+                        }
+                    }
             }
 
-            $media->setWidth($width);
-            $media->setHeight($height);
+            if (!empty($height) && !empty($width)) {
+                if ($media->getId()) {
+                    $eventArgs->getEntityManager()->getConnection()->executeUpdate(
+                        'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
+                        [
+                            ':width' => $width,
+                            ':height' => $height,
+                            ':id' => $media->getId(),
+                        ]
+                    );
+                }
+
+                $media->setWidth($width);
+                $media->setHeight($height);
+            }
         }
+    }
+
+    /**
+     * Test file for instance Media and has supported types
+     *
+     * @param object $media
+     * @return bool
+     */
+    private function isFormatSupported($media)
+    {
+        return $media instanceof Media
+            && ($media->getType() === Media::TYPE_IMAGE
+                || ($media->getType() === Media::TYPE_VECTOR && $media->getExtension() === 'svg'));
     }
 }

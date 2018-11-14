@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
     {
         $id = $this->Request()->id;
         $netto = $this->Request()->ust_free;
-        if ($netto == 'false') {
+        if ($netto === 'false') {
             $netto = false;
         }
         $typ = $this->Request()->typ;
@@ -84,7 +84,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
             [$id]
         );
         foreach ($getDocumentTypes as $targetID) {
-            $deleteOldRows = Shopware()->Db()->query(
+            Shopware()->Db()->query(
                 'DELETE FROM s_core_documents_box WHERE documentID = ?',
                 [$targetID['id']]
             );
