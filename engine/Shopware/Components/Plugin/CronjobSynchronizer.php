@@ -79,7 +79,10 @@ class CronjobSynchronizer
 
         $action = $cronjob['action'];
         $selectStatement = 'SELECT id FROM s_crontab WHERE `action` = ? AND pluginID = ?';
-        $params = [$action, $plugin->getId()];
+        $params = [
+            $action,
+            $plugin->getId(),
+        ];
 
         $id = $this->connection->fetchColumn($selectStatement, $params);
 
