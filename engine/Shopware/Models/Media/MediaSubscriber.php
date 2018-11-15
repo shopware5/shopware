@@ -100,7 +100,6 @@ class MediaSubscriber implements EventSubscriber
         $mediaService = $this->container->get('shopware_media.media_service');
 
         if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->has($media->getPath())) {
-
             switch ($media->getType()) {
                 case Media::TYPE_IMAGE:
                     list($width, $height) = getimagesizefromstring($mediaService->read($media->getPath()));
@@ -114,11 +113,11 @@ class MediaSubscriber implements EventSubscriber
                         $attr = $xml->attributes();
 
                         if ($attr->width > 0 && $attr->height > 0) {
-                            $width = (int)$attr->width;
-                            $height = (int)$attr->height;
+                            $width = (int) $attr->width;
+                            $height = (int) $attr->height;
                         } elseif ($attr->viewBox && count($size = explode(' ', $attr->viewBox)) === 4) {
-                            $width = (int)$size[2];
-                            $height = (int)$size[3];
+                            $width = (int) $size[2];
+                            $height = (int) $size[3];
                         }
                     }
             }
@@ -145,6 +144,7 @@ class MediaSubscriber implements EventSubscriber
      * Test file for instance Media and has supported types
      *
      * @param object $media
+     *
      * @return bool
      */
     private function isFormatSupported($media)

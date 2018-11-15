@@ -4353,7 +4353,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
     }
 
-
     /**
      * @param array $detailData
      * @param array $article
