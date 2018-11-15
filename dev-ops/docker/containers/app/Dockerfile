@@ -1,4 +1,4 @@
-FROM webdevops/php-apache-dev:7.1
+FROM webdevops/php-apache-dev:7.2
 
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash
 
