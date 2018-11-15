@@ -59,7 +59,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     {
         $pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
 
-        /** @var $plugin Plugin */
+        /** @var Plugin $plugin */
         $plugin = $pluginManager->getPluginByName('HttpCache');
 
         $pluginManager->installPlugin($plugin);

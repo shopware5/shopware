@@ -72,7 +72,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $this->getAccessToken()
             );
 
-            /** @var $service DownloadService */
+            /** @var DownloadService $service */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->getMetaInformation($request);
             $this->get('BackendSession')->offsetSet('plugin_manager_meta_download', $result);
@@ -112,7 +112,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         );
 
         try {
-            /** @var $service DownloadService */
+            /** @var DownloadService $service */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->downloadRange($request);
         } catch (Exception $e) {
@@ -124,7 +124,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         if ($result instanceof FinishResult) {
             $this->View()->assign(['success' => true, 'finish' => true, 'destination' => $destination]);
         } else {
-            /* @var $result \Shopware\Recovery\Update\Steps\ValidResult */
+            /* @var \Shopware\Recovery\Update\Steps\ValidResult $result */
             $this->View()->assign(['success' => true, 'finish' => false, 'offset' => $result->getOffset()]);
         }
     }

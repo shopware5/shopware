@@ -51,6 +51,7 @@ class Link extends ModelEntity
      * @var \Shopware\Models\Attribute\ArticleLink
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -61,9 +62,9 @@ class Link extends ModelEntity
     private $id;
 
     /**
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     * @var int
      *
-     * @var
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
     private $articleId;
 

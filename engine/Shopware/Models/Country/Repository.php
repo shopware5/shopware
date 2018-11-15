@@ -31,10 +31,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all defined countries.
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
+     * @param null     $filter
+     * @param null     $order
+     * @param null|int $offset
+     * @param null|int $limit
      *
      * @return \Doctrine\ORM\Query
      * @return \Doctrine\ORM\Query
@@ -122,7 +122,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a
      * list of countries for the passed area id.
      *
-     * @param $areaId
+     * @param int $areaId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -137,7 +137,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCountriesByAreaIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $areaId
+     * @param int $areaId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -181,7 +181,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of \Doctrine\ORM\Query object which selects all country data for the passed country id.
      *
-     * @param $countryId
+     * @param int $countryId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -196,7 +196,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCountryQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $countryId
+     * @param int $countryId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -215,7 +215,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a
      * list of countries for the passed area id.
      *
-     * @param $countryId
+     * @param int $countryId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -230,7 +230,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShopsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $countryId
+     * @param int $countryId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -248,7 +248,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a
      * list of countries for the passed area id.
      *
-     * @param $countryId
+     * @param int $countryId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -263,7 +263,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShopsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $countryId
+     * @param int $countryId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -282,22 +282,20 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a
      * list of countries for the passed area id.
      *
-     * @param $stateId
+     * @param int $stateId
      *
      * @return \Doctrine\ORM\Query
      */
     public function getStateAttributesQuery($stateId)
     {
-        $builder = $this->getShopsQueryBuilder($stateId);
-
-        return $builder->getQuery();
+        return $this->getStateAttributesQueryBuilder($stateId)->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getShopsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $stateId
+     * @param int $stateId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

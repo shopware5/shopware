@@ -23,8 +23,8 @@
  */
 
 /**
- * @param array $params
- * @param $template
+ * @param array  $params
+ * @param string $template
  *
  * @return bool|mixed|string
  */

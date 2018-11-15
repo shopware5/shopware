@@ -32,7 +32,7 @@ namespace Shopware\Components\Migrations;
  * $migrationManager->run();
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -102,7 +102,7 @@ class Manager
     /**
      * Log string to stdout
      *
-     * @param $str
+     * @param string $str
      */
     public function log($str)
     {

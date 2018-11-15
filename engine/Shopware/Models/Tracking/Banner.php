@@ -97,10 +97,8 @@ class Banner extends ModelEntity
     private $views;
 
     /**
-     * Constructor
-     *
-     * @param $bannerId
-     * @param $date
+     * @param int                     $bannerId
+     * @param null|\DateTimeInterface $date
      */
     public function __construct($bannerId, $date = null)
     {

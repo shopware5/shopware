@@ -25,7 +25,7 @@ use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Status;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

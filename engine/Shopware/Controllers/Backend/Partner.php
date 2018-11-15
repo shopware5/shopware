@@ -60,7 +60,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     }
 
     /**
-     * returns a JSON string to with all found partner for the backend listing
+     * Returns a JSON string to with all found partner for the backend listing
      */
     public function getListAction()
     {
@@ -68,10 +68,10 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $limit = (int) $this->Request()->limit;
             $offset = (int) $this->Request()->start;
 
-            //order data
+            // Order data
             $order = (array) $this->Request()->getParam('sort', []);
 
-            /** @var $repository \Shopware\Models\Partner\Repository */
+            /** @var \Shopware\Models\Partner\Repository $repository */
             $repository = Shopware()->Models()->getRepository(Partner::class);
             $dataQuery = $repository->getListQuery($order, $offset, $limit);
 
@@ -85,7 +85,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     }
 
     /**
-     * returns a JSON string for the statistic overview
+     * Returns a JSON string for the statistic overview
      */
     public function getStatisticListAction()
     {
@@ -94,13 +94,13 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $offset = (int) $this->Request()->start;
             $partnerId = (int) $this->Request()->partnerId;
 
-            //order data
+            // Order data
             $order = (array) $this->Request()->getParam('sort', []);
 
             $fromDate = $this->getFromDate();
             $toDate = $this->getToDate();
 
-            /** @var $repository \Shopware\Models\Partner\Repository */
+            /** @var \Shopware\Models\Partner\Repository $repository */
             $repository = Shopware()->Models()->getRepository(Partner::class);
             $dataQuery = $repository->getStatisticListQuery($order, $offset, $limit, $partnerId, false, $fromDate, $toDate);
 
@@ -130,10 +130,10 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
      */
     public function getDetailAction()
     {
-        /** @var $filter array */
+        /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
 
-        /** @var $repository \Shopware\Models\Partner\Repository */
+        /** @var \Shopware\Models\Partner\Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
 
         $dataQuery = $repository->getDetailQuery($filter);
@@ -143,7 +143,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     }
 
     /**
-     * returns a JSON string for the statistic chart
+     * Returns a JSON string for the statistic chart
      */
     public function getChartDataAction()
     {
@@ -152,10 +152,10 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $fromDate = $this->getFromDate();
         $toDate = $this->getToDate();
 
-        /** @var $repository \Shopware\Models\Partner\Repository */
+        /** @var \Shopware\Models\Partner\Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
 
-        //get the information of the partner chart
+        // Get the information of the partner chart
         $dataQuery = $repository->getStatisticChartQuery($partnerId, $fromDate, $toDate);
         $data = $dataQuery->getArrayResult();
 
@@ -172,10 +172,10 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $id = $this->Request()->id;
 
         if (!empty($id)) {
-            //edit Data
+            // Edit Data
             $partnerModel = Shopware()->Models()->getRepository(Partner::class)->find($id);
         } else {
-            //new Data
+            // New Data
             $partnerModel = new Partner();
             $partnerModel->setDate('now');
         }
@@ -186,7 +186,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             Shopware()->Models()->persist($partnerModel);
             Shopware()->Models()->flush();
 
-            /** @var $repository \Shopware\Models\Partner\Repository */
+            /** @var \Shopware\Models\Partner\Repository $repository */
             $repository = Shopware()->Models()->getRepository(Partner::class);
 
             $filter = [['property' => 'id', 'value' => $partnerModel->getId()]];
@@ -206,7 +206,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     {
         $mapCustomerAccountValue = $this->Request()->mapCustomerAccountValue;
 
-        /** @var $repository \Shopware\Models\Partner\Repository */
+        /** @var \Shopware\Models\Partner\Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
         $dataQuery = $repository->getCustomerForMappingQuery($mapCustomerAccountValue);
         $customerData = $dataQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
@@ -223,7 +223,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function deletePartnerAction()
     {
         try {
-            /** @var $model \Shopware\Models\Partner\Partner */
+            /** @var \Shopware\Models\Partner\Partner $model */
             $model = Shopware()->Models()->getRepository(Partner::class)->find($this->Request()->id);
             Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
@@ -241,7 +241,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $trackingCode = $this->Request()->value;
         $partnerId = (int) $this->Request()->param;
 
-        /** @var $repository \Shopware\Models\Partner\Repository */
+        /** @var \Shopware\Models\Partner\Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
         $foundPartner = $repository->getValidateTrackingCodeQuery($trackingCode, $partnerId);
         $foundPartnerArray = $foundPartner->getArrayResult();
@@ -256,14 +256,14 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $this->Front()->Plugins()->Json()->setRenderer(false);
         $partnerId = (int) $this->Request()->partnerId;
 
-        /** @var $repository \Shopware\Models\Partner\Repository */
+        /** @var \Shopware\Models\Partner\Repository $repository */
         $repository = Shopware()->Models()->getRepository(Partner::class);
         $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $this->getFromDate(), $this->getToDate());
         $resultArray = $dataQuery->getArrayResult();
 
         $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
         $this->Response()->setHeader('Content-Disposition', 'attachment;filename=partner_statistic.csv');
-        //use this to set the BOM to show it in the right way for excel and stuff
+        // Use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
         if (is_array($resultArray[0])) {
@@ -359,9 +359,9 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     }
 
     /**
-     * helper to get the from date in the right format
+     * Helper to get the from date in the right format
      *
-     * return DateTime | fromDate
+     * @return \DateTime
      */
     private function getFromDate()
     {
@@ -379,18 +379,18 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     /**
      * helper to get the to date in the right format
      *
-     * return DateTime | toDate
+     * @return \DateTime
      */
     private function getToDate()
     {
-        //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
+        // If a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
             $toDate = new \DateTime();
         } else {
             $toDate = new \DateTime($toDate);
         }
-        //to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
+        // To get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
         return $toDate->add(new DateInterval('P1D'));
     }
 }

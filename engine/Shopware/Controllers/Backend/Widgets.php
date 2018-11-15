@@ -401,7 +401,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
     public function getShopwareNewsAction()
     {
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('Auth');
         $user = $auth->getIdentity();
         $result = $this->fetchRssFeedData($user->locale, 5);
@@ -706,9 +706,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Gets a widget by id and sets its column / row position
      *
-     * @param $viewId
-     * @param $position
-     * @param $column
+     * @param int $viewId
+     * @param int $position
+     * @param int $column
      *
      * @throws \Doctrine\ORM\ORMException
      */

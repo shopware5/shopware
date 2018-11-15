@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Update\Steps;
 class ResultMapper
 {
     /**
-     * @param $result ValidResult|FinishResult|ErrorResult
+     * @param ValidResult|FinishResult|ErrorResult $result
      *
      * @throws \Exception
      *

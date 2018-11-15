@@ -96,22 +96,26 @@ class Emotion extends ModelEntity
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="show_listing", type="boolean", nullable=false)
      */
     protected $showListing;
 
     /**
-     * @var
+     * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
     protected $templateId = null;
 
     /**
      * @var Template
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Template", inversedBy="emotions")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
     protected $template;
+
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -353,13 +357,13 @@ class Emotion extends ModelEntity
         }
 
         $elements = [];
-        /** @var $element Element */
+        /** @var Element $element */
         foreach ($this->getElements() as $element) {
             $newElement = clone $element;
             $newElement->setEmotion($this);
 
             if ($newElement->getData()) {
-                /** @var $data Data */
+                /** @var Data $data */
                 foreach ($newElement->getData() as $data) {
                     $data->setEmotion($this);
                 }
@@ -369,7 +373,7 @@ class Emotion extends ModelEntity
         }
 
         if ($attribute = $this->getAttribute()) {
-            /** @var Shopware\Models\Attribute\Emotion $newAttribute */
+            /** @var \Shopware\Models\Attribute\Emotion $newAttribute */
             $newAttribute = clone $attribute;
             $newAttribute->setEmotion($this);
             $this->attribute = $newAttribute;
@@ -753,7 +757,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param $rows
+     * @param int $rows
      */
     public function setRows($rows)
     {

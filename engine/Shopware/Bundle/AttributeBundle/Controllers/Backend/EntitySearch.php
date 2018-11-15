@@ -26,7 +26,7 @@ use Shopware\Bundle\AttributeBundle\Repository\RegistryInterface;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

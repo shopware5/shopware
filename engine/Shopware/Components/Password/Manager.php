@@ -27,7 +27,7 @@ namespace Shopware\Components\Password;
 /**
  * Password Manager
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -29,7 +29,7 @@ use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

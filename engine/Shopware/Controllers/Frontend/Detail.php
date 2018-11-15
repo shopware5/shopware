@@ -24,7 +24,7 @@
 use Shopware\Components\Random;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -279,7 +279,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     {
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        /** @var $repository \Shopware\Models\Category\Repository */
+        /** @var \Shopware\Models\Category\Repository $repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $repository->getPathById($categoryId);
 

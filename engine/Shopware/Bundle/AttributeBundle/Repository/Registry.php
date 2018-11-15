@@ -30,7 +30,7 @@ use Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher;
 use Shopware\Components\Model\ModelManager;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

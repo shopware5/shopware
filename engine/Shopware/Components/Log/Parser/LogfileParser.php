@@ -29,7 +29,7 @@ use Bcremer\LineReader\LineReader;
 class LogfileParser
 {
     /**
-     * @param $file
+     * @param string   $file
      * @param int      $offset
      * @param null|int $limit
      * @param bool     $reverse

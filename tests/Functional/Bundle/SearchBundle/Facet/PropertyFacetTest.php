@@ -70,7 +70,7 @@ class PropertyFacetTest extends TestCase
 
         $this->assertCount(1, $result->getFacets());
 
-        /** @var $facet FacetResultGroup */
+        /** @var FacetResultGroup $facet */
         $facet = $result->getFacets()[0];
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
 
@@ -107,7 +107,7 @@ class PropertyFacetTest extends TestCase
 
         $this->assertCount(1, $result->getFacets());
 
-        /** @var $facet FacetResultGroup */
+        /** @var FacetResultGroup $facet */
         foreach ($result->getFacets() as $facet) {
             $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
 

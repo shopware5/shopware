@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -62,7 +62,7 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
 
         $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
 
-        /** @var $article Shopware\Models\Article\Article */
+        /** @var Shopware\Models\Article\Article $article */
         $article = $this->resource->getOne($article->getId());
 
         $german = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(

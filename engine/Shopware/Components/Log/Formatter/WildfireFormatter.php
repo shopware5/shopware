@@ -30,7 +30,7 @@ use Monolog\Logger;
 /**
  * Serializes a log message according to Wildfire's header requirements
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -155,7 +155,7 @@ class WildfireFormatter extends BaseWildfireFormatter
     /**
      * Encodes a trace by encoding all "args" with encodeObject()
      *
-     * @param $trace
+     * @param null|array $trace
      *
      * @return array The encoded trace
      */

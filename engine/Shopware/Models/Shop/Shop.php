@@ -615,38 +615,38 @@ class Shop extends ModelEntity
 
         $container->set('Shop', $this);
 
-        /** @var $locale \Zend_Locale */
+        /** @var \Zend_Locale $locale */
         $locale = $container->get('Locale');
         $locale->setLocale($this->getLocale()->toString());
 
-        /** @var $currency \Zend_Currency */
+        /** @var \Zend_Currency $currency */
         $currency = $container->get('Currency');
         $currency->setLocale($locale);
         $currency->setFormat($this->getCurrency()->toArray());
 
-        /** @var $config \Shopware_Components_Config */
+        /** @var \Shopware_Components_Config $config */
         $config = $container->get('Config');
         $config->setShop($this);
 
-        /** @var $snippets \Shopware_Components_Snippet_Manager */
+        /** @var \Shopware_Components_Snippet_Manager $snippets */
         $snippets = $container->get('Snippets');
         $snippets->setShop($this);
 
-        /** @var $plugins \Enlight_Plugin_PluginManager */
+        /** @var \Enlight_Plugin_PluginManager $plugins */
         $plugins = $container->get('Plugins');
 
-        /** @var $pluginNamespace \Shopware_Components_Plugin_Namespace */
+        /** @var \Shopware_Components_Plugin_Namespace $pluginNamespace */
         foreach ($plugins as $pluginNamespace) {
             if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
                 $pluginNamespace->setShop($this);
             }
         }
 
-        //Initializes the frontend session to prevent output before session started.
+        // Initializes the frontend session to prevent output before session started.
         $container->get('session');
 
         if ($this->getTemplate() !== null) {
-            /** @var $templateManager \Enlight_Template_Manager */
+            /** @var \Enlight_Template_Manager $templateManager */
             $templateManager = $container->get('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
@@ -669,7 +669,7 @@ class Shop extends ModelEntity
             );
         }
 
-        /** @var $templateMail \Shopware_Components_TemplateMail */
+        /** @var \Shopware_Components_TemplateMail $templateMail */
         $templateMail = $container->get('TemplateMail');
         $templateMail->setShop($this);
 
@@ -683,10 +683,10 @@ class Shop extends ModelEntity
      */
     private function registerTheme(Template $template)
     {
-        /** @var $templateManager \Enlight_Template_Manager */
+        /** @var \Enlight_Template_Manager $templateManager */
         $templateManager = Shopware()->Container()->get('template');
 
-        /** @var $inheritance Inheritance */
+        /** @var Inheritance $inheritance */
         $inheritance = Shopware()->Container()->get('theme_inheritance');
 
         $path = $inheritance->getTemplateDirectories($template);

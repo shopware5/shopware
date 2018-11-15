@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 /**
  * Deprecated Shopware Class to provide article export feeds
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

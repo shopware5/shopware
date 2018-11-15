@@ -35,7 +35,7 @@ use Shopware\Models\User\User as UserModel;
 /**
  * User API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -80,7 +80,7 @@ class User extends Resource
             ->where('users.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $user UserModel */
+        /** @var UserModel $user */
         $user = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$user) {

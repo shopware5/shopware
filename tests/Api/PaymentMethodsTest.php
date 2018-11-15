@@ -176,7 +176,7 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
     /**
      * @depends testPostPaymentShouldBeSuccessful
      *
-     * @param $identifier
+     * @param string $identifier
      */
     public function testGetPaymentWithIdShouldBeSuccessful($identifier)
     {
@@ -202,7 +202,7 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
     /**
      * @depends testPostPaymentShouldBeSuccessful
      *
-     * @param $id
+     * @param int $id
      */
     public function testDeletePaymentWithIdShouldBeSuccessful($id)
     {

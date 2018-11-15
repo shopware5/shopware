@@ -168,7 +168,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     public function getContent(Smarty_Template_Source $source)
     {
         foreach ($source->components as $_component) {
-            /* @var $content Smarty_Template_Source */
+            /* @var Smarty_Template_Source $content */
             $_component->content = $this->getSnippetContent($_component);
         }
         $this->snippetManager->write();
@@ -291,10 +291,10 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
      * Returns the snippet content for the given snippet namespace and name.
      * If the force parameter is set to true, the default value will be set and returned.
      *
-     * @param $namespace
-     * @param $name
-     * @param $default
-     * @param bool $force
+     * @param string $namespace
+     * @param string $name
+     * @param mixed  $default
+     * @param bool   $force
      *
      * @return mixed
      */

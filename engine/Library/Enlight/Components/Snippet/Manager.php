@@ -28,34 +28,34 @@
  * It is responsible to read and write the corresponding namespaces.
  *
  * @category   Enlight
- * @package    Enlight_Snippet
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Components_Snippet_Manager extends Enlight_Class
 {
     /**
-     * @var     Enlight_Config_Adapter Can be overwrite in the constructor
+     * @var Enlight_Config_Adapter Can be overwrite in the constructor
      */
     protected $adapter;
 
     /**
-     * @var     array Array with all registered namespaces
+     * @var array Array with all registered namespaces
      */
-    protected $namespaces = array();
+    protected $namespaces = [];
 
     /**
-     * @var     string Default config class
+     * @var string Default config class
      */
     protected $defaultNamespaceClass = 'Enlight_Components_Snippet_Namespace';
 
     /**
-     * @var     string Default config class
+     * @var string Default config class
      */
     protected $defaultSection = null;
 
     /**
-     * @var     string Array of all ignored namespaces. Can be set in the constructor.
+     * @var string Array of all ignored namespaces. Can be set in the constructor.
      */
     protected $ignoreNamespace;
 
@@ -64,12 +64,12 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
      * The adapter can be set in the options array element "adapter" and have to been an instance
      * of the Enlight_Config_Adapter.
      *
-     * @param   array|Enlight_Config_Adapter|null $options
+     * @param array|Enlight_Config_Adapter|null $options
      */
     public function __construct($options = null)
     {
         if (!is_array($options)) {
-            $options = array('adapter' => $options);
+            $options = ['adapter' => $options];
         }
 
         if (isset($options['adapter']) && $options['adapter'] instanceof Enlight_Config_Adapter) {
@@ -84,24 +84,27 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
     /**
      * Returns a snippet model instance
      *
-     * @param   string $namespace
-     * @return  Enlight_Components_Snippet_Namespace
+     * @param string $namespace
+     *
+     * @return Enlight_Components_Snippet_Namespace
      */
     public function getNamespace($namespace = null)
     {
         $key = $namespace === null ? '__ignore' : (string) $namespace;
         if (!isset($this->namespaces[$key])) {
-            $this->namespaces[$key] = new $this->defaultNamespaceClass(array(
+            $this->namespaces[$key] = new $this->defaultNamespaceClass([
                 'adapter' => $this->adapter,
                 'name' => $namespace,
-                'section' => $this->defaultSection
-            ));
+                'section' => $this->defaultSection,
+            ]);
         }
+
         return $this->namespaces[$key];
     }
 
     /**
      * Adapter class of the snippet manager
+     *
      * @return Enlight_Config_Adapter
      */
     public function Adapter()
@@ -111,25 +114,30 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
 
     /**
      * Standard setter method for the adapter
+     *
      * @param Enlight_Config_Adapter $adapter
+     *
      * @return Enlight_Components_Snippet_Manager
      */
     public function setAdapter($adapter)
     {
         $this->adapter = $adapter;
+
         return $this;
     }
 
     /**
      * Writes each registered namespace to the database
+     *
      * @return Enlight_Components_Snippet_Manager
      */
     public function write()
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         foreach ($this->namespaces as $namespace) {
             $namespace->write();
         }
+
         return $this;
     }
 }

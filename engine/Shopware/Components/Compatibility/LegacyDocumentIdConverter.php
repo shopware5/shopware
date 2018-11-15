@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Compatibility;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 
 /**
  * This class is necessary for a smooth migration to MySQL 8. MySQL 8 forces Ids in foreign key constraints to be lower case.

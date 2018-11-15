@@ -30,7 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -57,7 +57,7 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
         $compiler = $this->container->get('theme_compiler');
         $rootDir = $this->container->getParameter('shopware.app.rootdir');
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         foreach ($shops as $shop) {
             $configuration = $compiler->getThemeConfiguration($shop);
             $file = $this->dumpConfiguration($shop, $configuration);

@@ -742,7 +742,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getAddons()
     {
@@ -750,7 +750,7 @@ class PluginStruct implements \JsonSerializable
     }
 
     /**
-     * @param \string[] $addons
+     * @param string[] $addons
      */
     public function setAddons($addons)
     {

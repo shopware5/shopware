@@ -123,7 +123,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Returns true if and only if the Role has access to the Resource
      *
-     * @param $params
+     * @param array $params
      *
      * @return bool
      */
@@ -221,7 +221,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function checkAuth()
     {
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('Auth');
         if ($auth->hasIdentity()) {
             $auth->refresh();
@@ -281,7 +281,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             $this->aclRole = $identity->role;
         }
 
-        /** @var $engine Enlight_Template_Manager */
+        /** @var Enlight_Template_Manager $engine */
         $engine = $container->get('Template');
         $engine->unregisterPlugin(
             Smarty::PLUGIN_FUNCTION,

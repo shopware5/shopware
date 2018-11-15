@@ -51,6 +51,7 @@ class Download extends ModelEntity
      * @var \Shopware\Models\Attribute\ArticleDownload
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -61,9 +62,9 @@ class Download extends ModelEntity
     private $id;
 
     /**
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     * @var int
      *
-     * @var
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
     private $articleId;
 

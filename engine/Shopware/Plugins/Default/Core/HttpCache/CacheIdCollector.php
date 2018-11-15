@@ -86,8 +86,8 @@ class CacheIdCollector
     }
 
     /**
-     * @param $request
-     * @param $view
+     * @param Request $request
+     * @param View    $view
      *
      * @return array
      */
@@ -156,7 +156,7 @@ class CacheIdCollector
     }
 
     /**
-     * @param $request
+     * @param Request $request
      *
      * @return array
      */

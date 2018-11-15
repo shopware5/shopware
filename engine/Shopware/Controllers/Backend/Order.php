@@ -189,8 +189,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Get documents of a specific type for the given orders
      *
-     * @param $orderIds
-     * @param $docType
+     * @param int[]  $orderIds
+     * @param string $docType
      *
      * @return \Doctrine\ORM\Query
      */
@@ -368,7 +368,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', [['property' => 'history.changeDate', 'direction' => 'DESC']]);
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
 
         //the backend order module have no function to create a new order so an order id must be passed.
@@ -402,7 +402,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $id = (int) $this->Request()->getParam('id');
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order/main');
 
         // The backend order module have no function to create a new order so an order id must be passed.
@@ -476,7 +476,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         // Before we can create the status mail, we need to save the order data. Otherwise
         // the status mail would be created with the old order status and amount.
-        /** @var $order \Shopware\Models\Order\Order */
+        /** @var \Shopware\Models\Order\Order $order */
         $statusBefore = $order->getOrderStatus();
         $clearedBefore = $order->getPaymentStatus();
         $invoiceShippingBefore = $order->getInvoiceShipping();
@@ -533,7 +533,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function deleteAction()
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
 
         // Get posted customers
@@ -570,7 +570,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $orderId = $this->Request()->getParam('orderId');
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         // Check if an order id is passed. If no order id passed, return success false
@@ -681,7 +681,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function deletePositionAction()
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         $positions = $this->Request()->getParam('positions', [['id' => $this->Request()->getParam('id')]]);
@@ -710,7 +710,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        /** @var $order \Shopware\Models\Order\Order */
+        /** @var \Shopware\Models\Order\Order $order */
         $order = $this->getRepository()->find($orderId);
         if (empty($order)) {
             $this->View()->assign([
@@ -778,7 +778,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $documentMode = $this->Request()->getParam('mode');
         $addAttachments = $this->request->getParam('addAttachments') === 'true';
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')->getNamespace('backend/order');
 
         if (empty($orders)) {
@@ -804,7 +804,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 continue;
             }
 
-            /** @var $order \Shopware\Models\Order\Order */
+            /** @var \Shopware\Models\Order\Order $order */
             $order = $modelManager->find(Order::class, $data['id']);
             if (!$order) {
                 continue;
@@ -920,7 +920,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = $this->request->getParam('orderId');
         $attachments = $this->request->getParam('attachment');
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
 
         if (empty($data)) {
@@ -1002,7 +1002,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = (int) $this->Request()->getParam('orderId');
         $mailTemplateName = $this->Request()->getParam('mailTemplateName', 'sORDERDOCUMENTS');
 
-        /** @var $mail Enlight_Components_Mail */
+        /** @var Enlight_Components_Mail $mail */
         $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, 0, $mailTemplateName);
 
         $this->view->assign([
@@ -1444,7 +1444,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to select a single order.
      *
-     * @param $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -1734,7 +1734,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function getDefaultName($typeId)
     {
-        /** @var $queryBuilder \Doctrine\DBAL\Query\QueryBuilder $builder */
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $queryBuilder */
         $queryBuilder = $this->container->get('dbal_connection')->createQueryBuilder();
 
         return $queryBuilder->select('name')
@@ -1984,7 +1984,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $templateName = $this->getTemplateNameForDocumentTypeId($documentTypeId);
         }
 
-        /** @var $mail Enlight_Components_Mail */
+        /** @var Enlight_Components_Mail $mail */
         $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, (int) $statusId, $templateName);
 
         if ($mail instanceof Enlight_Components_Mail) {

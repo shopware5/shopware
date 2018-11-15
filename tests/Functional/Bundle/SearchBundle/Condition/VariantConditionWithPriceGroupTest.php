@@ -231,7 +231,7 @@ class VariantConditionWithPriceGroupTest extends TestCase
     /**
      * Get products and set the graduated prices and inStock of the variants.
      *
-     * @param $number
+     * @param string      $number
      * @param ShopContext $context
      * @param Category    $category
      * @param array       $data

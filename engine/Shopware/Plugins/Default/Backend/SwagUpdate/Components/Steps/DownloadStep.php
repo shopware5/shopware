@@ -28,7 +28,7 @@ use ShopwarePlugins\SwagUpdate\Components\Download;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -38,13 +38,14 @@ class Newsletter extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * This is the inverse side of the association between newsletters and mail-addreses which have already
+     * This is the inverse side of the association between newsletters and mail-addresses which have already
      * received the given newsletter.
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Address", mappedBy="lastNewsletter")
      */
     protected $addresses;
+
     /**
      * Autoincrement ID
      *
@@ -469,19 +470,23 @@ class Newsletter extends ModelEntity
     }
 
     /**
+     * @deprecated Will be removed without replacement in 6.0
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrders()
     {
-        return $this->orders;
+        return null;
     }
 
     /**
+     * @deprecated Will be removed without replacement in 6.0
+     *
      * @return \Shopware\Models\Newsletter\Address
      */
     public function getAlreadySendTo()
     {
-        return $this->alreadySendTo;
+        return null;
     }
 
     /**

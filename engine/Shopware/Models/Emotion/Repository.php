@@ -30,7 +30,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,8 +40,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filter
-     * @param array $orderBy
+     * @param string $filter
+     * @param array  $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -409,7 +409,7 @@ class Repository extends ModelRepository
     /**
      * This function selects all elements and components of the passed emotion id.
      *
-     * @param $emotionId
+     * @param int $emotionId
      *
      * @return QueryBuilder
      */
@@ -428,8 +428,8 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -449,7 +449,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $shopId
+     * @param int $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

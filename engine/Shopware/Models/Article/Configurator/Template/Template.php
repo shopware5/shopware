@@ -294,7 +294,7 @@ class Template extends ModelEntity
     /**
      * Set supplierNumber
      *
-     * @param $supplierNumber
+     * @param string $supplierNumber
      *
      * @return \Shopware\Models\Article\Configurator\Template\Template
      */
@@ -316,7 +316,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param $additionalText
+     * @param string $additionalText
      *
      * @return Template
      */
@@ -340,7 +340,7 @@ class Template extends ModelEntity
     /**
      * Set active
      *
-     * @param $active
+     * @param int $active
      *
      * @return \Shopware\Models\Article\Configurator\Template\Template
      */
@@ -486,7 +486,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param $article
+     * @param \Shopware\Models\Article\Article $article
      *
      * @return Template
      */

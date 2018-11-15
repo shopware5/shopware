@@ -35,7 +35,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  *
@@ -393,7 +393,7 @@ class SitemapXMLRepository
         $context = $this->contextService->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name']);
 
@@ -404,7 +404,7 @@ class SitemapXMLRepository
 
         $query->groupBy('manufacturer.id');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

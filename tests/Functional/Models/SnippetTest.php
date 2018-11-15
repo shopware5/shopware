@@ -24,7 +24,7 @@
 use Shopware\Models\Snippet\Snippet;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

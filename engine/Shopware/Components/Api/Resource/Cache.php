@@ -36,7 +36,7 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
  * This resource provides access to all shopware caches.
  * It is used internally by the Cache/Performance backend module
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

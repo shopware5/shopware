@@ -25,7 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,7 +56,7 @@ class Download
     }
 
     /**
-     * @param $callback
+     * @param callable $callback
      *
      * @throws \Exception
      */

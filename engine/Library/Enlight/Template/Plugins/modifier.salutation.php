@@ -20,7 +20,8 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- * @param $salutation
+ *
+ * @param string $salutation
  */
 
 function smarty_modifier_salutation($salutation)

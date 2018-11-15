@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -164,7 +164,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
                 continue;
             }
 
-            /** @var $cheapestPrice Struct\Product\PriceRule */
+            /** @var Struct\Product\PriceRule $cheapestPrice */
             $cheapestPrice = $priceRules[$key];
 
             $cheapestPrice->setCustomerGroup($group);
@@ -184,7 +184,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      *
      * @param Struct\ListProduct             $product
      * @param Struct\ProductContextInterface $context
-     * @param $quantity
+     * @param int                            $quantity
      *
      * @return null|Struct\Product\PriceDiscount
      */
@@ -202,7 +202,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var $highest Struct\Product\PriceDiscount */
+        /** @var Struct\Product\PriceDiscount $highest */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

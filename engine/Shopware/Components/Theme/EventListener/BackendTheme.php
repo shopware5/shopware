@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Registers the current backend theme for the backend requests.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

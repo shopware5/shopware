@@ -31,7 +31,7 @@ use Shopware\Components\Routing\GeneratorInterface;
 /**
  * @see \Enlight_Controller_Router_Default
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

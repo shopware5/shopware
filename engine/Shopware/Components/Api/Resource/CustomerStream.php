@@ -483,7 +483,7 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param $stream \Shopware\Models\CustomerStream\CustomerStream
+     * @param \Shopware\Models\CustomerStream\CustomerStream $stream
      *
      * @throws CustomValidationException
      */

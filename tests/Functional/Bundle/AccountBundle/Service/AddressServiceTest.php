@@ -235,7 +235,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param $addressId
+     * @param int $addressId
      * @depends testSetDefaultBilling
      * @depends testDeleteDefaultAddressShouldFail
      */

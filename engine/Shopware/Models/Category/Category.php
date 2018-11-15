@@ -32,7 +32,7 @@ use Shopware\Models\ProductStream\ProductStream;
 /**
  * Shopware Categories
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
@@ -370,7 +370,7 @@ class Category extends ModelEntity
     /**
      * Sets the primary key
      *
-     * @param $id
+     * @param int $id
      */
     public function setPrimaryIdentifier($id)
     {
@@ -390,7 +390,7 @@ class Category extends ModelEntity
     /**
      * Set id
      *
-     * @param $id
+     * @param int $id
      *
      * @return int
      */
@@ -469,7 +469,7 @@ class Category extends ModelEntity
     /**
      * Get parents category id
      *
-     * @return Category[]
+     * @return ArrayCollection<Category>
      */
     public function getChildren()
     {
@@ -481,7 +481,7 @@ class Category extends ModelEntity
      */
     public function isLeaf()
     {
-        return $this->getChildren()->count() == 0;
+        return $this->getChildren()->count() === 0;
     }
 
     /**
@@ -977,7 +977,7 @@ class Category extends ModelEntity
     /**
      * Helper function which checks, if this category is child of a given parent category
      *
-     * @param $parent \Shopware\Models\Category\Category
+     * @param \Shopware\Models\Category\Category $parent
      *
      * @return bool
      */

@@ -32,7 +32,7 @@ use Shopware\Models\Shop\Shop;
 /**
  * Class Repository
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

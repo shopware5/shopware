@@ -31,7 +31,7 @@ use Shopware\Models\Blog\Blog;
  * Contains the logic for the listing of the blog articles and the detail page.
  * Furthermore it will manage the blog comment handling
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

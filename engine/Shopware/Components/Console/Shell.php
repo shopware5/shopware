@@ -27,7 +27,7 @@ namespace Shopware\Components\Console;
 use Symfony\Component\Console\Shell as BaseShell;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -174,7 +174,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->View()->assign(['success' => false, 'errorMsg' => 'No ID given to delete']);
         }
         try {
-            $costsModel = Shopware()->Models()->find(ShippingCost::class, $costsId);
+            $costsModel = Shopware()->Models()->find(ShippingCost::class, (int) $costsId);
             $this->getManager()->remove($costsModel);
             $this->getManager()->flush();
             $this->View()->assign(['success' => true]);
@@ -286,14 +286,14 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
         $manager = $this->getManager();
 
-        // clear costs
+        // Clear costs
         $this->deleteCostsMatrix($dispatchId);
 
         $data = [];
         foreach ($costsMatrix as $param) {
             $shippingCostModel = new \Shopware\Models\Dispatch\ShippingCost();
             $param['dispatch'] = $dispatch;
-            // set data to model and overwrite the image field
+            // Set data to model and overwrite the image field
             $shippingCostModel->fromArray($param);
 
             try {
@@ -316,8 +316,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     public function getPaymentsAction()
     {
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 20);
+        $offset = (int) $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);
 
@@ -333,8 +333,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     public function getCountriesAction()
     {
-        $limit = $this->Request()->getParam('limit', 999);
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 999);
+        $offset = (int) $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);
 
@@ -464,7 +464,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         if (!empty($params['bindTimeFrom'])) {
             $bindTimeFrom = new Zend_Date();
             $bindTimeFrom->set($params['bindTimeFrom'], Zend_Date::TIME_SHORT);
-            $bindTimeFrom = $bindTimeFrom->get(Zend_Date::MINUTE) * 60 + $bindTimeFrom->get(Zend_Date::HOUR) * 60 * 60;
+            $bindTimeFrom = (int) $bindTimeFrom->get(Zend_Date::MINUTE) * 60 + (int) $bindTimeFrom->get(Zend_Date::HOUR) * 60 * 60;
             $params['bindTimeFrom'] = $bindTimeFrom;
         } else {
             $params['bindTimeFrom'] = null;
@@ -473,7 +473,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         if (!empty($params['bindTimeTo'])) {
             $bindTimeTo = new Zend_Date();
             $bindTimeTo->set($params['bindTimeTo'], Zend_Date::TIME_SHORT);
-            $bindTimeTo = $bindTimeTo->get(Zend_Date::MINUTE) * 60 + $bindTimeTo->get(Zend_Date::HOUR) * 60 * 60;
+            $bindTimeTo = (int) $bindTimeTo->get(Zend_Date::MINUTE) * 60 + (int) $bindTimeTo->get(Zend_Date::HOUR) * 60 * 60;
             $params['bindTimeTo'] = $bindTimeTo;
         } else {
             $params['bindTimeTo'] = null;

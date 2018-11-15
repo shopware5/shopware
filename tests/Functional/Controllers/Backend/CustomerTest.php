@@ -23,14 +23,15 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /** @var $model \Shopware\Models\Customer\Customer */
+    /** @var \Shopware\Models\Customer\Customer $repository */
     protected $repository = null;
+
     /** @var Shopware\Components\Model\ModelManager */
     private $manager = null;
 

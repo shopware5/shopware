@@ -168,7 +168,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     {
         $rolesRepository = Shopware()->Models()->getRepository(Role::class);
         $manager = Shopware()->Models();
-        $roleId = $this->Request()->getParam('id');
+        $roleId = (int) $this->Request()->getParam('id');
 
         // Check if any user is assigned to this role
         if (Shopware()->Db()->fetchOne('
@@ -191,14 +191,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * Update / create role
      * All params will be get from request object
-     *
-     * @param admin true / false
-     * @param enabled true / false
-     * @param description
-     * @param id (If not set new role will be created)
-     * @param name
-     * @param parentId
-     * @param source
      */
     public function updateRoleAction()
     {
@@ -206,7 +198,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $rolesRepository = Shopware()->Models()->getRepository(Role::class);
 
         if (!empty($id)) {
-            $role = $rolesRepository->find($id);
+            $role = $rolesRepository->find((int) $id);
         } else {
             $role = new Role();
         }
@@ -303,7 +295,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $isNewUser = false;
 
         if (!empty($id)) {
-            $user = $this->getUserRepository()->find($id);
+            $user = $this->getUserRepository()->find((int) $id);
         } else {
             $user = new User();
             $isNewUser = true;
@@ -739,7 +731,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      *
      * @param \Shopware\Models\User\Resource $resource
      * @param \Shopware\Models\User\Role     $role
-     * @param                                $resourceAdmins
+     * @param array                          $resourceAdmins
      *
      * @return array
      */

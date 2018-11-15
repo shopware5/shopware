@@ -40,7 +40,7 @@ use Shopware\Components\Model\LazyFetchModelEntity;
 class Premium extends LazyFetchModelEntity
 {
     /**
-     * @var
+     * @var \Shopware\Models\Shop\Shop
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
@@ -52,6 +52,7 @@ class Premium extends LazyFetchModelEntity
      * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber")
      */
     protected $articleDetail;
+
     /**
      * @var int
      *
@@ -174,7 +175,7 @@ class Premium extends LazyFetchModelEntity
     /**
      * Sets the assigned subShop
      *
-     * @param  $shop
+     * @param \Shopware\Models\Shop\Shop $shop
      */
     public function setShop($shop)
     {
@@ -184,7 +185,7 @@ class Premium extends LazyFetchModelEntity
     /**
      * Returns the instance of the assigned subShop
      *
-     * @return mixed
+     * @return \Shopware\Models\Shop\Shop
      */
     public function getShop()
     {
@@ -194,7 +195,7 @@ class Premium extends LazyFetchModelEntity
     /**
      * Sets the assigned article
      *
-     * @param $articleDetail  \Shopware\Models\Article\Detail
+     * @param \Shopware\Models\Article\Detail $articleDetail
      *
      * @return \Shopware\Models\Premium\Premium
      */
@@ -218,7 +219,7 @@ class Premium extends LazyFetchModelEntity
     /**
      * Sets the shopId of a premium-article
      *
-     * @param $shopId int Contains the shopId
+     * @param int $shopId Contains the shopId
      *
      * @return \Shopware\Models\Premium\Premium
      */

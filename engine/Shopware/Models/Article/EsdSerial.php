@@ -51,6 +51,7 @@ class EsdSerial extends ModelEntity
      * @var \Shopware\Models\Order\Esd
      */
     protected $esdOrder;
+
     /**
      * @var int
      *
@@ -76,7 +77,7 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @param esd $esd
+     * @param \Shopware\Models\Article\Esd $esd
      *
      * @return \Shopware\Models\Article\EsdSerial
      */

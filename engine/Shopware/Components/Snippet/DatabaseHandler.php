@@ -32,14 +32,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DatabaseHandler
 {
     /**
-     * @var
+     * @var string
      */
     protected $kernelRoot;
 
@@ -61,7 +61,7 @@ class DatabaseHandler
     /**
      * @param ModelManager                            $em
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param $kernelRoot
+     * @param string                                  $kernelRoot
      */
     public function __construct(ModelManager $em, \Enlight_Components_Db_Adapter_Pdo_Mysql $db, $kernelRoot)
     {
@@ -82,9 +82,9 @@ class DatabaseHandler
      * Loads all snippets from all files in $snippetsDir
      * (including subfolders) and writes them to the database.
      *
-     * @param null   $snippetsDir
-     * @param bool   $force
-     * @param string $namespacePrefix allows to prefix the snippet namespace
+     * @param null|string $snippetsDir
+     * @param bool        $force
+     * @param string      $namespacePrefix allows to prefix the snippet namespace
      */
     public function loadToDatabase($snippetsDir = null, $force = false, $namespacePrefix = '')
     {

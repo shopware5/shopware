@@ -35,7 +35,7 @@ class Repository extends ModelRepository
      * Returns an Banner Statistic Model.Either a new one or an existing one. If no date given
      * the current date will be used.
      *
-     * @param $bannerId
+     * @param int       $bannerId
      * @param \DateTime $date
      *
      * @return Banner
@@ -61,10 +61,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the article impression
      *
-     * @param $articleId
-     * @param $shopId
-     * @param null $date
-     * @param null $deviceType
+     * @param int                     $articleId
+     * @param int                     $shopId
+     * @param null|\DateTimeInterface $date
+     * @param null|string             $deviceType
      *
      * @return \Doctrine\ORM\Query
      */
@@ -82,10 +82,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleImpressionQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
-     * @param $shopId
-     * @param $date
-     * @param $deviceType
+     * @param int                $articleId
+     * @param int                $shopId
+     * @param \DateTimeInterface $date
+     * @param null|string        $deviceType
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

@@ -42,7 +42,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -124,7 +124,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($query);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $propertyData = $statement->fetchAll();

@@ -30,7 +30,7 @@ use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -121,7 +121,7 @@ class ResourceSubscriber implements SubscriberInterface
         $finder->files()->name('*.' . $type)->in($directory);
         $finder->sortByName();
 
-        /** @var File $file */
+        /** @var \SplFileInfo $file */
         foreach ($finder as $file) {
             $files[] = $file->getRealPath();
         }

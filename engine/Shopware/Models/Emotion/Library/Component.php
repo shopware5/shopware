@@ -60,6 +60,7 @@ class Component extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $fields;
+
     /**
      * Unique identifier field of the grid model.
      *
@@ -90,7 +91,7 @@ class Component extends ModelEntity
      * Contains the component description which displayed in the backend
      * module of
      *
-     * @var
+     * @var string
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
@@ -223,7 +224,7 @@ class Component extends ModelEntity
      * Contains the component description which displayed in the backend
      * module of
      *
-     * @param  $description
+     * @param string $description
      */
     public function setDescription($description)
     {

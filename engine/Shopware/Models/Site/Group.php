@@ -111,7 +111,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return null|\Shopware\Models\Site\Group
      */
     public function getMapping()
     {
@@ -119,7 +119,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param $mapping
+     * @param null|\Shopware\Models\Site\Group $mapping
      */
     public function setMapping($mapping)
     {

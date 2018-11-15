@@ -40,7 +40,7 @@ use Shopware\Models\Shop;
  * Additionally this class is used to build the configuration
  * inheritance for the backend module.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -195,7 +195,7 @@ class Configurator
 
         $synchronized = [];
 
-        //iterates all configurations sets of the file system
+        // Iterates all configurations sets of the file system
         foreach ($collection as $item) {
             if (!$item instanceof ConfigSet) {
                 throw new \Exception(sprintf(
@@ -206,13 +206,13 @@ class Configurator
 
             $item->validate();
 
-            //check if this set is already defined, to prevent auto increment in the database.
+            // Check if this set is already defined, to prevent auto increment in the database.
             $existing = $this->getExistingConfigSet(
                 $template->getConfigSets(),
                 $item->getName()
             );
 
-            //if the set isn't defined, create a new one
+            // If the set isn't defined, create a new one
             if (!$existing instanceof Shop\TemplateConfig\Set) {
                 $existing = new Shop\TemplateConfig\Set();
                 $template->getConfigSets()->add($existing);
@@ -279,14 +279,14 @@ class Configurator
             'container' => $container,
         ]);
 
-        /** @var $layout Shop\TemplateConfig\Layout */
+        /** @var Shop\TemplateConfig\Layout $layout */
         foreach ($containers as $layout) {
             if (!in_array($layout->getName(), $structure['containers'])) {
                 $this->entityManager->remove($layout);
             }
         }
 
-        /** @var $layout Shop\TemplateConfig\Element */
+        /** @var Shop\TemplateConfig\Element $layout */
         foreach ($fields as $layout) {
             if (!in_array($layout->getName(), $structure['fields'])) {
                 $this->entityManager->remove($layout);
@@ -438,7 +438,7 @@ class Configurator
             return;
         }
 
-        /** @var $template Shop\Template */
+        /** @var Shop\Template $template */
         $template = $this->repository->findOneBy([
             'template' => $theme->getTemplate(),
         ]);
@@ -469,7 +469,7 @@ class Configurator
      */
     private function getExistingConfigSet($collection, $name)
     {
-        /** @var $item Shop\TemplateConfig\Set */
+        /** @var Shop\TemplateConfig\Set $item */
         foreach ($collection as $item) {
             if ($item->getName() == $name) {
                 return $item;

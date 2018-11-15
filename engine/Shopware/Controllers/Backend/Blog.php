@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             //order data
             $order = (array) $this->Request()->getParam('sort', []);
 
-            /** @var $filter array */
+            /** @var array $filter */
             $filter = $this->Request()->getParam('filter', []);
 
             $query = $this->getCategoryRepository()->getBlogCategoriesByParentQuery($categoryId);
@@ -139,7 +139,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             $blogCategoryIds = $this->getBlogCategoryListIds($blogCategories);
             $blogCategoryIds[] = $categoryId;
 
-            /** @var $repository \Shopware\Models\Blog\Repository */
+            /** @var \Shopware\Models\Blog\Repository $repository */
             $repository = $this->getRepository();
             $dataQuery = $repository->getBackendListQuery($blogCategoryIds, $filter, $order, $offset, $limit);
 
@@ -157,7 +157,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     public function getBlogCategoriesAction()
     {
-        /** @var $filter array */
+        /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
         $node = $this->Request()->getParam('node');
 
@@ -214,7 +214,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             $this->getManager()->persist($blogModel);
             $this->getManager()->flush();
 
-            /** @var $repository \Shopware\Models\Blog\Repository */
+            /** @var \Shopware\Models\Blog\Repository $repository */
             $repository = $this->getManager()->getRepository(Blog::class);
 
             $filter = [['property' => 'id', 'value' => $blogModel->getId()]];
@@ -231,7 +231,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     public function getDetailAction()
     {
-        /** @var $filter array */
+        /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
@@ -270,7 +270,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         if (empty($order)) {
             $order = [['property' => 'creationDate', 'direction' => 'DESC']];
         }
-        /** @var $filter array */
+        /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
         $blogId = (int) $this->Request()->blogId;
 
@@ -326,7 +326,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $blogArticleRequestData = empty($multipleBlogArticles) ? [['id' => $this->Request()->id]] : $multipleBlogArticles;
         try {
             foreach ($blogArticleRequestData as $blogArticle) {
-                /** @var $model \Shopware\Models\Blog\Blog */
+                /** @var \Shopware\Models\Blog\Blog $model */
                 $model = $this->getRepository()->find($blogArticle['id']);
                 $this->getManager()->remove($model);
             }
@@ -346,7 +346,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->id]] : $multipleBlogComments;
         try {
             foreach ($blogCommentRequestData as $blogComment) {
-                /** @var $model \Shopware\Models\Blog\Comment */
+                /** @var \Shopware\Models\Blog\Comment $model */
                 $model = $this->getBlogCommentRepository()->find($blogComment['id']);
                 $this->getManager()->remove($model);
             }
@@ -366,7 +366,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->id]] : $multipleBlogComments;
         try {
             foreach ($blogCommentRequestData as $blogComment) {
-                /** @var $model \Shopware\Models\Blog\Comment */
+                /** @var \Shopware\Models\Blog\Comment $model */
                 $model = $this->getBlogCommentRepository()->find($blogComment['id']);
                 $model->setActive(true);
             }
@@ -412,8 +412,8 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * This method loads prepares the tag associated data for saving it directly to the blog model
      *
-     * @param $data
-     * @param $blogModel
+     * @param array                      $data
+     * @param \Shopware\Models\Blog\Blog $blogModel
      */
     protected function prepareTagAssociatedData($data, $blogModel)
     {
@@ -431,7 +431,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * This method prepares the media data for saving it directly to the blog model
      *
-     * @param $mediaData
+     * @param array $mediaData
      *
      * @return array
      */
@@ -452,7 +452,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * Helper method to delete all old tags mappings by the given blogId
      *
-     * @param $blogId
+     * @param int $blogId
      */
     protected function deleteOldTags($blogId)
     {
@@ -481,7 +481,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * Returns the blog category ids for the list query.
      *
-     * @param $blogCategories
+     * @param array $blogCategories
      *
      * @return array
      */
@@ -498,7 +498,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * flat the blog tags for the box select component
      *
-     * @param $tags
+     * @param array $tags
      *
      * @return string
      */
@@ -515,7 +515,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * This function loads the assigned articles models for the passed ids in the "assignedArticles" parameter.
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -526,7 +526,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             if (empty($assignedArticleData['id'])) {
                 continue;
             }
-            /** @var $assignedArticle \Shopware\Models\Article\Article */
+            /** @var \Shopware\Models\Article\Article $assignedArticle */
             $assignedArticle = $this->getArticleRepository()->find($assignedArticleData['id']);
             $assignedArticlesRequestData[] = $assignedArticle;
         }
@@ -538,13 +538,13 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     /**
      * This function loads the author model for the passed id authorId parameter
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
     private function prepareAuthorAssociatedData($data)
     {
-        /* @var $author \Shopware\Models\User\User */
+        /* @var \Shopware\Models\User\User $author */
         if (!empty($data['authorId'])) {
             $data['author'] = $this->getManager()->find('Shopware\Models\User\User', $data['authorId']);
         } else {

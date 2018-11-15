@@ -35,7 +35,7 @@ use Shopware\Models\Shop;
  * The Theme\Compiler class is used for the less compiling in the store front.
  * This class handles additionally the css and javascript minification.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -32,10 +32,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to get property relations
      *
-     * @param $filter
-     * @param $order
-     * @param $limit
-     * @param $offset
+     * @param null|array  $filter
+     * @param null|string $order
+     * @param null|int    $limit
+     * @param null|int    $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -54,8 +54,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPropertyRelationQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
-     * @param $order
+     * @param null|array  $filter
+     * @param null|string $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -84,8 +84,8 @@ class Repository extends ModelRepository
      *
      * @param null $filter
      * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param int  $limit
+     * @param int  $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -135,9 +135,9 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all property sets
      *
-     * @param $offset
-     * @param $limit
-     * @param $filter
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -159,7 +159,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getSetsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -182,9 +182,9 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all property options
      *
-     * @param $offset
-     * @param $limit
-     * @param $filter
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -206,7 +206,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getOptionsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -228,7 +228,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all property set assignments
      *
-     * @param $setId
+     * @param int $setId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -243,7 +243,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getSetAssignsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $setId
+     * @param int $setId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -270,7 +270,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the
      * property attributes for the passed group id.
      *
-     * @param $groupId
+     * @param int $groupId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -285,7 +285,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $groupId
+     * @param int $groupId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -304,7 +304,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select
      * all data about the passed group id.
      *
-     * @param $groupId
+     * @param int $groupId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -319,7 +319,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getGroupDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $groupId
+     * @param int $groupId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -338,7 +338,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $optionId
+     * @param int $optionId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -353,7 +353,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPropertyValueByOptionIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $optionId
+     * @param int $optionId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -373,9 +373,9 @@ class Repository extends ModelRepository
     /**
      * Helper function to set the FORCE INDEX path.
      *
-     * @param $query \Doctrine\ORM\Query
-     * @param $index String
-     * @param bool $straightJoin
+     * @param \Doctrine\ORM\Query $query
+     * @param string              $index
+     * @param bool                $straightJoin
      *
      * @return \Doctrine\ORM\Query
      */

@@ -31,7 +31,7 @@ use Shopware\Components\Random;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

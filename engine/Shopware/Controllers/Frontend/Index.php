@@ -25,7 +25,7 @@ use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -38,7 +38,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
     public function indexAction()
     {
-        /** @var $context ShopContextInterface */
+        /** @var ShopContextInterface $context */
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 

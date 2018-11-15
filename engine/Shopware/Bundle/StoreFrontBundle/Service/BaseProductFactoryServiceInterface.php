@@ -35,7 +35,7 @@ interface BaseProductFactoryServiceInterface
      * Creates a single base product struct with all required identifier fields
      * for other store front services
      *
-     * @param $number
+     * @param string $number
      *
      * @return BaseProduct
      */
@@ -45,7 +45,7 @@ interface BaseProductFactoryServiceInterface
      * Creates a list of base product structs with all required identifier fields
      * for other store front services
      *
-     * @param $numbers
+     * @param string[] $numbers
      *
      * @return BaseProduct[]
      */

@@ -144,12 +144,12 @@ EOT;
     }
 
     /**
-     * @param $result1
+     * @param array $results
      * @param array $localPluginNames
      *
      * @return mixed
      */
-    private function getCompatiblePlugins($result1, &$localPluginNames)
+    private function getCompatiblePlugins($results, &$localPluginNames)
     {
         if (empty($localPluginNames)) {
             return [];
@@ -157,7 +157,7 @@ EOT;
 
         $compatiblePlugins = [];
 
-        foreach ($result1 as $result) {
+        foreach ($results as $result) {
             foreach ($result['plugin_names'] as $pluginName) {
                 if (!in_array($pluginName, $localPluginNames)) {
                     continue;
@@ -176,16 +176,16 @@ EOT;
     }
 
     /**
-     * @param $result1
+     * @param array $results
      * @param array $localPluginNames
      *
      * @return mixed
      */
-    private function getInCompatiblePlugins($result1, &$localPluginNames)
+    private function getInCompatiblePlugins($results, &$localPluginNames)
     {
         $compatiblePlugins = [];
 
-        foreach ($result1 as $result) {
+        foreach ($results as $result) {
             foreach ($result['plugin_names'] as $pluginName) {
                 if (!in_array($pluginName, $localPluginNames)) {
                     continue;

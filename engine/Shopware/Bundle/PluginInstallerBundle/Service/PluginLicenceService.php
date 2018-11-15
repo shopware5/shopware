@@ -255,7 +255,7 @@ class PluginLicenceService
      */
     private function getLicences()
     {
-        /** @var $connection Connection */
+        /** @var Connection $connection */
         $connection = $this->connection;
         $builder = $connection->createQueryBuilder();
 

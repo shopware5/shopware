@@ -187,9 +187,9 @@ class CategoryFacetTest extends TestCase
     }
 
     /**
-     * @param Criteria $criteria
-     * @param Category $category
-     * @param $conditions
+     * @param Criteria    $criteria
+     * @param Category    $category
+     * @param array       $conditions
      * @param ShopContext $context
      */
     protected function addCategoryBaseCondition(

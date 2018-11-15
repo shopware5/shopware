@@ -435,7 +435,7 @@ class Customer extends LazyFetchModelEntity
     private $birthday;
 
     /**
-     * @var \boolean
+     * @var bool
      * @ORM\Column(name="doubleOptinRegister", type="boolean", nullable=false)
      */
     private $doubleOptinRegister;
@@ -1181,7 +1181,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param $defaultBillingAddress
+     * @param Address $defaultBillingAddress
      *
      * @return ModelEntity
      */
@@ -1199,7 +1199,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param $defaultShippingAddress
+     * @param Address $defaultShippingAddress
      *
      * @return ModelEntity
      */

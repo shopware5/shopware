@@ -142,7 +142,7 @@ class CacheControl
      *
      * @param Request  $request
      * @param Response $response
-     * @param $shopId
+     * @param int      $shopId
      *
      * @return bool
      */

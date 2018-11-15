@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 interface ShopGatewayInterface
 {
     /**
-     * @param $ids
+     * @param int[] $ids
      *
      * @return Shop[] indexed by id
      */

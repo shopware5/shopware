@@ -40,7 +40,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
  *
  * @runInSeparateProcess
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -88,8 +88,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Ensures given $pluginName is installed and activated.
      *
-     * @param $pluginName
-     * @param array $config
+     * @param string $pluginName
+     * @param array  $config
      */
     private static function ensurePluginAvailable($pluginName, $config = [])
     {
@@ -120,8 +120,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $pluginName
-     * @param $status
+     * @param string $pluginName
+     * @param array  $status
      */
     private static function restorePluginState($pluginName, $status)
     {
