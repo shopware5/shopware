@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
      */
     refs: [
         { ref: 'navigationTree', selector: 'snippet-main-navigation' },
-        { ref: 'snippetPanel', selector: 'snippet-main-snippetPanel' }
+        { ref: 'snippetPanel', selector: 'snippet-main-snippetPanel' },
+        { ref: 'expertButton', selector: 'snippet-main-window button[action=expert]' }
     ],
 
     /**
@@ -186,7 +187,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                             me.subApplication.setAppWindow(me.mainWindow);
                             me.mainWindow.show();
 
-                            me.onToggleExpert(null, config.extendedMode);
+                            me.getExpertButton().toggle(config.extendedMode);
                         }
                     });
                 }
