@@ -20,6 +20,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Add product notification attributes
 * Added `DISTINCT` for `priceListingQuery` to improve ES indexing performance with activated variant filter
 * Added media optimizer overview to backend systeminfo
+* Added `notify`-event `Shopware_Command_RebuildSeoIndexCommand_CreateRewriteTable` that is triggered after the SEO index is rebuilt via cli command `sw:rebuild:seo:index`
 
 ### Changes
 
