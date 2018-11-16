@@ -199,12 +199,12 @@ class CategoryDenormalization
             ';
 
             $parameters = [
-                'categoryPath' => '%|' . $categoryId . '|%',
+                'categoryPath' => '%|' . (int) $categoryId . '|%',
             ];
         }
 
         if ($count !== null) {
-            $sql = $this->limit($sql, $count, $offset);
+            $sql = $this->limit($sql, (int) $count, $offset);
         }
 
         $stmt = $this->getConnection()->prepare($sql);
@@ -235,7 +235,7 @@ class CategoryDenormalization
     {
         $updateStmt = $this->connection->prepare('UPDATE s_categories set path = :path WHERE id = :categoryId');
 
-        $parents = $this->getParentCategoryIds($categoryId);
+        $parents = $this->getParentCategoryIds((int) $categoryId);
         array_shift($parents);
 
         if (empty($parents)) {

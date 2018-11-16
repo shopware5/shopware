@@ -128,7 +128,7 @@ class QueryAliasMapper
             $value = $request->getQuery($alias);
             if ($value !== null) {
                 $request->setQuery($key, $value);
-                $request->setQuery($alias);
+                $request->setQuery($alias, null);
             }
         }
     }

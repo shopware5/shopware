@@ -308,13 +308,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getArticlesAction()
     {
-        $categoryId = $this->Request()->getParam('categoryId', 0);
-        $offset = $this->Request()->getParam('start', 0);
-        $limit = $this->Request()->getParam('limit', 20);
+        $categoryId = (int) $this->Request()->getParam('categoryId', 0);
+        $offset = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 20);
         $search = $this->Request()->getParam('search', '');
         $params = [
             'categoryId' => $categoryId,
         ];
+
         /** @var QueryBuilder $builder */
         $builder = $this->get('dbal_connection')->createQueryBuilder();
         $builder->select([
@@ -354,9 +355,9 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getCategoryArticlesAction()
     {
-        $categoryId = $this->Request()->getParam('categoryId');
-        $offset = $this->Request()->getParam('start', 0);
-        $limit = $this->Request()->getParam('limit', 20);
+        $categoryId = (int) $this->Request()->getParam('categoryId');
+        $offset = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 20);
         $search = $this->Request()->getParam('search', '');
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -366,7 +367,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             'details.number',
             'suppliers.name as supplierName',
         ]);
-        $builder->from('Shopware\Models\Article\Article', 'articles')
+        $builder->from(\Shopware\Models\Article\Article::class, 'articles')
             ->innerJoin('articles.categories', 'categories')
             ->innerJoin('articles.supplier', 'suppliers')
             ->innerJoin('articles.mainDetail', 'details')
@@ -404,8 +405,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $usedIds = $this->Request()->usedIds;
 
-        $offset = $this->Request()->getParam('start');
-        $limit = $this->Request()->getParam('limit', 20);
+        $offset = (int) $this->Request()->getParam('start');
+        $limit = (int) $this->Request()->getParam('limit', 20);
 
         /** @var \Shopware\Models\Customer\Repository $customerRepository */
         $customerRepository = $this->getCustomerRepository();
@@ -414,7 +415,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $total = Shopware()->Models()->getQueryCount($dataQuery);
         $data = $dataQuery->getArrayResult();
 
-        //return the data and total count
+        // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
@@ -490,7 +491,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $ids = json_decode($this->Request()->getParam('ids'));
         foreach ($ids as $key => $categoryId) {
             /** @var Category $category */
-            $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+            $category = Shopware()->Models()->getReference(\Shopware\Models\Category\Category::class, (int) $categoryId);
             $category->setPosition($key);
         }
         Shopware()->Models()->flush();
@@ -508,7 +509,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function saveDetail()
     {
         $params = $this->Request()->getParams();
-        $categoryId = $params['id'];
+        $categoryId = (int) $params['id'];
 
         if (empty($categoryId)) {
             $categoryModel = new Category();
@@ -531,19 +532,15 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $categoryModel = $this->getRepository()->find($categoryId);
         }
 
-        $categoryModel->setStream();
+        $categoryModel->setStream(null);
         if ($params['streamId']) {
-            $params['stream'] = Shopware()->Models()->find('Shopware\Models\ProductStream\ProductStream', $params['streamId']);
+            $params['stream'] = Shopware()->Models()->find(\Shopware\Models\ProductStream\ProductStream::class, (int) $params['streamId']);
         }
 
         $params = $this->prepareCustomerGroupsAssociatedData($params);
         $params = $this->prepareMediaAssociatedData($params);
 
-        unset($params['articles']);
-        unset($params['emotion']);
-        unset($params['imagePath']);
-        unset($params['parentId']);
-        unset($params['parent']);
+        unset($params['articles'], $params['emotion'], $params['imagePath'], $params['parentId'], $params['parent']);
 
         if (!array_key_exists('template', $params)) {
             $params['template'] = null;
@@ -605,11 +602,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     public function rebuildCategoryPathAction()
     {
-        // try to set maximum execution time
+        // Try to set maximum execution time
         @set_time_limit(0);
 
         $categoryId = $this->Request()->getParam('categoryId');
-        $offset = $this->Request()->getParam('offset');
+        $offset = (int) $this->Request()->getParam('offset');
         $count = $this->Request()->getParam('limit');
 
         $this->getCategoryComponent()->rebuildCategoryPath($categoryId, $count, $offset);
@@ -636,7 +633,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     public function removeOldAssignmentsAction()
     {
-        // try to set maximum execution time
+        // Try to set maximum execution time
         @set_time_limit(0);
 
         $categoryId = $this->Request()->getParam('categoryId');
@@ -667,7 +664,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     public function rebuildAssignmentsAction()
     {
-        // try to set maximum execution time
+        // Try to set maximum execution time
         @set_time_limit(0);
 
         $categoryId = $this->Request()->getParam('categoryId');
@@ -714,8 +711,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
         }
-        $newParentId = $this->Request()->getParam('categoryId');
-        $newParentId = $newParentId == 0 ? 1 : $newParentId;
+        $newParentId = (int) $this->Request()->getParam('categoryId');
+        $newParentId = $newParentId === 0 ? 1 : $newParentId;
         $result = [];
 
         foreach ($categoryIds as $categoryId) {
@@ -756,20 +753,20 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     protected function initAcl()
     {
-        // read
+        // Read
         $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getDetail', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getPathByQuery', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getIdPath', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getTemplateSettings', 'read', 'Insufficient Permissions');
 
-        // update
+        // Update
         $this->addAclPermission('updateDetail', 'update', 'Insufficient Permissions');
 
-        //delete
+        // Delete
         $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
 
-        // create
+        // Create
         $this->addAclPermission('createDetail', 'create', 'Insufficient Permissions');
     }
 
@@ -793,7 +790,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         /** @var Category $category */
-        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+        $category = Shopware()->Models()->getReference(\Shopware\Models\Category\Category::class, (int) $categoryId);
 
         $counter = 0;
         foreach ($articleIds as $articleId) {
@@ -802,7 +799,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
 
             /** @var \Shopware\Models\Article\Article $article */
-            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article = Shopware()->Models()->getReference(\Shopware\Models\Article\Article::class, (int) $articleId);
             $article->removeCategory($category);
 
             ++$counter;
@@ -832,7 +829,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         /** @var Category $category */
-        $category = Shopware()->Models()->getReference('Shopware\Models\Category\Category', $categoryId);
+        $category = Shopware()->Models()->getReference(\Shopware\Models\Category\Category::class, (int) $categoryId);
 
         $counter = 0;
         foreach ($articleIds as $articleId) {
@@ -841,7 +838,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
 
             /** @var \Shopware\Models\Article\Article $article */
-            $article = Shopware()->Models()->getReference('Shopware\Models\Article\Article', (int) $articleId);
+            $article = Shopware()->Models()->getReference(\Shopware\Models\Article\Article::class, (int) $articleId);
             $article->addCategory($category);
 
             ++$counter;
@@ -878,7 +875,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+            $this->mediaRepository = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class);
         }
 
         return $this->mediaRepository;
@@ -892,7 +889,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     private function getCustomerRepository()
     {
         if ($this->customerRepository === null) {
-            $this->customerRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+            $this->customerRepository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Customer::class);
         }
 
         return $this->customerRepository;
@@ -910,7 +907,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $customerGroups = [];
         foreach ($data['customerGroups'] as $customerGroupData) {
             if (!empty($customerGroupData['id'])) {
-                $model = Shopware()->Models()->find('Shopware\Models\Customer\Group', $customerGroupData['id']);
+                $model = Shopware()->Models()->find(\Shopware\Models\Customer\Group::class, $customerGroupData['id']);
                 $customerGroups[] = $model;
             }
         }

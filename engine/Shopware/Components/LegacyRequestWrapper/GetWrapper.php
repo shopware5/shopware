@@ -108,7 +108,7 @@ class GetWrapper implements \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->request->setQuery($offset);
+        $this->request->setQuery($offset, null);
     }
 
     /**
