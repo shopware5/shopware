@@ -1110,7 +1110,7 @@ class sAdmin
                 $countryList[$key]['notice'] = $countryTranslations[$country['id']]['notice'];
             }
 
-            if (!empty($countryTranslations[$country['id']]['allow_shipping'])) {
+            if (isset($countryTranslations[$country['id']]['allow_shipping'])) {
                 $countryList[$key]['allow_shipping'] = $countryTranslations[$country['id']]['allow_shipping'];
             }
 
