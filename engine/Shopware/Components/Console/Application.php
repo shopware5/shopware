@@ -68,7 +68,6 @@ class Application extends BaseApplication
 
         parent::__construct('Shopware', $kernel->getRelease()['version'] . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
-        $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
         $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $kernel->getEnvironment()));
     }
@@ -106,14 +105,6 @@ class Application extends BaseApplication
             $this->setCommandLoader($this->kernel->getContainer()->get('console.command_loader'));
             $this->registerCommands($output);
             $this->commandsRegistered = true;
-        }
-
-        if ($input->hasParameterOption(['--shell', '-s']) === true) {
-            $shell = new Shell($this);
-            $shell->setProcessIsolation($input->hasParameterOption(['--process-isolation']));
-            $shell->run();
-
-            return 0;
         }
 
         return parent::doRun($input, $output);
