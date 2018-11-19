@@ -34,6 +34,15 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
      */
     protected $connection;
 
+    /**
+     * @var Shopware\Components\Routing\Matchers\RewriteMatcher
+     */
+    protected $matcher;
+
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
     protected function setUp()
     {
         $c = Shopware()->Container();
@@ -46,6 +55,9 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
         $this->createSeoUrls();
     }
 
+    /**
+     * Tear down
+     */
     protected function tearDown()
     {
         parent::tearDown();
@@ -53,53 +65,145 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
         $this->connection->rollBack();
     }
 
+    /**
+     * Create demo data for the testcases
+     */
     public function createSeoUrls()
     {
         $this->connection->exec("
             INSERT INTO s_core_rewrite_urls(path, org_path, main, subshopID)
             VALUES
-            ('foo', 'sViewport=bar&param=1', 0, 1),
-            ('foo', 'sViewport=baz&param=2', 1, 2)
+            ('unique-url-main', 'sViewport=a&param=1', 1, 1),
+            ('unique-url-main-with-action', 'sViewport=b&action=foo&param=2', 1, 1),
+            ('unique-url-main-with-s-action', 'sViewport=c&sAction=bar&param=3', 1, 1),
+            ('unique-url-not-main', 'sViewport=d&param=4', 0, 1),
+            ('same-url-different-subshops-one-main', 'sViewport=e&param=5', 0, 1),
+            ('same-url-different-subshops-one-main', 'sViewport=f&param=6', 1, 2)
         ");
     }
 
+    /**
+     * Provide SEO URLs to be tested
+     *
+     * @return array
+     */
     public function provideSeoUrls()
     {
         return [
             [
-                'shopId' => 2,
-                'seoPath' => 'foo',
-                'query' => [
+                'shopId' => 1,
+                'path' => 'this-url-does-not-exists',
+                'expected' => 'this-url-does-not-exists',
+            ],
+            [
+                'shopId' => 1,
+                'path' => '/backend/this-is-a-backend-url',
+                'expected' => '/backend/this-is-a-backend-url',
+            ],
+            [
+                'shopId' => 1,
+                'path' => '/api/this-is-an-api-url',
+                'expected' => '/api/this-is-an-api-url',
+            ],
+            [
+                'shopId' => 1,
+                'path' => 'unique-url-main',
+                'expected' => [
                     'module' => 'frontend',
-                    'controller' => 'baz',
+                    'controller' => 'a',
                     'action' => 'index',
+                    'param' => '1',
+                    'rewriteUrl' => true,
+                ],
+            ],
+            [
+                'shopId' => 2,
+                'path' => 'unique-url-main',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'a',
+                    'action' => 'index',
+                    'param' => '1',
+                    'rewriteAlias' => true,
+                ],
+            ],
+            [
+                'shopId' => 1,
+                'path' => 'unique-url-main-with-action',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'b',
+                    'action' => 'foo',
                     'param' => '2',
                     'rewriteUrl' => true,
                 ],
             ],
             [
                 'shopId' => 1,
-                'seoPath' => 'foo',
-                'query' => [
+                'path' => 'unique-url-main-with-s-action',
+                'expected' => [
                     'module' => 'frontend',
-                    'controller' => 'bar',
+                    'controller' => 'c',
+                    'action' => 'bar',
+                    'param' => '3',
+                    'rewriteUrl' => true,
+                ],
+            ],
+            [
+                'shopId' => 1,
+                'path' => 'unique-url-not-main',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'd',
                     'action' => 'index',
-                    'param' => '1',
+                    'param' => '4',
                     'rewriteAlias' => true,
+                ],
+            ],
+            [
+                'shopId' => 1,
+                'path' => 'same-url-different-subshops-one-main',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'e',
+                    'action' => 'index',
+                    'param' => '5',
+                    'rewriteAlias' => true,
+                ],
+            ],
+            [
+                'shopId' => 2,
+                'path' => 'same-url-different-subshops-one-main',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'f',
+                    'action' => 'index',
+                    'param' => '6',
+                    'rewriteUrl' => true,
                 ],
             ],
         ];
     }
 
+    /**
+     * Test case
+     */
     public function testMatcherTest()
     {
         foreach ($this->provideSeoUrls() as $testCase) {
             $context = $this->createRoutingContext($testCase['shopId']);
 
-            $this->assertEquals($this->matcher->match($testCase['seoPath'], $context), $testCase['query']);
+            $this->assertEquals($this->matcher->match($testCase['path'], $context), $testCase['expected']);
         }
     }
 
+    /**
+     * Creates a routing context for the given $shopId
+     *
+     * @param int $shopId
+     *
+     * @return Context
+     */
     public function createRoutingContext($shopId)
     {
         $context = new Context();
