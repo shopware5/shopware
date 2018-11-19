@@ -436,6 +436,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="doubleOptinRegister", type="boolean", nullable=false)
      */
     private $doubleOptinRegister;

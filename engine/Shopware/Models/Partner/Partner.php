@@ -50,6 +50,7 @@ class Partner extends ModelEntity
      * @var \Shopware\Models\Attribute\Partner
      */
     protected $attribute;
+
     /**
      * @var int
      *
