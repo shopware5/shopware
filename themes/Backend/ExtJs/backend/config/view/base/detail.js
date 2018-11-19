@@ -71,6 +71,7 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
             form.reset();
         }
         this.fireEvent('recordchange', this, record);
+        form.fireEvent('recordchange', form, record);
     },
 
     updateRecord: function(record) {

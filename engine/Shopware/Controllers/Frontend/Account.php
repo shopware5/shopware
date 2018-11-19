@@ -66,6 +66,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
         $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
 
+        if (!empty($userData['shippingaddress']['country']['id'])) {
+            $country = $this->get('shopware_storefront.country_gateway')->getCountry($userData['shippingaddress']['country']['id'], $this->get('shopware_storefront.context_service')->getContext());
+            $userData['shippingaddress']['country'] = $this->get('legacy_struct_converter')->convertCountryStruct($country);
+        }
+
         $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
         $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
         $this->View()->assign('sUserData', $userData);
