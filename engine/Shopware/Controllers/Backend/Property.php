@@ -432,7 +432,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         $value->setValue($this->Request()->getPost('value'));
 
-        if ($this->Request()->has('mediaId') && $this->Request()->getParam('mediaId', null)) {
+        if ($this->Request()->has('mediaId') && $this->Request()->getParam('mediaId')) {
             $media = $this->get('models')->find('Shopware\Models\Media\Media', $this->Request()->getPost('mediaId'));
             $value->setMedia($media);
         } else {

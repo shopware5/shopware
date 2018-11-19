@@ -98,7 +98,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     public function getAlbumsAction()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $albumId = $this->Request()->getParam('albumId', null);
+        $albumId = $this->Request()->getParam('albumId');
 
         $builder->select(['album'])
             ->from(\Shopware\Models\Media\Album::class, 'album')
@@ -284,12 +284,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         $id = $this->Request()->getParam(
             'mediaId',
-            $this->Request()->getParam('id', null)
+            $this->Request()->getParam('id')
         );
 
         $path = $this->Request()->getParam(
             'path',
-            $this->Request()->getParam('virtualPath', null)
+            $this->Request()->getParam('virtualPath')
         );
 
         if (empty($id) && empty($path)) {

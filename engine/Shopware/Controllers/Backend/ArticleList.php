@@ -269,7 +269,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $resource = $this->Request()->getParam('resource');
 
-        $queueId = $this->Request()->getParam('queueId', null);
+        $queueId = $this->Request()->getParam('queueId');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
@@ -321,7 +321,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $filter = $this->Request()->getParam('filter', []);
         $filter = isset($filter[0]['value']) ? $filter[0]['value'] : null;
         if (!$filter) {
-            $filter = $this->Request()->getParam('query', null);
+            $filter = $this->Request()->getParam('query');
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
@@ -467,7 +467,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $filterArray = $this->Request()->getParam('filterArray');
         $operations = $this->Request()->getParam('operations');
         $limit = $this->Request()->getParam('limit', 1000);
-        $queueId = $this->Request()->getParam('queueId', null);
+        $queueId = $this->Request()->getParam('queueId');
         $offset = $this->Request()->getParam('offset', 0);
         $filterArray = json_decode($filterArray, true);
         if ($filterArray === false) {

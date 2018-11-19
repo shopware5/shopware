@@ -42,10 +42,10 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function searchAction()
     {
-        $entity = $this->Request()->getParam('entity', null);
+        $entity = $this->Request()->getParam('entity');
         $ids = $this->Request()->getParam('ids', []);
-        $id = $this->Request()->getParam('id', null);
-        $term = $this->Request()->getParam('query', null);
+        $id = $this->Request()->getParam('id');
+        $term = $this->Request()->getParam('query');
         $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
 

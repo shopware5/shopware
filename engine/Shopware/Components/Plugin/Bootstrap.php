@@ -73,7 +73,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         $this->info = new Enlight_Config($this->getInfo(), true);
         if ($info instanceof Enlight_Config) {
-            $info->setAllowModifications(true);
+            $info->setAllowModifications();
             $updateVersion = null;
             $updateSource = null;
 

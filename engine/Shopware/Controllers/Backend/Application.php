@@ -277,7 +277,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $this->View()->assign(
             $this->delete(
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('id')
             )
         );
     }
@@ -291,8 +291,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $this->View()->assign(
             $this->reloadAssociation(
-                $this->Request()->getParam('id', null),
-                $this->Request()->getParam('association', null),
+                $this->Request()->getParam('id'),
+                $this->Request()->getParam('association'),
                 $this->Request()->getParam('start', 0),
                 $this->Request()->getParam('limit', 20),
                 $this->Request()->getParam('sort', []),
@@ -319,11 +319,11 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $this->View()->assign(
             $this->searchAssociation(
-                $this->Request()->getParam('query', null),
-                $this->Request()->getParam('association', null),
+                $this->Request()->getParam('query'),
+                $this->Request()->getParam('association'),
                 $this->Request()->getParam('start', 0),
                 $this->Request()->getParam('limit', 20),
-                $this->Request()->getParam('id', null),
+                $this->Request()->getParam('id'),
                 $this->Request()->getParam('filter', []),
                 $this->Request()->getParam('sort', [])
             )

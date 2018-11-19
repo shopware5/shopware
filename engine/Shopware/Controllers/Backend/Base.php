@@ -683,7 +683,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
-        $shopId = $this->Request()->getParam('shopId', null);
+        $shopId = $this->Request()->getParam('shopId');
         $filter = $this->Request()->getParam('filter', []);
         if ($shopId) {
             $filter[] = [
@@ -824,7 +824,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getCountryStatesAction()
     {
-        $countryId = $this->Request()->getParam('countryId', null);
+        $countryId = $this->Request()->getParam('countryId');
 
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\State::class);
 
@@ -913,9 +913,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getPageNotFoundDestinationOptionsAction()
     {
-        $limit = $this->Request()->getParam('limit', null);
+        $limit = $this->Request()->getParam('limit');
         $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', null);
+        $sort = $this->Request()->getParam('sort');
 
         $namespace = Shopware()->Snippets()->getNamespace('backend/base/page_not_found_destination_options');
 

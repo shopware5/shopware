@@ -424,7 +424,7 @@ class Compiler
      */
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
-        $config = $this->inheritance->buildConfig($template, $shop, true);
+        $config = $this->inheritance->buildConfig($template, $shop);
         $config['shopware-revision'] = $this->release->getRevision();
 
         $collection = new ArrayCollection();

@@ -209,7 +209,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
                 ->clearBody();
 
             $response->setHttpResponseCode(200);
-            $enlightRequest->setDispatched(true);
+            $enlightRequest->setDispatched();
             $dispatcher->dispatch($enlightRequest, $response);
         }
 

@@ -121,7 +121,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function manufacturerAction()
     {
-        $manufacturerId = $this->Request()->getParam('sSupplier', null);
+        $manufacturerId = $this->Request()->getParam('sSupplier');
 
         /** @var ProductContextInterface $context */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();

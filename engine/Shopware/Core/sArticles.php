@@ -1012,7 +1012,7 @@ class sArticles
     public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = [])
     {
         if ($sCategoryID === null) {
-            $sCategoryID = $this->frontController->Request()->getParam('sCategory', null);
+            $sCategoryID = $this->frontController->Request()->getParam('sCategory');
         }
 
         $providedNumber = $number;

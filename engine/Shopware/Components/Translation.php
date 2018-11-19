@@ -220,8 +220,7 @@ class Shopware_Components_Translation
         foreach ($data as &$translation) {
             $translation['objectdata'] = $this->unFilterData(
                 $translation['objecttype'],
-                $translation['objectdata'],
-                null
+                $translation['objectdata']
             );
 
             if ($merge) {
@@ -348,7 +347,7 @@ class Shopware_Components_Translation
         }
 
         if ($merge) {
-            $tmp = $this->read($language, $type, 1);
+            $tmp = $this->read($language, $type);
             $tmp[$key] = $data;
             $data = $tmp;
         }

@@ -59,8 +59,8 @@ class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_
             $this->Request()->getParam('id'),
             (int) $this->Request()->getParam('offset', 0),
             $this->Request()->getParam('limit'),
-            $this->Request()->getParam('conditions', null),
-            $this->Request()->getParam('sortings', null)
+            $this->Request()->getParam('conditions'),
+            $this->Request()->getParam('sortings')
         );
 
         $this->View()->assign('data', $customers->getCustomers());

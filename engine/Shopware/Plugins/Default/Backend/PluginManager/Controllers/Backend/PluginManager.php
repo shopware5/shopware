@@ -322,8 +322,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $context = new ListingRequest(
             $this->getLocale(),
             $this->getVersion(),
-            $this->Request()->getParam('offset', null),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('offset'),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('filter', []),
             $this->getListingSorting()
         );

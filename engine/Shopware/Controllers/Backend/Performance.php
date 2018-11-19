@@ -391,7 +391,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     public function fixCategoriesAction()
     {
         $offset = $this->Request()->getParam('offset', 0);
-        $limit = $this->Request()->getParam('limit', null);
+        $limit = $this->Request()->getParam('limit');
 
         $component = Shopware()->Container()->get('CategoryDenormalization');
 
