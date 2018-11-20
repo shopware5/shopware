@@ -330,6 +330,7 @@ class CrudService
             'tableName' => $table,
             'columnName' => $column,
             'columnType' => $unifiedType,
+            'defaultValue' => $defaultValue,
         ]);
 
         $configId = null;
