@@ -51,11 +51,6 @@ class Shopware extends Enlight_Application
     protected $appPath;
 
     /**
-     * @var string
-     */
-    protected $docPath;
-
-    /**
      * @var Container
      */
     protected $container;
@@ -70,7 +65,6 @@ class Shopware extends Enlight_Application
 
         $this->container = $container;
         $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->docPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
 
         parent::__construct();
     }
@@ -155,7 +149,7 @@ class Shopware extends Enlight_Application
      */
     public function DocPath($path = null)
     {
-        return $this->normalizePath($this->docPath, $path);
+        return $this->normalizePath($this->container->getParameter('shopware.app.rootDir'), $path);
     }
 
     /**

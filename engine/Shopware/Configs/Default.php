@@ -23,10 +23,12 @@
  */
 use Shopware\Components\Logger;
 
-if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
-    $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
+$projectDir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR;
+
+if (file_exists($projectDir . 'config_' . $this->Environment() . '.php')) {
+    $customConfig = $this->loadConfig($projectDir . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
-    $customConfig = $this->loadConfig($this->DocPath() . 'config.php');
+    $customConfig = $this->loadConfig($projectDir . 'config.php');
 } else {
     $customConfig = [];
 }
@@ -49,13 +51,13 @@ return array_replace_recursive([
         'private' => [
             'type' => 'local',
             'config' => [
-                'root' => realpath(__DIR__ . '/../../../files/'),
+                'root' => $projectDir . 'files' . DIRECTORY_SEPARATOR,
             ],
         ],
         'public' => [
             'type' => 'local',
             'config' => [
-                'root' => realpath(__DIR__ . '/../../../web/'),
+                'root' => $projectDir . 'web' . DIRECTORY_SEPARATOR,
                 'url' => '',
             ],
         ],
@@ -78,7 +80,7 @@ return array_replace_recursive([
                         'private' => 0700 & ~umask(),
                     ],
                 ],
-                'root' => realpath(__DIR__ . '/../../../'),
+                'root' => $projectDir,
             ],
             'ftp' => [
                 'type' => 'ftp',
@@ -175,8 +177,8 @@ return array_replace_recursive([
         'Default' => $this->AppPath('Plugins_Default'),
         'Local' => $this->AppPath('Plugins_Local'),
         'Community' => $this->AppPath('Plugins_Community'),
-        'ShopwarePlugins' => $this->DocPath('custom_plugins'),
-        'ProjectPlugins' => $this->DocPath('custom_project'),
+        'ShopwarePlugins' => $projectDir . 'custom/plugins/',
+        'ProjectPlugins' => $projectDir . 'custom/project/',
     ],
     'template' => [
         'compileCheck' => true,
@@ -188,7 +190,7 @@ return array_replace_recursive([
         'forceCache' => false,
         'cacheDir' => $this->getCacheDir() . '/templates',
         'compileDir' => $this->getCacheDir() . '/templates',
-        'templateDir' => $this->DocPath('themes'),
+        'templateDir' => $projectDir . 'themes',
     ],
     'mail' => [
         'charset' => 'utf-8',
@@ -306,19 +308,19 @@ return array_replace_recursive([
         ],
     ],
     'app' => [
-        'rootDir' => $this->DocPath(),
-        'downloadsDir' => $this->DocPath('files_downloads'),
-        'documentsDir' => $this->DocPath('files_documents'),
+        'rootDir' => $projectDir,
+        'downloadsDir' => $projectDir . 'files/downloads',
+        'documentsDir' => $projectDir . 'files/documents',
     ],
     'web' => [
-        'webDir' => $this->DocPath('web'),
-        'cacheDir' => $this->DocPath('web_cache'),
+        'webDir' => $projectDir . 'web',
+        'cacheDir' => $projectDir . 'web/cache',
     ],
     'mpdf' => [
         // Passed to \Mpdf\Mpdf::__construct:
         'defaultConfig' => [
             'tempDir' => $this->getCacheDir() . '/mpdf/',
-            'fontDir' => $this->DocPath('engine_Library_Mpdf_ttfonts_'),
+            'fontDir' => $projectDir . 'engine/Library/Mpdf/ttfonts/',
             'fonttrans' => [
                 'helvetica' => 'arial',
                 'verdana' => 'arial',
