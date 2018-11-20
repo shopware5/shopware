@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Order.controller.Document', {
                     order: order,
                     preSelectedAttachment: record,
                     documentTypeStore: documentTypeStore,
-                    listStore: this.getListing().listStore
+                    listStore: me.subApplication.getStore('Order')
                 }).show();
             }
         });
