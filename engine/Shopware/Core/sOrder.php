@@ -1917,15 +1917,9 @@ EOT;
      */
     private function getUserDataForMail($userData)
     {
-        foreach ($userData['billingaddress'] as $key => $value) {
-            $userData['billingaddress'][$key] = html_entity_decode($value);
-        }
-        foreach ($userData['shippingaddress'] as $key => $value) {
-            $userData['shippingaddress'][$key] = html_entity_decode($value);
-        }
-        foreach ($userData['additional']['country'] as $key => $value) {
-            $userData['additional']['country'][$key] = html_entity_decode($value);
-        }
+        array_walk_recursive($userData['billingaddress'], 'html_entity_decode');
+        array_walk_recursive($userData['shippingaddress'], 'html_entity_decode');
+        array_walk_recursive($userData['additional']['country'], 'html_entity_decode');
 
         $userData['additional']['payment']['description'] = html_entity_decode(
             $userData['additional']['payment']['description']
