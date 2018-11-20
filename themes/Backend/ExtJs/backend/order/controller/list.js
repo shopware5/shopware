@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
         documentTypeStore.load({
             callback: function() {
                 me.mainWindow = me.getView('mail.Window').create({
-                    listStore: me.getOrderListGrid().getStore(),
+                    listStore: me.subApplication.getStore('Order'),
                     mail: mail,
                     record: record,
                     order: record,
