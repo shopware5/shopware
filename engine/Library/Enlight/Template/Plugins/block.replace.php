@@ -50,5 +50,5 @@ function smarty_block_replace($params, $content, $smarty, &$repeat, $template)
     }
 
     require_once(SMARTY_PLUGINS_DIR . 'shared.mb_str_replace.php');
-    return mb_str_replace($params['search'], $params['replace'], $content);
+    return smarty_mb_str_replace($params['search'], $params['replace'], $content);
 }
