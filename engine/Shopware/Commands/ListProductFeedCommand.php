@@ -71,7 +71,7 @@ class ListProductFeedCommand extends ShopwareCommand
         $table->setHeaders(['Product Feed', 'Id', 'Last export', 'Interval', 'Active'])
             ->setRows($rows);
 
-        $table->render($output);
+        $table->render();
     }
 
     private function formatInterval($interval)

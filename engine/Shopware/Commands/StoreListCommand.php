@@ -79,7 +79,9 @@ class StoreListCommand extends StoreCommand
             return;
         }
 
-        /** @var $licence LicenceStruct */
+        $result = null;
+
+        /** @var LicenceStruct $licence */
         foreach ($licences as $licence) {
             $result[] = [
                 'technicalName' => $licence->getTechnicalName(),
@@ -94,6 +96,6 @@ class StoreListCommand extends StoreCommand
         $table->setHeaders(['Technical name', 'Description', 'domain', 'Creation date', 'Type'])
               ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

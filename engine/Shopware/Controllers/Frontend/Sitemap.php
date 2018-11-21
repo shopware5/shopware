@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * @category Shopware
@@ -44,7 +45,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         );
 
         $categoryTree = array_merge($categoryTree, $additionalTrees);
-        $this->View()->sCategoryTree = $categoryTree;
+        $this->View()->assign('sCategoryTree', $categoryTree);
     }
 
     /**
@@ -125,9 +126,9 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     /**
      * Recursive helper function to convert a site to correct sitemap format
      *
-     * @param $site
+     * @param array $site
      *
-     * @return mixed
+     * @return array
      */
     private function convertSite($site)
     {
@@ -273,8 +274,8 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param null $from
-     * @param null $to
+     * @param null|\DateTimeInterface $from
+     * @param null|\DateTimeInterface $to
      *
      * @return bool
      */
@@ -346,7 +347,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = $this->get('dbal_connection')->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name']);
 
@@ -357,7 +358,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
         $query->groupBy('manufacturer.id');
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

@@ -71,14 +71,14 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * The element that will be returned on each iteration.
      *
-     * @var mixed
+     * @var null|int|false
      */
     private $_current = null;
 
     /**
      * The element that will be returned on each iteration.
      *
-     * @var mixed
+     * @var null|int|false
      */
     private $_header = null;
 
@@ -116,11 +116,17 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         fclose($this->_handler);
     }
 
+    /**
+     * @param string $fieldmark
+     */
     public function SetFieldmark($fieldmark)
     {
         $this->_fieldmark = $fieldmark;
     }
 
+    /**
+     * @return null|int|false
+     */
     public function GetHeader()
     {
         return $this->_header;
@@ -148,6 +154,8 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 
     /**
      * This method returns the current row number.
+     *
+     * @return null|int
      */
     public function key()
     {
@@ -217,7 +225,6 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      */
     private function _read()
     {
-        //$this->_current = fgetcsv($this->_handler, $this->_length, $this->_delimiter);
         if (!$this->_handler || feof($this->_handler)) {
             $this->_current = false;
 
@@ -226,7 +233,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         $count = 0;
         $line = stream_get_line($this->_handler, $this->_length, $this->_newline);
 
-        // remove possible utf8-bom
+        // Remove possible utf8-bom
         if (substr($line, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
             $line = substr($line, 3);
         }
@@ -250,7 +257,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         do {
             $row .= current($line);
             $count = substr_count($row, $this->_fieldmark);
-            if ($count % 2 != 0) {
+            if ($count % 2 !== 0) {
                 $row .= ';';
                 continue;
             } elseif ($count) {

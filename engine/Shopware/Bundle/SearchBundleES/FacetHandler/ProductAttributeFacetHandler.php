@@ -91,6 +91,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     ) {
         /** @var ProductAttributeFacet $criteriaPart */
         $field = 'attributes.core.' . $criteriaPart->getField();
+        $type = null;
 
         try {
             $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());

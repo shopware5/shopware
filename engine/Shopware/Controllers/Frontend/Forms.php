@@ -70,14 +70,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $id = $this->Request()->getParam('sFid');
         $id = $id ?: $this->Request()->getParam('id');
 
-        $this->View()->forceMail = (int) $this->Request()->getParam('forceMail');
-        $this->View()->id = $id;
-        $this->View()->sSupport = $this->getContent($id);
-        $this->View()->rand = Random::getAlphanumericString(32);
+        $this->View()->assign('forceMail', (int) $this->Request()->getParam('forceMail'));
+        $this->View()->assign('id', $id);
+        $this->View()->assign('sSupport', $this->getContent($id));
+        $this->View()->assign('rand', Random::getAlphanumericString(32));
 
         $success = $this->Request()->getParam('success');
         if ($success) {
-            $this->View()->sSupport = array_merge($this->View()->sSupport, ['sElements' => []]);
+            $this->View()->assign('sSupport', array_merge($this->View()->sSupport, ['sElements' => []]));
         }
 
         $this->renderElementNote($this->View());
@@ -101,7 +101,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         /** @var Enlight_Components_Mail $mail */
         $mail = $this->get('mail');
 
-        //Email field available check
+        // Email field available check
         foreach ($this->_elements as $element) {
             if ($element['typ'] === 'email') {
                 $postEmail = $this->_postData[$element['id']];
@@ -150,11 +150,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
-        /* @var $query \Doctrine\ORM\Query */
+        /* @var \Doctrine\ORM\Query $query */
         $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)
             ->getActiveFormQuery($formId, $shopId);
 
-        /* @var $form Form */
+        /* @var Form $form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
@@ -164,7 +164,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             );
         }
 
-        /* @var $field Field */
+        /* @var Field $field */
         foreach ($form->getFields() as $field) {
             $fieldId = $field->getId();
             $this->_elements[$fieldId] = [

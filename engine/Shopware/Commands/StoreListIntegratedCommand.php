@@ -72,6 +72,6 @@ class StoreListIntegratedCommand extends StoreCommand
         $table->setHeaders(['Id', 'Technical name', 'Label', 'Installed', 'Version', 'Update available'])
             ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

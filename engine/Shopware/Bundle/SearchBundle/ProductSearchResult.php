@@ -60,9 +60,8 @@ class ProductSearchResult extends ProductNumberSearchResult
      */
     public function __construct($products, $totalCount, $facets, Criteria $criteria, ShopContextInterface $context)
     {
-        $this->products = $products;
-        $this->totalCount = $totalCount;
-        $this->facets = $facets;
+        parent::__construct($products, $totalCount, $facets);
+
         $this->criteria = $criteria;
         $this->context = $context;
     }

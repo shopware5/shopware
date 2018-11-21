@@ -71,6 +71,6 @@ class StoreListDomainsCommand extends StoreCommand
         $table->setHeaders(['Domain', 'Balance'])
               ->setRows($domains);
 
-        $table->render($output);
+        $table->render();
     }
 }

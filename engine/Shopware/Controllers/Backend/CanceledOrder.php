@@ -226,7 +226,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
         // Insert the percentage into each field manually
-        if ($data !== null && isset($total)) {
+        if ($data !== null && $total === null) {
             for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
                 if ($total !== 0) {
                     $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
@@ -320,6 +320,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return;
         }
 
+        $code = null;
         // Set the template depending on the voucherId. -1 is a special Id, which defines
         // the 'Ask for Reason' question.
         if ($template === 'sCANCELEDQUESTION') {
@@ -691,7 +692,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     /**
      * Read free codes from the database. If no free codes are available, null will be returned
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return array|null
      */

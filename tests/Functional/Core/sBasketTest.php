@@ -111,7 +111,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test with empty session, expect empty array
         $this->assertEquals(
-            ['hideBasket' => false, 'articles' => null],
+            ['hideBasket' => false, 'articles' => []],
             $this->module->sCheckBasketQuantities()
         );
     }
@@ -2522,9 +2522,9 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     {
         $date = new DateTime();
         $date->modify('-8 days');
-        $lastLogin = $date->format(DateTime::ISO8601);
+        $lastLogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
 
         $testData = [
             'password' => 'fooobar',

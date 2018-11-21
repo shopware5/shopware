@@ -56,11 +56,14 @@ class Backup
      */
     protected $backupPath;
 
+    /**
+     * @var string
+     */
     protected $backupBaseName = 'me-backup-';
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $config \Shopware_Components_Config
+     * @param DqlHelper                   $dqlHelper
+     * @param \Shopware_Components_Config $config
      *
      * @throws \RuntimeException
      */
@@ -118,8 +121,8 @@ class Backup
     /**
      * Returns a list of backup files
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -172,10 +175,10 @@ class Backup
     /**
      * Finish a backup - compresses it and creates a model for the backup.
      *
-     * @param $filterString
-     * @param $operations
-     * @param $items
-     * @param $id
+     * @param string $filterString
+     * @param array  $operations
+     * @param array  $items
+     * @param int    $id
      */
     public function finishBackup($filterString, $operations, $items, $id)
     {
@@ -223,7 +226,7 @@ class Backup
         $path = $backup->getPath();
         $dir = dirname($path);
 
-        if ($offset == 0) {
+        if ($offset === 0) {
             $zip = new \ZipArchive();
             $zip->open($path);
             $success = $zip->extractTo($dir);
@@ -235,6 +238,7 @@ class Backup
 
         // Get list of datasql files
         $dataFiles = $this->getDirectoryList($dir . '/', ['datasql']);
+        $numFiles = null;
 
         if (!empty($dataFiles)) {
             $tables = [];
@@ -364,7 +368,7 @@ class Backup
     /**
      * Try do determine the data type of the value in order to backup it properly
      *
-     * @param $value
+     * @param int|float $value
      *
      * @return null|int
      */
@@ -439,7 +443,7 @@ class Backup
     /**
      * Returns a prefix for a given table
      *
-     * @param $table
+     * @param string $table
      *
      * @throws \RuntimeException
      *
@@ -459,7 +463,7 @@ class Backup
     /**
      * Return an array of columns which needs to be backed up for a given table
      *
-     * @param $table
+     * @param string $table
      *
      * @throws \RuntimeException
      *
@@ -479,7 +483,7 @@ class Backup
     /**
      * Returns a string from a given operations array
      *
-     * @param $operations
+     * @param array $operations
      *
      * @return string
      */
@@ -497,9 +501,9 @@ class Backup
      * Creates a backup model for a given backup
      *
      * @param string $path
-     * @param $filterString
-     * @param $operations
-     * @param $items
+     * @param string $filterString
+     * @param array  $operations
+     * @param array  $items
      */
     protected function saveBackup($path, $filterString, $operations, $items)
     {
@@ -521,10 +525,10 @@ class Backup
     /**
      * Dumps a given table to disc - as only needed columns are exported, this is quite fast
      *
-     * @param $table
-     * @param $name
-     * @param $ids
-     * @param $newBackup
+     * @param string $table
+     * @param string $name
+     * @param int[]  $ids
+     * @param bool   $newBackup
      *
      * @throws \RuntimeException
      */
@@ -583,7 +587,7 @@ class Backup
     /**
      * Returns output directory for a given name and takes care for directory permissions
      *
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -606,7 +610,7 @@ class Backup
     /**
      * Compresses the backup and delete old uncompressed files
      *
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -631,7 +635,7 @@ class Backup
     /**
      * Zips the backup directory content
      *
-     * @param $name
+     * @param string $name
      *
      * @throws \RuntimeException
      *
@@ -663,9 +667,9 @@ class Backup
     /**
      * Return a list of files with a certain extension
      *
-     * @param $path
-     * @param array $findExtension
-     * @param array $blacklistName
+     * @param string $path
+     * @param array  $findExtension
+     * @param array  $blacklistName
      *
      * @return array
      */

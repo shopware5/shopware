@@ -68,7 +68,6 @@ class Application extends BaseApplication
 
         parent::__construct('Shopware', $kernel->getRelease()['version'] . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
-        $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
         $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $kernel->getEnvironment()));
     }
@@ -108,14 +107,6 @@ class Application extends BaseApplication
             $this->commandsRegistered = true;
         }
 
-        if ($input->hasParameterOption(['--shell', '-s']) === true) {
-            $shell = new Shell($this);
-            $shell->setProcessIsolation($input->hasParameterOption(['--process-isolation']));
-            $shell->run();
-
-            return 0;
-        }
-
         return parent::doRun($input, $output);
     }
 
@@ -151,12 +142,12 @@ class Application extends BaseApplication
         $this->registerTaggedServiceIds();
 
         if (!$this->skipDatabase) {
-            //Wrap database related logic in a try-catch
-            //so that non-db commands can still execute
+            // Wrap database related logic in a try-catch
+            // so that non-db commands can still execute
             try {
                 $em = $this->kernel->getContainer()->get('models');
 
-                // setup doctrine commands
+                // Setup doctrine commands
                 $helperSet = $this->getHelperSet();
                 $helperSet->set(new EntityManagerHelper($em), 'em');
                 $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
@@ -187,7 +178,7 @@ class Application extends BaseApplication
         $collection = new ArrayCollection();
         $collection = $eventManager->collect('Shopware_Console_Add_Command', $collection, ['subject' => $this]);
 
-        /** @var $command Command */
+        /** @var Command $command */
         foreach ($collection as $command) {
             if ($command instanceof Command) {
                 $this->add($command);

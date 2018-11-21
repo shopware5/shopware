@@ -151,7 +151,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             GROUP BY groups.groupkey) as t
             ORDER BY :field :direction LIMIT :limit OFFSET :offset';
 
-        /** @var \Doctrine\Dbal\Connection $db */
+        /** @var \Doctrine\DBAL\Connection $db */
         $db = $this->get('dbal_connection');
 
         try {

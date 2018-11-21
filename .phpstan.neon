@@ -4,6 +4,13 @@ includes:
     #- ../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
     level: 2
+
+    autoload_directories:
+        - %currentWorkingDirectory%/var/cache
+        - %currentWorkingDirectory%/engine/Library
+    autoload_files:
+        - %currentWorkingDirectory%/vendor/autoload.php
+
     paths:
         #- %currentWorkingDirectory%/tests/
         - %currentWorkingDirectory%/engine/Shopware
@@ -32,3 +39,7 @@ parameters:
         - '#Method Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\DumperInterface\:\:getProxyFactoryCode\(\)#'
         - '#Shopware_Components_Snippet_Manager::__construct\(\) does not call parent constructor from Enlight_Components_Snippet_Manager#'
         - '#Call to method [a-zA-Z\\]+\(\) on an unknown class Shopware\\Models\\Attribute\\[a-zA-Z\\]+#'
+        - '#does not call parent constructor from Enlight_Class#'
+        - '#Binary operation "|=" between string and string results in an error.#'
+
+    reportUnmatchedIgnoredErrors: false
