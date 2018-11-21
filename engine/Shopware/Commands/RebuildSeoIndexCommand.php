@@ -153,7 +153,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
                 'Shopware_Command_RebuildSeoIndexCommand_CreateRewriteTable',
                 [
                     'shopContext' => $context,
-                    'cachedTime'  => $currentTime,
+                    'cachedTime' => $currentTime,
                 ]
             );
         }
