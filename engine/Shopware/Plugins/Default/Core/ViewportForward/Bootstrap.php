@@ -64,7 +64,12 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
                 $request->setControllerName('listing')->setDispatched(false);
                 break;
             case 'supplier':
-                $request->setControllerName('listing')->setActionName('manufacturer')->setDispatched(false);
+                $url = $args->getSubject()->Router()->assemble([
+                        'controller' => 'listing',
+                        'action' => 'manufacturer',
+                        'sSupplier' => $request->getParam('sSupplier'),
+                ]);
+                $args->getSubject()->Response()->setRedirect($url, 301);
                 break;
             case 'captcha':
                 $request->setModuleName('widgets')->setControllerName('captcha')->setDispatched(false);
