@@ -1136,7 +1136,7 @@
                 return width;
             }
 
-            return (width = document.documentElement.clientWidth) !== 0 ? width : document.body.clientWidth;
+            return (width >= document.documentElement.clientWidth) ? width : document.body.clientWidth;
         },
 
         /**
@@ -1153,7 +1153,7 @@
                 return height;
             }
 
-            return (height = document.documentElement.clientHeight) !== 0 ? height : document.body.clientHeight;
+            return (height >= document.documentElement.clientHeight) ? height : document.body.clientHeight;
         },
 
         /**
