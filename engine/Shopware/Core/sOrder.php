@@ -1879,8 +1879,8 @@ EOT;
         // add attributes to orderDetails
         foreach ($orderDetails as &$orderDetail) {
             $attributes = $this->attributeLoader->load('s_order_details_attributes', $orderDetail['orderdetailsID']);
-            unset($attributes['id']);
-            unset($attributes['detailID']);
+            unset($attributes['id'], $attributes['detailID']);
+
             $orderDetail['attributes'] = $attributes;
         }
 
@@ -1900,8 +1900,8 @@ EOT;
     {
         $order = $this->getOrderById($orderId);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderId);
-        unset($attributes['id']);
-        unset($attributes['orderID']);
+        unset($attributes['id'], $attributes['orderID']);
+
         $order['attributes'] = $attributes;
 
         return $order;
@@ -1915,11 +1915,17 @@ EOT;
      *
      * @return array
      */
-    private function getUserDataForMail($userData)
+    private function getUserDataForMail(array $userData)
     {
-        array_walk_recursive($userData['billingaddress'], 'html_entity_decode');
-        array_walk_recursive($userData['shippingaddress'], 'html_entity_decode');
-        array_walk_recursive($userData['additional']['country'], 'html_entity_decode');
+        array_walk_recursive($userData['billingaddress'], function (&$value) {
+            $value = html_entity_decode($value);
+        });
+        array_walk_recursive($userData['shippingaddress'], function (&$value) {
+            $value = html_entity_decode($value);
+        });
+        array_walk_recursive($userData['additional']['country'], function (&$value) {
+            $value = html_entity_decode($value);
+        });
 
         $userData['additional']['payment']['description'] = html_entity_decode(
             $userData['additional']['payment']['description']
