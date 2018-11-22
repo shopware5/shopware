@@ -36,6 +36,7 @@
         <service id="shopware_elastic_search.text_mapping_factory"
                  class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory">
             <argument>%shopware.es.enabled%</argument>
+            <argument type="expression">container.hasParameter('shopware.es.version') ? parameter('shopware.es.version') : null</argument>
         </service>
 
         <service id="shopware_elastic_search.index_factory" class="Shopware\Bundle\ESIndexingBundle\IndexFactory">
