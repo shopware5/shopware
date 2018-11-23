@@ -170,8 +170,6 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function __construct($id, $config = [])
     {
-        parent::__construct();
-
         // Test-data for preview mode
         if ($config['_preview'] == true && $config['_previewSample'] == true) {
             $array = $this->getDemoData();
