@@ -239,7 +239,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = null;
 
-        if ($repository === null) {
+        if ($repository !== null) {
             $builder = $repository->createQueryBuilder($name);
         }
 
