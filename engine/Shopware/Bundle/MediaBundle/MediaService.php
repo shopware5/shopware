@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\MediaBundle;
 
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Util;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -246,6 +247,12 @@ class MediaService implements MediaServiceInterface
     public function migrateFile($path)
     {
         if ($this->getAdapterType() !== 'local' || $this->isEncoded($path)) {
+            return;
+        }
+
+        $normalizedPath = Util::normalizePath($path);
+
+        if (strpos($normalizedPath, 'media/') !== 0) {
             return;
         }
 
