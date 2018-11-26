@@ -9,11 +9,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 ### Changes
 
-
+* Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password` 
 
 ### Removals
 
-* Removed s_articles_attributes.articleID which was not set for new article variants anymore since Shopware 5.2.0
+* Removed `s_articles_attributes`.`articleID` which was not set for new article variants anymore since Shopware 5.2.0
 
 ### Deprecations
 
