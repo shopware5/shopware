@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
@@ -117,6 +118,25 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @var \Shopware\Components\Model\ModelRepository
      */
     protected $propertyValueRepository;
+
+    /**
+     * @var array
+     */
+    protected $esdFileUploadBlacklist = [
+        'php',
+        'php3',
+        'php4',
+        'php5',
+        'phtml',
+        'cgi',
+        'pl',
+        'sh',
+        'com',
+        'bat',
+        '',
+        'py',
+        'rb',
+    ];
 
     public function initAcl()
     {
@@ -1818,6 +1838,31 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         if ($file === null) {
             $this->View()->assign(['success' => false]);
+
+            return;
+        }
+
+        $extension = strtolower($file->getClientOriginalExtension());
+        $blacklist = $this->esdFileUploadBlacklist;
+
+        $blacklist = $this->container->get('shopware.event_manager')->filter(
+            'Shopware_Controllers_Backend_Article_UploadEsdFile_Filter_EsdFileUploadBlacklist',
+            $blacklist,
+            [
+                'subject' => $this,
+            ]
+        );
+
+        if (in_array($extension, $blacklist, true)) {
+            $e = new MediaFileExtensionIsBlacklistedException($extension);
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'exception' => [
+                    '_class' => get_class($e),
+                    'extension' => $extension,
+                ],
+            ]);
 
             return;
         }
