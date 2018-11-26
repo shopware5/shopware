@@ -133,8 +133,8 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function getUsersAction()
     {
         $params = $this->Request()->getParams();
-        $limit = (empty($params['limit'])) ? 20 : $params['limit'];
-        $offset = (empty($params['start'])) ? 0 : $params['start'];
+        $limit = (empty($params['limit'])) ? 20 : (int) $params['limit'];
+        $offset = (empty($params['start'])) ? 0 : (int) $params['start'];
         $filter = (empty($params['search'])) ? null : $params['search'];
         $order = (empty($params['order'])) ? '' : $params['order'];
 

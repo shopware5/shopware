@@ -80,7 +80,7 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        return password_hash($password, PASSWORD_DEFAULT, $this->options);
+        return password_hash($password, PASSWORD_BCRYPT, $this->options);
     }
 
     /**
@@ -90,6 +90,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isReencodeNeeded($hash)
     {
-        return password_needs_rehash($hash, PASSWORD_DEFAULT, $this->options);
+        return password_needs_rehash($hash, PASSWORD_BCRYPT, $this->options);
     }
 }
