@@ -87,7 +87,14 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
                     name:'fileName',
                     allowBlank:false,
                     required:true,
-                    enableKeyEvents:true
+                    enableKeyEvents:true,
+                    validator: function (value) {
+                        if (value.indexOf('..') >= 0 || value.indexOf('.php') >= 0) {
+                            return '{s name=invalid_filename}{/s}';
+                        }
+
+                        return true;
+                    }
                 },
                 {
                     fieldLabel:'{s name=detail_general/field/partner_id}Partner ID{/s}',
