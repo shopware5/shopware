@@ -110,7 +110,7 @@ class Manager
     {
         $encoderName = strtolower($this->config->defaultPasswordEncoder);
 
-        if (empty($encoderName) || $encoderName == 'auto') {
+        if (empty($encoderName) || $encoderName === 'auto') {
             $bryptEncoder = $this->encoder['bcrypt'];
             if ($bryptEncoder->isCompatible()) {
                 $encoderName = 'bcrypt';
