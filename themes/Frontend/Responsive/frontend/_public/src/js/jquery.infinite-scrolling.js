@@ -166,13 +166,13 @@
             };
 
             me.params = parseQueryString(window.location.href);
-            me.upperParams = $.extend({}, me.params);
             me.historyParams = $.extend({}, me.params);
 
             if (me.opts.productBoxLayout) {
                 me.params.productBoxLayout = me.opts.productBoxLayout || null;
             }
 
+            me.upperParams = $.extend({}, me.params);
             me.urlBasicMode = false;
 
             // if no seo url is provided, use the url basic push mode
