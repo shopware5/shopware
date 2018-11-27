@@ -27,7 +27,7 @@ jobs:
     - stage: lint
       php: 7.2
       install:
-      - curl -s -L "https://github.com/phpstan/phpstan/releases/download/0.10.5/phpstan.phar" > phpstan.phar && chmod +x phpstan.phar
+      - composer install && curl -s -L "https://github.com/phpstan/phpstan/releases/download/0.10.5/phpstan.phar" > phpstan.phar && chmod +x phpstan.phar
       script:
       # Static analyzer check
       - ./phpstan.phar analyze --no-progress -c .phpstan.neon
