@@ -35,6 +35,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Table(name="s_export")
  * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductFeed extends ModelEntity
 {
@@ -1130,5 +1131,21 @@ class ProductFeed extends ModelEntity
     public function isDirty()
     {
         return $this->dirty;
+    }
+
+    /**
+     * @ORM\PostLoad()
+     * @ORM\PreUpdate()
+     * @ORM\PrePersist()
+     */
+    public function sanitizeFilename()
+    {
+        $this->fileName = basename($this->fileName);
+        $extension = strtolower(pathinfo($this->fileName, PATHINFO_EXTENSION));
+
+        if (in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
+            $this->fileName = str_replace('.' . $extension, '.invalid', strtolower($this->fileName));
+            Shopware()->Models()->flush($this);
+        }
     }
 }
