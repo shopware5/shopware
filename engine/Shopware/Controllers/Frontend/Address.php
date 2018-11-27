@@ -192,6 +192,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $this->View()->assign('countryNotAvailableForShipping', !$this->isValidShippingAddress($address));
         $this->View()->assign($this->getFormViewData($form));
+        $this->View()->assign('isShipping', $address->getId() === $address->getCustomer()->getDefaultShippingAddress()->getId());
     }
 
     /**
