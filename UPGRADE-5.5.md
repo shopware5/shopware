@@ -31,7 +31,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `themes/Frontend/Bare/frontend/detail/comment/form.tpl`
     * `themes/Frontend/Bare/frontend/newsletter/index.tpl`
     * `themes/Frontend/Bare/frontend/tellafriend/index.tpl`
-* Changed Symfony library to version 3.4.18
+* Changed Symfony library to version 3.4.19
 * Changed seo product query to clarify select statement
 * Changed document view to hide document boxes on new entry
 * Changed `CronjobSynchronizer` to consider action names without Cronjob Prefix
