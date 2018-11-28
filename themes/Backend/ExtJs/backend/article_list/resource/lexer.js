@@ -136,7 +136,7 @@ Ext.define('Lexer', {
             }
 
             // subOperators, Lists and OR are not possible in simple queries
-            if (token == 'IN' || tokenType == 'subOperators' || (tokenType == 'boolOperators' && token == 'OR')) {
+            if (token == 'IN' || token == 'NOT IN' || tokenType == 'subOperators' || (tokenType == 'boolOperators' && token == 'OR')) {
                 me.setExpressionNotSimple();
             } else if (tokenType == 'boolOperators' && token == 'AND') {
                 me.addToSimpleResult();
@@ -148,7 +148,7 @@ Ext.define('Lexer', {
             }
 
             // Check for list
-            if (token == 'IN') {
+            if (token == 'IN' || token == 'NOT IN') {
                 me.inList = true;
             }
 
@@ -381,7 +381,7 @@ Ext.define('Lexer', {
                 me.setSuggestion('value');
                 return { rules: me.grammar.values, message: '{s name=lexer/value}Value{/s}'}
             }
-            if (token == 'IN') {
+            if (token == 'IN' || token == 'NOT IN') {
                 me.setSuggestion(['(']);
                 return { rules: '(', message: '{s name=lexer/openingBrace}({/s}'}
             }
