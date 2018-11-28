@@ -74,10 +74,12 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                 var result = Ext.decode(response.responseText);
 
                 if (!result.success) {
-                    Shopware.Notification.createStickyGrowlMessage({
-                        title: snippets.errorTitle,
-                        text: result.opensslMissing ? snippets.opensslMessage : result.message,
-                    });
+                    if (result.message && result.success === false) {
+                        Shopware.Notification.createStickyGrowlMessage({
+                            title: snippets.errorTitle,
+                            text: result.opensslMissing ? snippets.opensslMessage : result.message,
+                        });
+                    }
 
                     return;
                 }
