@@ -31,6 +31,7 @@ Ext.define('Shopware.window.ExpiredPluginStop', {
     closable: false,
     minimizable: false,
     maximizable: false,
+    height: 450,
 
     getImage: function() {
         return '{link file="backend/_resources/images/plugin_manager/stop.svg"}';
