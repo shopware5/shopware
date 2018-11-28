@@ -31,6 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Checks\PHPExtensionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\PHPVersionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\RegexCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
+use ShopwarePlugins\SwagUpdate\Components\ExtensionMissingException;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
@@ -67,6 +68,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $this->View()->assign([
                 'success' => false,
                 'data' => [],
+                'message' => $e->getMessage(),
             ]);
 
             return;
@@ -276,7 +278,24 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             }
         }
 
-        $data = $this->fetchUpdateVersion();
+        try {
+            $data = $this->fetchUpdateVersion();
+        } catch (Exception $e) {
+            $opensslMissing = false;
+
+            if ($e instanceof ExtensionMissingException) {
+                $opensslMissing = $e->getMessage() === 'openssl';
+            }
+
+            $this->View()->assign([
+                'success' => false,
+                'data' => [],
+                'message' => $e->getMessage(),
+                'opensslMissing' => $opensslMissing,
+            ]);
+
+            return;
+        }
 
         if ($data instanceof Version && $data->isNewer) {
             $this->View()->assign([
