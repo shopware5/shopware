@@ -137,8 +137,9 @@
                         me.pushState(stateObj, ordernumber);
                     }
                 },
-                complete: function () {
+                complete: function (response, status) {
                     $.loadingIndicator.close();
+                    $.publish('plugin/swAjaxVariant/onRequestDataCompleted', [me, response, status, values, stateObj.location]);
                 }
             });
         },
