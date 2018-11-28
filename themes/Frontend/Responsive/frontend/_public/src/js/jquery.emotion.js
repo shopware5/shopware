@@ -345,7 +345,7 @@
 
             me.$contentMain = $('.content-main');
             me.$container = me.$el.parents('.content--emotions');
-            me.$wrapper = me.$el.parents('.emotion--wrapper');
+            me.$wrapper = me.$el.parents(me.opts.wrapperSelector);
 
             me.$elements = me.$el.find(me.opts.elementSelector);
             me.$gridSizer = me.$el.find(me.opts.gridSizerSelector);
