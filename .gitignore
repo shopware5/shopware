@@ -78,8 +78,9 @@ Thumbs.db
 /docker-compose.override.yml
 /.psh.yml
 /.psh.yaml
-/dev-ops/docker/containers/*/createuser.sh
-/dev-ops/docker/containers/php7/Dockerfile
+/dev-ops/docker/containers/app/Dockerfile
+/dev-ops/docker/containers/elasticsearch/Dockerfile
+/dev-ops/docker/containers/mysql/Dockerfile
 /.psh.yaml.override
 /.psh.yml.override
 
