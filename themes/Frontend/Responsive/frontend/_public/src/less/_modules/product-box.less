@@ -104,11 +104,8 @@ Shopware provides 3 product box types:<br/>
 
     //  Product box
 .product--box {
-    .clearfix();
     display: block;
-    width: 100%;
     padding: 2% 0 0 2%;
-    float: left;
 
     .box--content {
         .unitize-padding(10, 10);
@@ -357,7 +354,7 @@ Creates a corner product badge on a product-box.
 }
 
 .box--minimal {
-    width: 50%;
+    .flexboxChild(50%);
 
     .product--image {
         .unitize-height(120);
@@ -514,7 +511,7 @@ Creates a corner product badge on a product-box.
     }
 
     .box--minimal {
-        width: 33.3%;
+        .flexboxChild(33.3%);
     }
 
     .box--image {
@@ -562,11 +559,11 @@ Creates a corner product badge on a product-box.
     .is--ctl-listing.is--no-sidebar {
         .box--basic {
             .image--top(180);
-            width: 50%;
+            .flexboxChild(50%);
         }
 
         .box--minimal {
-            width: 25%;
+            .flexboxChild(25%);
 
             .product--image {
                 .unitize-height(180);
@@ -574,17 +571,17 @@ Creates a corner product badge on a product-box.
         }
 
         .box--image {
-            width: 50%;
+            .flexboxChild(50%);
         }
 
         .has--sidebar-filter {
             .box--basic {
                 .image--left(160);
-                width: 100%;
+                .flexboxChild(100%);
             }
 
             .box--minimal {
-                width: 33.3%;
+                .flexboxChild(33.3%);
             }
         }
     }
@@ -594,16 +591,16 @@ Creates a corner product badge on a product-box.
 
     .box--basic {
         .image--top(180);
-        width: 50%;
+        .flexboxChild(50%);
     }
 
     .box--minimal {
-        width: 25%;
+        .flexboxChild(25%);
     }
 
     .box--image {
         .image--top(280);
-        width: 50%;
+        .flexboxChild(50%);
     }
 
     .is--ctl-search,
@@ -613,21 +610,21 @@ Creates a corner product badge on a product-box.
         }
 
         .box--minimal {
-            width: 20%;
+            .flexboxChild(20%);
         }
 
         .box--image {
-            width: 33.3%;
+            .flexboxChild(33.3%);
         }
 
         .has--sidebar-filter {
             .box--basic {
                 .image--top(180);
-                width: 50%;
+                .flexboxChild(50%);
             }
 
             .box--minimal {
-                width: 25%;
+                .flexboxChild(25%);
             }
         }
     }
@@ -644,7 +641,7 @@ Creates a corner product badge on a product-box.
     }
 
     .box--minimal {
-        width: 25%;
+        .flexboxChild(25%);
 
         .buybox--form {
             .buy-btn--cart-text {
@@ -665,7 +662,7 @@ Creates a corner product badge on a product-box.
     .is--ctl-listing.is--no-sidebar {
 
         .box--minimal {
-            width: 20%;
+            .flexboxChild(20%);
         }
 
         .has--sidebar-filter {

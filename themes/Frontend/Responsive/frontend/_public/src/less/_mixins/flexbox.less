@@ -1,0 +1,18 @@
+.flexboxContainer() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.flexboxChild(@width: initial) {
+    -webkit-flex: @width;
+    -ms-flex: @width;
+    flex: @width;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+}
