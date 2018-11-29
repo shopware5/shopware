@@ -48,14 +48,28 @@ class ReflectionHelper
      *
      * @return object
      */
-    public function createInstanceFromNamedArguments($className, $arguments, $secure = true, $docPath = null, array $directories = ['engine' . DIRECTORY_SEPARATOR . 'Shopware', 'custom'])
+    public function createInstanceFromNamedArguments($className, $arguments, $secure = true, $docPath = null, array $directories = [])
     {
         $reflectionClass = new \ReflectionClass($className);
+
+        $docPath = $docPath === null ? Shopware()->Container()->getParameter('shopware.app.rootdir') : $docPath;
+
+        $folders = Shopware()->Container()->getParameter('shopware.plugin_directories');
+
+        if ($docPath === Shopware()->DocPath()) {
+            $folders[] = Shopware()->DocPath('engine_Shopware');
+        } else {
+            $folders[] = Shopware()->DocPath();
+        }
+
+        foreach ($folders as $folder) {
+            $directories[] = substr($folder, strlen($docPath));
+        }
 
         if ($secure) {
             $this->verifyClass(
                 $reflectionClass,
-                $docPath === null ? Shopware()->DocPath() : $docPath,
+                $docPath,
                 $directories
             );
         }
