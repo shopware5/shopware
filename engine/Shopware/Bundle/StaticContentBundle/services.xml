@@ -9,6 +9,9 @@
         <service class="Shopware\Bundle\StaticContentBundle\Service\Core\DownloadService"
                  id="shopware_static_content.service.download_service">
             <argument id="front" type="service"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="shopware.esd.public.url_generator"/>
+            <argument type="string">%shopware.filesystem.private.config.root%</argument>
         </service>
         <service class="Shopware\Bundle\StaticContentBundle\Service\Core\EsdService"
                  id="shopware_static_content.service.esd_service">
