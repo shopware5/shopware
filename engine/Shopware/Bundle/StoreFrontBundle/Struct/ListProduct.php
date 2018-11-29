@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -118,6 +118,14 @@ class ListProduct extends BaseProduct
      * @var \DateTime
      */
     protected $createdAt;
+
+    /**
+     * Defines the date which the product was last updated in
+     * the database.
+     *
+     * @var \DateTime
+     */
+    protected $updatedAt;
 
     /**
      * Defines a list of keywords for this product.
@@ -370,7 +378,7 @@ class ListProduct extends BaseProduct
     /**
      * Adds a new product state.
      *
-     * @param $state
+     * @param array $state
      */
     public function addState($state)
     {
@@ -396,7 +404,7 @@ class ListProduct extends BaseProduct
     /**
      * Checks if the product has a specify state.
      *
-     * @param $state
+     * @param string $state
      *
      * @return bool
      */
@@ -841,6 +849,22 @@ class ListProduct extends BaseProduct
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     /**

@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
      */
     refs: [
         { ref: 'navigationTree', selector: 'snippet-main-navigation' },
-        { ref: 'snippetPanel', selector: 'snippet-main-snippetPanel' }
+        { ref: 'snippetPanel', selector: 'snippet-main-snippetPanel' },
+        { ref: 'expertButton', selector: 'snippet-main-window button[action=expert]' }
     ],
 
     /**
@@ -164,13 +165,31 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                     var snippet = Ext.create('Shopware.apps.Snippet.model.Snippet', me.subApplication.snippet);
                     me.onTranslate(snippet);
                 } else {
-                    me.mainWindow = me.getView('main.Window').create({
-                        nSpaceStore:     me.getStore('NSpace'),
-                        snippetStore:    me.getStore('Snippet'),
-                        shoplocaleStore: localeStore
+                    Ext.Ajax.request({
+                        url: '{url controller=UserConfig action=get}',
+                        params: {
+                            name: 'snippet_module'
+                        },
+                        callback: function (request, success, response) {
+                            var config = Ext.JSON.decode(response.responseText);
+
+                            if (!config || config.length <= 0) {
+                                config = { extendedMode: false };
+                            }
+
+                            me.subApplication.userConfig = config;
+
+                            me.mainWindow = me.getView('main.Window').create({
+                                nSpaceStore:     me.getStore('NSpace'),
+                                snippetStore:    me.getStore('Snippet'),
+                                shoplocaleStore: localeStore
+                            });
+                            me.subApplication.setAppWindow(me.mainWindow);
+                            me.mainWindow.show();
+
+                            me.getExpertButton().toggle(config.extendedMode);
+                        }
                     });
-                    me.subApplication.setAppWindow(me.mainWindow);
-                    me.mainWindow.show();
                 }
             }
         });
@@ -436,7 +455,17 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
      * @return void
      */
     onToggleExpert: function(btn, isPressed) {
-        var me = this;
+        var me = this, config = me.subApplication.userConfig;
+
+        config.extendedMode = isPressed;
+
+        Ext.Ajax.request({
+            url: '{url controller=UserConfig action=save}',
+            params: {
+                config: Ext.JSON.encode(config),
+                name: 'snippet_module'
+            }
+        });
 
         me.getSnippetPanel().enableExpertMode(isPressed);
    },

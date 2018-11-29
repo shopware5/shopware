@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 use Shopware\Components\Random;
+use Shopware\Models\Blog\Blog;
 
 /**
  * Shopware Frontend Controller for the Blog
@@ -30,7 +31,7 @@ use Shopware\Components\Random;
  * Contains the logic for the listing of the blog articles and the detail page.
  * Furthermore it will manage the blog comment handling
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -42,7 +43,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     protected $repository;
 
     /**
-     * @var \Shopware\Models\Category\Repository
+     * @var \Shopware\Models\Blog\Repository
      */
     protected $blogCommentRepository;
 
@@ -85,7 +86,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog');
+            $this->repository = Shopware()->Models()->getRepository(Blog::class);
         }
 
         return $this->repository;
@@ -193,19 +194,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
 
         foreach ($blogArticles as $key => $blogArticle) {
-            //adding number of comments to the blog article
+            // Adding number of comments to the blog article
             $blogArticles[$key]['numberOfComments'] = count($blogArticle['comments']);
 
-            //adding tags and tag filter links to the blog article
+            // Adding tags and tag filter links to the blog article
             $tagsQuery = $this->repository->getTagsByBlogId($blogArticle['id']);
             $tagsData = $tagsQuery->getArrayResult();
             $blogArticles[$key]['tags'] = $this->addLinksToFilter($tagsData, 'sFilterTags', 'name', false);
 
-            //adding average vote data to the blog article
+            // Adding average vote data to the blog article
             $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticle['id']);
             $blogArticles[$key]['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
-            //adding thumbnails to the blog article
+            // Adding thumbnails to the blog article
             if (empty($blogArticle['media'][0]['mediaId'])) {
                 continue;
             }
@@ -216,14 +217,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 continue;
             }
 
-            /** @var $media \Shopware\Bundle\StoreFrontBundle\Struct\Media */
+            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\Media $media */
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
 
             $blogArticles[$key]['media'] = $media;
         }
 
-        //RSS and ATOM Feed part
+        // RSS and ATOM Feed part
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
             $this->Response()->setHeader('Content-Type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
@@ -231,6 +232,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+
+        if (!empty($categoryContent['external'])) {
+            return $this->redirect($categoryContent['external'], ['code' => 301]);
+        }
+
         $assigningData = [
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getCategoryBreadcrumb($categoryId),
@@ -283,7 +289,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         // Redirect if category is not available, inactive or external
-        /** @var $category \Shopware\Models\Category\Category */
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);
         if ($category === null || !$category->getActive()) {
             $location = ['controller' => 'index'];
@@ -318,9 +324,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $mediaIds = array_column($blogArticleData['media'], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        //adding thumbnails to the blog article
+        // Adding thumbnails to the blog article
         foreach ($blogArticleData['media'] as &$media) {
             $mediaId = $media['mediaId'];
             $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($mediaStructs[$mediaId]);
@@ -346,13 +351,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
         if (!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
             // Update the views count
-            /* @var $blogModel Shopware\Models\Blog\Blog */
+            /* @var Shopware\Models\Blog\Blog $blogModel */
             $blogModel = $this->getRepository()->find($blogArticleId);
             if ($blogModel) {
                 $blogModel->setViews($blogModel->getViews() + 1);
                 Shopware()->Models()->flush($blogModel);
 
-                //save it to the session
+                // Save it to the session
                 $visitedBlogItems[] = $blogArticleId;
                 Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
             }
@@ -378,6 +383,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function ratingAction()
     {
         $blogArticleId = (int) $this->Request()->getParam('blogArticle');
+        $sErrorFlag = null;
 
         if (!empty($blogArticleId)) {
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
@@ -440,7 +446,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 if (!empty(Shopware()->Config()->sOPTINVOTE) && empty(Shopware()->Session()->sUserId)) {
                     $hash = Random::getAlphanumericString(32);
 
-                    //save comment confirm for the optin
+                    // Save comment confirm for the optin
                     $blogCommentModel = new \Shopware\Models\CommentConfirm\CommentConfirm();
                     $blogCommentModel->setCreationDate(new DateTime('now'));
                     $blogCommentModel->setHash($hash);
@@ -456,7 +462,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $mail->addTo($this->Request()->getParam('eMail'));
                     $mail->send();
                 } else {
-                    //save comment
+                    //Save comment
                     $commentData = $this->Request()->getPost();
                     $this->sSaveComment($commentData, $blogArticleId);
                 }
@@ -471,7 +477,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the date filter
      *
-     * @param array $blogCategoryIds
+     * @param int[] $blogCategoryIds
      * @param array $selectedFilters
      *
      * @return array
@@ -479,8 +485,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getDateFilterData($blogCategoryIds, $selectedFilters)
     {
         // Date filter query
-        $dateFilterQuery = $this->repository->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters);
-        $dateFilterData = $dateFilterQuery->getArrayResult();
+        $dateFilterData = $this->repository
+            ->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters)
+            ->getArrayResult();
 
         return $this->addLinksToFilter($dateFilterData, 'sFilterDate', 'dateFormatDate');
     }
@@ -488,16 +495,17 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the author filter
      *
-     * @param $blogCategoryIds
-     * @param $filter | selected filters
+     * @param int[] $blogCategoryIds
+     * @param array $filter          selected filters
      *
      * @return array
      */
     public function getAuthorFilterData($blogCategoryIds, $filter)
     {
         // Date filter query
-        $filterQuery = $this->repository->getAuthorFilterQuery($blogCategoryIds, $filter);
-        $filterData = $filterQuery->getArrayResult();
+        $filterData = $this->repository
+            ->getAuthorFilterQuery($blogCategoryIds, $filter)
+            ->getArrayResult();
 
         return $this->addLinksToFilter($filterData, 'sFilterAuthor', 'name');
     }
@@ -505,16 +513,17 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the tags filter
      *
-     * @param $blogCategoryIds
-     * @param $filter | selected filters
+     * @param int[] $blogCategoryIds
+     * @param array $filter          | selected filters
      *
      * @return array
      */
     public function getTagsFilterData($blogCategoryIds, $filter)
     {
         // Date filter query
-        $filterQuery = $this->repository->getTagsFilterQuery($blogCategoryIds, $filter);
-        $filterData = $filterQuery->getArrayResult();
+        $filterData = $this->repository
+            ->getTagsFilterQuery($blogCategoryIds, $filter)
+            ->getArrayResult();
 
         return $this->addLinksToFilter($filterData, 'sFilterTags', 'name');
     }

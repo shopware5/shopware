@@ -88,7 +88,7 @@ class PrefixFilesystemTest extends TestCase
         return [
             ['simplePrefix', 'simplePrefix/swag/file.txt', 'swag/file.txt'],
             ['simplePrefix/', 'simplePrefix/swag/', 'swag/'],
-            ['/simplePrefix/', 'simplePrefix/simplePrefix/foo.txt', 'foo.txt'],
+            ['/simplePrefix/', 'simplePrefix/simplePrefix/foo.txt', 'simplePrefix/foo.txt'],
             ['//simplePrefix//', 'prefix/swag.txt', 'prefix/swag.txt'],
         ];
     }

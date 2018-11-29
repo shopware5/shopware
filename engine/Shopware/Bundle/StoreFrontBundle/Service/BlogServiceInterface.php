@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -42,7 +42,7 @@ interface BlogServiceInterface
      * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
      *
-     * @return Struct\Blog[] indexed by the blog id
+     * @return Struct\Blog\Blog[] indexed by the blog id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);
 }

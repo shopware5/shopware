@@ -81,9 +81,9 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     public function onFilterRender(Enlight_Event_EventArgs $args)
     {
-        /** @var $request Enlight_Controller_Request_RequestHttp */
+        /** @var Enlight_Controller_Request_RequestHttp $request */
         $request = $args->getSubject()->Action()->Request();
-        /** @var $response Enlight_Controller_Response_ResponseHttp */
+        /** @var Enlight_Controller_Response_ResponseHttp $response */
         $response = $args->getSubject()->Action()->Response();
 
         $source = $args->getReturn();
@@ -180,7 +180,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             if ($src[1] === 'a' && preg_match('#^https?://#', $src[3])) {
                 $host = @parse_url($src[3], PHP_URL_HOST);
                 if (!strstr($src[0], 'rel=') && !in_array($host, $this->backLinkWhiteList)) {
-                    $src[0] = rtrim($src[0], '>') . ' rel="nofollow">';
+                    $src[0] = rtrim($src[0], '>') . ' rel="nofollow noopener">';
                 }
             }
         }
@@ -263,7 +263,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     protected function filterUrls($source)
     {
-        /** @var $router \Shopware\Components\Routing\RouterInterface */
+        /** @var \Shopware\Components\Routing\RouterInterface $router */
         $router = $this->get('router');
         $baseFile = preg_quote($router->getContext()->getBaseFile(), '#');
         $regex = '#<(a|form|iframe|link|img)[^<>]*(href|src|action)="(' . $baseFile . '[^"]*)".*>#Umsi';

@@ -31,6 +31,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
@@ -142,6 +143,9 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             $categoryFacet
         );
 
+        if (!$facet instanceof FacetResultInterface) {
+            return;
+        }
         $result->addFacet($facet);
     }
 

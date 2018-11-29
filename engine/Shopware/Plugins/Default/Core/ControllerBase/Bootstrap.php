@@ -104,7 +104,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Returns current category id
      *
-     * @param $default
+     * @param int $default
      *
      * @return int
      */
@@ -122,7 +122,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Return current categories
      *
-     * @param $parentId
+     * @param int $parentId
      *
      * @return array
      */
@@ -155,7 +155,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Return box campaigns items
      *
-     * @param $parentId
+     * @param int $parentId
      *
      * @return array
      */

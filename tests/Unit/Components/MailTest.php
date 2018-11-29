@@ -27,7 +27,7 @@ namespace Shopware\Tests\Unit\Components;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

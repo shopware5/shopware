@@ -46,21 +46,21 @@ The styling includes the base styling and the delivery states.
 */
 
 .product--delivery {
-	.unitize(font-size, 14);
+    .unitize(font-size, 14);
 
     p { margin: 0; }
 
-	// Base class for the icon
-	.delivery--status-icon {
-		.unitize-variable(9); // returns the variable "emValue"
-		.border-radius(~"@{emValue}rem");
-		.unitize-margin(0, 5, 0, 0);
-		.unitize-width(9);
-		.unitize-height(9);
+    // Base class for the icon
+    .delivery--status-icon {
+        .unitize-variable(9); // returns the variable "emValue"
+        .border-radius(~"@{emValue}rem");
+        .unitize-margin(0, 5, 0, 0);
+        .unitize-width(9);
+        .unitize-height(9);
         .unitize(line-height, 10);
-		display: inline-block;
+        display: inline-block;
         position: relative;
-	}
+    }
 
     .delivery--status-shipping-free {
         background: @highlight-info;
@@ -69,12 +69,12 @@ The styling includes the base styling and the delivery states.
         color: @highlight-info;
     }
 
-	.delivery--status-available {
+    .delivery--status-available {
         background: @highlight-success
-	}
-	.delivery--text-available {
+    }
+    .delivery--text-available {
         color: @highlight-success;
-	}
+    }
 
     .delivery--status-more-is-coming {
         background: @highlight-notice;
@@ -91,8 +91,8 @@ The styling includes the base styling and the delivery states.
         color: @highlight-error;
     }
 
-	.delivery--text {
-		margin: 0;
-		display: inline-block;
-	}
+    .delivery--text {
+        margin: 0;
+        display: inline-block;
+    }
 }

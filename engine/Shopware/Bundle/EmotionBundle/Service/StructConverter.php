@@ -33,7 +33,6 @@ use Shopware\Bundle\EmotionBundle\ComponentHandler\CategoryTeaserComponentHandle
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Compatibility\LegacyStructConverter;

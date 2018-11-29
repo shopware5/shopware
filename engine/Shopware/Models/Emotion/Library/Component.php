@@ -60,6 +60,7 @@ class Component extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $fields;
+
     /**
      * Unique identifier field of the grid model.
      *
@@ -90,7 +91,7 @@ class Component extends ModelEntity
      * Contains the component description which displayed in the backend
      * module of
      *
-     * @var
+     * @var string
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
@@ -212,7 +213,7 @@ class Component extends ModelEntity
      * Contains the component description which displayed in the backend
      * module of
      *
-     * @return
+     * @return string
      */
     public function getDescription()
     {
@@ -223,7 +224,7 @@ class Component extends ModelEntity
      * Contains the component description which displayed in the backend
      * module of
      *
-     * @param  $description
+     * @param string $description
      */
     public function setDescription($description)
     {
@@ -438,8 +439,6 @@ class Component extends ModelEntity
      *     @var string $defaultValue       Optional; date string in format Y-m-d
      * }
      *
-     * @param array $options
-     *
      * @return Field
      */
     public function createDateField(array $options)
@@ -464,8 +463,6 @@ class Component extends ModelEntity
      *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
-     *
-     * @param array $options
      *
      * @return Field
      */
@@ -698,7 +695,7 @@ class Component extends ModelEntity
 
     public function getMaxPositionValue()
     {
-        if (is_null($this->maxFieldPositionValue)) {
+        if ($this->maxFieldPositionValue === null) {
             $this->maxFieldPositionValue = 0;
 
             $positions = array_map(

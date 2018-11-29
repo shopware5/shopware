@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     public function getWhitelistedCSRFActions()
     {
-        return ['index', 'render', 'saveIndustry'];
+        return ['index', 'render', 'saveIndustry', 'getShops'];
     }
 
     public function indexAction()
@@ -58,6 +58,16 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
         $config = $benchmarkRepository->getConfigForShop($this->getShopId());
 
+        if ($this->hasOutdatedStatistics($config->getLastReceived())) {
+            $this->redirect([
+                'controller' => 'BenchmarkOverview',
+                'action' => 'index',
+                'shopId' => $this->getShopId(),
+            ]);
+
+            return;
+        }
+
         echo $config->getCachedTemplate();
     }
 
@@ -73,15 +83,38 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $this->View()->assign('success', true);
     }
 
+    public function getShopsAction()
+    {
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+
+        $shops = $benchmarkRepository->getShopsWithValidTemplate();
+        $currentShop = $this->getShopId();
+
+        $shops[$currentShop]['active'] = 1;
+
+        $widgetsAllowed = (int) $this->_isAllowed('swag-bi-base', 'widgets');
+
+        $this->View()->assign([
+            'shops' => $shops,
+            'shopSwitchUrl' => $this->Front()->Router()->assemble([
+                'controller' => 'BenchmarkOverview',
+                'action' => 'render',
+                'shopId' => 'replaceShopId',
+            ]) . '?widgetAllowed=' . $widgetsAllowed,
+        ]);
+    }
+
     protected function initAcl()
     {
         $this->addAclPermission('index', 'read', 'Insufficient permissions');
         $this->addAclPermission('render', 'read', 'Insufficient permissions');
         $this->addAclPermission('setIndustry', 'manage', 'Insufficient permissions');
+        $this->addAclPermission('getShops', 'read', 'Insufficient permissions');
     }
 
     /**
-     * @param BenchmarkConfig $settings
+     * @param null|BenchmarkConfig $config
      */
     private function handleSettings(BenchmarkConfig $config = null)
     {
@@ -163,13 +196,18 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     {
         /** @var TemplateCachingHandler $cachingHandler */
         $cachingHandler = $this->get('shopware.benchmark_bundle.components.template_caching_handler');
+        $shopId = $this->getShopId();
 
-        if ($cachingHandler->isTemplateCached()) {
-            $this->redirect([
+        if ($cachingHandler->isTemplateCached($shopId)) {
+            $link = $this->get('router')->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
-                'shopId' => $this->getShopId(),
+                'shopId' => $shopId,
             ]);
+
+            $widgetsAllowed = (int) $this->_isAllowed('swag-bi-base', 'widgets');
+
+            $this->redirect($link . '?widgetAllowed=' . $widgetsAllowed);
 
             return;
         }
@@ -187,7 +225,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $em = $this->get('models');
         $repo = $em->getRepository(Menu::class);
 
-        /** @var Menu $menuEntry */
+        /** @var Menu|null $menuEntry */
         $menuEntry = $repo->findOneBy(['controller' => 'Benchmark', 'action' => 'Settings']);
         if ($menuEntry) {
             $menuEntry->setActive(true);

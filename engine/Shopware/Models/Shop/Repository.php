@@ -349,8 +349,8 @@ class Repository extends ModelRepository
     {
         $shops = $this->getActiveShops();
 
-        foreach ($shops as $shop) {
-            $this->fixActive($shop);
+        foreach ($shops as $key => $shop) {
+            $shops[$key] = $this->fixActive($shop);
         }
 
         return $shops;
@@ -403,7 +403,7 @@ class Repository extends ModelRepository
      */
     public function getQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -441,7 +441,7 @@ class Repository extends ModelRepository
      */
     public function getActiveQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->getQueryBuilder()
             ->where('shop.active = 1');
     }
@@ -628,7 +628,7 @@ class Repository extends ModelRepository
      */
     private function getActiveMainShopQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -658,7 +658,7 @@ class Repository extends ModelRepository
      */
     private function getActiveSubShopQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 

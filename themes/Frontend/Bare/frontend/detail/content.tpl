@@ -19,7 +19,9 @@
         {/block}
 
         {* Product header *}
-        {include file="frontend/detail/content/header.tpl"}
+        {block name="frontend_detail_index_header_container"}
+            {include file="frontend/detail/content/header.tpl"}
+        {/block}
 
         <div class="product--detail-upper block-group">
             {* Product image *}
@@ -31,12 +33,16 @@
                     data-maxZoom="{$theme.lightboxZoomFactor}"
                     data-thumbnails=".image--thumbnails"
                     {/if}>
-                    {include file="frontend/detail/image.tpl"}
+                    {block name="frontend_detail_index_image"}
+                        {include file="frontend/detail/image.tpl"}
+                    {/block}
                 </div>
             {/block}
 
             {* "Buy now" box container *}
-            {include file="frontend/detail/content/buy_container.tpl"}
+            {block name="frontend_detail_index_buy_box_container"}
+                {include file="frontend/detail/content/buy_container.tpl"}
+            {/block}
         </div>
 
         {* Product bundle hook point *}
@@ -58,10 +64,14 @@
             <div class="tab-menu--cross-selling"{if $sArticle.relatedProductStreams} data-scrollable="true"{/if}>
 
                 {* Tab navigation *}
-                {include file="frontend/detail/content/tab_navigation.tpl"}
+                {block name="frontend_detail_index_tabs_navigation_container"}
+                    {include file="frontend/detail/content/tab_navigation.tpl"}
+                {/block}
 
                 {* Tab content container *}
-                {include file="frontend/detail/content/tab_container.tpl"}
+                {block name="frontend_detail_index_tab_container"}
+                    {include file="frontend/detail/content/tab_container.tpl"}
+                {/block}
             </div>
         {/block}
     </div>

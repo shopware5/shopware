@@ -28,9 +28,6 @@ use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-/**
- * Class IndexFactory
- */
 class IndexFactory implements IndexFactoryInterface
 {
     /**
@@ -49,20 +46,34 @@ class IndexFactory implements IndexFactoryInterface
     private $numberOfReplicas;
 
     /**
+     * @var int|null
+     */
+    private $totalFieldsLimit;
+
+    /**
+     * @var int|null
+     */
+    private $maxResultWindow;
+
+    /**
      * @param string   $prefix
      * @param int|null $numberOfShards
      * @param int|null $numberOfReplicas
+     * @param int|null $totalFieldsLimit
+     * @param int|null $maxResultWindow
      */
-    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null)
+    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null, $totalFieldsLimit = null, $maxResultWindow = null)
     {
         $this->prefix = $prefix;
         $this->numberOfShards = $numberOfShards;
         $this->numberOfReplicas = $numberOfReplicas;
+        $this->totalFieldsLimit = $totalFieldsLimit;
+        $this->maxResultWindow = $maxResultWindow;
     }
 
     /**
-     * @param Shop $shop
-     * @param $mappingType
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return IndexConfiguration
      */
@@ -72,13 +83,15 @@ class IndexFactory implements IndexFactoryInterface
             $this->getIndexName($shop, $mappingType) . '_' . $this->getTimestamp(),
             $this->getIndexName($shop, $mappingType),
             $this->numberOfShards,
-            $this->numberOfReplicas
+            $this->numberOfReplicas,
+            $this->totalFieldsLimit,
+            $this->maxResultWindow
         );
     }
 
     /**
-     * @param Shop $shop
-     * @param $mappingType
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return ShopIndex
      */
@@ -106,8 +119,8 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop $shop
-     * @param $mappingType
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return string
      */

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
@@ -31,7 +30,7 @@ use Shopware\Models\Shop\Shop;
 /**
  * Shopware Plugin Namespace
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -286,8 +285,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return $result;
         }
 
-        /** @var $plugin Shopware\Models\Plugin\Plugin */
-        /** @var $widget Shopware\Models\Widget\Widget */
+        /** @var Shopware\Models\Plugin\Plugin $plugin */
+        /** @var Shopware\Models\Widget\Widget $widget */
         foreach ($plugin->getWidgets() as $widget) {
             $name = $widget->getName();
             $db->insert('s_core_acl_privileges', [

@@ -111,65 +111,65 @@ The functionality is provided by the `jquery.off-canvas-menu.js` file.
 }
 
 .navigation--smartphone {
-	.navigation--entry {
-		.unitize-padding(12, 10, 12, 10);
-		background: #fff;
-	}
-	.navigation--link {
-		display: block;
-	}
+    .navigation--entry {
+        .unitize-padding(12, 10, 12, 10);
+        background: #fff;
+    }
+    .navigation--link {
+        display: block;
+    }
 
-	.entry--close-off-canvas {
+    .entry--close-off-canvas {
         .unitize-padding(2, 10);
         .unitize(line-height, 38);
-		.secondary-gradient();
+        .secondary-gradient();
 
-		.navigation--link {
-			.clearfix();
+        .navigation--link {
+            .clearfix();
             .unitize(font-size, 14);
-			color: @gray-light;
-			font-weight: @font-bold-weight;
+            color: @gray-light;
+            font-weight: @font-bold-weight;
 
-			&:active {
-				color: @gray;
-			}
-		}
-		.icon--arrow-right {
-			.unitize-margin(12, 0, 0, 0);
+            &:active {
+                color: @gray;
+            }
+        }
+        .icon--arrow-right {
+            .unitize-margin(12, 0, 0, 0);
             .unitize(font-size, 11);
             float: right;
-		}
-	}
+        }
+    }
 }
 
 .navigation--headline,
 .sidebar--navigation {
-	.unitize-margin(0, 10, 0, 10);
+    .unitize-margin(0, 10, 0, 10);
 }
 .navigation--headline {
-	.unitize-margin(16, 10, 6, 10);
+    .unitize-margin(16, 10, 6, 10);
     .unitize(line-height, 26);
     color: @text-color-dark;
     font-weight: @font-bold-weight;
-	font-size: 1em;
+    font-size: 1em;
 }
 .sidebar--navigation {
-	.border-radius();
-	background: #fff;
-	border: 1px solid @border-color;
+    .border-radius();
+    background: #fff;
+    border: 1px solid @border-color;
 
-	.navigation--entry {
-		border-bottom: 1px solid @border-color;
+    .navigation--entry {
+        border-bottom: 1px solid @border-color;
 
-		&:last-child {
-			border-bottom: 0 none;
-		}
-	}
-	.navigation--link {
-		color: @text-color;
+        &:last-child {
+            border-bottom: 0 none;
+        }
+    }
+    .navigation--link {
+        color: @text-color;
         overflow: hidden;
         text-overflow: ellipsis;
-	}
+    }
 }
 
 @media screen and(min-width: @tabletViewportWidth) {

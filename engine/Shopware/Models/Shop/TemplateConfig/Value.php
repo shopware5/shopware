@@ -60,7 +60,7 @@ class Value extends ModelEntity
     private $id;
 
     /**
-     * @var
+     * @var int
      * @ORM\Column(name="element_id", type="integer", nullable=false)
      */
     private $elementId;

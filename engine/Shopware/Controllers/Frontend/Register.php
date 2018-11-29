@@ -24,6 +24,7 @@
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Shopware\Models\Customer\Address;
@@ -79,6 +80,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             return;
         }
 
+        $this->View()->assign('isAccountless', $this->get('session')->get('isAccountless'));
         $this->View()->assign('register', $this->getRegisterData());
         $this->View()->assign('countryList', $this->getCountries());
     }
@@ -120,6 +122,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $shippingForm = $this->createShippingForm($data['register']['shipping']);
             $shipping = $shippingForm->getData();
             $errors['shipping'] = $this->getFormErrors($shippingForm);
+        } else {
+            /** @var Address $billing */
+            $billing = $billingForm->getData();
+
+            $country = $this->get('shopware_storefront.country_gateway')->getCountry($billing->getCountry()->getId(), $context);
+
+            if (!$country->allowShipping()) {
+                $errors['billing']['country'] = $this->get('snippets')->getNamespace('frontend/register/index')->get('CountryNotAvailableForShipping');
+            }
         }
 
         $validCaptcha = $this->validateCaptcha($this->get('config')->get('registerCaptcha'), $this->request);
@@ -139,9 +150,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
 
         if ($errors['occurred']) {
-            unset($data['register']['personal']['password']);
-            unset($data['register']['personal']['passwordConfirmation']);
-            unset($data['register']['personal']['emailConfirmation']);
+            unset(
+                $data['register']['personal']['password'],
+                $data['register']['personal']['passwordConfirmation'],
+                $data['register']['personal']['emailConfirmation']
+            );
 
             $this->View()->assign('errors', $errors);
             $this->View()->assign($data);
@@ -156,7 +169,17 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         /** @var Address $billing */
         $billing = $billingForm->getData();
 
-        $doubleOptinRegister = $this->container->get('config')->get('optinregister');
+        $config = $this->container->get('config');
+
+        $accountMode = (int) $customer->getAccountMode();
+        $doubleOptinWithAccount = ($accountMode === 0) && $config->get('optinregister');
+        $doubleOptInAccountless = ($accountMode === 1) && $config->get('optinaccountless');
+
+        $doubleOptinRegister = $doubleOptinWithAccount || $doubleOptInAccountless;
+        $shop = $context->getShop();
+        $shop->addAttribute('sendOptinMail', new Attribute([
+            'sendOptinMail' => $doubleOptinRegister,
+        ]));
 
         $customer->setReferer((string) $session->offsetGet('sReferer'));
         $customer->setValidation((string) $data['register']['personal']['sValidation']);
@@ -166,19 +189,21 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $customer->setDoubleOptinConfirmDate(null);
 
         $registerService->register(
-            $context->getShop(),
+            $shop,
             $customer,
             $billing,
-            $shipping,
-            $doubleOptinRegister
+            $shipping
         );
 
         /*
          * Remove sensitive data before writing to the session
          */
-        unset($data['register']['personal']['password']);
-        unset($data['register']['personal']['passwordConfirmation']);
-        unset($data['register']['billing']['password']);
+        unset(
+            $data['register']['personal']['password'],
+            $data['register']['personal']['passwordConfirmation'],
+            $data['register']['billing']['password'],
+            $data['register']['billing']['passwordConfirmation']
+        );
 
         if ($doubleOptinRegister) {
             $this->get('events')->notify(
@@ -189,6 +214,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
                     'shippingID' => $customer->getDefaultShippingAddress()->getId(),
                 ]
             );
+
+            $session->offsetSet('isAccountless', $accountMode === Customer::ACCOUNT_MODE_FAST_LOGIN);
 
             $this->redirectCustomer([
                 'location' => 'register',
@@ -236,7 +263,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $customer = $modelManager->find(Customer::class, $customerId);
 
         // One-Time-Account
-        if ($customer->getAccountMode() === 1) {
+        if ($data['fromCheckout'] === true || $customer->getAccountMode() === 1) {
             $redirection = [
                 'controller' => 'checkout',
                 'action' => 'confirm',
@@ -452,7 +479,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function getCustomerGroupKey()
     {
-        $customerGroupKey = $this->request->getParam('sValidation', null);
+        $customerGroupKey = $this->request->getParam('sValidation');
         $customerGroupId = $this->get('dbal_connection')->fetchColumn(
             'SELECT id FROM s_core_customergroups WHERE `groupkey` = ?',
             [$customerGroupKey]
@@ -531,6 +558,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     /**
      * Redirects after registration to the corresponding controllers and actions
+     *
+     * @param array $params
      */
     private function redirectCustomer(array $params = [])
     {

@@ -21,18 +21,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Category\Category;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /** @var $model Category */
+    /** @var Category $repository */
     protected $repository = null;
+
     /**
      * dummy data
      *

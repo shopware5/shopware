@@ -4,6 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <imports>
+        <import resource="../HttpCache/services.xml"/>
+    </imports>
+
     <parameters>
         <parameter key="shopware.slug.config" type="collection">
             <parameter key="regexp">/([^A-Za-z0-9\.]|-)+/</parameter>
@@ -61,6 +65,7 @@
             <argument type="service" id="shopware.escaper" />
             <argument>%shopware.template%</argument>
             <argument>%shopware.template_security%</argument>
+            <argument>%shopware.cache.backendOptions%</argument>
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
@@ -382,6 +387,14 @@
             <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
+        <service id="legacy_documentid_converter" class="Shopware\Components\Compatibility\LegacyDocumentIdConverter">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="legacy_mysql8_migration_command" class="Shopware\Components\Compatibility\MigrateMysql8Command">
+            <tag name="console.command" command="sw:migrate:mysql8" />
+        </service>
+
         <service id="query_alias_mapper" class="Shopware\Components\QueryAliasMapper">
             <factory class="Shopware\Components\QueryAliasMapper" method="createFromConfig" />
             <argument type="service" id="config" />
@@ -393,12 +406,6 @@
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
             <argument type="service" id="shopware_plugininstaller.plugin_service_local" />
             <argument type="service" id="shopware_plugininstaller.store_client" />
-        </service>
-
-        <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="corelogger" />
-            <argument type="service" id="guzzle_http_client_factory" />
         </service>
 
         <service id="shop_page_menu" class="Shopware\Components\SitePageMenu">
@@ -532,10 +539,6 @@
             <argument type="service" id="models" />
         </service>
 
-        <service id="shopware.http_cache.route_installer" class="Shopware\Components\HttpCache\CacheRouteInstaller">
-            <argument type="service" id="config_writer"/>
-        </service>
-
         <service id="basket_persister" class="Shopware\Components\BasketSignature\BasketPersister">
             <argument type="service" id="dbal_connection" />
         </service>
@@ -649,7 +652,7 @@
             <argument type="service" id="shopware.emotion.preset_data_synchronizer" />
             <argument type="service" id="shopware.api.emotionpreset" />
             <argument type="service" id="shopware_media.media_service" />
-            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.app.rootdir%</argument>
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.slug" />
         </service>
@@ -685,7 +688,7 @@
             <argument type="service" id="events" />
             <!--preset element handlers-->
             <argument type="tagged" tag="shopware.emotion.preset_component_handler" />
-            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.app.rootdir%</argument>
         </service>
 
         <service id="shopware.emotion.preset_banner_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerComponentHandler">
@@ -832,10 +835,13 @@
         <service id="shopware.cart.proportional_tax_calculator"
                  class="Shopware\Components\Cart\ProportionalTaxCalculator"/>
 
-        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
+        <service id="shopware.cart.basket_query_helper" class="Shopware\Components\Cart\BasketQueryHelper">
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="session"/>
+        </service>
+
+        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
             <argument type="service" id="shopware.cart.proportional_tax_calculator"/>
+            <argument type="service" id="shopware.cart.basket_query_helper" />
         </service>
 
         <service id="shopware.cart.proportional_cart_merger" class="Shopware\Components\Cart\ProportionalCartMerger">
@@ -852,9 +858,33 @@
             <argument>%shopware.filesystem.public%</argument>
         </service>
 
+        <service id="shopware.filesystem.public.url_generator" class="Shopware\Components\Filesystem\PublicUrlGenerator">
+            <argument type="service" id="service_container"/>
+            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.filesystem.public.config.root%</argument>
+            <argument>%shopware.filesystem.public.config.url%</argument>
+        </service>
+
         <service id="shopware.filesystem.private" class="League\Flysystem\FilesystemInterface">
             <factory service="shopware.filesystem_factory" method="factory" />
             <argument>%shopware.filesystem.private%</argument>
         </service>
+
+        <service id="shopware.components.privacy.cookie_remove_subscriber" class="Shopware\Components\Privacy\CookieRemoveSubscriber" >
+            <argument type="service" id="config"/>
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware.esd.public.url_generator" class="Shopware\Components\Filesystem\PublicUrlGenerator">
+            <argument type="service" id="service_container"/>
+            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.filesystem.private.config.root%</argument>
+        </service>
+
+        <service id="shopware.components.state_translator" class="Shopware\Components\StateTranslatorService">
+            <argument type="service" id="snippets"/>
+        </service>
+
+        <service id="shopware.components.stream_protocol_validator" class="Shopware\Components\StreamProtocolValidator"/>
     </services>
 </container>

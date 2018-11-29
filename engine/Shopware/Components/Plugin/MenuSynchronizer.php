@@ -70,6 +70,7 @@ class MenuSynchronizer
                     $menuNames = array_merge($menuNames, $childMenuNames);
                 }
             }
+
             if ($menuItem['isRootMenu']) {
                 $parent = null;
             } else {

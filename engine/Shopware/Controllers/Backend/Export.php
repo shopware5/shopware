@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -190,7 +189,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         $dirName = $this->container->getParameter('kernel.cache_dir');
         $dirName .= '/productexport/';
         if (!file_exists($dirName)) {
-            mkdir($dirName, 0777);
+            mkdir($dirName);
         }
 
         return $dirName;

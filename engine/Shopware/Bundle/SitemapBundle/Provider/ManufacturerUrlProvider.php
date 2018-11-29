@@ -49,7 +49,8 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * {@inheritdoc}
+     * @param Connection     $connection
+     * @param Routing\Router $router
      */
     public function __construct(Connection $connection, Routing\Router $router)
     {
@@ -58,15 +59,12 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
-            return null;
+            return [];
         }
 
         $manufacturers = $this->getManufacturersForSitemap($shopContext);
@@ -113,7 +111,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     {
         $categoryId = $shopContext->getShop()->getCategory()->getId();
 
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name', 'manufacturer.changed']);
 
@@ -124,7 +122,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
 
         $query->groupBy('manufacturer.id');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

@@ -52,7 +52,8 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $this->View()->loadTemplate(sprintf('backend/benchmark/template/local/%s.tpl', $template));
 
         if ($template === 'waiting') {
-            $this->View()->assign('waitingSinceDays', $this->getWaitingTemplateId());
+            $waitingSinceHours = $this->getWaitingSinceHours();
+            $this->View()->assign('waitingSinceHours', $waitingSinceHours);
         }
 
         if ($template === 'industry_select') {
@@ -103,23 +104,16 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
     }
 
     /**
-     * Returns the identifier of the snippets, templates etc. to be used
+     * Returns the amount of hours since first seeing the waiting screen.
      *
      * @return int
      */
-    private function getWaitingTemplateId()
+    private function getWaitingSinceHours()
     {
         $now = new DateTime('now');
         $diff = $now->diff($this->getWaitingSinceDate());
-        // We need to increment the raw difference in days by one, because we want to show the first screen on day #0
 
-        $dateDiff = $diff->days + 1;
-
-        if ($dateDiff > 3) {
-            $dateDiff = 3;
-        }
-
-        return $dateDiff;
+        return (int) ($diff->h + ($diff->days * 24));
     }
 
     /**
@@ -165,7 +159,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
      */
     private function getUserIdentity()
     {
-        /** @var $plugin Shopware_Plugins_Backend_Auth_Bootstrap */
+        /** @var Shopware_Plugins_Backend_Auth_Bootstrap $plugin */
         $plugin = $this->get('plugins')->get('Backend')->get('Auth');
 
         try {

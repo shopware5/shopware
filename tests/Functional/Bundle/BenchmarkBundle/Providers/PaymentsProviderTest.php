@@ -36,7 +36,7 @@ class PaymentsProviderTest extends ProviderTestCase
         'paymentsWithReduction' => IsType::TYPE_INT,
         'paymentsWithPercentagePrice' => IsType::TYPE_INT,
         'paymentsWithAbsolutePrice' => IsType::TYPE_INT,
-        'paymentUsages' => IsType::TYPE_ARRAY,
+        'paymentsUsages' => IsType::TYPE_ARRAY,
     ];
 
     /**

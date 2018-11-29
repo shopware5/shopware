@@ -30,7 +30,12 @@ return [
 
     'api.endpoint' => 'https://api.shopware.com',
 
-    'languages' => ['de', 'en', 'nl', 'it', 'fr', 'es', 'pt'],
+    'tos.urls' => [
+        'de' => 'https://api.shopware.com/gtc/de_DE.html',
+        'en' => 'https://api.shopware.com/gtc/en_GB.html',
+    ],
+
+    'languages' => ['de', 'en', 'nl', 'it', 'fr', 'es', 'pt', 'pl'],
 
     'slim' => [
         'log.level' => \Slim\Log::DEBUG,

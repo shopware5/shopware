@@ -82,7 +82,7 @@ class ProfileUpdateFormType extends AbstractType
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
-            array_walk_recursive($data, function (&$item, $key) {
+            array_walk_recursive($data, function (&$item) {
                 $item = strip_tags($item);
             });
             $event->setData($data);

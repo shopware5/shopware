@@ -47,8 +47,6 @@ interface PartialConditionHandlerInterface
      * @param Criteria              $criteria
      * @param Search                $search
      * @param ShopContextInterface  $context
-     *
-     * @return
      */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,

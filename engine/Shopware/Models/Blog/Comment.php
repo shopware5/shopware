@@ -264,7 +264,7 @@ class Comment extends ModelEntity
     /**
      * Get points
      *
-     * @return \Shopware\Models\Blog\double
+     * @return float
      */
     public function getPoints()
     {
@@ -274,7 +274,7 @@ class Comment extends ModelEntity
     /**
      * Set points
      *
-     * @param \Shopware\Models\Blog\double $points
+     * @param float $points
      */
     public function setPoints($points)
     {

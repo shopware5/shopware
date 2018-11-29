@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -80,6 +80,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     /**
      * Standard plugin update method to register all required components.
      *
+     * @param string $version
+     *
      * @return bool success
      */
     public function update($version)
@@ -131,7 +133,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function onBackendOrderPostDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var $view Enlight_View_Default */
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
 
         //if the controller action name equals "load" we have to load all application components
@@ -153,10 +155,10 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function onBackendCustomerPostDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var $view Enlight_View_Default */
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
 
-        //if the controller action name equals "load" we have to load all application components
+        // If the controller action name equals "load" we have to load all application components
         if ($args->getRequest()->getActionName() === 'load') {
             $view->addTemplateDir($this->Path() . 'Views/emotion/');
 

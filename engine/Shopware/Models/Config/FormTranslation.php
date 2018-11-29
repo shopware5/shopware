@@ -93,9 +93,9 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * @param $label
+     * @param string $label
      *
-     * @return Form
+     * @return FormTranslation
      */
     public function setLabel($label)
     {
@@ -117,7 +117,7 @@ class FormTranslation extends ModelEntity
      *
      * @param string $description
      *
-     * @return string
+     * @return FormTranslation
      */
     public function setDescription($description)
     {

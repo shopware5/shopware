@@ -178,7 +178,7 @@
         </service>
 
         <service id="customer_search.dbal.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundleDBAL\Commands\SearchIndexPopulateCommand">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:customer:search:index:populate"/>
         </service>
 
         <service id="customer_search.dbal.indexing.order_gateway" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderGateway" >

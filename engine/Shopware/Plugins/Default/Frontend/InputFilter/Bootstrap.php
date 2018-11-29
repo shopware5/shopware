@@ -28,7 +28,7 @@
 class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public $sqlRegex = 's_core_|s_order_|s_user|benchmark.*\(|(?:insert|replace).+into|update.+set|(?:delete|select).+from|(?:alter|rename|create|drop|truncate).+(?:database|table|procedure)|union.+select|prepare.+from.+execute|select.+into\s+(outfile|dumpfile)';
-    public $xssRegex = 'javascript:|src\s*=|\bon[a-z]+\s*=|style\s*=';
+    public $xssRegex = 'javascript:|src\s*=|\bon[a-z]+\s*=|style\s*=|\bdata-\w+';
     public $rfiRegex = '\.\./|\\0';
 
     /**
@@ -66,8 +66,6 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
     public function onRouteShutdown(Enlight_Controller_EventArgs $args)
     {
         $request = $args->getRequest();
-        $front = $args->getSubject();
-        $response = $front->Response();
         $config = $this->Config();
 
         if ($request->getModuleName() === 'backend' || $request->getModuleName() === 'api') {

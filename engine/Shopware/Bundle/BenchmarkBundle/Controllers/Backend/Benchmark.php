@@ -32,6 +32,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
         try {
             /** @var BenchmarkRepository $benchmarkRepository */
             $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+            $benchmarkRepository->synchronizeShops();
 
             $this->View()->assign([
                 'success' => true,
@@ -123,19 +124,33 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function checkBenchmarksAction()
     {
         $result = new BenchmarkDataResult();
-        $message = false;
+        $message = null;
 
         try {
-            $result = $this->get('shopware.benchmark_bundle.benchmark_statistics')->sendBenchmarkData();
+            /** @var BenchmarkDataResult $result */
+            $result = $this->get('shopware.benchmark_bundle.benchmark_statistics')->handleTransmission();
         } catch (\Exception $e) {
             $message = $e->getMessage();
         }
 
+        $statisticsResponseSuccess = $result->getStatisticsResponse() !== null;
+        $bIResponseSuccess = $result->getBiResponse() !== null;
+
+        $shopId = 0;
+        if ($statisticsResponseSuccess) {
+            $shopId = $result->getStatisticsResponse()->getShopId();
+        }
+
+        if ($bIResponseSuccess) {
+            $shopId = $result->getBiResponse()->getShopId();
+        }
+
         $this->View()->assign([
-            'success' => true,
-            'statistics' => $result->getStatisticsResponse(),
-            'bi' => $result->getBiResponse(),
+            'success' => $message === null,
+            'statistics' => $statisticsResponseSuccess,
+            'bi' => $bIResponseSuccess,
             'message' => $message,
+            'shopId' => $shopId,
         ]);
     }
 

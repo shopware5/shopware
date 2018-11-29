@@ -89,10 +89,7 @@ class ProductUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return null|Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
@@ -108,7 +105,7 @@ class ProductUrlProvider implements UrlProviderInterface
         $productNumberSearchResult = $this->productNumberSearch->search($criteria, $shopContext);
 
         if (count($productNumberSearchResult->getProducts()) === 0) {
-            return null;
+            return [];
         }
 
         // Load all available product ids

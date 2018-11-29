@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
@@ -497,7 +496,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      *
-     * @param $id
+     * @param int $id
      *
      * @throws Zend_Http_Client_Exception
      * @throws Zend_Json_Exception
@@ -645,7 +644,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      *
-     * @param $id
+     * @param int $id
      *
      * @throws Zend_Http_Client_Exception
      * @throws Zend_Json_Exception

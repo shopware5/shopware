@@ -1,4 +1,4 @@
-<?php $app->render('_header.php', ['tab' => 'start']) ?>
+<?php $app->render('_header.php', ['tab' => 'start']); ?>
 
 <h2><?= $language['start_update']; ?></h2>
 
@@ -11,13 +11,11 @@
         <option value="de"<?php if ($selectedLanguage == 'de') {
     ?>
                 selected="selected"<?php
-
 } ?>><?= $language['select_language_de']; ?></option>
         <option value="en"<?php if ($selectedLanguage == 'en') {
-    ?>
+        ?>
                 selected="selected"<?php
-
-} ?>><?= $language['select_language_en']; ?></option>
+    } ?>><?= $language['select_language_en']; ?></option>
     </select>
 
     <div class="actions clearfix">
@@ -25,4 +23,4 @@
     </div>
 </form>
 
-<?php $app->render('_footer.php') ?>
+<?php $app->render('_footer.php'); ?>

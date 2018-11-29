@@ -166,7 +166,7 @@ class Document extends ModelEntity
     /**
      * Sets the document's unique key
      *
-     * @param string
+     * @param string $key
      *
      * @return \Shopware\Models\Document\Document
      */

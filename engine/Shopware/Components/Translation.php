@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 
@@ -69,7 +68,7 @@ class Shopware_Components_Translation
             if (!is_string($value)) {
                 continue;
             }
-            if ('' === trim($value)) {
+            if (trim($value) === '') {
                 unset($tmp[$tmpKey]);
             }
         }
@@ -221,8 +220,7 @@ class Shopware_Components_Translation
         foreach ($data as &$translation) {
             $translation['objectdata'] = $this->unFilterData(
                 $translation['objecttype'],
-                $translation['objectdata'],
-                null
+                $translation['objectdata']
             );
 
             if ($merge) {
@@ -275,8 +273,6 @@ class Shopware_Components_Translation
      * @param int    $language
      * @param string $type
      * @param int    $key
-     *
-     * @return array
      */
     public function delete($language, $type, $key = 1)
     {
@@ -339,8 +335,6 @@ class Shopware_Components_Translation
      * @param bool   $merge
      *
      * @throws \Zend_Db_Adapter_Exception
-     *
-     * @return int|bool
      */
     public function write($language, $type, $key = 1, $data = null, $merge = false)
     {
@@ -353,7 +347,7 @@ class Shopware_Components_Translation
         }
 
         if ($merge) {
-            $tmp = $this->read($language, $type, 1);
+            $tmp = $this->read($language, $type);
             $tmp[$key] = $data;
             $data = $tmp;
         }
@@ -420,7 +414,7 @@ class Shopware_Components_Translation
     /**
      * Returns mapping for a translation type
      *
-     * @param $type
+     * @param string $type
      *
      * @return array|bool
      */

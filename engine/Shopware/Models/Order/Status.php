@@ -98,7 +98,6 @@ class Status extends ModelEntity
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -138,6 +137,14 @@ class Status extends ModelEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -239,7 +246,7 @@ class Status extends ModelEntity
     /**
      * @param \Shopware\Models\Mail\Mail|array|null $mail
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Status
      */
     public function setMail($mail)
     {

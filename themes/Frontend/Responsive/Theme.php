@@ -79,6 +79,7 @@ class Theme extends \Shopware\Components\Theme
         // Third party plugins / libraries
         'src/js/vendors/modernizr/modernizr.custom.35977.js',
         'vendors/js/jquery/jquery.min.js',
+        'src/js/jquery.symbol-polyfill.js',
         'vendors/js/picturefill/picturefill.min.js',
         'vendors/js/jquery.transit/jquery.transit.js',
         'vendors/js/jquery.event.move/jquery.event.move.js',

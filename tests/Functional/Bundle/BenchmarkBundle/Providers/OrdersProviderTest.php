@@ -34,6 +34,24 @@ class OrdersProviderTest extends ProviderTestCase
         'list' => IsType::TYPE_ARRAY,
     ];
 
+    public function testGetArrayKeysFit()
+    {
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $basicContent = $this->openDemoDataFile('basic_setup');
+        $dbalConnection->exec($basicContent);
+
+        parent::testGetArrayKeysFit();
+    }
+
+    public function testGetValidateTypes()
+    {
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $basicContent = $this->openDemoDataFile('basic_setup');
+        $dbalConnection->exec($basicContent);
+
+        parent::testGetValidateTypes();
+    }
+
     /**
      * @group BenchmarkBundle
      */
@@ -67,14 +85,14 @@ class OrdersProviderTest extends ProviderTestCase
                 'referer' => null,
             ],
             'shipment' => [
-                'name' => 'Example dispatch 3',
+                'name' => 'others',
                 'cost' => [
                     'minPrice' => 14.00,
                     'maxPrice' => 14.00,
                 ],
             ],
             'payment' => [
-                'name' => 'example4',
+                'name' => 'others',
                 'cost' => [
                     'percentCosts' => 0,
                     'absoluteCosts' => 0,
@@ -83,12 +101,14 @@ class OrdersProviderTest extends ProviderTestCase
             ],
             'items' => [
                 [
+                    'detailId' => 206,
                     'unitPrice' => 150.00,
                     'totalPrice' => 150.00,
                     'amount' => 1,
                     'packUnit' => '',
                     'purchaseUnit' => '',
                 ], [
+                    'detailId' => 207,
                     'unitPrice' => 20.00,
                     'totalPrice' => 80.00,
                     'amount' => 4,
@@ -139,6 +159,9 @@ class OrdersProviderTest extends ProviderTestCase
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
         $firstResult = $this->getBenchmarkData();
+
+        $this->sendStatistics();
+
         $secondResult = $this->getBenchmarkData();
 
         $this->assertSame(5, $firstResult['list'][0]['orderId']);
@@ -146,6 +169,9 @@ class OrdersProviderTest extends ProviderTestCase
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=2;');
         $thirdResultSet = $this->getBenchmarkData();
+
+        $this->sendStatistics();
+
         $forthResultSet = $this->getBenchmarkData();
 
         $this->assertSame(5, $thirdResultSet['list'][0]['orderId']);
@@ -163,10 +189,10 @@ class OrdersProviderTest extends ProviderTestCase
     {
         $this->installDemoData('orders_detailed');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
-        $this->getBenchmarkData();
+        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1 WHERE shop_id=1;');
+        $this->sendStatistics();
 
-        $this->assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config'));
+        $this->assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 
     /**
@@ -175,6 +201,7 @@ class OrdersProviderTest extends ProviderTestCase
     public function testGetOrdersListPerShop()
     {
         $this->installDemoData('orders_detailed');
+        $this->installDemoData('second_config');
         $provider = $this->getProvider();
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=10;');

@@ -37,7 +37,7 @@ class BenchmarkDataResult
     private $biResponse;
 
     /**
-     * @param null|\Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse $statisticsResponse
+     * @param null|\Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse           $statisticsResponse
      * @param null|\Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse $biResponse
      */
     public function __construct(

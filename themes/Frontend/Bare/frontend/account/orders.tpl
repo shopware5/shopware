@@ -89,7 +89,7 @@
                             {/foreach}
 
                             {if $sPages.next}
-                                <a href="{$sPages.next}" class="paging--link paging--next">
+                                <a href="{$sPages.next}" class="btn paging--link paging--next">
                                     <i class="icon--arrow-right"></i>
                                 </a>
                             {/if}

@@ -26,8 +26,6 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
-use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
-use Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
@@ -930,7 +928,7 @@ class Helper
 
         foreach ($groups as $group) {
             $options = [];
-            /** @var $option Models\Article\Configurator\Option */
+            /** @var Models\Article\Configurator\Option $option */
             foreach ($group->getOptions() as $option) {
                 $options[] = [
                     'id' => $option->getId(),
@@ -996,7 +994,7 @@ class Helper
      * Helper function which creates all variants for
      * the passed groups with options.
      *
-     * @param $groups
+     * @param array $groups
      * @param null  $numberPrefix
      * @param array $data
      *
@@ -1200,8 +1198,8 @@ class Helper
      * Helper function which combines all array elements
      * of the passed arrays.
      *
-     * @param $arrays
-     * @param int $i
+     * @param array $arrays
+     * @param int   $i
      *
      * @return array
      */
@@ -1230,7 +1228,7 @@ class Helper
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
      *
-     * @param $combinations
+     * @param array $combinations
      *
      * @return mixed
      */

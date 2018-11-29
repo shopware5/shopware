@@ -99,6 +99,10 @@ class HrefLangService implements HrefLangServiceInterface
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
             }
 
+            if ((int) $languageShop['id'] === $this->config->get('hrefLangDefaultShop')) {
+                $href->setLocale('x-default');
+            }
+
             if (!$this->isSeoUrl($parameters, $href->getLink())) {
                 continue;
             }

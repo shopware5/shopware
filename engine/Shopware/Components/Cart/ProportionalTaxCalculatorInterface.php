@@ -34,8 +34,8 @@ interface ProportionalTaxCalculatorInterface
     /**
      * Used to calculate proportional taxes of a dynamic calculated price.
      *
-     * @param float   $discount - Price which calculated percentage by the provided prices array. Example: -10€ voucher
-     * @param Price[] $prices   - Prices array which used for the "discount" calculation
+     * @param float   $discount   - Price which calculated percentage by the provided prices array. Example: -10€ voucher
+     * @param Price[] $prices     - Prices array which used for the "discount" calculation
      * @param bool    $isNetPrice - Net price state of customergroup
      *
      * @return Price[]

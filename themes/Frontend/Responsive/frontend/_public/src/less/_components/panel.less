@@ -302,7 +302,7 @@ Styling options: `has--border` and `has--shadow`
 ```
 */
 .panel--paging {
-	.unitize(line-height, 32);
+    .unitize(line-height, 32);
     display: inline-block;
 
     .paging--link {
@@ -311,12 +311,12 @@ Styling options: `has--border` and `has--shadow`
         .unitize(font-size, 14);
         .unitize(line-height, 30);
         .border-radius();
-		.linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
+        .linear-gradient(@btn-default-top-bg, @btn-default-bottom-bg);
         display: inline-block;
         font-weight: @font-base-weight;
         text-align: center;
-		border: 1px solid @btn-default-border-color;
-		color: @btn-default-text-color;
+        border: 1px solid @btn-default-border-color;
+        color: @btn-default-text-color;
 
         [class^="icon--"] {
             .unitize(font-size, 10);
@@ -324,18 +324,18 @@ Styling options: `has--border` and `has--shadow`
 
         &.is--active,
         &.is--active:hover {
-			.unitize(line-height, 32);
-			.linear-gradient(@btn-primary-top-bg, @btn-primary-bottom-bg);
-			color: @btn-primary-text-color;
-			border: 0 none;
-			font-weight: @font-bold-weight;
-			cursor: default;
+            .unitize(line-height, 32);
+            .linear-gradient(@btn-primary-top-bg, @btn-primary-bottom-bg);
+            color: @btn-primary-text-color;
+            border: 0 none;
+            font-weight: @font-bold-weight;
+            cursor: default;
         }
 
         &:hover {
-			background: @btn-default-hover-bg;
-			color: @btn-default-hover-text-color;
-			border-color: @btn-default-hover-border-color;
+            background: @btn-default-hover-bg;
+            color: @btn-default-hover-text-color;
+            border-color: @btn-default-hover-border-color;
         }
     }
 }

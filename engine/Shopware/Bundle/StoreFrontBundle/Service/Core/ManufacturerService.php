@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -97,10 +97,11 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     {
         $links = [];
         foreach ($manufacturers as $manufacturer) {
-            $links[$manufacturer->getId()] = [
+            $manufacturerId = $manufacturer->getId();
+            $links[$manufacturerId] = [
                 'controller' => 'listing',
                 'action' => 'manufacturer',
-                'sSupplier' => $manufacturer->getId(),
+                'sSupplier' => $manufacturerId,
             ];
         }
 

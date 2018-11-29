@@ -30,8 +30,8 @@
  * - parts  : Number of parts to split
  * - assign : Assign the split array to given smarty variable
  *
- * @param $params
- * @param $smarty
+ * @param array  $params
+ * @param object $smarty
  */
 function smarty_function_partition($params, $smarty)
 {
@@ -44,10 +44,10 @@ function smarty_function_partition($params, $smarty)
     // calculate partsize
     $partlen = floor($listlen / $p);
     $partrem = $listlen % $p;
-    $partition = array();
+    $partition = [];
     $mark = 0;
     // Split array in to chunks
-    for ($px = 0; $px < $p; $px++) {
+    for ($px = 0; $px < $p; ++$px) {
         $incr = ($px < $partrem) ? $partlen + 1 : $partlen;
         $partition[$px] = array_slice($list, $mark, $incr);
         $mark += $incr;

@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 interface MyInterface
 {
-    public function myPublic($bar, $foo = 'bar', array $barBar = array(), MyInterface $fooFoo = null);
+    public function myPublic($bar, $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null);
 }
 
 interface MyReferenceInterface
@@ -38,7 +38,7 @@ interface MyReferenceInterface
 
 class MyBasicTestClass implements MyInterface
 {
-    public function myPublic($bar, $foo = 'bar', array $barBar = array(), MyInterface $fooFoo = null)
+    public function myPublic($bar, $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null)
     {
         return $bar . $foo;
     }

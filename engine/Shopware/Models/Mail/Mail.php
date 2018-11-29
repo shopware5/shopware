@@ -55,6 +55,7 @@ class Mail extends ModelEntity
     const MAILTYPE_USER = 1;
     const MAILTYPE_SYSTEM = 2;
     const MAILTYPE_STATE = 3;
+    const MAILTYPE_DOCUMENT = 4;
 
     /**
      * OWNING SIDE
@@ -376,7 +377,7 @@ class Mail extends ModelEntity
             return false;
         }
 
-        if (null === $this->getStatus()) {
+        if ($this->getStatus() === null) {
             return false;
         }
 
@@ -394,7 +395,7 @@ class Mail extends ModelEntity
             return false;
         }
 
-        if (null === $this->getStatus()) {
+        if ($this->getStatus() === null) {
             return false;
         }
 
@@ -419,6 +420,16 @@ class Mail extends ModelEntity
     public function isUserMail()
     {
         return $this->getMailtype() == self::MAILTYPE_USER;
+    }
+
+    /**
+     * Returns whether or not this is a mail for sending documents.
+     *
+     * @return bool
+     */
+    public function isDocumentMail()
+    {
+        return $this->getMailtype() == self::MAILTYPE_DOCUMENT;
     }
 
     /**
@@ -488,7 +499,7 @@ class Mail extends ModelEntity
      */
     public function getContext()
     {
-        if (null === $this->context) {
+        if ($this->context === null) {
             return [];
         }
 
@@ -514,7 +525,7 @@ class Mail extends ModelEntity
      *   );
      * </code>
      *
-     * @param $array
+     * @param array  $array
      * @param string $glue
      *
      * @return array

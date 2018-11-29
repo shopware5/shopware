@@ -89,7 +89,7 @@
                 {$deleteUrl = {url controller="checkout" action="ajaxDeleteArticleCart" sDelete="voucher"}}
             {/if}
 
-            {if $basketItem.modus != 4}
+            {if $basketItem.modus != 4 && $basketItem.modus != 3}
                 <form action="{$deleteUrl}" method="post">
                     <button type="submit" class="btn is--small action--remove" title="{s name="AjaxCartRemoveArticle"}{/s}">
                         <i class="icon--cross"></i>
@@ -101,14 +101,14 @@
 
     {* Article name *}
     {block name='frontend_checkout_ajax_cart_articlename'}
-        {$useAnchor = ($basketItem.modus != 4 && $basketItem.modus != 2)}
+        {$useAnchor = ($basketItem.modus != 4 && $basketItem.modus != 2 && $basketItem.modus != 3)}
         {if $useAnchor}
             <a class="item--link" href="{$detailLink}" title="{$basketItem.articlename|escapeHtml}">
         {else}
             <div class="item--link">
         {/if}
             {block name="frontend_checkout_ajax_cart_articlename_quantity"}
-                <span class="item--quantity">{$basketItem.quantity}x</span>
+                <span class="item--quantity">{$basketItem.quantity}{s name="AjaxCartQuantityTimes"}{/s}</span>
             {/block}
             {block name="frontend_checkout_ajax_cart_articlename_name"}
                 <span class="item--name">

@@ -29,7 +29,7 @@ use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -87,7 +87,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return FacetHandlerInterface[]
+     * @return FacetHandlerInterface[]|PartialFacetHandlerInterface[]
      */
     public function registerFacetHandlers()
     {
@@ -124,7 +124,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     private function validateHandlers(array $handlers)
     {
         if (empty($handlers)) {
-            throw new \RuntimeException('No handlers provided in \Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber');
+            throw new \RuntimeException(sprintf('No handlers provided in %s', __CLASS__));
         }
 
         foreach ($handlers as $handler) {

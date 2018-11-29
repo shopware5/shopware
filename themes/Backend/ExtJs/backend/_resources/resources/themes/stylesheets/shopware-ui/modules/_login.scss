@@ -31,21 +31,21 @@
     color: #475c6a;
 
     .#{$prefix}window-body {
-	    background: transparent;
-	    border: 0 none !important;
+        background: transparent;
+        border: 0 none !important;
     }
 
-	/** Footer toolbar */
+    /** Footer toolbar */
     .#{$prefix}toolbar-footer {
         @include single-box-shadow('none');
         border-left: 0 none;
         border-right: 0 none;
-    	background: transparent !important;
-    	overflow: visible;
+        background: transparent !important;
+        overflow: visible;
 
-    	.#{$prefix}box-inner {
-    		overflow: visible;
-    	}
+        .#{$prefix}box-inner {
+            overflow: visible;
+        }
     }
 
     h1 {
@@ -64,7 +64,7 @@
         }
     }
 
-	// Form elements - field labels
+    // Form elements - field labels
     .#{$prefix}form-item {
         width: 266px !important;
     }
@@ -76,7 +76,7 @@
         padding: 8px 0 0;
     }
 
-	// Form elements - text fields
+    // Form elements - text fields
     .#{$prefix}form-item-body {
         @include border-radius(6px);
         background: none;
@@ -99,7 +99,7 @@
         }
 
         .#{$prefix}form-text, textarea.#{$prefix}form-field {
-        	@include form-item-focus;
+            @include form-item-focus;
             padding: 1px 10px;
             color: #475c6a;
         }
@@ -115,35 +115,35 @@
         }
     }
 
-	// Form elements - combobox fields
+    // Form elements - combobox fields
     .#{$prefix}form-combo {
         .#{$prefix}form-text {
-        	@include border-radius(6px 0 0 6px);
+            @include border-radius(6px 0 0 6px);
             width: 226px !important;
             line-height: 16px;
             padding-left: 48px;
         }
 
         .#{$prefix}trigger-cell {
-	        width: 37px !important;
+            width: 37px !important;
         }
         .#{$prefix}form-trigger {
             @include border-radius(0 6px 6px 0);
             border: 1px solid #fff;
-        	height: 35px;
-        	width: 38px !important;
-	        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAhCAYAAACxzQkrAAABzklEQVR4AcXRvYsUQRCG8fvPTQQzQwMDMVID95JDOEExOARhRRADL9HA8ALRU/drurt0avZBg1deKrqBB4pmmf5N7cmhj6Dpn9qgiH5sUGTyGTSW+rGWjWzqRPNv8o2nJVAvgroHxYHaSFSCFKp1DxoSY0ACM7dvy1kdRKEDUwdlgIp/G9Uw2eRADAIktiRQom62kwmMBJktiTSCKtvZASIJ8iiPsdsxIIdqHuIxBlRAUeiA1DEGBErCTEAkxoAYDErABK4DKWIUyKPqVTFbQB5FdUgFs50AaZSGkblcIBSGEpMgBo3SsBfrD/Ho+UVcb/acZW8vP8WDs5dx9e2HgBhM1gHVUKtXb+LW/Sdxb3Ue19v9gvn4Oc/mvlx9LWFoA4iy5mHfN7u/qKfncfH+Muc7D09j/QfmEAkBM1FfQJtlyAOBIokDtWBWbEYhNAYIAZIoA6Nnr9/F3cdnidmVIGA0SKM8rI7QGA3yMPIIchD6deyE4b8wgavXNQQMHQCBcjAqIIB4DKB5IGCF7MVkIBoEqg4rQjTmpwTRVMcZhIaAAcQwZ3DFNEJDNMjACsgDeYgDFXD17F2AKpUAxbbTAHSz8aGt3zyIzSQmIm7/BtC/NeJ5aEtBAAAAAElFTkSuQmCC") no-repeat !important;
+            height: 35px;
+            width: 38px !important;
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAhCAYAAACxzQkrAAABzklEQVR4AcXRvYsUQRCG8fvPTQQzQwMDMVID95JDOEExOARhRRADL9HA8ALRU/drurt0avZBg1deKrqBB4pmmf5N7cmhj6Dpn9qgiH5sUGTyGTSW+rGWjWzqRPNv8o2nJVAvgroHxYHaSFSCFKp1DxoSY0ACM7dvy1kdRKEDUwdlgIp/G9Uw2eRADAIktiRQom62kwmMBJktiTSCKtvZASIJ8iiPsdsxIIdqHuIxBlRAUeiA1DEGBErCTEAkxoAYDErABK4DKWIUyKPqVTFbQB5FdUgFs50AaZSGkblcIBSGEpMgBo3SsBfrD/Ho+UVcb/acZW8vP8WDs5dx9e2HgBhM1gHVUKtXb+LW/Sdxb3Ue19v9gvn4Oc/mvlx9LWFoA4iy5mHfN7u/qKfncfH+Muc7D09j/QfmEAkBM1FfQJtlyAOBIokDtWBWbEYhNAYIAZIoA6Nnr9/F3cdnidmVIGA0SKM8rI7QGA3yMPIIchD6deyE4b8wgavXNQQMHQCBcjAqIIB4DKB5IGCF7MVkIBoEqg4rQjTmpwTRVMcZhIaAAcQwZ3DFNEJDNMjACsgDeYgDFXD17F2AKpUAxbbTAHSz8aGt3zyIzSQmIm7/BtC/NeJ5aEtBAAAAAElFTkSuQmCC") no-repeat !important;
         }
     }
 
     .#{$prefix}form-trigger-wrap-focus {
-	    .#{$prefix}form-trigger {
+        .#{$prefix}form-trigger {
             border: 1px solid;
             border-color: #2eb5f9 !important;
             -webkit-box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
             -moz-box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
             box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
-	    }
+        }
     }
 
     // Form submit button

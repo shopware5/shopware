@@ -258,9 +258,9 @@ class sOrder
     /**
      * Check each basket row for instant downloads
      *
-     * @param $basketRow
-     * @param $orderID
-     * @param $orderDetailsID
+     * @param array $basketRow
+     * @param int   $orderID
+     * @param int   $orderDetailsID
      *
      * @return array
      */
@@ -448,7 +448,7 @@ class sOrder
             $affectedRows = $this->db->insert('s_order', $data);
             $orderID = $this->db->lastInsertId();
         } catch (Exception $e) {
-            throw new Enlight_Exception('##sOrder-sTemporaryOrder-#01:' . $e->getMessage(), 0, $e);
+            throw new Enlight_Exception(sprintf('##sOrder-sTemporaryOrder-#01:%s', $e->getMessage()), 0, $e);
         }
         if (!$affectedRows || !$orderID) {
             throw new Enlight_Exception('##sOrder-sTemporaryOrder-#01: No rows affected or no order id saved', 0);
@@ -504,7 +504,7 @@ class sOrder
                 $this->db->insert('s_order_details', $data);
                 $orderDetailId = $this->db->lastInsertId();
             } catch (Exception $e) {
-                throw new Enlight_Exception('##sOrder-sTemporaryOrder-Position-#02:' . $e->getMessage(), 0, $e);
+                throw new Enlight_Exception(sprintf('##sOrder-sTemporaryOrder-Position-#02:%s', $e->getMessage()), 0, $e);
             }
 
             // Create order detail attributes
@@ -617,11 +617,11 @@ class sOrder
             $this->db->commit();
         } catch (Exception $e) {
             $this->db->rollBack();
-            throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER['HTTP_HOST']} :" . $e->getMessage(), 0, $e);
+            throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s :%s', $_SERVER['HTTP_HOST'], $e->getMessage()), 0, $e);
         }
 
         if (!$affectedRows || !$orderID) {
-            throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER['HTTP_HOST']} : No rows affected or no order id created.", 0);
+            throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s : No rows affected or no order id created.', $_SERVER['HTTP_HOST']), 0);
         }
 
         try {
@@ -646,10 +646,10 @@ class sOrder
 
         $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
-        unset($attributes['id']);
-        unset($attributes['orderID']);
+        unset($attributes['id'], $attributes['orderID']);
 
         $position = 0;
+        $esdOrder = null;
         foreach ($this->sBasketData['content'] as $key => $basketRow) {
             ++$position;
 
@@ -718,7 +718,7 @@ class sOrder
                 $this->db->executeUpdate($sql);
                 $orderdetailsID = $this->db->lastInsertId();
             } catch (Exception $e) {
-                throw new Enlight_Exception("Shopware Order Fatal-Error {$_SERVER['HTTP_HOST']} :" . $e->getMessage(), 0, $e);
+                throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s :%s', $_SERVER['HTTP_HOST'], $e->getMessage()), 0, $e);
             }
 
             $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
@@ -738,8 +738,7 @@ class sOrder
 
             $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderdetailsID);
             $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID);
-            unset($detailAttributes['id']);
-            unset($detailAttributes['detailID']);
+            unset($detailAttributes['id'], $detailAttributes['detailID']);
             $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
 
             // Update sales and stock
@@ -833,6 +832,8 @@ class sOrder
 
     /**
      * send order confirmation mail
+     *
+     * @param array $variables
      */
     public function sendMail($variables)
     {
@@ -1229,6 +1230,7 @@ class sOrder
     {
         $statusId = (int) $statusId;
         $orderId = (int) $orderId;
+        $dispatch = null;
 
         if (empty($templateName)) {
             $templateName = 'sORDERSTATEMAIL' . $statusId;
@@ -1276,7 +1278,7 @@ class sOrder
             $order['payment_description'] = $payment['description'];
         }
 
-        /* @var $mailModel \Shopware\Models\Mail\Mail */
+        /* @var \Shopware\Models\Mail\Mail $mailModel */
         $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
             ['name' => $templateName]
         );
@@ -1565,7 +1567,7 @@ EOT;
     /**
      * Replacement for: Shopware()->Api()->Export()->sOrderCustomers(array('orderID' => $orderId));
      *
-     * @param $orderId
+     * @param int $orderId
      *
      * @return array|false
      */
@@ -1704,7 +1706,7 @@ EOT;
     /**
      * Helper function which returns all available esd serials for the passed esd id.
      *
-     * @param $esdId
+     * @param int $esdId
      *
      * @return array
      */
@@ -1746,8 +1748,8 @@ EOT;
     /**
      * Checks if the current customer should see net prices.
      *
-     * @param $taxId
-     * @param $customerGroupId
+     * @param int $taxId
+     * @param int $customerGroupId
      *
      * @return bool
      */
@@ -1787,9 +1789,9 @@ EOT;
      * Helper function which reserves individual voucher codes for the
      * passed user.
      *
-     * @param $orderCode
-     * @param $customerId
-     * @param $voucherCodeId
+     * @param string $orderCode
+     * @param int    $customerId
+     * @param int    $voucherCodeId
      */
     private function reserveVoucher($orderCode, $customerId, $voucherCodeId)
     {
@@ -1866,7 +1868,7 @@ EOT;
      * Additionally to the order details rows, this function returns
      * the order detail attributes for each position.
      *
-     * @param $orderId
+     * @param int $orderId
      *
      * @return array
      */
@@ -1877,8 +1879,8 @@ EOT;
         // add attributes to orderDetails
         foreach ($orderDetails as &$orderDetail) {
             $attributes = $this->attributeLoader->load('s_order_details_attributes', $orderDetail['orderdetailsID']);
-            unset($attributes['id']);
-            unset($attributes['detailID']);
+            unset($attributes['id'], $attributes['detailID']);
+
             $orderDetail['attributes'] = $attributes;
         }
 
@@ -1898,8 +1900,8 @@ EOT;
     {
         $order = $this->getOrderById($orderId);
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderId);
-        unset($attributes['id']);
-        unset($attributes['orderID']);
+        unset($attributes['id'], $attributes['orderID']);
+
         $order['attributes'] = $attributes;
 
         return $order;
@@ -1913,17 +1915,17 @@ EOT;
      *
      * @return array
      */
-    private function getUserDataForMail($userData)
+    private function getUserDataForMail(array $userData)
     {
-        foreach ($userData['billingaddress'] as $key => $value) {
-            $userData['billingaddress'][$key] = html_entity_decode($value);
-        }
-        foreach ($userData['shippingaddress'] as $key => $value) {
-            $userData['shippingaddress'][$key] = html_entity_decode($value);
-        }
-        foreach ($userData['additional']['country'] as $key => $value) {
-            $userData['additional']['country'][$key] = html_entity_decode($value);
-        }
+        array_walk_recursive($userData['billingaddress'], function (&$value) {
+            $value = html_entity_decode($value);
+        });
+        array_walk_recursive($userData['shippingaddress'], function (&$value) {
+            $value = html_entity_decode($value);
+        });
+        array_walk_recursive($userData['additional']['country'], function (&$value) {
+            $value = html_entity_decode($value);
+        });
 
         $userData['additional']['payment']['description'] = html_entity_decode(
             $userData['additional']['payment']['description']

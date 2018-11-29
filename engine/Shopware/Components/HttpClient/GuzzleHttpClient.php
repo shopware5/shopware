@@ -28,7 +28,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,7 +56,7 @@ class GuzzleHttpClient implements HttpClientInterface
         try {
             $response = $this->guzzleClient->get($url, ['headers' => $headers]);
         } catch (\Exception $e) {
-            /** @var $e GuzzleClientException */
+            /** @var GuzzleClientException $e */
             $body = '';
             if ($e->hasResponse()) {
                 $body = (string) $e->getResponse()->getBody();
@@ -175,7 +175,7 @@ class GuzzleHttpClient implements HttpClientInterface
 
             $response = $this->guzzleClient->post($url, $options);
         } catch (\Exception $e) {
-            /** @var $e GuzzleClientException */
+            /** @var GuzzleClientException $e */
             $body = '';
             if ($e->hasResponse()) {
                 $body = (string) $e->getResponse()->getBody();

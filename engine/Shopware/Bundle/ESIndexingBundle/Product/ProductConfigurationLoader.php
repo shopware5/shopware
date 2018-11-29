@@ -100,7 +100,7 @@ class ProductConfigurationLoader
 
         $query->setParameter(':articleIds', $articleIds, Connection::PARAM_STR_ARRAY);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);

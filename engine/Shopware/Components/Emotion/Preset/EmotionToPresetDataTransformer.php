@@ -54,7 +54,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param $emotionId
+     * @param int $emotionId
      *
      * @throws NoResultException
      *
@@ -87,6 +87,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
 
     /**
      * @param array $emotionData
+     * @param bool  $keepName
      *
      * @return array
      */

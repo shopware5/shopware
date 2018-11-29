@@ -42,6 +42,11 @@ class Product extends ListProduct
     /**
      * @var string
      */
+    protected $formattedUpdatedAt;
+
+    /**
+     * @var string
+     */
     protected $formattedReleaseDate;
 
     /**
@@ -159,6 +164,22 @@ class Product extends ListProduct
     public function setFormattedCreatedAt($formattedCreatedAt)
     {
         $this->formattedCreatedAt = $formattedCreatedAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFormattedUpdatedAt()
+    {
+        return $this->formattedUpdatedAt;
+    }
+
+    /**
+     * @param int $formattedUpdatedAt
+     */
+    public function setFormattedUpdatedAt($formattedUpdatedAt)
+    {
+        $this->formattedUpdatedAt = $formattedUpdatedAt;
     }
 
     /**

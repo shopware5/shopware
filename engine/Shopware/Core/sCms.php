@@ -90,8 +90,8 @@ class sCms
     /**
      * Read a specific, static page (E.g. terms and conditions, etc.)
      *
-     * @param int $staticId The page id
-     * @param int $shopId   Id of the shop
+     * @param null|int $staticId The page id
+     * @param null|int $shopId   Id of the shop
      *
      * @return array|false Page data, or false if none found by given id
      */
@@ -160,7 +160,7 @@ class sCms
      *
      * @return array
      */
-    public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'gLeft')
+    public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'left')
     {
         $menu = [];
 

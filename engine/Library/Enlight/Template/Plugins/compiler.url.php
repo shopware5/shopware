@@ -37,20 +37,22 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
      * Attribute definition: Overwrites base class.
      *
      * @var array
+     *
      * @see Smarty_Internal_CompileBase
      */
-    public $optional_attributes = array('_any');
+    public $optional_attributes = ['_any'];
 
     /**
      * Array of names of valid option flags
      *
      * @var array
      */
-    public $option_flags = array('appendSession', 'forceSecure', 'fullPath');
+    public $option_flags = ['appendSession', 'forceSecure', 'fullPath'];
 
     /**
-     * @param $args
-     * @param $compiler
+     * @param array  $args
+     * @param object $compiler
+     *
      * @return string
      */
     public function compile($args, $compiler)
@@ -64,7 +66,7 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
         }
 
         // Removes the arguments that were not in the original.
-        $noArgs = array();
+        $noArgs = [];
         foreach ($args as $arg) {
             if (is_array($arg)) {
                 $noArgs[] = key($arg);
@@ -90,19 +92,19 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
             return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble((array) ' . $extractParams . ')); ?>';
         }
 
-        $params = array();
+        $params = [];
         foreach ($_attr as $index => $param) {
             if (isset($extractParams) || !preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $param, $match) || !empty($_attr['appendSession'])) {
                 $params = '';
                 foreach ($_attr as $index => $param) {
-                    $params .= var_export($index, true). ' => ' . $param . ', ';
+                    $params .= var_export($index, true) . ' => ' . $param . ', ';
                 }
 
                 if (isset($extractParams)) {
                     return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . ')); ?>';
-                } else {
-                    return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble(array(' . $params . '))); ?>';
                 }
+
+                return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble(array(' . $params . '))); ?>';
             }
             $params[$index] = is_numeric($param) ? $param : substr($param, 1, -1);
         }

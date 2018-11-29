@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\License\Service\Exceptions\LicenseHostException;
 use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
@@ -220,13 +219,13 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
     }
 
     /**
-     * @param $e
+     * @param Exception $e
      *
      * @return string
      */
     private function resolveLicenseException($e)
     {
-        // get class name without namespace
+        // Get class name without namespace
         $exceptionType = (new \ReflectionClass($e))->getShortName();
 
         if (in_array($exceptionType, $this->licenseException)) {

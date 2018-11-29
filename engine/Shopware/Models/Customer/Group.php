@@ -73,6 +73,7 @@ class Group extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $customers;
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field.
@@ -395,9 +396,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param $discounts \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Customer\Discount[]
-     *
-     * @return Group
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Customer\Discount[] $discounts
      */
     public function setDiscounts($discounts)
     {
@@ -419,7 +418,7 @@ class Group extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\CustomerGroup', 'attribute', 'customerGroup');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\CustomerGroup::class, 'attribute', 'customerGroup');
     }
 
     /**

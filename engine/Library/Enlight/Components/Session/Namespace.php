@@ -27,7 +27,7 @@
  * The Enlight_Components_Session_Namespace extends the Zend_Session_Namespace with an easy array access.
  *
  * @category    Enlight
- * @package     Enlight_Session
+ *
  * @copyright   Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license     http://enlight.de/license     New BSD License
  */
@@ -35,8 +35,10 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
 {
     /**
      * Whether an offset exists
-     * @param mixed $key A key to check for.
-     * @return boolean Returns true on success or false on failure.
+     *
+     * @param mixed $key a key to check for
+     *
+     * @return bool returns true on success or false on failure
      */
     public function offsetExists($key)
     {
@@ -45,7 +47,8 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
 
     /**
      * Unset the given offset.
-     * @param string $key Key to unset.
+     *
+     * @param string $key key to unset
      */
     public function offsetUnset($key)
     {
@@ -54,8 +57,10 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
 
     /**
      * Offset to retrieve
-     * @param mixed $key The offset to retrieve.
-     * @return mixed Can return all value types.
+     *
+     * @param mixed $key the offset to retrieve
+     *
+     * @return mixed can return all value types
      */
     public function offsetGet($key)
     {
@@ -64,8 +69,9 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
 
     /**
      * Offset to set
-     * @param mixed $key The offset to assign the value to.
-     * @param mixed $value The value to set.
+     *
+     * @param mixed $key   the offset to assign the value to
+     * @param mixed $value the value to set
      */
     public function offsetSet($key, $value)
     {
@@ -74,6 +80,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
 
     /**
      * Count elements of the object
+     *
      * @return int The custom count as an integer
      */
     public function count()
@@ -82,13 +89,15 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
     }
 
     /**
-     * @param $name
-     * @param null $default
-     * @return null
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
      */
     public function get($name, $default = null)
     {
         $value = $this->offsetGet($name);
+
         return $value !== null ? $value : $default;
     }
 }

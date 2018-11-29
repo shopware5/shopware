@@ -96,6 +96,14 @@ class ProductIndexer implements DataIndexerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function supports()
+    {
+        return ProductMapping::TYPE;
+    }
+
+    /**
      * @param ShopIndex $index
      * @param string[]  $numbers
      */

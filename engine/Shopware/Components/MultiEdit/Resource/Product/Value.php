@@ -37,7 +37,7 @@ class Value
     protected $dqlHelper;
 
     /**
-     * @param $dqlHelper DqlHelper
+     * @param DqlHelper $dqlHelper
      */
     public function __construct(DqlHelper $dqlHelper)
     {
@@ -55,6 +55,12 @@ class Value
     /**
      * Suggests values for a given attribute. Optionally we'd be able to filter the suggested values
      * by the operator the user put in front.
+     *
+     * @param string $attribute
+     * @param string $operator
+     * @param array  $queryConfig
+     *
+     * @return array
      */
     public function getValuesFor($attribute, $operator, $queryConfig)
     {

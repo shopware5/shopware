@@ -31,7 +31,7 @@ use Monolog\Handler\ChromePHPHandler as BaseChromePhpHandler;
 /**
  * ChromePhpHandler.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -70,6 +70,8 @@ class ChromePhpHandler extends BaseChromePhpHandler
 
     /**
      * Adds the headers to the response once it's created
+     *
+     * @param \Enlight_Controller_EventArgs $args
      */
     public function onRouteStartUp(\Enlight_Controller_EventArgs $args)
     {

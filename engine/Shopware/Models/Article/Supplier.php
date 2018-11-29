@@ -94,6 +94,7 @@ class Supplier extends ModelEntity
      * @var \Shopware\Models\Attribute\ArticleSupplier
      */
     protected $attribute;
+
     /**
      * Autoincrement ID
      *
@@ -119,7 +120,7 @@ class Supplier extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="img", type="string", nullable=true)
+     * @ORM\Column(name="img", type="string", nullable=false)
      */
     private $image = '';
 
@@ -128,7 +129,7 @@ class Supplier extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="link", type="string", nullable=true)
+     * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link = '';
 
@@ -157,7 +158,7 @@ class Supplier extends ModelEntity
     /**
      * Sets the primary key
      *
-     * @param $id
+     * @param int $id
      */
     public function setPrimaryIdentifier($id)
     {

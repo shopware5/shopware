@@ -1087,7 +1087,7 @@ class Zend_Mail extends Zend_Mime_Message
             $user = getmypid();
         }
 
-        $rand = mt_rand();
+        $rand = Shopware\Components\Random::getInteger(0, PHP_INT_MAX);
 
         if ($this->_recipients !== array()) {
             $recipient = array_rand($this->_recipients);

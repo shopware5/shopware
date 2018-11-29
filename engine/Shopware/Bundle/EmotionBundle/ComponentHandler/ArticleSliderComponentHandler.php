@@ -29,6 +29,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
+use Shopware\Bundle\SearchBundle\Sorting\RandomSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
@@ -43,6 +44,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     const TYPE_PRODUCT_STREAM = 'product_stream';
     const TYPE_STATIC_PRODUCT = 'selected_article';
     const TYPE_STATIC_VARIANT = 'selected_variant';
+    const TYPE_RANDOM = 'random_product';
     const TYPE_NEWCOMER = 'newcomer';
     const TYPE_TOPSELLER = 'topseller';
     const TYPE_LOWEST_PRICE = 'price_asc';
@@ -119,6 +121,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
             case self::TYPE_TOPSELLER:
             case self::TYPE_NEWCOMER:
+            case self::TYPE_RANDOM:
             case self::TYPE_LOWEST_PRICE:
             case self::TYPE_HIGHEST_PRICE:
                 $criteria = $this->generateCriteria($element, $context);
@@ -159,6 +162,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
         switch ($type) {
             case self::TYPE_PRODUCT_STREAM:
             case self::TYPE_NEWCOMER:
+            case self::TYPE_RANDOM:
             case self::TYPE_TOPSELLER:
             case self::TYPE_HIGHEST_PRICE:
             case self::TYPE_LOWEST_PRICE:
@@ -251,6 +255,9 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
             case self::TYPE_NEWCOMER:
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
+                break;
+            case self::TYPE_RANDOM:
+                $criteria->addSorting(new RandomSorting());
                 break;
         }
 

@@ -73,6 +73,19 @@ class Sitemap extends Page
     }
 
     /**
+     * Its ok to be on sitemap_index.xml
+     * {@inheritdoc}
+     */
+    protected function verifyUrl(array $urlParameters = [])
+    {
+        if (strpos($this->getDriver()->getCurrentUrl(), '/sitemap_index.xml') !== false) {
+            return;
+        }
+
+        parent::verifyUrl($urlParameters);
+    }
+
+    /**
      * @param string $title
      * @param string $link
      * @param array  $data
@@ -132,19 +145,4 @@ class Sitemap extends Page
         $message = sprintf('The site "%s" with link "%s" was not found!', $title, $link);
         Helper::throwException($message);
     }
-
-    /**
-     * Its ok to be on sitemap_index.xml
-     * {@inheritdoc}
-     */
-    protected function verifyUrl(array $urlParameters = array())
-    {
-        if (strpos($this->getDriver()->getCurrentUrl(), '/sitemap_index.xml') !== false) {
-            return;
-        }
-
-        parent::verifyUrl($urlParameters);
-    }
-
-
 }

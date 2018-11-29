@@ -32,6 +32,8 @@ use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Esd;
+use Shopware\Models\Article\EsdSerial;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
@@ -42,7 +44,7 @@ use Shopware\Models\Tax\Tax;
 /**
  * Variant API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,7 +55,7 @@ class Variant extends Resource implements BatchInterface
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Article\Detail');
+        return $this->getManager()->getRepository(\Shopware\Models\Article\Detail::class);
     }
 
     /**
@@ -74,7 +76,6 @@ class Variant extends Resource implements BatchInterface
      * @param array $options
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
      * @return array|\Shopware\Models\Article\Detail
@@ -94,11 +95,11 @@ class Variant extends Resource implements BatchInterface
                 ->addOrderBy('prices.from', 'ASC')
                 ->setParameter('variantId', $id);
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $articleDetail */
         $variant = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$variant) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
@@ -123,7 +124,7 @@ class Variant extends Resource implements BatchInterface
     {
         $this->checkPrivilege('read');
 
-        /** @var \Doctrine\DBAL\Query\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->getRepository()->createQueryBuilder('detail');
 
         $builder->addSelect(['prices', 'attribute', 'customerGroup'])
@@ -141,10 +142,10 @@ class Variant extends Resource implements BatchInterface
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the article data
+        // Returns the article data
         $variants = $paginator->getIterator()->getArrayCopy();
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
@@ -161,7 +162,7 @@ class Variant extends Resource implements BatchInterface
     /**
      * Little helper function for the ...ByNumber methods
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -174,11 +175,11 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $articleDetail */
         $articleDetail = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$articleDetail) {
-            throw new ApiException\NotFoundException("Variant by number {$number} not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by number %s not found', $number));
         }
 
         return $articleDetail->getId();
@@ -215,11 +216,11 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $articleDetail */
         $articleDetail = $this->getRepository()->find($id);
 
         if (!$articleDetail) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         if ($articleDetail->getKind() === 1) {
@@ -238,10 +239,6 @@ class Variant extends Resource implements BatchInterface
      * @param string $number
      * @param array  $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     *
      * @return Detail
      */
     public function updateByNumber($number, array $params)
@@ -254,7 +251,7 @@ class Variant extends Resource implements BatchInterface
     /**
      * Updates a single variant entity.
      *
-     * @param $id
+     * @param int   $id
      * @param array $params
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
@@ -269,11 +266,11 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $variant Detail */
+        /** @var Detail $variant */
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         $variant = $this->internalUpdate($id, $params, $variant->getArticle());
@@ -308,11 +305,11 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException('Passed parameter array does not contain an articleId property');
         }
 
-        /** @var $article ArticleModel */
-        $article = $this->getManager()->find('Shopware\Models\Article\Article', $articleId);
+        /** @var ArticleModel $article */
+        $article = $this->getManager()->find(\Shopware\Models\Article\Article::class, $articleId);
 
         if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $articleId not found");
+            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $articleId));
         }
 
         $variant = $this->internalCreate($params, $article);
@@ -335,7 +332,7 @@ class Variant extends Resource implements BatchInterface
      * Required for the article resource if the article data is already updated
      * in the entity but not in the database.
      *
-     * @param $id
+     * @param int          $id
      * @param array        $data
      * @param ArticleModel $article
      *
@@ -350,11 +347,11 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $variant Detail */
+        /** @var Detail $variant */
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
-            throw new ApiException\NotFoundException("Variant by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
         $variant->setArticle($article);
@@ -473,7 +470,7 @@ class Variant extends Resource implements BatchInterface
             return false;
         }
 
-        $model = $this->getManager()->find('Shopware\Models\Article\Detail', $id);
+        $model = $this->getManager()->find(\Shopware\Models\Article\Detail::class, $id);
 
         if ($model) {
             return $id;
@@ -545,6 +542,9 @@ class Variant extends Resource implements BatchInterface
         if (isset($data['images'])) {
             $data = $this->prepareImageAssociation($data, $article, $variant);
         }
+        if (isset($data['esd'])) {
+            $data = $this->prepareEsdAssociation($data, $variant);
+        }
 
         if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
             $connection = Shopware()->Container()->get('dbal_connection');
@@ -565,19 +565,19 @@ class Variant extends Resource implements BatchInterface
      * or over the link property which can contain a image link.
      * This image will be added automatically to the article.
      *
-     * @param $data
+     * @param array        $data
      * @param ArticleModel $article
      * @param Detail       $variant
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return mixed
+     * @return array
      */
     protected function prepareImageAssociation($data, ArticleModel $article, Detail $variant)
     {
         if (empty($data['images'])) {
             if ($variant->getImages()->count() > 0) {
-                /** @var $image Image */
+                /** @var Image $image */
                 foreach ($variant->getImages() as $image) {
                     $mapping = $this->getVariantMappingOfImage($image, $variant);
 
@@ -597,20 +597,20 @@ class Variant extends Resource implements BatchInterface
             true
         );
         foreach ($data['images'] as $imageData) {
-            //check if a media id was passed.
+            // Check if a media id was passed.
             if (isset($imageData['mediaId'])) {
-                //first check if the media object is already assigned to the article
+                // First check if the media object is already assigned to the article
                 $image = $this->getAvailableMediaImage(
                     $article->getImages(),
                     $imageData['mediaId']
                 );
 
-                //media image isn't assigned to the article?
+                // Media image isn't assigned to the article?
                 if (!$image) {
-                    //find the media object and convert it to an article image.
-                    /** @var $media MediaModel */
+                    // Find the media object and convert it to an article image.
+                    /** @var MediaModel $media */
                     $media = $this->getManager()->find(
-                        'Shopware\Models\Media\Media',
+                        \Shopware\Models\Media\Media::class,
                         (int) $imageData['mediaId']
                     );
 
@@ -625,7 +625,7 @@ class Variant extends Resource implements BatchInterface
                     );
                 }
             } elseif (isset($imageData['link'])) {
-                //check if an url passed and upload the passed image url and create a new article image.
+                // Check if an url passed and upload the passed image url and create a new article image.
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
                     $imageData['link']
                 );
@@ -633,7 +633,7 @@ class Variant extends Resource implements BatchInterface
                     $article, $media
                 );
             } else {
-                throw new ApiException\CustomValidationException("One of the passed variant images doesn't contains a mediaId or link property!");
+                throw new ApiException\CustomValidationException("One of the passed variant images doesn't contain a mediaId or link property!");
             }
 
             $variantImage = $this->createVariantImage(
@@ -668,11 +668,11 @@ class Variant extends Resource implements BatchInterface
     {
         $parent = $image->getParent();
 
-        /** @var $mapping Image\Mapping */
+        /** @var Image\Mapping $mapping */
         foreach ($parent->getMappings() as $mapping) {
             $match = true;
 
-            /** @var $rule Image\Rule */
+            /** @var Image\Rule $rule */
             foreach ($mapping->getRules() as $rule) {
                 $option = $this->getCollectionElementByProperty(
                     $variant->getConfiguratorOptions(),
@@ -693,25 +693,25 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param $data
+     * @param array                            $data
      * @param \Shopware\Models\Article\Article $article
      * @param \Shopware\Models\Article\Detail  $variant
      * @param \Shopware\Models\Tax\Tax         $tax
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return array
+     * @return Collection
      */
     protected function preparePriceAssociation($data, ArticleModel $article, Detail $variant, Tax $tax)
     {
         $prices = $this->checkDataReplacement($variant->getPrices(), $data, 'prices', true);
 
         foreach ($data['prices'] as &$priceData) {
-            /** @var $price Price */
+            /** @var Price $price */
             $price = $this->getOneToManySubElement(
                 $prices,
                 $priceData,
-                '\Shopware\Models\Article\Price'
+                \Shopware\Models\Article\Price::class
             );
 
             if (empty($priceData['customerGroupKey'])) {
@@ -722,9 +722,9 @@ class Variant extends Resource implements BatchInterface
                 $priceData['from'] = 1;
             }
 
-            // load the customer group of the price definition
+            // Load the customer group of the price definition
             $customerGroup = $this->getManager()
-                ->getRepository('Shopware\Models\Customer\Group')
+                ->getRepository(\Shopware\Models\Customer\Group::class)
                 ->findOneBy(['key' => $priceData['customerGroupKey']]);
 
             /** @var CustomerGroup $customerGroup */
@@ -754,7 +754,7 @@ class Variant extends Resource implements BatchInterface
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return Collection
+     * @return array
      */
     protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
     {
@@ -772,12 +772,12 @@ class Variant extends Resource implements BatchInterface
                 'name' => $optionData['group'],
             ]);
 
-            //group is in the article configurator set configured?
+            // Group is in the article configurator set configured?
             if (!$availableGroup) {
                 continue;
             }
 
-            //check if the option is available in the configured article configurator set.
+            // Check if the option is available in the configured article configurator set.
             $option = $this->getAvailableOption($availableGroup->getOptions(), [
                 'id' => $optionData['optionId'],
                 'name' => $optionData['option'],
@@ -808,11 +808,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param $data
+     * @param array        $data
      * @param ArticleModel $article
      * @param Detail       $variant
      *
-     * @return mixed
+     * @return array
      */
     protected function prepareAttributeAssociation($data, ArticleModel $article, Detail $variant)
     {
@@ -833,11 +833,11 @@ class Variant extends Resource implements BatchInterface
      * Prepares the base variant data to save over doctrine.
      * Resolves the foreign keys for the passed unit data.
      *
-     * @param $data
+     * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
-     * @return mixed
+     * @return array
      */
     protected function prepareUnitAssociation($data)
     {
@@ -862,7 +862,7 @@ class Variant extends Resource implements BatchInterface
      * If no unit reference found, the function creates a new Unit entity.
      * The passed unit data will be assigned to the created or found Unit entity.
      *
-     * @param $unitData
+     * @param array $unitData
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
@@ -872,17 +872,17 @@ class Variant extends Resource implements BatchInterface
     {
         $unitRepository = $this->getManager()->getRepository(\Shopware\Models\Article\Unit::class);
 
-        //try to find an existing unit by the passed conditions "id", "name" or "unit"
+        // Try to find an existing unit by the passed conditions "id", "name" or "unit"
         $unit = $unitRepository->findOneBy(
             $this->getUnitFindCondition($unitData)
         );
 
-        //unit identifier send and unit not found? throw exception => Not allowed to create a new unit in this case
+        // Unit identifier send and unit not found? throw exception => Not allowed to create a new unit in this case
         if (!$unit && isset($unitData['id'])) {
             throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $unitData['id']));
         }
 
-        //to create a new unit, the unit name and unit is required. Otherwise we throw an exception
+        // To create a new unit, the unit name and unit is required. Otherwise we throw an exception
         if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
             $unit = new Unit();
         } elseif (!$unit) {
@@ -894,7 +894,14 @@ class Variant extends Resource implements BatchInterface
         return $unit;
     }
 
-    private function considerTaxInput($variant)
+    /**
+     * @param array $variant
+     *
+     * @throws ApiException\CustomValidationException
+     *
+     * @return array
+     */
+    private function considerTaxInput(array $variant)
     {
         $tax = Shopware()->Db()->fetchOne(
             'SELECT tax
@@ -921,13 +928,13 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * @param Collection|array $availableImages
-     * @param $mediaId
+     * @param int              $mediaId
      *
      * @return bool|Image
      */
     private function getAvailableMediaImage($availableImages, $mediaId)
     {
-        /** @var $image Image */
+        /** @var Image $image */
         foreach ($availableImages as $image) {
             if ($image->getMedia()->getId() == $mediaId) {
                 return $image;
@@ -940,14 +947,14 @@ class Variant extends Resource implements BatchInterface
     /**
      * Calculates and merges the numeric values of the Price entity
      *
-     * @param $priceData
-     * @param $tax
+     * @param array $priceData
+     * @param Tax   $tax
      *
      * @throws ApiException\CustomValidationException
      *
      * @return mixed
      */
-    private function mergePriceData($priceData, $tax)
+    private function mergePriceData(array $priceData, Tax $tax)
     {
         if (array_key_exists('from', $priceData)) {
             $priceData['from'] = (int) $priceData['from'];
@@ -992,9 +999,13 @@ class Variant extends Resource implements BatchInterface
      */
     private function getAvailableGroup($availableGroups, array $groupData)
     {
-        /** @var $availableGroup Option */
+        //Convert string to lower case to avoid problems with case insensitivity in database
+        //vs case sensitivity in PHP
+        $groupName = mb_strtolower($groupData['name']);
+
+        /** @var Option $availableGroup */
         foreach ($availableGroups as $availableGroup) {
-            if (($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
+            if ((mb_strtolower($availableGroup->getName()) == $groupName && $groupData['name'] !== null)
                 || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
                 return $availableGroup;
             }
@@ -1010,13 +1021,17 @@ class Variant extends Resource implements BatchInterface
      * @param Collection|array $availableOptions
      * @param array            $optionData
      *
-     * @return bool
+     * @return bool|Option
      */
     private function getAvailableOption($availableOptions, array $optionData)
     {
-        /** @var $availableOption Option */
+        //Convert string to lower case to avoid problems with case insensitivity in database
+        //vs case sensitivity in PHP
+        $optionName = mb_strtolower($optionData['name']);
+
+        /** @var Option $availableOption */
         foreach ($availableOptions as $availableOption) {
-            if (($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
+            if ((mb_strtolower($availableOption->getName()) == $optionName && $optionData['name'] !== null)
                 || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
                 return $availableOption;
             }
@@ -1029,13 +1044,13 @@ class Variant extends Resource implements BatchInterface
      * Helper function returns the findOneBy condition
      * for the passed unit data.
      *
-     * @param $data
+     * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
      * @return array
      */
-    private function getUnitFindCondition($data)
+    private function getUnitFindCondition(array $data)
     {
         if (isset($data['id'])) {
             return ['id' => $data['id']];
@@ -1050,5 +1065,113 @@ class Variant extends Resource implements BatchInterface
         }
 
         throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
+    }
+
+    /**
+     * @param array  $data
+     * @param Detail $variant
+     *
+     * @return array
+     */
+    private function prepareEsdAssociation($data, Detail $variant)
+    {
+        if (is_array($data['esd'])) {
+            $esd = $variant->getEsd();
+
+            // Use already uploaded download file
+            if (!isset($data['esd']['reuse'])) {
+                $data['esd']['reuse'] = false;
+            }
+
+            if (!$esd) {
+                $esd = new Esd();
+                $esd->setArticleDetail($variant);
+            }
+
+            if (isset($data['esd']['file'])) {
+                $file = $this->getMediaResource()->load($data['esd']['file']);
+                $fileName = pathinfo($data['esd']['file'], PATHINFO_FILENAME);
+                $fileExt = pathinfo($data['esd']['file'], PATHINFO_EXTENSION);
+
+                $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
+
+                // File already exists?
+                if (file_exists($esdDir . '/' . $fileName . '.' . $fileExt) && !$data['esd']['reuse']) {
+                    $saveFileName = uniqid($fileName) . '.' . $fileExt;
+                } else {
+                    $saveFileName = $fileName . '.' . $fileExt;
+                }
+                $saveFile = $esdDir . '/' . $saveFileName;
+
+                copy($file, $saveFile);
+                @unlink($file);
+                $data['esd']['file'] = $saveFileName;
+            }
+
+            if (isset($data['esd']['serials'])) {
+                $data = $this->prepareEsdSerialsAssociation($data, $esd);
+            }
+
+            $esd->fromArray($data['esd']);
+            $variant->setEsd($esd);
+        } elseif (is_null($data['esd'])) {
+            $variant->setEsd(null);
+        }
+
+        unset($data['esd']);
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param Esd   $esd
+     *
+     * @return array
+     */
+    private function prepareEsdSerialsAssociation($data, Esd $esd)
+    {
+        // Remove old serials
+        /** @var EsdSerial $serial */
+        foreach ($esd->getSerials() as $serial) {
+            $found = false;
+            foreach ($data['esd']['serials'] as $newSerial) {
+                if ($newSerial['serialnumber'] === $serial->getSerialnumber()) {
+                    $serial->fromArray($newSerial);
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->manager->remove($serial);
+                $esd->getSerials()->removeElement($serial);
+            }
+        }
+
+        // Add new items
+        foreach ($data['esd']['serials'] as $newSerial) {
+            $found = false;
+
+            /** @var EsdSerial $serial */
+            foreach ($esd->getSerials() as $serial) {
+                if ($newSerial['serialnumber'] === $serial->getSerialnumber()) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $newSerialModel = new EsdSerial();
+                $newSerialModel->fromArray($newSerial);
+                $newSerialModel->setEsd($esd);
+                $this->getManager()->persist($newSerialModel);
+                $esd->getSerials()->add($newSerialModel);
+            }
+        }
+
+        unset($data['esd']['serials']);
+
+        return $data;
     }
 }

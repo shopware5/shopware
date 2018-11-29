@@ -72,8 +72,8 @@ class SitePageMenu
     /**
      * Returns a shop page tree for the provided shop id.
      *
-     * @param $shopId
-     * @param $activeId
+     * @param int $shopId
+     * @param int $activeId
      *
      * @return array
      */
@@ -81,7 +81,7 @@ class SitePageMenu
     {
         $query = $this->getQuery($shopId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -176,9 +176,9 @@ class SitePageMenu
      * Checks if the provided menu contains already an entry for the provided site.
      * If the provided site contains a mapping but the existing not, override the existing.
      *
-     * @param $menu
-     * @param $key
-     * @param $site
+     * @param array  $menu
+     * @param string $key
+     * @param array  $site
      *
      * @return bool
      */
@@ -188,9 +188,9 @@ class SitePageMenu
     }
 
     /**
-     * @param $parentId
-     * @param $sites
-     * @param $activeId
+     * @param int   $parentId
+     * @param array $sites
+     * @param int   $activeId
      *
      * @return array
      */

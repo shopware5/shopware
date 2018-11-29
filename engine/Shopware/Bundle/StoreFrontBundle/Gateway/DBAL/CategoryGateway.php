@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -158,7 +158,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $this->fieldHelper->addProductStreamTranslation($query, $context);
         $this->fieldHelper->addCategoryMainDataTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -175,7 +175,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $categories = [];
         foreach ($data as $row) {
             $id = $row['__category_id'];
-            $categories[$id] = $this->categoryHydrator->hydrate($this->translateCategoryMedia($row, $context));
+            $categories[$id] = $this->categoryHydrator->hydrate($this->translateCategoryData($row, $context));
         }
 
         return $categories;
@@ -236,14 +236,14 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     }
 
     /**
-     * Resolves translated category media
+     * Resolves translated data for media and streamId
      *
      * @param array                       $category
      * @param Struct\ShopContextInterface $context
      *
      * @return array
      */
-    private function translateCategoryMedia(array $category, Struct\ShopContextInterface $context)
+    private function translateCategoryData(array $category, Struct\ShopContextInterface $context)
     {
         if (empty($category['__category_translation'])) {
             return $category;
@@ -253,6 +253,10 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
 
         if (!empty($translation['imagePath'])) {
             $category['mediaTranslation'] = $this->mediaService->get($translation['imagePath'], $context);
+        }
+
+        if (!empty($translation['streamId'])) {
+            $category['__stream_id'] = $translation['streamId'];
         }
 
         return $category;

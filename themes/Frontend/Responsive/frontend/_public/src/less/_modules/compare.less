@@ -10,29 +10,29 @@ The user can open the tool inside the product detail section.
 
     // Basic header
 .top-bar--navigation {
-	position: relative;
+    position: relative;
 
     .entry--compare {
         .unitize-padding(0, 8);
 
-		// Compare quantity
-		.compare--quantity {
-			.unitize(margin-left, 5);
-			font-weight: @font-bold-weight;
-			display: inline-block;
-			color: @brand-primary;
-		}
+        // Compare quantity
+        .compare--quantity {
+            .unitize(margin-left, 5);
+            font-weight: @font-bold-weight;
+            display: inline-block;
+            color: @brand-primary;
+        }
 
-		.icon--compare {
-			.unitize(font-size, 12);
-		}
+        .icon--compare {
+            .unitize(font-size, 12);
+        }
     }
 
     .compare--list {
         .unitize-width(280);
         .unitize-padding(5, 10, 10, 10);
         .unitize(top, 32);
-		.unitize(right, 12);
+        .unitize(right, 12);
         text-align: left;
         position: absolute;
         display: none;
@@ -64,7 +64,7 @@ The user can open the tool inside the product detail section.
     .js--is--dropdown-active .compare--list {
         display: block;
 
-		.compare--entry {
+        .compare--entry {
             cursor: default;
 
             form {
@@ -94,12 +94,12 @@ The user can open the tool inside the product detail section.
         }
 
         .btn--item-delete {
-			.unitize-height(21);
-			.unitize-width(21);
-			.unitize-padding(4, 5);
-			.unitize-margin(8, 0);
-			.unitize(font-size, 8);
-			.unitize(line-height, 14);
+            .unitize-height(21);
+            .unitize-width(21);
+            .unitize-padding(4, 5);
+            .unitize-margin(8, 0);
+            .unitize(font-size, 8);
+            .unitize(line-height, 14);
             float: right;
 
             .icon--cross {
@@ -245,7 +245,7 @@ The user can open the tool inside the product detail section.
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
-	.top-bar--navigation {
-		.compare--list { right: 0; }
-	}
+    .top-bar--navigation {
+        .compare--list { right: 0; }
+    }
 }

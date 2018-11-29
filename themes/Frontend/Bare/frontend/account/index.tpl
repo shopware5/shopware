@@ -25,6 +25,13 @@
             {include file="frontend/account/success_messages.tpl"}
         {/block}
 
+        {* Shipping error message *}
+        {block name="frontend_account_index_shipping_country_error_message"}
+            {if !$sUserData.shippingaddress.country.allowShipping}
+                {include file="frontend/_includes/messages.tpl" type="error" content="{s name="AccountShippingCountryNotAllowed"}{/s}"}
+            {/if}
+        {/block}
+
         {* Optin successful *}
         {if $smarty.get.optinconfirmed && {config name=optinregister}}
             {include file="frontend/_includes/messages.tpl" type="success" content="{s name="AccountOptinConfirmed"}{/s}"}

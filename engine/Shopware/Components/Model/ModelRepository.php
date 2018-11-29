@@ -37,7 +37,7 @@ use Doctrine\ORM\EntityRepository;
  * $modelRepository->createQueryBuilder();
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,7 +49,7 @@ class ModelRepository extends EntityRepository
      * @param string $alias
      * @param string $indexBy the index for the from
      *
-     * @return QueryBuilder
+     * @return \Shopware\Components\Model\QueryBuilder
      */
     public function createQueryBuilder($alias, $indexBy = null)
     {

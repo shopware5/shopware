@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator;
 

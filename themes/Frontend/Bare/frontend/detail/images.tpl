@@ -18,7 +18,7 @@
                             {$alt = $sArticle.image.description|escape}
                         {/if}
 
-                        <a href="{$sArticle.image.src.1}"
+                        <a href="{$sArticle.image.source}"
                            title="{s name="DetailThumbnailText" namespace="frontend/detail/index"}{/s}: {$alt}"
                            class="thumbnail--link is--active">
                             {block name='frontend_detail_image_thumbs_main_img'}
@@ -42,7 +42,7 @@
                                 {$alt = $image.description|escape}
                             {/if}
 
-                            <a href="{$image.src.1}"
+                            <a href="{$image.source}"
                                title="{s name="DetailThumbnailText" namespace="frontend/detail/index"}{/s}: {$alt}"
                                class="thumbnail--link">
                                 {block name='frontend_detail_image_thumbs_images_img'}

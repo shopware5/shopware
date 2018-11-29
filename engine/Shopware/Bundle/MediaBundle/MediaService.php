@@ -75,7 +75,7 @@ class MediaService implements MediaServiceInterface
         $this->config = $config;
 
         if (!isset($config['mediaUrl'])) {
-            throw new \Exception(sprintf("Please provide a 'mediaUrl' in your %s adapter.", $config['type']));
+            throw new \Exception(sprintf('Please provide a "mediaUrl" in your %s adapter.', $config['type']));
         }
 
         $mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();

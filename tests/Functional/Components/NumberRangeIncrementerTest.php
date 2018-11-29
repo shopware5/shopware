@@ -28,7 +28,7 @@ use Shopware\Components\NumberRangeIncrementer;
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -64,7 +64,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
                 $rangeName,
             ]
         );
-        $expectedNumber += 1;
+        ++$expectedNumber;
 
         $manager = new NumberRangeIncrementer($this->connection);
 

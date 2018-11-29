@@ -388,7 +388,7 @@ class ProductListingVariationLoader
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
         $priceTable->andWhere('defaultPrice.articledetailsID IN (:variants)');
 
-        $priceListingQuery->select('prices.`articledetailsID` as articledetailsID');
+        $priceListingQuery->select('DISTINCT prices.`articledetailsID` as articledetailsID');
         $priceListingQuery->addSelect('prices.`articleID` as articleID');
         $priceListingQuery->addSelect($this->listingPriceHelper->getSelection($context) . 'as price');
         $priceListingQuery->from('s_articles', 'product');
@@ -424,6 +424,7 @@ class ProductListingVariationLoader
         $subPriceQuery->from('s_articles_details', 'details');
         $subPriceQuery->leftJoin('details', '(' . $priceListingQuery . ')', 'prices', 'details.id = prices.articledetailsID');
         $subPriceQuery->leftJoin('details', '(' . $onSalePriceListingQuery . ')', 'onsalePriceList', 'details.id = onsalePriceList.articledetailsID');
+        $subPriceQuery->andWhere('details.id IN (:variants)');
 
         $query->innerJoin('availableVariant', '(' . $subPriceQuery . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
 
@@ -499,7 +500,7 @@ class ProductListingVariationLoader
             $availabilityResult = [];
             foreach ($productAvailability as &$currentAvailability) {
                 $availabilityResult[$currentAvailability['variant_id']]['variant_id'] = (int) $currentAvailability['variant_id'];
-                $availabilityResult[$currentAvailability['variant_id']]['availability'] = $currentAvailability['availability'];
+                $availabilityResult[$currentAvailability['variant_id']]['availability'] = (bool) $currentAvailability['availability'];
 
                 $availabilityResult[$currentAvailability['variant_id']]['options'][] = (int) $currentAvailability['option_id'];
                 $availabilityResult[$currentAvailability['variant_id']]['groups'][] = (int) $currentAvailability['group_id'];

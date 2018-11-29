@@ -1,4 +1,4 @@
-{* Filter options which will be included in the "listing/listing_actions.tpl" *}
+{* Filter options which will be included in the "listing/listing_actions.tpl" or "listing/sidebar.tpl" depending on $theme.sidebarFilter *}
 {namespace name="frontend/listing/listing_actions"}
 
 {block name='frontend_listing_actions_filter'}

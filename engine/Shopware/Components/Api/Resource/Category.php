@@ -31,32 +31,31 @@ use Shopware\Models\Media\Media as MediaModel;
 /**
  * Category API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Category extends Resource
 {
     /**
-     * @var Shopware_Components_Translation
+     * @var \Shopware_Components_Translation
      */
     private $translationComponent;
 
     /**
-     * @param Shopware_Components_Translation|null $translationComponent
+     * @param \Shopware_Components_Translation|null $translationComponent
      */
-    public function __construct(Shopware_Components_Translation $translationComponent = null)
+    public function __construct(\Shopware_Components_Translation $translationComponent = null)
     {
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
-
 
     /**
      * @return \Shopware\Models\Category\Repository
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Category\Category');
+        return $this->getManager()->getRepository(\Shopware\Models\Category\Category::class);
     }
 
     /**
@@ -77,11 +76,11 @@ class Category extends Resource
 
         $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
 
-        /** @var $category \Shopware\Models\Category\Category */
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         if ($this->getResultMode() === Resource::HYDRATE_ARRAY) {
@@ -108,7 +107,6 @@ class Category extends Resource
                     $category['translations'][$shop['id']] += $attributeTranslation;
                 }
             }
-
         } else {
             $category = $category[0];
         }
@@ -133,10 +131,10 @@ class Category extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the category data
+        // Returns the category data
         $categories = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $categories, 'total' => $totalResult];
@@ -201,11 +199,11 @@ class Category extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $category \Shopware\Models\Category\Category */
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         $params = $this->prepareCategoryData($params);
@@ -242,11 +240,11 @@ class Category extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $category \Shopware\Models\Category\Category */
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         $this->getManager()->remove($category);
@@ -254,12 +252,12 @@ class Category extends Resource
 
         $this->getManager()->getConnection()->delete('s_core_translations', [
             'objecttype' => 'category',
-            'objectkey' => $id
+            'objectkey' => $id,
         ]);
 
         $this->getManager()->getConnection()->delete('s_core_translations', [
             'objecttype' => 's_categories_attributes',
-            'objectkey' => $id
+            'objectkey' => $id,
         ]);
 
         return $category;
@@ -274,7 +272,7 @@ class Category extends Resource
      *
      * @throws \RuntimeException
      *
-     * @return null|Category
+     * @return null|\Shopware\Models\Category\Category
      */
     public function findCategoryByPath($path, $create = false)
     {
@@ -299,7 +297,7 @@ class Category extends Resource
                     return null;
                 }
 
-                if (null === $parent) {
+                if ($parent === null) {
                     /** @var \Shopware\Models\Category\Category $parent */
                     $parent = $this->getRepository()->find($parentId);
                     if (!$parent) {
@@ -324,20 +322,55 @@ class Category extends Resource
         return $categoryModel;
     }
 
-    private function prepareCategoryData($params)
+    /**
+     * @param int   $categoryId
+     * @param array $translations
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     */
+    public function writeTranslations($categoryId, $translations)
+    {
+        $attributes = $this->getAttributeProperties();
+
+        foreach ($translations as $translation) {
+            $shop = $this->getManager()->find(\Shopware\Models\Shop\Shop::class, $translation['shopId']);
+            if (!$shop) {
+                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
+            }
+
+            $attributeTranslation = array_intersect_key($translation, array_flip($attributes));
+
+            $this->translationComponent->write($shop->getId(), 'category', $categoryId, array_diff_key($translation, array_flip($attributes)));
+
+            if (!empty($attributeTranslation)) {
+                $this->translationComponent->write($shop->getId(), 's_categories_attributes', $categoryId, $attributeTranslation);
+            }
+        }
+    }
+
+    /**
+     * @param array $params
+     *
+     * @throws ApiException\CustomValidationException
+     *
+     * @return array
+     */
+    private function prepareCategoryData(array $params)
     {
         if (!isset($params['name'])) {
             throw new ApiException\CustomValidationException('A name is required');
         }
 
-        // in order to have a consistent interface within the REST Api, one might want
+        // In order to have a consistent interface within the REST Api, one might want
         // to set the parent category by using 'parentId' instead of 'parent'
         if (isset($params['parentId']) && !isset($params['parent'])) {
             $params['parent'] = $params['parentId'];
         }
 
         if (!empty($params['parent'])) {
-            $params['parent'] = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->find($params['parent']);
+            $params['parent'] = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class)->find($params['parent']);
             if (!$params['parent']) {
                 throw new ApiException\CustomValidationException(sprintf('Parent by id %s not found', $params['parent']));
             }
@@ -374,13 +407,13 @@ class Category extends Resource
         $media = null;
 
         if (isset($data['media']['link'])) {
-            /** @var $media MediaModel */
+            /** @var MediaModel $media */
             $media = $this->getResource('media')->internalCreateMediaByFileLink(
                 $data['media']['link']
             );
         } elseif (!empty($data['media']['mediaId'])) {
             $media = $this->getManager()->find(
-                'Shopware\Models\Media\Media',
+                \Shopware\Models\Media\Media::class,
                 (int) $data['media']['mediaId']
             );
 
@@ -393,35 +426,6 @@ class Category extends Resource
         unset($data['media']);
 
         return $data;
-    }
-
-    /**
-     * @param int   $categoryId
-     * @param array $translations
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     */
-    public function writeTranslations($categoryId, $translations)
-    {
-        $attributes = $this->getAttributeProperties();
-
-        foreach ($translations as $translation) {
-            $shop = $this->getManager()->find(\Shopware\Models\Shop\Shop::class, $translation['shopId']);
-            if (!$shop) {
-                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
-            }
-
-            $attributeTranslation = array_intersect_key($translation, array_flip($attributes));
-
-            $this->translationComponent->write($shop->getId(), 'category', $categoryId, array_diff_key($translation, array_flip($attributes)));
-
-            if (!empty($attributeTranslation)) {
-                $this->translationComponent->write($shop->getId(), 's_categories_attributes', $categoryId, $attributeTranslation);
-            }
-
-        }
     }
 
     /**

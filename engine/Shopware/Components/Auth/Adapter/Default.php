@@ -38,42 +38,49 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      * @var string
      */
     protected $_tableName = 's_core_auth';
+
     /**
      * Column that holds the username
      *
      * @var string
      */
     protected $_identityColumn = 'username';
+
     /**
      * Column that holds the password
      *
      * @var string
      */
     protected $_credentialColumn = 'password';
+
     /**
      * Array with conditions that have to be true in auth request
      *
      * @var array
      */
     protected $conditions = ['active=1', 'lockeduntil <= NOW()'];
+
     /**
      * Column that holds the expire date
      *
      * @var string
      */
     protected $expiryColumn = 'lastlogin';
+
     /**
      * Column that holds the session id
      *
      * @var string
      */
     protected $sessionIdColumn = 'sessionID';
+
     /**
      * For bruce force protection - column that holds the date until the login is permitted
      *
      * @var string
      */
     protected $lockedUntilColumn = 'lockeduntil';
+
     /**
      * How many seconds is a login is valid?
      *
@@ -159,9 +166,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     }
 
     /**
-     * @param $plaintext
-     * @param $hash
-     * @param $encoderName
+     * @param string $plaintext
+     * @param string $hash
+     * @param string $encoderName
      */
     public function rehash($plaintext, $hash, $encoderName)
     {
@@ -217,7 +224,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     /**
      * Set the property failed logins to a new value
      *
-     * @param $number
+     * @param string $number
      *
      * @return Shopware_Components_Auth_Adapter_Default
      */

@@ -120,7 +120,7 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition WeightCondition|WidthCondition|LengthCondition|HeightCondition */
+        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition $condition */
         if ($condition = $criteria->getCondition($name)) {
             $method = 'get' . ucfirst($minField);
             $activeMin = $condition->$method();

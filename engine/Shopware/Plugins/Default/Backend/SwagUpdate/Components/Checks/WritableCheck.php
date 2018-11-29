@@ -30,7 +30,7 @@ use ShopwarePlugins\SwagUpdate\Components\FileSystem;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

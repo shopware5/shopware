@@ -44,8 +44,8 @@ class Grammar
     protected $eventManager;
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $eventManager \Enlight_Event_EventManager
+     * @param DqlHelper                   $dqlHelper
+     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct($dqlHelper, $eventManager)
     {
@@ -132,7 +132,7 @@ class Grammar
                     )) {
                         $attributes[$formattedColumn] = $event->getReturn();
                     } else {
-                        throw new \RuntimeException("Column with type {$type} was not configured, yet");
+                        throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
                     }
             }
         }

@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
 
                     onCloseButton: function() {
                         /*{if {acl_is_allowed privilege=skipUpdate resource=swagupdate}}*/
-                        Ext.MessageBox.confirm('{s name="skip_update"}Aktualisierung überspingen{/s}', '{s name="skip_update_question"}Möchten Sie die Meldungen für diese Aktualisierung dauerhaft deaktivieren?{/s}', skipUpdate);
+                        Ext.MessageBox.confirm('{s name="skip_update"}Skip update{/s}', '{s name="skip_update_question"}Do you want to disable the notifications for this update permanently?{/s}', skipUpdate);
                         /*{/if}*/
                     }
                 });
@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                             localStorage.setItem('skipVersion', version);
                         }
 
-                        Shopware.Notification.createGrowlMessage('{s name="popups_disabled"}Meldungen deaktiviert{/s}', Ext.String.format('{s name="no_more_popups"}Es werden keine weiteren Meldungen für die Shopware Version [0] angezeigt.{/s}', version));
+                        Shopware.Notification.createGrowlMessage('{s name="popups_disabled"}Popups disabled{/s}', Ext.String.format('{s name="no_more_popups"}No more popups will be shown for Shopware version [0].{/s}', version));
                     }
                 }
             }

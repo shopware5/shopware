@@ -14,12 +14,12 @@ Feature: Detail page
         When  I write an evaluation:
             | field        | value           |
             | sVoteName    | Max Mustermann  |
-            | sVoteMail    | info@example.de |
             | sVoteStars   | 1 sehr schlecht |
             | sVoteSummary | Neue Bewertung  |
             | sVoteComment | Hallo Welt      |
-        And  I click the link in my latest email
+        And  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
         And  the shop owner activates my latest evaluation
+        And  I am on the detail page for article 198
 
         Then  I should see an average customer evaluation of 7 from following evaluations:
             | stars |
@@ -32,19 +32,19 @@ Feature: Detail page
     Scenario: I can let me notify, when an article is not available
         Given The notification plugin is activated
         And   I am on the detail page for article 243
-        Then  I should see "Benachrichtigen Sie mich, wenn der Artikel lieferbar ist"
+        Then  I should see "Benachrichtigen Sie mich, sobald der Artikel lieferbar ist"
 
         When  I submit the notification form with "test-notification@example.de"
-        Then  I should see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
+        Then  I should see "Bestätigen Sie den Link der E-Mail, die wir Ihnen soeben geschickt haben. Wir benachrichtigen Sie dann, sobald der Artikel wieder verfügbar ist."
 
         When  I click the link in my latest email
-        Then  I should see "Vielen Dank! Wir haben Ihre Anfrage gespeichert! Sie werden benachrichtigt sobald der Artikel wieder verfügbar ist."
+        Then  I should see "Vielen Dank! Wir haben Ihre Anfrage gespeichert. Sie werden benachrichtigt sobald der Artikel wieder verfügbar ist."
 
     @plugin @notification
     Scenario: I should not see the notification box, when the notification plugin is disabled
         Given The notification plugin is deactivated
         And   I am on the detail page for article 243
-        Then  I should not see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
+        Then  I should not see "Bestätigen Sie den Link der E-Mail, die wir Ihnen soeben geschickt haben. Wir benachrichtigen Sie dann, sobald der Artikel wieder verfügbar ist."
 
     @language @javascript
     Scenario: I can change the language
@@ -65,19 +65,15 @@ Feature: Detail page
         When  I write an evaluation:
             | field        | value           |
             | sVoteName    | Max Mustermann  |
-            | sVoteMail    | info@example.de |
             | sVoteStars   | 3               |
             | sVoteSummary | Neue Bewertung  |
             | sVoteComment | Hallo Welt      |
         Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
-        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
-        But   I should not see "Hallo Welt"
-
-        When  I click the link in my latest email
-        Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
+        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
         But   I should not see "Hallo Welt"
 
         When  the shop owner activates my latest evaluation
+        And   I am on the detail page for article 100
         Then  I should see an average customer evaluation of 3 from following evaluations:
             | author         | stars | headline       | comment    |
             | Max Mustermann | 3     | Neue Bewertung | Hallo Welt |

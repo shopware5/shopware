@@ -37,6 +37,7 @@ class StaticUrlProvider implements UrlProviderInterface
      * @var Routing\Router
      */
     private $router;
+
     /**
      * @var Connection
      */
@@ -48,8 +49,6 @@ class StaticUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * StaticUrlProvider constructor.
-     *
      * @param Routing\Router $router
      * @param Connection     $connection
      */
@@ -118,8 +117,6 @@ class StaticUrlProvider implements UrlProviderInterface
      *
      * @param int $shopId
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return array
      */
     private function getSitesByShopId($shopId)
@@ -139,12 +136,13 @@ class StaticUrlProvider implements UrlProviderInterface
             $builder = $this->connection->createQueryBuilder();
             $current = $builder->from('s_cms_static', 'sites')
                 ->select('*')
+                ->where('sites.active = 1')
                 ->andWhere(
                     $builder->expr()->orX(
-                        $builder->expr()->eq('sites.grouping', ':g1'),        // = gBottom
-                        $builder->expr()->like('sites.grouping', ':g2'),      //like 'gBottom|%
-                        $builder->expr()->like('sites.grouping', ':g3'),      //like '|gBottom
-                        $builder->expr()->like('sites.grouping', ':g4')      //like '|gBottom|
+                        $builder->expr()->eq('sites.grouping', ':g1'),   //  = bottom
+                        $builder->expr()->like('sites.grouping', ':g2'), // like 'bottom|%
+                        $builder->expr()->like('sites.grouping', ':g3'), // like '|bottom
+                        $builder->expr()->like('sites.grouping', ':g4')  // like '|bottom|
                     )
                 )
                 ->andWhere(

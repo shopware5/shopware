@@ -119,7 +119,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
     {
         $activeAverage = null;
         if ($criteria->hasCondition('vote_average')) {
-            /** @var $condition VoteAverageCondition */
+            /** @var VoteAverageCondition $condition */
             $condition = $criteria->getCondition('vote_average');
             $activeAverage = $condition->getAverage();
         }
@@ -166,7 +166,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         $values = [];
         for ($i = 1; $i <= 4; ++$i) {
             $affected = array_filter($data, function ($value) use ($i) {
-                return ($value['key'] / 2) >= $i;
+                return $i <= ($value['key'] / 2);
             });
 
             $count = array_sum(array_column($affected, 'doc_count'));

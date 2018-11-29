@@ -79,6 +79,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function viewAction()
     {
+        $hash = null;
+
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
             if (!Shopware()->Container()->get('Auth')->hasIdentity()) {
@@ -391,6 +393,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      * Init template method
      *
      * Initializes the template using the mailing data.
+     *
+     * @param array $mailing
+     *
+     * @return Enlight_Template_Manager
      */
     public function initTemplate($mailing)
     {
@@ -530,6 +536,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return false;
         }
 
+        $customerGroups = null;
+        $recipientGroups = null;
         $mailing['groups'] = unserialize($mailing['groups']);
 
         // The first element holds the selected customer groups for the current newsletter
@@ -785,7 +793,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return null;
         }
 
-        /** @var $plugin \Shopware\Models\Plugin\Plugin */
+        /** @var \Shopware\Models\Plugin\Plugin $plugin */
         $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $pluginBootstrap->getId());
         if (!$plugin) {
             return null;

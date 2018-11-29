@@ -15,17 +15,17 @@
 
     <title>Shopware 5 - Installer</title>
 
-    <link rel="shortcut icon" href="<?= $baseUrl ?>../common/assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?= $baseUrl; ?>../common/assets/images/favicon.ico" type="image/x-icon" />
 
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/reset.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/icons.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/style.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl; ?>../common/assets/styles/reset.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl; ?>../common/assets/styles/icons.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl; ?>../common/assets/styles/style.css" media="all"/>
 
     <script>
         var shopwareTranslations = {
-            'counterTextMigrations': '<?= $t->t('migration_counter_text_migrations') ?>',
-            'counterTextSnippets':   '<?= $t->t('migration_counter_text_snippets') ?>',
-            'updateSuccess':         '<?= $t->t('migration_update_success') ?>'
+            'counterTextMigrations': '<?= $t->t('migration_counter_text_migrations'); ?>',
+            'counterTextSnippets':   '<?= $t->t('migration_counter_text_snippets'); ?>',
+            'updateSuccess':         '<?= $t->t('migration_update_success'); ?>'
         }
     </script>
 </head>
@@ -35,14 +35,14 @@
 
     <!-- Header -->
     <header class="header--main">
-        <img class="header-logo" src="<?= $baseUrl ?>assets/images/logo.png" alt="Shopware5 Installer" data-small="<?= $baseUrl ?>assets/images/logo-small.png" data-normal="<?= $baseUrl ?>assets/images/logo.png">
-        <img src="<?= $baseUrl ?>../common/assets/images/logo-sw5.png" alt="Shopware 5" class="header-shopware5-logo is--right">
+        <img class="header-logo" src="<?= $baseUrl; ?>assets/images/logo.png" alt="Shopware5 Installer" data-small="<?= $baseUrl; ?>assets/images/logo-small.png" data-normal="<?= $baseUrl; ?>assets/images/logo.png">
+        <img src="<?= $baseUrl; ?>../common/assets/images/logo-sw5.png" alt="Shopware 5" class="header-shopware5-logo is--right">
 
         <div class="version--notice">
-            <?= $t->t('version_text') ?> <?= $version ?>
+            <?= $t->t('version_text'); ?> <?= $version; ?>
         </div>
     </header>
 
     <div class="content--wrapper block-group">
-        <?php $menuHelper->printMenu() ?>
+        <?php $menuHelper->printMenu(); ?>
         <section class="content--main block">

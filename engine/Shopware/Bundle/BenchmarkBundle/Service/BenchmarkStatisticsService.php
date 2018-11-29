@@ -25,10 +25,8 @@
 namespace Shopware\Bundle\BenchmarkBundle\Service;
 
 use DateInterval;
-use DateTime;
-use DateTimeZone;
+use Shopware\Bundle\BenchmarkBundle\Exception\TransmissionNotNecessaryException;
 use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkDataResult;
-use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
 class BenchmarkStatisticsService
@@ -54,8 +52,8 @@ class BenchmarkStatisticsService
     private $biService;
 
     /**
-     * @param StatisticsService           $statistics
      * @param BenchmarkRepository         $benchmarkRepository
+     * @param StatisticsService           $statistics
      * @param BusinessIntelligenceService $biService
      * @param DateInterval|null           $interval
      *
@@ -74,30 +72,60 @@ class BenchmarkStatisticsService
     }
 
     /**
-     * @param int $shopId
-     *
      * @return BenchmarkDataResult
      */
-    public function sendBenchmarkData($shopId)
+    public function handleTransmission()
     {
-        /** @var BenchmarkConfig $benchmarkConfig */
-        $benchmarkConfig = $this->benchmarkRepository->getConfigForShop($shopId);
-
-        $statisticsResponse = null;
-        $biResponse = null;
-
-        $now = new DateTime('now', new DateTimeZone('UTC'));
-
-        if ($benchmarkConfig->isActive()) {
-            if ($benchmarkConfig->getLastSent()->add($this->interval) < $now) {
-                $statisticsResponse = $this->statistics->transmit($shopId);
-            }
-
-            if ($benchmarkConfig->getLastReceived()->add($this->interval) < $now) {
-                $biResponse = $this->biService->transmit($shopId);
-            }
-        }
+        $statisticsResponse = $this->sendStatisticsData();
+        $biResponse = $this->fetchBenchmarkData();
 
         return new BenchmarkDataResult($statisticsResponse, $biResponse);
+    }
+
+    private function sendStatisticsData()
+    {
+        // Configuration hasn't been done yet
+        if ($this->benchmarkRepository->getConfigsCount() === 0) {
+            return null;
+        }
+
+        $this->benchmarkRepository->synchronizeShops();
+
+        $benchmarkConfig = $this->benchmarkRepository->getNextTransmissionShopConfig();
+
+        if (!$benchmarkConfig) {
+            return null;
+        }
+
+        $this->benchmarkRepository->lockShop($benchmarkConfig->getShopId());
+
+        $statisticsResponse = null;
+
+        try {
+            $statisticsResponse = $this->statistics->transmit($benchmarkConfig, $benchmarkConfig->getBatchSize());
+            $statisticsResponse->setShopId((int) $benchmarkConfig->getShopId());
+        } catch (TransmissionNotNecessaryException $e) {
+            return null;
+        } finally {
+            $this->benchmarkRepository->unlockShop($benchmarkConfig->getShopId());
+        }
+
+        return $statisticsResponse;
+    }
+
+    private function fetchBenchmarkData()
+    {
+        $biResponse = null;
+
+        $benchmarkConfig = $this->benchmarkRepository->getNextReceivingShopConfig();
+
+        if (!$benchmarkConfig) {
+            return null;
+        }
+
+        $biResponse = $this->biService->transmit($benchmarkConfig);
+        $biResponse->setShopId((int) $benchmarkConfig->getShopId());
+
+        return $biResponse;
     }
 }

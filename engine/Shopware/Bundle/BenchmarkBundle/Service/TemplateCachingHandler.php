@@ -42,14 +42,18 @@ class TemplateCachingHandler
     }
 
     /**
+     * @param int $shopId
+     *
      * @return bool
      */
-    public function isTemplateCached()
+    public function isTemplateCached($shopId)
     {
         $queryBuilder = $this->connection->createQueryBuilder();
 
         $template = $queryBuilder->select('config.cached_template')
             ->from('s_benchmark_config', 'config')
+            ->where('config.shop_id = :shopId')
+            ->setParameter('shopId', $shopId)
             ->execute()
             ->fetchColumn();
 

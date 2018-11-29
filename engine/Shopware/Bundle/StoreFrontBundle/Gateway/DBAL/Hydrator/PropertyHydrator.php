@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -197,8 +197,8 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
-     * @param int $sortMode
+     * @param Struct\Property\Option[] $options
+     * @param int                      $sortMode
      */
     private function sortOptions(&$options, $sortMode)
     {
@@ -218,7 +218,7 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
+     * @param Struct\Property\Option[] $options
      */
     private function sortOptionsByPosition(&$options)
     {
@@ -232,7 +232,7 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
+     * @param Struct\Property\Option[] $options
      */
     private function sortOptionsNumercialValue(&$options)
     {
@@ -249,7 +249,7 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
+     * @param Struct\Property\Option[] $options
      */
     private function sortOptionsAlphanumeric(&$options)
     {

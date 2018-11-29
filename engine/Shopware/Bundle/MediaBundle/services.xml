@@ -110,15 +110,15 @@
         <!-- Commands -->
 
         <service id="shopware_media.commands.media_cleanup" class="Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand">
-            <tag name="console.command" />
+            <tag name="console.command" command="sw:media:cleanup"/>
         </service>
 
         <service id="shopware_media.commands.image_migrate" class="Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand">
-            <tag name="console.command" />
+            <tag name="console.command" command="sw:media:migrate"/>
         </service>
 
         <service id="shopware_media.commands.media_optimize" class="Shopware\Bundle\MediaBundle\Commands\MediaOptimizeCommand">
-            <tag name="console.command" />
+            <tag name="console.command" command="sw:media:optimize"/>
         </service>
     </services>
 </container>

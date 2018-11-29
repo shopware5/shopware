@@ -270,7 +270,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             },
             style: 'background: rgb(240, 242, 244)',
             title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
-            translationForm: me.mainForm
+            translationForm: me.mainForm,
+            autoScroll: true
         });
     }
 });

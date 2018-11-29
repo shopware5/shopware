@@ -158,6 +158,12 @@ class ShopIndexer implements ShopIndexerInterface
             'settings' => [
                 'number_of_shards' => $configuration->getNumberOfShards(),
                 'number_of_replicas' => $configuration->getNumberOfReplicas(),
+                'mapping' => [
+                    'total_fields' => [
+                        'limit' => $configuration->getTotalFieldsLimit(),
+                    ],
+                ],
+                'max_result_window' => $configuration->getMaxResultWindow(),
             ],
         ];
 
@@ -178,7 +184,8 @@ class ShopIndexer implements ShopIndexerInterface
     }
 
     /**
-     * @param ShopIndex $index
+     * @param ShopIndex        $index
+     * @param MappingInterface $mapping
      */
     private function updateMapping(ShopIndex $index, MappingInterface $mapping)
     {
@@ -196,7 +203,9 @@ class ShopIndexer implements ShopIndexerInterface
     private function populate(ShopIndex $index, ProgressHelperInterface $progress)
     {
         foreach ($this->indexer as $indexer) {
-            $indexer->populate($index, $progress);
+            if ($indexer->supports() === $index->getType()) {
+                $indexer->populate($index, $progress);
+            }
         }
 
         $this->client->indices()->refresh(['index' => $index->getName()]);
@@ -228,16 +237,24 @@ class ShopIndexer implements ShopIndexerInterface
      */
     private function createAlias(IndexConfiguration $configuration)
     {
-        $exist = $this->client->indices()->existsAlias(['name' => $configuration->getAlias()]);
+        $currentAlias = $configuration->getAlias();
+        $aliasExists = $this->client->indices()->existsAlias(['name' => $currentAlias]);
 
-        if ($exist) {
+        if ($aliasExists) {
             $this->switchAlias($configuration);
-        } else {
-            $this->client->indices()->putAlias([
-                'index' => $configuration->getName(),
-                'name' => $configuration->getAlias(),
-            ]);
+
+            return;
         }
+
+        $indexExists = $this->client->indices()->exists(['index' => $currentAlias]);
+        if ($indexExists) {
+            $this->client->indices()->delete(['index' => $currentAlias]);
+        }
+
+        $this->client->indices()->putAlias([
+            'index' => $configuration->getName(),
+            'name' => $configuration->getAlias(),
+        ]);
     }
 
     /**

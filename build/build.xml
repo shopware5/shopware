@@ -18,7 +18,7 @@
         </parallel>
     </target>
 
-    <target name="build-continuous" depends="unit-shopware-continuous"/>
+    <target name="build-continuous" depends="check-code-style, unit-shopware-continuous"/>
     <target name="build-unit" depends="build-composer-install, build-cache-dir, build-config, build-database, build-snippets-deploy, build-theme-initialize,build-create-admin-account, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
@@ -109,6 +109,17 @@
             <arg value="composer.phar" />
             <arg value="update" />
             <arg value="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="check-code-style" depends="build-composer-install">
+        <exec executable="${script.php}" failonerror="true">
+            <arg value="vendor/bin/php-cs-fixer" />
+            <arg value="fix" />
+            <arg value="--dry-run" />
+            <arg value="--stop-on-violation" />
+            <arg value="--verbose" />
+            <arg value="--show-progress=dots" />
         </exec>
     </target>
 
@@ -377,5 +388,17 @@
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/media_selection/editor_plugin.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/fullscreen/editor_plugin.js" />
         </concat>
+    </target>
+
+    <target name="phpstan" description="PHP Static Analysis Tool">
+        <get src="https://github.com/phpstan/phpstan/releases/download/0.10.5/phpstan.phar"
+             dest="${basedir}/build/artifacts/phpstan.phar" skipexisting="true"/>
+        <exec executable="php" searchpath="true" resolveexecutable="true" failonerror="true">
+            <arg value="${basedir}/build/artifacts/phpstan.phar"/>
+            <arg value="analyse"/>
+            <arg value="-c"/>
+            <arg value=".phpstan.neon"/>
+            <arg value="--no-progress"/>
+        </exec>
     </target>
 </project>

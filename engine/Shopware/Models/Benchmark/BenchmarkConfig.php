@@ -99,6 +99,24 @@ class BenchmarkConfig extends ModelEntity
     private $lastProductId;
 
     /**
+     * The id of the last analytics that was sent to the server
+     *
+     * @var int
+     *
+     * @ORM\Column(name="last_analytics_id", type="integer", nullable=false)
+     */
+    private $lastAnalyticsId;
+
+    /**
+     * The most recent date to figure out which orders have been updated since they have last been transmitted
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_updated_orders_date", type="datetime", nullable=true)
+     */
+    private $lastUpdatedOrdersDate;
+
+    /**
      * The batch size in which entities are to be transmitted
      *
      * @var int
@@ -110,7 +128,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * The industry the shop is in
      *
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="industry", type="integer", nullable=false)
      */
@@ -151,6 +169,15 @@ class BenchmarkConfig extends ModelEntity
     private $active;
 
     /**
+     * Flag which defines if the current shop is locked for transmitting data.
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(name="locked", type="datetime", nullable=true)
+     */
+    private $locked;
+
+    /**
      * @param string $id
      */
     public function __construct($id)
@@ -158,11 +185,12 @@ class BenchmarkConfig extends ModelEntity
         $this->id = $id;
 
         // Default values
-        $this->lastReceived = '1990-01-01 00:00:00';
-        $this->lastSent = '1990-01-01 00:00:00';
+        $this->lastReceived = '1970-01-01 00:00:00';
+        $this->lastSent = '1970-01-01 00:00:00';
         $this->lastOrderId = 0;
         $this->lastCustomerId = 0;
         $this->lastProductId = 0;
+        $this->lastAnalyticsId = 0;
         $this->batchSize = 1000;
         $this->active = 0;
     }
@@ -266,6 +294,38 @@ class BenchmarkConfig extends ModelEntity
     /**
      * @return int
      */
+    public function getLastAnalyticsId()
+    {
+        return (int) $this->lastAnalyticsId;
+    }
+
+    /**
+     * @param int $lastAnalyticsId
+     */
+    public function setLastAnalyticsId($lastAnalyticsId)
+    {
+        $this->lastAnalyticsId = (int) $lastAnalyticsId;
+    }
+
+    /**#
+     * @return \DateTime
+     */
+    public function getLastUpdatedOrdersDate()
+    {
+        return $this->lastUpdatedOrdersDate;
+    }
+
+    /**
+     * @param \DateTime $lastUpdatedOrdersDate
+     */
+    public function setLastUpdatedOrdersDate(\DateTime $lastUpdatedOrdersDate)
+    {
+        $this->lastUpdatedOrdersDate = $lastUpdatedOrdersDate;
+    }
+
+    /**
+     * @return int
+     */
     public function getBatchSize()
     {
         return $this->batchSize;
@@ -357,6 +417,22 @@ class BenchmarkConfig extends ModelEntity
     public function setActive($active)
     {
         $this->active = (bool) $active;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
+     * @param \DateTime $locked
+     */
+    public function setLocked(\DateTime $locked)
+    {
+        $this->locked = $locked;
     }
 
     /**

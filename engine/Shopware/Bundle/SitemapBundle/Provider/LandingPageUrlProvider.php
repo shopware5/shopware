@@ -43,6 +43,7 @@ class LandingPageUrlProvider implements UrlProviderInterface
      * @var bool
      */
     private $allExported = false;
+
     /**
      * @var ModelManager
      */
@@ -59,15 +60,12 @@ class LandingPageUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return null|Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
-            return null;
+            return [];
         }
 
         $emotionRepository = $this->modelManager->getRepository(Emotion::class);
@@ -78,7 +76,7 @@ class LandingPageUrlProvider implements UrlProviderInterface
         $campaigns = $builder->getQuery()->getArrayResult();
 
         if (count($campaigns) === 0) {
-            return null;
+            return [];
         }
 
         foreach ($campaigns as $key => &$campaign) {

@@ -59,7 +59,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             'name': '{s name=grid/column/name}File name{/s}',
             'width': '{s name=grid/column/width}Image width{/s}',
             'height': '{s name=grid/column/height}Image height{/s}',
-            'type': '{s name=grid/column/type}File type{/s}'
+            'type': '{s name=grid/column/type}File type{/s}',
+            'fileSize': '{s name=grid/column/fileSize}File size{/s}'
         },
         types: {
             'video': '{s name=grid/types/video}Video{/s}',
@@ -160,6 +161,12 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             header: me.snippets.column.type,
             flex: 1,
             renderer: me.typeRenderer
+        }, {
+            dataIndex: 'fileSize',
+            header: me.snippets.column.fileSize,
+            hidden: true,
+            flex: 1,
+            renderer: me.fileSizeRenderer
         }]
     },
 
@@ -275,6 +282,17 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
         }
 
         return result;
+    },
+
+    /**
+     * Returns the rendered fileSize
+     * @param integer bytes
+     */
+    fileSizeRenderer: function(bytes) {
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 Byte';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
     }
 });
 //{/block}

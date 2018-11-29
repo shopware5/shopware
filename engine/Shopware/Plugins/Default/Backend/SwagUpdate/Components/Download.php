@@ -25,7 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,7 +56,7 @@ class Download
     }
 
     /**
-     * @param $callback
+     * @param callable $callback
      *
      * @throws \Exception
      */
@@ -93,8 +93,8 @@ class Download
      */
     public function downloadFile($sourceUri, $destinationUri, $totalSize, $hash)
     {
-        if (false === ($destination = fopen($destinationUri, 'a+'))) {
-            throw new \Exception('Destination is invalid.');
+        if (($destination = fopen($destinationUri, 'a+')) === false) {
+            throw new \Exception(sprintf('Destination "%s" is invalid.', $destinationUri));
         }
 
         if (filesize($destinationUri) > 0) {

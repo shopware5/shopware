@@ -44,7 +44,7 @@ class VoteTest extends TestCase
 
         $this->assertCount(5, $votes);
 
-        /** @var $vote Vote */
+        /** @var Vote $vote */
         foreach ($votes as $vote) {
             $this->assertEquals('Bert Bewerter', $vote->getName());
         }

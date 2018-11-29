@@ -35,7 +35,7 @@ use Shopware_Components_Config as ShopwareConfig;
  * @see http://api.symfony.com/2.0/Symfony/Component/Routing/RequestContext.html
  * @see \Enlight_Controller_Request_Request
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

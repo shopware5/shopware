@@ -78,13 +78,13 @@ class CategoryDuplicator
         $originalCategory = $originalCategoryStmt->fetch(\PDO::FETCH_ASSOC);
 
         if (empty($originalCategory)) {
-            throw new \RuntimeException('Category ' . $originalCategoryId . ' not found');
+            throw new \RuntimeException(sprintf('Category "%s" not found', $originalCategoryId));
         }
 
         $newPosStmt = $this->connection
             ->prepare('SELECT MAX(`position`) FROM s_categories WHERE parent = :parent');
         $newPosStmt->execute([':parent' => $parentId]);
-        $newPos = (int) $newPosStmt->fetchColumn(0);
+        $newPos = (int) $newPosStmt->fetchColumn();
         $originalCategory['position'] = $newPos + 1;
 
         $originalCategory['parent'] = $parentId;

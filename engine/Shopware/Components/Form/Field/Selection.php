@@ -34,14 +34,14 @@ class Selection extends Field
     /**
      * Contains the store data for the selection field.
      *
-     * @var mixed
+     * @var array[]
      */
     protected $store;
 
     /**
      * Requires to set a name for the field
      *
-     * @param $name
+     * @param string  $name
      * @param array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      */
     public function __construct($name, $store)
@@ -51,7 +51,7 @@ class Selection extends Field
     }
 
     /**
-     * @param mixed $store
+     * @param array[] $store
      */
     public function setStore($store)
     {

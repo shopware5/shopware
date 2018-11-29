@@ -33,7 +33,7 @@ use Shopware\Models\Article\Supplier;
 /**
  * Deprecated Shopware Class that handles url rewrites
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -474,8 +474,8 @@ class sRewriteTable
     public function getSeoArticleQuery()
     {
         return "
-            SELECT a.*, d.ordernumber, d.suppliernumber, s.name as supplier, datum as date,
-                d.releasedate, changetime as changed, metaTitle, ct.objectdata, ctf.objectdata as objectdataFallback, at.attr1, at.attr2,
+            SELECT a.*, d.ordernumber, d.suppliernumber, s.name as supplier, a.datum as date,
+                d.releasedate, a.changetime as changed, ct.objectdata, ctf.objectdata as objectdataFallback, at.attr1, at.attr2,
                 at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9,
                 at.attr10,at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16,
                 at.attr17, at.attr18, at.attr19, at.attr20
@@ -533,7 +533,7 @@ class sRewriteTable
             $blogCategoryIds[] = $blogCategory['id'];
         }
 
-        /** @var $repository \Shopware\Models\Blog\Repository */
+        /** @var \Shopware\Models\Blog\Repository $repository */
         $blogArticlesQuery = $this->modelManager->getRepository(\Shopware\Models\Blog\Blog::class)
             ->getListQuery($blogCategoryIds, $offset, $limit);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -590,7 +590,7 @@ class sRewriteTable
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
-        /** @var $repo \Shopware\Models\Emotion\Repository */
+        /** @var \Shopware\Models\Emotion\Repository $repo */
         $repo = $this->modelManager->getRepository(\Shopware\Models\Emotion\Emotion::class);
         $queryBuilder = $repo->getListQueryBuilder();
 
@@ -773,7 +773,7 @@ class sRewriteTable
     public function sCategoryPath($categoryId)
     {
         $parts = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
-            ->getPathById($categoryId, 'name');
+            ->getPathById($categoryId);
         $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
         $parts = array_slice($parts, $level);
 

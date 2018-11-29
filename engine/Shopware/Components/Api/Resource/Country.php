@@ -29,7 +29,7 @@ use Shopware\Components\Api\Exception as ApiException;
 /**
  * Country API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -69,10 +69,10 @@ class Country extends Resource
             ],
         ];
         $builder = $this->getRepository()->getCountriesWithStatesQueryBuilder($filters);
-        /** @var $country \Shopware\Models\Country\Country */
+        /** @var \Shopware\Models\Country\Country $country */
         $country = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
         if (!$country) {
-            throw new ApiException\NotFoundException("Country by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
         }
 
         return $country;
@@ -164,10 +164,10 @@ class Country extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $country \Shopware\Models\Country\Country */
+        /** @var \Shopware\Models\Country\Country $country */
         $country = $this->getRepository()->find($id);
         if (!$country) {
-            throw new ApiException\NotFoundException("Country by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
         }
 
         $params = $this->prepareCountryData($params, $country);
@@ -201,10 +201,10 @@ class Country extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $country \Shopware\Models\Country\Country */
+        /** @var \Shopware\Models\Country\Country $country */
         $country = $this->getRepository()->find($id);
         if (!$country) {
-            throw new ApiException\NotFoundException("Country by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
         }
 
         $this->getManager()->remove($country);
@@ -238,7 +238,7 @@ class Country extends Resource
                 }
             } else {
                 if (isset($params[$param]) && empty($params[$param])) {
-                    throw new ApiException\CustomValidationException("Param $param may not be empty");
+                    throw new ApiException\CustomValidationException(sprintf('Param "%s" may not be empty', $param));
                 }
             }
         }
@@ -250,7 +250,7 @@ class Country extends Resource
                 if ($area) {
                     $params['area'] = $area;
                 } else {
-                    throw new ApiException\NotFoundException("Area by id {$areaId} not found");
+                    throw new ApiException\NotFoundException(sprintf('Area by id %d not found', $areaId));
                 }
             } else {
                 $params['area'] = null;
@@ -286,7 +286,7 @@ class Country extends Resource
             /** @var \Shopware\Models\Country\State $stateModel */
             $stateModel = $this->getManager()->find('Shopware\Models\Country\State', $state['id']);
             if (!$stateModel) {
-                throw new ApiException\NotFoundException("State by id {$state['id']} not found");
+                throw new ApiException\NotFoundException(sprintf('State by id %d not found', (int) $state['id']));
             }
 
             // Update state

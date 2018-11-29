@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -87,7 +87,8 @@ class ConfiguratorOptionsGateway
     /**
      * Get groups with options by optionids
      *
-     * @param array $optionIds
+     * @param array                $optionIds
+     * @param ShopContextInterface $context
      *
      * @return Struct\Configurator\Group[]
      */

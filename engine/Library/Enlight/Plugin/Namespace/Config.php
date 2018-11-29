@@ -33,7 +33,7 @@
  * To use this directly in the plugin there is the extra extended Plugin_Bootstrap_Config component.
  *
  * @category   Enlight
- * @package    Enlight_Plugin
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -41,12 +41,12 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
 {
     /**
      * @var Enlight_Config Contains an instance of the Enlight_Config. Can be overwritten in the class
-     * constructor by using the $options["storage"] array element.
+     *                     constructor by using the $options["storage"] array element.
      */
     protected $storage;
 
     /**
-     * @var Enlight_Event_Subscriber Contains an instance of Enlight_Event_Subscriber.
+     * @var Enlight_Event_Subscriber contains an instance of Enlight_Event_Subscriber
      */
     protected $subscriber;
 
@@ -56,8 +56,8 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      * with storage settings or only with a name for the storage.
      * If the name is passed as array, it is used to instantiate the storage.
      *
-     * @param   string $name
-     * @param   null|Enlight_Config $storage
+     * @param string              $name
+     * @param null|Enlight_Config $storage
      */
     public function __construct($name, $storage = null)
     {
@@ -71,25 +71,25 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
     /**
      * Loads a plugin in the plugin namespace by name over the Enlight_Config.
      *
+     * @param string $name
+     * @param bool   $throwException
      *
-     * @param $name
-     * @param bool $throwException
      * @return \Enlight_Plugin_Namespace_Config|\Enlight_Plugin_PluginCollection
      */
     public function load($name, $throwException = true)
     {
         $item = $this->Storage()->plugins->$name;
-        if ($item === null || $this->plugins->offsetExists($name) || !(class_exists($item->class) || class_exists($item->class.'Dummy'))) {
+        if ($item === null || $this->plugins->offsetExists($name) || !(class_exists($item->class) || class_exists($item->class . 'Dummy'))) {
             return parent::load($name, $throwException);
         }
 
-        /** @var $item \Enlight_Config */
+        /** @var \Enlight_Config $item */
         $classname = $item->get('class');
         if (!class_exists($classname)) {
             $classname .= 'Dummy';
         }
 
-        /** @var $plugin Enlight_Plugin_Bootstrap_Config */
+        /** @var Enlight_Plugin_Bootstrap_Config $plugin */
         $plugin = new $classname($name, $item);
 
         return parent::registerPlugin($plugin);
@@ -99,26 +99,28 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      * Writes all registered plugins into the storage.
      * The subscriber and the registered plugins are converted to an array.
      *
-     * @return  Enlight_Plugin_Namespace_Config
+     * @return Enlight_Plugin_Namespace_Config
      */
     public function write()
     {
         $this->storage->plugins = $this->toArray();
         $this->storage->listeners = $this->Subscriber()->toArray();
         $this->storage->write();
+
         return $this;
     }
 
     /**
      * Loads all plugins in the plugin namespace over the storage.
      *
-     * @return  Enlight_Plugin_Namespace_Config
+     * @return Enlight_Plugin_Namespace_Config
      */
     public function read()
     {
         foreach ($this->Storage()->plugins as $name => $value) {
             $this->load($name);
         }
+
         return $this;
     }
 
@@ -145,17 +147,10 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
     }
 
     /**
-     * @return Enlight_Config
-     */
-    protected function initStorage()
-    {
-    }
-
-    /**
      * Returns the instance of the Enlight_Event_Subscriber_Plugin. If the subscriber
      * isn't instantiated the function will load it automatically.
      *
-     * @return  Enlight_Event_Subscriber_Plugin
+     * @return Enlight_Event_Subscriber_Plugin
      */
     public function Subscriber()
     {
@@ -170,48 +165,61 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      * Returns the plugin configuration by the plugin name. If the
      * plugin has no config, the config is automatically set an empty array.
      *
-     * @param   string $name
-     * @return  Enlight_Config|array
+     * @param string $name
+     *
+     * @return Enlight_Config|array
      */
     public function getConfig($name)
     {
         $item = $this->Storage()->plugins->$name;
         if (!isset($item->config)) {
-            $item->config = array();
+            $item->config = [];
         }
+
         return $item->config;
     }
 
     /**
-     * @param   $name
-     * @param   $config
-     * @return  Enlight_Plugin_Namespace_Config
+     * @param $name
+     * @param $config
+     *
+     * @return Enlight_Plugin_Namespace_Config
      */
     public function setConfig($name, $config)
     {
         if (!isset($this->Storage()->plugins->$name)) {
-            $this->Storage()->plugins->$name = array();
+            $this->Storage()->plugins->$name = [];
         }
         $this->Storage()->plugins->$name->config = $config;
+
         return $this;
     }
 
     /**
      * Converts the internal plugin property to an array and returns it.
-     * @return  array
+     *
+     * @return array
      */
     public function toArray()
     {
         $this->read();
-        $plugins = array();
-        /** @var $plugin Enlight_Plugin_Bootstrap_Config */
+        $plugins = [];
+        /** @var Enlight_Plugin_Bootstrap_Config $plugin */
         foreach ($this->plugins as $name => $plugin) {
-            $plugins[$name] = array(
+            $plugins[$name] = [
                 'name' => $plugin->getName(),
                 'class' => get_class($plugin),
-                'config' => $plugin->Config()
-            );
+                'config' => $plugin->Config(),
+            ];
         }
+
         return $plugins;
+    }
+
+    /**
+     * @return Enlight_Config
+     */
+    protected function initStorage()
+    {
     }
 }

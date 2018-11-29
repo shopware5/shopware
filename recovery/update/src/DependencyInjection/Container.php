@@ -188,10 +188,8 @@ class Container extends BaseContainer
         $container['shopware.theme_installer'] = function ($c) {
             $shopwareContainer = $c['shopware.container'];
 
-            /** @var $themeInstaller \Shopware\Components\Theme\Installer */
-            $themeInstaller = $shopwareContainer->get('theme_installer');
-
-            return $themeInstaller;
+            /* @var \Shopware\Components\Theme\Installer $themeInstaller */
+            return $shopwareContainer->get('theme_installer');
         };
 
         $container['shopware.update.cleanup'] = function ($container) use ($backupDir) {

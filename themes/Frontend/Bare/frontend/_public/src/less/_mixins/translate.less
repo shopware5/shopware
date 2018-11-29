@@ -16,10 +16,10 @@ Keep in mind, that 3d translations are needing an perspective, otherwise the tra
 */
 
 .translate(@x: 0, @y: 0, @z: -1) when (@z > -1) {
-	-webkit-transform: translate3d(@x, @y, @z);
-	transform: translate3d(@x, @y, @z);
+    -webkit-transform: translate3d(@x, @y, @z);
+    transform: translate3d(@x, @y, @z);
 }
 .translate(@x: 0, @y: 0, @z: -1) when (@z < 0) {
-	-webkit-transform: translate(@x, @y);
-	transform: translate(@x, @y);
+    -webkit-transform: translate(@x, @y);
+    transform: translate(@x, @y);
 }

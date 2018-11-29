@@ -28,14 +28,14 @@
  * It has an reference to the application and the plugin collection.
  *
  * @category   Enlight
- * @package    Enlight_Plugin
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
 {
     /**
-     * @var string Contains the name of the plugin.
+     * @var string contains the name of the plugin
      */
     protected $name;
 
@@ -48,7 +48,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * The Enlight_Plugin_Bootstrap expects a name for the plugin and
      * optionally an instance of the Enlight_Plugin_PluginCollection
      *
-     * @param $name
+     * @param string $name
      */
     public function __construct($name)
     {
@@ -65,7 +65,8 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
 
     /**
      * Getter method for the plugin name property.
-     * @return  string
+     *
+     * @return string
      */
     public function getName()
     {
@@ -76,18 +77,21 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * Setter method for the collection property.
      *
      * @param Enlight_Plugin_PluginCollection|null $collection
+     *
      * @return Enlight_Plugin_Bootstrap
      */
     public function setCollection(Enlight_Plugin_PluginCollection $collection = null)
     {
         $this->collection = $collection;
         $this->afterInit();
+
         return $this;
     }
 
     /**
      * Getter method for the collection property.
-     * @return  Enlight_Plugin_PluginCollection
+     *
+     * @return Enlight_Plugin_PluginCollection
      */
     public function Collection()
     {
@@ -108,6 +112,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * Get service from resource loader
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function get($name)

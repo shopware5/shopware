@@ -21,8 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-use Enlight_Controller_Request_Request as Request;
 use Shopware\Models\Search\CustomSorting;
 
 class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Backend_Application

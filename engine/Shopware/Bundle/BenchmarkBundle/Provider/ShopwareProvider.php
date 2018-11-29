@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\License\Service\LicenseUnpackServiceInterface;
 use Shopware\Components\ShopwareReleaseStruct;
 
 class ShopwareProvider implements BenchmarkProviderInterface
@@ -43,13 +44,23 @@ class ShopwareProvider implements BenchmarkProviderInterface
     private $releaseStruct;
 
     /**
-     * @param Connection            $connection
-     * @param ShopwareReleaseStruct $releaseStruct
+     * @var LicenseUnpackServiceInterface
      */
-    public function __construct(Connection $connection, ShopwareReleaseStruct $releaseStruct)
-    {
+    private $licenseUnpackService;
+
+    /**
+     * @param Connection                    $connection
+     * @param ShopwareReleaseStruct         $releaseStruct
+     * @param LicenseUnpackServiceInterface $licenseUnpackService
+     */
+    public function __construct(
+        Connection $connection,
+        ShopwareReleaseStruct $releaseStruct,
+        LicenseUnpackServiceInterface $licenseUnpackService
+    ) {
         $this->connection = $connection;
         $this->releaseStruct = $releaseStruct;
+        $this->licenseUnpackService = $licenseUnpackService;
     }
 
     public function getName()
@@ -95,7 +106,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getOs()
     {
-        return php_uname('s');
+        return PHP_OS ?: '';
     }
 
     /**
@@ -103,7 +114,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getArch()
     {
-        return php_uname('m');
+        return php_uname('m') ?: '';
     }
 
     /**
@@ -111,7 +122,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getDist()
     {
-        return php_uname('r');
+        return php_uname('r') ?: '';
     }
 
     /**
@@ -127,7 +138,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getPhpVersion()
     {
-        return phpversion();
+        return PHP_VERSION;
     }
 
     /**
@@ -147,7 +158,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
     private function getMemoryLimit()
     {
@@ -167,14 +178,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getExtensions()
     {
-        $extensions = [];
-        foreach (get_loaded_extensions() as $extension) {
-            // Whitespace in JSON keys can create problems
-            $extension = str_replace(' ', '_', $extension);
-            $extensions[$extension] = phpversion($extension);
-        }
-
-        return $extensions;
+        return array_values(get_loaded_extensions());
     }
 
     /**
@@ -209,10 +213,19 @@ class ShopwareProvider implements BenchmarkProviderInterface
         $license = $this->connection->fetchColumn('SELECT license FROM s_core_licenses WHERE active=1 AND module = "SwagCommercial"');
 
         if (!$license) {
-            $license = 'community';
+            return 'ce';
         }
 
-        return $license;
+        try {
+            $licenseInfo = $this->licenseUnpackService->readLicenseInfo($license);
+
+            if (isset($licenseInfo['product'])) {
+                return strtolower($licenseInfo['product']);
+            }
+        } catch (\Exception $e) {
+        }
+
+        return 'ce';
     }
 
     /**

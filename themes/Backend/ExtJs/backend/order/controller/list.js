@@ -53,8 +53,8 @@ Ext.define('Shopware.apps.Order.controller.List', {
         successTitle: '{s name=message/save/success_title}Successful{/s}',
         failureTitle: '{s name=message/save/error_title}Error{/s}',
         overwriteOrder: {
-            title: '{s name=overwrite_order/title}Overwrite most recent changes{/s}',
-            message: '{s name=overwrite_order/message}Do you really want to overwrite the latest changes?{/s}',
+            title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
+            message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
         },
         changeStatus: {
             successMessage: '{s name=message/status/success}The status has been changed successfully{/s}',
@@ -181,9 +181,10 @@ Ext.define('Shopware.apps.Order.controller.List', {
         documentTypeStore.load({
             callback: function() {
                 me.mainWindow = me.getView('mail.Window').create({
-                    listStore: me.getOrderListGrid().getStore(),
+                    listStore: me.subApplication.getStore('Order'),
                     mail: mail,
                     record: record,
+                    order: record,
                     documentTypeStore: documentTypeStore
                 }).show();
             }
@@ -196,6 +197,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
         //open the order listing window
         me.mainWindow = me.getView('batch.Window').create({
             orderStatusStore: grid.orderStatusStore,
+            paymentStatusStore: grid.paymentStatusStore,
             records: records
         }).show();
     },

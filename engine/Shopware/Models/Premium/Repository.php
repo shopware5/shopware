@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Premium;
+namespace Shopware\Models\Premium;
 
 use Shopware\Components\Model\ModelRepository;
 
@@ -38,9 +38,10 @@ class Repository extends ModelRepository
     /**
      * Function to get all premium-articles and the subshop-name and the article-name
      *
-     * @param $start
-     * @param $limit
-     * @param null $filterValue
+     * @param int         $start
+     * @param int         $limit
+     * @param string      $order
+     * @param null|string $filterValue
      *
      * @return \Doctrine\ORM\Query
      */
@@ -48,18 +49,18 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
-                'premium.id',
-                'premium.startPrice as startPrice',
-                'premium.orderNumber as orderNumber',
-                'premium.orderNumberExport as orderNumberExport',
-                'premium.shopId as shopId',
-                'subshop.name as subShopName',
-                'article.name as name',
-                    ])
-                ->from($this->getEntityName(), 'premium')
-                ->leftJoin('premium.shop', 'subshop')
-                ->leftJoin('premium.articleDetail', 'detail')
-                ->leftJoin('detail.article', 'article');
+            'premium.id',
+            'premium.startPrice as startPrice',
+            'premium.orderNumber as orderNumber',
+            'premium.orderNumberExport as orderNumberExport',
+            'premium.shopId as shopId',
+            'subshop.name as subShopName',
+            'article.name as name',
+            ])
+            ->from($this->getEntityName(), 'premium')
+            ->leftJoin('premium.shop', 'subshop')
+            ->leftJoin('premium.articleDetail', 'detail')
+            ->leftJoin('detail.article', 'article');
 
         if ($filterValue !== null) {
             $builder->where('article.name LIKE ?1')
@@ -69,7 +70,7 @@ class Repository extends ModelRepository
             $builder->addOrderBy($order);
         }
         $builder->setFirstResult($start)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         return $builder->getQuery();
     }

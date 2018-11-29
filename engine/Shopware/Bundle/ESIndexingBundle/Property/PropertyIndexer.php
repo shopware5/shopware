@@ -112,4 +112,12 @@ class PropertyIndexer implements DataIndexerInterface
             'body' => $documents,
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports()
+    {
+        return PropertyMapping::TYPE;
+    }
 }

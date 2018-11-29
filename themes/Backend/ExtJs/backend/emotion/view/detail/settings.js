@@ -189,7 +189,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     },
 
     createGeneralFieldSet: function() {
-        var me = this;
+        var me = this,
+            store;
 
         me.categories = Ext.create('Ext.ux.form.field.BoxSelect', {
             name: 'categories',
@@ -211,12 +212,23 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             labelWidth: me.defaults.labelWidth
         });
 
+        store = me.emotion.getShops();
+        if (!store) {
+            store = Ext.create('Ext.data.Store', {
+                model: 'Shopware.apps.Emotion.model.EmotionShop'
+            });
+            me.emotion['getShopsStore'] = store;
+        }
+
+        me.shopGrid = me.createShopSelectionGrid(store, false);
+
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.fieldSets.displaySettingsLabel,
             defaults: me.defaults,
             items: [
                 me.categories,
-                me.listingCheckbox
+                me.listingCheckbox,
+                me.shopGrid
             ]
         });
     },
@@ -235,7 +247,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             me.emotion['getShopsStore'] = store;
         }
         
-        me.landingPageFields.shopGrid = me.createShopSelectionGrid(store);
+        me.landingPageFields.shopGrid = me.createShopSelectionGrid(store, true);
 
         me.landingPageFields.seoTitle = Ext.create('Ext.form.field.Text', {
             name: 'seoTitle',
@@ -310,7 +322,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         });
     },
 
-    createShopSelectionGrid: function(store) {
+    createShopSelectionGrid: function(store, urlColumn) {
         var me = this;
 
         return Ext.create('Shopware.form.field.ShopGrid', {
@@ -357,26 +369,32 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 });
             },
             createColumns: function() {
-                var me = this;
-                return [
-                    { dataIndex: 'name', flex: 1 },
-                    {
-                        dataIndex: 'seoUrl',
-                        flex: 2,
-                        editor: {
-                            xtype: 'textfield',
-                            readOnly: true,
-                            selectOnFocus: true
-                        },
-                        renderer: function(value, metaData) {
-                            if (value) {
-                                metaData.tdAttr = 'data-qtip="' + value + '"';
-                                return value;
+                var me = this,
+                    columns = [
+                        { dataIndex: 'name', flex: 1 }
+                    ];
+
+                    if (urlColumn) {
+                        columns.push({
+                            dataIndex: 'seoUrl',
+                            flex: 2,
+                            editor: {
+                                xtype: 'textfield',
+                                readOnly: true,
+                                selectOnFocus: true
+                            },
+                            renderer: function(value, metaData) {
+                                if (value) {
+                                    metaData.tdAttr = 'data-qtip="' + value + '"';
+                                    return value;
+                                }
                             }
-                        }
-                    },
-                    me.createActionColumn()
-                ];
+                        })
+                    }
+
+                    columns.push(me.createActionColumn());
+
+                return columns;
             }
         });
     },

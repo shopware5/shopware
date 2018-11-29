@@ -3,7 +3,7 @@
 {block name="benchmark_index_title"}Shopware BI - Branche wählen{/block}
 
 {block name="benchmark_index_head_scripts"}
-	{$smarty.block.parent}
+    {$smarty.block.parent}
     <script src="{link file='backend/benchmark/template/local/js/industry_select.js'}"></script>
 {/block}
 
@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="industry--save-button" style="display: none;"
-                            data-success-url="{url controller=BenchmarkOverview action=index}"
+                            data-success-url="{url controller=BenchmarkOverview action=index lang='placeholder'}"
                             data-save-url="{url controller=BenchmarkOverview action=saveIndustry}">
                             <span class="save-button--text">[[ $t('saveIndustryText') ]]</span>
                             <span class="save-button--shop-counter">0</span>

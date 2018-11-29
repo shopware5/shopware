@@ -568,7 +568,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\DetailStatus
+     * @return Status
      */
     public function getStatus()
     {
@@ -689,7 +689,7 @@ class Detail extends ModelEntity
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[0])) {
-                /** @var $oldArticle \Shopware\Models\Article\Detail */
+                /** @var \Shopware\Models\Article\Detail $oldArticle */
                 $oldArticle = $repository->findOneBy(['number' => $articleChange[0]]);
             }
 
@@ -698,7 +698,7 @@ class Detail extends ModelEntity
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[1])) {
-                /** @var $newArticle \Shopware\Models\Article\Detail */
+                /** @var \Shopware\Models\Article\Detail $newArticle */
                 $newArticle = $repository->findOneBy(['number' => $articleChange[1]]);
             }
 

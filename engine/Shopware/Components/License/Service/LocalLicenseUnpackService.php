@@ -32,7 +32,7 @@ use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -58,7 +58,7 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
         }
 
         if ($info['host'] != $host) {
-            throw new LicenseHostException(new LicenseInformation($info), 'License key is not valid for domain ' . $request->host);
+            throw new LicenseHostException(new LicenseInformation($info), sprintf('License key is not valid for domain %s', $request->host));
         }
 
         $info['edition'] = $info['product'];

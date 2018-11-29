@@ -7,18 +7,30 @@
 {$path = ''}
 
 {if $sBasketItem.modus == $IS_PRODUCT}
-    {$path = 'frontend/checkout/cart_item_product.tpl'}
+    {block name="frontend_checkout_cart_item_product_wrapper"}
+        {$path = 'frontend/checkout/cart_item_product.tpl'}
+    {/block}
 {elseif $sBasketItem.modus == $IS_PREMIUM_PRODUCT}
-    {$path = 'frontend/checkout/cart_item_premium_product.tpl'}
+    {block name="frontend_checkout_cart_item_premium_product_wrapper"}
+        {$path = 'frontend/checkout/cart_item_premium_product.tpl'}
+    {/block}
 {elseif $sBasketItem.modus == $IS_VOUCHER}
-    {$path = 'frontend/checkout/cart_item_voucher.tpl'}
+    {block name="frontend_checkout_cart_item_voucher_wrapper"}
+        {$path = 'frontend/checkout/cart_item_voucher.tpl'}
+    {/block}
 {elseif $sBasketItem.modus == $IS_REBATE}
-    {$path = 'frontend/checkout/cart_item_rebate.tpl'}
+    {block name="frontend_checkout_cart_item_rebate_wrapper"}
+        {$path = 'frontend/checkout/cart_item_rebate.tpl'}
+    {/block}
 {elseif $sBasketItem.modus == $IS_SURCHARGE_DISCOUNT}
-    {$path = 'frontend/checkout/cart_item_surcharge_discount.tpl'}
+    {block name="frontend_checkout_cart_item_surcharge_discount_wrapper"}
+        {$path = 'frontend/checkout/cart_item_surcharge_discount.tpl'}
+    {/block}
 {else}
     {* Register your own mode selection *}
-    {block name='frontend_checkout_cart_item_additional_type'}{/block}
+    {block name="frontend_checkout_cart_item_additional_type_wrapper"}
+        {block name='frontend_checkout_cart_item_additional_type'}{/block}
+    {/block}
 {/if}
 
 {if $path != ''}

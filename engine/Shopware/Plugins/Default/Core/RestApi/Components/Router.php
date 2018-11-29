@@ -28,7 +28,7 @@ use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_Response as Response;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

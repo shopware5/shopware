@@ -46,6 +46,11 @@ class BatchProcess
     protected $filterResource;
 
     /**
+     * @var Queue
+     */
+    protected $queueResource;
+
+    /**
      * Reference to the config instance
      *
      * @var \Shopware_Components_Config
@@ -53,10 +58,10 @@ class BatchProcess
     protected $configResource;
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $filter Filter
-     * @param $queue Queue
-     * @param $config \Shopware_Components_Config
+     * @param DqlHelper                   $dqlHelper
+     * @param Filter                      $filter
+     * @param Queue                       $queue
+     * @param \Shopware_Components_Config $config
      */
     public function __construct($dqlHelper, $filter, $queue, $config)
     {
@@ -153,7 +158,7 @@ class BatchProcess
                     $attributes[$attribute] = ['set'];
                     break;
                 default:
-                    throw new \RuntimeException("Column with type {$type} was not configured, yet");
+                    throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
             }
             // Technically we're able to process DQL here. This should not be enabled by default and is quite limited
             if (false) {
@@ -168,8 +173,8 @@ class BatchProcess
      * Will apply a operation list to a given $detailIds. As the operations are grouped by entity, we just need one
      * update query and are able to apply modifications within one query
      *
-     * @param $operations
-     * @param $detailIds
+     * @param array $operations
+     * @param int[] $detailIds
      */
     public function applyOperations($operations, $detailIds)
     {
@@ -190,12 +195,12 @@ class BatchProcess
             list($prefix, $column) = explode('.', $operation['column']);
 
             $type = $columnInfo[ucfirst($prefix) . ucfirst($column)]['type'];
-            if ($operation['value'] && $type == 'decimal' || $type == 'integer' || $type == 'float') {
+            if ($operation['value'] && $type == 'decimal' || $type === 'integer' || $type === 'float') {
                 $operation['value'] = str_replace(',', '.', $operation['value']);
             }
 
             // In set mode: If column is nullable and value is "" - set it to null
-            if ($operation['operator'] == 'set' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable'] && $operation['value'] == '') {
+            if ($operation['operator'] === 'set' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable'] && $operation['value'] == '') {
                 $operationValue = 'NULL';
             } else {
                 $operationValue = $builder->expr()->literal($operation['value']);
@@ -241,10 +246,10 @@ class BatchProcess
     /**
      * Updates a sine article details within batch mode
      *
-     * @param $detailIds
-     * @param $nestedOperations
+     * @param int[] $detailIds
+     * @param array $nestedOperations
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function updateDetails($detailIds, $nestedOperations)
     {
@@ -281,7 +286,7 @@ class BatchProcess
     /**
      * Batch processes a given queue
      *
-     * @param $queueId
+     * @param int $queueId
      *
      * @throws \RuntimeException
      *
@@ -296,7 +301,7 @@ class BatchProcess
         $queue = $entityManager->find('\Shopware\Models\MultiEdit\Queue', $queueId);
 
         if (!$queue) {
-            throw new \RuntimeException("Queue with ID {$queueId} not found");
+            throw new \RuntimeException(sprintf('Queue with ID %s not found', $queueId));
         }
 
         $operations = json_decode($queue->getOperations(), true);
@@ -314,7 +319,7 @@ class BatchProcess
             }
         } catch (\Exception $e) {
             $connection->rollBack();
-            throw new \RuntimeException("Error updating details: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException(sprintf('Error updating details: %s', $e->getMessage()), 0, $e);
         }
         $remaining = $queue->getArticleDetails()->count();
 

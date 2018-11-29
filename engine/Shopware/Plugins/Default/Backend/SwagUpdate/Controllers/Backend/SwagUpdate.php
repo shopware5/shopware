@@ -44,7 +44,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -226,7 +226,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII, 0)) {
+        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII)) {
             $this->View()->assign([
                 'success' => false,
                 'error' => 'Could not read files from connection.',
@@ -257,9 +257,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
-    /**
-     * @return array('success' => true, 'data' => array('...'))
-     */
     public function popupAction()
     {
         $config = $this->getPluginConfig();
@@ -298,7 +295,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $base = $this->Request()->getBaseUrl();
         $user = Shopware()->Container()->get('Auth')->getIdentity();
 
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
 
         $payload = [
@@ -317,9 +314,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $payload = json_encode($payload);
         $projectDir = $this->container->getParameter('shopware.app.rootdir');
+        $updateFilePath = $projectDir . 'files/update/update.json';
 
-        if (!file_put_contents($projectDir . 'files/update/update.json', $payload)) {
-            throw new \Exception('Could not write update.json');
+        if (!file_put_contents($updateFilePath, $payload)) {
+            throw new \Exception(sprintf('Could not write file %s', $updateFilePath));
         }
 
         $this->redirect($base . '/recovery/update/index.php');
@@ -415,7 +413,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $fs = new Filesystem();
 
-        /** @var $file \SplFileInfo */
+        /** @var \SplFileInfo $file */
         foreach ($iterator as $file) {
             $sourceFile = $file->getPathname();
             $destinationFile = Shopware()->DocPath() . str_replace($fileDir, '', $file->getPathname());
@@ -590,7 +588,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      */
     private function getUserLanguage(stdClass $user)
     {
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $locale = strtolower($locale->getLocale());
 

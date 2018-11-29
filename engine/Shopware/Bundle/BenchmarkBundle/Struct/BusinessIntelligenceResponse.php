@@ -37,13 +37,20 @@ class BusinessIntelligenceResponse
     private $html;
 
     /**
+     * @var int
+     */
+    private $shopId;
+
+    /**
      * @param \DateTime $dateTime
      * @param string    $html
+     * @param int       $shopId
      */
-    public function __construct(\DateTime $dateTime, $html)
+    public function __construct(\DateTime $dateTime, $html, $shopId = null)
     {
         $this->dateTime = $dateTime;
         $this->html = $html;
+        $this->shopId = $shopId;
     }
 
     /**
@@ -60,5 +67,21 @@ class BusinessIntelligenceResponse
     public function getHtml()
     {
         return $this->html;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
     }
 }

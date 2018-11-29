@@ -25,7 +25,7 @@
 namespace Shopware\Components\Password\Encoder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -59,7 +59,7 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isCompatible()
     {
-        return version_compare(PHP_VERSION, '5.3.7', '>=');
+        return PHP_VERSION_ID >= 50307;
     }
 
     /**

@@ -134,7 +134,9 @@ Ext.define('Shopware.apps.Order.view.list.Document', {
         return Ext.create('Ext.grid.column.Action', {
             width: 60,
             items: [
+                /*{if {acl_is_allowed resource=order privilege=deleteDocument}}*/
                 me.createDeleteColumn(),
+                /*{/if}*/
                 me.createSendColumn()
             ]
         });

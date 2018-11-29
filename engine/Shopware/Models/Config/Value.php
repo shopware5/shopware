@@ -107,7 +107,7 @@ class Value extends ModelEntity
      *
      * @param Shop $shop
      *
-     * @return Element
+     * @return Value
      */
     public function setShop($shop)
     {

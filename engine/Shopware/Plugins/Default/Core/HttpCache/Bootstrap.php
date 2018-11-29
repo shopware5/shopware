@@ -31,7 +31,7 @@ use ShopwarePlugins\HttpCache\CacheIdCollector;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -150,15 +150,26 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         return true;
     }
 
+    /**
+     * @param Enlight_Event_EventArgs $args
+     *
+     * @return CacheControl
+     */
     public function initCacheControl(Enlight_Event_EventArgs $args)
     {
         return new CacheControl(
             $this->get('session'),
-            $this->Config(),
-            $this->get('events')
+            $this->get('shopware.plugin.cached_config_reader')->getByPluginName('HttpCache'),
+            $this->get('events'),
+            $this->get('shopware.http_cache.default_route_service'),
+            $this->get('shopware.http_cache.cache_time_service'),
+            $this->get('shopware.http_cache.cache_route_generation_service')
         );
     }
 
+    /**
+     * @return CacheIdCollector
+     */
     public function initCacheIdCollector()
     {
         return new CacheIdCollector();
@@ -213,7 +224,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     {
         $form = $this->Form();
 
-        /** @var $parent \Shopware\Models\Config\Form */
+        /** @var \Shopware\Models\Config\Form $parent */
         $parent = $this->Forms()->findOneBy(['name' => 'Core']);
 
         $form->setParent($parent);

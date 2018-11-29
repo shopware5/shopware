@@ -49,8 +49,6 @@ class CategoryUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * CategoryUrlProvider constructor.
-     *
      * @param ModelManager   $modelManager
      * @param Routing\Router $router
      */
@@ -61,15 +59,12 @@ class CategoryUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
-            return null;
+            return [];
         }
 
         $parentId = $shopContext->getShop()->getCategory()->getId();

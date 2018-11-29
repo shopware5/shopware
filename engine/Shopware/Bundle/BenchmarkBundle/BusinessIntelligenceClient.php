@@ -120,8 +120,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
             throw new BenchmarkHydratingException(sprintf('Could not retrieve BI response: %s', $data));
         }
 
-        // Deactivating Signatures for the moment
-        // $this->verifyResponseSignature($response);
+        $this->verifyResponseSignature($response);
 
         return $this->biResponseHydrator->hydrate(['html' => $data]);
     }
@@ -133,10 +132,11 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
      */
     private function verifyResponseSignature(Response $response)
     {
-        $signature = $response->getHeader('x-shopware-signature');
+        $signatureHeaderName = 'x-shopware-signature';
+        $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException('Signature not found in x-shopware-signature header');
+            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->benchmarkEncryption->isSignatureSupported()) {

@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Install;
 use Shopware\Recovery\Install\Service\TranslationService;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -91,7 +91,7 @@ class MenuHelper
      */
     public function setCurrent($name)
     {
-        if (false === array_search($name, $this->entries)) {
+        if (array_search($name, $this->entries) === false) {
             throw new \Exception('could not find entrie');
         }
 

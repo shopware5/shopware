@@ -29,7 +29,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -74,7 +74,7 @@ class ThemeInitializeCommand extends ShopwareCommand
     {
         $statement = $this->conn->query('SELECT id FROM s_core_templates WHERE template LIKE "Responsive"');
         $statement->execute();
-        $templateId = $statement->fetchColumn(0);
+        $templateId = $statement->fetchColumn();
 
         if (!$templateId) {
             throw new \RuntimeException('Could not get id for default template');

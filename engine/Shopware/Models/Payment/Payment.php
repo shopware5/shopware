@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Payment;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -78,7 +79,7 @@ class Payment extends ModelEntity
     protected $plugin;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
      */
@@ -248,7 +249,7 @@ class Payment extends ModelEntity
     private $shops;
 
     /**
-     * @var
+     * @var ArrayCollection<\Shopware\Models\Payment\RuleSet>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\RuleSet", mappedBy="payment")
      * @ORM\JoinColumn(name="id", referencedColumnName="paymentID")
@@ -772,7 +773,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return
+     * @return ArrayCollection<\Shopware\Models\Payment\RuleSet>
      */
     public function getRuleSets()
     {
@@ -780,7 +781,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param  $ruleSets
+     * @param ArrayCollection<\Shopware\Models\Payment\RuleSet> $ruleSets
      *
      * @return \Shopware\Models\Payment\Payment
      */
@@ -826,7 +827,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param mixed $paymentInstances
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\PaymentInstance> $paymentInstances
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -834,7 +835,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      */
     public function getPaymentInstances()
     {

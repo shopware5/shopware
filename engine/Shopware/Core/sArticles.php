@@ -36,7 +36,7 @@ use Shopware\Components\QueryAliasMapper;
 /**
  * Shopware Class that handle articles
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -626,7 +626,7 @@ class sArticles
     /**
      * Get article topsellers for a specific category
      *
-     * @param $category int category id
+     * @param int $category
      *
      * @return array
      */
@@ -797,6 +797,7 @@ class sArticles
         ";
 
         $getGroups = $this->db->fetchAll($sql, [$customergroup]);
+        $priceMatrix = [];
 
         if (count($getGroups)) {
             foreach ($getGroups as $group) {
@@ -819,6 +820,8 @@ class sArticles
             }
 
             if (empty($doMatrix)) {
+                $matchingPercent = 0;
+
                 // Getting price rule matching to quantity
                 foreach ($priceMatrix as $start => $percent) {
                     if ($start <= $quantity) {
@@ -844,7 +847,7 @@ class sArticles
                 foreach ($priceMatrix as $start => $percent) {
                     $getBlockPricings[$i]['from'] = $start;
                     $getBlockPricings[$i]['to'] = $percent['to'];
-                    if ($i == 0 && $ignore) {
+                    if ($i === 0 && $ignore) {
                         $getBlockPricings[$i]['price'] = $this->sCalculatingPrice(($listprice / 100 * (100)), $articleData['tax'], $articleData['taxID'], $articleData);
                         $divPercent = $percent['percent'];
                     } else {
@@ -877,7 +880,7 @@ class sArticles
      * @param bool $returnArrayIfConfigurator
      * @param bool $checkLiveshopping
      *
-     * @return float cheapest price or null
+     * @return float|array cheapest price or null
      */
     public function sGetCheapestPrice($article, $group, $pricegroup, $usepricegroups, $realtime = false, $returnArrayIfConfigurator = false, $checkLiveshopping = false)
     {
@@ -969,6 +972,9 @@ class sArticles
 
         // Updated / Fixed 28.10.2008 - STH
         if (!empty($usepricegroups)) {
+            $listPrice = null;
+            $foundPrice = null;
+
             if (!empty($cheapestPrice)) {
                 $listPrice = $cheapestPrice;
             } else {
@@ -985,7 +991,7 @@ class sArticles
 
             if (!empty($returnPrice) && $foundPrice) {
                 $cheapestPrice = $returnPrice;
-            } elseif (!empty($foundPrice) && $returnPrice == 0.00) {
+            } elseif ($foundPrice !== null && $returnPrice === 0.) {
                 $cheapestPrice = '0.00';
             } else {
                 $cheapestPrice = '0';
@@ -1012,7 +1018,7 @@ class sArticles
     public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = [])
     {
         if ($sCategoryID === null) {
-            $sCategoryID = $this->frontController->Request()->getParam('sCategory', null);
+            $sCategoryID = $this->frontController->Request()->getParam('sCategory');
         }
 
         $providedNumber = $number;
@@ -1086,9 +1092,9 @@ class sArticles
      *
      * @since 4.1.4
      *
-     * @param $price | the final price which will be shown
-     * @param float $purchaseUnit
-     * @param float $referenceUnit
+     * @param string $price         | the final price which will be shown
+     * @param float  $purchaseUnit
+     * @param float  $referenceUnit
      *
      * @return float
      */
@@ -1250,32 +1256,32 @@ class sArticles
      * image will be used as cover image. Otherwise the function calls the
      * getArticleMainCover function which returns the absolute main image
      *
-     * @param $articleId
-     * @param $orderNumber
-     * @param $articleAlbum
+     * @param int                          $articleId
+     * @param string                       $orderNumber
+     * @param \Shopware\Models\Media\Album $articleAlbum
      *
      * @return array
      */
     public function getArticleCover($articleId, $orderNumber, $articleAlbum)
     {
         if (!empty($orderNumber)) {
-            //check for specify variant images. For example:
-            //if the user is on a detail page of a shoe and select the color "red"
-            //we have to check if the current variant has an own configured picture for a red shoe.
-            //the query selects orders the result at first by the image main flag, at second for the position.
+            // Check for specify variant images. For example:
+            // If the user is on a detail page of a shoe and select the color "red"
+            // we have to check if the current variant has an own configured picture for a red shoe.
+            // The query selects orders the result at first by the image main flag, at second for the position.
             $cover = $this->getArticleRepository()
                 ->getVariantImagesByArticleNumberQuery($orderNumber, 0, 1)
                 ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         }
 
-        //if we have found a configured article image which has the same options like the passed article order number
-        //we have to return this one.
+        // If we have found a configured article image which has the same options like the passed article order number
+        // we have to return this one.
         if (!empty($cover)) {
             return $this->getDataOfArticleImage($cover, $articleAlbum);
         }
 
-        //if we haven't found and variant image we have to select the first image which has no configuration.
-        //the query orders the result at first by the image main flag, at second by the position.
+        // If we haven't found and variant image we have to select the first image which has no configuration.
+        // The query orders the result at first by the image main flag, at second by the position.
         $cover = $this->getArticleRepository()
             ->getArticleCoverImageQuery($articleId)
             ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -1284,7 +1290,7 @@ class sArticles
             return $this->getDataOfArticleImage($cover, $articleAlbum);
         }
 
-        //if no variant or normal article image is found we will return the main image of the article even if this image has a variant restriction
+        // If no variant or normal article image is found we will return the main image of the article even if this image has a variant restriction
         return $this->getArticleMainCover($articleId, $articleAlbum);
     }
 
@@ -1292,8 +1298,8 @@ class sArticles
      * Returns the the absolute main article image
      * This method returns the main cover depending on the main flag no matter if any variant restriction is set
      *
-     * @param $articleId
-     * @param $articleAlbum
+     * @param int                          $articleId
+     * @param \Shopware\Models\Media\Album $articleAlbum
      *
      * @return array
      */
@@ -1309,7 +1315,7 @@ class sArticles
     /**
      * Wrapper method to specialize the sGetArticlePictures method for the listing images
      *
-     * @param $articleId
+     * @param int  $articleId
      * @param bool $forceMainImage | if true this will return the main image no matter which variant restriction is set
      *
      * @return array
@@ -1322,7 +1328,7 @@ class sArticles
     /**
      * Get all pictures from a certain article
      *
-     * @param        $sArticleID
+     * @param int    $sArticleID
      * @param bool   $onlyCover
      * @param int    $pictureSize    | unused variable
      * @param string $ordernumber
@@ -1337,7 +1343,7 @@ class sArticles
         static $articleAlbum;
         if ($articleAlbum === null) {
             //now we search for the default article album of the media manager, this album contains the thumbnail configuration.
-            /** @var $model \Shopware\Models\Media\Album */
+            /** @var \Shopware\Models\Media\Album $model */
             $articleAlbum = $this->getMediaRepository()
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult();
@@ -1557,8 +1563,8 @@ class sArticles
     /**
      * Read translation for one or more articles
      *
-     * @param $data
-     * @param $object
+     * @param array  $data
+     * @param string $object
      *
      * @return array
      */
@@ -1805,6 +1811,7 @@ class sArticles
 
                 unset($sArticle['image']);
 
+                $positions = [];
                 $debug = false;
 
                 foreach ($sArticle['images'] as $imageKey => $image) {
@@ -2023,7 +2030,7 @@ class sArticles
             return [];
         }
 
-        /** @var $currentProduct BaseProduct */
+        /** @var BaseProduct $currentProduct */
         foreach ($products as $index => $currentProduct) {
             if ($currentProduct->getNumber() != $orderNumber) {
                 continue;
@@ -2157,16 +2164,14 @@ class sArticles
     /**
      * Internal helper function to convert the image data from the database to the frontend structure.
      *
-     * @param array $image
-     * @param $articleAlbum \Shopware\Models\Media\Album
-     *
-     * @throws \Exception
+     * @param array                        $image
+     * @param \Shopware\Models\Media\Album $articleAlbum
      *
      * @return array
      */
     private function getDataOfArticleImage($image, $articleAlbum)
     {
-        //initial the data array
+        // Initial the data array
         $imageData = [];
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
@@ -2174,12 +2179,12 @@ class sArticles
             return $imageData;
         }
 
-        //first we get all thumbnail sizes of the article album
+        // First we get all thumbnail sizes of the article album
         $sizes = $articleAlbum->getSettings()->getThumbnailSize();
 
         $highDpiThumbnails = $articleAlbum->getSettings()->isThumbnailHighDpi();
 
-        //if no extension is configured, shopware use jpg as default extension
+        // If no extension is configured, shopware use jpg as default extension
         if (empty($image['extension'])) {
             $image['extension'] = 'jpg';
         }
@@ -2194,7 +2199,7 @@ class sArticles
         $imageData['id'] = $image['id'];
         $imageData['parentId'] = $image['parentId'];
 
-        // attributes as array as they come from non configurator aricles
+        // Attributes as array as they come from non configurator articles
         if (!empty($image['attribute'])) {
             unset($image['attribute']['id']);
             unset($image['attribute']['articleImageId']);
@@ -2203,7 +2208,7 @@ class sArticles
             $imageData['attribute'] = [];
         }
 
-        // attributes as keys as they come from configurator articles
+        // Attributes as keys as they come from configurator articles
         if (!empty($image['attribute1'])) {
             $imageData['attribute']['attribute1'] = $image['attribute1'];
         }
@@ -2241,8 +2246,8 @@ class sArticles
      * Returns a minified product which can be used for listings,
      * sliders or emotions.
      *
-     * @param $category
-     * @param $number
+     * @param int    $category
+     * @param string $number
      *
      * @return array|bool
      */
@@ -2556,7 +2561,7 @@ class sArticles
     }
 
     /**
-     * @param $articleId
+     * @param int $articleId
      *
      * @return string
      */

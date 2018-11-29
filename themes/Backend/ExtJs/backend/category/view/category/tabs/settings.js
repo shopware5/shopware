@@ -405,7 +405,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         me.streamSelection = Ext.create('Shopware.form.field.ProductStreamSelection', {
             name: 'streamId',
-            labelWidth: 155
+            labelWidth: 155,
+            translatable: true
         });
 
         return [
@@ -632,7 +633,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * @return array of strings
      */
     getAllowedExtensions : function() {
-        return [ 'gif', 'png', 'jpeg', 'jpg' ]
+        return [ 'gif', 'png', 'jpeg', 'jpg', 'svg' ]
     }
 });
 //{/block}

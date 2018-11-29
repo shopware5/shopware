@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -215,7 +215,7 @@ class Media extends Extendable
     }
 
     /**
-     * @param $index
+     * @param string $index
      *
      * @return Thumbnail
      */

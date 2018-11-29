@@ -55,7 +55,7 @@ class ShopProvider implements BenchmarkProviderInterface
      */
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
-        $now = new \DateTime('now');
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
         $this->shopId = $shopContext->getShop()->getId();
 
@@ -75,7 +75,7 @@ class ShopProvider implements BenchmarkProviderInterface
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
         $shopHash = \Ramsey\Uuid\Uuid::fromBytes(
-            $queryBuilder->select('config.id')
+            (string) $queryBuilder->select('config.id')
             ->from('s_benchmark_config', 'config')
             ->where('config.shop_id = :shopId')
             ->setParameter(':shopId', $this->shopId)
@@ -93,7 +93,7 @@ class ShopProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return $queryBuilder->select('industry')
+        return (string) $queryBuilder->select('industry')
             ->from('s_benchmark_config', 'config')
             ->where('config.shop_id = :shopId')
             ->setParameter(':shopId', $this->shopId)
@@ -108,11 +108,17 @@ class ShopProvider implements BenchmarkProviderInterface
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return $queryBuilder->select('type')
+        $type = (string) $queryBuilder->select('type')
             ->from('s_benchmark_config', 'config')
             ->where('config.shop_id = :shopId')
             ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetchColumn();
+
+        if (!in_array($type, ['b2b', 'b2c'])) {
+            $type = 'b2c';
+        }
+
+        return $type;
     }
 }

@@ -37,13 +37,27 @@ class StatisticsResponse
     private $token;
 
     /**
+     * @var bool
+     */
+    private $isFinished;
+
+    /**
+     * @var int
+     */
+    private $shopId;
+
+    /**
      * @param \DateTime $dateUpdated
      * @param string    $token
+     * @param bool      $isFinished
+     * @param int       $shopId
      */
-    public function __construct(\DateTime $dateUpdated, $token)
+    public function __construct(\DateTime $dateUpdated, $token, $isFinished, $shopId = null)
     {
         $this->dateUpdated = $dateUpdated;
         $this->token = $token;
+        $this->isFinished = $isFinished;
+        $this->shopId = $shopId;
     }
 
     /**
@@ -60,5 +74,29 @@ class StatisticsResponse
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return $this->isFinished;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
     }
 }

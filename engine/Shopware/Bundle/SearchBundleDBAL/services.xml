@@ -283,7 +283,6 @@
         <service id="shopware_searchdbal.product_dimensions_facet_handler" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductDimensionsFacetHandler" >
             <argument id="shopware_searchdbal.dbal_query_builder_factory" type="service"/>
             <argument id="snippets" type="service"/>
-            <argument id="query_alias_mapper" type="service"/>
             <argument id="shopware_searchdbal.variant_helper" type="service"/>
             <tag name="facet_handler_dbal"/>
         </service>

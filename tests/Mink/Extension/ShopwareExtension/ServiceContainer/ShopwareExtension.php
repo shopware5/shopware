@@ -64,7 +64,7 @@ class ShopwareExtension implements ExtensionInterface
         $boolFilter = function ($v) {
             $filtered = filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-            return (null === $filtered) ? $v : $filtered;
+            return ($filtered === null) ? $v : $filtered;
         };
 
         $builder

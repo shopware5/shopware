@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service class="Shopware\Bundle\EsBackendBundle\EsBackendIndexer" id="shopware_es_backend.indexer">
+            <argument id="shopware_elastic_search.client" type="service"/>
+            <argument type="tagged" tag="shopware_es_backend.repository" />
+        </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />
+
+        <service class="Shopware\Bundle\EsBackendBundle\Searcher\OrderSearcher"
+                 id="shopware_es_backend.order_searcher"
+                 decorates="shopware_attribute.order_searcher">
+
+            <argument id="shopware_elastic_search.client" type="service"/>
+            <argument id="shopware_es_backend.order_searcher.inner" type="service"/>
+            <argument type="service" id="shopware_es_backend.search_query_builder"/>
+            <argument>orders</argument>
+            <argument>%shopware.es.backend.enabled%</argument>
+        </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\Searcher\ProductSearcher"
+                 id="shopware_es_backend.product_searcher"
+                 decorates="shopware_attribute.product_searcher">
+
+            <argument id="shopware_elastic_search.client" type="service"/>
+            <argument id="shopware_es_backend.product_searcher.inner" type="service"/>
+            <argument type="service" id="shopware_es_backend.search_query_builder"/>
+            <argument>product</argument>
+            <argument>%shopware.es.backend.enabled%</argument>
+        </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\Searcher\CustomerSearcher"
+                 id="shopware_es_backend.customer_searcher"
+                 decorates="shopware_attribute.customer_searcher">
+
+            <argument id="shopware_elastic_search.client" type="service"/>
+            <argument id="shopware_es_backend.customer_searcher.inner" type="service"/>
+            <argument type="service" id="shopware_es_backend.search_query_builder"/>
+            <argument>customer</argument>
+            <argument>%shopware.es.backend.enabled%</argument>
+        </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\Subscriber\OrmBacklogSubscriber"
+                 id="shopware_bundle.es_backend_subscriber.orm_backlog_subscriber">
+
+            <tag name="doctrine.event_subscriber"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <!-- Commands -->
+
+        <service class="Shopware\Bundle\EsBackendBundle\Commands\IndexPopulateCommand"
+                 id="shopware_es_backend.commands.index_populate_command">
+            <tag name="console.command" command="sw:es:backend:index:populate"/>
+        </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\Commands\SyncBacklogCommand"
+                 id="shopware_es_backend.commands.sync_backlog_command">
+            <tag name="console.command" command="sw:es:backend:sync"/>
+        </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\Commands\IndexCleanupCommand"
+                 id="shopware_es_backend.commands.index_cleanup_command">
+            <tag name="console.command" command="sw:es:backend:index:cleanup"/>
+        </service>
+    </services>
+</container>
+

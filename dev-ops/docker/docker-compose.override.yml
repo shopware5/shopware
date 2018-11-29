@@ -4,7 +4,7 @@ version: "3.3"
 services:
   appserver:
     ports:
-      - "18000:80"
+      - "8088:80"
 
   app_mysql:
     ports:

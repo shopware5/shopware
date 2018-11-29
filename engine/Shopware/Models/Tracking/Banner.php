@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Tracking;
+namespace Shopware\Models\Tracking;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -97,14 +97,12 @@ class Banner extends ModelEntity
     private $views;
 
     /**
-     * Constructor
-     *
-     * @param $bannerId
-     * @param $date
+     * @param int                     $bannerId
+     * @param null|\DateTimeInterface $date
      */
     public function __construct($bannerId, $date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = new \DateTime();
         }
         $this->setDisplayDate($date);
@@ -126,7 +124,7 @@ class Banner extends ModelEntity
      *
      * @param \DateTime $displayDate
      *
-     * @return \Shopware\Models\Banner\Banner
+     * @return Banner
      */
     public function setDisplayDate($displayDate)
     {
@@ -150,7 +148,7 @@ class Banner extends ModelEntity
      *
      * @param int $bannerId
      *
-     * @return \Shopware\Models\Banner\Banner
+     * @return Banner
      */
     public function setBannerId($bannerId)
     {
@@ -174,7 +172,7 @@ class Banner extends ModelEntity
      *
      * @param int $clicks
      *
-     * @return \Shopware\Models\Banner\Banner
+     * @return Banner
      */
     public function setClicks($clicks)
     {
@@ -198,7 +196,7 @@ class Banner extends ModelEntity
      *
      * @param int $views
      *
-     * @return \Shopware\Models\Banner\Banner
+     * @return Banner
      */
     public function setViews($views)
     {
@@ -212,7 +210,7 @@ class Banner extends ModelEntity
      *
      * @internal param int $views
      *
-     * @return \Shopware\Models\Banner\Banner
+     * @return Banner
      */
     public function increaseViews()
     {
@@ -224,9 +222,9 @@ class Banner extends ModelEntity
     /**
      * Increases the number of times the banner has been clicked by one.
      *
-     * @internal param int $views
+     * @internal param int $clicks
      *
-     * @return \Shopware\Models\Banner\Banner
+     * @return Banner
      */
     public function increaseClicks()
     {

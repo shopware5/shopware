@@ -25,7 +25,7 @@
 namespace Shopware\Recovery\Common\HttpClient;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -115,7 +115,7 @@ class CurlClient implements Client
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         curl_close($curl);
-        if (false === $content) {
+        if ($content === false) {
             throw new ClientException($errmsg, $error);
         }
 

@@ -216,6 +216,8 @@
                 opts = me.opts,
                 $el = me.$el;
 
+            me.applyDataAttributes();
+
             me.$personalEmail = $el.find(opts.personalEmailSelector);
             me.$personalPassword = $el.find(opts.personalPasswordSelector);
             me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
@@ -499,9 +501,6 @@
                         break;
                     }
                     action = 'ajax_validate_email';
-                    break;
-                case 'register_billing_ustid':
-                    action = 'ajax_validate_billing';
                     break;
                 case 'register_personal_password':
                 case 'register_personal_passwordConfirmation':

@@ -21,12 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\OrderRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
@@ -34,7 +34,6 @@ use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Service\DownloadService;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginViewService;
@@ -73,7 +72,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $this->getAccessToken()
             );
 
-            /** @var $service DownloadService */
+            /** @var DownloadService $service */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->getMetaInformation($request);
             $this->get('BackendSession')->offsetSet('plugin_manager_meta_download', $result);
@@ -113,7 +112,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         );
 
         try {
-            /** @var $service DownloadService */
+            /** @var DownloadService $service */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->downloadRange($request);
         } catch (Exception $e) {
@@ -125,7 +124,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         if ($result instanceof FinishResult) {
             $this->View()->assign(['success' => true, 'finish' => true, 'destination' => $destination]);
         } else {
-            /* @var $result \Shopware\Recovery\Update\Steps\ValidResult */
+            /* @var \Shopware\Recovery\Update\Steps\ValidResult $result */
             $this->View()->assign(['success' => true, 'finish' => false, 'offset' => $result->getOffset()]);
         }
     }
@@ -222,8 +221,21 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
                 return;
             }
+
+            $data = $pluginInformation->jsonSerialize();
+
+            $data['shopSecretMissing'] = $subscriptionService->getException() instanceof StoreException;
+            $data['live'] = false;
+
+            $this->View()->assign('data', $data);
+        } else {
+            $data = $pluginInformation->jsonSerialize();
+            $data['live'] = true;
+
+            $this->View()->assign('data', $data);
         }
-        $this->View()->assign(['success' => true, 'data' => $pluginInformation]);
+
+        $this->View()->assign(['success' => true]);
     }
 
     public function storeListingAction()
@@ -310,8 +322,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $context = new ListingRequest(
             $this->getLocale(),
             $this->getVersion(),
-            $this->Request()->getParam('offset', null),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('offset'),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('filter', []),
             $this->getListingSorting()
         );
@@ -491,6 +503,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $expiredPlugins[] = $pluginInformationStruct->getTechnicalName();
         }
 
+        $qb = $this->get('dbal_connection')->createQueryBuilder();
+        $installDates = $qb->from('s_core_plugins', 'plugins')
+            ->addSelect('plugins.name, plugins.installation_date, plugins.capability_secure_uninstall')
+            ->andWhere('name IN (:names)')
+            ->setParameter('names', $expiredPlugins, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC | PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
+
         $context = new PluginsByTechnicalNameRequest(
             $this->getLocale(),
             $this->getVersion(),
@@ -502,56 +522,21 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
             $plugins = $pluginStoreService->getPlugins($context);
 
+            foreach ($plugins as $plugin) {
+                if (isset($installDates[$plugin->getTechnicalName()])) {
+                    $date = $installDates[$plugin->getTechnicalName()]['installation_date'];
+
+                    if ($date) {
+                        $plugin->setInstallationDate(new DateTime($date));
+                    }
+                    $plugin->setCapabilitySecureUninstall($installDates[$plugin->getTechnicalName()]['capability_secure_uninstall']);
+                }
+            }
+
             $this->View()->assign(['success' => true, 'data' => array_values($plugins)]);
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
-    }
-
-    public function checkLicencePluginAction()
-    {
-        $plugin = $this->getPluginModel('SwagLicense');
-
-        switch (true) {
-            case !$plugin instanceof Shopware\Models\Plugin\Plugin:
-                $state = 'download';
-                break;
-
-            case $plugin->getInstalled() == null:
-                $state = 'install';
-                break;
-
-            case !$plugin->getActive():
-                $state = 'activate';
-                break;
-
-            default:
-                $this->View()->assign('success', true);
-
-                return;
-        }
-
-        $context = new PluginsByTechnicalNameRequest(
-            $this->getLocale(),
-            $this->getVersion(),
-            ['SwagLicense']
-        );
-
-        try {
-            /** @var PluginViewService $pluginViewService */
-            $pluginViewService = $this->get('shopware_plugininstaller.plugin_service_view');
-            $data = $pluginViewService->getPlugin($context);
-        } catch (Exception $e) {
-            $this->handleException($e);
-
-            return;
-        }
-
-        $this->View()->assign([
-            'success' => false,
-            'data' => $data,
-            'state' => $state,
-        ]);
     }
 
     public function purchasePluginAction()
@@ -626,62 +611,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             'success' => true,
             'data' => $basket,
         ]);
-    }
-
-    public function importLicenceKeyAction()
-    {
-        $key = $this->Request()->getParam('licenceKey');
-
-        try {
-            /** @var $service PluginLicenceService */
-            $service = $this->get('shopware_plugininstaller.plugin_licence_service');
-            $service->importLicence($key);
-        } catch (Exception $e) {
-            $this->handleException($e);
-
-            return;
-        }
-
-        $this->View()->assign('success', true);
-    }
-
-    public function importPluginLicenceAction()
-    {
-        $technicalName = $this->Request()->getParam('technicalName');
-
-        $context = new PluginLicenceRequest(
-            $this->getAccessToken(),
-            $this->getDomain(),
-            $this->getVersion(),
-            $technicalName
-        );
-
-        /** @var PluginStoreService $pluginStoreService */
-        $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
-        $licence = $pluginStoreService->getPluginLicence($context);
-
-        if (!$licence) {
-            return $this->View()->assign([
-                'success' => false,
-                'message' => sprintf('Licence for plugin %s not found', $technicalName),
-            ]);
-        }
-
-        if (!$licence->getLicenseKey()) {
-            return $this->View()->assign('success', true);
-        }
-
-        try {
-            /** @var $service PluginLicenceService */
-            $service = $this->get('shopware_plugininstaller.plugin_licence_service');
-            $service->importLicence($licence->getLicenseKey());
-        } catch (Exception $e) {
-            $this->handleException($e);
-
-            return;
-        }
-
-        return $this->View()->assign('success', true);
     }
 
     public function getAccessTokenAction()
@@ -945,6 +874,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     /**
      * @param string $orderNumber
      * @param array  $positions
+     *
+     * @return null|string
      */
     private function getTechnicalNameOfOrderNumber($orderNumber, array $positions)
     {

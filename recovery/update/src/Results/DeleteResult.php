@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Recovery\Update;
+namespace Shopware\Recovery\Update\Results;
 
 class DeleteResult
 {

@@ -25,24 +25,37 @@
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\BatchableProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class OrdersProvider implements BenchmarkProviderInterface
+class OrdersProvider implements BatchableProviderInterface
 {
     /**
      * @var Connection
      */
-    private $dbalConnection;
+    protected $dbalConnection;
 
     /**
      * @var int
      */
-    private $shopId;
+    protected $shopId;
 
-    public function __construct(Connection $dbalConnection)
+    /**
+     * @var MatcherService
+     */
+    private $paymentMatcher;
+
+    /**
+     * @var MatcherService
+     */
+    private $shipmentMatcher;
+
+    public function __construct(Connection $dbalConnection, MatcherService $paymentMatcher, MatcherService $shipmentMatcher)
     {
         $this->dbalConnection = $dbalConnection;
+        $this->paymentMatcher = $paymentMatcher;
+        $this->shipmentMatcher = $shipmentMatcher;
     }
 
     public function getName()
@@ -53,44 +66,69 @@ class OrdersProvider implements BenchmarkProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getBenchmarkData(ShopContextInterface $shopContext)
+    public function getBenchmarkData(ShopContextInterface $shopContext, $batchSize = null)
     {
         $this->shopId = $shopContext->getShop()->getId();
 
         return [
-            'list' => $this->getOrdersList(),
+            'list' => $this->getOrdersList($batchSize),
         ];
     }
 
     /**
+     * @param array $config
+     * @param int   $batch
+     *
      * @return array
      */
-    private function getOrdersList()
+    protected function getOrdersBasicData(array $config, $batch)
+    {
+        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $lastOrderId = (int) $config['last_order_id'];
+
+        return $ordersQueryBuilder->select('orders.*')
+            ->from('s_order', 'orders')
+            ->where('orders.id > :lastOrderId')
+            ->andWhere('orders.subshopID = :shopId')
+            ->andWhere('orders.status != -1')
+            ->orderBy('orders.id', 'ASC')
+            ->setMaxResults($batch)
+            ->setParameter(':lastOrderId', $lastOrderId)
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param int $batchSize
+     *
+     * @return array
+     */
+    private function getOrdersList($batchSize = null)
     {
         $config = $this->getOrderConfig();
         $batch = (int) $config['batch_size'];
-        $lastOrderId = (int) $config['last_order_id'];
 
-        $orderData = $this->getOrderData($batch, $lastOrderId);
-        $orderData = $this->hydrateData($orderData);
-        $lastOrder = end($orderData);
-
-        if ($lastOrder) {
-            $this->updateLastOrderId($lastOrder['orderId']);
+        if ($batchSize !== null) {
+            $batch = $batchSize;
         }
+
+        $orderData = $this->getOrderData($config, $batch);
+        $orderData = $this->hydrateData($orderData);
 
         return $orderData;
     }
 
     /**
-     * @param int $batch
-     * @param int $lastOrderId
+     * @param array $config
+     * @param int   $batch
      *
      * @return array
      */
-    private function getOrderData($batch, $lastOrderId)
+    private function getOrderData(array $config, $batch)
     {
-        $ordersBasicData = $this->getOrdersBasicData($batch, $lastOrderId);
+        $ordersBasicData = $this->getOrdersBasicData($config, $batch);
 
         $orderIds = array_keys($ordersBasicData);
         $dispatchIds = $this->getUniqueColumnValues($ordersBasicData, 'dispatchID');
@@ -111,37 +149,59 @@ class OrdersProvider implements BenchmarkProviderInterface
         }
 
         foreach ($ordersBasicData as $orderId => &$basicOrder) {
+            // Dispatch has been deleted in meanwhile
+            if (!isset($dispatchData[$basicOrder['dispatchID']])) {
+                $dispatchData[$basicOrder['dispatchID']] = [
+                    'id' => 0,
+                    'name' => 'others',
+                    'minPrice' => 0,
+                    'maxPrice' => 0,
+                ];
+            }
+
+            if (!isset($paymentData[$basicOrder['paymentID']])) {
+                $paymentData[$basicOrder['paymentID']] = [
+                    'id' => 0,
+                    'name' => 'others',
+                    'percentCosts' => 0,
+                    'absoluteCosts' => 0,
+                    'absoluteCostsPerCountry' => 0,
+                ];
+            }
+
+            if (!isset($customerData[$basicOrder['userID']])) {
+                $customerData[$basicOrder['userID']] = [
+                    'registered' => false,
+                    'birthYear' => 0,
+                    'birthMonth' => 0,
+                    'gender' => 'male',
+                    'registerDate' => '1970-01-01',
+                    'hasNewsletter' => false,
+                ];
+            }
+
+            $customerData[$basicOrder['userID']]['registered'] = (bool) $customerData[$basicOrder['userID']]['registered'];
+            $customerData[$basicOrder['userID']]['hasNewsletter'] = (bool) $customerData[$basicOrder['userID']]['hasNewsletter'];
+            $customerData[$basicOrder['userID']]['birthYear'] = (int) $customerData[$basicOrder['userID']]['birthYear'];
+            $customerData[$basicOrder['userID']]['birthMonth'] = (int) $customerData[$basicOrder['userID']]['birthMonth'];
+
             $basicOrder['dispatch'] = $dispatchData[$basicOrder['dispatchID']];
             $basicOrder['payment'] = $paymentData[$basicOrder['paymentID']];
 
             $basicOrder['customer'] = $customerData[$basicOrder['userID']];
-            $basicOrder['customer']['billing']['country'] = $billingCountries[$orderId];
-            $basicOrder['customer']['shipping']['country'] = $shippingCountries[$orderId];
+            $basicOrder['customer']['billing']['country'] = isset($billingCountries[$orderId]) ? $billingCountries[$orderId] : '--';
+            $basicOrder['customer']['shipping']['country'] = isset($shippingCountries[$orderId]) ? $shippingCountries[$orderId] : '--';
+
+            if (strlen($basicOrder['customer']['billing']['country']) !== 2) {
+                $basicOrder['customer']['billing']['country'] = '--';
+            }
+
+            if (strlen($basicOrder['customer']['shipping']['country']) !== 2) {
+                $basicOrder['customer']['shipping']['country'] = '--';
+            }
         }
 
         return $ordersBasicData;
-    }
-
-    /**
-     * @param int $batch
-     * @param int $lastOrderId
-     *
-     * @return array
-     */
-    private function getOrdersBasicData($batch, $lastOrderId)
-    {
-        $ordersQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $ordersQueryBuilder->select('orders.*')
-            ->from('s_order', 'orders')
-            ->where('orders.id > :lastOrderId')
-            ->andWhere('orders.subshopID = :shopId')
-            ->orderBy('orders.id', 'ASC')
-            ->setMaxResults($batch)
-            ->setParameter(':lastOrderId', $lastOrderId)
-            ->setParameter(':shopId', $this->shopId)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
     }
 
     /**
@@ -155,34 +215,70 @@ class OrdersProvider implements BenchmarkProviderInterface
 
         $currentHydratedOrder = [];
         foreach ($orderData as $orderId => $order) {
-            $currentHydratedOrder['orderId'] = $orderId;
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $order['ordertime']);
+
+            $currentHydratedOrder['orderId'] = (int) $orderId;
+            $currentHydratedOrder['status'] = (int) $order['status'];
             $currentHydratedOrder['currency'] = $order['currency'];
-            $currentHydratedOrder['shippingCosts'] = $order['invoice_shipping'];
+            $currentHydratedOrder['shippingCosts'] = (float) $order['invoice_shipping'];
+            $currentHydratedOrder['changed'] = (string) $order['changed'];
+            $currentHydratedOrder['invoiceAmount'] = (float) $order['invoice_amount'];
+            $currentHydratedOrder['invoiceAmountNet'] = (float) $order['invoice_amount_net'];
+            $currentHydratedOrder['isTaxFree'] = (bool) $order['taxfree'];
+            $currentHydratedOrder['isNet'] = (bool) $order['net'];
+            $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
+            $currentHydratedOrder['datetime'] = $dateTime->format('Y-m-d H:i:s');
             $currentHydratedOrder['customer'] = $order['customer'];
 
+            // PHP DateTime can handle also invalid dates
+            if (!$this->isValidDate($currentHydratedOrder['datetime'])) {
+                $currentHydratedOrder['datetime'] = '1970-01-01 00:00:00';
+                $currentHydratedOrder['date'] = '1970-01-01';
+            }
+
             $currentHydratedOrder['analytics'] = [
-                'device' => $order['deviceType'],
+                'device' => empty($order['deviceType']) ? 'desktop' : $order['deviceType'],
                 'referer' => $order['referer'] ? true : false,
             ];
 
             $currentHydratedOrder['shipment'] = [
-                'name' => $order['dispatch']['name'],
+                'name' => empty($order['dispatch']['name']) ? 'others' : $this->shipmentMatcher->matchString($order['dispatch']['name']),
                 'cost' => [
-                    'minPrice' => $order['dispatch']['minPrice'],
-                    'maxPrice' => $order['dispatch']['maxPrice'],
+                    'minPrice' => (float) $order['dispatch']['minPrice'],
+                    'maxPrice' => (float) $order['dispatch']['maxPrice'],
                 ],
             ];
 
             $currentHydratedOrder['payment'] = [
-                'name' => $order['payment']['name'],
+                'name' => empty($order['payment']['name']) ? 'others' : $this->paymentMatcher->matchString($order['payment']['name']),
                 'cost' => [
-                    'percentCosts' => $order['payment']['percentCosts'],
-                    'absoluteCosts' => $order['payment']['absoluteCosts'],
-                    'absoluteCostsPerCountry' => $order['payment']['absoluteCostsPerCountry'],
+                    'percentCosts' => (float) $order['payment']['percentCosts'],
+                    'absoluteCosts' => (float) $order['payment']['absoluteCosts'],
+                    'absoluteCostsPerCountry' => (float) $order['payment']['absoluteCostsPerCountry'],
                 ],
             ];
 
-            $currentHydratedOrder['items'] = $order['details'];
+            $currentHydratedOrder['items'] = isset($order['details']) ? $order['details'] : [];
+
+            $isCancelOrder = $currentHydratedOrder['status'] === 4;
+
+            if (!$currentHydratedOrder['changed']) {
+                $currentHydratedOrder['changed'] = '1970-01-01 00:00:00';
+            }
+
+            if ($isCancelOrder) {
+                $currentHydratedOrder['invoiceAmount'] = 0;
+                $currentHydratedOrder['shippingCosts'] = 0;
+            }
+
+            $currentHydratedOrder['items'] = array_map(function ($item) use ($isCancelOrder) {
+                $item['detailId'] = (int) $item['detailId'];
+                $item['unitPrice'] = (float) ($isCancelOrder ? 0 : $item['unitPrice']);
+                $item['totalPrice'] = (float) ($isCancelOrder ? 0 : $item['totalPrice']);
+                $item['amount'] = (int) $item['amount'];
+
+                return $item;
+            }, $currentHydratedOrder['items']);
 
             $hydratedOrders[] = $currentHydratedOrder;
         }
@@ -202,11 +298,12 @@ class OrdersProvider implements BenchmarkProviderInterface
         return $orderDetailsQueryBuilder->select([
                 'details.id',
                 'details.orderID',
+                'details.id as detailId',
                 'details.price as unitPrice',
                 'details.price * details.quantity as totalPrice',
                 'details.quantity as amount',
-                'details.pack_unit as packUnit',
-                'details.unit as purchaseUnit',
+                'IFNULL(details.pack_unit, "") as packUnit',
+                'IFNULL(details.unit, "") as purchaseUnit',
             ])
             ->from('s_order_details', 'details')
             ->where('details.orderID IN (:orderIds)')
@@ -266,20 +363,10 @@ class OrdersProvider implements BenchmarkProviderInterface
 
         return $configsQueryBuilder->select('configs.*')
             ->from('s_benchmark_config', 'configs')
+            ->where('configs.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetch();
-    }
-
-    /**
-     * @param int $lastOrderId
-     */
-    private function updateLastOrderId($lastOrderId)
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-        $queryBuilder->update('s_benchmark_config')
-            ->set('last_order_id', ':lastOrderId')
-            ->setParameter(':lastOrderId', $lastOrderId)
-            ->execute();
     }
 
     /**
@@ -386,5 +473,17 @@ class OrdersProvider implements BenchmarkProviderInterface
 
         // Values unique this way, faster than array_unique
         return array_keys(array_flip($columnValues));
+    }
+
+    /**
+     * @param string $date
+     *
+     * @return bool
+     */
+    private function isValidDate($date)
+    {
+        $re = '/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/m';
+
+        return preg_match($re, $date);
     }
 }

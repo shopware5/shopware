@@ -5241,6 +5241,7 @@ INSERT INTO `s_core_countries` (`id`, `countryname`, `countryiso`, `areaID`, `co
 (35, 'Rum&auml;nien', 'RO', 3, 'ROMANIA', 10, '', 0, 0, 0, 0, 'ROU', 0, 0),
 (36, 'Brasilien', 'BR', 2, 'BRAZIL', 10, '', 0, 0, 0, 0, 'BRA', 0, 0),
 (37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 'ISR', 0, 0);
+UPDATE `s_core_countries` SET `allow_shipping` = 1;
 
 TRUNCATE TABLE `s_core_countries_areas`;
 INSERT INTO `s_core_countries_areas` (`id`, `name`, `active`) VALUES
@@ -5989,6 +5990,7 @@ TRUNCATE TABLE `s_core_shop_pages`;
 INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
 (1, 1),
 (1, 2),
+(1, 3),
 (2, 7),
 (2, 9),
 (2, 10);
@@ -6129,26 +6131,6 @@ INSERT INTO `s_core_units` (`id`, `unit`, `description`) VALUES
 (8, 'Paket(e)', 'Paket(e)'),
 (9, 'Stck.', 'Stück'),
 (10, 'ml', 'Milliliter');
-
-TRUNCATE TABLE `s_core_widgets`;
-INSERT INTO `s_core_widgets` (`id`, `name`, `label`) VALUES
-(1, 'swag-sales-widget', 'Umsatz Heute und Gestern'),
-(2, 'swag-upload-widget', 'Drag and Drop Upload'),
-(3, 'swag-visitors-customers-widget', 'Besucher online'),
-(4, 'swag-last-orders-widget', 'Letzte Bestellungen'),
-(5, 'swag-notice-widget', 'Notizzettel'),
-(6, 'swag-merchant-widget', 'Händlerfreischaltung'),
-(7, 'swag-shopware-news-widget', 'shopware News');
-
-TRUNCATE TABLE `s_core_widget_views`;
-INSERT INTO `s_core_widget_views` (`id`, `widget_id`, `auth_id`, `column`, `position`) VALUES
-(7, 6, 50, 0, 1),
-(8, 1, 50, 0, 2),
-(9, 2, 50, 1, 1),
-(10, 3, 50, 1, 2),
-(11, 4, 50, 2, 1),
-(12, 5, 50, 2, 2),
-(13, 7, 50, 3, 1);
 
 TRUNCATE TABLE `s_emarketing_banners`;
 TRUNCATE TABLE `s_emarketing_banners_attributes`;
@@ -6978,7 +6960,7 @@ INSERT INTO `s_emotion_element_value` (`id`, `emotionID`, `elementID`, `componen
 (4227, 10, 1498, 4, 5, ''),
 (4228, 10, 1498, 4, 8, 'random_article'),
 (4229, 10, 1499, 3, 3, 'media/image/Teaser-Banner504091a2365ee.jpg'),
-(4230, 10, 1499, 3, 7, 'null'),
+(4230, 10, 1499, 3, 7, '[{"x":0,"y":0,"width":"240","height":"211","link":"SW10178","resizerIndex":0,"linkLocation":"internal","title":"","as_tooltip":0,"path":""},{"x":"0","y":"212","width":"240","height":"166","link":"SW10170","resizerIndex":1,"linkLocation":"internal","title":"","as_tooltip":0,"path":""},{"x":"0","y":"379","width":"240","height":"166","link":"SW10153.1","resizerIndex":2,"linkLocation":"internal","title":"","as_tooltip":0,"path":""}]'),
 (4231, 10, 1499, 3, 47, ''),
 (4232, 7, 1500, 3, 3, 'media/image/sommerwelten_top.jpg'),
 (4233, 7, 1500, 3, 7, '[{"x":158,"y":27,"width":198,"height":150,"link":"SW10170","resizerIndex":17,"path":""},{"x":515,"y":26,"width":208,"height":183,"link":"SW10159","resizerIndex":18,"path":""},{"x":47,"y":207,"width":227,"height":173,"link":"SW10178","resizerIndex":19,"path":""},{"x":263,"y":354,"width":183,"height":175,"link":"SW10172","resizerIndex":20,"path":""},{"x":291,"y":511,"width":210,"height":81,"link":"SW10172","resizerIndex":21,"path":""},{"x":580,"y":481,"width":151,"height":241,"link":"SW10150","resizerIndex":22,"path":""},{"x":517,"y":686,"width":159,"height":56,"link":"SW10150","resizerIndex":23,"path":""},{"x":54,"y":560,"width":212,"height":147,"link":"SW10155.1","resizerIndex":24,"path":""},{"x":"456","y":"238","width":"111","height":"62","link":"SW10098","resizerIndex":25,"path":""},{"x":"505","y":"239","width":"173","height":"227","link":"SW10098","resizerIndex":26,"path":""}]'),
@@ -10753,3 +10735,5 @@ TRUNCATE s_emotion_shops;
 INSERT INTO `s_emotion_shops` (`id`, `emotion_id`, `shop_id`) VALUES
 (1, 5, 1),
 (2, 9, 1);
+
+UPDATE s_articles SET taxID = 4 WHERE id IN(SELECT articleID FROM s_articles_categories_ro WHERE categoryID IN(15));

@@ -25,7 +25,7 @@
 /**
  * Sitemap controller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @deprecated Will be removed in Shopware 6.0
  *

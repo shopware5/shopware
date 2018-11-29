@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\FirstRunWizardPluginStoreService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
@@ -272,7 +271,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         }
 
         $user = Shopware()->Container()->get('Auth')->getIdentity();
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 

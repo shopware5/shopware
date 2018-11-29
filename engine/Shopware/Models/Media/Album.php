@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Media;
+namespace Shopware\Models\Media;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -123,7 +124,8 @@ class Album extends ModelEntity
     /**
      * An album can have multiple sub-albums.
      *
-     * @var
+     * @var ArrayCollection<\Shopware\Models\Media\Album>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Media\Album", mappedBy="parent")
      * @ORM\OrderBy({"position" = "ASC"})
      */
@@ -133,6 +135,7 @@ class Album extends ModelEntity
      * An album can only be subordinated to another album.
      *
      * @var null|\Shopware\Models\Media\Album
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      */
@@ -141,7 +144,8 @@ class Album extends ModelEntity
     /**
      * An album can be assigned to multiple media.
      *
-     * @var
+     * @var ArrayCollection<\Shopware\Models\Media\Media>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Media\Media", mappedBy="album")
      */
     private $media;
@@ -238,7 +242,7 @@ class Album extends ModelEntity
     /**
      * Returns the child albums.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Media\Album>
      */
     public function getChildren()
     {
@@ -248,7 +252,7 @@ class Album extends ModelEntity
     /**
      * Sets the child albums.
      *
-     * @param  $children
+     * @param ArrayCollection<\Shopware\Models\Media\Album> $children
      *
      * @return array|\Shopware\Models\Media\Album
      */
@@ -272,7 +276,7 @@ class Album extends ModelEntity
     /**
      * Sets the parent album instance
      *
-     * @param  $parent
+     * @param null|\Shopware\Models\Media\Album $parent
      *
      * @return \Shopware\Models\Media\Album
      */
@@ -286,7 +290,7 @@ class Album extends ModelEntity
     /**
      * Returns the associated media.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Media\Media>
      */
     public function getMedia()
     {
@@ -316,7 +320,7 @@ class Album extends ModelEntity
     /**
      * Sets the album settings
      *
-     * @param $settings \Shopware\Models\Media\Settings
+     * @param \Shopware\Models\Media\Settings $settings
      *
      * @return \Shopware\Models\Media\Album
      */

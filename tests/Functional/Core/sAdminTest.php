@@ -1166,6 +1166,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 $this->assertArrayHasKey('ordernumber', $detail);
                 $this->assertArrayHasKey('articleID', $detail);
                 $this->assertArrayHasKey('articleordernumber', $detail);
+                $this->assertArrayHasKey('amountNumeric', $detail);
+                $this->assertArrayHasKey('priceNumeric', $detail);
             }
 
             // This tests SW-5653
@@ -1248,6 +1250,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'display_state_in_registration' => '0',
                         'force_state_in_registration' => '0',
                         'countryarea' => 'welt',
+                        'allow_shipping' => '1',
                     ],
                     'countryShipping' => [
                         'id' => '20',
@@ -1265,6 +1268,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'display_state_in_registration' => '0',
                         'force_state_in_registration' => '0',
                         'countryarea' => 'welt',
+                        'allow_shipping' => '1',
                     ],
                     'stateShipping' => ['id' => 0],
                 ],

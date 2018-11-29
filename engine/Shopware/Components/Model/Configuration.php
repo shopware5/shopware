@@ -38,7 +38,7 @@ use Doctrine\ORM\Repository\RepositoryFactory;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -122,7 +122,7 @@ class Configuration extends BaseConfiguration
     public function setCache(CacheProvider $cache)
     {
         // Set namespace for doctrine cache provider to avoid collisions
-        $namespace = !is_null($this->cacheNamespace) ? $this->cacheNamespace : md5(
+        $namespace = $this->cacheNamespace !== null ? $this->cacheNamespace : md5(
             $this->getProxyDir() . $this->release->getRevision()
         );
         $cache->setNamespace('dc2_' . $namespace . '_');
@@ -213,7 +213,7 @@ class Configuration extends BaseConfiguration
     public function setAttributeDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -245,7 +245,7 @@ class Configuration extends BaseConfiguration
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -285,7 +285,7 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param $provider
+     * @param string $provider
      *
      * @throws \Exception
      *
@@ -301,7 +301,7 @@ class Configuration extends BaseConfiguration
         }
 
         if (!class_exists($provider)) {
-            throw new \Exception('Doctrine cache provider "' . $provider . "' not found failure.");
+            throw new \Exception(sprintf('Doctrine cache provider "%s" not found failure.', $provider));
         }
 
         return new $provider();

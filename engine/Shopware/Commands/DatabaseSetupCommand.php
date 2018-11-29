@@ -32,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -52,7 +52,8 @@ class DatabaseSetupCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('sw:database:setup');
+        $this->setName('sw:database:setup')
+            ->setDescription('Setups shopware database');
 
         $this->addOption(
             'steps',

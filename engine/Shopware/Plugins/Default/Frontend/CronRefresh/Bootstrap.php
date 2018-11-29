@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 
 /**
@@ -90,7 +89,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      */
     public function onCronJobSearch(Shopware_Components_Cron_CronJob $job)
     {
-        /* @var $indexer SearchIndexerInterface */
+        /* @var SearchIndexerInterface $indexer */
         $indexer = $this->get('shopware_searchdbal.search_indexer');
         $indexer->build();
     }
@@ -99,7 +98,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      * Delete old entries from s_statistics_referrer
      * by default older than 90 days
      *
-     * @param $maximumReferrerAge
+     * @param int $maximumReferrerAge
      *
      * @return int
      */
@@ -123,7 +122,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      * Delete old entries from s_statistics_article_impression
      * by default older than 90 days
      *
-     * @param $maximumAge
+     * @param int $maximumAge
      *
      * @return int
      */

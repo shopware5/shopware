@@ -150,8 +150,11 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
+        $now = new \DateTime('now');
+
         $this->installDemoData('benchmark_config');
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
+        $this->setSetting('last_received', $now->format('Y-m-d H:i:s'));
 
         $this->expectOutputString('<h2>Placeholder</h2>');
         $controller->renderAction();
@@ -165,6 +168,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         $controller = parent::getController();
 
         Shopware()->Container()->set('auth', new AuthMock());
+        Shopware()->Plugins()->Backend()->Auth()->onInitResourceAuth(new \Enlight_Event_EventArgs());
 
         return $controller;
     }

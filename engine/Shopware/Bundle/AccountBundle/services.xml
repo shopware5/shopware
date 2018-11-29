@@ -5,7 +5,6 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-
         <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\AddressService">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_account.address_validator" />
@@ -111,6 +110,7 @@
             <argument type="service" id="shopware.number_range_incrementer"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_account.address_service"/>
+            <argument type="service" id="front"/>
         </service>
 
         <service id="shopware_account.store_front_greeting_service" class="Shopware\Bundle\AccountBundle\Service\StoreFrontCustomerGreetingService" >

@@ -537,7 +537,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @param  $country
+     * @param \Shopware\Models\Country\Country $country
      */
     public function setCountry($country)
     {

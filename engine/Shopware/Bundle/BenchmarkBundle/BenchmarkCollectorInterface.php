@@ -30,8 +30,9 @@ interface BenchmarkCollectorInterface
 {
     /**
      * @param ShopContextInterface $shopContext
+     * @param int                  $batchSize   - If set, this will be used for the Orders, Customers and ProductsProvider
      *
-     * @return string - Must be a JSON encoded string
+     * @return array
      */
-    public function get(ShopContextInterface $shopContext);
+    public function get(ShopContextInterface $shopContext, $batchSize = null);
 }

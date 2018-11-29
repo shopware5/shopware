@@ -36,7 +36,7 @@ namespace Shopware\Components\Model;
  *
  * Most write operations take place in s_articles_categories_ro.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -88,17 +88,11 @@ class CategoryDenormalization
         return $this->enableTransactions;
     }
 
-    /**
-     * @return CategoryDenormalization
-     */
     public function enableTransactions()
     {
         $this->enableTransactions = true;
     }
 
-    /**
-     * @return CategoryDenormalization
-     */
     public function disableTransactions()
     {
         $this->enableTransactions = false;
@@ -205,12 +199,12 @@ class CategoryDenormalization
             ';
 
             $parameters = [
-                'categoryPath' => '%|' . $categoryId . '|%',
+                'categoryPath' => '%|' . (int) $categoryId . '|%',
             ];
         }
 
         if ($count !== null) {
-            $sql = $this->limit($sql, $count, $offset);
+            $sql = $this->limit($sql, (int) $count, $offset);
         }
 
         $stmt = $this->getConnection()->prepare($sql);
@@ -232,8 +226,8 @@ class CategoryDenormalization
     /**
      * Rebuilds the path for a single category
      *
-     * @param $categoryId
-     * @param $categoryPath
+     * @param int         $categoryId
+     * @param null|string $categoryPath
      *
      * @return int
      */
@@ -241,7 +235,7 @@ class CategoryDenormalization
     {
         $updateStmt = $this->connection->prepare('UPDATE s_categories set path = :path WHERE id = :categoryId');
 
-        $parents = $this->getParentCategoryIds($categoryId);
+        $parents = $this->getParentCategoryIds((int) $categoryId);
         array_shift($parents);
 
         if (empty($parents)) {
@@ -609,12 +603,12 @@ class CategoryDenormalization
     {
         $count = (int) $count;
         if ($count <= 0) {
-            throw new \Exception("LIMIT argument count=$count is not valid");
+            throw new \Exception(sprintf('LIMIT argument count=%s is not valid', $count));
         }
 
         $offset = (int) $offset;
         if ($offset < 0) {
-            throw new \Exception("LIMIT argument offset=$offset is not valid");
+            throw new \Exception(sprintf('LIMIT argument offset=%s is not valid', $offset));
         }
 
         $sql .= " LIMIT $count";

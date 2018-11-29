@@ -42,7 +42,7 @@ class Utils
     }
 
     /**
-     * @param $app \Slim\Slim
+     * @param \Slim\Slim $app
      *
      * @return $this
      */

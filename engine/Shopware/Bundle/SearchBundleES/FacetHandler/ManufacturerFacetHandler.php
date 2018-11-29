@@ -134,13 +134,13 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     private function createListItems(Criteria $criteria, $manufacturers)
     {
         $actives = [];
-        /** @var $condition ManufacturerCondition */
+        /** @var ManufacturerCondition $condition */
         if ($condition = $criteria->getCondition('manufacturer')) {
             $actives = $condition->getManufacturerIds();
         }
 
         $items = [];
-        /** @var $manufacturer Manufacturer */
+        /** @var Manufacturer $manufacturer */
         foreach ($manufacturers as $manufacturer) {
             $items[] = new ValueListItem(
                 $manufacturer->getId(),
@@ -158,8 +158,8 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria $criteria
-     * @param $items
+     * @param Criteria        $criteria
+     * @param ValueListItem[] $items
      *
      * @return ValueListFacetResult
      */

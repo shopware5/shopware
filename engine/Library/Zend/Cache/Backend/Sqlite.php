@@ -525,7 +525,7 @@ class Zend_Cache_Backend_Sqlite extends Zend_Cache_Backend implements Zend_Cache
     private function _automaticVacuum()
     {
         if ($this->_options['automatic_vacuum_factor'] > 0) {
-            $rand = rand(1, $this->_options['automatic_vacuum_factor']);
+            $rand = Shopware\Components\Random::getInteger(1, $this->_options['automatic_vacuum_factor']);
             if ($rand == 1) {
                 $this->_query('VACUUM');
             }

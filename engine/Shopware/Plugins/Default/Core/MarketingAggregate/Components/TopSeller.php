@@ -28,7 +28,7 @@
  * This components refresh and initials the top seller data
  * in the s_articles_top_seller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -58,7 +58,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     /**
      * Helper function to refresh the top seller data for a single article.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @throws Exception
      */
@@ -103,6 +103,8 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * Initials the top seller data.
      * This function is used from the backend controller when the user
      * want to refresh the top seller data manuel.
+     *
+     * @param null|int $limit
      */
     public function initTopSeller($limit = null)
     {
@@ -148,7 +150,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * Refresh the elapsed top seller data of the s_articles_top_seller table.
      * This function is used
      *
-     * @param $limit int Limit the update count
+     * @param int $limit Limit the update count
      */
     public function updateElapsedTopSeller($limit = null)
     {

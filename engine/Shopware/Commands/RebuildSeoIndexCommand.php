@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,6 +62,11 @@ class RebuildSeoIndexCommand extends ShopwareCommand
     protected $modelManager;
 
     /**
+     * @var ContainerAwareEventManager
+     */
+    protected $events;
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -85,6 +91,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         $this->modelManager = $this->container->get('models');
         $this->seoIndex = $this->container->get('SeoIndex');
         $this->rewriteTable = $this->modules->RewriteTable();
+        $this->events = $this->container->get('events');
 
         $shops = $input->getArgument('shopId');
 
@@ -105,7 +112,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         foreach ($shops as $shopId) {
             $output->writeln('Rebuilding SEO index for shop ' . $shopId);
 
-            /** @var $repository \Shopware\Models\Shop\Repository */
+            /** @var \Shopware\Models\Shop\Repository $repository */
             $repository = $this->modelManager->getRepository(\Shopware\Models\Shop\Shop::class);
             $shop = $repository->getActiveById($shopId);
 
@@ -141,6 +148,14 @@ class RebuildSeoIndexCommand extends ShopwareCommand
             $this->rewriteTable->sCreateRewriteTableBlog();
             $this->rewriteTable->createManufacturerUrls($context);
             $this->rewriteTable->sCreateRewriteTableStatic();
+
+            $this->events->notify(
+                'Shopware_Command_RebuildSeoIndexCommand_CreateRewriteTable',
+                [
+                    'shopContext' => $context,
+                    'cachedTime' => $currentTime,
+                ]
+            );
         }
 
         $output->writeln('The SEO index was rebuild successfully.');

@@ -24,7 +24,9 @@
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\HttpCache\CacheWarmer;
+use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Routing\Context;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
 use Shopware\Models\Plugin\Plugin;
@@ -36,7 +38,7 @@ use Shopware\Models\Shop\Shop;
  */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-    const PHP_RECOMMENDED_VERSION = '7.0.0';
+    const PHP_RECOMMENDED_VERSION = '7.1.0';
     const PHP_MINIMUM_VERSION = '5.6.4';
 
     const PERFORMANCE_VALID = 1;
@@ -169,7 +171,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * General helper method which triggers the prepare...ConfigForSaving methods
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -305,7 +307,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $findBy['form'] = $form;
         }
 
-        /** @var $element Shopware\Models\Config\Element */
+        /** @var Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy($findBy);
 
         // If the element is empty, the given setting does not exists. This might be the case for some plugins
@@ -389,7 +391,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     public function fixCategoriesAction()
     {
         $offset = $this->Request()->getParam('offset', 0);
-        $limit = $this->Request()->getParam('limit', null);
+        $limit = $this->Request()->getParam('limit');
 
         $component = Shopware()->Container()->get('CategoryDenormalization');
 
@@ -427,16 +429,26 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         $shopId = (int) $this->Request()->getParam('shopId', 1);
 
-        /** @var $cacheWarmer CacheWarmer */
-        $cacheWarmer = $this->get('http_cache_warmer');
+        /** @var Context $context */
+        $context = Context::createFromShop(
+            $this->container->get('models')->getRepository(Shop::class)->getById($shopId),
+            $this->container->get('config')
+        );
 
-        $counts = [
-            'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
-            'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
-            'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
-            'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
-            'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId),
-        ];
+        $urlProviderFactory = $this->get('shopware_cache_warmer.url_provider_factory');
+        $providers = $urlProviderFactory->getAllProviders();
+
+        // Count for each provider, if enabled
+        $config = json_decode($this->Request()->getParam('config', '{}'), true);
+        $counts = [];
+        foreach ($providers as $provider) {
+            if ($config[$provider->getName()]) {
+                $counts[$provider->getName()] = (int) $provider->getCount($context);
+            } else {
+                $counts[$provider->getName()] = 0;
+            }
+        }
+        $counts['all'] = array_sum($counts);
 
         $counts = $this->get('events')->filter(
             'Shopware_Controllers_Performance_filterCounts',
@@ -452,50 +464,57 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * Calculates and call every url depending on the shopId and the resource
+     * Calculates and calls every url depending on the shopId and the resource
      */
     public function warmUpCacheAction()
     {
-        $shopId = (int) $this->Request()->getParam('shopId', 1);
-        $limit = (int) $this->Request()->get('limit');
-        $offset = (int) $this->Request()->get('offset');
-        $concurrentRequests = (int) $this->Request()->getParam('concurrent', 1);
-        $resource = $this->Request()->get('resource');
+        /** @var UrlProviderFactoryInterface $urlProviderFactory */
+        $urlProviderFactory = $this->get('shopware_cache_warmer.url_provider_factory');
 
         /** @var CacheWarmer $cacheWarmer */
         $cacheWarmer = $this->get('http_cache_warmer');
 
-        $viewPorts = [];
-        switch ($resource) {
-            case 'article':
-                $viewPorts[] = $cacheWarmer::ARTICLE_PATH;
-                break;
-            case 'category':
-                $viewPorts[] = $cacheWarmer::CATEGORY_PATH;
-                break;
-            case 'blog':
-                $viewPorts[] = $cacheWarmer::BlOG_PATH;
-                break;
-            case 'static':
-                $viewPorts[] = $cacheWarmer::CUSTOM_PATH;
-                $viewPorts[] = $cacheWarmer::EMOTION_LANDING_PAGE_PATH;
-                break;
-            case 'supplier':
-                $viewPorts[] = $cacheWarmer::SUPPLIER_PATH;
-                break;
-            default:
-                $this->View()->assign(['success' => false]);
+        /** @var Context $context */
+        $context = Context::createFromShop(
+            Shopware()->Models()->getRepository(Shop::class)->getById((int) $this->Request()->getParam('shopId', 1)),
+            Shopware()->Config()
+        );
 
-                return;
-        }
+        $limit = (int) $this->Request()->get('limit');
+        $offset = (int) $this->Request()->get('offset');
+        $concurrentRequests = (int) $this->Request()->getParam('concurrent', 1);
 
-        $urls = $cacheWarmer->getSEOUrlByViewPort($viewPorts, $shopId, $limit, $offset);
-        $cacheWarmer->callUrls($urls, $shopId, $concurrentRequests);
+        $resource = $this->Request()->get('resource');
+        $provider = $urlProviderFactory->getProvider($resource);
+
+        $urls = $provider->getUrls($context, $limit, $offset);
+
+        $view = $this->View();
+
+        $this->get('events')->addListener('Shopware_Components_CacheWarmer_ErrorOccured', function () use ($view) {
+            $view->assign('requestFailed', true);
+        });
+
+        $cacheWarmer->warmUpUrls($urls, $context, $concurrentRequests);
 
         $this->View()->assign([
             'success' => true,
             'data' => ['count' => count($urls)],
         ]);
+    }
+
+    /**
+     * Regenerate sitemap cache
+     */
+    public function buildSitemapCacheAction()
+    {
+        $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
+
+        foreach ($shops as $shop) {
+            $this->container->get('shopware_bundle_sitemap.service.sitemap_exporter')->generate($shop);
+        }
+
+        $this->View()->assign('success', true);
     }
 
     protected function initAcl()
@@ -557,9 +576,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     protected function getPerformanceCheckData()
     {
         $descriptionPHPVersion = '';
-        if (version_compare(phpversion(), self::PHP_RECOMMENDED_VERSION, '>=')) {
+        if (version_compare(PHP_VERSION, self::PHP_RECOMMENDED_VERSION, '>=')) {
             $validPHPVersion = self::PERFORMANCE_VALID;
-        } elseif (version_compare(phpversion(), self::PHP_MINIMUM_VERSION, '>=')) {
+        } elseif (version_compare(PHP_VERSION, self::PHP_MINIMUM_VERSION, '>=')) {
             $validPHPVersion = self::PERFORMANCE_WARNING;
             $descriptionPHPVersion = Shopware()->Snippets()->getNamespace('backend/performance/main')
                 ->get('cache/php_version/description_eol');
@@ -583,7 +602,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             [
                 'id' => 4,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/php_version'),
-                'value' => phpversion(),
+                'value' => PHP_VERSION,
                 'valid' => $validPHPVersion,
                 'description' => $descriptionPHPVersion,
             ],
@@ -685,7 +704,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     private function activeHttpCache($httpCache)
     {
-        /** @var $service InstallerService */
+        /** @var InstallerService $service */
         $service = Shopware()->Container()->get('shopware.plugin_manager');
 
         if (!$httpCache->getInstalled()) {
@@ -707,7 +726,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return;
         }
 
-        /** @var $service InstallerService */
+        /** @var InstallerService $service */
         $service = Shopware()->Container()->get('shopware.plugin_manager');
         $service->deactivatePlugin($httpCache);
     }
@@ -715,7 +734,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Get plugin orm-model by name
      *
-     * @param $name
+     * @param string $name
      *
      * @return null|Plugin
      */

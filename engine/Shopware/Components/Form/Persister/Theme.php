@@ -174,7 +174,7 @@ class Theme implements Form\Interfaces\Persister
      */
     private function saveField(Form\Interfaces\Field $field, Template $template, TemplateConfig\Layout $parent)
     {
-        /** @var $field Form\Field */
+        /** @var Form\Field $field */
         $lessCompatible = true;
         if (array_key_exists('lessCompatible', $field->getAttributes())) {
             $attributes = $field->getAttributes();
@@ -195,47 +195,47 @@ class Theme implements Form\Interfaces\Persister
 
         switch ($class) {
             case 'Shopware\\Components\\Form\\Field\\Text':
-                /* @var $field Form\Field\Text */
+                /* @var Form\Field\Text $field */
                 $data += ['type' => 'theme-text-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Boolean':
-                /* @var $field Form\Field\Boolean */
+                /* @var Form\Field\Boolean $field */
                 $data += ['type' => 'theme-checkbox-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Date':
-                /* @var $field Form\Field\Date */
+                /* @var Form\Field\Date $field */
                 $data += ['type' => 'theme-date-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Color':
-                /* @var $field Form\Field\Color */
+                /* @var Form\Field\Color $field */
                 $data += ['type' => 'theme-color-picker'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Media':
-                /* @var $field Form\Field\Media */
+                /* @var Form\Field\Media $field */
                 $data += ['type' => 'theme-media-selection'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Number':
-                /* @var $field Form\Field\Number */
+                /* @var Form\Field\Number $field */
                 $data += ['type' => 'numberfield'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Em':
-                /* @var $field Form\Field\Number */
+                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-em-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Percent':
-                /* @var $field Form\Field\Number */
+                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-percent-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Pixel':
-                /* @var $field Form\Field\Number */
+                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-pixel-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\TextArea':
-                /* @var $field Form\Field\Number */
+                /* @var Form\Field\Number $field */
                 $data += ['type' => 'theme-text-area-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Selection':
-                /* @var $field Form\Field\Selection */
+                /* @var Form\Field\Selection $field */
                 $data += [
                     'type' => 'theme-select-field',
                     'selection' => $field->getStore(),
@@ -263,7 +263,7 @@ class Theme implements Form\Interfaces\Persister
      */
     private function checkExistingElement(PersistentCollection $collection, $name)
     {
-        /** @var $element TemplateConfig\Element */
+        /** @var TemplateConfig\Element $element */
         foreach ($collection as $element) {
             if ($element->getName() == $name) {
                 return $element;
@@ -281,7 +281,7 @@ class Theme implements Form\Interfaces\Persister
      */
     private function checkExistingLayout(PersistentCollection $collection, $name)
     {
-        /** @var $element TemplateConfig\Layout */
+        /** @var TemplateConfig\Layout $element */
         foreach ($collection as $element) {
             if ($element->getName() == $name) {
                 return $element;

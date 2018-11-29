@@ -29,9 +29,12 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ *
+ * NOTICE:  When doing changes on this file, please remember to do those changes in the CheapestPriceESGateway as well!
+ *          Otherwise there could be problems with the ES Indexing
  */
 class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 {
@@ -127,7 +130,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $this->fieldHelper->addVariantTranslation($query, $context);
         $this->fieldHelper->addPriceTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -149,7 +152,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
      *
      * @return array
      */
-    private function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
+    protected function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {

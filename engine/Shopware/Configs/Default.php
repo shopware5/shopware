@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Logger;
+
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
@@ -35,7 +37,14 @@ if (!is_array($customConfig)) {
 
 return array_replace_recursive([
     'custom' => [],
+
+    /*
+     * For more information on working with reverse proxies and trusted headers see
+     * https://symfony.com/doc/current/deployment/proxies.html
+     */
     'trustedproxies' => [],
+    'trustedheaderset' => -1,
+
     'filesystem' => [
         'private' => [
             'type' => 'local',
@@ -47,6 +56,7 @@ return array_replace_recursive([
             'type' => 'local',
             'config' => [
                 'root' => realpath(__DIR__ . '/../../../web/'),
+                'url' => '',
             ],
         ],
     ],
@@ -89,6 +99,7 @@ return array_replace_recursive([
 
                 'bucket' => '',
                 'region' => '',
+                'endpoint' => null,
                 'credentials' => [
                     'key' => '',
                     'secret' => '',
@@ -133,6 +144,8 @@ return array_replace_recursive([
         'write_backlog' => true,
         'number_of_replicas' => null,
         'number_of_shards' => null,
+        'total_fields_limit' => null,
+        'max_result_window' => 10000,
         'wait_for_status' => 'green',
         'batchsize' => 500,
         'backend' => [
@@ -227,8 +240,8 @@ return array_replace_recursive([
     ],
     'bi' => [
         'endpoint' => [
-            'benchmark' => 'https://bi-staging.shopware.com/benchmark',
-            'statistics' => 'https://bi-staging.shopware.com/statistics',
+            'benchmark' => 'https://bi.shopware.com/benchmark',
+            'statistics' => 'https://bi.shopware.com/statistics',
         ],
     ],
     'session' => [
@@ -300,7 +313,6 @@ return array_replace_recursive([
     'web' => [
         'webDir' => $this->DocPath('web'),
         'cacheDir' => $this->DocPath('web_cache'),
-        'sitemapDir' => $this->DocPath('web_sitemap'),
     ],
     'mpdf' => [
         // Passed to \Mpdf\Mpdf::__construct:
@@ -354,6 +366,16 @@ return array_replace_recursive([
                     'BI' => 'verdanaz.ttf',
                 ],
             ],
+            'format' => 'A4',
         ],
+    ],
+    'backward_compatibility' => [
+        /*
+         * @deprecated since 5.5, sorting will be default and this parameter will be removed with Shopware 5.6
+         */
+        'predictable_plugin_order' => false,
+    ],
+    'logger' => [
+        'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
     ],
 ], $customConfig);

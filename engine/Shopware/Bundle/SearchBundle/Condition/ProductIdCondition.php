@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

@@ -72,10 +72,10 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param $value
-     * @param $taxId
-     * @param int $percent
-     * @param string $taxConfig
+     * @param float $value
+     * @param int   $taxId
+     * @param int   $percent
+     *
      * @return string
      */
     protected function createVoucher($value, $taxId, $percent = 1)
@@ -93,7 +93,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
                 'modus' => 0,
                 'numorder' => 1000,
                 'percental' => $percent,
-                'taxconfig' => $taxId
+                'taxconfig' => $taxId,
             ]);
 
         return $code;

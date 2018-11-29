@@ -96,7 +96,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @param $shop
+     * @param Shop $shop
      *
      * @return \Shopware_Components_TemplateMail
      */
@@ -179,12 +179,12 @@ class Shopware_Components_TemplateMail
 
         if (!($mailModel instanceof Mail)) {
             $modelName = $mailModel;
-            /* @var $mailModel Mail */
+            /* @var Mail $mailModel */
             $mailModel = $this->getModelManager()->getRepository(Mail::class)->findOneBy(
                 ['name' => $modelName]
             );
             if (!$mailModel) {
-                throw new \Enlight_Exception("Mail-Template with name '{$modelName}' could not be found.");
+                throw new \Enlight_Exception(sprintf('Mail-Template with name "%s" could not be found.', $modelName));
             }
         }
 
@@ -219,9 +219,15 @@ class Shopware_Components_TemplateMail
                 $defaultContext['theme'] = $theme;
             }
 
-            $isoCode = $this->getShop()->get('isocode');
+            $isoCode = $this->getShop()->getId();
             $translationReader = $this->getTranslationReader();
-            $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+
+            if ($fallback = $this->getShop()->getFallback()) {
+                $translation = $translationReader->readWithFallback($isoCode, $fallback->getId(), 'config_mails', $mailModel->getId());
+            } else {
+                $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+            }
+
             $mailModel->setTranslation($translation);
         } else {
             $defaultContext = [
@@ -286,7 +292,7 @@ class Shopware_Components_TemplateMail
             $mail->setBodyHtml($stringCompiler->compileString($mailModel->getContentHtml()));
         }
 
-        /** @var $attachment \Shopware\Models\Mail\Attachment */
+        /** @var \Shopware\Models\Mail\Attachment $attachment */
         foreach ($mailModel->getAttachments() as $attachment) {
             if ($attachment->getShopId() !== null
                 && ($this->getShop() === null || $attachment->getShopId() !== $this->getShop()->getId())) {

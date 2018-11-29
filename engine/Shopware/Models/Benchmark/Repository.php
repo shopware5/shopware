@@ -25,6 +25,7 @@
 namespace Shopware\Models\Benchmark;
 
 use Doctrine\ORM\EntityRepository;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Repository
@@ -95,6 +96,26 @@ class Repository extends EntityRepository
     }
 
     /**
+     * @return array
+     */
+    public function getShopsWithValidTemplate()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        return $queryBuilder->select([
+                'configs.shop_id as arrayKey',
+                'configs.shop_id as shopId',
+                'shops.name as shopName',
+            ])
+            ->from('s_benchmark_config', 'configs')
+            ->innerJoin('configs', 's_core_shops', 'shops', 'shops.id = configs.shop_id')
+            ->where('configs.last_received > NOW() - INTERVAL 7 DAY')
+            ->andWhere('configs.cached_template IS NOT NULL')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param bool $addShopName
      *
      * @return array
@@ -129,6 +150,60 @@ class Repository extends EntityRepository
     }
 
     /**
+     * Synchronizes benchmark config
+     */
+    public function synchronizeShops()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $shopIds = $queryBuilder->select('id')
+            ->from('s_core_shops', 'shop')
+            ->where('shop.main_id IS NULL')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $configs = $this->findAll();
+
+        $benchmarkShopIds = array_map(function ($config) {
+            return $config->getShopid();
+        }, $configs);
+
+        /** @var BenchmarkConfig $config */
+        foreach ($configs as $config) {
+            if (!in_array($config->getShopId(), $shopIds)) {
+                // Shop does not exist anymore
+                $this->getEntityManager()->remove($config);
+            }
+        }
+
+        foreach ($shopIds as $shopId) {
+            if (!in_array($shopId, $benchmarkShopIds)) {
+                $config = new BenchmarkConfig(Uuid::uuid4());
+                $config->setShopId($shopId);
+                $this->getEntityManager()->persist($config);
+            }
+        }
+
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Only returns valid and active shops.
+     *
+     * @return array
+     */
+    public function getValidShops()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        return $queryBuilder->select('configs.id')
+            ->from('s_benchmark_config', 'configs')
+            ->where('configs.active = 1 AND configs.industry != 0')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
      * @return int
      */
     public function getConfigsCount()
@@ -139,6 +214,101 @@ class Repository extends EntityRepository
             ->from('s_benchmark_config', 'configs')
             ->execute()
             ->fetchColumn();
+    }
+
+    /**
+     * @return BenchmarkConfig|null
+     */
+    public function getNextTransmissionShopConfig()
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $yesterday = new \DateTime('now', new \DateTimeZone('UTC'));
+        $yesterday = $yesterday->modify('-1 day');
+
+        $lastHour = new \DateTime('now', new \DateTimeZone('UTC'));
+        $lastHour = $lastHour->modify('-1 hour');
+
+        return $queryBuilder->select('configs')
+            ->from(BenchmarkConfig::class, 'configs')
+            ->where('configs.lastSent < :yesterday')
+            ->andWhere('configs.active = 1')
+            ->andWhere('configs.industry != 0')
+            ->andWhere('configs.locked IS NULL OR configs.locked < :lastHour')
+            ->setParameter(':yesterday', $yesterday->format('Y-m-d H:i:s'))
+            ->setParameter(':lastHour', $lastHour->format('Y-m-d H:i:s'))
+            ->orderBy('configs.shopId', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @return BenchmarkConfig|null
+     */
+    public function getNextReceivingShopConfig()
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = $now->modify('-1 day');
+
+        return $queryBuilder->select('configs')
+            ->from(BenchmarkConfig::class, 'configs')
+            ->where('configs.lastReceived < :dateNow')
+            ->andWhere('configs.lastSent > configs.lastReceived')
+            ->andWhere('configs.active = 1')
+            ->andWhere('configs.industry != 0')
+            ->andWhere('configs.token IS NOT NULL')
+            ->setParameter(':dateNow', $now->format('Y-m-d H:i:s'))
+            ->orderBy('configs.shopId')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function lockShop($shopId)
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $queryBuilder->update('s_benchmark_config')
+            ->set('locked', ':now')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $shopId)
+            ->setParameter(':now', $now->format('Y-m-d H:i:s'))
+            ->execute();
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function unlockShop($shopId)
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $queryBuilder->update('s_benchmark_config')
+            ->set('locked', 'NULL')
+            ->where('shop_id = :shopId')
+            ->setParameter(':shopId', $shopId)
+            ->execute();
+    }
+
+    /**
+     * @return array
+     */
+    public function getShopIds()
+    {
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        return $queryBuilder->select('configs.shop_id')
+            ->from('s_benchmark_config', 'configs')
+            ->where('configs.industry != 0')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**

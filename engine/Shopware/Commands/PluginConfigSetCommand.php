@@ -32,7 +32,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -119,7 +119,7 @@ class PluginConfigSetCommand extends ShopwareCommand
      * Casts a given string into the proper type.
      * Works only for some types, see return.
      *
-     * @param $value
+     * @param string $value
      *
      * @return bool|int|null|string
      */

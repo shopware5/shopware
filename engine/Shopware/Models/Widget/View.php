@@ -59,7 +59,7 @@ class View extends ModelEntity
      * @var null
      * @ORM\Column(name="auth_id", type="integer", nullable=true)
      */
-    private $authId = null;
+    private $authId;
 
     /**
      * @var int
@@ -72,6 +72,12 @@ class View extends ModelEntity
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
+
+    /**
+     * @var array|null
+     * @ORM\Column(name="data", type="json_array", nullable=true)
+     */
+    private $data;
 
     /**
      * @return int
@@ -143,5 +149,34 @@ class View extends ModelEntity
     public function setPosition($position)
     {
         $this->position = $position;
+    }
+
+    public function getAuthId()
+    {
+        return $this->authId;
+    }
+
+    /**
+     * @param null $authId
+     */
+    public function setAuthId($authId)
+    {
+        $this->authId = $authId;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array|null $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
     }
 }

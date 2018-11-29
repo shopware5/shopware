@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -162,7 +162,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 
         $firstDiscount = $discounts[0];
 
-        /** @var $previous Struct\Product\PriceRule */
+        /** @var Struct\Product\PriceRule $previous */
         $previous = null;
         if ($firstDiscount->getQuantity() > 1) {
             $firstGraduation = clone $reference;
@@ -221,7 +221,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
                 continue;
             }
 
-            /** @var $productPrices Struct\Product\PriceRule[] */
+            /** @var Struct\Product\PriceRule[] $productPrices */
             $productPrices = $priceRules[$key];
 
             foreach ($productPrices as $price) {

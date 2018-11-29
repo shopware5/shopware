@@ -30,7 +30,7 @@ use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 class StatisticsResponseHydrator implements HydratorInterface
 {
     /**
-     * @param array $data
+     * {@inheritdoc}
      *
      * @throws StatisticsHydratingException
      *
@@ -38,14 +38,23 @@ class StatisticsResponseHydrator implements HydratorInterface
      */
     public function hydrate(array $data)
     {
-        if ($data['message'] !== 'Success') {
-            throw new StatisticsHydratingException(sprintf('Expected field "message" to be "success", was "%s"', $data['message']));
+        $messageDataArrayKey = 'message';
+        $messageDataSuccessValue = 'Success';
+        if ($data[$messageDataArrayKey] !== $messageDataSuccessValue) {
+            throw new StatisticsHydratingException(
+                sprintf(
+                    'Expected field "%s" to be "%s", was "%s"',
+                    $messageDataArrayKey,
+                    $messageDataSuccessValue,
+                    $data[$messageDataArrayKey]
+                )
+            );
         }
 
         if (empty($data['responseToken'])) {
-            throw new StatisticsHydratingException('Missing field "token" from server response');
+            throw new StatisticsHydratingException('Missing field "responseToken" from server response');
         }
 
-        return new StatisticsResponse($date = new \DateTime('now'), $data['responseToken']);
+        return new StatisticsResponse($date = new \DateTime('now', new \DateTimeZone('UTC')), $data['responseToken'], false);
     }
 }
