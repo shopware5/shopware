@@ -51,4 +51,12 @@ class TextMappingES5 implements TextMappingInterface
     {
         return ['type' => 'keyword'];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeRawField(): array
+    {
+        return $this->getNotAnalyzedField();
+    }
 }

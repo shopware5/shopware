@@ -43,4 +43,9 @@ interface TextMappingInterface
      * @return array
      */
     public function getKeywordField();
+
+    /**
+     * @return array
+     */
+    public function getAttributeRawField(): array;
 }
