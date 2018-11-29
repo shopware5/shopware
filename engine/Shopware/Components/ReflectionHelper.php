@@ -99,6 +99,12 @@ class ReflectionHelper
     private function verifyClass(\ReflectionClass $class, $docPath, array $directories = [])
     {
         $fileName = $class->getFileName();
+
+		// if shopware is installed via composer and $class is not in vendor dir, change $docPath
+        if (strpos($docPath, '/vendor/') !== false && strpos($fileName, '/vendor/') === false) {
+            $docPath = substr($docPath, 0, strlen('vendor/shopware/shopware/') * -1);
+        }
+        
         $fileDir = substr($fileName, 0, strlen($docPath));
 
         // Trying to execute a class outside of the Shopware DocumentRoot
