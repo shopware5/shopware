@@ -158,18 +158,6 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         };
     },
 
-    getAttributeForm: function() {
-        var me = this;
-
-        me.attributeForm = Ext.create('Shopware.attribute.Form', {
-            table: 's_core_shops_attributes',
-            allowTranslation: false,
-            margin: '20 0 0'
-        });
-
-        return me.attributeForm;
-    },
-
     getItems: function() {
         var me = this;
 
@@ -290,9 +278,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             hidden: true
         },{
             xtype: 'config-shop-page'
-        },
-        me.getAttributeForm()
-        ]
+        }]
     },
 
     loadRecord: function() {
