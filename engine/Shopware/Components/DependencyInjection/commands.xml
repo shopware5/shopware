@@ -130,6 +130,11 @@
             <tag name="console.command" command="sw:refresh:search:index"/>
         </service>
 
+        <service id="shopware.commands.refresh_topseller_command"
+                 class="Shopware\Commands\RefreshTopsellerCommand">
+            <tag name="console.command" command="sw:refresh:topseller"/>
+        </service>
+
         <service id="shopware.commands.session_cleanup_command"
                  class="Shopware\Commands\SessionCleanupCommand">
             <tag name="console.command" command="sw:session:cleanup"/>
