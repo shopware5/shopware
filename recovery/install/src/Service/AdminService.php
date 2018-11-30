@@ -62,7 +62,7 @@ class AdminService
 INSERT INTO s_core_auth
 (roleID,username,password,encoder,localeID,`name`,email,active,lockeduntil)
 VALUES
-(1,?,?,?,?,?,?,1,'0000-00-00 00:00:00');
+(1,?,?,?,?,?,?,1,NOW());
 EOT;
 
         $prepareStatement = $this->connection->prepare($sql);

@@ -1145,7 +1145,11 @@ class ProductFeed extends ModelEntity
 
         if (in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
             $this->fileName = str_replace('.' . $extension, '.invalid', strtolower($this->fileName));
-            Shopware()->Models()->flush($this);
+
+            // To prevent PrePersist event
+            if ($this->id) {
+                Shopware()->Models()->flush($this);
+            }
         }
     }
 }
