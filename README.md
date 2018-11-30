@@ -44,6 +44,7 @@ Visit the forum at <http://forum.shopware.com/>
 -   <a href="http://php.net/manual/en/book.zip.php" target="_blank">zip</a>
 -   <a href="http://php.net/manual/en/book.zlib.php" target="_blank">zlib</a>
 -   <a href="http://php.net/manual/en/ref.pdo-mysql.php" target="_blank">PDO/MySQL</a>
+-   <a href="http://php.net/manual/de/book.fileinfo.php" target="_blank">fileinfo</a>
 
 ### Installation via Git
 
