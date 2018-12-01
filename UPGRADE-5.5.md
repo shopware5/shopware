@@ -44,6 +44,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed default groupKey to get correct subpages of custom pages in mobile menu
 * Changed some mailer options to combo boxes to avoid wrong entries
 * Changed CSV import of snippets to only remove one apostrophe from the beginning of a line 
+* Changed the jQuery swRegister plugin to use the correct input ids for input validation if they were changed by data attributes
 
 ## 5.5.3
 
