@@ -27,7 +27,7 @@ use Shopware\Models\Analytics\Repository;
 /**
  * Statistics controller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -68,7 +68,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function preDispatch()
     {
         if ($this->Request()->has('format')) {
-            $this->format = $this->Request()->getParam('format', null);
+            $this->format = $this->Request()->getParam('format');
 
             //remove limit parameter to export all data.
             $this->Request()->setParam('limit', null);
@@ -365,7 +365,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getPartnerRevenue(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -402,7 +402,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getVisitedReferrer(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -431,7 +431,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductSales(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -670,7 +670,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductAmountPerManufacturer(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -702,7 +702,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getSearchTerms(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -724,7 +724,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getVisitorImpressions(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -746,7 +746,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductImpressions(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -804,7 +804,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getReferrerUrls(
             $selectedReferrer,
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null)
+            $this->Request()->getParam('limit')
         );
 
         $this->View()->assign([
@@ -1000,7 +1000,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
-
 
     private function getCsvFileName()
     {

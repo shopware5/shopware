@@ -4,6 +4,8 @@ echo "COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}"
 
 cp dev-ops/docker/docker-compose.override.yml .
 
+sh dev-ops/docker/actions/.copy_mysql-config.sh "__MYSQL_VERSION__"
+
 docker-compose build && docker-compose up -d
 wait
 

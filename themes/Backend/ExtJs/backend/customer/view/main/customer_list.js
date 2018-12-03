@@ -72,6 +72,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
                 lastname: { header: '{s name="column/last_name"}{/s}' },
                 zipcode: { header: '{s name="zip_code"}{/s}' },
                 city: { header: '{s name="city"}{/s}' },
+                countryName: { header: '{s name="column/country"}{/s}' },
                 firstLogin: { header: '{s name="first_login"}{/s}', renderer: this.dateRenderer },
                 lastLogin: { header: '{s name="lastLogin"}{/s}', renderer: this.dateRenderer },
                 accountMode: { header: '{s name="column/accountMode"}{/s}', renderer: this.accountModeRenderer },

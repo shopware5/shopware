@@ -38,7 +38,7 @@
  */
 function smarty_function_controllerName($params, Enlight_Template_Default $template)
 {
-    /** @var $front Enlight_Controller_Front */
+    /** @var Enlight_Controller_Front $front */
     $front = Shopware()->Front();
     $request = $front->Request();
 

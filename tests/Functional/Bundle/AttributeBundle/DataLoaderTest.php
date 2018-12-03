@@ -82,7 +82,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getForeignKeyData
      *
-     * @param $input
+     * @param string $input
      */
     public function testLoadForeignKeyValidation($input)
     {
@@ -128,7 +128,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getForeignKeyData
      *
-     * @param $input
+     * @param string $input
      */
     public function testLoadTranslationsForeignKeyValidation($input)
     {

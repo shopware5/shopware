@@ -30,7 +30,7 @@ use Shopware\Components\CSRFGetProtectionAware;
 use Shopware\Models\Customer\Address;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -515,8 +515,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Add an article to cart directly from cart / confirm view
      *
-     * @param sAdd = ordernumber
-     * @param sQuantity = quantity
+     * request param "sAdd" = ordernumber
+     * request param "sQuantity" = quantity
      *
      * @throws LogicException
      */
@@ -527,18 +527,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         $ordernumber = trim($this->Request()->getParam('sAdd'));
-        $quantity = $this->Request()->getParam('sQuantity');
-        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
+        $quantity = (int) $this->Request()->getParam('sQuantity');
+        $productId = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
 
         $this->View()->sBasketInfo = $this->getInstockInfo($ordernumber, $quantity);
 
-        if (!empty($articleID)) {
-            $insertID = $this->basket->sAddArticle($ordernumber, $quantity);
+        if (!empty($productId)) {
+            $insertId = $this->basket->sAddArticle($ordernumber, $quantity);
             $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
-            if (!empty($insertID)) {
+            if (!empty($insertId)) {
                 $basket = $this->getBasket();
                 foreach ($basket['content'] as $item) {
-                    if ($item['id'] == $insertID) {
+                    if ($item['id'] == $insertId) {
                         $this->View()->sArticle = $item;
                         break;
                     }
@@ -546,11 +546,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             }
 
             if (Shopware()->Config()->get('similarViewedShow', true)) {
-                $this->View()->sCrossSimilarShown = $this->getSimilarShown($articleID);
+                $this->View()->sCrossSimilarShown = $this->getSimilarShown($productId);
             }
 
             if (Shopware()->Config()->get('alsoBoughtShow', true)) {
-                $this->View()->sCrossBoughtToo = $this->getBoughtToo($articleID);
+                $this->View()->sCrossBoughtToo = $this->getBoughtToo($productId);
             }
         }
 
@@ -568,8 +568,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Add more then one article directly from cart / confirm view
      *
-     * @param sAddAccessories = List of article order numbers separated by ;
-     * @param sAddAccessoriesQuantity = List of article quantities separated by ;
+     * request param "sAddAccessories" = List of article order numbers separated by ;
+     * request param "sAddAccessoriesQuantity" = List of article quantities separated by ;
      */
     public function addAccessoriesAction()
     {
@@ -584,7 +584,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Delete an article from cart -
      *
-     * @param sDelete = id from s_basket identifying the product to delete
+     * request param "sDelete" = id from s_basket identifying the product to delete
      * Forward to cart / confirmation page after success
      */
     public function deleteArticleAction()
@@ -598,14 +598,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Change quantity of a certain product
      *
-     * @param sArticle = The article to update
-     * @param sQuantity = new quantity
+     * request param "sArticle" = The article to update
+     * request param "sQuantity" = new quantity
      * Forward to cart / confirm view after success
      */
     public function changeQuantityAction()
     {
         if ($this->Request()->getParam('sArticle') && $this->Request()->getParam('sQuantity')) {
-            $this->View()->sBasketInfo = $this->basket->sUpdateArticle($this->Request()->getParam('sArticle'), $this->Request()->getParam('sQuantity'));
+            $this->View()->sBasketInfo = $this->basket->sUpdateArticle((int) $this->Request()->getParam('sArticle'), (int) $this->Request()->getParam('sQuantity'));
         }
         $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'index')]);
     }
@@ -630,7 +630,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Add premium / bonus article to cart
      *
-     * @param sAddPremium - ordernumber of bonus article (defined in s_articles_premiums)
+     * request param "sAddPremium" - ordernumber of bonus article (defined in s_articles_premiums)
      * Return to cart / confirm page on success
      */
     public function addPremiumAction()
@@ -964,7 +964,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * Get current stock from a certain product defined by $ordernumber
      * Support for multidimensional variants
      *
-     * @param unknown_type $ordernumber
+     * @param string $ordernumber
      *
      * @return array with article id / current basket quantity / instock / laststock
      */
@@ -1144,6 +1144,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 $resultVoucherTaxMode = Shopware()->Db()->fetchOne(
                     'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?
                 ', [$item['ordernumber']]);
+
+                $tax = null;
+
                 // Old behaviour
                 if (empty($resultVoucherTaxMode) || $resultVoucherTaxMode === 'default') {
                     $tax = Shopware()->Config()->get('sVOUCHERTAX');
@@ -1406,10 +1409,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Get selected payment or do payment mean selection automatically
      *
-     * @return array
+     * @return array|bool
      */
     public function getSelectedPayment()
     {
+        $payment = null;
         $paymentMethods = $this->getPayments();
 
         if (!empty($this->View()->sUserData['additional']['payment'])) {
@@ -1487,8 +1491,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Set the provided dispatch method
      *
-     * @param $dispatchId $dispatchId ID of the dispatch method to set
-     * @param int|null $paymentId Payment id to validate
+     * @param int      $dispatchId $dispatchId ID of the dispatch method to set
+     * @param int|null $paymentId  Payment id to validate
      *
      * @return int set dispatch method id
      */
@@ -1679,10 +1683,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * @param $basket
+     * @param array   $basket
      * @param Request $request
-     *
-     * @throws Exception
      *
      * @return array
      */
@@ -1895,8 +1897,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     private function saveDefaultAddresses()
     {
-        $billingId = $this->session->offsetGet('checkoutBillingAddressId', false);
-        $shippingId = $this->session->offsetGet('checkoutShippingAddressId', false);
+        $billingId = $this->session->offsetGet('checkoutBillingAddressId');
+        $shippingId = $this->session->offsetGet('checkoutShippingAddressId');
         $setBoth = $this->Request()->getPost('setAsDefaultAddress', false);
 
         if (!$this->Request()->getPost('setAsDefaultBillingAddress') && !$setBoth) {
@@ -1942,7 +1944,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $address = $this->get('models')->find(Address::class, $addressId);
 
-        if ($address && $isShippingAddress && !$address->getCountry()->getAllowShipping()) {
+        $context = $this->get('shopware_storefront.context_service')->getContext();
+        $country = $this->get('shopware_storefront.country_gateway')->getCountry($address->getCountry()->getId(), $context);
+
+        if ($address && $isShippingAddress && !$country->allowShipping()) {
             $this->View()->assign('invalidShippingCountry', true);
 
             return false;
@@ -2029,7 +2034,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $shopModel = $this->get('shop');
         $shopModel->setCurrency($currencyModel);
 
-        /** @var $currency \Zend_Currency */
+        /** @var \Zend_Currency $currency */
         $currency = $this->get('Currency');
         $currency->setFormat($currencyModel->toArray());
 

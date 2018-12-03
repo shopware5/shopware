@@ -49,9 +49,9 @@ class Queue
     protected $backupResource;
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $filter Filter
-     * @param $backup Backup
+     * @param DqlHelper $dqlHelper
+     * @param Filter    $filter
+     * @param Backup    $backup
      */
     public function __construct(
         DqlHelper $dqlHelper,
@@ -90,8 +90,8 @@ class Queue
     /**
      * Pops a number of entries from the queue
      *
-     * @param $queueId
-     * @param $number
+     * @param int $queueId
+     * @param int $number
      *
      * @return mixed
      */

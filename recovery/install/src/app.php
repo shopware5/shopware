@@ -240,7 +240,7 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $menuHelper->setCurrent('requirements');
 
     // Check system requirements
-    /** @var $shopwareSystemCheck Requirements */
+    /** @var Requirements $shopwareSystemCheck */
     $shopwareSystemCheck = $container->offsetGet('install.requirements');
     $systemCheckResults = $shopwareSystemCheck->toArray();
 
@@ -249,7 +249,7 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $app->view()->setData('systemError', (bool) $systemCheckResults['hasErrors']);
 
     // Check file & directory permissions
-    /** @var $shopwareSystemCheckPath RequirementsPath */
+    /** @var RequirementsPath $shopwareSystemCheckPath */
     $shopwareSystemCheckPath = $container->offsetGet('install.requirementsPath');
     $shopwareSystemCheckPathResult = $shopwareSystemCheckPath->check();
 

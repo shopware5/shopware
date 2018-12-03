@@ -25,7 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,7 +56,7 @@ class Download
     }
 
     /**
-     * @param $callback
+     * @param callable $callback
      *
      * @throws \Exception
      */
@@ -116,7 +116,7 @@ class Download
             return 0;
         }
 
-        $range = $size . '-' . $totalSize;
+        $range = $size . '-' . ($totalSize - 1);
 
         if (!function_exists('curl_init')) {
             throw new \Exception('PHP Extension "curl" is required to download a file');

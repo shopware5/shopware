@@ -182,7 +182,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     protected function upgradeShop($request, $response)
     {
-        /** @var $shop DetachedShop */
+        /** @var DetachedShop $shop */
         $shop = $this->get('Shop');
 
         $cookieKey = null;
@@ -212,7 +212,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         if ($cookieKey === 'shop' && $this->shouldRedirect($request, $shop)) {
-            /** @var $repository Shopware\Models\Shop\Repository */
+            /** @var Shopware\Models\Shop\Repository $repository */
             $repository = $this->get('models')->getRepository(Shop::class);
 
             $newShop = $repository->getActiveById($cookieValue);
@@ -444,7 +444,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $requestUri = substr($requestUri, 0, $pos);
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
+        /** @var Shopware\Models\Shop\Repository $repository */
         $repository = $this->get('models')->getRepository(Shop::class);
         $requestShop = $repository->getActiveShopByRequestAsArray($request);
 

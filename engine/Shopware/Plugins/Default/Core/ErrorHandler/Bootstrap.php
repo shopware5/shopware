@@ -30,7 +30,7 @@ use Shopware\Components\Logger;
 /**
  * Shopware Error Handler
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -106,7 +106,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getOs()
     {
-        return php_uname('s');
+        return PHP_OS ?: '';
     }
 
     /**
@@ -114,7 +114,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getArch()
     {
-        return php_uname('m');
+        return php_uname('m') ?: '';
     }
 
     /**
@@ -122,7 +122,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getDist()
     {
-        return php_uname('r');
+        return php_uname('r') ?: '';
     }
 
     /**
@@ -138,7 +138,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getPhpVersion()
     {
-        return phpversion();
+        return PHP_VERSION;
     }
 
     /**

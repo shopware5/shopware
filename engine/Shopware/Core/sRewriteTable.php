@@ -33,7 +33,7 @@ use Shopware\Models\Article\Supplier;
 /**
  * Deprecated Shopware Class that handles url rewrites
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -533,7 +533,7 @@ class sRewriteTable
             $blogCategoryIds[] = $blogCategory['id'];
         }
 
-        /** @var $repository \Shopware\Models\Blog\Repository */
+        /** @var \Shopware\Models\Blog\Repository $repository */
         $blogArticlesQuery = $this->modelManager->getRepository(\Shopware\Models\Blog\Blog::class)
             ->getListQuery($blogCategoryIds, $offset, $limit);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -590,7 +590,7 @@ class sRewriteTable
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
-        /** @var $repo \Shopware\Models\Emotion\Repository */
+        /** @var \Shopware\Models\Emotion\Repository $repo */
         $repo = $this->modelManager->getRepository(\Shopware\Models\Emotion\Emotion::class);
         $queryBuilder = $repo->getListQueryBuilder();
 
@@ -773,7 +773,7 @@ class sRewriteTable
     public function sCategoryPath($categoryId)
     {
         $parts = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
-            ->getPathById($categoryId, 'name');
+            ->getPathById($categoryId);
         $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
         $parts = array_slice($parts, $level);
 

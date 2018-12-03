@@ -30,7 +30,7 @@ use Monolog\Logger;
 /**
  * Serializes a log message according to Wildfire's header requirements
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -155,7 +155,7 @@ class WildfireFormatter extends BaseWildfireFormatter
     /**
      * Encodes a trace by encoding all "args" with encodeObject()
      *
-     * @param $trace
+     * @param null|array $trace
      *
      * @return array The encoded trace
      */
@@ -258,13 +258,13 @@ class WildfireFormatter extends BaseWildfireFormatter
                         ))
                 ) {
                     if (array_key_exists($raw_name, $members) && !$property->isStatic()) {
-                        $return[$name] = $this->encodeObject($members[$raw_name], $objectDepth + 1, 1);
+                        $return[$name] = $this->encodeObject($members[$raw_name], $objectDepth + 1);
                     } else {
                         if (method_exists($property, 'setAccessible')) {
                             $property->setAccessible(true);
-                            $return[$name] = $this->encodeObject($property->getValue($object), $objectDepth + 1, 1);
+                            $return[$name] = $this->encodeObject($property->getValue($object), $objectDepth + 1);
                         } elseif ($property->isPublic()) {
-                            $return[$name] = $this->encodeObject($property->getValue($object), $objectDepth + 1, 1);
+                            $return[$name] = $this->encodeObject($property->getValue($object), $objectDepth + 1);
                         } else {
                             $return[$name] = '** Need PHP 5.3 to get value **';
                         }
@@ -291,7 +291,7 @@ class WildfireFormatter extends BaseWildfireFormatter
                                     $this->objectFilters[$class]
                             ))
                     ) {
-                        $return[$name] = $this->encodeObject($value, $objectDepth + 1, 1);
+                        $return[$name] = $this->encodeObject($value, $objectDepth + 1);
                     } else {
                         $return[$name] = '** Excluded by Filter **';
                     }

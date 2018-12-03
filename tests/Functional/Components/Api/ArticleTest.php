@@ -28,9 +28,10 @@ use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
 use Shopware\Models\Article\Image;
+use Shopware\Models\Category\Category;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -1374,11 +1375,11 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var \Shopware\Models\Article\Article $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getName(), 'Turnschuhe', "Article name don't match");
 
-        /** @var $variant \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $variant */
         foreach ($updated->getDetails() as $variant) {
             $this->assertTrue(
                 in_array(
@@ -1390,7 +1391,7 @@ class ArticleTest extends TestCase
 
             $this->assertCount(2, $variant->getConfiguratorOptions(), 'Configurator option count dont match');
 
-            /** @var $option \Shopware\Models\Article\Configurator\Option */
+            /** @var \Shopware\Models\Article\Configurator\Option $option */
             foreach ($variant->getConfiguratorOptions() as $option) {
                 $this->assertTrue(in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
             }
@@ -1522,11 +1523,11 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var \Shopware\Models\Article\Article $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getName(), 'Turnschuhe', "Article name doesn't match");
 
-        /** @var $variant \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $variant */
         foreach ($updated->getDetails() as $variant) {
             $this->assertTrue(
                 in_array(
@@ -1536,7 +1537,7 @@ class ArticleTest extends TestCase
                 )
             );
 
-            /** @var $option \Shopware\Models\Article\Configurator\Option */
+            /** @var \Shopware\Models\Article\Configurator\Option $option */
             foreach ($variant->getConfiguratorOptions() as $option) {
                 $this->assertTrue(in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
 
@@ -1687,7 +1688,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var \Shopware\Models\Article\Article $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getConfiguratorSet()->getType(), 2, "ConfiguratorSet.Type doesn't match");
 
@@ -1804,7 +1805,7 @@ class ArticleTest extends TestCase
 
         $mainFlagExists = false;
 
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $image */
         foreach ($article->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $mainFlagExists = true;
@@ -1895,7 +1896,7 @@ class ArticleTest extends TestCase
         $this->assertCount(4, $article->getImages());
 
         $hasMain = false;
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $image */
         foreach ($article->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
@@ -2069,7 +2070,7 @@ class ArticleTest extends TestCase
         $data['images'] = $images;
         $article = $this->resource->create($data);
 
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $image */
         foreach ($article->getImages() as $image) {
             $this->assertInstanceOf('\Shopware\Models\Attribute\ArticleImage', $image->getAttribute());
             $this->assertEquals('attr1', $image->getAttribute()->getAttribute1());
@@ -2189,9 +2190,9 @@ class ArticleTest extends TestCase
             Resource::HYDRATE_OBJECT
         );
         $article = $this->resource->create($data);
-        /** @var \$article Shopware\Models\Article\Article */
+        /** @var Shopware\Models\Article\Article $article */
         $article = $this->resource->update($article->getId(), $update);
-        /** @var $value \Shopware\Models\Property\Value */
+        /** @var \Shopware\Models\Property\Value $value */
         foreach ($article->getPropertyValues() as $value) {
             $this->assertTrue(in_array($value->getId(), $valueIds));
             $this->assertTrue(in_array($value->getOption()->getId(), $optionIds));
@@ -2251,7 +2252,7 @@ class ArticleTest extends TestCase
             Resource::HYDRATE_OBJECT
         );
         $article = $this->resource->create($data);
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var \Shopware\Models\Article\Article $article */
         $article = $this->resource->update($article->getId(), $update);
 
         $articleId = $article->getId();
@@ -2314,11 +2315,11 @@ class ArticleTest extends TestCase
 
         $article = $this->resource->create($create);
 
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $image */
         foreach ($article->getImages() as $image) {
             $this->assertCount(1, $image->getMappings());
 
-            /** @var $mapping \Shopware\Models\Article\Image\Mapping */
+            /** @var \Shopware\Models\Article\Image\Mapping $mapping */
             foreach ($image->getMappings() as $mapping) {
                 $this->assertCount(1, $mapping->getRules());
             }
@@ -2328,7 +2329,7 @@ class ArticleTest extends TestCase
 
         $article = $this->resource->getOne($article->getId());
 
-        /** @var $variant \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $variant */
         foreach ($article->getDetails() as $variant) {
             foreach ($variant->getConfiguratorOptions() as $option) {
                 if ($option->getName() == $usedOption[0]['name']) {
@@ -2402,7 +2403,7 @@ class ArticleTest extends TestCase
 
         $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
 
-        /** @var $price \Shopware\Models\Article\Price */
+        /** @var \Shopware\Models\Article\Price $price */
         $price = $article->getMainDetail()->getPrices()->first();
 
         $this->assertEquals(
@@ -2511,7 +2512,7 @@ class ArticleTest extends TestCase
 
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var \Shopware\Models\Article\Article $article */
         $article = $this->resource->getOne($article->getId());
 
         $this->assertCount(2, $article->getSeoCategories());
@@ -2530,7 +2531,7 @@ class ArticleTest extends TestCase
 
         $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
 
-        /** @var $price \Shopware\Models\Article\Price */
+        /** @var \Shopware\Models\Article\Price $price */
         $price = $article->getMainDetail()->getPrices()->first();
 
         $net = 400 / (($article->getTax()->getTax() + 100) / 100);
@@ -2592,6 +2593,7 @@ class ArticleTest extends TestCase
         );
         $ids = array_map(
             function ($category) {
+                /* @var Category $category */
                 return $category->getId();
             },
             $article->getCategories()->toArray()
@@ -3098,8 +3100,7 @@ class ArticleTest extends TestCase
                 'option' => $combination['option'],
                 'groupId' => $combination['groupId'],
             ];
-            unset($combination['groupId']);
-            unset($combination['option']);
+            unset($combination['groupId'], $combination['option']);
         }
 
         return $combinations;
@@ -3140,15 +3141,15 @@ class ArticleTest extends TestCase
 
     protected function internalTestReplaceMode($entity, $arrayKey, $replace = true)
     {
-        //create keys for getter function and the __options parameter in the update and create
-        //example => "__options_categories"  /  "getCategories"
+        // Create keys for getter function and the __options parameter in the update and create
+        // Example => "__options_categories"  /  "getCategories"
         $replaceKey = '__options_' . $arrayKey;
         $getter = 'get' . ucfirst($arrayKey);
 
-        //returns a simple article data set to create an article with a simple main detail
+        // Returns a simple article data set to create an article with a simple main detail
         $data = $this->getSimpleTestData();
 
-        //get an offset of 10 entities for the current entity type, like 10x categories
+        // Get an offset of 10 entities for the current entity type, like 10x categories
         $createdEntities = $this->getEntityOffset($entity);
         $data[$arrayKey] = $createdEntities;
 

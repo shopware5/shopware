@@ -181,7 +181,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $creation
+     * @param string $creation
      */
     public function setCreation($creation)
     {
@@ -197,7 +197,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $expiration
+     * @param \DateTimeInterface $expiration
      */
     public function setExpiration($expiration)
     {
@@ -293,7 +293,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $plugin
+     * @param Plugin $plugin
      */
     public function setPlugin($plugin)
     {

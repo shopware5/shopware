@@ -39,7 +39,7 @@ class Filter
     protected $dqlHelper;
 
     /**
-     * @param $dqlHelper
+     * @param DqlHelper $dqlHelper
      */
     public function __construct($dqlHelper)
     {
@@ -57,7 +57,7 @@ class Filter
     /**
      * Returns a string representation of a given filterArray
      *
-     * @param $filterArray
+     * @param array $filterArray
      *
      * @return string
      */
@@ -71,10 +71,10 @@ class Filter
     /**
      * Builds the actual query for the token list
      *
-     * @param $tokens
-     * @param $offset
-     * @param $limit
-     * @param $orderBy
+     * @param array      $tokens
+     * @param null|int   $offset
+     * @param null|int   $limit
+     * @param null|array $orderBy
      *
      * @return \Doctrine\ORM\Query
      */
@@ -94,14 +94,15 @@ class Filter
     /**
      * Returns the basic filter query builder, with all the rules (tokens) applied
      *
-     * @param $tokens
-     * @param $orderBy
+     * @param array $tokens
+     * @param array $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getFilterQueryBuilder($tokens, $orderBy)
     {
         $joinEntities = $this->getDqlHelper()->getJoinColumns($tokens);
+        $orderByInfo = null;
 
         if (isset($orderBy['property'])) {
             $orderByInfo = $this->getDqlHelper()->getColumnInfoByAlias($orderBy['property']);
@@ -144,7 +145,7 @@ class Filter
     /**
      * Query builder to select a product with its dependencies
      *
-     * @param $detailId
+     * @param int $detailId
      *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
@@ -164,7 +165,7 @@ class Filter
     }
 
     /**
-     * @param $query \Doctrine\ORM\Query
+     * @param \Doctrine\ORM\Query $query
      *
      * @return array
      */
@@ -190,10 +191,10 @@ class Filter
     /**
      * Will return products which match a given filter (tokens)
      *
-     * @param $tokens
-     * @param $offset
-     * @param $limit
-     * @param $orderBy
+     * @param array $tokens
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $orderBy
      *
      * @return array
      */
@@ -222,7 +223,7 @@ class Filter
     }
 
     /**
-     * @param $joinEntities
+     * @param array $joinEntities
      *
      * @return array
      */
@@ -232,7 +233,7 @@ class Filter
         $joinEntities = array_filter(
             $joinEntities,
             function ($item) {
-                return $item != 'Shopware\Models\Article\Article' && $item != 'Shopware\Models\Article\Detail';
+                return $item !== 'Shopware\Models\Article\Article' && $item !== 'Shopware\Models\Article\Detail';
             }
         );
 

@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_View
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -28,75 +29,17 @@
  * If you want to implement your own view class then you have to implement this interface.
  *
  * @category   Enlight
- * @package    Enlight_View
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 abstract class Enlight_View
 {
     /**
-     * Sets the template path list.
-     *
-     * @param   string|array $path
-     * @return  Enlight_View
-     */
-    abstract public function setTemplateDir($path);
-
-    /**
-     * Adds a path to the template list.
-     *
-     * @param   string|array $path
-     * @return  Enlight_View
-     */
-    abstract public function addTemplateDir($path);
-
-    /**
-     * Checks if a template is stored.
-     *
-     * @return  bool
-     */
-    abstract public function hasTemplate();
-
-    /**
-     * Assigns a specified value to the template.
-     *
-     * @param   string $spec
-     * @param   mixed $value
-     * @param   bool $nocache
-     * @param   int $scope
-     * @return  Enlight_View
-     */
-    abstract public function assign($spec, $value = null, $nocache = false, $scope = null);
-
-    /**
-     * Resets a specified value or all values.
-     *
-     * @param   string $spec
-     * @return  Enlight_View
-     */
-    abstract public function clearAssign($spec = null);
-
-    /**
-     * Returns a specified value or all values.
-     *
-     * @param   string|null $spec
-     * @return  mixed|array
-     */
-    abstract public function getAssign($spec = null);
-
-    /**
-     * Renders the current template.
-     *
-     * @return  string
-     */
-    abstract public function render();
-
-    /**
      * Magic setter
      *
-     * @param   $name
-     * @param   mixed $value
-     * @return  void
+     * @param       $name
+     * @param mixed $value
      */
     public function __set($name, $value = null)
     {
@@ -106,7 +49,8 @@ abstract class Enlight_View
     /**
      * Magic getter
      *
-     * @param $name
+     * @param string $name
+     *
      * @return array|mixed
      */
     public function __get($name)
@@ -117,22 +61,84 @@ abstract class Enlight_View
     /**
      * Magic isset
      *
-     * @param   string $name
+     * @param string $name
+     *
      * @return bool
      */
     public function __isset($name)
     {
-        return ($this->getAssign($name) !== null);
+        return $this->getAssign($name) !== null;
     }
 
     /**
      * Magic unset
      *
-     * @param $name
-     * @return void
+     * @param string $name
      */
     public function __unset($name)
     {
         $this->clearAssign($name);
     }
+
+    /**
+     * Sets the template path list.
+     *
+     * @param string|array $path
+     *
+     * @return Enlight_View
+     */
+    abstract public function setTemplateDir($path);
+
+    /**
+     * Adds a path to the template list.
+     *
+     * @param string|array $path
+     *
+     * @return Enlight_View
+     */
+    abstract public function addTemplateDir($path);
+
+    /**
+     * Checks if a template is stored.
+     *
+     * @return bool
+     */
+    abstract public function hasTemplate();
+
+    /**
+     * Assigns a specified value to the template.
+     *
+     * @param string $spec
+     * @param mixed  $value
+     * @param bool   $nocache
+     * @param int    $scope
+     *
+     * @return Enlight_View
+     */
+    abstract public function assign($spec, $value = null, $nocache = false, $scope = null);
+
+    /**
+     * Resets a specified value or all values.
+     *
+     * @param string $spec
+     *
+     * @return Enlight_View
+     */
+    abstract public function clearAssign($spec = null);
+
+    /**
+     * Returns a specified value or all values.
+     *
+     * @param string|null $spec
+     *
+     * @return mixed|array
+     */
+    abstract public function getAssign($spec = null);
+
+    /**
+     * Renders the current template.
+     *
+     * @return string
+     */
+    abstract public function render();
 }

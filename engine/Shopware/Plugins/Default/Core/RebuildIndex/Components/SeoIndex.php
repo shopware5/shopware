@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -116,13 +116,13 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Register a shop in order to be able to use the sRewriteTable core class
      *
-     * @param $shopId
+     * @param int $shopId
      *
      * @return \Shopware\Models\Shop\Shop
      */
     public function registerShop($shopId)
     {
-        /** @var $repository \Shopware\Models\Shop\Repository */
+        /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $shop = $repository->getById($shopId);
@@ -250,7 +250,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countEmotions()
     {
-        /** @var $repo \Shopware\Models\Emotion\Repository */
+        /** @var \Shopware\Models\Emotion\Repository $repo */
         $repo = Shopware()->Models()->getRepository(\Shopware\Models\Emotion\Emotion::class);
         $builder = $repo->getListingQuery();
 
@@ -296,7 +296,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     /**
      * Count Static routes
      *
-     * @param $shopId
+     * @param int $shopId
      *
      * @return int
      */

@@ -25,7 +25,7 @@
 /**
  * Shopware System Plugin
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -71,7 +71,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
+        /** @var Shopware_Plugins_Frontend_Statistics_Bootstrap $plugin */
         $plugin = Shopware()->Plugins()->Frontend()->Statistics();
         if ($plugin->checkIsBot($args->getRequest()->getHeader('USER_AGENT'))) {
             Enlight_Components_Session::destroy(true, false);
@@ -103,7 +103,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $system->_SESSION = Shopware()->Session();
             $system->sSESSION_ID = Shopware()->Session()->get('sessionId');
             if ($request !== null && Shopware()->Session()->Bot === null) {
-                /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
+                /** @var Shopware_Plugins_Frontend_Statistics_Bootstrap $plugin */
                 $plugin = Shopware()->Plugins()->Frontend()->Statistics();
                 Shopware()->Session()->Bot = $plugin->checkIsBot($request->getHeader('USER_AGENT'));
             }

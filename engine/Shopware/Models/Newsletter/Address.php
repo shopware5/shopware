@@ -58,6 +58,7 @@ class Address extends LazyFetchModelEntity
      * @var \Shopware\Models\Newsletter\Group
      */
     protected $newsletterGroup;
+
     /**
      * Autoincrement ID
      *
@@ -188,19 +189,39 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param int $lastMailingId
+     * @param int $lastNewsletterId
      */
-    public function setLastMailingId($lastMailingId)
+    public function setLastNewsletterId($lastNewsletterId)
     {
-        $this->lastMailingId = $lastMailingId;
+        $this->lastNewsletterId = $lastNewsletterId;
     }
 
     /**
      * @return int
      */
+    public function getLastNewsletterId()
+    {
+        return $this->lastNewsletterId;
+    }
+
+    /**
+     * @deprecated Use `setLastNewsletterId()` instead
+     *
+     * @param int $lastMailingId
+     */
+    public function setLastMailingId($lastMailingId)
+    {
+        $this->lastNewsletterId = $lastMailingId;
+    }
+
+    /**
+     * @deprecated Use `getLastNewsletterId()` instead
+     *
+     * @return int
+     */
     public function getLastMailingId()
     {
-        return $this->lastMailingId;
+        return $this->lastNewsletterId;
     }
 
     /**

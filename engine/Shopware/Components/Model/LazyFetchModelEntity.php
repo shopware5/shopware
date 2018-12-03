@@ -41,7 +41,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
     }
 
     /**
-     * @param $object
+     * @param object $object
      *
      * @return bool
      */
@@ -51,7 +51,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
     }
 
     /**
-     * @param $object
+     * @param object        $object
      * @param array         $condition
      * @param EntityManager $em
      *

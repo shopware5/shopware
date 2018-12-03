@@ -128,7 +128,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set priceGroup
      *
-     * @param $customerGroup
+     * @param \Shopware\Models\Customer\Group $customerGroup
      *
      * @return \Shopware\Models\Article\Configurator\Template\Price
      */
@@ -152,7 +152,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set from
      *
-     * @param $from
+     * @param int $from
      *
      * @return \Shopware\Models\Article\Configurator\Template\Price
      */
@@ -176,7 +176,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param $to
+     * @param int|string $to
      *
      * @return \Shopware\Models\Article\Configurator\Template\Price
      */
@@ -203,7 +203,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set price
      *
-     * @param $price
+     * @param float $price
      *
      * @return \Shopware\Models\Article\Configurator\Template\Price
      */
@@ -227,7 +227,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set pseudoPrice
      *
-     * @param $pseudoPrice
+     * @param float $pseudoPrice
      *
      * @return \Shopware\Models\Article\Configurator\Template\Price
      */

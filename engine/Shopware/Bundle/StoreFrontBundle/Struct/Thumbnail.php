@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -54,8 +54,8 @@ class Thumbnail extends Extendable
     /**
      * @param string      $source
      * @param string|null $retinaSource
-     * @param $maxWidth
-     * @param $maxHeight
+     * @param int         $maxWidth
+     * @param int         $maxHeight
      */
     public function __construct($source, $retinaSource, $maxWidth, $maxHeight)
     {

@@ -45,7 +45,7 @@ class ConsoleProgressHelper implements ProgressHelperInterface
     private $count;
 
     /**
-     * @var
+     * @var int
      */
     private $current;
 

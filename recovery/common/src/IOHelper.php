@@ -32,7 +32,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -121,7 +121,7 @@ class IOHelper
     /**
      * Write a message to STDOUT without trailing newline
      *
-     * @param $message
+     * @param string $message
      */
     public function write($message)
     {
@@ -131,7 +131,7 @@ class IOHelper
     /**
      * Write a message to STDOUT with trailing newline
      *
-     * @param $message
+     * @param string $message
      */
     public function writeln($message)
     {

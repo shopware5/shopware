@@ -28,7 +28,7 @@ use Enlight_Collection_ArrayCollection as ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

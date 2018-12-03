@@ -21,30 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-use Shopware\Components\Migrations\AbstractMigration;
-
-class Migrations_Migration1444 extends AbstractMigration
+class Migrations_Migration1448 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * {@inheritdoc}
-     */
     public function up($modus)
     {
-        $sql = <<<'SQL'
-CREATE TABLE `s_articles_notification_attributes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `notificationID` int(11) UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `notificationID` (`notificationID`),
-  CONSTRAINT `s_articles_notification_attributesibfk_1` FOREIGN KEY (`notificationID`) REFERENCES `s_articles_notification` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-SQL;
-
-        $sql .= <<<'EOD'
-UPDATE `s_core_config_mails` SET `context` = 'a:5:{s:12:"sArticleLink";s:70:"http://shopware.example/genusswelten/koestlichkeiten/272/spachtelmasse";s:12:"sOrdernumber";s:7:"SW10239";s:5:"sData";N;s:11:"sNotifyData";N;s:21:"sNotifyData.attribute";N;}' 
-WHERE `s_core_config_mails`.`name` = 'sARTICLEAVAILABLE';
-EOD;
-        $this->addSql($sql);
+        $this->addSql('ALTER TABLE `s_core_countries` ALTER COLUMN `allow_shipping` SET DEFAULT 1');
     }
 }

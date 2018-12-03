@@ -182,7 +182,8 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                         countriesStore: me.countriesStore,
                         paymentsStore: me.paymentsStore,
                         dispatchesStore: me.dispatchesStore,
-                        documentTypesStore: me.documentTypesStore
+                        documentTypesStore: me.documentTypesStore,
+                        listStore: me.subApplication.getStore('Order')
                     });
                 }
             }

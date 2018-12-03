@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Order;
 use Shopware\Components\Api\Resource\Resource;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -26,7 +26,7 @@ use Shopware\Bundle\AttributeBundle\Repository\RegistryInterface;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -64,7 +64,7 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
         $criteria->offset = $request->getParam('start', 0);
         $criteria->limit = $request->getParam('limit', 30);
         $criteria->ids = $request->getParam('ids', []);
-        $criteria->term = $request->getParam('query', null);
+        $criteria->term = $request->getParam('query');
         $criteria->sortings = $request->getParam('sorts', []);
         $criteria->conditions = $request->getParam('filters', []);
 

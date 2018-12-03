@@ -31,7 +31,7 @@ use ShopwarePlugins\HttpCache\CacheIdCollector;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -224,7 +224,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     {
         $form = $this->Form();
 
-        /** @var $parent \Shopware\Models\Config\Form */
+        /** @var \Shopware\Models\Config\Form $parent */
         $parent = $this->Forms()->findOneBy(['name' => 'Core']);
 
         $form->setParent($parent);

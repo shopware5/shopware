@@ -194,10 +194,10 @@
                                                     </div>
                                                 {/block}
                                             </div>
-                                        {elseif $newsletterCaptchaName !== 'nocaptcha'}
-                                            <div class="captcha--placeholder"
-                                                 data-src="{url module=widgets controller=Captcha action=getCaptchaByName captchaName=$newsletterCaptchaName}"{if isset($sErrorFlag) && count($sErrorFlag) > 0}
-                                                 data-hasError="true"{/if} data-autoload="true"></div>
+                                        {else}
+                                            {$captchaName = $newsletterCaptchaName}
+                                            {$captchaHasError = isset($sErrorFlag) && count($sErrorFlag) > 0}
+                                            {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                                         {/if}
                                     </div>
                                 {/if}

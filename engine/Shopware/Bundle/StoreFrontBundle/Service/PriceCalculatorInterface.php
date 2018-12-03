@@ -36,7 +36,7 @@ interface PriceCalculatorInterface
      * The function is used for the original price value of a price struct
      * and the pseudo price of a price struct.
      *
-     * @param                                $price
+     * @param float                          $price
      * @param Struct\Tax                     $tax
      * @param Struct\ProductContextInterface $context
      *

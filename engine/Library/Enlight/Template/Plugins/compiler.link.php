@@ -34,21 +34,22 @@ class Smarty_Compiler_Link extends Smarty_Internal_CompileBase
      * Attribute definition: Overwrites base class.
      *
      * @var array
+     *
      * @see Smarty_Internal_CompileBase
      */
-    public $required_attributes = array('file');
+    public $required_attributes = ['file'];
 
     /**
      * Array of names of valid option flags
      *
      * @var array
      */
-    public $option_flags = array('fullPath');
-
+    public $option_flags = ['fullPath'];
 
     /**
-     * @param $args
-     * @param $compiler
+     * @param array  $args
+     * @param object $compiler
+     *
      * @return string
      */
     public function compile($args, $compiler)
@@ -64,10 +65,11 @@ class Smarty_Compiler_Link extends Smarty_Internal_CompileBase
 
         if (preg_match('/^([\'"]?)[a-zA-Z0-9\/\.\-\_]+(\\1)$/', $_attr['file'], $match)) {
             $compiler->smarty->loadPlugin('smarty_function_flink');
-            return smarty_function_flink(array(
+
+            return smarty_function_flink([
                 'file' => $file,
-                'fullPath' => $fullPath
-            ), $compiler);
+                'fullPath' => $fullPath,
+            ], $compiler);
         }
 
         return '<?php $_smarty_tpl->smarty->loadPlugin("smarty_function_flink"); echo smarty_function_flink(array(' .

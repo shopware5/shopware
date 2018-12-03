@@ -159,7 +159,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
      */
     private function getUserIdentity()
     {
-        /** @var $plugin Shopware_Plugins_Backend_Auth_Bootstrap */
+        /** @var Shopware_Plugins_Backend_Auth_Bootstrap $plugin */
         $plugin = $this->get('plugins')->get('Backend')->get('Auth');
 
         try {

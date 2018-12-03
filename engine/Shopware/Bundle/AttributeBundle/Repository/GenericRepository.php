@@ -29,7 +29,7 @@ use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
 use Shopware\Components\Model\ModelManager;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

@@ -616,7 +616,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                         return me.countryStateStore.getById(stateId).get('name');
                     }
                 }
-            },
+            }
         );
     },
 

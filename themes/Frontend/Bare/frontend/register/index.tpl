@@ -167,8 +167,8 @@
 
                     {* Captcha *}
                     {block name='frontend_register_index_form_captcha'}
-                        {$captchaHasError = $errors.captcha}
                         {$captchaName = {config name=registerCaptcha}}
+                        {$captchaHasError = $errors.captcha}
                         {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                     {/block}
 

@@ -66,7 +66,7 @@ class ManufacturerTest extends TestCase
         $manufacturers = Shopware()->Container()->get('shopware_storefront.manufacturer_service')
             ->getList($ids, $context);
 
-        /** @var $manufacturer Manufacturer */
+        /** @var Manufacturer $manufacturer */
         foreach ($manufacturers as $key => $manufacturer) {
             $this->assertEquals($key, $manufacturer->getId());
 

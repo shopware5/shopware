@@ -97,13 +97,11 @@ class ArticleImpression extends ModelEntity
     private $deviceType;
 
     /**
-     * Constructor
-     *
-     * @param $articleId
-     * @param $shopId
-     * @param $date
-     * @param int    $impressions
-     * @param string $deviceType
+     * @param int                     $articleId
+     * @param int                     $shopId
+     * @param null|\DateTimeInterface $date
+     * @param int                     $impressions
+     * @param string                  $deviceType
      */
     public function __construct($articleId, $shopId, $date = null, $impressions = 1, $deviceType = null)
     {

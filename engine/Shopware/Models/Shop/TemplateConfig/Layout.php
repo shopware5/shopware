@@ -35,25 +35,29 @@ use Shopware\Components\Model\ModelEntity;
 class Layout extends ModelEntity
 {
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     protected $name;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     protected $type;
 
     /**
-     * @var
+     * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=false)
      */
     protected $templateId;
 
     /**
      * @var Element
+     *
      * @ORM\ManyToOne(
      *      targetEntity="Shopware\Models\Shop\Template",
      *      inversedBy="layouts"
@@ -79,6 +83,7 @@ class Layout extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column()
      */
     protected $title;
@@ -99,10 +104,11 @@ class Layout extends ModelEntity
     protected $children;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<Element>
      * @ORM\OneToMany(targetEntity="Element", mappedBy="container"))
      */
     protected $elements;
+
     /**
      * @var int
      *
@@ -135,7 +141,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -175,7 +181,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param mixed $template
+     * @param string $template
      */
     public function setTemplate($template)
     {
@@ -183,7 +189,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTemplate()
     {
@@ -207,7 +213,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getType()
     {
@@ -215,7 +221,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param mixed $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -223,7 +229,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -231,7 +237,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name)
     {

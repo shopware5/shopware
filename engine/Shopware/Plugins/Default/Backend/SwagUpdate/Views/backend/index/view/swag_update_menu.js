@@ -55,7 +55,9 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
         snippets = {
             title: '{s name=growl/update/title}A new version of Shopware is available{/s}',
             button: '{s name=growl/update/button}Display info{/s}',
-            messageSticky: '{s name=growl/update/message}Version [0] of Shopware is available.{/s}'
+            messageSticky: '{s name=growl/update/message}Version [0] of Shopware is available.{/s}',
+            errorTitle: '{s name=growl/update/error_title}Shopware Updater Error{/s}',
+            opensslMessage: '{s name=growl/update/openssl_message}Shopware needs OpenSSL to check for new versions{/s}'
         };
 
         /**
@@ -72,6 +74,13 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                 var result = Ext.decode(response.responseText);
 
                 if (!result.success) {
+                    if (result.message && result.success === false) {
+                        Shopware.Notification.createStickyGrowlMessage({
+                            title: snippets.errorTitle,
+                            text: result.opensslMissing ? snippets.opensslMessage : result.message,
+                        });
+                    }
+
                     return;
                 }
 

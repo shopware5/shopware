@@ -36,7 +36,7 @@ use Shopware\Models\Emotion\Emotion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -372,7 +372,7 @@ class LegacyStructConverter
             }
 
             $data['pseudopricePercent'] = [
-                'int' => round($discount, 0),
+                'int' => round($discount),
                 'float' => $discount,
             ];
         }
@@ -451,7 +451,7 @@ class LegacyStructConverter
             );
         }
 
-        /** @var $variantPrice Price */
+        /** @var Price $variantPrice */
         $variantPrice = $product->getVariantPrice();
         $data = array_merge($data, $this->convertProductPriceStruct($variantPrice));
         $data['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
@@ -753,7 +753,7 @@ class LegacyStructConverter
         foreach ($set->getGroups() as $group) {
             $values = [];
             foreach ($group->getOptions() as $option) {
-                /* @var $option StoreFrontBundle\Struct\Property\Option */
+                /* @var StoreFrontBundle\Struct\Property\Option $option */
                 $values[$option->getId()] = $option->getName();
             }
 
@@ -761,7 +761,7 @@ class LegacyStructConverter
 
             $mediaValues = [];
             foreach ($group->getOptions() as $option) {
-                /** @var $option StoreFrontBundle\Struct\Property\Option */
+                /** @var StoreFrontBundle\Struct\Property\Option $option */
                 if ($option->getMedia()) {
                     $mediaValues[$option->getId()] = array_merge(['valueId' => $option->getId()], $this->convertMediaStruct($option->getMedia()));
                 }
@@ -1216,7 +1216,7 @@ class LegacyStructConverter
         }
 
         if ($product->hasAttribute('marketing')) {
-            /** @var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
+            /** @var StoreFrontBundle\Struct\Product\MarketingAttribute $marketing */
             $marketing = $product->getAttribute('marketing');
             $data['newArticle'] = $marketing->isNew();
             $data['sUpcoming'] = $marketing->comingSoon();

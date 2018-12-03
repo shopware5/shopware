@@ -24,7 +24,7 @@
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -37,7 +37,7 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
     {
         @set_time_limit(1200);
 
-        /* @var $indexer SearchIndexerInterface */
+        /* @var SearchIndexerInterface $indexer */
         $indexer = $this->get('shopware_searchdbal.search_indexer');
         $indexer->build();
 

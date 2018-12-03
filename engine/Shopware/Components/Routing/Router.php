@@ -28,7 +28,7 @@ use Enlight_Controller_Request_Request as EnlightRequest;
 use Enlight_Controller_Router as EnlightRouter;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,7 +60,7 @@ class Router extends EnlightRouter implements RouterInterface
     protected $postFilters;
 
     /**
-     * The di constructor of shopware router
+     * The DI constructor of shopware router
      *
      * @param Context               $context
      * @param MatcherInterface[]    $matchers
@@ -75,6 +75,8 @@ class Router extends EnlightRouter implements RouterInterface
         array $preFilters = [],
         array $postFilters = []
     ) {
+        parent::__construct();
+
         $this->context = $context;
         $this->matchers = $matchers;
         $this->generators = $generators;

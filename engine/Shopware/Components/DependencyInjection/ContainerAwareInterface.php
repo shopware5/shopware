@@ -27,7 +27,7 @@ namespace Shopware\Components\DependencyInjection;
 /**
  * ContainerAwareInterface should be implemented by classes that depends on a Container.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

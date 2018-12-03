@@ -76,11 +76,12 @@ class Image extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var
+     * @var \Shopware\Models\Media\Media
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="articles")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      */
     protected $media;
+
     /**
      * @var int
      *
@@ -163,9 +164,10 @@ class Image extends ModelEntity
     private $mediaId = null;
 
     /**
-     * The parent category
+     * The parent image
      *
-     * @var Category
+     * @var Image
+     *
      * @ORM\ManyToOne(targetEntity="Image", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */

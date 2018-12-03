@@ -26,7 +26,7 @@ use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -62,13 +62,13 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             return;
         }
 
-        /** @var $context ShopContextInterface */
+        /** @var ShopContextInterface $context */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);
 
-        /** @var $result ProductSearchResult */
+        /** @var ProductSearchResult $result */
         $result = $this->get('shopware_search.product_search')->search($criteria, $context);
         $articles = $this->convertProducts($result);
 
@@ -85,7 +85,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $request = $this->Request()->getParams();
         $request['sSearchOrginal'] = $term;
 
-        /** @var $mapper \Shopware\Components\QueryAliasMapper */
+        /** @var \Shopware\Components\QueryAliasMapper $mapper */
         $mapper = $this->get('query_alias_mapper');
 
         $service = Shopware()->Container()->get('shopware_storefront.custom_sorting_service');

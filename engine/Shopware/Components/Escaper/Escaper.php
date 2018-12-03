@@ -27,7 +27,7 @@ namespace Shopware\Components\Escaper;
 /**
  * @see https://github.com/zendframework/zend-escaper/blob/master/src/Escaper.php
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

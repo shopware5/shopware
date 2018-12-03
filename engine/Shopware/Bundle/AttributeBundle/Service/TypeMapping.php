@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

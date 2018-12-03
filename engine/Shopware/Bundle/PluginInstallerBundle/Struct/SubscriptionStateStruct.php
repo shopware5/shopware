@@ -50,10 +50,10 @@ class SubscriptionStateStruct implements \JsonSerializable
     private $expiredPluginSubscriptions;
 
     /**
-     * @param bool $isShopUpgraded
-     * @param []   $notUpgradedPlugins
-     * @param []   $wrongVersionPlugins
-     * @param []   $expiredPluginSubscriptions
+     * @param bool  $isShopUpgraded
+     * @param array $notUpgradedPlugins
+     * @param array $wrongVersionPlugins
+     * @param array $expiredPluginSubscriptions
      */
     public function __construct($isShopUpgraded, $notUpgradedPlugins, $wrongVersionPlugins, $expiredPluginSubscriptions)
     {

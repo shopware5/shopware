@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Media API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -170,7 +170,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $media MediaModel */
+        /** @var MediaModel $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {

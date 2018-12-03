@@ -31,7 +31,7 @@ use Shopware\Components\Random;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -661,100 +661,5 @@ class CustomerTest extends TestCase
 
         $this->assertNotNull($customer->getAttribute());
         $this->assertInstanceOf(CustomerAttribute::class, $customer->getAttribute());
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     * @expectedExceptionMessage Country by id 25 is not available for shipping
-     */
-    public function testCreateCustomerWithInvalidShippingCountryInBilling()
-    {
-        $data = [
-            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
-            'number' => __FUNCTION__,
-            'salutation' => 'mr',
-            'firstname' => 'Max',
-            'lastname' => 'Mustermann',
-            'billing' => [
-                'salutation' => 'mr',
-                'zipcode' => '12345',
-                'city' => 'Musterhausen',
-                'firstname' => 'Max',
-                'lastname' => 'Mustermann',
-                'street' => 'Musterstr. 123',
-                'country' => '25',
-            ],
-        ];
-
-        $this->resource->create($data);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     * @expectedExceptionMessage Country by id 25 is not available for shipping
-     */
-    public function testCreateCustomerWithInvalidShippingCountry()
-    {
-        $data = [
-            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
-            'number' => __FUNCTION__,
-            'salutation' => 'mr',
-            'firstname' => 'Max',
-            'lastname' => 'Mustermann',
-            'billing' => [
-                'salutation' => 'mr',
-                'zipcode' => '12345',
-                'city' => 'Musterhausen',
-                'firstname' => 'Max',
-                'lastname' => 'Mustermann',
-                'street' => 'Musterstr. 123',
-                'country' => '2',
-            ],
-            'shipping' => [
-                'salutation' => 'mr',
-                'zipcode' => '12345',
-                'city' => 'Musterhausen',
-                'firstname' => 'Max',
-                'lastname' => 'Mustermann',
-                'street' => 'Musterstr. 123',
-                'country' => '25',
-            ],
-        ];
-
-        $this->resource->create($data);
-    }
-
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     * @expectedExceptionMessage Country by id 25 is not available for shipping
-     */
-    public function testCreateCustomerAndUpdateWithInvalidShipping()
-    {
-        $data = [
-            'email' => __FUNCTION__ . Random::getAlphanumericString(5) . '@foobar.com',
-            'number' => __FUNCTION__,
-            'salutation' => 'mr',
-            'firstname' => 'Max',
-            'lastname' => 'Mustermann',
-            'billing' => [
-                'salutation' => 'mr',
-                'zipcode' => '12345',
-                'city' => 'Musterhausen',
-                'firstname' => 'Max',
-                'lastname' => 'Mustermann',
-                'street' => 'Musterstr. 123',
-                'country' => '2',
-            ],
-        ];
-
-        $customer = $this->resource->create($data);
-
-        $this->assertNotEmpty($customer);
-
-        $this->resource->update($customer->getId(), [
-            'defaultBillingAddress' => [
-                'country' => '25',
-            ],
-        ]);
     }
 }

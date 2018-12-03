@@ -411,7 +411,7 @@ class Order extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="trackingcode", type="string", length=255, nullable=false)
+     * @ORM\Column(name="trackingcode", type="text", nullable=false)
      */
     private $trackingCode;
 
@@ -1010,7 +1010,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param  $customer
+     * @param \Shopware\Models\Customer\Customer $customer
      */
     public function setCustomer($customer)
     {
@@ -1026,7 +1026,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param  $payment
+     * @param \Shopware\Models\Payment\Payment $payment
      */
     public function setPayment($payment)
     {
@@ -1042,7 +1042,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param  $dispatch
+     * @param \Shopware\Models\Dispatch\Dispatch $dispatch
      */
     public function setDispatch($dispatch)
     {
@@ -1058,7 +1058,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param  $paymentStatus
+     * @param \Shopware\Models\Order\Status $paymentStatus
      */
     public function setPaymentStatus($paymentStatus)
     {
@@ -1074,7 +1074,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param $orderStatus
+     * @param \Shopware\Models\Order\Status $orderStatus
      */
     public function setOrderStatus($orderStatus)
     {
@@ -1177,7 +1177,7 @@ class Order extends ModelEntity
         $invoiceAmountNet = 0;
 
         //iterate order details to recalculate the amount.
-        /** @var $detail Detail */
+        /** @var Detail $detail */
         foreach ($this->getDetails() as $detail) {
             $price = round($detail->getPrice(), 2);
 

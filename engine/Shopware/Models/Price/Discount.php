@@ -99,7 +99,7 @@ class Discount extends ModelEntity
      *
      * @param Group $group
      *
-     * @return discount
+     * @return Discount
      */
     public function setGroup($group)
     {
@@ -110,6 +110,8 @@ class Discount extends ModelEntity
 
     /**
      * Get group
+     *
+     * @return Group
      */
     public function getGroup()
     {
@@ -119,7 +121,7 @@ class Discount extends ModelEntity
     /**
      * Set customerGroup
      *
-     * @param $customerGroup
+     * @param \Shopware\Models\Customer\Group $customerGroup
      *
      * @return Discount
      */
@@ -132,6 +134,8 @@ class Discount extends ModelEntity
 
     /**
      * Get customerGroup
+     *
+     * @return \Shopware\Models\Customer\Group
      */
     public function getCustomerGroup()
     {
@@ -143,7 +147,7 @@ class Discount extends ModelEntity
      *
      * @param float $discount
      *
-     * @return discount
+     * @return Discount
      */
     public function setDiscount($discount)
     {
@@ -167,7 +171,7 @@ class Discount extends ModelEntity
      *
      * @param float $start
      *
-     * @return discount
+     * @return Discount
      */
     public function setStart($start)
     {

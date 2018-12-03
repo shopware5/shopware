@@ -191,7 +191,7 @@ Ext.define('Shopware.attribute.Form', {
 
         Ext.each(fields.items, function(field) {
             try {
-                field.setValue(null);
+                field.setValue(typeof field.defaultValue === 'undefined' ? null : field.defaultValue);
             } catch (e) {
             }
         });

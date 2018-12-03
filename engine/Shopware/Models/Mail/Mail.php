@@ -525,7 +525,7 @@ class Mail extends ModelEntity
      *   );
      * </code>
      *
-     * @param $array
+     * @param array  $array
      * @param string $glue
      *
      * @return array

@@ -130,7 +130,7 @@ SQL;
     /**
      * create database if not exists
      *
-     * @param $dbName
+     * @param string $dbName
      */
     public function dropDatabase($dbName)
     {

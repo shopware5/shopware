@@ -20,9 +20,7 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- * @param $salutation
  */
-
 function smarty_modifier_salutation($salutation)
 {
     $snippets = Shopware()->Container()->get('snippets');
@@ -30,5 +28,6 @@ function smarty_modifier_salutation($salutation)
     if (strlen(trim($label)) === 0) {
         return $salutation;
     }
+
     return $label;
 }

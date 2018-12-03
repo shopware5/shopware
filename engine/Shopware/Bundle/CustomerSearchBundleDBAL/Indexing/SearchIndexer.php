@@ -78,7 +78,7 @@ class SearchIndexer implements SearchIndexerInterface
     }
 
     /**
-     * @param $customer
+     * @param AnalyzedCustomer $customer
      *
      * @return array
      */

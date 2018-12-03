@@ -39,9 +39,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all data about a single customer.
      *
-     * @param $customerId
-     *
-     * @internal param $id
+     * @param int $customerId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -56,7 +54,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $customerId
+     * @param int $customerId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -131,11 +129,11 @@ class Repository extends ModelRepository
     /**
      * Returns a list of orders for the passed customer id and filtered by the filter parameter.
      *
-     * @param      $customerId
-     * @param null $filter
-     * @param null $orderBy
-     * @param null $limit
-     * @param null $offset
+     * @param int      $customerId
+     * @param null     $filter
+     * @param null     $orderBy
+     * @param null|int $limit
+     * @param null|int $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -154,16 +152,16 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getOrdersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $customerId
-     * @param      $filter
-     * @param null $orderBy
+     * @param int         $customerId
+     * @param null|string $filter
+     * @param null|array  $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getOrdersQueryBuilder($customerId, $filter = null, $orderBy = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        //select the different entities
+        // Select the different entities
         $builder->select([
             'orders.id as id',
             'orders.number as orderNumber',
@@ -175,14 +173,14 @@ class Repository extends ModelRepository
             'orders.cleared as paymentStatusId',
         ]);
 
-        //join the required tables for the order list
+        // Join the required tables for the order list
         $builder->from('Shopware\Models\Order\Order', 'orders')
                 ->leftJoin('orders.payment', 'payment')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.paymentStatus', 'paymentStatus');
 
-        //filter the displayed columns with the passed filter string
+        // Filter the displayed columns with the passed filter string
         if (!empty($filter)) {
             $builder->where('orders.customerId = :customerId');
             $builder->andWhere(
@@ -264,9 +262,9 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * all defined customer groups. Used to show all unselected customer groups to restrict the category
      *
-     * @param $usedIds
-     * @param $offset
-     * @param $limit
+     * @param int[] $usedIds
+     * @param int   $offset
+     * @param int   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -281,9 +279,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $usedIds
-     * @param $offset
-     * @param $limit
+     * @param int[] $usedIds
+     * @param int   $offset
+     * @param int   $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

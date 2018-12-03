@@ -40,29 +40,12 @@
          * Initializes the plugin and sets up the necessary event handler
          */
         init: function () {
-            var ie;
-
             // Check if we have a variant configurator
             if (!this.$el.find('.product--configurator').length) {
                 return;
             }
 
             this.applyDataAttributes();
-
-            // Detecting IE version using feature detection (IE7+, browsers prior to IE7 are detected as 7)
-            ie = (function () {
-                if (window.ActiveXObject === undefined) return null;
-                if (!document.querySelector) return 7;
-                if (!document.addEventListener) return 8;
-                if (!window.atob) return 9;
-                /* eslint no-proto: "off" */
-                if (!document.__proto__) return 10;
-                return 11;
-            })();
-
-            if (ie && ie <= 9) {
-                this.hasHistorySupport = false;
-            }
 
             this.$el
                 .on(this.getEventName('click'), '*[data-ajax-variants="true"]', $.proxy(this.onChange, this))

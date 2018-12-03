@@ -363,7 +363,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * contains all inherited child roles. The association is defined over
      * the Role.id property and the Role.parentId property.
      *
-     * @param $children \Doctrine\Common\Collections\ArrayCollection
+     * @param \Doctrine\Common\Collections\ArrayCollection $children
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -392,7 +392,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * contains the inherited parent role. The association is defined over
      * the Role.id property and the Role.parentId property.
      *
-     * @param $parent \Shopware\Models\User\Role
+     * @param \Shopware\Models\User\Role $parent
      */
     public function setParent($parent)
     {

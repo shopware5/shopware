@@ -27,7 +27,7 @@
  * The plugin bootstrap of the marketing data plugin registers all events
  * and configurations for the shopware aggregate functions within shopware.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -476,20 +476,21 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function refreshArticle(Enlight_Event_EventArgs $arguments)
     {
-        if (!($this->isTopSellerActivated())) {
+        if (!$this->isTopSellerActivated()) {
             return;
         }
 
-        /** @var $article \Shopware\Models\Article\Article */
-        $article = $arguments->getEntity();
-        if (!($article instanceof \Shopware\Models\Article\Article)) {
+        /** @var \Shopware\Models\Article\Article $product */
+        $product = $arguments->getEntity();
+        if (!($product instanceof \Shopware\Models\Article\Article)) {
             return;
         }
-        if (!($article->getId()) > 0) {
+        if (!($product->getId()) > 0) {
             return;
         }
+
         $this->TopSeller()->refreshTopSellerForArticleId(
-            $article->getId()
+            $product->getId()
         );
     }
 

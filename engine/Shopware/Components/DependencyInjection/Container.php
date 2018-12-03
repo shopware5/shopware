@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Container as BaseContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

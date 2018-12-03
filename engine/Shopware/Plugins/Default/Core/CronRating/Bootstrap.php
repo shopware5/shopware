@@ -166,7 +166,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @param $sendTime
+     * @param string $sendTime
      *
      * @return array
      */
@@ -233,7 +233,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @param $orderIds
+     * @param int[] $orderIds
      *
      * @return array
      */
@@ -319,7 +319,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @param $orderIds
+     * @param int[] $orderIds
      *
      * @return array
      */
@@ -403,7 +403,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
      *
      * by using the corresponding shopId for every order's positions.
      *
-     * @param $orderPositions
+     * @param array $orderPositions
      *
      * @return array
      */

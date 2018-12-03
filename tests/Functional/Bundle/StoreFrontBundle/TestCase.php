@@ -165,9 +165,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
-     * @param Category $category
-     * @param $conditions
+     * @param Criteria    $criteria
+     * @param Category    $category
+     * @param array       $conditions
      * @param ShopContext $context
      */
     protected function addCategoryBaseCondition(
@@ -217,7 +217,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param $number
+     * @param int         $number
      * @param ShopContext $context
      * @param Category    $category
      * @param $additionally

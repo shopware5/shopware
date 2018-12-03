@@ -42,7 +42,7 @@ use Shopware\Models\Translation\Translation as TranslationModel;
 /**
  * Translation API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -90,7 +90,7 @@ class Translation extends Resource implements BatchInterface
      * If your resource supports other kinds of IDs, too, you should identify
      * your entity by these IDs and return the primary ID of that entity.
      *
-     * @param $data
+     * @param array $data
      *
      * @return int|bool Return the primary ID of the entity, if it exists
      *                  Return false, if no existing entity matches $data
@@ -244,7 +244,7 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param $id int - Identifier of the translated object, like the s_articles.id.
+     * @param int   $id   - Identifier of the translated object, like the s_articles.id.
      * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -280,10 +280,10 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param $number string - Alphanumeric identifier of the translatable entity.
-     *                         This can be a article number, configurator group name or some thing else.
-     *                         For more information which number fields are supported, look into the #getIdByNumber
-     * @param array $data
+     * @param string $number - Alphanumeric identifier of the translatable entity.
+     *                       This can be a article number, configurator group name or some thing else.
+     *                       For more information which number fields are supported, look into the #getIdByNumber
+     * @param array  $data
      *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
@@ -318,7 +318,7 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param $id
+     * @param int   $id
      * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -371,10 +371,10 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param $number string - Alphanumeric identifier of the translatable entity.
-     *                         This can be a article number, configurator group name or some thing else.
-     *                         For more information which number fields are supported, look into the #getIdByNumber
-     * @param array $data
+     * @param string $number - Alphanumeric identifier of the translatable entity.
+     *                       This can be a article number, configurator group name or some thing else.
+     *                       For more information which number fields are supported, look into the #getIdByNumber
+     * @param array  $data
      *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
@@ -509,8 +509,8 @@ class Translation extends Resource implements BatchInterface
      * the real identifier of the translatable object.
      * This function is used from every *byNumber function.
      *
-     * @param $number
-     * @param $type
+     * @param string $number
+     * @param string $type
      *
      * @throws \Exception
      *
@@ -558,7 +558,7 @@ class Translation extends Resource implements BatchInterface
      * Returns the identifier of the product (s_articles.id).
      * The function expects a variant order number as alphanumeric identifier (s_articles_details.ordernumber)
      *
-     * @param $number - Alphanumeric order number of the variant
+     * @param string $number - Alphanumeric order number of the variant
      *
      * @throws \Exception
      *
@@ -566,7 +566,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getProductIdByNumber($number)
     {
-        /** @var $entity Detail */
+        /** @var Detail $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Article\Detail',
             [['number' => $number]]
@@ -585,7 +585,7 @@ class Translation extends Resource implements BatchInterface
      * Returns the identifier of the product (s_articles_details.id).
      * The function expects a variant order number as alphanumeric identifier (s_articles_details.ordernumber)
      *
-     * @param $number - Alphanumeric order number of the variant
+     * @param string $number - Alphanumeric order number of the variant
      *
      * @throws \Exception
      *
@@ -593,7 +593,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getProductVariantIdByNumber($number)
     {
-        /** @var $entity Detail */
+        /** @var Detail $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Article\Detail',
             [['number' => $number]]
@@ -613,7 +613,7 @@ class Translation extends Resource implements BatchInterface
      * But the article links have no alphanumeric identifier, so the function
      * throws only an exception.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws ApiException\CustomValidationException
      */
@@ -629,7 +629,7 @@ class Translation extends Resource implements BatchInterface
      * But the article downloads have no alphanumeric identifier, so the function
      * throws only an exception.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws ApiException\CustomValidationException
      */
@@ -643,7 +643,7 @@ class Translation extends Resource implements BatchInterface
     /**
      * Returns the primary identifier of the passed alphanumeric manufacturer number.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -651,7 +651,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getManufacturerIdByNumber($number)
     {
-        /** @var $entity Supplier */
+        /** @var Supplier $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Article\Supplier',
             [['name' => $number]]
@@ -670,7 +670,7 @@ class Translation extends Resource implements BatchInterface
      * Returns the primary identifier for the passed country name/iso.
      * The passed number can contain a country iso or name.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -678,7 +678,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getCountryIdByNumber($number)
     {
-        /** @var $entity Country */
+        /** @var Country $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Country\Country',
             [
@@ -700,7 +700,7 @@ class Translation extends Resource implements BatchInterface
      * Returns the primary identifier for the passed country state name/short code.
      * The passed number can contain a country state short code or name.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -708,7 +708,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getCountryStateIdByNumber($number)
     {
-        /** @var $entity State */
+        /** @var State $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Country\State',
             [
@@ -729,7 +729,7 @@ class Translation extends Resource implements BatchInterface
     /**
      * Returns the primary identifier for the passed dispatch name.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -737,7 +737,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getDispatchIdByNumber($number)
     {
-        /** @var $entity Dispatch */
+        /** @var Dispatch $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Dispatch\Dispatch',
             [
@@ -757,7 +757,7 @@ class Translation extends Resource implements BatchInterface
     /**
      * Returns the primary identifier for the passed payment name/description.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -765,7 +765,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getPaymentIdByNumber($number)
     {
-        /** @var $entity Payment */
+        /** @var Payment $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Payment\Payment',
             [
@@ -786,7 +786,7 @@ class Translation extends Resource implements BatchInterface
     /**
      * Returns the primary identifier for the passed filter set name.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -794,7 +794,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getFilterSetIdByNumber($number)
     {
-        /** @var $entity Group */
+        /** @var Group $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Property\Group',
             [
@@ -819,7 +819,7 @@ class Translation extends Resource implements BatchInterface
      *     SET-A|GROUP-A
      *
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -835,7 +835,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var $set Group */
+        /** @var Group $set */
         $set = $this->findEntityByConditions(
             'Shopware\Models\Property\Group',
             [
@@ -849,7 +849,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var $group Option */
+        /** @var Option $group */
         $group = $this->getCollectionElementByProperty(
             $set->getOptions(),
             'name',
@@ -873,7 +873,7 @@ class Translation extends Resource implements BatchInterface
      *     SET-A|GROUP-A
      *
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -889,7 +889,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var $set Group */
+        /** @var Group $set */
         $set = $this->findEntityByConditions(
             'Shopware\Models\Property\Group',
             [
@@ -903,7 +903,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var $group Option */
+        /** @var Option $group */
         $group = $this->getCollectionElementByProperty(
             $set->getOptions(),
             'name',
@@ -916,7 +916,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var $option Value */
+        /** @var Value $option */
         $option = $this->getCollectionElementByProperty(
             $group->getValues(),
             'value',
@@ -935,7 +935,7 @@ class Translation extends Resource implements BatchInterface
     /**
      * Returns the primary identifier for the passed configurator group name.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Exception
      *
@@ -943,7 +943,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getConfiguratorGroupIdByNumber($number)
     {
-        /** @var $entity ConfiguratorGroup */
+        /** @var ConfiguratorGroup $entity */
         $entity = $this->findEntityByConditions(
             'Shopware\Models\Article\Configurator\Group',
             [['name' => $number]]
@@ -965,7 +965,7 @@ class Translation extends Resource implements BatchInterface
      * Example:
      *     GROUP-A|OPTION-A
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -982,7 +982,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var $group ConfiguratorGroup */
+        /** @var ConfiguratorGroup $group */
         $group = $this->findEntityByConditions(
             'Shopware\Models\Article\Configurator\Group',
             [['name' => $numbers[0]]]
@@ -994,7 +994,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var $option ConfiguratorOption */
+        /** @var ConfiguratorOption $option */
         $option = $this->getCollectionElementByProperty(
             $group->getOptions(),
             'name',

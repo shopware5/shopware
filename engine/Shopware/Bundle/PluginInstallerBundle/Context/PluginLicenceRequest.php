@@ -49,10 +49,10 @@ class PluginLicenceRequest
     private $token;
 
     /**
-     * @param $token
-     * @param $domain
-     * @param $shopwareVersion
-     * @param $technicalName
+     * @param AccessTokenStruct $token
+     * @param string            $domain
+     * @param string            $shopwareVersion
+     * @param string            $technicalName
      */
     public function __construct($token, $domain, $shopwareVersion, $technicalName)
     {

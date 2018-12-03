@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 /**
  * Shopware Class that handles categories
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -161,7 +161,7 @@ class sCategories
 
     /**
      * @param Category $category
-     * @param $childrenCounts
+     * @param array    $childrenCounts
      *
      * @return array
      */
@@ -458,7 +458,7 @@ class sCategories
      * Returns a key value array which contains the category id
      * as key and the count of category children as value.
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return array
      */
@@ -473,7 +473,7 @@ class sCategories
             ->groupBy('parent')
             ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -484,7 +484,7 @@ class sCategories
      * of the category.
      * The category id is used as array key and the parent id as array value.
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return array
      */
@@ -500,7 +500,7 @@ class sCategories
             ->addOrderBy('category.id')
             ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -510,7 +510,7 @@ class sCategories
      * Returns all ids, additionally with the provided one,
      * of the category path of the provided id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return array
      */
@@ -522,7 +522,7 @@ class sCategories
             ->where('category.id = :id')
             ->setParameter(':id', $id);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         $path = $statement->fetch(PDO::FETCH_COLUMN);

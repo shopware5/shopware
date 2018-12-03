@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\Configuration;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -330,6 +330,7 @@ class CrudService
             'tableName' => $table,
             'columnName' => $column,
             'columnType' => $unifiedType,
+            'defaultValue' => $defaultValue,
         ]);
 
         $configId = null;

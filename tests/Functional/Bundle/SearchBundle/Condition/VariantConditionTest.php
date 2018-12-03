@@ -345,7 +345,7 @@ class VariantConditionTest extends TestCase
     /**
      * Get products and set the graduated prices of the variants.
      *
-     * @param $number
+     * @param string      $number
      * @param Category    $category
      * @param ShopContext $context
      * @param array       $data

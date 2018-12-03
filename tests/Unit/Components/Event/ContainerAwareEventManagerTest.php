@@ -30,7 +30,7 @@ use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

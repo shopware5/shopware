@@ -79,7 +79,7 @@ class CloneStructTest extends TestCase
 
         $clone = clone $simple;
 
-        /** @var $nested SimpleStruct[] */
+        /** @var SimpleStruct[] $nested */
         $nested = $simple->getValue();
         $nested[0]->setValue('struct 3');
 
@@ -104,7 +104,7 @@ class CloneStructTest extends TestCase
         $clone = clone $simple;
         $simple->setValue(null);
 
-        /** @var $nested SimpleStruct[] */
+        /** @var SimpleStruct[] $nested */
         $nested = $clone->getValue();
         $this->assertArrayHasKey('struct1', $nested);
         $this->assertArrayHasKey('struct2', $nested);
@@ -125,7 +125,7 @@ class CloneStructTest extends TestCase
         $clone = clone $simple;
         $simple->setValue(null);
 
-        /** @var $value SimpleStruct[][] */
+        /** @var SimpleStruct[][] $value */
         $value = $clone->getValue();
         $this->assertCount(2, $value[0]);
         $this->assertCount(2, $value[1]);

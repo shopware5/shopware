@@ -42,7 +42,7 @@ class MemoryLimit
     }
 
     /**
-     * @param $memoryLimit
+     * @param string $memoryLimit
      *
      * @return int|string
      */

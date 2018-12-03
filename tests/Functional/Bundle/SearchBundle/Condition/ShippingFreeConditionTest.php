@@ -50,7 +50,7 @@ class ShippingFreeConditionTest extends TestCase
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param \Shopware\Models\Category\Category $category
      * @param ShopContext                        $context
      * @param bool                               $shippingFree

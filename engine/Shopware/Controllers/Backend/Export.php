@@ -189,7 +189,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         $dirName = $this->container->getParameter('kernel.cache_dir');
         $dirName .= '/productexport/';
         if (!file_exists($dirName)) {
-            mkdir($dirName, 0777);
+            mkdir($dirName);
         }
 
         return $dirName;

@@ -147,7 +147,7 @@ class Settings extends ModelEntity
     /**
      * Sets the icon css class
      *
-     * @param $icon
+     * @param string $icon
      *
      * @return \Shopware\Models\Media\Settings
      */
@@ -221,7 +221,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param  $album
+     * @param \Shopware\Models\Media\Album $album
      */
     public function setAlbum($album)
     {

@@ -66,6 +66,7 @@ class Template extends ModelEntity
 
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(
      *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
      *      mappedBy="template",
@@ -77,6 +78,7 @@ class Template extends ModelEntity
 
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(
      *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
      *      mappedBy="template",
@@ -85,6 +87,7 @@ class Template extends ModelEntity
      * )
      */
     protected $configSets;
+
     /**
      * @var int
      *
@@ -172,6 +175,7 @@ class Template extends ModelEntity
 
     /**
      * @var \Shopware\Models\Plugin\Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="templates")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
      */
@@ -406,7 +410,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Template $parent
+     * @param null|\Shopware\Models\Shop\Template $parent
      */
     public function setParent(Template $parent = null)
     {
@@ -422,7 +426,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param mixed $elements
+     * @param ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Element> $elements
      */
     public function setElements($elements)
     {
@@ -435,7 +439,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Element>
      */
     public function getElements()
     {
@@ -443,7 +447,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $shops
+     * @param ArrayCollection<\Shopware\Models\Shop\Shop> $shops
      */
     public function setShops($shops)
     {
@@ -451,7 +455,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Shop\Shop>
      */
     public function getShops()
     {
@@ -459,7 +463,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $layouts
+     * @param ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Layout> $layouts
      */
     public function setLayouts($layouts)
     {
@@ -472,7 +476,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Layout>
      */
     public function getLayouts()
     {
@@ -480,7 +484,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return Set[]
+     * @return ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Set>
      */
     public function getConfigSets()
     {
@@ -488,7 +492,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param Set[] $configSets
+     * @param ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Set> $configSets
      */
     public function setConfigSets($configSets)
     {

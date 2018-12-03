@@ -34,7 +34,7 @@ class Color extends Field
     /**
      * Requires to set a name for the field
      *
-     * @param $name
+     * @param string $name
      */
     public function __construct($name)
     {

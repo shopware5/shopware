@@ -292,7 +292,7 @@ class Manager
      *
      * array('width' => 100, 'height' => 200)
      *
-     * @param $thumbnailSizes
+     * @param string[] $thumbnailSizes
      *
      * @return array
      */
@@ -333,7 +333,7 @@ class Manager
      * Returns an array with width and height gained
      * from a string in a format like 100x200
      *
-     * @param $size
+     * @param string $size
      *
      * @return array
      */

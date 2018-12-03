@@ -119,12 +119,14 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             'groups.name as customerGroup',
             'billing.zipcode',
             'billing.city',
+            'country.name as countryName',
             'billing.company',
         ]);
 
         $query->from(Customer::class, 'customer');
         $query->leftJoin('customer.shop', 'shops');
         $query->leftJoin('customer.defaultBillingAddress', 'billing');
+        $query->leftJoin('billing.country', 'country');
         $query->leftJoin('customer.attribute', 'attribute');
         $query->leftJoin('customer.group', 'groups');
 
@@ -204,6 +206,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             'shop' => ['alias' => 'shops.id', 'type' => 'int'],
             'zipcode' => ['alias' => 'billing.zipcode', 'type' => 'string'],
             'city' => ['alias' => 'billing.city', 'type' => 'string'],
+            'countryId' => ['alias' => 'billing.countryId', 'type' => 'int'],
             'company' => ['alias' => 'billing.company', 'type' => 'string'],
         ]);
 

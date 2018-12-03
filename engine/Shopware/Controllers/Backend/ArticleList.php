@@ -23,6 +23,7 @@
  */
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 
@@ -269,7 +270,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $resource = $this->Request()->getParam('resource');
 
-        $queueId = $this->Request()->getParam('queueId', null);
+        $queueId = $this->Request()->getParam('queueId');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
@@ -321,7 +322,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $filter = $this->Request()->getParam('filter', []);
         $filter = isset($filter[0]['value']) ? $filter[0]['value'] : null;
         if (!$filter) {
-            $filter = $this->Request()->getParam('query', null);
+            $filter = $this->Request()->getParam('query');
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
@@ -411,10 +412,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function saveFilterAction()
     {
         $data = $this->Request()->getParams();
-        $id = $this->Request()->get('id', null);
+        $id = $this->Request()->getParam('id', null);
 
         if ($id) {
-            $filter = $this->getMultiEditRepository()->find($id);
+            $filter = $this->getMultiEditRepository()->find((int) $id);
         } else {
             $filter = new Shopware\Models\MultiEdit\Filter();
         }
@@ -467,7 +468,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $filterArray = $this->Request()->getParam('filterArray');
         $operations = $this->Request()->getParam('operations');
         $limit = $this->Request()->getParam('limit', 1000);
-        $queueId = $this->Request()->getParam('queueId', null);
+        $queueId = $this->Request()->getParam('queueId');
         $offset = $this->Request()->getParam('offset', 0);
         $filterArray = json_decode($filterArray, true);
         if ($filterArray === false) {
@@ -498,7 +499,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $id = (int) $this->Request()->getParam('Detail_id');
 
-        /** @var $articleDetail Detail */
+        /** @var Detail $articleDetail */
         $articleDetail = $this->getDetailRepository()->find($id);
         if (!is_object($articleDetail)) {
             $this->View()->assign([

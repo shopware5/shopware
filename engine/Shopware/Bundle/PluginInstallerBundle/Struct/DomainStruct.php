@@ -50,7 +50,7 @@ class DomainStruct implements \JsonSerializable
      * @param string $domain
      * @param float  $balance
      * @param float  $dispo
-     * @param $isPartner
+     * @param bool   $isPartner
      */
     public function __construct($domain, $balance, $dispo, $isPartner)
     {

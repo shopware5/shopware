@@ -149,7 +149,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $group Group */
+        /* @var Group $group */
         $group = $this->get('models')->getRepository(Group::class)->find($id);
         if (!$group) {
             $this->View()->assign(['success' => false, 'message' => 'Group not found']);
@@ -185,7 +185,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $group Group */
+        /* @var Group $group */
         $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($setId);
         if (!$group) {
             $this->View()->assign(['success' => false, 'message' => 'Group not found']);
@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $option Option */
+        /* @var Option $option */
         $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
@@ -228,7 +228,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $group Group */
+        /* @var Group $group */
         $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($groupId);
         if (!$group) {
             $this->View()->assign(['success' => false, 'message' => 'Group not found']);
@@ -236,7 +236,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $option Option */
+        /* @var Option $option */
         $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($optionId);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
@@ -307,7 +307,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $option Option */
+        /* @var Option $option */
         $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($id);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
@@ -342,7 +342,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $option Option */
+        /* @var Option $option */
         $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($id);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
@@ -390,7 +390,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $option Option */
+        /* @var Option $option */
         $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
@@ -422,7 +422,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $value Value */
+        /* @var Value $value */
         $value = Shopware()->Models()->getRepository('Shopware\Models\Property\Value')->find($id);
         if (!$value) {
             $this->View()->assign(['success' => false, 'message' => 'Value not found']);
@@ -432,7 +432,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         $value->setValue($this->Request()->getPost('value'));
 
-        if ($this->Request()->has('mediaId') && $this->Request()->getParam('mediaId', null)) {
+        if ($this->Request()->has('mediaId') && $this->Request()->getParam('mediaId')) {
             $media = $this->get('models')->find('Shopware\Models\Media\Media', $this->Request()->getPost('mediaId'));
             $value->setMedia($media);
         } else {
@@ -466,7 +466,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        /* @var $value Value */
+        /* @var Value $value */
         $value = Shopware()->Models()->getRepository('Shopware\Models\Property\Value')->find($id);
         if (!$value) {
             $this->View()->assign(['success' => false, 'message' => 'Value not found']);

@@ -283,7 +283,7 @@ class GarbageCollector
     /**
      * Adds a media by path to used table
      *
-     * @param $path
+     * @param string $path
      */
     private function addMediaByPath($path)
     {
@@ -294,7 +294,7 @@ class GarbageCollector
     /**
      * Adds a media by id to used table
      *
-     * @param $mediaId
+     * @param int $mediaId
      */
     private function addMediaById($mediaId)
     {

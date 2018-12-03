@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -52,10 +52,10 @@ class Keyword
     private $relevance;
 
     /**
-     * @param $id
-     * @param $relevance
-     * @param $term
-     * @param $word
+     * @param int    $id
+     * @param float  $relevance
+     * @param string $term
+     * @param string $word
      */
     public function __construct($id, $relevance, $term, $word)
     {

@@ -122,7 +122,7 @@ class sSystem
     /**
      * Pointer to PHP-Mailer Object
      *
-     * @var
+     * @var \Enlight_Components_Mail
      *
      * @deprecated Use Shopware()->Mail()
      */
@@ -205,8 +205,8 @@ class sSystem
     /**
      * @deprecated Use Shopware()->Modules()->Core()->(method name)
      *
-     * @param $name
-     * @param null $params
+     * @param string $name
+     * @param null   $params
      *
      * @return mixed
      */

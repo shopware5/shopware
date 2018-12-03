@@ -28,7 +28,7 @@ use Shopware\Components\Escaper\EscaperInterface;
 use Shopware\Components\Template\Security;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -52,7 +52,7 @@ class Template
         array $securityConfig,
         array $backendOptions
     ) {
-        /** @var $template \Enlight_Template_Manager */
+        /** @var \Enlight_Template_Manager $template */
         $template = \Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
 
         $template->enableSecurity(

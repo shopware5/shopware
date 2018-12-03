@@ -79,7 +79,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
              AND category.category_id = :categoryId'
         );
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -111,7 +111,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->where('emotion.id = :emotionId')
             ->setParameter(':emotionId', $emotionId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_ASSOC);
@@ -151,14 +151,14 @@ class DeviceConfiguration implements DeviceConfigurationInterface
 
         $query->setParameter(':id', $emotionId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return array|null
      */
@@ -168,7 +168,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->andWhere('emotion.id = :id')
             ->setParameter('id', $id);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_ASSOC);
@@ -185,7 +185,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->andWhere('emotion.parent_id = :id')
             ->setParameter(':id', $parentId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

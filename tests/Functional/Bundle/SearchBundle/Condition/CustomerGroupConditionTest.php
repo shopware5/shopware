@@ -73,7 +73,7 @@ class CustomerGroupConditionTest extends TestCase
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param Group[]                            $customerGroups
      * @param \Shopware\Models\Category\Category $category
      * @param ShopContext                        $context

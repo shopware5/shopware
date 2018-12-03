@@ -39,9 +39,9 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partners for the backend list
      *
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
+     * @param null|array $order
+     * @param null|int   $offset
+     * @param null|int   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -62,7 +62,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $order
+     * @param array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -91,7 +91,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partner for the detail page
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -106,7 +106,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -122,14 +122,14 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object to select the partner for the statistic list
      *
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
-     * @param      $partnerId
-     * @param bool $summary
-     * @param      $fromDate
-     * @param      $toDate
-     * @param      $userCurrencyFactor
+     * @param array     $order
+     * @param int       $offset
+     * @param int       $limit
+     * @param int       $partnerId
+     * @param bool      $summary
+     * @param \DateTime $fromDate
+     * @param \DateTime $toDate
+     * @param float|int $userCurrencyFactor
      *
      * @return \Doctrine\ORM\Query
      */
@@ -148,12 +148,12 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getStatisticListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $order
-     * @param      $partnerId
-     * @param bool $summary
-     * @param      $fromDate
-     * @param      $toDate
-     * @param      $userCurrencyFactor
+     * @param array     $order
+     * @param int       $partnerId
+     * @param bool      $summary
+     * @param \DateTime $fromDate
+     * @param \DateTime $toDate
+     * @param float|int $userCurrencyFactor
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -206,10 +206,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $partnerId
-     * @param $fromDate
-     * @param $toDate
-     * @param $userCurrencyFactor
+     * @param int       $partnerId
+     * @param \DateTime $fromDate
+     * @param \DateTime $toDate
+     * @param float|int $userCurrencyFactor
      *
      * @return \Doctrine\ORM\Query
      */
@@ -224,10 +224,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getStatisticChartQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $partnerId
-     * @param $fromDate
-     * @param $toDate
-     * @param $userCurrencyFactor
+     * @param int       $partnerId
+     * @param \DateTime $fromDate
+     * @param \DateTime $toDate
+     * @param float|int $userCurrencyFactor
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -261,7 +261,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object to map the customer to the partner account
      *
-     * @param $mappingValue
+     * @param string $mappingValue
      *
      * @return \Doctrine\ORM\Query
      */
@@ -276,7 +276,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerForMappingQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $mappingValue
+     * @param string $mappingValue
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -306,8 +306,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object to validate the Tracking-Code because the Tracking-Code has to be unique
      *
-     * @param $trackingCode
-     * @param $partnerId
+     * @param string $trackingCode
+     * @param int    $partnerId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -322,8 +322,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateTrackingCodeQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $trackingCode
-     * @param $partnerId
+     * @param string $trackingCode
+     * @param int    $partnerId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -346,8 +346,8 @@ class Repository extends ModelRepository
     /**
      * Helper method to get the date part of the dql query
      *
-     * @param $alias
-     * @param bool $monthlyAmount | whether to add the selection of a month or not
+     * @param string $alias
+     * @param bool   $monthlyAmount | whether to add the selection of a month or not
      *
      * @return string
      */

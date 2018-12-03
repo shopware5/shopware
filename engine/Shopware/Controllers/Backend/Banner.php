@@ -34,6 +34,9 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 {
     /**
      * Test repository injection variable
+     *
+     * @var \Shopware\Models\Banner\Repository
+     * @scope private
      */
     public static $testRepository = null;
 
@@ -69,7 +72,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $query = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class)->getListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('start'),
             false
         );
@@ -185,6 +188,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // Add or edit detection
         $tmpId = $this->Request()->get('id');
+        $id = null;
 
         // Collecting form data
         if (!empty($tmpId)) {
@@ -208,9 +212,9 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         $params = $this->Request()->getParams();
 
-        // build a single from date instead of two parts
+        // Build a single from date instead of two parts
         $params['validFrom'] = $this->prepareDateAndTime($this->Request()->get('validFromDate'), $this->Request()->get('validFromTime'));
-        // build a single till date instead of two dates
+        // Build a single till date instead of two dates
         $params['validTo'] = $this->prepareDateAndTime($this->Request()->get('validToDate'), $this->Request()->get('validToTime'));
         // Get media manager
         $mediaManagerData = $this->Request()->get('media-manager-selection');
