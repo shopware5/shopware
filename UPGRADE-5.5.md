@@ -65,6 +65,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed regex in media manager to filter all symbols
 * Changed cart item information to use laststock from variant instead product
 * Changed media normalizer to consider model objects
+* Changed `clear_cache.sh` to use `rsync` if available for faster cache clearing
 
 ### Removals
 
