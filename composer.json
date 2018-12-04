@@ -9,8 +9,9 @@
         "proprietary"
     ],
     "support": {
-        "forum": "http://forum.shopware.com",
-        "wiki": "http://wiki.shopware.com",
+        "forum": "https://forum.shopware.com",
+        "chat": "https://gitter.im/shopware/shopware",
+        "wiki": "https://community.shopware.com",
         "source": "https://github.com/shopware/shopware",
         "issues": "https://issues.shopware.com"
     },
