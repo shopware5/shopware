@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.Attributes.model.Table', {
         s_categories_attributes: '{s name="table/s_categories_attributes"}{/s}',
         s_core_countries_attributes: '{s name="table/s_core_countries_attributes"}{/s}',
         s_core_countries_states_attributes: '{s name="table/s_core_countries_states_attributes"}{/s}',
+        s_core_shops_attributes: '{s name="table/s_core_shops_attributes"}{/s}',
         s_user_attributes: '{s name="table/s_user_attributes"}{/s}',
         s_core_customergroups_attributes: '{s name="table/s_core_customergroups_attributes"}{/s}',
         s_premium_dispatch_attributes: '{s name="table/s_premium_dispatch_attributes"}{/s}',
