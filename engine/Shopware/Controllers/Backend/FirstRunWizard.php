@@ -319,7 +319,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function getAlternativeLocalesAction()
     {
-        /** @var $targetLocale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $targetLocale */
         $targetLocale = Shopware()->Container()->get('Auth')->getIdentity()->locale;
 
         $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
@@ -566,7 +566,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         $user = Shopware()->Container()->get('Auth')->getIdentity();
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 

@@ -126,7 +126,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             /** @var Address $billing */
             $billing = $billingForm->getData();
 
-            if (!$billing->getCountry()->getAllowShipping()) {
+            $country = $this->get('shopware_storefront.country_gateway')->getCountry($billing->getCountry()->getId(), $context);
+
+            if (!$country->allowShipping()) {
                 $errors['billing']['country'] = $this->get('snippets')->getNamespace('frontend/register/index')->get('CountryNotAvailableForShipping');
             }
         }
@@ -477,7 +479,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function getCustomerGroupKey()
     {
-        $customerGroupKey = $this->request->getParam('sValidation', null);
+        $customerGroupKey = $this->request->getParam('sValidation');
         $customerGroupId = $this->get('dbal_connection')->fetchColumn(
             'SELECT id FROM s_core_customergroups WHERE `groupkey` = ?',
             [$customerGroupKey]

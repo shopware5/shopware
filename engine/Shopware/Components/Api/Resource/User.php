@@ -35,7 +35,7 @@ use Shopware\Models\User\User as UserModel;
 /**
  * User API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -80,20 +80,23 @@ class User extends Resource
             ->where('users.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $user UserModel */
+        /** @var UserModel $user */
         $user = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$user) {
             throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
         }
 
-        if (is_array($user)) {
-            unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
-        } else {
-            $user->setApiKey('');
-            $user->setSessionId('');
-            $user->setPassword('');
-            $user->setEncoder('');
+        if (!$this->hasPrivilege('create', 'usermanager') &&
+            !$this->hasPrivilege('update', 'usermanager')) {
+            if (is_array($user)) {
+                unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
+            } else {
+                $user->setApiKey('');
+                $user->setSessionId('');
+                $user->setPassword('');
+                $user->setEncoder('');
+            }
         }
 
         return $user;

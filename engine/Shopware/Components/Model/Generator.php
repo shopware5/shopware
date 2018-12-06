@@ -307,8 +307,8 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $sourceCode string
+     * @param \Doctrine\DBAL\Schema\Table $table
+     * @param string                      $sourceCode
      *
      * @throws \Exception
      *
@@ -345,7 +345,7 @@ class %className% extends ModelEntity
      * php types. For example the database type "text" will be converted
      * to "string"
      *
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -374,10 +374,10 @@ class %className% extends ModelEntity
 
         $classes = [];
 
-        /** @var $file \SplFileInfo */
+        /** @var \SplFileInfo $file */
         foreach ($iterator as $file) {
             $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
-            if ($file->isDir() || $extension !== 'php') {
+            if ($extension !== 'php' || $file->isDir()) {
                 continue;
             }
 
@@ -438,7 +438,7 @@ class %className% extends ModelEntity
      * The generate model function create the doctrine model for
      * the passed table name.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return int
      */
@@ -494,7 +494,7 @@ class %className% extends ModelEntity
     /**
      * Returns the class definition for the passed table object
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return mixed
      */
@@ -527,7 +527,7 @@ class %className% extends ModelEntity
      * The tableMapping array contains the class names and namespace for
      * each already declared shopware model/table.
      *
-     * @param $tableName
+     * @param string $tableName
      *
      * @return string
      */
@@ -555,14 +555,14 @@ class %className% extends ModelEntity
      * for all table column properties. This function returns
      * only the defintion of the properties, not of the getters and seters.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
     protected function getColumnsProperties($table)
     {
         $columns = [];
-        /** @var $column \Doctrine\DBAL\Schema\Column */
+        /** @var \Doctrine\DBAL\Schema\Column $column */
         foreach ($table->getColumns() as $column) {
             if ($table->getName() === 's_articles_attributes' && $column->getName() === 'articleID') {
                 continue;
@@ -581,8 +581,8 @@ class %className% extends ModelEntity
      * This function creates only the property definition for a single
      * column, not the getter and setter function.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -617,8 +617,8 @@ class %className% extends ModelEntity
      * If the passed column is a foreign key column the function uses the class
      * name of the foreign table as property with an additional suffix "Id".
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -658,14 +658,14 @@ class %className% extends ModelEntity
      * If the column has a foreign key definition, the class name
      * of the foreign table will be used for the property name of the column.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return bool|\Doctrine\DBAL\Schema\ForeignKeyConstraint
      */
     protected function getColumnForeignKey($table, $column)
     {
-        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
+        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey */
         foreach ($table->getForeignKeys() as $foreignKey) {
             foreach ($foreignKey->getLocalColumns() as $foreignKeyColumn) {
                 if ($foreignKeyColumn === $column->getName()) {
@@ -681,7 +681,7 @@ class %className% extends ModelEntity
      * Helper function to covnert the boolean value of the function "column->getNotNull()" to
      * a string which can be used for the doctrine annoation.
      *
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -700,8 +700,8 @@ class %className% extends ModelEntity
      * In this case doctrine requires the @ORM\ID annoation and a primary key
      * strategy.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return bool
      */
@@ -725,14 +725,14 @@ class %className% extends ModelEntity
      * This function creates only the property definition source code, not the getter
      * and setter source code for the properties.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
     protected function getAssociationProperties($table)
     {
         $associations = [];
-        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
+        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey */
         foreach ($table->getForeignKeys() as $foreignKey) {
             if ($table->getName() === 's_articles_attributes' && $foreignKey->getColumns()[0] === 'articleID') {
                 continue;
@@ -750,8 +750,8 @@ class %className% extends ModelEntity
      * The getter and setter function for the properties are created over the
      * "getAssociationFunctions" function.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @param \Doctrine\DBAL\Schema\Table                $table
+     * @param \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey
      *
      * @return string
      */
@@ -782,7 +782,7 @@ class %className% extends ModelEntity
      * Creates the source code for the custom constructor, which initializes all
      * not-null properties with their respective default vaulue.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return string
      */
@@ -847,7 +847,7 @@ class %className% extends ModelEntity
      * The getColumnsFunctions function creates the source code for the
      * getter and setter for all table columns properties.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
@@ -865,8 +865,8 @@ class %className% extends ModelEntity
      * Helper function to create the getter and setter source code
      * for the passed column object.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -886,14 +886,14 @@ class %className% extends ModelEntity
      * Creates the getter and setter functions source code for all association
      * properties of the passed table object.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
     protected function getAssociationsFunctions($table)
     {
         $columns = [];
-        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
+        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey */
         foreach ($table->getForeignKeys() as $foreignKey) {
             if ($table->getName() === 's_articles_attributes' && $foreignKey->getColumns()[0] === 'articleID') {
                 continue;
@@ -909,7 +909,7 @@ class %className% extends ModelEntity
      * Creates the getter and setter function source code for the passed
      * foreign key constraint object.
      *
-     * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @param \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey
      *
      * @return string
      */

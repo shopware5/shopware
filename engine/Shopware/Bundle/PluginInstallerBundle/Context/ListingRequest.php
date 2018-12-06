@@ -47,12 +47,12 @@ class ListingRequest extends BaseRequest
     private $conditions;
 
     /**
-     * @param $locale
-     * @param $shopwareVersion
-     * @param $offset
-     * @param $limit
-     * @param $conditions
-     * @param $sortings
+     * @param string  $locale
+     * @param string  $shopwareVersion
+     * @param int     $offset
+     * @param int     $limit
+     * @param array[] $conditions
+     * @param array[] $sortings
      */
     public function __construct(
         $locale,
@@ -90,7 +90,7 @@ class ListingRequest extends BaseRequest
     }
 
     /**
-     * @return \array[]
+     * @return array[]
      */
     public function getConditions()
     {
@@ -98,7 +98,7 @@ class ListingRequest extends BaseRequest
     }
 
     /**
-     * @return \array[]
+     * @return array[]
      */
     public function getSortings()
     {

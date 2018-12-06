@@ -174,8 +174,8 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             $request->getParam('streamId'),
             (int) $request->getParam('start', 0),
             (int) $request->getParam('limit', 50),
-            $request->getParam('conditions', null),
-            $request->getParam('sorting', null)
+            $request->getParam('conditions'),
+            $request->getParam('sorting')
         );
 
         $data = $this->container->get('shopware.customer_stream.repository')->fetchBackendListing($result->getIds());

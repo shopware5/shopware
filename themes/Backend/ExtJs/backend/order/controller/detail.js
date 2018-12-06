@@ -777,7 +777,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     }
                 }
                 // reload the order list
-                me.getOrderList().store.load();
+                me.subApplication.getStore('Order').load();
             }
         });
     },
@@ -801,7 +801,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     ],
                     record: record,
                     order: record,
-                    listStore: me.getOrderList().getStore(),
+                    listStore: me.subApplication.getStore('Order'),
                     documentTypeStore: documentTypeStore,
                     mail: mail
                 }).show();

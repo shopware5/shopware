@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
 
@@ -64,9 +63,9 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * $eventManager->addListener('foo.action', array($listener, 'onFooAction'));
      *
-     * @param $eventName
-     * @param $listener
-     * @param int $priority
+     * @param string   $eventName
+     * @param callback $listener
+     * @param int      $priority
      *
      * @return Enlight_Event_EventManager
      */
@@ -163,7 +162,7 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * Retrieve a list of listeners registered to a given event.
      *
-     * @param   $event
+     * @param $event
      *
      * @return Enlight_Event_Handler[]
      */
@@ -255,7 +254,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (null !== ($return = $listener->execute($eventArgs))
+            if (($return = $listener->execute($eventArgs)) !== null
                 || $eventArgs->isProcessed()
             ) {
                 $eventArgs->setProcessed(true);
@@ -301,7 +300,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (null !== ($return = $listener->execute($eventArgs))) {
+            if (($return = $listener->execute($eventArgs)) !== null) {
                 $eventArgs->setReturn($return);
             }
         }

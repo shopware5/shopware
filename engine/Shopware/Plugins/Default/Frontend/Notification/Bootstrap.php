@@ -366,6 +366,15 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
             $shopContext = Context::createFromShop($shop, $this->get('config'));
             $this->get('router')->setContext($shopContext);
+            $sContext = $this->get('shopware_storefront.context_service')->createShopContext($notify['language']);
+
+            $productInformation = $this->get('shopware_storefront.list_product_service')->get($notify['ordernumber'], $sContext);
+
+            if (empty($productInformation)) {
+                continue;
+            }
+
+            $productInformation = $this->get('legacy_struct_converter')->convertListProductStruct($productInformation);
 
             $link = Shopware()->Front()->Router()->assemble([
                 'sViewport' => 'detail',
@@ -378,6 +387,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 'sArticleLink' => $link,
                 'sOrdernumber' => $notify['ordernumber'],
                 'sData' => $job['data'],
+                'product' => $productInformation,
             ];
 
             $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);

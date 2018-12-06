@@ -43,7 +43,7 @@ class DownloadTest extends TestCase
 
         $this->assertCount(2, $downloads);
 
-        /** @var $download Download */
+        /** @var Download $download */
         foreach ($downloads as $download) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
             $this->assertContains($download->getFile(), ['/var/www/first.txt', '/var/www/second.txt']);
@@ -80,7 +80,7 @@ class DownloadTest extends TestCase
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param ShopContext                        $context
      * @param \Shopware\Models\Category\Category $category
      * @param null                               $additionally

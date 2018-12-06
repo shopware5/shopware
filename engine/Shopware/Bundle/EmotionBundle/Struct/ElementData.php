@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -62,8 +62,8 @@ class ElementData implements \JsonSerializable
     }
 
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed  $value
      */
     public function set($name, $value)
     {

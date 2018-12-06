@@ -39,7 +39,7 @@ use Shopware\Models\Shop;
  * template directories or other resources which should include the
  * theme inheritance.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -29,7 +29,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,7 +56,7 @@ EOF
     {
         $this->container->load('table');
 
-        /** @var $manager $manager */
+        /** @var \Enlight_Components_Cron_Manager $manager */
         $manager = $this->container->get('cron');
         $rows = [];
 
@@ -75,6 +75,6 @@ EOF
         $table->setHeaders(['Name', 'Action', 'Active', 'Interval', 'Next run', 'Last run'])
               ->setRows($rows);
 
-        $table->render($output);
+        $table->render();
     }
 }

@@ -87,10 +87,10 @@ class ConfigWriter
      */
     public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop)
     {
-        /** @var $form Form */
+        /** @var Form $form */
         $form = $this->formRepository->findOneBy(['pluginId' => $plugin->getId()]);
 
-        /** @var $element Element */
+        /** @var Element $element */
         $element = $this->elementRepository->findOneBy(['form' => $form, 'name' => $name]);
         if (!$element) {
             throw new \Exception(sprintf('Config element "%s" not found.', $name));

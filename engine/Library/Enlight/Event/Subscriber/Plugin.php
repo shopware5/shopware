@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Event
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -27,7 +28,7 @@
  * The Enlight_Event_Subscriber_Plugin is a collection to manage multiple event handlers within a plugin.
  *
  * @category   Enlight
- * @package    Enlight_Event
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -35,7 +36,7 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
 {
     /**
      * @var Enlight_Plugin_Namespace Contains an instance of the Enlight_Plugin_Namespace.
-     * Will be set in the class constructor.
+     *                               Will be set in the class constructor.
      */
     protected $namespace;
 
@@ -54,23 +55,24 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
     /**
      * Writes all listeners to the storage.
      *
-     * @return  Enlight_Event_Subscriber_Config
+     * @return Enlight_Event_Subscriber_Config
      */
     public function write()
     {
         $this->storage->listeners = $this->toArray();
         $this->storage->write();
+
         return $this;
     }
 
     /**
      * Loads the event listener from storage.
      *
-     * @return  Enlight_Event_Subscriber_Config
+     * @return Enlight_Event_Subscriber_Config
      */
     public function read()
     {
-        $this->listeners = array();
+        $this->listeners = [];
 
         if ($this->storage->listeners !== null) {
             foreach ($this->storage->listeners as $entry) {
@@ -86,20 +88,23 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
                 );
             }
         }
+
         return $this;
     }
 
     /**
      * Returns all listeners as array.
+     *
      * @return array
      */
     public function toArray()
     {
-        $listeners = array();
-        /** @var $handler Enlight_Event_Handler_Plugin */
+        $listeners = [];
+        /** @var Enlight_Event_Handler_Plugin $handler */
         foreach ($this->listeners as $handler) {
             $listeners[] = $handler->toArray();
         }
+
         return $listeners;
     }
 }

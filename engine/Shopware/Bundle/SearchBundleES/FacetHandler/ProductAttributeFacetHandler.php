@@ -91,11 +91,22 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     ) {
         /** @var ProductAttributeFacet $criteriaPart */
         $field = 'attributes.core.' . $criteriaPart->getField();
+        $type = null;
+
+        try {
+            $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
+            $type = $attribute->getElasticSearchType()['type'];
+        } catch (\Exception $e) {
+        }
+
         $this->criteriaParts[] = $criteriaPart;
 
         switch ($criteriaPart->getMode()) {
             case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
             case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
+                if ($type === 'string') {
+                    $field .= '.raw';
+                }
                 $aggregation = new TermsAggregation($criteriaPart->getName());
                 $aggregation->setField($field);
                 $aggregation->addParameter('size', self::AGGREGATION_SIZE);
@@ -247,8 +258,8 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
     /**
      * @param ProductAttributeFacet $criteriaPart
-     * @param $data
-     * @param Criteria $criteria
+     * @param array                 $data
+     * @param Criteria              $criteria
      *
      * @return null|RadioFacetResult|ValueListFacetResult
      */
@@ -264,9 +275,14 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
         $actives = [];
 
-        /** @var $condition ProductAttributeCondition */
+        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $actives = $condition->getValue();
+
+            // $condition->getValue() can return a string
+            if (!is_array($actives)) {
+                $actives = [$actives];
+            }
         }
 
         $items = array_map(function ($row) use ($actives) {
@@ -294,8 +310,8 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
     /**
      * @param ProductAttributeFacet $criteriaPart
-     * @param $data
-     * @param Criteria $criteria
+     * @param array                 $data
+     * @param Criteria              $criteria
      *
      * @return null|BooleanFacetResult
      */
@@ -318,8 +334,8 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
     /**
      * @param ProductAttributeFacet $criteriaPart
-     * @param $data
-     * @param Criteria $criteria
+     * @param array                 $data
+     * @param Criteria              $criteria
      *
      * @return RangeFacetResult
      */
@@ -332,7 +348,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition ProductAttributeCondition */
+        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $data = $condition->getValue();
             $activeMin = $data['min'];

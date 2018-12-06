@@ -522,7 +522,7 @@ class DqlHelper
     /**
      * Return column info for a given alias
      *
-     * @param $alias
+     * @param string $alias
      *
      * @return bool
      */
@@ -540,7 +540,7 @@ class DqlHelper
     /**
      * Returns the association name for a given entity in order to join it automatically
      *
-     * @param $entity
+     * @param string $entity
      *
      * @return string
      */
@@ -590,7 +590,7 @@ class DqlHelper
     /**
      * Returns a list of entities we need to join based on the given tokens
      *
-     * @param $tokens
+     * @param array $tokens
      *
      * @return array
      */
@@ -770,9 +770,9 @@ class DqlHelper
      * Helper function to format a value depending on its type and value
      * Will set value = null for empty *strings* and replace comma with period for decimals
      *
-     * @param $prefix
-     * @param $field
-     * @param $value
+     * @param string $prefix
+     * @param array  $field
+     * @param string $value
      *
      * @return mixed|null
      */
@@ -797,7 +797,7 @@ class DqlHelper
      * This method will return a list of IDs of a given foreign entity which is connected to a given $detailId
      *
      * @param string $foreignPrefix
-     * @param array  $detailIds
+     * @param int[]  $detailIds
      *
      * @return mixed
      */

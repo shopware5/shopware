@@ -86,7 +86,7 @@ class ListProductTest extends TestCase
     }
 
     /**
-     * @param $number
+     * @param string      $number
      * @param ShopContext $context
      *
      * @return ListProduct

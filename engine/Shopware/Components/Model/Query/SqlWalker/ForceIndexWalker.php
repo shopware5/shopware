@@ -29,7 +29,7 @@ use Doctrine\ORM\Query\SqlWalker;
 /**
  * Quick hack to allow adding a SQL specified commands
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

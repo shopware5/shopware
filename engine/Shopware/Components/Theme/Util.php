@@ -34,7 +34,7 @@ use Shopware\Models\Shop;
  * which contains different small functions
  * which used in all other Theme\* classes.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

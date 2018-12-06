@@ -37,7 +37,7 @@ use Shopware\Models\Widget\Widget;
 /**
  * Shopware Plugin Bootstrap
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -66,14 +66,14 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Constructor method
      *
-     * @param                     $name
+     * @param string              $name
      * @param Enlight_Config|null $info
      */
     public function __construct($name, $info = null)
     {
         $this->info = new Enlight_Config($this->getInfo(), true);
         if ($info instanceof Enlight_Config) {
-            $info->setAllowModifications(true);
+            $info->setAllowModifications();
             $updateVersion = null;
             $updateSource = null;
 
@@ -407,7 +407,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Creates a new widget
      *
-     * @param $name
+     * @param string $name
      */
     public function createWidget($name)
     {
@@ -710,7 +710,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function extendsEmotionTemplates(Enlight_Controller_ActionEventArgs $args)
     {
-        /** @var $view Enlight_View_Default */
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
 
         if (file_exists($this->Path() . '/Views/emotion_components/')) {
@@ -867,7 +867,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             return null;
         }
 
-        /** @var $plugin Plugin */
+        /** @var Plugin $plugin */
         $plugin = Shopware()->Models()->find(Plugin::class, $httpCache->getId());
 
         if (!$plugin->getActive() || !$plugin->getInstalled()) {

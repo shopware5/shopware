@@ -148,7 +148,7 @@ class SupplierRepository extends ModelRepository
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['supplier'])
             ->from('Shopware\Models\Article\Supplier', 'supplier');

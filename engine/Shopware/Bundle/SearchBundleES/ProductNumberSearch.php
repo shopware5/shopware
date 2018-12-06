@@ -58,7 +58,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @param Client                $client
      * @param IndexFactoryInterface $indexFactory
-     * @param $handlers
+     * @param HandlerInterface[]    $handlers
      */
     public function __construct(
         Client $client,

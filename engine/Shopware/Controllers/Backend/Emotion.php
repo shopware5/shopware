@@ -70,18 +70,18 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function listAction()
     {
-        $limit = $this->Request()->getParam('limit', null);
+        $limit = $this->Request()->getParam('limit');
         $offset = $this->Request()->getParam('start', 0);
-        $filter = $this->Request()->getParam('filter', null);
-        $filterBy = $this->Request()->getParam('filterBy', null);
-        $categoryId = $this->Request()->getParam('categoryId', null);
+        $filter = $this->Request()->getParam('filter');
+        $filterBy = $this->Request()->getParam('filterBy');
+        $categoryId = $this->Request()->getParam('categoryId');
 
         $query = $this->getRepository()->getListingQuery($filter, $filterBy, $categoryId);
 
         $query->setFirstResult($offset)
             ->setMaxResults($limit);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
         $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -106,8 +106,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function getMasterLandingPagesAction()
     {
-        $id = $this->Request()->getParam('id', null);
-        $ownId = $this->Request()->getParam('ownId', null);
+        $id = $this->Request()->getParam('id');
+        $ownId = $this->Request()->getParam('ownId');
 
         $builder = $this->getRepository()->getListingQuery([], 'onlyLandingPageMasters');
 
@@ -139,7 +139,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function detailAction()
     {
-        $id = $this->Request()->getParam('id', null);
+        $id = $this->Request()->getParam('id');
         $repository = $this->getRepository();
 
         $query = $repository->getEmotionDetailQuery($id);
@@ -155,13 +155,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $validFrom = $emotion['validFrom'];
         $validTo = $emotion['validTo'];
 
-        /** @var $validFrom \DateTime */
+        /** @var \DateTime $validFrom */
         if ($validFrom instanceof \DateTime) {
             $emotion['validFrom'] = $validFrom->format('d.m.Y');
             $emotion['validFromTime'] = $validFrom->format('H:i');
         }
 
-        /** @var $validTo \DateTime */
+        /** @var \DateTime $validTo */
         if ($validTo instanceof \DateTime) {
             $emotion['validTo'] = $validTo->format('d.m.Y');
             $emotion['validToTime'] = $validTo->format('H:i');
@@ -299,7 +299,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function uploadAction()
     {
-        /** @var $file UploadedFile */
+        /** @var UploadedFile $file */
         $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('emotionfile');
         $fileSystem = $this->container->get('file_system');
 
@@ -752,7 +752,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $this->View()->assign(
             $this->deleteTemplate(
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('id')
             )
         );
     }
@@ -775,7 +775,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $this->View()->assign(
             $this->duplicateTemplate(
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('id')
             )
         );
     }
@@ -790,9 +790,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $this->View()->assign(
             $this->getTemplates(
-                $this->Request()->getParam('start', null),
-                $this->Request()->getParam('limit', null),
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('start'),
+                $this->Request()->getParam('limit'),
+                $this->Request()->getParam('id')
             )
         );
     }
@@ -855,7 +855,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *      'error' => array('Error 1', 'Error 2', ...)
      * )
      *
-     * @param $records
+     * @param array $records
      *
      * @return array
      */
@@ -1138,11 +1138,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     private function saveEmotion(array $data)
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/emotion');
 
         if (!empty($data['id'])) {
-            /** @var $emotion Emotion */
+            /** @var Emotion $emotion */
             $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $data['id']);
 
             if (!$emotion) {
@@ -1155,14 +1155,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 return null;
             }
         } else {
-            /** @var $emotion Emotion */
+            /** @var Emotion $emotion */
             $emotion = new Emotion();
             $emotion->setCreateDate(new \DateTime());
         }
 
         $template = null;
         if (!empty($data['templateId'])) {
-            /** @var $template \Shopware\Models\Emotion\Template */
+            /** @var \Shopware\Models\Emotion\Template $template */
             $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['templateId']);
         }
 
@@ -1212,7 +1212,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         if (Shopware()->Container()->get('Auth')->getIdentity()->id) {
-            /** @var $user \Shopware\Models\User\User */
+            /** @var \Shopware\Models\User\User $user */
             $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);
             $emotion->setUser($user);
         }
@@ -1318,7 +1318,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 continue;
             }
 
-            /** @var $field Field */
+            /** @var Field $field */
             $field = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['fieldId']);
             $item['field'] = $field;
 
@@ -1334,8 +1334,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Method for processing the different value types of the data fields.
      *
-     * @param Field $field
-     * @param $value
+     * @param Field        $field
+     * @param array|string $value
      *
      * @return string
      */
@@ -1464,8 +1464,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param     $query         \Doctrine\ORM\Query
-     * @param int $hydrationMode
+     * @param \Doctrine\ORM\Query $query
+     * @param int                 $hydrationMode
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */

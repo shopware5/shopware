@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -88,7 +88,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         $query->select($this->fieldHelper->getTaxFields())
             ->from('s_core_tax', 'tax');
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -104,7 +104,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         foreach ($data as $tax) {
             $query->setParameter(':taxId', $tax['__tax_id']);
 
-            /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+            /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
             $statement = $query->execute();
 
             $area = $statement->fetch(\PDO::FETCH_ASSOC);

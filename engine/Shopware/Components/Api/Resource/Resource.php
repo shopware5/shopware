@@ -38,7 +38,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 /**
  * Abstract API Resource Class
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,6 +49,7 @@ abstract class Resource implements ContainerAwareInterface
      * Hydrates an object graph. This is the default behavior.
      */
     const HYDRATE_OBJECT = 1;
+
     /**
      * Hydrates an array graph.
      */
@@ -83,7 +84,9 @@ abstract class Resource implements ContainerAwareInterface
      */
     protected $role;
 
-    /** @var Container */
+    /**
+     * @var Container
+     */
     protected $container;
 
     /**
@@ -246,6 +249,13 @@ abstract class Resource implements ContainerAwareInterface
         }
     }
 
+    /**
+     * @param array $data
+     *
+     * @throws BatchInterfaceNotImplementedException
+     *
+     * @return array
+     */
     public function batchDelete($data)
     {
         if (!$this instanceof BatchInterface) {
@@ -291,7 +301,7 @@ abstract class Resource implements ContainerAwareInterface
      * This method will update/create a whole list of entities.
      * The resource needs to implement BatchInterface for that.
      *
-     * @param $data
+     * @param array $data
      *
      * @throws BatchInterfaceNotImplementedException
      *
@@ -321,7 +331,7 @@ abstract class Resource implements ContainerAwareInterface
                         'data' => $this->create($datum),
                     ];
                 }
-                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                if ($this->getResultMode() === self::HYDRATE_ARRAY) {
                     $results[$key]['data'] = Shopware()->Models()->toArray(
                         $results[$key]['data']
                     );
@@ -351,20 +361,20 @@ abstract class Resource implements ContainerAwareInterface
      * same configuration for the model manager and acl
      * as the current resource.
      *
-     * @param $name
+     * @param string $name
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     protected function getResource($name)
     {
         try {
-            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            /** @var \Shopware\Components\Api\Resource\Resource $resource */
             $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));
         } catch (ServiceNotFoundException $e) {
             $name = ucfirst($name);
             $class = __NAMESPACE__ . '\\Resource\\' . $name;
 
-            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            /** @var \Shopware\Components\Api\Resource\Resource $resource */
             $resource = new $class();
         }
 
@@ -387,9 +397,9 @@ abstract class Resource implements ContainerAwareInterface
      * the "replace" parameter the collection will be cleared.
      *
      * @param Collection $collection
-     * @param $data
-     * @param $optionName
-     * @param $defaultReplace
+     * @param array      $data
+     * @param string     $optionName
+     * @param bool       $defaultReplace
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -409,8 +419,8 @@ abstract class Resource implements ContainerAwareInterface
 
     /**
      * @param Collection|array $collection
-     * @param                  $property
-     * @param                  $value
+     * @param string           $property
+     * @param mixed            $value
      *
      * @throws \Exception
      *
@@ -461,8 +471,8 @@ abstract class Resource implements ContainerAwareInterface
      * Helper function to execute different findOneBy statements which different conditions
      * until a passed entity instance found.
      *
-     * @param $entity
-     * @param array $conditions
+     * @param object $entity
+     * @param array  $conditions
      *
      * @throws \Exception
      *
@@ -498,9 +508,9 @@ abstract class Resource implements ContainerAwareInterface
      * passed collection and persist the entity.
      *
      * @param Collection $collection
-     * @param $data
-     * @param $entityType
-     * @param array $conditions
+     * @param array      $data
+     * @param string     $entityType
+     * @param array      $conditions
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
@@ -543,9 +553,9 @@ abstract class Resource implements ContainerAwareInterface
      * Otherwise the item will be
      *
      * @param Collection $collection
-     * @param $data
-     * @param $entityType
-     * @param array $conditions
+     * @param array      $data
+     * @param string     $entityType
+     * @param array      $conditions
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *

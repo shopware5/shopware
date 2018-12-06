@@ -60,7 +60,7 @@ class PlainStrategy implements StrategyInterface
             return '';
         }
 
-        preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
+        preg_match('/.*((media\/(?:archive|image|model|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path, $matches);
 
         if (!empty($matches)) {
             $path = $matches[2] . '/' . $matches[3];
@@ -79,6 +79,6 @@ class PlainStrategy implements StrategyInterface
      */
     public function isEncoded($path)
     {
-        return (bool) preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path);
+        return (bool) preg_match('/.*((media\/(?:archive|image|model|music|pdf|temp|unknown|video|vector)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path);
     }
 }

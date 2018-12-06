@@ -31,21 +31,21 @@ use Shopware\Models\Media\Media as MediaModel;
 /**
  * Category API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Category extends Resource
 {
     /**
-     * @var Shopware_Components_Translation
+     * @var \Shopware_Components_Translation
      */
     private $translationComponent;
 
     /**
-     * @param Shopware_Components_Translation|null $translationComponent
+     * @param \Shopware_Components_Translation|null $translationComponent
      */
-    public function __construct(Shopware_Components_Translation $translationComponent = null)
+    public function __construct(\Shopware_Components_Translation $translationComponent = null)
     {
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
@@ -76,7 +76,7 @@ class Category extends Resource
 
         $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
 
-        /** @var $category \Shopware\Models\Category\Category */
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$category) {
@@ -272,7 +272,7 @@ class Category extends Resource
      *
      * @throws \RuntimeException
      *
-     * @return null|Category
+     * @return null|\Shopware\Models\Category\Category
      */
     public function findCategoryByPath($path, $create = false)
     {

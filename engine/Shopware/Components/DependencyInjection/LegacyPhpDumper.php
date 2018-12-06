@@ -599,7 +599,7 @@ EOF;
      *
      * @param string     $id
      * @param Definition $definition
-     * @param string     &$file
+     * @param string     $file
      *
      * @return string
      */
@@ -1602,6 +1602,7 @@ EOF;
                     $operands = [0];
                     $code = [];
                     $code[] = 'new RewindableGenerator(function () {';
+                    $countCode = null;
 
                     if (!$values = $value->getValues()) {
                         $code[] = '            return new \EmptyIterator();';

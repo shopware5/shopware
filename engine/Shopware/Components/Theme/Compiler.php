@@ -35,7 +35,7 @@ use Shopware\Models\Shop;
  * The Theme\Compiler class is used for the less compiling in the store front.
  * This class handles additionally the css and javascript minification.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -424,7 +424,7 @@ class Compiler
      */
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
-        $config = $this->inheritance->buildConfig($template, $shop, true);
+        $config = $this->inheritance->buildConfig($template, $shop);
         $config['shopware-revision'] = $this->release->getRevision();
 
         $collection = new ArrayCollection();

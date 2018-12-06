@@ -25,26 +25,6 @@ use Shopware\Components\Cart\Struct\Price;
 
 /**
  * Order model for document generation
- *
- * @property int id;
- * @property array order;
- * @property ArrayObject positions;
- * @property int userID;
- * @property array user;
- * @property array billing;
- * @property array shipping;
- * @property array payment;
- * @property array paymentInstances;
- * @property array dispatch;
- * @property bool net;
- * @property bool summaryNet;
- * @property float amountNetto;
- * @property float amount;
- * @property array tax;
- * @property array currency;
- * @property float shippingCosts;
- * @property bool shippingCostsAsPosition;
- * @property mixed discount;
  */
 class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Hook
 {
@@ -54,117 +34,138 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      * @var int
      */
     protected $_id;
+
     /**
      * Metadata of the order
      *
      * @var array
      */
     protected $_order;
+
     /**
      * Metadata of the order positions
      *
      * @var ArrayObject
      */
     protected $_positions;
+
     /**
      * Id of the user (s_user.id)
      *
      * @var int
      */
     protected $_userID;
+
     /**
      * Metadata of the user (email,customergroup etc. s_user.*)
      *
      * @var array
      */
     protected $_user;
+
     /**
      * Billingdata for this order / user (s_order_billingaddress)
      *
      * @var array
      */
     protected $_billing;
+
     /**
      * Shippingdata for this order / user (s_order_shippingaddress)
      *
      * @var array
      */
     protected $_shipping;
+
     /**
      * Payment information for this order (s_core_paymentmeans)
      *
      * @var array
      */
     protected $_payment;
+
     /**
      * Payment instances information for this order (s_core_payment_instance)
      *
      * @var array
      */
     protected $_paymentInstances;
+
     /**
      * Information about the dispatch for this order
      *
      * @var array
      */
     protected $_dispatch;
+
     /**
      * Calculate complete without tax
      *
      * @var bool
      */
     protected $_net;
+
     /**
      * Hide Gross amount
      *
      * @var bool
      */
     protected $_summaryNet;
+
     /**
      * Complete net amount
      *
      * @var float
      */
     protected $_amountNetto;
+
     /**
      * Complete gross amount
      *
      * @var float
      */
     protected $_amount;
+
     /**
      * Array with tax rates
      *
      * @var array
      */
     protected $_tax;
+
     /**
      * Currency information (s_core_currencies)
      *
      * @var array
      */
     protected $_currency;
+
     /**
      * Shipping costs
      *
      * @var float
      */
     protected $_shippingCosts;
+
     /**
      * Add shipping costs as order position
      *
      * @var bool
      */
     protected $_shippingCostsAsPosition;
+
+    /**
+     * @var float
+     */
     protected $_discount;
 
-    /** @var \Shopware\Models\Tax\Repository */
+    /**
+     * @var \Shopware\Models\Tax\Repository
+     */
     protected $_taxRepository;
 
     /**
-     * Initiate order model
-     *
-     * @param  $id
+     * @param int   $id
      * @param array $config
      */
     public function __construct($id, $config = [])
@@ -311,6 +312,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $this->_shippingCosts = $this->_order['invoice_shipping'];
 
         if ($this->_shippingCostsAsPosition == true && !empty($this->_shippingCosts)) {
+            $taxes = [];
+
             if ($this->_order['taxfree']) {
                 $this->_amountNetto = $this->_amountNetto + $this->_order['invoice_shipping'];
             } else {
@@ -350,7 +353,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     $shipping['articleordernumber'] = '';
                     $shipping['name'] = $shippingName . ' ' . (count($taxes) > 1 ? '(' . $tax->getTaxRate() . '%)' : '');
 
-                    $this->positions[] = $shipping;
+                    $this->_positions[] = $shipping;
                 }
 
                 return;
@@ -373,7 +376,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $shipping['articleordernumber'] = '';
             $shipping['name'] = $shippingName;
 
-            $this->positions[] = $shipping;
+            $this->_positions[] = $shipping;
         }
     }
 
@@ -522,10 +525,10 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 ', [$position['articleordernumber']]);
 
                 if (empty($position['tax_rate'])) {
-                    if ($ticketResult['taxconfig'] == 'default' || empty($ticketResult['taxconfig'])) {
+                    if ($ticketResult['taxconfig'] === 'default' || empty($ticketResult['taxconfig'])) {
                         $position['tax'] = Shopware()->Config()->sVOUCHERTAX;
                     // Pre 3.5.4 behaviour
-                    } elseif ($ticketResult['taxconfig'] == 'auto') {
+                    } elseif ($ticketResult['taxconfig'] === 'auto') {
                         // Check max. used tax-rate from basket
                         $position['tax'] = $this->getMaxTaxRate();
                     } elseif ((int) $ticketResult['taxconfig']) {
@@ -786,7 +789,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      * Converts the serialized array to utf8 by unserializing it, iterating through each element and setting the encoding to utf8.
      * It also reverts the arrays to objects
      *
-     * @param $array
+     * @param array|\ArrayIterator $array
      *
      * @return array
      */
@@ -873,12 +876,14 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
     /**
      * Returns prices from invoice positions
+     *
+     * @return Price[]
      */
     private function getPricePositions()
     {
         $prices = [];
 
-        foreach ($this->positions as $position) {
+        foreach ($this->_positions as $position) {
             if ($position['modus'] === '0') {
                 $prices[] = new Price($position['amount'], $position['amount_netto'], (float) $position['tax_rate'], null);
             }

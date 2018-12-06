@@ -132,7 +132,7 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition PriceCondition */
+        /** @var PriceCondition $condition */
         if ($condition = $criteria->getCondition('price')) {
             $activeMin = $condition->getMinPrice();
             $activeMax = $condition->getMaxPrice();

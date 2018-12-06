@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware SwagMultiEdit Plugin - Queue Model
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
@@ -48,6 +48,7 @@ class Queue extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\MultiEdit\QueueArticle", mappedBy="queue", cascade={"persist"},  fetch="EXTRA_LAZY")
      */
     protected $articleDetails;
+
     /**
      * Unique identifier
      *
@@ -109,8 +110,7 @@ class Queue extends ModelEntity
     public function __construct($resource)
     {
         $this->resource = $resource;
-
-        $this->details = new ArrayCollection();
+        $this->articleDetails = new ArrayCollection();
     }
 
     /**
@@ -130,7 +130,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @param $filterString
+     * @param string $filterString
      */
     public function setFilterString($filterString)
     {

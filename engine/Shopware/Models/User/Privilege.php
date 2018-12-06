@@ -107,7 +107,7 @@ class Privilege extends ModelEntity
      * the Privilege.resource property (OWNING SIDE) and the Resource.privileges (INVERSE SIDE) property.
      * The resource data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @param $resource \Shopware\Models\User\Resource
+     * @param \Shopware\Models\User\Resource $resource
      */
     public function setResource($resource)
     {

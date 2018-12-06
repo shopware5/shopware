@@ -56,7 +56,7 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult', $facet);
 
@@ -85,7 +85,7 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
 
         $this->assertEquals(105.00, $facet->getMin());
@@ -115,7 +115,7 @@ class PriceFacetTest extends TestCase
             [],
             $context
         );
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
 
         $this->assertEquals(100.00, $facet->getMin());
@@ -147,7 +147,7 @@ class PriceFacetTest extends TestCase
             [],
             $context
         );
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
 
         $this->assertEquals(250.00, $facet->getMin());
@@ -172,7 +172,7 @@ class PriceFacetTest extends TestCase
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param ShopContext                        $context
      * @param \Shopware\Models\Category\Category $category
      * @param array                              $prices

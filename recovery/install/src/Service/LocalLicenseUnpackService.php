@@ -32,7 +32,7 @@ use Shopware\Recovery\Install\Struct\LicenseUnpackRequest;
 use Shopware\Recovery\Install\Struct\ShopwareEdition;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

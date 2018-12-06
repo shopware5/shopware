@@ -1,24 +1,63 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/bsd-license.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
-
 interface Enlight_Controller_Request_Request
 {
+    /**
+     * Access values contained in the superglobals as public members
+     * Order of precedence: 1. GET, 2. POST, 3. COOKIE, 4. SERVER, 5. ENV
+     *
+     * @see http://msdn.microsoft.com/en-us/library/system.web.httprequest.item.aspx
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function __get($key);
+
+    /**
+     * Set values
+     *
+     * In order to follow {@link __get()}, which operates on a number of
+     * superglobals, setting values through overloading is not allowed and will
+     * raise an exception. Use setParam() instead.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @throws \Exception
+     */
+    public function __set($key, $value);
+
+    /**
+     * Check to see if a property is set
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function __isset($key);
+
     /**
      * Retrieve the module name in lowercase
      *
@@ -30,6 +69,7 @@ interface Enlight_Controller_Request_Request
      * Set the module name to use
      *
      * @param string $value
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setModuleName($value);
@@ -45,6 +85,7 @@ interface Enlight_Controller_Request_Request
      * Set the controller name to use
      *
      * @param string $value
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setControllerName($value);
@@ -60,6 +101,7 @@ interface Enlight_Controller_Request_Request
      * Set the action name
      *
      * @param string $value
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setActionName($value);
@@ -75,6 +117,7 @@ interface Enlight_Controller_Request_Request
      * Set the module key
      *
      * @param string $key
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setModuleKey($key);
@@ -90,6 +133,7 @@ interface Enlight_Controller_Request_Request
      * Set the controller key
      *
      * @param string $key
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setControllerKey($key);
@@ -105,6 +149,7 @@ interface Enlight_Controller_Request_Request
      * Set the action key
      *
      * @param string $key
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setActionKey($key);
@@ -121,6 +166,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $key
      * @param string $default Default value to use if key not found
+     *
      * @return mixed
      */
     public function getUserParam($key, $default = null);
@@ -135,7 +181,8 @@ interface Enlight_Controller_Request_Request
     /**
      * Set flag indicating whether or not request has been dispatched
      *
-     * @param boolean $flag
+     * @param bool $flag
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setDispatched($flag = true);
@@ -143,62 +190,33 @@ interface Enlight_Controller_Request_Request
     /**
      * Determine if the request has been dispatched
      *
-     * @return boolean
+     * @return bool
      */
     public function isDispatched();
-
-    /**
-     * Access values contained in the superglobals as public members
-     * Order of precedence: 1. GET, 2. POST, 3. COOKIE, 4. SERVER, 5. ENV
-     *
-     * @see http://msdn.microsoft.com/en-us/library/system.web.httprequest.item.aspx
-     * @param string $key
-     * @return mixed
-     */
-    public function __get($key);
 
     /**
      * Alias to __get
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function get($key);
 
     /**
-     * Set values
-     *
-     * In order to follow {@link __get()}, which operates on a number of
-     * superglobals, setting values through overloading is not allowed and will
-     * raise an exception. Use setParam() instead.
-     *
-     * @param string $key
-     * @param mixed $value
-     * @throws \Exception
-     */
-    public function __set($key, $value);
-
-    /**
      * Alias to __set()
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function set($key, $value);
-
-    /**
-     * Check to see if a property is set
-     *
-     * @param string $key
-     * @return boolean
-     */
-    public function __isset($key);
 
     /**
      * Alias to __isset()
      *
      * @param string $key
-     * @return boolean
+     *
+     * @return bool
      */
     public function has($key);
 
@@ -208,7 +226,8 @@ interface Enlight_Controller_Request_Request
      * If no $key is passed, returns the entire $_GET array.
      *
      * @param string $key
-     * @param mixed $default Default value to use if key not found
+     * @param mixed  $default Default value to use if key not found
+     *
      * @return mixed Returns null if key does not exist
      */
     public function getQuery($key = null, $default = null);
@@ -219,7 +238,8 @@ interface Enlight_Controller_Request_Request
      * If no $key is passed, returns the entire $_POST array.
      *
      * @param string $key
-     * @param mixed $default Default value to use if key not found
+     * @param mixed  $default Default value to use if key not found
+     *
      * @return mixed Returns null if key does not exist
      */
     public function getPost($key = null, $default = null);
@@ -230,7 +250,8 @@ interface Enlight_Controller_Request_Request
      * If no $key is passed, returns the entire $_COOKIE array.
      *
      * @param string $key
-     * @param mixed $default Default value to use if key not found
+     * @param mixed  $default Default value to use if key not found
+     *
      * @return mixed Returns null if key does not exist
      */
     public function getCookie($key = null, $default = null);
@@ -241,7 +262,8 @@ interface Enlight_Controller_Request_Request
      * If no $key is passed, returns the entire $_SERVER array.
      *
      * @param string $key
-     * @param mixed $default Default value to use if key not found
+     * @param mixed  $default Default value to use if key not found
+     *
      * @return mixed Returns null if key does not exist
      */
     public function getServer($key = null, $default = null);
@@ -252,7 +274,8 @@ interface Enlight_Controller_Request_Request
      * If no $key is passed, returns the entire $_ENV array.
      *
      * @param string $key
-     * @param mixed $default Default value to use if key not found
+     * @param mixed  $default Default value to use if key not found
+     *
      * @return mixed Returns null if key does not exist
      */
     public function getEnv($key = null, $default = null);
@@ -283,6 +306,7 @@ interface Enlight_Controller_Request_Request
      * ORIG_SCRIPT_NAME in its determination.
      *
      * @param mixed $baseUrl
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setBaseUrl($baseUrl = null);
@@ -292,6 +316,7 @@ interface Enlight_Controller_Request_Request
      * <form action="<?=$baseUrl?>/news/submit" method="POST"/>
      *
      * @param bool $raw
+     *
      * @return string
      */
     public function getBaseUrl($raw = false);
@@ -300,6 +325,7 @@ interface Enlight_Controller_Request_Request
      * Set the base path for the URL
      *
      * @param string|null $basePath
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setBasePath($basePath = null);
@@ -316,6 +342,7 @@ interface Enlight_Controller_Request_Request
      * Set the PATH_INFO string
      *
      * @param string|null $pathInfo
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setPathInfo($pathInfo = null);
@@ -334,7 +361,8 @@ interface Enlight_Controller_Request_Request
      *
      * Can be empty array, or contain one or more of '_GET' or '_POST'.
      *
-     * @param  array $paramSources
+     * @param array $paramSources
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setParamSources(array $paramSources = []);
@@ -353,6 +381,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param mixed $key
      * @param mixed $value
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setParam($key, $value);
@@ -366,6 +395,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param mixed $key
      * @param mixed $default Default value to use if key not found
+     *
      * @return mixed
      */
     public function getParam($key, $default = null);
@@ -388,6 +418,7 @@ interface Enlight_Controller_Request_Request
      * using the keys specified in the array.
      *
      * @param array $params
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setParams(array $params);
@@ -401,7 +432,7 @@ interface Enlight_Controller_Request_Request
      * deserializing non-form-encoded message bodies; etc. Attributes
      * will be application and request specific, and CAN be mutable.
      *
-     * @return mixed[] Attributes derived from the request.
+     * @return mixed[] attributes derived from the request
      */
     public function getAttributes();
 
@@ -416,8 +447,10 @@ interface Enlight_Controller_Request_Request
      * specifying a default value to return if the attribute is not found.
      *
      * @see getAttributes()
-     * @param string $name The attribute name.
-     * @param mixed $default Default value to return if the attribute does not exist.
+     *
+     * @param string $name    the attribute name
+     * @param mixed  $default default value to return if the attribute does not exist
+     *
      * @return mixed
      */
     public function getAttribute($name, $default = null);
@@ -427,8 +460,9 @@ interface Enlight_Controller_Request_Request
      * described in getAttributes().
      *
      * @see getAttributes()
-     * @param string $name The attribute name.
-     * @param mixed $value The value of the attribute.
+     *
+     * @param string $name  the attribute name
+     * @param mixed  $value the value of the attribute
      */
     public function setAttribute($name, $value);
 
@@ -437,7 +471,8 @@ interface Enlight_Controller_Request_Request
      * described in getAttributes().
      *
      * @see getAttributes()
-     * @param string $name The attribute name.
+     *
+     * @param string $name the attribute name
      */
     public function unsetAttribute($name);
 
@@ -451,42 +486,42 @@ interface Enlight_Controller_Request_Request
     /**
      * Was the request made by POST?
      *
-     * @return boolean
+     * @return bool
      */
     public function isPost();
 
     /**
      * Was the request made by GET?
      *
-     * @return boolean
+     * @return bool
      */
     public function isGet();
 
     /**
      * Was the request made by PUT?
      *
-     * @return boolean
+     * @return bool
      */
     public function isPut();
 
     /**
      * Was the request made by DELETE?
      *
-     * @return boolean
+     * @return bool
      */
     public function isDelete();
 
     /**
      * Was the request made by HEAD?
      *
-     * @return boolean
+     * @return bool
      */
     public function isHead();
 
     /**
      * Was the request made by OPTIONS?
      *
-     * @return boolean
+     * @return bool
      */
     public function isOptions();
 
@@ -495,21 +530,21 @@ interface Enlight_Controller_Request_Request
      *
      * Should work with Prototype/Script.aculo.us, possibly others.
      *
-     * @return boolean
+     * @return bool
      */
     public function isXmlHttpRequest();
 
     /**
      * Is this a Flash request?
      *
-     * @return boolean
+     * @return bool
      */
     public function isFlashRequest();
 
     /**
      * Is https secure request
      *
-     * @return boolean
+     * @return bool
      */
     public function isSecure();
 
@@ -548,8 +583,9 @@ interface Enlight_Controller_Request_Request
     /**
      * Set GET values method
      *
-     * @param  string|array $spec
-     * @param  null|mixed $value
+     * @param string|array $spec
+     * @param null|mixed   $value
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setQuery($spec, $value = null);
@@ -564,8 +600,9 @@ interface Enlight_Controller_Request_Request
     /**
      * Set POST values method
      *
-     * @param  string|array $spec
-     * @param  null|mixed $value
+     * @param string|array $spec
+     * @param null|mixed   $value
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setPost($spec, $value = null);
@@ -573,7 +610,8 @@ interface Enlight_Controller_Request_Request
     /**
      * Sets the request URI scheme
      *
-     * @param $value
+     * @param bool $value
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setSecure($value = true);
@@ -582,6 +620,7 @@ interface Enlight_Controller_Request_Request
      * Set SERVER remote address
      *
      * @param string $address
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setRemoteAddress($address);
@@ -590,6 +629,7 @@ interface Enlight_Controller_Request_Request
      * Sets HTTP host method
      *
      * @param string $host
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setHttpHost($host);
@@ -601,6 +641,7 @@ interface Enlight_Controller_Request_Request
      * $_SERVER['HTTP_X_REWRITE_URL'], or $_SERVER['ORIG_PATH_INFO'] + $_SERVER['QUERY_STRING'].
      *
      * @param string $requestUri
+     *
      * @return Enlight_Controller_Request_Request
      */
     public function setRequestUri($requestUri = null);
@@ -611,17 +652,20 @@ interface Enlight_Controller_Request_Request
      * Accept header, 'Accept-Encoding' to get the Accept-Encoding header.
      *
      * @param string $header HTTP header name
-     * @return string|false HTTP header value, or false if not found
+     *
      * @throws \Exception
+     *
+     * @return string|false HTTP header value, or false if not found
      */
     public function getHeader($header);
 
     /**
      * Sets HTTP header method
      *
-     * @param   string $header
-     * @param   $value
-     * @return  Enlight_Controller_Request_Request
+     * @param string $header
+     * @param        $value
+     *
+     * @return Enlight_Controller_Request_Request
      */
     public function setHeader($header, $value);
 

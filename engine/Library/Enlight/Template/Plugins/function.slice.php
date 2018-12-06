@@ -31,8 +31,8 @@
  * - length : How long a single slice should be
  * - assign : Smarty variable to assign the sliced array
  *
- * @param $params
- * @param $smarty
+ * @param array  $params
+ * @param object $smarty
  */
 function smarty_function_slice($params, $smarty)
 {

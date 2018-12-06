@@ -22,28 +22,6 @@
  * our trademarks remain entirely with us.
  */
 use Shopware\Components\Random;
-/*
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 use Shopware\Models\Blog\Blog;
 
 /**
@@ -53,7 +31,7 @@ use Shopware\Models\Blog\Blog;
  * Contains the logic for the listing of the blog articles and the detail page.
  * Furthermore it will manage the blog comment handling
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -65,7 +43,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     protected $repository;
 
     /**
-     * @var \Shopware\Models\Category\Repository
+     * @var \Shopware\Models\Blog\Repository
      */
     protected $blogCommentRepository;
 
@@ -311,7 +289,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         // Redirect if category is not available, inactive or external
-        /** @var $category \Shopware\Models\Category\Category */
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->getCategoryRepository()->find($blogArticleData['categoryId']);
         if ($category === null || !$category->getActive()) {
             $location = ['controller' => 'index'];
@@ -405,6 +383,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function ratingAction()
     {
         $blogArticleId = (int) $this->Request()->getParam('blogArticle');
+        $sErrorFlag = null;
 
         if (!empty($blogArticleId)) {
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
@@ -498,7 +477,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the date filter
      *
-     * @param array $blogCategoryIds
+     * @param int[] $blogCategoryIds
      * @param array $selectedFilters
      *
      * @return array
@@ -506,8 +485,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getDateFilterData($blogCategoryIds, $selectedFilters)
     {
         // Date filter query
-        $dateFilterQuery = $this->repository->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters);
-        $dateFilterData = $dateFilterQuery->getArrayResult();
+        $dateFilterData = $this->repository
+            ->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters)
+            ->getArrayResult();
 
         return $this->addLinksToFilter($dateFilterData, 'sFilterDate', 'dateFormatDate');
     }
@@ -515,16 +495,17 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the author filter
      *
-     * @param $blogCategoryIds
-     * @param $filter | selected filters
+     * @param int[] $blogCategoryIds
+     * @param array $filter          selected filters
      *
      * @return array
      */
     public function getAuthorFilterData($blogCategoryIds, $filter)
     {
         // Date filter query
-        $filterQuery = $this->repository->getAuthorFilterQuery($blogCategoryIds, $filter);
-        $filterData = $filterQuery->getArrayResult();
+        $filterData = $this->repository
+            ->getAuthorFilterQuery($blogCategoryIds, $filter)
+            ->getArrayResult();
 
         return $this->addLinksToFilter($filterData, 'sFilterAuthor', 'name');
     }
@@ -532,16 +513,17 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the tags filter
      *
-     * @param $blogCategoryIds
-     * @param $filter | selected filters
+     * @param int[] $blogCategoryIds
+     * @param array $filter          | selected filters
      *
      * @return array
      */
     public function getTagsFilterData($blogCategoryIds, $filter)
     {
         // Date filter query
-        $filterQuery = $this->repository->getTagsFilterQuery($blogCategoryIds, $filter);
-        $filterData = $filterQuery->getArrayResult();
+        $filterData = $this->repository
+            ->getTagsFilterQuery($blogCategoryIds, $filter)
+            ->getArrayResult();
 
         return $this->addLinksToFilter($filterData, 'sFilterTags', 'name');
     }

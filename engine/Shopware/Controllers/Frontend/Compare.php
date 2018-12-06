@@ -40,21 +40,21 @@ class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
 
     public function indexAction()
     {
-        $this->View()->sComparisons = $this->articles->sGetComparisons();
+        $this->View()->assign('sComparisons', $this->articles->sGetComparisons());
     }
 
     public function addArticleAction()
     {
         if (($articleId = $this->Request()->getParam('articleID')) !== null) {
-            $this->View()->sCompareAddResult = $this->articles->sAddComparison($articleId);
+            $this->View()->assign('sCompareAddResult', $this->articles->sAddComparison($articleId));
         }
-        $this->View()->sComparisons = $this->articles->sGetComparisons();
+        $this->View()->assign('sComparisons', $this->articles->sGetComparisons());
     }
 
     public function deleteArticleAction()
     {
         if (($articleId = $this->Request()->getParam('articleID')) !== null) {
-            $this->articles->sDeleteComparison($articleId);
+            $this->articles->sDeleteComparison((int) $articleId);
         }
         $this->forward('index');
     }
@@ -72,6 +72,6 @@ class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
 
     public function overlayAction()
     {
-        $this->View()->sComparisonsList = $this->articles->sGetComparisonList();
+        $this->View()->assign('sComparisonsList', $this->articles->sGetComparisonList());
     }
 }

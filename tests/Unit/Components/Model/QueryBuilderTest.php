@@ -100,7 +100,7 @@ class QueryBuilderTest extends TestCase
 
         $this->querybuilder->addFilter($filter);
 
-        /** @var $expression Andx */
+        /** @var Andx $expression */
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 
@@ -129,7 +129,7 @@ class QueryBuilderTest extends TestCase
 
         $this->querybuilder->addFilter($filter);
 
-        /** @var $expression Andx */
+        /** @var Andx $expression */
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 
@@ -172,7 +172,7 @@ class QueryBuilderTest extends TestCase
 
         $this->querybuilder->addFilter($filter);
 
-        /** @var $expression Andx */
+        /** @var Andx $expression */
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 
@@ -206,7 +206,7 @@ class QueryBuilderTest extends TestCase
 
         $this->querybuilder->addFilter($filter);
 
-        /** @var $expression Andx */
+        /** @var Andx $expression */
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 
@@ -239,7 +239,7 @@ class QueryBuilderTest extends TestCase
 
         $this->querybuilder->addFilter($filter);
 
-        /** @var $expression Andx */
+        /** @var Andx $expression */
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 
@@ -271,7 +271,7 @@ class QueryBuilderTest extends TestCase
 
         $this->querybuilder->addFilter($filter);
 
-        /** @var $expression Andx */
+        /** @var Andx $expression */
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 
@@ -316,7 +316,7 @@ class QueryBuilderTest extends TestCase
 
         $this->querybuilder->addFilter($filter);
 
-        /** @var $expression Andx */
+        /** @var Andx $expression */
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 

@@ -25,7 +25,7 @@
 /**
  * Shopware Supplier Management
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
@@ -144,7 +144,8 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
             return;
         }
-
+        /** @var \Shopware\Models\Article\Supplier $supplierModel */
+        $supplierModel = null;
         $id = (int) $this->Request()->get('id');
         if ($id > 0) {
             $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
@@ -188,11 +189,11 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     /**
      * Returns all known Suppliers from the database. there are ordered by there name
      *
-     * @return mixed
+     * @return array
      */
     public function getAllSupplier()
     {
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
@@ -209,7 +210,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     /**
      * Gets a single supplier
      *
-     * @param $id
+     * @param int $id
      */
     protected function getSingleSupplier($id)
     {

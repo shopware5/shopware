@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Category;
 use Shopware\Components\Api\Resource\Resource;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -84,9 +84,10 @@ class CategoryTest extends TestCase
             ],
         ];
 
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Category\Category', $category);
+        $this->assertInstanceOf(\Shopware\Models\Category\Category::class, $category);
         $this->assertGreaterThan(0, $category->getId());
 
         $this->assertEquals($category->getActive(), $testData['active']);
@@ -134,7 +135,7 @@ class CategoryTest extends TestCase
 
         $category = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Category\Category', $category);
+        $this->assertInstanceOf(\Shopware\Models\Category\Category::class, $category);
         $this->assertEquals($id, $category->getId());
 
         $this->assertEquals($category->getActive(), $testData['active']);

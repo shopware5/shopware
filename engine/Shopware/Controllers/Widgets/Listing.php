@@ -56,7 +56,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
                 $this->Request()->setParam('sSort', $default);
             }
 
-            /** @var $articleModule \sArticles */
+            /** @var \sArticles $articleModule */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($orderNumber, $categoryId, $this->Request());
 
@@ -230,7 +230,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     public function getCustomPageAction()
     {
         $pageId = (int) $this->Request()->getParam('pageId', 0);
-        $groupKey = $this->Request()->getParam('groupKey', 'gLeft');
+        $groupKey = $this->Request()->getParam('groupKey', 'left');
 
         $customPage = Shopware()->Modules()->Cms()->sGetStaticPageChildrensById($pageId, $groupKey);
 

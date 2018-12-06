@@ -27,7 +27,7 @@ use Shopware\Models\Banner\Banner;
 /**
  * Deprecated Shopware Class that handles marketing related functions
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,6 +56,13 @@ class sMarketing
      * @var int
      */
     public $customerGroupId;
+
+    /**
+     * @deprecated in Shopware 5.5.4, to be removed in 6.0
+     *
+     * @var \Shopware\Models\Category\Category
+     */
+    private $category;
 
     /**
      * @var StoreFrontBundle\Service\ContextServiceInterface
@@ -228,7 +235,7 @@ class sMarketing
     /**
      * Get banners to display in this category
      *
-     * @param $sCategory
+     * @param int $sCategory
      * @param int $limit
      *
      * @return array Contains all information about the banner-object
@@ -275,7 +282,7 @@ class sMarketing
             }
 
             // count views.
-            /** @var $statRepository \Shopware\Models\Tracking\Repository */
+            /** @var \Shopware\Models\Tracking\Repository $shopRepository */
             $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($getAffectedBanners['id']);
             $bannerStatistics->increaseViews();
@@ -663,8 +670,8 @@ class sMarketing
     /**
      * For the provided article id, returns the associated variant numbers and additional texts
      *
-     * @param $articleId
-     * @param $mainDetailId
+     * @param int $articleId
+     * @param int $mainDetailId
      *
      * @return array
      */
@@ -676,6 +683,7 @@ class sMarketing
             FROM s_articles_details
             WHERE articleID = :articleId AND kind != 3';
 
+        $products = [];
         $variantsData = Shopware()->Db()->fetchAll(
             $sql,
             ['articleId' => $articleId]
@@ -722,7 +730,7 @@ class sMarketing
     /**
      * Processes the newsletter articles and returns the corresponding data.
      *
-     * @param $articles
+     * @param array $articles
      *
      * @return array
      */
@@ -741,7 +749,7 @@ class sMarketing
     }
 
     /**
-     * @param $images
+     * @param string[] $images
      *
      * @throws Exception
      *
@@ -749,7 +757,7 @@ class sMarketing
      */
     private function getMediaIdsOfPath($images)
     {
-        /** @var $query \Doctrine\DBAL\Query\QueryBuilder */
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
         $query->select(['media.id'])
             ->from('s_media', 'media')

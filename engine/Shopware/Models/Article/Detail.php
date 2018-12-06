@@ -224,7 +224,7 @@ class Detail extends ModelEntity
     private $height = null;
 
     /**
-     * @var string ean
+     * @var string
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
     private $ean = null;
@@ -374,7 +374,7 @@ class Detail extends ModelEntity
     /**
      * Set kind
      *
-     * @param $kind
+     * @param int $kind
      *
      * @return Detail
      */

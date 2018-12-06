@@ -24,7 +24,7 @@
 use Shopware\Components\Random;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -75,9 +75,11 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
      */
     public function testGetInteger()
     {
-        $result = Random::getInteger(-100, 100);
-        $this->assertLessThanOrEqual(100, $result);
-        $this->assertGreaterThanOrEqual(-100, $result);
+        for ($i = 0; $i < 100; ++$i) {
+            $result = Random::getInteger(-100000, 100000);
+            $this->assertLessThanOrEqual(100000, $result);
+            $this->assertGreaterThanOrEqual(-100000, $result);
+        }
     }
 
     /**
@@ -85,9 +87,15 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
      */
     public function testGetFloat()
     {
-        $result = Random::getFloat();
-        $this->assertInternalType('float', $result);
-        $this->assertLessThanOrEqual(1, $result);
-        $this->assertGreaterThanOrEqual(0, $result);
+        $results = [];
+        for ($i = 0; $i < 1000; ++$i) {
+            $result = Random::getFloat();
+            $this->assertInternalType('float', $result);
+            $this->assertLessThanOrEqual(1, $result);
+            $this->assertGreaterThanOrEqual(0, $result);
+            $this->assertNotContains($result, $results);
+
+            $results[] = $result;
+        }
     }
 }

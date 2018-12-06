@@ -40,7 +40,7 @@ use Shopware\Models\Shop;
  * uses the Theme\Configurator class to synchronize the
  * theme configuration with the database.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -164,7 +164,7 @@ class Installer
         // Builds the theme inheritance
         $this->setParents($themes);
 
-        /** @var $theme Theme */
+        /** @var Theme $theme */
         foreach ($themes as $theme) {
             $this->configurator->synchronize($theme);
         }
@@ -190,7 +190,7 @@ class Installer
             AbstractQuery::HYDRATE_OBJECT
         );
 
-        /** @var $directory \DirectoryIterator */
+        /** @var \DirectoryIterator $directory */
         foreach ($directories as $directory) {
             // Check valid directory
 
@@ -253,7 +253,7 @@ class Installer
 
         $themes = [];
 
-        /** @var $plugin Plugin */
+        /** @var Plugin $plugin */
         foreach ($plugins as $plugin) {
             $path = $this->pathResolver->getPluginPath($plugin);
 
@@ -351,7 +351,7 @@ class Installer
 
         $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
-        /** @var $theme Shop\Template */
+        /** @var Shop\Template $theme */
         foreach ($themes as $theme) {
             $directory = $this->pathResolver->getDirectory($theme);
             if (!file_exists($directory)) {
@@ -372,7 +372,7 @@ class Installer
      */
     private function setParents(array $themes)
     {
-        /** @var $theme Theme */
+        /** @var Theme $theme */
         foreach ($themes as $theme) {
             if ($theme->getExtend() === null) {
                 continue;

@@ -1,26 +1,26 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Template
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
-
 require_once 'Smarty/Smarty.class.php';
 
 /**
@@ -32,7 +32,7 @@ require_once 'Smarty/Smarty.class.php';
  * multiple plugins.
  *
  * @category   Enlight
- * @package    Enlight_Template
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -59,7 +59,8 @@ class Enlight_Template_Default extends Smarty_Internal_Template
      * @param array|string $tpl_var the template variable name(s)
      * @param mixed        $value   the value to assign
      * @param bool         $nocache if true any output of this variable will be not cached
-     * @param bool         $scope the scope the variable will have  (local,parent or root)
+     * @param bool         $scope   the scope the variable will have  (local,parent or root)
+     *
      * @return Enlight_Template_Default
      */
     public function assign($tpl_var, $value = null, $nocache = false, $scope = null)
@@ -77,15 +78,17 @@ class Enlight_Template_Default extends Smarty_Internal_Template
                 parent::assign($tpl_var, $value, $nocache);
             }
         }
+
         return $this;
     }
 
     /**
      * Clears the given assigned template variable.
      *
-     * @param   string|array|null $tpl_var the template variable(s) to clear
-     * @param   int               $scope
-     * @return  Enlight_Template_Default instance for chaining
+     * @param string|array|null $tpl_var the template variable(s) to clear
+     * @param int               $scope
+     *
+     * @return Enlight_Template_Default instance for chaining
      */
     public function clearAssign($tpl_var, $scope = null)
     {
@@ -105,11 +108,12 @@ class Enlight_Template_Default extends Smarty_Internal_Template
             $this->parent->$function($tpl_var);
         } elseif ($scope === Smarty::SCOPE_GLOBAL) {
             if ($tpl_var === null) {
-                Smarty::$global_tpl_vars[$tpl_var] = array();
+                Smarty::$global_tpl_vars[$tpl_var] = [];
             } else {
                 unset(Smarty::$global_tpl_vars[$tpl_var]);
             }
         }
+
         return $this;
     }
 
@@ -119,7 +123,6 @@ class Enlight_Template_Default extends Smarty_Internal_Template
      * @param        $spec
      * @param        $content
      * @param string $mode
-     * @return void
      */
     public function extendsBlock($spec, $content, $mode = self::BLOCK_REPLACE)
     {
@@ -149,14 +152,13 @@ class Enlight_Template_Default extends Smarty_Internal_Template
                 $content .= $this->block_data[$spec]['source'];
             }
         }
-        $this->block_data[$spec] = array('source' => $content, 'mode' => $mode, 'file' => null);
+        $this->block_data[$spec] = ['source' => $content, 'mode' => $mode, 'file' => null];
     }
 
     /**
      * This function extends the whole template file.
      *
-     * @param $templateName
-     * @return void
+     * @param string $templateName
      */
     public function extendsTemplate($templateName)
     {
@@ -166,8 +168,9 @@ class Enlight_Template_Default extends Smarty_Internal_Template
     /**
      * Sets the cache id.
      *
-     * @param   null $cacheId
-     * @return  Enlight_Template_Default
+     * @param null $cacheId
+     *
+     * @return Enlight_Template_Default
      */
     public function setCacheId($cacheId = null)
     {
@@ -175,14 +178,16 @@ class Enlight_Template_Default extends Smarty_Internal_Template
             $cacheId = implode('|', $cacheId);
         }
         $this->cache_id = (string) $cacheId;
+
         return $this;
     }
 
     /**
      * Extends the cache id.
      *
-     * @param   null $cacheId
-     * @return  Enlight_Template_Default
+     * @param null $cacheId
+     *
+     * @return Enlight_Template_Default
      */
     public function addCacheId($cacheId)
     {
@@ -196,11 +201,13 @@ class Enlight_Template_Default extends Smarty_Internal_Template
         } else {
             $this->cache_id .= '|' . $cacheId;
         }
+
         return $this;
     }
 
     /**
      * Returns the instance of the Enlight_Template_Manager
+     *
      * @return Enlight_Template_Manager
      */
     public function Engine()
@@ -210,6 +217,7 @@ class Enlight_Template_Default extends Smarty_Internal_Template
 
     /**
      * Returns the instance of the Enlight_Template_Default
+     *
      * @return Enlight_Template_Default
      */
     public function Template()

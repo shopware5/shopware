@@ -30,7 +30,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

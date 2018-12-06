@@ -147,7 +147,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     public function updatePaymentsAction()
     {
         try {
-            $id = $this->Request()->getParam('id', null);
+            $id = $this->Request()->getParam('id');
             /** @var Payment $payment */
             $payment = Shopware()->Models()->find(Payment::class, $id);
             $action = $payment->getAction();
@@ -254,7 +254,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      * - set the correct icon
      * - match the surcharges to the countries
      *
-     * @param $results
+     * @param array $results
      *
      * @return mixed
      */

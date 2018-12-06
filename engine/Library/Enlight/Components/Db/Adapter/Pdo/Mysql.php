@@ -1,23 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Db
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 use Doctrine\DBAL\Connection;
 
@@ -28,7 +30,7 @@ use Doctrine\DBAL\Connection;
  * and removes for safety reasons, the database connection settings.
  *
  * @category   Enlight
- * @package    Enlight_Db
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -41,13 +43,14 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
 
     /**
      * @param Connection $connection
-     * @param array $config
+     * @param array      $config
+     *
      * @return self
      */
     public static function createFromDbalConnectionAndConfig(Connection $connection, $config)
     {
         $adapter = new self($config);
-        $adapter->dbalConnection= $connection;
+        $adapter->dbalConnection = $connection;
 
         unset($adapter->_config['username'], $adapter->_config['password']);
 
@@ -55,36 +58,24 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     }
 
     /**
-     * Quote a raw string.
-     *
-     * @param string $value
-     * @return string
-     */
-    protected function _quote($value)
-    {
-        if ($value instanceof Zend_Date) {
-            $value = $value->toString('yyyy-MM-dd HH:mm:ss');
-        }
-        return parent::_quote($value);
-    }
-
-    /**
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'
      *
-     * @param string|Zend_Db_Select $sql The SQL statement with placeholders.
-     * @param array $bind An array of data to bind to the placeholders.
+     * @param string|Zend_Db_Select $sql  the SQL statement with placeholders
+     * @param array                 $bind an array of data to bind to the placeholders
+     *
+     * @throws Zend_Db_Adapter_Exception to re-throw PDOException
+     *
      * @return Zend_Db_Statement_Pdo
-     * @throws Zend_Db_Adapter_Exception To re-throw PDOException.
      */
-    public function query($sql, $bind = array())
+    public function query($sql, $bind = [])
     {
         if (empty($bind) && $sql instanceof Zend_Db_Select) {
             $bind = $sql->getBind();
         }
 
         if (!is_array($bind)) {
-            $bind = array($bind);
+            $bind = [$bind];
         }
 
         foreach ($bind as $name => $value) {
@@ -97,36 +88,16 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     }
 
     /**
-     * Creates a PDO object and connects to the database.
-     *
-     * @return void
-     * @throws Zend_Db_Adapter_Exception
-     */
-    protected function _connect()
-    {
-        // if we already have a PDO object, no need to re-connect.
-        if ($this->_connection) {
-            return;
-        }
-
-        if (!$this->dbalConnection) {
-            throw new RuntimeException(sprintf("Class can only be constructed using %s::createFromDbalConnectionAndConfig().", __CLASS__));
-        }
-
-        $this->_connection = $this->dbalConnection->getWrappedConnection();
-    }
-
-    /**
      * Executes an SQL INSERT/UPDATE/DELETE query with the given parameters
      * and returns the number of affected rows.
      *
-     * @param string $query  The SQL query.
-     * @param array  $params The query parameters.
-     * @param array  $types  The parameter types, ignored for now.
+     * @param string $query  the SQL query
+     * @param array  $params the query parameters
+     * @param array  $types  the parameter types, ignored for now
      *
-     * @return integer The number of affected rows.
+     * @return int the number of affected rows
      */
-    public function executeUpdate($query, array $params = array(), array $types = array())
+    public function executeUpdate($query, array $params = [], array $types = [])
     {
         $stmt = $this->query($query, $params);
 
@@ -135,12 +106,14 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
 
     /**
      * Alias for query.
-     * @param $query
-     * @param array $params
-     * @param array $types
+     *
+     * @param string $query
+     * @param array  $params
+     * @param array  $types
+     *
      * @return Zend_Db_Statement_Pdo
      */
-    public function executeQuery($query, array $params = array(), array $types = array())
+    public function executeQuery($query, array $params = [], array $types = [])
     {
         return $this->query($query, $params);
     }
@@ -153,6 +126,42 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     public function getErrorMessage()
     {
         $error = $this->getConnection()->errorInfo();
+
         return isset($error[2]) ? $error[2] : null;
+    }
+
+    /**
+     * Quote a raw string.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    protected function _quote($value)
+    {
+        if ($value instanceof Zend_Date) {
+            $value = $value->toString('yyyy-MM-dd HH:mm:ss');
+        }
+
+        return parent::_quote($value);
+    }
+
+    /**
+     * Creates a PDO object and connects to the database.
+     *
+     * @throws Zend_Db_Adapter_Exception
+     */
+    protected function _connect()
+    {
+        // if we already have a PDO object, no need to re-connect.
+        if ($this->_connection) {
+            return;
+        }
+
+        if (!$this->dbalConnection) {
+            throw new RuntimeException(sprintf('Class can only be constructed using %s::createFromDbalConnectionAndConfig().', __CLASS__));
+        }
+
+        $this->_connection = $this->dbalConnection->getWrappedConnection();
     }
 }

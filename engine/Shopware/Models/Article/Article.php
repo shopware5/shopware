@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Shopware Article Model
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
@@ -881,7 +881,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Category\Category>
      */
     public function getCategories()
     {
@@ -897,7 +897,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $categories
+     * @param ArrayCollection<\Shopware\Models\Category\Category> $categories
      *
      * @return Article
      */
@@ -975,7 +975,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Article>
      */
     public function getRelated()
     {
@@ -983,7 +983,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Article>
      */
     public function getSimilar()
     {
@@ -991,7 +991,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param $related ArrayCollection
+     * @param ArrayCollection<Article> $related
      *
      * @return Article
      */
@@ -1003,7 +1003,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param $similar ArrayCollection
+     * @param ArrayCollection<Article> $similar
      *
      * @return Article
      */
@@ -1031,7 +1031,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Image>
      */
     public function getImages()
     {

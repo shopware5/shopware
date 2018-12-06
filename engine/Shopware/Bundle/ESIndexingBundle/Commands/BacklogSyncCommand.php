@@ -30,7 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -74,7 +74,7 @@ class BacklogSyncCommand extends ShopwareCommand
             return;
         }
 
-        /** @var $last Backlog */
+        /** @var Backlog $last */
         $last = $backlogs[count($backlogs) - 1];
         $reader->setLastBacklogId($last->getId());
 

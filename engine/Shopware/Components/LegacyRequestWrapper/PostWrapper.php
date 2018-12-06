@@ -106,7 +106,7 @@ class PostWrapper implements \ArrayAccess
      *                      The offset to unset.
      *                      </p>
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function offsetUnset($offset)
     {

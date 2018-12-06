@@ -133,7 +133,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($queryCriteria, $query, $facet);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);

@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -378,7 +378,7 @@ class ListProduct extends BaseProduct
     /**
      * Adds a new product state.
      *
-     * @param $state
+     * @param array $state
      */
     public function addState($state)
     {
@@ -404,7 +404,7 @@ class ListProduct extends BaseProduct
     /**
      * Checks if the product has a specify state.
      *
-     * @param $state
+     * @param string $state
      *
      * @return bool
      */

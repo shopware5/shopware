@@ -115,7 +115,7 @@ class ORMBacklogSubscriber implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $eventArgs)
     {
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 

@@ -29,7 +29,7 @@ use ShopwarePlugins\SwagUpdate\Components\Archive\Zip;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

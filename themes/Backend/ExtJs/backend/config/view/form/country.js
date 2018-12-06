@@ -97,6 +97,8 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
         },{
             xtype: 'config-element-boolean',
             name: 'allowShipping',
+            translatable: true,
+            translationName: 'allow_shipping',
             fieldLabel: '{s name=country/detail/allow_shipping}Allow the usage as shipping country{/s}'
         },{
             xtype: 'config-element-select',

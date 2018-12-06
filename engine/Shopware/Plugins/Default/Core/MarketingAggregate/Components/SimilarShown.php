@@ -28,7 +28,7 @@
  * This components refresh and initials the similar shown data
  * in the s_articles_similar_shown_ro
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -162,8 +162,8 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      * This function is used to insert or update the similar shown table
      * for a single buy combination of two articles.
      *
-     * @param $articleId
-     * @param $relatedArticleId
+     * @param int $articleId
+     * @param int $relatedArticleId
      */
     public function refreshSimilarShown($articleId, $relatedArticleId)
     {

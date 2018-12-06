@@ -26,7 +26,7 @@ use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

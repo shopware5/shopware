@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Install\Service;
 use Shopware\Recovery\Install\Struct\AdminUser;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,15 +60,16 @@ class AdminService
 
         $sql = <<<'EOT'
 INSERT INTO s_core_auth
-(roleID,username,password,localeID,`name`,email,active,lockeduntil)
+(roleID,username,password,encoder,localeID,`name`,email,active,lockeduntil)
 VALUES
-(1,?,?,?,?,?,1,'0000-00-00 00:00:00');
+(1,?,?,?,?,?,?,1,NOW());
 EOT;
 
         $prepareStatement = $this->connection->prepare($sql);
         $prepareStatement->execute([
             $user->username,
             $this->saltPassword($user->password),
+            'bcrypt',
             $localeId,
             $user->name,
             $user->email,
@@ -114,6 +115,6 @@ EOT;
      */
     private function saltPassword($password)
     {
-        return md5('A9ASD:_AD!_=%a8nx0asssblPlasS$' . md5($password));
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 }

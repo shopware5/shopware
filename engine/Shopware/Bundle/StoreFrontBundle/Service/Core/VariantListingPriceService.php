@@ -107,7 +107,7 @@ class VariantListingPriceService
         foreach ($result->getProducts() as $product) {
             $number = $product->getNumber();
 
-            /* @var $cheapestPriceRule PriceRule */
+            /* @var PriceRule $cheapestPriceRule */
             if (!array_key_exists($number, $cheapestPriceData)) {
                 $cheapestPriceRule = $product->getPriceRules()[0];
                 $displayFromPrice = $product->displayFromPrice();
@@ -164,7 +164,7 @@ class VariantListingPriceService
      *
      * @param ListProduct $product
      * @param ShopContext $context
-     * @param $quantity
+     * @param int         $quantity
      *
      * @return null|PriceDiscount
      */
@@ -182,7 +182,7 @@ class VariantListingPriceService
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var $highest PriceDiscount */
+        /** @var PriceDiscount $highest */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

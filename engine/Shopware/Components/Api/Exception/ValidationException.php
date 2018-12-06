@@ -33,7 +33,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * API Exception
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

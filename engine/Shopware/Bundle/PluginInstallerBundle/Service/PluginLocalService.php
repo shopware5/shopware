@@ -69,17 +69,15 @@ class PluginLocalService
     {
         $query = $this->getQuery();
 
-        $query
-            ->andWhere("plugin.name != 'PluginManager'")
-            ->andWhere('plugin.capability_enable = 1')
-        ;
+        $query->andWhere("plugin.name != 'PluginManager'")
+            ->andWhere('plugin.capability_enable = 1');
 
         $this->addSortings($context, $query);
 
         $query->setFirstResult($context->getOffset())
             ->setMaxResults($context->getLimit());
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -121,7 +119,7 @@ class PluginLocalService
                 Connection::PARAM_STR_ARRAY
             );
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -139,7 +137,7 @@ class PluginLocalService
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.capability_update = 1');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);

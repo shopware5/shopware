@@ -32,7 +32,7 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
      */
     public function getEmotion($repository)
     {
-        /** @var $repository \Shopware\Models\Emotion\Repository */
+        /** @var \Shopware\Models\Emotion\Repository $repository */
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);
 

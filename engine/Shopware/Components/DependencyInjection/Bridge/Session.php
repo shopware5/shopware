@@ -31,7 +31,7 @@ use Shopware\Components\Session\PdoSessionHandler;
  * Session Dependency Injection Bridge
  * Starts and handles the session
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -84,7 +84,7 @@ class Session
             \Enlight_Components_Session::writeClose();
         }
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('Shop');
 
         $sessionOptions['name'] = 'session-' . $shop->getId();

@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -40,7 +40,7 @@ class ZipUtils
     {
         $stream = new \ZipArchive();
 
-        if (($retVal = $stream->open($filename, null)) !== true) {
+        if (($retVal = $stream->open($filename)) !== true) {
             throw new \RuntimeException(
                 self::getErrorMessage($retVal, $filename),
                 $retVal

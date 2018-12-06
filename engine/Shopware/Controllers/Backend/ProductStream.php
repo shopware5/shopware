@@ -76,7 +76,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
                 $conditions = $streamRepo->unserialize($conditions);
 
-                foreach ($conditions as $condition) { /* @var $condition \Shopware\Bundle\SearchBundle\ConditionInterface */
+                foreach ($conditions as $condition) { /* @var \Shopware\Bundle\SearchBundle\ConditionInterface $condition */
                     $criteria->addCondition($condition);
                 }
             }

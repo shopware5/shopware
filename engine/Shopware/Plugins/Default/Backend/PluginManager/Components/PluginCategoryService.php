@@ -209,7 +209,7 @@ class PluginCategoryService
             ->where('categories.locale = :locale')
             ->setParameter(':locale', $locale);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_GROUP);

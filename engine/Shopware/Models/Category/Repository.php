@@ -24,7 +24,6 @@
 
 namespace Shopware\Models\Category;
 
-use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
 
@@ -43,7 +42,7 @@ use Shopware\Components\Model\ModelRepository;
  *  - s_articles
  *  - s_articles_categories
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -62,7 +61,7 @@ class Repository extends ModelRepository
             return '';
         }
 
-        /** @var $category Category */
+        /** @var Category $category */
         $category = $this->find($id);
 
         $before = $this->getCategoryPathBefore($category, $field, $separator);
@@ -150,7 +149,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryId
+     * @param int $categoryId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -189,7 +188,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy = [], $limit = null, $offset = null, $selectOnlyActive = true)
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->createQueryBuilder('c');
         $builder->select([
             'c.id as id',
@@ -614,7 +613,7 @@ class Repository extends ModelRepository
      *
      * @param Category $category
      * @param string   $field
-     * @param $separator
+     * @param string   $separator
      *
      * @return array|string
      */
@@ -700,7 +699,7 @@ class Repository extends ModelRepository
      */
     protected function getActiveQueryBuilder($customerGroupId = null)
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from($this->getEntityName(), 'c')
                 ->select([

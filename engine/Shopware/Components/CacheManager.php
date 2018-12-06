@@ -28,7 +28,7 @@ use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Theme\PathResolver;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -266,6 +266,7 @@ class CacheManager
     public function getConfigCacheInfo()
     {
         $cacheConfig = $this->container->getParameter('shopware.cache');
+        $dir = null;
 
         if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apcu) {
             $info = [];
@@ -412,7 +413,7 @@ class CacheManager
             \RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        /** @var $entry \SplFileInfo */
+        /** @var \SplFileInfo $entry */
         foreach ($iterator as $entry) {
             if ($entry->getFilename() === '.gitkeep') {
                 continue;

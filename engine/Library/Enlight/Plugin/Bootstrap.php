@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Plugin
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -28,14 +29,14 @@
  * It has an reference to the application and the plugin collection.
  *
  * @category   Enlight
- * @package    Enlight_Plugin
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
 {
     /**
-     * @var string Contains the name of the plugin.
+     * @var string contains the name of the plugin
      */
     protected $name;
 
@@ -48,7 +49,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * The Enlight_Plugin_Bootstrap expects a name for the plugin and
      * optionally an instance of the Enlight_Plugin_PluginCollection
      *
-     * @param $name
+     * @param string $name
      */
     public function __construct($name)
     {
@@ -65,7 +66,8 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
 
     /**
      * Getter method for the plugin name property.
-     * @return  string
+     *
+     * @return string
      */
     public function getName()
     {
@@ -76,18 +78,21 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * Setter method for the collection property.
      *
      * @param Enlight_Plugin_PluginCollection|null $collection
+     *
      * @return Enlight_Plugin_Bootstrap
      */
     public function setCollection(Enlight_Plugin_PluginCollection $collection = null)
     {
         $this->collection = $collection;
         $this->afterInit();
+
         return $this;
     }
 
     /**
      * Getter method for the collection property.
-     * @return  Enlight_Plugin_PluginCollection
+     *
+     * @return Enlight_Plugin_PluginCollection
      */
     public function Collection()
     {
@@ -108,6 +113,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * Get service from resource loader
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function get($name)

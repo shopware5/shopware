@@ -41,6 +41,7 @@ class ProductStream extends ModelEntity
      * @var \Shopware\Models\Attribute\ProductStream
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -104,7 +105,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @param $name string
+     * @param string $name
      */
     public function setName($name)
     {

@@ -50,6 +50,7 @@ class Partner extends ModelEntity
      * @var \Shopware\Models\Attribute\Partner
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -616,7 +617,7 @@ class Partner extends ModelEntity
     /**
      * Get orders
      *
-     * @return mixed
+     * @return \Shopware\Models\Order\Order[]
      */
     public function getOrders()
     {
@@ -626,7 +627,7 @@ class Partner extends ModelEntity
     /**
      * Set orders
      *
-     * @param $orders
+     * @param \Shopware\Models\Order\Order[] $orders
      */
     public function setOrders($orders)
     {

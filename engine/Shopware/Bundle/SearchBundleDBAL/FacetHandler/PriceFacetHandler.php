@@ -38,7 +38,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -114,7 +114,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
 
         $query->orderBy('listing_price.cheapest_price', 'ASC');
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $min = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -123,7 +123,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
 
         $query->orderBy('listing_price.cheapest_price', 'DESC');
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $max = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -131,7 +131,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition PriceCondition */
+        /** @var PriceCondition $condition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $activeMin = $condition->getMinPrice();
             $activeMax = $condition->getMaxPrice();

@@ -29,7 +29,7 @@ namespace Shopware\Components;
  *
  * This class is highly based on Rand.php of Component_ZendMath
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @see      https://github.com/zendframework/zf2/blob/master/library/Zend/Math/Rand.php
  * @see      https://github.com/ircmaxell/RandomLib
@@ -43,8 +43,6 @@ abstract class Random
      * Generate random bytes
      *
      * @param int $length
-     *
-     * @throws \Exception
      *
      * @return string
      */
@@ -92,11 +90,6 @@ abstract class Random
      * Generate random float (0..1)
      * This function generates floats with platform-dependent precision
      *
-     * PHP uses double precision floating-point format (64-bit) which has
-     * 52-bits of significand precision. We gather 7 bytes of random data,
-     * and we fix the exponent to the bias (1023). In this way we generate
-     * a float of 1.mantissa.
-     *
      * @return float
      */
     public static function getFloat()
@@ -128,7 +121,7 @@ abstract class Random
             throw new \DomainException('Length should be >= 1');
         }
 
-        // charlist is empty or not provided
+        // Charlist is empty or not provided
         if (empty($charlist)) {
             $numBytes = ceil($length * 0.75);
             $bytes = static::getBytes($numBytes);
@@ -138,7 +131,7 @@ abstract class Random
 
         $listLen = mb_strlen($charlist, '8bit');
 
-        if ($listLen == 1) {
+        if ($listLen === 1) {
             return str_repeat($charlist, $length);
         }
 
@@ -191,16 +184,16 @@ abstract class Random
     public static function generatePassword($length = 15, $availableSets = ['l', 'u', 'd', 's'])
     {
         $sets = [];
-        if (in_array('l', $availableSets)) {
+        if (in_array('l', $availableSets, true)) {
             $sets[] = 'abcdefghjkmnpqrstuvwxyz';
         }
-        if (in_array('u', $availableSets)) {
+        if (in_array('u', $availableSets, true)) {
             $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
         }
-        if (in_array('d', $availableSets)) {
+        if (in_array('d', $availableSets, true)) {
             $sets[] = '23456789';
         }
-        if (in_array('s', $availableSets)) {
+        if (in_array('s', $availableSets, true)) {
             $sets[] = '!@#$%&*?';
         }
 
@@ -224,7 +217,7 @@ abstract class Random
     /**
      * Return a random element from an array
      *
-     * @param $array
+     * @param array $array
      *
      * @return mixed
      */

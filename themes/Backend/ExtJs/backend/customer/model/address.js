@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Customer.model.Address', {
         { name: 'additionalAddressLine2', type: 'string', useNull: true },
         { name: 'countryId', type: 'int' },
         { name: 'stateId', type: 'int', useNull: true },
-        { name: 'phone', type: 'string', useNull: true },
+        { name: 'phone', type: 'string', useNull: true }
     ],
 
     associations: [

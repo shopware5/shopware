@@ -714,7 +714,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $mainDetail = $article->getMainDetail();
 
-        /** @var $price \Shopware\Models\Article\Price */
+        /** @var \Shopware\Models\Article\Price $price */
         $price = $mainDetail->getPrices()->first();
 
         $quantity = mt_rand(1, 10);

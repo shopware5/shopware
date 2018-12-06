@@ -21,35 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Migrations\AbstractMigration;
 
-namespace Shopware\Components\Console;
-
-use Symfony\Component\Console\Shell as BaseShell;
-
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shell extends BaseShell
+class Migrations_Migration1446 extends AbstractMigration
 {
-    /**
-     * Returns the shell header.
-     *
-     * @return string The header string
-     */
-    protected function getHeader()
+    public function up($modus)
     {
-        return <<<EOF
-<info>
-         _
-     ___| |__   ___  _ ____      ____ _ _ __ ___
-    / __| '_ \ / _ \| '_ \ \ /\ / / _` | '__/ _ \
-    \__ \ | | | (_) | |_) \ V  V / (_| | | |  __/
-    |___/_| |_|\___/| .__/ \_/\_/ \__,_|_|  \___|
-                    |_|
-</info>
-EOF
-        . parent::getHeader();
+        $this->addSql('ALTER TABLE `s_order` CHANGE `trackingcode` `trackingcode` TEXT COLLATE utf8_unicode_ci NOT NULL;');
     }
 }

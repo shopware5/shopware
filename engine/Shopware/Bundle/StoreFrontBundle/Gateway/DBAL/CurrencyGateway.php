@@ -81,7 +81,7 @@ class CurrencyGateway implements CurrencyGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return \array[]
+     * @return array[]
      */
     private function getCurrencies($ids)
     {

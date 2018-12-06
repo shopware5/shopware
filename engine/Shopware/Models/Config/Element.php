@@ -48,6 +48,7 @@ class Element extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -56,60 +57,70 @@ class Element extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="value", type="object", nullable=true)
      */
     private $value;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="type", type="string", nullable=true)
      */
     private $type;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="required", type="boolean")
      */
     private $required = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="scope", type="integer", nullable=false)
      */
     private $scope = 0;
 
     /**
      * @var array
+     *
      * @ORM\Column(name="options", type="array")
      */
     private $options;
 
     /**
      * @var Form
+     *
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="elements")
      * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      */
@@ -117,6 +128,7 @@ class Element extends ModelEntity
 
     /**
      * @var Value[]
+     *
      * @ORM\OneToMany(targetEntity="Value", mappedBy="element", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="element_id")
      */
@@ -125,9 +137,9 @@ class Element extends ModelEntity
     /**
      * Class constructor.
      *
-     * @param $type
-     * @param $name
-     * @param array $options
+     * @param string     $type
+     * @param string     $name
+     * @param null|array $options
      */
     public function __construct($type, $name, $options = null)
     {

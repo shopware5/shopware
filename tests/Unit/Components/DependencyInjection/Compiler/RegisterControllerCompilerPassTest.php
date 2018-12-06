@@ -32,7 +32,7 @@ use Shopware\Tests\Unit\Components\DependencyInjection\Compiler\RegisterControll
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

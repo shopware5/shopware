@@ -42,7 +42,14 @@
                                     {$sArticle = $search_result}
                                     {*reset pseudo price value to prevent discount boxes*}
                                     {$sArticle.has_pseudoprice = 0}
-                                    {include file="frontend/listing/product-box/product-price.tpl" sArticle=$sArticle}
+
+                                    {block name="search_ajax_list_entry_price_main"}
+                                        {include file="frontend/listing/product-box/product-price.tpl"}
+                                    {/block}
+
+                                    {block name="search_ajax_list_entry_price_unit"}
+                                        {include file="frontend/search/product-price-unit.tpl"}
+                                    {/block}
                                 </span>
                             {/block}
                         </a>

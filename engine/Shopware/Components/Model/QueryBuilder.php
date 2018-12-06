@@ -31,7 +31,7 @@ use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 /**
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -251,7 +251,7 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
     {
-        /** @var $select \Doctrine\ORM\Query\Expr\Select */
+        /** @var \Doctrine\ORM\Query\Expr\Select $select */
         $select = $this->getDQLPart('select');
         if (is_array($orderBy)) {
             foreach ($orderBy as $order) {
@@ -294,7 +294,7 @@ class QueryBuilder extends BaseQueryBuilder
     {
         $query = parent::getQuery();
 
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $this->getEntityManager();
 
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {

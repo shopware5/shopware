@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -66,7 +66,7 @@ class SearchTermLogger implements SearchTermLoggerInterface
             return;
         }
 
-        /* @var $condition SearchTermCondition */
+        /* @var SearchTermCondition $condition */
         $condition = $criteria->getCondition('search');
 
         $now = new \DateTime();

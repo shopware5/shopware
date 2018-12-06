@@ -82,7 +82,7 @@ class ShopGateway implements ShopGatewayInterface
     {
         $shops = $this->getShops($ids);
 
-        //check if parent shops has to be loaded
+        // Check if parent shops has to be loaded
         $mainIds = array_values(array_unique(array_filter(array_column($shops, '__shop_main_id'))));
         $mainIds = array_diff($mainIds, $ids);
 
@@ -113,7 +113,7 @@ class ShopGateway implements ShopGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return \array[]
+     * @return array[]
      */
     private function getShops($ids)
     {

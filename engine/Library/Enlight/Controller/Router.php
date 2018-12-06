@@ -91,8 +91,8 @@ abstract class Enlight_Controller_Router extends Enlight_Class
     /**
      * Sets a global parameter.
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed  $value
      *
      * @return self
      */

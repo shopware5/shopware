@@ -35,7 +35,7 @@ namespace Shopware\Recovery\Install;
  *   </files>
  * </shopware>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

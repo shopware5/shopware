@@ -31,7 +31,7 @@ Ext.define('Shopware.attribute.HtmlFieldHandler', {
     extend: 'Shopware.attribute.FieldHandlerInterface',
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'html');
+        return (attribute.get('columnType') === 'html');
     },
 
     create: function(field, attribute) {

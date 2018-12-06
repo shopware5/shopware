@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Controller
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -32,26 +33,12 @@
  * </code>
  *
  * @category   Enlight
- * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bootstrap_Default
 {
-    /**
-     * Init this plugin. This Plugin should run before the dispatching process.
-     */
-    public function init()
-    {
-        if ($this->Collection() === null) {
-            return;
-        }
-        $event = new Enlight_Event_Handler_Default('Enlight_Controller_Action_PreDispatch', array(
-            $this, 'onPreDispatch'
-        ));
-        $this->Application()->Events()->registerListener($event);
-    }
-
     /**
      * @var bool
      */
@@ -65,18 +52,33 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
     /**
      * @var array
      */
-    protected $parseParams = array();
+    protected $parseParams = [];
+
+    /**
+     * Init this plugin. This Plugin should run before the dispatching process.
+     */
+    public function init()
+    {
+        if ($this->Collection() === null) {
+            return;
+        }
+        $event = new Enlight_Event_Handler_Default('Enlight_Controller_Action_PreDispatch', [
+            $this, 'onPreDispatch',
+        ]);
+        $this->Application()->Events()->registerListener($event);
+    }
 
     /**
      * Called from the event manager before the dispatch process.
      * Parse the json input data, when it was activated.
      *
-     * @param   Enlight_Event_EventArgs $args
-     * @return  bool
+     * @param Enlight_Event_EventArgs $args
+     *
+     * @return bool
      */
     public function onPreDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var $subject Enlight_Controller_Action */
+        /** @var Enlight_Controller_Action $subject */
         $subject = $args->get('subject');
         $request = $subject->Request();
 
@@ -116,7 +118,7 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
 
         // Rests the configuration for the next dispatch
         $this->parseInput = false;
-        $this->parseParams = array();
+        $this->parseParams = [];
         $this->padding = null;
     }
 
@@ -124,12 +126,14 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
      * Enables parsing the json input in pre-dispatch.
      * Reads the data from PHP-stream "php://input".
      *
-     * @param   bool $parseInput
-     * @return  Enlight_Controller_Plugins_JsonRequest_Bootstrap
+     * @param bool $parseInput
+     *
+     * @return Enlight_Controller_Plugins_JsonRequest_Bootstrap
      */
     public function setParseInput($parseInput = true)
     {
         $this->parseInput = (bool) $parseInput;
+
         return $this;
     }
 
@@ -137,12 +141,14 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
      * Enables parsing the json params in pre-dispatch.
      * Reads the data from post or get params.
      *
-     * @param   array $parseParams
-     * @return  Enlight_Controller_Plugins_JsonRequest_Bootstrap
+     * @param array $parseParams
+     *
+     * @return Enlight_Controller_Plugins_JsonRequest_Bootstrap
      */
-    public function setParseParams($parseParams = array())
+    public function setParseParams($parseParams = [])
     {
         $this->parseParams = (array) $parseParams;
+
         return $this;
     }
 
@@ -153,6 +159,7 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
     public function setPadding($padding = true)
     {
         $this->padding = $padding;
+
         return $this;
     }
 

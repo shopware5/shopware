@@ -42,10 +42,10 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function searchAction()
     {
-        $entity = $this->Request()->getParam('entity', null);
+        $entity = $this->Request()->getParam('entity');
         $ids = $this->Request()->getParam('ids', []);
-        $id = $this->Request()->getParam('id', null);
-        $term = $this->Request()->getParam('query', null);
+        $id = $this->Request()->getParam('id');
+        $term = $this->Request()->getParam('query');
         $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
 
@@ -109,7 +109,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * Queries the articles from the database based on the passed search term
      *
-     * @param $search
+     * @param string $search
      *
      * @return array
      */
@@ -230,7 +230,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $entity
+     * @param string $entity
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -272,7 +272,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $builder \Doctrine\ORM\QueryBuilder
+     * @param \Doctrine\ORM\QueryBuilder $builder
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
@@ -374,7 +374,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return array[]
      */

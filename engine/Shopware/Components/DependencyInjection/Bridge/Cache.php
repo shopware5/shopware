@@ -32,7 +32,7 @@ use Zend_Locale_Data;
  * Wrapper for accessing the used zend cache instance
  * + call of Zend_Locale_Data::setCache.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

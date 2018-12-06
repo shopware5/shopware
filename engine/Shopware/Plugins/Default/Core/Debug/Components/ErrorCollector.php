@@ -27,7 +27,7 @@ namespace Shopware\Plugin\Debug\Components;
 use Shopware\Components\Logger;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -54,7 +54,7 @@ class ErrorCollector implements CollectorInterface
 
     public function start()
     {
-        $this->errorHandler->setEnabledLog(true);
+        $this->errorHandler->setEnabledLog();
         $this->errorHandler->registerErrorHandler(E_ALL | E_STRICT);
     }
 

@@ -31,12 +31,18 @@ Ext.define('Shopware.attribute.FloatFieldHandler', {
     extend: 'Shopware.attribute.FieldHandlerInterface',
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'float');
+        return (attribute.get('columnType') === 'float');
     },
 
     create: function(field, attribute) {
         field.xtype = 'numberfield';
         field.align = 'right';
+
+        if (attribute.get('defaultValue') !== null) {
+            field.value = parseFloat(attribute.get('defaultValue'));
+            field.defaultValue = field.value;
+        }
+
         return field;
     }
 });

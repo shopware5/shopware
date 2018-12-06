@@ -88,7 +88,7 @@ class XmlCronjobReader
 
     /**
      * @param \DOMNode $node
-     * @param $name
+     * @param string   $name
      *
      * @return null|string
      */

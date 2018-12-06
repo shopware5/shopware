@@ -42,7 +42,7 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implem
             return;
         }
 
-        /** @var $cronManager Enlight_Components_Cron_Manager */
+        /** @var Enlight_Components_Cron_Manager $cronManager */
         $cronManager = Shopware()->Container()->get('cron');
 
         set_time_limit(0);

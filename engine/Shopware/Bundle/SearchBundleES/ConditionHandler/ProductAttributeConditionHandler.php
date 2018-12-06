@@ -114,6 +114,9 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
 
         switch ($criteriaPart->getOperator()) {
             case ProductAttributeCondition::OPERATOR_EQ:
+                if ($type === 'string') {
+                    $field .= '.raw';
+                }
                 if ($criteriaPart->getValue() === null) {
                     $filter = new BoolQuery();
                     $filter->add(new ExistsQuery($field), BoolQuery::MUST_NOT);

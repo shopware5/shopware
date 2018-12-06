@@ -26,7 +26,7 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Repository;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

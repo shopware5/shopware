@@ -104,7 +104,7 @@ class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      * Each filter group is joined as own PropertyCondition to the criteria
      * object
      *
-     * @param $filters
+     * @param array $filters
      *
      * @return array
      */

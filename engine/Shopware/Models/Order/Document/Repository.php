@@ -43,17 +43,17 @@ class Repository extends ModelRepository
      * To determine the total number of records, use the following syntax:
      * Shopware()->Models()->getQueryCount($query);
      *
-     * @param      $orderId
-     * @param null $filter
-     * @param null $orderBy
-     * @param null $limit
-     * @param null $offset
+     * @param int      $orderId
+     * @param null     $filter
+     * @param null     $orderBy
+     * @param null|int $limit
+     * @param null|int $offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery($orderId, $filter = null, $orderBy = null, $limit = null, $offset = null)
     {
-        /** @var $builder \Doctrine\ORM\QueryBuilder */
+        /** @var \Doctrine\ORM\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder = $this->selectListQuery($builder);
 

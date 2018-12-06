@@ -25,7 +25,7 @@
 namespace Shopware\Components;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -148,7 +148,7 @@ class QueryAliasMapper
      *    'foo' => 'bar'
      * ]
      *
-     * @param string[]
+     * @param string[] $params
      *
      * @return string[]
      */
@@ -182,7 +182,7 @@ class QueryAliasMapper
      *   'foo'   => 'bar,
      * ]
      *
-     * @param string[]
+     * @param string[] $params
      *
      * @return string[]
      */
