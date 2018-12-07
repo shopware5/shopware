@@ -1141,7 +1141,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     break;
                 }
                 //Fix: check if type is 'DateTime', otherwise return
-                if(!is_a($value, 'DateTime')) {
+                if (!$value instanceof \DateTime) {
 					break; 
 				}
                 $date = new DateTime($value);
