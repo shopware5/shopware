@@ -149,28 +149,28 @@ class CategoryDuplicator
     }
 
     /**
-     * Duplicates the category article associations from one category to another
+     * Duplicates the category product associations from one category to another
      *
      * @param int $originalCategoryId
      * @param int $newCategoryId
      */
     public function duplicateCategoryArticleAssociations($originalCategoryId, $newCategoryId)
     {
-        $assocArticlesStmt = $this->connection->prepare(
+        $assocProductsStmt = $this->connection->prepare(
             'SELECT articleID FROM s_articles_categories WHERE categoryID = :categoryID'
         );
-        $assocArticlesStmt->execute([':categoryID' => $originalCategoryId]);
-        $articles = $assocArticlesStmt->fetchAll(\PDO::FETCH_COLUMN, 0);
+        $assocProductsStmt->execute([':categoryID' => $originalCategoryId]);
+        $products = $assocProductsStmt->fetchAll(\PDO::FETCH_COLUMN, 0);
 
-        if ($articles) {
+        if ($products) {
             $insertStmt = $this->connection->prepare(
                 'INSERT INTO s_articles_categories (categoryID, articleID)
-            VALUES (' . $newCategoryId . ', ' . implode($articles, '), (' . $newCategoryId . ', ') . ')'
+            VALUES (' . $newCategoryId . ', ' . implode($products, '), (' . $newCategoryId . ', ') . ')'
             );
             $insertStmt->execute();
 
-            foreach ($articles as $articleId) {
-                $this->categoryDenormalization->addAssignment($articleId, $newCategoryId);
+            foreach ($products as $productId) {
+                $this->categoryDenormalization->addAssignment($productId, $newCategoryId);
             }
         }
     }
