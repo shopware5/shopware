@@ -179,7 +179,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                                             ->findOneBy(['customerId' => Shopware()->Session()->sUserId]);
         if (!empty($partnerModel)) {
             $this->View()->assign('partnerId', $partnerModel->getId());
-            Shopware()->Session()->assign('partnerId', $partnerModel->getId());
+            Shopware()->Session()->offsetSet('partnerId', $partnerModel->getId());
         }
     }
 
