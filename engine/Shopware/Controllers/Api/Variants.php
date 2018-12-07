@@ -21,16 +21,19 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Api\Manager;
+use Shopware\Components\Api\Resource\Variant;
+
 class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Variant
+     * @var Variant
      */
     protected $resource = null;
 
     public function init()
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('variant');
+        $this->resource = Manager::getResource('variant');
     }
 
     /**
@@ -40,17 +43,19 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit = (int) $this->Request()->getParam('limit', 1000);
-        $offset = (int) $this->Request()->getParam('start', 0);
-        $filter = $this->Request()->getParam('filter', []);
-        $sort = $this->Request()->getParam('sort', []);
+        $request = $this->Request();
+        $limit = (int) $request->getParam('limit', 1000);
+        $offset = (int) $request->getParam('start', 0);
+        $filter = $request->getParam('filter', []);
+        $sort = $request->getParam('sort', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort, [
-            'considerTaxInput' => (bool) $this->Request()->getParam('considerTaxInput', false),
+            'considerTaxInput' => (bool) $request->getParam('considerTaxInput', false),
         ]);
 
-        $this->View()->assign($result);
-        $this->View()->assign('success', true);
+        $view = $this->View();
+        $view->assign($result);
+        $view->assign('success', true);
     }
 
     /**
@@ -60,21 +65,23 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      */
     public function getAction()
     {
-        $id = $this->Request()->getParam('id');
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $request = $this->Request();
+        $id = $request->getParam('id');
+        $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $articleDetail = $this->resource->getOneByNumber($id, [
-                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
+            $variant = $this->resource->getOneByNumber($id, [
+                'considerTaxInput' => $request->getParam('considerTaxInput'),
             ]);
         } else {
-            $articleDetail = $this->resource->getOne($id, [
-                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
+            $variant = $this->resource->getOne($id, [
+                'considerTaxInput' => $request->getParam('considerTaxInput'),
             ]);
         }
 
-        $this->View()->assign('data', $articleDetail);
-        $this->View()->assign('success', true);
+        $view = $this->View();
+        $view->assign('data', $variant);
+        $view->assign('success', true);
     }
 
     /**
@@ -84,11 +91,11 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      */
     public function postAction()
     {
-        $article = $this->resource->create($this->Request()->getPost());
+        $variant = $this->resource->create($this->Request()->getPost());
 
-        $location = $this->apiBaseUrl . 'variants/' . $article->getId();
+        $location = $this->apiBaseUrl . 'variants/' . $variant->getId();
         $data = [
-            'id' => $article->getId(),
+            'id' => $variant->getId(),
             'location' => $location,
         ];
 
@@ -103,19 +110,20 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      */
     public function putAction()
     {
-        $id = $this->Request()->getParam('id');
-        $params = $this->Request()->getPost();
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $request = $this->Request();
+        $id = $request->getParam('id');
+        $params = $request->getPost();
+        $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $article = $this->resource->updateByNumber($id, $params);
+            $variant = $this->resource->updateByNumber($id, $params);
         } else {
-            $article = $this->resource->update($id, $params);
+            $variant = $this->resource->update($id, $params);
         }
 
-        $location = $this->apiBaseUrl . 'variants/' . $article->getId();
+        $location = $this->apiBaseUrl . 'variants/' . $variant->getId();
         $data = [
-            'id' => $article->getId(),
+            'id' => $variant->getId(),
             'location' => $location,
         ];
 
@@ -129,8 +137,9 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      */
     public function deleteAction()
     {
-        $id = $this->Request()->getParam('id');
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $request = $this->Request();
+        $id = $request->getParam('id');
+        $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);
