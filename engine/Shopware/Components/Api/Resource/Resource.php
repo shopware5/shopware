@@ -59,7 +59,7 @@ abstract class Resource
      *
      * @var ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var bool
@@ -74,19 +74,19 @@ abstract class Resource
     /**
      * @var \Shopware_Components_Acl
      */
-    protected $acl = null;
+    protected $acl;
 
     /**
      * Contains the current role
      *
      * @var string|\Zend_Acl_Role_Interface
      */
-    protected $role = null;
+    protected $role;
 
     /**
      * @var Container
      */
-    protected $container = null;
+    protected $container;
 
     /**
      * @return Container
@@ -119,7 +119,7 @@ abstract class Resource
             return;
         }
 
-        $calledClass = get_called_class();
+        $calledClass = static::class;
         $calledClass = explode('\\', $calledClass);
         $resource = strtolower(end($calledClass));
 
@@ -225,7 +225,7 @@ abstract class Resource
      */
     public function getResultMode()
     {
-        return $this->resultMode;
+        return (int) $this->resultMode;
     }
 
     /**
@@ -263,6 +263,7 @@ abstract class Resource
 
         $results = [];
         foreach ($data as $key => $datum) {
+            /** @var BatchInterface $this */
             $id = $this->getIdByData($datum);
 
             try {
@@ -271,7 +272,7 @@ abstract class Resource
                     'operation' => 'delete',
                     'data' => $this->delete($id),
                 ];
-                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                if ($this->getResultMode() === self::HYDRATE_ARRAY) {
                     $results[$key]['data'] = Shopware()->Models()->toArray(
                         $results[$key]['data']
                     );
@@ -314,6 +315,7 @@ abstract class Resource
 
         $results = [];
         foreach ($data as $key => $datum) {
+            /** @var BatchInterface $this */
             $id = $this->getIdByData($datum);
 
             try {
@@ -400,7 +402,7 @@ abstract class Resource
      * @param string     $optionName
      * @param bool       $defaultReplace
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     protected function checkDataReplacement(Collection $collection, $data, $optionName, $defaultReplace)
     {
@@ -470,7 +472,7 @@ abstract class Resource
      * Helper function to execute different findOneBy statements which different conditions
      * until a passed entity instance found.
      *
-     * @param object $entity
+     * @param string $entity
      * @param array  $conditions
      *
      * @throws \Exception
