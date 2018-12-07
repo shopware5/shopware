@@ -45,16 +45,16 @@ class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
 
     public function addArticleAction()
     {
-        if (($articleId = $this->Request()->getParam('articleID')) !== null) {
-            $this->View()->assign('sCompareAddResult', $this->articles->sAddComparison($articleId));
+        if (($productId = $this->Request()->getParam('articleID')) !== null) {
+            $this->View()->assign('sCompareAddResult', $this->articles->sAddComparison($productId));
         }
         $this->View()->assign('sComparisons', $this->articles->sGetComparisons());
     }
 
     public function deleteArticleAction()
     {
-        if (($articleId = $this->Request()->getParam('articleID')) !== null) {
-            $this->articles->sDeleteComparison((int) $articleId);
+        if (($productId = $this->Request()->getParam('articleID')) !== null) {
+            $this->articles->sDeleteComparison((int) $productId);
         }
         $this->forward('index');
     }

@@ -70,7 +70,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         /** @var ProductSearchResult $result */
         $result = $this->get('shopware_search.product_search')->search($criteria, $context);
-        $articles = $this->convertProducts($result);
+        $products = $this->convertProducts($result);
 
         if ($this->get('config')->get('traceSearch', true)) {
             $this->get('shopware_searchdbal.search_term_logger')->logResult(
@@ -108,7 +108,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             'ajaxCountUrlParams' => [],
             'sortings' => $sortings,
             'sSearchResults' => [
-                'sArticles' => $articles,
+                'sArticles' => $products,
                 'sArticlesCount' => $result->getTotalCount(),
             ],
             'productBoxLayout' => $this->get('config')->get('searchProductBoxLayout'),
@@ -142,14 +142,14 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 GROUP BY articleID
                 LIMIT 2
             ';
-            $articles = $this->get('db')->fetchAll($sql, [$search]);
-            if ($articles[0]['configurator_set_id']) {
-                $number = $articles[0]['ordernumber'];
+            $products = $this->get('db')->fetchAll($sql, [$search]);
+            if ($products[0]['configurator_set_id']) {
+                $number = $products[0]['ordernumber'];
             }
 
-            $articles = array_column($articles, 'articleID');
+            $products = array_column($products, 'articleID');
 
-            if (empty($articles)) {
+            if (empty($products)) {
                 $sql = "
                     SELECT DISTINCT articleID
                     FROM s_articles_details
@@ -158,10 +158,10 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                     GROUP BY articleID
                     LIMIT 2
                 ";
-                $articles = $this->get('db')->fetchCol($sql, [$search, $search]);
+                $products = $this->get('db')->fetchCol($sql, [$search, $search]);
             }
         }
-        if (!empty($articles) && count($articles) == 1) {
+        if (!empty($products) && count($products) == 1) {
             $sql = '
                 SELECT ac.articleID
                 FROM  s_articles_categories_ro ac
@@ -173,15 +173,15 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 LIMIT 1
             ';
 
-            $articles = $this->get('db')->fetchCol($sql, [
+            $products = $this->get('db')->fetchCol($sql, [
                 $this->get('shop')->get('parentID'),
-                $articles[0],
+                $products[0],
             ]);
         }
-        if (!empty($articles) && count($articles) == 1) {
+        if (!empty($products) && count($products) == 1) {
             $assembleParams = [
                 'sViewport' => 'detail',
-                'sArticle' => $articles[0],
+                'sArticle' => $products[0],
             ];
             if ($number) {
                 $assembleParams['number'] = $number;
@@ -203,18 +203,18 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     private function convertProducts(ProductSearchResult $result)
     {
-        $articles = [];
+        $products = [];
         foreach ($result->getProducts() as $product) {
-            $article = $this->get('legacy_struct_converter')->convertListProductStruct($product);
+            $productArray = $this->get('legacy_struct_converter')->convertListProductStruct($product);
 
-            $articles[] = $article;
+            $products[] = $productArray;
         }
 
-        if (empty($articles)) {
+        if (empty($products)) {
             return null;
         }
 
-        return $articles;
+        return $products;
     }
 
     /**

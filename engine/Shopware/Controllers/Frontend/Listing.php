@@ -152,7 +152,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria->addBaseCondition($condition);
         }
 
-        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
+        $categoryProducts = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
             $context->getShop()->getCategory()->getId(),
             $criteria
         );
@@ -171,16 +171,16 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $facets = [];
-        foreach ($categoryArticles['facets'] as $facet) {
+        foreach ($categoryProducts['facets'] as $facet) {
             if (!$facet instanceof FacetResultInterface || $facet->getFacetName() === 'manufacturer') {
                 continue;
             }
             $facets[] = $facet;
         }
 
-        $categoryArticles['facets'] = $facets;
+        $categoryProducts['facets'] = $facets;
 
-        $this->View()->assign($categoryArticles);
+        $this->View()->assign($categoryProducts);
         $this->View()->assign('showListing', true);
         $this->View()->assign('manufacturer', $manufacturer);
         $this->View()->assign('ajaxCountUrlParams', [
@@ -540,7 +540,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria->resetFacets();
         }
 
-        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
+        $categoryProducts = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
         $viewData = $this->View()->getAssign();
 
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
@@ -553,10 +553,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
-        $facets = $facetFilter->filter($categoryArticles['facets'], $criteria);
-        $categoryArticles['facets'] = $facets;
+        $facets = $facetFilter->filter($categoryProducts['facets'], $criteria);
+        $categoryProducts['facets'] = $facets;
 
-        $this->View()->assign($categoryArticles);
+        $this->View()->assign($categoryProducts);
         $this->View()->assign('sortings', $sortings);
     }
 

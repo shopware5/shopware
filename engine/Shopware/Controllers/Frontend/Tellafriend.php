@@ -67,9 +67,9 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
             return $this->forward('index', 'index');
         }
 
-        // Get Article-Information
-        $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $id);
-        if (empty($sArticle['articleName'])) {
+        // Get Product-Information
+        $product = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $id);
+        if (empty($product['articleName'])) {
             return $this->forward('index', 'index');
         }
 
@@ -105,12 +105,12 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
 
             if ($variables['sError'] == false) {
                 // Prepare eMail
-                $sArticle['linkDetails'] = $this->Front()->Router()->assemble(['sViewport' => 'detail', 'sArticle' => $sArticle['articleID']]);
+                $product['linkDetails'] = $this->Front()->Router()->assemble(['sViewport' => 'detail', 'sArticle' => $product['articleID']]);
 
                 $context = [
                     'sName' => $this->sSYSTEM->_POST['sName'],
-                    'sArticle' => html_entity_decode($sArticle['articleName']),
-                    'sLink' => $sArticle['linkDetails'],
+                    'sArticle' => html_entity_decode($product['articleName']),
+                    'sLink' => $product['linkDetails'],
                 ];
 
                 if ($this->sSYSTEM->_POST['sComment']) {
@@ -139,6 +139,6 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
             }
         }
         $this->View()->assign('rand', Random::getAlphanumericString(32));
-        $this->View()->assign('sArticle', $sArticle);
+        $this->View()->assign('sArticle', $product);
     }
 }
