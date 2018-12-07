@@ -466,8 +466,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->groupBy('articles.id');
 
         // Don't search for normal articles
-        $displayArticles = (bool) $this->Request()->getParam('articles', true);
-        if (!$displayArticles) {
+        $displayProducts = (bool) $this->Request()->getParam('articles', true);
+        if (!$displayProducts) {
             $builder->andWhere('articles.configuratorSetId IS NOT NULL');
         }
 
