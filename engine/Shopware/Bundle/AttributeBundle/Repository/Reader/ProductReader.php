@@ -125,14 +125,14 @@ class ProductReader extends GenericReader
     }
 
     /**
-     * @param array[] $articles
+     * @param array[] $products
      *
      * @return array[]
      */
-    private function assignAdditionalText(array $articles)
+    private function assignAdditionalText(array $products)
     {
         /** @var Repository $shopRepo */
-        $shopRepo = $this->entityManager->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepo = $this->entityManager->getRepository(Shop::class);
 
         /** @var Shop $shop */
         $shop = $shopRepo->getActiveDefault();
@@ -143,35 +143,35 @@ class ProductReader extends GenericReader
             ContextService::FALLBACK_CUSTOMER_GROUP
         );
 
-        $products = $this->buildListProducts($articles);
-        $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
+        $tempProducts = $this->buildListProducts($products);
+        $tempProducts = $this->additionalTextService->buildAdditionalTextLists($tempProducts, $context);
 
-        foreach ($products as $product) {
-            $number = $product->getNumber();
-            if (!isset($articles[$number])) {
+        foreach ($tempProducts as $tempProduct) {
+            $number = $tempProduct->getNumber();
+            if (!isset($products[$number])) {
                 continue;
             }
-            $articles[$number]['additionalText'] = $product->getAdditional();
-        }
-
-        return $articles;
-    }
-
-    /**
-     * @param array[] $articles
-     *
-     * @return ListProduct[]
-     */
-    private function buildListProducts(array $articles)
-    {
-        $products = [];
-        foreach ($articles as $article) {
-            $product = new ListProduct($article['articleId'], $article['variantId'], $article['number']);
-            $product->setAdditional($article['additionalText']);
-            $products[$article['number']] = $product;
+            $products[$number]['additionalText'] = $tempProduct->getAdditional();
         }
 
         return $products;
+    }
+
+    /**
+     * @param array[] $products
+     *
+     * @return ListProduct[]
+     */
+    private function buildListProducts(array $products)
+    {
+        $listProducts = [];
+        foreach ($products as $product) {
+            $listProduct = new ListProduct($product['articleId'], $product['variantId'], $product['number']);
+            $listProduct->setAdditional($product['additionalText']);
+            $listProducts[$product['number']] = $listProduct;
+        }
+
+        return $listProducts;
     }
 
     private function assignCategoryIds(array $products)

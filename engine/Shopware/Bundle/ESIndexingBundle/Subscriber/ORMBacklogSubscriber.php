@@ -31,7 +31,7 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Detail as VariantModel;
 use Shopware\Models\Article\Price as PriceModel;
 use Shopware\Models\Article\Supplier as SupplierModel;
@@ -175,7 +175,7 @@ class ORMBacklogSubscriber implements EventSubscriber
     private function getDeleteBacklog($entity)
     {
         switch (true) {
-            case $entity instanceof ArticleModel:
+            case $entity instanceof ProductModel:
                 return new Backlog(self::EVENT_ARTICLE_DELETED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
                 return new Backlog(self::EVENT_VARIANT_DELETED, ['number' => $entity->getNumber()]);
@@ -204,7 +204,7 @@ class ORMBacklogSubscriber implements EventSubscriber
     private function getInsertBacklog($entity)
     {
         switch (true) {
-            case $entity instanceof ArticleModel:
+            case $entity instanceof ProductModel:
                 return new Backlog(self::EVENT_ARTICLE_INSERTED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
                 return new Backlog(self::EVENT_VARIANT_INSERTED, ['number' => $entity->getNumber()]);
@@ -238,7 +238,7 @@ class ORMBacklogSubscriber implements EventSubscriber
     private function getUpdateBacklog($entity)
     {
         switch (true) {
-            case $entity instanceof ArticleModel:
+            case $entity instanceof ProductModel:
                 return new Backlog(self::EVENT_ARTICLE_UPDATED, ['id' => $entity->getId()]);
             case $entity instanceof VariantModel:
                 return new Backlog(self::EVENT_VARIANT_UPDATED, ['number' => $entity->getNumber()]);
