@@ -28,9 +28,5 @@ use League\Flysystem\FilesystemInterface;
 
 interface DownloadServiceInterface
 {
-    /**
-     * @param string              $location
-     * @param FilesystemInterface $filesystem
-     */
-    public function send($location, FilesystemInterface $filesystem);
+    public function send(string $location, FilesystemInterface $filesystem): void;
 }

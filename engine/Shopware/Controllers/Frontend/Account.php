@@ -376,33 +376,32 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         try {
-            $download = $esdService->get(Shopware()->Session()->sUserId, $esdID);
+            $download = $esdService->loadEsdOfCustomer($this->container->get('session')->offsetGet('sUserId'), $esdID);
         } catch (EsdNotFoundException $exception) {
-            return $this->forwardDownloadError(1);
+            $this->forwardDownloadError(1);
+
+            return;
         }
 
         if (empty($download->getFile())) {
-            return $this->forwardDownloadError(1);
+            $this->forwardDownloadError(1);
+
+            return;
         }
 
         $filePath = $esdService->getLocation($download);
 
         if ($filesystem->has($filePath) === false) {
-            return $this->forwardDownloadError(2);
+            $this->forwardDownloadError(2);
+
+            return;
         }
 
         try {
-            return $downloadService->send($filePath, $filesystem);
+            $downloadService->send($filePath, $filesystem);
         } catch (\League\Flysystem\FileNotFoundException $exception) {
-            return $this->forwardDownloadError(2);
+            $this->forwardDownloadError(2);
         }
-    }
-
-    private function forwardDownloadError($errorCode)
-    {
-        $this->View()->sErrorCode = (int)$errorCode;
-
-        $this->forward('downloads');
     }
 
     /**
@@ -684,6 +683,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->container->get('shopware_storefront.context_service')->initializeContext();
 
         $modules->Basket()->sRefreshBasket();
+    }
+
+    private function forwardDownloadError(int $errorCode): void
+    {
+        $this->View()->assign('sErrorCode', $errorCode);
+
+        $this->forward('downloads');
     }
 
     /**

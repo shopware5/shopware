@@ -30,19 +30,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd;
 interface EsdServiceInterface
 {
     /**
-     * @param int $userId
+     * @param int $customerId
      * @param int $esdId
      *
      * @throws EsdNotFoundException
      *
      * @return Esd
      */
-    public function get($userId, $esdId);
+    public function loadEsdOfCustomer(int $customerId, int $esdId): Esd;
 
     /**
      * @param Esd $esd
      *
      * @return string
      */
-    public function getLocation(Esd $esd);
+    public function getLocation(Esd $esd): string;
 }

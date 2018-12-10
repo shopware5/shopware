@@ -56,15 +56,15 @@ class EsdService implements EsdServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($userId, $esdId)
+    public function loadEsdOfCustomer(int $customerId, int $esdId): Esd
     {
-        return $this->esdGateway->get($userId, $esdId);
+        return $this->esdGateway->loadEsdOfCustomer($customerId, $esdId);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLocation(Esd $esd)
+    public function getLocation(Esd $esd): string
     {
         return $this->config->offsetGet('esdKey') . '/' . $esd->getFile();
     }

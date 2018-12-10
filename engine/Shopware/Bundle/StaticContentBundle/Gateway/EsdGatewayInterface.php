@@ -30,12 +30,12 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd;
 interface EsdGatewayInterface
 {
     /**
-     * @param int $userId
+     * @param int $customerId
      * @param int $esdId
      *
      * @throws EsdNotFoundException
      *
      * @return Esd
      */
-    public function get($userId, $esdId);
+    public function loadEsdOfCustomer(int $customerId, int $esdId): Esd;
 }

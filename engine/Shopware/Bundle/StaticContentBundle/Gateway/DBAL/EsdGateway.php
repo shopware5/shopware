@@ -30,6 +30,7 @@ use Shopware\Bundle\StaticContentBundle\Exception\EsdNotFoundException;
 use Shopware\Bundle\StaticContentBundle\Gateway\EsdGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\EsdHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd;
 
 class EsdGateway implements EsdGatewayInterface
 {
@@ -48,11 +49,6 @@ class EsdGateway implements EsdGatewayInterface
      */
     private $fieldHelper;
 
-    /**
-     * @param Connection  $connection
-     * @param EsdHydrator $esdHydrator
-     * @param FieldHelper $fieldHelper
-     */
     public function __construct(
         Connection $connection,
         EsdHydrator $esdHydrator,
@@ -66,20 +62,18 @@ class EsdGateway implements EsdGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get($userId, $esdId)
+    public function loadEsdOfCustomer(int $customerId, int $esdId): Esd
     {
         $query = $this->getDefaultQuery()
-            ->setParameter('userId', $userId)
-            ->setParameter('esdId', $esdId)
-        ;
+            ->setParameter('customerId', $customerId)
+            ->setParameter('esdId', $esdId);
 
         $result = $query->execute()->fetch();
 
         if (empty($result)) {
             $query = $this->getFallbackQuery()
-                ->setParameter('userId', $userId)
-                ->setParameter('esdId', $esdId)
-            ;
+                ->setParameter('customerId', $customerId)
+                ->setParameter('esdId', $esdId);
 
             $result = $query->execute()->fetch();
         }
@@ -94,14 +88,14 @@ class EsdGateway implements EsdGatewayInterface
     /**
      * @return QueryBuilder
      */
-    protected function getDefaultQuery()
+    protected function getDefaultQuery(): QueryBuilder
     {
         return $this->connection->createQueryBuilder()
             ->addSelect($this->fieldHelper->getEsdFields())
             ->from('s_articles_esd', 'esd')
             ->innerJoin('esd', 's_order_esd', 'orderEsd', 'esd.id = orderEsd.esdID')
             ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esd.id = esdAttribute.esdID')
-            ->andWhere('orderEsd.userID = :userId')
+            ->andWhere('orderEsd.userID = :customerId')
             ->andWhere('orderEsd.orderdetailsID = :esdId')
         ;
     }
@@ -109,7 +103,7 @@ class EsdGateway implements EsdGatewayInterface
     /**
      * @return QueryBuilder
      */
-    protected function getFallbackQuery()
+    protected function getFallbackQuery(): QueryBuilder
     {
         return $this->connection->createQueryBuilder()
             ->select($this->fieldHelper->getEsdFields())
@@ -118,7 +112,7 @@ class EsdGateway implements EsdGatewayInterface
             ->innerJoin('articlesDetails', 's_order_details', 'orderDetails', 'articlesDetails.ordernumber = orderDetails.articleordernumber')
             ->innerJoin('orderDetails', 's_order', '`order`', '`order`.id = orderDetails.orderID')
             ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esd.id = esdAttribute.esdID')
-            ->andWhere('`order`.userID = :userId')
+            ->andWhere('`order`.userID = :customerId')
             ->andWhere('orderDetails.id = :esdId')
         ;
     }
