@@ -1034,6 +1034,44 @@ class LegacyStructConverter
     }
 
     /**
+     * Converts a payment struct
+     *
+     * @param StoreFrontBundle\Struct\Payment $payment
+     *
+     * @return array
+     */
+    public function convertPaymentStruct(StoreFrontBundle\Struct\Payment $payment)
+    {
+        $data = [
+            'id' => $payment->getId(),
+            'name' => $payment->getName(),
+            'description' => $payment->getDescription(),
+            'template' => $payment->getTemplate(),
+            'class' => $payment->getClass(),
+            'table' => $payment->getTable(),
+            'hide' => $payment->getHide(),
+            'additionaldescription' => $payment->getAdditionalDescription(),
+            'debit_percent' => $payment->getDebitPercent(),
+            'surcharge' => $payment->getSurcharge(),
+            'surchargestring' => $payment->getSurchargeString(),
+            'position' => $payment->getPosition(),
+            'active' => $payment->getActive(),
+            'esdactive' => $payment->getEsdActive(),
+            'embediframe' => $payment->getEmbediframe(),
+            'hideprospect' => $payment->getHideProspect(),
+            'action' => $payment->getAction(),
+            'pluginID' => $payment->getPluginID(),
+            'source' => $payment->getSource(),
+            'mobile_inactive' => $payment->getMobileInactive(),
+            'attributes' => $payment->getAttributes(),
+        ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Payment', $data, [
+            'payment' => $payment,
+        ]);
+    }
+
+    /**
      * Returns the count of children categories of the provided category
      *
      * @param int $id

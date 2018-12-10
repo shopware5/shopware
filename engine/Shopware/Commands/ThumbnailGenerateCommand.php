@@ -170,6 +170,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
         $total = $paginator->count();
 
         $progressBar = new ProgressBar($this->output, $total);
+        $progressBar->setRedrawFrequency(10);
         $progressBar->start();
 
         /* @var Media $media */

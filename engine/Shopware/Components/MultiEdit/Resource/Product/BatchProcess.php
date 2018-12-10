@@ -142,7 +142,7 @@ class BatchProcess
                 case 'bigint':
                 case 'decimal':
                 case 'float':
-                    $attributes[$attribute] = ['set', 'add', 'subtract', 'devide', 'multiply'];
+                    $attributes[$attribute] = ['set', 'add', 'subtract', 'divide', 'multiply'];
                     break;
                 case 'text':
                 case 'string':
@@ -210,6 +210,7 @@ class BatchProcess
                 case 'removestring':
                     $builder->set("{$prefix}.$column", new \Doctrine\ORM\Query\Expr\Literal("REPLACE({$prefix}.{$column}, '{$operation['value']}', '')"));
                     break;
+                case 'divide':
                 case 'devide':
                     $builder->set("{$prefix}.$column", $builder->expr()->quot("{$prefix}.$column", $operationValue));
                     break;

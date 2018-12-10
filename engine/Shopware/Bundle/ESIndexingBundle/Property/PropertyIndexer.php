@@ -78,7 +78,6 @@ class PropertyIndexer implements DataIndexerInterface
             $this->indexProperties($index, $ids);
             $progress->advance(count($ids));
         }
-
         $progress->finish();
     }
 

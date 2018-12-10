@@ -157,6 +157,9 @@ return array_replace_recursive([
                 'localhost:9200',
             ],
         ],
+        'logger' => [
+            'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
+        ],
     ],
     'front' => [
         'noErrorHandler' => false,

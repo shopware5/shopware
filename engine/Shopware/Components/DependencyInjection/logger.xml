@@ -32,6 +32,16 @@
             </call>
         </service>
 
+        <service id="monolog.formatter.normalizer" class="Monolog\Formatter\NormalizerFormatter"/>
+        <service id="monolog.handler.rotating_file.es" class="Monolog\Handler\RotatingFileHandler">
+            <argument>%kernel.logs_dir%/es_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <argument>%shopware.es.logger.level%</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
         <!-- FingersCrossed handler-->
         <service id="monolog.handler.fingers_crossed" class="Monolog\Handler\FingersCrossedHandler" public="false">
             <argument type="service" id="monolog.handler.rotating_file" />
@@ -53,6 +63,15 @@
             <call method="pushHandler">
                 <argument type="service" id="monolog.handler.rotating_file.plugin" />
             </call>
+        </service>
+
+        <!--ES logger -->
+        <service id="eslogger" class="Shopware\Components\Logger">
+            <argument>es</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.rotating_file.es" />
+            </call>
+
         </service>
 
         <!-- ChromePHP handler-->

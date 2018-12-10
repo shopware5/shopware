@@ -689,7 +689,7 @@ class FieldHelper
 
     public function getShopFields()
     {
-        return [
+        $fields = [
             'shop.id as __shop_id',
             'shop.main_id as __shop_main_id',
             'shop.name as __shop_name',
@@ -711,6 +711,13 @@ class FieldHelper
             'shop.default as __shop_default',
             'shop.active as __shop_active',
         ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_core_shops_attributes', 'shopAttribute')
+        );
+
+        return $fields;
     }
 
     public function getCurrencyFields()
@@ -1322,6 +1329,16 @@ class FieldHelper
         $this->addTranslation('page', 'page', $query, $context);
     }
 
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addPaymentTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('payment', 'config_payment', $query, $context, '1');
+        $this->addTranslation('paymentAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentAttribute.paymentmeanID');
+    }
+
     public function getCustomerFields()
     {
         $fields = [
@@ -1364,6 +1381,12 @@ class FieldHelper
         );
     }
 
+    /**
+     * Returns an array with all required payment fields.
+     * Requires that the s_core_paymentmeans table is included with table alias 'payment'
+     *
+     * @return array
+     */
     public function getPaymentFields()
     {
         $fields = [
