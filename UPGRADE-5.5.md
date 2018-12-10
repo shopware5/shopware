@@ -2,6 +2,10 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.5
+
+* Added new event `TemplateMail_CreateMail_MailContext` to `engine/Shopware/Components/TemplateMail.php`
+
 ## 5.5.4
 
 [View all changes from v5.5.3...v5.5.4](https://github.com/shopware/shopware/compare/v5.5.3...v5.5.4)

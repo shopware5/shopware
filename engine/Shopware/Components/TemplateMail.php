@@ -190,6 +190,7 @@ class Shopware_Components_TemplateMail
 
         $config = Shopware()->Config();
         $inheritance = Shopware()->Container()->get('theme_inheritance');
+        $eventManager = Shopware()->Container()->get('events');
 
         if ($this->getShop() !== null) {
             $defaultContext = [
@@ -207,8 +208,6 @@ class Shopware_Components_TemplateMail
             }
 
             if ($theme) {
-                $eventManager = Shopware()->Container()->get('events');
-
                 $keys = $eventManager->filter(
                     'TemplateMail_CreateMail_Available_Theme_Config',
                     $this->themeVariables,
@@ -237,6 +236,15 @@ class Shopware_Components_TemplateMail
 
         // Save current context to mail model
         $mailContext = json_decode(json_encode($context), true);
+
+        $mailContext = $eventManager->filter(
+            'TemplateMail_CreateMail_MailContext',
+            $mailContext,
+            [
+                'mailModel' => $mailModel,
+            ]
+        );
+
         $mailModel->setContext($mailContext);
         $this->getModelManager()->flush($mailModel);
 
