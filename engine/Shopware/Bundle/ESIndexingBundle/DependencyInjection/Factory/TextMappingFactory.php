@@ -37,9 +37,19 @@ class TextMappingFactory
      */
     private $esEnabled;
 
-    public function __construct($esEnabled = false)
+    /**
+     * @var string
+     */
+    private $version;
+
+    /**
+     * @param bool          $esEnabled
+     * @param string | null $version
+     */
+    public function __construct($esEnabled = false, $version = null)
     {
         $this->esEnabled = $esEnabled;
+        $this->version = $version;
     }
 
     /**
@@ -53,20 +63,22 @@ class TextMappingFactory
             return new TextMappingES2();
         }
 
-        try {
-            $info = $client->info();
-        } catch (\Exception $e) {
-            return new TextMappingES2();
+        if (!$this->version) {
+            try {
+                $info = $client->info();
+                $this->version = $info['version']['number'];
+            } catch (\Exception $e) {
+                return new TextMappingES2();
+            }
         }
 
-        if (version_compare($info['version']['number'], '6', '>=')) {
-            return new TextMappingES6();
+        switch (true) {
+            case version_compare($this->version, '6', '>='):
+                return new TextMappingES6();
+            case version_compare($this->version, '5', '>='):
+                return new TextMappingES5();
+            default:
+                return new TextMappingES2();
         }
-
-        if (version_compare($info['version']['number'], '5', '>=')) {
-            return new TextMappingES5();
-        }
-
-        return new TextMappingES2();
     }
 }
