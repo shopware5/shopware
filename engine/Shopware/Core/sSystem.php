@@ -90,7 +90,7 @@ class sSystem
     public $_SESSION;
 
     /**
-     * Path to article images
+     * Path to product images
      *
      * @var string
      */
