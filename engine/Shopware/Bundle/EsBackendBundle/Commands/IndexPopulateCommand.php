@@ -28,6 +28,7 @@ use Shopware\Bundle\EsBackendBundle\EsBackendIndexer;
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -45,6 +46,8 @@ class IndexPopulateCommand extends ShopwareCommand
         $this
             ->setName('sw:es:backend:index:populate')
             ->setDescription('Reindex all documents for the backend')
+            ->addOption('no-evaluation', null, InputOption::VALUE_NONE, 'Disable evaluation for each index')
+            ->addOption('stop-on-error', null, InputOption::VALUE_NONE, 'Abort indexing if an error occurs')
         ;
     }
 
@@ -57,6 +60,10 @@ class IndexPopulateCommand extends ShopwareCommand
         $indexer = $this->container->get('shopware_es_backend.indexer');
 
         $helper = new ConsoleProgressHelper($output);
+        $evaluation = $this->container->get('shopware_elastic_search.console.console_evaluation_helper');
+        $evaluation->setOutput($output)
+            ->setActive(!$input->getOption('no-evaluation'))
+            ->setStopOnError($input->getOption('stop-on-error'));
 
         $indexer->index($helper);
     }
