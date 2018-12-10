@@ -146,7 +146,12 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
             $this->overdueJobsList = $this->getOverdueJobs();
         }
 
-        return array_pop($this->overdueJobsList);
+        while (($nextJob = array_pop($this->overdueJobsList)) !== null) {
+            if ($this->isJobStillOverdue($nextJob->getId())) {
+                return $nextJob;
+            }
+        }
+        return null;
     }
 
     /**
@@ -246,5 +251,26 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         }
 
         return $overdueJobsList;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isJobStillOverdue($jobId)
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb->select('*')
+            ->from($this->tableName, 'c')
+            ->andWhere('c.active = 1')
+            ->andWhere('c.end IS NOT NULL')
+            ->andWhere('c.id = :jobId')
+            ->andWhere('c.next <= :dateNow')
+            ->setParameter('jobId', $jobId)
+            ->setParameter('dateNow', new DateTime(), 'datetime');
+        $row = $qb->execute()->fetch();
+        if (!$row) {
+            return false;
+        }
+        return true;
     }
 }

@@ -254,6 +254,8 @@ class Media extends Resource
         /** @var Album $album */
         $album = $this->getManager()->find(Album::class, $albumId);
         if (!$album) {
+            // Cleanup temporary file
+            $this->deleteTmpFile($file);
             throw new ApiException\CustomValidationException(
                 sprintf('Album by id %s not found', $albumId)
             );
@@ -268,6 +270,9 @@ class Media extends Resource
             throw new ApiException\CustomValidationException(
                 sprintf('Some error occurred while persisting your media')
             );
+        } finally {
+            // Cleanup temporary file
+            $this->deleteTmpFile($file);
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
@@ -497,5 +502,16 @@ class Media extends Resource
         }
 
         return $oldPath;
+    }
+
+    /**
+     * @param string $file
+     */
+    private function deleteTmpFile($file)
+    {
+        if (file_exists($file)) {
+            unlink($file);
+            rmdir(dirname($file));
+        }
     }
 }

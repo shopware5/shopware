@@ -689,7 +689,7 @@ class FieldHelper
 
     public function getShopFields()
     {
-        return [
+        $fields = [
             'shop.id as __shop_id',
             'shop.main_id as __shop_main_id',
             'shop.name as __shop_name',
@@ -711,6 +711,13 @@ class FieldHelper
             'shop.default as __shop_default',
             'shop.active as __shop_active',
         ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_core_shops_attributes', 'shopAttribute')
+        );
+
+        return $fields;
     }
 
     public function getCurrencyFields()

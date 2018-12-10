@@ -100,7 +100,7 @@ class Manager
         $imagePath = $media->getPath();
 
         if ($media->getType() !== $media::TYPE_IMAGE) {
-            throw new \Exception('File %s is not an image.', $imagePath);
+            throw new \Exception(sprintf('File %s is not an image.', $imagePath));
         }
 
         if (empty($thumbnailSizes)) {
