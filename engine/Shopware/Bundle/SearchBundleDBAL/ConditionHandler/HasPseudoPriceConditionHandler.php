@@ -73,7 +73,7 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, Crite
     ) {
         $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
 
-        $query->andWhere('listing_price.pseudoprice > 0');
+        $query->andWhere('listing_price.pseudoprice > listing_price.price');
     }
 
     public function setCriteria(Criteria $criteria)
