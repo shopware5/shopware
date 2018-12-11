@@ -314,7 +314,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $url = sprintf(
             '%s://%s%s/',
-            'http',
+            $shop->getSecure() ? 'https' : 'http',
             $shop->getHost(),
             $shop->getBasePath()
         );

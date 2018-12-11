@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\EsBackendBundle;
 
 use Elasticsearch\Client;
+use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 
 class EsBackendIndexer
@@ -42,13 +43,19 @@ class EsBackendIndexer
     private $repositories;
 
     /**
+     * @var EvaluationHelperInterface
+     */
+    private $evaluation;
+
+    /**
      * @param Client             $client
      * @param \IteratorAggregate $repositories
      */
-    public function __construct(Client $client, \IteratorAggregate $repositories)
+    public function __construct(Client $client, \IteratorAggregate $repositories, EvaluationHelperInterface $evaluation)
     {
         $this->client = $client;
         $this->repositories = $repositories;
+        $this->evaluation = $evaluation;
     }
 
     /**
@@ -189,6 +196,7 @@ class EsBackendIndexer
         }
 
         $progress->finish();
+        $this->evaluation->finish();
     }
 
     private function createAlias($index, $alias)

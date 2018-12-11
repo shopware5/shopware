@@ -1549,6 +1549,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $orderNumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
 
+        $this->basket->sAddArticle($orderNumber, $quantity);
+
         $this->View()->assign(
             'basketInfoMessage',
             $this->getInstockInfo($orderNumber, $quantity)
@@ -1560,8 +1562,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 $this->Request()->getParam('sAddAccessoriesQuantity')
             );
         }
-
-        $this->basket->sAddArticle($orderNumber, $quantity);
 
         $this->forward('ajaxCart');
     }

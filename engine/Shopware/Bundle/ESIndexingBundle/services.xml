@@ -10,6 +10,12 @@
             <argument>%shopware.es.client%</argument>
         </service>
 
+        <service id="shopware_elastic_search.client.logger" class="Shopware\Bundle\ESIndexingBundle\EsClientLogger" decorates="shopware_elastic_search.client">
+            <argument type="service" id="shopware_elastic_search.client.logger.inner"/>
+            <argument type="service" id="eslogger"/>
+            <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
+        </service>
+
         <service id="shopware_elastic_search.shop_indexer_factory"
                  class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\ShopIndexerFactory">
             <argument type="tagged" tag="shopware_elastic_search.data_indexer"/>
@@ -36,6 +42,7 @@
         <service id="shopware_elastic_search.text_mapping_factory"
                  class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory">
             <argument>%shopware.es.enabled%</argument>
+            <argument type="expression">container.hasParameter('shopware.es.version') ? parameter('shopware.es.version') : null</argument>
         </service>
 
         <service id="shopware_elastic_search.index_factory" class="Shopware\Bundle\ESIndexingBundle\IndexFactory">
@@ -229,6 +236,10 @@
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\AnalyzeCommand"
                  id="shopware_elastic_search.commands.analyze_command">
             <tag name="console.command" command="sw:es:analyze"/>
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Console\ConsoleEvaluationHelper"
+                 id="shopware_elastic_search.console.console_evaluation_helper">
         </service>
     </services>
 </container>

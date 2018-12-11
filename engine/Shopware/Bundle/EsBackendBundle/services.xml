@@ -9,6 +9,7 @@
         <service class="Shopware\Bundle\EsBackendBundle\EsBackendIndexer" id="shopware_es_backend.indexer">
             <argument id="shopware_elastic_search.client" type="service"/>
             <argument type="tagged" tag="shopware_es_backend.repository" />
+            <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />

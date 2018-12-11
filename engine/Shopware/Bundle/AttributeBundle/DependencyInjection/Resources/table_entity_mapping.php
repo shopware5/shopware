@@ -186,6 +186,14 @@ return [
         'coreAttributes' => [],
         'dependingTables' => [],
     ],
+    's_core_shops_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\Shop',
+        'identifiers' => ['id', 'shopid'],
+        'foreignKey' => 'shopid',
+        'coreAttributes' => [],
+        'dependingTables' => [],
+    ],
     's_user_attributes' => [
         'readOnly' => false,
         'model' => 'Shopware\Models\Attribute\Customer',

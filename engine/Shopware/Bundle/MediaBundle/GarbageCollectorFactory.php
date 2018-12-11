@@ -26,6 +26,7 @@ namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 /**
@@ -141,7 +142,7 @@ class GarbageCollectorFactory
             ->andWhere('column_type = :columnType')
             ->setParameters([
                 'entityName' => \Shopware\Models\Media\Media::class,
-                'columnType' => 'single_selection',
+                'columnType' => TypeMapping::TYPE_SINGLE_SELECTION,
             ])
             ->execute()
             ->fetchAll();
@@ -158,13 +159,28 @@ class GarbageCollectorFactory
             ->andWhere('column_type = :columnType')
             ->setParameters([
                 'entityName' => \Shopware\Models\Media\Media::class,
-                'columnType' => 'multi_selection',
+                'columnType' => TypeMapping::TYPE_MULTI_SELECTION,
             ])
             ->execute()
             ->fetchAll();
 
         foreach ($multiSelectionColumns as $attribute) {
             $mediaPositions[] = new MediaPosition($attribute['table_name'], $attribute['column_name'], 'id', MediaPosition::PARSE_PIPES);
+        }
+
+        // values as path in html/smarty code
+        $htmlColumns = $this->connection->createQueryBuilder()
+            ->select(['table_name', 'column_name'])
+            ->from('s_attribute_configuration')
+            ->andWhere('column_type = :columnType')
+            ->setParameters([
+                'columnType' => TypeMapping::TYPE_HTML,
+            ])
+            ->execute()
+            ->fetchAll();
+
+        foreach ($htmlColumns as $attribute) {
+            $mediaPositions[] = new MediaPosition($attribute['table_name'], $attribute['column_name'], 'path', MediaPosition::PARSE_HTML);
         }
 
         return $mediaPositions;

@@ -117,6 +117,7 @@ class DatabaseHandler
             $filePath = $file->getRelativePathname();
             if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
+                $namespace = str_replace('\\', '/', $namespace);
             } else {
                 continue;
             }
@@ -246,6 +247,7 @@ class DatabaseHandler
             $filePath = $file->getRelativePathname();
             if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
+                $namespace = str_replace('\\', '/', $namespace);
             } else {
                 continue;
             }
