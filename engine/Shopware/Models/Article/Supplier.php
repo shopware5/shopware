@@ -81,6 +81,8 @@ class Supplier extends ModelEntity
      * INVERSE SIDE
      * Articles can be bound to a specific supplier
      *
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="supplier", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="id", referencedColumnName="supplierID")
      */
@@ -89,9 +91,9 @@ class Supplier extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\ArticleSupplier
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
      */
     protected $attribute;
 
@@ -312,7 +314,7 @@ class Supplier extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleSupplier', 'attribute', 'articleSupplier');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleSupplier::class, 'attribute', 'articleSupplier');
     }
 
     /**

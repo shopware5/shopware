@@ -39,12 +39,13 @@ class Link extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
+     * @var \Shopware\Models\Newsletter\Container
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="links")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Container
      */
     protected $container;
+
     /**
      * Autoincrement ID
      *
@@ -63,7 +64,7 @@ class Link extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Description of the link / link text
@@ -165,8 +166,6 @@ class Link extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
-     *
-     * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)
     {

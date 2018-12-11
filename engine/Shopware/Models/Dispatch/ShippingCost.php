@@ -56,6 +56,7 @@ class ShippingCost extends ModelEntity
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
      */
     protected $dispatch;
+
     /**
      * Autoincrement ID
      *
@@ -198,8 +199,6 @@ class ShippingCost extends ModelEntity
 
     /**
      * @param \Shopware\Models\Dispatch\Dispatch|array|null $dispatch
-     *
-     * @return \Shopware\Components\Model\ModelEntity
      */
     public function setDispatch($dispatch)
     {

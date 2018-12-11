@@ -41,6 +41,7 @@ class Element extends ModelEntity
      * doctrine associations can be defined over this field
      *
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -51,6 +52,7 @@ class Element extends ModelEntity
      * Contains the name of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="documentID", type="integer", nullable=false)
      */
     private $documentId = '';
@@ -59,6 +61,7 @@ class Element extends ModelEntity
      * Contains the name of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name = '';
@@ -67,6 +70,7 @@ class Element extends ModelEntity
      * Contains the name of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="style", type="string", nullable=false)
      */
     private $style = '';
@@ -75,6 +79,7 @@ class Element extends ModelEntity
      * Contains the name of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="value", type="string", nullable=false)
      */
     private $value = '';
@@ -82,10 +87,10 @@ class Element extends ModelEntity
     /**
      * Owning Side
      *
+     * @var \Shopware\Models\Document\Document
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Document\Document", inversedBy="elements")
      * @ORM\JoinColumn(name="documentID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Document\Document
      */
     private $document;
 

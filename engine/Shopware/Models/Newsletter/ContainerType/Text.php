@@ -39,12 +39,13 @@ class Text extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'text' and parent container
      *
+     * @var \Shopware\Models\Newsletter\Container
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="text")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Container
      */
     protected $container;
+
     /**
      * Autoincrement ID
      *
@@ -63,12 +64,13 @@ class Text extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Headline of the element
      *
      * @var string
+     *
      * @ORM\Column(name="headline", type="string", length=255, nullable=false)
      */
     private $headline;
@@ -77,24 +79,28 @@ class Text extends ModelEntity
      * (HTML) content of the model
      *
      * @var string
+     *
      * @ORM\Column(name="html", type="string", length=16777215 , nullable=false)
      */
     private $content;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="image", type="string", length=255 , nullable=false)
      */
     private $image;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="link", type="string", length=255 , nullable=false)
      */
     private $link;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="alignment", type="string", length=255 , nullable=false)
      */
     private $alignment;

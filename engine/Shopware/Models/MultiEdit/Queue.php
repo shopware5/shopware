@@ -43,7 +43,7 @@ class Queue extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\MultiEdit\QueueArticle>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\MultiEdit\QueueArticle", mappedBy="queue", cascade={"persist"},  fetch="EXTRA_LAZY")
      */
@@ -103,8 +103,6 @@ class Queue extends ModelEntity
     private $created;
 
     /**
-     * Class constructor.
-     *
      * @param string $resource
      */
     public function __construct($resource)

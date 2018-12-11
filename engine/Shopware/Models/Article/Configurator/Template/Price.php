@@ -37,6 +37,7 @@ class Price extends LazyFetchModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Article\Configurator\Template\Template
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", inversedBy="prices")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      * @ORM\OrderBy({"customerGroupKey" = "ASC", "from" = "ASC"})
@@ -46,11 +47,12 @@ class Price extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\TemplatePrice
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -62,6 +64,7 @@ class Price extends LazyFetchModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=false)
      */
     private $templateId;
@@ -287,7 +290,7 @@ class Price extends LazyFetchModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\TemplatePrice', 'attribute', 'templatePrice');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\TemplatePrice::class, 'attribute', 'templatePrice');
     }
 
     /**

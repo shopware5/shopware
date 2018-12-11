@@ -48,7 +48,7 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Media>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
      */
@@ -68,9 +68,9 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Blog
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist"})
      */
     protected $attribute;
 
@@ -426,19 +426,19 @@ class Blog extends ModelEntity
     /**
      * Set Media
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $media
+     * @param \Shopware\Models\Blog\Media[]|null $media
      *
      * @return Blog|ModelEntity
      */
     public function setMedia($media)
     {
-        return $this->setOneToMany($media, '\Shopware\Models\Blog\Media', 'media', 'blog');
+        return $this->setOneToMany($media, \Shopware\Models\Blog\Media::class, 'media', 'blog');
     }
 
     /**
      * Get the assigned articles
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
      */
     public function getAssignedArticles()
     {
@@ -448,7 +448,7 @@ class Blog extends ModelEntity
     /**
      * Set the assigned articles
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $assignedArticles
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article> $assignedArticles
      */
     public function setAssignedArticles($assignedArticles)
     {
@@ -514,7 +514,7 @@ class Blog extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Blog', 'attribute', 'blog');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Blog::class, 'attribute', 'blog');
     }
 
     /**
@@ -526,13 +526,13 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Comment>|array|null $comments
+     * @param \Shopware\Models\Blog\Comment[]|null $comments
      *
      * @return Blog|ModelEntity
      */
     public function setComments($comments)
     {
-        return $this->setOneToMany($comments, '\Shopware\Models\Blog\Comment', 'comments', 'blog');
+        return $this->setOneToMany($comments, \Shopware\Models\Blog\Comment::class, 'comments', 'blog');
     }
 
     /**

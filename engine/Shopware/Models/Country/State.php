@@ -53,6 +53,7 @@ class State extends ModelEntity
      * @var \Shopware\Models\Attribute\CountryState
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -74,28 +75,28 @@ class State extends ModelEntity
      *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    private $position = null;
+    private $position;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    private $name = null;
+    private $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="shortcode", type="string", length=255, nullable=true)
      */
-    private $shortCode = null;
+    private $shortCode;
 
     /**
      * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
-    private $active = null;
+    private $active;
 
     /**
      * Get id
@@ -233,6 +234,6 @@ class State extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\CountryState', 'attribute', 'countryState');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\CountryState::class, 'attribute', 'countryState');
     }
 }

@@ -76,6 +76,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the unique customer number
      *
      * @var string
+     *
      * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
      */
     protected $number = '';
@@ -86,6 +87,7 @@ class Customer extends LazyFetchModelEntity
      * The association is joined over the group id field and the groupkey field of the customer.
      *
      * @var \Shopware\Models\Customer\Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="customers", cascade={"persist"})
      * @ORM\JoinColumn(name="customergroup", referencedColumnName="groupkey")
      */
@@ -96,7 +98,8 @@ class Customer extends LazyFetchModelEntity
      * The orders property is the inverse side of the association between customer and orders.
      * The association is joined over the customer id field and the userID field of the order.
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Order\Order>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Order", mappedBy="customer")
      */
     protected $orders;
@@ -115,6 +118,7 @@ class Customer extends LazyFetchModelEntity
      * INVERSE SIDE
      *
      * @var \Shopware\Models\Attribute\Customer
+     *
      * @Assert\Valid
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
@@ -126,6 +130,7 @@ class Customer extends LazyFetchModelEntity
      * The association is joined over the pricegroup id field and the pricegroupID field of the customer.
      *
      * @var \Shopware\Models\Customer\PriceGroup
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\PriceGroup", inversedBy="customers")
      * @ORM\JoinColumn(name="pricegroupID", referencedColumnName="id")
      */
@@ -134,21 +139,21 @@ class Customer extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Notification", mappedBy="customer")
+     * @var ArrayCollection<\Shopware\Models\Article\Notification>
      *
-     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Notification", mappedBy="customer")
      */
     protected $notifications;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="customer")
      */
     protected $paymentInstances;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Customer\PaymentData>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
@@ -158,6 +163,7 @@ class Customer extends LazyFetchModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Customer\Address
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
      * @ORM\JoinColumn(name="default_billing_address_id", referencedColumnName="id")
      */
@@ -167,6 +173,7 @@ class Customer extends LazyFetchModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Customer\Address
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
      * @ORM\JoinColumn(name="default_shipping_address_id", referencedColumnName="id")
      */
@@ -182,6 +189,7 @@ class Customer extends LazyFetchModelEntity
      * doctrine associations can be defined over this field
      *
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -192,6 +200,7 @@ class Customer extends LazyFetchModelEntity
      * Time of the last modification of the customer
      *
      * @var DateTime
+     *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
@@ -201,6 +210,7 @@ class Customer extends LazyFetchModelEntity
      * Used for the payment association.
      *
      * @var int
+     *
      * @ORM\Column(name="paymentID", type="integer", nullable=false)
      */
     private $paymentId = 0;
@@ -209,6 +219,7 @@ class Customer extends LazyFetchModelEntity
      * Key of the assigned customer group.
      *
      * @var string
+     *
      * @ORM\Column(name="customergroup", type="string", length=15, nullable=false)
      */
     private $groupKey = '';
@@ -217,6 +228,7 @@ class Customer extends LazyFetchModelEntity
      * Id shop where the customer has registered.
      *
      * @var int
+     *
      * @ORM\Column(name="subshopID", type="integer", nullable=false)
      */
     private $shopId = 0;
@@ -225,6 +237,7 @@ class Customer extends LazyFetchModelEntity
      * Id of the price group, which the customer is assigned
      *
      * @var int
+     *
      * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
      */
     private $priceGroupId = null;
@@ -256,6 +269,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the md5 encoded password
      *
      * @var string
+     *
      * @ORM\Column(name="password", type="string", length=1024, nullable=false)
      */
     private $hashPassword = '';
@@ -264,6 +278,7 @@ class Customer extends LazyFetchModelEntity
      * Flag whether the customer account is activated.
      *
      * @var int
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = 0;
@@ -273,6 +288,7 @@ class Customer extends LazyFetchModelEntity
      * or the newsletter.
      *
      * @var string
+     *
      * @Assert\Email(strict=false)
      * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=70, nullable=false)
@@ -283,6 +299,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the date on which the customer account was created.
      *
      * @var \DateTime
+     *
      * @ORM\Column(name="firstlogin", type="date", nullable=false)
      */
     private $firstLogin;
@@ -291,6 +308,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the date on which the customer has logged in recently.
      *
      * @var \DateTime
+     *
      * @ORM\Column(name="lastlogin", type="datetime", nullable=false)
      */
     private $lastLogin;
@@ -299,12 +317,14 @@ class Customer extends LazyFetchModelEntity
      * Flag whether the customer checks the "don't create a shop account" checkbox
      *
      * @var int
+     *
      * @ORM\Column(name="accountmode", type="integer", nullable=false)
      */
     private $accountMode = 0;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="confirmationkey", type="string", length=100, nullable=false)
      */
     private $confirmationKey = '';
@@ -313,6 +333,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the session id of the last customer session.
      *
      * @var string
+     *
      * @ORM\Column(name="sessionID", type="string", length=255, nullable=false)
      */
     private $sessionId = '';
@@ -327,6 +348,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="validation", type="string", length=255, nullable=false)
      */
     private $validation = '';
@@ -335,6 +357,7 @@ class Customer extends LazyFetchModelEntity
      * Flag whether the customer is a shop partner.
      *
      * @var int
+     *
      * @ORM\Column(name="affiliate", type="integer", nullable=false)
      */
     private $affiliate = 0;
@@ -351,6 +374,7 @@ class Customer extends LazyFetchModelEntity
      * Id of the language sub shop
      *
      * @var string
+     *
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
     private $languageId = 1;
@@ -360,6 +384,8 @@ class Customer extends LazyFetchModelEntity
      *
      * Used for the language subshop association
      *
+     * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="language", referencedColumnName="id")
      */
@@ -367,6 +393,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="referer", type="string", length=255, nullable=false)
      */
     private $referer = '';
@@ -375,6 +402,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the internal comment for the customer.
      *
      * @var string
+     *
      * @ORM\Column(name="internalcomment", type="text", nullable=false)
      */
     private $internalComment = '';
@@ -383,6 +411,7 @@ class Customer extends LazyFetchModelEntity
      * Count of the failed customer logins
      *
      * @var int
+     *
      * @ORM\Column(name="failedlogins", type="integer", nullable=false)
      */
     private $failedLogins = 0;
@@ -391,6 +420,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the time, since the customer is logged into a session.
      *
      * @var \DateTime
+     *
      * @ORM\Column(name="lockedUntil", type="datetime", nullable=true)
      */
     private $lockedUntil = null;
@@ -406,6 +436,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
     private $title;
@@ -430,6 +461,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
     private $birthday;
@@ -443,12 +475,14 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="doubleOptinEmailSentDate", type="datetime", nullable=true)
      */
     private $doubleOptinEmailSentDate;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="doubleOptinConfirmDate", type="datetime", nullable=true)
      */
     private $doubleOptinConfirmDate;
@@ -458,9 +492,6 @@ class Customer extends LazyFetchModelEntity
      */
     private $customerType;
 
-    /**
-     * Class constructor. Initials the orders array and the date fields.
-     */
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -975,7 +1006,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Customer', 'attribute', 'customer');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Customer::class, 'attribute', 'customer');
     }
 
     /**
@@ -1015,7 +1046,7 @@ class Customer extends LazyFetchModelEntity
      * the Customer.orders property (INVERSE SIDE) and the Order.customer (OWNING SIDE) property.
      * The order data is joined over the s_order.userID field.
      *
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Order\Order>
      */
     public function getOrders()
     {
@@ -1028,7 +1059,7 @@ class Customer extends LazyFetchModelEntity
      * the Customer.orders property (INVERSE SIDE) and the Order.customer (OWNING SIDE) property.
      * The order data is joined over the s_order.userID field.
      *
-     * @param ArrayCollection|array|null $orders
+     * @param ArrayCollection<\Shopware\Models\Order\Order>|\Shopware\Models\Order\Order[]|null $orders
      *
      * @return \Shopware\Models\Customer\Customer
      */
@@ -1067,7 +1098,7 @@ class Customer extends LazyFetchModelEntity
      */
     public function setGroup($group)
     {
-        return $this->setManyToOne($group, '\Shopware\Models\Customer\Group', 'group');
+        return $this->setManyToOne($group, \Shopware\Models\Customer\Group::class, 'group');
     }
 
     /**
@@ -1110,6 +1141,9 @@ class Customer extends LazyFetchModelEntity
         $this->setShop($subShop);
     }
 
+    /**
+     * @return \Shopware\Models\Shop\Shop
+     */
     public function getLanguageSubShop()
     {
         return $this->languageSubShop;
@@ -1124,7 +1158,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param ArrayCollection $paymentInstances
+     * @param ArrayCollection<\Shopware\Models\Payment\PaymentInstance> $paymentInstances
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -1132,7 +1166,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      */
     public function getPaymentInstances()
     {
@@ -1140,7 +1174,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param ArrayCollection $paymentData
+     * @param ArrayCollection<\Shopware\Models\Customer\PaymentData> $paymentData
      */
     public function setPaymentData($paymentData)
     {
@@ -1148,7 +1182,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Customer\PaymentData>
      */
     public function getPaymentData()
     {
@@ -1411,6 +1445,6 @@ class Customer extends LazyFetchModelEntity
      */
     public function updateChangedTimestamp()
     {
-        $this->changed = new DateTime();
+        $this->changed = new \DateTime();
     }
 }

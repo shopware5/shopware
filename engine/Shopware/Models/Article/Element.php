@@ -37,6 +37,7 @@ class Element extends ModelEntity
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -45,60 +46,70 @@ class Element extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     private $type;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="`default`", type="string", nullable=true)
      */
     private $default;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="store", type="string", nullable=true)
      */
     private $store;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="required", type="boolean")
      */
     private $required = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="help", type="string", nullable=true)
      */
     private $help;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="translatable", type="boolean")
      */
     private $translatable = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="variantable", type="boolean")
      */
     private $variantable = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;

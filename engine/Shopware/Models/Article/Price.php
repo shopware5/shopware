@@ -41,6 +41,7 @@ class Price extends LazyFetchModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Article\Detail
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="prices")
      * @ORM\JoinColumn(name="articledetailsID", referencedColumnName="id")
      * @ORM\OrderBy({"customerGroupKey" = "ASC", "from" = "ASC"})
@@ -50,21 +51,22 @@ class Price extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", orphanRemoval=true, mappedBy="articlePrice", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\ArticlePrice
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", orphanRemoval=true, mappedBy="articlePrice", cascade={"persist"})
      */
     protected $attribute;
 
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Article
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Article
      */
     protected $article;
+
     /**
      * @var int
      *
@@ -73,20 +75,24 @@ class Price extends LazyFetchModelEntity
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
     private $articleId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="articledetailsID", type="integer", nullable=false)
      */
     private $articleDetailsId;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="pricegroup", type="string", length=30, nullable=false)
      */
     private $customerGroupKey = '';
@@ -350,6 +356,6 @@ class Price extends LazyFetchModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticlePrice', 'attribute', 'articlePrice');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticlePrice::class, 'attribute', 'articlePrice');
     }
 }

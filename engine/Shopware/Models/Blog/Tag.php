@@ -44,6 +44,7 @@ class Tag extends ModelEntity
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
      */
     protected $blog;
+
     /**
      * @var int
      *

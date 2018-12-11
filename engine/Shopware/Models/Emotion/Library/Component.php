@@ -40,10 +40,10 @@ use Shopware\Models\Plugin\Plugin;
 class Component extends ModelEntity
 {
     /**
+     * @var Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="emotionComponents")
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
-     *
-     * @var Plugin
      */
     protected $plugin;
 
@@ -55,9 +55,9 @@ class Component extends ModelEntity
      * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
      * backend module) to configure which article has to been displayed.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Field", mappedBy="component", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Library\Field>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Field", mappedBy="component", orphanRemoval=true, cascade={"persist"})
      */
     protected $fields;
 
@@ -81,17 +81,20 @@ class Component extends ModelEntity
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
+
     /**
      * @var string
      *
      * @ORM\Column(name="convert_function", type="string", length=255, nullable=true)
      */
-    private $convertFunction = null;
+    private $convertFunction;
+
     /**
      * Contains the component description which displayed in the backend
      * module of
      *
      * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
@@ -109,6 +112,7 @@ class Component extends ModelEntity
      * Contains the css class for the component
      *
      * @var string
+     *
      * @ORM\Column(name="cls", type="string", length=255, nullable=false)
      */
     private $cls;
@@ -126,9 +130,10 @@ class Component extends ModelEntity
      * Contains the plugin id which added this component to the library
      *
      * @var int
+     *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
-    private $pluginId = null;
+    private $pluginId;
 
     /**
      * Private var that holds the max position value of the form fields
@@ -136,12 +141,8 @@ class Component extends ModelEntity
      *
      * @var int
      */
-    private $maxFieldPositionValue = null;
+    private $maxFieldPositionValue;
 
-    /**
-     * Class constructor.
-     * Initials all array collections and date time properties.
-     */
     public function __construct()
     {
         $this->fields = new ArrayCollection();
@@ -154,7 +155,7 @@ class Component extends ModelEntity
      * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
      * backend module) to configure which article has to been displayed.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Library\Field>
      */
     public function getFields()
     {
@@ -168,13 +169,13 @@ class Component extends ModelEntity
      * with xtype: 'emotion-article-search' (the shopware article suggest search with a individual configuration for the
      * backend module) to configure which article has to been displayed.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $fields
+     * @param \Shopware\Models\Emotion\Library\Field[]|array|null $fields
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Component
      */
     public function setFields($fields)
     {
-        return $this->setOneToMany($fields, '\Shopware\Models\Emotion\Library\Field', 'fields', 'component');
+        return $this->setOneToMany($fields, \Shopware\Models\Emotion\Library\Field::class, 'fields', 'component');
     }
 
     /**

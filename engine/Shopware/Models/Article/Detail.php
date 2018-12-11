@@ -618,13 +618,13 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $prices
+     * @param \Shopware\Models\Article\Price[]|null $prices
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Detail
      */
     public function setPrices($prices)
     {
-        return $this->setOneToMany($prices, '\Shopware\Models\Article\Price', 'prices', 'detail');
+        return $this->setOneToMany($prices, \Shopware\Models\Article\Price::class, 'prices', 'detail');
     }
 
     /**
@@ -1001,12 +1001,12 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $images
+     * @param \Shopware\Models\Article\Image[]|null $images
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return Detail
      */
     public function setImages($images)
     {
-        return $this->setOneToMany($images, '\Shopware\Models\Article\Image', 'images', 'articleDetail');
+        return $this->setOneToMany($images, \Shopware\Models\Article\Image::class, 'images', 'articleDetail');
     }
 }

@@ -39,12 +39,15 @@ use Shopware\Components\Model\ModelEntity;
 class Plugin extends ModelEntity
 {
     /**
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Library\Component>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
      */
     protected $emotionComponents;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -53,144 +56,168 @@ class Plugin extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=false)
      */
     private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="namespace", type="string", nullable=false)
      */
     private $namespace;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="source", type="string", nullable=false)
      */
     private $source;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $description;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active = false;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="installation_date", type="datetime", nullable=true)
      */
     private $installed;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
     private $updated;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="refresh_date", type="datetime", nullable=true)
      */
     private $refreshed;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="author", type="string", nullable=true)
      */
     private $author;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="copyright", type="string", nullable=true)
      */
     private $copyright;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="license", type="string", nullable=false)
      */
     private $license;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="version", type="string", nullable=false)
      */
     private $version;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="support", type="string", nullable=false)
      */
     private $support;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="changes", type="string", nullable=false)
      */
     private $changes;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="update_version", type="string", nullable=false)
      */
     private $updateVersion;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="update_source", type="string", nullable=false)
      */
     private $updateSource;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="capability_update", type="boolean")
      */
     private $capabilityUpdate = true;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="capability_install", type="boolean")
      */
     private $capabilityInstall = true;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="capability_enable", type="boolean")
      */
     private $capabilityEnable = true;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="capability_secure_uninstall", type="boolean")
      */
     private $capabilitySecureUninstall = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="translations", type="text")
      */
     private $translations;
@@ -198,7 +225,8 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Config\Form[]|ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\Form>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
@@ -208,7 +236,8 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Menu\Menu[]|ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Menu\Menu>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Menu\Menu", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
@@ -218,7 +247,8 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Payment\Payment[]|ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Payment\Payment", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
      * @ORM\OrderBy({"id" = "ASC"})
@@ -228,7 +258,8 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Shop\Template[]|ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Template>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Shop\Template", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
      * @ORM\OrderBy({"id" = "ASC"})
@@ -238,7 +269,8 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Widget\Widget[]|ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\Widget>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
      * @ORM\OrderBy({"id" = "ASC"})
@@ -246,7 +278,8 @@ class Plugin extends ModelEntity
     private $widgets;
 
     /**
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Plugin\License>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
      * @ORM\OrderBy({"type" = "ASC"})
      */
@@ -254,13 +287,11 @@ class Plugin extends ModelEntity
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="in_safe_mode", type="boolean")
      */
     private $inSafeMode = false;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->added = new \DateTime('now');
@@ -602,7 +633,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Plugin\License>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Plugin\License>
      */
     public function getLicenses()
     {
@@ -610,7 +641,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Plugin\License> $licenses
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Plugin\License> $licenses
      */
     public function setLicenses($licenses)
     {
