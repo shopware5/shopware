@@ -413,7 +413,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 'property' => $violation->getPropertyPath(),
             ];
         }
-
+        /** @var catch wrong date conversion $errors */
         if (!empty($errors)) {
             return ['success' => false, 'violations' => $errors];
         }
