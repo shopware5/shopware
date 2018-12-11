@@ -113,6 +113,23 @@ class FilterTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public function dataDomainDataProvider()
+    {
+        return [
+            [
+                '<span data-hello="world" >',
+                null,
+            ],
+            [
+                'data-example.com',
+                'data-example.com',
+            ]
+        ];
+    }
+
+    /**
      * @dataProvider sqlProvider
      *
      * @param string $statement
@@ -150,6 +167,22 @@ class FilterTest extends TestCase
         $this->assertEquals(
             $expected['disabled'],
             \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', false)
+        );
+    }
+
+    /**
+     * @dataProvider dataDomainDataProvider
+     *
+     * @param string $input
+     * @param $expected
+     */
+    public function testDataDomain($input, $expected)
+    {
+        $regex = '#' . $this->inputFilter->xssRegex . '#msi';
+
+        $this->assertEquals(
+            $expected,
+            \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, $regex, false)
         );
     }
 }
