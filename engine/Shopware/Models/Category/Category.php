@@ -42,7 +42,7 @@ use Shopware\Models\ProductStream\ProductStream;
 class Category extends ModelEntity
 {
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Customer\Group>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_categories_avoid_customergroups",
@@ -66,7 +66,7 @@ class Category extends ModelEntity
     protected $attribute;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Emotion\Emotion>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="categories")
      * @ORM\JoinTable(name="s_emotion_categories",
@@ -92,18 +92,21 @@ class Category extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="sorting_ids", type="string", nullable=true)
      */
     protected $sortingIds;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="hide_sortings", type="boolean", nullable=false)
      */
     protected $hideSortings = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="facet_ids", type="string", nullable=true)
      */
     protected $facetIds;
@@ -130,12 +133,14 @@ class Category extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="stream_id", type="integer", nullable=true)
      */
     private $streamId;
 
     /**
      * @var ProductStream
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\ProductStream\ProductStream")
      * @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
      */
@@ -296,7 +301,7 @@ class Category extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<Category>
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
@@ -304,7 +309,7 @@ class Category extends ModelEntity
     private $children;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories",
@@ -319,7 +324,7 @@ class Category extends ModelEntity
     private $articles;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories_ro",
@@ -354,9 +359,6 @@ class Category extends ModelEntity
      */
     private $mediaId;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -881,7 +883,7 @@ class Category extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Category', 'attribute', 'category');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Category::class, 'attribute', 'category');
     }
 
     /**

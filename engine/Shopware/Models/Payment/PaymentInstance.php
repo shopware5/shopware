@@ -43,23 +43,30 @@ class PaymentInstance extends ModelEntity
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="order_id", type="integer")
      */
     protected $orderId;
 
     /**
+     * @var \Shopware\Models\Payment\Payment
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="paymentInstances")
      * @ORM\JoinColumn(name="payment_mean_id", referencedColumnName="id")
      */
     protected $paymentMean;
 
     /**
+     * @var \Shopware\Models\Order\Order
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Order\Order", inversedBy="paymentInstances")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      */
     protected $order;
 
     /**
+     * @var \Shopware\Models\Customer\Customer
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="paymentInstances")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -155,6 +162,7 @@ class PaymentInstance extends ModelEntity
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
     protected $createdAt;
+
     /**
      * @var int
      *
@@ -260,7 +268,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param mixed $customer
+     * @param \Shopware\Models\Customer\Customer $customer
      */
     public function setCustomer($customer)
     {
@@ -268,7 +276,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Customer\Customer
      */
     public function getCustomer()
     {
@@ -324,7 +332,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param mixed $order
+     * @param \Shopware\Models\Order\Order $order
      */
     public function setOrder($order)
     {
@@ -332,7 +340,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Order\Order
      */
     public function getOrder()
     {
@@ -340,7 +348,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param mixed $paymentMean
+     * @param \Shopware\Models\Payment\Payment $paymentMean
      */
     public function setPaymentMean($paymentMean)
     {
@@ -348,7 +356,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Payment\Payment
      */
     public function getPaymentMean()
     {
@@ -372,7 +380,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param mixed $amount
+     * @param float $amount
      */
     public function setAmount($amount)
     {
@@ -380,7 +388,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getAmount()
     {

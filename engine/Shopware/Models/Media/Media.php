@@ -24,7 +24,6 @@
 
 namespace   Shopware\Models\Media;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
@@ -112,14 +111,15 @@ class Media extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Media>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
     protected $blogMedia;
 
     /**
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Property\Value>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Property\Value", mappedBy="media")
      */
     protected $properties;
@@ -137,6 +137,7 @@ class Media extends ModelEntity
      * Unique identifier
      *
      * @var int
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -147,6 +148,7 @@ class Media extends ModelEntity
      * Id of the assigned album
      *
      * @var int
+     *
      * @ORM\Column(name="albumID", type="integer", nullable=false)
      */
     private $albumId;
@@ -155,6 +157,7 @@ class Media extends ModelEntity
      * Name of the media, also used as a file name
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -163,6 +166,7 @@ class Media extends ModelEntity
      * Description for the media.
      *
      * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
@@ -171,6 +175,7 @@ class Media extends ModelEntity
      * Path of the uploaded file.
      *
      * @var string
+     *
      * @ORM\Column(name="path", type="string", length=255, nullable=false)
      */
     private $path;
@@ -179,6 +184,7 @@ class Media extends ModelEntity
      * Flag for the media type.
      *
      * @var string
+     *
      * @ORM\Column(name="type", type="string", length=50, nullable=false)
      */
     private $type;
@@ -187,6 +193,7 @@ class Media extends ModelEntity
      * Extension of the uploaded file
      *
      * @var string
+     *
      * @ORM\Column(name="extension", type="string", length=20, nullable=false)
      */
     private $extension;
@@ -195,6 +202,7 @@ class Media extends ModelEntity
      * Id of the user, who uploaded the file.
      *
      * @var int
+     *
      * @ORM\Column(name="userID", type="integer", nullable=false)
      */
     private $userId;
@@ -203,6 +211,7 @@ class Media extends ModelEntity
      * Creation date of the media
      *
      * @var \DateTime
+     *
      * @ORM\Column(name="created", type="date", nullable=false)
      */
     private $created;
@@ -218,6 +227,7 @@ class Media extends ModelEntity
      * Filesize of the file in bytes
      *
      * @var int
+     *
      * @ORM\Column(name="file_size", type="integer", nullable=false)
      */
     private $fileSize;
@@ -226,6 +236,7 @@ class Media extends ModelEntity
      * Width of the file in px if it's an image
      *
      * @var int
+     *
      * @ORM\Column(name="width", type="integer", nullable=true)
      */
     private $width;
@@ -234,6 +245,7 @@ class Media extends ModelEntity
      * Height of the file in px if it's an image
      *
      * @var int
+     *
      * @ORM\Column(name="height", type="integer", nullable=true)
      */
     private $height;
@@ -243,6 +255,7 @@ class Media extends ModelEntity
      * or if the Query Builder is specified with the association.
      *
      * @var \Shopware\Models\Media\Album
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="media")
      * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
      */
@@ -982,7 +995,7 @@ class Media extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Media', 'attribute', 'media');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Media::class, 'attribute', 'media');
     }
 
     /**

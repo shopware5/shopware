@@ -235,13 +235,13 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @param array|\Shopware\Models\Attribute\ArticleNotification $attribute
+     * @param array|\Shopware\Models\Attribute\ArticleNotification|array|null $attribute
      *
      * @return Notification
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleNotification', 'attribute', 'articleNotification');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleNotification::class, 'attribute', 'articleNotification');
     }
 
     /**

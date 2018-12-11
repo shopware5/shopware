@@ -59,11 +59,12 @@ class Banner extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Banner
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * Primary Key - autoincrement value
      *
@@ -199,7 +200,7 @@ class Banner extends ModelEntity
         if (empty($validFrom)) {
             $validFrom = null;
         }
-        // if the date isn't null try to transform it to a DateTime Object.
+        // If the date isn't null try to transform it to a DateTime Object.
         if (!$validFrom instanceof \DateTime && $validFrom !== null) {
             $validFrom = new \DateTime($validFrom);
         }
@@ -231,7 +232,7 @@ class Banner extends ModelEntity
         if (empty($validTo)) {
             $validTo = null;
         }
-        // if the date isn't null try to transform it to a DateTime Object.
+        // If the date isn't null try to transform it to a DateTime Object.
         if (!$validTo instanceof \DateTime && $validTo !== null) {
             $validTo = new \DateTime($validTo);
         }
@@ -406,6 +407,6 @@ class Banner extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Banner', 'attribute', 'banner');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Banner::class, 'attribute', 'banner');
     }
 }

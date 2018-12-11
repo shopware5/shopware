@@ -39,6 +39,7 @@ class ContactData extends ModelEntity
      * The actual email address
      *
      * @var string
+     *
      * @ORM\Column(name="email", type="string", nullable=false)
      */
     protected $email;
@@ -60,7 +61,7 @@ class ContactData extends ModelEntity
     protected $salutation;
 
     /**
-     * @var string title
+     * @var string
      *
      * @ORM\Column(name="title", type="string", nullable=true)
      */

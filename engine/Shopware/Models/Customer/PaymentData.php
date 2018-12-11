@@ -42,6 +42,8 @@ use Shopware\Components\Model\ModelEntity;
 class PaymentData extends ModelEntity
 {
     /**
+     * @var \Shopware\Models\Payment\Payment
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="paymentData")
      * @ORM\JoinColumn(name="payment_mean_id", referencedColumnName="id")
      */
@@ -55,6 +57,8 @@ class PaymentData extends ModelEntity
     protected $paymentMeanId;
 
     /**
+     * @var \Shopware\Models\Customer\Customer
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="paymentData")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -115,6 +119,7 @@ class PaymentData extends ModelEntity
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
     protected $createdAt;
+
     /**
      * @var int
      *

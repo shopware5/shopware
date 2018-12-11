@@ -50,7 +50,8 @@ class Emotion extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned grid will be displayed in front of the categories.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category", inversedBy="emotions")
      * @ORM\JoinTable(name="s_emotion_categories",
      *      joinColumns={
@@ -68,6 +69,7 @@ class Emotion extends ModelEntity
      * Contains the assigned \Shopware\Models\User\User which created this emotion.
      *
      * @var \Shopware\Models\User\User
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
@@ -79,18 +81,18 @@ class Emotion extends ModelEntity
      * The element model contains the configuration about the size and position of the element
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Element", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Element>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Element", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
      */
     protected $elements;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Emotion", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Emotion
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Emotion", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -257,24 +259,28 @@ class Emotion extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="cols", type="integer", nullable=false)
      */
     private $cols;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="cell_spacing", type="integer", nullable=false)
      */
     private $cellSpacing;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="cell_height", type="integer", nullable=false)
      */
     private $cellHeight;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="article_height", type="integer", nullable=false)
      */
     private $articleHeight;
@@ -283,7 +289,8 @@ class Emotion extends ModelEntity
      * Contains the assigned Shopware\Models\Shop\Shop.
      * Used for shop limitation of single emotion landingpages.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Shop>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_emotion_shops",
      *      joinColumns={
@@ -321,19 +328,18 @@ class Emotion extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="customer_stream_ids", type="string", nullable=true)
      */
     private $customerStreamIds;
 
     /**
      * @var string|null
+     *
      * @ORM\Column(name="replacement", type="string", nullable=true)
      */
     private $replacement;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->shops = new \Doctrine\Common\Collections\ArrayCollection();
@@ -546,11 +552,11 @@ class Emotion extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Emotion|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Emotion
+     * @return Emotion
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Emotion', 'attribute', 'emotion');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Emotion::class, 'attribute', 'emotion');
     }
 
     /**
@@ -558,7 +564,7 @@ class Emotion extends ModelEntity
      * The element model contains the configuration about the size and position of the element
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Element>
      */
     public function getElements()
     {
@@ -571,13 +577,13 @@ class Emotion extends ModelEntity
      * The element model contains the configuration about the size and position of the element
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $elements
+     * @param \Shopware\Models\Emotion\Element[]|null $elements
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Emotion
      */
     public function setElements($elements)
     {
-        return $this->setOneToMany($elements, '\Shopware\Models\Emotion\Element', 'elements', 'emotion');
+        return $this->setOneToMany($elements, \Shopware\Models\Emotion\Element::class, 'elements', 'emotion');
     }
 
     /**

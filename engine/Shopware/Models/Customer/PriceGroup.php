@@ -49,9 +49,9 @@ class PriceGroup extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="priceGroup")
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Customer>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="priceGroup")
      */
     protected $customers;
 
@@ -60,6 +60,7 @@ class PriceGroup extends ModelEntity
      * doctrine associations can be defined over this field.
      *
      * @var int
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -70,6 +71,7 @@ class PriceGroup extends ModelEntity
      * Contains the customer price group name value.
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -78,6 +80,7 @@ class PriceGroup extends ModelEntity
      * Flag which indicates a net price.
      *
      * @var int
+     *
      * @ORM\Column(name="netto", type="integer", nullable=false)
      */
     private $netto;
@@ -86,13 +89,11 @@ class PriceGroup extends ModelEntity
      * Flag which indicates if a price group is active or not.
      *
      * @var int
+     *
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
     private $active;
 
-    /**
-     * Class constructor which initials the discounts association.
-     */
     public function __construct()
     {
         $this->customers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -142,7 +143,7 @@ class PriceGroup extends ModelEntity
      * the Customer.group property (OWNING SIDE) and the Group.customers (INVERSE SIDE) property.
      * The customer data is joined over the s_user.groupkey field.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Customer>
      */
     public function getCustomers()
     {
@@ -155,7 +156,7 @@ class PriceGroup extends ModelEntity
      * the Customer.group property (OWNING SIDE) and the Group.customers (INVERSE SIDE) property.
      * The customer data is joined over the s_user.groupkey field.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $customers
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Customer> $customers
      */
     public function setCustomers($customers)
     {

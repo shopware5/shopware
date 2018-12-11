@@ -44,6 +44,7 @@ class Vote extends ModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="votes", cascade={"persist"})
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      */
@@ -51,10 +52,12 @@ class Vote extends ModelEntity
 
     /**
      * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
     protected $shop;
+
     /**
      * @var int
      *
@@ -73,6 +76,7 @@ class Vote extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="shop_id", type="integer", nullable=true)
      */
     private $shopId;

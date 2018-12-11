@@ -58,6 +58,7 @@ class Settings extends ModelEntity
      * Unique identifier
      *
      * @var int
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -68,6 +69,7 @@ class Settings extends ModelEntity
      * Id of the album
      *
      * @var int
+     *
      * @ORM\Column(name="albumID", type="integer", nullable=false)
      */
     private $albumId;
@@ -76,6 +78,7 @@ class Settings extends ModelEntity
      * Flag whether thumbnails will be created on this album.
      *
      * @var int
+     *
      * @ORM\Column(name="create_thumbnails", type="integer", nullable=false)
      */
     private $createThumbnails;
@@ -84,6 +87,7 @@ class Settings extends ModelEntity
      * Sizes of the thumbnails. Format => WIDTHxHEIGHT;
      *
      * @var string
+     *
      * @ORM\Column(name="thumbnail_size", type="text", nullable=false)
      */
     private $thumbnailSize;
@@ -92,6 +96,7 @@ class Settings extends ModelEntity
      * Css class for the album
      *
      * @var string
+     *
      * @ORM\Column(name="icon", type="string", length=50, nullable=false)
      */
     private $icon;
@@ -100,6 +105,7 @@ class Settings extends ModelEntity
      * Generate high dpi thumbnails
      *
      * @var bool
+     *
      * @ORM\Column(name="thumbnail_high_dpi", type="boolean", nullable=false)
      */
     private $thumbnailHighDpi;
@@ -108,6 +114,7 @@ class Settings extends ModelEntity
      * Thumbnail quality
      *
      * @var int
+     *
      * @ORM\Column(name="thumbnail_quality", type="integer", nullable=false)
      */
     private $thumbnailQuality;
@@ -116,6 +123,7 @@ class Settings extends ModelEntity
      * high dpi thumbnails quality
      *
      * @var int
+     *
      * @ORM\Column(name="thumbnail_high_dpi_quality", type="integer", nullable=false)
      */
     private $thumbnailHighDpiQuality;

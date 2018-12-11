@@ -17,14 +17,24 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/engine/Shopware/Plugins
         - %currentWorkingDirectory%/engine/Shopware/Configs/Default.php
+        # The following files ignored due to: RuntimeException (Shopware Kernel not booted) thrown while autoloading class Shopware\Models\Order\Document\Document.
         - %currentWorkingDirectory%/engine/Shopware/Components/Document.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/Api/Resource/Order.php
+        - %currentWorkingDirectory%/engine/Shopware/Controllers/Api/Orders.php
         - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/Order.php
+        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/CanceledOrder.php
         - %currentWorkingDirectory%/engine/Shopware/Models/Order/Repository.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Order.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Detail.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/OrderHistorySubscriber.php
         - %currentWorkingDirectory%/engine/Shopware/Models/Order/Document/Document.php
+        - %currentWorkingDirectory%/engine/Shopware/Bundle/EsBackendBundle/Subscriber/OrmBacklogSubscriber.php
 
     ignoreErrors:
         - '#apcu_#'
         - '#ioncube_#'
+        - '#opcache_#'
+        - '#imagettftext#'
         - '#class Redis#'
 
         - '#Return typehint of method Shopware\\Models\\[a-zA-Z0-9\\_]+::getAttribute\(\) has invalid type Shopware\\Models\\Attribute\\[a-zA-Z0-9\\_]+#'

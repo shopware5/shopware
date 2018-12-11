@@ -39,6 +39,7 @@ class Rule extends ModelEntity
      * OWNING SIDE - BI DIRECTIONAL
      *
      * @var \Shopware\Models\Article\Image\Mapping
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image\Mapping", inversedBy="rules")
      * @ORM\JoinColumn(name="mapping_id", referencedColumnName="id")
      */
@@ -48,10 +49,12 @@ class Rule extends ModelEntity
      * OWNING SIDE - UNI DIRECTIONAL
      *
      * @var \Shopware\Models\Article\Configurator\Option
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Option")
      * @ORM\JoinColumn(name="option_id", referencedColumnName="id")
      */
     protected $option;
+
     /**
      * @var int
      *

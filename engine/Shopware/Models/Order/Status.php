@@ -87,9 +87,9 @@ class Status extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Mail\Mail", mappedBy="status")
-     *
      * @var \Shopware\Models\Mail\Mail
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Mail\Mail", mappedBy="status")
      */
     protected $mail;
 

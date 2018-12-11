@@ -103,6 +103,7 @@ class Comment extends ModelEntity
 
     /**
      * @var \Shopware\Models\Blog\Blog
+     *
      * @ORM\ManyToOne(targetEntity="Blog", inversedBy="comments")
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
      */

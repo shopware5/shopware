@@ -42,6 +42,8 @@ class QueueArticle extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Detail
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
      * @ORM\JoinColumn(name="detail_id", referencedColumnName="id")
      */
@@ -50,10 +52,13 @@ class QueueArticle extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\MultiEdit\Queue
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\MultiEdit\Queue", inversedBy="articleDetails")
      * @ORM\JoinColumn(name="queue_id", referencedColumnName="id")
      */
     protected $queue;
+
     /**
      * Unique identifier
      *
@@ -80,7 +85,7 @@ class QueueArticle extends ModelEntity
     private $queueId;
 
     /**
-     * @param mixed $detail
+     * @param \Shopware\Models\Article\Detail $detail
      */
     public function setDetail($detail)
     {
@@ -88,7 +93,7 @@ class QueueArticle extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Article\Detail
      */
     public function getDetail()
     {
@@ -96,7 +101,7 @@ class QueueArticle extends ModelEntity
     }
 
     /**
-     * @param mixed $queue
+     * @param \Shopware\Models\MultiEdit\Queue $queue
      */
     public function setQueue($queue)
     {
@@ -104,7 +109,7 @@ class QueueArticle extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\MultiEdit\Queue
      */
     public function getQueue()
     {

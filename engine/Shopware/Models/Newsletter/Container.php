@@ -41,6 +41,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its text-child
      *
      * @var \Shopware\Models\Newsletter\ContainerType\Text
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Text", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $text;
@@ -51,6 +52,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its banner child
      *
      * @var \Shopware\Models\Newsletter\ContainerType\Banner
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Banner", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $banner;
@@ -60,7 +62,8 @@ class Container extends ModelEntity
      *
      * Inverse side of the association between the container and its link childs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Link>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Link", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $links;
@@ -70,7 +73,8 @@ class Container extends ModelEntity
      *
      * Inverse side of the association between the container and its article childs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Article>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist",  "remove"})
      */
     protected $articles;
@@ -79,12 +83,13 @@ class Container extends ModelEntity
      * OWNING SIDE
      * Owning side of the newsletter-container association
      *
+     * @var \Shopware\Models\Newsletter\Newsletter
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="containers")
      * @ORM\JoinColumn(name="promotionID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Newsletter
      */
     protected $newsletter;
+
     /**
      * Autoincrement ID
      *
@@ -103,7 +108,7 @@ class Container extends ModelEntity
      *
      * @ORM\Column(name="promotionID", type="integer", length=11, nullable=true)
      */
-    private $newsletterId = null;
+    private $newsletterId;
 
     /**
      * value of the container
@@ -136,13 +141,11 @@ class Container extends ModelEntity
      * Position of the container - containers will be selected ordered by position
      *
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", length=11, nullable=false)
      */
     private $position = 0;
 
-    /**
-     * Class constructor. Initials the containers array.
-     */
     public function __construct()
     {
         $this->links = new \Doctrine\Common\Collections\ArrayCollection();
@@ -254,18 +257,18 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Article $articles
      *
-     * @return \Shopware\Models\Newsletter\ContainerType\Article
+     * @return Container
      */
     public function setArticles($articles)
     {
-        $return = $this->setOneToMany($articles, '\Shopware\Models\Newsletter\ContainerType\Article', 'articles', 'container');
+        $return = $this->setOneToMany($articles, \Shopware\Models\Newsletter\ContainerType\Article::class, 'articles', 'container');
         $this->setType('ctArticles');
 
         return $return;
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\ContainerType\Article
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Article>
      */
     public function getArticles()
     {
@@ -273,13 +276,13 @@ class Container extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\ContainerType\Banner $banner
+     * @param \Shopware\Models\Newsletter\ContainerType\Banner|null $banner
      *
-     * @return \Shopware\Models\Newsletter\ContainerType\Banner
+     * @return Container
      */
     public function setBanner($banner)
     {
-        $return = $this->setOneToOne($banner, '\Shopware\Models\Newsletter\ContainerType\Banner', 'banner', 'container');
+        $return = $this->setOneToOne($banner, \Shopware\Models\Newsletter\ContainerType\Banner::class, 'banner', 'container');
         $this->setType('ctBanner');
 
         return $return;
@@ -294,20 +297,20 @@ class Container extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\ContainerType\Link $links
+     * @param \Shopware\Models\Newsletter\ContainerType\Link[]|null $links
      *
-     * @return \Shopware\Models\Newsletter\ContainerType\Link
+     * @return Container
      */
     public function setLinks($links)
     {
-        $return = $this->setOneToMany($links, '\Shopware\Models\Newsletter\ContainerType\Link', 'links', 'container');
+        $return = $this->setOneToMany($links, \Shopware\Models\Newsletter\ContainerType\Link::class, 'links', 'container');
         $this->setType('ctLinks');
 
         return $return;
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\ContainerType\Link
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Link>
      */
     public function getLinks()
     {

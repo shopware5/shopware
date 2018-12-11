@@ -48,6 +48,8 @@ class Premium extends LazyFetchModelEntity
     protected $shop;
 
     /**
+     * @var \Shopware\Models\Article\Detail
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail")
      * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber")
      */

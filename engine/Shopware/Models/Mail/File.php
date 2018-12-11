@@ -47,6 +47,7 @@ abstract class File extends ModelEntity
      * The role property is the owning side of the association between attachment and media.
      *
      * @var \Shopware\Models\Media\Media
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Media", fetch="EAGER")
      * @ORM\JoinColumn(name="mediaID", referencedColumnName="id")
      */

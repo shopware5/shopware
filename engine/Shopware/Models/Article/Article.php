@@ -46,17 +46,18 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Tax\Tax
+     *
      * @Assert\NotBlank
      * @Assert\Valid
      *
-     * @var \Shopware\Models\Tax\Tax
      * @ORM\OneToOne(targetEntity="Shopware\Models\Tax\Tax")
      * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
      */
     protected $tax;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Category\Category>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories",
@@ -71,7 +72,7 @@ class Article extends ModelEntity
     protected $categories;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\SeoCategory>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories_ro",
@@ -86,7 +87,8 @@ class Article extends ModelEntity
     protected $allCategories;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\SeoCategory>
+     *
      * @ORM\OneToMany(
      *      targetEntity="Shopware\Models\Article\SeoCategory",
      *      mappedBy="article",
@@ -97,7 +99,7 @@ class Article extends ModelEntity
     protected $seoCategories;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Customer\Group>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_articles_avoid_customergroups",
@@ -112,7 +114,7 @@ class Article extends ModelEntity
     protected $customerGroups;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\ProductStream\ProductStream>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\ProductStream\ProductStream")
      * @ORM\JoinTable(name="s_product_streams_articles",
@@ -129,7 +131,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var ArrayCollection
+     * @var \Shopware\Models\Property\Group
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Property\Group", inversedBy="articles")
      * @ORM\JoinColumn(name="filtergroupID", referencedColumnName="id")
@@ -137,7 +139,7 @@ class Article extends ModelEntity
     protected $propertyGroup;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_relationships",
@@ -152,7 +154,7 @@ class Article extends ModelEntity
     protected $related;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_similar",
@@ -181,7 +183,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Detail>
      *
      * @Assert\Valid
      *
@@ -206,7 +208,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Link>
      *
      * @Assert\Valid
      *
@@ -217,7 +219,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Download>
      *
      * @Assert\Valid
      *
@@ -228,7 +230,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Image>
      *
      * @Assert\Valid
      *
@@ -250,7 +252,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Vote>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Vote", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
@@ -278,7 +280,7 @@ class Article extends ModelEntity
     protected $configuratorSet;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Property\Value>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinTable(name="s_filter_articles",
@@ -304,11 +306,12 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Esd>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $esds;
+
     /**
      * @var int
      *
@@ -1050,13 +1053,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection|array|null $images
+     * @param \Shopware\Models\Article\Image[]|null $images
      *
      * @return Article
      */
     public function setImages($images)
     {
-        return $this->setOneToMany($images, '\Shopware\Models\Article\Image', 'images', 'article');
+        return $this->setOneToMany($images, \Shopware\Models\Article\Image::class, 'images', 'article');
     }
 
     /**
@@ -1068,13 +1071,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection|array|null $downloads
+     * @param \Shopware\Models\Article\Download[]|null $downloads
      *
      * @return Article
      */
     public function setDownloads($downloads)
     {
-        return $this->setOneToMany($downloads, '\Shopware\Models\Article\Download', 'downloads', 'article');
+        return $this->setOneToMany($downloads, \Shopware\Models\Article\Download::class, 'downloads', 'article');
     }
 
     /**
@@ -1086,13 +1089,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection|array|null $links
+     * @param \Shopware\Models\Article\Link[]|null $links
      *
      * @return Article
      */
     public function setLinks($links)
     {
-        return $this->setOneToMany($links, '\Shopware\Models\Article\Link', 'links', 'article');
+        return $this->setOneToMany($links, \Shopware\Models\Article\Link::class, 'links', 'article');
     }
 
     /**
@@ -1113,7 +1116,7 @@ class Article extends ModelEntity
      */
     public function setSupplier($supplier)
     {
-        return $this->setManyToOne($supplier, '\Shopware\Models\Article\Supplier', 'supplier');
+        return $this->setManyToOne($supplier, \Shopware\Models\Article\Supplier::class, 'supplier');
     }
 
     /**
@@ -1125,13 +1128,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection|array|null $details
+     * @param \Shopware\Models\Article\Detail[]|null $details
      *
      * @return Article
      */
     public function setDetails($details)
     {
-        return $this->setOneToMany($details, '\Shopware\Models\Article\Detail', 'details', 'article');
+        return $this->setOneToMany($details, \Shopware\Models\Article\Detail::class, 'details', 'article');
     }
 
     /**
@@ -1143,13 +1146,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail|array|null $mainDetail
+     * @param \Shopware\Models\Article\Detail[]|null $mainDetail
      *
      * @return \Shopware\Models\Article\Detail
      */
     public function setMainDetail($mainDetail)
     {
-        $return = $this->setOneToOne($mainDetail, '\Shopware\Models\Article\Detail', 'mainDetail', 'article');
+        $return = $this->setOneToOne($mainDetail, \Shopware\Models\Article\Detail::class, 'mainDetail', 'article');
         if ($this->mainDetail instanceof \Shopware\Models\Article\Detail) {
             $this->mainDetail->setKind(1);
         }
@@ -1186,13 +1189,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection|array|null $votes
+     * @param \Shopware\Models\Article\Vote[]|null $votes
      *
      * @return Article
      */
     public function setVotes($votes)
     {
-        return $this->setOneToMany($votes, '\Shopware\Models\Article\Vote', 'votes', 'article');
+        return $this->setOneToMany($votes, \Shopware\Models\Article\Vote::class, 'votes', 'article');
     }
 
     /**
@@ -1288,7 +1291,7 @@ class Article extends ModelEntity
      */
     public function setConfiguratorSet($configuratorSet)
     {
-        $this->setManyToOne($configuratorSet, '\Shopware\Models\Article\Configurator\Set', 'configuratorSet');
+        $this->setManyToOne($configuratorSet, \Shopware\Models\Article\Configurator\Set::class, 'configuratorSet');
 
         return $this;
     }
@@ -1328,13 +1331,13 @@ class Article extends ModelEntity
      */
     public function setConfiguratorTemplate($configuratorTemplate)
     {
-        $this->setOneToOne($configuratorTemplate, '\Shopware\Models\Article\Configurator\Template\Template', 'configuratorTemplate', 'article');
+        $this->setOneToOne($configuratorTemplate, \Shopware\Models\Article\Configurator\Template\Template::class, 'configuratorTemplate', 'article');
 
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Article\SeoCategory>
      */
     public function getSeoCategories()
     {
@@ -1342,7 +1345,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $seoCategories
+     * @param \Shopware\Models\Article\SeoCategory[]|null $seoCategories
      *
      * @return \Shopware\Components\Model\ModelEntity
      */
@@ -1350,14 +1353,14 @@ class Article extends ModelEntity
     {
         return $this->setOneToMany(
             $seoCategories,
-            '\Shopware\Models\Article\SeoCategory',
+            \Shopware\Models\Article\SeoCategory::class,
             'seoCategories',
             'article'
         );
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\ProductStream\ProductStream>
      */
     public function getRelatedProductStreams()
     {
@@ -1365,7 +1368,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $relatedProductStreams
+     * @param ArrayCollection<\Shopware\Models\ProductStream\ProductStream> $relatedProductStreams
      */
     public function setRelatedProductStreams($relatedProductStreams)
     {

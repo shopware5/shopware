@@ -54,20 +54,21 @@ class Dispatch extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Dispatch\ShippingCost", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\ShippingCost>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Dispatch\ShippingCost", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
      */
     protected $costsMatrix;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Dispatch", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Dispatch
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Dispatch", mappedBy="dispatch", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * Autoincrement ID
      *
@@ -349,7 +350,7 @@ class Dispatch extends ModelEntity
     /**
      * Contains all known countries for whom this dispatch is available.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
      *
      * @ORM\ManyToMany(targetEntity="\Shopware\Models\Country\Country")
      * @ORM\JoinTable(name="s_premium_dispatch_countries",
@@ -362,7 +363,7 @@ class Dispatch extends ModelEntity
     /**
      * A list of categories in which the dispatch is not allowed.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_premium_dispatch_categories",
@@ -375,7 +376,7 @@ class Dispatch extends ModelEntity
     /**
      * A list if payments means that are allowed this this dispatch
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment")
      * @ORM\JoinTable(name="s_premium_dispatch_paymentmeans",
@@ -388,7 +389,7 @@ class Dispatch extends ModelEntity
     /**
      * A list of dates (holidays) on which this dispatch is not allowed.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Dispatch\Holiday")
      * @ORM\JoinTable(name="s_premium_dispatch_holidays",
@@ -1047,7 +1048,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of holiday objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday>
      */
     public function getHolidays()
     {
@@ -1057,7 +1058,7 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of holiday objects
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $holidays
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday> $holidays
      *
      * @return \Shopware\Models\Dispatch\Dispatch
      */
@@ -1071,7 +1072,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of payment objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday>
      */
     public function getPayments()
     {
@@ -1081,7 +1082,7 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of payments
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $payments
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday> $payments
      *
      * @return \Shopware\Models\Dispatch\Dispatch
      */
@@ -1095,7 +1096,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of category objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category>
      */
     public function getCategories()
     {
@@ -1105,7 +1106,7 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of category objects
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $categories
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category> $categories
      *
      * @return \Shopware\Models\Dispatch\Dispatch
      */
@@ -1119,7 +1120,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of country objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
      */
     public function getCountries()
     {
@@ -1129,9 +1130,9 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of country objects
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $countries
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country> $countries
      *
-     * @return \Shopware\Models\Dispatch\Dispatch
+     * @return Dispatch
      */
     public function setCountries($countries)
     {
@@ -1141,7 +1142,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\ShippingCost>
      */
     public function getCostsMatrix()
     {
@@ -1149,13 +1150,13 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $costsMatrix
+     * @param \Shopware\Models\Dispatch\ShippingCost[]|null $costsMatrix
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Dispatch
      */
     public function setCostsMatrix($costsMatrix)
     {
-        return $this->setOneToMany($costsMatrix, '\Shopware\Models\Dispatch\ShippingCost', 'costsMatrix', 'dispatch');
+        return $this->setOneToMany($costsMatrix, \Shopware\Models\Dispatch\ShippingCost::class, 'costsMatrix', 'dispatch');
     }
 
     /**
@@ -1169,10 +1170,10 @@ class Dispatch extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Dispatch|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Dispatch
+     * @return Dispatch
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Dispatch', 'attribute', 'dispatch');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Dispatch::class, 'attribute', 'dispatch');
     }
 }

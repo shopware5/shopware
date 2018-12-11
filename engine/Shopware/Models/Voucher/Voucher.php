@@ -38,20 +38,21 @@ class Voucher extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Voucher\Code", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Voucher\Code Objects
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Voucher\Code", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
      */
     protected $codes;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Voucher", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Voucher
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Voucher", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -189,6 +190,7 @@ class Voucher extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="customer_stream_ids", type="text", nullable=true)
      */
     private $customerStreamIds;
@@ -205,7 +207,6 @@ class Voucher extends ModelEntity
 
     /**
      * Setter Method to set the description field from the Model
-     *
      *
      * @param string $description
      *
@@ -643,7 +644,7 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>
      */
     public function getCodes()
     {
@@ -651,13 +652,13 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $codes
+     * @param \Shopware\Models\Voucher\Code[]|null $codes
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Voucher
      */
     public function setCodes($codes)
     {
-        return $this->setOneToMany($codes, '\Shopware\Models\Voucher\Code', 'codes', 'voucher');
+        return $this->setOneToMany($codes, \Shopware\Models\Voucher\Code::class, 'codes', 'voucher');
     }
 
     /**
@@ -669,20 +670,26 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Voucher|array|null $attribute
+     * @param \Shopware\Models\Attribute\Voucher|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Voucher
+     * @return Voucher
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Voucher', 'attribute', 'voucher');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Voucher::class, 'attribute', 'voucher');
     }
 
+    /**
+     * @return string
+     */
     public function getCustomerStreamIds()
     {
         return $this->customerStreamIds;
     }
 
+    /**
+     * @param string $customerStreamIds
+     */
     public function setCustomerStreamIds($customerStreamIds)
     {
         $this->customerStreamIds = $customerStreamIds;
