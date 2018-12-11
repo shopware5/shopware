@@ -24,28 +24,19 @@
 
 namespace Shopware\Components;
 
-use Enlight_Controller_Front;
-use Fig\Link\GenericLinkProvider;
 use Fig\Link\Link;
+use Psr\Link\EvolvableLinkProviderInterface;
 
-/**
- * Class WebLinkManager
- * @package Shopware\Components
- */
 class WebLinkManager
 {
     /**
-     * @var Enlight_Controller_Front
+     * @var EvolvableLinkProviderInterface
      */
-    private $front;
+    private $linkProvider;
 
-    /**
-     * WebLinkManager constructor.
-     * @param Enlight_Controller_Front $front
-     */
-    public function __construct(Enlight_Controller_Front $front)
+    public function __construct(EvolvableLinkProviderInterface $linkProvider)
     {
-        $this->front = $front;
+        $this->linkProvider = $linkProvider;
     }
 
     /**
@@ -57,7 +48,7 @@ class WebLinkManager
      *
      * @return string The relation URI
      */
-    public function link($uri, $rel, array $attributes = array())
+    public function link(string $uri, string $rel, array $attributes = []): string
     {
         // Remove smarty quotes
         $uri = $value = trim($uri, '"\'');
@@ -65,6 +56,7 @@ class WebLinkManager
         foreach ($attributes as &$attribute) {
             $attribute = trim($attribute, '"\'');
         }
+        unset($attribute);
 
         if (empty($uri)) {
             return $uri;
@@ -78,9 +70,15 @@ class WebLinkManager
         foreach ($attributes as $key => $value) {
             $link = $link->withAttribute($key, $value);
         }
-        $linkProvider = $this->front->Request()->getParam('_links', new GenericLinkProvider());
-        $this->front->Request()->setParam('_links', $linkProvider->withLink($link));
+
+        $this->linkProvider = $this->linkProvider->withLink($link);
+
         return $uri;
+    }
+
+    public function getLinkProvider(): EvolvableLinkProviderInterface
+    {
+        return $this->linkProvider;
     }
 
     /**
@@ -91,7 +89,7 @@ class WebLinkManager
      *
      * @return string The path of the asset
      */
-    public function preload($uri, array $attributes = array())
+    public function preload(string $uri, array $attributes = []): string
     {
         return $this->link($uri, 'preload', $attributes);
     }
@@ -104,7 +102,7 @@ class WebLinkManager
      *
      * @return string The path of the asset
      */
-    public function dnsPrefetch($uri, array $attributes = array())
+    public function dnsPrefetch(string $uri, array $attributes = []): string
     {
         return $this->link($uri, 'dns-prefetch', $attributes);
     }
@@ -117,7 +115,7 @@ class WebLinkManager
      *
      * @return string The path of the asset
      */
-    public function preconnect($uri, array $attributes = array())
+    public function preconnect(string $uri, array $attributes = []): string
     {
         return $this->link($uri, 'preconnect', $attributes);
     }
@@ -130,7 +128,7 @@ class WebLinkManager
      *
      * @return string The path of the asset
      */
-    public function prefetch($uri, array $attributes = array())
+    public function prefetch(string $uri, array $attributes = []): string
     {
         return $this->link($uri, 'prefetch', $attributes);
     }
@@ -143,7 +141,7 @@ class WebLinkManager
      *
      * @return string The path of the asset
      */
-    public function prerender($uri, array $attributes = array())
+    public function prerender(string $uri, array $attributes = []): string
     {
         return $this->link($uri, 'prerender', $attributes);
     }

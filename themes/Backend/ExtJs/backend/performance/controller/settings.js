@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         // First of all: Hide all items:
         settings.panel.items.each(function(item) {
             item.hide();
-            if (item.xtype == itemName) {
+            if (item.xtype === itemName) {
                 itemToShow = item;
             }
         });

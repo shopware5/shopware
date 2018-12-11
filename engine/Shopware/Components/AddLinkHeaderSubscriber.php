@@ -29,10 +29,6 @@ use Enlight_Event_EventArgs;
 use Psr\Link\LinkProviderInterface;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
 
-/**
- * Class AddLinkHeaderSubscriber
- * @package Shopware
- */
 class AddLinkHeaderSubscriber implements SubscriberInterface
 {
     /**
@@ -41,34 +37,52 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
     private $serializer;
 
     /**
-     * AddLinkHeaderSubscriber constructor.
+     * @var bool
      */
-    public function __construct()
+    private $pushEnabled;
+
+    /**
+     * @var WebLinkManager
+     */
+    private $webLinkManager;
+
+    public function __construct(HttpHeaderSerializer $headerSerializer,
+        WebLinkManager $webLinkManager,
+        bool $pushEnabled)
     {
-        $this->serializer = new HttpHeaderSerializer();
+        $this->serializer = $headerSerializer;
+        $this->pushEnabled = $pushEnabled;
+        $this->webLinkManager = $webLinkManager;
     }
 
     /**
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            'Enlight_Controller_Front_DispatchLoopShutdown' => 'onDispatchLoopShutdown'
+            'Enlight_Controller_Front_DispatchLoopShutdown' => 'onDispatchLoopShutdown',
         ];
     }
 
     /**
      * @param Enlight_Event_EventArgs $args
      */
-    public function onDispatchLoopShutdown(Enlight_Event_EventArgs $args)
+    public function onDispatchLoopShutdown(Enlight_Event_EventArgs $args): void
     {
         /** @var \Enlight_Controller_Request_Request $request */
         $request = $args->get('request');
+
+        // Only use Server Push if it is enabled in the settings and the current module is "frontend"
+        if (!$this->pushEnabled
+            || $request->getModuleName() !== 'frontend') {
+            return;
+        }
+
         /** @var \Enlight_Controller_Response_Response $response */
         $response = $args->get('response');
 
-        if ($linkProvider = $request->getParam('_links')) {
+        if ($linkProvider = $this->webLinkManager->getLinkProvider()) {
             if (!$linkProvider instanceof LinkProviderInterface || !$links = $linkProvider->getLinks()) {
                 return;
             }

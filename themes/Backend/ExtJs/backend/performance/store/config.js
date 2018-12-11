@@ -30,46 +30,46 @@ Ext.define('Shopware.apps.Performance.store.Config', {
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     /**
      * Disable auto loading
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
 
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Performance.model.Config',
+    model: 'Shopware.apps.Performance.model.Config',
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        url:'{url action="getConfig"}',
+        url: '{url action="getConfig"}',
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });

@@ -187,23 +187,23 @@ abstract class ModelEntity
             $setterFunction = 'set' . ucfirst($reference);
         }
 
-        //to remove the whole one to many association, u can pass null as parameter.
+        // To remove the whole one to many association, u can pass null as parameter.
         if ($data === null) {
             $this->$getterFunction()->clear();
 
             return $this;
         }
-        //if no array passed or if false passed, return
+        // If no array passed or if false passed, return
         if (!is_array($data)) {
             return $this;
         }
 
-        //create a new collection to collect all updated and created models.
+        // Create a new collection to collect all updated and created models.
         $updated = new \Doctrine\Common\Collections\ArrayCollection();
 
-        //iterate all passed items
+        // Iterate all passed items
         foreach ($data as $item) {
-            //to get the right collection item use the internal helper function
+            // To get the right collection item use the internal helper function
             if (is_array($item) && isset($item['id']) && $item['id'] !== null) {
                 $attribute = $this->getArrayCollectionElementById($this->$getterFunction(), $item['id']);
                 if (!$attribute instanceof $model) {
@@ -212,22 +212,22 @@ abstract class ModelEntity
                 //if the item is an array without an id, create a new model.
             } elseif (is_array($item)) {
                 $attribute = new $model();
-            //if the item is no array, it could be an instance of the expected object.
+            // If the item is no array, it could be an instance of the expected object.
             } else {
                 $attribute = $item;
             }
 
-            //check if the object correctly initialed. If this is not the case continue.
+            // Check if the object correctly initialed. If this is not the case continue.
             if (!$attribute instanceof $model) {
                 continue;
             }
 
-            //if the current item is an array, use the from array function to set the data.
+            // If the current item is an array, use the from array function to set the data.
             if (is_array($item)) {
                 $attribute->fromArray($item);
             }
 
-            //after the attribute filled with data, set the association reference and add the model to the internal collection.
+            // After the attribute filled with data, set the association reference and add the model to the internal collection.
             if ($setterFunction !== null) {
                 $attribute->$setterFunction($this);
             }
@@ -236,12 +236,12 @@ abstract class ModelEntity
                 $this->$getterFunction()->add($attribute);
             }
 
-            //add the model to the updated collection to have an flag which models updated.
+            // Add the model to the updated collection to have an flag which models updated.
             $updated->add($attribute);
         }
 
-        //after all passed data items added to the internal collection, we have to iterate the items
-        //to remove all old items which are not updated.
+        // After all passed data items added to the internal collection, we have to iterate the items
+        // to remove all old items which are not updated.
         foreach ($this->$getterFunction() as $attr) {
             //the updated collection contains all updated and created models.
             if (!$updated->contains($attr)) {

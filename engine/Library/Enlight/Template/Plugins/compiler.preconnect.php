@@ -31,19 +31,22 @@ class Smarty_Compiler_Preconnect extends Smarty_Internal_CompileBase
      * Attribute definition: Overwrites base class.
      *
      * @var array
+     *
      * @see Smarty_Internal_CompileBase
      */
     public $required_attributes = ['uri'];
 
     /**
      * Overwrite optional attributes
+     *
      * @var array
      */
     public $optional_attributes = ['_any'];
 
     /**
-     * @param array $args
+     * @param array                                  $args
      * @param Smarty_Internal_SmartyTemplateCompiler $compiler
+     *
      * @return string
      */
     public function compile($args, $compiler)
