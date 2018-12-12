@@ -505,7 +505,7 @@
         setSizes: function (orientation) {
             var me = this,
                 o = orientation || me.opts.orientation,
-                containerSize = (o === 'vertical') ? me.$el.innerHeight() : me.$el.innerWidth(),
+                containerSize = (o === 'vertical') ? me.$container.height() : me.$container.width(),
                 itemSize = (o === 'vertical') ? me.opts.itemMinHeight : me.opts.itemMinWidth;
 
             me.itemsPerPage = Math.floor(containerSize / itemSize);
