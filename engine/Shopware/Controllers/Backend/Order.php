@@ -626,12 +626,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $data['number'] = $order->getNumber();
 
         $data = $this->getPositionAssociatedData($data);
-        // If $data === null, the article was not found
+        // If $data === null, the product was not found
         if ($data === null) {
             $this->View()->assign([
                 'success' => false,
                 'data' => [],
-                'message' => 'The articlenumber "' . $this->Request()->getParam('articleNumber', '') . '" is not valid',
+                'message' => 'The productnumber "' . $this->Request()->getParam('articleNumber', '') . '" is not valid',
             ]);
 
             return;
@@ -645,12 +645,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         // If the passed data is a new position, the flush function will add the new id to the position model
         $data['id'] = $position->getId();
 
-        // The position model will refresh the article stock, so the article stock
+        // The position model will refresh the product stock, so the product stock
         // will be assigned to the view to refresh the grid or form panel.
-        $articleRepository = Shopware()->Models()->getRepository(ArticleDetail::class);
-        $article = $articleRepository->findOneBy(['number' => $position->getArticleNumber()]);
-        if ($article instanceof ArticleDetail) {
-            $data['inStock'] = $article->getInStock();
+        $variantRepository = Shopware()->Models()->getRepository(ArticleDetail::class);
+        $variant = $variantRepository->findOneBy(['number' => $position->getArticleNumber()]);
+        if ($variant instanceof ArticleDetail) {
+            $data['inStock'] = $variant->getInStock();
         }
         $order = $this->getRepository()->find($order->getId());
 
@@ -1829,16 +1829,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['tax']);
         }
 
-        /** @var ArticleDetail $articleDetails */
-        $articleDetails = Shopware()->Models()->getRepository(ArticleDetail::class)
+        /** @var ArticleDetail $variant */
+        $variant = Shopware()->Models()->getRepository(ArticleDetail::class)
             ->findOneBy(['number' => $data['articleNumber']]);
 
         // Load ean, unit and pack unit (translate if needed)
-        if ($articleDetails) {
-            $data['ean'] = $articleDetails->getEan() ?: $articleDetails->getArticle()->getMainDetail()->getEan();
-            $unit = $articleDetails->getUnit() ?: $articleDetails->getArticle()->getMainDetail()->getUnit();
+        if ($variant) {
+            $data['ean'] = $variant->getEan() ?: $variant->getArticle()->getMainDetail()->getEan();
+            $unit = $variant->getUnit() ?: $variant->getArticle()->getMainDetail()->getUnit();
             $data['unit'] = $unit ? $unit->getName() : null;
-            $data['packunit'] = $articleDetails->getPackUnit() ?: $articleDetails->getArticle()->getMainDetail()->getPackUnit();
+            $data['packunit'] = $variant->getPackUnit() ?: $variant->getArticle()->getMainDetail()->getPackUnit();
 
             $languageData = Shopware()->Db()->fetchRow(
                 'SELECT s_core_shops.default, s_order.language AS languageId
@@ -1867,30 +1867,30 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     }
                 }
 
-                $articleTranslation = [];
+                $productTranslation = [];
 
                 // Load variant translations if we are adding a variant to the order
-                if ($articleDetails->getId() != $articleDetails->getArticle()->getMainDetail()->getId()) {
-                    $articleTranslation = $translator->read(
+                if ($variant->getId() != $variant->getArticle()->getMainDetail()->getId()) {
+                    $productTranslation = $translator->read(
                         $languageData['languageId'],
                         'variant',
-                        $articleDetails->getId()
+                        $variant->getId()
                     );
                 }
 
-                // Load article translations if we are adding a main article or the variant translation is incomplete
-                if ($articleDetails->getId() == $articleDetails->getArticle()->getMainDetail()->getId()
-                    || empty($articleTranslation['packUnit'])
+                // Load product translations if we are adding a main product or the variant translation is incomplete
+                if ($variant->getId() == $variant->getArticle()->getMainDetail()->getId()
+                    || empty($productTranslation['packUnit'])
                 ) {
-                    $articleTranslation = $translator->read(
+                    $productTranslation = $translator->read(
                         $languageData['languageId'],
                         'article',
-                        $articleDetails->getArticle()->getId()
+                        $variant->getArticle()->getId()
                     );
                 }
 
-                if (!empty($articleTranslation['packUnit'])) {
-                    $data['packUnit'] = $articleTranslation['packUnit'];
+                if (!empty($productTranslation['packUnit'])) {
+                    $data['packUnit'] = $productTranslation['packUnit'];
                 }
             }
         }

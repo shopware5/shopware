@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 /**
  * Shopware Class that handles categories
  *
- * @category Shopware
+ * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -221,9 +221,9 @@ class sCategories
 
     /**
      * Returns the leaf category to which the
-     * article belongs, inside the category subtree.
+     * product belongs, inside the category subtree.
      *
-     * @param int  $articleId Id of the article to look for
+     * @param int  $articleId Id of the product to look for
      * @param int  $parentId  Category subtree root id. If null, the shop category is used.
      * @param null $shopId
      *
@@ -251,7 +251,7 @@ class sCategories
         }
 
         $sql = '
-           SELECT ac.categoryID as id
+           SELECT ac.categoryID AS id
             FROM s_articles_categories ac
                 INNER JOIN s_categories c
                     ON  ac.categoryID = c.id

@@ -170,14 +170,16 @@ class ProductProvider implements ProductProviderInterface
         if ($variantFacet) {
             $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
 
-            $articleIds = array_map(
+            $productIds = array_map(
                 function (ListProduct $product) {
                     return $product->getId();
-                }, $products);
+                },
+                $products
+            );
 
-            $configurations = $this->configurationLoader->getConfigurations($articleIds, $context);
+            $configurations = $this->configurationLoader->getConfigurations($productIds, $context);
 
-            $combinations = $this->configurationLoader->getCombinations($articleIds);
+            $combinations = $this->configurationLoader->getCombinations($productIds);
 
             $listingPrices = $this->listingVariationLoader->getListingPrices($shop, $products, $variantConfiguration, $variantFacet);
 
@@ -294,25 +296,25 @@ class ProductProvider implements ProductProviderInterface
         }, $products);
 
         $query = $this->connection->createQueryBuilder();
-        $query->select(['mapping.articleID', 'categories.id', 'categories.path'])
+        $query->select(['mapping.articleID AS productId', 'categories.id', 'categories.path'])
             ->from('s_articles_categories', 'mapping')
             ->innerJoin('mapping', 's_categories', 'categories', 'categories.id = mapping.categoryID')
-            ->where('mapping.articleID IN (:ids)')
+            ->where('productId IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
         $result = [];
         foreach ($data as $row) {
-            $articleId = (int) $row['articleID'];
+            $productId = (int) $row['productId'];
             $categories = [];
-            if (isset($result[$articleId])) {
-                $categories = $result[$articleId];
+            if (isset($result[$productId])) {
+                $categories = $result[$productId];
             }
             $temp = explode('|', $row['path']);
             $temp[] = $row['id'];
 
-            $result[$articleId] = array_merge($categories, $temp);
+            $result[$productId] = array_merge($categories, $temp);
         }
 
         return array_map(function ($row) {

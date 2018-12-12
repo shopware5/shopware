@@ -96,8 +96,10 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
      */
     public function supports(Element $element)
     {
-        return $element->getComponent()->getType() === self::COMPONENT_NAME
-            || $element->getComponent()->getConvertFunction() === self::LEGACY_CONVERT_FUNCTION;
+        $component = $element->getComponent();
+
+        return $component->getType() === self::COMPONENT_NAME
+            || $component->getConvertFunction() === self::LEGACY_CONVERT_FUNCTION;
     }
 
     /**
@@ -131,8 +133,8 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
 
             case self::TYPE_STATIC_PRODUCT:
-                $articles = $element->getConfig()->get('selected_articles', []);
-                $productNumbers = array_filter(explode('|', $articles));
+                $products = $element->getConfig()->get('selected_articles', []);
+                $productNumbers = array_filter(explode('|', $products));
                 if (empty($productNumbers)) {
                     $productNumbers = [];
                 }
@@ -140,8 +142,8 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 $collection->getBatchRequest()->setProductNumbers($key, $productNumbers);
                 break;
             case self::TYPE_STATIC_VARIANT:
-                $articles = $element->getConfig()->get('selected_variants', []);
-                $productNumbers = array_filter(explode('|', $articles));
+                $productVariants = $element->getConfig()->get('selected_variants', []);
+                $productNumbers = array_filter(explode('|', $productVariants));
                 if (empty($productNumbers)) {
                     $productNumbers = [];
                 }

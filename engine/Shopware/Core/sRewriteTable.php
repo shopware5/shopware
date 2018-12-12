@@ -29,11 +29,12 @@ use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
 use Shopware\Models\Article\Supplier;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Deprecated Shopware Class that handles url rewrites
  *
- * @category Shopware
+ * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -156,7 +157,8 @@ class sRewriteTable
         $this->moduleManager = $moduleManager ?: Shopware()->Modules();
         $this->slug = $slug ?: Shopware()->Container()->get('shopware.slug');
         $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
-        $this->shopPageService = $shopPageService ?: Shopware()->Container()->get('shopware_storefront.shop_page_service');
+        $this->shopPageService = $shopPageService ?: Shopware()->Container()
+            ->get('shopware_storefront.shop_page_service');
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
 
@@ -297,7 +299,7 @@ class sRewriteTable
             AND c.id IS NULL"
         );
 
-        // delete non-existing articles
+        // delete non-existing products
         $this->db->query("
             DELETE ru FROM s_core_rewrite_urls ru
             LEFT JOIN s_articles a
@@ -389,7 +391,7 @@ class sRewriteTable
     }
 
     /**
-     * Create rewrite rules for articles
+     * Create rewrite rules for products
      *
      * @param string $lastUpdate
      * @param int    $limit
@@ -404,8 +406,8 @@ class sRewriteTable
     {
         $lastId = null;
 
-        $routerArticleTemplate = $this->config->get('sROUTERARTICLETEMPLATE');
-        if (empty($routerArticleTemplate)) {
+        $routerProductTemplate = $this->config->get('sROUTERARTICLETEMPLATE');
+        if (empty($routerProductTemplate)) {
             return $lastUpdate;
         }
 
@@ -417,7 +419,8 @@ class sRewriteTable
         $sql = $this->getSeoArticleQuery();
         $sql = $this->db->limit($sql, $limit, $offset);
 
-        $shopFallbackId = (Shopware()->Shop()->getFallback() instanceof \Shopware\Models\Shop\Shop) ? Shopware()->Shop()->getFallback()->getId() : null;
+        $fallbackShop = Shopware()->Shop()->getFallback();
+        $shopFallbackId = ($fallbackShop instanceof Shop) ? $fallbackShop->getId() : null;
 
         $result = $this->db->fetchAll(
             $sql,
@@ -441,7 +444,7 @@ class sRewriteTable
 
         foreach ($result as $row) {
             $this->data->assign('sArticle', $row);
-            $path = $this->template->fetch('string:' . $routerArticleTemplate, $this->data);
+            $path = $this->template->fetch('string:' . $routerProductTemplate, $this->data);
             $path = $this->sCleanupPath($path);
 
             $orgPath = 'sViewport=detail&sArticle=' . $row['id'];
@@ -466,7 +469,7 @@ class sRewriteTable
     }
 
     /**
-     * Helper function which returns the sql query for the seo articles.
+     * Helper function which returns the sql query for the seo products.
      * Used in multiple locations
      *
      * @return string
@@ -474,8 +477,8 @@ class sRewriteTable
     public function getSeoArticleQuery()
     {
         return "
-            SELECT a.*, d.ordernumber, d.suppliernumber, s.name as supplier, a.datum as date,
-                d.releasedate, a.changetime as changed, ct.objectdata, ctf.objectdata as objectdataFallback, at.attr1, at.attr2,
+            SELECT a.*, d.ordernumber, d.suppliernumber, s.name AS supplier, a.datum AS date,
+                d.releasedate, a.changetime AS changed, ct.objectdata, ctf.objectdata AS objectdataFallback, at.attr1, at.attr2,
                 at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9,
                 at.attr10,at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16,
                 at.attr17, at.attr18, at.attr19, at.attr20
@@ -566,7 +569,8 @@ class sRewriteTable
         }
 
         $ids = $this->getManufacturerIds($offset, $limit);
-        $manufacturers = Shopware()->Container()->get('shopware_storefront.manufacturer_service')->getList($ids, $context);
+        $manufacturers = Shopware()->Container()->get('shopware_storefront.manufacturer_service')
+            ->getList($ids, $context);
 
         $seoSupplierRouteTemplate = $this->config->get('seoSupplierRouteTemplate');
         foreach ($manufacturers as $manufacturer) {
@@ -619,7 +623,13 @@ class sRewriteTable
         $routerCampaignTemplate = $this->config->get('routerCampaignTemplate');
 
         foreach ($campaigns as $campaign) {
-            $this->sCreateRewriteTableForSingleCampaign($this->translationComponent, $languageId, $fallbackId, $campaign, $routerCampaignTemplate);
+            $this->sCreateRewriteTableForSingleCampaign(
+                $this->translationComponent,
+                $languageId,
+                $fallbackId,
+                $campaign,
+                $routerCampaignTemplate
+            );
         }
     }
 
@@ -743,7 +753,7 @@ class sRewriteTable
     {
         $parts = null;
         if (!empty($params['articleID'])) {
-            $parts = $this->sCategoryPathByArticleId(
+            $parts = $this->sCategoryPathByProductId(
                 $params['articleID'],
                 isset($params['categoryID']) ? $params['categoryID'] : null
             );
@@ -789,7 +799,7 @@ class sRewriteTable
     }
 
     /**
-     * Maps the translation of the objectdata from the s_core_translations in the article array
+     * Maps the translation of the objectdata from the s_core_translations in the product array
      *
      * @param array $articles
      *
@@ -797,14 +807,14 @@ class sRewriteTable
      */
     public function mapArticleTranslationObjectData($articles)
     {
-        foreach ($articles as &$article) {
-            if (empty($article['objectdata']) && empty($article['objectdataFallback'])) {
-                unset($article['objectdata'], $article['objectdataFallback']);
+        foreach ($articles as &$product) {
+            if (empty($product['objectdata']) && empty($product['objectdataFallback'])) {
+                unset($product['objectdata'], $product['objectdataFallback']);
                 continue;
             }
 
-            $objectData = @unserialize($article['objectdata']);
-            $objectDataFallback = @unserialize($article['objectdataFallback']);
+            $objectData = @unserialize($product['objectdata']);
+            $objectDataFallback = @unserialize($product['objectdataFallback']);
 
             if (empty($objectData)) {
                 $objectData = [];
@@ -818,9 +828,9 @@ class sRewriteTable
                 continue;
             }
 
-            unset($article['objectdata'], $article['objectdataFallback']);
+            unset($product['objectdata'], $product['objectdataFallback']);
 
-            $article = $this->mapArticleObjectFields($article, $objectData, $objectDataFallback, [
+            $product = $this->mapProductObjectFields($product, $objectData, $objectDataFallback, [
                 'name' => 'txtArtikel',
                 'description_long' => 'txtlangbeschreibung',
                 'description' => 'txtshortdescription',
@@ -829,8 +839,8 @@ class sRewriteTable
                 'metaTitle' => 'metaTitle',
             ]);
 
-            $article = $this->mapArticleObjectAttributeFields($article, $objectDataFallback);
-            $article = $this->mapArticleObjectAttributeFields($article, $objectData);
+            $product = $this->mapProductObjectAttributeFields($product, $objectDataFallback);
+            $product = $this->mapProductObjectAttributeFields($product, $objectData);
         }
 
         return $articles;
@@ -875,18 +885,18 @@ class sRewriteTable
 
     /**
      * Returns the category path to which the
-     * article belongs, inside the category subtree.
+     * product belongs, inside the category subtree.
      * Used internally in sSmartyCategoryPath
      *
-     * @param int $articleId Id of the article to look for
+     * @param int $productId Id of the product to look for
      * @param int $parentId  Category subtree root id. If null, the shop category is used.
      *
      * @return null|array Category path, or null if no category found
      */
-    private function sCategoryPathByArticleId($articleId, $parentId = null)
+    private function sCategoryPathByProductId($productId, $parentId = null)
     {
         $categoryId = $this->moduleManager->Categories()->sGetCategoryIdByArticleId(
-            $articleId,
+            $productId,
             $parentId
         );
 
@@ -987,56 +997,56 @@ class sRewriteTable
     }
 
     /**
-     * Map article core translation including fallback fields for given article
+     * Map product core translation including fallback fields for given product
      *
-     * @param array $article
+     * @param array $product
      * @param array $objectData
      * @param array $objectDataFallback
-     * @param array $fieldMappings      array(articleFieldName => objectDataFieldName)
+     * @param array $fieldMappings      array(productFieldName => objectDataFieldName)
      *
-     * @return array $article
+     * @return array
      */
-    private function mapArticleObjectFields(
-        array $article,
+    private function mapProductObjectFields(
+        array $product,
         array $objectData,
         array $objectDataFallback,
         array $fieldMappings
     ) {
-        foreach ($fieldMappings as $articleFieldName => $objectDataFieldName) {
+        foreach ($fieldMappings as $productFieldName => $objectDataFieldName) {
             if (!empty($objectData[$objectDataFieldName])) {
-                $article[$articleFieldName] = $objectData[$objectDataFieldName];
+                $product[$productFieldName] = $objectData[$objectDataFieldName];
                 continue;
             }
 
             if (!empty($objectDataFallback[$objectDataFieldName])) {
-                $article[$articleFieldName] = $objectDataFallback[$objectDataFieldName];
+                $product[$productFieldName] = $objectDataFallback[$objectDataFieldName];
             }
         }
 
-        return $article;
+        return $product;
     }
 
     /**
-     * Map article attribute translation including fallback fields for given article
+     * Map product attribute translation including fallback fields for given product
      *
-     * @param array $article
+     * @param array $product
      * @param array $translations
      *
-     * @return array $article
+     * @return array
      */
-    private function mapArticleObjectAttributeFields($article, $translations)
+    private function mapProductObjectAttributeFields($product, $translations)
     {
         foreach ($translations as $key => $value) {
             if (strpos($key, '__attribute_') === false || empty($value)) {
                 continue;
             }
 
-            $articleKey = str_replace('__attribute_', '', $key);
+            $productKey = str_replace('__attribute_', '', $key);
 
-            $article[$articleKey] = $value;
+            $product[$productKey] = $value;
         }
 
-        return $article;
+        return $product;
     }
 
     /**
@@ -1077,7 +1087,7 @@ class sRewriteTable
             return $context;
         }
 
-        /* @var \Shopware\Models\Shop\Shop $shop */
+        /* @var Shop $shop */
         if (Shopware()->Container()->has('shop')) {
             $shop = Shopware()->Container()->get('shop');
 
@@ -1102,8 +1112,15 @@ class sRewriteTable
     private function hasSpecificShopPath($org_path, $path, $shopId)
     {
         $statement = $this->db
-            ->executeQuery('SELECT `org_path` FROM `s_core_rewrite_urls` WHERE `path`=? AND `main`=1 AND `subshopId`=? AND `org_path`!=?',
-            [$path, $shopId, $org_path]);
+            ->executeQuery(
+                'SELECT `org_path`
+                FROM `s_core_rewrite_urls`
+                WHERE `path`=?
+                  AND `main`=1
+                  AND `subshopId`=?
+                  AND `org_path`!=?',
+                [$path, $shopId, $org_path]
+            );
 
         if ($statement->rowCount() === 0) {
             return false;
