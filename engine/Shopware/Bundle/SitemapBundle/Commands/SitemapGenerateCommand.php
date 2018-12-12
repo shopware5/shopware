@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\Commands;
 
+use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,7 +41,17 @@ class SitemapGenerateCommand extends ShopwareCommand
         $this
             ->setName('sw:generate:sitemap')
             ->setDescription('Generates sitemaps for a given shop (or all active ones)')
-            ->addOption('shopId', 'i', InputOption::VALUE_OPTIONAL)
+            ->addOption(
+                'shopId',
+                'i',
+                InputOption::VALUE_OPTIONAL,
+                'Generate sitemap only for for this shop')
+            ->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_NONE,
+                'Force generation, even if generation has been locked by some other process'
+            )
         ;
     }
 
@@ -49,6 +60,7 @@ class SitemapGenerateCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = $this->container->get('models')->getRepository(Shop::class);
 
         $shops = null;
@@ -72,7 +84,17 @@ class SitemapGenerateCommand extends ShopwareCommand
         foreach ($shops as $shop) {
             $output->writeln(sprintf('Generating sitemaps for shop #%d (%s)...', $shop->getId(), $shop->getName()));
 
-            $sitemapExporter->generate($shop);
+            if ($input->getOption('force')) {
+                $this->container
+                    ->get('shopware_bundle_sitemap.service.sitemap_lock')
+                    ->unLock($shop);
+            }
+
+            try {
+                $sitemapExporter->generate($shop);
+            } catch (AlreadyLockedException $exception) {
+                $output->writeln(sprintf('ERROR: %s', $exception->getMessage()));
+            }
         }
 
         $output->writeln('done!');

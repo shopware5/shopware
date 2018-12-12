@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SitemapBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
@@ -86,7 +87,11 @@ class CronjobSubscriber implements SubscriberInterface
         /** @var Shop $shop */
         foreach ($this->modelManager->getRepository(Shop::class)->getActiveShopsFixed() as $shop) {
             $output .= sprintf('Generating sitemaps for shop #%d (%s)...', $shop->getId(), $shop->getName()) . PHP_EOL;
-            $this->sitemapExporter->generate($shop);
+            try {
+                $this->sitemapExporter->generate($shop);
+            } catch (AlreadyLockedException $exception) {
+                $output .= sprintf('ERROR: %s', $exception->getMessage()) . PHP_EOL;
+            }
         }
 
         return $output;

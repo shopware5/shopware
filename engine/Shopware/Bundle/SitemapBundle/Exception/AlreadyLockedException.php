@@ -22,24 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle;
+namespace Shopware\Bundle\SitemapBundle\Exception;
 
-use Shopware\Bundle\SitemapBundle\Struct\Url;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
-
-interface UrlProviderInterface
+class AlreadyLockedException extends \RuntimeException
 {
-    /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return null|Url[]
-     */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);
-
-    /**
-     * Resets the provider for next sitemap generation
-     */
-    public function reset();
 }

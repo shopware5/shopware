@@ -4,7 +4,12 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ## 5.5.5
 
+[View all changes from v5.5.4...v5.5.5](https://github.com/shopware/shopware/compare/v5.5.4...v5.5.5)
+
+### Additions
+
 * Added new event `TemplateMail_CreateMail_MailContext` to `engine/Shopware/Components/TemplateMail.php`
+* Added internal locking to sitemap generation so the sitemap isn't generated multiple times in parallel
 
 ## 5.5.4
 
