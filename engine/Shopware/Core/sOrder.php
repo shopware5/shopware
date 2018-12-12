@@ -1965,21 +1965,31 @@ EOT;
      */
     private function getUserDataForMail(array $userData)
     {
-        array_walk_recursive($userData['billingaddress'], function (&$value) {
-            $value = html_entity_decode($value);
-        });
-        array_walk_recursive($userData['shippingaddress'], function (&$value) {
-            $value = html_entity_decode($value);
-        });
-        array_walk_recursive($userData['additional']['country'], function (&$value) {
-            $value = html_entity_decode($value);
-        });
+        $userData['billingaddress'] = $this->htmlEntityDecodeRecursive($userData['billingaddress']);
+        $userData['shippingaddress'] = $this->htmlEntityDecodeRecursive($userData['shippingaddress']);
+        $userData['country'] = $this->htmlEntityDecodeRecursive($userData['country']);
 
         $userData['additional']['payment']['description'] = html_entity_decode(
             $userData['additional']['payment']['description']
         );
 
         return $userData;
+    }
+
+    /**
+     * Helper function to recursively apply html_entity_decode() to the given data.
+     *
+     * @param array|string $data
+     *
+     * @return array|string
+     */
+    private function htmlEntityDecodeRecursive($data)
+    {
+        $func = function ($item) use (&$func) {
+            return is_array($item) ? array_map($func, $item) : call_user_func('html_entity_decode', $item);
+        };
+
+        return array_map($func, $data);
     }
 
     /**
