@@ -299,7 +299,7 @@ class ProductProvider implements ProductProviderInterface
         $query->select(['mapping.articleID AS productId', 'categories.id', 'categories.path'])
             ->from('s_articles_categories', 'mapping')
             ->innerJoin('mapping', 's_categories', 'categories', 'categories.id = mapping.categoryID')
-            ->where('productId IN (:ids)')
+            ->where('mapping.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
