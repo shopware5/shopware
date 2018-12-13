@@ -924,7 +924,7 @@ class sExport
             LEFT JOIN s_core_pricegroups_discounts pd
             ON a.pricegroupActive=1
             AND a.pricegroupID=groupID
-            AND customergroupID = 1
+            AND customergroupID = {$this->sSettings['customergroupID']}
             AND discountstart=1
 
             LEFT JOIN s_articles_esd e ON e.articledetailsID=d.id
