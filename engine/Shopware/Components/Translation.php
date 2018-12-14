@@ -176,10 +176,10 @@ class Shopware_Components_Translation
     /**
      * Reads multiple translation data from storage.
      *
-     * @param int    $language
-     * @param string $type
-     * @param int    $key
-     * @param bool   $merge
+     * @param int       $language
+     * @param string    $type
+     * @param int|int[] $key
+     * @param bool      $merge
      *
      * @return array
      */
@@ -238,7 +238,7 @@ class Shopware_Components_Translation
      * @param int       $language
      * @param int       $fallback
      * @param string    $type
-     * @param int|array $key
+     * @param int|int[] $key
      * @param bool      $merge
      *
      * @return array|mixed

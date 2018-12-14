@@ -5991,9 +5991,9 @@ INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
 (1, 1),
 (1, 2),
 (1, 3),
-(2, 7),
-(2, 9),
-(2, 10);
+(2, 1),
+(2, 2),
+(2, 3);
 
 TRUNCATE TABLE `s_core_tax_rules`;
 
@@ -6119,7 +6119,8 @@ INSERT IGNORE INTO `s_core_translations` (`id`, `objecttype`, `objectdata`, `obj
 (262, 'article', 'a:2:{s:10:"txtArtikel";s:24:"Munsterland Aperitif 16%";s:19:"txtlangbeschreibung";s:432:"<p>Io copia moeror immo pro audio modestia. Permaneo animosus etsi furax, aversor, faenum Pecus, mus me dux ferociter interpellatio certo. infrequentia Illis Quamquam Invidus, indutus voco tot Velociter, rare qui Limbus in Uter sub Ferito. Hinc lacrima Tutor gens Stabulaus antrum levis se voveo quemadmodum ruo illa sidereus. Luo Modicus tutela sedo Uxor contineo, ait ait crebra exsecror Ruga Sospes gratuita se Quae praevideo</p>";}', 3, '2'),
 (263, 'article', 'a:2:{s:10:"txtArtikel";s:24:"Shipping costs by weight";s:19:"txtlangbeschreibung";s:226:"<p>This article weighs 8 KG. These requires a calculation by weight. If you add it to the cart, it will be charged with 19,90 Euro. To do so, use the follwing access data: max.mustermann@mail.com &amp; Password: shopware .</p>";}', 248, '2'),
 (270, 'article', 'a:1:{s:10:"txtArtikel";s:19:"Beach Towel "Ibiza"";}', 178, '2'),
-(272, 'config_payment', 'a:5:{i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionalDescription";s:141:"Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionalDescription";s:15:"Additional text";}i:3;a:2:{s:11:"description";s:16:"Cash on delivery";s:21:"additionalDescription";s:25:"(including 2.00 Euro VAT)";}i:5;a:2:{s:11:"description";s:15:"Paid in advance";s:21:"additionalDescription";s:57:"The goods are delivered directly upon receipt of payment.";}i:6;a:1:{s:21:"additionalDescription";s:17:"SEPA direct debit";}}', 1, '2');
+(272, 'config_payment', 'a:5:{i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionalDescription";s:141:"Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionalDescription";s:15:"Additional text";}i:3;a:2:{s:11:"description";s:16:"Cash on delivery";s:21:"additionalDescription";s:25:"(including 2.00 Euro VAT)";}i:5;a:2:{s:11:"description";s:15:"Paid in advance";s:21:"additionalDescription";s:57:"The goods are delivered directly upon receipt of payment.";}i:6;a:1:{s:21:"additionalDescription";s:17:"SEPA direct debit";}}', 1, '2'),
+(273, 'page', 'a:1:{s:11:"description";s:7:"Imprint";}', 3, '2');
 
 
 TRUNCATE TABLE `s_core_units`;
