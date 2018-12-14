@@ -20,7 +20,6 @@
  * @author     Heiner Lohaus
  * @author     $Author$
  */
-
 use PHPUnit\DbUnit\AbstractTester;
 use PHPUnit\DbUnit\Database\DefaultConnection;
 
@@ -31,7 +30,7 @@ use PHPUnit\DbUnit\Database\DefaultConnection;
  * with an automatically access on the database resource.
  *
  * @category   Enlight
- * @package    Enlight_Test
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -68,26 +67,14 @@ class Enlight_Components_Test_Database_DefaultTester extends AbstractTester
             $pdo = Shopware()->Db()->getConnection();
             $this->connection = $this->createDefaultDBConnection($pdo);
         }
-        return $this->connection;
-    }
 
-    /**
-     * Creates a new DefaultDatabaseConnection using the given PDO connection
-     * and database schema name.
-     *
-     * @param PDO    $connection
-     * @param string $schema
-     * @return DefaultConnection
-     */
-    protected function createDefaultDBConnection(PDO $connection, $schema = '')
-    {
-        return new DefaultConnection($connection, $schema);
+        return $this->connection;
     }
 
     /**
      * TestCases must call this method inside setUp().
      */
-    public function onSetUp()
+    public function onSetUp(): void
     {
         $this->getConnection()->getConnection()->exec('SET FOREIGN_KEY_CHECKS=0;');
         parent::onSetUp();
@@ -96,9 +83,23 @@ class Enlight_Components_Test_Database_DefaultTester extends AbstractTester
     /**
      * TestCases must call this method inside tearDown().
      */
-    public function onTearDown()
+    public function onTearDown(): void
     {
         parent::onTearDown();
         $this->getConnection()->getConnection()->exec('SET FOREIGN_KEY_CHECKS=1;');
+    }
+
+    /**
+     * Creates a new DefaultDatabaseConnection using the given PDO connection
+     * and database schema name.
+     *
+     * @param PDO    $connection
+     * @param string $schema
+     *
+     * @return DefaultConnection
+     */
+    protected function createDefaultDBConnection(PDO $connection, $schema = ''): DefaultConnection
+    {
+        return new DefaultConnection($connection, $schema);
     }
 }

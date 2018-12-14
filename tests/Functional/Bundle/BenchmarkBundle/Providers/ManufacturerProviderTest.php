@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
-use PHPUnit_Framework_Constraint_IsType as IsType;
+use PHPUnit\Framework\Constraint\IsType;
 
 class ManufacturerProviderTest extends ProviderTestCase
 {

@@ -454,7 +454,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $upstream = $filesystem->readStream($filePath);
         $downstream = fopen('php://output', 'wb');
 
-        ob_end_clean();
+        if (!$this->container->hasParameter('shopware.session.unitTestEnabled') || !$this->container->getParameter('shopware.session.unitTestEnabled')) {
+            ob_end_clean();
+        }
 
         while (!feof($upstream)) {
             fwrite($downstream, fread($upstream, 4096));

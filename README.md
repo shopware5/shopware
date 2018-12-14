@@ -22,10 +22,10 @@ Visit the forum at <http://forum.shopware.com/>
 
 ### Shopware Server Requirements
 
-- PHP 5.6.4 or above, PHP 7.1 or above strongly recommended
+- PHP 7.1.0 or above
 - [Apache 2.2 or 2.4](https://httpd.apache.org/)
 - Apache's `mod_rewrite` module
-- MySQL 5.5.0 or above
+- MySQL 5.6.0 or above
 
 #### Required PHP extensions:
 
@@ -54,7 +54,7 @@ Follow the instruction below if you want to install Shopware 5 using Git.
 
     git clone https://github.com/shopware/shopware.git
 
-In case you wish to contribute to Shopware, fork the `5.5` branch rather than cloning it, and create a pull request via Github. For further information please read the section "Get involved" of this document.
+In case you wish to contribute to Shopware, fork the `5.6` branch rather than cloning it, and create a pull request via Github. For further information please read the section "Get involved" of this document.
 
 2.) Set the correct directory permissions:
 
