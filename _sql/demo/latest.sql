@@ -5240,7 +5240,15 @@ INSERT INTO `s_core_countries` (`id`, `countryname`, `countryiso`, `areaID`, `co
 (34, 'Slowakei', 'SK', 3, 'SLOVAKIA', 10, '', 0, 0, 0, 0, 'SVK', 0, 0),
 (35, 'Rum&auml;nien', 'RO', 3, 'ROMANIA', 10, '', 0, 0, 0, 0, 'ROU', 0, 0),
 (36, 'Brasilien', 'BR', 2, 'BRAZIL', 10, '', 0, 0, 0, 0, 'BRA', 0, 0),
-(37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 'ISR', 0, 0);
+(37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 'ISR', 0, 0),
+(38, 'Bulgarien', 'BG', 3, 'BULGARIA', 10, '', 0, 0, 0, 0, 'BGR', 0, 0),
+(39, 'Estland', 'EE', 3, 'ESTONIA', 10, '', 0, 0, 0, 0, 'EST', 0, 0),
+(40, 'Kroatien', 'HR', 3, 'CROATIA', 10, '', 0, 0, 0, 0, 'HRV', 0, 0),
+(41, 'Lettland', 'LV', 3, 'LATVIA', 10, '', 0, 0, 0, 0, 'LVA', 0, 0),
+(42, 'Litauen', 'LT', 3, 'LITHUANIA', 10, '', 0, 0, 0, 0, 'LTU', 0, 0),
+(43, 'Malta', 'MT', 3, 'MALTA', 10, '', 0, 0, 0, 0, 'MLT', 0, 0),
+(44, 'Slowenien', 'SI', 3, 'SLOVENIA', 10, '', 0, 0, 0, 0, 'SVN', 0, 0),
+(45, 'Zypern', 'CY', 3, 'CYPRUS', 10, '', 0, 0, 0, 0, 'CYP', 0, 0);
 UPDATE `s_core_countries` SET `allow_shipping` = 1;
 
 TRUNCATE TABLE `s_core_countries_areas`;
