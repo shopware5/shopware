@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <requirements>
     <requirement>
-        <name>php</name><group>core</group><required>5.6.4</required>
+        <name>php</name><group>core</group><required>7.1.0</required>
     </requirement>
     <requirement>
         <name>mod_rewrite</name><group>core</group><required>1</required>
         <notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
     </requirement>
     <requirement>
-        <name>mysql</name><group>core</group><required>5.5.0</required><database>1</database>
+        <name>mysql</name><group>core</group><required>5.6.0</required><database>1</database>
     </requirement>
     <requirement>
         <name>pdo</name><group>extension</group><required>1</required>

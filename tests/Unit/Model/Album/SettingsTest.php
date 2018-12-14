@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use PHPUnit\Framework\TestCase;
 
 /**
  * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Models_Album_SettingsTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Models_Album_SettingsTest extends TestCase
 {
     public function testGetThumbnailSizeReturnValue()
     {

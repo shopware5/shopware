@@ -54,7 +54,7 @@ class CategoryDenormalizationTest extends TestCase
      */
     private $conn;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!extension_loaded('sqlite3')) {
             $this->markTestSkipped(
@@ -88,7 +88,7 @@ class CategoryDenormalizationTest extends TestCase
     /**
      * @return DefaultConnection
      */
-    public function getConnection()
+    public function getConnection(): DefaultConnection
     {
         if (!extension_loaded('sqlite3')) {
             return null;
@@ -107,7 +107,7 @@ class CategoryDenormalizationTest extends TestCase
      *
      * @return IDataSet
      */
-    public function getDataSet()
+    public function getDataSet(): IDataSet
     {
         $dataset = $this->createFlatXMLDataSet(__DIR__ . '/_CategoryDenormalization/category-seed.xml');
 
@@ -121,7 +121,7 @@ class CategoryDenormalizationTest extends TestCase
      * @covers \Shopware\Components\Model\CategoryDenormalization::setConnection
      * @covers \Shopware\Components\Model\CategoryDenormalization::getConnection
      */
-    public function testSetConnection()
+    public function testSetConnection(): void
     {
         $pdo = $this->createMock(PDOMock::class);
 
@@ -133,7 +133,7 @@ class CategoryDenormalizationTest extends TestCase
     /**
      * @covers \Shopware\Components\Model\CategoryDenormalization::getParentCategoryIds
      */
-    public function testGetParentCategoryIdsReturnsArrayWithCategoryIds()
+    public function testGetParentCategoryIdsReturnsArrayWithCategoryIds(): void
     {
         $expectedResult = [5, 4, 2];
 
@@ -142,7 +142,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testRebuildAssignment()
+    public function testRebuildAssignment(): void
     {
         $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
@@ -162,7 +162,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
-    public function testAddAssignment()
+    public function testAddAssignment(): void
     {
         $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
@@ -177,7 +177,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
-    public function testRemoveAssignment()
+    public function testRemoveAssignment(): void
     {
         $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
@@ -197,7 +197,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
-    public function testRebuildCategoryPath()
+    public function testRebuildCategoryPath(): void
     {
         $result = $this->component->rebuildCategoryPathCount();
 
@@ -223,7 +223,7 @@ class CategoryDenormalizationTest extends TestCase
     /**
      * @depends testAddAssignment
      */
-    public function testMoveCategory()
+    public function testMoveCategory(): void
     {
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -261,7 +261,7 @@ class CategoryDenormalizationTest extends TestCase
     /**
      * @depends testAddAssignment
      */
-    public function testMoveLeafCategory()
+    public function testMoveLeafCategory(): void
     {
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -293,7 +293,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
-    public function testRemoveAllAssignments()
+    public function testRemoveAllAssignments(): void
     {
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -311,7 +311,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
-    public function testRemoveArticleAssignmentments()
+    public function testRemoveArticleAssignmentments(): void
     {
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -331,7 +331,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
-    public function testGetParentCategoryIdsForRootLevelReturnsEmptyArray()
+    public function testGetParentCategoryIdsForRootLevelReturnsEmptyArray(): void
     {
         $expectedResult = [];
 
@@ -340,14 +340,14 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testRebuildAllAssignmentsCountReturnsZeroIfTableIsEmpty()
+    public function testRebuildAllAssignmentsCountReturnsZeroIfTableIsEmpty(): void
     {
         $result = $this->component->rebuildAllAssignmentsCount();
 
         $this->assertEquals(0, $result);
     }
 
-    public function testLimitWithLimitArgument()
+    public function testLimitWithLimitArgument(): void
     {
         $statement = 'SELECT * FROM example';
 
@@ -357,7 +357,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testLimitWithLimitArgumentAndOffsetNull()
+    public function testLimitWithLimitArgumentAndOffsetNull(): void
     {
         $statement = 'SELECT * FROM example';
 
@@ -367,7 +367,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testLimitWithLimitArgumentAndOffset()
+    public function testLimitWithLimitArgumentAndOffset(): void
     {
         $statement = 'SELECT * FROM example';
 
@@ -377,7 +377,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testLimitShouldThrowExceptionIfLimitIsLessThanOne()
+    public function testLimitShouldThrowExceptionIfLimitIsLessThanOne(): void
     {
         $statement = 'SELECT * FROM example';
 
@@ -386,7 +386,7 @@ class CategoryDenormalizationTest extends TestCase
         $this->component->limit($statement, 0, 20);
     }
 
-    public function testLimitShouldThrowExceptionIfOffsetIsLessThanOne()
+    public function testLimitShouldThrowExceptionIfOffsetIsLessThanOne(): void
     {
         $statement = 'SELECT * FROM example';
 
@@ -395,13 +395,13 @@ class CategoryDenormalizationTest extends TestCase
         $this->component->limit($statement, 5, -1);
     }
 
-    public function testEnableTransactions()
+    public function testEnableTransactions(): void
     {
         $this->component->enableTransactions();
         $this->assertTrue($this->component->transactionsEnabled());
     }
 
-    public function testDisableTransactions()
+    public function testDisableTransactions(): void
     {
         $this->component->disableTransactions();
         $this->assertFalse($this->component->transactionsEnabled());

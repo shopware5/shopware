@@ -16,7 +16,7 @@
         "issues": "https://issues.shopware.com"
     },
     "require": {
-        "php": "^5.6.4||^7.0",
+        "php": "^7.1",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-date": "*",
@@ -83,8 +83,8 @@
         "ext-zend-opcache": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.6||~6.3",
-        "phpunit/dbunit": "~2.0|| ~3.0",
+        "phpunit/phpunit": "~6.0",
+        "phpunit/dbunit": "~3.0",
         "behat/behat": "~3.4",
         "behat/mink": "~1.7",
         "behat/mink-extension": "v2.2",
@@ -122,14 +122,13 @@
             "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
             "Shopware\\Tests\\Unit\\": "tests/Unit",
             "Shopware\\Tests\\Functional\\": "tests/Functional"
-        },
-        "files": ["tests/dbunit_shims.php"]
+        }
     },
     "config": {
         "autoloader-suffix": "Shopware",
         "optimize-autoloader": true,
         "platform": {
-            "php": "5.6.4"
+            "php": "7.1.0"
         }
     },
     "scripts": {
