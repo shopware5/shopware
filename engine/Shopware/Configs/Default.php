@@ -239,6 +239,7 @@ return array_replace_recursive([
            'cof',
            'siteurl',
            '_ga',
+           'fbclid',         // Facebook
         ],
     ],
     'bi' => [
