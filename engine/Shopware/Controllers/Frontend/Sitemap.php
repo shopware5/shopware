@@ -23,6 +23,7 @@
  */
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Shop\DetachedShop;
+use Shopware\Models\Site\Site;
 
 /**
  * @category Shopware
@@ -167,10 +168,10 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     private function getSitesByShopId($shopId)
     {
         $sql = '
-            SELECT groups.key
+            SELECT shopGroups.key
             FROM s_core_shop_pages shopPages
-              INNER JOIN s_cms_static_groups groups
-                ON groups.id = shopPages.group_id
+              INNER JOIN s_cms_static_groups shopGroups
+                ON shopGroups.id = shopPages.group_id
             WHERE shopPages.shop_id = ?
         ';
 
@@ -184,7 +185,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
-                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->from(Site::class, 'sites', 'sites.id')
                 ->andWhere('sites.active = true')
                 ->getQuery()
                 ->getArrayResult();
