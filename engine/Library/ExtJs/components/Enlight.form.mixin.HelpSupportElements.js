@@ -27,8 +27,7 @@
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-Ext.define('Enlight.form.mixin.HelpSupportElements',
-{
+Ext.define('Enlight.form.mixin.HelpSupportElements', {
     /**
      * Support text which will be displayed under the form element.
      * @string
