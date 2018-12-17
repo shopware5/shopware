@@ -259,6 +259,11 @@ class sBasket
             }
         }
 
+        $products = $this->eventManager->filter('Shopware_Modules_Basket_CheckBasketQuantities_ProductsQuantity', $products, [
+            'subject' => $this,
+            'hideBasket' => $hideBasket,
+        ]);
+
         return ['hideBasket' => $hideBasket, 'articles' => $products];
     }
 

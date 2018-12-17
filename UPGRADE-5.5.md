@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added internal locking to sitemap generation so the sitemap isn't generated multiple times in parallel
 * Added event plugin/swAjaxVariant/onHistoryChanged in in order to listen to changes in browser history after variants did change 
 * Added blocks frontend_account_order_item_pseudo_price_inner and frontend_account_order_item_pseudo_price_inner_value to frontend/account/order_item_details.tpl to modify price if necessary 
+* Add filter Shopware_Modules_Basket_CheckBasketQuantities_ProductQuantities in order to modify variable for each basket item
 
 ### Changes
 
