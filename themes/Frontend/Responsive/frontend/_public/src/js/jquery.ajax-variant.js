@@ -135,6 +135,7 @@
 
                     if (pushState && me.hasHistorySupport) {
                         me.pushState(stateObj, ordernumber);
+                        $.publish('plugin/swAjaxVariant/onHistoryChanged', [me, response, values, stateObj.location]);
                     }
                 },
                 complete: function (response, status) {
