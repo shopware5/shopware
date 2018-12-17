@@ -868,16 +868,13 @@ class sAdmin
             AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(now())-?)
         ';
 
-        $timeOut = $this->config->get('sUSERTIMEOUT');
-        $timeOut = !empty($timeOut) ? $timeOut : 7200;
-
         $getUser = $this->db->fetchRow(
             $sql,
             [
                 $userPassword,
                 $userMail,
                 $userId,
-                $timeOut,
+                (int) ini_get('session.gc_maxlifetime'),
             ]
         );
         $getUser = $getUser ?: [];
