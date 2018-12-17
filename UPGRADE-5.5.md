@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added new event `TemplateMail_CreateMail_MailContext` to `engine/Shopware/Components/TemplateMail.php`
 * Added internal locking to sitemap generation so the sitemap isn't generated multiple times in parallel
+* Add filter Shopware_Modules_Basket_CheckBasketQuantities_ProductQuantities in order to modify variable for each basket item
 
 ## 5.5.4
 
