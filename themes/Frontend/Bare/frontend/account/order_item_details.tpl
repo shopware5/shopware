@@ -89,10 +89,14 @@
                                                         {s name="priceDiscountLabel" namespace="frontend/detail/data"}{/s}
                                                     {/block}
 
+                                                    {block name="frontend_account_order_item_pseudo_price_inner"}
                                                     <span class="order--pseudo-price is--italic is--soft is--line-through">
-                                                        {$article.currentPseudoprice|currency}
+                                                        {block name="frontend_account_order_item_pseudo_price_inner_value"}
+                                                            {$article.currentPseudoprice|currency}
+                                                        {/block}
                                                         {s name="Star" namespace="frontend/listing/box_article"}{/s}
                                                     </span>
+                                                    {/block}
 
                                                     {block name="frontend_account_order_item_pseudo_price_after"}
                                                         {s name="priceDiscountInfo" namespace="frontend/detail/data"}{/s}
