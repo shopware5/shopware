@@ -21,6 +21,22 @@
  * our trademarks remain entirely with us.
  */
 
+{* Include default components *}
+{include file='ExtJs/components/Enlight.app.Window.js'}
+{include file='ExtJs/components/Enlight.app.SubWindow.js'}
+{include file='ExtJs/components/Enlight.app.SubApplication.js'}
+{include file='ExtJs/components/Enlight.app.Controller.js'}
+{include file='ExtJs/components/Ext.util.FileUpload.js'}
+{include file='ExtJs/components/Enlight.app.WindowManagement.js'}
+{include file='ExtJs/components/Enlight.form.mixin.HelpSupportElements.js'}
+{include file='ExtJs/components/Enlight.app.SubWindow.js'}
+{include file='ExtJs/components/Ext.ux.DataView.DragSelector.js'}
+{include file='ExtJs/components/Ext.ux.DataView.LabelEditor.js'}
+{include file='ExtJs/components/Ext.ux.form.field.BoxSelect.js'}
+{include file='ExtJs/components/Ext.ux.RowExpander.js'}
+{include file='ExtJs/components/Ext.ux.form.MultiSelect.js'}
+{include file='ExtJs/components/Ext.ux.form.ItemSelector.js'}
+
 {* Include overrides *}
 {include file='ExtJs/overrides/Ext.Base.js'}
 {include file='ExtJs/overrides/Ext.grid.header.Container.js'}
@@ -33,6 +49,7 @@
 {include file='ExtJs/overrides/Ext.button.Button.js'}
 {include file='ExtJs/overrides/Ext.LoadMask.js'}
 {include file='ExtJs/overrides/Ext.form.Field.js'}
+{include file='ExtJs/overrides/Ext.form.field.HtmlEditor.js'}
 {include file='ExtJs/overrides/Ext.toolbar.Paging.js'}
 {include file='ExtJs/overrides/Ext.Template.js'}
 {include file='ExtJs/overrides/Ext.form.Base.js'}
@@ -57,22 +74,6 @@
 {include file='ExtJs/overrides/Ext.form.field.Display.js'}
 {include file='ExtJs/overrides/Ext.String.js'}
 {include file='ExtJs/overrides/Ext.view.Table.js'}
-
-{* Include default components *}
-{include file='ExtJs/components/Enlight.app.Window.js'}
-{include file='ExtJs/components/Enlight.app.SubWindow.js'}
-{include file='ExtJs/components/Enlight.app.SubApplication.js'}
-{include file='ExtJs/components/Enlight.app.Controller.js'}
-{include file='ExtJs/components/Ext.util.FileUpload.js'}
-{include file='ExtJs/components/Enlight.app.WindowManagement.js'}
-{include file='ExtJs/components/Enlight.app.SubWindow.js'}
-{include file='ExtJs/components/Ext.ux.DataView.DragSelector.js'}
-{include file='ExtJs/components/Ext.ux.DataView.LabelEditor.js'}
-{include file='ExtJs/components/Ext.ux.form.field.BoxSelect.js'}
-{include file='ExtJs/components/Ext.ux.RowExpander.js'}
-{include file='ExtJs/components/Ext.ux.form.MultiSelect.js'}
-{include file='ExtJs/components/Ext.ux.form.ItemSelector.js'}
-
 
 //Shopware backend application components
 {include file='backend/base/application/Shopware.model.Helper.js'}
