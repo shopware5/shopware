@@ -14,6 +14,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Changes
 
 * Changed user timeout to session `session.gc_maxlifetime`
+* Changed itemprop `priceCurrency` to be available for products with price groups
 
 ## 5.5.4
 
