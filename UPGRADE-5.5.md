@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added new event `TemplateMail_CreateMail_MailContext` to `engine/Shopware/Components/TemplateMail.php`
 * Added internal locking to sitemap generation so the sitemap isn't generated multiple times in parallel
+* Added event plugin/swAjaxVariant/onHistoryChanged in in order to listen to changes in browser history after variants did change 
 
 ### Changes
 
