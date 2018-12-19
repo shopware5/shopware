@@ -35,8 +35,8 @@
             <argument type="service" id="db_connection" />
             <argument type="service" id="events" />
             <argument type="collection">
-                <argument type="string">%shopware.plugin_directories.ShopwarePlugins%</argument>
-                <argument type="string">%shopware.plugin_directories.ProjectPlugins%</argument>
+                <argument type="string" key="ShopwarePlugins">%shopware.plugin_directories.ShopwarePlugins%</argument>
+                <argument type="string" key="ProjectPlugins">%shopware.plugin_directories.ProjectPlugins%</argument>
             </argument>
             <argument type="service" id="shopware.release" />
         </service>
