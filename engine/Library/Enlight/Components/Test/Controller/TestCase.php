@@ -109,10 +109,11 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      * Dispatch the request
      *
      * @param string|null $url
+     * @param bool        $followRedirects
      *
      * @return Enlight_Controller_Response_Response
      */
-    public function dispatch($url = null)
+    public function dispatch($url = null, $followRedirects = false)
     {
         $request = $this->Request();
         if ($url !== null) {
@@ -127,6 +128,16 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
                 ->setResponse($response);
 
         $front->dispatch();
+
+        if ($followRedirects && $this->Response()->getHttpResponseCode() === 302) {
+            $link = parse_url($this->Response()->getHeader('Location'), PHP_URL_PATH);
+            $this->resetResponse();
+            $cookies = $this->Response()->getCookies();
+            $this->resetRequest();
+            $this->Request()->setCookies($cookies);
+
+            return $this->dispatch($link);
+        }
 
         /** @var Enlight_Controller_Plugins_ViewRenderer_Bootstrap $viewRenderer */
         $viewRenderer = $front->Plugins()->get('ViewRenderer');

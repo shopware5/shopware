@@ -105,7 +105,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->Request()->setParam('sAdd', self::ARTICLE_NUMBER);
         $this->Request()->setParam('isXHR', 1);
 
-        $response = $this->dispatch('/checkout/addArticle');
+        $response = $this->dispatch('/checkout/addArticle', true);
         $this->assertContains('<div class="modal--checkout-add-article">', $response->getBody());
 
         Shopware()->Modules()->Basket()->sDeleteBasket();
@@ -246,7 +246,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->Request()->setHeader('User-Agent', $userAgent);
         $this->Request()->setParam('sQuantity', $quantity);
         $this->Request()->setParam('sAdd', self::ARTICLE_NUMBER);
-        $this->dispatch('/checkout/addArticle');
+        $this->dispatch('/checkout/addArticle', true);
 
         return Shopware()->Container()->get('SessionID');
     }
