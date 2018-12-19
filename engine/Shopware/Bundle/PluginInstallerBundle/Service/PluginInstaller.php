@@ -313,6 +313,7 @@ class PluginInstaller
             $this->pdo,
             $this->pluginDirectories
         );
+
         $plugins = $initializer->initializePlugins();
 
         foreach ($plugins as $plugin) {
@@ -348,7 +349,7 @@ class PluginInstaller
             $info['link'] = isset($info['link']) ? $info['link'] : null;
 
             $data = [
-                'namespace' => 'ShopwarePlugins',
+                'namespace' => $plugin->getNamespace(),
                 'version' => $info['version'],
                 'author' => $info['author'],
                 'name' => $plugin->getName(),

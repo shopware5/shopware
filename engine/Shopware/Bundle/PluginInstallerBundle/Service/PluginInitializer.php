@@ -79,7 +79,7 @@ class PluginInitializer
         }
         unset($pluginData);
 
-        foreach ($this->pluginDirectories as $pluginDirectory) {
+        foreach ($this->pluginDirectories as $pluginNamespace => $pluginDirectory) {
             foreach (new \DirectoryIterator($pluginDirectory) as $pluginDir) {
                 if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {
                     continue;
@@ -92,7 +92,7 @@ class PluginInitializer
                 }
 
                 $namespace = $pluginName;
-                $className = '\\' . $namespace . '\\' . $pluginName;
+                $className = '\\' . $pluginName . '\\' . $pluginName;
                 $classLoader->addPrefix($namespace, $pluginDir->getPathname());
 
                 if (!class_exists($className)) {
@@ -102,7 +102,7 @@ class PluginInitializer
                 $isActive = in_array($pluginName, $shopwarePlugins, true);
 
                 /** @var Plugin $plugin */
-                $plugin = new $className($isActive);
+                $plugin = new $className($isActive, $pluginNamespace);
 
                 if (!$plugin instanceof Plugin) {
                     throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));
