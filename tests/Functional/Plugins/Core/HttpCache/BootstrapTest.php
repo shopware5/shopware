@@ -73,6 +73,8 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $this->pluginManager->installPlugin($plugin);
         $this->pluginManager->activatePlugin($plugin);
 
+        $this->cacheManager->clearConfigCache();
+
         $this->previousConfig = $this->pluginManager->getPluginConfig($plugin);
 
         parent::setUp();
