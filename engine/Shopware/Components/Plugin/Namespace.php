@@ -556,16 +556,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             WHERE namespace=?
         ';
 
-        /** @var Zend_Cache_Core $cache */
-        $cache = $this->Application()->Container()->get('cache');
-        $cacheKey = 'globalAllPlugins' . $this->name;
-        if ($cache->test($cacheKey)) {
-            $rows = (array) $cache->load($cacheKey);
-        } else {
-            $connection = $this->Application()->Container()->get('dbal_connection');
-            $rows = $connection->fetchAll($sql, [$this->name]);
-            $cache->save($rows, $cacheKey, ['Shopware_Plugin'], 86400);
-        }
+        $connection = $this->Application()->Container()->get('dbal_connection');
+        $rows = $connection->fetchAll($sql, [$this->name]);
 
         $plugins = [];
         foreach ($rows as $row) {
@@ -632,15 +624,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
              WHERE ce.type=0
              ORDER BY name, position
         ';
-        /** @var Zend_Cache_Core $cache */
-        $cache = $this->Application()->Container()->get('cache');
-        $cacheKey = 'globalListenersPlugins' . $namespace;
-        if ($cache->test($cacheKey)) {
-            $listeners = (array) $cache->load($cacheKey);
-        } else {
-            $listeners = $this->Application()->Db()->fetchAll($sql, [$namespace]);
-            $cache->save($listeners, $cacheKey, ['Shopware_Plugin'], 86400);
-        }
+        $listeners = $this->Application()->Db()->fetchAll($sql, [$namespace]);
 
         foreach ($listeners as $listenerKey => $listener) {
             if (($position = strpos($listener['listener'], '::')) !== false) {
