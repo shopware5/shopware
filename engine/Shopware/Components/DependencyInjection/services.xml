@@ -447,8 +447,23 @@
         </service>
 
         <service id="ErrorSubscriber" class="Shopware\Components\ErrorSubscriber">
-            <tag name="shopware.event_subscriber" />
             <argument type="service" id="corelogger"/>
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="AddLinkHeaderSubscriber" class="Shopware\Components\AddLinkHeaderSubscriber">
+            <argument type="service">
+                <service class="\Symfony\Component\WebLink\HttpHeaderSerializer" />
+            </argument>
+            <argument type="service" id="web_link_manager" />
+            <argument type="expression">service('config').get('http2Push', false)</argument>
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="web_link_manager" class="Shopware\Components\WebLinkManager">
+            <argument type="service">
+                <service class="\Fig\Link\GenericLinkProvider" />
+            </argument>
         </service>
 
         <service id="config_writer" class="Shopware\Components\ConfigWriter">

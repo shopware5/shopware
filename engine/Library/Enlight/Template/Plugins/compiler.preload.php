@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,55 +23,43 @@
  */
 
 /**
- * Base config store which loads all needed config data
+ * Specifies a file to be preloaded using Link header
  */
-//{block name="backend/performance/store/config"}
-Ext.define('Shopware.apps.Performance.store.Config', {
+class Smarty_Compiler_Preload extends Smarty_Internal_CompileBase
+{
     /**
-     * Extend for the standard ExtJS 4
-     * @string
+     * Attribute definition: Overwrites base class.
+     *
+     * @var array
+     *
+     * @see Smarty_Internal_CompileBase
      */
-    extend: 'Ext.data.Store',
-
-    /**
-     * Disable auto loading
-     * @boolean
-     */
-    autoLoad: false,
+    public $required_attributes = ['file'];
 
     /**
-     * Define the used model for this store
-     * @string
+     * Overwrite optional attributes
+     *
+     * @var array
      */
-    model: 'Shopware.apps.Performance.model.Config',
+    public $optional_attributes = ['_any'];
 
     /**
-     * Configure the data communication
-     * @object
+     * @param array                                  $args
+     * @param Smarty_Internal_SmartyTemplateCompiler $compiler
+     *
+     * @return string
      */
-    proxy: {
-        /**
-         * Set proxy type to ajax
-         * @string
-         */
-        type: 'ajax',
+    public function compile($args, $compiler)
+    {
+        // Check and get attributes
+        $_attr = $this->getAttributes($compiler, $args);
 
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        url: '{url action="getConfig"}',
+        unset($_attr['nocache']);
 
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader: {
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
+        $options = $_attr;
+        unset($options['file']);
+
+        return '<?php '
+             . 'echo Shopware()->Container()->get(\'web_link_manager\')->preload(' . $_attr['file'] . ', ' . var_export($options, true) . ') ?>';
     }
-});
-//{/block}
+}

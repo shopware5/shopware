@@ -50,6 +50,7 @@
         "symfony/serializer": "3.4.19",
         "symfony/options-resolver": "3.4.19",
         "symfony/expression-language": "3.4.19",
+        "symfony/web-link": "3.4.19",
         "monolog/monolog": "1.23.0",
         "doctrine/common": "2.7.3",
         "doctrine/collections": "1.4.0",
@@ -74,6 +75,8 @@
         "php-http/curl-client": "1.7.1",
         "guzzlehttp/psr7": "1.4.2",
         "php-http/message": "1.6.0",
+        "psr/link": "1.0.0",
+        "fig/link-util": "1.0.0",
         "league/flysystem": "1.0.46",
         "league/flysystem-aws-s3-v3": "1.0.19",
         "superbalist/flysystem-google-storage": "6.0.0"

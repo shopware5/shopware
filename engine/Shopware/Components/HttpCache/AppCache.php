@@ -118,6 +118,8 @@ class AppCache extends HttpCache
         $response->headers->remove('cache-control');
         $response->headers->addCacheControlDirective('no-cache');
 
+        $this->filterHttp2ServerPushHeader($request, $response);
+
         return $response;
     }
 
@@ -354,5 +356,22 @@ class AppCache extends HttpCache
 
         $noCache[] = 'slt';
         $request->cookies->set('nocache', implode(', ', $noCache));
+    }
+
+    /**
+     * @param Request  $request
+     * @param Response $response
+     */
+    private function filterHttp2ServerPushHeader(Request $request, Response $response)
+    {
+        /* We do not want to push the assets with every request, only for new visitors. We therefore check
+           for an existing session-cookie, which would indicate that this isn't the first client request. */
+        foreach ($request->cookies->keys() as $cookieName) {
+            if (strpos($cookieName, 'session-') === 0) {
+                $response->headers->remove('link');
+
+                return;
+            }
+        }
     }
 }
