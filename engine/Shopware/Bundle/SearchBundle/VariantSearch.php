@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\VariantListingPriceService;
+use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Models\Article\Configurator\Group;
@@ -39,7 +39,7 @@ class VariantSearch implements ProductSearchInterface
     private $decorated;
 
     /**
-     * @var VariantListingPriceService
+     * @var VariantListingPriceServiceInterface
      */
     private $listingPriceService;
 
@@ -48,9 +48,14 @@ class VariantSearch implements ProductSearchInterface
      */
     private $configuratorService;
 
+    /**
+     * @param ProductSearchInterface              $decorated
+     * @param VariantListingPriceServiceInterface $listingPriceService
+     * @param ConfiguratorServiceInterface        $configuratorService
+     */
     public function __construct(
         ProductSearchInterface $decorated,
-        VariantListingPriceService $listingPriceService,
+        VariantListingPriceServiceInterface $listingPriceService,
         ConfiguratorServiceInterface $configuratorService
     ) {
         $this->decorated = $decorated;
@@ -58,6 +63,9 @@ class VariantSearch implements ProductSearchInterface
         $this->configuratorService = $configuratorService;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function search(Criteria $criteria, Struct\ProductContextInterface $context)
     {
         $result = $this->decorated->search($criteria, $context);

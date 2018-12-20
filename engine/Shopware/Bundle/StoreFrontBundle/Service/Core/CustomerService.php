@@ -24,30 +24,30 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\AddressGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerService implements CustomerServiceInterface
 {
     /**
-     * @var CustomerGateway
+     * @var CustomerGatewayInterface
      */
     private $customerGateway;
 
     /**
-     * @var AddressGateway
+     * @var AddressGatewayInterface
      */
     private $addressGateway;
 
     /**
-     * @param CustomerGateway $customerGateway
-     * @param AddressGateway  $addressGateway
+     * @param CustomerGatewayInterface $customerGateway
+     * @param AddressGatewayInterface  $addressGateway
      */
     public function __construct(
-        CustomerGateway $customerGateway,
-        AddressGateway $addressGateway
+        CustomerGatewayInterface $customerGateway,
+        AddressGatewayInterface $addressGateway
     ) {
         $this->customerGateway = $customerGateway;
         $this->addressGateway = $addressGateway;

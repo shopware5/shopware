@@ -31,6 +31,7 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
@@ -38,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
-class VariantListingPriceService
+class VariantListingPriceService implements VariantListingPriceServiceInterface
 {
     /**
      * @var VariantHelperInterface
@@ -65,6 +66,13 @@ class VariantListingPriceService
      */
     private $config;
 
+    /**
+     * @param QueryBuilderFactoryInterface         $factory
+     * @param VariantHelperInterface               $helper
+     * @param VariantCheapestPriceGatewayInterface $variantCheapestPriceGateway
+     * @param PriceCalculationServiceInterface     $priceCalculationService
+     * @param Shopware_Components_Config           $config
+     */
     public function __construct(
         QueryBuilderFactoryInterface $factory,
         VariantHelperInterface $helper,
@@ -79,6 +87,9 @@ class VariantListingPriceService
         $this->config = $config;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updatePrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
