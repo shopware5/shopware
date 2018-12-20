@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             successMessage: '{s name=domainRegistration/successMessage}Domain registration successful{/s}',
             waitTitle: '{s name=domainRegistration/waitTitle}Registering domain{/s}',
             waitMessage: '{s name=domainRegistration/waitMessage}This process might take a few seconds{/s}',
-            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='http://en.wiki.shopware.com/Shopware-ID-Shopware-Account_detail_1433.html#Add_shop_.2F_domain' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
+            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='https://docs.shopware.com/en/shopware-5-en/first-steps/shopware-account#link-your-shop' title='Shopware Account documentation' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
         },
 
         login: {
