@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -34,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ConfiguratorOptionsGateway
+class ConfiguratorOptionsGateway implements Gateway\ConfiguratorOptionsGatewayInterface
 {
     /**
      * @var Hydrator\ConfiguratorHydrator
@@ -85,12 +84,7 @@ class ConfiguratorOptionsGateway
     }
 
     /**
-     * Get groups with options by optionids
-     *
-     * @param array                $optionIds
-     * @param ShopContextInterface $context
-     *
-     * @return Struct\Configurator\Group[]
+     * {@inheritdoc}
      */
     public function getOptions(array $optionIds, ShopContextInterface $context)
     {
