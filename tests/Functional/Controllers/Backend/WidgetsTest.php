@@ -36,6 +36,9 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
         Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Db()->exec('DELETE FROM s_statistics_visitors');
+        Shopware()->Db()->exec('DELETE FROM s_order');
+        Shopware()->Db()->exec('DELETE FROM s_user');
     }
 
     protected function tearDown()
@@ -47,42 +50,16 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
     public function testConversionIsEmpty()
     {
-        Shopware()->Db()->exec('DELETE FROM s_statistics_visitors');
-        Shopware()->Db()->exec('DELETE FROM s_order');
-
         $this->dispatch('backend/widgets/getTurnOverVisitors');
 
         $response = $this->View()->getAssign();
 
-        $expectedData = [
-            'success' => true,
-            'data' => [
-                [
-                    'name' => 'Heute',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-                [
-                    'name' => 'Gestern',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-            ],
-            'conversion' => '0.00',
-        ];
-
-        $this->assertEquals($expectedData, $response);
+        $this->assertTrue($response['success']);
+        $this->assertEquals('0.00', $response['conversion']);
     }
 
     public function testConversionIsCalucatedFromBeginningOfDay()
     {
-        Shopware()->Db()->exec('DELETE FROM s_statistics_visitors');
-        Shopware()->Db()->exec('DELETE FROM s_order');
-
         $date = new DateTime();
         $date->sub(new DateInterval('P7DT1M'));
 
@@ -108,37 +85,14 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('backend/widgets/getTurnOverVisitors');
 
-        $expectedData = [
-            'success' => true,
-            'data' => [
-                [
-                    'name' => 'Heute',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-                [
-                    'name' => 'Gestern',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-            ],
-            'conversion' => '100.00',
-        ];
+        $response = $this->View()->getAssign();
 
-        $response = ($this->View()->getAssign());
-
-        $this->assertEquals($expectedData, $response);
+        $this->assertTrue($response['success']);
+        $this->assertEquals('100.00', $response['conversion']);
     }
 
     public function testConversionStillWorks()
     {
-        Shopware()->Db()->exec('DELETE FROM s_statistics_visitors');
-        Shopware()->Db()->exec('DELETE FROM s_order');
-
         $date = new DateTime();
         $date->sub(new DateInterval('P6DT59M'));
 
@@ -164,37 +118,14 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('backend/widgets/getTurnOverVisitors');
 
-        $expectedData = [
-            'success' => true,
-            'data' => [
-                [
-                    'name' => 'Heute',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-                [
-                    'name' => 'Gestern',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-            ],
-            'conversion' => '100.00',
-        ];
+        $response = $this->View()->getAssign();
 
-        $response = ($this->View()->getAssign());
-
-        $this->assertEquals($expectedData, $response);
+        $this->assertTrue($response['success']);
+        $this->assertEquals('100.00', $response['conversion']);
     }
 
     public function testIfNoConversionAfterEightDays()
     {
-        Shopware()->Db()->exec('DELETE FROM s_statistics_visitors');
-        Shopware()->Db()->exec('DELETE FROM s_order');
-
         $date = new DateTime();
         $date->sub(new DateInterval('P8D'));
 
@@ -220,29 +151,9 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('backend/widgets/getTurnOverVisitors');
 
-        $expectedData = [
-            'success' => true,
-            'data' => [
-                [
-                    'name' => 'Heute',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-                [
-                    'name' => 'Gestern',
-                    'turnover' => 0.0,
-                    'visitors' => null,
-                    'newCustomers' => '0',
-                    'orders' => '0',
-                ],
-            ],
-            'conversion' => '0.00',
-        ];
+        $response = $this->View()->getAssign();
 
-        $response = ($this->View()->getAssign());
-
-        $this->assertEquals($expectedData, $response);
+        $this->assertTrue($response['success']);
+        $this->assertEquals('0.00', $response['conversion']);
     }
 }
