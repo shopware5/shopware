@@ -27,7 +27,7 @@ const:
   DB_PORT: "3306"
   SW_HOST: "localhost:8088"
   SW_BASE_PATH: ""
-  PHP_VERSION: "7.1"
+  PHP_VERSION: "7.2"
   MYSQL_VERSION: "5.7"
   ELASTICSEARCH_IMAGE: "docker.elastic.co/elasticsearch/elasticsearch"
   ELASTICSEARCH_VERSION: "5.6.5"
