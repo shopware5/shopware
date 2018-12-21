@@ -12,7 +12,7 @@
 
 <div class="actions clearfix">
     <a class="btn btn-default is--right" href="<?php echo $url; ?>" target="_blank"><?= $t->t('finish_frontend'); ?></a>
-    <a class="btn btn-default is--right" href="<?= $selectedLanguage === 'de' ? 'http://community.shopware.com/_detail_930.html' : 'http://en.community.shopware.com/_detail_1195.html'; ?>" target="_blank"><?= $t->t('finish_first_steps'); ?></a>
+    <a class="btn btn-default is--right" href="<?= $selectedLanguage === 'de' ? 'https://docs.shopware.com/de/shopware-5-de/erste-schritte/erste-schritte-in-shopware' : 'https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware'; ?>" target="_blank"><?= $t->t('finish_first_steps'); ?></a>
     <a class="btn btn-primary btn-new-line is--right" href="<?php echo $url; ?>/backend" target="_blank"><?= $t->t('finish_backend'); ?></a>
 </div>
 

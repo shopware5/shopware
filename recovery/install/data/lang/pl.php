@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Z radością witamy Cię w naszej społeczności. Pomyślnie zainstalowałeś Shopware.
-<p>Twój sklep jest gotowy do użycia. Jeśli jesteś nowym użytkownikiem Shopware, zalecamy zapoznanie się z przewodnikiem <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Pierwsze kroki w Shopware"</a>. Kiedy zalogujesz się do sklepu po raz pierwszy, nasz "Kreator pierwszego uruchomienia" poprowadzi cię przez kolejne podstawowe ustawienia.</p>
+<p>Twój sklep jest gotowy do użycia. Jeśli jesteś nowym użytkownikiem Shopware, zalecamy zapoznanie się z przewodnikiem <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"Pierwsze kroki w Shopware"</a>. Kiedy zalogujesz się do sklepu po raz pierwszy, nasz "Kreator pierwszego uruchomienia" poprowadzi cię przez kolejne podstawowe ustawienia.</p>
 <p>Ciesz się swoim nowym sklepem internetowym!</p>',
 ];
