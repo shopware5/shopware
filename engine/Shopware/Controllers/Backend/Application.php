@@ -866,7 +866,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     //remove the foreign key data.
                     unset($data[$field]);
                 }
-            } elseif ($mapping['type'] === ClassMetadataInfo::MANY_TO_MANY) {
+            } elseif (in_array($mapping['type'], [ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::ONE_TO_MANY], true)) {
                 /**
                  * @ORM\ManyToMany associations.
                  *
