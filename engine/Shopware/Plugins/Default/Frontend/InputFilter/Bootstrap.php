@@ -28,7 +28,7 @@
 class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public $sqlRegex = 's_core_|s_order_|s_user|benchmark.*\(|(?:insert|replace).+into|update.+set|(?:delete|select).+from|(?:alter|rename|create|drop|truncate).+(?:database|table|procedure)|union.+select|prepare.+from.+execute|select.+into\s+(outfile|dumpfile)';
-    public $xssRegex = 'javascript:|src\s*=|\bon[a-z]+\s*=|style\s*=|\bdata-\w+\s*=';
+    public $xssRegex = 'javascript:|src\s*=|\bon[a-z]+\s*=|style\s*=|\bdata-\w+(?!\.)\b\s?=?';
     public $rfiRegex = '\.\./|\\0';
 
     /**
