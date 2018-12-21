@@ -25,6 +25,7 @@
  * Overrides the Ext.panel.Panel to disable for all browsers except Google
  * Chrome which performs well here.
  */
+//{block name="extjs/overrides/panel"}
 Ext.override(Ext.panel.Panel, {
     animCollapse: Ext.isChrome,
 
@@ -119,3 +120,4 @@ Ext.override(Ext.panel.Panel, {
         me.ghostPanel.el.hide();
     },
 });
+//{/block}

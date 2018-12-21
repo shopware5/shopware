@@ -22,6 +22,7 @@
  */
 
 /** @lends Ext.grid.header.Container# */
+//{block name="extjs/overrides/container"}
 Ext.override(Ext.grid.header.Container, {
     /**
      * Maps the record data to base it on the header id's.
@@ -91,3 +92,4 @@ Ext.override(Ext.grid.header.Container, {
         return obj;
     }
 });
+//{/block}

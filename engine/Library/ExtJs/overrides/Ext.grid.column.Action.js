@@ -26,6 +26,7 @@
  * an additional HTML5 data attribute to provide
  * a better adressing in selenium ui tests.
  */
+//{block name="extjs/overrides/action"}
 Ext.override(Ext.grid.column.Action, {
 
     /** Suffix for the data attribute */
@@ -72,4 +73,4 @@ Ext.override(Ext.grid.column.Action, {
         };
     }
 });
-
+//{/block}

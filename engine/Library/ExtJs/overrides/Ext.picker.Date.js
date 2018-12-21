@@ -20,6 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/date"}
 Ext.override(Ext.picker.Date, {
 
     /**
@@ -37,3 +39,4 @@ Ext.override(Ext.picker.Date, {
         }
     }
 });
+//{/block}

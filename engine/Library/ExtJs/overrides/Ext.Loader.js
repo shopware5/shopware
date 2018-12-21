@@ -27,7 +27,7 @@
  * This bends the controller/model/store/view paths
  * to our shopware default paths.
  */
-
+//{block name="extjs/overrides/loader"}
 (function() {
     /**
      * Currently open loader requests
@@ -382,3 +382,4 @@
         return this;
     };
 })();
+//{/block}

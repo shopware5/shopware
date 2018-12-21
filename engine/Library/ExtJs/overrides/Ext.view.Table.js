@@ -33,6 +33,7 @@
  * This override fixes the problem by using the solution provided in the linked support forum topic.
  * The respective lines are marked with a 'Fix:' comment.
  */
+//{block name="extjs/overrides/table"}
 Ext.override(Ext.view.Table, {
 
     onUpdate : function(store, record, operation, changedFieldNames) {
@@ -114,3 +115,4 @@ Ext.override(Ext.view.Table, {
         }
     }
 });
+//{/block}

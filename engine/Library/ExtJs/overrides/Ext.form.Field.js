@@ -31,6 +31,7 @@
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
+//{block name="extjs/overrides/field"}
 Ext.override(Ext.form.Field,
 /** @lends Ext.form.Field# */
 {
@@ -195,3 +196,4 @@ Ext.override(Ext.form.Field,
         return helpIcon;
     }
 });
+//{/block}

@@ -20,6 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/messageBox"}
 Ext.override(Ext.MessageBox, {
     afterRender: function() {
         var me = this,
@@ -46,3 +48,4 @@ Ext.override(Ext.MessageBox, {
         me.callParent(arguments);
     }
 });
+//{/block}

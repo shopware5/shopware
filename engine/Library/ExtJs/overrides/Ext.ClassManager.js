@@ -20,6 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/classManager"}
 ;(function(Manager, global) {
     /**
      * Checks if a class has already been created.
@@ -179,3 +181,4 @@
         return match;
     };
 })(Ext.ClassManager, Ext.global);
+//{/block}
