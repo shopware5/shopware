@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
 
         <service class="Shopware\Bundle\EsBackendBundle\EsBackendIndexer" id="shopware_es_backend.indexer">
             <argument id="shopware_elastic_search.client" type="service"/>

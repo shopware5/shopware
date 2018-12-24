@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <service id="shopware_elastic_search.client" class="Elasticsearch\Client">
             <factory class="Shopware\Bundle\ESIndexingBundle\ClientFactory" method="createClient"/>
             <argument>%shopware.es.client%</argument>
@@ -175,8 +177,7 @@
         </service>
 
         <service id="shopware_elastic_search.orm_backlog_subscriber"
-                 class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSubscriber"
-                 public="false">
+                 class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSubscriber">
             <argument type="service" id="service_container"/>
             <tag name="doctrine.event_subscriber"/>
         </service>

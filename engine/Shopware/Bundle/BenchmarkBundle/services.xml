@@ -14,6 +14,8 @@
     </parameters>
 
     <services>
+        <defaults public="true" />
+
         <!-- Providers & Collectors -->
         <service id="shopware.benchmark_bundle.collector" class="Shopware\Bundle\BenchmarkBundle\BenchmarkCollector">
             <argument type="tagged" tag="shopware.benchmark_provider" />

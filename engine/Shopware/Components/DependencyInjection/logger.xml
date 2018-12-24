@@ -11,6 +11,8 @@
     </parameters>
 
     <services>
+        <defaults public="true" />
+
         <!-- RotatingFileHandler handler-->
         <service id="monolog.processor.uid" class="Monolog\Processor\UidProcessor" public="false" />
 
