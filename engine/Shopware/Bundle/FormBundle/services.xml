@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
 
         <service id="shopware.form.factory" class="Symfony\Component\Form\FormFactoryInterface">
             <factory class="Shopware\Bundle\FormBundle\FormFactory" method="factory" />
