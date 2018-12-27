@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2::getAttributeRawField`
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5::getAttributeRawField`
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6::getAttributeRawField`
+* Added new privilege for Plugin Manager and Updater notifications
 
 ### Changes
 
