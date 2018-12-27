@@ -51,4 +51,12 @@ class TextMappingES6 implements TextMappingInterface
     {
         return ['type' => 'keyword'];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeRawField(): array
+    {
+        return $this->getKeywordField();
+    }
 }

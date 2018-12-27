@@ -51,4 +51,12 @@ class TextMappingES2 implements TextMappingInterface
     {
         return ['type' => 'string'];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeRawField(): array
+    {
+        return $this->getNotAnalyzedField();
+    }
 }

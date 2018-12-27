@@ -336,13 +336,13 @@ class ProductMapping implements MappingInterface
             switch ($type['type']) {
                 case 'keyword':
                     $type = $this->textMapping->getKeywordField();
-                    $type['fields']['raw'] = $this->getAttributeRawField();
+                    $type['fields']['raw'] = $this->textMapping->getAttributeRawField();
                     break;
 
                 case 'string':
                 case 'text':
                     $type = $this->textMapping->getTextField();
-                    $type['fields']['raw'] = $this->getAttributeRawField();
+                    $type['fields']['raw'] = $this->textMapping->getAttributeRawField();
                     break;
             }
 
@@ -356,20 +356,6 @@ class ProductMapping implements MappingInterface
                 ],
             ],
         ];
-    }
-
-    private function getAttributeRawField()
-    {
-        $rawField = $this->textMapping->getNotAnalyzedField();
-        try {
-            $info = $this->client->info([]);
-            if (version_compare($info['version']['number'], '6', '>=')) {
-                $rawField = $this->textMapping->getKeywordField();
-            }
-        } catch (\Exception $e) {
-        }
-
-        return $rawField;
     }
 
     /**
