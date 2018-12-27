@@ -98,6 +98,8 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         if ($this->Request()->get('file') === 'bootstrap') {
             $this->View()->assign('tinymceLang', $this->getTinyMceLang($identity), true);
         }
+
+        $this->enableBrowserCache();
     }
 
     /**
@@ -105,6 +107,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function loadAction()
     {
+        $this->enableBrowserCache();
     }
 
     public function extendsAction()
@@ -275,5 +278,14 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $replacement = ['_\1', '_\1'];
 
         return preg_replace($pattern, $replacement, $input);
+    }
+
+    private function enableBrowserCache(): void
+    {
+        if ($this->container->getParameter('shopware.template.forceCompile')) {
+            return;
+        }
+
+        $this->Response()->setHeader('Cache-Control', 'max-age=2592000, public', true);
     }
 }
