@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/index/view/menu}
+// {namespace name=backend/index/view/menu}
 
 Ext.define('Shopware.notification.SubscriptionWarning', {
 
@@ -31,7 +31,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         expired_soon_subscription_warning: 'Subscription(s) for [0]x plugin(s) expire in a few days.<br /><br /><b>Soon expired plugins:</b><br />[1]',
         expired_soon_subscription_days_warning: ' days',
         invalid_licence: 'Licence(s) of [0]x plugin(s) are invalid.<br /><br /><b>Invalid licence(s):</b><br />[1]',
-        shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet.',
+        shop_license_upgrade: 'The license upgrade for the shop hasn\'t been executed yet.',
         no_license: 'You may be a victim of counterfeiting. <br /><br /><b>No valid license found for plugins:</b><br />[1]',
         expiring_license: 'Expiring license(s)',
         expired_license: 'Expired license(s)',
@@ -98,7 +98,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
 
                 if (!Ext.isEmpty(subscriptionExpirationDate)) {
                     isSubscriptionExpired = subscriptionExpirationDate < today;
-                    daysDiffSubscription = Math.round(Math.abs((subscriptionExpirationDate.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
+                    daysDiffSubscription = Math.round(Math.abs((subscriptionExpirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
 
                     if (isSubscriptionExpired) {
                         preparedData.expiredPluginSubscriptions.push({
@@ -121,7 +121,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
 
                 if (!Ext.isEmpty(licenseExpiration)) {
                     isLicenseExpired = licenseExpiration < today;
-                    daysDiffLicense = Math.round(Math.abs((licenseExpiration.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
+                    daysDiffLicense = Math.round(Math.abs((licenseExpiration.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
 
                     if (!isLicenseExpired && daysDiffLicense > 14) {
                         continue;
@@ -146,6 +146,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         Ext.Ajax.request({
             url: '{url controller="PluginManager" action="getPluginInformation"}',
             success: function (response) {
+                /* {if {acl_is_allowed privilege=notification resource=pluginmanager}} */
                 var responseData = Ext.decode(response.responseText);
 
                 if (!responseData || Ext.isEmpty(responseData.data)) {
@@ -174,6 +175,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                 if (responseData.success === true && responseData.data) {
                     callback(responseData.data);
                 }
+                /* {/if} */
             }
         });
     },
@@ -185,7 +187,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             expiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, true),
             soonExpiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, false);
 
-        if(data.isShopUpgraded == false) {
+        if (data.isShopUpgraded == false) {
             me.displayShopNotUpgradedShopMessage();
         }
 
@@ -233,7 +235,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
     },
 
     displayWrongVersionNotice: function(plugins) {
-        var me          = this,
+        var me = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
         Shopware.Notification.createStickyGrowlMessage({
@@ -243,18 +245,17 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
     },
 
     displayNotUpgradedNotice: function(plugins) {
-        var me          = this,
+        var me = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
         Shopware.Notification.createStickyGrowlMessage({
             text: Ext.String.format(me.snippets.licence_upgrade_warning, plugins.length, pluginNames),
             width: 440
         });
-
     },
 
     displaySubscriptionNotice: function(plugins) {
-        var me          = this,
+        var me = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
         if (Ext.util.Cookies.get('hideSubscriptionNotice') !== null) {
@@ -281,7 +282,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
     },
 
     displayExpiredSoonSubscriptionNotice: function(plugins) {
-        var me          = this,
+        var me = this,
             pluginNames = me.getSoonExpiredPluginNamesMessage(plugins, '<br />');
 
         Shopware.Notification.createStickyGrowlMessage({
@@ -318,7 +319,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
     },
 
     displaySoonExpiredLicensePluginsNotice: function(plugins) {
-        var me          = this,
+        var me = this,
             pluginNames = me.getSoonExpiredPluginNamesMessage(plugins, '<br />');
 
         Shopware.Notification.createStickyGrowlMessage({
@@ -329,7 +330,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
     },
 
     displayUnknownLicensePluginsNotice: function(plugins) {
-        var me          = this,
+        var me = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
         Shopware.Notification.createStickyGrowlMessage({
@@ -345,7 +346,6 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                 );
             }
         });
-
     },
 
     /**
@@ -421,9 +421,9 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
 
     getExpiredMode: function(expiredPlugins) {
         var modes = {
-            'stop': parseInt('{config name="missingLicenseStopThreshold"}'),
-            'warning': parseInt('{config name="missingLicenseWarningThreshold"}'),
-        }, currentMode = 'normal';
+                'stop': parseInt('{config name="missingLicenseStopThreshold"}'),
+                'warning': parseInt('{config name="missingLicenseWarningThreshold"}')
+            }, currentMode = 'normal';
 
         Object.keys(modes).forEach(function (mode) {
             if (currentMode !== 'normal') {
@@ -433,7 +433,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                 if (plugin.dayDiff >= modes[mode]) {
                     currentMode = mode;
                 }
-            })
+            });
         });
 
         return currentMode;
@@ -441,8 +441,8 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
 
     openPluginManager: function() {
         Shopware.app.Application.addSubApplication({
-                name: 'Shopware.apps.PluginManager'
-            },
+            name: 'Shopware.apps.PluginManager'
+        },
             undefined,
             function() {
                 Ext.Function.defer(function () {

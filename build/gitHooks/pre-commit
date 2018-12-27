@@ -98,7 +98,7 @@ class PreCommitChecks
             }
 
             $this->writeln('Help:', 2);
-            $this->writeln('./themes/node_modules/eslint/bin/eslint.js --fix -c themes/.eslintrc.js --ignore-path themes/.eslintignore ' . implode(' ', $fileList), 3);
+            $this->writeln('./themes/node_modules/.bin/eslint --fix -c themes/.eslintrc.js --ignore-path themes/.eslintignore ' . implode(' ', $fileList), 3);
         }
     }
 
