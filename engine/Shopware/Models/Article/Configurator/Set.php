@@ -168,7 +168,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Group>
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Group>
      */
     public function getGroups()
     {
@@ -176,19 +176,19 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Group> $groups
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Group>|Group[] $groups
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */
     public function setGroups($groups)
     {
-        $this->setOneToMany($groups, \Shopware\Models\Article\Configurator\Group::class, 'groups');
+        $this->setOneToMany($groups, Group::class, 'groups');
 
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
+     * @return ArrayCollection<\Shopware\Models\Article\Article>
      */
     public function getArticles()
     {
@@ -196,7 +196,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article> $articles
+     * @param ArrayCollection<\Shopware\Models\Article\Article> $articles
      */
     public function setArticles($articles)
     {
@@ -204,7 +204,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
      */
     public function getDependencies()
     {
@@ -212,7 +212,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Dependency> $dependencies
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Dependency> $dependencies
      */
     public function setDependencies($dependencies)
     {
@@ -220,7 +220,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>
      */
     public function getOptions()
     {
@@ -228,13 +228,13 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option> $options
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Option>|Option[] $options
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */
     public function setOptions($options)
     {
-        $this->setOneToMany($options, \Shopware\Models\Article\Configurator\Option::class, 'options');
+        $this->setOneToMany($options, Option::class, 'options');
 
         return $this;
     }

@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Article as ProductAttribute;
 use Shopware\Models\Category\Category as ArticleCategory;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -173,7 +174,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Supplier
+     * @var Supplier
      *
      * @Assert\Valid
      *
@@ -197,7 +198,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @Assert\NotBlank
      * @Assert\Valid
@@ -263,7 +264,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Article
+     * @var ProductAttribute
      *
      * @Assert\Valid
      *
@@ -274,7 +275,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Configurator\Set
+     * @var Configurator\Set
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
@@ -299,7 +300,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Article\Configurator\Template\Template
+     * @var Configurator\Template\Template
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
@@ -1052,13 +1053,15 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Image[]|null $images
+     * @param Image[]|null $images
      *
      * @return Article
      */
     public function setImages($images)
     {
-        return $this->setOneToMany($images, \Shopware\Models\Article\Image::class, 'images', 'article');
+        $this->setOneToMany($images, Image::class, 'images', 'article');
+
+        return $this;
     }
 
     /**
@@ -1070,13 +1073,15 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Download[]|null $downloads
+     * @param Download[]|null $downloads
      *
      * @return Article
      */
     public function setDownloads($downloads)
     {
-        return $this->setOneToMany($downloads, \Shopware\Models\Article\Download::class, 'downloads', 'article');
+        $this->setOneToMany($downloads, Download::class, 'downloads', 'article');
+
+        return $this;
     }
 
     /**
@@ -1088,20 +1093,22 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Link[]|null $links
+     * @param Link[]|null $links
      *
      * @return Article
      */
     public function setLinks($links)
     {
-        return $this->setOneToMany($links, \Shopware\Models\Article\Link::class, 'links', 'article');
+        $this->setOneToMany($links, Link::class, 'links', 'article');
+
+        return $this;
     }
 
     /**
      * OWNING SIDE
      * of the association between articles and supplier
      *
-     * @return \Shopware\Models\Article\Supplier
+     * @return Supplier
      */
     public function getSupplier()
     {
@@ -1109,13 +1116,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Supplier|array|null $supplier
+     * @param Supplier|array|null $supplier
      *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setSupplier($supplier)
     {
-        return $this->setManyToOne($supplier, \Shopware\Models\Article\Supplier::class, 'supplier');
+        return $this->setManyToOne($supplier, Supplier::class, 'supplier');
     }
 
     /**
@@ -1127,17 +1134,19 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail[]|null $details
+     * @param Detail[]|null $details
      *
      * @return Article
      */
     public function setDetails($details)
     {
-        return $this->setOneToMany($details, \Shopware\Models\Article\Detail::class, 'details', 'article');
+        $this->setOneToMany($details, Detail::class, 'details', 'article');
+
+        return $this;
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getMainDetail()
     {
@@ -1145,18 +1154,18 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail[]|null $mainDetail
+     * @param Detail|null $mainDetail
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Article
      */
     public function setMainDetail($mainDetail)
     {
-        $return = $this->setOneToOne($mainDetail, \Shopware\Models\Article\Detail::class, 'mainDetail', 'article');
-        if ($this->mainDetail instanceof \Shopware\Models\Article\Detail) {
+        $this->setOneToOne($mainDetail, Detail::class, 'mainDetail', 'article');
+        if ($this->mainDetail instanceof Detail) {
             $this->mainDetail->setKind(1);
         }
 
-        return $return;
+        return $this;
     }
 
     /**
@@ -1188,17 +1197,19 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Vote[]|null $votes
+     * @param Vote[]|null $votes
      *
      * @return Article
      */
     public function setVotes($votes)
     {
-        return $this->setOneToMany($votes, \Shopware\Models\Article\Vote::class, 'votes', 'article');
+        $this->setOneToMany($votes, Vote::class, 'votes', 'article');
+
+        return $this;
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Article
+     * @return ProductAttribute
      */
     public function getAttribute()
     {
@@ -1206,13 +1217,15 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Article|array|null $attribute
+     * @param ProductAttribute|array|null $attribute
      *
      * @return Article
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Article', 'attribute', 'article');
+        $this->setOneToOne($attribute, ProductAttribute::class, 'attribute', 'article');
+
+        return $this;
     }
 
     /**
@@ -1276,7 +1289,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Set
+     * @return Configurator\Set
      */
     public function getConfiguratorSet()
     {
@@ -1284,13 +1297,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Set $configuratorSet
+     * @param Configurator\Set $configuratorSet
      *
      * @return Article
      */
     public function setConfiguratorSet($configuratorSet)
     {
-        $this->setManyToOne($configuratorSet, \Shopware\Models\Article\Configurator\Set::class, 'configuratorSet');
+        $this->setManyToOne($configuratorSet, Configurator\Set::class, 'configuratorSet');
 
         return $this;
     }
@@ -1316,7 +1329,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Template\Template
+     * @return Configurator\Template\Template
      */
     public function getConfiguratorTemplate()
     {
@@ -1324,13 +1337,18 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Template\Template $configuratorTemplate
+     * @param Configurator\Template\Template $configuratorTemplate
      *
      * @return Article
      */
     public function setConfiguratorTemplate($configuratorTemplate)
     {
-        $this->setOneToOne($configuratorTemplate, \Shopware\Models\Article\Configurator\Template\Template::class, 'configuratorTemplate', 'article');
+        $this->setOneToOne(
+            $configuratorTemplate,
+            Configurator\Template\Template::class,
+            'configuratorTemplate',
+            'article'
+        );
 
         return $this;
     }
@@ -1344,7 +1362,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\SeoCategory[]|null $seoCategories
+     * @param SeoCategory[]|null $seoCategories
      *
      * @return \Shopware\Components\Model\ModelEntity
      */
@@ -1352,7 +1370,7 @@ class Article extends ModelEntity
     {
         return $this->setOneToMany(
             $seoCategories,
-            \Shopware\Models\Article\SeoCategory::class,
+            SeoCategory::class,
             'seoCategories',
             'article'
         );

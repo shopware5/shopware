@@ -25,6 +25,8 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\Collection;
+use Exception;
+use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
@@ -32,6 +34,7 @@ use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
+use Shopware_Components_Acl as AclComponent;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
@@ -72,7 +75,7 @@ abstract class Resource
     protected $resultMode = self::HYDRATE_ARRAY;
 
     /**
-     * @var \Shopware_Components_Acl
+     * @var AclComponent
      */
     protected $acl;
 
@@ -121,6 +124,7 @@ abstract class Resource
 
         $calledClass = static::class;
         $calledClass = explode('\\', $calledClass);
+        /** @var \Zend_Acl_Resource_Interface|string $resource */
         $resource = strtolower(end($calledClass));
 
         if (!$this->getAcl()->has($resource)) {
@@ -157,11 +161,11 @@ abstract class Resource
     }
 
     /**
-     * @param \Shopware_Components_Acl $acl
+     * @param AclComponent $acl
      *
-     * @return \Shopware\Components\Api\Resource\Resource
+     * @return resource
      */
-    public function setAcl(\Shopware_Components_Acl $acl)
+    public function setAcl(AclComponent $acl)
     {
         $this->acl = $acl;
 
@@ -169,7 +173,7 @@ abstract class Resource
     }
 
     /**
-     * @return \Shopware_Components_Acl
+     * @return AclComponent
      */
     public function getAcl()
     {
@@ -179,7 +183,7 @@ abstract class Resource
     /**
      * @param string|\Zend_Acl_Role_Interface $role
      *
-     * @return \Shopware\Components\Api\Resource\Resource
+     * @return resource
      */
     public function setRole($role)
     {
@@ -231,7 +235,7 @@ abstract class Resource
     /**
      * @param object $entity
      *
-     * @throws \Shopware\Components\Api\Exception\OrmException
+     * @throws ApiException\OrmException
      */
     public function flush($entity = null)
     {
@@ -241,7 +245,7 @@ abstract class Resource
                 $this->getManager()->flush($entity);
                 $this->getManager()->getConnection()->commit();
                 $this->getManager()->clear();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->getManager()->getConnection()->rollBack();
                 throw new ApiException\OrmException($e->getMessage(), 0, $e);
             }
@@ -277,7 +281,7 @@ abstract class Resource
                         $results[$key]['data']
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
@@ -337,7 +341,7 @@ abstract class Resource
                         $results[$key]['data']
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
@@ -423,7 +427,7 @@ abstract class Resource
      * @param string           $property
      * @param mixed            $value
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return mixed|null
      */
@@ -433,7 +437,7 @@ abstract class Resource
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($entity, $method)) {
-                throw new \Exception(
+                throw new RuntimeException(
                     sprintf('Method %s not found on entity %s', $method, get_class($entity))
                 );
                 continue;
@@ -475,7 +479,7 @@ abstract class Resource
      * @param string $entity
      * @param array  $conditions
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return null|ModelEntity
      */
@@ -483,7 +487,7 @@ abstract class Resource
     {
         $repo = $this->getManager()->getRepository($entity);
         if (!$repo instanceof ModelRepository) {
-            throw new \Exception(sprintf('Passed entity has no configured repository: %s', $entity));
+            throw new RuntimeException(sprintf('Passed entity has no configured repository: %s', $entity));
         }
 
         foreach ($conditions as $condition) {
@@ -514,9 +518,9 @@ abstract class Resource
      * @param string     $entityType
      * @param array      $conditions
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
-     * @return null|object
+     * @return ModelEntity
      */
     protected function getOneToManySubElement(Collection $collection, $data, $entityType, $conditions = ['id'])
     {
@@ -559,7 +563,7 @@ abstract class Resource
      * @param string     $entityType
      * @param array      $conditions
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return null|object
      */
@@ -600,8 +604,8 @@ abstract class Resource
     protected function resetEntityManager()
     {
         $this->getContainer()->reset('models')
-                                  ->reset('dbal_connection')
-                                  ->load('models');
+            ->reset('dbal_connection')
+            ->load('models');
 
         $this->getContainer()->load('dbal_connection');
 

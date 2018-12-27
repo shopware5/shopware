@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\ORMException;
+use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Resource\Category as CategoryResource;
@@ -175,7 +176,7 @@ class Article extends Resource implements BatchInterface
             ->where('article.id = ?1')
             ->setParameter(1, $id);
 
-        /* @var array $product */
+        /** @var ProductModel|array $product */
         $product = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$product) {
@@ -208,9 +209,8 @@ class Article extends Resource implements BatchInterface
             }
 
             $query = $this->getManager()->createQuery('SELECT shop FROM Shopware\Models\Shop\Shop as shop');
-            $shops = $query->getArrayResult();
 
-            foreach ($shops as $shop) {
+            foreach ($query->getArrayResult() as $shop) {
                 $translation = $this->translationComponent->read($shop['id'], 'article', $id);
                 if (!empty($translation)) {
                     $translation['shopId'] = $shop['id'];
@@ -469,7 +469,7 @@ class Article extends Resource implements BatchInterface
      */
     public function deleteByNumber($number)
     {
-        throw new \Exception('Deleting products by number isn\'t possible, yet.');
+        throw new RuntimeException('Deleting products by number isn\'t possible, yet.');
     }
 
     /**
@@ -594,10 +594,8 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getArticleImageMappingsQuery($article->getId());
 
-        $mappings = $builder->getQuery()->getResult();
-
         /** @var Image\Mapping $mapping */
-        foreach ($mappings as $mapping) {
+        foreach ($builder->getQuery()->getResult() as $mapping) {
             $builder = $this->getArticleVariantQuery($article->getId());
 
             /** @var Image\Rule $rule */
@@ -608,10 +606,8 @@ class Article extends Resource implements BatchInterface
                     ->setParameter($alias, $option->getId());
             }
 
-            $variants = $builder->getQuery()->getResult();
-
             /** @var Detail $variant */
-            foreach ($variants as $variant) {
+            foreach ($builder->getQuery()->getResult() as $variant) {
                 $exist = $this->getCollectionElementByProperty(
                     $variant->getImages(),
                     'parent',
@@ -687,15 +683,16 @@ class Article extends Resource implements BatchInterface
     public function writeTranslations($articleId, $translations)
     {
         $whitelist = $this->getAttributeProperties();
-        $whitelist = array_merge($whitelist, [
+        array_push(
+            $whitelist,
             'metaTitle',
             'name',
             'description',
             'descriptionLong',
             'shippingTime',
             'keywords',
-            'packUnit',
-        ]);
+            'packUnit'
+        );
 
         foreach ($translations as $translation) {
             $shop = $this->getManager()->find(Shop::class, $translation['shopId']);
@@ -976,9 +973,8 @@ class Article extends Resource implements BatchInterface
     protected function removeArticleDetails($article)
     {
         $sql = 'SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1';
-        $details = Shopware()->Db()->fetchAll($sql, [$article->getId()]);
 
-        foreach ($details as $detail) {
+        foreach (Shopware()->Db()->fetchAll($sql, [$article->getId()]) as $detail) {
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
@@ -2392,6 +2388,7 @@ class Article extends Resource implements BatchInterface
         $downloads = $this->checkDataReplacement($product->getDownloads(), $data, 'downloads', true);
 
         foreach ($data['downloads'] as &$downloadData) {
+            /** @var Download $download */
             $download = $this->getOneToManySubElement(
                 $downloads,
                 $downloadData,
@@ -2540,22 +2537,23 @@ class Article extends Resource implements BatchInterface
         $metaData = $this->getManager()->getClassMetadata(ProductAttribute::class);
         $properties = [];
 
+        /** @var \ReflectionProperty $property */
         foreach ($metaData->getReflectionProperties() as $property) {
-            if ($metaData->hasAssociation($property->getName())) {
+            $propertyName = $property->getName();
+            if ($metaData->hasAssociation($propertyName)) {
                 continue;
             }
-            $propertyName = $property->getName();
             $properties[$propertyName] = $propertyName;
         }
 
-        foreach ($metaData->getAssociationMappings() as $property => $mapping) {
-            $name = $metaData->getSingleAssociationJoinColumnName($property);
+        foreach ($metaData->getAssociationMappings() as $propertyName => $mapping) {
+            $name = $metaData->getSingleAssociationJoinColumnName($propertyName);
             $field = $metaData->getFieldForColumn($name);
             unset($properties[$field]);
         }
 
-        foreach ($metaData->getIdentifierFieldNames() as $property) {
-            unset($properties[$property]);
+        foreach ($metaData->getIdentifierFieldNames() as $identifierFieldName) {
+            unset($properties[$identifierFieldName]);
         }
 
         $fields = [];

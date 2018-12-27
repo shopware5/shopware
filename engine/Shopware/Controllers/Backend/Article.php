@@ -1300,6 +1300,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         // Check if the main detail variant was deleted
         if ($product->getMainDetail() === null) {
+            /** @var Detail $newMainDetail */
             $newMainDetail = $this->getArticleDetailRepository()->findOneBy(['articleId' => $productId]);
             $product->setMainDetail($newMainDetail);
         }

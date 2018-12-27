@@ -43,9 +43,8 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @param Connection $connection
      */
-    public function __construct(
-        Connection $connection
-    ) {
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
     }
 
