@@ -238,5 +238,10 @@
                  class="Shopware\Commands\WarmUpHttpCacheCommand">
             <tag name="console.command" command="sw:warm:http:cache"/>
         </service>
+
+        <service id="shopware.commands.make_migration_command"
+                 class="Shopware\Commands\CreateMigrationCommand">
+            <tag name="console.command" command="sw:make:migration"/>
+        </service>
     </services>
 </container>

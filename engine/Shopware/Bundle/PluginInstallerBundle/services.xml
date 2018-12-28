@@ -40,6 +40,7 @@
                 <argument type="string" key="ProjectPlugins">%shopware.plugin_directories.ProjectPlugins%</argument>
             </argument>
             <argument type="service" id="shopware.release" />
+            <argument type="service" id="pluginlogger" />
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">

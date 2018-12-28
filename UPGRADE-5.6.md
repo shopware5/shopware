@@ -13,6 +13,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6::getAttributeRawField`
 * Added new privilege for Plugin Manager and Updater notifications
 * Added product review widget
+* Added plugin migrations
+    * Migrations are loaded from folder `SwagTestPlugin/Resources/migrations`
+    * The migration file can be generated using `./bin/console sw:make:migration SwagTestPlugin added-something-new`
+
 
 ### Changes
 
