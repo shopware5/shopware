@@ -1457,10 +1457,12 @@ class sAdmin
             $addScopeSql = $this->db->quoteInto('AND subshopID = ?', $this->subshopId);
         }
 
-        return $this->db->fetchOne(
+        $result = $this->db->fetchOne(
             "SELECT id FROM s_user WHERE email = ? AND accountmode != 1 $addScopeSql",
             [$email]
-        ) ?: null;
+        );
+
+        return $result ? (int) $result : null;
     }
 
     /**

@@ -157,7 +157,7 @@ class PaymentInstance extends ModelEntity
     protected $amount;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
@@ -252,7 +252,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -260,7 +260,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {

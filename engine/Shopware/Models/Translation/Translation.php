@@ -43,10 +43,12 @@ class Translation extends ModelEntity
 {
     /**
      * @var Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id")
      */
     protected $shop;
+
     /**
      * @var int
      *

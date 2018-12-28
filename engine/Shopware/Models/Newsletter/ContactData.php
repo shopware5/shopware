@@ -103,21 +103,21 @@ class ContactData extends ModelEntity
     protected $city;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     protected $added;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=false)
      */
     protected $doubleOptinConfirmed;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="deleted", type="datetime", nullable=true)
      */
@@ -135,7 +135,7 @@ class ContactData extends ModelEntity
     private $id;
 
     /**
-     * @param \DateTime $added
+     * @param \DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -143,7 +143,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -167,7 +167,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param \DateTime $deleted
+     * @param \DateTimeInterface $deleted
      */
     public function setDeleted($deleted)
     {
@@ -175,7 +175,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDeleted()
     {
@@ -319,7 +319,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDoubleOptinConfirmed()
     {
@@ -327,7 +327,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param \DateTime $doubleOptinConfirmed
+     * @param \DateTimeInterface $doubleOptinConfirmed
      */
     public function setDoubleOptinConfirmed($doubleOptinConfirmed)
     {

@@ -137,7 +137,7 @@ class Blog extends ModelEntity
     private $views = null;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="display_date", type="datetime", nullable=false)
      */
@@ -333,7 +333,7 @@ class Blog extends ModelEntity
     /**
      * Get DisplayDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDisplayDate()
     {
@@ -343,11 +343,11 @@ class Blog extends ModelEntity
     /**
      * Set DisplayDate
      *
-     * @param \DateTime|string $displayDate
+     * @param \DateTimeInterface|string $displayDate
      */
     public function setDisplayDate($displayDate)
     {
-        if (!$displayDate instanceof \DateTime && strlen($displayDate) > 0) {
+        if (!$displayDate instanceof \DateTimeInterface && strlen($displayDate) > 0) {
             $displayDate = new \DateTime($displayDate);
         }
         $this->displayDate = $displayDate;

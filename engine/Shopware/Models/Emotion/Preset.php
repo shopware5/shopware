@@ -127,7 +127,7 @@ class Preset extends ModelEntity
     /**
      * Contains the asset data for imports
      *
-     * @var string
+     * @var bool
      *
      * @ORM\Column(name="assets_imported", type="boolean", nullable=false)
      */
@@ -136,7 +136,7 @@ class Preset extends ModelEntity
     /**
      * Contains the info if preset is hidden for internal im/export use.
      *
-     * @var string
+     * @var bool
      *
      * @ORM\Column(name="hidden", type="boolean", nullable=false)
      */

@@ -275,11 +275,11 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param \DateTime|null $date
+     * @param \DateTimeInterface|null $date
      *
      * @return null|string
      */
-    private function formatDate(\DateTime $date = null)
+    private function formatDate(\DateTimeInterface $date = null)
     {
         return !$date ? null : $date->format('Y-m-d');
     }

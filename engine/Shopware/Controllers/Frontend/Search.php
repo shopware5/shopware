@@ -120,7 +120,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      *
      * @param string $search
      *
-     * @return string
+     * @return string|false
      */
     protected function searchFuzzyCheck($search)
     {
@@ -199,7 +199,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
     /**
      * @param ProductSearchResult $result
      *
-     * @return array
+     * @return array|null
      */
     private function convertProducts(ProductSearchResult $result)
     {

@@ -252,7 +252,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
      *
-     * @return LocaleStruct Information about the current locale
+     * @return LocaleStruct|null Information about the current locale
      */
     private function getCurrentLocale()
     {

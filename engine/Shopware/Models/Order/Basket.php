@@ -64,9 +64,9 @@ class Basket extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\OrderBasket
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -129,11 +129,11 @@ class Basket extends ModelEntity
     private $netPrice = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
-    private $date = null;
+    private $date;
 
     /**
      * @var int
@@ -396,7 +396,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -404,7 +404,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {

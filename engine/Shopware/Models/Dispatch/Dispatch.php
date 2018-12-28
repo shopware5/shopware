@@ -124,7 +124,7 @@ class Dispatch extends ModelEntity
     /**
      * Active flag
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -1072,7 +1072,7 @@ class Dispatch extends ModelEntity
     /**
      * Returns an ArrayCollection of payment objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
      */
     public function getPayments()
     {
@@ -1082,7 +1082,7 @@ class Dispatch extends ModelEntity
     /**
      * Takes an ArrayCollection of payments
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Dispatch\Holiday> $payments
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment> $payments
      *
      * @return \Shopware\Models\Dispatch\Dispatch
      */

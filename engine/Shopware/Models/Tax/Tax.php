@@ -59,6 +59,7 @@ class Tax extends ModelEntity
 
     /**
      * @var float
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="tax", type="decimal", nullable=false)
      */
@@ -83,9 +84,6 @@ class Tax extends ModelEntity
      */
     private $rules;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->rules = new ArrayCollection();

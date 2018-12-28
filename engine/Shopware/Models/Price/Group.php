@@ -37,7 +37,7 @@ use Shopware\Components\Model\ModelEntity;
 class Group extends ModelEntity
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Price\Discount>
+     * @var \Doctrine\Common\Collections\ArrayCollection<Discount>
      *
      * @ORM\OneToMany(targetEntity="Discount", mappedBy="group", orphanRemoval=true, cascade={"all"})
      */
@@ -107,7 +107,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Price\Discount[]|null $discounts
+     * @param null|\Doctrine\Common\Collections\ArrayCollection<Discount> $discounts
      *
      * @return Group
      */

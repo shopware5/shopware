@@ -114,7 +114,7 @@ class PaymentData extends ModelEntity
     protected $accountHolder;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
@@ -177,7 +177,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -185,7 +185,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -193,7 +193,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @param mixed $customer
+     * @param \Shopware\Models\Customer\Customer $customer
      */
     public function setCustomer($customer)
     {
@@ -201,7 +201,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Customer\Customer
      */
     public function getCustomer()
     {
@@ -225,7 +225,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @param mixed $paymentMean
+     * @param \Shopware\Models\Payment\Payment $paymentMean
      */
     public function setPaymentMean($paymentMean)
     {
@@ -233,7 +233,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Payment\Payment
      */
     public function getPaymentMean()
     {

@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Article as ProductAttribute;
 use Shopware\Models\Category\Category as ArticleCategory;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -51,6 +52,8 @@ class Article extends ModelEntity
      * @Assert\NotBlank
      * @Assert\Valid
      *
+     * @var \Shopware\Models\Tax\Tax
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Tax\Tax")
      * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
      */
@@ -72,7 +75,7 @@ class Article extends ModelEntity
     protected $categories;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Article\SeoCategory>
+     * @var ArrayCollection<\Shopware\Models\Category\Category>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories_ro",
@@ -171,7 +174,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Supplier
+     * @var Supplier
      *
      * @Assert\Valid
      *
@@ -195,7 +198,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @Assert\NotBlank
      * @Assert\Valid
@@ -261,7 +264,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Article
+     * @var ProductAttribute
      *
      * @Assert\Valid
      *
@@ -272,7 +275,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Configurator\Set
+     * @var Configurator\Set
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
@@ -297,7 +300,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Article\Configurator\Template\Template
+     * @var Configurator\Template\Template
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
@@ -326,42 +329,42 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="main_detail_id", type="integer", nullable=true)
      */
-    private $mainDetailId = null;
+    private $mainDetailId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="supplierID", type="integer", nullable=true)
      */
-    private $supplierId = null;
+    private $supplierId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="taxID", type="integer", nullable=true)
      */
-    private $taxId = null;
+    private $taxId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
      */
-    private $priceGroupId = null;
+    private $priceGroupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="filtergroupID", type="integer", nullable=true)
      */
-    private $filterGroupId = null;
+    private $filterGroupId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
-    private $configuratorSetId = null;
+    private $configuratorSetId;
 
     /**
      * @var string
@@ -377,26 +380,26 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description_long", type="text", nullable=true)
      */
-    private $descriptionLong = null;
+    private $descriptionLong;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @Assert\DateTime()
      *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
-    private $added = null;
+    private $added;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -410,7 +413,7 @@ class Article extends ModelEntity
     private $pseudoSales = 0;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="topseller", type="boolean", nullable=false)
      */
@@ -431,21 +434,21 @@ class Article extends ModelEntity
     private $metaTitle = null;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="changetime", type="datetime", nullable=false)
      */
-    private $changed = 'now';
+    private $changed;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="pricegroupActive", type="boolean", nullable=false)
      */
     private $priceGroupActive = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @deprecated Since version 5.4, to be removed in 6.0
      * @ORM\Column(name="laststock", type="boolean", nullable=false)
@@ -460,7 +463,7 @@ class Article extends ModelEntity
     private $crossBundleLook = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="notification", type="boolean", nullable=false)
      */
@@ -481,22 +484,19 @@ class Article extends ModelEntity
     private $mode = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="available_from", type="datetime", nullable=true)
      */
-    private $availableFrom = null;
+    private $availableFrom;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="available_to", type="datetime", nullable=true)
      */
-    private $availableTo = null;
+    private $availableTo;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -601,13 +601,13 @@ class Article extends ModelEntity
     /**
      * Set date
      *
-     * @param \DateTime|string $added
+     * @param \DateTimeInterface|string $added
      *
      * @return Article
      */
     public function setAdded($added = 'now')
     {
-        if (!($added instanceof \DateTime)) {
+        if (!($added instanceof \DateTimeInterface)) {
             $this->added = new \DateTime($added);
         } else {
             $this->added = $added;
@@ -619,7 +619,7 @@ class Article extends ModelEntity
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -677,7 +677,7 @@ class Article extends ModelEntity
     /**
      * Set highlight
      *
-     * @param int $highlight
+     * @param bool $highlight
      *
      * @return Article
      */
@@ -691,7 +691,7 @@ class Article extends ModelEntity
     /**
      * Get highlight
      *
-     * @return int
+     * @return bool
      */
     public function getHighlight()
     {
@@ -749,13 +749,13 @@ class Article extends ModelEntity
     /**
      * Set changed
      *
-     * @param \DateTime|string $changed
+     * @param \DateTimeInterface|string $changed
      *
      * @return Article
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTime) {
+        if (!$changed instanceof \DateTimeInterface) {
             $this->changed = new \DateTime($changed);
         } else {
             $this->changed = $changed;
@@ -767,7 +767,7 @@ class Article extends ModelEntity
     /**
      * Get changed
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {
@@ -777,7 +777,7 @@ class Article extends ModelEntity
     /**
      * Set priceGroupActive
      *
-     * @param int $priceGroupActive
+     * @param bool $priceGroupActive
      *
      * @return Article
      */
@@ -791,7 +791,7 @@ class Article extends ModelEntity
     /**
      * Get priceGroupActive
      *
-     * @return int
+     * @return bool
      */
     public function getPriceGroupActive()
     {
@@ -801,7 +801,7 @@ class Article extends ModelEntity
     /**
      * Set lastStock
      *
-     * @param int $lastStock
+     * @param bool $lastStock
      *
      * @return Article
      */
@@ -815,7 +815,7 @@ class Article extends ModelEntity
     /**
      * Get lastStock
      *
-     * @return int
+     * @return bool
      */
     public function getLastStock()
     {
@@ -825,7 +825,7 @@ class Article extends ModelEntity
     /**
      * Set notification
      *
-     * @param int $notification
+     * @param bool $notification
      *
      * @return Article
      */
@@ -839,7 +839,7 @@ class Article extends ModelEntity
     /**
      * Get notification
      *
-     * @return int
+     * @return bool
      */
     public function getNotification()
     {
@@ -1053,13 +1053,15 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Image[]|null $images
+     * @param Image[]|null $images
      *
      * @return Article
      */
     public function setImages($images)
     {
-        return $this->setOneToMany($images, \Shopware\Models\Article\Image::class, 'images', 'article');
+        $this->setOneToMany($images, Image::class, 'images', 'article');
+
+        return $this;
     }
 
     /**
@@ -1071,13 +1073,15 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Download[]|null $downloads
+     * @param Download[]|null $downloads
      *
      * @return Article
      */
     public function setDownloads($downloads)
     {
-        return $this->setOneToMany($downloads, \Shopware\Models\Article\Download::class, 'downloads', 'article');
+        $this->setOneToMany($downloads, Download::class, 'downloads', 'article');
+
+        return $this;
     }
 
     /**
@@ -1089,20 +1093,22 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Link[]|null $links
+     * @param Link[]|null $links
      *
      * @return Article
      */
     public function setLinks($links)
     {
-        return $this->setOneToMany($links, \Shopware\Models\Article\Link::class, 'links', 'article');
+        $this->setOneToMany($links, Link::class, 'links', 'article');
+
+        return $this;
     }
 
     /**
      * OWNING SIDE
      * of the association between articles and supplier
      *
-     * @return \Shopware\Models\Article\Supplier
+     * @return Supplier
      */
     public function getSupplier()
     {
@@ -1110,13 +1116,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Supplier|array|null $supplier
+     * @param Supplier|array|null $supplier
      *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setSupplier($supplier)
     {
-        return $this->setManyToOne($supplier, \Shopware\Models\Article\Supplier::class, 'supplier');
+        return $this->setManyToOne($supplier, Supplier::class, 'supplier');
     }
 
     /**
@@ -1128,17 +1134,19 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail[]|null $details
+     * @param Detail[]|null $details
      *
      * @return Article
      */
     public function setDetails($details)
     {
-        return $this->setOneToMany($details, \Shopware\Models\Article\Detail::class, 'details', 'article');
+        $this->setOneToMany($details, Detail::class, 'details', 'article');
+
+        return $this;
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getMainDetail()
     {
@@ -1146,18 +1154,18 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail[]|null $mainDetail
+     * @param Detail|null $mainDetail
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Article
      */
     public function setMainDetail($mainDetail)
     {
-        $return = $this->setOneToOne($mainDetail, \Shopware\Models\Article\Detail::class, 'mainDetail', 'article');
-        if ($this->mainDetail instanceof \Shopware\Models\Article\Detail) {
+        $this->setOneToOne($mainDetail, Detail::class, 'mainDetail', 'article');
+        if ($this->mainDetail instanceof Detail) {
             $this->mainDetail->setKind(1);
         }
 
-        return $return;
+        return $this;
     }
 
     /**
@@ -1189,17 +1197,19 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Vote[]|null $votes
+     * @param Vote[]|null $votes
      *
      * @return Article
      */
     public function setVotes($votes)
     {
-        return $this->setOneToMany($votes, \Shopware\Models\Article\Vote::class, 'votes', 'article');
+        $this->setOneToMany($votes, Vote::class, 'votes', 'article');
+
+        return $this;
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Article
+     * @return ProductAttribute
      */
     public function getAttribute()
     {
@@ -1207,13 +1217,15 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Article|array|null $attribute
+     * @param ProductAttribute|array|null $attribute
      *
      * @return Article
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Article', 'attribute', 'article');
+        $this->setOneToOne($attribute, ProductAttribute::class, 'attribute', 'article');
+
+        return $this;
     }
 
     /**
@@ -1237,7 +1249,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAvailableFrom()
     {
@@ -1245,7 +1257,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTime $availableFrom
+     * @param \DateTimeInterface $availableFrom
      *
      * @return Article
      */
@@ -1257,7 +1269,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAvailableTo()
     {
@@ -1265,7 +1277,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTime $availableTo
+     * @param \DateTimeInterface $availableTo
      *
      * @return Article
      */
@@ -1277,7 +1289,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Set
+     * @return Configurator\Set
      */
     public function getConfiguratorSet()
     {
@@ -1285,13 +1297,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Set $configuratorSet
+     * @param Configurator\Set $configuratorSet
      *
      * @return Article
      */
     public function setConfiguratorSet($configuratorSet)
     {
-        $this->setManyToOne($configuratorSet, \Shopware\Models\Article\Configurator\Set::class, 'configuratorSet');
+        $this->setManyToOne($configuratorSet, Configurator\Set::class, 'configuratorSet');
 
         return $this;
     }
@@ -1317,7 +1329,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Template\Template
+     * @return Configurator\Template\Template
      */
     public function getConfiguratorTemplate()
     {
@@ -1325,13 +1337,18 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Template\Template $configuratorTemplate
+     * @param Configurator\Template\Template $configuratorTemplate
      *
      * @return Article
      */
     public function setConfiguratorTemplate($configuratorTemplate)
     {
-        $this->setOneToOne($configuratorTemplate, \Shopware\Models\Article\Configurator\Template\Template::class, 'configuratorTemplate', 'article');
+        $this->setOneToOne(
+            $configuratorTemplate,
+            Configurator\Template\Template::class,
+            'configuratorTemplate',
+            'article'
+        );
 
         return $this;
     }
@@ -1345,7 +1362,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\SeoCategory[]|null $seoCategories
+     * @param SeoCategory[]|null $seoCategories
      *
      * @return \Shopware\Components\Model\ModelEntity
      */
@@ -1353,7 +1370,7 @@ class Article extends ModelEntity
     {
         return $this->setOneToMany(
             $seoCategories,
-            \Shopware\Models\Article\SeoCategory::class,
+            SeoCategory::class,
             'seoCategories',
             'article'
         );

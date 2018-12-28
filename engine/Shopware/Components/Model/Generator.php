@@ -253,7 +253,7 @@ class %className% extends ModelEntity
     /**
      * @param string $tableName
      *
-     * @return int
+     * @return string
      */
     public function getSourceCodeForTable($tableName)
     {
@@ -311,7 +311,7 @@ class %className% extends ModelEntity
      *
      * @throws \Exception
      *
-     * @return int
+     * @return bool
      */
     public function createModelFile($table, $sourceCode)
     {
@@ -439,7 +439,7 @@ class %className% extends ModelEntity
      *
      * @param \Doctrine\DBAL\Schema\Table $table
      *
-     * @return int
+     * @return string
      */
     protected function generateModel($table)
     {
@@ -656,7 +656,7 @@ class %className% extends ModelEntity
      * @param \Doctrine\DBAL\Schema\Table  $table
      * @param \Doctrine\DBAL\Schema\Column $column
      *
-     * @return bool|\Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @return null|\Doctrine\DBAL\Schema\ForeignKeyConstraint
      */
     protected function getColumnForeignKey($table, $column)
     {

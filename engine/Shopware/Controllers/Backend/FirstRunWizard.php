@@ -538,7 +538,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @throws Exception
      *
-     * @return LocaleStruct Information about the current locale
+     * @return LocaleStruct|null Information about the current locale
      */
     private function getCurrentLocale()
     {
@@ -557,7 +557,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
                     'message' => $e->getMessage(),
                 ]);
 
-                return;
+                return null;
             }
 
             foreach ($serverLocales as $serverLocale) {
@@ -580,7 +580,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @throws Exception
      *
-     * @return string[] Information about the current user's shop domains
+     * @return string[]|null Information about the current user's shop domains
      */
     private function getDomains(AccessTokenStruct $token)
     {
@@ -595,7 +595,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
                 'message' => $e->getMessage(),
             ]);
 
-            return;
+            return null;
         }
 
         $shopsDomains = array_map(function ($shopData) {

@@ -177,7 +177,7 @@ class Template extends ModelEntity
     private $height;
 
     /**
-     * @var float
+     * @var string
      *
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
@@ -199,6 +199,7 @@ class Template extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="minpurchase", type="integer", nullable=true)
      */
     private $minPurchase = null;
@@ -229,35 +230,35 @@ class Template extends ModelEntity
      *
      * @ORM\Column(name="referenceunit", type="decimal", nullable=true)
      */
-    private $referenceUnit = null;
+    private $referenceUnit;
 
     /**
      * @var string
      *
      * @ORM\Column(name="packunit", type="text", nullable=true)
      */
-    private $packUnit = null;
+    private $packUnit;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
      */
     private $shippingFree = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
-    private $releaseDate = null;
+    private $releaseDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="shippingtime", type="string", length=11, nullable=true)
      */
-    private $shippingTime = null;
+    private $shippingTime;
 
     /**
      * Class constructor. Initials the array collections.
@@ -592,7 +593,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getEan()
     {
@@ -600,7 +601,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param float $ean
+     * @param string $ean
      */
     public function setEan($ean)
     {
@@ -658,7 +659,7 @@ class Template extends ModelEntity
     /**
      * Set shippingFree
      *
-     * @param int $shippingFree
+     * @param bool $shippingFree
      *
      * @return \Shopware\Models\Article\Configurator\Template\Template
      */
@@ -672,7 +673,7 @@ class Template extends ModelEntity
     /**
      * Get shippingFree
      *
-     * @return int
+     * @return bool
      */
     public function getShippingFree()
     {
@@ -682,13 +683,13 @@ class Template extends ModelEntity
     /**
      * Set releaseDate
      *
-     * @param \DateTime|string|null $releaseDate
+     * @param \DateTimeInterface|string|null $releaseDate
      *
      * @return \Shopware\Models\Article\Configurator\Template\Template
      */
     public function setReleaseDate($releaseDate = null)
     {
-        if ($releaseDate !== null && !($releaseDate instanceof \DateTime)) {
+        if ($releaseDate !== null && !($releaseDate instanceof \DateTimeInterface)) {
             $this->releaseDate = new \DateTime($releaseDate);
         } else {
             $this->releaseDate = $releaseDate;
@@ -700,7 +701,7 @@ class Template extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getReleaseDate()
     {

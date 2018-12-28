@@ -49,7 +49,7 @@ class XmlConfigDefinitionReader
     /**
      * @param \DOMDocument $xml
      *
-     * @return array
+     * @return array|void
      */
     private function parseForm(\DOMDocument $xml)
     {

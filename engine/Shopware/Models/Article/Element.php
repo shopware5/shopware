@@ -108,7 +108,7 @@ class Element extends ModelEntity
     private $variantable = false;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -267,7 +267,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPosition()
     {
@@ -275,7 +275,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $position
+     * @param int $position
      */
     public function setPosition($position)
     {

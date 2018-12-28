@@ -105,7 +105,7 @@ class Price extends LazyFetchModelEntity
     private $from = 1;
 
     /**
-     * @var int
+     * @var int|string
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
@@ -191,7 +191,10 @@ class Price extends LazyFetchModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
+        /** @var \Shopware\Models\Customer\Group $return */
+        $return = $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
+
+        return $return;
     }
 
     /**
@@ -221,7 +224,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param int|null $to
+     * @param null|int|string $to
      *
      * @return Price
      */

@@ -27,7 +27,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductConfigurationLoader
@@ -112,7 +111,7 @@ class ProductConfigurationLoader
      * @param array                $articleIds
      * @param ShopContextInterface $context
      *
-     * @return Group[]
+     * @return array<int, array<\Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group>>
      */
     public function getConfigurations(array $articleIds, ShopContextInterface $context)
     {
@@ -152,7 +151,7 @@ class ProductConfigurationLoader
 
         $result = [];
         foreach ($data as $productId => $rows) {
-            $result[$productId] = $this->hydrator->hydrateGroups($rows);
+            $result[(int) $productId] = $this->hydrator->hydrateGroups($rows);
         }
 
         return $result;

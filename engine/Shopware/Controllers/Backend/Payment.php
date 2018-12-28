@@ -41,14 +41,14 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var \Shopware\Models\Country\Repository
      */
-    protected $countryRepository = null;
+    protected $countryRepository;
 
     /**
      * Disable template engine for all actions
@@ -238,7 +238,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to get access to the country repository.
      *
-     * @return null|Shopware\Models\Country\Repository
+     * @return \Shopware\Models\Country\Repository
      */
     private function getCountryRepository()
     {
@@ -256,7 +256,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      *
      * @param array $results
      *
-     * @return mixed
+     * @return array
      */
     private function formatResult($results)
     {

@@ -44,7 +44,7 @@ class Shopware_Components_Config implements ArrayAccess
     protected $_cacheTime = false;
 
     /**
-     * @var bool|int
+     * @var string[]
      */
     protected $_cacheTags = ['Shopware_Config'];
 
@@ -54,7 +54,7 @@ class Shopware_Components_Config implements ArrayAccess
     protected $_data;
 
     /**
-     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @var \Zend_Db_Adapter_Abstract
      */
     protected $_db;
 
@@ -65,8 +65,6 @@ class Shopware_Components_Config implements ArrayAccess
 
     /**
      * @param array $config
-     *
-     * @throws Zend_Cache_Exception
      */
     public function __construct(array $config)
     {

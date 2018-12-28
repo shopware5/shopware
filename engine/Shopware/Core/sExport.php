@@ -126,7 +126,7 @@ class sExport
     /**
      * @param int|string $currency
      *
-     * @return array
+     * @return array|false
      */
     public function sGetCurrency($currency)
     {

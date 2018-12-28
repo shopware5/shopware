@@ -73,6 +73,8 @@ class Privilege extends ModelEntity
      * The resource property is the owning side of the association between resource and privileges.
      * The association is joined over the s_core_acl_privileges.resourceID field and the s_core_acl_resources.id
      *
+     * @var \Shopware\Models\User\Resource
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\Resource", inversedBy="privileges")
      * @ORM\JoinColumn(name="resourceID", referencedColumnName="id")
      */
@@ -117,14 +119,16 @@ class Privilege extends ModelEntity
     /**
      * Set resourceId
      *
-     * @param int $resourceId
+     * @param null|int $resourceId
      *
      * @return Privilege
      */
     public function setResourceId($resourceId)
     {
         if (!empty($resourceId)) {
-            $this->resource = Shopware()->Models()->find("Shopware\Models\User\Resource", $resourceId);
+            /** @var \Shopware\Models\User\Resource resource */
+            $resource = Shopware()->Models()->find(\Shopware\Models\User\Resource::class, $resourceId);
+            $this->resource = $resource;
         }
         $this->resourceId = $resourceId;
 

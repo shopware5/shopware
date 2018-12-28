@@ -38,6 +38,8 @@ class Detail extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="details")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      * @ORM\OrderBy({"position" = "ASC"})
@@ -47,18 +49,18 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Price", mappedBy="detail", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Price>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Price", mappedBy="detail", orphanRemoval=true, cascade={"persist"})
      */
     protected $prices;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Article
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -75,6 +77,8 @@ class Detail extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="articles")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
      *      joinColumns={
@@ -84,33 +88,32 @@ class Detail extends ModelEntity
      *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
      *      }
      * )
-     *
-     * @var ArrayCollection
      */
     protected $configuratorOptions;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Esd", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Article\Esd
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Esd", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      */
     protected $esd;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Notification", mappedBy="articleDetail")
+     * @var ArrayCollection<\Shopware\Models\Article\Notification>
      *
-     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Notification", mappedBy="articleDetail")
      */
     protected $notifications;
 
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Image>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
@@ -141,6 +144,7 @@ class Detail extends ModelEntity
 
     /**
      * @var string
+     *
      * @Assert\NotBlank
      * @Assert\Regex("/^[a-zA-Z0-9-_.]+$/")
      *
@@ -213,18 +217,21 @@ class Detail extends ModelEntity
 
     /**
      * @var float
+     *
      * @ORM\Column(name="length", type="decimal", nullable=true, precision=3)
      */
     private $len = null;
 
     /**
      * @var float
+     *
      * @ORM\Column(name="height", type="decimal", nullable=true, precision=3)
      */
     private $height = null;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
     private $ean = null;
@@ -238,24 +245,28 @@ class Detail extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="minpurchase", type="integer", nullable=false)
      */
     private $minPurchase = 1;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="purchasesteps", type="integer", nullable=true)
      */
     private $purchaseSteps = null;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="maxpurchase", type="integer", nullable=true)
      */
     private $maxPurchase = null;
@@ -289,7 +300,7 @@ class Detail extends ModelEntity
     private $shippingFree = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -766,13 +777,13 @@ class Detail extends ModelEntity
     /**
      * Set releaseDate
      *
-     * @param \DateTime|string|null $releaseDate
+     * @param \DateTimeInterface|string|null $releaseDate
      *
      * @return Detail
      */
     public function setReleaseDate($releaseDate = null)
     {
-        if ($releaseDate !== null && !($releaseDate instanceof \DateTime)) {
+        if ($releaseDate !== null && !($releaseDate instanceof \DateTimeInterface)) {
             $this->releaseDate = new \DateTime($releaseDate);
         } else {
             $this->releaseDate = $releaseDate;
@@ -784,7 +795,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getReleaseDate()
     {

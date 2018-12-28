@@ -50,8 +50,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected static $ensureLoadedPlugins = [];
+
     /**
-     * @var InstallerService
+     * @var InstallerService|null
      */
     private static $pluginManager;
 

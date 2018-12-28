@@ -113,7 +113,7 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Image\Rule[]|null $rules
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Image\Rule> $rules
      */
     public function setRules($rules)
     {

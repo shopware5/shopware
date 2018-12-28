@@ -39,16 +39,17 @@ class Value extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\PropertyValue
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -79,7 +80,7 @@ class Value extends ModelEntity
     private $optionId;
 
     /**
-     * @var string
+     * @var Option
      *
      * @ORM\ManyToOne(targetEntity="Option", inversedBy="values", cascade={"persist"})
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id")
@@ -87,7 +88,7 @@ class Value extends ModelEntity
     private $option;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="propertyValues")
      * @ORM\JoinTable(name="s_filter_articles",
@@ -99,12 +100,14 @@ class Value extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
     private $mediaId = null;
 
     /**
      * @var Media
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="properties")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      */

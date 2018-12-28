@@ -62,6 +62,8 @@ class Detail extends ModelEntity
      *
      * @Assert\NotBlank
      *
+     * @var \Shopware\Models\Order\Status
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\DetailStatus")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
@@ -214,7 +216,7 @@ class Detail extends ModelEntity
     private $shippedGroup = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -459,7 +461,7 @@ class Detail extends ModelEntity
     /**
      * Set releaseDate
      *
-     * @param \DateTime $releaseDate
+     * @param \DateTimeInterface $releaseDate
      *
      * @return Detail
      */
@@ -473,7 +475,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getReleaseDate()
     {
@@ -609,7 +611,7 @@ class Detail extends ModelEntity
      */
     public function afterRemove()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         // Do not increase instock for canceled orders
@@ -642,7 +644,7 @@ class Detail extends ModelEntity
      */
     public function afterInsert()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         /*
@@ -679,11 +681,11 @@ class Detail extends ModelEntity
         $newQuantity = empty($quantityChange) ? $this->quantity : $quantityChange[1];
         $quantityDiff = $oldQuantity - $newQuantity;
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
-        //If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
-        //The stock of the new article will be reduced by the (new) ordered quantity.
+        // If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
+        // The stock of the new article will be reduced by the (new) ordered quantity.
         if (!empty($articleChange)) {
             /*
              * before try to get the article, check if the association field (articleNumber) is not empty,
@@ -851,7 +853,7 @@ class Detail extends ModelEntity
     private function calculateOrderAmount()
     {
         if ($this->getOrder() instanceof Order) {
-            //recalculates the new amount
+            // Recalculates the new amount
             $this->getOrder()->calculateInvoiceAmount();
             Shopware()->Models()->persist($this->getOrder());
         }

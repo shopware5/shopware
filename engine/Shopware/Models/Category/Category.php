@@ -283,7 +283,7 @@ class Category extends ModelEntity
     /**
      * Should any filter shown on the category page be hidden?
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="hidefilter", type="boolean", nullable=false)
      */
@@ -292,7 +292,7 @@ class Category extends ModelEntity
     /**
      * Should the top part of that category be displayed?
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="hidetop", type="boolean", nullable=false)
      */
@@ -339,14 +339,14 @@ class Category extends ModelEntity
     private $allArticles;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
@@ -454,12 +454,13 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param Category[] $children
+     * @param ArrayCollection<Category> $children
      *
      * @return Category
      */
     public function setChildren($children)
     {
+        /** @var Category $child */
         foreach ($children as $child) {
             $child->setParent($this);
         }
@@ -537,13 +538,13 @@ class Category extends ModelEntity
     /**
      * Set changed
      *
-     * @param \DateTime|string $changed
+     * @param \DateTimeInterface|string $changed
      *
      * @return Category
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTime) {
+        if (!$changed instanceof \DateTimeInterface) {
             $this->changed = new \DateTime($changed);
         } else {
             $this->changed = $changed;
@@ -555,7 +556,7 @@ class Category extends ModelEntity
     /**
      * Get changed
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {
@@ -565,7 +566,7 @@ class Category extends ModelEntity
     /**
      * Get added
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -935,7 +936,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Emotion\Emotion>
      */
     public function getEmotions()
     {
@@ -943,7 +944,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $emotions
+     * @param ArrayCollection<\Shopware\Models\Emotion\Emotion> $emotions
      *
      * @return Category
      */
@@ -989,7 +990,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getProductBoxLayout()
     {
@@ -997,7 +998,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param int $productBoxLayout
+     * @param string $productBoxLayout
      *
      * @return Category
      */

@@ -73,7 +73,7 @@ class Comment extends ModelEntity
     private $comment;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
@@ -83,6 +83,7 @@ class Comment extends ModelEntity
      * Flag which shows if the blog comment is active or not. 1= active otherwise inactive
      *
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
@@ -162,11 +163,11 @@ class Comment extends ModelEntity
     /**
      * Set creationDate
      *
-     * @param \DateTime|string $creationDate
+     * @param \DateTimeInterface|string $creationDate
      */
     public function setCreationDate($creationDate)
     {
-        if (!$creationDate instanceof \DateTime && strlen($creationDate) > 0) {
+        if (!$creationDate instanceof \DateTimeInterface && strlen($creationDate) > 0) {
             $creationDate = new \DateTime($creationDate);
         }
         $this->creationDate = $creationDate;
@@ -175,7 +176,7 @@ class Comment extends ModelEntity
     /**
      * Get creationDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreationDate()
     {

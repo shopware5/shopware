@@ -173,7 +173,7 @@ class Template extends ModelEntity
     private $emotion = false;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="version", type="integer")
      */

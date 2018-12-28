@@ -233,7 +233,7 @@ class ORMBacklogSubscriber implements EventSubscriber
     /**
      * @param object $entity
      *
-     * @return Backlog
+     * @return Backlog|null
      */
     private function getUpdateBacklog($entity)
     {

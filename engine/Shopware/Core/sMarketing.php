@@ -238,7 +238,7 @@ class sMarketing
      * @param int $sCategory
      * @param int $limit
      *
-     * @return array Contains all information about the banner-object
+     * @return array|false Contains all information about the banner-object
      */
     public function sBanner($sCategory, $limit = 1)
     {

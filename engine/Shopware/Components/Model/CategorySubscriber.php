@@ -89,7 +89,9 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function getCategoryComponent()
     {
-        $this->categoryDenormalization = $this->container->get('CategoryDenormalization');
+        /** @var CategoryDenormalization $categoryDenormalization */
+        $categoryDenormalization = $this->container->get('CategoryDenormalization');
+        $this->categoryDenormalization = $categoryDenormalization;
 
         $this->categoryDenormalization->disableTransactions();
 

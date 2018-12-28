@@ -119,8 +119,8 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $partner->setCountryName('Dummy');
         $partner->setEmail('Dummy');
         $partner->setWeb('Dummy');
-        $partner->setProfile('Dummy')
-        ;
+        $partner->setProfile('Dummy');
+
         $this->em->persist($partner);
 
         $order = new \Shopware\Models\Order\Order();

@@ -74,7 +74,7 @@ class CustomListingHydrator extends Hydrator
      * @param array $data
      * @param array $streams
      *
-     * @return CustomFacet
+     * @return CustomFacet|null
      */
     public function hydrateFacet(array $data, array $streams)
     {

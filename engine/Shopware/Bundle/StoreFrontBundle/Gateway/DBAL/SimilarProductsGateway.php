@@ -36,25 +36,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
 {
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var Connection
      */
     private $connection;
 
     /**
-     * @var \Shopware_Components_Config
+     * @param Connection $connection
      */
-    private $config;
-
-    /**
-     * @param Connection                  $connection
-     * @param \Shopware_Components_Config $config
-     */
-    public function __construct(
-        Connection $connection,
-        \Shopware_Components_Config $config
-    ) {
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
-        $this->config = $config;
     }
 
     /**

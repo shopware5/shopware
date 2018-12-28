@@ -68,7 +68,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Repository for the shop model
      *
-     * @var Repository
+     * @var \Shopware\Models\Shop\Repository
      */
     protected $shopRepository;
 
@@ -99,7 +99,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $manager;
 
@@ -1300,6 +1300,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         // Check if the main detail variant was deleted
         if ($product->getMainDetail() === null) {
+            /** @var Detail $newMainDetail */
             $newMainDetail = $this->getArticleDetailRepository()->findOneBy(['articleId' => $productId]);
             $product->setMainDetail($newMainDetail);
         }
@@ -2225,7 +2226,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to get access on the shop repository.
      *
-     * @return null|Shopware\Models\Shop\Repository
+     * @return Shopware\Models\Shop\Repository
      */
     protected function getShopRepository()
     {
@@ -2239,7 +2240,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to get access on the category repository.
      *
-     * @return null|Shopware\Models\Category\Repository
+     * @return \Shopware\Models\Category\Repository
      */
     protected function getCategoryRepository()
     {

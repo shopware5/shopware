@@ -56,7 +56,7 @@ class Layout extends ModelEntity
     protected $templateId;
 
     /**
-     * @var Element
+     * @var \Shopware\Models\Shop\Template
      *
      * @ORM\ManyToOne(
      *      targetEntity="Shopware\Models\Shop\Template",
@@ -181,7 +181,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param string $template
+     * @param \Shopware\Models\Shop\Template $template
      */
     public function setTemplate($template)
     {
@@ -189,7 +189,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return \Shopware\Models\Shop\Template
      */
     public function getTemplate()
     {

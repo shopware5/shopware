@@ -184,7 +184,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return string[] indexed by product id
+     * @return array<int, string> indexed by product id
      */
     private function getMapping(array $ids)
     {
@@ -211,6 +211,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         foreach ($mapping as $row) {
             $ids = array_merge($ids, explode(',', $row));
         }
+        /** @var array<int> $ids */
         $ids = array_unique($ids);
 
         return $ids;

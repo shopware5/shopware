@@ -498,7 +498,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $userID = Shopware()->Modules()->Admin()->sGetUserByMail($email);
         if (empty($userID)) {
-            return;
+            return [];
         }
 
         $hash = \Shopware\Components\Random::getAlphanumericString(32);

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Struct;
 class BusinessIntelligenceResponse
 {
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $dateTime;
 
@@ -42,11 +42,11 @@ class BusinessIntelligenceResponse
     private $shopId;
 
     /**
-     * @param \DateTime $dateTime
-     * @param string    $html
-     * @param int       $shopId
+     * @param \DateTimeInterface $dateTime
+     * @param string             $html
+     * @param int                $shopId
      */
-    public function __construct(\DateTime $dateTime, $html, $shopId = null)
+    public function __construct(\DateTimeInterface $dateTime, $html, $shopId = null)
     {
         $this->dateTime = $dateTime;
         $this->html = $html;
@@ -54,7 +54,7 @@ class BusinessIntelligenceResponse
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDateTime()
     {

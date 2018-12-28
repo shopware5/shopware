@@ -50,7 +50,7 @@ class XmlCronjobReader
     /**
      * @param \DOMDocument $xml
      *
-     * @return array
+     * @return array|void
      */
     private function parseInfo(\DOMDocument $xml)
     {

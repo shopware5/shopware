@@ -80,6 +80,7 @@ class Document extends ModelEntity
      * Contains the numbers of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="numbers", type="string", nullable=false)
      */
     private $numbers = '';
@@ -106,6 +107,7 @@ class Document extends ModelEntity
      * Contains the top-value of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="top", type="integer", nullable=false)
      */
     private $top = 0;

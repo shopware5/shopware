@@ -338,7 +338,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      * @param string $date
      * @param string $time
      *
-     * @return DateTime
+     * @return \DateTime|null
      */
     private function prepareDateAndTime($date, $time)
     {

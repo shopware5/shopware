@@ -26,6 +26,10 @@ namespace   Shopware\Models\Newsletter;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Newsletter\ContainerType\Article;
+use Shopware\Models\Newsletter\ContainerType\Banner;
+use Shopware\Models\Newsletter\ContainerType\Link;
+use Shopware\Models\Newsletter\ContainerType\Text;
 
 /**
  * Shopware container model represents a newsletter container.
@@ -206,7 +210,6 @@ class Container extends ModelEntity
     public function setNewsletter($newsletter)
     {
         $this->newsletter = $newsletter;
-//        $this->setManyToOne($newsletter, '\Shopware\Models\Newsletter\Newsletter', 'newsletter');
     }
 
     /**
@@ -240,7 +243,8 @@ class Container extends ModelEntity
      */
     public function setText($text)
     {
-        $return = $this->setOneToOne($text, '\Shopware\Models\Newsletter\ContainerType\Text', 'text', 'container');
+        /** @var \Shopware\Models\Newsletter\ContainerType\Text $return */
+        $return = $this->setOneToOne($text, Text::class, 'text', 'container');
         $this->setType('ctText');
 
         return $return;
@@ -257,11 +261,12 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Article $articles
      *
-     * @return Container
+     * @return \Shopware\Models\Newsletter\ContainerType\Article
      */
     public function setArticles($articles)
     {
-        $return = $this->setOneToMany($articles, \Shopware\Models\Newsletter\ContainerType\Article::class, 'articles', 'container');
+        /** @var \Shopware\Models\Newsletter\ContainerType\Article $return */
+        $return = $this->setOneToMany($articles, Article::class, 'articles', 'container');
         $this->setType('ctArticles');
 
         return $return;
@@ -278,11 +283,12 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Banner|null $banner
      *
-     * @return Container
+     * @return \Shopware\Models\Newsletter\ContainerType\Banner
      */
     public function setBanner($banner)
     {
-        $return = $this->setOneToOne($banner, \Shopware\Models\Newsletter\ContainerType\Banner::class, 'banner', 'container');
+        /** @var \Shopware\Models\Newsletter\ContainerType\Banner $return */
+        $return = $this->setOneToOne($banner, Banner::class, 'banner', 'container');
         $this->setType('ctBanner');
 
         return $return;
@@ -299,11 +305,12 @@ class Container extends ModelEntity
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Link[]|null $links
      *
-     * @return Container
+     * @return \Shopware\Models\Newsletter\ContainerType\Link
      */
     public function setLinks($links)
     {
-        $return = $this->setOneToMany($links, \Shopware\Models\Newsletter\ContainerType\Link::class, 'links', 'container');
+        /** @var \Shopware\Models\Newsletter\ContainerType\Link $return */
+        $return = $this->setOneToMany($links, Link::class, 'links', 'container');
         $this->setType('ctLinks');
 
         return $return;

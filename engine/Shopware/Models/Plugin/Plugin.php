@@ -97,28 +97,28 @@ class Plugin extends ModelEntity
     private $active = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="installation_date", type="datetime", nullable=true)
      */
     private $installed;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
     private $updated;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="refresh_date", type="datetime", nullable=true)
      */
@@ -409,7 +409,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -417,7 +417,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \DateTime $added
+     * @param \DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -425,7 +425,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getInstalled()
     {
@@ -433,7 +433,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \DateTime $installed
+     * @param \DateTimeInterface $installed
      */
     public function setInstalled($installed)
     {
@@ -441,7 +441,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getUpdated()
     {
@@ -449,7 +449,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \DateTime $updated
+     * @param \DateTimeInterface $updated
      */
     public function setUpdated($updated)
     {
@@ -569,7 +569,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Config\Form[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\Form>
      */
     public function getConfigForms()
     {
@@ -577,7 +577,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\Form> $configForms
      */
     public function setConfigForms($configForms)
     {
@@ -585,7 +585,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Menu\Menu>
      */
     public function getMenuItems()
     {
@@ -593,7 +593,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $menuItems
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Menu\Menu> $menuItems
      */
     public function setMenuItems($menuItems)
     {
@@ -601,7 +601,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Payment\Payment[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
      */
     public function getPayments()
     {
@@ -609,7 +609,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Payment\Payment[] $payments
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment> $payments
      */
     public function setPayments($payments)
     {
@@ -617,7 +617,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Shop\Template[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Template>
      */
     public function getTemplates()
     {
@@ -625,7 +625,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Shop\Template[] $templates
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Template> $templates
      */
     public function setTemplates($templates)
     {

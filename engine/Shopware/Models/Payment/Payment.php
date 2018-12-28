@@ -66,7 +66,7 @@ class Payment extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Payment
+     * @var \Shopware\Models\Attribute\Payment<\Shopware\Models\Attribute\Payment>
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
      */
@@ -181,21 +181,21 @@ class Payment extends ModelEntity
     private $position = 0;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="esdactive", type="boolean", nullable=false)
      */
     private $esdActive = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
      */

@@ -44,7 +44,7 @@ class Value extends ModelEntity
     private $id;
 
     /**
-     * @var string
+     * @var Element
      *
      * @ORM\ManyToOne(targetEntity="Element", inversedBy="values")
      * @ORM\JoinColumn(name="element_id", referencedColumnName="id")

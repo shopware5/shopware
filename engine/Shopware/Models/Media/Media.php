@@ -96,14 +96,15 @@ class Media extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Media
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Image>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="media")
      */
     protected $articles;
@@ -210,7 +211,7 @@ class Media extends ModelEntity
     /**
      * Creation date of the media
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created", type="date", nullable=false)
      */
@@ -461,7 +462,7 @@ class Media extends ModelEntity
     /**
      * Sets the creation date of the media.
      *
-     * @param \DateTime $created
+     * @param \DateTimeInterface $created
      *
      * @return \Shopware\Models\Media\Media
      */
@@ -475,7 +476,7 @@ class Media extends ModelEntity
     /**
      * Returns the creation date of the media.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreated()
     {
@@ -485,7 +486,7 @@ class Media extends ModelEntity
     /**
      * Sets the memory size of the file.
      *
-     * @param float $fileSize
+     * @param int $fileSize
      *
      * @return \Shopware\Models\Media\Media
      */
@@ -565,7 +566,7 @@ class Media extends ModelEntity
      * Setter method for the file property. If the file is set, the file information will be extracted
      * and set into the internal properties.
      *
-     * @param File $file
+     * @param UploadedFile $file
      *
      * @return \Shopware\Models\Media\Media
      */

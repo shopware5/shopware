@@ -198,6 +198,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->sPayment = $payment;
 
+        /** @var array<string, mixed> $userData */
         $userData = $this->View()->sUserData;
         $userData['additional']['payment'] = $this->View()->sPayment;
         $this->View()->sUserData = $userData;
@@ -271,9 +272,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $this->View()->assign('sVoucherError', $voucherErrors);
         }
 
+        /** @var array<array<array>> $activeBillingAddressId */
         if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
             $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
         }
+        /** @var array<array<array>> $activeShippingAddressId */
         if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
             $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
         }
@@ -1337,7 +1340,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      *
      * @param null $paymentId
      *
-     * @return array list of dispatches
+     * @return array|false list of dispatches
      */
     public function getDispatches($paymentId = null)
     {
@@ -1365,7 +1368,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * Get current selected country - if no country is selected, choose first one from list
      * of available countries
      *
-     * @return array with country information
+     * @return array|false
      */
     public function getSelectedCountry()
     {

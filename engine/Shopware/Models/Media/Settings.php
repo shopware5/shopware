@@ -120,7 +120,7 @@ class Settings extends ModelEntity
     private $thumbnailQuality;
 
     /**
-     * high dpi thumbnails quality
+     * High DPI thumbnails quality
      *
      * @var int
      *

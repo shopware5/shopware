@@ -180,7 +180,7 @@ class Element extends ModelEntity
             $dataArray[] = $newData;
         }
 
-        $this->data = $dataArray;
+        $this->data = new \Doctrine\Common\Collections\ArrayCollection($dataArray);
 
         $viewportData = [];
         foreach ($this->viewports as $viewport) {
@@ -191,7 +191,7 @@ class Element extends ModelEntity
             $viewportData[] = $newViewport;
         }
 
-        $this->viewports = $viewportData;
+        $this->viewports = new \Doctrine\Common\Collections\ArrayCollection($viewportData);
     }
 
     /**

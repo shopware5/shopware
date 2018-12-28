@@ -88,7 +88,7 @@ class Notification extends LazyFetchModelEntity
     private $articleNumber;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -249,7 +249,10 @@ class Notification extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, ['number' => $this->articleNumber]);
+        /** @var \Shopware\Models\Article\Detail $return */
+        $return = $this->fetchLazy($this->articleDetail, ['number' => $this->articleNumber]);
+
+        return $return;
     }
 
     /**
@@ -257,6 +260,9 @@ class Notification extends LazyFetchModelEntity
      */
     public function getCustomer()
     {
-        return $this->fetchLazy($this->customer, ['email' => $this->mail]);
+        /** @var \Shopware\Models\Customer\Customer $return */
+        $return = $this->fetchLazy($this->customer, ['email' => $this->mail]);
+
+        return $return;
     }
 }

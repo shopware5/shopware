@@ -143,7 +143,7 @@ class Field extends ModelEntity
     /**
      * Defines the date and time when the field was created
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */

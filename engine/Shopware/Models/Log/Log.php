@@ -68,7 +68,7 @@ class Log extends ModelEntity
     private $text;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -187,7 +187,7 @@ class Log extends ModelEntity
     /**
      * Set date
      *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      *
      * @return Log
      */
@@ -201,7 +201,7 @@ class Log extends ModelEntity
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {

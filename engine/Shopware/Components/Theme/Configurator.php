@@ -465,13 +465,13 @@ class Configurator
      * @param Shop\TemplateConfig\Set[] $collection
      * @param string                    $name
      *
-     * @return Shop\TemplateConfig\Set
+     * @return Shop\TemplateConfig\Set|null
      */
     private function getExistingConfigSet($collection, $name)
     {
         /** @var Shop\TemplateConfig\Set $item */
         foreach ($collection as $item) {
-            if ($item->getName() == $name) {
+            if ($item->getName() === $name) {
                 return $item;
             }
         }

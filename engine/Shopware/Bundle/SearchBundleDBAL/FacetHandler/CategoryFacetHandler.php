@@ -95,7 +95,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
      * @param Criteria                     $criteria
      * @param ShopContextInterface         $context
      *
-     * @return FacetResultInterface
+     * @return null|FacetResultInterface
      */
     public function generatePartialFacet(
         FacetInterface $facet,

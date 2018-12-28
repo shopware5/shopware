@@ -354,7 +354,7 @@ class Mail extends ModelEntity
     /**
      * isHtml-Mail
      *
-     * @return int
+     * @return bool
      */
     public function isHtml()
     {

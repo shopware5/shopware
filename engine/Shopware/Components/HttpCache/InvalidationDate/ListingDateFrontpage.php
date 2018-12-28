@@ -57,7 +57,9 @@ class ListingDateFrontpage implements InvalidationDateInterface
     {
         $this->connection = $connection;
         $this->route = $route;
-        $this->shop = $container->get('shop');
+        /** @var Shop $shop */
+        $shop = $container->get('shop');
+        $this->shop = $shop;
     }
 
     /**

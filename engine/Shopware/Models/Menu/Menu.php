@@ -317,7 +317,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return Menu[]|ArrayCollection
+     * @return ArrayCollection<Menu>
      */
     public function getChildren()
     {
@@ -325,7 +325,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param Menu[] $children
+     * @param ArrayCollection<Menu> $children
      */
     public function setChildren($children)
     {
