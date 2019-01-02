@@ -90,8 +90,7 @@ class ShopIndexerFactory
             $this->container->get('shopware_elastic_search.console.console_evaluation_helper'),
             $indexer,
             $mappings,
-            $settings,
-            $this->container->getParameter('shopware.es')
+            $settings
         );
     }
 
