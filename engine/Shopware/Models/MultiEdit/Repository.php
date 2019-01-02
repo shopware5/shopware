@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelRepository;
 /**
  * Shopware SwagAboCommerce Plugin - Repository
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -38,7 +38,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all filters for the listing
      *
-     * @param $filter
+     * @param null|string $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -53,7 +53,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
+     * @param null|string $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -69,8 +69,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all backup entities
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \Doctrine\ORM\Query
      */

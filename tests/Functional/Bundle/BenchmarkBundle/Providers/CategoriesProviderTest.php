@@ -29,56 +29,75 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class CategoriesProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.categories';
-    const EXPECTED_KEYS_COUNT = 3;
+    const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
-        'total' => IsType::TYPE_INT,
-        'maxLevels' => IsType::TYPE_INT,
         'products' => [
             'average' => IsType::TYPE_FLOAT,
             'max' => IsType::TYPE_INT,
         ],
+        'tree' => IsType::TYPE_ARRAY,
     ];
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalCategoriesAndMaxLevels()
+    public function testGetAverageProductsPerCategoryPerShop()
     {
-        $this->installDemoData('categories');
+        $this->installDemoData('category_products');
 
         $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertSame(2.0, $resultData['products']['average']);
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(5, $resultData['total']);
-        $this->assertSame(6, $resultData['maxLevels']);
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(1.0, $resultData['products']['average']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetAverageProductsPerCategory()
+    public function testGetMaxProductsPerCategoryPerShop()
     {
         $this->installDemoData('category_products');
 
         $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertSame(6, $resultData['products']['max']);
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(4.0, $resultData['products']['average']);
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(2, $resultData['products']['max']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetMaxProductsPerCategory()
+    public function testGetCategoryTreePerShop()
     {
         $this->installDemoData('category_products');
 
         $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
 
-        $resultData = $provider->getBenchmarkData();
+        // First child category, "Example Parent 1"
+        $this->assertCount(2, $resultData['tree'][0]['children']);
+        // First child of "Example parent 1", name "Example 3"
+        $this->assertCount(1, $resultData['tree'][0]['children'][1]['children']);
+        // Child of "Example 3", name "Example 5"
+        $this->assertCount(1, $resultData['tree'][0]['children'][1]['children'][0]['children']);
 
-        $this->assertSame(7, $resultData['products']['max']);
+        $this->assertEquals(0, $resultData['tree'][0]['children'][1]['active']);
+        $this->assertEquals(1, $resultData['tree'][0]['children'][1]['children'][0]['active']);
+        $this->assertEquals(1, $resultData['tree'][0]['children'][0]['hasProductStream']);
+
+        $provider = $this->getProvider();
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+
+        // First child category, "Example Parent 2"
+        $this->assertCount(1, $resultData['tree'][0]['children']);
+        // First child of "Example Parent 2", name "Example 4"
+        $this->assertCount(0, $resultData['tree'][0]['children'][0]['children']);
+
+        $this->assertEquals(1, $resultData['tree'][0]['active']);
+        $this->assertEquals(0, $resultData['tree'][0]['children'][0]['active']);
     }
 }

@@ -31,7 +31,7 @@ namespace Shopware\Bundle\SearchBundle;
  * Each condition is handled by his own condition handler
  * which defined in the specify gateway engines.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

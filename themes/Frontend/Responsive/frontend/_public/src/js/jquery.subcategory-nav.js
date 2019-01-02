@@ -305,7 +305,7 @@
             me.addEventListener();
 
             // fetch menu by category id if actual category is not the main category
-            if (!opts.categoryId || !opts.fetchUrl || (opts.mainCategoryId == opts.categoryId)) {
+            if (!opts.categoryId || !opts.fetchUrl || ((opts.mainCategoryId == opts.categoryId) && (opts.fetchUrl.indexOf('getCategory') !== -1))) {
                 return;
             }
 
@@ -367,7 +367,7 @@
             $.publish('plugin/swSubCategoryNav/onClickBackButton', [ me, event ]);
 
             // decide if there is a parent group or main sidebar
-            if (!url || parentId === me.opts.mainCategoryId) {
+            if (!url || (parentId === me.opts.mainCategoryId) && (url.indexOf('getCategory') !== -1)) {
                 me.slideToMainMenu();
                 return;
             }

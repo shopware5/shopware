@@ -31,7 +31,7 @@ use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 /**
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -74,12 +74,16 @@ class QueryBuilder extends BaseQueryBuilder
      * instead or call {@link setParameters()} only once, or with all the
      * parameters.
      *
+     * @deprecated This method is deprecated since 5.4.
+     *
      * @param \Doctrine\Common\Collections\ArrayCollection|array $parameters the query parameters to set
      *
      * @return QueryBuilder this QueryBuilder instance
      */
     public function setParameters($parameters)
     {
+        trigger_error(sprintf('%s::%s() is deprecated. Please use setParameter().', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $existingParameters = $this->getParameters();
 
         if (count($existingParameters) && is_array($parameters)) {
@@ -97,7 +101,7 @@ class QueryBuilder extends BaseQueryBuilder
      * should only use it to quickly move backwards to the old
      * {@link setParameters()} behavior.
      *
-     * @deprecated
+     * @deprecated This method is deprecated since 5.4.
      *
      * @param array $parameters
      *
@@ -105,6 +109,8 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addParameters(array $parameters)
     {
+        trigger_error(sprintf('%s::%s() is deprecated. Please use addParameter().', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $existingParameters = $this->getParameters();
         $newParameters = new ArrayCollection();
 
@@ -181,7 +187,9 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $parameterKey = str_replace(['.'], ['_'], $exprKey) . uniqid();
+            // The return value of uniqid, even w/o parameters, may contain dots in some environments
+            // so we make sure to strip those as well
+            $parameterKey = str_replace(['.'], ['_'], $exprKey . uniqid());
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
@@ -195,7 +203,7 @@ class QueryBuilder extends BaseQueryBuilder
                     case is_array($where):
                         $expression = 'IN';
                         break;
-                    case is_null($where):
+                    case $where === null:
                         $expression = 'IS NULL';
                         break;
                     default:
@@ -204,7 +212,7 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            if (is_null($where)) {
+            if ($where === null) {
                 $expression = 'IS NULL';
             }
 
@@ -245,7 +253,7 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
     {
-        /** @var $select \Doctrine\ORM\Query\Expr\Select */
+        /** @var array<string, mixed> $select */
         $select = $this->getDQLPart('select');
         if (is_array($orderBy)) {
             foreach ($orderBy as $order) {
@@ -288,7 +296,7 @@ class QueryBuilder extends BaseQueryBuilder
     {
         $query = parent::getQuery();
 
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $this->getEntityManager();
 
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {

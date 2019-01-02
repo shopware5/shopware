@@ -21,28 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Cart\Struct\Price;
 
 /**
  * Order model for document generation
- * @property int id;
- * @property array order;
- * @property ArrayObject positions;
- * @property int userID;
- * @property array user;
- * @property array billing;
- * @property array shipping;
- * @property array payment;
- * @property array paymentInstances;
- * @property array dispatch;
- * @property bool net;
- * @property bool summaryNet;
- * @property float amountNetto;
- * @property float amount;
- * @property array tax;
- * @property array currency;
- * @property float shippingCosts;
- * @property bool shippingCostsAsPosition;
- * @property mixed discount;
  */
 class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Hook
 {
@@ -52,117 +34,138 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      * @var int
      */
     protected $_id;
+
     /**
      * Metadata of the order
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_order;
+
     /**
      * Metadata of the order positions
      *
      * @var ArrayObject
      */
     protected $_positions;
+
     /**
      * Id of the user (s_user.id)
      *
      * @var int
      */
     protected $_userID;
+
     /**
      * Metadata of the user (email,customergroup etc. s_user.*)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_user;
+
     /**
      * Billingdata for this order / user (s_order_billingaddress)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_billing;
+
     /**
      * Shippingdata for this order / user (s_order_shippingaddress)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_shipping;
+
     /**
      * Payment information for this order (s_core_paymentmeans)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_payment;
+
     /**
      * Payment instances information for this order (s_core_payment_instance)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_paymentInstances;
+
     /**
      * Information about the dispatch for this order
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_dispatch;
+
     /**
      * Calculate complete without tax
      *
      * @var bool
      */
     protected $_net;
+
     /**
      * Hide Gross amount
      *
      * @var bool
      */
     protected $_summaryNet;
+
     /**
      * Complete net amount
      *
      * @var float
      */
     protected $_amountNetto;
+
     /**
      * Complete gross amount
      *
      * @var float
      */
     protected $_amount;
+
     /**
      * Array with tax rates
      *
      * @var array
      */
     protected $_tax;
+
     /**
      * Currency information (s_core_currencies)
      *
-     * @var array
+     * @var ArrayObject
      */
     protected $_currency;
+
     /**
      * Shipping costs
      *
      * @var float
      */
     protected $_shippingCosts;
+
     /**
      * Add shipping costs as order position
      *
      * @var bool
      */
     protected $_shippingCostsAsPosition;
+
+    /**
+     * @var float
+     */
     protected $_discount;
 
-    /** @var \Shopware\Models\Tax\Repository */
+    /**
+     * @var \Shopware\Models\Tax\Repository
+     */
     protected $_taxRepository;
 
     /**
-     * Initiate order model
-     *
-     * @param  $id
+     * @param int   $id
      * @param array $config
      */
     public function __construct($id, $config = [])
@@ -229,11 +232,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Magic getter
      *
-     * @param  $var_name
+     * @param string $var_name
      *
      * @throws Enlight_Exception
-     *
-     * @return
      */
     public function __get($var_name)
     {
@@ -241,7 +242,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         if (property_exists($this, $var_name)) {
             return $this->$var_name;
         }
-        throw new Enlight_Exception("Property $var_name does not exists");
+        throw new Enlight_Exception(sprintf('Property %s does not exist', $var_name));
     }
 
     /**
@@ -259,7 +260,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             ', [$this->_id]), ArrayObject::ARRAY_AS_PROPS);
 
         if (empty($this->_order['id'])) {
-            throw new Enlight_Exception('Order with id ' . $this->_id . ' not found!');
+            throw new Enlight_Exception(sprintf('Order with id %d not found!', $this->_id));
         }
 
         // Load order attributes
@@ -281,35 +282,82 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processOrder()
     {
-        if ($this->_order['invoice_shipping_net'] != 0) {
-            // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
-            $approximateTaxRate = $this->_order['invoice_shipping'] / $this->_order['invoice_shipping_net'] * 100 - 100;
+        $shippingName = Shopware()->Snippets()->getNamespace('documents/index')->get('ShippingCosts', 'Shipping costs', true);
+
+        if ($this->_order['invoice_shipping_tax_rate'] === null) {
+            if ($this->_order['invoice_shipping_net'] != 0) {
+                // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
+                $approximateTaxRate = $this->_order['invoice_shipping'] / $this->_order['invoice_shipping_net'] * 100 - 100;
+            } else {
+                $approximateTaxRate = 0;
+            }
+
+            $taxShipping = $this->getTaxRateByApproximateTaxRate(
+                $approximateTaxRate,
+                $this->_shipping['country']['areaID'],
+                $this->_shipping['countryID'],
+                $this->_shipping['stateID'],
+                $this->_user['customergroupID']
+            );
+
+            $taxShipping = (float) $taxShipping;
         } else {
-            $approximateTaxRate = 0;
+            if ($this->_order['invoice_shipping_net'] != 0) {
+                $taxShipping = $this->_order['invoice_shipping_tax_rate'];
+            } else {
+                $taxShipping = 0;
+            }
         }
 
-        $taxShipping = $this->getTaxRateByApproximateTaxRate(
-            $approximateTaxRate,
-            $this->_shipping['country']['areaID'],
-            $this->_shipping['countryID'],
-            $this->_shipping['stateID'],
-            $this->_user['customergroupID']
-        );
-
-        $taxShipping = (float) $taxShipping;
         $this->_shippingCosts = $this->_order['invoice_shipping'];
 
         if ($this->_shippingCostsAsPosition == true && !empty($this->_shippingCosts)) {
+            $taxes = [];
+
             if ($this->_order['taxfree']) {
                 $this->_amountNetto = $this->_amountNetto + $this->_order['invoice_shipping'];
             } else {
-                $this->_amountNetto = $this->_amountNetto + ($this->_order['invoice_shipping'] / (100 + $taxShipping) * 100);
-                if (!empty($taxShipping) && !empty($this->_order['invoice_shipping'])) {
-                    $this->_tax[number_format($taxShipping, 2)] += ($this->_order['invoice_shipping'] / (100 + $taxShipping)) * $taxShipping;
+                if ($this->_order['is_proportional_calculation']) {
+                    $taxes = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator')->calculate($this->_order['invoice_shipping'], $this->getPricePositions(), false);
+
+                    $taxNet = 0;
+
+                    /** @var Price $tax */
+                    foreach ($taxes as $tax) {
+                        $taxNet += $tax->getNetPrice();
+                        $this->_tax[number_format($tax->getTaxRate(), 2)] += $tax->getTax();
+                    }
+
+                    $this->_amountNetto += $taxNet;
+                } else {
+                    $this->_amountNetto += ($this->_order['invoice_shipping'] / (100 + $taxShipping) * 100);
+                    if (!empty($taxShipping) && !empty($this->_order['invoice_shipping'])) {
+                        $this->_tax[number_format($taxShipping, 2)] += ($this->_order['invoice_shipping'] / (100 + $taxShipping)) * $taxShipping;
+                    }
                 }
             }
 
             $this->_amount = $this->_amount + $this->_order['invoice_shipping'];
+
+            if ($this->_order['is_proportional_calculation']) {
+                /** @var Price $tax */
+                foreach ($taxes as $tax) {
+                    $shipping = [];
+                    $shipping['quantity'] = 1;
+                    $shipping['netto'] = $tax->getNetPrice();
+                    $shipping['tax'] = $tax->getTaxRate();
+                    $shipping['price'] = $tax->getPrice();
+                    $shipping['amount'] = $tax->getPrice();
+                    $shipping['modus'] = 1;
+                    $shipping['amount_netto'] = $tax->getNetPrice();
+                    $shipping['articleordernumber'] = '';
+                    $shipping['name'] = $shippingName . ' ' . (count($taxes) > 1 ? '(' . $tax->getTaxRate() . '%)' : '');
+
+                    $this->_positions[] = $shipping;
+                }
+
+                return;
+            }
 
             $shipping = [];
             $shipping['quantity'] = 1;
@@ -326,9 +374,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $shipping['modus'] = 1;
             $shipping['amount_netto'] = $shipping['netto'];
             $shipping['articleordernumber'] = '';
-            $shipping['name'] = 'Versandkosten';
+            $shipping['name'] = $shippingName;
 
-            $this->positions[] = $shipping;
+            $this->_positions[] = $shipping;
         }
     }
 
@@ -477,10 +525,10 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 ', [$position['articleordernumber']]);
 
                 if (empty($position['tax_rate'])) {
-                    if ($ticketResult['taxconfig'] == 'default' || empty($ticketResult['taxconfig'])) {
+                    if ($ticketResult['taxconfig'] === 'default' || empty($ticketResult['taxconfig'])) {
                         $position['tax'] = Shopware()->Config()->sVOUCHERTAX;
-                        // Pre 3.5.4 behaviour
-                    } elseif ($ticketResult['taxconfig'] == 'auto') {
+                    // Pre 3.5.4 behaviour
+                    } elseif ($ticketResult['taxconfig'] === 'auto') {
                         // Check max. used tax-rate from basket
                         $position['tax'] = $this->getMaxTaxRate();
                     } elseif ((int) $ticketResult['taxconfig']) {
@@ -489,7 +537,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                         $getTaxRate = Shopware()->Db()->fetchOne("
                         SELECT tax FROM s_core_tax WHERE id = $temporaryTax
                         ");
-                        $position['tax'] = $getTaxRate['tax'];
+                        $position['tax'] = $getTaxRate;
                     } else {
                         $position['tax'] = 0;
                     }
@@ -557,7 +605,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function getBilling()
     {
         $this->_billing = new ArrayObject(Shopware()->Db()->fetchRow('
-        SELECT sob.*,sub.ustid,u.customernumber FROM s_order_billingaddress AS sob
+        SELECT sob.*,IF(sob.ustid IS NULL OR sob.ustid = "", sub.ustid, sob.ustid) as ustid,u.customernumber FROM s_order_billingaddress AS sob
         LEFT JOIN s_user_addresses AS sub ON sub.id = ?
         LEFT JOIN s_user u ON u.id = sub.user_id
         WHERE sob.userID = ? AND
@@ -644,7 +692,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         ", [$this->_order['dispatchID']]);
 
         if (empty($this->_dispatch)) {
-            $this->_dispatch = [];
+            $this->_dispatch = new ArrayObject();
         }
         $this->_dispatch = new ArrayObject($this->_dispatch, ArrayObject::ARRAY_AS_PROPS);
     }
@@ -741,7 +789,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      * Converts the serialized array to utf8 by unserializing it, iterating through each element and setting the encoding to utf8.
      * It also reverts the arrays to objects
      *
-     * @param $array
+     * @param array|\ArrayIterator $array
      *
      * @return array
      */
@@ -824,5 +872,23 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     private function getDemoData()
     {
         return include __DIR__ . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR . 'OrderData.php';
+    }
+
+    /**
+     * Returns prices from invoice positions
+     *
+     * @return Price[]
+     */
+    private function getPricePositions()
+    {
+        $prices = [];
+
+        foreach ($this->_positions as $position) {
+            if ($position['modus'] === '0') {
+                $prices[] = new Price($position['amount'], $position['amount_netto'], (float) $position['tax_rate'], null);
+            }
+        }
+
+        return $prices;
     }
 }

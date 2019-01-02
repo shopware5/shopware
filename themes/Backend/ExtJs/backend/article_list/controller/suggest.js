@@ -322,19 +322,26 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
      * @param name
      * @returns boolean
      */
-    loadFilter: function(filterString, name) {
+    loadFilter: function(filterString, name, extraParams) {
         var me = this,
             batchEditButton = me.getBatchEditButton(),
             mainWindow = me.getController('Main').mainWindow,
             result = me.getParser().parse(filterString);
 
+        var existing = me.subApplication.articleStore.getProxy().extraParams;
+
+        if (!extraParams) {
+            extraParams = { };
+        }
+
+        extraParams = Ext.Object.merge(existing, extraParams);
+        extraParams.resource = 'product';
+        extraParams.ast = Ext.JSON.encode(me.getParser().getAst());
+
         if (result) {
             me.subApplication.currentFilterName = name;
             me.subApplication.currentFilterString = filterString;
-            me.subApplication.articleStore.getProxy().extraParams = {
-                resource: 'product',
-                ast: Ext.JSON.encode(me.getParser().getAst())
-            };
+            me.subApplication.articleStore.getProxy().extraParams = extraParams;
             me.subApplication.articleStore.loadPage(1, { callback: function () {
                 me.getController('BatchProcess').updateBatchProcessWindow();
                 mainWindow.setWindowTitle(name);

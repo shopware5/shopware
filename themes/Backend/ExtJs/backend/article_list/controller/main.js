@@ -317,7 +317,9 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
             filter = '';
         }
 
-        result = me.getController('Suggest').loadFilter(filter + currentFilter);
+        result = me.getController('Suggest').loadFilter(filter + currentFilter, null, {
+            query: searchTerm
+        });
         if (result) {
             me.lastSearchFilter = filter;
         }

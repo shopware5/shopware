@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
@@ -34,7 +35,7 @@ use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -78,6 +79,8 @@ class ProductReader extends GenericReader
     {
         $products = parent::getList($identifiers);
         $products = $this->assignAdditionalText($products);
+        $products = $this->assignCategoryIds($products);
+        $products = $this->assignPrice($products);
 
         return $products;
     }
@@ -89,17 +92,26 @@ class ProductReader extends GenericReader
     {
         $query = $this->entityManager->createQueryBuilder();
         $query->select([
+            'variant.id as id',
             'variant.id as variantId',
             'article.id as articleId',
             'article.name',
+            'article.taxId',
+            'article.description',
             'variant.number',
+            'variant.kind',
             'variant.inStock',
+            'variant.ean',
+            'variant.supplierNumber',
             'variant.additionalText',
             'article.active as articleActive',
             'variant.active as variantActive',
+            'supplier.id as supplierId',
+            'supplier.name as supplierName',
         ]);
         $query->from(Detail::class, 'variant', $this->getIdentifierField());
-        $query->innerJoin('variant.article', 'article');
+        $query->leftJoin('variant.article', 'article');
+        $query->leftJoin('article.supplier', 'supplier');
 
         return $query;
     }
@@ -113,14 +125,14 @@ class ProductReader extends GenericReader
     }
 
     /**
-     * @param array[] $articles
+     * @param array[] $products
      *
      * @return array[]
      */
-    private function assignAdditionalText(array $articles)
+    private function assignAdditionalText(array $products)
     {
         /** @var Repository $shopRepo */
-        $shopRepo = $this->entityManager->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepo = $this->entityManager->getRepository(Shop::class);
 
         /** @var Shop $shop */
         $shop = $shopRepo->getActiveDefault();
@@ -131,32 +143,83 @@ class ProductReader extends GenericReader
             ContextService::FALLBACK_CUSTOMER_GROUP
         );
 
-        $products = $this->buildListProducts($articles);
-        $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
+        $tempProducts = $this->buildListProducts($products);
+        $tempProducts = $this->additionalTextService->buildAdditionalTextLists($tempProducts, $context);
 
-        foreach ($products as $product) {
-            $number = $product->getNumber();
-            if (!isset($articles[$number])) {
+        foreach ($tempProducts as $tempProduct) {
+            $number = $tempProduct->getNumber();
+            if (!isset($products[$number])) {
                 continue;
             }
-            $articles[$number]['additionalText'] = $product->getAdditional();
+            $products[$number]['additionalText'] = $tempProduct->getAdditional();
         }
 
-        return $articles;
+        return $products;
     }
 
     /**
-     * @param array[] $articles
+     * @param array[] $products
      *
      * @return ListProduct[]
      */
-    private function buildListProducts(array $articles)
+    private function buildListProducts(array $products)
     {
-        $products = [];
-        foreach ($articles as $article) {
-            $product = new ListProduct($article['articleId'], $article['variantId'], $article['number']);
-            $product->setAdditional($article['additionalText']);
-            $products[$article['number']] = $product;
+        $listProducts = [];
+        foreach ($products as $product) {
+            $listProduct = new ListProduct($product['articleId'], $product['variantId'], $product['number']);
+            $listProduct->setAdditional($product['additionalText']);
+            $listProducts[$product['number']] = $listProduct;
+        }
+
+        return $listProducts;
+    }
+
+    private function assignCategoryIds(array $products)
+    {
+        $ids = array_column($products, 'articleId');
+
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select(['articleID', 'GROUP_CONCAT(categoryID)']);
+        $query->from('s_articles_categories_ro');
+        $query->where('articleID IN (:ids)');
+        $query->groupBy('articleID');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $categories = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        foreach ($products as &$product) {
+            $mapping = [];
+            $id = $product['articleId'];
+            if (array_key_exists($id, $categories)) {
+                $mapping = array_values(array_filter(explode(',', $categories[$id])));
+            }
+            $product['categoryIds'] = $mapping;
+        }
+
+        return $products;
+    }
+
+    private function assignPrice(array $products)
+    {
+        $ids = array_column($products, 'articleId');
+        $variantIds = array_column($products, 'variantId');
+
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select(['articledetailsID', 'price']);
+        $query->from('s_articles_prices');
+        $query->where('articleID IN (:ids)');
+        $query->andWhere('articledetailsID IN (:variantIds)');
+        $query->andWhere('`from` = 1');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('variantIds', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        $prices = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        foreach ($products as &$product) {
+            $id = $product['variantId'];
+            if (array_key_exists($id, $prices)) {
+                $product['price'] = $prices[$id];
+            }
         }
 
         return $products;

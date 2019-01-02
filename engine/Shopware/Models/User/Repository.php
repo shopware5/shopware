@@ -39,7 +39,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select the user data for
      * the passed user id.
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -54,7 +54,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getUserDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -73,10 +73,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of users.
      *
-     * @param null $filter
-     * @param null $limit
-     * @param null $offset
-     * @param null $orderBy
+     * @param null|array $filter
+     * @param null|int   $limit
+     * @param null|int   $offset
+     * @param null|array $orderBy
      *
      * @return \Doctrine\ORM\Query
      */
@@ -98,7 +98,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getUserListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
+     * @param null|string $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -130,8 +130,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of roles.
      *
-     * @param null $offset
-     * @param null $limit
+     * @param null|int $offset
+     * @param null|int $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -165,7 +165,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the attributes
      * for the passed user id.
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -180,7 +180,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $userId
+     * @param int $userId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -198,7 +198,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of resources.
      *
-     * @param $filter
+     * @param null|string $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -213,7 +213,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getResourcesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
+     * @param null|string $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -237,7 +237,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select all resources
      * with an active admin rule.
      *
-     * @param $roleId
+     * @param int $roleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -252,7 +252,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getResourcesWithAdminRuleQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $roleId
+     * @param int $roleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -301,7 +301,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which deletes the passed resource
      *
-     * @param $resourceId
+     * @param int $resourceId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -316,7 +316,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getResourceDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $resourceId
+     * @param int $resourceId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -333,7 +333,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which deletes the passed privilege.
      *
-     * @param $privilegeId
+     * @param int $privilegeId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -348,7 +348,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPrivilegeDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $privilegeId
+     * @param int $privilegeId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -366,7 +366,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which deletes all privileges
      * of the passed resource id.
      *
-     * @param $resourceId
+     * @param int $resourceId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -381,7 +381,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPrivilegeDeleteByResourceIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $resourceId
+     * @param int $resourceId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -399,7 +399,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which delete all rules
      * for the passed privilege id.
      *
-     * @param $privilegeId
+     * @param int $privilegeId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -414,7 +414,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRuleDeleteByPrivilegeIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $privilegeId
+     * @param int $privilegeId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -431,7 +431,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which delete the passed rule.
      *
-     * @param $roleId
+     * @param int $roleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -446,7 +446,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRuleDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $roleId
+     * @param int $roleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -464,7 +464,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which deletes all rules
      * for the passed resource id.
      *
-     * @param $resourceId
+     * @param int $resourceId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -479,7 +479,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getRuleDeleteByResourceIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $resourceId
+     * @param int $resourceId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -496,7 +496,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $roleId
+     * @param int $roleId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -511,7 +511,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAdminRuleDeleteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $roleId
+     * @param int $roleId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

@@ -28,9 +28,6 @@ use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-/**
- * Class IndexFactory
- */
 class IndexFactory implements IndexFactoryInterface
 {
     /**
@@ -49,40 +46,58 @@ class IndexFactory implements IndexFactoryInterface
     private $numberOfReplicas;
 
     /**
+     * @var int|null
+     */
+    private $totalFieldsLimit;
+
+    /**
+     * @var int|null
+     */
+    private $maxResultWindow;
+
+    /**
      * @param string   $prefix
      * @param int|null $numberOfShards
      * @param int|null $numberOfReplicas
+     * @param int|null $totalFieldsLimit
+     * @param int|null $maxResultWindow
      */
-    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null)
+    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null, $totalFieldsLimit = null, $maxResultWindow = null)
     {
         $this->prefix = $prefix;
         $this->numberOfShards = $numberOfShards;
         $this->numberOfReplicas = $numberOfReplicas;
+        $this->totalFieldsLimit = $totalFieldsLimit;
+        $this->maxResultWindow = $maxResultWindow;
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return IndexConfiguration
      */
-    public function createIndexConfiguration(Shop $shop)
+    public function createIndexConfiguration(Shop $shop, $mappingType)
     {
         return new IndexConfiguration(
-            $this->getIndexName($shop) . '_' . $this->getTimestamp(),
-            $this->getIndexName($shop),
+            $this->getIndexName($shop, $mappingType) . '_' . $this->getTimestamp(),
+            $this->getIndexName($shop, $mappingType),
             $this->numberOfShards,
-            $this->numberOfReplicas
+            $this->numberOfReplicas,
+            $this->totalFieldsLimit,
+            $this->maxResultWindow
         );
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return ShopIndex
      */
-    public function createShopIndex(Shop $shop)
+    public function createShopIndex(Shop $shop, $mappingType)
     {
-        return new ShopIndex($this->getIndexName($shop), $shop);
+        return new ShopIndex($this->getIndexName($shop, $mappingType), $shop, $mappingType);
     }
 
     /**
@@ -104,12 +119,13 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop   $shop
+     * @param string $mappingType
      *
      * @return string
      */
-    private function getIndexName(Shop $shop)
+    private function getIndexName(Shop $shop, $mappingType)
     {
-        return $this->getPrefix() . $shop->getId();
+        return $this->getPrefix() . $shop->getId() . '_' . $mappingType;
     }
 }

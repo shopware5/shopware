@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,9 +22,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Value;
 
 /**
  * Backend search controller
@@ -39,10 +42,10 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function searchAction()
     {
-        $entity = $this->Request()->getParam('entity', null);
+        $entity = $this->Request()->getParam('entity');
         $ids = $this->Request()->getParam('ids', []);
-        $id = $this->Request()->getParam('id', null);
-        $term = $this->Request()->getParam('query', null);
+        $id = $this->Request()->getParam('id');
+        $term = $this->Request()->getParam('query');
         $offset = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
 
@@ -86,32 +89,27 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         // Sanitize and clean up the search parameter for later processing
-        $search = $this->Request()->get('search');
-        $search = strtolower($search);
-        $search = trim($search);
+        $term = $this->Request()->get('search');
+        $term = strtolower($term);
+        $term = trim($term);
 
-        $search = preg_replace('/[^\\w0-9]+/u', ' ', $search);
-        $search = trim(preg_replace('/\s+/', '%', $search), '%');
+        $term = preg_replace('/[^\\w0-9]+/u', ' ', $term);
+        $term = trim(preg_replace('/\s+/', '%', $term), '%');
 
-        if ($search === '') {
+        if ($term === '') {
             return;
         }
 
-        $articles = $this->getArticles($search);
-        $customers = $this->getCustomers($search);
-        $orders = $this->getOrders($search);
+        $search = $this->container->get('shopware.backend.global_search');
+        $result = $search->search($term);
 
-        $this->View()->assign('searchResult', [
-            'articles' => $articles,
-            'customers' => $customers,
-            'orders' => $orders,
-        ]);
+        $this->View()->assign('searchResult', $result);
     }
 
     /**
      * Queries the articles from the database based on the passed search term
      *
-     * @param $search
+     * @param string $search
      *
      * @return array
      */
@@ -153,7 +151,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * Queries the customers from the database based on the passed search term
      *
-     * @param $search
+     * @param string $search
      *
      * @return array
      */
@@ -188,7 +186,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * Queries the orders from the database based on the passed search term
      *
-     * @param $search
+     * @param string $search
      *
      * @return array
      */
@@ -232,7 +230,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $entity
+     * @param string $entity
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -244,26 +242,26 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             ->from($entity, 'entity');
 
         switch ($entity) {
-            case 'Shopware\Models\Article\Article':
+            case Article::class:
                 $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
                     ->innerJoin('entity.mainDetail', 'mainDetail')
                     ->leftJoin('entity.details', 'details');
                 break;
 
-            case 'Shopware\Models\Property\Value':
+            case Value::class:
                 if ($groupId = $this->Request()->getParam('groupId')) {
                     $query->andWhere('entity.optionId = :optionId')
                         ->setParameter(':optionId', $this->Request()->getParam('groupId'));
                 }
                 break;
 
-            case 'Shopware\Models\Property\Option':
+            case Option::class:
                 if ($setId = $this->Request()->getParam('setId')) {
                     $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
                         ->setParameter(':setId', $setId);
                 }
                 break;
-            case 'Shopware\Models\Category\Category':
+            case Category::class:
                 $query->andWhere('entity.parent IS NOT NULL')
                     ->addOrderBy('entity.parentId')
                     ->addOrderBy('entity.position');
@@ -274,7 +272,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $builder \Doctrine\ORM\QueryBuilder
+     * @param \Doctrine\ORM\QueryBuilder $builder
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
@@ -306,7 +304,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }, $data);
 
         switch ($entity) {
-            case 'Shopware\Models\Category\Category':
+            case Category::class:
                 $data = $this->resolveCategoryPath($data);
                 break;
         }
@@ -366,21 +364,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * Creates a custom search term condition
-     *
-     * @param string $entity
-     * @param string $column
-     *
-     * @return string
-     */
-    private function createCustomFieldToSearchTermCondition($entity, $column)
-    {
-        $field = $entity . '.' . $column;
-
-        return $field . ' LIKE :search';
-    }
-
-    /**
      * @param \Doctrine\ORM\QueryBuilder $query
      * @param int[]                      $ids
      */
@@ -391,7 +374,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return array[]
      */
@@ -420,7 +403,9 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $ids
+     * @param int[] $ids
+     *
+     * @return array
      */
     private function getCategories($ids)
     {

@@ -21,11 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Random;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,7 +52,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
     public function successAction()
     {
         $this->View()->loadTemplate('frontend/tellafriend/index.tpl');
-        $this->View()->sSuccess = true;
+        $this->View()->assign('sSuccess', true);
     }
 
     public function indexAction()
@@ -68,9 +67,9 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
             return $this->forward('index', 'index');
         }
 
-        // Get Article-Information
-        $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $id);
-        if (empty($sArticle['articleName'])) {
+        // Get Product-Information
+        $product = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $id);
+        if (empty($product['articleName'])) {
             return $this->forward('index', 'index');
         }
 
@@ -86,7 +85,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $variables['sError'] = true;
             }
 
-            if (preg_match('/;/', $this->Request()->getPost('sRecipient')) || strlen($this->Request()->getPost('sRecipient') >= 50)) {
+            if (preg_match('/;/', $this->Request()->getPost('sRecipient')) || strlen($this->Request()->getPost('sRecipient')) >= 50) {
                 $variables['sError'] = true;
             }
 
@@ -106,12 +105,12 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
 
             if ($variables['sError'] == false) {
                 // Prepare eMail
-                $sArticle['linkDetails'] = $this->Front()->Router()->assemble(['sViewport' => 'detail', 'sArticle' => $sArticle['articleID']]);
+                $product['linkDetails'] = $this->Front()->Router()->assemble(['sViewport' => 'detail', 'sArticle' => $product['articleID']]);
 
                 $context = [
                     'sName' => $this->sSYSTEM->_POST['sName'],
-                    'sArticle' => html_entity_decode($sArticle['articleName']),
-                    'sLink' => $sArticle['linkDetails'],
+                    'sArticle' => html_entity_decode($product['articleName']),
+                    'sLink' => $product['linkDetails'],
                 ];
 
                 if ($this->sSYSTEM->_POST['sComment']) {
@@ -132,14 +131,14 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $url = $this->Front()->Router()->assemble(['controller' => 'tellafriend', 'action' => 'success']);
                 $this->redirect($url);
             } else {
-                $this->View()->sError = true;
-                $this->View()->sName = $this->Request()->getPost('sName');
-                $this->View()->sMail = $this->Request()->getPost('sMail');
-                $this->View()->sRecipient = $this->Request()->getPost('sRecipient');
-                $this->View()->sComment = $this->Request()->getPost('sComment');
+                $this->View()->assign('sError', true);
+                $this->View()->assign('sName', $this->Request()->getPost('sName'));
+                $this->View()->assign('sMail', $this->Request()->getPost('sMail'));
+                $this->View()->assign('sRecipient', $this->Request()->getPost('sRecipient'));
+                $this->View()->assign('sComment', $this->Request()->getPost('sComment'));
             }
         }
-        $this->View()->rand = Random::getAlphanumericString(32);
-        $this->View()->sArticle = $sArticle;
+        $this->View()->assign('rand', Random::getAlphanumericString(32));
+        $this->View()->assign('sArticle', $product);
     }
 }

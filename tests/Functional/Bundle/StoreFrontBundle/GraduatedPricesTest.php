@@ -91,13 +91,13 @@ class GraduatedPricesTest extends TestCase
 
         $this->helper->createArticle($data);
 
-        /** @var $first Price */
+        /** @var Price $first */
         $listProduct = $this->helper->getListProduct($number, $context);
         $this->assertCount(3, $listProduct->getPrices());
         $first = array_shift($listProduct->getPrices());
         $this->assertEquals(100, $first->getCalculatedPrice());
 
-        /** @var $first Price */
+        /** @var Price $first */
         $listProduct = $this->helper->getListProduct($variantNumber, $context);
 
         $this->assertCount(3, $listProduct->getPrices());

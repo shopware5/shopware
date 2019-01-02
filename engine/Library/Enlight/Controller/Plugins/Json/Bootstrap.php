@@ -29,32 +29,15 @@
  * known as jsonp.
  *
  * @category   Enlight
- * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap_Default
 {
     /**
-     * Initializes this plugin. This Plugin should run after the ViewRenderer Plugin
-     *
-     * @return void
-     */
-    public function init()
-    {
-        if ($this->Collection() === null) {
-            return;
-        }
-        $event = new Enlight_Event_Handler_Default(
-            'Enlight_Controller_Action_PostDispatch',
-            array($this, 'onPostDispatch'),
-            500
-        );
-        $this->Application()->Events()->registerListener($event);
-    }
-
-    /**
      * Source encoding needed to convert to UTF-8
+     *
      * @var string
      */
     protected $encoding = 'UTF-8';
@@ -82,14 +65,31 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     protected $formatDateTime = true;
 
     /**
+     * Initializes this plugin. This Plugin should run after the ViewRenderer Plugin
+     */
+    public function init()
+    {
+        if ($this->Collection() === null) {
+            return;
+        }
+        $event = new Enlight_Event_Handler_Default(
+            'Enlight_Controller_Action_PostDispatch',
+            [$this, 'onPostDispatch'],
+            500
+        );
+        $this->Application()->Events()->registerListener($event);
+    }
+
+    /**
      * Called from the Event Manager after the dispatch process
      *
      * @param Enlight_Event_EventArgs $args
+     *
      * @return bool
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var $subject Enlight_Controller_Action */
+        /** @var $controller Enlight_Controller_Action $controller */
         $subject = $args->get('subject');
         $response = $subject->Response();
         $request = $subject->Request();
@@ -136,11 +136,13 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      * name.
      *
      * @param bool $padding
+     *
      * @return Enlight_Controller_Plugins_Json_Bootstrap
      */
     public function setPadding($padding = true)
     {
         $this->padding = $padding;
+
         return $this;
     }
 
@@ -158,15 +160,16 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      * The method can be used to determine if the raw output will be transformed to JSON
      * or just the data assigned to the current view.
      *
-     * @param   bool $renderer
-     * @return  Enlight_Controller_Plugins_Json_Bootstrap
+     * @param bool $renderer
+     *
+     * @return Enlight_Controller_Plugins_Json_Bootstrap
      */
     public function setRenderer($renderer = true)
     {
         $this->renderer = (bool) $renderer;
 
         if ($this->renderer === true) {
-            /** @var $viewRenderer Enlight_Controller_Plugins_ViewRenderer_Bootstrap */
+            /** @var Enlight_Controller_Plugins_ViewRenderer_Bootstrap $viewRenderer */
             $viewRenderer = $this->Collection()->get('ViewRenderer');
             // Disable the default renderer
             $viewRenderer->setNoRender(true);
@@ -188,12 +191,14 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Sets the source encoding used to convert the current data to UTF-8
      *
-     * @param $encoding
+     * @param string $encoding
+     *
      * @return \Enlight_Controller_Plugins_Json_Bootstrap
      */
     public function setEncoding($encoding)
     {
         $this->encoding = (string) $encoding;
+
         return $this;
     }
 
@@ -210,7 +215,8 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Converts data to json
      *
-     * @param  mixed $data
+     * @param mixed $data
+     *
      * @return string
      */
     protected function convertToJson($data)
@@ -219,12 +225,13 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
             $this->convertToUtf8($data, $this->encoding);
         }
         if ($this->formatDateTime === true && is_array($data)) {
-            array_walk_recursive($data, array($this, 'convertDateTime'));
+            array_walk_recursive($data, [$this, 'convertDateTime']);
             $data = Zend_Json::encode($data);
             $data = preg_replace('/"Date\((-?\d+)\)"/', 'new Date($1)', $data);
         } else {
             $data = Zend_Json::encode($data);
         }
+
         return $data;
     }
 
@@ -232,7 +239,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      * Converts date time objects
      *
      * @param DateTime $value
-     * @param $key
+     * @param mixed    $key
      */
     protected static function convertDateTime(&$value, $key)
     {
@@ -244,9 +251,10 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Converts a non UTF-8 string into an UTF-8 string
      *
-     * @param   string|array $data
-     * @param   string       $encoding
-     * @return  string|array
+     * @param string|array $data
+     * @param string       $encoding
+     *
+     * @return string|array
      */
     protected function convertToUtf8($data, $encoding)
     {
@@ -264,9 +272,10 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Embedded a JSON object into a callback function
      *
-     * @param $data
-     * @param $callback
-     * @return String
+     * @param string $data
+     * @param string $callback
+     *
+     * @return string
      */
     protected function addPadding($data, $callback)
     {

@@ -33,7 +33,8 @@ Ext.define('Shopware.apps.Index.model.WidgetSettings', {
         'columnsShown',
         'dock',
         'pinned',
-        'minimized'
+        'minimized',
+        { name: 'data', type: 'auto' }
     ]
 });
 

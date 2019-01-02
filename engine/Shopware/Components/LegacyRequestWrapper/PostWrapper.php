@@ -52,7 +52,7 @@ class PostWrapper implements \ArrayAccess
      * @return bool true on success or false on failure.
      *              </p>
      *              <p>
-     *              The return value will be casted to boolean if non-boolean was returned.
+     *              The return value will be casted to boolean if non-boolean was returned
      */
     public function offsetExists($offset)
     {
@@ -106,7 +106,7 @@ class PostWrapper implements \ArrayAccess
      *                      The offset to unset.
      *                      </p>
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function offsetUnset($offset)
     {

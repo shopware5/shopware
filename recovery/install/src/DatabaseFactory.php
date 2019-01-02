@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Install;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -64,7 +64,7 @@ class DatabaseFactory
     }
 
     /**
-     * @param $conn
+     * @param \PDO $conn
      */
     protected function setNonStrictSQLMode(\PDO $conn)
     {

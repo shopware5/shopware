@@ -82,6 +82,17 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             errorTitle: '{s name=message/account/error_title}Failure{/s}',
             errorText: '{s name=message/account/error_text}There is an error occurred while saving.{/s}'
         },
+        overwriteCustomer: {
+            title: '{s name=overwriteCustomer/title}Overwrite most recent changes{/s}',
+            message: '{s name=overwriteCustomer/message}Do you really want to overwrite the latest changes?{/s}',
+        },
+
+        unlock: {
+            successTitle: '{s name=base/unlock_customer/success_title}Successfully{/s}',
+            successText: '{s name=base/unlock_customer/success_text}Successfully unlocked the customer.{/s}',
+            errorTitle: '{s name=base/unlock_customer/error_title}Failure{/s}',
+            errorText: '{s name=base/unlock_customer/error_text}An error occurred while unlocking the customer.{/s}'
+        },
 
         growlMessage: '{s name=message/growlMessage}Customer{/s}'
     },
@@ -106,7 +117,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 click: me.onSaveCustomer
             },
             'customer-base-field-set': {
-                generatePassword: me.onGeneratePassword
+                generatePassword: me.onGeneratePassword,
+                unlockCustomer: me.onUnlockCustomer
             },
             'customer-debit-field-set': {
                 changePayment: me.onChangePayment
@@ -365,15 +377,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 addressData[field.getName()] = field.getValue();
             });
 
-            var addressModel = Ext.create('Shopware.apps.Customer.model.Address', addressData),
-                billingModel = Ext.create('Shopware.apps.Customer.model.Billing'),
-                shippingModel = Ext.create('Shopware.apps.Customer.model.Shipping');
-
-            billingModel.fromAddress(addressModel);
-            shippingModel.fromAddress(addressModel);
-
-            model.getBilling().add(billingModel);
-            model.getShipping().add(shippingModel);
+            var addressModel = Ext.create('Shopware.apps.Customer.model.Address', addressData);
         }
 
         form.getForm().updateRecord(model);
@@ -411,7 +415,48 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     quickView.getStore().load();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.password.errorTitle, me.snippets.password.errorText + '<br> ' + rawData.message, me.snippets.growlMessage);
+
+                    if (rawData.overwriteAble) {
+                        Ext.MessageBox.confirm(me.snippets.overwriteCustomer.title, me.snippets.overwriteCustomer.message, function (response) {
+                            if (response === 'yes') {
+                                record.set('changed', rawData.data.changed);
+                                me.onSaveCustomer(btn);
+                            }
+                        });
+                    }
                 }
+            }
+        });
+    },
+
+    /**
+     * @param { Ext.container.Container } unlockContainer
+     * @param { Ext.data.Model } record
+     */
+    onUnlockCustomer: function (unlockContainer, record) {
+        var me = this,
+            displayField = unlockContainer.down('displayfield'),
+            button = unlockContainer.down('button');
+
+        Ext.Ajax.request({
+            url: '{url action=unlockCustomer}',
+            params: {
+                customerId: record.get('id')
+            },
+            success: function (response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                if (!result.success) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.unlock.errorTitle, me.snippets.unlock.errorText, me.snippets.growlMessage);
+                    return;
+                }
+
+                record.set('lockedUntil', null);
+                record.set('failedLogins', 0);
+
+                Shopware.Notification.createGrowlMessage(me.snippets.unlock.successTitle, me.snippets.unlock.successText, me.snippets.growlMessage);
+                displayField.setValue('');
+                button.setDisabled(true);
             }
         });
     }

@@ -43,4 +43,8 @@ class ViewMock extends \Enlight_View_Default
     {
         $this->template = $template;
     }
+
+    public function assign($spec, $value = null, $nocache = null, $scope = null)
+    {
+    }
 }

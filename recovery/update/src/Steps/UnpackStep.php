@@ -85,7 +85,7 @@ class UnpackStep
                 $localFs->rename($backupDirRelative, rtrim($backupDirRelative, '/') . uniqid());
             }
 
-            // maybe we have to create backup dir here:
+            // Maybe we have to create backup dir here:
             $localFs->write($backupDirRelative . 'dummy', 'dummyfile');
         }
 
@@ -115,12 +115,12 @@ class UnpackStep
             ++$count;
 
             if ($this->isDebug) {
-                // just remove the update file
+                // Just remove the update file
                 $localFs->delete($sourceFile);
             } else {
                 if ($localFs->has($targetFile)) {
                     if ($localFs->has($backupFile)) {
-                        // issue rename to trash command
+                        // Issue rename to trash command
                         $remoteFs->delete($targetFile);
                     } else {
                         $remoteFs->rename($targetFile, $backupFile);

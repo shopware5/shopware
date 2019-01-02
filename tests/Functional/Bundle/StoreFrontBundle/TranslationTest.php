@@ -106,7 +106,7 @@ class TranslationTest extends TestCase
         $article = $this->helper->createArticle($product);
 
         $unit = null;
-        /** @var $detail Detail */
+        /** @var Detail $detail */
         foreach ($article->getDetails() as $detail) {
             if ($variant['number'] === $detail->getNumber()) {
                 $unit = $detail->getUnit();

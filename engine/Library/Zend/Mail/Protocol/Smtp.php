@@ -21,6 +21,8 @@
  * @version    $Id$
  */
 
+use Zend\Mail\Protocol\ProtocolTrait;
+
 
 /**
  * @see Zend_Mime
@@ -45,6 +47,8 @@
  */
 class Zend_Mail_Protocol_Smtp extends Zend_Mail_Protocol_Abstract
 {
+    use ProtocolTrait;
+
     /**
      * The transport method for the socket
      *
@@ -198,7 +202,7 @@ class Zend_Mail_Protocol_Smtp extends Zend_Mail_Protocol_Abstract
         if ($this->_secure == 'tls') {
             $this->_send('STARTTLS');
             $this->_expect(220, 180);
-            if (!stream_socket_enable_crypto($this->_socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+            if (!stream_socket_enable_crypto($this->_socket, true, $this->getCryptoMethod())) {
                 /**
                  * @see Zend_Mail_Protocol_Exception
                  */

@@ -36,9 +36,15 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         expiring_license: 'Expiring license(s)',
         expired_license: 'Expired license(s)',
         expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
-        expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
+        expired_license_warning: 'At least one license of your used plugins has expired. <br>Check this in your Shopware account under "Licenses > Licenses" and update your license immediately.',
         unknown_license: 'Unlicensed plugins',
-        confirm_open_pluginmanager: 'You have installed unlicensed plugins. Do you want to open the Plugin Manager now to check your plugins?'
+        confirm_open_pluginmanager: 'You have installed unlicensed plugins. Do you want to open the Plugin Manager now to check your plugins?',
+        subscription: 'Subscription',
+        subscription_hide_message: 'Would you like to hide this message for a week?',
+        openPluginOverview: 'Open plugin overview',
+        importantInformation: 'Important Information',
+        noShopSecretWarning: 'In order to receive information about updates and install plugins, you need to log in to your Shopware account. If you don\'t have a Shopware account yet, you can easily register.',
+        login: 'Login now'
     },
 
     /**
@@ -50,13 +56,11 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         me.getPluginInformation(function (data) {
             var pluginData = me.preparePluginData(data);
             pluginData.expiredPluginSubscriptions.sort(me.sortPluginsByDaysLeftCallback);
-            me.displayNotices(pluginData);
+            me.displayNotices(pluginData, data);
         });
     },
 
     checkSecret: function () {
-        var me = this;
-
         Ext.Ajax.request({
             url: '{url controller="PluginManager" action="checkSecret"}'
         });
@@ -96,11 +100,12 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                     isSubscriptionExpired = subscriptionExpirationDate < today;
                     daysDiffSubscription = Math.round(Math.abs((subscriptionExpirationDate.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
 
-                    if (isSubscriptionExpired || daysDiffSubscription < 14) {
+                    if (isSubscriptionExpired) {
                         preparedData.expiredPluginSubscriptions.push({
                             label: plugin.label,
                             expired: isSubscriptionExpired,
-                            daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription
+                            daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription,
+                            dayDiff: daysDiffSubscription
                         });
                     }
                 }
@@ -125,7 +130,8 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                     preparedData.expiredLicensePlugins.push({
                         label: plugin.label,
                         expired: isLicenseExpired,
-                        daysLeft: isLicenseExpired ? 0 : daysDiffLicense
+                        daysLeft: isLicenseExpired ? 0 : daysDiffLicense,
+                        dayDiff: daysDiffLicense
                     });
                 }
             }
@@ -146,6 +152,25 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                     return;
                 }
 
+                if (responseData.data.shopSecretMissing) {
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: me.snippets.importantInformation,
+                        text: me.snippets.noShopSecretWarning,
+                        width: 460,
+                        btnDetail: {
+                            text: me.snippets.login,
+                            callback: function () {
+                                Shopware.app.Application.addSubApplication({
+                                    name: 'Shopware.apps.PluginManager',
+                                    params: {
+                                        openLogin: true
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+
                 if (responseData.success === true && responseData.data) {
                     callback(responseData.data);
                 }
@@ -153,7 +178,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         });
     },
 
-    displayNotices: function(data) {
+    displayNotices: function(data, rawData) {
         var me = this,
             expiredLicensePlugins = me.filterExpiredPlugins(data.expiredLicensePlugins, true),
             soonExpiredLicensePlugins = me.filterExpiredPlugins(data.expiredLicensePlugins, false),
@@ -181,7 +206,21 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         }
 
         if (expiredLicensePlugins && expiredLicensePlugins.length > 0) {
-            me.displayExpiredLicensePluginsNotice(expiredLicensePlugins);
+            if (!rawData.live) {
+                return;
+            }
+
+            switch (me.getExpiredMode(expiredLicensePlugins)) {
+                case 'stop':
+                    Ext.create('Shopware.window.ExpiredPluginStop');
+                    break;
+                case 'warning':
+                    Ext.create('Shopware.window.ExpiredPluginWarning');
+                    break;
+
+                default:
+                    me.displayExpiredLicensePluginsNotice(expiredLicensePlugins);
+            }
         }
 
         if (soonExpiredLicensePlugins && soonExpiredLicensePlugins.length > 0) {
@@ -218,9 +257,26 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         var me          = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
+        if (Ext.util.Cookies.get('hideSubscriptionNotice') !== null) {
+            return;
+        }
+
         Shopware.Notification.createStickyGrowlMessage({
             text: Ext.String.format(me.snippets.subscription_warning, plugins.length, pluginNames),
-            width: 440
+            width: 440,
+            onCloseButton: function() {
+                Ext.Msg.confirm(
+                    me.snippets.subscription,
+                    me.snippets.subscription_hide_message,
+                    function(answer) {
+                        if (answer === 'yes') {
+                            var currentDate = new Date();
+                            currentDate.setDate(currentDate.getDate() + 7);
+                            Ext.util.Cookies.set('hideSubscriptionNotice', 1, currentDate);
+                        }
+                    }
+                );
+            }
         });
     },
 
@@ -242,19 +298,22 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         });
     },
 
-    displayExpiredLicensePluginsNotice: function(plugins) {
-        var me          = this,
-            pluginNames = me.getPluginNamesMessage(plugins, '<br />');
+    displayExpiredLicensePluginsNotice: function() {
+        var me = this;
 
         Shopware.Notification.createStickyGrowlMessage({
             title: me.snippets.expired_license,
-            text: Ext.String.format(me.snippets.expired_license_warning, plugins.length, pluginNames),
-            width: 440
-        });
-
-        Shopware.app.Application.addSubApplication({
-            name: 'Shopware.apps.PluginManager',
-            action: 'ExpiredPlugins'
+            text: me.snippets.expired_license_warning,
+            width: 440,
+            btnDetail: {
+                text: me.snippets.openPluginOverview,
+                callback: function () {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.PluginManager',
+                        action: 'ExpiredPlugins'
+                    });
+                }
+            }
         });
     },
 
@@ -360,9 +419,27 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         return 0;
     },
 
-    openPluginManager: function() {
-        var me = this;
+    getExpiredMode: function(expiredPlugins) {
+        var modes = {
+            'stop': parseInt('{config name="missingLicenseStopThreshold"}'),
+            'warning': parseInt('{config name="missingLicenseWarningThreshold"}'),
+        }, currentMode = 'normal';
 
+        Object.keys(modes).forEach(function (mode) {
+            if (currentMode !== 'normal') {
+                return;
+            }
+            expiredPlugins.forEach(function (plugin) {
+                if (plugin.dayDiff >= modes[mode]) {
+                    currentMode = mode;
+                }
+            })
+        });
+
+        return currentMode;
+    },
+
+    openPluginManager: function() {
         Shopware.app.Application.addSubApplication({
                 name: 'Shopware.apps.PluginManager'
             },

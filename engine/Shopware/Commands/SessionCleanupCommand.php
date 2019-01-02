@@ -53,7 +53,7 @@ EOF
     {
         $io = new SymfonyStyle($input, $output);
         $saveHandler = $this->container->get('session.save_handler');
-        if (null === $saveHandler) {
+        if ($saveHandler === null) {
             $io->error('Save handler not available');
 
             return 1;

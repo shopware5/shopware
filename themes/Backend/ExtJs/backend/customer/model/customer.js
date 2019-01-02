@@ -50,8 +50,10 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
     fields: [
         // {block name="backend/customer/model/customer/fields"}{/block}
         { name: 'newPassword', type: 'string' },
+        { name: 'changed', type: 'date', dateFormat: 'c' },
         { name: 'amount', type: 'float' },
         { name: 'orderCount', type: 'int' },
+        { name: 'failedLogins', type: 'int' },
         { name: 'canceledOrderAmount', type: 'float' },
         { name: 'shopName', type: 'string' },
         { name: 'language', type: 'string' },
@@ -62,6 +64,23 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name: 'lastname', type: 'string' },
         { name: 'title', type: 'string' },
         { name: 'number', type: 'string' },
+        { name: 'serverTime', type: 'date', defaultValue: null },
+        {
+            name: 'lockedUntil',
+            type: 'date',
+            defaultValue: null,
+            convert: function (value, record) {
+                if (record.get('serverTime') === null || value === null || !Ext.isDefined(record.get('serverTime'))) {
+                    return value;
+                }
+
+                if (record.get('serverTime').getTime() >= value.getTime()) {
+                    return null;
+                }
+
+                return value;
+            }
+        },
         { name: 'customerStreamIds', type: 'string' }
     ],
 
@@ -105,8 +124,8 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
      * @array
      */
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Customer.model.Billing', name: 'getBilling', associationKey: 'billing' },
-        { type: 'hasMany', model: 'Shopware.apps.Customer.model.Shipping', name: 'getShipping', associationKey: 'shipping' },
+        { type: 'hasMany', model: 'Shopware.apps.Customer.model.Address', name: 'getDefaultBillingAddress', associationKey: 'defaultBillingAddress' },
+        { type: 'hasMany', model: 'Shopware.apps.Customer.model.Address', name: 'getDefaultShippingAddress', associationKey: 'defaultShippingAddress' },
         { type: 'hasMany', model: 'Shopware.apps.Customer.model.Debit', name: 'getDebit', associationKey: 'debit' },
         { type: 'hasMany', model: 'Shopware.apps.Customer.model.PaymentData', name: 'getPaymentData', associationKey: 'paymentData' }
     ]

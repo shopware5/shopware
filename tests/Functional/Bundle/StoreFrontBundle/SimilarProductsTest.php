@@ -74,7 +74,7 @@ class SimilarProductsTest extends TestCase
 
         $this->assertCount(4, $similarProducts);
 
-        /** @var $similarProduct ListProduct */
+        /** @var ListProduct $similarProduct */
         foreach ($similarProducts as $similarProduct) {
             $this->assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
             $this->assertContains($similarProduct->getNumber(), $similarNumbers);
@@ -117,7 +117,7 @@ class SimilarProductsTest extends TestCase
 
             $this->assertCount(4, $similarProducts);
 
-            /** @var $similarProduct ListProduct */
+            /** @var ListProduct $similarProduct */
             foreach ($similarProducts as $similarProduct) {
                 $this->assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
                 $this->assertContains($similarProduct->getNumber(), $similarNumbers);
@@ -176,8 +176,8 @@ class SimilarProductsTest extends TestCase
     }
 
     /**
-     * @param $productId
-     * @param $similarProductIds
+     * @param int   $productId
+     * @param int[] $similarProductIds
      */
     private function linkSimilarProduct($productId, $similarProductIds)
     {

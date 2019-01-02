@@ -61,7 +61,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param $products
+     * @param array       $products
      * @param ShopContext $context
      * @param Category    $category
      *
@@ -88,7 +88,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     public function getEkCustomerGroup()
     {
         return $this->converter->convertCustomerGroup(
-            Shopware()->Container()->get('models')->find('Shopware\Models\Customer\Group', 1)
+            Shopware()->Container()->get('models')->find(\Shopware\Models\Customer\Group::class, 1)
         );
     }
 
@@ -101,6 +101,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @param SortingInterface[]   $sortings
      * @param null                 $context
      * @param array                $configs
+     * @param bool                 $variantSearch
      *
      * @return ProductNumberSearchResult
      */
@@ -112,7 +113,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $facets = [],
         $sortings = [],
         $context = null,
-        array $configs = []
+        array $configs = [],
+        $variantSearch = false
     ) {
         if ($context === null) {
             $context = $this->getContext();
@@ -145,7 +147,11 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
         $criteria->offset(0)->limit(4000);
 
-        $search = Shopware()->Container()->get('shopware_search.product_number_search');
+        if ($variantSearch) {
+            $search = Shopware()->Container()->get('shopware_search.variant_search');
+        } else {
+            $search = Shopware()->Container()->get('shopware_search.product_number_search');
+        }
 
         $result = $search->search($criteria, $context);
 
@@ -159,9 +165,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
-     * @param Category $category
-     * @param $conditions
+     * @param Criteria    $criteria
+     * @param Category    $category
+     * @param array       $conditions
      * @param ShopContext $context
      */
     protected function addCategoryBaseCondition(
@@ -211,7 +217,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param $number
+     * @param int         $number
      * @param ShopContext $context
      * @param Category    $category
      * @param $additionally
@@ -236,11 +242,11 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param ProductNumberSearchResult $result
-     * @param $expectedNumbers
+     * @param array                     $expectedNumbers
      */
     protected function assertSearchResult(
         ProductNumberSearchResult $result,
-        $expectedNumbers
+        array $expectedNumbers
     ) {
         $numbers = array_map(function (BaseProduct $product) {
             return $product->getNumber();
@@ -303,7 +309,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param $number
+     * @param string      $number
      * @param ShopContext $context
      * @param Category    $category
      * @param array       $additionally
@@ -336,5 +342,18 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $product = array_merge($product, $additionally);
 
         return $product;
+    }
+
+    /**
+     * Allows to set a Shopware config
+     *
+     * @param string $name
+     * @param mixed  $value
+     */
+    protected function setConfig($name, $value)
+    {
+        Shopware()->Container()->get('config_writer')->save($name, $value);
+        Shopware()->Container()->get('cache')->clean();
+        Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
     }
 }

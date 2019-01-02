@@ -29,7 +29,7 @@ use Shopware\Components\Logger;
 use Shopware\Components\Model\Configuration;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -62,6 +62,8 @@ class DbalCollector implements CollectorInterface
      * Logs all database process to the internal log object.
      * Iterates all queries of the query profiler and writes the query,
      * the parameter and the elapsed seconds for the query into a new row of the log.
+     *
+     * @param Logger $log
      */
     public function logResults(Logger $log)
     {
@@ -74,7 +76,7 @@ class DbalCollector implements CollectorInterface
             return;
         }
 
-        /** @var $query Zend_Db_Profiler_Query */
+        /** @var \Zend_Db_Profiler_Query $query */
         foreach ($queries as $query) {
             $id = md5($query['sql']);
             $totalTime += $query['executionMS'];

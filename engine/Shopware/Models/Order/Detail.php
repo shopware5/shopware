@@ -26,6 +26,7 @@ namespace Shopware\Models\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Detail as ArticleDetail;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -49,48 +50,59 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Detail extends ModelEntity
 {
     /**
+     * @var \Shopware\Models\Order\Order
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="details")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Order
      */
     protected $order;
 
     /**
+     * @var \Shopware\Models\Order\Status
+     *
      * @Assert\NotBlank
+     *
+     * @var \Shopware\Models\Order\Status
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\DetailStatus")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Status
      */
     protected $status;
 
     /**
+     * @var \Shopware\Models\Tax\Tax
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Tax\Tax")
      * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Tax\Tax
      */
     protected $tax;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderDetail", mappedBy="orderDetail", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\OrderDetail
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderDetail", mappedBy="orderDetail", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="orderDetail")
-     *
      * @var \Shopware\Models\Order\Esd
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="orderDetail")
      */
     protected $esd;
+
+    /**
+     * @var ArticleDetail|null
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
+     * @ORM\JoinColumn(name="articleDetailID", referencedColumnName="id")
+     */
+    protected $articleDetail;
+
     /**
      * @var int
      *
@@ -108,9 +120,9 @@ class Detail extends ModelEntity
     private $orderId;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var int
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
@@ -124,9 +136,10 @@ class Detail extends ModelEntity
     private $taxId;
 
     /**
+     * @var float
+     *
      * @Assert\NotBlank
      *
-     * @var float
      * @ORM\Column(name="tax_rate", type="float", nullable=false)
      */
     private $taxRate;
@@ -139,6 +152,13 @@ class Detail extends ModelEntity
     private $statusId;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="articleDetailID", type="integer", nullable=true)
+     */
+    private $articleDetailID;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
@@ -146,36 +166,36 @@ class Detail extends ModelEntity
     private $number;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var string
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
     private $articleNumber;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var float
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="price", type="float", nullable=false)
      */
     private $price;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var int
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="quantity", type="integer", nullable=false)
      */
     private $quantity;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var string
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -196,7 +216,7 @@ class Detail extends ModelEntity
     private $shippedGroup = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -375,6 +395,22 @@ class Detail extends ModelEntity
     }
 
     /**
+     * @return null|ArticleDetail
+     */
+    public function getArticleDetail()
+    {
+        return $this->articleDetail;
+    }
+
+    /**
+     * @param null|ArticleDetail $articleDetail
+     */
+    public function setArticleDetail(ArticleDetail $articleDetail = null)
+    {
+        $this->articleDetail = $articleDetail;
+    }
+
+    /**
      * Set shipped
      *
      * @param int $shipped
@@ -425,7 +461,7 @@ class Detail extends ModelEntity
     /**
      * Set releaseDate
      *
-     * @param \DateTime $releaseDate
+     * @param \DateTimeInterface $releaseDate
      *
      * @return Detail
      */
@@ -439,7 +475,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getReleaseDate()
     {
@@ -535,7 +571,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\DetailStatus
+     * @return Status
      */
     public function getStatus()
     {
@@ -575,7 +611,7 @@ class Detail extends ModelEntity
      */
     public function afterRemove()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         // Do not increase instock for canceled orders
@@ -608,7 +644,7 @@ class Detail extends ModelEntity
      */
     public function afterInsert()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         /*
@@ -645,18 +681,18 @@ class Detail extends ModelEntity
         $newQuantity = empty($quantityChange) ? $this->quantity : $quantityChange[1];
         $quantityDiff = $oldQuantity - $newQuantity;
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
-        //If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
-        //The stock of the new article will be reduced by the (new) ordered quantity.
+        // If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
+        // The stock of the new article will be reduced by the (new) ordered quantity.
         if (!empty($articleChange)) {
             /*
              * before try to get the article, check if the association field (articleNumber) is not empty,
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[0])) {
-                /** @var $oldArticle \Shopware\Models\Article\Detail */
+                /** @var \Shopware\Models\Article\Detail $oldArticle */
                 $oldArticle = $repository->findOneBy(['number' => $articleChange[0]]);
             }
 
@@ -665,7 +701,7 @@ class Detail extends ModelEntity
              * otherwise the find function will throw an exception
              */
             if (!empty($articleChange[1])) {
-                /** @var $newArticle \Shopware\Models\Article\Detail */
+                /** @var \Shopware\Models\Article\Detail $newArticle */
                 $newArticle = $repository->findOneBy(['number' => $articleChange[1]]);
             }
 
@@ -710,7 +746,7 @@ class Detail extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\OrderDetail', 'attribute', 'orderDetail');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\OrderDetail::class, 'attribute', 'orderDetail');
     }
 
     /**
@@ -817,7 +853,7 @@ class Detail extends ModelEntity
     private function calculateOrderAmount()
     {
         if ($this->getOrder() instanceof Order) {
-            //recalculates the new amount
+            // Recalculates the new amount
             $this->getOrder()->calculateInvoiceAmount();
             Shopware()->Models()->persist($this->getOrder());
         }

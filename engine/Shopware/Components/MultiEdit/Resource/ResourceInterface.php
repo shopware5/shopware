@@ -39,9 +39,9 @@ interface ResourceInterface
     /**
      * Returns values to be suggested for the current attribute
      *
-     * @param $attribute
-     * @param $operator
-     * @param $queryConfig
+     * @param string $attribute
+     * @param string $operator
+     * @param array  $queryConfig
      *
      * @return mixed
      */
@@ -50,14 +50,14 @@ interface ResourceInterface
     /**
      * Needs to return an array of entities matching the given filter
      *
-     * @param $ast
-     * @param $offset
-     * @param $limit
-     * @param $orderBy
+     * @param array $tokens
+     * @param int   $offset
+     * @param int   $limit
+     * @param null  $orderBy
      *
      * @return mixed
      */
-    public function filter($ast, $offset, $limit, $orderBy = null);
+    public function filter($tokens, $offset, $limit, $orderBy = null);
 
     /**
      * Returns columns to be shown in the batchProcess window
@@ -69,7 +69,7 @@ interface ResourceInterface
     /**
      * The actual batch processing
      *
-     * @param $queueId
+     * @param int $queueId
      *
      * @return mixed
      */
@@ -78,11 +78,11 @@ interface ResourceInterface
     /**
      * Create a queue from a given filterArray
      *
-     * @param $filterArray
-     * @param $operations
-     * @param $offset
-     * @param $limit
-     * @param $queueId
+     * @param array  $filterArray
+     * @param string $operations
+     * @param int    $offset
+     * @param int    $limit
+     * @param int    $queueId
      *
      * @return mixed
      */
@@ -98,7 +98,7 @@ interface ResourceInterface
     /**
      * Saves a single modified instance of the entity
      *
-     * @param $params
+     * @param array $params
      *
      * @return mixed
      */
@@ -107,8 +107,8 @@ interface ResourceInterface
     /**
      * Returns a list of available backups
      *
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return mixed
      */
@@ -117,8 +117,8 @@ interface ResourceInterface
     /**
      * Restores a given backup
      *
-     * @param $id
-     * @param $offset
+     * @param int $id
+     * @param int $offset
      *
      * @return mixed
      */
@@ -127,7 +127,7 @@ interface ResourceInterface
     /**
      * Delete a given backup
      *
-     * @param $id
+     * @param int $id
      *
      * @return mixed
      */

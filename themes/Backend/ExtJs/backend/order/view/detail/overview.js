@@ -95,6 +95,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             trackingCode: '{s name=overview/edit/tracking_code}Tracking code{/s}',
             shippingCost: '{s name=overview/edit/shipping_cost}Shipping costs ([0]){/s}',
             shippingCostNet: '{s name=overview/edit/shipping_cost_net}Shipping costs net ([0]){/s}',
+            shippingTaxRate: '{s name=overview/edit/shipping_tax_rate}Shipping tax rate{/s}',
             orderState: '{s name=overview/edit/order_status}Order status{/s}',
             paymentState: '{s name=overview/edit/payment_status}Payment status{/s}'
         },
@@ -112,7 +113,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             customerEmail: '{s name=overview/details/customer_email}E-Mail{/s}',
             referer: '{s name=overview/details/referer}Referer{/s}',
             deviceType: '{s name=overview/details/device_type}Device type{/s}',
-            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}'
+            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}',
+            changed: '{s name=overview/details/changed}Last changed{/s}'
         },
         customerDeleted: '{s name=overview/details/customer_deleted_text}Caution: The assigned customer has been deleted.{/s}'
     },
@@ -632,7 +634,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         return [
             { name: 'referer', fieldLabel: me.snippets.details.referer},
             { name: 'remoteAddressConverted', fieldLabel: me.snippets.details.remoteAddress},
-            { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType}
+            { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType},
+            { name: 'changed', fieldLabel: me.snippets.details.changed}
         ];
     },
 
@@ -744,6 +747,14 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                 submitLocaleSeparator: false,
                 name: 'invoiceShippingNet',
                 fieldLabel: Ext.String.format(me.snippets.edit.shippingCostNet, me.record.get('currency'))
+            },
+            {
+                xtype: 'numberfield',
+                decimalPrecision: 2,
+                submitLocaleSeparator: false,
+                name: 'invoiceShippingTaxRate',
+                disabled: me.record.get('isProportionalCalculation'),
+                fieldLabel: me.snippets.edit.shippingTaxRate
             },
             {
                 xtype: 'combobox',

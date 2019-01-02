@@ -31,14 +31,14 @@
     border-color: #fc6220 !important;
     position: absolute !important;
 
-	.#{$prefix}window-header {
+    .#{$prefix}window-header {
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
         -ms-box-shadow: none;
         box-shadow: none;
         background: theme-image($theme, 'window_bg_old.png') repeat-x !important;
         border-bottom-color: #fc6220 !important;
-	}
+    }
 
     .#{$prefix}window-header-text {
         color: #fff;
@@ -49,11 +49,11 @@
 .#{$prefix}window {
     padding: 0;
     position: absolute !important;
-	background: #f7f7f7;
+    background: #f7f7f7;
 
     /** Header */
     .#{$prefix}window-header {
-    	@include reset-box-shadow;
+        @include reset-box-shadow;
         background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAiCAIAAADQyG7qAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAp1JREFUSA0FwYFhJEcQxDCyb51/qh+ApmjAf//+qQCgbtt2d0AFqGoFAEDQdncf8DYVEFYBWgEBUAkBAABocCjVVgGACgABAGwLACAAgOooFRDaBGHvqZTQ1tZGCb1HUW3f24C7I6r7XQVUgQp4VyBtKohAt7eiVaGtimiJgNgCiAKsVL0vsAIAqALq7oBWBVSBUAUXxAesTsG9pwIVVQHb7q4S0Ep9b8CHqGtAVKnI3/tT784TqSoRaG27332tqFIrvW1qC0HEvQEVAlRV63sL0iuIqCIA8G3iWyoIQiFafIAate6E9KqgDTkPqAAAgN7b73dfBQJVWUFr520D7rttKrANAaqt7+/tTnXV1koorpW42rqfK6qlBm0fsAUrlIrS21Z4/P39gRUBVAD4tgvQt94eugqDQbD1VrC1eitcvG31vffuDii2VWqbd9FqGwAAlepdb8hXvK1SV8Hbqh8ERPje846o3R2VqF/U2N73/VdV24JCQIDVVUGseA8lvvf35+93d9sDwKCKoQURvE30DNq8A74Be7/7EUhbABQRUEBqQAHvzVK/oqJqKhBQmIm2AfeTFlctXMoXEGNt0XkBxR0NECoAjElK0PYVhBKCRaRHAa1BFUFiFKjFt23tOADYgu6sImJNjfamqpFZfe+9SlwJRBCrCKTl2aoCgVgv+N66c7E39DTqhYir88JtwOm2wIg+ZHUsqMHduXp/7/f7raEkoGy9TUXJb0vYuYW8tlSD1dbIk0DErTuB6qtQqlK3Ib/7AcAKuLGlnFcQa9UHvDpEt0DhvUHvjVCKKogB0Xvz/N6qskisAKBSAao4KStqC+D1/b0HIC1ViOTWPAGi6g4igHqLOz9BDxoJv/ut6TlAJaidqoVUP9rP3/80YYPTK7hH/QAAAABJRU5ErkJggg==") repeat-x;
         border-bottom: 1px solid $border-color !important;
 
@@ -68,33 +68,33 @@
         padding: 0;
 
         .#{$prefix}window-header-body {
-        	@include border-radius(5px 5px 0 0);
-        	padding: $window-header-padding;
-    		border: 1px solid #eaedef;
-    		border-top: 1px solid #f5f7f8;
-    		border-bottom: 0;
+            @include border-radius(5px 5px 0 0);
+            padding: $window-header-padding;
+            border: 1px solid #eaedef;
+            border-top: 1px solid #f5f7f8;
+            border-bottom: 0;
         }
     }
 
     /** Body styling */
     .#{$prefix}window-body {
-    	@include border-radius(0 0 4px 4px);
-    	border: 1px solid #eff2f5 !important;
-    	border-top-width: 2px !important;
-    	background: #f9fafa;
+        @include border-radius(0 0 4px 4px);
+        border: 1px solid #eff2f5 !important;
+        border-top-width: 2px !important;
+        background: #f9fafa;
 
-    	/** Get rid of the nasty body borders */
-    	.#{$prefix}window-item > .#{$prefix}tab-bar {
-    		border-color: transparent !important;
+        /** Get rid of the nasty body borders */
+        .#{$prefix}window-item > .#{$prefix}tab-bar {
+            border-color: transparent !important;
 
-	    	& > .#{$prefix}tab-bar-body {
-		    	border-color: transparent !important;
-	    	}
+            & > .#{$prefix}tab-bar-body {
+                border-color: transparent !important;
+            }
 
-	    	& + .#{$prefix}panel-body {
-		    	border-color: transparent !important;
-	    	}
-    	}
+            & + .#{$prefix}panel-body {
+                border-color: transparent !important;
+            }
+        }
     }
 }
 .#{$prefix}window + .#{$prefix}mask {
@@ -109,7 +109,7 @@
     -ms-box-shadow: 0 0 0 transparent !important;
     box-shadow: 0 0 0 transparent !important;
 
-	margin: 3px 0 0 0;
+    margin: 3px 0 0 0;
     border-style: solid;
     border-width: 0 0 3px 0;
     border-color: rgba(0, 0, 0, 0.08);
@@ -117,10 +117,10 @@
 
 // Ghosting modus
 .#{$prefix}panel-ghost, .#{$prefix}window-ghost {
-	@include opacity(1);
+    @include opacity(1);
 }
 
 // Basic tools
 .#{$prefix}tool img {
-	background-image: theme-image($theme, 'tool-sprites.png');
+    background-image: theme-image($theme, 'tool-sprites.png');
 }

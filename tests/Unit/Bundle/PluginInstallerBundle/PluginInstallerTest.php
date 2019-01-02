@@ -89,7 +89,8 @@ class PluginInstallerTest extends TestCase
             $databaseHandler,
             $requirementValidator,
             $pdo,
-            __DIR__ . '/Fixtures',
+            new \Enlight_Event_EventManager(),
+            ['ShopwarePlugins' => __DIR__ . '/Fixtures'],
             new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision'])
         );
 

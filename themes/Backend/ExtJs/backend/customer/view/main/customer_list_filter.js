@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
         var customerGroupStore = factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group");
         var shopStore = factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop");
         var salutationStore = Ext.create('Shopware.apps.Base.store.Salutation');
+        var countryStore = factory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
         var modeStore = Ext.create('Ext.data.Store', {
             fields: ['key', 'label'],
             data: [
@@ -95,6 +96,13 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                     fieldLabel: '{s name="city"}{/s}',
                     expression: 'LIKE'
                 },
+                countryId: {
+                    xtype: 'combobox',
+                    displayField: 'name',
+                    valueField: 'id',
+                    store: countryStore,
+                    fieldLabel: '{s name="column/country"}{/s}'
+                },
                 active: {
                     fieldLabel: '{s name="active"}{/s}'
                 },
@@ -123,13 +131,15 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                     store: shopStore
                 },
                 firstLogin: {
-                    fieldLabel: '{s name="first_login"}{/s}'
+                    fieldLabel: '{s name="first_login"}{/s}',
+                    expression: '>='
                 },
                 lastLogin: {
                     fieldLabel: '{s name="lastLogin"}{/s}'
                 },
                 lockedUntil: {
-                    fieldLabel: '{s name="lockedUntil"}{/s}'
+                    fieldLabel: '{s name="lockedUntil"}{/s}',
+                    expression: '<='
                 },
                 birthday: {
                     fieldLabel: '{s name="birthday"}{/s}'

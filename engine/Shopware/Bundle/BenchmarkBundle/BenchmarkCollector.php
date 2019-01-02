@@ -24,10 +24,13 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Shopware\Bundle\BenchmarkBundle\Provider\UpdatedOrdersProvider;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 class BenchmarkCollector implements BenchmarkCollectorInterface
 {
     /**
-     * @var BenchmarkProviderInterface[]
+     * @var \IteratorAggregate
      */
     private $providers;
 
@@ -44,23 +47,36 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
      */
     public static function getVersion()
     {
-        return '1.0.0';
+        return '1.0.3';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get()
+    public function get(ShopContextInterface $shopContext, $batchSize = null)
     {
         $providerData = [];
 
+        /** @var BenchmarkProviderInterface $provider */
         foreach ($this->providers as $provider) {
-            $providerData[$provider->getName()] = $provider->getBenchmarkData();
+            if ($provider instanceof BatchableProviderInterface) {
+                // Updated Orders Provider may only be called if no initial order has to be transmitted
+                if ($provider instanceof UpdatedOrdersProvider && $providerData['orders']['list']) {
+                    $providerData[$provider->getName()]['list'] = [];
+                    continue;
+                }
+
+                $providerData[$provider->getName()] = $provider->getBenchmarkData($shopContext, $batchSize);
+
+                continue;
+            }
+
+            $providerData[$provider->getName()] = $provider->getBenchmarkData($shopContext);
         }
 
-        $providerData = $this->moveShopData($providerData);
+        $providerData = $this->moveUpdatedOrdersData($providerData);
 
-        return json_encode($providerData, true);
+        return $this->moveShopData($providerData);
     }
 
     /**
@@ -74,12 +90,37 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
      */
     private function moveShopData(array $providerData)
     {
-        if (!array_key_exists('shop', $providerData)) {
-            throw new \Exception('Necessary data with name \'shop\' not provided.');
+        $shopDataArrayKey = 'shop';
+        if (!array_key_exists($shopDataArrayKey, $providerData)) {
+            throw new \Exception(sprintf('Necessary data with name \'%s\' not provided.', $shopDataArrayKey));
         }
 
-        $providerData = $providerData['shop'] + $providerData;
-        unset($providerData['shop']);
+        $providerData = $providerData[$shopDataArrayKey] + $providerData;
+        unset($providerData[$shopDataArrayKey]);
+
+        return $providerData;
+    }
+
+    /**
+     * Moves the "updated_orders" array into the "orders" key and leaves a hint about that moving
+     *
+     * @param array $providerData
+     *
+     * @return array
+     */
+    private function moveUpdatedOrdersData(array $providerData)
+    {
+        // Nothing to be moved
+        if (!array_key_exists('updated_orders', $providerData) || !$providerData['updated_orders']['list']) {
+            return $providerData;
+        }
+
+        $providerData['orders'] = $providerData['updated_orders'];
+
+        // Necessary to know that the "orders" key contains the updated_orders later on
+        // This is used in the StatisticsService to update the "last_updated_orders_date" column
+        $providerData['updated_orders']['moved'] = true;
+        unset($providerData['updated_orders']['list']);
 
         return $providerData;
     }

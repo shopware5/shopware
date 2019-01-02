@@ -25,7 +25,7 @@
 namespace Shopware\Components\Routing;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -35,7 +35,7 @@ interface MatcherInterface
      * @param string  $pathInfo
      * @param Context $context
      *
-     * @return array|false
+     * @return string|array|false
      */
     public function match($pathInfo, Context $context);
 }

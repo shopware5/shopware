@@ -32,14 +32,13 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -69,7 +68,6 @@ class Application extends BaseApplication
 
         parent::__construct('Shopware', $kernel->getRelease()['version'] . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
-        $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
         $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $kernel->getEnvironment()));
     }
@@ -77,7 +75,7 @@ class Application extends BaseApplication
     /**
      * Gets the Kernel associated with this Console.
      *
-     * @return KernelInterface A KernelInterface instance
+     * @return \Shopware\Kernel
      */
     public function getKernel()
     {
@@ -104,24 +102,9 @@ class Application extends BaseApplication
         }
 
         if (!$this->commandsRegistered) {
+            $this->setCommandLoader($this->kernel->getContainer()->get('console.command_loader'));
             $this->registerCommands($output);
             $this->commandsRegistered = true;
-        }
-
-        $container = $this->kernel->getContainer();
-
-        foreach ($this->all() as $command) {
-            if ($command instanceof ContainerAwareInterface) {
-                $command->setContainer($container);
-            }
-        }
-
-        if ($input->hasParameterOption(['--shell', '-s']) === true) {
-            $shell = new Shell($this);
-            $shell->setProcessIsolation($input->hasParameterOption(['--process-isolation']));
-            $shell->run();
-
-            return 0;
         }
 
         return parent::doRun($input, $output);
@@ -132,6 +115,10 @@ class Application extends BaseApplication
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
+        if ($command instanceof ContainerAwareInterface) {
+            $command->setContainer($this->kernel->getContainer());
+        }
+
         $exitCode = parent::doRunCommand($command, $input, $output);
 
         /** @var \Enlight_Event_EventManager $eventManager */
@@ -152,16 +139,15 @@ class Application extends BaseApplication
      */
     protected function registerCommands(OutputInterface $output)
     {
-        $this->registerFilesystemCommands();
         $this->registerTaggedServiceIds();
 
         if (!$this->skipDatabase) {
-            //Wrap database related logic in a try-catch
-            //so that non-db commands can still execute
+            // Wrap database related logic in a try-catch
+            // so that non-db commands can still execute
             try {
                 $em = $this->kernel->getContainer()->get('models');
 
-                // setup doctrine commands
+                // Setup doctrine commands
                 $helperSet = $this->getHelperSet();
                 $helperSet->set(new EntityManagerHelper($em), 'em');
                 $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
@@ -182,30 +168,6 @@ class Application extends BaseApplication
         }
     }
 
-    protected function registerFilesystemCommands()
-    {
-        if (!is_dir($dir = $this->getKernel()->getRootDir() . '/engine/Shopware/Commands')) {
-            return;
-        }
-
-        $finder = new Finder();
-        $finder->files()->name('*Command.php')->in($dir);
-
-        $prefix = 'Shopware\\Commands';
-        foreach ($finder as $file) {
-            $ns = $prefix;
-            if ($relativePath = $file->getRelativePath()) {
-                $ns .= '\\' . strtr($relativePath, '/', '\\');
-            }
-            $class = $ns . '\\' . $file->getBasename('.php');
-
-            $r = new \ReflectionClass($class);
-            if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract() && !$r->getConstructor()->getNumberOfRequiredParameters()) {
-                $this->add($r->newInstance());
-            }
-        }
-    }
-
     protected function registerEventCommands()
     {
         $this->kernel->getContainer()->load('plugins');
@@ -216,7 +178,7 @@ class Application extends BaseApplication
         $collection = new ArrayCollection();
         $collection = $eventManager->collect('Shopware_Console_Add_Command', $collection, ['subject' => $this]);
 
-        /** @var $command Command */
+        /** @var Command $command */
         foreach ($collection as $command) {
             if ($command instanceof Command) {
                 $this->add($command);
@@ -227,13 +189,17 @@ class Application extends BaseApplication
     /**
      * Register tagged commands in Symfony style
      *
-     * @see Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass
+     * @see AddConsoleCommandPass
      */
     protected function registerTaggedServiceIds()
     {
+        $lazyServices = array_keys($this->kernel->getContainer()->getParameter('console.lazy_command.ids'));
+
         if ($this->kernel->getContainer()->hasParameter('console.command.ids')) {
             foreach ($this->kernel->getContainer()->getParameter('console.command.ids') as $id) {
-                $this->add($this->kernel->getContainer()->get($id));
+                if (!in_array($id, $lazyServices)) {
+                    $this->add($this->kernel->getContainer()->get($id));
+                }
             }
         }
     }

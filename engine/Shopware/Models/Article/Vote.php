@@ -44,6 +44,7 @@ class Vote extends ModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="votes", cascade={"persist"})
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      */
@@ -51,10 +52,12 @@ class Vote extends ModelEntity
 
     /**
      * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
     protected $shop;
+
     /**
      * @var int
      *
@@ -73,6 +76,7 @@ class Vote extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="shop_id", type="integer", nullable=true)
      */
     private $shopId;
@@ -106,7 +110,7 @@ class Vote extends ModelEntity
     private $points;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -134,7 +138,7 @@ class Vote extends ModelEntity
     private $answer;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="answer_date", type="datetime", nullable=true)
      */
@@ -250,7 +254,7 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the vote
      *
-     * @param \DateTime $datum
+     * @param \DateTimeInterface $datum
      *
      * @return Vote
      */
@@ -264,7 +268,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the vote
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDatum()
     {
@@ -348,13 +352,13 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the answer
      *
-     * @param \DateTime|string $answer_date
+     * @param \DateTimeInterface|string $answer_date
      *
      * @return Vote
      */
     public function setAnswerDate($answer_date)
     {
-        if (!$answer_date instanceof \DateTime) {
+        if (!$answer_date instanceof \DateTimeInterface) {
             $answer_date = new \DateTime($answer_date);
         }
         $this->answer_date = $answer_date;
@@ -365,7 +369,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the answer
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAnswerDate()
     {

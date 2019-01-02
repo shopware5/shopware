@@ -30,7 +30,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -77,7 +77,7 @@ class SnippetsToIniCommand extends ShopwareCommand
             return 1;
         }
 
-        /** @var $databaseLoader \Shopware\Components\Snippet\DatabaseHandler */
+        /** @var \Shopware\Components\Snippet\DatabaseHandler $databaseLoader */
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $databaseLoader->setOutput($output);
         $databaseLoader->dumpFromDatabase($input->getOption('target'), $input->getArgument('locale'));

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -36,7 +35,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
     {
         $id = $this->Request()->id;
         $netto = $this->Request()->ust_free;
-        if ($netto == 'false') {
+        if ($netto === 'false') {
             $netto = false;
         }
         $typ = $this->Request()->typ;
@@ -44,6 +43,10 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
         $date = $this->Request()->date;
         $delivery_date = $this->Request()->delivery_date;
         $bid = $this->Request()->bid;
+        $renderer = strtolower($this->Request()->getParam('renderer', 'pdf')); // html / pdf
+        if (!in_array($renderer, ['html', 'pdf'])) {
+            $renderer = 'pdf';
+        }
         $this->View()->setTemplate();
         $document = Shopware_Components_Document::initDocument(
             $id,
@@ -55,7 +58,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
                 'date' => $date,
                 'delivery_date' => $delivery_date,
                 'shippingCostsAsPosition' => true,
-                '_renderer' => 'pdf',
+                '_renderer' => $renderer,
                 '_preview' => $this->Request()->preview,
                 '_previewForcePagebreak' => $this->Request()->pagebreak,
                 '_previewSample' => $this->Request()->sampleData,
@@ -81,7 +84,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
             [$id]
         );
         foreach ($getDocumentTypes as $targetID) {
-            $deleteOldRows = Shopware()->Db()->query(
+            Shopware()->Db()->query(
                 'DELETE FROM s_core_documents_box WHERE documentID = ?',
                 [$targetID['id']]
             );

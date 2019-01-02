@@ -27,27 +27,58 @@ namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5;
+use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 
 class TextMappingFactory
 {
     /**
+     * @var bool
+     */
+    private $esEnabled;
+
+    /**
+     * @var string
+     */
+    private $version;
+
+    /**
+     * @param bool          $esEnabled
+     * @param string | null $version
+     */
+    public function __construct($esEnabled = false, $version = null)
+    {
+        $this->esEnabled = $esEnabled;
+        $this->version = $version;
+    }
+
+    /**
      * @param Client $client
      *
      * @return TextMappingInterface
      */
-    public static function factory(Client $client)
+    public function factory(Client $client)
     {
-        try {
-            $info = $client->info([]);
-        } catch (\Exception $e) {
+        if (!$this->esEnabled) {
             return new TextMappingES2();
         }
 
-        if (version_compare($info['version']['number'], '5', '>=')) {
-            return new TextMappingES5();
+        if (!$this->version) {
+            try {
+                $info = $client->info();
+                $this->version = $info['version']['number'];
+            } catch (\Exception $e) {
+                return new TextMappingES2();
+            }
         }
 
-        return new TextMappingES2();
+        switch (true) {
+            case version_compare($this->version, '6', '>='):
+                return new TextMappingES6();
+            case version_compare($this->version, '5', '>='):
+                return new TextMappingES5();
+            default:
+                return new TextMappingES2();
+        }
     }
 }

@@ -37,7 +37,16 @@ Ext.define('Shopware.apps.UserManager.model.User', {
     extend: 'Ext.data.Model',
     fields: [
         //{block name="backend/user_manager/model/user/fields"}{/block}
-        'id', 'username', 'groupname', 'name', 'email', 'active', 'admin', 'failedlogins', { name: 'lastLogin', type: 'date'} ],
+        'id',
+        'username',
+        'groupname',
+        'name',
+        'email',
+        'active',
+        'admin',
+        'failedlogins',
+        { name: 'lastLogin', type: 'date'}
+    ],
     proxy: {
         type: 'ajax',
         api: {

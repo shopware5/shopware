@@ -21,22 +21,28 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Components\QueryAliasMapper;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Media\Album;
 
 /**
- * Shopware Class that handle articles
+ * Shopware Class that handle products
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -172,7 +178,7 @@ class sArticles
     /**
      * @var sArticlesComparisons
      */
-    private $articleComparisons;
+    private $productComparisons;
 
     /**
      * @var StoreFrontBundle\Service\ProductNumberServiceInterface
@@ -216,29 +222,29 @@ class sArticles
         $this->productNumberService = $container->get('shopware_storefront.product_number_service');
         $this->listingLinkRewriteService = $container->get('shopware_storefront.listing_link_rewrite_service');
 
-        $this->articleComparisons = new sArticlesComparisons($this, $container);
+        $this->productComparisons = new sArticlesComparisons($this, $container);
     }
 
     /**
-     * Delete articles from comparision chart
+     * Delete products from comparision chart
      *
-     * @param int $article Unique article id - refers to s_articles.id
+     * @param int $article Unique product id - refers to s_articles.id
      */
     public function sDeleteComparison($article)
     {
-        $this->articleComparisons->sDeleteComparison($article);
+        $this->productComparisons->sDeleteComparison($article);
     }
 
     /**
-     * Delete all articles from comparision chart
+     * Delete all products from comparision chart
      */
     public function sDeleteComparisons()
     {
-        $this->articleComparisons->sDeleteComparisons();
+        $this->productComparisons->sDeleteComparisons();
     }
 
     /**
-     * Insert articles in comparision chart
+     * Insert products in comparision chart
      *
      * @param int $article s_articles.id
      *
@@ -246,31 +252,31 @@ class sArticles
      */
     public function sAddComparison($article)
     {
-        return $this->articleComparisons->sAddComparison($article);
+        return $this->productComparisons->sAddComparison($article);
     }
 
     /**
-     * Get all articles from comparision chart
+     * Get all products from comparision chart
      *
      * @return array Associative array with all articles or empty array
      */
     public function sGetComparisons()
     {
-        return $this->articleComparisons->sGetComparisons();
+        return $this->productComparisons->sGetComparisons();
     }
 
     /**
-     * Get all articles and a table of their properties as an array
+     * Get all products and a table of their properties as an array
      *
-     * @return array Associative array with all articles or empty array
+     * @return array Associative array with all products or empty array
      */
     public function sGetComparisonList()
     {
-        return $this->articleComparisons->sGetComparisonList();
+        return $this->productComparisons->sGetComparisonList();
     }
 
     /**
-     * Returns all filterable properties depending on the given articles
+     * Returns all filterable properties depending on the given products
      *
      * @param array $articles
      *
@@ -278,11 +284,11 @@ class sArticles
      */
     public function sGetComparisonProperties($articles)
     {
-        return $this->articleComparisons->sGetComparisonProperties($articles);
+        return $this->productComparisons->sGetComparisonProperties($articles);
     }
 
     /**
-     * fills the article properties with the values and fills up empty values
+     * fills the product properties with the values and fills up empty values
      *
      * @param array $properties
      * @param array $articles
@@ -291,11 +297,11 @@ class sArticles
      */
     public function sFillUpComparisonArticles($properties, $articles)
     {
-        return $this->articleComparisons->sFillUpComparisonArticles($properties, $articles);
+        return $this->productComparisons->sFillUpComparisonArticles($properties, $articles);
     }
 
     /**
-     * Get all properties from one article
+     * Get all properties from one product
      *
      * @param int $articleId - s_articles.id
      *
@@ -303,7 +309,7 @@ class sArticles
      */
     public function sGetArticleProperties($articleId)
     {
-        $orderNumber = $this->getOrdernumberByArticleId($articleId);
+        $orderNumber = $this->getOrderNumberByProductId($articleId);
         if (!$orderNumber) {
             return [];
         }
@@ -323,7 +329,7 @@ class sArticles
     }
 
     /**
-     * Save a new article comment / voting
+     * Save a new product comment / voting
      * Reads several values directly from _POST
      *
      * @param int $article - s_articles.id
@@ -373,7 +379,7 @@ class sArticles
         $query = $connection->createQueryBuilder();
         $query->insert('s_articles_vote');
         $query->values([
-            'articleID' => ':articleID',
+            'articleID' => ':productId',
             'name' => ':name',
             'headline' => ':headline',
             'comment' => ':comment',
@@ -385,7 +391,7 @@ class sArticles
         ]);
 
         $query->setParameters([
-            ':articleID' => $article,
+            ':productId' => $article,
             ':name' => $sVoteName,
             ':headline' => $sVoteSummary,
             ':comment' => $sVoteComment,
@@ -410,11 +416,11 @@ class sArticles
     }
 
     /**
-     * Get id from all articles, that belongs to a specific supplier
+     * Get id from all products, that belongs to a specific supplier
      *
      * @param int $supplierID Supplier id (s_articles.supplierID)
      *
-     * @return array
+     * @return array|void
      */
     public function sGetArticlesBySupplier($supplierID = null)
     {
@@ -427,23 +433,21 @@ class sArticles
         }
         $sSearch = (int) $this->frontController->Request()->getQuery('sSearch');
 
-        $getArticles = $this->db->fetchAll(
+        return $this->db->fetchAll(
             'SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC',
             [$sSearch]
         );
-
-        return $getArticles;
     }
 
     /**
-     * @param null                  $categoryId
-     * @param SearchBundle\Criteria $criteria
+     * @param null     $categoryId
+     * @param Criteria $criteria
      *
      * @throws Enlight_Exception
      *
      * @return array|bool|mixed
      */
-    public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
+    public function sGetArticlesByCategory($categoryId = null, Criteria $criteria = null)
     {
         if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
             'subject' => $this,
@@ -483,11 +487,8 @@ class sArticles
         $id = (int) $id;
         $categoryId = (int) $this->frontController->Request()->getQuery('sCategory');
 
-        $supplierRepository = Shopware()->Models()->getRepository(
-            'Shopware\Models\Article\Supplier'
-        );
-        $supplier = $supplierRepository->find($id);
-        if (!is_object($supplier)) {
+        $supplier = Shopware()->Models()->getRepository(Supplier::class)->find($id);
+        if (!($supplier instanceof Supplier)) {
             return [];
         }
         $supplier = Shopware()->Models()->toArray($supplier);
@@ -501,12 +502,12 @@ class sArticles
     }
 
     /**
-     * Article price calucation
+     * Product price calucation
      *
      * @param float $price
      * @param float $tax
      * @param int   $taxId
-     * @param array $article article data as an array
+     * @param array $article product data as an array
      *
      * @throws Enlight_Exception
      *
@@ -541,7 +542,6 @@ class sArticles
         if ((!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])) {
             $price = $this->sFormatPrice($price);
         } else {
-            //if ($price > 100)         die(round($price * (100 + $tax) / 100, 5));
             $price = $this->sFormatPrice(round($price * (100 + $tax) / 100, 3));
         }
 
@@ -551,7 +551,7 @@ class sArticles
     /**
      * @param int $taxId
      *
-     * @return float|false
+     * @return string|false
      */
     public function getTaxRateByConditions($taxId)
     {
@@ -565,7 +565,7 @@ class sArticles
     }
 
     /**
-     * Article price calucation unformated return
+     * Product price calucation unformated return
      *
      * @param float $price
      * @param float $tax
@@ -573,14 +573,21 @@ class sArticles
      * @param bool  $ignoreTax
      * @param int   $taxId
      * @param bool  $ignoreCurrency
-     * @param array $article        article data as an array
+     * @param array $article        product data as an array
      *
      * @throws Enlight_Exception
      *
-     * @return float $price  price unformated
+     * @return float $price  price non-formatted
      */
-    public function sCalculatingPriceNum($price, $tax, $doNotRound = false, $ignoreTax = false, $taxId = 0, $ignoreCurrency = false, $article = [])
-    {
+    public function sCalculatingPriceNum(
+        $price,
+        $tax,
+        $doNotRound = false,
+        $ignoreTax = false,
+        $taxId = 0,
+        $ignoreCurrency = false,
+        $article = []
+    ) {
         if (empty($taxId)) {
             throw new Enlight_Exception('Empty tax id in sCalculatingPriceNum');
         }
@@ -625,9 +632,9 @@ class sArticles
     }
 
     /**
-     * Get article topsellers for a specific category
+     * Get product topsellers for a specific category
      *
-     * @param $category int category id
+     * @param int $category
      *
      * @return array
      */
@@ -656,18 +663,18 @@ class sArticles
         $criteria->setFetchCount(false);
 
         $result = $this->searchService->search($criteria, $context);
-        $articles = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
+        $products = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
         Shopware()->Events()->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
-            ['subject' => $this, 'category' => $category, 'articles' => $articles]
+            ['subject' => $this, 'category' => $category, 'articles' => $products]
         );
 
-        return $articles;
+        return $products;
     }
 
     /**
-     * Check if an article has instant download
+     * Check if an product has instant download
      *
      * @param int  $id        s_articles.id
      * @param int  $detailsID s_articles_details.id
@@ -677,7 +684,7 @@ class sArticles
      */
     public function sCheckIfEsd($id, $detailsID, $realtime = false)
     {
-        // Check if this article is esd-only (check in variants, too -> later)
+        // Check if this product is esd-only (check in variants, too -> later)
 
         if ($detailsID) {
             $sqlGetEsd = "
@@ -699,7 +706,8 @@ class sArticles
     }
 
     /**
-     * Read the id from all articles that are in the same category as the article specified by parameter (For article navigation in top of detailpage)
+     * Read the id from all products that are in the same category as the product specified by parameter
+     * (For product navigation in top of detail page)
      *
      * @param string                                 $orderNumber
      * @param int                                    $categoryId
@@ -728,7 +736,7 @@ class sArticles
     }
 
     /**
-     * Read the unit types from a certain article
+     * Read the unit types from a certain product
      *
      * @param int $id s_articles.id
      *
@@ -745,7 +753,10 @@ class sArticles
         ', [$id]);
 
         if (!empty($unit) && !Shopware()->Shop()->get('skipbackend')) {
-            $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_units' AND objectlanguage=" . Shopware()->Shop()->getId();
+            $sql = "SELECT objectdata
+                    FROM s_core_translations
+                    WHERE objecttype='config_units'
+                      AND objectlanguage=" . Shopware()->Shop()->getId();
             $translation = $this->db->fetchOne($sql);
             if (!empty($translation)) {
                 $translation = unserialize($translation);
@@ -759,20 +770,27 @@ class sArticles
     }
 
     /**
-     * Get discounts and discount table for a certain article
+     * Get discounts and discount table for a certain product
      *
      * @param string $customergroup id of customergroup key
      * @param string $groupID       customer group id
      * @param float  $listprice     default price
      * @param int    $quantity
      * @param bool   $doMatrix      Return array with all block prices
-     * @param array  $articleData   current article
+     * @param array  $articleData   current product
      * @param bool   $ignore        deprecated
      *
-     * @return array|float|null
+     * @return array|float|false|void
      */
-    public function sGetPricegroupDiscount($customergroup, $groupID, $listprice, $quantity, $doMatrix = true, $articleData = [], $ignore = false)
-    {
+    public function sGetPricegroupDiscount(
+        $customergroup,
+        $groupID,
+        $listprice,
+        $quantity,
+        $doMatrix = true,
+        $articleData = [],
+        $ignore = false
+    ) {
         $getBlockPricings = [];
         $laststart = null;
         $divPercent = null;
@@ -798,6 +816,7 @@ class sArticles
         ";
 
         $getGroups = $this->db->fetchAll($sql, [$customergroup]);
+        $priceMatrix = [];
 
         if (count($getGroups)) {
             foreach ($getGroups as $group) {
@@ -820,6 +839,8 @@ class sArticles
             }
 
             if (empty($doMatrix)) {
+                $matchingPercent = 0;
+
                 // Getting price rule matching to quantity
                 foreach ($priceMatrix as $start => $percent) {
                     if ($start <= $quantity) {
@@ -828,7 +849,6 @@ class sArticles
                 }
 
                 if ($matchingPercent) {
-                    //echo "Percent discount via pricegroup $groupID - $matchingPercent Discount\n";
                     return $listprice / 100 * (100 - $matchingPercent);
                 }
             } else {
@@ -845,14 +865,24 @@ class sArticles
                 foreach ($priceMatrix as $start => $percent) {
                     $getBlockPricings[$i]['from'] = $start;
                     $getBlockPricings[$i]['to'] = $percent['to'];
-                    if ($i == 0 && $ignore) {
-                        $getBlockPricings[$i]['price'] = $this->sCalculatingPrice(($listprice / 100 * (100)), $articleData['tax'], $articleData['taxID'], $articleData);
+                    if ($i === 0 && $ignore) {
+                        $getBlockPricings[$i]['price'] = $this->sCalculatingPrice(
+                            ($listprice / 100 * (100)),
+                            $articleData['tax'],
+                            $articleData['taxID'],
+                            $articleData
+                        );
                         $divPercent = $percent['percent'];
                     } else {
                         if ($ignore) {
                             $percent['percent'] -= $divPercent;
                         }
-                        $getBlockPricings[$i]['price'] = $this->sCalculatingPrice(($listprice / 100 * (100 - $percent['percent'])), $articleData['tax'], $articleData['taxID'], $articleData);
+                        $getBlockPricings[$i]['price'] = $this->sCalculatingPrice(
+                            ($listprice / 100 * (100 - $percent['percent'])),
+                            $articleData['tax'],
+                            $articleData['taxID'],
+                            $articleData
+                        );
                     }
                     ++$i;
                 }
@@ -868,7 +898,7 @@ class sArticles
     }
 
     /**
-     * Get the cheapest price for a certain article
+     * Get the cheapest price for a certain product
      *
      * @param int  $article                   id
      * @param int  $group                     customer group id
@@ -878,10 +908,17 @@ class sArticles
      * @param bool $returnArrayIfConfigurator
      * @param bool $checkLiveshopping
      *
-     * @return float cheapest price or null
+     * @return float|array cheapest price or null
      */
-    public function sGetCheapestPrice($article, $group, $pricegroup, $usepricegroups, $realtime = false, $returnArrayIfConfigurator = false, $checkLiveshopping = false)
-    {
+    public function sGetCheapestPrice(
+        $article,
+        $group,
+        $pricegroup,
+        $usepricegroups,
+        $realtime = false,
+        $returnArrayIfConfigurator = false,
+        $checkLiveshopping = false
+    ) {
         if ($group != $this->sSYSTEM->sUSERGROUP) {
             $fetchGroup = $group;
         } else {
@@ -970,6 +1007,9 @@ class sArticles
 
         // Updated / Fixed 28.10.2008 - STH
         if (!empty($usepricegroups)) {
+            $listPrice = null;
+            $foundPrice = null;
+
             if (!empty($cheapestPrice)) {
                 $listPrice = $cheapestPrice;
             } else {
@@ -986,14 +1026,18 @@ class sArticles
 
             if (!empty($returnPrice) && $foundPrice) {
                 $cheapestPrice = $returnPrice;
-            } elseif (!empty($foundPrice) && $returnPrice == 0.00) {
+            } elseif ($foundPrice !== null && $returnPrice === 0.) {
                 $cheapestPrice = '0.00';
             } else {
                 $cheapestPrice = '0';
             }
         }
 
-        if (isset($queryCheapestPrice[0]['count']) && $queryCheapestPrice[0]['count'] > 1 && empty($queryCheapestPrice[1]['price']) && !empty($returnArrayIfConfigurator)) {
+        if (isset($queryCheapestPrice[0]['count'])
+            && $queryCheapestPrice[0]['count'] > 1
+            && empty($queryCheapestPrice[1]['price'])
+            && !empty($returnArrayIfConfigurator)
+        ) {
             return [$cheapestPrice, $queryCheapestPrice[0]['count']];
         }
 
@@ -1001,7 +1045,7 @@ class sArticles
     }
 
     /**
-     * Get one article with all available data
+     * Get one product with all available data
      *
      * @param int   $id          article id
      * @param null  $sCategoryID
@@ -1013,7 +1057,7 @@ class sArticles
     public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = [])
     {
         if ($sCategoryID === null) {
-            $sCategoryID = $this->frontController->Request()->getParam('sCategory', null);
+            $sCategoryID = $this->frontController->Request()->getParam('sCategory');
         }
 
         $providedNumber = $number;
@@ -1087,9 +1131,9 @@ class sArticles
      *
      * @since 4.1.4
      *
-     * @param $price | the final price which will be shown
-     * @param float $purchaseUnit
-     * @param float $referenceUnit
+     * @param string $price         | the final price which will be shown
+     * @param float  $purchaseUnit
+     * @param float  $referenceUnit
      *
      * @return float
      */
@@ -1108,7 +1152,7 @@ class sArticles
     }
 
     /**
-     * Formats article prices
+     * Formats product prices
      *
      * @param float $price
      *
@@ -1141,7 +1185,7 @@ class sArticles
     }
 
     /**
-     * Round article price
+     * Round product price
      *
      * @param float $moneyfloat
      *
@@ -1166,11 +1210,14 @@ class sArticles
     /**
      * @param string $ordernumber
      *
-     * @return array
+     * @return array|false
      */
     public function sGetProductByOrdernumber($ordernumber)
     {
-        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', ['subject' => $this, 'value' => $ordernumber])) {
+        if (Shopware()->Events()->notifyUntil(
+            'Shopware_Modules_Articles_sGetProductByOrdernumber_Start',
+            ['subject' => $this, 'value' => $ordernumber]
+        )) {
             return false;
         }
 
@@ -1186,14 +1233,14 @@ class sArticles
     }
 
     /**
-     * Get basic article data in various modes (firmly definied by id, random, top,new)
+     * Get basic product data in various modes (firmly definied by id, random, top,new)
      *
      * @param string $mode      Modus (fix, random, top, new)
      * @param int    $category  filter by category
-     * @param int    $value     article id / ordernumber for firmly definied articles
+     * @param int    $value     product id / ordernumber for firmly definied products
      * @param bool   $withImage
      *
-     * @return array
+     * @return array|false
      */
     public function sGetPromotionById($mode, $category = 0, $value = 0, $withImage = false)
     {
@@ -1245,72 +1292,72 @@ class sArticles
     }
 
     /**
-     * Internal helper function to get the cover image of an article.
+     * Internal helper function to get the cover image of a product.
      * If the orderNumber parameter is set, the function checks first
      * if an variant image configured. If this is the case, this
      * image will be used as cover image. Otherwise the function calls the
      * getArticleMainCover function which returns the absolute main image
      *
-     * @param $articleId
-     * @param $orderNumber
-     * @param $articleAlbum
+     * @param int    $articleId
+     * @param string $orderNumber
+     * @param Album  $articleAlbum
      *
      * @return array
      */
     public function getArticleCover($articleId, $orderNumber, $articleAlbum)
     {
         if (!empty($orderNumber)) {
-            //check for specify variant images. For example:
-            //if the user is on a detail page of a shoe and select the color "red"
-            //we have to check if the current variant has an own configured picture for a red shoe.
-            //the query selects orders the result at first by the image main flag, at second for the position.
-            $cover = $this->getArticleRepository()
+            // Check for specify variant images. For example:
+            // If the user is on a detail page of a shoe and select the color "red"
+            // we have to check if the current variant has an own configured picture for a red shoe.
+            // The query selects orders the result at first by the image main flag, at second for the position.
+            $cover = $this->getProductRepository()
                 ->getVariantImagesByArticleNumberQuery($orderNumber, 0, 1)
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
         }
 
-        //if we have found a configured article image which has the same options like the passed article order number
-        //we have to return this one.
+        // If we have found a configured product image which has the same options like the passed product order number
+        // we have to return this one.
         if (!empty($cover)) {
-            return $this->getDataOfArticleImage($cover, $articleAlbum);
+            return $this->getDataOfProductImage($cover, $articleAlbum);
         }
 
-        //if we haven't found and variant image we have to select the first image which has no configuration.
-        //the query orders the result at first by the image main flag, at second by the position.
-        $cover = $this->getArticleRepository()
+        // If we haven't found and variant image we have to select the first image which has no configuration.
+        // The query orders the result at first by the image main flag, at second by the position.
+        $cover = $this->getProductRepository()
             ->getArticleCoverImageQuery($articleId)
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         if (!empty($cover)) {
-            return $this->getDataOfArticleImage($cover, $articleAlbum);
+            return $this->getDataOfProductImage($cover, $articleAlbum);
         }
 
-        //if no variant or normal article image is found we will return the main image of the article even if this image has a variant restriction
+        // If no variant or normal product image is found we will return the main image of the product even if this image has a variant restriction
         return $this->getArticleMainCover($articleId, $articleAlbum);
     }
 
     /**
-     * Returns the the absolute main article image
+     * Returns the the absolute main product image
      * This method returns the main cover depending on the main flag no matter if any variant restriction is set
      *
-     * @param $articleId
-     * @param $articleAlbum
+     * @param int   $articleId
+     * @param Album $articleAlbum
      *
      * @return array
      */
     public function getArticleMainCover($articleId, $articleAlbum)
     {
-        $cover = $this->getArticleRepository()
+        $cover = $this->getProductRepository()
             ->getArticleFallbackCoverQuery($articleId)
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        return $this->getDataOfArticleImage($cover, $articleAlbum);
+        return $this->getDataOfProductImage($cover, $articleAlbum);
     }
 
     /**
      * Wrapper method to specialize the sGetArticlePictures method for the listing images
      *
-     * @param $articleId
+     * @param int  $articleId
      * @param bool $forceMainImage | if true this will return the main image no matter which variant restriction is set
      *
      * @return array
@@ -1321,9 +1368,9 @@ class sArticles
     }
 
     /**
-     * Get all pictures from a certain article
+     * Get all pictures from a certain product
      *
-     * @param        $sArticleID
+     * @param int    $sArticleID
      * @param bool   $onlyCover
      * @param int    $pictureSize    | unused variable
      * @param string $ordernumber
@@ -1333,51 +1380,58 @@ class sArticles
      *
      * @return array
      */
-    public function sGetArticlePictures($sArticleID, $onlyCover = true, $pictureSize = 0, $ordernumber = null, $allImages = false, $realtime = false, $forceMainImage = false)
-    {
+    public function sGetArticlePictures(
+        $sArticleID,
+        $onlyCover = true,
+        $pictureSize = 0,
+        $ordernumber = null,
+        $allImages = false,
+        $realtime = false,
+        $forceMainImage = false
+    ) {
         static $articleAlbum;
         if ($articleAlbum === null) {
-            //now we search for the default article album of the media manager, this album contains the thumbnail configuration.
-            /** @var $model \Shopware\Models\Media\Album */
+            //now we search for the default product album of the media manager, this album contains the thumbnail configuration.
+            /** @var Album $model */
             $articleAlbum = $this->getMediaRepository()
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult();
         }
 
-        //first we convert the passed article id into an integer to prevent sql injections
-        $articleId = (int) $sArticleID;
+        //first we convert the passed product id into an integer to prevent sql injections
+        $productId = (int) $sArticleID;
 
         Shopware()->Events()->notify(
             'Shopware_Modules_Articles_GetArticlePictures_Start',
-            ['subject' => $this, 'id' => $articleId]
+            ['subject' => $this, 'id' => $productId]
         );
 
-        //first we get the article cover
+        //first we get the product cover
         if ($forceMainImage) {
-            $cover = $this->getArticleMainCover($articleId, $articleAlbum);
+            $cover = $this->getArticleMainCover($productId, $articleAlbum);
         } else {
-            $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
+            $cover = $this->getArticleCover($productId, $ordernumber, $articleAlbum);
         }
 
         if ($onlyCover) {
             $cover = Shopware()->Events()->filter(
                 'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
                 $cover,
-                ['subject' => $this, 'id' => $articleId]
+                ['subject' => $this, 'id' => $productId]
             );
 
             return $cover;
         }
 
-        //now we select all article images of the passed article id.
-        $articleImages = $this->getArticleRepository()
-            ->getArticleImagesQuery($articleId)
+        //now we select all product images of the passed product id.
+        $productImages = $this->getProductRepository()
+            ->getArticleImagesQuery($productId)
             ->getArrayResult();
 
         //if an order number passed to the function, we have to select the configured variant images
         $variantImages = [];
         if (!empty($ordernumber)) {
-            $variantImages = $this->getArticleRepository()
+            $variantImages = $this->getProductRepository()
                 ->getVariantImagesByArticleNumberQuery($ordernumber)
                 ->getArrayResult();
         }
@@ -1386,12 +1440,12 @@ class sArticles
         $addedImages = [$cover['id']];
         $images = [];
 
-        //first we add all variant images, this images has a higher priority as the normal article images
+        //first we add all variant images, this images has a higher priority as the normal product images
         foreach ($variantImages as $variantImage) {
             //if the image wasn't added already, we can add the image
             if (!in_array($variantImage['id'], $addedImages)) {
                 //first we have to convert the image data, to resolve the image path and get the thumbnail configuration
-                $image = $this->getDataOfArticleImage($variantImage, $articleAlbum);
+                $image = $this->getDataOfProductImage($variantImage, $articleAlbum);
 
                 //after the data was converted we add the image to the result array and add the id to the addedImages array
                 $images[] = $image;
@@ -1400,61 +1454,62 @@ class sArticles
         }
 
         //after the variant images added, we can add the normal images, this images has a lower priority as the variant images
-        foreach ($articleImages as $articleImage) {
+        foreach ($productImages as $productImage) {
             //add only normal images without any configuration
             //if the image wasn't added already, we can add the image
-            if (!in_array($articleImage['id'], $addedImages)) {
+            if (!in_array($productImage['id'], $addedImages)) {
                 //first we have to convert the image data, to resolve the image path and get the thumbnail configuration
-                $image = $this->getDataOfArticleImage($articleImage, $articleAlbum);
+                $image = $this->getDataOfProductImage($productImage, $articleAlbum);
 
                 //after the data was converted we add the image to the result array and add the id to the addedImages array
                 $images[] = $image;
-                $addedImages[] = $articleImage['id'];
+                $addedImages[] = $productImage['id'];
             }
         }
 
         $images = Shopware()->Events()->filter(
             'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
             $images,
-            ['subject' => $this, 'id' => $articleId]
+            ['subject' => $this, 'id' => $productId]
         );
 
         return $images;
     }
 
     /**
-     * Get article id by ordernumber
+     * Get product id by ordernumber
      *
      * @param string $ordernumber
      *
-     * @return int $id or false
+     * @return int|false $id or false
      */
     public function sGetArticleIdByOrderNumber($ordernumber)
     {
-        $checkForArticle = $this->db->fetchRow('
-        SELECT articleID AS id FROM s_articles_details WHERE ordernumber=?
-        ', [$ordernumber]);
+        $checkForProduct = $this->db->fetchRow(
+            'SELECT articleID AS id FROM s_articles_details WHERE ordernumber=?',
+            [$ordernumber]
+        );
 
-        if (isset($checkForArticle['id'])) {
-            return $checkForArticle['id'];
+        if (isset($checkForProduct['id'])) {
+            return $checkForProduct['id'];
         }
 
         return false;
     }
 
     /**
-     * Get name from a certain article by order number
+     * Get name from a certain product by order number
      *
      * @param string $orderNumber
      * @param bool   $returnAll   Return only name or additional data, too
      * @param bool   $translate   Disables the translation of the product if set to false
      *
-     * @return string or array
+     * @return string|array|false
      */
     public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false, $translate = true)
     {
-        $article = $this->db->fetchRow('
-            SELECT
+        $product = $this->db->fetchRow(
+            'SELECT
                 s_articles.id,
                 s_articles.main_detail_id,
                 s_articles_details.id AS did,
@@ -1463,62 +1518,62 @@ class sArticles
                 s_articles.configurator_set_id
             FROM s_articles_details, s_articles
             WHERE ordernumber = :orderNumber
-                AND s_articles.id = s_articles_details.articleID
-        ', [
+                AND s_articles.id = s_articles_details.articleID',
+            [
                 'orderNumber' => $orderNumber,
             ]
         );
 
-        if (!$article) {
+        if (!$product) {
             return false;
         }
 
-        // Load translations for article or variant
+        // Load translations for product or variant
         if ($translate) {
-            if ((int) $article['did'] !== (int) $article['main_detail_id']) {
-                $article = $this->sGetTranslation(
-                    $article,
-                    $article['did'],
+            if ((int) $product['did'] !== (int) $product['main_detail_id']) {
+                $product = $this->sGetTranslation(
+                    $product,
+                    $product['did'],
                     'variant'
                 );
             } else {
-                $article = $this->sGetTranslation(
-                    $article,
-                    $article['id'],
+                $product = $this->sGetTranslation(
+                    $product,
+                    $product['id'],
                     'article'
                 );
             }
         }
 
-        // If article has variants, we need to append the additional text to the name
-        if ($article['configurator_set_id'] > 0) {
-            $product = new StoreFrontBundle\Struct\ListProduct(
-                (int) $article['id'],
-                (int) $article['did'],
+        // If product has variants, we need to append the additional text to the name
+        if ($product['configurator_set_id'] > 0) {
+            $productStruct = new ListProduct(
+                (int) $product['id'],
+                (int) $product['did'],
                 $orderNumber
             );
 
-            $product->setAdditional($article['additionaltext']);
+            $productStruct->setAdditional($product['additionaltext']);
 
             $context = $this->contextService->getShopContext();
-            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+            $productStruct = $this->additionalTextService->buildAdditionalText($productStruct, $context);
 
             if (!$returnAll) {
-                return $article['articleName'] . ' ' . $product->getAdditional();
+                return $product['articleName'] . ' ' . $productStruct->getAdditional();
             }
 
-            $article['additionaltext'] = $product->getAdditional();
+            $product['additionaltext'] = $productStruct->getAdditional();
         }
 
         if (!$returnAll) {
-            return $article['articleName'];
+            return $product['articleName'];
         }
 
-        return $article;
+        return $product;
     }
 
     /**
-     * Get article name by s_articles.id
+     * Get product name by s_articles.id
      *
      * @param int  $articleId
      * @param bool $returnAll
@@ -1535,31 +1590,34 @@ class sArticles
     }
 
     /**
-     * Get article taxrate by id
+     * Get product taxrate by id
      *
-     * @param int $id article id
+     * @param int $id product id
      *
-     * @return float tax or false
+     * @return float|false tax or false
      */
     public function sGetArticleTaxById($id)
     {
-        $checkForArticle = $this->db->fetchRow('
-        SELECT s_core_tax.tax AS tax FROM s_core_tax, s_articles WHERE s_articles.id=? AND
-        s_articles.taxID = s_core_tax.id
-        ', [$id]);
+        $checkForProduct = $this->db->fetchRow(
+            'SELECT s_core_tax.tax AS tax
+            FROM s_core_tax, s_articles
+            WHERE s_articles.id=?
+              AND s_articles.taxID = s_core_tax.id',
+            [$id]
+        );
 
-        if (isset($checkForArticle['tax'])) {
-            return $checkForArticle['tax'];
+        if (isset($checkForProduct['tax'])) {
+            return $checkForProduct['tax'];
         }
 
         return false;
     }
 
     /**
-     * Read translation for one or more articles
+     * Read translation for one or more products
      *
-     * @param $data
-     * @param $object
+     * @param array  $data
+     * @param string $object
      *
      * @return array
      */
@@ -1628,7 +1686,7 @@ class sArticles
         }
 
         foreach ($translations as $translation) {
-            $article = (int) $translation['objectkey'];
+            $productId = (int) $translation['objectkey'];
             $object = unserialize($translation['objectdata']);
             foreach ($object as $translateKey => $value) {
                 if (isset($map[$translateKey])) {
@@ -1636,8 +1694,8 @@ class sArticles
                 } else {
                     $key = $translateKey;
                 }
-                if (!empty($value) && array_key_exists($key, $data[$article])) {
-                    $data[$article][$key] = $value;
+                if (!empty($value) && array_key_exists($key, $data[$productId])) {
+                    $data[$productId][$key] = $value;
                 }
             }
         }
@@ -1745,7 +1803,7 @@ class sArticles
     /**
      * Get array of images from a certain configurator combination
      *
-     * @param array  $sArticle     Associative array with all article data
+     * @param array  $sArticle     Associative array with all product data
      * @param string $sCombination Currencly active combination
      *
      * @return array
@@ -1806,6 +1864,7 @@ class sArticles
 
                 unset($sArticle['image']);
 
+                $positions = [];
                 $debug = false;
 
                 foreach ($sArticle['images'] as $imageKey => $image) {
@@ -1945,14 +2004,14 @@ class sArticles
     }
 
     /**
-     * Helper function to get access to the article repository.
+     * Helper function to get access to the product repository.
      *
      * @return \Shopware\Models\Article\Repository
      */
-    private function getArticleRepository()
+    private function getProductRepository()
     {
         if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
+            $this->articleRepository = Shopware()->Models()->getRepository(Article::class);
         }
 
         return $this->articleRepository;
@@ -1965,7 +2024,7 @@ class sArticles
      *
      * @throws \Exception
      *
-     * @return SearchBundle\Criteria
+     * @return Criteria
      */
     private function createProductNavigationCriteria(
         $categoryId,
@@ -1996,7 +2055,7 @@ class sArticles
     /**
      * @param int $categoryId
      *
-     * @return int|null
+     * @return string|null
      */
     private function getStreamIdOfCategory($categoryId)
     {
@@ -2004,10 +2063,10 @@ class sArticles
     }
 
     /**
-     * @param SearchBundle\ProductNumberSearchResult          $searchResult
-     * @param string                                          $orderNumber
-     * @param int                                             $categoryId
-     * @param StoreFrontBundle\Struct\ProductContextInterface $context
+     * @param SearchBundle\ProductNumberSearchResult $searchResult
+     * @param string                                 $orderNumber
+     * @param int                                    $categoryId
+     * @param ProductContextInterface                $context
      *
      * @return array
      */
@@ -2015,7 +2074,7 @@ class sArticles
         SearchBundle\ProductNumberSearchResult $searchResult,
         $orderNumber,
         $categoryId,
-        StoreFrontBundle\Struct\ProductContextInterface $context
+        ProductContextInterface $context
     ) {
         $products = $searchResult->getProducts();
         $products = array_values($products);
@@ -2024,7 +2083,7 @@ class sArticles
             return [];
         }
 
-        /** @var $currentProduct BaseProduct */
+        /** @var BaseProduct $currentProduct */
         foreach ($products as $index => $currentProduct) {
             if ($currentProduct->getNumber() != $orderNumber) {
                 continue;
@@ -2146,7 +2205,7 @@ class sArticles
         }
 
         if (is_numeric($value)) {
-            $number = $this->getOrdernumberByArticleId($value);
+            $number = $this->getOrderNumberByProductId($value);
             if ($number) {
                 $value = $number;
             }
@@ -2159,15 +2218,13 @@ class sArticles
      * Internal helper function to convert the image data from the database to the frontend structure.
      *
      * @param array $image
-     * @param $articleAlbum \Shopware\Models\Media\Album
-     *
-     * @throws \Exception
+     * @param Album $productAlbum
      *
      * @return array
      */
-    private function getDataOfArticleImage($image, $articleAlbum)
+    private function getDataOfProductImage($image, $productAlbum)
     {
-        //initial the data array
+        // Initial the data array
         $imageData = [];
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
@@ -2175,12 +2232,12 @@ class sArticles
             return $imageData;
         }
 
-        //first we get all thumbnail sizes of the article album
-        $sizes = $articleAlbum->getSettings()->getThumbnailSize();
+        // First we get all thumbnail sizes of the product album
+        $sizes = $productAlbum->getSettings()->getThumbnailSize();
 
-        $highDpiThumbnails = $articleAlbum->getSettings()->isThumbnailHighDpi();
+        $highDpiThumbnails = $productAlbum->getSettings()->isThumbnailHighDpi();
 
-        //if no extension is configured, shopware use jpg as default extension
+        // If no extension is configured, shopware use jpg as default extension
         if (empty($image['extension'])) {
             $image['extension'] = 'jpg';
         }
@@ -2195,7 +2252,7 @@ class sArticles
         $imageData['id'] = $image['id'];
         $imageData['parentId'] = $image['parentId'];
 
-        // attributes as array as they come from non configurator aricles
+        // Attributes as array as they come from non configurator products
         if (!empty($image['attribute'])) {
             unset($image['attribute']['id']);
             unset($image['attribute']['articleImageId']);
@@ -2204,7 +2261,7 @@ class sArticles
             $imageData['attribute'] = [];
         }
 
-        // attributes as keys as they come from configurator articles
+        // Attributes as keys as they come from configurator products
         if (!empty($image['attribute1'])) {
             $imageData['attribute']['attribute1'] = $image['attribute1'];
         }
@@ -2242,8 +2299,8 @@ class sArticles
      * Returns a minified product which can be used for listings,
      * sliders or emotions.
      *
-     * @param $category
-     * @param $number
+     * @param int    $category
+     * @param string $number
      *
      * @return array|bool
      */
@@ -2290,18 +2347,18 @@ class sArticles
      * Returns a listing of products. Used for the backward compatibility category listings.
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
-     * @param int                                             $categoryId
-     * @param StoreFrontBundle\Struct\ProductContextInterface $context
-     * @param Enlight_Controller_Request_Request              $request
-     * @param SearchBundle\Criteria                           $criteria
+     * @param int                                $categoryId
+     * @param ProductContextInterface            $context
+     * @param Enlight_Controller_Request_Request $request
+     * @param Criteria                           $criteria
      *
      * @return array
      */
     private function getListing(
         $categoryId,
-        StoreFrontBundle\Struct\ProductContextInterface $context,
+        ProductContextInterface $context,
         Enlight_Controller_Request_Request $request,
-        SearchBundle\Criteria $criteria
+        Criteria $criteria
     ) {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         $conditions = array_filter($conditions, function (VariantCondition $condition) {
@@ -2316,29 +2373,29 @@ class sArticles
             $searchResult = $this->searchService->search($criteria, $context);
         }
 
-        $articles = [];
-        foreach ($searchResult->getProducts() as $product) {
-            $article = $this->legacyStructConverter->convertListProductStruct($product);
+        $products = [];
+        foreach ($searchResult->getProducts() as $productStruct) {
+            $product = $this->legacyStructConverter->convertListProductStruct($productStruct);
 
             if (!empty($categoryId) && $categoryId != $context->getShop()->getCategory()->getId()) {
-                $article['linkDetails'] .= "&sCategory=$categoryId";
+                $product['linkDetails'] .= "&sCategory=$categoryId";
             }
 
-            if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
-                $article['description_long'] = $article['description'];
+            if ($this->config->get('useShortDescriptionInListing') && strlen($product['description']) > 5) {
+                $product['description_long'] = $product['description'];
             }
-            $article['description_long'] = $this->sOptimizeText($article['description_long']);
+            $product['description_long'] = $this->sOptimizeText($product['description_long']);
 
-            $articles[$article['ordernumber']] = $article;
+            $products[$product['ordernumber']] = $product;
         }
 
-        $articles = $this->listingLinkRewriteService->rewriteLinks($criteria, $articles, $context);
+        $products = $this->listingLinkRewriteService->rewriteLinks($criteria, $products, $context);
 
         $pageSizes = explode('|', $this->config->get('numberArticlesToShow'));
         $sPage = (int) $request->getParam('sPage', 1);
 
         return [
-            'sArticles' => $articles,
+            'sArticles' => $products,
             'criteria' => $criteria,
             'facets' => $searchResult->getFacets(),
             'sPage' => $sPage,
@@ -2385,7 +2442,10 @@ class sArticles
                 $data['additionaltext'] = $product->getAdditional();
             }
 
-            if ($this->config->get('forceArticleMainImageInListing') && $configurator->getType() !== ConfiguratorService::CONFIGURATOR_TYPE_STANDARD && empty($selection)) {
+            if ($this->config->get('forceArticleMainImageInListing')
+                && $configurator->getType() !== ConfiguratorService::CONFIGURATOR_TYPE_STANDARD
+                && empty($selection)
+            ) {
                 $data['image'] = $this->legacyStructConverter->convertMediaStruct($product->getCover());
                 $data['images'] = [];
                 foreach ($product->getMedia() as $image) {
@@ -2425,7 +2485,7 @@ class sArticles
             return $data;
         }
 
-        $criteria = new SearchBundle\Criteria();
+        $criteria = new Criteria();
         foreach ($selection as $groupId => $optionId) {
             $criteria->addBaseCondition(
                 new VariantCondition([(int) $optionId], true, (int) $groupId)
@@ -2458,13 +2518,13 @@ class sArticles
     /**
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
-     * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param int                                 $categoryId
-     * @param bool                                $addNumber
+     * @param ListProduct $product
+     * @param int         $categoryId
+     * @param bool        $addNumber
      *
      * @return array
      */
-    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId, $addNumber)
+    private function getLinksOfProduct(ListProduct $product, $categoryId, $addNumber)
     {
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();
@@ -2557,21 +2617,19 @@ class sArticles
     }
 
     /**
-     * @param $articleId
+     * @param int $productId
      *
      * @return string
      */
-    private function getOrdernumberByArticleId($articleId)
+    private function getOrderNumberByProductId($productId)
     {
-        $number = $this->db->fetchOne(
+        return $this->db->fetchOne(
             'SELECT ordernumber
              FROM s_articles_details
                 INNER JOIN s_articles
                   ON s_articles.main_detail_id = s_articles_details.id
              WHERE articleID = ?',
-            [$articleId]
+            [$productId]
         );
-
-        return $number;
     }
 }

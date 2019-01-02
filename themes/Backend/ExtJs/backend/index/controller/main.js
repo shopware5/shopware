@@ -46,7 +46,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep'),
             firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled,
             enableInstallationFeedback = me.subApplication.enableInstallationFeedback,
-            enableBetaFeedback = me.subApplication.enableBetaFeedback;
+            enableBetaFeedback = me.subApplication.enableBetaFeedback,
+            biOverviewEnabled = me.subApplication.biOverviewEnabled;
 
         if (!firstRunWizardEnabled) {
             firstRunWizardStep = 0;
@@ -99,6 +100,19 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                     }, 2000);
                 }
             }
+
+            /*{if {acl_is_allowed privilege=manage resource=benchmark}}*/
+            if (biOverviewEnabled) {
+                Ext.Function.defer(function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Benchmark',
+                        params: {
+                            isTeaser: true
+                        }
+                    });
+                }, 2000);
+            }
+            /* {/if} */
         }
     },
 
@@ -116,6 +130,11 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         me.addKeyboardEvents();
         me.checkLoginStatus();
+        /*{if {acl_is_allowed privilege=submit resource=benchmark}}*/
+        if (me.subApplication.biIsActive) {
+            me.checkBenchmarksStatus();
+        }
+        /*{/if}*/
     },
 
     /**
@@ -235,19 +254,15 @@ Ext.define('Shopware.apps.Index.controller.Main', {
     },
 
     /**
-     * Helper method which sends each 5 seconds an request
-     * to the backend and checks if the user is logged in.
-     *
-     * The method registers an new task runner which checks
-     * the status.
+     * Helper method which checks every 30 seconds wether the user is logged in.
      *
      * @private
      * @return void
      */
-    checkLoginStatus: function() {
+    checkLoginStatus: function () {
         Ext.TaskManager.start({
             interval: 30000,
-            run: function() {
+            run: function () {
                 Ext.Ajax.request({
                     url: '{url controller=login action=getLoginStatus}',
                     success: function(response) {
@@ -263,6 +278,59 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 });
             }
         });
+    },
+
+    /**
+     * Helper method which checks for new Benchmark data periodically (every 10 seconds).
+     *
+     * @private
+     * @return void
+     */
+    checkBenchmarksStatus: function () {
+        var interval = 10000,
+            checkBenchmarksFn = function () {
+                Ext.Ajax.request({
+                    url: '{url controller=benchmark action=checkBenchmarks}',
+                    success: function(response) {
+                        var res = Ext.decode(response.responseText);
+
+                        interval = 10000;
+
+                        // Set interval to 5 minutes if all data was sent
+                        if (!res.statistics && res.bi) {
+                            interval = 300000;
+                        }
+
+                        // If we received new BI statistics, we print a growl message
+                        if (res.bi) {
+                            Shopware.Notification.createStickyGrowlMessage({
+                                title: '{s name=title/new_benchmark}{/s}',
+                                text: '{s name=content/new_benchmark}{/s}',
+                                btnDetail: {
+                                    text: '{s name=open}{/s}',
+                                    callback: function () {
+                                        Shopware.app.Application.addSubApplication({
+                                            name: 'Shopware.apps.Benchmark',
+                                            params: {
+                                                shopId: res.shopId
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+
+                        // If neither sending nor receiving is necessary, set interval to 12 hours
+                        if (!res.statistics && !res.bi && !res.message) {
+                            interval = 43200000;
+                        }
+
+                        window.setTimeout(checkBenchmarksFn, interval);
+                    }
+                });
+            };
+
+        window.setTimeout(checkBenchmarksFn, interval);
     }
 });
 
@@ -499,9 +567,8 @@ createShopwareVersionMessage = function() {
             html: '<p>' +
                     '<strong>Shopware {$SHOPWARE_VERSION} {$SHOPWARE_VERSION_TEXT}</strong>' +
                     '<span>Build Rev {$SHOPWARE_REVISION}</span></p>' +
-
                     '{if $product == "CE"}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
-                    '<p><strong>{if $product == "PE"}Professional Edition{elseif $product == "PP"}Professional Plus Edition{elseif $product == "EE"}Enterprise Edition{elseif $product == "EB"}Enterprise Business Edition{elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
+                    '<p><strong>{if $product == "PE"}Professional Edition{elseif $product == "PP"}Professional Plus Edition{elseif $product == "EE"}Enterprise Edition{elseif $product == "EB"}Enterprise Business Edition{elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See <a href="https://api.shopware.com/gtc/en_GB.html" target="_blank">TOS</a> for details</span></p>{/if}' +
 
                     '<p><strong>Shopware 5 uses the following components</strong></p>' +
                     '<p><strong>Enlight 2</strong><span>BSD License</span><span>&nbsp;Origin: shopware AG</span></p>' +
@@ -532,8 +599,7 @@ createShopwareVersionMessage = function() {
     Ext.getBody().on('click', function() {
         this.destroy();
     }, aboutWindow, {
-        single: true,
-        stopEvent: true
+        single: true
     });
 };
 //{/block}

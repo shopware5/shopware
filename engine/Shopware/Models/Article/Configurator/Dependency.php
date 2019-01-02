@@ -44,40 +44,44 @@ class Dependency extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
     private $configuratorSetId = null;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId = null;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="child_id", type="integer", nullable=true)
      */
     private $childId = null;
 
     /**
+     * @var \Shopware\Models\Article\Configurator\Option
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="dependencyParents")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Configurator\Option
      */
     private $parentOption;
 
     /**
+     * @var \Shopware\Models\Article\Configurator\Option
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="dependencyChildren")
      * @ORM\JoinColumn(name="child_id", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Configurator\Option
      */
     private $childOption;
 
     /**
      * @var \Shopware\Models\Article\Configurator\Set
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="dependencies")
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
      */
@@ -100,9 +104,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @param $parentOption
-     *
-     * @internal param \Shopware\Models\Article\Configurator\Option $parent
+     * @param \Shopware\Models\Article\Configurator\Option $parentOption
      */
     public function setParentOption($parentOption)
     {
@@ -118,9 +120,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @param $childOption
-     *
-     * @internal param \Shopware\Models\Article\Configurator\Option $child
+     * @param \Shopware\Models\Article\Configurator\Option $childOption
      */
     public function setChildOption($childOption)
     {
@@ -136,7 +136,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @param  $configuratorSet
+     * @param \Shopware\Models\Article\Configurator\Set $configuratorSet
      */
     public function setConfiguratorSet($configuratorSet)
     {

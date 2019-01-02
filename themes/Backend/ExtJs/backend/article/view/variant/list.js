@@ -98,6 +98,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             errorMessage: '{s name=article_saved/error_message}An error has occurred while saving the article:{/s}',
             errorTitle: '{s name=article_saved/error_title}Error{/s}',
             ordernumberNotMatch: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
+        },
+        graduatedPrices: {
+            title: '{s name=graduatedPrices/title}{/s}',
+            confirm: '{s name=graduatedPrices/confirm}{/s}'
         }
     },
 
@@ -151,7 +155,17 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 oldPrice = Ext.Number.toFixed(oldPrice, 2);
 
                 if (newPrice != oldPrice) {
-                    me.fireEvent('editVariantPrice', e.record, newPrice);
+                    if (e.record.getPriceStore.getCount() > 1) {
+                        Ext.Msg.confirm(me.snippets.graduatedPrices.title, me.snippets.graduatedPrices.confirm, function (answer) {
+                            if (answer === 'yes') {
+                                me.fireEvent('editVariantPrice', e.record, newPrice);
+                            } else {
+                                e.record.reject();
+                            }
+                        });
+                    } else {
+                        me.fireEvent('editVariantPrice', e.record, newPrice);
+                    }
                 }
 
             } else if (e.field === 'pseudoPrice') {
@@ -171,7 +185,17 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 }
 
                 if (newPseudoPrice !== oldPseudoPrice || newPseudoPrice === 0.00) {
-                    me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
+                    if (e.record.getPriceStore.getCount() > 1) {
+                        Ext.Msg.confirm(me.snippets.graduatedPrices.title, me.snippets.graduatedPrices.confirm, function (answer) {
+                            if (answer === 'yes') {
+                                me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
+                            } else {
+                                e.record.reject();
+                            }
+                        });
+                    } else {
+                        me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
+                    }
                 }
 
             } else {
@@ -183,6 +207,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                     oldValue = e.record.get('number');
                     newValue = e.record.get('details.number') || e.record.get('number')
                 }
+                
+               if (e.field === 'details.inStock') {
+                   oldValue = e.record.get('inStock');
+               }
 
                 if(e.field === 'details.number' &&  (!newValue || !newValue.match(/^[a-zA-Z0-9-_. ]+$/))) {
                     Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
@@ -197,6 +225,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
                 if (e.field === 'details.number') {
                     e.record.set('number', newValue);
+                }
+                
+                if (e.field === 'details.inStock') {
+                    e.record.set('inStock', newValue);
                 }
 
                 me.fireEvent('saveVariant', e.record);
@@ -323,8 +355,8 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         standardColumns = [
             {
                 header: me.snippets.columns.stock,
-                dataIndex: 'inStock',
-                sortable: false,
+                dataIndex: 'details.inStock',
+                sortable: true,
                 flex: 1,
                 renderer: me.stockColumnRenderer,
                 editor: {

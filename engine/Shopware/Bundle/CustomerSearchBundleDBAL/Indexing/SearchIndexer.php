@@ -34,15 +34,15 @@ class SearchIndexer implements SearchIndexerInterface
     private $connection;
 
     /**
-     * @var CustomerProvider
+     * @var CustomerProviderInterface
      */
     private $provider;
 
     /**
-     * @param Connection       $connection
-     * @param CustomerProvider $provider
+     * @param Connection                $connection
+     * @param CustomerProviderInterface $provider
      */
-    public function __construct(Connection $connection, CustomerProvider $provider)
+    public function __construct(Connection $connection, CustomerProviderInterface $provider)
     {
         $this->connection = $connection;
         $this->provider = $provider;
@@ -78,7 +78,7 @@ class SearchIndexer implements SearchIndexerInterface
     }
 
     /**
-     * @param $customer
+     * @param AnalyzedCustomer $customer
      *
      * @return array
      */
@@ -249,12 +249,12 @@ class SearchIndexer implements SearchIndexerInterface
     }
 
     /**
-     * @param \DateTime|null $date
-     * @param string         $format
+     * @param \DateTimeInterface|null $date
+     * @param string                  $format
      *
      * @return null|string
      */
-    private function formatDate(\DateTime $date = null, $format = 'Y-m-d H:i:s')
+    private function formatDate(\DateTimeInterface $date = null, $format = 'Y-m-d H:i:s')
     {
         if ($date === null) {
             return null;

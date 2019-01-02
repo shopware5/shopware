@@ -37,10 +37,9 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\QueryAliasMapper;
 
 class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
 {
@@ -55,15 +54,14 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
     private $snippetNamespace;
 
     /**
-     * @var VariantHelper
+     * @var VariantHelperInterface
      */
     private $variantHelper;
 
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper,
-        VariantHelper $variantHelper
+        VariantHelperInterface $variantHelper
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
@@ -155,7 +153,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition WeightCondition|WidthCondition|LengthCondition|HeightCondition */
+        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition $condition */
         if ($condition = $criteria->getCondition($name)) {
             $method = 'get' . ucfirst($minField);
             $activeMin = $condition->$method();

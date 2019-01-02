@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 
 /**
@@ -78,7 +77,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         $data['disable_on_error'] = $job->getDisableOnError() ? '1' : '0';
         $data['name'] = $job->getName();
 
-        if (null === $job->getId()) {
+        if ($job->getId() === null) {
             $this->connection->insert($this->tableName, $data);
         } else {
             $this->connection->update(
@@ -147,7 +146,12 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
             $this->overdueJobsList = $this->getOverdueJobs();
         }
 
-        return array_pop($this->overdueJobsList);
+        while (($nextJob = array_pop($this->overdueJobsList)) !== null) {
+            if ($this->isJobStillOverdue($nextJob->getId())) {
+                return $nextJob;
+            }
+        }
+        return null;
     }
 
     /**
@@ -196,8 +200,8 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     /**
      * Internal helper method to grep data based on a given column name.
      *
-     * @param $column
-     * @param $value
+     * @param string $column
+     * @param string $value
      *
      * @return Enlight_Components_Cron_Job|null
      */
@@ -247,5 +251,26 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         }
 
         return $overdueJobsList;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isJobStillOverdue($jobId)
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb->select('*')
+            ->from($this->tableName, 'c')
+            ->andWhere('c.active = 1')
+            ->andWhere('c.end IS NOT NULL')
+            ->andWhere('c.id = :jobId')
+            ->andWhere('c.next <= :dateNow')
+            ->setParameter('jobId', $jobId)
+            ->setParameter('dateNow', new DateTime(), 'datetime');
+        $row = $qb->execute()->fetch();
+        if (!$row) {
+            return false;
+        }
+        return true;
     }
 }

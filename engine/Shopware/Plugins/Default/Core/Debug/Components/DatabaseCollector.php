@@ -27,7 +27,7 @@ namespace Shopware\Plugin\Debug\Components;
 use Shopware\Components\Logger;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,10 +55,12 @@ class DatabaseCollector implements CollectorInterface
      * Logs all database process to the internal log object.
      * Iterates all queries of the query profiler and writes the query,
      * the parameter and the elapsed seconds for the query into a new row of the log.
+     *
+     * @param Logger $log
      */
     public function logResults(Logger $log)
     {
-        /** @var $profiler \Zend_Db_Profiler */
+        /** @var \Zend_Db_Profiler $profiler */
         $profiler = $this->db->getProfiler();
 
         $rows = [['time', 'count', 'sql', 'params']];
@@ -70,7 +72,7 @@ class DatabaseCollector implements CollectorInterface
             return;
         }
 
-        /** @var $query \Zend_Db_Profiler_Query */
+        /** @var \Zend_Db_Profiler_Query $query */
         foreach ($queryProfiles as $query) {
             $id = md5($query->getQuery());
             $total_time += $query->getElapsedSecs();

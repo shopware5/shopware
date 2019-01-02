@@ -21,8 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
+use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Components\Api\Resource\Article as ArticleResource;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
 
 /**
  * Shopware SwagMultiEdit Plugin - MultiEdit Backend Controller
@@ -267,7 +271,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $resource = $this->Request()->getParam('resource');
 
-        $queueId = $this->Request()->getParam('queueId', null);
+        $queueId = $this->Request()->getParam('queueId');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
@@ -319,7 +323,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $filter = $this->Request()->getParam('filter', []);
         $filter = isset($filter[0]['value']) ? $filter[0]['value'] : null;
         if (!$filter) {
-            $filter = $this->Request()->getParam('query', null);
+            $filter = $this->Request()->getParam('query');
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
@@ -352,6 +356,17 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $ast = json_decode($ast, true);
         if ($ast == false) {
             throw new RuntimeException('Could not decode AST');
+        }
+
+        if ($this->container->getParameter('shopware.es.backend.enabled')) {
+            $result = $this->filterByRepository();
+            $this->View()->assign([
+                'success' => true,
+                'data' => $result['data'],
+                'total' => $result['total'],
+            ]);
+
+            return;
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
@@ -398,10 +413,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function saveFilterAction()
     {
         $data = $this->Request()->getParams();
-        $id = $this->Request()->get('id', null);
+        $id = $this->Request()->getParam('id', null);
 
         if ($id) {
-            $filter = $this->getMultiEditRepository()->find($id);
+            $filter = $this->getMultiEditRepository()->find((int) $id);
         } else {
             $filter = new Shopware\Models\MultiEdit\Filter();
         }
@@ -454,16 +469,16 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $filterArray = $this->Request()->getParam('filterArray');
         $operations = $this->Request()->getParam('operations');
         $limit = $this->Request()->getParam('limit', 1000);
-        $queueId = $this->Request()->getParam('queueId', null);
+        $queueId = $this->Request()->getParam('queueId');
         $offset = $this->Request()->getParam('offset', 0);
         $filterArray = json_decode($filterArray, true);
-        if ($filterArray == false) {
-            throw new RuntimeException("Could not decode '{$this->Request()->getParam('filterArray')}'");
+        if ($filterArray === false) {
+            throw new RuntimeException(sprintf('Could not decode "%s"', $this->Request()->getParam('filterArray')));
         }
 
         $operations = json_decode($operations, true);
-        if ($operations == false) {
-            throw new RuntimeException("Could not decode '{$this->Request()->getParam('operations')}'");
+        if ($operations === false) {
+            throw new RuntimeException(sprintf('Could not decode "%s"', $this->Request()->getParam('operations')));
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
@@ -479,28 +494,26 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Event listener function of the article store of the backend module.
-     *
-     * @return mixed
+     * Event listener function of the product store of the backend module.
      */
     public function deleteProductAction()
     {
         $id = (int) $this->Request()->getParam('Detail_id');
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
-        $articleDetail = $this->getDetailRepository()->find($id);
-        if (!is_object($articleDetail)) {
+        /** @var Detail $variant */
+        $variant = $this->getDetailRepository()->find($id);
+        if (!is_object($variant)) {
             $this->View()->assign([
                 'success' => false,
             ]);
         } else {
-            $articleResource = new Shopware\Components\Api\Resource\Article();
+            $articleResource = new ArticleResource();
             $articleResource->setManager($this->get('models'));
 
-            if ($articleDetail->getKind() == 1) {
-                $articleResource->delete($articleDetail->getArticle()->getId());
+            if ($variant->getKind() == 1) {
+                $articleResource->delete($variant->getArticle()->getId());
             } else {
-                Shopware()->Models()->remove($articleDetail);
+                Shopware()->Models()->remove($variant);
             }
 
             Shopware()->Models()->flush();
@@ -514,7 +527,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Normalize filter
      *
-     * @param $filter
+     * @param string $filter
      *
      * @return string
      */
@@ -526,7 +539,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Translate filter name and description
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return mixed
      */
@@ -543,13 +556,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Internal helper function to get access to the article repository.
+     * Internal helper function to get access to the product repository.
      *
      * @return \Shopware\Components\Model\ModelRepository
      */
     private function getDetailRepository()
     {
-        return Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        return Shopware()->Models()->getRepository(Detail::class);
     }
 
     /**
@@ -631,7 +644,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $service = $this->get('shopware_storefront.additional_text_service');
 
         /** @var \Shopware\Models\Shop\Repository $shopRepo */
-        $shopRepo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepo = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
 
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $shopRepo->getActiveDefault();
@@ -646,5 +659,94 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         );
 
         return $service->buildAdditionalTextLists($products, $context);
+    }
+
+    private function filterByRepository()
+    {
+        $criteria = $this->createCriteria($this->Request());
+
+        $repository = $this->container->get('shopware_attribute.product_repository');
+
+        $result = $repository->search($criteria);
+
+        $ids = array_column($result->getData(), 'variantId');
+
+        $data = $this->container->get('multi_edit.product.dql_helper')
+            ->getProductsForListing($ids);
+
+        $sortedData = [];
+        foreach ($ids as $id) {
+            foreach ($data as $key => $row) {
+                if ($row['Detail_id'] == $id) {
+                    $sortedData[] = $row;
+                    unset($data[$key]);
+                    break;
+                }
+            }
+        }
+
+        return ['data' => $sortedData, 'total' => $result->getCount()];
+    }
+
+    /**
+     * @param Enlight_Controller_Request_Request $request
+     *
+     * @return SearchCriteria
+     */
+    private function createCriteria(Enlight_Controller_Request_Request $request)
+    {
+        if ($request->getParam('showVariants', false) === 'true') {
+            $criteria = new SearchCriteria(Detail::class);
+        } else {
+            $criteria = new SearchCriteria(Article::class);
+        }
+        $criteria->offset = $request->getParam('start', 0);
+        $criteria->limit = $request->getParam('limit', 30);
+        $criteria->ids = $request->getParam('ids', []);
+        $criteria->term = $request->getParam('query', null);
+        $criteria->sortings = $request->getParam('sort', []);
+        $criteria->conditions = $request->getParam('filters', []);
+
+        $categoryId = (int) $request->getParam('categoryId');
+        if ($categoryId > 0) {
+            $criteria->conditions[] = ['property' => 'categoryIds', 'value' => $categoryId, 'expression' => 'IN'];
+        }
+
+        foreach ($criteria->sortings as $index => &$sorting) {
+            switch ($sorting['property']) {
+                case 'Detail_number':
+                    $sorting['property'] = 'number';
+                    break;
+                case 'Article_name':
+                    $sorting['property'] = 'name.raw';
+                    break;
+                case 'Supplier_name':
+                    $sorting['property'] = 'supplierName.raw';
+                    break;
+                case 'Article_active':
+                    $sorting['property'] = 'articleActive';
+                    break;
+                case 'Tax_name':
+                    $sorting['property'] = 'taxId';
+                    break;
+                case 'Detail_inStock':
+                    $sorting['property'] = 'inStock';
+                    break;
+                case 'Price_price':
+                    $sorting['property'] = 'price';
+                    break;
+                default:
+                    unset($criteria->sortings[$index]);
+                    break;
+            }
+        }
+
+        $criteria->params = $request->getParams();
+
+        if (!empty($criteria->ids)) {
+            $criteria->ids = json_decode($criteria->ids, true);
+        }
+
+        return $criteria;
     }
 }

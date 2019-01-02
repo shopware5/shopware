@@ -21,13 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\AttributeBundle\Repository\RegistryInterface;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -65,7 +64,7 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
         $criteria->offset = $request->getParam('start', 0);
         $criteria->limit = $request->getParam('limit', 30);
         $criteria->ids = $request->getParam('ids', []);
-        $criteria->term = $request->getParam('query', null);
+        $criteria->term = $request->getParam('query');
         $criteria->sortings = $request->getParam('sorts', []);
         $criteria->conditions = $request->getParam('filters', []);
 
@@ -78,6 +77,10 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
 
         if (!empty($criteria->ids)) {
             $criteria->ids = json_decode($criteria->ids, true);
+        }
+
+        if ($id = $request->getParam('id')) {
+            $criteria->ids = [$id];
         }
 
         return $criteria;

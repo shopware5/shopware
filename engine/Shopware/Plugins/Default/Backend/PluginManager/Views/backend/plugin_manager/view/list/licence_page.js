@@ -77,10 +77,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
         me.on('licence-selection-changed', function(grid, selModel, selection) {
             if (selection.length > 0) {
                 me.downloadButton.enable();
-                me.importLicenceButton.enable();
             } else {
                 me.downloadButton.disable();
-                me.importLicenceButton.disable();
             }
         });
 
@@ -102,24 +100,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
             }
         });
 
-        me.importLicenceButton = Ext.create('Ext.button.Button', {
-            iconCls: 'sprite-key',
-            text: '{s name="import_selected_licences"}Import selected licenses{/s}',
-            disabled: true,
-            handler: function() {
-                var selModel = me.getSelectionModel();
-
-                me.queueRequests(
-                    'import-plugin-licence',
-                    selModel.getSelection(),
-                    function() {
-                        me.hideLoadingMask();
-                    }
-                );
-            }
-        });
-
-        items = Ext.Array.insert(items, 0, [ me.downloadButton, me.importLicenceButton ]);
+        items = Ext.Array.insert(items, 0, [ me.downloadButton ]);
 
         return items;
     },
@@ -169,25 +150,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
     createActionColumnItems: function() {
         var me = this,
             items = me.callParent(arguments);
-
-        items.push({
-            iconCls: 'sprite-key',
-            tooltip: '{s name="import_licence"}Import license{/s}',
-            getClass: function(value, metaData, record) {
-                if (!record.get('isLicenseCheckEnabled')) {
-                    return Ext.baseCSSPrefix + 'hidden';
-                }
-            },
-            handler: function (view, rowIndex, colIndex, item, opts, record) {
-                Shopware.app.Application.fireEvent(
-                    'import-plugin-licence',
-                    record,
-                    function() {
-                        me.hideLoadingMask();
-                    }
-                );
-            }
-        });
 
         items.push({
             iconCls: 'sprite-inbox-download',

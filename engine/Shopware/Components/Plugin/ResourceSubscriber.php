@@ -30,7 +30,7 @@ use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -70,6 +70,8 @@ class ResourceSubscriber implements SubscriberInterface
         if ($files) {
             return new ArrayCollection($files);
         }
+
+        return null;
     }
 
     /**
@@ -81,6 +83,8 @@ class ResourceSubscriber implements SubscriberInterface
         if ($files) {
             return new ArrayCollection($files);
         }
+
+        return null;
     }
 
     /**
@@ -100,7 +104,7 @@ class ResourceSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param string $baseDir resource basedirectory
+     * @param string $baseDir resource base directory
      * @param string $type    `css` or `js`
      *
      * @return string[]
@@ -117,7 +121,7 @@ class ResourceSubscriber implements SubscriberInterface
         $finder->files()->name('*.' . $type)->in($directory);
         $finder->sortByName();
 
-        /** @var File $file */
+        /** @var \SplFileInfo $file */
         foreach ($finder as $file) {
             $files[] = $file->getRealPath();
         }

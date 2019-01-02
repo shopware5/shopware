@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Licence Shopware',
     'menuitem_configuration' => 'Configuration',
     'menuitem_finish' => 'Terminé',
-    'menuitem_license' => 'Licence d\'utilisateur final',
+    'menuitem_license' => 'Conditions générales',
 
     'license_incorrect' => 'Échec de la vérification de la clé de licence saisie',
     'license_does_not_match' => 'La clé de licence saisie ne correspond à aucune version Shopware commerciale',
@@ -49,6 +49,7 @@ return [
     'select_language_fr' => 'Français',
     'select_language_es' => 'Español',
     'select_language_pt' => 'Português',
+    'select_language_pl' => 'Polski',
 
     'language-selection_select_language' => 'Assistant d\'installation des langues',
     'language-selection_header' => 'Ton installation Shopware',
@@ -73,7 +74,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Statut',
     'requirements_error' => '<h3 class="alert-heading">Attention!</h3>L\'installation ne peut être réalisée car la configuration requise n\'est pas satisfaite',
     'requirements_success' => '<h3 class="alert-heading">Félicitations!</h3>L\'installation peut être réalisée car la configuration requise est satisfaite',
-    'requirements_ioncube' => '<small><strong>* Remarque:</strong> Le chiffrage Software ionCube n\'est pas installé sur ton système. Celui-ci est uniquement nécessaire pour installer les extensions sur <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a>. Ces extensions sont codées avec ionCube. Tu peux récupérer l\'installation d\'ionCube à tout moment.</small>',
     'requirements_php_info' => 'Afin que Shopware soit fonctionnel, ton serveur doit disposer de la configuration requise suivante',
     'requirements_system_colcheck' => 'Configuration requise',
     'requirements_system_colrequired' => 'Nécessaire',
@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(Tout afficher)',
     'requirements_hide_all' => '(Tout masquer)',
 
-    'license_agreement_header' => 'Contrat de licence utilisateur final ("CLUF")',
-    'license_agreement_info' => 'Tu dois lire et accepter ce contrat de licence pour pouvoir compléter l\'installation. L\'édition Shopware Community possède une licence AGPL alors qu\'une partie des plugins et du template dépendent de la nouvelle licence BSD.',
-    'license_agreement_error' => 'Vous devez accepter notre contrat de licence',
-    'license_agreement_checkbox' => 'J\'accepte le contrat de licence',
+    'license_agreement_header' => 'Conditions générales de vente ("CGV")',
+    'license_agreement_info' => 'Tu dois lire et accepter ce conditions pour pouvoir compléter l\'installation. L\'édition Shopware Community possède une licence AGPL alors qu\'une partie des plugins et du template dépendent de la nouvelle licence BSD.',
+    'license_agreement_error' => 'Vous devez accepter notre conditions générales de vente',
+    'license_agreement_checkbox' => 'J\'accepte le contrat de conditions',
 
     'database-configuration_header' => 'Configurer la base de données',
     'database-configuration_field_host' => 'Serveur de la base de données:',
@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Nous nous réjouissons de t\'accueillir dans notre communauté. Shopware a été installé.
-<p>Ta boutique est maintenant opérationnelle. Si tu utilises Shopware pour la première fois, nous te conseillons de consulter le guide <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Premiers pas sur Shopware"</a>. Si tu te connectes pour la première fois au backend de la boutique, notre "First Run Wizard" t\'accompagnera à travers l\'installation de base.</p>
+<p>Ta boutique est maintenant opérationnelle. Si tu utilises Shopware pour la première fois, nous te conseillons de consulter le guide <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"Premiers pas sur Shopware"</a>. Si tu te connectes pour la première fois au backend de la boutique, notre "First Run Wizard" t\'accompagnera à travers l\'installation de base.</p>
 <p>Profite bien de ta nouvelle boutique en ligne!</p>',
 ];

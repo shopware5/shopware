@@ -56,7 +56,7 @@ class ArticleImpression extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -97,13 +97,11 @@ class ArticleImpression extends ModelEntity
     private $deviceType;
 
     /**
-     * Constructor
-     *
-     * @param $articleId
-     * @param $shopId
-     * @param $date
-     * @param int    $impressions
-     * @param string $deviceType
+     * @param int                     $articleId
+     * @param int                     $shopId
+     * @param null|\DateTimeInterface $date
+     * @param int                     $impressions
+     * @param string                  $deviceType
      */
     public function __construct($articleId, $shopId, $date = null, $impressions = 1, $deviceType = null)
     {
@@ -128,9 +126,9 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * set the date
+     * Set the date
      *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -138,9 +136,9 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * get the date
+     * Get the date
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -148,7 +146,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * set the articleId
+     * Set the articleId
      *
      * @param int $articleId
      */
@@ -158,7 +156,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * get the articleId
+     * Get the articleId
      *
      * @return int
      */
@@ -168,7 +166,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * set the shopId
+     * Set the shopId
      *
      * @param int $shopId
      */
@@ -178,7 +176,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * get the shopId
+     * Get the shopId
      *
      * @return int
      */
@@ -188,7 +186,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * set the impressions
+     * Set the impressions
      *
      * @param int $impressions
      */
@@ -198,7 +196,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * get the impressions
+     * Get the impressions
      *
      * @return int
      */

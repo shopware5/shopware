@@ -149,7 +149,7 @@ interface MediaServiceInterface
      *
      * @param string $path
      *
-     * @return string
+     * @return bool
      */
     public function isEncoded($path);
 

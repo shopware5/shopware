@@ -25,21 +25,35 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\ORMException;
+use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Resource\Category as CategoryResource;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Download;
 use Shopware\Models\Article\Image;
+use Shopware\Models\Article\Link;
+use Shopware\Models\Article\SeoCategory;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Attribute\Article as ProductAttribute;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media as MediaModel;
+use Shopware\Models\Price\Group;
+use Shopware\Models\Property\Group as PropertyGroup;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Value;
 use Shopware\Models\Shop\Shop;
+use Shopware\Models\Tax\Tax;
 use Shopware_Components_Translation;
 
 /**
  * Article API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -63,7 +77,7 @@ class Article extends Resource implements BatchInterface
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Article\Article::class);
+        return $this->getManager()->getRepository(ProductModel::class);
     }
 
     /**
@@ -71,13 +85,13 @@ class Article extends Resource implements BatchInterface
      */
     public function getDetailRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Article\Detail::class);
+        return $this->getManager()->getRepository(Detail::class);
     }
 
     /**
      * Little helper function for the ...ByNumber methods
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -90,25 +104,25 @@ class Article extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
-        $articleDetail = $this->getDetailRepository()->findOneBy(['number' => $number]);
+        /** @var Detail $productVariant */
+        $productVariant = $this->getDetailRepository()->findOneBy(['number' => $number]);
 
-        if (!$articleDetail) {
-            throw new ApiException\NotFoundException("Article by number {$number} not found");
+        if (!$productVariant) {
+            throw new ApiException\NotFoundException(sprintf('Product by number "%s" not found', $number));
         }
 
-        return $articleDetail
+        return $productVariant
             ->getArticle()
             ->getId();
     }
 
     /**
-     * Convenience method to get a article by number
+     * Convenience method to get a product by number
      *
      * @param string $number
      * @param array  $options
      *
-     * @return array|\Shopware\Models\Article\Article
+     * @return array|ProductModel
      */
     public function getOneByNumber($number, array $options = [])
     {
@@ -124,7 +138,7 @@ class Article extends Resource implements BatchInterface
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
-     * @return array|\Shopware\Models\Article\Article
+     * @return array|ProductModel
      */
     public function getOne($id, array $options = [])
     {
@@ -148,7 +162,7 @@ class Article extends Resource implements BatchInterface
             'propertyGroup',
             'customerGroups',
         ])
-            ->from(\Shopware\Models\Article\Article::class, 'article')
+            ->from(ProductModel::class, 'article')
             ->leftJoin('article.mainDetail', 'mainDetail')
             ->leftJoin('mainDetail.prices', 'mainDetailPrices')
             ->leftJoin('mainDetailPrices.customerGroup', 'priceCustomGroup')
@@ -162,65 +176,63 @@ class Article extends Resource implements BatchInterface
             ->where('article.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $article \Shopware\Models\Article\Article */
-        $article = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
+        /** @var array $product */
+        $product = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
-        if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
+        if (!$product) {
+            throw new ApiException\NotFoundException(sprintf('Product by id "%d" not found', $id));
         }
 
-        if ($this->getResultMode() == self::HYDRATE_ARRAY) {
-            /* @var $article array */
-            $article['images'] = $this->getArticleImages($id);
-            $article['configuratorSet'] = $this->getArticleConfiguratorSet($id);
-            $article['links'] = $this->getArticleLinks($id);
-            $article['downloads'] = $this->getArticleDownloads($id);
-            $article['categories'] = $this->getArticleCategories($id);
-            $article['similar'] = $this->getArticleSimilar($id);
-            $article['related'] = $this->getArticleRelated($id);
-            $article['details'] = $this->getArticleVariants($id);
-            $article['seoCategories'] = $this->getArticleSeoCategories($id);
+        if ($this->getResultMode() === self::HYDRATE_ARRAY) {
+            $product['images'] = $this->getArticleImages($id);
+            $product['configuratorSet'] = $this->getArticleConfiguratorSet($id);
+            $product['links'] = $this->getArticleLinks($id);
+            $product['downloads'] = $this->getArticleDownloads($id);
+            $product['categories'] = $this->getArticleCategories($id);
+            $product['similar'] = $this->getArticleSimilar($id);
+            $product['related'] = $this->getArticleRelated($id);
+            $product['details'] = $this->getArticleVariants($id);
+            $product['seoCategories'] = $this->getArticleSeoCategories($id);
 
             if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
-                $article['mainDetail']['prices'] = $this->getTaxPrices(
-                    $article['mainDetail']['prices'],
-                    $article['tax']['tax']
+                $product['mainDetail']['prices'] = $this->getTaxPrices(
+                    $product['mainDetail']['prices'],
+                    $product['tax']['tax']
                 );
 
-                foreach ($article['details'] as &$detail) {
+                foreach ($product['details'] as &$detail) {
                     $detail['prices'] = $this->getTaxPrices(
                         $detail['prices'],
-                        $article['tax']['tax']
+                        $product['tax']['tax']
                     );
                 }
             }
 
             $query = $this->getManager()->createQuery('SELECT shop FROM Shopware\Models\Shop\Shop as shop');
-            $shops = $query->getArrayResult();
 
-            foreach ($shops as $shop) {
+            foreach ($query->getArrayResult() as $shop) {
                 $translation = $this->translationComponent->read($shop['id'], 'article', $id);
                 if (!empty($translation)) {
                     $translation['shopId'] = $shop['id'];
-                    $article['translations'][$shop['id']] = $translation;
+                    $product['translations'][$shop['id']] = $translation;
                 }
             }
 
             if (isset($options['language']) && !empty($options['language'])) {
-                /** @var $shop Shop */
-                $shop = $this->findEntityByConditions(\Shopware\Models\Shop\Shop::class, [
+                /** @var Shop $shop */
+                $shop = $this->findEntityByConditions(Shop::class, [
                     ['id' => $options['language']],
                     ['shop' => $options['language']],
                 ]);
 
-                $article = $this->translateArticle(
-                    $article,
+                $product = $this->translateArticle(
+                    $product,
                     $shop
                 );
             }
         }
 
-        return $article;
+        return $product;
     }
 
     /**
@@ -228,7 +240,7 @@ class Article extends Resource implements BatchInterface
      * If the customer group configured "taxInput" as true, the price will be formatted as gross.
      *
      * @param array $prices  Array of the variant prices
-     * @param float $taxRate Float value of the article tax (example: 19.00)
+     * @param float $taxRate Float value of the product tax (example: 19.00)
      *
      * @return array
      */
@@ -257,6 +269,7 @@ class Article extends Resource implements BatchInterface
     {
         $this->checkPrivilege('read');
 
+        /** @var QueryBuilder $builder */
         $builder = $this->getRepository()->createQueryBuilder('article')
             ->addSelect(['mainDetail', 'attribute'])
             ->addSelect('mainDetail.lastStock')
@@ -282,7 +295,7 @@ class Article extends Resource implements BatchInterface
          * To support Shopware <= 5.3 we make sure the lastStock-column of the main variant is being used instead of the
          * one on the product itself.
          */
-        $articles = array_map(function (array $val) {
+        $products = array_map(function (array $val) {
             $val[0]['lastStock'] = $val['lastStock'];
             unset($val['lastStock']);
 
@@ -292,35 +305,35 @@ class Article extends Resource implements BatchInterface
         if ($this->getResultMode() === self::HYDRATE_ARRAY
             && isset($options['language'])
             && !empty($options['language'])) {
-            /** @var $shop Shop */
-            $shop = $this->findEntityByConditions(\Shopware\Models\Shop\Shop::class, [
+            /** @var Shop $shop */
+            $shop = $this->findEntityByConditions(Shop::class, [
                 ['id' => $options['language']],
             ]);
 
-            foreach ($articles as &$article) {
-                $article = $this->translateArticle(
-                    $article,
+            foreach ($products as &$product) {
+                $product = $this->translateArticle(
+                    $product,
                     $shop
                 );
             }
         }
 
-        return ['data' => $articles, 'total' => $totalResult];
+        return ['data' => $products, 'total' => $totalResult];
     }
 
     /**
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
-     * @return \Shopware\Models\Article\Article
+     * @return ProductModel
      */
     public function create(array $params)
     {
         $this->checkPrivilege('create');
 
-        $article = new ArticleModel();
+        $product = new ProductModel();
 
         $translations = [];
         if (!empty($params['translations'])) {
@@ -328,20 +341,20 @@ class Article extends Resource implements BatchInterface
             unset($params['translations']);
         }
 
-        $params = $this->prepareAssociatedData($params, $article);
+        $params = $this->prepareAssociatedData($params, $product);
 
-        $article->fromArray($params);
+        $product->fromArray($params);
 
-        $violations = $this->getManager()->validate($article);
+        $violations = $this->getManager()->validate($product);
         if ($violations->count() > 0) {
             throw new ApiException\ValidationException($violations);
         }
 
-        $this->getManager()->persist($article);
+        $this->getManager()->persist($product);
         $this->flush();
 
         if (!empty($translations)) {
-            $this->writeTranslations($article->getId(), $translations);
+            $this->writeTranslations($product->getId(), $translations);
         }
 
         /*
@@ -354,12 +367,12 @@ class Article extends Resource implements BatchInterface
         if (!array_key_exists('mainDetail', $params) && array_key_exists('lastStock', $params)) {
             $db = $this->getContainer()->get('dbal_connection');
             $db->executeQuery('UPDATE `s_articles_details` SET lastStock=:lastStock WHERE `articleID`=:articleId', [
-                'lastStock' => $article->getLastStock(),
-                'articleId' => $article->getId(),
+                'lastStock' => $product->getLastStock(),
+                'articleId' => $product->getId(),
             ]);
         }
 
-        return $article;
+        return $product;
     }
 
     /**
@@ -372,7 +385,7 @@ class Article extends Resource implements BatchInterface
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
-     * @return \Shopware\Models\Article\Article
+     * @return ProductModel
      */
     public function updateByNumber($number, array $params)
     {
@@ -389,7 +402,7 @@ class Article extends Resource implements BatchInterface
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
-     * @return \Shopware\Models\Article\Article
+     * @return ProductModel
      */
     public function update($id, array $params)
     {
@@ -401,27 +414,27 @@ class Article extends Resource implements BatchInterface
 
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select([
-            'article',
-            'mainDetail',
-            'mainDetailPrices',
-            'mainDetailAttribute',
+            'product',
+            'mainVariant',
+            'mainVariantPrices',
+            'mainVariantAttribute',
             'tax',
             'supplier',
         ])
-            ->from(\Shopware\Models\Article\Article::class, 'article')
-            ->leftJoin('article.mainDetail', 'mainDetail')
-            ->leftJoin('mainDetail.prices', 'mainDetailPrices')
-            ->leftJoin('article.tax', 'tax')
-            ->leftJoin('article.supplier', 'supplier')
-            ->leftJoin('mainDetail.attribute', 'mainDetailAttribute')
-            ->where('article.id = ?1')
+            ->from(ProductModel::class, 'product')
+            ->leftJoin('product.mainDetail', 'mainVariant')
+            ->leftJoin('mainVariant.prices', 'mainVariantPrices')
+            ->leftJoin('product.tax', 'tax')
+            ->leftJoin('product.supplier', 'supplier')
+            ->leftJoin('mainVariant.attribute', 'mainVariantAttribute')
+            ->where('product.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $article \Shopware\Models\Article\Article */
-        $article = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
+        /** @var ProductModel $product */
+        $product = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
-        if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
+        if (!$product) {
+            throw new ApiException\NotFoundException(sprintf('Product by id "%d" not found', $id));
         }
 
         $translations = [];
@@ -430,10 +443,10 @@ class Article extends Resource implements BatchInterface
             unset($params['translations']);
         }
 
-        $params = $this->prepareAssociatedData($params, $article);
+        $params = $this->prepareAssociatedData($params, $product);
 
-        $article->fromArray($params);
-        $violations = $this->getManager()->validate($article);
+        $product->fromArray($params);
+        $violations = $this->getManager()->validate($product);
         if ($violations->count() > 0) {
             throw new ApiException\ValidationException($violations);
         }
@@ -441,26 +454,22 @@ class Article extends Resource implements BatchInterface
         $this->flush();
 
         if (!empty($translations)) {
-            $this->writeTranslations($article->getId(), $translations);
+            $this->writeTranslations($product->getId(), $translations);
         }
 
-        return $article;
+        return $product;
     }
 
     /**
-     * Convenience function to delete a article by number
+     * Convenience function to delete a product by number
      *
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Exception
-     *
-     * @return \Shopware\Models\Article\Article
      */
     public function deleteByNumber($number)
     {
-        throw new \Exception("Deleting articles by number isn't possible, yet.");
+        throw new RuntimeException('Deleting products by number isn\'t possible, yet.');
     }
 
     /**
@@ -469,7 +478,7 @@ class Article extends Resource implements BatchInterface
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
-     * @return \Shopware\Models\Article\Article
+     * @return ProductModel
      */
     public function delete($id)
     {
@@ -479,43 +488,43 @@ class Article extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $article \Shopware\Models\Article\Article */
-        $article = $this->getRepository()->find($id);
+        /** @var ProductModel $product */
+        $product = $this->getRepository()->find($id);
 
-        if (!$article) {
-            throw new ApiException\NotFoundException("Article by id $id not found");
+        if (!$product) {
+            throw new ApiException\NotFoundException(sprintf('Product by "id" %d not found', $id));
         }
 
         // Delete associated data
-        $query = $this->getRepository()->getRemovePricesQuery($article->getId());
+        $query = $this->getRepository()->getRemovePricesQuery($product->getId());
         $query->execute();
-        $query = $this->getRepository()->getRemoveAttributesQuery($article->getId());
+        $query = $this->getRepository()->getRemoveAttributesQuery($product->getId());
         $query->execute();
-        $query = $this->getRepository()->getRemoveESDQuery($article->getId());
+        $query = $this->getRepository()->getRemoveESDQuery($product->getId());
         $query->execute();
-        $query = $this->getRepository()->getRemoveArticleTranslationsQuery($article->getId());
+        $query = $this->getRepository()->getRemoveArticleTranslationsQuery($product->getId());
         $query->execute();
 
         $sql = 'DELETE FROM s_articles_translations WHERE articleID = ?';
-        $this->getManager()->getConnection()->executeQuery($sql, [$article->getId()]);
+        $this->getManager()->getConnection()->executeQuery($sql, [$product->getId()]);
 
-        $this->removeArticleDetails($article);
+        $this->removeArticleDetails($product);
 
-        $this->getManager()->remove($article);
+        $this->getManager()->remove($product);
         $this->flush();
 
-        return $article;
+        return $product;
     }
 
     /**
-     * Helper function which converts the passed data for the main variant of the article.
+     * Helper function which converts the passed data for the main variant of the product.
      *
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      *
      * @return array
      */
-    public function prepareMainDetail(array $data, ArticleModel $article)
+    public function prepareMainDetail(array $data, ProductModel $article)
     {
         $detail = $article->getMainDetail();
         if (!$detail) {
@@ -531,35 +540,35 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Short method to completely generate all images from an article, main images and variant images
+     * Short method to completely generate all images from an product, main images and variant images
      *
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param bool         $force   Force all images to be regenerated
      *
      * @see \Shopware\Components\Api\Resource\Article::generateMainThumbnails()
      * @see \Shopware\Components\Api\Resource\Article::generateVariantImages()
      */
-    public function generateImages(ArticleModel $article, $force = false)
+    public function generateImages(ProductModel $article, $force = false)
     {
         $this->generateMainThumbnails($article, $force);
         $this->generateVariantImages($article, $force);
     }
 
     /**
-     * Generate the main thumbnails of an article
+     * Generate the main thumbnails of an product
      *
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param bool         $force   Force to regenerate main thumbnails
      */
-    public function generateMainThumbnails(ArticleModel $article, $force = false)
+    public function generateMainThumbnails(ProductModel $article, $force = false)
     {
-        /** @var $generator \Shopware\Components\Thumbnail\Manager */
+        /** @var \Shopware\Components\Thumbnail\Manager $generator */
         $generator = $this->getContainer()->get('thumbnail_manager');
 
-        /** @var $mediaService \Shopware\Bundle\MediaBundle\MediaService */
+        /** @var \Shopware\Bundle\MediaBundle\MediaService $mediaService */
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        /** @var $image Image */
+        /** @var Image $image */
         foreach ($article->getImages() as $image) {
             $media = $image->getMedia();
 
@@ -575,23 +584,21 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * This method generates all variant image entities for a given article model instance.
-     * The method expects that the variants and the mapping of the article images already exist.
+     * This method generates all variant image entities for a given product model instance.
+     * The method expects that the variants and the mapping of the product images already exist.
      *
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param bool         $force   Force variant image regeneration
      */
-    public function generateVariantImages(ArticleModel $article, $force = false)
+    public function generateVariantImages(ProductModel $article, $force = false)
     {
         $builder = $this->getArticleImageMappingsQuery($article->getId());
 
-        $mappings = $builder->getQuery()->getResult();
-
-        /** @var $mapping Image\Mapping */
-        foreach ($mappings as $mapping) {
+        /** @var Image\Mapping $mapping */
+        foreach ($builder->getQuery()->getResult() as $mapping) {
             $builder = $this->getArticleVariantQuery($article->getId());
 
-            /** @var $rule Image\Rule */
+            /** @var Image\Rule $rule */
             foreach ($mapping->getRules() as $rule) {
                 $option = $rule->getOption();
                 $alias = 'option' . $option->getId();
@@ -599,10 +606,8 @@ class Article extends Resource implements BatchInterface
                     ->setParameter($alias, $option->getId());
             }
 
-            $variants = $builder->getQuery()->getResult();
-
-            /** @var $variant Detail */
-            foreach ($variants as $variant) {
+            /** @var Detail $variant */
+            foreach ($builder->getQuery()->getResult() as $variant) {
                 $exist = $this->getCollectionElementByProperty(
                     $variant->getImages(),
                     'parent',
@@ -625,14 +630,14 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Helper function which creates a new article image with the passed media object.
+     * Helper function which creates a new product image with the passed media object.
      *
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param MediaModel   $media
      *
      * @return Image
      */
-    public function createNewArticleImage(ArticleModel $article, MediaModel $media)
+    public function createNewArticleImage(ProductModel $article, MediaModel $media)
     {
         $image = new Image();
         $image = $this->updateArticleImageWithMedia(
@@ -647,15 +652,15 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Helper function to map the media data into an article image
+     * Helper function to map the media data into an product image
      *
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param Image        $image
      * @param MediaModel   $media
      *
      * @return Image
      */
-    public function updateArticleImageWithMedia(ArticleModel $article, Image $image, MediaModel $media)
+    public function updateArticleImageWithMedia(ProductModel $article, Image $image, MediaModel $media)
     {
         $image->setMain(2);
         $image->setMedia($media);
@@ -671,30 +676,31 @@ class Article extends Resource implements BatchInterface
      * @param int   $articleId
      * @param array $translations
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      */
     public function writeTranslations($articleId, $translations)
     {
         $whitelist = $this->getAttributeProperties();
-        $whitelist = array_merge($whitelist, [
+        array_push(
+            $whitelist,
             'metaTitle',
             'name',
             'description',
             'descriptionLong',
             'shippingTime',
             'keywords',
-            'packUnit',
-        ]);
+            'packUnit'
+        );
 
         foreach ($translations as $translation) {
-            $shop = $this->getManager()->find(\Shopware\Models\Shop\Shop::class, $translation['shopId']);
+            $shop = $this->getManager()->find(Shop::class, $translation['shopId']);
             if (!$shop) {
-                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $translation['shopId']));
+                throw new ApiException\CustomValidationException(sprintf('Shop by id "%s" not found', $translation['shopId']));
             }
 
-            //backward compatibility for attribute translations
+            // Backward compatibility for attribute translations
             foreach ($translation as $key => $value) {
                 $attrKey = '__attribute_' . $key;
                 if (in_array($attrKey, $whitelist) && !isset($translation[$attrKey])) {
@@ -730,7 +736,7 @@ class Article extends Resource implements BatchInterface
             return false;
         }
 
-        $model = $this->getManager()->find(\Shopware\Models\Article\Article::class, $id);
+        $model = $this->getManager()->find(ProductModel::class, $id);
 
         if ($model) {
             return $id;
@@ -744,7 +750,10 @@ class Article extends Resource implements BatchInterface
      */
     protected function getVariantResource()
     {
-        return $this->getResource('Variant');
+        /** @var Variant $return */
+        $return = $this->getResource('Variant');
+
+        return $return;
     }
 
     /**
@@ -752,7 +761,10 @@ class Article extends Resource implements BatchInterface
      */
     protected function getTranslationResource()
     {
-        return $this->getResource('Translation');
+        /** @var Translation $return */
+        $return = $this->getResource('Translation');
+
+        return $return;
     }
 
     /**
@@ -760,11 +772,14 @@ class Article extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        return $this->getResource('Media');
+        /** @var Media $return */
+        $return = $this->getResource('Media');
+
+        return $return;
     }
 
     /**
-     * Selects the configured article configurator set and the assigned
+     * Selects the configured product configurator set and the assigned
      * configurator groups of the set.
      * The groups are sorted by the position value.
      *
@@ -776,7 +791,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['configuratorSet', 'groups'])
-            ->from(\Shopware\Models\Article\Configurator\Set::class, 'configuratorSet')
+            ->from(Configurator\Set::class, 'configuratorSet')
             ->innerJoin('configuratorSet.articles', 'article')
             ->leftJoin('configuratorSet.groups', 'groups')
             ->addOrderBy('groups.position', 'ASC')
@@ -787,7 +802,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Selects all images of the main variant of the passed article id.
+     * Selects all images of the main variant of the passed product id.
      * The images are sorted by their position value.
      *
      * @param int $articleId
@@ -798,7 +813,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['images'])
-            ->from(\Shopware\Models\Article\Image::class, 'images')
+            ->from(Image::class, 'images')
             ->innerJoin('images.article', 'article')
             ->where('article.id = :articleId')
             ->orderBy('images.position', 'ASC')
@@ -809,7 +824,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Selects all configured download files for the passed article id.
+     * Selects all configured download files for the passed product id.
      *
      * @param int $articleId
      *
@@ -819,7 +834,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['downloads'])
-            ->from(\Shopware\Models\Article\Download::class, 'downloads')
+            ->from(Download::class, 'downloads')
             ->innerJoin('downloads.article', 'article')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -829,7 +844,7 @@ class Article extends Resource implements BatchInterface
 
     /**
      * Helper function which selects all configured links
-     * for the passed article id.
+     * for the passed product id.
      *
      * @param int $articleId
      *
@@ -839,7 +854,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['links'])
-            ->from(\Shopware\Models\Article\Link::class, 'links')
+            ->from(Link::class, 'links')
             ->innerJoin('links.article', 'article')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -848,8 +863,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Helper function which selects all categories of the passed
-     * article id.
+     * Helper function which selects all categories of the passed product id.
      * This function returns only the directly assigned categories.
      * To prevent a big data, this function selects only the category name and id.
      *
@@ -861,7 +875,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['categories.id', 'categories.name'])
-            ->from(\Shopware\Models\Category\Category::class, 'categories')
+            ->from(Category::class, 'categories')
             ->innerJoin('categories.articles', 'articles')
             ->where('articles.id = :articleId')
             ->setParameter('articleId', $articleId);
@@ -870,8 +884,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Helper function which selects all similar articles
-     * of the passed article id.
+     * Helper function which selects all similar products of the passed product id.
      *
      * @param int $articleId
      *
@@ -881,19 +894,18 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL similar.{id, name}'])
-            ->from(\Shopware\Models\Article\Article::class, 'article')
+            ->from(ProductModel::class, 'article')
             ->innerJoin('article.similar', 'similar')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
 
-        $article = $this->getSingleResult($builder);
+        $product = $this->getSingleResult($builder);
 
-        return $article['similar'];
+        return $product['similar'];
     }
 
     /**
-     * Helper function which selects all accessory articles
-     * of the passed article id.
+     * Helper function which selects all accessory products of the passed product id.
      *
      * @param int $articleId
      *
@@ -903,18 +915,18 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL related.{id, name}'])
-            ->from(\Shopware\Models\Article\Article::class, 'article')
+            ->from(ProductModel::class, 'article')
             ->innerJoin('article.related', 'related')
             ->where('article.id = :articleId')
             ->setParameter('articleId', $articleId);
 
-        $article = $this->getSingleResult($builder);
+        $product = $this->getSingleResult($builder);
 
-        return $article['related'];
+        return $product['related'];
     }
 
     /**
-     * Returns the configured article seo categories.
+     * Returns the configured product seo categories.
      * This categories are used for the seo url generation.
      *
      * @param int $articleId
@@ -925,7 +937,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['seoCategories', 'category'])
-            ->from(\Shopware\Models\Article\SeoCategory::class, 'seoCategories')
+            ->from(SeoCategory::class, 'seoCategories')
             ->innerJoin('seoCategories.category', 'category')
             ->where('seoCategories.articleId = :articleId')
             ->setParameter('articleId', $articleId);
@@ -935,7 +947,7 @@ class Article extends Resource implements BatchInterface
 
     /**
      * Helper function which loads all non main variants of
-     * the passed article id.
+     * the passed product id.
      * Additionally the function selects the variant prices
      * and configurator options for each variant.
      *
@@ -954,16 +966,15 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Helper function to remove article details for a given article
+     * Helper function to remove product details for a given product
      *
-     * @param \Shopware\Models\Article\Article $article
+     * @param ProductModel $article
      */
     protected function removeArticleDetails($article)
     {
         $sql = 'SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1';
-        $details = Shopware()->Db()->fetchAll($sql, [$article->getId()]);
 
-        foreach ($details as $detail) {
+        foreach (Shopware()->Db()->fetchAll($sql, [$article->getId()]) as $detail) {
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
@@ -979,12 +990,12 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
      * @return array
      */
-    protected function prepareAssociatedData($data, ArticleModel $article)
+    protected function prepareAssociatedData($data, ProductModel $article)
     {
         $data = $this->prepareArticleAssociatedData($data, $article);
         $data = $this->prepareCategoryAssociatedData($data, $article);
@@ -1023,14 +1034,14 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareVariants($data, ArticleModel $article)
+    protected function prepareVariants($data, ProductModel $article)
     {
         unset($data['details']);
 
@@ -1098,7 +1109,7 @@ class Article extends Resource implements BatchInterface
                 //1. Use the number as identifier to update an existing variant
                 //2. Use this number for the new variant
                 if (isset($variantData['number'])) {
-                    $variant = $this->getManager()->getRepository(\Shopware\Models\Article\Detail::class)->findOneBy([
+                    $variant = $this->getManager()->getRepository(Detail::class)->findOneBy([
                         'number' => $variantData['number'],
                         'articleId' => $article->getId(),
                     ]);
@@ -1156,11 +1167,11 @@ class Article extends Resource implements BatchInterface
         }
 
         // If the main variant was changed,
-        if (isset($oldMainId, $newMain) && $oldMainId != $newMain->getId()) {
+        if (isset($oldMainId, $newMain) && (int) $oldMainId !== (int) $newMain->getId()) {
             $oldMainVariantProcessed = false;
 
             foreach ($variants as &$processedVariant) {
-                if ($processedVariant->getId() == $oldMainId) {
+                if ((int) $processedVariant->getId() === (int) $oldMainId) {
                     $processedVariant->setKind(2);
                     $oldMainVariantProcessed = true;
                     break;
@@ -1183,15 +1194,15 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      * @throws \Exception
      *
      * @return array
      */
-    protected function prepareConfiguratorSet($data, ArticleModel $article)
+    protected function prepareConfiguratorSet($data, ProductModel $article)
     {
         if (!isset($data['configuratorSet'])) {
             return $data;
@@ -1226,12 +1237,12 @@ class Article extends Resource implements BatchInterface
         foreach ($data['configuratorSet']['groups'] as $groupData) {
             $group = null;
             if (isset($groupData['id'])) {
-                $group = $this->getManager()->getRepository(\Shopware\Models\Article\Configurator\Group::class)->find($groupData['id']);
+                $group = $this->getManager()->getRepository(Configurator\Group::class)->find($groupData['id']);
                 if (!$group) {
-                    throw new ApiException\CustomValidationException(sprintf('ConfiguratorGroup by id %s not found', $groupData['id']));
+                    throw new ApiException\CustomValidationException(sprintf('ConfiguratorGroup by id "%s" not found', $groupData['id']));
                 }
             } elseif (isset($groupData['name'])) {
-                $group = $this->getManager()->getRepository(\Shopware\Models\Article\Configurator\Group::class)->findOneBy(['name' => $groupData['name']]);
+                $group = $this->getManager()->getRepository(Configurator\Group::class)->findOneBy(['name' => $groupData['name']]);
 
                 if (!$group) {
                     $group = new Configurator\Group();
@@ -1247,12 +1258,12 @@ class Article extends Resource implements BatchInterface
                 $option = null;
                 if ($group->getId() > 0) {
                     if (isset($optionData['id'])) {
-                        $option = $this->getManager()->find(\Shopware\Models\Article\Configurator\Option::class, $optionData['id']);
+                        $option = $this->getManager()->find(Configurator\Option::class, $optionData['id']);
                         if (!$option) {
-                            throw new ApiException\CustomValidationException(sprintf('ConfiguratorOption by id %s not found', $optionData['id']));
+                            throw new ApiException\CustomValidationException(sprintf('ConfiguratorOption by id "%s" not found', $optionData['id']));
                         }
                     } else {
-                        $option = $this->getManager()->getRepository(\Shopware\Models\Article\Configurator\Option::class)->findOneBy([
+                        $option = $this->getManager()->getRepository(Configurator\Option::class)->findOneBy([
                             'name' => $optionData['name'],
                             'groupId' => $group->getId(),
                         ]);
@@ -1294,26 +1305,26 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareArticleAssociatedData($data, ArticleModel $article)
+    protected function prepareArticleAssociatedData($data, ProductModel $article)
     {
         //check if a tax id is passed and load the tax model or set the tax parameter to null.
         if (!empty($data['taxId'])) {
-            $data['tax'] = $this->getManager()->find(\Shopware\Models\Tax\Tax::class, $data['taxId']);
+            $data['tax'] = $this->getManager()->find(Tax::class, $data['taxId']);
 
             if (empty($data['tax'])) {
-                throw new ApiException\CustomValidationException(sprintf('Tax by id %s not found', $data['taxId']));
+                throw new ApiException\CustomValidationException(sprintf('Tax by id "%s" not found', $data['taxId']));
             }
         } elseif (isset($data['tax']) && ($data['tax'] >= 0)) {
-            $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(['tax' => $data['tax']]);
+            $tax = $this->getManager()->getRepository(Tax::class)->findOneBy(['tax' => $data['tax']]);
             if (!$tax) {
-                throw new ApiException\CustomValidationException(sprintf('Tax by taxrate %s not found', $data['tax']));
+                throw new ApiException\CustomValidationException(sprintf('Tax by taxrate "%s" not found', $data['tax']));
             }
             $data['tax'] = $tax;
         } else {
@@ -1322,14 +1333,14 @@ class Article extends Resource implements BatchInterface
 
         //check if a supplier id is passed and load the supplier model or set the supplier parameter to null.
         if (!empty($data['supplierId'])) {
-            $data['supplier'] = $this->getManager()->find(\Shopware\Models\Article\Supplier::class, $data['supplierId']);
+            $data['supplier'] = $this->getManager()->find(Supplier::class, $data['supplierId']);
             if (empty($data['supplier'])) {
-                throw new ApiException\CustomValidationException(sprintf('Supplier by id %s not found', $data['supplierId']));
+                throw new ApiException\CustomValidationException(sprintf('Supplier by id "%s" not found', $data['supplierId']));
             }
         } elseif (!empty($data['supplier'])) {
-            $supplier = $this->getManager()->getRepository('Shopware\Models\Article\Supplier')->findOneBy(['name' => $data['supplier']]);
+            $supplier = $this->getManager()->getRepository(Supplier::class)->findOneBy(['name' => $data['supplier']]);
             if (!$supplier) {
-                $supplier = new \Shopware\Models\Article\Supplier();
+                $supplier = new Supplier();
                 $supplier->setName($data['supplier']);
             }
             $data['supplier'] = $supplier;
@@ -1342,9 +1353,9 @@ class Article extends Resource implements BatchInterface
             if (empty($data['priceGroupId'])) {
                 $data['priceGroupId'] = null;
             } else {
-                $data['priceGroup'] = $this->getManager()->find(\Shopware\Models\Price\Group::class, $data['priceGroupId']);
+                $data['priceGroup'] = $this->getManager()->find(Group::class, $data['priceGroupId']);
                 if (empty($data['priceGroup'])) {
-                    throw new ApiException\CustomValidationException(sprintf('Pricegroup by id %s not found', $data['priceGroupId']));
+                    throw new ApiException\CustomValidationException(sprintf('Pricegroup by id "%s" not found', $data['priceGroupId']));
                 }
             }
         } else {
@@ -1356,10 +1367,10 @@ class Article extends Resource implements BatchInterface
             if (empty($data['filterGroupId'])) {
                 $data['propertyGroup'] = null;
             } else {
-                $data['propertyGroup'] = $this->getManager()->find(\Shopware\Models\Property\Group::class, $data['filterGroupId']);
+                $data['propertyGroup'] = $this->getManager()->find(PropertyGroup::class, $data['filterGroupId']);
 
                 if (empty($data['propertyGroup'])) {
-                    throw new ApiException\CustomValidationException(sprintf('PropertyGroup by id %s not found', $data['filterGroupId']));
+                    throw new ApiException\CustomValidationException(sprintf('PropertyGroup by id "%s" not found', $data['filterGroupId']));
                 }
             }
         } else {
@@ -1370,12 +1381,12 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
      * @return array
      */
-    protected function prepareAttributeAssociatedData($data, ArticleModel $article)
+    protected function prepareAttributeAssociatedData($data, ProductModel $article)
     {
         if (isset($data['attribute']) && !isset($data['mainDetail']['attribute'])) {
             $data['mainDetail']['attribute'] = $data['attribute'];
@@ -1390,23 +1401,26 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareCategoryAssociatedData($data, ArticleModel $article)
+    protected function prepareCategoryAssociatedData($data, ProductModel $article)
     {
         if (!isset($data['categories'])) {
             return $data;
         }
 
-        $this->resetArticleCategoryAssignment($data, $article);
+        $this->resetProductCategoryAssignment($data, $article);
 
+        /** @var ArrayCollection<\Shopware\Models\Category\Category> $categories */
         $categories = $article->getCategories();
+
         $categoryIds = $categories->map(function ($category) {
+            /* @var Category $category */
             return $category->getId();
         });
 
@@ -1416,16 +1430,19 @@ class Article extends Resource implements BatchInterface
             $category = $this->getManyToManySubElement(
                 $categories,
                 $categoryData,
-                '\Shopware\Models\Category\Category'
+                Category::class
             );
 
             if (!$category) {
                 if (!empty($categoryData['path'])) {
-                    $category = $this->getResource('Category')->findCategoryByPath($categoryData['path'], true);
+                    /** @var CategoryResource $categoryResource */
+                    $categoryResource = $this->getResource('Category');
+                    $category = $categoryResource->findCategoryByPath($categoryData['path'], true);
 
                     if (!$category) {
-                        throw new ApiException\CustomValidationException(sprintf('Could not find or create category by path: %s.',
-                            $categoryData['path']));
+                        throw new ApiException\CustomValidationException(
+                            sprintf('Could not find or create category by path: %s.', $categoryData['path'])
+                        );
                     }
 
                     if (isset($categoryIds[$category->getId()])) {
@@ -1445,14 +1462,14 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareSeoCategoryAssociatedData($data, ArticleModel $article)
+    protected function prepareSeoCategoryAssociatedData($data, ProductModel $article)
     {
         if (!isset($data['seoCategories'])) {
             return $data;
@@ -1466,17 +1483,17 @@ class Article extends Resource implements BatchInterface
         );
 
         foreach ($data['seoCategories'] as $categoryData) {
-            /** @var $seoCategory \Shopware\Models\Article\SeoCategory */
+            /** @var SeoCategory $seoCategory */
             $seoCategory = $this->getOneToManySubElement(
                 $categories,
                 $categoryData,
-                '\Shopware\Models\Article\SeoCategory'
+                SeoCategory::class
             );
 
             if (isset($categoryData['shopId'])) {
-                /** @var $shop \Shopware\Models\Shop\Shop */
+                /** @var Shop $shop */
                 $shop = $this->manager->find(
-                    'Shopware\Models\Shop\Shop',
+                    Shop::class,
                     $categoryData['shopId']
                 );
 
@@ -1491,14 +1508,14 @@ class Article extends Resource implements BatchInterface
 
             if (!$seoCategory->getShop()) {
                 throw new ApiException\CustomValidationException(
-                    sprintf('An article seo category requires a configured shop')
+                    sprintf('An product seo category requires a configured shop')
                 );
             }
 
             if (isset($categoryData['categoryId'])) {
-                /** @var $category \Shopware\Models\Category\Category */
+                /** @var Category $category */
                 $category = $this->manager->find(
-                    'Shopware\Models\Category\Category',
+                    Category::class,
                     $categoryData['categoryId']
                 );
 
@@ -1510,7 +1527,9 @@ class Article extends Resource implements BatchInterface
 
                 $seoCategory->setCategory($category);
             } elseif (isset($categoryData['categoryPath'])) {
-                $category = $this->getResource('Category')->findCategoryByPath(
+                /** @var CategoryResource $categoryResource */
+                $categoryResource = $this->getResource('Category');
+                $category = $categoryResource->findCategoryByPath(
                     $categoryData['categoryPath'],
                     true
                 );
@@ -1530,7 +1549,7 @@ class Article extends Resource implements BatchInterface
 
             if (!$existing) {
                 throw new ApiException\CustomValidationException(
-                    sprintf("Seo category isn't assigned as normal article category. Only assigned categories can be used as seo category")
+                    sprintf('Seo category isn\'t assigned as normal product category. Only assigned categories can be used as seo category')
                 );
             }
 
@@ -1543,14 +1562,14 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareAvoidCustomerGroups($data, ArticleModel $article)
+    protected function prepareAvoidCustomerGroups($data, ProductModel $article)
     {
         if (!isset($data['customerGroups'])) {
             return $data;
@@ -1572,14 +1591,14 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareRelatedAssociatedData($data, ArticleModel $article)
+    protected function prepareRelatedAssociatedData($data, ProductModel $article)
     {
         if (!isset($data['related'])) {
             return $data;
@@ -1592,41 +1611,41 @@ class Article extends Resource implements BatchInterface
                 continue;
             }
 
-            $relatedArticle = null;
+            $relatedProduct = null;
             if ($relatedData['number']) {
-                $articleId = $this->getManager()->getConnection()->fetchColumn(
+                $productId = $this->getManager()->getConnection()->fetchColumn(
                     'SELECT articleID FROM s_articles_details WHERE ordernumber = :number',
                     [':number' => $relatedData['number']]
                 );
 
-                if ($articleId) {
-                    $relatedArticle = $this->getManyToManySubElement(
+                if ($productId) {
+                    $relatedProduct = $this->getManyToManySubElement(
                         $related,
-                        ['id' => $articleId],
-                        \Shopware\Models\Article\Article::class
+                        ['id' => $productId],
+                        ProductModel::class
                     );
                 }
             }
 
-            if (!$relatedArticle) {
-                $relatedArticle = $this->getManyToManySubElement(
+            if (!$relatedProduct) {
+                $relatedProduct = $this->getManyToManySubElement(
                     $related,
                     $relatedData,
-                    \Shopware\Models\Article\Article::class
+                    ProductModel::class
                 );
             }
 
             //no valid entity found, throw exception!
-            if (!$relatedArticle) {
-                $property = $relatedData['number'] ? $relatedData['number'] : $relatedData['id'];
+            if (!$relatedProduct) {
+                $property = $relatedData['number'] ?: $relatedData['id'];
                 throw new ApiException\CustomValidationException(
-                    sprintf('Related Article by number/id %s not found', $property)
+                    sprintf('Related product by number/id "%s" not found', $property)
                 );
             }
 
-            /* @var $relatedArticle ArticleModel */
+            /* @var ProductModel $relatedProduct */
             if ($relatedData['cross']) {
-                $relatedArticle->getRelated()->add($article);
+                $relatedProduct->getRelated()->add($article);
             }
         }
 
@@ -1636,14 +1655,14 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareSimilarAssociatedData($data, ArticleModel $article)
+    protected function prepareSimilarAssociatedData($data, ProductModel $article)
     {
         if (!isset($data['similar'])) {
             return $data;
@@ -1656,41 +1675,41 @@ class Article extends Resource implements BatchInterface
                 continue;
             }
 
-            $similarArticle = null;
+            $similarProduct = null;
             if ($similarData['number']) {
-                $articleId = $this->getManager()->getConnection()->fetchColumn(
+                $productId = $this->getManager()->getConnection()->fetchColumn(
                     'SELECT articleID FROM s_articles_details WHERE ordernumber = :number',
                     [':number' => $similarData['number']]
                 );
 
-                if ($articleId) {
-                    $similarArticle = $this->getManyToManySubElement(
+                if ($productId) {
+                    $similarProduct = $this->getManyToManySubElement(
                         $similar,
-                        ['id' => $articleId],
-                        \Shopware\Models\Article\Article::class
+                        ['id' => $productId],
+                        ProductModel::class
                     );
                 }
             }
 
-            if (!$similarArticle) {
-                $similarArticle = $this->getManyToManySubElement(
+            if (!$similarProduct) {
+                $similarProduct = $this->getManyToManySubElement(
                     $similar,
                     $similarData,
-                    \Shopware\Models\Article\Article::class
+                    ProductModel::class
                 );
             }
 
             //no valid entity found, throw exception!
-            if (!$similarArticle) {
-                $property = $similarData['number'] ? $similarData['number'] : $similarData['id'];
+            if (!$similarProduct) {
+                $property = $similarData['number'] ?: $similarData['id'];
                 throw new ApiException\CustomValidationException(
-                    sprintf('Similar Article by number/id %s not found', $property)
+                    sprintf('Similar product by number/id "%s" not found', $property)
                 );
             }
 
-            /* @var $similarArticle ArticleModel */
+            /* @var ProductModel $similarProduct */
             if ($similarData['cross']) {
-                $similarArticle->getSimilar()->add($article);
+                $similarProduct->getSimilar()->add($article);
             }
         }
 
@@ -1700,14 +1719,14 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function preparePropertyValuesData($data, ArticleModel $article)
+    protected function preparePropertyValuesData($data, ProductModel $article)
     {
         if (!isset($data['propertyValues'])) {
             return $data;
@@ -1718,7 +1737,7 @@ class Article extends Resource implements BatchInterface
             return $data;
         }
 
-        $propertyRepository = $this->getManager()->getRepository(\Shopware\Models\Property\Group::class);
+        $propertyRepository = $this->getManager()->getRepository(PropertyGroup::class);
 
         /*
          *  Get group - this is required.
@@ -1729,22 +1748,22 @@ class Article extends Resource implements BatchInterface
             $propertyGroup = $article->getPropertyGroup();
         }
 
-        if (!$propertyGroup instanceof \Shopware\Models\Property\Group) {
-            throw new ApiException\CustomValidationException(sprintf('There is no propertyGroup specified'));
+        if (!$propertyGroup instanceof PropertyGroup) {
+            throw new ApiException\CustomValidationException('There is no propertyGroup specified');
         }
 
         $models = [];
 
         foreach ($data['propertyValues'] as $valueData) {
             $value = null;
-            /** @var \Shopware\Models\Property\Option $option */
+            /** @var Option $option */
             $option = null;
 
             // Get value by id
             if (isset($valueData['id'])) {
-                $value = $this->getManager()->getRepository(\Shopware\Models\Property\Value::class)->find($valueData['id']);
+                $value = $this->getManager()->getRepository(Value::class)->find($valueData['id']);
                 if (!$value) {
-                    throw new ApiException\CustomValidationException(sprintf('Property value by id %s not found', $valueData['id']));
+                    throw new ApiException\CustomValidationException(sprintf('Property value by id "%s" not found', $valueData['id']));
                 }
                 // Get / create value by name
             } elseif (isset($valueData['value'])) {
@@ -1752,9 +1771,9 @@ class Article extends Resource implements BatchInterface
                 if (isset($valueData['option'])) {
                     // get option by id
                     if (isset($valueData['option']['id'])) {
-                        $option = $this->getManager()->getRepository(\Shopware\Models\Property\Option::class)->find($valueData['option']['id']);
+                        $option = $this->getManager()->getRepository(Option::class)->find($valueData['option']['id']);
                         if (!$option) {
-                            throw new ApiException\CustomValidationException(sprintf('Property option by id %s not found', $valueData['option']['id']));
+                            throw new ApiException\CustomValidationException(sprintf('Property option by id "%s" not found', $valueData['option']['id']));
                         }
                         $filters = [
                             ['property' => 'options.id', 'expression' => '=', 'value' => $option->getId()],
@@ -1787,7 +1806,7 @@ class Article extends Resource implements BatchInterface
                             );
                             //creates a new option
                             if ($groupOption === null) {
-                                $option = new \Shopware\Models\Property\Option();
+                                $option = new Option();
                                 $propertyGroup->addOption($option);
                             } else {
                                 $option = $groupOption;
@@ -1796,23 +1815,23 @@ class Article extends Resource implements BatchInterface
                             $option = $relation->getOption();
                         }
                     } else {
-                        throw new ApiException\CustomValidationException('A property option need to be given for each property value');
+                        throw new ApiException\CustomValidationException('A property option needs to be given for each property value');
                     }
                     $option->fromArray($valueData['option']);
                     if ($option->isFilterable() === null) {
                         $option->setFilterable(false);
                     }
                 } else {
-                    throw new ApiException\CustomValidationException('A property option need to be given for each property value');
+                    throw new ApiException\CustomValidationException('A property option needs to be given for each property value');
                 }
                 // create the value
                 // If there is a filter value with matching name and option, load this value, else create a new one
-                $value = $this->getManager()->getRepository(\Shopware\Models\Property\Value::class)->findOneBy([
+                $value = $this->getManager()->getRepository(Value::class)->findOneBy([
                     'value' => $valueData['value'],
                     'optionId' => $option->getId(),
                 ]);
                 if (!$value) {
-                    $value = new \Shopware\Models\Property\Value($option, $valueData['value']);
+                    $value = new Value($option, $valueData['value']);
                 }
                 if (isset($valueData['position'])) {
                     $value->setPosition($valueData['position']);
@@ -1830,10 +1849,10 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Returns a query builder to select all article images with mappings and rules.
+     * Returns a query builder to select all product images with mappings and rules.
      * Used to generate the variant images.
      *
-     * @param $articleId
+     * @param int $articleId
      *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
@@ -1841,7 +1860,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['mappings', 'image', 'rules'])
-            ->from(\Shopware\Models\Article\Image\Mapping::class, 'mappings')
+            ->from(Image\Mapping::class, 'mappings')
             ->innerJoin('mappings.image', 'image')
             ->innerJoin('mappings.rules', 'rules')
             ->where('image.articleId = :articleId')
@@ -1851,7 +1870,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Checks if the passed article image is already created
+     * Checks if the passed product image is already created
      * as variant image.
      *
      * @param Detail $variant
@@ -1861,9 +1880,9 @@ class Article extends Resource implements BatchInterface
      */
     protected function isVariantImageExist(Detail $variant, Image $image)
     {
-        /** @var $variantImage Image */
+        /** @var Image $variantImage */
         foreach ($variant->getImages() as $variantImage) {
-            if ($variantImage->getParent()->getId() == $image->getId()) {
+            if ((int) $variantImage->getParent()->getId() === (int) $image->getId()) {
                 return true;
             }
         }
@@ -1873,9 +1892,9 @@ class Article extends Resource implements BatchInterface
 
     /**
      * Small helper function which creates a query builder to select
-     * all article variants.
+     * all product variants.
      *
-     * @param $id
+     * @param int $id
      *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
@@ -1883,7 +1902,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select('variants');
-        $builder->from(\Shopware\Models\Article\Detail::class, 'variants')
+        $builder->from(Detail::class, 'variants')
             ->where('variants.articleId = :articleId')
             ->setParameter('articleId', $id);
 
@@ -1891,7 +1910,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Creates the article image mappings for the passed article and image entity.
+     * Creates the product image mappings for the passed product and image entity.
      * The mappings parameter contains a multi dimensional array with configurator options.
      * The first level of the mappings defines the OR conditions of the image mappings.
      * The second level of the mappings defines a single rule.
@@ -1907,16 +1926,16 @@ class Article extends Resource implements BatchInterface
      * )
      *
      * @param Image        $image
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param array        $mappings
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      */
-    protected function createImageMappings(Image $image, ArticleModel $article, array $mappings)
+    protected function createImageMappings(Image $image, ProductModel $article, array $mappings)
     {
         if (!$article->getConfiguratorSet()) {
             throw new ApiException\CustomValidationException(
-                'Article is no configurator article. Image mapping can only be created on configurator articles'
+                'Product is no configurator product. Image mapping can only be created on configurator products'
             );
         }
 
@@ -1937,9 +1956,9 @@ class Article extends Resource implements BatchInterface
                 $available = $this->getCollectionElementByProperties($configuratorOptions, $conditions);
 
                 if (!$available) {
-                    $property = $option['id'] ? $option['id'] : $option['name'];
+                    $property = $option['id'] ?: $option['name'];
                     throw new ApiException\CustomValidationException(
-                        sprintf('Passed option %s do not exist in the configurator set of the article', $property)
+                        sprintf('Passed option "%s" does not exist in the configurator set of the product', $property)
                     );
                 }
 
@@ -1958,7 +1977,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Translate the whole article array.
+     * Translate the whole product array.
      *
      * @param array $data
      * @param Shop  $shop
@@ -2064,8 +2083,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed values array with the passed shop entity.
      *
-     * @param $values
-     * @param Shop $shop
+     * @param array $values
+     * @param Shop  $shop
      *
      * @return mixed
      */
@@ -2099,8 +2118,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed supplier data.
      *
-     * @param $supplier
-     * @param Shop $shop
+     * @param array $supplier
+     * @param Shop  $shop
      *
      * @return array
      */
@@ -2128,8 +2147,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed property group data.
      *
-     * @param $groupData
-     * @param Shop $shop
+     * @param array $groupData
+     * @param Shop  $shop
      *
      * @return array
      */
@@ -2160,8 +2179,8 @@ class Article extends Resource implements BatchInterface
     /**
      * Translates the passed variants array and all associated data.
      *
-     * @param $details
-     * @param Shop $shop
+     * @param array $details
+     * @param Shop  $shop
      *
      * @return mixed
      */
@@ -2220,8 +2239,8 @@ class Article extends Resource implements BatchInterface
      * existing data object. This function merges only values, which already
      * exist in the original data array.
      *
-     * @param $data
-     * @param $translation
+     * @param array $data
+     * @param array $translation
      *
      * @return array
      */
@@ -2238,9 +2257,9 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which translates associated array data.
      *
-     * @param array $association
-     * @param Shop  $shop
-     * @param $type
+     * @param array  $association
+     * @param Shop   $shop
+     * @param string $type
      *
      * @return array
      */
@@ -2264,9 +2283,9 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function to get a single translation.
      *
-     * @param $type
-     * @param $shopId
-     * @param $key
+     * @param string $type
+     * @param int    $shopId
+     * @param string $key
      *
      * @return array
      */
@@ -2321,15 +2340,15 @@ class Article extends Resource implements BatchInterface
      * Helper function for the category assignment.
      * This function is used for the category configuration.
      * If the data key __options_categories => replace is set to true,
-     * the function removes the assigned article categories from the
+     * the function removes the assigned product categories from the
      * s_articles_categories and s_articles_categories_ro table.
      *
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $product
      */
-    private function resetArticleCategoryAssignment(array $data, ArticleModel $article)
+    private function resetProductCategoryAssignment(array $data, ProductModel $product)
     {
-        if (!$article->getId()) {
+        if (!$product->getId()) {
             return;
         }
 
@@ -2340,38 +2359,40 @@ class Article extends Resource implements BatchInterface
             return;
         }
 
-        $this->manager->getConnection()->executeUpdate(
+        $connection = $this->manager->getConnection();
+        $connection->executeUpdate(
             'DELETE FROM s_articles_categories WHERE articleID = :articleId',
-            [':articleId' => $article->getId()]
+            [':articleId' => $product->getId()]
         );
 
-        $this->manager->getConnection()->executeUpdate(
+        $connection->executeUpdate(
             'DELETE FROM s_articles_categories_ro WHERE articleID = :articleId',
-            [':articleId' => $article->getId()]
+            [':articleId' => $product->getId()]
         );
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $product
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    private function prepareDownloadsAssociatedData($data, ArticleModel $article)
+    private function prepareDownloadsAssociatedData($data, ProductModel $product)
     {
         if (!isset($data['downloads'])) {
             return $data;
         }
 
-        $downloads = $this->checkDataReplacement($article->getDownloads(), $data, 'downloads', true);
+        $downloads = $this->checkDataReplacement($product->getDownloads(), $data, 'downloads', true);
 
         foreach ($data['downloads'] as &$downloadData) {
+            /** @var Download $download */
             $download = $this->getOneToManySubElement(
                 $downloads,
                 $downloadData,
-                \Shopware\Models\Article\Download::class
+                Download::class
             );
 
             if (isset($downloadData['link'])) {
@@ -2385,8 +2406,10 @@ class Article extends Resource implements BatchInterface
 
                 try { //persist the model into the model manager
                     $this->getManager()->persist($media);
-                } catch (\Doctrine\ORM\ORMException $e) {
-                    throw new ApiException\CustomValidationException(sprintf('Some error occured while loading your image'));
+                } catch (ORMException $e) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf('Some error occured while loading your image from link "%s"', $downloadData['link'])
+                    );
                 }
 
                 $download->setFile($media->getPath());
@@ -2395,7 +2418,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $download->fromArray($downloadData);
-            $download->setArticle($article);
+            $download->setArticle($product);
         }
         $data['downloads'] = $downloads;
 
@@ -2406,14 +2429,14 @@ class Article extends Resource implements BatchInterface
      * Resolves the passed images data to valid Shopware\Models\Article\Image
      * entities.
      *
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
+     * @param array        $data
+     * @param ProductModel $product
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    private function prepareImageAssociatedData($data, ArticleModel $article)
+    private function prepareImageAssociatedData($data, ProductModel $product)
     {
         if (!isset($data['images'])) {
             return $data;
@@ -2421,7 +2444,7 @@ class Article extends Resource implements BatchInterface
 
         // remove assigned images
         if (empty($data['images'])) {
-            $images = $article->getImages();
+            $images = $product->getImages();
             $images->clear();
             unset($data['images']);
 
@@ -2429,24 +2452,24 @@ class Article extends Resource implements BatchInterface
         }
 
         $position = 1;
-        $images = $this->checkDataReplacement($article->getImages(), $data, 'images', false);
+        $images = $this->checkDataReplacement($product->getImages(), $data, 'images', false);
 
         foreach ($data['images'] as &$imageData) {
-            /** @var $image Image */
+            /** @var Image $image */
             $image = $this->getOneToManySubElement(
                 $images,
                 $imageData,
-                \Shopware\Models\Article\Image::class
+                Image::class
             );
 
             if (isset($imageData['link'])) {
-                /** @var $media MediaModel */
+                /** @var MediaModel $media */
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
                     $imageData['link']
                 );
 
                 $image = $this->updateArticleImageWithMedia(
-                    $article,
+                    $product,
                     $image,
                     $media
                 );
@@ -2455,16 +2478,16 @@ class Article extends Resource implements BatchInterface
                 ++$position;
             } elseif (!empty($imageData['mediaId'])) {
                 $media = $this->getManager()->find(
-                    \Shopware\Models\Media\Media::class,
+                    MediaModel::class,
                     (int) $imageData['mediaId']
                 );
 
                 if (!($media instanceof MediaModel)) {
-                    throw new ApiException\CustomValidationException(sprintf('Media by mediaId %s not found', $imageData['mediaId']));
+                    throw new ApiException\CustomValidationException(sprintf('Media by mediaId "%s" not found', $imageData['mediaId']));
                 }
 
                 $image = $this->updateArticleImageWithMedia(
-                    $article,
+                    $product,
                     $image,
                     $media
                 );
@@ -2473,8 +2496,8 @@ class Article extends Resource implements BatchInterface
             $image->fromArray($imageData);
 
             // if image is set as main set other images to secondary
-            if ($image->getMain() == 1) {
-                /** @var $otherImage Image */
+            if ((int) $image->getMain() === 1) {
+                /** @var Image $otherImage */
                 foreach ($images as $otherImage) {
                     //only update existing images which are not the current processed image.
                     //otherwise the main flag won't be changed.
@@ -2485,7 +2508,7 @@ class Article extends Resource implements BatchInterface
             }
 
             if (isset($imageData['options'])) {
-                $this->createImageMappings($image, $article, $imageData['options']);
+                $this->createImageMappings($image, $product, $imageData['options']);
             }
         }
 
@@ -2505,30 +2528,32 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * Returns all none association property of the article class.
+     * Returns all none association property of the product class.
      *
      * @return array
      */
     private function getAttributeProperties()
     {
-        $metaData = $this->getManager()->getClassMetadata(\Shopware\Models\Attribute\Article::class);
+        $metaData = $this->getManager()->getClassMetadata(ProductAttribute::class);
         $properties = [];
 
+        /** @var \ReflectionProperty $property */
         foreach ($metaData->getReflectionProperties() as $property) {
-            if ($metaData->hasAssociation($property->getName())) {
+            $propertyName = $property->getName();
+            if ($metaData->hasAssociation($propertyName)) {
                 continue;
             }
-            $properties[$property->getName()] = $property->getName();
+            $properties[$propertyName] = $propertyName;
         }
 
-        foreach ($metaData->getAssociationMappings() as $property => $mapping) {
-            $name = $metaData->getSingleAssociationJoinColumnName($property);
+        foreach ($metaData->getAssociationMappings() as $propertyName => $mapping) {
+            $name = $metaData->getSingleAssociationJoinColumnName($propertyName);
             $field = $metaData->getFieldForColumn($name);
             unset($properties[$field]);
         }
 
-        foreach ($metaData->getIdentifierFieldNames() as $property) {
-            unset($properties[$property]);
+        foreach ($metaData->getIdentifierFieldNames() as $identifierFieldName) {
+            unset($properties[$identifierFieldName]);
         }
 
         $fields = [];

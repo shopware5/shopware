@@ -119,5 +119,6 @@ if (PHP_SAPI === 'cli' && isset($_SERVER['argv'][1])) {
 
 $request = Request::createFromGlobals();
 
-$kernel->handle($request)
-       ->send();
+$response = $kernel->handle($request);
+$response->send();
+$kernel->terminate($request, $response);

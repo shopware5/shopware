@@ -25,7 +25,7 @@
 namespace Shopware\Recovery\Install;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,7 +56,6 @@ class Requirements
     public function toArray()
     {
         $result = [
-            'hasIoncube'  => false,
             'hasErrors' => false,
             'hasWarnings' => false,
             'checks' => [],
@@ -74,9 +73,9 @@ class Requirements
             $check['group'] = (string) $requirement->group;
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
-            $check['version']  = (string) $requirement->version;
-            $check['check']   = (bool) (string) $requirement->result;
-            $check['error']    = (bool) $requirement->error;
+            $check['version'] = (string) $requirement->version;
+            $check['check'] = (bool) (string) $requirement->result;
+            $check['error'] = (bool) $requirement->error;
 
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
@@ -86,10 +85,6 @@ class Requirements
                 $result['hasWarnings'] = true;
             } else {
                 $check['status'] = 'ok';
-
-                if (strtolower($check['name']) === 'ioncube loader') {
-                    $result['hasIoncube'] = true;
-                }
             }
             unset($check['check'], $check['error']);
 
@@ -178,24 +173,6 @@ class Requirements
         }
 
         return $requiredValue == $value;
-    }
-
-    /**
-     * Checks the ion cube loader
-     *
-     * @return bool|string
-     */
-    private function checkIonCubeLoader()
-    {
-        if (!extension_loaded('ionCube Loader')) {
-            return false;
-        }
-
-        if (!function_exists('ioncube_loader_version')) {
-            return false;
-        }
-
-        return ioncube_loader_version();
     }
 
     /**
@@ -378,16 +355,19 @@ class Requirements
      */
     private function decodePhpSize($val)
     {
-        $val = trim($val);
-        $last = strtolower($val[strlen($val) - 1]);
+        $val = strtolower(trim($val));
+        $last = substr($val, -1);
+
         $val = (float) $val;
         switch ($last) {
             /* @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $val *= 1024;
             /* @noinspection PhpMissingBreakStatementInspection */
+            // no break
             case 'm':
                 $val *= 1024;
+                // no break
             case 'k':
                 $val *= 1024;
         }
@@ -411,12 +391,16 @@ class Requirements
             /* @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
                 $val *= 1024;
+                // no break
             case 'GB':
                 $val *= 1024;
+                // no break
             case 'MB':
                 $val *= 1024;
+                // no break
             case 'KB':
                 $val *= 1024;
+                // no break
             case 'B':
                 $val = (float) $val;
         }

@@ -78,7 +78,7 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
         $mediaFields = ['webm_video', 'ogg_video', 'h264_video', 'fallback_picture'];
 
         foreach ($mediaFields as $field) {
-            $value = $element->getConfig()->get($field, null);
+            $value = $element->getConfig()->get($field);
 
             if (!preg_match('#^media/*#i', $value)) {
                 continue;

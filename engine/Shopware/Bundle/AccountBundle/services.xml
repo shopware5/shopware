@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
 
         <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\AddressService">
             <argument type="service" id="models" />
@@ -111,12 +112,17 @@
             <argument type="service" id="shopware.number_range_incrementer"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_account.address_service"/>
+            <argument type="service" id="front"/>
         </service>
 
         <service id="shopware_account.store_front_greeting_service" class="Shopware\Bundle\AccountBundle\Service\StoreFrontCustomerGreetingService" >
             <argument id="session" type="service"/>
             <argument id="dbal_connection" type="service"/>
             <argument id="config" type="service"/>
+        </service>
+
+        <service id="shopware_account.customer_unlock_service" class="Shopware\Bundle\AccountBundle\Service\CustomerUnlockService">
+            <argument id="dbal_connection" type="service"/>
         </service>
     </services>
 </container>

@@ -32,6 +32,7 @@ use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Order\Billing;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\DetailStatus;
+use Shopware\Models\Order\Order as OrderModel;
 use Shopware\Models\Order\Shipping;
 use Shopware\Models\Order\Status;
 use Shopware\Models\Partner\Partner;
@@ -42,7 +43,7 @@ use Shopware\Models\Tax\Tax;
 /**
  * Order API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,13 +54,13 @@ class Order extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Order\Order');
+        return $this->getManager()->getRepository(OrderModel::class);
     }
 
     /**
      * Little helper function for the ...ByNumber methods
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -72,11 +73,11 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $orderModel \Shopware\Models\Order\Order */
+        /** @var OrderModel $orderModel */
         $orderModel = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$orderModel) {
-            throw new ApiException\NotFoundException("Order by number {$number} not found");
+            throw new ApiException\NotFoundException(sprintf('Order by number %s not found', $number));
         }
 
         return $orderModel->getId();
@@ -88,7 +89,7 @@ class Order extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
-     * @return array|\Shopware\Models\Order\Order
+     * @return array|OrderModel
      */
     public function getOneByNumber($number)
     {
@@ -103,7 +104,7 @@ class Order extends Resource
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
-     * @return array|\Shopware\Models\Order\Order
+     * @return array|OrderModel
      */
     public function getOne($id)
     {
@@ -115,11 +116,11 @@ class Order extends Resource
 
         $filters = [['property' => 'orders.id', 'expression' => '=', 'value' => $id]];
         $builder = $this->getRepository()->getOrdersQueryBuilder($filters);
-        /** @var $order \Shopware\Models\Order\Order */
+        /** @var OrderModel $order */
         $order = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$order) {
-            throw new ApiException\NotFoundException("Order by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Order by id %d not found', $id));
         }
 
         if (is_array($order)) {
@@ -160,10 +161,10 @@ class Order extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the order data
+        // Returns the order data
         $orders = $paginator->getIterator()->getArrayCopy();
 
         foreach ($orders as &$order) {
@@ -183,7 +184,7 @@ class Order extends Resource
      *
      * @throws ApiException\ValidationException
      *
-     * @return \Shopware\Models\Order\Order
+     * @return OrderModel
      */
     public function create(array $params)
     {
@@ -199,7 +200,7 @@ class Order extends Resource
         }
 
         // Create model
-        $order = new \Shopware\Models\Order\Order();
+        $order = new OrderModel();
 
         // Setting default values, necessary because of not-nullable table colums
         $order->setComment('');
@@ -241,11 +242,7 @@ class Order extends Resource
      * @param string $number
      * @param array  $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     *
-     * @return \Shopware\Models\Order\Order
+     * @return OrderModel
      */
     public function updateByNumber($number, $params)
     {
@@ -262,7 +259,7 @@ class Order extends Resource
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      *
-     * @return \Shopware\Models\Order\Order
+     * @return OrderModel
      */
     public function update($id, array $params)
     {
@@ -272,11 +269,11 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $order \Shopware\Models\Order\Order */
+        /** @var OrderModel $order */
         $order = $this->getRepository()->find($id);
 
         if (!$order) {
-            throw new ApiException\NotFoundException("Order by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Order by id %d not found', $id));
         }
 
         $params = $this->prepareOrderData($params);
@@ -412,10 +409,9 @@ class Order extends Resource
             $params['partner'] = $this->getContainer()->get('models')->find(Partner::class, $params['partnerId']);
 
             if (empty($params['partner'])) {
-                throw new ApiException\NotFoundException(sprintf(
-                    'Partner by id %s not found',
-                    $params['partnerId']
-                ));
+                throw new ApiException\NotFoundException(
+                    sprintf('Partner by id %s not found', $params['partnerId'])
+                );
             }
 
             unset($params['partnerId']);
@@ -447,6 +443,7 @@ class Order extends Resource
             'articleId',
             'articleName',
             'articleNumber',
+            'articleDetailID',
             'attribute',
             'config',
             'ean',
@@ -495,7 +492,7 @@ class Order extends Resource
             $detailModel = new Detail();
             $detailModel->fromArray($detail);
 
-            /** @var $status \Shopware\Models\Order\DetailStatus */
+            /** @var DetailStatus $status */
             $status = $this->getContainer()->get('models')->find(DetailStatus::class, $detail['statusId']);
             if (!$status) {
                 throw new ApiException\NotFoundException(sprintf('DetailStatus by id %s not found', $detail['statusId']));
@@ -557,7 +554,7 @@ class Order extends Resource
         $params = array_intersect_key($params, array_flip($orderWhiteList));
 
         if (isset($params['orderStatusId'])) {
-            $params['orderStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
+            $params['orderStatus'] = Shopware()->Models()->getRepository(Status::class)->findOneBy(
                 [
                     'id' => $params['orderStatusId'],
                     'group' => 'state',
@@ -573,7 +570,7 @@ class Order extends Resource
         }
 
         if (isset($params['paymentStatusId'])) {
-            $params['paymentStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
+            $params['paymentStatus'] = Shopware()->Models()->getRepository(Status::class)->findOneBy(
                 [
                     'id' => $params['paymentStatusId'],
                     'group' => 'payment',
@@ -629,8 +626,8 @@ class Order extends Resource
             }
 
             // Check order detail model
-            /** @var \Shopware\Models\Order\Detail $detailModel */
-            $detailModel = Shopware()->Models()->find('Shopware\Models\Order\Detail', $detail['id']);
+            /** @var Detail $detailModel */
+            $detailModel = Shopware()->Models()->find(Detail::class, $detail['id']);
             if (!$detailModel) {
                 throw new ApiException\NotFoundException(sprintf(
                     'Detail by id %s not found',
@@ -639,8 +636,8 @@ class Order extends Resource
             }
 
             if (isset($detail['status'])) {
-                /** @var $status \Shopware\Models\Order\DetailStatus */
-                $status = Shopware()->Models()->find('Shopware\Models\Order\DetailStatus', $detail['status']);
+                /** @var DetailStatus $status */
+                $status = Shopware()->Models()->find(DetailStatus::class, $detail['status']);
 
                 if (!$status) {
                     throw new ApiException\NotFoundException(sprintf(
@@ -666,14 +663,14 @@ class Order extends Resource
     }
 
     /**
-     * @param array                        $params
-     * @param \Shopware\Models\Order\Order $order
+     * @param array      $params
+     * @param OrderModel $order
      *
      * @throws ApiException\NotFoundException
      * @throws ApiException\ValidationException
      * @throws ApiException\ParameterMissingException
      */
-    private function prepareCreateAddresses(array $params, \Shopware\Models\Order\Order $order)
+    private function prepareCreateAddresses(array $params, OrderModel $order)
     {
         if (!array_key_exists('billing', $params)) {
             throw new ApiException\ParameterMissingException('billing');
@@ -691,8 +688,16 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException('billing.countryId');
         }
 
-        if (!array_key_exists('stateId', $billing)) {
-            throw new ApiException\ParameterMissingException('billing.stateId');
+        if (isset($billing['stateId'])) {
+            $state = $this->getContainer()->get('models')->find(State::class, (int) $billing['stateId']);
+            if (!$state instanceof State) {
+                throw new ApiException\NotFoundException(sprintf(
+                    'Billing State by id %s not found',
+                    $billing['stateId']
+                ));
+            }
+        } else {
+            $billing['stateId'] = 0;
         }
 
         $country = $this->getContainer()->get('models')->find(CountryModel::class, $billing['countryId']);
@@ -700,14 +705,6 @@ class Order extends Resource
             throw new ApiException\NotFoundException(sprintf(
                 'Billing Country by id %s not found',
                 $billing['countryId']
-            ));
-        }
-
-        $state = $this->getContainer()->get('models')->find(State::class, $billing['stateId']);
-        if (!$state) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Shipping State by id %s not found',
-                $billing['stateId']
             ));
         }
 
@@ -730,8 +727,16 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException('shipping.countryId');
         }
 
-        if (!array_key_exists('stateId', $shipping)) {
-            throw new ApiException\ParameterMissingException('shipping.stateId');
+        if (isset($shipping['stateId'])) {
+            $state = $this->getContainer()->get('models')->find(State::class, (int) $shipping['stateId']);
+            if (!$state instanceof State) {
+                throw new ApiException\NotFoundException(sprintf(
+                    'Shipping State by id %s not found',
+                    $shipping['stateId']
+                ));
+            }
+        } else {
+            $shipping['stateId'] = 0;
         }
 
         $country = $this->getContainer()->get('models')->find(CountryModel::class, $shipping['countryId']);
@@ -739,14 +744,6 @@ class Order extends Resource
             throw new ApiException\NotFoundException(sprintf(
                 'Shipping Country by id %s not found',
                 $shipping['countryId']
-            ));
-        }
-
-        $state = $this->getContainer()->get('models')->find(State::class, $shipping['stateId']);
-        if (!$state) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Shipping State by id %s not found',
-                $shipping['stateId']
             ));
         }
 

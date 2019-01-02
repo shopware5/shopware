@@ -117,9 +117,9 @@ class Utils
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
 
-            /** @var $path \SplFileInfo */
+            /** @var \SplFileInfo $path */
             foreach ($iterator as $path) {
-                if ($path->getFilename() == '.gitkeep') {
+                if ($path->getFilename() === '.gitkeep') {
                     continue;
                 }
 
@@ -281,7 +281,7 @@ class Utils
     }
 
     /**
-     * @param $conn
+     * @param \PDO $conn
      */
     protected static function setNonStrictSQLMode(\PDO $conn)
     {

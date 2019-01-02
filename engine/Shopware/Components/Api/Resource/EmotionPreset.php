@@ -138,7 +138,7 @@ class EmotionPreset extends Resource
      */
     public function update($id, array $data, $locale = 'de_DE')
     {
-        /** @var $preset Preset */
+        /** @var Preset $preset */
         $preset = $this->models->getRepository(Preset::class)->find($id);
         if (!$preset) {
             throw new NotFoundException(sprintf('Preset with id %s not found', $id));

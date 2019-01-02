@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
+use Elasticsearch\Client;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
@@ -59,21 +60,29 @@ class ProductMapping implements MappingInterface
     private $crudService;
 
     /**
+     * @var Client
+     */
+    private $client;
+
+    /**
      * @param IdentifierSelector    $identifierSelector
      * @param FieldMappingInterface $fieldMapping
      * @param TextMappingInterface  $textMapping
      * @param CrudService           $crudService
+     * @param Client                $client
      */
     public function __construct(
         IdentifierSelector $identifierSelector,
         FieldMappingInterface $fieldMapping,
         TextMappingInterface $textMapping,
-        CrudService $crudService
+        CrudService $crudService,
+        Client $client
     ) {
         $this->identifierSelector = $identifierSelector;
         $this->fieldMapping = $fieldMapping;
         $this->textMapping = $textMapping;
         $this->crudService = $crudService;
+        $this->client = $client;
     }
 
     /**
@@ -94,17 +103,17 @@ class ProductMapping implements MappingInterface
                 'includes' => ['id', 'mainVariantId', 'variantId', 'number'],
             ],
             'properties' => [
-                //identifiers
+                // Identifiers
                 'id' => ['type' => 'long'],
                 'mainVariantId' => ['type' => 'long'],
                 'variantId' => ['type' => 'long'],
 
-                //number fields
+                // Number fields
                 'number' => array_merge($this->textMapping->getTextField(), ['analyzer' => 'standard']),
                 'ean' => $this->textMapping->getNotAnalyzedField(),
-                'manufacturerNumber' => $this->textMapping->getNotAnalyzedField(),
+                'manufacturerNumber' => $this->fieldMapping->getLanguageField($shop),
 
-                //language fields
+                // Language fields
                 'name' => $this->fieldMapping->getLanguageField($shop),
                 'shortDescription' => $this->fieldMapping->getLanguageField($shop),
                 'longDescription' => $this->fieldMapping->getLanguageField($shop),
@@ -112,7 +121,7 @@ class ProductMapping implements MappingInterface
                 'keywords' => $this->fieldMapping->getLanguageField($shop),
                 'metaTitle' => $this->fieldMapping->getLanguageField($shop),
 
-                //other fields
+                // Other fields
                 'calculatedPrices' => $this->getCalculatedPricesMapping($shop),
                 'minStock' => ['type' => 'long'],
                 'stock' => ['type' => 'long'],
@@ -125,11 +134,11 @@ class ProductMapping implements MappingInterface
                 'length' => ['type' => 'long'],
                 'width' => ['type' => 'double'],
 
-                //grouped id fields
+                // Grouped id fields
                 'blockedCustomerGroupIds' => ['type' => 'long'],
                 'categoryIds' => ['type' => 'long'],
 
-                //flags
+                // Flags
                 'isMainVariant' => ['type' => 'boolean'],
                 'closeouts' => ['type' => 'boolean'],
                 'allowsNotification' => ['type' => 'boolean'],
@@ -143,11 +152,12 @@ class ProductMapping implements MappingInterface
                 'customerPriceCount' => ['type' => 'long'],
                 'fallbackPriceCount' => ['type' => 'long'],
 
-                //dates
+                // Dates
                 'formattedCreatedAt' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
+                'formattedUpdatedAt' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
                 'formattedReleaseDate' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
 
-                //nested structs
+                // Nested structs
                 'manufacturer' => $this->getManufacturerMapping($shop),
                 'priceGroup' => $this->getPriceGroupMapping(),
                 'properties' => $this->getPropertyMapping($shop),
@@ -157,6 +167,8 @@ class ProductMapping implements MappingInterface
 
                 'attributes' => $this->getAttributeMapping(),
                 'configuration' => $this->getVariantOptionsMapping($shop),
+
+                'voteAverage' => $this->getVoteAverageMapping(),
             ],
         ];
     }
@@ -324,13 +336,13 @@ class ProductMapping implements MappingInterface
             switch ($type['type']) {
                 case 'keyword':
                     $type = $this->textMapping->getKeywordField();
-                    $type['fields']['raw'] = $this->textMapping->getNotAnalyzedField();
+                    $type['fields']['raw'] = $this->getAttributeRawField();
                     break;
 
                 case 'string':
                 case 'text':
                     $type = $this->textMapping->getTextField();
-                    $type['fields']['raw'] = $this->textMapping->getNotAnalyzedField();
+                    $type['fields']['raw'] = $this->getAttributeRawField();
                     break;
             }
 
@@ -344,6 +356,20 @@ class ProductMapping implements MappingInterface
                 ],
             ],
         ];
+    }
+
+    private function getAttributeRawField()
+    {
+        $rawField = $this->textMapping->getNotAnalyzedField();
+        try {
+            $info = $this->client->info([]);
+            if (version_compare($info['version']['number'], '6', '>=')) {
+                $rawField = $this->textMapping->getKeywordField();
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $rawField;
     }
 
     /**
@@ -364,6 +390,20 @@ class ProductMapping implements MappingInterface
                         'name' => $this->fieldMapping->getLanguageField($shop),
                         'description' => $this->fieldMapping->getLanguageField($shop),
                     ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getVoteAverageMapping()
+    {
+        return [
+            'properties' => [
+                'average' => [
+                    'type' => 'double',
                 ],
             ],
         ];

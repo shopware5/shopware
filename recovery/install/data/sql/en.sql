@@ -910,7 +910,7 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hello,
 
 thank you for evaluating the article {$sArticle.articleName}.
-Please confirm the evaluation by clicking the following link:
+Please confirm your evaluation using the following link:
 
 {$sConfirmLink}
 
@@ -920,7 +920,7 @@ Please confirm the evaluation by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for evaluating the article {$sArticle.articleName}.<br/>
-        Please confirm the evaluation by clicking the following link:<br/>
+        Please confirm your evaluation using the following link:<br/>
         <br/>
         <a href="{$sConfirmLink}">Confirm</a>
     </p>
@@ -928,6 +928,94 @@ Please confirm the evaluation by clicking the following link:
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
   `context` = 'a:2:{s:12:"sConfirmLink";s:133:"http://shopware.example/craft-tradition/men/business-bags/165/die-zeit-5?action=rating&sConfirmation=6avE5xLF22DTp8gNPaZ8KRUfJhflnvU9";s:8:"sArticle";a:1:{s:11:"articleName";s:24:"DIE ZEIT 5 Cowhide mokka";}}'
 WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your registration at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for signing up at {$sShop}.
+Please confirm your registration by clicking the following link:
+
+{$sConfirmLink}
+
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for signing up at {$sShop}.<br/>
+        Please confirm your registration by clicking the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm registration</a><br/>
+        <br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTER';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your e-mail address for your order at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+Please confirm your e-mail address using the following link:
+
+{$sConfirmLink}
+
+After the confirmation you will be directed your order overview, where you can check your order again and complete it.
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        Please confirm your e-mail address using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm e-mail</a><br/>
+        <br/>
+        After the confirmation you will be directed your order overview, where you can check your order again and complete it.<br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTERACCOUNTLESS';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your blog article evaluation',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for evaluating the blog article "{$sArticle.title}".
+Please confirm your evaluation using the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for evaluating the blog article for "{$sArticle.title}".<br/>
+        Please confirm your evaluation using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINBLOGCOMMENT';
 
 
 
@@ -1423,9 +1511,80 @@ thank you for your order at {config name=shopName}. In the attachments of this e
         thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
+</div>',`ishtml` = 1,`attachment` = '',
   `context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:12:"order_number";s:5:"20006";s:6:"userID";s:1:"4";s:10:"customerID";s:1:"4";s:14:"invoice_amount";s:5:"701.4";s:18:"invoice_amount_net";s:6:"589.42";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-10-29 10:00:08";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:15:"completely_paid";s:19:"cleared_description";s:15:"Completely paid";s:11:"status_name";s:9:"completed";s:18:"status_description";s:9:"Completed";s:19:"payment_description";s:18:"Payment in advance";s:20:"dispatch_description";s:17:"Standard delivery";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"222";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:3:"166";s:18:"articleordernumber";s:7:"SW10166";s:5:"price";s:5:"69.95";s:8:"quantity";s:2:"10";s:7:"invoice";s:5:"699.5";s:4:"name";s:12:"DIE ZEIT 100";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"223";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20006";s:17:"billing_firstname";s:4:"John";s:16:"billing_lastname";s:3:"Doe";s:14:"billing_street";s:16:"Examplestreet 11";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:4:"1234";s:12:"billing_city";s:11:"Examplecity";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:7:"Germany";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:7:"germany";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"66";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:4:"John";s:17:"shipping_lastname";s:3:"Doe";s:15:"shipping_street";s:16:"Examplestreet 11";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:4:"1234";s:13:"shipping_city";s:11:"Examplecity";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:7:"Germany";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:7:"germany";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"4";s:8:"password";s:60:"$2y$10$qcu486mGUDZ/qbUSJDi78uYwatm24dzQ/dCO79PVVP0MbGHJ0LLgq";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:12:"xyz@mail.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-10-30";s:9:"lastlogin";s:19:"2017-10-30 12:02:18";s:9:"sessionID";s:26:"mpmqj6qoro0pg3ua9u5hprh646";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"6";s:27:"default_shipping_address_id";s:1:"6";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:4:"John";s:8:"lastname";s:3:"Doe";s:8:"birthday";s:10:"2017-10-30";s:11:"login_token";s:38:"1f6f51a1-54c1-4db8-8b4f-fbe957f8b856.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:17:"Standard delivery";s:11:"description";s:0:"";}}'
 WHERE `s_core_config_mails`.`name` = 'sORDERDOCUMENTS';
+
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Invoice for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
+
+{include file="string:{config name=emailfooterplain}"}', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_invoice';
+
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Delivery note for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your delivery note in PDF format.
+
+{include file="string:{config name=emailfooterplain}"}', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your delivery note in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_delivery_note';
+
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Credit note for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your credit note in PDF format.
+
+{include file="string:{config name=emailfooterplain}"}', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find the your credit note in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_credit';
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Cancellation invoice for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your cancellation invoice in PDF format.
+
+{include file="string:{config name=emailfooterplain}"', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your cancellation invoice in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_cancellation';
 
 -- s_cms_static_groups --
 UPDATE s_cms_static_groups SET `name` = 'German left pane and service/support top' WHERE id = 1;
@@ -1441,262 +1600,6 @@ INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
   (1, 7),
   (1, 9),
   (1, 10);
-
--- s_core_locales --
-UPDATE s_core_locales SET language = 'German', territory = 'Germany' WHERE locale = 'de_DE';
-UPDATE s_core_locales SET language = 'English', territory = 'United Kingdom' WHERE locale = 'en_GB';
-UPDATE s_core_locales SET language = 'Afar', territory = 'Djibouti' WHERE locale = 'aa_DJ';
-UPDATE s_core_locales SET language = 'Afar', territory = 'Eritrea' WHERE locale = 'aa_ER';
-UPDATE s_core_locales SET language = 'Afar', territory = 'Ethiopia' WHERE locale = 'aa_ET';
-UPDATE s_core_locales SET language = 'Afrikaans', territory = 'Namibia' WHERE locale = 'af_NA';
-UPDATE s_core_locales SET language = 'Afrikaans', territory = 'South Africa' WHERE locale = 'af_ZA';
-UPDATE s_core_locales SET language = 'Akan', territory = 'Ghana' WHERE locale = 'ak_GH';
-UPDATE s_core_locales SET language = 'Amharic', territory = 'Ethiopia' WHERE locale = 'am_ET';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'United Arab Emirates' WHERE locale = 'ar_AE';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Bahrain' WHERE locale = 'ar_BH';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Algeria' WHERE locale = 'ar_DZ';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Egypt' WHERE locale = 'ar_EG';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Iraq' WHERE locale = 'ar_IQ';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Jordan' WHERE locale = 'ar_JO';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Kuwait' WHERE locale = 'ar_KW';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Lebanon' WHERE locale = 'ar_LB';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Libya' WHERE locale = 'ar_LY';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Morocco' WHERE locale = 'ar_MA';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Oman' WHERE locale = 'ar_OM';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Qatar' WHERE locale = 'ar_QA';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Saudi Arabia' WHERE locale = 'ar_SA';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Sudan' WHERE locale = 'ar_SD';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Syria' WHERE locale = 'ar_SY';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Tunisia' WHERE locale = 'ar_TN';
-UPDATE s_core_locales SET language = 'Arabic', territory = 'Yemen' WHERE locale = 'ar_YE';
-UPDATE s_core_locales SET language = 'Assamese', territory = 'India' WHERE locale = 'as_IN';
-UPDATE s_core_locales SET language = 'Azerbaijani', territory = 'Azerbaijan' WHERE locale = 'az_AZ';
-UPDATE s_core_locales SET language = 'Belarusian', territory = 'Belarus' WHERE locale = 'be_BY';
-UPDATE s_core_locales SET language = 'Bulgarian', territory = 'Bulgaria' WHERE locale = 'bg_BG';
-UPDATE s_core_locales SET language = 'Bengali', territory = 'Bangladesh' WHERE locale = 'bn_BD';
-UPDATE s_core_locales SET language = 'Bengali', territory = 'India' WHERE locale = 'bn_IN';
-UPDATE s_core_locales SET language = 'Tibetan', territory = 'China' WHERE locale = 'bo_CN';
-UPDATE s_core_locales SET language = 'Tibetan', territory = 'India' WHERE locale = 'bo_IN';
-UPDATE s_core_locales SET language = 'Bosnian', territory = 'Bosnia and Herzegovina' WHERE locale = 'bs_BA';
-UPDATE s_core_locales SET language = 'Blin', territory = 'Eritrea' WHERE locale = 'byn_ER';
-UPDATE s_core_locales SET language = 'Catalan', territory = 'Spain' WHERE locale = 'ca_ES';
-UPDATE s_core_locales SET language = 'Atsam', territory = 'Nigeria' WHERE locale = 'cch_NG';
-UPDATE s_core_locales SET language = 'Czech', territory = 'Czech Republic' WHERE locale = 'cs_CZ';
-UPDATE s_core_locales SET language = 'Welsh', territory = 'United Kingdom' WHERE locale = 'cy_GB';
-UPDATE s_core_locales SET language = 'Danish', territory = 'Denmark' WHERE locale = 'da_DK';
-UPDATE s_core_locales SET language = 'German', territory = 'Austria' WHERE locale = 'de_AT';
-UPDATE s_core_locales SET language = 'German', territory = 'Belgium' WHERE locale = 'de_BE';
-UPDATE s_core_locales SET language = 'German', territory = 'Switzerland' WHERE locale = 'de_CH';
-UPDATE s_core_locales SET language = 'German', territory = 'Liechtenstein' WHERE locale = 'de_LI';
-UPDATE s_core_locales SET language = 'German', territory = 'Luxemburg' WHERE locale = 'de_LU';
-UPDATE s_core_locales SET language = 'Maldivian', territory = 'Maldive Islands' WHERE locale = 'dv_MV';
-UPDATE s_core_locales SET language = 'Bhutanese', territory = 'Bhutan' WHERE locale = 'dz_BT';
-UPDATE s_core_locales SET language = 'Ewe', territory = 'Ghana' WHERE locale = 'ee_GH';
-UPDATE s_core_locales SET language = 'Ewe', territory = 'Togo' WHERE locale = 'ee_TG';
-UPDATE s_core_locales SET language = 'Greek', territory = 'Cyprus' WHERE locale = 'el_CY';
-UPDATE s_core_locales SET language = 'Greek', territory = 'Greece' WHERE locale = 'el_GR';
-UPDATE s_core_locales SET language = 'English', territory = 'American Samoa' WHERE locale = 'en_AS';
-UPDATE s_core_locales SET language = 'English', territory = 'Australia' WHERE locale = 'en_AU';
-UPDATE s_core_locales SET language = 'English', territory = 'Belgium' WHERE locale = 'en_BE';
-UPDATE s_core_locales SET language = 'English', territory = 'Botswana' WHERE locale = 'en_BW';
-UPDATE s_core_locales SET language = 'English', territory = 'Belize' WHERE locale = 'en_BZ';
-UPDATE s_core_locales SET language = 'English', territory = 'Canada' WHERE locale = 'en_CA';
-UPDATE s_core_locales SET language = 'English', territory = 'Guam' WHERE locale = 'en_GU';
-UPDATE s_core_locales SET language = 'English', territory = 'Hong Kong' WHERE locale = 'en_HK';
-UPDATE s_core_locales SET language = 'English', territory = 'Ireland' WHERE locale = 'en_IE';
-UPDATE s_core_locales SET language = 'English', territory = 'India' WHERE locale = 'en_IN';
-UPDATE s_core_locales SET language = 'English', territory = 'Jamaica' WHERE locale = 'en_JM';
-UPDATE s_core_locales SET language = 'English', territory = 'Marshall Islands' WHERE locale = 'en_MH';
-UPDATE s_core_locales SET language = 'English', territory = 'Northern Mariana Islands' WHERE locale = 'en_MP';
-UPDATE s_core_locales SET language = 'English', territory = 'Malta' WHERE locale = 'en_MT';
-UPDATE s_core_locales SET language = 'English', territory = 'Namibia' WHERE locale = 'en_NA';
-UPDATE s_core_locales SET language = 'English', territory = 'New Zealand' WHERE locale = 'en_NZ';
-UPDATE s_core_locales SET language = 'English', territory = 'Philippines' WHERE locale = 'en_PH';
-UPDATE s_core_locales SET language = 'English', territory = 'Pakistan' WHERE locale = 'en_PK';
-UPDATE s_core_locales SET language = 'English', territory = 'Singapore' WHERE locale = 'en_SG';
-UPDATE s_core_locales SET language = 'English', territory = 'Trinidad and Tobago' WHERE locale = 'en_TT';
-UPDATE s_core_locales SET language = 'English', territory = 'U.S. Minor Outlying Islands' WHERE locale = 'en_UM';
-UPDATE s_core_locales SET language = 'English', territory = 'United States' WHERE locale = 'en_US';
-UPDATE s_core_locales SET language = 'English', territory = 'American Virgin Islands' WHERE locale = 'en_VI';
-UPDATE s_core_locales SET language = 'English', territory = 'South Africa' WHERE locale = 'en_ZA';
-UPDATE s_core_locales SET language = 'English', territory = 'Zimbabwe' WHERE locale = 'en_ZW';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Argentina' WHERE locale = 'es_AR';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Bolivia' WHERE locale = 'es_BO';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Chile' WHERE locale = 'es_CL';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Colombia' WHERE locale = 'es_CO';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Costa Rica' WHERE locale = 'es_CR';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Dominican Republic' WHERE locale = 'es_DO';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Ecuador' WHERE locale = 'es_EC';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Spain' WHERE locale = 'es_ES';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Guatemala' WHERE locale = 'es_GT';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Honduras' WHERE locale = 'es_HN';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Mexico' WHERE locale = 'es_MX';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Nicaragua' WHERE locale = 'es_NI';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Panama' WHERE locale = 'es_PA';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Peru' WHERE locale = 'es_PE';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Puerto Rico' WHERE locale = 'es_PR';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Paraguay' WHERE locale = 'es_PY';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'El Salvador' WHERE locale = 'es_SV';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'United States' WHERE locale = 'es_US';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Uruguay' WHERE locale = 'es_UY';
-UPDATE s_core_locales SET language = 'Spanish', territory = 'Venezuela' WHERE locale = 'es_VE';
-UPDATE s_core_locales SET language = 'Estonian', territory = 'Estonia' WHERE locale = 'et_EE';
-UPDATE s_core_locales SET language = 'Basque', territory = 'Spain' WHERE locale = 'eu_ES';
-UPDATE s_core_locales SET language = 'Persian', territory = 'Afghanistan' WHERE locale = 'fa_AF';
-UPDATE s_core_locales SET language = 'Persian', territory = 'Iran' WHERE locale = 'fa_IR';
-UPDATE s_core_locales SET language = 'Finnish', territory = 'Finland' WHERE locale = 'fi_FI';
-UPDATE s_core_locales SET language = 'Filipino', territory = 'Philippines' WHERE locale = 'fil_PH';
-UPDATE s_core_locales SET language = 'Faeroese', territory = 'Faeroe Islands' WHERE locale = 'fo_FO';
-UPDATE s_core_locales SET language = 'French', territory = 'Belgium' WHERE locale = 'fr_BE';
-UPDATE s_core_locales SET language = 'French', territory = 'Canada' WHERE locale = 'fr_CA';
-UPDATE s_core_locales SET language = 'French', territory = 'Switzerland' WHERE locale = 'fr_CH';
-UPDATE s_core_locales SET language = 'French', territory = 'France' WHERE locale = 'fr_FR';
-UPDATE s_core_locales SET language = 'French', territory = 'Luxembourg' WHERE locale = 'fr_LU';
-UPDATE s_core_locales SET language = 'French', territory = 'Monaco' WHERE locale = 'fr_MC';
-UPDATE s_core_locales SET language = 'French', territory = 'Senegal' WHERE locale = 'fr_SN';
-UPDATE s_core_locales SET language = 'Friulian', territory = 'Italy' WHERE locale = 'fur_IT';
-UPDATE s_core_locales SET language = 'Irish', territory = 'Ireland' WHERE locale = 'ga_IE';
-UPDATE s_core_locales SET language = 'Ga', territory = 'Ghana' WHERE locale = 'gaa_GH';
-UPDATE s_core_locales SET language = 'Geez', territory = 'Eritrea' WHERE locale = 'gez_ER';
-UPDATE s_core_locales SET language = 'Geez', territory = 'Ethiopia' WHERE locale = 'gez_ET';
-UPDATE s_core_locales SET language = 'Galician', territory = 'Spain' WHERE locale = 'gl_ES';
-UPDATE s_core_locales SET language = 'Swiss German', territory = 'Switzerland' WHERE locale = 'gsw_CH';
-UPDATE s_core_locales SET language = 'Gujarati', territory = 'India' WHERE locale = 'gu_IN';
-UPDATE s_core_locales SET language = 'Manx', territory = 'United Kingdom' WHERE locale = 'gv_GB';
-UPDATE s_core_locales SET language = 'Hausa', territory = 'Ghana' WHERE locale = 'ha_GH';
-UPDATE s_core_locales SET language = 'Hausa', territory = 'Niger' WHERE locale = 'ha_NE';
-UPDATE s_core_locales SET language = 'Hausa', territory = 'Nigeria' WHERE locale = 'ha_NG';
-UPDATE s_core_locales SET language = 'Hausa', territory = 'Sudan' WHERE locale = 'ha_SD';
-UPDATE s_core_locales SET language = 'Hawaiian', territory = 'United States' WHERE locale = 'haw_US';
-UPDATE s_core_locales SET language = 'Hebrew', territory = 'Israel' WHERE locale = 'he_IL';
-UPDATE s_core_locales SET language = 'Hindi', territory = 'India' WHERE locale = 'hi_IN';
-UPDATE s_core_locales SET language = 'Croatian', territory = 'Croatia' WHERE locale = 'hr_HR';
-UPDATE s_core_locales SET language = 'Hungarian', territory = 'Hungary' WHERE locale = 'hu_HU';
-UPDATE s_core_locales SET language = 'Armenian', territory = 'Armenia' WHERE locale = 'hy_AM';
-UPDATE s_core_locales SET language = 'Indonesian', territory = 'Indonesia' WHERE locale = 'id_ID';
-UPDATE s_core_locales SET language = 'Igbo', territory = 'Nigeria' WHERE locale = 'ig_NG';
-UPDATE s_core_locales SET language = 'Sichuan Yi', territory = 'China' WHERE locale = 'ii_CN';
-UPDATE s_core_locales SET language = 'Icelandic', territory = 'Iceland' WHERE locale = 'is_IS';
-UPDATE s_core_locales SET language = 'Italian', territory = 'Switzerland' WHERE locale = 'it_CH';
-UPDATE s_core_locales SET language = 'Italian', territory = 'Italy' WHERE locale = 'it_IT';
-UPDATE s_core_locales SET language = 'Japanese', territory = 'Japan' WHERE locale = 'ja_JP';
-UPDATE s_core_locales SET language = 'Georgian', territory = 'Georgia' WHERE locale = 'ka_GE';
-UPDATE s_core_locales SET language = 'Jju', territory = 'Nigeria' WHERE locale = 'kaj_NG';
-UPDATE s_core_locales SET language = 'Kamba', territory = 'Kenya' WHERE locale = 'kam_KE';
-UPDATE s_core_locales SET language = 'Tyap', territory = 'Nigeria' WHERE locale = 'kcg_NG';
-UPDATE s_core_locales SET language = 'Koro', territory = 'Ivory Coast' WHERE locale = 'kfo_CI';
-UPDATE s_core_locales SET language = 'Kazakh', territory = 'Kazakhstan' WHERE locale = 'kk_KZ';
-UPDATE s_core_locales SET language = 'Greenlandic', territory = 'Greenland' WHERE locale = 'kl_GL';
-UPDATE s_core_locales SET language = 'Cambodian', territory = 'Cambodia' WHERE locale = 'km_KH';
-UPDATE s_core_locales SET language = 'Kannada', territory = 'India' WHERE locale = 'kn_IN';
-UPDATE s_core_locales SET language = 'Korean', territory = 'Republic of Korea' WHERE locale = 'ko_KR';
-UPDATE s_core_locales SET language = 'Konkani', territory = 'India' WHERE locale = 'kok_IN';
-UPDATE s_core_locales SET language = 'Kpelle', territory = 'Guinea' WHERE locale = 'kpe_GN';
-UPDATE s_core_locales SET language = 'Kpelle', territory = 'Liberia' WHERE locale = 'kpe_LR';
-UPDATE s_core_locales SET language = 'Kurdish', territory = 'Iraq' WHERE locale = 'ku_IQ';
-UPDATE s_core_locales SET language = 'Kurdish', territory = 'Iran' WHERE locale = 'ku_IR';
-UPDATE s_core_locales SET language = 'Kurdish', territory = 'Syria' WHERE locale = 'ku_SY';
-UPDATE s_core_locales SET language = 'Kurdish', territory = 'Turkey' WHERE locale = 'ku_TR';
-UPDATE s_core_locales SET language = 'Cornish', territory = 'United Kingdom' WHERE locale = 'kw_GB';
-UPDATE s_core_locales SET language = 'Kirghiz', territory = 'Kyrgyzstan' WHERE locale = 'ky_KG';
-UPDATE s_core_locales SET language = 'Lingala', territory = 'Democratic Republic of the Congo' WHERE locale = 'ln_CD';
-UPDATE s_core_locales SET language = 'Lingala', territory = 'Congo' WHERE locale = 'ln_CG';
-UPDATE s_core_locales SET language = 'Lao', territory = 'Laos' WHERE locale = 'lo_LA';
-UPDATE s_core_locales SET language = 'Lithuanian', territory = 'Lithuania' WHERE locale = 'lt_LT';
-UPDATE s_core_locales SET language = 'Latvian', territory = 'Lettland' WHERE locale = 'lv_LV';
-UPDATE s_core_locales SET language = 'Macedonian', territory = 'Macedonia' WHERE locale = 'mk_MK';
-UPDATE s_core_locales SET language = 'Malayalam', territory = 'India' WHERE locale = 'ml_IN';
-UPDATE s_core_locales SET language = 'Mongol', territory = 'China' WHERE locale = 'mn_CN';
-UPDATE s_core_locales SET language = 'Mongol', territory = 'Mongolia' WHERE locale = 'mn_MN';
-UPDATE s_core_locales SET language = 'Marathi', territory = 'India' WHERE locale = 'mr_IN';
-UPDATE s_core_locales SET language = 'Malay', territory = 'Brunei Darussalam' WHERE locale = 'ms_BN';
-UPDATE s_core_locales SET language = 'Malay', territory = 'Malaysia' WHERE locale = 'ms_MY';
-UPDATE s_core_locales SET language = 'Maltese', territory = 'Malta' WHERE locale = 'mt_MT';
-UPDATE s_core_locales SET language = 'Burmese', territory = 'Myanmar' WHERE locale = 'my_MM';
-UPDATE s_core_locales SET language = 'Norwegian Bokmål', territory = 'Norway' WHERE locale = 'nb_NO';
-UPDATE s_core_locales SET language = 'Low German', territory = 'Germany' WHERE locale = 'nds_DE';
-UPDATE s_core_locales SET language = 'Nepalese', territory = 'India' WHERE locale = 'ne_IN';
-UPDATE s_core_locales SET language = 'Nepalese', territory = 'Nepal' WHERE locale = 'ne_NP';
-UPDATE s_core_locales SET language = 'Dutch', territory = 'Belgium' WHERE locale = 'nl_BE';
-UPDATE s_core_locales SET language = 'Dutch', territory = 'Netherlands' WHERE locale = 'nl_NL';
-UPDATE s_core_locales SET language = 'Norwegian Nynorsk', territory = 'Norway' WHERE locale = 'nn_NO';
-UPDATE s_core_locales SET language = 'Southern Ndebele', territory = 'South Africa' WHERE locale = 'nr_ZA';
-UPDATE s_core_locales SET language = 'Northern Sotho language', territory = 'South Africa' WHERE locale = 'nso_ZA';
-UPDATE s_core_locales SET language = 'Nyanja', territory = 'Malawi' WHERE locale = 'ny_MW';
-UPDATE s_core_locales SET language = 'Occitan', territory = 'France' WHERE locale = 'oc_FR';
-UPDATE s_core_locales SET language = 'Oromo', territory = 'Ethiopia' WHERE locale = 'om_ET';
-UPDATE s_core_locales SET language = 'Oromo', territory = 'Kenya' WHERE locale = 'om_KE';
-UPDATE s_core_locales SET language = 'Orija', territory = 'India' WHERE locale = 'or_IN';
-UPDATE s_core_locales SET language = 'Punjabi', territory = 'India' WHERE locale = 'pa_IN';
-UPDATE s_core_locales SET language = 'Punjabi', territory = 'Pakistan' WHERE locale = 'pa_PK';
-UPDATE s_core_locales SET language = 'Polish', territory = 'Poland' WHERE locale = 'pl_PL';
-UPDATE s_core_locales SET language = 'Pashto', territory = 'Afghanistan' WHERE locale = 'ps_AF';
-UPDATE s_core_locales SET language = 'Portuguese', territory = 'Brazil' WHERE locale = 'pt_BR';
-UPDATE s_core_locales SET language = 'Portuguese', territory = 'Portugal' WHERE locale = 'pt_PT';
-UPDATE s_core_locales SET language = 'Romanian', territory = 'Republic of Moldova' WHERE locale = 'ro_MD';
-UPDATE s_core_locales SET language = 'Romanian', territory = 'Romania' WHERE locale = 'ro_RO';
-UPDATE s_core_locales SET language = 'Russian', territory = 'Russian Federation' WHERE locale = 'ru_RU';
-UPDATE s_core_locales SET language = 'Russian', territory = 'Ukraine' WHERE locale = 'ru_UA';
-UPDATE s_core_locales SET language = 'Rwandan', territory = 'Rwanda' WHERE locale = 'rw_RW';
-UPDATE s_core_locales SET language = 'Sanskrit', territory = 'India' WHERE locale = 'sa_IN';
-UPDATE s_core_locales SET language = 'Northen Samian', territory = 'Finland' WHERE locale = 'se_FI';
-UPDATE s_core_locales SET language = 'Northen Samian', territory = 'Norway' WHERE locale = 'se_NO';
-UPDATE s_core_locales SET language = 'Serbo-Croat', territory = 'Bosnia and Herzegovina' WHERE locale = 'sh_BA';
-UPDATE s_core_locales SET language = 'Serbo-Croat', territory = 'Serbia and Montenegro' WHERE locale = 'sh_CS';
-UPDATE s_core_locales SET language = 'Serbo-Croat', territory = '' WHERE locale = 'sh_YU';
-UPDATE s_core_locales SET language = 'Singhalese', territory = 'Sri Lanka' WHERE locale = 'si_LK';
-UPDATE s_core_locales SET language = 'Sidamo', territory = 'Ethiopia' WHERE locale = 'sid_ET';
-UPDATE s_core_locales SET language = 'Slovakian', territory = 'Slovakia' WHERE locale = 'sk_SK';
-UPDATE s_core_locales SET language = 'Slovakian', territory = 'Slovenia' WHERE locale = 'sl_SI';
-UPDATE s_core_locales SET language = 'Somali', territory = 'Djibouti' WHERE locale = 'so_DJ';
-UPDATE s_core_locales SET language = 'Somali', territory = 'Ethiopia' WHERE locale = 'so_ET';
-UPDATE s_core_locales SET language = 'Somali', territory = 'Kenya' WHERE locale = 'so_KE';
-UPDATE s_core_locales SET language = 'Somali', territory = 'Somalia' WHERE locale = 'so_SO';
-UPDATE s_core_locales SET language = 'Albanian', territory = 'Albania' WHERE locale = 'sq_AL';
-UPDATE s_core_locales SET language = 'Serbian', territory = 'Bosnia and Herzegovina' WHERE locale = 'sr_BA';
-UPDATE s_core_locales SET language = 'Serbian', territory = 'Serbia and Montenegro' WHERE locale = 'sr_CS';
-UPDATE s_core_locales SET language = 'Serbian', territory = 'Montenegro' WHERE locale = 'sr_ME';
-UPDATE s_core_locales SET language = 'Serbian', territory = 'Serbia' WHERE locale = 'sr_RS';
-UPDATE s_core_locales SET language = 'Serbian', territory = '' WHERE locale = 'sr_YU';
-UPDATE s_core_locales SET language = 'Swazi', territory = 'Swaziland' WHERE locale = 'ss_SZ';
-UPDATE s_core_locales SET language = 'Swazi', territory = 'South Africa' WHERE locale = 'ss_ZA';
-UPDATE s_core_locales SET language = 'Southern Sotho Language', territory = 'Lesotho' WHERE locale = 'st_LS';
-UPDATE s_core_locales SET language = 'Southern Sotho Language', territory = 'South Africa' WHERE locale = 'st_ZA';
-UPDATE s_core_locales SET language = 'Swedish', territory = 'Finland' WHERE locale = 'sv_FI';
-UPDATE s_core_locales SET language = 'Swedish', territory = 'Sweden' WHERE locale = 'sv_SE';
-UPDATE s_core_locales SET language = 'Swahili', territory = 'Kenya' WHERE locale = 'sw_KE';
-UPDATE s_core_locales SET language = 'Swahili', territory = 'Tanzania' WHERE locale = 'sw_TZ';
-UPDATE s_core_locales SET language = 'Syriac', territory = 'Syria' WHERE locale = 'syr_SY';
-UPDATE s_core_locales SET language = 'Tamil', territory = 'India' WHERE locale = 'ta_IN';
-UPDATE s_core_locales SET language = 'Telugu', territory = 'India' WHERE locale = 'te_IN';
-UPDATE s_core_locales SET language = 'Tadjik', territory = 'Tajikistan' WHERE locale = 'tg_TJ';
-UPDATE s_core_locales SET language = 'Thai', territory = 'Thailand' WHERE locale = 'th_TH';
-UPDATE s_core_locales SET language = 'Tigrinya', territory = 'Eritrea' WHERE locale = 'ti_ER';
-UPDATE s_core_locales SET language = 'Tigrinya', territory = 'Ethiopia' WHERE locale = 'ti_ET';
-UPDATE s_core_locales SET language = 'Tigre', territory = 'Eritrea' WHERE locale = 'tig_ER';
-UPDATE s_core_locales SET language = 'Tswana Language', territory = 'South Africa' WHERE locale = 'tn_ZA';
-UPDATE s_core_locales SET language = 'Tongan', territory = 'Tonga' WHERE locale = 'to_TO';
-UPDATE s_core_locales SET language = 'Turkish', territory = 'Turkey' WHERE locale = 'tr_TR';
-UPDATE s_core_locales SET language = 'Tsonga', territory = 'South Africa' WHERE locale = 'ts_ZA';
-UPDATE s_core_locales SET language = 'Tartar', territory = 'Russian Federation' WHERE locale = 'tt_RU';
-UPDATE s_core_locales SET language = 'Uighur', territory = 'China' WHERE locale = 'ug_CN';
-UPDATE s_core_locales SET language = 'Ukrainian', territory = 'Ukraine' WHERE locale = 'uk_UA';
-UPDATE s_core_locales SET language = 'Urdu', territory = 'India' WHERE locale = 'ur_IN';
-UPDATE s_core_locales SET language = 'Urdu', territory = 'Pakistan' WHERE locale = 'ur_PK';
-UPDATE s_core_locales SET language = 'Uzbek', territory = 'Afghanistan' WHERE locale = 'uz_AF';
-UPDATE s_core_locales SET language = 'Uzbek', territory = 'Uzbekistan' WHERE locale = 'uz_UZ';
-UPDATE s_core_locales SET language = 'Venda Language', territory = 'South Africa' WHERE locale = 've_ZA';
-UPDATE s_core_locales SET language = 'Vietnamese', territory = 'Vietnam' WHERE locale = 'vi_VN';
-UPDATE s_core_locales SET language = 'Walamo Language', territory = 'Ethiopia' WHERE locale = 'wal_ET';
-UPDATE s_core_locales SET language = 'Wolof', territory = 'Senegal' WHERE locale = 'wo_SN';
-UPDATE s_core_locales SET language = 'Xhosa', territory = 'South Africa' WHERE locale = 'xh_ZA';
-UPDATE s_core_locales SET language = 'Yoruba', territory = 'Nigeria' WHERE locale = 'yo_NG';
-UPDATE s_core_locales SET language = 'Chinese', territory = 'China' WHERE locale = 'zh_CN';
-UPDATE s_core_locales SET language = 'Chinese', territory = 'Hong Kong' WHERE locale = 'zh_HK';
-UPDATE s_core_locales SET language = 'Chinese', territory = 'Macao' WHERE locale = 'zh_MO';
-UPDATE s_core_locales SET language = 'Chinese', territory = 'Singapur' WHERE locale = 'zh_SG';
-UPDATE s_core_locales SET language = 'Chinese', territory = 'Taiwan' WHERE locale = 'zh_TW';
-UPDATE s_core_locales SET language = 'Zulu', territory = 'South Africa' WHERE locale = 'zu_ZA';
 
 -- s_order_number --
 UPDATE s_order_number SET `desc` = 'Customers' WHERE id = 1;
@@ -1833,3 +1736,41 @@ UPDATE s_search_custom_facet SET `name` = 'Variants', `facet` = '{"Shopware\\\\B
 
 -- s_core_translations --
 UPDATE `s_core_translations` SET objectdata = 'a:1:{s:5:\"label\";s:8:\"Variants\";}' WHERE objecttype = 'custom_facet' AND objectlanguage = 1 AND dirty != 1;
+
+-- s_media-album --
+UPDATE `s_media_album` SET `name` = 'Recycle bin' WHERE `id` = -13;
+UPDATE `s_media_album` SET `name` = 'Manufacturer' WHERE `id` = -12;
+UPDATE `s_media_album` SET `name` = 'Blog' WHERE `id` = -11;
+UPDATE `s_media_album` SET `name` = 'Unsorted' WHERE `id` = -10;
+UPDATE `s_media_album` SET `name` = 'Other' WHERE `id` = -9;
+UPDATE `s_media_album` SET `name` = 'Music' WHERE `id` = -8;
+UPDATE `s_media_album` SET `name` = 'Video' WHERE `id` = -7;
+UPDATE `s_media_album` SET `name` = 'Files' WHERE `id` = -6;
+UPDATE `s_media_album` SET `name` = 'Newsletter' WHERE `id` = -5;
+UPDATE `s_media_album` SET `name` = 'Campaigns' WHERE `id` = -4;
+UPDATE `s_media_album` SET `name` = 'Shopping Worlds' WHERE `id` = -3;
+UPDATE `s_media_album` SET `name` = 'Banner' WHERE `id` = -2;
+UPDATE `s_media_album` SET `name` = 'Products' WHERE `id` = -1;
+
+-- s_premium_holidays --
+UPDATE `s_premium_holidays` SET `name` = 'New Year''s Day' WHERE `id` = '1';
+UPDATE `s_premium_holidays` SET `name` = 'Epiphany' WHERE `id` = '3';
+UPDATE `s_premium_holidays` SET `name` = 'Carnival Monday' WHERE `id` = '4';
+UPDATE `s_premium_holidays` SET `name` = 'Saint Joseph''s Day' WHERE `id` = '5';
+UPDATE `s_premium_holidays` SET `name` = 'Good Friday' WHERE `id` = '6';
+UPDATE `s_premium_holidays` SET `name` = 'Easter Monday' WHERE `id` = '7';
+UPDATE `s_premium_holidays` SET `name` = 'Labour Day' WHERE `id` = '8';
+UPDATE `s_premium_holidays` SET `name` = 'Ascension Day' WHERE `id` = '9';
+UPDATE `s_premium_holidays` SET `name` = 'Whitmonday' WHERE `id` = '10';
+UPDATE `s_premium_holidays` SET `name` = 'Corpus Christi' WHERE `id` = '11';
+UPDATE `s_premium_holidays` SET `name` = 'Assumption Day' WHERE `id` = '13';
+UPDATE `s_premium_holidays` SET `name` = 'German Unification Day' WHERE `id` = '14';
+UPDATE `s_premium_holidays` SET `name` = 'Austrian National Day' WHERE `id` = '15';
+UPDATE `s_premium_holidays` SET `name` = 'Reformation Day' WHERE `id` = '16';
+UPDATE `s_premium_holidays` SET `name` = 'All Hallows'' Day' WHERE `id` = '17';
+UPDATE `s_premium_holidays` SET `name` = 'Day of Prayer and Repentance' WHERE `id` = '18';
+UPDATE `s_premium_holidays` SET `name` = 'Feast of the Immaculate Conception' WHERE `id` = '19';
+UPDATE `s_premium_holidays` SET `name` = 'Christmas Eve' WHERE `id` = '20';
+UPDATE `s_premium_holidays` SET `name` = 'Christmas Day' WHERE `id` = '21';
+UPDATE `s_premium_holidays` SET `name` = 'Boxing Day' WHERE `id` = '22';
+UPDATE `s_premium_holidays` SET `name` = 'New Year''s Eve' WHERE `id` = '23';

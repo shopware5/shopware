@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
@@ -32,9 +31,9 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Components\Model\ModelRepository[]
+     * @var array<string, \Shopware\Components\Model\ModelRepository>
      */
-    public static $repositories = null;
+    public static $repositories;
 
     /**
      * @var array
@@ -55,12 +54,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $repository = $this->getRepository('form');
 
         $user = Shopware()->Container()->get('Auth')->getIdentity();
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
 
         $fallback = $this->getFallbackLocaleId($locale->getId());
 
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
             ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId IN(:localeId, :fallbackId)')
@@ -80,7 +79,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         ;
 
         // Search forms
-        if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
+        if (isset($filter[0]['property']) && $filter[0]['property'] === 'search') {
             $builder->where('form.name LIKE :search')
                 ->orWhere('form.label LIKE :search')
                 ->orWhere('translation.label LIKE :search')
@@ -132,13 +131,13 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $repository = $this->getRepository('form');
 
         $user = Shopware()->Container()->get('Auth')->getIdentity();
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $language = $locale->toString();
 
         $fallback = $this->getFallbackLocaleId($locale->getId());
 
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
             ->leftJoin('form.translations', 'formTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'formTranslation.localeId IN (:localeId, :fallbackId)', 'formTranslation.localeId')
@@ -176,6 +175,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $data = $this->translateValues($fallback, $data);
         $data = $this->translateValues($locale->getId(), $data);
 
+        // 'en' is supported as last fallback.
+        $storeFallbackLocales = [substr($language, 0, 2), 'en_GB', 'en'];
+
         foreach ($data['elements'] as &$values) {
             $values = $this->translateValues($fallback, $values);
             $values = $this->translateValues($locale->getId(), $values);
@@ -184,9 +186,13 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 continue;
             }
 
-            $values['options']['store'] = $this->translateStore('en', $values['options']['store']);
-            $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
-            $values['options']['queryMode'] = 'remote';
+            $store = $values['options']['store'];
+            // Replace the store, which may contain multiple translations, with
+            // a store with translated messages:
+            $values['options']['store'] = $this->translateStore($language, $store, $storeFallbackLocales);
+            if (!isset($values['options']['queryMode'])) {
+                $values['options']['queryMode'] = 'remote';
+            }
         }
 
         $this->View()->assign([
@@ -204,7 +210,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $shopRepository = $this->getRepository('shop');
         $elements = $this->Request()->getParam('elements');
 
-        /* @var $defaultShop Shop */
+        /* @var Shop $defaultShop */
         $defaultShop = $shopRepository->getDefault();
         if ($defaultShop === null) {
             $this->View()->assign(['success' => false, 'message' => 'No default shop found. Check your shop configuration']);
@@ -224,12 +230,16 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function getListAction()
     {
-        /** @var $name string */
+        /** @var string $name */
         $name = $this->Request()->get('_repositoryClass');
-        /** @var $repository Shopware\Components\Model\ModelRepository */
+
+        /** @var Shopware\Components\Model\ModelRepository $repository */
         $repository = $this->getRepository($name);
 
-        if (isset($repository)) {
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
+        $builder = null;
+
+        if ($repository !== null) {
             $builder = $repository->createQueryBuilder($name);
         }
 
@@ -277,6 +287,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
         }
 
+        $data = [];
+        $total = null;
+
         if ($builder !== null) {
             $builder->addFilter((array) $this->Request()->getParam('filter', []))
                 ->addOrderBy((array) $this->Request()->getParam('sort', []));
@@ -286,6 +299,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $query = $builder->getQuery();
             $total = Shopware()->Models()->getQueryCount($query);
             $data = $query->getArrayResult();
+        }
+
+        if (!empty($data) && $name === 'locale') {
+            $data = $this->getSnippetsForLocales($data);
         }
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
@@ -406,7 +423,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         if ($repository === null) {
             return;
         }
-        /** @var $builder Shopware\Components\Model\QueryBuilder */
+        /** @var Shopware\Components\Model\QueryBuilder $builder */
         $builder = $repository->createQueryBuilder($name);
 
         switch ($name) {
@@ -638,6 +655,22 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         return;
                     }
                     break;
+                case 'document':
+                    $exceptionMessage = $ex->getMessage();
+                    if (strpos($exceptionMessage, '1062 Duplicate entry') !== false
+                        &&
+                        strpos($exceptionMessage, 'for key \'key\'') !== false
+                    ) {
+                        $this->View()->assign([
+                            'success' => false,
+                            'message' => $this->get('snippets')->getNamespace('backend/config/view/document')->get('document/detail/key_exists'),
+                        ]);
+
+                        return;
+                    }
+
+                    // Not the exception we want to handle here, rethrow. (Instead of fall through)
+                    throw $ex;
                 default:
                     throw $ex;
             }
@@ -786,9 +819,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
-     * @return Shopware\Components\Model\ModelRepository
+     * @return \Doctrine\ORM\EntityRepository|null
      */
     protected function getRepository($name)
     {
@@ -867,7 +900,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param   $name
+     * @param string $name
      *
      * @return string
      */
@@ -905,6 +938,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     /**
      * Helper function to translate the store of select- and combo-fields
      * Store value will be replaced by the value in the correct language.
+     * If no match for $language is found in the $store array, the first found translation
+     * for the languages defined by $fallbackLocales will be used.
      * If there is no matching language in array defined, the first array element will be used.
      * If the store or a value is not an array, it will not be changed.
      *
@@ -913,37 +948,63 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      * $store = array(
      *              array(1, array('de_DE' => 'Auto', 'en_GB' => 'car')),
      *              array(2, array('de_DE' => 'Hund', 'en_GB' => 'dog')),
-     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat'))
+     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat')),
+     *              array(4, 'A string without translation')
      *          );
      *
-     * @param string $language
+     * @param string $language        the preferred locale (e.g., the user's locale)
      * @param mixed  $store
+     * @param array  $fallbackLocales a list of locales (e.g., ['en_GB', 'en'])
      *
      * @return mixed
      */
-    private function translateStore($language, $store)
+    private function translateStore($language, $store, array $fallbackLocales)
     {
         if (!is_array($store)) {
             return $store;
         }
 
+        // All locales ordered according to which translations shall be preferred:
+        $tryLocales = array_merge([$language], $fallbackLocales);
+
         foreach ($store as &$row) {
             $value = array_pop($row);
 
+            // If not an array, there are no translations and we directly choose the given value:
             if (!is_array($value)) {
                 $row[] = $value;
                 continue;
             }
 
-            if (!array_key_exists($language, $value)) {
-                $row[] = array_shift($value);
-                continue;
-            }
+            // Find the most preferable translation:
+            $translation = $this->getTranslation($value, $tryLocales);
 
-            $row[] = $value[$language];
+            if ($translation) {
+                $row[] = $translation;
+            } else {
+                // If none of the available locales could be identified as preferable, fallback to the first defined translation:
+                $row[] = array_shift($value);
+            }
         }
 
         return $store;
+    }
+
+    /**
+     * @param array $value
+     * @param array $tryLocales
+     *
+     * @return string|null
+     */
+    private function getTranslation(array $value, array $tryLocales)
+    {
+        foreach ($tryLocales as $tryLocale) {
+            if (isset($value[$tryLocale])) {
+                return $value[$tryLocale];
+            }
+        }
+
+        return null;
     }
 
     private function createDocumentElements($model)
@@ -1094,8 +1155,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     /**
      * Simple validation for backend config elements
      *
-     * @param $elementData
-     * @param $value
+     * @param array $elementData
+     * @param array $value
      *
      * @return bool
      */
@@ -1113,7 +1174,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 // check existence of each locale
                 foreach ($value as $localeId) {
                     $locale = Shopware()->Models()->find('Shopware\Models\Shop\Locale', $localeId);
-                    if (null === $locale) {
+                    if ($locale === null) {
                         return false;
                     }
                 }
@@ -1244,7 +1305,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $shopRepository = $this->getRepository('shop');
 
-        /** @var $element Element */
+        /** @var Element $element */
         $element = Shopware()->Models()->find(Element::class, $elementData['id']);
 
         $removedValues = [];
@@ -1256,7 +1317,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $values = [];
         foreach ($elementData['values'] as $valueData) {
-            /* @var $shop Shop */
+            /* @var Shop $shop */
             $shop = $shopRepository->find($valueData['shopId']);
 
             //  Scope not match
@@ -1312,7 +1373,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param $currentLocaleId
+     * @param int $currentLocaleId
      *
      * @return int
      */
@@ -1327,5 +1388,29 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         );
 
         return $fallback;
+    }
+
+    /**
+     * Replaces the locales with the snippets data
+     *
+     * @param array $data
+     *
+     * @return array $data
+     */
+    private function getSnippetsForLocales($data)
+    {
+        $snippets = $this->container->get('snippets');
+        foreach ($data as &$locale) {
+            if (!empty($locale['language'])) {
+                $locale['language'] = $snippets->getNamespace('backend/locale/language')->get($locale['locale'],
+                    $locale['language'], true);
+            }
+            if (!empty($locale['territory'])) {
+                $locale['territory'] = $snippets->getNamespace('backend/locale/territory')->get($locale['locale'],
+                    $locale['territory'], true);
+            }
+        }
+
+        return $data;
     }
 }

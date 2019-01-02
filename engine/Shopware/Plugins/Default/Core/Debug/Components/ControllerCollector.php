@@ -27,7 +27,7 @@ namespace Shopware\Plugin\Debug\Components;
 use Shopware\Components\Logger;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -75,6 +75,8 @@ class ControllerCollector implements CollectorInterface
 
     /**
      * Get total execution time in controller
+     *
+     * @param Logger $log
      */
     public function logResults(Logger $log)
     {

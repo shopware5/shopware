@@ -45,7 +45,7 @@ class CommentConfirm extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -56,7 +56,7 @@ class CommentConfirm extends ModelEntity
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    private $type = null;
+    private $type;
 
     /**
      * @var string
@@ -71,6 +71,11 @@ class CommentConfirm extends ModelEntity
      * @ORM\Column(name="data", type="string", nullable=false)
      */
     private $data;
+
+    public function __construct()
+    {
+        $this->type = 'swComment';
+    }
 
     /**
      * Get id
@@ -125,11 +130,11 @@ class CommentConfirm extends ModelEntity
     /**
      * Set CreationDate
      *
-     * @param \DateTime|string $creationDate
+     * @param \DateTimeInterface|string $creationDate
      */
     public function setCreationDate($creationDate)
     {
-        if (!$creationDate instanceof \DateTime && strlen($creationDate) > 0) {
+        if (!$creationDate instanceof \DateTimeInterface && strlen($creationDate) > 0) {
             $creationDate = new \DateTime($creationDate);
         }
         $this->creationDate = $creationDate;
@@ -138,7 +143,7 @@ class CommentConfirm extends ModelEntity
     /**
      * Get CreationDate
      *
-     * @return string
+     * @return \DateTimeInterface
      */
     public function getCreationDate()
     {

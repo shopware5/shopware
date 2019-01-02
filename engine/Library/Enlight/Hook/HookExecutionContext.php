@@ -62,24 +62,18 @@ class Enlight_Hook_HookExecutionContext
 
     /**
      * @param Enlight_Hook_HookManager $hookManager
-     * @param Enlight_Hook_Proxy $class
+     * @param Enlight_Hook_Proxy $subject
      * @param string $method
      * @param array $args
      */
     public function __construct(
         Enlight_Hook_HookManager $hookManager,
-        Enlight_Hook_Proxy $class,
+        Enlight_Hook_Proxy $subject,
         $method,
         array $args
     ) {
         $this->hookManager = $hookManager;
-        $this->args = new Enlight_Hook_HookArgs(array_merge(
-            [
-                'class' => $class,
-                'method' => $method
-            ],
-            $args
-        ));
+        $this->args = new Enlight_Hook_HookArgs($subject, $method, $args);
     }
 
     /*+
@@ -100,7 +94,7 @@ class Enlight_Hook_HookExecutionContext
     {
         // Save this context in the proxy
         $proxy = $this->args->getSubject();
-        $proxy->pushHookExecutionContext($this->args->getMethod(), $this);
+        $proxy->__pushHookExecutionContext($this->args->getMethod(), $this);
 
         // Before hooks
         $this->hookManager->getEventManager()->notify(
@@ -122,7 +116,7 @@ class Enlight_Hook_HookExecutionContext
         );
 
         // Remove this context from the proxy
-        $proxy->popHookExecutionContext($this->args->getMethod());
+        $proxy->__popHookExecutionContext($this->args->getMethod());
 
         return $returnValue;
     }
@@ -144,7 +138,7 @@ class Enlight_Hook_HookExecutionContext
         if (count($listeners) === 0 || $this->parentExecutionLevel >= count($listeners)) {
             // No 'replace' listeners or reached the end of the execution chain, hence execute the original method
             // using a generated helper method. This allows us to call both public and protected methods.
-            $returnValue = $this->args->getSubject()->executeOriginalMethod($this->args->getMethod(), $args);
+            $returnValue = $this->args->getSubject()->__executeOriginalMethod($this->args->getMethod(), $args);
             $this->args->setReturn($returnValue);
 
             return $returnValue;

@@ -31,6 +31,7 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
@@ -38,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
-class VariantListingPriceService
+class VariantListingPriceService implements VariantListingPriceServiceInterface
 {
     /**
      * @var VariantHelperInterface
@@ -65,6 +66,13 @@ class VariantListingPriceService
      */
     private $config;
 
+    /**
+     * @param QueryBuilderFactoryInterface         $factory
+     * @param VariantHelperInterface               $helper
+     * @param VariantCheapestPriceGatewayInterface $variantCheapestPriceGateway
+     * @param PriceCalculationServiceInterface     $priceCalculationService
+     * @param Shopware_Components_Config           $config
+     */
     public function __construct(
         QueryBuilderFactoryInterface $factory,
         VariantHelperInterface $helper,
@@ -79,6 +87,9 @@ class VariantListingPriceService
         $this->config = $config;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updatePrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
     {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
@@ -107,12 +118,15 @@ class VariantListingPriceService
         foreach ($result->getProducts() as $product) {
             $number = $product->getNumber();
 
+            /* @var PriceRule $cheapestPriceRule */
             if (!array_key_exists($number, $cheapestPriceData)) {
-                continue;
+                $cheapestPriceRule = $product->getPriceRules()[0];
+                $displayFromPrice = $product->displayFromPrice();
+            } else {
+                $cheapestPriceRule = $cheapestPriceData[$number]['price'];
+                $displayFromPrice = $cheapestPriceData[$number]['different_price_count'] > 1;
             }
 
-            /** @var $cheapestPriceRule PriceRule */
-            $cheapestPriceRule = $cheapestPriceData[$number]['price'];
             if ($product->isPriceGroupActive()) {
                 $cheapestPriceRule = $this->calculatePriceGroupDiscounts($product, $cheapestPriceRule, $context);
             }
@@ -125,7 +139,7 @@ class VariantListingPriceService
                 $product->setListingPrice($product->getCheapestPrice());
             }
 
-            $product->setDisplayFromPrice($cheapestPriceData[$number]['different_price_count'] > 1);
+            $product->setDisplayFromPrice($displayFromPrice);
         }
     }
 
@@ -161,7 +175,7 @@ class VariantListingPriceService
      *
      * @param ListProduct $product
      * @param ShopContext $context
-     * @param $quantity
+     * @param int         $quantity
      *
      * @return null|PriceDiscount
      */
@@ -179,7 +193,7 @@ class VariantListingPriceService
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var $highest PriceDiscount */
+        /** @var PriceDiscount $highest */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

@@ -25,6 +25,7 @@
 namespace Shopware\Components\Emotion\Preset;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use Shopware\Components\Emotion\Preset\ComponentHandler\ComponentHandlerInterface;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Components\Model\ModelManager;
@@ -56,15 +57,17 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     /**
      * @param ModelManager                $modelManager
      * @param \Enlight_Event_EventManager $eventManager
-     * @param array                       $componentHandlers
+     * @param IteratorAggregate           $componentHandlers
+     * @param string                      $rootDir
      */
-    public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, array $componentHandlers, $rootDir)
+    public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, IteratorAggregate $componentHandlers, $rootDir)
     {
         $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
 
-        $this->componentHandlers = $componentHandlers;
-        $this->componentHandlers = $this->registerComponentHandlers();
+        $this->componentHandlers = $this->registerComponentHandlers(
+            iterator_to_array($componentHandlers, false)
+        );
         $this->rootDir = $rootDir;
     }
 
@@ -80,7 +83,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $presetData = json_decode($preset->getPresetData(), true);
 
         if (!$presetData || !is_array($presetData) || !array_key_exists('elements', $presetData)) {
-            throw new PresetAssetImportException('The preset data of the ' . $preset->getName() . ' preset seems to be invalid.');
+            throw new PresetAssetImportException(sprintf('The preset data of the %s preset seems to be invalid.', $preset->getName()));
         }
 
         // continue if no sync data present or we just have an assets key which is empty
@@ -193,9 +196,11 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
+     * @param array $defaultComponentHandlers
+     *
      * @return array
      */
-    private function registerComponentHandlers()
+    private function registerComponentHandlers(array $defaultComponentHandlers)
     {
         $componentHandlers = new ArrayCollection();
         $componentHandlers = $this->eventManager->collect(
@@ -203,7 +208,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
             $componentHandlers
         );
 
-        return array_merge($this->componentHandlers, $componentHandlers->toArray());
+        return array_merge($defaultComponentHandlers, $componentHandlers->toArray());
     }
 
     /**
@@ -238,7 +243,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $assets = $syncData->get('assets');
 
         foreach ($assets as $key => &$path) {
-            if (0 === strpos($path, '/custom/')) {
+            if (strpos($path, '/custom/') === 0) {
                 $path = 'file://' . $this->rootDir . $path;
             }
         }

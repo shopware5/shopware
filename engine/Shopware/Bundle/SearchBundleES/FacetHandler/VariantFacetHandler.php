@@ -38,8 +38,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway;
-use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorOptionsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -47,23 +46,25 @@ use Shopware\Components\QueryAliasMapper;
 class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
     /**
-     * @var ConfiguratorServiceInterface
+     * @var ConfiguratorOptionsGatewayInterface
      */
     private $gateway;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $fieldName;
 
     /**
      * VariantFacetHandler constructor.
      *
-     * @param ConfiguratorOptionsGateway $gateway
-     * @param QueryAliasMapper           $queryAliasMapper
+     * @param ConfiguratorOptionsGatewayInterface $gateway
+     * @param QueryAliasMapper                    $queryAliasMapper
      */
-    public function __construct(ConfiguratorOptionsGateway $gateway, QueryAliasMapper $queryAliasMapper)
-    {
+    public function __construct(
+        ConfiguratorOptionsGatewayInterface $gateway,
+        QueryAliasMapper $queryAliasMapper
+    ) {
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('variants')) {
             $this->fieldName = 'var';
         }

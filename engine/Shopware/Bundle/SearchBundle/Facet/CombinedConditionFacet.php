@@ -50,6 +50,7 @@ class CombinedConditionFacet implements FacetInterface
      * @param string|array $conditions
      * @param string       $label
      * @param string       $requestParameter
+     * @param null|array   $stream
      */
     public function __construct($conditions, $label, $requestParameter, $stream = null)
     {
@@ -122,11 +123,14 @@ class CombinedConditionFacet implements FacetInterface
         if (empty($serialized)) {
             return [];
         }
+        /** @var array<int, ConditionInterface> $sortings */
         $sortings = [];
         foreach ($serialized as $className => $arguments) {
             $className = explode('|', $className);
             $className = $className[0];
-            $sortings[] = $reflector->createInstanceFromNamedArguments($className, $arguments);
+            /** @var ConditionInterface $condition */
+            $condition = $reflector->createInstanceFromNamedArguments($className, $arguments);
+            $sortings[] = $condition;
         }
 
         return $sortings;

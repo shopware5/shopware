@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Media;
+namespace Shopware\Models\Media;
 
 use Shopware\Components\Model\ModelRepository;
 
@@ -36,10 +36,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to access a list of media
      *
-     * @param $filter
-     * @param $orderBy
-     * @param $offset
-     * @param $limit
+     * @param null|string $filter
+     * @param null|string $orderBy
+     * @param null|int    $offset
+     * @param null|int    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -58,8 +58,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getMediaListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
-     * @param $orderBy
+     * @param string $filter
+     * @param string $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -82,12 +82,12 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select the media of the passed album id.
      * Used for the backend media manager listing of the media.
      *
-     * @param      $albumId
-     * @param null $filter
-     * @param null $orderBy
-     * @param null $offset
-     * @param null $limit
-     * @param null $validTypes
+     * @param int      $albumId
+     * @param null     $filter
+     * @param null     $orderBy
+     * @param null|int $offset
+     * @param null|int $limit
+     * @param null     $validTypes
      *
      * @return \Doctrine\ORM\Query
      */

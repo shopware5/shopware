@@ -27,7 +27,7 @@ namespace Shopware\Components;
 use Doctrine\DBAL\Connection;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,7 +60,7 @@ class NumberRangeIncrementer implements NumberRangeIncrementerInterface
             }
 
             $this->connection->executeUpdate('UPDATE s_order_number SET number = number + 1 WHERE name = ?', [$name]);
-            $number += 1;
+            ++$number;
             $this->connection->commit();
         } catch (\Exception $e) {
             $this->connection->rollBack();

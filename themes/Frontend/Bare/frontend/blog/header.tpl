@@ -16,7 +16,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
         <meta property="og:title" content="{$sArticle.title|escapeHtml}" />
-        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtml}" />
+        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
         {if $sArticle.author}
         <meta property="article:author" content="{$sArticle.author.name|escapeHtml}" />
@@ -24,7 +24,7 @@
 
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="{$sArticle.title|escapeHtml}" />
-        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtml}" />
+        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
         {if $sArticle.media[0].source}
             <meta property="og:image" content="{$sArticle.media[0].source}" />

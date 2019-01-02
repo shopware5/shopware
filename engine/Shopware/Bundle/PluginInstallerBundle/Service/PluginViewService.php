@@ -125,10 +125,9 @@ class PluginViewService
                     $result[$name] = $localPlugin;
                     break;
 
-                case $storePlugin !== null: {
+                case $storePlugin !== null:
                     $result[$name] = $storePlugin;
                     break;
-                }
             }
         }
 

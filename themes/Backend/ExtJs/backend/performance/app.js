@@ -84,6 +84,7 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.fields.Categories',
         'tabs.settings.fields.Various',
         'tabs.settings.fields.Customers',
+        'tabs.settings.fields.Sitemap',
 
         'tabs.settings.elements.BaseGrid',
         'tabs.settings.elements.CacheTime',
@@ -113,7 +114,8 @@ Ext.define('Shopware.apps.Performance', {
         'Search',
         'Categories',
         'Various',
-        'Customer'
+        'Customer',
+        'Sitemap',
     ],
 
     bulkLoad: true,

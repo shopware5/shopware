@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateLicencesRequest;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
@@ -112,7 +111,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
             return null;
         }
 
-        /** @var $token AccessTokenStruct */
+        /** @var AccessTokenStruct $token */
         $token = $this->get('BackendSession')->offsetGet('store_token');
         $token = unserialize($token);
 

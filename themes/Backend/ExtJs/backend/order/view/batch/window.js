@@ -118,7 +118,8 @@ Ext.define('Shopware.apps.Order.view.batch.Window', {
         me.items = Ext.create('Shopware.apps.Order.view.batch.Form', {
             flex: 1,
             records: me.records,
-            orderStatusStore: me.orderStatusStore
+            orderStatusStore: me.orderStatusStore,
+            paymentStatusStore: me.paymentStatusStore
         });
 
         me.callParent(arguments);

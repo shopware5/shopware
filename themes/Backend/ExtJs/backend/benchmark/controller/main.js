@@ -9,25 +9,59 @@ Ext.define('Shopware.apps.Benchmark.controller.Main', {
 
     init: function () {
         var me = this,
-            windowName = 'overview.Window';
+            windowName = 'overview.Window',
+            params = {};
+
+        me.control({
+            'benchmark-overview-window': {
+                'beforeclose': me.onBeforeCloseOverviewWindow
+            }
+        });
+
+        if (me.subApplication.params) {
+            if (me.subApplication.params.isTeaser) {
+                params = {
+                    isTeaser: true,
+                    height: 700
+                };
+            }
+
+            if (me.subApplication.params.shopId) {
+                params = {
+                    shopId: me.subApplication.params.shopId
+                };
+            }
+        }
 
         if (this.subApplication.action === 'Settings') {
             windowName = 'settings.Window';
-
-            Ext.Ajax.request({
-                url: '{url controller=Benchmark action=loadSettings}',
-                success: function (response) {
-                    var settingsData = Ext.decode(response.responseText);
-
-                    me.getSettingsPanel().loadSettingsRecord(settingsData);
-                    me.getSettingsPanel().setLoading(false);
-                }
-            });
+            params = {};
         }
 
-        me.mainWindow = me.getView(windowName).create().show();
+        me.mainWindow = me.getView(windowName).create(params).show();
+
+        window.addEventListener('message', function (msg) {
+            if (msg.data === 'closeWindow') {
+                me.mainWindow.destroy();
+            }
+        }, false);
 
         me.callParent(arguments);
+    },
+
+    /**
+     * @param { Ext.window.Window } win
+     */
+    onBeforeCloseOverviewWindow: function (win) {
+        /*{if {acl_is_allowed privilege=manage}}*/
+        var el =  win.down('#disableBenchmarkTeaser');
+
+        if (el && el.getValue()) {
+            Ext.Ajax.request({
+                url: '{url controller=Benchmark action=disableBenchmarkTeaser}'
+            });
+        }
+        /*{/if}*/
     }
 });
 //{/block}

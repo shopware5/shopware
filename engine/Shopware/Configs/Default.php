@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Logger;
+
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
@@ -35,7 +37,29 @@ if (!is_array($customConfig)) {
 
 return array_replace_recursive([
     'custom' => [],
+
+    /*
+     * For more information on working with reverse proxies and trusted headers see
+     * https://symfony.com/doc/current/deployment/proxies.html
+     */
     'trustedproxies' => [],
+    'trustedheaderset' => -1,
+
+    'filesystem' => [
+        'private' => [
+            'type' => 'local',
+            'config' => [
+                'root' => realpath(__DIR__ . '/../../../files/'),
+            ],
+        ],
+        'public' => [
+            'type' => 'local',
+            'config' => [
+                'root' => realpath(__DIR__ . '/../../../web/'),
+                'url' => '',
+            ],
+        ],
+    ],
     'cdn' => [
         'backend' => 'local',
         'strategy' => 'md5',
@@ -54,7 +78,7 @@ return array_replace_recursive([
                         'private' => 0700 & ~umask(),
                     ],
                 ],
-                'path' => realpath(__DIR__ . '/../../../'),
+                'root' => realpath(__DIR__ . '/../../../'),
             ],
             'ftp' => [
                 'type' => 'ftp',
@@ -68,6 +92,27 @@ return array_replace_recursive([
                 'passive' => true,
                 'ssl' => false,
                 'timeout' => 30,
+            ],
+            's3' => [
+                'type' => 's3',
+                'mediaUrl' => '',
+
+                'bucket' => '',
+                'region' => '',
+                'endpoint' => null,
+                'credentials' => [
+                    'key' => '',
+                    'secret' => '',
+                ],
+            ],
+            'gcp' => [
+                'type' => 'gcp',
+                'mediaUrl' => '',
+
+                'projectId' => '',
+                'keyFilePath' => '',
+                'bucket' => '',
+                'root' => '',
             ],
         ],
     ],
@@ -99,11 +144,21 @@ return array_replace_recursive([
         'write_backlog' => true,
         'number_of_replicas' => null,
         'number_of_shards' => null,
+        'total_fields_limit' => null,
+        'max_result_window' => 10000,
         'wait_for_status' => 'green',
+        'batchsize' => 500,
+        'backend' => [
+            'write_backlog' => false,
+            'enabled' => false,
+        ],
         'client' => [
             'hosts' => [
                 'localhost:9200',
             ],
+        ],
+        'logger' => [
+            'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
         ],
     ],
     'front' => [
@@ -116,6 +171,8 @@ return array_replace_recursive([
     'config' => [],
     'store' => [
         'apiEndpoint' => 'https://api.shopware.com',
+        'timeout' => 7,
+        'connect_timeout' => 5,
     ],
     'plugin_directories' => [
         'Default' => $this->AppPath('Plugins_Default'),
@@ -182,6 +239,13 @@ return array_replace_recursive([
            'cof',
            'siteurl',
            '_ga',
+           'fbclid',         // Facebook
+        ],
+    ],
+    'bi' => [
+        'endpoint' => [
+            'benchmark' => 'https://bi.shopware.com/benchmark',
+            'statistics' => 'https://bi.shopware.com/statistics',
         ],
     ],
     'session' => [
@@ -192,6 +256,9 @@ return array_replace_recursive([
         'save_handler' => 'db',
         'use_trans_sid' => 0,
         'locking' => true,
+    ],
+    'sitemap' => [
+        'batchsize' => 10000,
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
@@ -236,6 +303,11 @@ return array_replace_recursive([
     'template_security' => [
         'php_modifiers' => include __DIR__ . '/smarty_functions.php',
         'php_functions' => include __DIR__ . '/smarty_functions.php',
+    ],
+    'search' => [
+        'indexer' => [
+            'batchsize' => 4000,
+        ],
     ],
     'app' => [
         'rootDir' => $this->DocPath(),
@@ -298,6 +370,16 @@ return array_replace_recursive([
                     'BI' => 'verdanaz.ttf',
                 ],
             ],
+            'format' => 'A4',
         ],
+    ],
+    'backward_compatibility' => [
+        /*
+         * @deprecated since 5.5, sorting will be default and this parameter will be removed with Shopware 5.6
+         */
+        'predictable_plugin_order' => false,
+    ],
+    'logger' => [
+        'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
     ],
 ], $customConfig);

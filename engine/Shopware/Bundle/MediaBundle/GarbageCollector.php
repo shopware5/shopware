@@ -110,7 +110,7 @@ class GarbageCollector
      */
     private function createTempTable()
     {
-        $this->connection->exec('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id))');
+        $this->connection->exec('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id), INDEX media (mediaId))');
     }
 
     /**
@@ -283,7 +283,7 @@ class GarbageCollector
     /**
      * Adds a media by path to used table
      *
-     * @param $path
+     * @param string $path
      */
     private function addMediaByPath($path)
     {
@@ -294,7 +294,7 @@ class GarbageCollector
     /**
      * Adds a media by id to used table
      *
-     * @param $mediaId
+     * @param int $mediaId
      */
     private function addMediaById($mediaId)
     {
@@ -313,7 +313,7 @@ class GarbageCollector
             $this->connection->executeQuery(
                 $sql,
                 [':mediaPaths' => $paths],
-                [':mediaPaths' => Connection::PARAM_INT_ARRAY]
+                [':mediaPaths' => Connection::PARAM_STR_ARRAY]
             );
         }
 

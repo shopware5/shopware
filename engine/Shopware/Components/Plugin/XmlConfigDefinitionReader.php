@@ -29,9 +29,9 @@ use Symfony\Component\Config\Util\XmlUtils;
 class XmlConfigDefinitionReader
 {
     /**
-     * @param $file string
+     * @param string $file
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      *
      * @return array
      */
@@ -49,7 +49,7 @@ class XmlConfigDefinitionReader
     /**
      * @param \DOMDocument $xml
      *
-     * @return array
+     * @return array|void
      */
     private function parseForm(\DOMDocument $xml)
     {
@@ -184,6 +184,9 @@ class XmlConfigDefinitionReader
             $labels = [];
             foreach ($this->getChildren($item, 'label') as $label) {
                 $lang = $label->getAttribute('lang') ?: 'en_GB';
+
+                // XSD Requires en-GB, Zend uses en_GB
+                $lang = str_replace('-', '_', $lang);
 
                 $mapping = ['de' => 'de_DE', 'en' => 'en_GB'];
                 if (array_key_exists($lang, $mapping)) {

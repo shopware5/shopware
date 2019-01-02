@@ -35,11 +35,12 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Table(name="s_export")
  * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductFeed extends ModelEntity
 {
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="dirty", type="boolean")
      */
@@ -48,11 +49,12 @@ class ProductFeed extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\ProductFeed
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -70,7 +72,7 @@ class ProductFeed extends ModelEntity
     private $name;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="last_export", type="datetime", nullable=false)
      */
@@ -105,7 +107,7 @@ class ProductFeed extends ModelEntity
     private $countArticles;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="expiry", type="datetime", nullable=false)
      */
@@ -126,7 +128,7 @@ class ProductFeed extends ModelEntity
     private $formatId = 1;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="last_change", type="datetime", nullable=false)
      */
@@ -259,7 +261,7 @@ class ProductFeed extends ModelEntity
     private $shopId;
 
     /**
-     * @var string
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="cache_refreshed", type="datetime", nullable=true)
      */
@@ -273,7 +275,7 @@ class ProductFeed extends ModelEntity
     private $variantExport = 1;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Supplier>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Supplier")
      * @ORM\JoinTable(name="s_export_suppliers",
@@ -284,7 +286,7 @@ class ProductFeed extends ModelEntity
     private $suppliers;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="\Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_export_articles",
@@ -295,7 +297,8 @@ class ProductFeed extends ModelEntity
     private $articles;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_export_categories",
      *      joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
@@ -341,13 +344,13 @@ class ProductFeed extends ModelEntity
     /**
      * Set lastExport
      *
-     * @param \DateTime|string $lastExport
+     * @param \DateTimeInterface|string $lastExport
      *
      * @return ProductFeed
      */
     public function setLastExport($lastExport)
     {
-        if (!$lastExport instanceof \DateTime) {
+        if (!$lastExport instanceof \DateTimeInterface) {
             $lastExport = new \DateTime($lastExport);
         }
         $this->lastExport = $lastExport;
@@ -358,7 +361,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get lastExport
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastExport()
     {
@@ -464,13 +467,13 @@ class ProductFeed extends ModelEntity
     /**
      * Set expiry
      *
-     * @param \DateTime|string $expiry
+     * @param \DateTimeInterface|string $expiry
      *
      * @return ProductFeed
      */
     public function setExpiry($expiry)
     {
-        if (!$expiry instanceof \DateTime) {
+        if (!$expiry instanceof \DateTimeInterface) {
             $expiry = new \DateTime($expiry);
         }
         $this->expiry = $expiry;
@@ -481,7 +484,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get expiry
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getExpiry()
     {
@@ -539,13 +542,13 @@ class ProductFeed extends ModelEntity
     /**
      * Set lastChange
      *
-     * @param \DateTime|string $lastChange
+     * @param \DateTimeInterface|string $lastChange
      *
      * @return ProductFeed
      */
     public function setLastChange($lastChange)
     {
-        if (!$lastChange instanceof \DateTime) {
+        if (!$lastChange instanceof \DateTimeInterface) {
             $lastChange = new \DateTime($lastChange);
         }
         $this->lastChange = $lastChange;
@@ -556,7 +559,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get lastChange
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastChange()
     {
@@ -1092,13 +1095,13 @@ class ProductFeed extends ModelEntity
     /**
      * Set cache refreshed datetime
      *
-     * @param \DateTime|string $cacheRefreshed
+     * @param \DateTimeInterface|string $cacheRefreshed
      *
      * @return ProductFeed
      */
     public function setCacheRefreshed($cacheRefreshed)
     {
-        if (!$cacheRefreshed instanceof \DateTime) {
+        if (!$cacheRefreshed instanceof \DateTimeInterface) {
             $cacheRefreshed = new \DateTime($cacheRefreshed);
         }
         $this->cacheRefreshed = $cacheRefreshed;
@@ -1109,7 +1112,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get cache refreshed datetime
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCacheRefreshed()
     {
@@ -1130,5 +1133,25 @@ class ProductFeed extends ModelEntity
     public function isDirty()
     {
         return $this->dirty;
+    }
+
+    /**
+     * @ORM\PostLoad()
+     * @ORM\PreUpdate()
+     * @ORM\PrePersist()
+     */
+    public function sanitizeFilename()
+    {
+        $this->fileName = basename($this->fileName);
+        $extension = strtolower(pathinfo($this->fileName, PATHINFO_EXTENSION));
+
+        if (!empty($extension) && in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
+            $this->fileName = str_replace('.' . $extension, '.invalid', strtolower($this->fileName));
+
+            // To prevent PrePersist event
+            if ($this->id) {
+                Shopware()->Models()->flush($this);
+            }
+        }
     }
 }

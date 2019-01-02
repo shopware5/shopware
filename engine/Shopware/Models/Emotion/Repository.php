@@ -27,9 +27,10 @@ namespace   Shopware\Models\Emotion;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,8 +40,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filter
-     * @param array $orderBy
+     * @param string $filter
+     * @param array  $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -51,7 +52,7 @@ class Repository extends ModelRepository
             ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions')
             ->leftJoin('emotions.categories', 'categories');
 
-        //filter the displayed columns with the passed filter string
+        // Filter the displayed columns with the passed filter string
         if (!empty($filter)) {
             $builder->where('categories.name LIKE ?2')
                 ->orWhere('emotions.name LIKE ?2')
@@ -308,7 +309,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['data.id', 'data.value', 'field.id as fieldId', 'field.name', 'field.valueType'])
-            ->from('Shopware\Models\Emotion\Data', 'data')
+            ->from(Data::class, 'data')
             ->join('data.field', 'field')
             ->leftJoin('field.component', 'component')
             ->where('component.id = ?1')
@@ -365,7 +366,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-            ->from('Shopware\Models\Attribute\Emotion', 'attribute')
+            ->from(EmotionAttribute::class, 'attribute')
             ->where('attribute.emotionId = ?1')
             ->setParameter(1, $emotionId);
 
@@ -408,7 +409,7 @@ class Repository extends ModelRepository
     /**
      * This function selects all elements and components of the passed emotion id.
      *
-     * @param $emotionId
+     * @param int $emotionId
      *
      * @return QueryBuilder
      */
@@ -416,7 +417,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['elements', 'component']);
-        $builder->from('Shopware\Models\Emotion\Element', 'elements');
+        $builder->from(Element::class, 'elements');
         $builder->leftJoin('elements.component', 'component');
         $builder->where('elements.emotionId = :emotionId');
         $builder->addOrderBy([['property' => 'elements.startRow', 'direction' => 'ASC']]);
@@ -427,8 +428,8 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -448,7 +449,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $shopId
+     * @param int $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -465,7 +466,7 @@ class Repository extends ModelRepository
     /**
      * @param int $id
      *
-     * @return \Doctrine\ORM\Query
+     * @return QueryBuilder
      */
     public function getEmotionById($id)
     {
@@ -493,7 +494,7 @@ class Repository extends ModelRepository
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['viewports'])
-            ->from('Shopware\Models\Emotion\ElementViewport', 'viewports')
+            ->from(ElementViewport::class, 'viewports')
             ->where('viewports.elementId IN (?1)')
             ->setParameter(1, $elementIds, Connection::PARAM_INT_ARRAY);
 

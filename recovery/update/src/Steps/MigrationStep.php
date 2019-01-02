@@ -62,7 +62,7 @@ class MigrationStep
 
         $migration = $this->migrationManager->getNextMigrationForVersion($currentVersion);
 
-        if (null === $migration) {
+        if ($migration === null) {
             return new FinishResult($offset, $totalCount);
         }
 

@@ -6,17 +6,22 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
 
     refs: [
         { ref: 'settingsPanel', selector: 'form[name=benchmark-settings-panel]' },
-        { ref: 'activationFieldSet', selector: 'fieldset[name=activationFieldSet]' },
-        { ref: 'deactivationFieldSet', selector: 'fieldset[name=deactivationFieldSet]' },
-        { ref: 'industryField', selector: 'industryfield[name=industry]' }
+        { ref: 'activationContainer', selector: 'container[name=activationContainer]' },
+        { ref: 'deActivationContainer', selector: 'container[name=deActivationContainer]' },
+        { ref: 'industryField', selector: 'industryfield[name=industry]' },
+        { ref: 'shopSelection', selector: 'combo[name=shopSelection]' },
+        { ref: 'typeRadios', selector: 'radiogroup[name=typeRadios]' },
+        { ref: 'typeFieldSet', selector: 'fieldset[name=typeFieldSet]' },
     ],
 
     init: function () {
         this.control({
             'benchmark-settings-window': {
-                saveSettings: this.onSaveSettings,
+                shopConfigLoaded: this.onShopConfigsLoaded,
+                configSelected: this.onConfigSelect,
                 activateBenchmark: this.activateBenchmark,
-                deactivateBenchmark: this.deactivateBenchmark
+                deactivateBenchmark: this.deactivateBenchmark,
+                saveType: this.onSaveType
             },
             'industryfield': {
                 changeIndustry: this.onChangeIndustry
@@ -29,38 +34,24 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
         this.callParent(arguments);
     },
 
-    onSaveSettings: function () {
-        var settingsPanel = this.getSettingsPanel(),
-            values = settingsPanel.getValues();
+    /**
+     * @param { Shopware.apps.Benchmark.store.ShopConfigs } store
+     * @param { Ext.form.field.ComboBox } comboBox
+     */
+    onShopConfigsLoaded: function (store, comboBox) {
+        var firstRecord = store.first();
 
-        settingsPanel.setLoading(true);
-        Ext.Ajax.request({
-            url: '{url controller=Benchmark action=saveSettings}',
-            params: {
-                ordersBatchSize: values.ordersBatchSize
-            },
-            success: function (response) {
-                var responseData = Ext.decode(response.responseText);
+        comboBox.select(firstRecord);
+        comboBox.fireEvent('select', comboBox, [firstRecord]);
+    },
 
-                settingsPanel.setLoading(false);
-
-                if (responseData.success) {
-                    Shopware.Notification.createGrowlMessage(
-                        '{s name="growlMessage/settings/success/title"}Save successful{/s}',
-                        '{s name="growlMessage/settings/success/message"}The benchmark settings were successfully saved{/s}',
-                        'BenchmarkIndustryWindow'
-                    );
-
-                    return;
-                }
-
-                Shopware.Notification.createGrowlMessage(
-                    '{s name="growlMessage/settings/error/title"}Error saving the settings{/s}',
-                    responseData.message ,
-                    'BenchmarkIndustryWindow'
-                );
-            }
-        });
+    /**
+     * @param { Shopware.apps.Benchmark.view.settings.Window } settingsWin
+     * @param { Ext.form.field.ComboBox } combo
+     * @param { Shopware.apps.Benchmark.model.ShopConfig } record
+     */
+    onConfigSelect: function (settingsWin, combo, record) {
+        this.getSettingsPanel().loadSettingsRecord(record);
     },
 
     onChangeIndustry: function () {
@@ -70,20 +61,23 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
     /**
      * @param { Shopware.apps.Benchmark.view.settings.IndustryWindow } win
      * @param { integer } val
+     * @param { Function } callback
      */
-    onSaveIndustry: function (win, val) {
+    onSaveIndustry: function (win, val, callback) {
         var me = this;
 
         Ext.Ajax.request({
             url: '{url controller=Benchmark action=saveIndustry}',
             params: {
-                industry: val
+                industry: val,
+                shopId: me.getShopSelection().getValue()
             },
             success: function (response) {
                 var responseData = Ext.decode(response.responseText);
 
                 win.destroy();
                 me.getIndustryField().setValue(val);
+                me.getSettingsPanel().getRecord().set('industry', val);
 
                 if (responseData.success) {
                     Shopware.Notification.createGrowlMessage(
@@ -91,6 +85,8 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
                         '{s name="growlMessage/industry_window/success/message"}The chosen industry was saved successfully{/s}',
                         'BenchmarkIndustryWindow'
                     );
+
+                    callback();
 
                     return;
                 }
@@ -105,6 +101,26 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
     },
 
     activateBenchmark: function () {
+        var me = this,
+            record = this.getSettingsPanel().getRecord();
+
+        if (record.get('industry') === 0) {
+            this.getView('settings.IndustryWindow').create({
+                additionalText: '{s name="settings/industry_window/choose_industry"}Please choose an industry first:{/s}',
+                customCallback: function () {
+                    me.sendBenchmarkActiveStatus(1, {
+                        successTitle: '{s name="growlMessage/activation/success/title"}Success{/s}',
+                        successMessage: '{s name="growlMessage/activation/success/message"}You\'re now participating{/s}',
+                        errorTitle: '{s name="growlMessage/activation/error/title"}Error{/s}',
+                        confirmationTitle: '{s name="growlMessage/activation/confirmation/title"}Participate{/s}',
+                        confirmationMessage: '{s name="growlMessage/activation/confirmation/message"}Do you really wish to participate?{/s}'
+                    })
+                }
+            }).show();
+
+            return;
+        }
+
         this.sendBenchmarkActiveStatus(1, {
             successTitle: '{s name="growlMessage/activation/success/title"}Success{/s}',
             successMessage: '{s name="growlMessage/activation/success/message"}You\'re now participating{/s}',
@@ -139,7 +155,8 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
             Ext.Ajax.request({
                 url: '{url controller=Benchmark action=setActive}',
                 params: {
-                    active: active
+                    active: active,
+                    shopId: me.getShopSelection().getValue()
                 },
                 success: function (response) {
                     var responseData = Ext.decode(response.responseText);
@@ -151,19 +168,61 @@ Ext.define('Shopware.apps.Benchmark.controller.Settings', {
                             'BenchmarkSettings'
                         );
 
-                        me.getActivationFieldSet()[active ? 'hide' : 'show']();
-                        me.getDeactivationFieldSet()[active ? 'show' : 'hide']();
+                        me.getActivationContainer()[active ? 'hide' : 'show']();
+                        me.getDeActivationContainer()[active ? 'show' : 'hide']();
+                        me.getShopSelection().getStore().load();
 
                         return;
                     }
 
                     Shopware.Notification.createGrowlMessage(
                         snippets.errorTitle,
-                        responseData.message ,
+                        responseData.message,
                         'BenchmarkSettings'
                     );
                 }
             });
+        });
+    },
+
+    onSaveType: function () {
+        var me = this,
+            radios = this.getTypeRadios(),
+            values = radios.getValue(),
+            selectedValue = values.type,
+            typeFieldSet = me.getTypeFieldSet();
+
+        typeFieldSet.setLoading(true);
+
+        Ext.Ajax.request({
+            url: '{url controller=Benchmark action=saveType}',
+            params: {
+                type: selectedValue,
+                shopId: me.getShopSelection().getValue()
+            },
+            success: function (response) {
+                var responseData = Ext.decode(response.responseText);
+
+                typeFieldSet.setLoading(false);
+
+                if (responseData.success) {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name="growlMessage/type/success/title"}Save successful{/s}',
+                        '{s name="growlMessage/type/success/message"}The business plan was successfully saved{/s}',
+                        'BenchmarkSettings'
+                    );
+
+                    me.getShopSelection().getStore().load();
+
+                    return;
+                }
+
+                Shopware.Notification.createGrowlMessage(
+                    '{s name="growlMessage/type/error/title"}Error{/s}',
+                    responseData.message,
+                    'BenchmarkSettings'
+                );
+            }
         });
     }
 });

@@ -55,33 +55,34 @@ class Mail extends ModelEntity
     const MAILTYPE_USER = 1;
     const MAILTYPE_SYSTEM = 2;
     const MAILTYPE_STATE = 3;
+    const MAILTYPE_DOCUMENT = 4;
 
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Order\Status
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Status", inversedBy="mail")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
      * @ORM\OrderBy({"position" = "ASC"})
-     *
-     * @var \Shopware\Models\Order\Status
      */
     protected $status;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Attachment", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Mail\Attachment>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Attachment", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
      */
     protected $attachments;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Mail", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Mail
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Mail", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -176,9 +177,6 @@ class Mail extends ModelEntity
      */
     private $translation = [];
 
-    /**
-     * Constructor of Mail
-     */
     public function __construct()
     {
         $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
@@ -356,7 +354,7 @@ class Mail extends ModelEntity
     /**
      * isHtml-Mail
      *
-     * @return int
+     * @return bool
      */
     public function isHtml()
     {
@@ -376,11 +374,11 @@ class Mail extends ModelEntity
             return false;
         }
 
-        if (null === $this->getStatus()) {
+        if ($this->getStatus() === null) {
             return false;
         }
 
-        return $this->getStatus()->getGroup() == 'state';
+        return $this->getStatus()->getGroup() === 'state';
     }
 
     /**
@@ -394,11 +392,11 @@ class Mail extends ModelEntity
             return false;
         }
 
-        if (null === $this->getStatus()) {
+        if ($this->getStatus() === null) {
             return false;
         }
 
-        return $this->getStatus()->getGroup() == 'payment';
+        return $this->getStatus()->getGroup() === 'payment';
     }
 
     /**
@@ -419,6 +417,16 @@ class Mail extends ModelEntity
     public function isUserMail()
     {
         return $this->getMailtype() == self::MAILTYPE_USER;
+    }
+
+    /**
+     * Returns whether or not this is a mail for sending documents.
+     *
+     * @return bool
+     */
+    public function isDocumentMail()
+    {
+        return $this->getMailtype() == self::MAILTYPE_DOCUMENT;
     }
 
     /**
@@ -488,7 +496,7 @@ class Mail extends ModelEntity
      */
     public function getContext()
     {
-        if (null === $this->context) {
+        if ($this->context === null) {
             return [];
         }
 
@@ -514,7 +522,7 @@ class Mail extends ModelEntity
      *   );
      * </code>
      *
-     * @param $array
+     * @param array  $array
      * @param string $glue
      *
      * @return array
@@ -546,19 +554,19 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Status|array|null $status
+     * @param \Shopware\Models\Order\Status[]|null $status
      *
-     * @return \Shopware\Models\Order\Status
+     * @return Mail
      */
     public function setStatus($status)
     {
         $this->mailtype = self::MAILTYPE_STATE;
 
-        return $this->setOneToOne($status, '\Shopware\Models\Order\Status', 'status', 'mail');
+        return $this->setOneToOne($status, \Shopware\Models\Order\Status::class, 'status', 'mail');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Shopware\Models\Mail\Attachment[]
      */
     public function getAttachments()
     {
@@ -566,13 +574,13 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $attachments
+     * @param \Shopware\Models\Mail\Attachment[]|null $attachments
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Mail
      */
     public function setAttachments($attachments)
     {
-        return $this->setOneToMany($attachments, '\Shopware\Models\Mail\Attachment', 'attachments', 'mail');
+        return $this->setOneToMany($attachments, \Shopware\Models\Mail\Attachment::class, 'attachments', 'mail');
     }
 
     /**
@@ -586,11 +594,11 @@ class Mail extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Mail|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Mail
+     * @return Mail
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Mail', 'attribute', 'mail');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Mail::class, 'attribute', 'mail');
     }
 
     /**

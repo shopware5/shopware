@@ -113,7 +113,7 @@ class EmotionExporter implements EmotionExporterInterface
         $filename = $this->rootDirectory . '/files/downloads/' . $name . time() . '.zip';
 
         if ($zip->open($filename, \ZipArchive::CREATE) !== true) {
-            throw new \Exception('Could not create zip file!');
+            throw new \Exception(sprintf('Could not create zip file "%s"!', $filename));
         }
 
         $emotionData = $this->transformer->transform($emotionId, true);
@@ -148,7 +148,7 @@ class EmotionExporter implements EmotionExporterInterface
         $zip->addFromString('emotion.json', json_encode($exportData));
 
         if (!$zip->close()) {
-            throw new \Exception('Could not close zip file!');
+            throw new \Exception(sprintf('Could not close zip file "%s"!', $filename));
         }
 
         $this->presetResource->delete($preset->getId());

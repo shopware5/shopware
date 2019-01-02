@@ -91,8 +91,15 @@ class ProductIndexer implements DataIndexerInterface
             $this->indexProducts($index, $numbers);
             $progress->advance(count(array_unique($ids)));
         }
-
         $progress->finish();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports()
+    {
+        return ProductMapping::TYPE;
     }
 
     /**

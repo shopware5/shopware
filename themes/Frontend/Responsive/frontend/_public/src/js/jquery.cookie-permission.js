@@ -32,6 +32,22 @@
             acceptButtonSelector: '.cookie-permission--accept-button',
 
             /**
+             * Selector of the decline button to select the button and register events on it.
+             *
+             * @property declineButtonSelector
+             * @type {string}
+             */
+            declineButtonSelector: '.cookie-permission--decline-button',
+
+            /**
+             * Selector of the close button to select the button and register events on it.
+             *
+             * @property declineButtonSelector
+             * @type {string}
+             */
+            closeButtonSelector: '.cookie-permission--close-button',
+
+            /**
              * Selector of the privacy statement link "More information" to select and prepare the href property.
              *
              * @property privacyLinkSelector
@@ -53,7 +69,12 @@
              * @property host
              * @type {string}
              */
-            urlPrefix: ''
+            urlPrefix: '',
+
+            /**
+             * Modal title
+             */
+            title: ''
         },
 
         /**
@@ -125,6 +146,7 @@
         createProperties: function() {
             this.$privacyLink = this.$el.find(this.opts.privacyLinkSelector);
             this.$acceptButton = this.$el.find(this.opts.acceptButtonSelector);
+            this.$declineButton = this.$el.find(this.opts.declineButtonSelector);
             this.storageKey = this.createStorageKey();
             this.storage = window.StorageManager.getLocalStorage();
         },
@@ -167,6 +189,7 @@
          */
         registerEvents: function() {
             this._on(this.$acceptButton, 'click', $.proxy(this.onAcceptButtonClick, this));
+            this._on(this.$declineButton, 'click', $.proxy(this.onDeclineButtonClick, this));
         },
 
         /**
@@ -175,6 +198,11 @@
          * @param {function} callback
          */
         displayCookiePermission: function(callback) {
+            if ((window.cookieRemoval === 2 && document.cookie.indexOf('allowCookie') !== -1) || (window.cookieRemoval === 1 && document.cookie.indexOf('cookieDeclined') !== -1)) {
+                callback(false);
+                return;
+            }
+
             callback(!this.storage.getItem(this.storageKey));
         },
 
@@ -206,7 +234,41 @@
         onAcceptButtonClick: function(event) {
             event.preventDefault();
 
-            this.storage.setItem(this.storageKey, 'true');
+            try {
+                window.localStorage.setItem(this.storageKey, 'true');
+            } catch (err) {}
+
+            var d = new Date();
+            d.setTime(d.getTime() + (180 * 24 * 60 * 60 * 1000));
+
+            document.cookie = 'allowCookie=1; path=/;expires=' + d.toGMTString() + ';';
+
+            this.hideElement();
+        },
+
+        /**
+         * Event handler for the declineButton click.
+         *
+         * @public
+         * @method onDeclineButtonClick
+         */
+        onDeclineButtonClick: function(event) {
+            event.preventDefault();
+
+            document.cookie = 'cookieDeclined=1; path=/;';
+
+            this.hideElement();
+        },
+
+        /**
+         * Event handler for the closeButton click.
+         *
+         * @public
+         * @method onCloseButtonClick
+         */
+        onCloseButtonClick: function(event) {
+            event.preventDefault();
+
             this.hideElement();
         },
 
@@ -217,8 +279,21 @@
          * @method showElement
          */
         showElement: function() {
-            this.$el.removeClass(this.opts.isHiddenClass);
-            this.setPermissionHeight();
+            if (window.cookieRemoval === 2) {
+                $.modal.open(this.$el.html(), {
+                    title: this.opts.title,
+                    sizing: 'content',
+                    width: 500
+                });
+
+                this.$acceptButton = $(this.opts.acceptButtonSelector);
+                this.$closeButton = $(this.opts.closeButtonSelector);
+                this._on(this.$acceptButton, 'click', $.proxy(this.onAcceptButtonClick, this));
+                this._on(this.$closeButton, 'click', $.proxy(this.onCloseButtonClick, this));
+            } else {
+                this.$el.removeClass(this.opts.isHiddenClass);
+                this.setPermissionHeight();
+            }
         },
 
         /**
@@ -230,6 +305,7 @@
         hideElement: function() {
             this.$el.addClass(this.opts.isHiddenClass);
             $body.css('padding-bottom', 0);
+            $.modal.close();
         }
     });
 }(jQuery, window));

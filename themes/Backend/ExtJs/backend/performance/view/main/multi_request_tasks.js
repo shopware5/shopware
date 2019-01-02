@@ -45,12 +45,6 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     modal: true,
 
     /**
-     * Disable the close icon in the window header
-     * @boolean
-     */
-    closable: false,
-
-    /**
      * Disable window resize
      * @boolean
      */
@@ -82,8 +76,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
 
     seo: {
         article: {
-            initialText: '{s name=listing/articles}Article URLs{/s}',
-            progressText: '{s name=progress/articles}[0] of [1] article urls{/s}',
+            initialText: '{s name=listing/articles}Product URLs{/s}',
+            progressText: '{s name=progress/articles}[0] of [1] product urls{/s}',
             requestUrl: '{url controller="Seo" action="seoArticle"}'
         },
         category: {
@@ -119,30 +113,41 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
     },
 
     httpCache: {
-        article: {
-            initialText: '{s name=progress/initialArticles}Article URLs...{/s}',
-            progressText: '{s name=progress/articles}[0] of [1] article URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=article}'
-        },
         category: {
-            initialText: '{s name=progress/initialCategory}Category URLs...{/s}',
-            progressText: '{s name=progress/category}[0] of [1] category URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=category}'
+            providerLabel: '{s name=progress/categoryLabel}Categories{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=category}',
+        },
+        emotion: {
+            providerLabel: '{s name=progress/emotionLabel}Shopping Worlds{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=emotion}',
         },
         blog: {
-            initialText: '{s name=progress/initialBlog}Blog URLs...{/s}',
-            progressText: '{s name=progress/blog}[0] of [1] blog URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}'
+            providerLabel: '{s name=progress/blogLabel}Blogs{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=blog}',
+        },
+        manufacturer: {
+            providerLabel: '{s name=progress/manufacturerLabel}Suppliers{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=manufacturer}',
         },
         static: {
-            initialText: '{s name=progress/initialStatic}Static URLs...{/s}',
-            progressText: '{s name=progress/httpCacheWarmer/static}[0] of [1] static URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=static}'
+            providerLabel: '{s name=progress/staticLabel}Static Pages{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=static}',
         },
-        supplier: {
-            initialText: '{s name=progress/initialSupplier}Supplier URLs...{/s}',
-            progressText: '{s name=progress/supplier}[0] of [1] supplier URLs{/s}',
-            requestUrl: '{url controller="Performance" action="warmUpCache" resource=supplier}'
+        product: {
+            providerLabel: '{s name=progress/productLabel}Products{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=product}',
+        },
+        variantswitch: {
+            providerLabel: '{s name=progress/variantSwitchLabel}Variant switch{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=variantswitch}',
+        },
+        productwithnumber: {
+            providerLabel: '{s name=progress/productWithNumberLabel}Products with product number{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=productwithnumber}',
+        },
+        productwithcategory: {
+            providerLabel: '{s name=progress/productWithCategoryLabel}Products with category parameter{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=productwithcategory}',
         }
     },
 
@@ -156,9 +161,30 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         close: '{s name=progress/close}Close window{/s}'
     },
 
+    /**
+     * How many items should be worked in batch in one AJAX-request to the server
+     */
     batchSize: 50,
 
+    /**
+     * For HTTPCache, how many URLs should be called concurrently?
+     */
+    concurrencySize: 2,
+
+    /**
+     * Type of generation
+     */
     currentType: 'seo',
+
+    /**
+     * Current step of the single progressbar
+     */
+    current: {},
+
+    /**
+     * Disable border of the window
+     */
+    border:false,
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -179,6 +205,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             unstyled: true,
             bodyPadding: 10,
             layout: 'anchor',
+            style: 'background-color: #ebedef',
             defaults: {
                 anchor: '100%'
             },
@@ -192,6 +219,10 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             dock: 'bottom'
         }];
 
+        Object.keys(me.httpCache).forEach(function (key) {
+            me.current[key] = 0;
+        });
+
         me.callParent(arguments);
     },
 
@@ -204,6 +235,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         if (me.currentType === 'seo') {
             return me.createSeoItems();
         } else if (me.currentType === 'httpCacheWarmer') {
+            this.width = 480;
             return me.createHttpCacheWarmerItems();
         } else {
             return me.createSearchIndexItems();
@@ -243,27 +275,159 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
      * @returns Array
      */
     createHttpCacheWarmerItems: function() {
-        var me = this,
-            items = [];
+        var me = this;
 
-        me.iterateConfig('httpCache', function(err, config, configName) {
-            if (err) {
-                throw err;
-            }
-
-            me[configName + 'Bar'] = me.createProgressBar(configName, config.initialText);
-            items.push(me[configName + 'Bar']);
-        });
+        me.progressBar = me.createProgressBar('httpCache', '{s name=progress/initialProgressbar}{/s}');
 
         return [
-            me.createShopCombo('httpCache'),
             {
-                xtype: 'container',
-                padding: '20 0',
-                items: items
+                title: '{s name="fieldset/cache/settings"}{/s}',
+                xtype: 'fieldset',
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%'
+                },
+                items: [
+                    me.createShopCombo('httpCache'),
+                    {
+                        xtype: 'container',
+                        padding: '20 0',
+                        margin: '0 5 0 105',
+                        items: me.progressBar,
+                    },
+                    me.createBatchSizeCombo(),
+                    me.createConcurrencySizeCombo()
+                ]
             },
-            me.createBatchSizeCombo()
-        ];
+            {
+                title: '{s name="fieldset/cache/settingsAdvanced"}{/s}',
+                xtype: 'fieldset',
+                collapsible: true,
+                collapsed: true,
+                items: me.createSettingsItems()
+            }];
+    },
+
+    createSettingsItems: function() {
+        var items = {
+                0: [],
+                1: [],
+            },
+            me = this;
+
+        var i = 1;
+        Object.keys(this.httpCache).forEach(function (name) {
+            var index = (i % 2 === 0) ? 1 : 0;
+            items[index].push({
+                name: name,
+                xtype: 'checkbox',
+                fieldLabel: me.httpCache[name].providerLabel,
+                inputValue: true,
+                uncheckedValue: false,
+                labelWidth: 155,
+                listeners: {
+                    change: function () {
+                        if (me.shopCombo.getValue()) {
+                            me.fireEvent('onShopSelected', me, me.shopCombo.getValue(), 'httpCache');
+                        }
+                    }
+                }
+            });
+            i++;
+        });
+
+        me.settingsForm = Ext.create('Ext.form.Panel', {
+            layout: {
+                type: 'vbox',
+                align : 'stretch',
+                pack  : 'start',
+            },
+            padding: 10,
+            bodyStyle : 'background:none',
+            border: 0,
+            items: [
+                me.createSettingsInfoText(),
+                {
+                    flex: 2,
+                    xtype: 'container',
+                    layout: {
+                        type: 'hbox',
+                        pack: 'start',
+                        align: 'stretch'
+                    },
+                    items: [
+                        me.createSettingsLeftItems(items[0]),
+                        me.createSettingsRightItems(items[1])
+                    ]
+                },
+                {
+                    xtype: 'container',
+                    items: [
+                        me.createSaveButton()
+                    ]
+                }
+            ],
+        });
+
+        Ext.Ajax.request({
+            url: '{url controller=UserConfig action=get}',
+            params: {
+                name: 'httpCache'
+            },
+            callback: function (request, success, response) {
+                var config = Ext.JSON.decode(response.responseText);
+
+                if (!Object.keys(config).length) {
+                    config = me.getDefaultConfiguration();
+                }
+
+                Object.keys(config).forEach(function (key) {
+                    me.settingsForm.down('[name="' + key + '"]').setValue(config[key]);
+                });
+            }
+        });
+
+        return me.settingsForm;
+    },
+
+    createSettingsInfoText: function() {
+        return {
+            xtype: 'container',
+            html: '<span class="x-form-item-label" style="margin-top: 0;margin-bottom: 10px;">{s name=listing/optionsLabel}{/s}</span>',
+            columnWidth: 1,
+            flex: 0.5
+        };
+    },
+
+    createSettingsLeftItems: function(items) {
+        return {
+            xtype: 'container',
+            items: items,
+            width: '48%',
+            style: {
+                'margin-right': '45px'
+            }
+        };
+    },
+
+    createSettingsRightItems: function(items) {
+        return {
+            xtype: 'container',
+            items: items,
+            width: '48%',
+        };
+    },
+
+    /**
+     * Helper method to create a descriptive text
+     * @param html
+     * @returns Ext.container.Container
+     */
+    createDescriptionContainer: function(html) {
+        return Ext.create('Ext.container.Container', {
+            style: 'color: #999; font-style: italic; margin: 15px 0 0 0;',
+            html: html
+        });
     },
 
     /**
@@ -309,6 +473,53 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         );
     },
 
+    createConcurrencySizeCombo: function() {
+        var me = this;
+
+        me.concurrencySizeCombo = Ext.create('Ext.form.ComboBox', {
+            fieldLabel: '{s name=multi_request/concurrency/label}Concurrency{/s}',
+            helpText: '{s name=multi_request/concurrency/help}How many URLs should be requested in parallel? Default: 2{/s}',
+            name: 'concurrencySize',
+            margin: '0 0 10 0',
+            allowBlank: false,
+            value: me.concurrencySize,
+            editable: true,
+            displayField: 'concurrencySize',
+            validator: function (value) {
+                if (value > me.batchSizeCombo.getValue()) {
+                    me.startButton.disable();
+                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                }
+                me.batchSizeCombo.clearInvalid();
+
+                if (me.shopCombo.value !== undefined) {
+                    me.startButton.enable();
+                }
+
+                return true;
+            },
+            store: Ext.create('Ext.data.Store', {
+                fields: [
+                    { name: 'concurrencySize', type: 'int' }
+                ],
+                data: [
+                    { concurrencySize: '1' },
+                    { concurrencySize: '2' },
+                    { concurrencySize: '3' },
+                    { concurrencySize: '4' },
+                    { concurrencySize: '5' },
+                    { concurrencySize: '6' },
+                    { concurrencySize: '7' },
+                    { concurrencySize: '8' },
+                    { concurrencySize: '9' },
+                    { concurrencySize: '10' }
+                ]
+            })
+        });
+
+        return me.concurrencySizeCombo;
+    },
+
     createBatchSizeCombo: function() {
         var me = this;
 
@@ -321,6 +532,19 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             value: me.batchSize,
             editable: true,
             displayField: 'batchSize',
+            validator: function (value) {
+                if (value < me.concurrencySizeCombo.getValue()) {
+                    me.startButton.disable();
+                    return '{s name=multi_request/concurrency/field_error}The Concurrency field can not have a greater value than the Batch size field{/s}';
+                }
+                me.concurrencySizeCombo.clearInvalid();
+
+                if (me.shopCombo.value !== undefined) {
+                    me.startButton.enable();
+                }
+
+                return true;
+            },
             store: Ext.create('Ext.data.Store', {
                 fields: [
                     { name: 'batchSize', type: 'int' }
@@ -380,7 +604,17 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                 if (me.currentType === 'seo') {
                     me.fireEvent('startSeoIndex', me);
                 } else if (me.currentType === 'httpCacheWarmer') {
-                    me.fireEvent('startHttpCacheWarmUp', me);
+                    Ext.Msg.confirm('{s name=progress/confirmCacheClearTitle}{/s}', '{s name=progress/confirmCacheClearText}{/s}', function (response) {
+                        if (response === 'yes') { // Clear cache and start
+                            me.clearHttpCacheAndStart();
+                        } else if(response === 'no') { // Just start
+                            me.fireEvent('startHttpCacheWarmUp', me);
+                        } else { // Cancel
+                            me.startButton.show();
+                            me.cancelButton.hide();
+                            me.closeButton.enable();
+                        }
+                    });
                 }
             }
         });
@@ -426,6 +660,23 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         });
     },
 
+    createSaveButton: function() {
+        var me = this;
+
+        return Ext.create('Ext.button.Button', {
+            text: '{s name="progress/standardSave"}{/s}',
+            cls: 'primary',
+            style: {
+                float: 'right'
+            },
+            handler: function() {
+                if (me.settingsForm) {
+                    me.saveWarmupConfiguration();
+                }
+            }
+        });
+    },
+
     /**
      * Creates the button container for the close and cancel button
      *
@@ -439,10 +690,10 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         me.cancelButton = me.createCancelButton();
 
         return [
-            me.startButton,
-            me.cancelButton,
             '->',
-            me.closeButton
+            me.closeButton,
+            me.startButton,
+            me.cancelButton
         ];
     },
 
@@ -493,6 +744,49 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         }
 
         this[target][name] = configuration;
+    },
+
+    saveWarmupConfiguration: function () {
+        Ext.Ajax.request({
+            url: '{url controller=UserConfig action=save}',
+            params: {
+                name: 'httpCache',
+                config: Ext.JSON.encode(this.settingsForm.getValues())
+            },
+            success: function () {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name="progress/standardSaveGrowlTitle"}{/s}',
+                    '{s name="progress/standardSaveGrowlText"}{/s}'
+                );
+            }
+        });
+    },
+
+    /**
+     * Clear http cache before warming
+     */
+    clearHttpCacheAndStart: function () {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller=Cache action=clearCache cache=Config}',
+            params:{
+                'cache[http]'   : 'on',
+            },
+            success: function () {
+                me.fireEvent('startHttpCacheWarmUp', me);
+            }
+        });
+    },
+
+    getDefaultConfiguration: function () {
+        var config = {};
+
+        Object.keys(this.httpCache).forEach(function (key) {
+            config[key] = true;
+        });
+
+        return config;
     }
 });
 //{/block}

@@ -63,7 +63,7 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
     public function getList()
     {
         if ($this->list === null) {
-            $this->list = new Zend_Config_Xml(dirname(__FILE__) . '/Data/Path.xml', 'files', true);
+            $this->list = new Zend_Config_Xml(__DIR__ . '/Data/Path.xml', 'files', true);
             $this->list = $this->list->file;
 
             $this->checkAll();
@@ -138,7 +138,7 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
      * @param string $version
      * @param string $required
      *
-     * @return bool
+     * @return string
      */
     protected function compare($name, $version, $required)
     {

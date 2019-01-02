@@ -1,84 +1,38 @@
-{extends file='frontend/checkout/cart_item.tpl'}
+{* Constants for the different basket item types *}
+{$IS_PRODUCT = 0}
+{$IS_PREMIUM_PRODUCT = 1}
+{$IS_VOUCHER = 2}
+{$IS_REBATE = 3}
+{$IS_SURCHARGE_DISCOUNT = 4}
+{$path = ''}
 
-{* Tax price for normal products *}
-{block name='frontend_checkout_cart_item_tax_price'}
-    <div class="panel--td column--tax-price block is--align-right">
-        {block name='frontend_checkout_cart_item_tax_label'}
-            <div class="column--label tax-price--label">
-                {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
-                    {s name='CheckoutColumnExcludeTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {elseif $sUserData.additional.charge_vat}
-                    {s name='CheckoutColumnTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {/if}
-            </div>
-        {/block}
-
-        {if $sUserData.additional.charge_vat}{$sBasketItem.tax|currency}{else}&nbsp;{/if}
-    </div>
-{/block}
-
-{* Additional product relevant information *}
-{block name='frontend_checkout_cart_item_details_inline'}
-    {$smarty.block.parent}
-
-    {block name='frontend_checkout_cart_item_details_essential_features'}
-        <div class="product--essential-features">
-            {include file="string:{config name=mainfeatures}"}
-        </div>
+{if $sBasketItem.modus == $IS_PRODUCT}
+    {block name="frontend_checkout_confirm_item_product_wrapper"}
+        {$path = 'frontend/checkout/confirm_item_product.tpl'}
     {/block}
-{/block}
+{elseif $sBasketItem.modus == $IS_PREMIUM_PRODUCT}
+    {block name="frontend_checkout_confirm_item_premium_product_wrapper"}
+        {$path = 'frontend/checkout/confirm_item_premium_product.tpl'}
+    {/block}
+{elseif $sBasketItem.modus == $IS_VOUCHER}
+    {block name="frontend_checkout_confirm_item_voucher_wrapper"}
+        {$path = 'frontend/checkout/confirm_item_voucher.tpl'}
+    {/block}
+{elseif $sBasketItem.modus == $IS_REBATE}
+    {block name="frontend_checkout_confirm_item_rebate_wrapper"}
+        {$path = 'frontend/checkout/confirm_item_rebate.tpl'}
+    {/block}
+{elseif $sBasketItem.modus == $IS_SURCHARGE_DISCOUNT}
+    {block name="frontend_checkout_confirm_item_surcharge_discount_wrapper"}
+        {$path = 'frontend/checkout/confirm_item_surcharge_discount.tpl'}
+    {/block}
+{else}
+    {* Register your own mode selection *}
+    {block name="frontend_checkout_confirm_item_additional_type_wrapper"}
+        {block name='frontend_checkout_cart_item_additional_type'}{/block}
+    {/block}
+{/if}
 
-{* Voucher tax price *}
-{block name='frontend_checkout_cart_item_voucher_tax_price'}
-    <div class="panel--td column--tax-price block is--align-right">
-        {block name='frontend_checkout_cart_voucher_tax_label'}
-            <div class="column--label tax-price--label">
-                {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
-                    {s name='CheckoutColumnExcludeTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {elseif $sUserData.additional.charge_vat}
-                    {s name='CheckoutColumnTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {/if}
-            </div>
-        {/block}
-
-        {if $sUserData.additional.charge_vat}{$sBasketItem.tax|currency}{else}&nbsp;{/if}
-    </div>
-{/block}
-
-{* Premium tax price *}
-{block name='frontend_checkout_cart_item_premium_tax_price'}
-    <div class="panel--td column--tax-price block is--align-right">
-        {block name='frontend_checkout_cart_voucher_tax_label'}
-            <div class="column--label tax-price--label">
-                {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
-                    {s name='CheckoutColumnExcludeTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {elseif $sUserData.additional.charge_vat}
-                    {s name='CheckoutColumnTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {/if}
-            </div>
-        {/block}
-
-        {if $sUserData.additional.charge_vat}{$sBasketItem.tax|currency}{else}&nbsp;{/if}
-    </div>
-{/block}
-
-
-{* Rebate tax price *}
-{block name='frontend_checkout_cart_item_rebate_tax_price'}
-    <div class="panel--td column--tax-price block is--align-right">
-        {block name='frontend_checkout_cart_voucher_tax_label'}
-            <div class="column--label tax-price--label">
-                {if $sUserData.additional.charge_vat && !$sUserData.additional.show_net}
-                    {s name='CheckoutColumnExcludeTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {elseif $sUserData.additional.charge_vat}
-                    {s name='CheckoutColumnTax' namespace="frontend/checkout/confirm_header"}{/s}
-                {/if}
-            </div>
-        {/block}
-
-        {if $sUserData.additional.charge_vat}{$sBasketItem.tax|currency}{else}&nbsp;{/if}
-    </div>
-{/block}
-
-{* Hide tax symbols *}
-{block name='frontend_checkout_cart_tax_symbol'}{/block}
+{if $path != ''}
+    {include file="$path" isLast=$isLast}
+{/if}

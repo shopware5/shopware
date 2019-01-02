@@ -44,7 +44,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.ArticleSlider', {
         'topseller': '{s name="article_slider_type/store/topseller" namespace="backend/emotion/view/components/article_slider_type"}{/s}',
         'price_asc': '{s name="article_slider_type/store/price_asc" namespace="backend/emotion/view/components/article_slider_type"}{/s}',
         'price_desc': '{s name="article_slider_type/store/price_desc" namespace="backend/emotion/view/components/article_slider_type"}{/s}',
-        'product_stream': '{s name="article_slider_type/store/product_stream" namespace="backend/emotion/view/components/article_slider_type"}{/s}'
+        'product_stream': '{s name="article_slider_type/store/product_stream" namespace="backend/emotion/view/components/article_slider_type"}{/s}',
+        'random_product': '{s name="article_slider_type/store/random_product" namespace="backend/emotion/view/components/article_slider_type"}{/s}'
     },
 
     createPreview: function() {

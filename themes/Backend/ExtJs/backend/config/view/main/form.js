@@ -127,6 +127,13 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                     }
                 }
 
+                /*{if !{acl_is_allowed privilege=sql_rule resource=shipping}}*/
+                if (elementName === 'premiumshippiungasketselect') {
+                    options.readOnly = true;
+                    elementDescription = '{s name="insufficient_permissions" namespace="backend/application/main"}{/s}';
+                }
+                /*{/if}*/
+
                 var field = Ext.applyIf({
                     xtype: type,
                     name: name,

@@ -156,9 +156,9 @@ class StoreClient
     }
 
     /**
-     * @param $resource
-     * @param array $params
-     * @param array $headers
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
@@ -183,7 +183,7 @@ class StoreClient
      *
      * @throws \Exception
      *
-     * @return array
+     * @return string
      */
     public function doAuthGetRequestRaw(
         AccessTokenStruct $accessToken,
@@ -247,8 +247,8 @@ class StoreClient
 
     /**
      * @param AccessTokenStruct $accessToken
-     * @param $resource
-     * @param $params
+     * @param string            $resource
+     * @param array             $params
      *
      * @throws \Exception
      *
@@ -305,7 +305,7 @@ class StoreClient
     }
 
     /**
-     * @param $resource
+     * @param string                 $resource
      * @param array                  $params
      * @param array                  $headers
      * @param accessTokenStruct|null $token
@@ -332,6 +332,8 @@ class StoreClient
             $header = array_merge($header, $headers);
         }
 
+        $response = null;
+
         try {
             $response = $this->httpClient->get($url, $header);
             $this->verifyResponseSignature($response);
@@ -343,7 +345,7 @@ class StoreClient
     }
 
     /**
-     * @param $resource
+     * @param string            $resource
      * @param array             $params
      * @param array             $headers
      * @param AccessTokenStruct $token
@@ -366,6 +368,7 @@ class StoreClient
             $header = array_merge($header, $headers);
         }
 
+        $response = null;
         try {
             $response = $this->httpClient->post(
                 $url,
@@ -521,10 +524,11 @@ class StoreClient
      */
     private function verifyResponseSignature(Response $response)
     {
-        $signature = $response->getHeader('x-shopware-signature');
+        $signatureHeaderName = 'x-shopware-signature';
+        $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException('Signature not found in x-shopware-signature header');
+            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->openSSLVerifier->isSystemSupported()) {

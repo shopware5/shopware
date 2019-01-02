@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
+use Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks\AuthMock;
+
 class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 {
     const CONTROLLER_NAME = \Shopware_Controllers_Backend_BenchmarkOverview::class;
@@ -36,31 +38,12 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
-        $this->installDemoData('benchmark_config');
-
+        Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
         $controller->indexAction();
 
         $redirect = $this->getRedirect($controller->Response());
 
         $this->assertContains('BenchmarkLocalOverview/render/template/start', $redirect);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
-    public function testIndexAction_should_redirect_industry_select()
-    {
-        /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
-        $controller = $this->getController();
-
-        $this->installDemoData('benchmark_config');
-        $this->setSetting('terms_accepted', 1);
-
-        $controller->indexAction();
-
-        $redirect = $this->getRedirect($controller->Response());
-
-        $this->assertContains('BenchmarkLocalOverview/render/template/industry_select', $redirect);
     }
 
     /**
@@ -72,7 +55,6 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('terms_accepted', 1);
         $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s'));
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
@@ -87,13 +69,12 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_local_fresh_statistics_no_file()
+    public function testIndexAction_should_redirect_waiting_fresh_statistics_no_cached_template()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('terms_accepted', 1);
         $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s'));
 
@@ -101,19 +82,18 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/statistics', $redirect);
+        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_local_inactive()
+    public function testIndexAction_should_redirect_waiting_inactive()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('terms_accepted', 1);
         $this->setSetting('industry', 1);
         $this->setSetting('active', 0);
 
@@ -121,19 +101,18 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/statistics', $redirect);
+        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexAction_should_redirect_local_active_outdated()
+    public function testIndexAction_should_redirect_waiting_active_outdated()
     {
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('terms_accepted', 1);
         $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s', strtotime('-31 days')));
         $this->setSetting('active', 1);
@@ -142,7 +121,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/statistics', $redirect);
+        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
@@ -154,7 +133,6 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('terms_accepted', 1);
         $this->setSetting('industry', 1);
         $this->setSetting('last_received', date('Y-m-d H:i:s', strtotime('-3 days')));
         $this->setSetting('active', 1);
@@ -172,11 +150,27 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
+        $now = new \DateTime('now');
+
         $this->installDemoData('benchmark_config');
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
+        $this->setSetting('last_received', $now->format('Y-m-d H:i:s'));
 
         $this->expectOutputString('<h2>Placeholder</h2>');
         $controller->renderAction();
+    }
+
+    /**
+     * @return \Shopware_Controllers_Backend_BenchmarkOverview
+     */
+    protected function getController()
+    {
+        $controller = parent::getController();
+
+        Shopware()->Container()->set('auth', new AuthMock());
+        Shopware()->Plugins()->Backend()->Auth()->onInitResourceAuth(new \Enlight_Event_EventArgs());
+
+        return $controller;
     }
 
     /**

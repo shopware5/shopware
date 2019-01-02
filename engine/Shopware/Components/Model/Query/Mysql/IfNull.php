@@ -34,7 +34,7 @@ use Doctrine\ORM\Query\Lexer;
  * IFNULL() returns a numeric or string value, depending on the context in
  * which it is used.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @author    Andrew Mackrodt <andrew@ajmm.org>
@@ -47,7 +47,7 @@ class IfNull extends FunctionNode
     public $expr2;
 
     /**
-     * @override
+     * {@inheritdoc}
      */
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
@@ -59,7 +59,7 @@ class IfNull extends FunctionNode
     }
 
     /**
-     * @override
+     * {@inheritdoc}
      */
     public function parse(\Doctrine\ORM\Query\Parser $parser)
     {

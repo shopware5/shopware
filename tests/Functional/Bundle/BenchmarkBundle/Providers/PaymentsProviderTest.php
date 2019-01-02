@@ -29,13 +29,14 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class PaymentsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.payments';
-    const EXPECTED_KEYS_COUNT = 5;
+    const EXPECTED_KEYS_COUNT = 6;
     const EXPECTED_TYPES = [
         'activePayments' => IsType::TYPE_INT,
         'paymentsWithSurcharge' => IsType::TYPE_INT,
         'paymentsWithReduction' => IsType::TYPE_INT,
         'paymentsWithPercentagePrice' => IsType::TYPE_INT,
         'paymentsWithAbsolutePrice' => IsType::TYPE_INT,
+        'paymentsUsages' => IsType::TYPE_ARRAY,
     ];
 
     /**
@@ -45,11 +46,9 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(5, $resultData['activePayments']);
+        $this->assertSame(4, $resultData['activePayments']);
     }
 
     /**
@@ -59,9 +58,7 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(4, $resultData['paymentsWithSurcharge']);
     }
@@ -73,9 +70,7 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(5, $resultData['paymentsWithReduction']);
     }
@@ -87,9 +82,7 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(4, $resultData['paymentsWithPercentagePrice']);
     }
@@ -101,10 +94,24 @@ class PaymentsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('payments');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(6, $resultData['paymentsWithAbsolutePrice']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetTotalActivePaymentsPerShop()
+    {
+        $this->installDemoData('payments');
+
+        $provider = $this->getProvider();
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertSame(4, $resultData['activePayments']);
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(5, $resultData['activePayments']);
     }
 }

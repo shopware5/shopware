@@ -45,11 +45,9 @@ class EmotionsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('emotions');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(6, $resultData['total']);
+        $this->assertSame(4, $resultData['total']);
     }
 
     /**
@@ -59,11 +57,9 @@ class EmotionsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('emotions');
 
-        $provider = $this->getProvider();
+        $resultData = $this->getBenchmarkData();
 
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(2, $resultData['timed']);
+        $this->assertSame(1, $resultData['timed']);
     }
 
     /**
@@ -73,10 +69,9 @@ class EmotionsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('emotions');
 
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(3, $resultData['landingPages']);
+        $this->assertSame(2, $resultData['landingPages']);
     }
 
     /**
@@ -84,10 +79,9 @@ class EmotionsProviderTest extends ProviderTestCase
      */
     public function testGetElementUsages()
     {
-        $this->installDemoData('emotion_elements');
+        $this->installDemoData('emotions');
 
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertArraySubset([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
@@ -102,9 +96,46 @@ class EmotionsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('emotions');
 
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
-        $this->assertArraySubset(['6', '4', '6', '5', '6'], $resultData['viewportUsages']);
+        $this->assertArraySubset(['4', '2', '4', '3', '4'], $resultData['viewportUsages']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetTotalEmotionsPerShop()
+    {
+        $this->installDemoData('emotions');
+
+        $provider = $this->getProvider();
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertSame(4, $resultData['total']);
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertSame(2, $resultData['total']);
+    }
+
+    /**
+     * @group BenchmarkBundle
+     */
+    public function testGetElementUsagesPerShop()
+    {
+        $this->installDemoData('emotions');
+
+        $provider = $this->getProvider();
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
+        $this->assertArraySubset([
+            ['elementCount' => 3, 'elementName' => 'example-element-1'],
+            ['elementCount' => 2, 'elementName' => 'example-element-2'],
+        ], $resultData['elementUsages']);
+
+        $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
+        $this->assertArraySubset([
+            ['elementCount' => 2, 'elementName' => 'example-element-1'],
+            ['elementCount' => 1, 'elementName' => 'example-element-2'],
+        ], $resultData['elementUsages']);
     }
 }

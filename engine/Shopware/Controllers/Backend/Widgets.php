@@ -21,8 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\User\User;
+use Shopware\Models\Widget\View;
+use Shopware\Models\Widget\Widget;
 
 /**
  * Backend widget controller
@@ -50,7 +52,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Container()->get('models')->createQueryBuilder();
         $builder->select(['widget', 'view', 'plugin'])
-            ->from('Shopware\Models\Widget\Widget', 'widget')
+            ->from(Widget::class, 'widget')
             ->leftJoin('widget.views', 'view', 'WITH', 'view.authId = ?1')
             ->leftJoin('widget.plugin', 'plugin')
             ->orderBy('view.position')
@@ -130,7 +132,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function addWidgetViewAction()
     {
-        $auth = Shopware()->Container()->get('auth');
+        $auth = $this->get('auth');
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(['success' => false]);
@@ -142,22 +144,24 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $userID = (int) $identity->id;
 
         $request = $this->Request();
-        $widgetId = $request->getParam('id');
+        $widgetId = (int) $request->getParam('id');
         $column = $request->getParam('column');
         $position = $request->getParam('position');
+        $data = $request->getParam('data', []);
 
-        $model = new \Shopware\Models\Widget\View();
+        $model = new View();
         $model->setWidget(
-            Shopware()->Container()->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
+            $this->get('models')->find(Widget::class, $widgetId)
         );
         $model->setAuth(
-            Shopware()->Container()->get('models')->find('Shopware\Models\User\User', $userID)
+            $this->get('models')->find(User::class, $userID)
         );
         $model->setColumn($column);
         $model->setPosition($position);
+        $model->setData($data);
 
-        Shopware()->Container()->get('models')->persist($model);
-        Shopware()->Container()->get('models')->flush();
+        $this->get('models')->persist($model);
+        $this->get('models')->flush();
         $viewId = $model->getId();
 
         $this->View()->assign(['success' => !empty($viewId), 'viewId' => $viewId]);
@@ -194,6 +198,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function getTurnOverVisitorsAction()
     {
+        $startDate = new DateTime();
+        $startDate->setTime(0, 0, 0)->sub(new DateInterval('P7D'));
+
         // Get turnovers
         $fetchAmount = Shopware()->Container()->get('db')->fetchRow(
             'SELECT
@@ -275,26 +282,26 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         '
         );
 
-        $timeBack = 7;
-
         $sql = "
         SELECT
             COUNT(id) AS `countOrders`,
-            DATE_FORMAT(DATE_SUB(now(),INTERVAL ? DAY),'%d.%m.%Y') AS point,
-            ((SELECT SUM(uniquevisits) FROM s_statistics_visitors WHERE datum >= DATE_SUB(now(),INTERVAL ? DAY) GROUP BY DATE_SUB(now(),INTERVAL ? DAY))) AS visitors
+            DATE_FORMAT(:startDate,'%d.%m.%Y') AS point,
+            ((SELECT SUM(uniquevisits) FROM s_statistics_visitors WHERE datum >= :startDate GROUP BY :startDate)) AS visitors
         FROM `s_order`
         WHERE
-            ordertime >= DATE_SUB(now(),INTERVAL ? DAY)
+            ordertime >= :startDate
         AND
             status != 4
         AND
             status != -1
         GROUP BY
-            DATE_SUB(now(), INTERVAL ? DAY)
+            :startDate
         ";
+
         $fetchConversion = Shopware()->Container()->get('db')->fetchRow(
-            $sql,
-            [$timeBack, $timeBack, $timeBack, $timeBack, $timeBack]
+            $sql, [
+                'startDate' => $startDate->format('Y-m-d H:i:s'),
+            ]
         );
 
         if ($fetchConversion['visitors'] != 0) {
@@ -397,10 +404,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
     public function getShopwareNewsAction()
     {
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('Auth');
         $user = $auth->getIdentity();
-        $result = $this->fetchRssFeedData($user->locale, 5);
+        $result = $this->fetchRssFeedData($user->locale);
 
         $this->View()->assign(
             [
@@ -702,9 +709,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Gets a widget by id and sets its column / row position
      *
-     * @param $viewId
-     * @param $position
-     * @param $column
+     * @param int $viewId
+     * @param int $position
+     * @param int $column
      *
      * @throws \Doctrine\ORM\ORMException
      */
@@ -734,12 +741,17 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $result = [];
 
+        $streamContextOptions = stream_context_get_options(stream_context_get_default());
+        $streamContextOptions['http']['timeout'] = 20;
+
         try {
-            $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
-                'http' => [
-                    'timeout' => 20,
-                ],
-            ])));
+            $xml = new \SimpleXMLElement(
+                file_get_contents(
+                    'https://' . $lang . '.shopware.com/news/?sRss=1',
+                    false,
+                    stream_context_create($streamContextOptions)
+                )
+            );
         } catch (\Exception $e) {
             return [];
         }

@@ -403,6 +403,18 @@ class Repository extends ModelRepository
      */
     public function getList($ids)
     {
+        $query = $this->getListQueryBuilder();
+        $query->where('orders.id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getListQueryBuilder()
+    {
         $query = $this->getEntityManager()->createQueryBuilder();
 
         $query->select([
@@ -438,10 +450,8 @@ class Repository extends ModelRepository
         $query->leftJoin('billing.state', 'billingState');
         $query->leftJoin('orders.shop', 'shop');
         $query->leftJoin('orders.dispatch', 'dispatch');
-        $query->where('orders.id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
     }
 
     /**
@@ -660,6 +670,30 @@ class Repository extends ModelRepository
      *
      * @return int[]
      */
+    protected function searchInOrders($term)
+    {
+        $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $query->select('orders.id');
+        $query->from('s_order', 'orders');
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'orders.ordernumber^3',
+            'orders.transactionID^1',
+            'orders.comment^0.2',
+            'orders.customercomment^0.2',
+            'orders.internalcomment^0.2',
+        ]);
+
+        $query->setMaxResults(self::SEARCH_TERM_LIMIT);
+
+        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * @param string $term
+     *
+     * @return int[]
+     */
     private function searchOrderIds($term)
     {
         $orders = $this->searchInOrders($term);
@@ -671,8 +705,11 @@ class Repository extends ModelRepository
         $orders = array_keys(array_flip(array_merge($orders, $billing)));
 
         $shipping = $this->searchAddressTable($term, 's_order_shippingaddress', $orders);
+        $orders = array_keys(array_flip(array_merge($orders, $shipping)));
 
-        return array_keys(array_flip(array_merge($orders, $shipping)));
+        $documents = $this->searchDocumentsTable($term, 's_order_documents', $orders);
+
+        return array_keys(array_flip(array_merge($orders, $documents)));
     }
 
     /**
@@ -751,23 +788,25 @@ class Repository extends ModelRepository
 
     /**
      * @param string $term
+     * @param string $table
+     * @param int[]  $excludedOrderIds
      *
      * @return int[]
      */
-    private function searchInOrders($term)
+    private function searchDocumentsTable($term, $table, array $excludedOrderIds = [])
     {
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $query->select('orders.id');
-        $query->from('s_order', 'orders');
+        $query->select('documents.orderID');
+        $query->from($table, 'documents');
         $builder = Shopware()->Container()->get('shopware.model.search_builder');
         $builder->addSearchTerm($query, $term, [
-            'orders.ordernumber^3',
-            'orders.transactionID^1',
-            'orders.comment^0.2',
-            'orders.customercomment^0.2',
-            'orders.internalcomment^0.2',
+            'documents.docID^1',
         ]);
 
+        if (!empty($excludedOrderIds)) {
+            $query->andWhere('documents.orderID NOT IN (:ids)');
+            $query->setParameter(':ids', $excludedOrderIds, Connection::PARAM_INT_ARRAY);
+        }
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);

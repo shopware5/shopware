@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <service id="shopware_search_es.handler_collection" class="Doctrine\Common\Collections\ArrayCollection">
             <factory service="shopware_search_es.product_number_search_factory" method="registerHandlerCollection" />
             <argument type="service" id="service_container" />
@@ -13,7 +15,7 @@
         <service id="shopware_search_es.struct_hydrator" class="Shopware\Bundle\SearchBundleES\StructHydrator" />
 
         <service id="shopware_search_es.product_number_search_factory" class="Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory">
-            <argument type="collection" />
+            <argument type="tagged" tag="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.product_number_search" class="Shopware\Bundle\SearchBundleES\ProductNumberSearch">
@@ -105,6 +107,10 @@
         </service>
 
         <service id="shopware_search_es.is_available_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\IsAvailableConditionHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.last_id_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\LastProductIdConditionHandler">
             <tag name="shopware_search_es.search_handler" />
         </service>
 

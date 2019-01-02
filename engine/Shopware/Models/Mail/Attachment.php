@@ -52,6 +52,7 @@ class Attachment extends File
      * The role property is the owning side of the association between attachment and shop.
      *
      * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shopID", referencedColumnName="id", nullable=true)
      */
@@ -62,6 +63,7 @@ class Attachment extends File
      * The role property is the owning side of the association between attachment and mail.
      *
      * @var \Shopware\Models\Mail\Mail
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Mail\Mail", inversedBy="attachments")
      * @ORM\JoinColumn(name="mailID", referencedColumnName="id")
      */

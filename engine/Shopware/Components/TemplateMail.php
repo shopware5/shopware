@@ -21,6 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Mail\Mail;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware TemplateMail Component
@@ -28,12 +31,12 @@
 class Shopware_Components_TemplateMail
 {
     /**
-     * @var \Shopware\Models\Shop\Shop
+     * @var Shop
      */
     protected $shop;
 
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $modelManager;
 
@@ -48,11 +51,36 @@ class Shopware_Components_TemplateMail
     protected $stringCompiler;
 
     /**
-     * @param \Shopware\Components\Model\ModelManager $modelManager
+     * @var array
+     */
+    protected $themeVariables = [
+        'mobileLogo' => true,
+        'tabletLogo' => true,
+        'tabletLandscapeLogo' => true,
+        'desktopLogo' => true,
+        'appleTouchIcon' => true,
+        'brand-primary' => true,
+        'brand-primary-light' => true,
+        'brand-secondary' => true,
+        'brand-secondary-dark' => true,
+        'text-color' => true,
+        'text-color-dark' => true,
+        'body-bg' => true,
+        'link-color' => true,
+        'link-hover-color' => true,
+        'font-size-h1' => true,
+        'font-size-h2' => true,
+        'font-size-h4' => true,
+        'font-size-h5' => true,
+        'font-size-h6' => true,
+    ];
+
+    /**
+     * @param ModelManager $modelManager
      *
      * @return \Shopware_Components_TemplateMail
      */
-    public function setModelManager(\Shopware\Components\Model\ModelManager $modelManager)
+    public function setModelManager(ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;
 
@@ -60,7 +88,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @return \Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     public function getModelManager()
     {
@@ -68,7 +96,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @param $shop
+     * @param Shop $shop
      *
      * @return \Shopware_Components_TemplateMail
      */
@@ -80,7 +108,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function getShop()
     {
@@ -94,7 +122,7 @@ class Shopware_Components_TemplateMail
      */
     public function getTranslationReader()
     {
-        if (null === $this->translationReader) {
+        if ($this->translationReader === null) {
             $this->translationReader = Shopware()->Container()->get('translation');
         }
 
@@ -134,10 +162,10 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @param string|\Shopware\Models\Mail\Mail $mailModel
-     * @param array                             $context
-     * @param \Shopware\Models\Shop\Shop        $shop
-     * @param array                             $overrideConfig
+     * @param string|Mail $mailModel
+     * @param array       $context
+     * @param Shop        $shop
+     * @param array       $overrideConfig
      *
      * @throws \Enlight_Exception
      *
@@ -145,23 +173,24 @@ class Shopware_Components_TemplateMail
      */
     public function createMail($mailModel, $context = [], $shop = null, $overrideConfig = [])
     {
-        if (null !== $shop) {
+        if ($shop !== null) {
             $this->setShop($shop);
         }
 
-        if (!($mailModel instanceof \Shopware\Models\Mail\Mail)) {
+        if (!($mailModel instanceof Mail)) {
             $modelName = $mailModel;
-            /* @var $mailModel \Shopware\Models\Mail\Mail */
-            $mailModel = $this->getModelManager()->getRepository(\Shopware\Models\Mail\Mail::class)->findOneBy(
+            /* @var Mail $mailModel */
+            $mailModel = $this->getModelManager()->getRepository(Mail::class)->findOneBy(
                 ['name' => $modelName]
             );
             if (!$mailModel) {
-                throw new \Enlight_Exception("Mail-Template with name '{$modelName}' could not be found.");
+                throw new \Enlight_Exception(sprintf('Mail-Template with name "%s" could not be found.', $modelName));
             }
         }
 
-        //todo@all Add setter and getter like the shop
         $config = Shopware()->Config();
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+        $eventManager = Shopware()->Container()->get('events');
 
         if ($this->getShop() !== null) {
             $defaultContext = [
@@ -169,9 +198,35 @@ class Shopware_Components_TemplateMail
                 'sShop' => $config->get('shopName'),
                 'sShopURL' => ($this->getShop()->getSecure() ? 'https://' : 'http://') . $this->getShop()->getHost() . $this->getShop()->getBaseUrl(),
             ];
-            $isoCode = $this->getShop()->get('isocode');
+
+            // Add theme to the context if given shop (or its main shop) has a template.
+            $theme = null;
+            if ($this->getShop()->getTemplate()) {
+                $theme = $inheritance->buildConfig($this->getShop()->getTemplate(), $this->getShop(), false);
+            } elseif ($this->getShop()->getMain() && $this->getShop()->getMain()->getTemplate()) {
+                $theme = $inheritance->buildConfig($this->getShop()->getMain()->getTemplate(), $this->getShop(), false);
+            }
+
+            if ($theme) {
+                $keys = $eventManager->filter(
+                    'TemplateMail_CreateMail_Available_Theme_Config',
+                    $this->themeVariables,
+                    ['theme' => $theme]
+                );
+
+                $theme = array_intersect_key($theme, $keys);
+                $defaultContext['theme'] = $theme;
+            }
+
+            $isoCode = $this->getShop()->getId();
             $translationReader = $this->getTranslationReader();
-            $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+
+            if ($fallback = $this->getShop()->getFallback()) {
+                $translation = $translationReader->readWithFallback($isoCode, $fallback->getId(), 'config_mails', $mailModel->getId());
+            } else {
+                $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+            }
+
             $mailModel->setTranslation($translation);
         } else {
             $defaultContext = [
@@ -179,8 +234,17 @@ class Shopware_Components_TemplateMail
             ];
         }
 
-        // save current context to mail model
+        // Save current context to mail model
         $mailContext = json_decode(json_encode($context), true);
+
+        $mailContext = $eventManager->filter(
+            'TemplateMail_CreateMail_MailContext',
+            $mailContext,
+            [
+                'mailModel' => $mailModel,
+            ]
+        );
+
         $mailModel->setContext($mailContext);
         $this->getModelManager()->flush($mailModel);
 
@@ -194,15 +258,15 @@ class Shopware_Components_TemplateMail
     /**
      * Loads values from MailModel into Mail
      *
-     * @param \Enlight_Components_Mail   $mail
-     * @param \Shopware\Models\Mail\Mail $mailModel
-     * @param array                      $overrideConfig
+     * @param \Enlight_Components_Mail $mail
+     * @param Mail                     $mailModel
+     * @param array                    $overrideConfig
      *
      * @throws \Enlight_Exception
      *
      * @return \Enlight_Components_Mail
      */
-    public function loadValues(\Enlight_Components_Mail $mail, \Shopware\Models\Mail\Mail $mailModel, $overrideConfig = [])
+    public function loadValues(\Enlight_Components_Mail $mail, Mail $mailModel, $overrideConfig = [])
     {
         $stringCompiler = $this->getStringCompiler();
 
@@ -236,7 +300,7 @@ class Shopware_Components_TemplateMail
             $mail->setBodyHtml($stringCompiler->compileString($mailModel->getContentHtml()));
         }
 
-        /** @var $attachment \Shopware\Models\Mail\Attachment */
+        /** @var \Shopware\Models\Mail\Attachment $attachment */
         foreach ($mailModel->getAttachments() as $attachment) {
             if ($attachment->getShopId() !== null
                 && ($this->getShop() === null || $attachment->getShopId() !== $this->getShop()->getId())) {

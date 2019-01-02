@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Country;
 use Shopware\Models\Country\State;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

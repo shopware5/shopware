@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.Base.model.DocType', {
                 }
             }
         },
+        { name: 'key', type: 'string' },
         { name: 'template', type: 'string' },
         { name: 'numbers', type: 'string' },
         { name: 'left', type: 'int' },

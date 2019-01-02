@@ -119,6 +119,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
 
         var me = this,
             form = me.getDetailForm(),
+            translation = form.translationPlugin,
             /*{if {acl_is_allowed privilege=deleteGroup}}*/
             deleteGroupButton = me.getDeleteGroupButton(),
             /*{/if}*/
@@ -132,6 +133,10 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
             selectedStore = ddselector.toStore;
 
         me.getAttributeForm().setDisabled(true);
+
+        translation.translationMerge = false;
+        translation.translationKey = record.get('helperId');
+        translation.initConfig(form);
 
         //determine if the item is a group or a site
         if (record.data.parentId != 'root' || record.isLeaf()) {
@@ -215,7 +220,6 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
                         //reload the stores and display a success message
                         me.getStore('Nodes').load();
                         me.getStore('Groups').load();
-//                        me.getGroupSelector().items.items[0].items.items[0].items.items[0].getStore().load();
 
                         Shopware.Notification.createGrowlMessage('','{s name=onDeleteGroupSuccess}The group has been deleted successfully.{/s}', '{s name=mainWindowTitle}{/s}');
                     },
@@ -272,7 +276,6 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
                         dialogWindow.destroy();
                         me.getStore('Nodes').load();
                         me.getStore('Groups').load();
-//                            me.getGroupSelector().items.items[0].items.items[0].items.items[0].getStore().load();
 
                         //display a success message
                         Shopware.Notification.createGrowlMessage('','{s name=onCreateGroupSuccess}The group has been created successfully.{/s}', '{s name=mainWindowTitle}{/s}');

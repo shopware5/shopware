@@ -90,6 +90,14 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             message: '{s name=convertOrder/message}Do you want to convert this order to a regular order?{/s}',
             successTitle: '{s name=convertOrderSuccess/tile}Order converted{/s}'
         },
+        overwriteOrder: {
+            title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
+            message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
+        },
+        overwriteDocument: {
+            title: '{s name=document/overwrite/confirmation/title}{/s}',
+            message: '{s name=document/overwrite/confirmation/message}{/s}',
+        },
         growlMessage: '{s name=growlMessage}Order{/s}'
     },
 
@@ -109,7 +117,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             },
             'order-detail-window order-communication-panel': {
                 saveInternalComment: me.onSaveInternalComment,
-                saveExternalComment: me.onSaveExternalComment
+                saveExternalComment: me.onSaveExternalComment,
+                updateForms: me.onUpdateDetailPage
             },
             'order-detail-window order-overview-panel': {
                 saveOverview: me.onSaveOverview,
@@ -295,6 +304,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         }
 
         e.record.save({
+            params: {
+                changed: order.get('changed'),
+            },
             callback:function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
@@ -303,12 +315,23 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 if ( operation.success === true ) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.positions.successMessage, me.snippets.growlMessage);
                     order.set('invoiceAmount', rawData.invoiceAmount);
+                    order.set('changed', rawData.changed);
                     if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
                         options.callback(order);
                     }
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.positions.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage);
-                    e.store.remove(records);
+
+                    if (rawData.overwriteAble) {
+                        Ext.MessageBox.confirm(me.snippets.overwriteOrder.title, me.snippets.overwriteOrder.message, function (response) {
+                            if (response === 'yes') {
+                                order.set('changed', rawData.data.changed);
+                                me.onSavePosition(editor, e, order, options);
+                            } else {
+                                e.store.rejectChanges();
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -351,6 +374,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
         // Update articleId for row
         editor.context.record.set('articleId', record.get('articleId'));
+        editor.context.record.set('articleDetailID', record.get('id'));
     },
 
 
@@ -402,7 +426,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             }
             store.remove(positions);
             store.getProxy().extraParams = {
-                orderID: orderId
+                orderID: orderId,
+                changed: order.get('changed')
             };
             store.sync({
                 callback:function (batch, operation) {
@@ -412,12 +437,30 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.delete.successMessage, me.snippets.growlMessage);
 
                         order.set('invoiceAmount', rawData.data.invoiceAmount);
+                        order.set('changed', rawData.data.changed);
                         if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
                             options.callback(order);
                         }
 
                     } else {
                         Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.delete.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
+
+                        if (rawData.overwriteAble) {
+                            Ext.MessageBox.confirm(me.snippets.overwriteOrder.title, me.snippets.overwriteOrder.message, function (response) {
+                                if (response === 'yes') {
+                                    order.set('changed', rawData.data.changed);
+                                    store.rejectChanges();
+
+                                    grid.getView().select(positions);
+
+                                    me.onDeleteMultiplePositions(order, grid, options);
+                                } else {
+                                    store.rejectChanges();
+                                }
+                            });
+                        } else {
+                            store.rejectChanges();
+                        }
                     }
                 }
             });
@@ -535,13 +578,45 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      *
      * @param [Ext.data.Model]          The record of the detail page (Shopware.apps.Order.model.Order)
      * @param [Ext.data.Model]          The configuration record of the document form (Shopware.apps.Order.model.Configuration)
-     * @param [Ext.container.Container] me
+     * @param [Ext.container.Container] The panel
      */
     onCreateDocument: function(order, config, panel) {
         var me = this,
-            store = Ext.create('Shopware.apps.Order.store.Configuration');
+            documentAlreadyCreated = false;
 
         panel.setLoading(true);
+
+        order.getReceiptStore.each(function (record) {
+            if (record.get('typeId') === config.get('documentType')) {
+                documentAlreadyCreated = true;
+            }
+        });
+
+        if (documentAlreadyCreated) {
+            Ext.MessageBox.confirm(
+                me.snippets.overwriteDocument.title,
+                me.snippets.overwriteDocument.message,
+                function (clickedButton) {
+                    if (clickedButton === 'no' || clickedButton === 'cancel') {
+                        panel.setLoading(false);
+                        return;
+                    }
+                    me.createDocument(order, config, panel);
+                }
+            );
+        } else {
+            me.createDocument(order, config, panel);
+        }
+    },
+
+    /**
+     * @param [Ext.data.Model]          The record of the detail page (Shopware.apps.Order.model.Order)
+     * @param [Ext.data.Model]          The configuration record of the document form (Shopware.apps.Order.model.Configuration)
+     * @param [Ext.container.Container] The panel
+     */
+    createDocument: function(order, config, panel) {
+        var me = this,
+            store = Ext.create('Shopware.apps.Order.store.Configuration');
 
         config.set('orderId', order.get('id'));
         store.add(config);
@@ -617,10 +692,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * which can be edit in the communication tab panel on the detail page.
      * @return void
      */
-    onSaveInternalComment: function(record) {
+    onSaveInternalComment: function(record, panel, options) {
         var me = this;
 
-        me.saveRecord(record, me.snippets.internalComment.successMessage, me.snippets.internalComment.failureMessage);
+        me.saveRecord(record, me.snippets.internalComment.successMessage, me.snippets.internalComment.failureMessage, options);
     },
 
     /**
@@ -652,10 +727,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * which can be edit in the communication tab panel on the detail page.
      * @return void
      */
-    onSaveExternalComment: function(record) {
+    onSaveExternalComment: function(record, panel, options) {
         var me = this;
 
-        me.saveRecord(record, me.snippets.externalComment.successMessage, me.snippets.externalComment.failureMessage);
+        me.saveRecord(record, me.snippets.externalComment.successMessage, me.snippets.externalComment.failureMessage, options);
 
     },
 
@@ -695,10 +770,19 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         options.callback(order);
                     }
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
+                    Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + operation.getError(), me.snippets.growlMessage)
+
+                    if (rawData.overwriteAble) {
+                        Ext.MessageBox.confirm(me.snippets.overwriteOrder.title, me.snippets.overwriteOrder.message, function (response) {
+                            if (response === 'yes') {
+                                order.set('changed', rawData.data.changed);
+                                me.saveRecord(order, successMessage, errorMessage, options);
+                            }
+                        });
+                    }
                 }
                 // reload the order list
-                me.getOrderList().store.load();
+                me.subApplication.getStore('Order').load();
             }
         });
     },
@@ -707,6 +791,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * Opens the status mail window
      *
      * @param mail
+     * @param record
      */
     showOrderMail: function(mail, record) {
         var me = this,
@@ -720,7 +805,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         record.get('id')
                     ],
                     record: record,
-                    listStore: me.getOrderList().getStore(),
+                    order: record,
+                    listStore: me.subApplication.getStore('Order'),
                     documentTypeStore: documentTypeStore,
                     mail: mail
                 }).show();

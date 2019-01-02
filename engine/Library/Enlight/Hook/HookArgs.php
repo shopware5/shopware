@@ -35,31 +35,49 @@
 class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
 {
     /**
-     * Default getter function to return the class property
-     *
-     * @return mixed
+     * @var mixed
+     */
+    protected $_subject;
+
+    /**
+     * @var string
+     */
+    protected $_method;
+
+    /**
+     * @param mixed $subject
+     * @param string $method
+     * @param array $args
+     */
+    public function __construct($subject, $method, array $args = array())
+    {
+        parent::__construct($args);
+        $this->_subject = $subject;
+        $this->_method = $method;
+    }
+
+    /**
+     * @return mixed The instance which the hook is executed on.
      */
     public function getSubject()
     {
-        return $this->get('class');
+        return $this->_subject;
     }
 
     /**
-     * Default getter function to return the method property
-     * @return mixed
+     * @return string The name of the method whose hooks are being executed.
      */
     public function getMethod()
     {
-        return $this->get('method');
+        return $this->_method;
     }
 
     /**
-     * Default getter function to return the array values of the elements property
-     * @return array
+     * @return array The arguments passed to the hooked method.
      */
     public function getArgs()
     {
-        return array_slice(array_values($this->_elements), 2);
+        return array_values($this->_elements);
     }
 
     /**

@@ -28,12 +28,15 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Property\Value;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PropertyOptionSearcher extends GenericSearcher
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function createQuery(SearchCriteria $criteria)
     {
         $query = $this->entityManager->createQueryBuilder();

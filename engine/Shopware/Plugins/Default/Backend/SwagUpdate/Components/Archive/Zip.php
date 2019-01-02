@@ -27,7 +27,7 @@ namespace ShopwarePlugins\SwagUpdate\Components\Archive;
 use ZipArchive;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,7 +53,7 @@ class Zip extends Adapter
         $this->stream = new ZipArchive();
 
         if ($fileName != null) {
-            if (true !== ($retval = $this->stream->open($fileName, $flags))) {
+            if (($retval = $this->stream->open($fileName, $flags)) !== true) {
                 throw new \RuntimeException($this->getErrorMessage($retval, $fileName), $retval);
             }
             $this->position = 0;
@@ -90,7 +90,7 @@ class Zip extends Adapter
     }
 
     /**
-     * @param $position
+     * @param int $position
      *
      * @return mixed
      */

@@ -58,7 +58,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @param Client                $client
      * @param IndexFactoryInterface $indexFactory
-     * @param $handlers
+     * @param HandlerInterface[]    $handlers
      */
     public function __construct(
         Client $client,
@@ -76,7 +76,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     public function search(Criteria $criteria, ShopContextInterface $context)
     {
         $search = $this->buildSearch($criteria, $context);
-        $index = $this->indexFactory->createShopIndex($context->getShop());
+        $index = $this->indexFactory->createShopIndex($context->getShop(), ProductMapping::TYPE);
 
         $data = $this->client->search([
             'index' => $index->getName(),
@@ -114,11 +114,12 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return Search
      * @throws \Exception
+     *
+     * @return Search
      */
     private function buildSearch(Criteria $criteria, ShopContextInterface $context)
     {
@@ -134,7 +135,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         if ($criteria->getLimit() !== null) {
             $search->setSize($criteria->getLimit());
         }
-        $search->addSort(new FieldSort('id', 'ASC'));
+        $search->addSort(new FieldSort('id', 'asc'));
 
         return $search;
     }
@@ -239,23 +240,23 @@ class ProductNumberSearch implements ProductNumberSearchInterface
                 continue;
             }
 
-            //trigger error when new interface isn't implemented
+            // Trigger error when new interface isn't implemented
             if (!$handler instanceof PartialConditionHandlerInterface) {
-                trigger_error(sprintf("Condition handler %s doesn't support new filter mode. Class has to implement \\Shopware\\Bundle\\SearchBundleES\\PartialConditionHandlerInterface.", get_class($handler)), E_USER_DEPRECATED);
+                trigger_error(sprintf('Condition handler "%s" doesn\'t support new filter mode. Class has to implement "%s".', get_class($handler), PartialConditionHandlerInterface::class), E_USER_DEPRECATED);
             }
 
-            //filter mode active and handler doesn't supports the filter mode?
-            if ($criteria->generatePartialFacets() && !$handler instanceof PartialConditionHandlerInterface) {
-                throw new \Exception(sprintf("New filter mode activated, handler class %s doesn't support this mode", get_class($handler)));
+            // Filter mode active and handler doesn't supports the filter mode?
+            if (!$handler instanceof PartialConditionHandlerInterface && $criteria->generatePartialFacets()) {
+                throw new \Exception(sprintf('New filter mode activated, handler class %s doesn\'t support this mode', get_class($handler)));
             }
 
-            //filter mode active and handler supports new filter mode?
-            if ($criteria->generatePartialFacets() && $handler instanceof PartialConditionHandlerInterface) {
+            // Filter mode active and handler supports new filter mode?
+            if ($handler instanceof PartialConditionHandlerInterface && $criteria->generatePartialFacets()) {
                 $handler->handleFilter($criteriaPart, $criteria, $search, $context);
                 continue;
             }
 
-            //old filter mode activated and implements new interface?
+            // Old filter mode activated and implements new interface?
             if ($handler instanceof PartialConditionHandlerInterface) {
                 $handler->handlePostFilter($criteriaPart, $criteria, $search, $context);
             } else {

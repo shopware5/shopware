@@ -78,7 +78,6 @@ class PropertyIndexer implements DataIndexerInterface
             $this->indexProperties($index, $ids);
             $progress->advance(count($ids));
         }
-
         $progress->finish();
     }
 
@@ -111,5 +110,13 @@ class PropertyIndexer implements DataIndexerInterface
             'type' => PropertyMapping::TYPE,
             'body' => $documents,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports()
+    {
+        return PropertyMapping::TYPE;
     }
 }

@@ -120,7 +120,7 @@ class EntityTransformer implements DataTransformerInterface
 
         $entity = $this->models->find($this->entityName, $entityId);
 
-        if (null === $entity) {
+        if ($entity === null) {
             // causes a validation error
             // this message is not shown to the user
             // see the invalid_message option

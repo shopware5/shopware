@@ -97,8 +97,10 @@ class Manager
      */
     public function createMediaThumbnail(Media $media, $thumbnailSizes = [], $keepProportions = false)
     {
+        $imagePath = $media->getPath();
+
         if ($media->getType() !== $media::TYPE_IMAGE) {
-            throw new \Exception('File is not an image.');
+            throw new \Exception(sprintf('File %s is not an image.', $imagePath));
         }
 
         if (empty($thumbnailSizes)) {
@@ -118,8 +120,6 @@ class Manager
         }
 
         $thumbnailSizes = $this->uniformThumbnailSizes($thumbnailSizes);
-
-        $imagePath = $media->getPath();
 
         $parameters = [
             'path' => $imagePath,
@@ -292,7 +292,7 @@ class Manager
      *
      * array('width' => 100, 'height' => 200)
      *
-     * @param $thumbnailSizes
+     * @param string[] $thumbnailSizes
      *
      * @return array
      */
@@ -333,7 +333,7 @@ class Manager
      * Returns an array with width and height gained
      * from a string in a format like 100x200
      *
-     * @param $size
+     * @param string $size
      *
      * @return array
      */

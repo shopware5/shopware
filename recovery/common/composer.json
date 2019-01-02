@@ -6,6 +6,7 @@
         "symfony/console": "2.6.13",
         "pimple/pimple": "3.0.2",
         "knplabs/gaufrette": "0.1.9",
+        "ramsey/uuid": "3.5.2",
         "paragonie/random_compat": "1.4.1",
         "symfony/finder": "3.3.6"
     },

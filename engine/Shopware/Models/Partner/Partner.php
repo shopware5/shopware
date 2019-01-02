@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Partner;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
@@ -45,11 +46,12 @@ class Partner extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Partner", mappedBy="partner", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Partner
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Partner", mappedBy="partner", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -67,7 +69,7 @@ class Partner extends ModelEntity
     private $idCode;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="date", nullable=false)
      */
@@ -186,6 +188,8 @@ class Partner extends ModelEntity
     private $customerId;
 
     /**
+     * @var ArrayCollection<\Shopware\Models\Order\Order>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Order", mappedBy="partner")
      * @ORM\JoinColumn(name="idcode", referencedColumnName="partnerID")
      */
@@ -226,15 +230,13 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set datum
-     *
-     * @param \DateTime|string $date
+     * @param null|\DateTimeInterface|string $date
      *
      * @return Partner
      */
     public function setDate($date)
     {
-        if ($date !== null && !($date instanceof \DateTime)) {
+        if ($date !== null && !($date instanceof \DateTimeInterface)) {
             $this->date = new \DateTime($date);
         } else {
             $this->date = $date;
@@ -244,9 +246,7 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get datum
-     *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -340,8 +340,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get zipCode
-     *
      * @return string
      */
     public function getZipCode()
@@ -350,8 +348,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set city
-     *
      * @param string $city
      *
      * @return Partner
@@ -364,8 +360,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -374,8 +368,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set phone
-     *
      * @param string $phone
      *
      * @return Partner
@@ -388,8 +380,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get phone
-     *
      * @return string
      */
     public function getPhone()
@@ -398,8 +388,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set fax
-     *
      * @param string $fax
      *
      * @return Partner
@@ -412,8 +400,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get fax
-     *
      * @return string
      */
     public function getFax()
@@ -422,8 +408,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set country
-     *
      * @param string $countryName
      *
      * @return Partner
@@ -436,8 +420,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountryName()
@@ -446,8 +428,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return Partner
@@ -460,8 +440,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -470,8 +448,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set web
-     *
      * @param string $web
      *
      * @return Partner
@@ -484,8 +460,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get web
-     *
      * @return string
      */
     public function getWeb()
@@ -494,8 +468,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set profile
-     *
      * @param string $profile
      *
      * @return Partner
@@ -508,8 +480,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get profile
-     *
      * @return string
      */
     public function getProfile()
@@ -518,8 +488,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set fix
-     *
      * @param float $fix
      *
      * @return Partner
@@ -532,8 +500,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get fix
-     *
      * @return float
      */
     public function getFix()
@@ -542,8 +508,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set percent
-     *
      * @param float $percent
      *
      * @return Partner
@@ -556,8 +520,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get percent
-     *
      * @return float
      */
     public function getPercent()
@@ -566,8 +528,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set cookieLifeTime
-     *
      * @param int $cookieLifeTime
      *
      * @return Partner
@@ -580,8 +540,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get cookieLifeTime
-     *
      * @return int
      */
     public function getCookieLifeTime()
@@ -590,8 +548,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param int $active
      *
      * @return Partner
@@ -604,8 +560,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return int
      */
     public function getActive()
@@ -614,9 +568,7 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get orders
-     *
-     * @return mixed
+     * @return ArrayCollection<\Shopware\Models\Order\Order>
      */
     public function getOrders()
     {
@@ -624,9 +576,7 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set orders
-     *
-     * @param $orders
+     * @param ArrayCollection<\Shopware\Models\Order\Order> $orders
      */
     public function setOrders($orders)
     {
@@ -634,8 +584,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Set customerId
-     *
      * @return int
      */
     public function getCustomerId()
@@ -644,8 +592,6 @@ class Partner extends ModelEntity
     }
 
     /**
-     * Get customerId
-     *
      * @param int $customerId
      */
     public function setCustomerId($customerId)
@@ -668,6 +614,6 @@ class Partner extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Partner', 'attribute', 'partner');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Partner::class, 'attribute', 'partner');
     }
 }

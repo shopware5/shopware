@@ -14,7 +14,7 @@
 
 {* My account entry *}
 {block name="frontend_index_checkout_actions_my_options"}
-    <li class="navigation--entry entry--account{if {config name=useSltCookie}} with-slt{/if}"
+    <li class="navigation--entry entry--account{if {config name=useSltCookie} || $sOneTimeAccount} with-slt{/if}"
         role="menuitem"
         data-offcanvas="true"
         data-offCanvasSelector=".account--dropdown-navigation">
@@ -40,7 +40,7 @@
             </a>
         {/block}
 
-        {if {config name=useSltCookie}}
+        {if {config name=useSltCookie} || $sOneTimeAccount}
             {block name="frontend_index_checkout_actions_account_navigation"}
                 <div class="account--dropdown-navigation">
 

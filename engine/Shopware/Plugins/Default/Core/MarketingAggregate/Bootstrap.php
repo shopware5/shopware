@@ -27,7 +27,7 @@
  * The plugin bootstrap of the marketing data plugin registers all events
  * and configurations for the shopware aggregate functions within shopware.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -317,6 +317,10 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Event listener function of the Shopware_Modules_Order_SaveOrder_ProcessDetails event.
      * This event is fired after a customer completed an order.
      * This function is used to add or increment the new also bought articles.
+     *
+     * @param Enlight_Event_EventArgs $arguments
+     *
+     * @return mixed
      */
     public function addNewAlsoBought(Enlight_Event_EventArgs $arguments)
     {
@@ -424,7 +428,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             self::AGGREGATE_STRATEGY_LIVE
         );
 
-        if (!($this->isTopSellerActivated()) || $strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
+        if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB) {
             return true;
         }
 
@@ -472,20 +476,21 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function refreshArticle(Enlight_Event_EventArgs $arguments)
     {
-        if (!($this->isTopSellerActivated())) {
+        if (!$this->isTopSellerActivated()) {
             return;
         }
 
-        /** @var $article \Shopware\Models\Article\Article */
-        $article = $arguments->getEntity();
-        if (!($article instanceof \Shopware\Models\Article\Article)) {
+        /** @var \Shopware\Models\Article\Article $product */
+        $product = $arguments->getEntity();
+        if (!($product instanceof \Shopware\Models\Article\Article)) {
             return;
         }
-        if (!($article->getId()) > 0) {
+        if (!($product->getId()) > 0) {
             return;
         }
+
         $this->TopSeller()->refreshTopSellerForArticleId(
-            $article->getId()
+            $product->getId()
         );
     }
 

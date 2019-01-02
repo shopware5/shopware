@@ -285,6 +285,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.default.FormRight', {
                 style       : 'width: 100%',
                 selectOnFocus   : false,
                 triggerAction   : 'all',
+                helpText: '{s name=right_empty_tax_help}{/s}',
                 listeners: {
                     change: function(field, value) {
                         field.setValue((!value || value === 0) ? '{s name=right_empty_tax}Highest tax{/s}' : value);

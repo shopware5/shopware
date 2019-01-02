@@ -60,13 +60,29 @@ Ext.define('Shopware.apps.Order.controller.Document', {
     },
 
     /**
-     * Loads a new mail and open a new mail window
+     * Opens the window to send an email with a selected document to the customer.
+     *
+     * @param { Shopware.apps.Order.model.Receipt } record
      */
     openMail: function(record) {
         var me = this,
-            order = me.getDocumentWindow().record;
+            order = me.getDocumentWindow().record,
+            documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
 
-        me.loadMail(order, record, Ext.bind(me.afterLoadMail, me));
+        // The window depends on a completely loaded documentTypeStore. So we load it here and open the window
+        // after successful loading.
+        documentTypeStore.load({
+            scope: me,
+            callback: function() {
+                this.getView('mail.Window').create({
+                    record: order,
+                    order: order,
+                    preSelectedAttachment: record,
+                    documentTypeStore: documentTypeStore,
+                    listStore: me.subApplication.getStore('Order')
+                }).show();
+            }
+        });
     },
 
     /**
@@ -76,85 +92,40 @@ Ext.define('Shopware.apps.Order.controller.Document', {
      * @param { Ext.data.Model } record
      */
     onDeleteDocument: function(grid, record) {
-        grid.getStore().remove(record);
-
-        Ext.Ajax.request({
-            url: '{url controller="order" action="deleteDocument"}',
-            method: 'POST',
-            params: {
-                documentId: record.get('id')
-            },
-            success: function(response) {
-                response = Ext.JSON.decode(response.responseText);
-                if (!response.success) {
-                    Shopware.Notification.createGrowlMessage(
-                        '{s name=document/attachemnt/error}Error{/s}',
-                        response.errorMessage
-                    );
+        Ext.MessageBox.confirm(
+            '{s name=document/delete/confirmation/title}Delete order document{/s}',
+            '{s name=document/delete/confirmation/message}A deleted order document cannot be restored. Do you really want to delete the document?{/s}',
+            function (clickedButton) {
+                if (clickedButton === 'no' || clickedButton === 'cancel') {
+                    return;
                 }
-            },
-            failure: function(response) {
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=document/attachemnt/error}Error{/s}',
-                    response.status + '<br />' + response.statusText
-                );
-            }
-        });
-    },
 
-    /**
-     * Calls a ajax request to load a new mail template.
-     *
-     * @param { Ext.data.Model } order
-     * @param { Ext.data.Model } record
-     * @param { function } callback
-     */
-    loadMail: function(order, record, callback) {
-        var me = this;
+                grid.getStore().remove(record);
 
-        Ext.Ajax.request({
-            url: '{url controller=order action=createMail}',
-            method: 'POST',
-            params: {
-                orderId: order.get('id')
-            },
-            success: function(response) {
-                response = Ext.JSON.decode(response.responseText);
-                Ext.callback(callback, me, [ response.mail, record ]);
-            },
-            failure: function(response) {
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=document/attachemnt/error}Error{/s}',
-                    response.status + '<br />' + response.statusText
-                );
+                Ext.Ajax.request({
+                    url: '{url controller="order" action="deleteDocument"}',
+                    method: 'POST',
+                    params: {
+                        documentId: record.get('id')
+                    },
+                    success: function(response) {
+                        response = Ext.JSON.decode(response.responseText);
+                        if (!response.success) {
+                            Shopware.Notification.createGrowlMessage(
+                                '{s name=document/attachemnt/error}Error{/s}',
+                                response.errorMessage
+                            );
+                        }
+                    },
+                    failure: function(response) {
+                        Shopware.Notification.createGrowlMessage(
+                            '{s name=document/attachemnt/error}Error{/s}',
+                            response.status + '<br />' + response.statusText
+                        );
+                    }
+                });
             }
-        });
-    },
-
-    /**
-     * Opens a new mail window.
-     *
-     * @param { object } mail
-     * @param { Ext.data.Model } record
-     */
-    afterLoadMail: function(mail, record) {
-        var me = this,
-            mail = Ext.create('Shopware.apps.Order.model.Mail', mail),
-            documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
-        
-        documentTypeStore.load({
-            callback: function() {
-                me.mainWindow = me.getView('mail.Window').create({
-                    attached: [
-                        record.get('id')
-                    ],
-                    listStore: me.getListing().getStore(),
-                    mail: mail,
-                    record: me.getDocumentWindow().record,
-                    documentTypeStore: documentTypeStore
-                }).show();
-            }
-        });
+        );
     }
 });
 //{/block}

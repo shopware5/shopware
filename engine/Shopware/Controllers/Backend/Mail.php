@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Document\Document;
 use Shopware\Models\Mail\Attachment;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
@@ -33,17 +34,17 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * @var \Shopware\Models\Mail\Repository
      */
-    protected $repository = null;
+    protected $repository;
 
     /**
      * Returns available mails
      */
     public function getMailsAction()
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $snippet = Shopware()->Snippets()->getNamespace('backend/mail/view/navigation');
 
-        // if id is provided return a single mail instead of a collection
+        // If id is provided return a single mail instead of a collection
         $id = $this->Request()->getParam('id');
         if (!empty($id) && is_numeric($id)) {
             $this->getSingleMail($id);
@@ -85,7 +86,13 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             'data' => [],
         ];
 
-        /* @var $mail Mail */
+        $documentNodes = [
+            'name' => $snippet->get('mails_documents', 'Document emails'),
+            'leaf' => false,
+            'data' => [],
+        ];
+
+        /* @var Mail $mail */
         foreach ($mails as $mail) {
             $node = [
                 'leaf' => true,
@@ -111,6 +118,9 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             } elseif ($mail->isUserMail()) {
                 $node['checked'] = false;
                 $userNodes['data'][] = $node;
+            } elseif ($mail->isDocumentMail()) {
+                $node['name'] = $this->getFriendlyNameOfDocumentEmail($node['name']);
+                $documentNodes['data'][] = $node;
             }
         }
 
@@ -120,6 +130,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $nodes[] = $statusNodes;
         $nodes[] = $systemNodes;
         $nodes[] = $userNodes;
+        $nodes[] = $documentNodes;
 
         $this->View()->assign(['success' => true, 'data' => $nodes]);
     }
@@ -161,7 +172,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $mail Mail */
+        /* @var Mail $mail */
         $mail = Shopware()->Models()->getRepository(Mail::class)->find($id);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -200,7 +211,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $mail Mail */
+        /* @var Mail $mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -231,7 +242,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $mail Mail */
+        /* @var Mail $mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -297,7 +308,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $mail Mail */
+        /* @var Mail $mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -340,7 +351,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $mail Mail */
+        /* @var Mail $mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -387,7 +398,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $mail \Shopware\Models\Mail\Mail */
+        /* @var \Shopware\Models\Mail\Mail $mail */
         $mail = $this->getRepository()->find($mailId);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -395,7 +406,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $media \Shopware\Models\Media\Media */
+        /* @var \Shopware\Models\Media\Media $media */
         $media = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class)->find($mediaId);
         if (!$media) {
             $this->View()->assign(['success' => false, 'message' => 'Media not found']);
@@ -428,7 +439,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $this->View()->assign(['success' => false, 'message' => 'Id not found']);
         }
 
-        /* @var $attachment Attachment */
+        /* @var Attachment $attachment */
         $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);
@@ -468,7 +479,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         if ($shopId == 0) {
             $shop = null;
         } else {
-            /* @var $shop Shop */
+            /* @var Shop $shop */
             $shop = Shopware()->Models()->getRepository(Shop::class)->find($shopId);
             if (!$shop) {
                 $this->View()->assign(['success' => false, 'message' => 'Shop not found']);
@@ -477,7 +488,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             }
         }
 
-        /* @var $attachment Attachment */
+        /* @var Attachment $attachment */
         $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);
@@ -507,7 +518,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $attachments = [];
 
         if ($mailId) {
-            /* @var $mail \Shopware\Models\Mail\Mail */
+            /* @var \Shopware\Models\Mail\Mail $mail */
             $mail = $this->getRepository()->find($mailId);
             if ($mail) {
                 $attachments = $mail->getAttachments();
@@ -516,7 +527,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $nodes = [];
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         $shops = Shopware()->Models()->getRepository(Shop::class)->findAll();
         foreach ($shops as $shop) {
             $shopNode = [
@@ -608,14 +619,14 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $mail = $data['mail'];
         $data = $data['data'];
 
-        /** @var $mail \Shopware\Models\Mail\Mail */
+        /** @var \Shopware\Models\Mail\Mail $mail */
         if (!$mail instanceof \Shopware\Models\Mail\Mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
 
             return;
         }
 
-        /** @var $shop Shop * */
+        /** @var Shop $shop */
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
         $shop->registerResources();
 
@@ -631,12 +642,12 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * Internal helper function to get access to the mail repository.
      *
-     * @return null|Shopware\Models\Mail\Repository
+     * @return \Shopware\Models\Mail\Repository
      */
     private function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail');
+            $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Mail\Mail::class);
         }
 
         return $this->repository;
@@ -691,5 +702,37 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             'sShopURL' => ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBaseUrl(),
             'sConfig' => $this->container->get('config'),
         ];
+    }
+
+    /**
+     * Replace the name of the email template with a more human readable name. The names from the document types
+     * are used for this.
+     *
+     * @param string $mailName
+     *
+     * @return string
+     */
+    private function getFriendlyNameOfDocumentEmail($mailName)
+    {
+        if ($mailName === 'sORDERDOCUMENTS') {
+            $namespace = Shopware()->Snippets()->getNamespace('backend/mail/view/navigation');
+
+            return $namespace->get('mails_documents_default', 'Default template');
+        }
+
+        $documentEmailsNamePrefix = 'document_';
+        if (mb_strpos($mailName, $documentEmailsNamePrefix) !== 0) {
+            return $mailName;
+        }
+        $documentTypeKey = str_replace($documentEmailsNamePrefix, '', $mailName);
+        /** @var Document $documentType */
+        $documentType = $this->getModelManager()->getRepository(Document::class)->findOneBy([
+            'key' => $documentTypeKey,
+        ]);
+        if (!$documentType) {
+            return $mailName;
+        }
+
+        return $documentType->getName();
     }
 }

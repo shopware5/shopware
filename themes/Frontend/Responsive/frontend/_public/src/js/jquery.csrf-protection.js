@@ -10,7 +10,7 @@
         var value = '; ' + document.cookie,
             parts = value.split('; ' + name + '=');
 
-        if (parts.length == 2) {
+        if (parts.length === 2) {
             return parts.pop().split(';').shift();
         }
         return undefined;
@@ -154,14 +154,16 @@
         requestToken: function() {
             var me = this;
 
-            $.ajax({
-                url: window.csrfConfig.generateUrl,
-                success: function(response, status, xhr) {
-                    me.saveToken(xhr.getResponseHeader('x-csrf-token'));
-                    $.publish('plugin/swCsrfProtection/requestToken', [ me, me.getToken() ]);
-                    me.afterInit();
-                }
-            });
+            if (window.StateManager.hasCookiesAllowed() || window.cookieRemoval === 1) {
+                $.ajax({
+                    url: window.csrfConfig.generateUrl,
+                    success: function(response, status, xhr) {
+                        me.saveToken(xhr.getResponseHeader('x-csrf-token'));
+                        $.publish('plugin/swCsrfProtection/requestToken', [ me, me.getToken() ]);
+                        me.afterInit();
+                    }
+                });
+            }
         },
 
         /**

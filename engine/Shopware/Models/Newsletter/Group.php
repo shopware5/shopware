@@ -47,7 +47,7 @@ class Group extends ModelEntity
     private $id;
 
     /**
-     * name of the group
+     * Name of the group
      *
      * @var string
      *

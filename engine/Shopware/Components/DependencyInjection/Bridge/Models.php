@@ -37,7 +37,7 @@ use Shopware\Components\Model\ModelManager;
  * The class constructor injects all required components and services
  * which required for the entity manager.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

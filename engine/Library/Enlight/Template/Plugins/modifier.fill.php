@@ -30,6 +30,7 @@
  * @param int    $width
  * @param string $break
  * @param string $fill
+ *
  * @return string
  */
 function smarty_modifier_fill($str, $width = 10, $break = '...', $fill = ' ')
@@ -52,13 +53,13 @@ function smarty_modifier_fill($str, $width = 10, $break = '...', $fill = ' ')
         return str_repeat($fill, $width);
     }
     // If the string longer than the given width shorten the string and append the break pattern
-    if (strlen($str) > $width) {
-        $str = substr($str, 0, $width - strlen($break)) . $break;
+    if (mb_strlen($str) > $width) {
+        $str = mb_substr($str, 0, $width - mb_strlen($break)) . $break;
     }
     // If the string is shorter than the given width - fill the remaining space with the filling pattern
-    if ($width > strlen($str)) {
-        return $str . str_repeat($fill, $width - strlen($str));
-    } else {
-        return $str;
+    if ($width > mb_strlen($str)) {
+        return $str . str_repeat($fill, $width - mb_strlen($str));
     }
+
+    return $str;
 }

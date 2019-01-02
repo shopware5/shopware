@@ -24,10 +24,11 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use Shopware\Recovery\Common\Service\UniqueIdGenerator;
 use Shopware\Recovery\Install\Struct\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,11 +40,18 @@ class ShopService
     private $connection;
 
     /**
-     * @param \PDO $connection
+     * @var UniqueIdGenerator
      */
-    public function __construct(\PDO $connection)
+    private $generator;
+
+    /**
+     * @param \PDO              $connection
+     * @param UniqueIdGenerator $generator
+     */
+    public function __construct(\PDO $connection, UniqueIdGenerator $generator)
     {
         $this->connection = $connection;
+        $this->generator = $generator;
     }
 
     /**
@@ -101,8 +109,9 @@ EOT;
             throw new \RuntimeException('Please fill in all required fields. (shop configuration#2)');
         }
 
-        $this->updateMailAddress($shop);
+        $this->updateMailAddresses($shop);
         $this->updateShopName($shop);
+        $this->generateEsdKey();
     }
 
     /**
@@ -127,9 +136,17 @@ EOT;
     /**
      * @param Shop $shop
      */
-    private function updateMailAddress(Shop $shop)
+    private function updateMailAddresses(Shop $shop)
     {
         $this->updateConfigValue('mail', $shop->email);
+
+        $sql = 'UPDATE `s_cms_support` SET email = :email';
+        $prepareStatement = $this->connection->prepare($sql);
+        $prepareStatement->execute(['email' => $shop->email]);
+
+        $sql = 'UPDATE `s_campaigns_sender` SET email = :email';
+        $prepareStatement = $this->connection->prepare($sql);
+        $prepareStatement->execute(['email' => $shop->email]);
     }
 
     /**
@@ -138,6 +155,11 @@ EOT;
     private function updateShopName(Shop $shop)
     {
         $this->updateConfigValue('shopName', $shop->name);
+    }
+
+    private function generateEsdKey()
+    {
+        $this->updateConfigValue('esdKey', strtolower($this->generator->generateUniqueId(33)));
     }
 
     /**

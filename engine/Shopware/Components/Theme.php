@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Used as meta information container for a theme.
  * Contains the inheritance and config definition of a theme.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -240,6 +240,8 @@ class Theme
      *      $container->addTab($tab);
      *  }
      * </code>
+     *
+     * @param Form\Container\TabContainer $container
      */
     public function createConfig(Form\Container\TabContainer $container)
     {
@@ -287,7 +289,7 @@ class Theme
     }
 
     /**
-     * @param bool $discardedLessThemes
+     * @param array $discardedLessThemes
      */
     public function setDiscardedLessThemes($discardedLessThemes)
     {

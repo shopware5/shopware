@@ -27,7 +27,7 @@ namespace Shopware\Components\Password;
 /**
  * Password Manager
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -58,10 +58,10 @@ class Manager
      */
     public function addEncoder(Encoder\PasswordEncoderInterface $encoder)
     {
-        $name = trim(strtolower($encoder->getName()));
+        $name = strtolower(trim($encoder->getName()));
 
         if (isset($this->encoder[$name])) {
-            throw new \Exception("Encoder by name {$name} already registered");
+            throw new \Exception(sprintf('Encoder by name %s already registered', $name));
         }
 
         $this->encoder[$name] = $encoder;
@@ -76,16 +76,16 @@ class Manager
      */
     public function getEncoderByName($name)
     {
-        $name = trim(strtolower($name));
+        $name = strtolower(trim($name));
 
         if (!isset($this->encoder[$name])) {
-            throw new \Exception("Encoder by name {$name} not found");
+            throw new \Exception(sprintf('Encoder by name %s not found', $name));
         }
 
         $encoder = $this->encoder[$name];
 
         if (method_exists($encoder, 'isCompatible') && !$encoder->isCompatible()) {
-            throw new \Exception("Encoder by name {$name} is not compatible with your system");
+            throw new \Exception(sprintf('Encoder by name %s is not compatible with your system', $name));
         }
 
         return $encoder;
@@ -110,7 +110,7 @@ class Manager
     {
         $encoderName = strtolower($this->config->defaultPasswordEncoder);
 
-        if (empty($encoderName) || $encoderName == 'auto') {
+        if (empty($encoderName) || $encoderName === 'auto') {
             $bryptEncoder = $this->encoder['bcrypt'];
             if ($bryptEncoder->isCompatible()) {
                 $encoderName = 'bcrypt';

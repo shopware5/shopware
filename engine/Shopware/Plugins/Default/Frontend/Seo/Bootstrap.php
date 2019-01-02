@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -61,26 +60,26 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * Optimize Sourcecode / Apply seo rules
+     * Optimize Sourcecode / Apply SEO rules
      *
-     * @param Enlight_Event_EventArgs $args
+     * @param Enlight_Controller_ActionEventArgs $args
      */
-    public function onPostDispatch(Enlight_Event_EventArgs $args)
+    public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
         $request = $args->getSubject()->Request();
         $response = $args->getSubject()->Response();
         $view = $args->getSubject()->View();
 
         if (!$request->isDispatched() || $response->isException()
-            || $request->getModuleName() != 'frontend'
+            || $request->getModuleName() !== 'frontend'
             || !$view->hasTemplate()
         ) {
             return;
         }
 
-        $config = Shopware()->Config();
+        $config = $this->get('config');
 
-        /** @var $mapper QueryAliasMapper */
+        /** @var QueryAliasMapper $mapper */
         $mapper = $this->get('query_alias_mapper');
 
         $controllerBlacklist = preg_replace('#\s#', '', $config['sSEOVIEWPORTBLACKLIST']);
@@ -104,7 +103,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             if (!empty($metaDescription)) {
                 $metaDescription = html_entity_decode($metaDescription, ENT_COMPAT, 'UTF-8');
                 $metaDescription = trim(preg_replace('/\s\s+/', ' ', strip_tags($metaDescription)));
-                $metaDescription = htmlspecialchars($metaDescription);
+                $metaDescription = htmlspecialchars($metaDescription, ENT_COMPAT);
             }
         }
 
@@ -148,6 +147,13 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if (!empty($metaDescription)) {
             $view->SeoMetaDescription = $metaDescription;
         }
+
+        if ($this->get('config')->get('hrefLangEnabled')) {
+            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+            $view->assign('sHrefLinks', $this->get('shopware_storefront.cached_href_lang_service')->getUrls($request->getParams(), $context));
+        }
+
+        $view->assign('SeoDescriptionMaxLength', (int) $this->get('config')->get('metaDescriptionLength'));
     }
 
     /**
@@ -165,7 +171,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return $source;
         }
 
-        $config = Shopware()->Config();
+        $config = $this->get('config');
 
         // Remove comments
         if (!empty($config['sSEOREMOVECOMMENTS'])) {

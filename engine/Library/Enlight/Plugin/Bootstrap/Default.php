@@ -28,7 +28,7 @@
  * By registering plugins over a directory structure the plugins have no configuration.
  *
  * @category   Enlight
- * @package    Enlight_Plugin
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -38,7 +38,7 @@ class Enlight_Plugin_Bootstrap_Default extends Enlight_Plugin_Bootstrap
      * The Enlight_Plugin_Bootstrap expects a name for the plugin and
      * optionally an instance of the Enlight_Plugin_PluginCollection
      *
-     * @param $name
+     * @param string                          $name
      * @param Enlight_Plugin_PluginCollection $collection
      */
     public function __construct($name, $collection = null)

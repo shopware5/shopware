@@ -86,19 +86,6 @@
                 .#{$prefix}form-item-hidden {
                     margin: 0;
                 }
-                .#{$prefix}search-article-live-field {
-
-                    /** Fixes the width of the search field in all modern browsers except IE9 */
-                    .#{$prefix}form-item-body {
-                        display: block !important;
-                        width: 168px !important;
-                    }
-
-                    /** Fixes the width of the search field in IE9 - we need "!important" here to override the inline style */
-                    input[name=live-article-search] {
-                        width: 165px !important
-                    }
-                }
             }
         }
 

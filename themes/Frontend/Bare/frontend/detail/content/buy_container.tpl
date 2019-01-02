@@ -49,9 +49,9 @@
 
         {* Product email notification *}
         {block name="frontend_detail_index_notification"}
-            {if $ShowNotification && $sArticle.notification && !$sArticle.isAvailable}
+            {if $ShowNotification && $sArticle.notification && $sArticle.instock < $sArticle.minpurchase}
                 {* Support products with or without variants *}
-                {if ($sArticle.hasAvailableVariant && $sArticle.isSelectionSpecified) || !$sArticle.hasAvailableVariant}
+                {if ($sArticle.hasAvailableVariant && ($sArticle.isSelectionSpecified || !$sArticle.sConfigurator)) || !$sArticle.hasAvailableVariant}
                     {include file="frontend/plugins/notification/index.tpl"}
                 {/if}
             {/if}
@@ -76,9 +76,8 @@
                         <meta itemprop="lowPrice" content="{$lowestPrice}"/>
                         <meta itemprop="highPrice" content="{$highestPrice}"/>
                         <meta itemprop="offerCount" content="{$sArticle.sBlockPrices|count}"/>
-                    {else}
-                        <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {/if}
+                    <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                 {/block}
 

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -122,22 +121,17 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     {
         try {
             $params = $this->Request()->getParams();
-            unset($params['module']);
-            unset($params['controller']);
-            unset($params['action']);
-            unset($params['_dc']);
+            unset($params['module'], $params['controller'], $params['action'], $params['_dc']);
 
             if ($params[0]) {
-                $data = [];
                 foreach ($params as $values) {
-                    $logModel = Shopware()->Models()->find('\Shopware\Models\Log\Log', $values['id']);
+                    $logModel = Shopware()->Models()->find(\Shopware\Models\Log\Log::class, $values['id']);
 
                     Shopware()->Models()->remove($logModel);
                     Shopware()->Models()->flush();
-                    $data[] = Shopware()->Models()->toArray($logModel);
                 }
             } else {
-                $logModel = Shopware()->Models()->find('\Shopware\Models\Log\Log', $params['id']);
+                $logModel = Shopware()->Models()->find(\Shopware\Models\Log\Log::class, $params['id']);
 
                 Shopware()->Models()->remove($logModel);
                 Shopware()->Models()->flush();
@@ -159,11 +153,12 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             $params = $request->getParams();
             $params['key'] = html_entity_decode($params['key']);
 
-            $logModel = new Shopware\Models\Log\Log();
+            $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
 
+            $logModel = new Shopware\Models\Log\Log();
             $logModel->fromArray($params);
             $logModel->setDate(new \DateTime('now'));
-            $logModel->setIpAddress($request->getClientIp());
+            $logModel->setIpAddress($ip);
             $logModel->setUserAgent($request->getServer('HTTP_USER_AGENT', 'Unknown'));
 
             Shopware()->Models()->persist($logModel);
@@ -186,7 +181,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $logFile = $this->getLogFile($files, $logFile);
 
         if (!$logFile) {
-            new RuntimeException('Log file not found.');
+            throw new RuntimeException('Log file not found.');
         }
 
         $logFilePath = $logDir . '/' . $this->getLogFile($files, $logFile);
@@ -286,7 +281,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * Returns an array of all log files in the given directory.
      *
-     * @param $logDir
+     * @param string $logDir
      *
      * @return array
      */
@@ -312,8 +307,8 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * Checks whether the specified log file exists in the log directory. If so, he returns it.
      *
-     * @param $files
-     * @param null $name
+     * @param array  $files
+     * @param string $name
      *
      * @return false|string
      */
@@ -329,7 +324,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     }
 
     /**
-     * @param $files
+     * @param array $files
      *
      * @return false|string
      */

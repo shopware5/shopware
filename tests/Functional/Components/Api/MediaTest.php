@@ -27,7 +27,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Media;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -69,6 +69,8 @@ class MediaTest extends TestCase
         //check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
         $this->assertTrue($mediaService->has($path));
+
+        unlink($dest);
     }
 
     public function testUploadNameWithOver50Characters()
@@ -94,13 +96,15 @@ class MediaTest extends TestCase
 
         $mediaService->delete(Shopware()->DocPath('media_image') . $media->getFileName());
         $mediaService->delete($path);
+
+        unlink($dest);
     }
 
     public function testSubmittedNameIsUsed()
     {
         $data = $this->getExtendedTestData();
-        $source = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gQJDCU6ODUJUgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC';
-        $data['file'] = $source;
+        $base64Data = base64_encode(file_get_contents(__DIR__ . '/fixtures/shopware_logo.png'));
+        $data['file'] = 'data:image/png;base64,' . $base64Data;
         $ids = [];
 
         // Assert that the given name is used
@@ -174,6 +178,8 @@ class MediaTest extends TestCase
         }
 
         $this->resource->create($data);
+
+        unlink($dest);
     }
 
     protected function getSimpleTestData()

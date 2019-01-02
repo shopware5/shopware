@@ -59,7 +59,7 @@ class Repository extends ModelRepository
      * @param int|null   $limit
      * @param int|null   $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getGroupListQueryBuilder(array $filterBy = null, array $orderBy = null, $limit = null, $offset = null)
     {
@@ -168,7 +168,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from(\Shopware\Models\Site\Site::class, 'attribute')
+                      ->from(\Shopware\Models\Attribute\Site::class, 'attribute')
                       ->where('attribute.siteId = ?1')
                       ->setParameter(1, $siteId);
 

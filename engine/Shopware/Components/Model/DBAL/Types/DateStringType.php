@@ -33,7 +33,7 @@ use Doctrine\DBAL\Types\Type;
  *
  * @licence   This code was originally released under the MIT license
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -52,7 +52,7 @@ class DateStringType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         // FIX START
-        if (!$value instanceof \DateTime && !empty($value)) {
+        if (!$value instanceof \DateTimeInterface && !empty($value)) {
             $value = new \DateTime($value);
         } elseif (empty($value)) {
             $value = null;

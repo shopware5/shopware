@@ -96,7 +96,7 @@ class ListingPriceHelper
     public function getPriceTable(ShopContextInterface $context)
     {
         $priceTable = $this->connection->createQueryBuilder();
-        $priceTable->select($this->getPriceColumns());
+        $priceTable->select($this->getDefaultPriceColumns());
         $priceTable->from('s_articles_prices', 'defaultPrice');
         $priceTable->where('defaultPrice.pricegroup = :fallbackCustomerGroup');
 
@@ -138,23 +138,9 @@ class ListingPriceHelper
     }
 
     /**
-     * @return string
-     */
-    private function getPriceSwitchColumns()
-    {
-        $template = 'IFNULL(customerPrice.%s, defaultPrice.%s) as %s';
-        $switch = [];
-        foreach ($this->getPriceColumns() as $column) {
-            $switch[] = sprintf($template, $column, $column, $column);
-        }
-
-        return implode(',', $switch);
-    }
-
-    /**
      * @return array
      */
-    private function getPriceColumns()
+    public function getPriceColumns()
     {
         return [
             '`id`',
@@ -168,6 +154,41 @@ class ListingPriceHelper
             '`baseprice`',
             '`percent`',
         ];
+    }
+
+    /**
+     * @return string
+     */
+    private function getPriceSwitchColumns()
+    {
+        $template = 'IFNULL(customerPrice.%s, defaultPrice.%s) as %s';
+        $switch = [];
+        foreach ($this->getPriceColumns() as $column) {
+            $switch[] = sprintf($template, $column, $column, $column);
+        }
+
+        $switch[] = 'defaultPrice.articleID as product_id';
+        $switch[] = 'defaultPrice.articledetailsID as variant_id';
+
+        return implode(',', $switch);
+    }
+
+    /**
+     * Get the columns for the price group prices.
+     *
+     * @return string
+     */
+    private function getDefaultPriceColumns()
+    {
+        $template = 'defaultPrice.%s';
+        $switch = [];
+        foreach ($this->getPriceColumns() as $column) {
+            $switch[] = sprintf($template, $column);
+        }
+        $switch[] = sprintf($template, 'articleID as product_id');
+        $switch[] = sprintf($template, 'articledetailsID as variant_id');
+
+        return implode(',', $switch);
     }
 
     /**

@@ -34,5 +34,5 @@ interface StatisticsClientInterface
      *
      * @return StatisticsResponse
      */
-    public function fetchStatistics(StatisticsRequest $statisticsRequest);
+    public function sendStatistics(StatisticsRequest $statisticsRequest);
 }

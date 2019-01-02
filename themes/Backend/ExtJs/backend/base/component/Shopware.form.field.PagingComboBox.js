@@ -93,11 +93,22 @@ Ext.define('Shopware.form.field.PagingComboBox',
      */
     forceDefaultPageSize: false,
 
+    /**
+     * Disables loading entities by select name
+     *
+     * @default false
+     * @boolean
+     */
+    disableLoadingSelectedName: false,
+
     initComponent: function () {
         var me = this;
 
         me.callParent(arguments);
-        me.on('change', me.templateComboBoxChanged);
+
+        if (!me.disableLoadingSelectedName) {
+            me.on('change', me.templateComboBoxChanged);
+        }
     },
 
     /**
@@ -141,7 +152,7 @@ Ext.define('Shopware.form.field.PagingComboBox',
      * @returns { string }
      */
     getDisplayValue: function () {
-        if (!Ext.isDefined(this.displayTplData)) {
+        if (!Ext.isDefined(this.displayTplData) || this.displayTplData === null) {
             return this.callParent(arguments);
         }
 

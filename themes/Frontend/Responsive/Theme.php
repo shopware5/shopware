@@ -79,7 +79,9 @@ class Theme extends \Shopware\Components\Theme
         // Third party plugins / libraries
         'src/js/vendors/modernizr/modernizr.custom.35977.js',
         'vendors/js/jquery/jquery.min.js',
+        'src/js/jquery.symbol-polyfill.js',
         'vendors/js/picturefill/picturefill.min.js',
+        'vendors/js/customEventPolyfill/customeventpolyfill.min.js',
         'vendors/js/jquery.transit/jquery.transit.js',
         'vendors/js/jquery.event.move/jquery.event.move.js',
         'vendors/js/jquery.event.swipe/jquery.event.swipe.js',
@@ -138,6 +140,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.storage-field.js',
         'src/js/jquery.cookie-permission.js',
         'src/js/jquery.shopware-responsive.js',
+        'src/js/jquery.invalid-tos-jump.js',
     ];
 
     /**

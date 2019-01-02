@@ -79,7 +79,9 @@
                     {/block}
                 </div>
             {else}
-                <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if isset($sErrorFlag) && count($sErrorFlag) > 0} data-hasError="true"{/if}></div>
+                {$captchaName = {config name=captchaMethod}}
+                {$captchaHasError = isset($sErrorFlag) && count($sErrorFlag) > 0}
+                {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
             {/if}
         {/block}
 
@@ -88,6 +90,13 @@
             <p class="review--notice">
                 {s name="DetailCommentInfoFields"}{/s}
             </p>
+        {/block}
+
+        {* Data protection information *}
+        {block name='frontend_detail_comment_input_privacy'}
+            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                {include file="frontend/_includes/privacy.tpl"}
+            {/if}
         {/block}
 
         {* Review actions *}

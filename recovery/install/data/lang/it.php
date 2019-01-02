@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Licenza Shopware',
     'menuitem_configuration' => 'Configurazione',
     'menuitem_finish' => 'Pronto',
-    'menuitem_license' => 'Licenza utente finale',
+    'menuitem_license' => 'Condizioni generali',
 
     'license_incorrect' => 'Il codice di licenza immesso sembra non essere valido',
     'license_does_not_match' => 'Il codice di licenza immesso non corrisponde a nessuna versione commerciale di Shopware',
@@ -49,6 +49,7 @@ return [
     'select_language_fr' => 'Français',
     'select_language_es' => 'Español',
     'select_language_pt' => 'Português',
+    'select_language_pl' => 'Polski',
 
     'language-selection_select_language' => 'Assistente installazione lingua',
     'language-selection_header' => 'Installazione del tuo Shopware',
@@ -73,7 +74,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Stato',
     'requirements_error' => '<h3 class="alert-heading">Attenzione!</h3>Non tutti i requisiti per l\'installazione sono soddisfatti',
     'requirements_success' => '<h3 class="alert-heading">Esito positivo!</h3>Tutti i requisiti per l\'installazione sono soddisfatti',
-    'requirements_ioncube' => '<small><strong>* Nota:</strong> In questo sistema non è installato il software di codifica ionCube. Questo software serve per installare successivamente espansioni del nostro <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a> codificate con ionCube. L\'installazione di ionCube può essere effettuata in qualsiasi momento successivo.</small>',
     'requirements_php_info' => 'Per consentire l\'utilizzo di Shopware, il tuo server deve soddisfare i requisiti di sistema seguenti.',
     'requirements_system_colcheck' => 'Requisito',
     'requirements_system_colrequired' => 'Obbligatorio',
@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(mostra tutto)',
     'requirements_hide_all' => '(nascondi tutto)',
 
-    'license_agreement_header' => 'Condizioni di licenza utente finale ("EULA")',
-    'license_agreement_info' => 'Qui sono indicate le nostre condizioni di licenza che devono essere lette e accettate per portare a termine l\'installazione. Shopware Community Edition è soggetto a licenza AGPL, mentre i componenti dei plugin e il template sono soggetti a licenza New BSD.',
-    'license_agreement_error' => 'Accetta le nostre condizioni di licenza',
-    'license_agreement_checkbox' => 'Accetto le condizioni di licenza',
+    'license_agreement_header' => 'Condizioni generali ("CG")',
+    'license_agreement_info' => 'Qui sono indicate le nostre condizioni generali che devono essere lette e accettate per portare a termine l\'installazione. Shopware Community Edition è soggetto a licenza AGPL, mentre i componenti dei plugin e il template sono soggetti a licenza New BSD.',
+    'license_agreement_error' => 'Accetta le nostre condizioni generali',
+    'license_agreement_checkbox' => 'Accetto le condizioni generali',
 
     'database-configuration_header' => 'Configura banca dati',
     'database-configuration_field_host' => 'Server banca dati:',
@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     siamo lieti di darti il benvenuto nella nostra Community. Shopware è stato installato con successo.
-<p>Il tuo Shop ora è pronto all\'uso. Se sei nuovo in Shopware, ti suggeriamo di leggere la guida <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Primi passi in Shopware"</a>. Se stai effettuando il primo accesso allo Shop Backend, la nostra procedura guidata "First Run" ti spiega i passaggi principali da compiere.</p>
+<p>Il tuo Shop ora è pronto all\'uso. Se sei nuovo in Shopware, ti suggeriamo di leggere la guida <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"Primi passi in Shopware"</a>. Se stai effettuando il primo accesso allo Shop Backend, la nostra procedura guidata "First Run" ti spiega i passaggi principali da compiere.</p>
 <p>Buon divertimento con il tuo nuovo Onlineshop!</p>',
 ];

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -183,7 +183,7 @@ class TypeMapping
     }
 
     /**
-     * @return string[]
+     * @return array<array>
      */
     public function getEntities()
     {
@@ -212,6 +212,8 @@ class TypeMapping
             'Shopware\Models\Newsletter\Newsletter',
             'Shopware\Models\Partner\Partner',
             'Shopware\Models\Shop\Shop',
+            'Shopware\Models\Site\Site',
+            'Shopware\Models\Country\Country',
         ];
 
         $result = [];

@@ -36,7 +36,7 @@ use Doctrine\ORM\Proxy\Proxy;
  *
  * Enlight event listener function can be registered over $this->subscribeEvent();
  * Example:
- *  - Before a new article created (Model: Shopware\Models\Article\Article) we want to call an own function named "beforeAnArticleCreated".
+ *  - Before a new product created (Model: Shopware\Models\Article\Article) we want to call an own function named "beforeAnArticleCreated".
  *
  * - Plugin Solution:
  * $this->subscribeEvent(
@@ -57,7 +57,7 @@ class EventSubscriber implements BaseEventSubscriber
     protected $eventManager;
 
     /**
-     * @param $eventManager
+     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct($eventManager)
     {
@@ -168,7 +168,7 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Returns the class name of the passed entity.
      *
-     * @param $entity \Shopware\Components\Model\ModelEntity
+     * @param \Shopware\Components\Model\ModelEntity $entity
      *
      * @return string
      */
@@ -186,8 +186,8 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Notify a lifecycleCallback event of doctrine over the enlight event manager.
      *
-     * @param $eventName string
-     * @param $eventArgs LifecycleEventArgs
+     * @param string             $eventName
+     * @param LifecycleEventArgs $eventArgs
      *
      * @return \Enlight_Event_EventArgs|null
      */

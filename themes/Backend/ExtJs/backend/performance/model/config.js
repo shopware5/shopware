@@ -96,7 +96,8 @@ Ext.define('Shopware.apps.Performance.model.Config', {
         { type:'hasMany', model:'Shopware.apps.Performance.model.Categories', name:'getCategories', associationKey:'categories' },
         { type:'hasMany', model:'Shopware.apps.Performance.model.Filter', name:'getFilter', associationKey:'filters' },
         { type:'hasMany', model:'Shopware.apps.Performance.model.Various', name:'getVarious', associationKey:'various' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Customer', name:'getCustomer', associationKey:'customer' }
+        { type:'hasMany', model:'Shopware.apps.Performance.model.Customer', name:'getCustomer', associationKey:'customer' },
+        { type:'hasMany', model:'Shopware.apps.Performance.model.Sitemap', name:'getSitemap', associationKey:'sitemap' },
     ]
 
 });

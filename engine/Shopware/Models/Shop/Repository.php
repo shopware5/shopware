@@ -341,9 +341,25 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns the active shops in fixed
+     *
+     * @return array
+     */
+    public function getActiveShopsFixed()
+    {
+        $shops = $this->getActiveShops();
+
+        foreach ($shops as $key => $shop) {
+            $shops[$key] = $this->fixActive($shop);
+        }
+
+        return $shops;
+    }
+
+    /**
      * @param \Enlight_Controller_Request_Request $request
      *
-     * @return DetachedShop
+     * @return DetachedShop|null
      */
     public function getActiveByRequest($request)
     {
@@ -387,7 +403,7 @@ class Repository extends ModelRepository
      */
     public function getQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -425,7 +441,7 @@ class Repository extends ModelRepository
      */
     public function getActiveQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->getQueryBuilder()
             ->where('shop.active = 1');
     }
@@ -486,7 +502,7 @@ class Repository extends ModelRepository
                 if (!$shop || $currentShop['base_url'] > $shop['base_url']) {
                     $shop = $currentShop;
                 }
-            } elseif (!$shop && $currentShop['base_path'] . '/' === $requestPath) {
+            } elseif (!$shop && $requestPath === $currentShop['base_path'] . '/') {
                 /*
                  * If no shop was found, use the one which basePath equals the requestPath
                  *
@@ -612,7 +628,7 @@ class Repository extends ModelRepository
      */
     private function getActiveMainShopQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 
@@ -642,7 +658,7 @@ class Repository extends ModelRepository
      */
     private function getActiveSubShopQueryBuilder()
     {
-        /* @var $builder QueryBuilder */
+        /* @var QueryBuilder $builder */
         return $this->createQueryBuilder('shop')
             ->addSelect('shop')
 

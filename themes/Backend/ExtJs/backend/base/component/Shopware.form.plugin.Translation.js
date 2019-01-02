@@ -103,12 +103,7 @@ Ext.define('Shopware.form.plugin.Translation',
     init: function(form) {
         var me = this;
 
-        form._translationConfig = {
-            translationType: me.translationType,
-            translationKey: me.translationKey,
-            translationCallback: me.translationCallback,
-            translationMerge: me.translationMerge
-        };
+        me.initConfig(form);
 
         form.on('afterrender', function() {
             me.initTranslationFields(form);
@@ -120,6 +115,18 @@ Ext.define('Shopware.form.plugin.Translation',
 
         form.translationPlugin = this;
         me.callParent(arguments);
+    },
+
+    /**
+     * @param form Ext.form.Panel
+     */
+    initConfig: function (form) {
+        form._translationConfig = {
+            translationType: this.translationType,
+            translationKey: this.translationKey,
+            translationCallback: this.translationCallback,
+            translationMerge: this.translationMerge
+        };
     },
 
     /**
@@ -287,6 +294,13 @@ Ext.define('Shopware.form.plugin.Translation',
             if (field.getValue()) {
                 if (config.xtype != 'tinymce') {
                     config.emptyText = field.getValue();
+
+                    if (config.xtype === 'productstreamselection') {
+                        config.emptyText = field.store.findRecord('id', config.emptyText).get('name');
+                    }
+                }
+                if (config.xtype == 'checkbox') {
+                    config.checked = field.checked;
                 }
             }
             result.push(config)

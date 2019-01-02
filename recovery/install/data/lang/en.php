@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Shopware licence',
     'menuitem_configuration' => 'Configuration',
     'menuitem_finish' => 'Done',
-    'menuitem_license' => 'End user licence',
+    'menuitem_license' => 'Terms of service',
 
     'license_incorrect' => 'The licence key entered does not appear to be valid',
     'license_does_not_match' => 'The licence key entered does not match a commercial Shopware version',
@@ -49,6 +49,7 @@ return [
     'select_language_fr' => 'Français',
     'select_language_es' => 'Español',
     'select_language_pt' => 'Português',
+    'select_language_pl' => 'Polski',
 
     'language-selection_select_language' => 'Language installation wizard',
     'language-selection_header' => 'Your Shopware installation',
@@ -73,7 +74,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => '<h3 class="alert-heading">Warning!</h3>Not all of the requirements for successful installation have been met',
     'requirements_success' => '<h3 class="alert-heading">Congratulations!</h3>All of the requirements for successful installation have been met',
-    'requirements_ioncube' => '<small><strong>* Hint:</strong> The ionCube encoding software is not installed on your system. This will only be needed if later on you want to install extensions via our <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a> that are encrypted with ionCube. You can install ionCube at any time.</small>',
     'requirements_php_info' => 'Your server must meet the following system requirements in order to run Shopware',
     'requirements_system_colcheck' => 'Requirement',
     'requirements_system_colrequired' => 'Required',
@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(show all)',
     'requirements_hide_all' => '(hide all)',
 
-    'license_agreement_header' => 'End user licence agreement ("EULA")',
-    'license_agreement_info' => 'Here you will find a summary of our licence terms, which you must read and accept for successful installation. The Shopware Community Edition is licensed under AGPL, while parts of the plug-ins and the template are under the New BSD licence.',
-    'license_agreement_error' => 'You must agree to our licence terms',
-    'license_agreement_checkbox' => 'I agree to the licence terms',
+    'license_agreement_header' => 'Terms of service ("TOS")',
+    'license_agreement_info' => 'Here you will find a summary of our terms of service, which you must read and accept for successful installation. The Shopware Community Edition is licensed under AGPL, while parts of the plug-ins and the template are under the New BSD licence.',
+    'license_agreement_error' => 'You must agree to our terms of service',
+    'license_agreement_checkbox' => 'I agree to the terms of service',
 
     'database-configuration_header' => 'Configure database',
     'database-configuration_field_host' => 'Database server:',
@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     We are delighted to welcome you to our community. You have successfully installed Shopware.
-<p>Your shop is now ready to use. If you are new to Shopware, we recommend that you take a look at the guide <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"First steps in Shopware"</a>. When you log in to the shop backend for the first time, our "First Run Wizard" will take you through some further basic settings.</p>
+<p>Your shop is now ready to use. If you are new to Shopware, we recommend that you take a look at the guide <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"First steps in Shopware"</a>. When you log in to the shop backend for the first time, our "First Run Wizard" will take you through some further basic settings.</p>
 <p>Enjoy your new online shop!</p>',
 ];

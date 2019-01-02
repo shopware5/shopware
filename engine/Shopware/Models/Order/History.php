@@ -65,6 +65,7 @@ class History extends ModelEntity
      * This is the primary key field. (strategy="IDENTITY")
      *
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -76,6 +77,7 @@ class History extends ModelEntity
      * Used for the $order association property.
      *
      * @var int
+     *
      * @ORM\Column(name="orderID", type="integer", nullable=false)
      */
     private $orderId;
@@ -85,6 +87,7 @@ class History extends ModelEntity
      * Used for the $user association property.
      *
      * @var int
+     *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
     private $userId = null;
@@ -94,6 +97,7 @@ class History extends ModelEntity
      * Used for the $previousOrderStatus association property.
      *
      * @var int
+     *
      * @ORM\Column(name="previous_order_status_id", type="integer", nullable=true)
      */
     private $previousOrderStatusId = null;
@@ -103,6 +107,7 @@ class History extends ModelEntity
      * Used for the $orderStatus association property.
      *
      * @var int
+     *
      * @ORM\Column(name="order_status_id", type="integer", nullable=true)
      */
     private $orderStatusId = null;
@@ -112,6 +117,7 @@ class History extends ModelEntity
      * Used for the $previousPaymentStatus association property.
      *
      * @var int
+     *
      * @ORM\Column(name="previous_payment_status_id", type="integer", nullable=true)
      */
     private $previousPaymentStatusId = null;
@@ -121,6 +127,7 @@ class History extends ModelEntity
      * Used for the $paymentStatus association property.
      *
      * @var int
+     *
      * @ORM\Column(name="payment_status_id", type="integer", nullable=true)
      */
     private $paymentStatusId = null;
@@ -130,6 +137,7 @@ class History extends ModelEntity
      * It will be saved in the s_order_history.comment field.
      *
      * @var string
+     *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
     private $comment = '';
@@ -139,10 +147,10 @@ class History extends ModelEntity
      * The $order property in this model is the owning side of the association of the order status history and the
      * order model. The $history property of the order model is the inverse side of this association.
      *
+     * @var \Shopware\Models\Order\Order
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Order
      */
     private $order;
 
@@ -152,10 +160,10 @@ class History extends ModelEntity
      * user model. This association is an uni-directional association. That means that the user model
      * don't know anything about the order status history.
      *
+     * @var \Shopware\Models\User\User
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\User\User")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\User\User
      */
     private $user;
 
@@ -165,10 +173,10 @@ class History extends ModelEntity
      * previous order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
+     * @var \Shopware\Models\Order\Status
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_order_status_id", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Status
      */
     private $previousOrderStatus;
 
@@ -178,10 +186,10 @@ class History extends ModelEntity
      * current order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
+     * @var \Shopware\Models\Order\Status
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="order_status_id", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Status
      */
     private $orderStatus;
 
@@ -191,10 +199,10 @@ class History extends ModelEntity
      * previous payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
+     * @var \Shopware\Models\Order\Status
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_payment_status_id", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Status
      */
     private $previousPaymentStatus;
 
@@ -204,19 +212,19 @@ class History extends ModelEntity
      * current payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
+     * @var \Shopware\Models\Order\Status
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="payment_status_id", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Status
      */
     private $paymentStatus;
 
     /**
      * Contains the date when the order status or payment status has been changed.
      *
-     * @ORM\Column(name="change_date", type="datetime", nullable=false)
+     * @var \DateTimeInterface
      *
-     * @var \DateTime
+     * @ORM\Column(name="change_date", type="datetime", nullable=false)
      */
     private $changeDate;
 
@@ -322,32 +330,6 @@ class History extends ModelEntity
         return $this->order;
     }
 
-//    /**
-//     * Setter function for the user property.
-//     * The $orderId property contains the order identifier for the associated order.
-//     * Used for the $order association property.
-//     *
-//     * @param int $orderId
-//     * @return \Shopware\Models\Order\History
-//     */
-//    public function setOrderId($orderId)
-//    {
-//        $this->orderId = $orderId;
-//        return $this;
-//    }
-//
-//    /**
-//     * Getter function for the user property.
-//     * The $orderId property contains the order identifier for the associated order.
-//     * Used for the $order association property.
-//     *
-//     * @return int
-//     */
-//    public function getOrderId()
-//    {
-//        return $this->orderId;
-//    }
-
     /**
      * Setter function for the user property.
      * Contains the associated status model for the current order status.
@@ -379,32 +361,6 @@ class History extends ModelEntity
     {
         return $this->orderStatus;
     }
-
-//    /**
-//     * Setter function for the user property.
-//     * The $orderStatusId property contains the id of the current order status of the order.
-//     * Used for the $orderStatus association property.
-//     *
-//     * @param int $orderStatusId
-//     * @return \Shopware\Models\Order\History
-//     */
-//    public function setOrderStatusId($orderStatusId)
-//    {
-//        $this->orderStatusId = $orderStatusId;
-//        return $this;
-//    }
-//
-//    /**
-//     * Getter function for the user property.
-//     * The $orderStatusId property contains the id of the current order status of the order.
-//     * Used for the $orderStatus association property.
-//     *
-//     * @return int
-//     */
-//    public function getOrderStatusId()
-//    {
-//        return $this->orderStatusId;
-//    }
 
     /**
      * Setter function for the user property.
@@ -438,33 +394,6 @@ class History extends ModelEntity
         return $this->paymentStatus;
     }
 
-//    /**
-//     * Setter function for the user property.
-//     * The $paymentStatusId property contains the id of the current payment status of the order.
-//     * Used for the $paymentStatus association property.
-//     *
-//     * @param int $paymentStatusId
-//     * @return \Shopware\Models\Order\History
-//     */
-//    public function setPaymentStatusId($paymentStatusId)
-//    {
-//        $this->paymentStatusId = $paymentStatusId;
-//        return $this;
-//
-//    }
-//
-//    /**
-//     * Getter function for the user property.
-//     * The $paymentStatusId property contains the id of the current payment status of the order.
-//     * Used for the $paymentStatus association property.
-//     *
-//     * @return int
-//     */
-//    public function getPaymentStatusId()
-//    {
-//        return $this->paymentStatusId;
-//    }
-
     /**
      * Setter function for the user property.
      * Contains the associated status model for the previous order status.
@@ -496,30 +425,6 @@ class History extends ModelEntity
     {
         return $this->previousOrderStatus;
     }
-
-//    /**
-//     * Setter function for the user property.
-//     *
-//     * @param int $previousOrderStatusId
-//     * @return \Shopware\Models\Order\History
-//     */
-//    public function setPreviousOrderStatusId($previousOrderStatusId)
-//    {
-//        $this->previousOrderStatusId = $previousOrderStatusId;
-//        return $this;
-//    }
-//
-//    /**
-//     * Getter function for the user property.
-//     * The $previousOrderStatusId property contains the id of the previous order status of the order.
-//     * Used for the $previousOrderStatus association property.
-//     *
-//     * @return int
-//     */
-//    public function getPreviousOrderStatusId()
-//    {
-//        return $this->previousOrderStatusId;
-//    }
 
     /**
      * Setter function for the previousPaymentStatus property.
@@ -553,63 +458,11 @@ class History extends ModelEntity
         return $this->previousPaymentStatus;
     }
 
-//    /**
-//     * Setter function for the previousPaymentStatusId property.
-//     * The $previousPaymentStatusId property contains the id of the previous payment status of the order.
-//     * Used for the $previousPaymentStatus association property.
-//     *
-//     * @param int $previousPaymentStatusId
-//     * @return \Shopware\Models\Order\History
-//     */
-//    public function setPreviousPaymentStatusId($previousPaymentStatusId)
-//    {
-//        $this->previousPaymentStatusId = $previousPaymentStatusId;
-//        return $this;
-//    }
-//
-//    /**
-//     * Getter function for the user property.
-//     * The $previousPaymentStatusId property contains the id of the previous payment status of the order.
-//     * Used for the $previousPaymentStatus association property.
-//     *
-//     * @return int
-//     */
-//    public function getPreviousPaymentStatusId()
-//    {
-//        return $this->previousPaymentStatusId;
-//    }
-
-//    /**
-//     * Setter function for the userId property.
-//     * The $userId property contains the unique user id of the user which changed the order status.
-//     * Used for the $user association property.
-//     *
-//     * @param int $userId
-//     * @return \Shopware\Models\Order\History
-//     */
-//    public function setUserId($userId)
-//    {
-//        $this->userId = $userId;
-//        return $this;
-//    }
-//
-//    /**
-//     * Getter function for the userId property.
-//     * The $userId property contains the unique user id of the user which changed the order status.
-//     * Used for the $user association property.
-//     *
-//     * @return int
-//     */
-//    public function getUserId()
-//    {
-//        return $this->userId;
-//    }
-
     /**
      * Getter function for the changeDate property.
      * Contains the date when the order status or payment status has been changed.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChangeDate()
     {
@@ -620,7 +473,7 @@ class History extends ModelEntity
      * Setter function for the changeDate property.
      * Contains the date when the order status or payment status has been changed.
      *
-     * @param \DateTime $changeDate
+     * @param \DateTimeInterface $changeDate
      */
     public function setChangeDate($changeDate)
     {

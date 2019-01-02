@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
@@ -320,7 +319,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function getAlternativeLocalesAction()
     {
-        /** @var $targetLocale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $targetLocale */
         $targetLocale = Shopware()->Container()->get('Auth')->getIdentity()->locale;
 
         $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
@@ -539,7 +538,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @throws Exception
      *
-     * @return LocaleStruct Information about the current locale
+     * @return LocaleStruct|null Information about the current locale
      */
     private function getCurrentLocale()
     {
@@ -558,7 +557,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
                     'message' => $e->getMessage(),
                 ]);
 
-                return;
+                return null;
             }
 
             foreach ($serverLocales as $serverLocale) {
@@ -567,7 +566,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         $user = Shopware()->Container()->get('Auth')->getIdentity();
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 
@@ -581,7 +580,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @throws Exception
      *
-     * @return string[] Information about the current user's shop domains
+     * @return string[]|null Information about the current user's shop domains
      */
     private function getDomains(AccessTokenStruct $token)
     {
@@ -596,7 +595,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
                 'message' => $e->getMessage(),
             ]);
 
-            return;
+            return null;
         }
 
         $shopsDomains = array_map(function ($shopData) {

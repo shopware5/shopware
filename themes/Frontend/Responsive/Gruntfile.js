@@ -109,6 +109,7 @@ module.exports = function (grunt) {
                     cwd: nodeDir + '/open-sans-fontface/fonts',
                     src: [
                         '*/**.ttf',
+                        '*/**.woff2',
                         '*/**.woff'
                     ],
                     dest: vendorDir + '/fonts/open-sans-fontface'
@@ -143,7 +144,7 @@ module.exports = function (grunt) {
         if (!grunt.file.isFile(htaccessFile)) {
 
             grunt.file.write(htaccessFile,
-                '<FilesMatch "\\.(ttf|eot|svg|woff)$">' + "\n    " +
+                '<FilesMatch "\\.(ttf|eot|svg|woff|woff2)$">' + "\n    " +
                     '<IfModule mod_expires.c>' + "\n        " +
                         'ExpiresActive on' + "\n        " +
                         'ExpiresDefault "access plus 1 year"' + "\n    " +

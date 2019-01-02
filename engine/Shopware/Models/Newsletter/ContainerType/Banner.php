@@ -39,12 +39,13 @@ class Banner extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
+     * @var \Shopware\Models\Newsletter\Container
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="banner")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Container
      */
     protected $container;
+
     /**
      * Autoincrement ID
      *
@@ -165,14 +166,11 @@ class Banner extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
-     *
-     * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)
     {
         $this->container = $container;
         $container->setType('ctBanner');
-        //        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'banner');
     }
 
     /**

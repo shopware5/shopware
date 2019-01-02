@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -242,7 +242,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     public function seoSupplierAction()
     {
         $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
-        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+        if ($seoSupplierConfig === null || $seoSupplierConfig === false) {
             $this->View()->assign([
                 'success' => true,
             ]);
@@ -256,6 +256,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shopId = (int) $this->Request()->getParam('shopId', 1);
 
         // Create shop
+        $this->SeoIndex()->registerShop($shopId);
         $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
 
         // Make sure a template is available
@@ -272,9 +273,9 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      * passed shop id. The offset and limit parameter are used
      * to update only an offset of article urls.
      *
-     * @param $offset int
-     * @param $limit int
-     * @param $shop Shopware\Models\Shop\Shop
+     * @param int                       $offset
+     * @param int                       $limit
+     * @param Shopware\Models\Shop\Shop $shop
      */
     protected function seoArticle($offset, $limit, $shop)
     {

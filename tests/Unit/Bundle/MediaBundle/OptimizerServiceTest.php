@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\MediaBundle;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
@@ -37,17 +38,17 @@ class OptimizerServiceTest extends TestCase
     private $optimizerService;
 
     /**
-     * @var array
+     * @var ArrayCollection
      */
     private $optimizers = [];
 
     protected function setUp()
     {
-        $this->optimizers = [
+        $this->optimizers = new ArrayCollection([
             new RunnableUnitOptimizer(),
             new NotRunnableUnitOptimizer(),
             new SingleRunnableUnitOptimizer(),
-        ];
+        ]);
 
         $this->optimizerService = new OptimizerService($this->optimizers);
     }
@@ -57,7 +58,7 @@ class OptimizerServiceTest extends TestCase
         $this->expectException(OptimizerNotFoundException::class);
         $file = __DIR__ . '/fixtures/sw-icon.png';
 
-        $optimizerService = new OptimizerService([]);
+        $optimizerService = new OptimizerService(new ArrayCollection());
         $optimizerService->optimize($file);
     }
 
@@ -93,7 +94,9 @@ class OptimizerServiceTest extends TestCase
 
     public function testGetOptimizers()
     {
-        $this->assertSame($this->optimizers, $this->optimizerService->getOptimizers());
+        $optimizers = $this->optimizerService->getOptimizers();
+        $this->assertInternalType('array', $optimizers);
+        $this->assertSame($this->optimizers->toArray(), $optimizers);
     }
 
     public function testOptimize()

@@ -24,7 +24,12 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\StatisticsService;
+use Shopware\Bundle\BenchmarkBundle\StatisticsClient;
+use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase;
 
 abstract class ProviderTestCase extends BenchmarkTestCase
@@ -39,9 +44,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
      */
     public function testGetArrayKeysFit()
     {
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
         $arrayKeys = array_keys($resultData);
 
         $this->assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
@@ -52,8 +55,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
      */
     public function testGetValidateTypes()
     {
-        $provider = $this->getProvider();
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         if (!is_array($this::EXPECTED_TYPES)) {
             $this->assertInternalType($this::EXPECTED_TYPES, $resultData);
@@ -62,6 +64,26 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         }
 
         $this->checkForTypes($resultData, $this::EXPECTED_TYPES);
+    }
+
+    /**
+     * @param string $dataName
+     */
+    protected function installDemoData($dataName)
+    {
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $basicContent = $this->openDemoDataFile('basic_setup');
+        $dbalConnection->exec($basicContent);
+
+        parent::installDemoData($dataName);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getBenchmarkData()
+    {
+        return $this->getProvider()->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1));
     }
 
     /**
@@ -111,5 +133,50 @@ abstract class ProviderTestCase extends BenchmarkTestCase
     protected function getAssetsFolder()
     {
         return __DIR__ . '/assets/';
+    }
+
+    /**
+     * @param int $shopId
+     *
+     * @return ShopContextInterface
+     */
+    protected function getShopContextByShopId($shopId)
+    {
+        return Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext($shopId);
+    }
+
+    protected function resetConfig()
+    {
+        /** @var Connection $dbalConnection */
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+
+        $dbalConnection->update('s_benchmark_config', [
+            'last_order_id' => '0',
+            'last_customer_id' => '0',
+            'last_product_id' => '0',
+        ], ['1' => '1']);
+    }
+
+    protected function sendStatistics($batchSize = null)
+    {
+        Shopware()->Models()->clear();
+        $response = new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), 'foo', false);
+
+        $client = $this->createMock(StatisticsClient::class);
+
+        $client
+            ->method('sendStatistics')->willReturn($response);
+
+        $service = new StatisticsService(
+            Shopware()->Container()->get('shopware.benchmark_bundle.collector'),
+            $client,
+            Shopware()->Container()->get('shopware.benchmark_bundle.repository.config'),
+            Shopware()->Container()->get('shopware_storefront.context_service'),
+            Shopware()->Container()->get('dbal_connection')
+        );
+
+        $config = Shopware()->Container()->get('shopware.benchmark_bundle.repository.config')->findOneBy(['shopId' => 1]);
+
+        $service->transmit($config, $config->getBatchSize());
     }
 }

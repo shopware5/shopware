@@ -415,19 +415,24 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * @param widgetName
      * @param menuItem
      */
-    onAddWidget: function (win, widgetName, menuItem) {
+    onAddWidget: function (win, widgetName, menuItem, data) {
         var me = this,
             container = win.containerCollection.getAt(0),
             widget = me.widgetStore.findRecord('name', widgetName);
 
-        menuItem.disable();
+        data = data || {};
+
+        if (menuItem) {
+            menuItem.disable();
+        }
 
         Ext.Ajax.request({
             url: '{url controller=widgets action=addWidgetView}',
             jsonData: {
                 id: widget.get('id'),
                 column: 0,
-                position: container.items.getCount() - 1
+                position: container.items.getCount() - 1,
+                data: data
             },
             callback: function (options, success, res) {
                 if (!success) {
@@ -444,7 +449,9 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
                         container.insert(newWidget.position.rowId, newWidget);
 
-                        menuItem.enable();
+                        if (menuItem) {
+                            menuItem.enable();
+                        }
                     }
                 });
             }

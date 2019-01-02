@@ -26,16 +26,20 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
+use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Category\Category;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
+ *
+ * @deprecated Will be removed in Shopware 5.6
  */
 class SitemapXMLRepository
 {
@@ -65,22 +69,30 @@ class SitemapXMLRepository
     private $storeFrontCriteriaFactory;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
      * @param ModelManager                       $em
      * @param ContextServiceInterface            $contextService
+     * @param int                                $batchSize
      */
     public function __construct(
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
         ModelManager $em,
-        ContextServiceInterface $contextService)
-    {
+        ContextServiceInterface $contextService,
+        $batchSize = 10000
+    ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->contextService = $contextService;
         $this->productNumberSearch = $productNumberSearch;
         $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory;
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -94,7 +106,7 @@ class SitemapXMLRepository
 
         return [
             'categories' => $categories,
-            'articles' => $this->readArticleUrls($categoryIds),
+            'articles' => $this->readProductUrls($categoryIds),
             'blogs' => $this->readBlogUrls($parentId),
             'customPages' => $this->readStaticUrls(),
             'suppliers' => $this->readSupplierUrls(),
@@ -111,8 +123,10 @@ class SitemapXMLRepository
      */
     private function readCategoryUrls($parentId)
     {
-        $categoryRepository = $this->em->getRepository('Shopware\Models\Category\Category');
-        $categories = $categoryRepository->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
+        /** @var array<array<string, mixed>> $categories */
+        $categories = $this->em
+            ->getRepository(Category::class)
+            ->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
 
         foreach ($categories as &$category) {
             $category['show'] = empty($category['external']);
@@ -132,7 +146,7 @@ class SitemapXMLRepository
     }
 
     /**
-     * Read article urls
+     * Read product urls
      *
      * @param int[] $categoryIds
      *
@@ -140,40 +154,71 @@ class SitemapXMLRepository
      *
      * @return array
      */
-    private function readArticleUrls(array $categoryIds)
+    private function readProductUrls(array $categoryIds)
     {
         if (empty($categoryIds)) {
             return [];
         }
 
-        // We are using the ProductNumberSearchService to make sure all basic checks for valid articles are fulfilled.
-        $productNumberSearchResult = $this->productNumberSearch->search(
-            $this->storeFrontCriteriaFactory->createBaseCriteria($categoryIds, $this->contextService->getShopContext()),
-            $this->contextService->getShopContext()
-        );
+        $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria($categoryIds, $this->contextService->getShopContext());
 
-        $articleIds = array_map(function (BaseProduct $baseProduct) {
-            return $baseProduct->getId();
-        }, array_values($productNumberSearchResult->getProducts()));
+        $productIds = $this->readProductUrlsRecursive($criteria);
 
         $statement = $this->connection->executeQuery(
             'SELECT id,changetime FROM s_articles WHERE id IN (:articleIds)',
-            [':articleIds' => $articleIds],
+            [':articleIds' => $productIds],
             [':articleIds' => Connection::PARAM_INT_ARRAY]
         );
 
-        $articles = [];
-        while ($article = $statement->fetch()) {
-            $article['changed'] = new \DateTime($article['changetime']);
-            $article['urlParams'] = [
+        $products = [];
+        while ($product = $statement->fetch()) {
+            $product['changed'] = new \DateTime($product['changetime']);
+            $product['urlParams'] = [
                 'sViewport' => 'detail',
-                'sArticle' => $article['id'],
+                'sArticle' => $product['id'],
             ];
 
-            $articles[] = $article;
+            $products[] = $product;
         }
 
-        return $articles;
+        return $products;
+    }
+
+    /**
+     * Reads all product urls recursive
+     *
+     * @param Criteria $criteria
+     *
+     * @return array
+     */
+    private function readProductUrlsRecursive(Criteria $criteria)
+    {
+        $result = [];
+        $criteria->limit($this->batchSize);
+
+        $productNumberSearchResult = $this->productNumberSearch->search(
+            $criteria,
+            $this->contextService->getShopContext()
+        );
+
+        $products = $productNumberSearchResult->getProducts();
+
+        if (empty($products)) {
+            return $result;
+        }
+
+        foreach ($products as $product) {
+            $result[] = $product->getId();
+        }
+
+        sort($result, SORT_NUMERIC);
+
+        $lastProductId = $result[count($result) - 1];
+
+        $criteria->removeBaseCondition('last_product_id');
+        $criteria->addBaseCondition(new LastProductIdCondition($lastProductId));
+
+        return array_merge($result, $this->readProductUrlsRecursive($criteria));
     }
 
     /**
@@ -187,7 +232,7 @@ class SitemapXMLRepository
     {
         $blogs = [];
 
-        $categoryRepository = $this->em->getRepository('Shopware\Models\Category\Category');
+        $categoryRepository = $this->em->getRepository(\Shopware\Models\Category\Category::class);
         $query = $categoryRepository->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 
@@ -264,10 +309,10 @@ class SitemapXMLRepository
     private function getSitesByShopId($shopId)
     {
         $sql = '
-            SELECT groups.key
+            SELECT static_groups.key
             FROM s_core_shop_pages shopPages
-              INNER JOIN s_cms_static_groups groups
-                ON groups.id = shopPages.group_id
+              INNER JOIN s_cms_static_groups static_groups
+                ON static_groups.id = shopPages.group_id
             WHERE shopPages.shop_id = ?
         ';
 
@@ -281,7 +326,8 @@ class SitemapXMLRepository
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
-                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->from(\Shopware\Models\Site\Site::class, 'sites', 'sites.id')
+                ->andWhere('sites.active = 1')
                 ->getQuery()
                 ->getArrayResult();
 
@@ -349,7 +395,7 @@ class SitemapXMLRepository
         $context = $this->contextService->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name']);
 
@@ -360,7 +406,7 @@ class SitemapXMLRepository
 
         $query->groupBy('manufacturer.id');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

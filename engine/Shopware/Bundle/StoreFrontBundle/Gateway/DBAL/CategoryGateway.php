@@ -26,10 +26,11 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -61,18 +62,26 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     private $connection;
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * @param Connection                $connection
      * @param FieldHelper               $fieldHelper
      * @param Hydrator\CategoryHydrator $categoryHydrator
+     * @param MediaServiceInterface     $mediaService
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\CategoryHydrator $categoryHydrator
+        Hydrator\CategoryHydrator $categoryHydrator,
+        MediaServiceInterface $mediaService
     ) {
         $this->connection = $connection;
         $this->categoryHydrator = $categoryHydrator;
         $this->fieldHelper = $fieldHelper;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -147,8 +156,9 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $this->fieldHelper->addCategoryTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addProductStreamTranslation($query, $context);
+        $this->fieldHelper->addCategoryMainDataTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -165,8 +175,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $categories = [];
         foreach ($data as $row) {
             $id = $row['__category_id'];
-
-            $categories[$id] = $this->categoryHydrator->hydrate($row);
+            $categories[$id] = $this->categoryHydrator->hydrate($this->translateCategoryData($row, $context));
         }
 
         return $categories;
@@ -175,7 +184,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return string[] indexed by product id
+     * @return array<int, string> indexed by product id
      */
     private function getMapping(array $ids)
     {
@@ -202,6 +211,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         foreach ($mapping as $row) {
             $ids = array_merge($ids, explode(',', $row));
         }
+        /** @var array<int> $ids */
         $ids = array_unique($ids);
 
         return $ids;
@@ -224,5 +234,32 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         }
 
         return $productCategories;
+    }
+
+    /**
+     * Resolves translated data for media and streamId
+     *
+     * @param array                       $category
+     * @param Struct\ShopContextInterface $context
+     *
+     * @return array
+     */
+    private function translateCategoryData(array $category, Struct\ShopContextInterface $context)
+    {
+        if (empty($category['__category_translation'])) {
+            return $category;
+        }
+
+        $translation = unserialize($category['__category_translation']);
+
+        if (!empty($translation['imagePath'])) {
+            $category['mediaTranslation'] = $this->mediaService->get($translation['imagePath'], $context);
+        }
+
+        if (!empty($translation['streamId'])) {
+            $category['__stream_id'] = $translation['streamId'];
+        }
+
+        return $category;
     }
 }

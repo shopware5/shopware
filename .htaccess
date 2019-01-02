@@ -10,6 +10,7 @@ RewriteEngine on
 RewriteRule shopware.dll shopware.php
 RewriteRule files/documents/.* engine [NC,L]
 RewriteRule backend/media/(.*) media/$1 [NC,L]
+RewriteRule custom/.*(config|menu|services|plugin)\.xml$ ./shopware.php?controller=Error&action=pageNotFoundError [NC,L]
 
 RewriteCond %{REQUEST_URI} !(\/(engine|files|templates|themes|web)\/)
 RewriteCond %{REQUEST_URI} !(\/media\/(archive|banner|image|music|pdf|unknown|video)\/)
@@ -64,7 +65,7 @@ DirectoryIndex shopware.php
     AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/javascript application/json application/font-woff application/font-woff2 image/svg+xml
 </IfModule>
 
-<Files ~ "\.(jpe?g|png|gif|css|js|woff|eot)$">
+<Files ~ "\.(jpe?g|png|gif|css|js|woff|woff2|ttf|svg|webp|eot|ico)$">
     <IfModule mod_expires.c>
         ExpiresActive on
         ExpiresDefault "access plus 1 month"

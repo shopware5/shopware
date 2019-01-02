@@ -37,7 +37,7 @@ use Shopware\Models\Widget\Widget;
 /**
  * Shopware Plugin Bootstrap
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -66,14 +66,14 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Constructor method
      *
-     * @param                     $name
+     * @param string              $name
      * @param Enlight_Config|null $info
      */
     public function __construct($name, $info = null)
     {
         $this->info = new Enlight_Config($this->getInfo(), true);
         if ($info instanceof Enlight_Config) {
-            $info->setAllowModifications(true);
+            $info->setAllowModifications();
             $updateVersion = null;
             $updateSource = null;
 
@@ -231,19 +231,24 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     final public function Plugin()
     {
         if ($this->plugin === null) {
-            $repo = Shopware()->Models()->getRepository(Plugin::class);
-            $this->plugin = $repo->findOneBy(['id' => $this->getId()]);
+            /** @var Plugin $plugin */
+            $plugin = Shopware()->Models()->getRepository(Plugin::class)
+                ->findOneBy(['id' => $this->getId()]);
+            $this->plugin = $plugin;
         }
 
         return $this->plugin;
     }
 
     /**
-     * @return ModelRepository
+     * @return \Shopware\Models\Form\Repository
      */
     final public function Forms()
     {
-        return Shopware()->Models()->getRepository(Form::class);
+        /** @var \Shopware\Models\Form\Repository $return */
+        $return = Shopware()->Models()->getRepository(Form::class);
+
+        return $return;
     }
 
     /**
@@ -267,11 +272,15 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         if ($this->form === null && $this->getName() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(['name' => $this->getName()]);
+            /** @var Form $form */
+            $form = $formRepository->findOneBy(['name' => $this->getName()]);
+            $this->form = $form;
         }
         if ($this->form === null && $this->getId() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(['pluginId' => $this->getId()]);
+            /** @var Form $form */
+            $form = $formRepository->findOneBy(['pluginId' => $this->getId()]);
+            $this->form = $form;
         }
 
         return $this->form !== null;
@@ -356,6 +365,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (is_string($options)) {
             $options = ['template' => $options];
         }
+        /** @var Template $template */
         $template = $this->Payments()->findOneBy(['template' => $options['template']]);
         if ($template === null) {
             $template = new Template();
@@ -407,7 +417,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Creates a new widget
      *
-     * @param $name
+     * @param string $name
      */
     public function createWidget($name)
     {
@@ -520,7 +530,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $path = $this->Path() . 'Controllers/' . ucfirst($module) . '/' . ucfirst($controller) . '.php';
 
         if (!file_exists($path)) {
-            throw new Enlight_Exception('Controller "' . $controller . '" can\'t load failure');
+            throw new Enlight_Exception(sprintf('Controller "%s" can\'t load failure', $controller));
         }
 
         //register plugin model directory
@@ -581,7 +591,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Returns plugin version
      *
-     * @return string
+     * @return null|string
      */
     public function getVersion()
     {
@@ -640,11 +650,14 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @param Enlight_Hook_HookHandler $handler
      *
-     * @return Shopware_Components_Plugin_Bootstrap
+     * @return \Shopware_Components_Plugin_Bootstrap
      */
     public function subscribeHook($handler)
     {
-        return $this->subscribeEvent($handler);
+        /** @var \Shopware_Components_Plugin_Bootstrap $return */
+        $return = $this->subscribeEvent($handler);
+
+        return $return;
     }
 
     /**
@@ -683,7 +696,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *     @var string $xType              Required; Ext JS xtype for the backend module component
      *     @var string $cls                Optional; $cls Css class which used in the frontend emotion
      *     @var string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
-     *     @var string $description        Optional; Description field for the component, which displayed in the backend module.
+     *     @var string $description        optional; Description field for the component, which displayed in the backend module.
      * }
      *
      * @return Component
@@ -710,7 +723,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function extendsEmotionTemplates(Enlight_Controller_ActionEventArgs $args)
     {
-        /** @var $view Enlight_View_Default */
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
 
         if (file_exists($this->Path() . '/Views/emotion_components/')) {
@@ -857,17 +870,18 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Notice if the Http Cache plugin isn't installed, this function
      * returns null.
      *
-     * @return Shopware_Plugins_Core_HttpCache_Bootstrap|null
+     * @return \Shopware_Plugins_Core_HttpCache_Bootstrap|null
      */
     protected function HttpCache()
     {
+        /** @var \Shopware_Plugins_Core_HttpCache_Bootstrap $httpCache */
         $httpCache = Shopware()->Plugins()->Core()->HttpCache();
 
         if (!$httpCache instanceof self) {
             return null;
         }
 
-        /** @var $plugin Plugin */
+        /** @var Plugin $plugin */
         $plugin = Shopware()->Models()->find(Plugin::class, $httpCache->getId());
 
         if (!$plugin->getActive() || !$plugin->getInstalled()) {

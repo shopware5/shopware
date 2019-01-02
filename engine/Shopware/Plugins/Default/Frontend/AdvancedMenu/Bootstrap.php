@@ -313,7 +313,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             ->setParameter(':depth', $depth)
             ->setParameter(':path', '%|' . $parentId . '|%');
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);

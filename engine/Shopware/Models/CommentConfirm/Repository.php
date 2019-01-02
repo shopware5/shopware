@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelRepository;
 /**
  * Repository for the CommentConfirm model (Shopware\Models\CommentConfirm\CommentConfirm).
  * <br>
- * The CommentConfirm model repository is responsible to manage all data's in s_core_optin
+ * The CommentConfirm model repository is responsible to manage all data in s_core_optin
  * This repository can be used to work with the saved optin data.
  */
 class Repository extends ModelRepository

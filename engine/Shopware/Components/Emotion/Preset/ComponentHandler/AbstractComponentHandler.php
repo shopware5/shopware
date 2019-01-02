@@ -72,7 +72,7 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return null|object
      */
@@ -82,7 +82,7 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return null|object
      */

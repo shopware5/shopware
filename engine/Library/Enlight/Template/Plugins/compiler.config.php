@@ -36,19 +36,21 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
      *
      * @var array
      */
-    public $required_attributes = array('name');
+    public $required_attributes = ['name'];
 
     /**
      * Attribute definition: Overwrites base class.
      *
      * @var array
+     *
      * @see Smarty_Internal_CompileBase
      */
-    public $optional_attributes = array('default', 'namespace');
+    public $optional_attributes = ['default', 'namespace'];
 
     /**
-     * @param $args
-     * @param $compiler
+     * @param array  $args
+     * @param object $compiler
+     *
      * @return string
      */
     public function compile($args, $compiler)
@@ -59,6 +61,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
             if (!isset($_attr['default'])) {
                 $_attr['default'] = 'null';
             }
+
             return '<?php echo ' . $_attr['default'] . '; ?>';
         }
 
@@ -70,6 +73,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
             if (isset($_attr['namespace'])) {
                 return '<?php echo Shopware()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
             }
+
             return '<?php echo Shopware()->Config()->get(' . $return . '); ?>';
         }
 
@@ -82,10 +86,10 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
         }
 
         if ($value !== null) {
-            return '<?php echo ' .  var_export($value, true) . ';?>';
+            return '<?php echo ' . var_export($value, true) . ';?>';
         }
         if (isset($_attr['default'])) {
-            return '<?php echo ' .  $_attr['default'] . ';?>';
+            return '<?php echo ' . $_attr['default'] . ';?>';
         }
 
         return null;

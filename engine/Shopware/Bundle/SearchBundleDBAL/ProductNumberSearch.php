@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
@@ -32,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,17 +57,17 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     /**
      * @param QueryBuilderFactoryInterface $queryBuilderFactory
      * @param \Enlight_Event_EventManager  $eventManager
-     * @param FacetHandlerInterface[]      $facetHandlers
+     * @param IteratorAggregate            $facetHandlers
      * @param Container                    $container
      */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Enlight_Event_EventManager $eventManager,
-        $facetHandlers,
+        IteratorAggregate $facetHandlers,
         Container $container
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->facetHandlers = $facetHandlers;
+        $this->facetHandlers = iterator_to_array($facetHandlers, false);
         $this->eventManager = $eventManager;
         $this->facetHandlers = $this->registerFacetHandlers();
 
@@ -109,7 +110,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     private function getProducts(QueryBuilder $query)
     {
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

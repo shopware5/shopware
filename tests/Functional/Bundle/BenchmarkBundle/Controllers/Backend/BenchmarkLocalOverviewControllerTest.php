@@ -38,7 +38,7 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();
 
-        $this->installDemoData('benchmark_config');
+        Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
         $controller->setView(new ViewMock(new \Enlight_Template_Manager()));
 
         $controller->renderAction();

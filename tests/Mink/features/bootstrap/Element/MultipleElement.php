@@ -141,10 +141,10 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      *
      * @see http://php.net/manual/en/countable.count.php
      *
-     * @return int The custom count as an integer.
+     * @return int the custom count as an integer.
      *             </p>
      *             <p>
-     *             The return value is cast to an integer.
+     *             The return value is cast to an integer
      */
     public function count()
     {
@@ -197,8 +197,8 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      *
      * @see http://php.net/manual/en/iterator.valid.php
      *
-     * @return bool The return value will be casted to boolean and then evaluated.
-     *              Returns true on success or false on failure.
+     * @return bool the return value will be casted to boolean and then evaluated.
+     *              Returns true on success or false on failure
      */
     public function valid()
     {

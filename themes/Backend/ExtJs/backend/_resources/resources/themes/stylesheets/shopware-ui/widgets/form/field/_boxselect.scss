@@ -27,17 +27,17 @@
  * @author shopware AG
  */
 @mixin shopware-boxselect {
-	table[id^=comboboxselect] {
-		tr[id$=inoutRow] {
-			width: 100%;
-		}
+    table[id^=comboboxselect] {
+        tr[id$=inoutRow] {
+            width: 100%;
+        }
 
-		table.#{$prefix}form-trigger-wrap .#{$prefix}form-trigger-input-cell {
-			width: 100%;
-		}
-	}
+        table.#{$prefix}form-trigger-wrap .#{$prefix}form-trigger-input-cell {
+            width: 100%;
+        }
+    }
     .#{$prefix}boxselect {
-    	width: 100%;
+        width: 100%;
 
         ul.#{$prefix}boxselect-list {
             height: auto;

@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -38,6 +37,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         $this->addAclPermission('getFileList', 'read', "You're not allowed to open the module.");
         $this->addAclPermission('getVersionList', 'read', "You're not allowed to open the module.");
         $this->addAclPermission('getEnconder', 'read', "You're not allowed to open the module.");
+        $this->addAclPermission('getOptimizers', 'read', "You're not allowed to open the module.");
         $this->addAclPermission('info', 'read', "You're not allowed to open the module.");
     }
 
@@ -63,7 +63,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
 
         foreach ($result['checks'] as $key => &$config) {
             // Those configs mustn't be displayed in the grid
-            if ($config['name'] == 'ionCube Loader' || $config['name'] == 'mod_rewrite') {
+            if ($config['name'] == 'mod_rewrite') {
                 unset($result['checks'][$key]);
             }
         }
@@ -122,27 +122,29 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     }
 
     /**
-     * Function to get the active encoders
+     * Function to get timezone diff
      */
-    public function getEncoderAction()
+    public function getTimezoneAction()
     {
-        $result = $this->get('shopware.requirements')->toArray();
-        $data = $result['checks'];
+        $offset = 0;
+        try {
+            $sql = 'SELECT @@system_time_zone;';
+            $timezone = $this->container->get('dbal_connection')->query($sql)->fetchColumn(0);
+            $datebaseZone = timezone_open(timezone_name_from_abbr($timezone));
+            $phpZone = timezone_open(date_default_timezone_get());
+            $databaseTime = new DateTime('now', $datebaseZone);
 
-        foreach ($data as $key => &$config) {
-            if ($config['name'] != 'ionCube Loader') {
-                continue;
+            if (!empty($timezone) && timezone_name_from_abbr($timezone)) {
+                $offset = abs($datebaseZone->getOffset(new DateTime()) - $phpZone->getOffset($databaseTime));
             }
-            if ($config['name'] === 'ionCube Loader' && $config['result'] === true) {
-                $encoder = $config;
-                break;
-            }
+        } catch (\PDOException $e) {
         }
-        if (empty($encoder)) {
-            $encoder = 'none';
+        if (empty($offset)) {
+            $sql = 'SELECT UNIX_TIMESTAMP()-' . time();
+            $offset = $this->container->get('dbal_connection')->query($sql)->fetchColumn(0);
         }
 
-        $this->View()->assign(['success' => true, 'data' => $encoder]);
+        $this->View()->assign(['success' => true, 'offset' => $offset < 60 ? 0 : round($offset / 60)]);
     }
 
     /**
@@ -158,6 +160,24 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
             apache_setenv('HTTP_COOKIE', null);
         }
         phpinfo();
+    }
+
+    public function getOptimizersAction()
+    {
+        $optimizers = $this->get('shopware_media.optimizer_service')->getOptimizers();
+        $optimizerResult = [];
+
+        foreach ($optimizers as $optimizer) {
+            $optimizerResult[] = [
+                'name' => $optimizer->getName(),
+                'mimeTypes' => $optimizer->getSupportedMimeTypes(),
+                'runnable' => $optimizer->isRunnable(),
+            ];
+        }
+
+        $this->View()->success = true;
+        $this->View()->data = $optimizerResult;
+        $this->View()->total = count($optimizerResult);
     }
 
     /**

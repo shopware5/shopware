@@ -303,6 +303,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
 
                 // fire event that a new record has been loaded.
                 settingForm.fireEvent('recordloaded', me.detailRecord, record);
+                settingForm.loadRecord(record);
 
                 window.customListing.loadCategory(me.detailRecord);
             }

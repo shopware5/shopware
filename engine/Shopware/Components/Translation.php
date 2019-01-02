@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 
@@ -69,7 +68,7 @@ class Shopware_Components_Translation
             if (!is_string($value)) {
                 continue;
             }
-            if ('' === trim($value)) {
+            if (trim($value) === '') {
                 unset($tmp[$tmpKey]);
             }
         }
@@ -177,10 +176,10 @@ class Shopware_Components_Translation
     /**
      * Reads multiple translation data from storage.
      *
-     * @param int    $language
-     * @param string $type
-     * @param int    $key
-     * @param bool   $merge
+     * @param int       $language
+     * @param string    $type
+     * @param int|int[] $key
+     * @param bool      $merge
      *
      * @return array
      */
@@ -205,9 +204,15 @@ class Shopware_Components_Translation
                 ->setParameter('objectType', $type);
         }
         if ($key) {
-            $queryBuilder
-                ->andWhere('t.objectkey = :objectKey')
-                ->setParameter('objectKey', $merge ? 1 : $key);
+            if (is_array($key)) {
+                $queryBuilder
+                    ->andWhere('t.objectkey IN (:objectKey)')
+                    ->setParameter('objectKey', $key, Connection::PARAM_INT_ARRAY);
+            } else {
+                $queryBuilder
+                    ->andWhere('t.objectkey = :objectKey')
+                    ->setParameter('objectKey', $merge ? 1 : $key);
+            }
         }
 
         $data = $queryBuilder->execute()->fetchAll();
@@ -215,8 +220,7 @@ class Shopware_Components_Translation
         foreach ($data as &$translation) {
             $translation['objectdata'] = $this->unFilterData(
                 $translation['objecttype'],
-                $translation['objectdata'],
-                null
+                $translation['objectdata']
             );
 
             if ($merge) {
@@ -231,28 +235,30 @@ class Shopware_Components_Translation
      * Reads multiple translations including their fallbacks
      * Merges the two (fallback has less priority) and returns the results
      *
-     * @param int    $language
-     * @param int    $fallback
-     * @param string $type
+     * @param int       $language
+     * @param int       $fallback
+     * @param string    $type
+     * @param int|int[] $key
+     * @param bool      $merge
      *
      * @return array|mixed
      */
-    public function readBatchWithFallback($language, $fallback, $type)
+    public function readBatchWithFallback($language, $fallback, $type, $key = 1, $merge = true)
     {
-        $translationData = $this->readBatch($language, $type, 1, true);
+        $translationData = $this->readBatch($language, $type, $key, $merge);
 
         // Look for a fallback and correspondent translations
         if (!empty($fallback)) {
-            $translationFallback = $this->readBatch($fallback, $type, 1, true);
+            $translationFallback = $this->readBatch($fallback, $type, $key, $merge);
 
             if (!empty($translationFallback)) {
                 // We need something like array_merge_recursive, but that also
                 // recursively merges elements with int keys.
-                foreach ($translationFallback as $key => $data) {
-                    if (array_key_exists($key, $translationData)) {
-                        $translationData[$key] += $data;
+                foreach ($translationFallback as $translationKey => $data) {
+                    if (array_key_exists($translationKey, $translationData)) {
+                        $translationData[$translationKey] += $data;
                     } else {
-                        $translationData[$key] = $data;
+                        $translationData[$translationKey] = $data;
                     }
                 }
             }
@@ -267,8 +273,6 @@ class Shopware_Components_Translation
      * @param int    $language
      * @param string $type
      * @param int    $key
-     *
-     * @return array
      */
     public function delete($language, $type, $key = 1)
     {
@@ -331,8 +335,6 @@ class Shopware_Components_Translation
      * @param bool   $merge
      *
      * @throws \Zend_Db_Adapter_Exception
-     *
-     * @return int|bool
      */
     public function write($language, $type, $key = 1, $data = null, $merge = false)
     {
@@ -345,7 +347,7 @@ class Shopware_Components_Translation
         }
 
         if ($merge) {
-            $tmp = $this->read($language, $type, 1);
+            $tmp = $this->read($language, $type);
             $tmp[$key] = $data;
             $data = $tmp;
         }
@@ -412,7 +414,7 @@ class Shopware_Components_Translation
     /**
      * Returns mapping for a translation type
      *
-     * @param $type
+     * @param string $type
      *
      * @return array|bool
      */
@@ -464,7 +466,7 @@ class Shopware_Components_Translation
     }
 
     /**
-     * Fix article translation table data.
+     * Fix product translation table data.
      *
      * @param int    $languageId
      * @param int    $articleId
@@ -481,7 +483,7 @@ class Shopware_Components_Translation
         $fallbacks = array_column($fallbacks, 'id');
 
         $data = $this->prepareArticleData($data);
-        $this->addArticleTranslation($articleId, $languageId, $data);
+        $this->addProductTranslation($articleId, $languageId, $data);
 
         $existQuery = $this->connection->prepare(
             "SELECT 1
@@ -501,7 +503,7 @@ class Shopware_Components_Translation
                 continue;
             }
             //add fallback translation to s_articles_translation for search requests.
-            $this->addArticleTranslation($articleId, $id, $data);
+            $this->addProductTranslation($articleId, $id, $data);
         }
     }
 
@@ -518,11 +520,11 @@ class Shopware_Components_Translation
         }
 
         $data = array_merge($data, [
-            'name' => (isset($data['txtArtikel'])) ? (string) $data['txtArtikel'] : '',
-            'keywords' => (isset($data['txtkeywords'])) ? (string) $data['txtkeywords'] : '',
-            'description' => (isset($data['txtshortdescription'])) ? (string) $data['txtshortdescription'] : '',
-            'description_long' => (isset($data['txtlangbeschreibung'])) ? (string) $data['txtlangbeschreibung'] : '',
-            'shippingtime' => (isset($data['txtshippingtime'])) ? (string) $data['txtshippingtime'] : '',
+            'name' => isset($data['txtArtikel']) ? (string) $data['txtArtikel'] : '',
+            'keywords' => isset($data['txtkeywords']) ? (string) $data['txtkeywords'] : '',
+            'description' => isset($data['txtshortdescription']) ? (string) $data['txtshortdescription'] : '',
+            'description_long' => isset($data['txtlangbeschreibung']) ? (string) $data['txtlangbeschreibung'] : '',
+            'shippingtime' => isset($data['txtshippingtime']) ? (string) $data['txtshippingtime'] : '',
         ]);
 
         $schemaManager = $this->connection->getSchemaManager();
@@ -543,38 +545,38 @@ class Shopware_Components_Translation
     }
 
     /**
-     * @param int   $articleId
+     * @param int   $productId
      * @param int   $languageId
      * @param array $data
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
-    private function addArticleTranslation($articleId, $languageId, array $data)
+    private function addProductTranslation($productId, $languageId, array $data)
     {
         $query = $this->connection->executeQuery(
             'SELECT id FROM s_articles_translations WHERE articleID = :articleId AND languageID = :languageId LIMIT 1',
-            [':articleId' => $articleId, ':languageId' => $languageId]
+            [':articleId' => $productId, ':languageId' => $languageId]
         );
         $exist = $query->fetch(PDO::FETCH_COLUMN);
 
         if ($exist) {
-            $this->updateArticleTranslation($exist, $data);
+            $this->updateProductTranslation($exist, $data);
         } else {
-            $this->insertArticleTranslation($articleId, $languageId, $data);
+            $this->insertProductTranslation($productId, $languageId, $data);
         }
     }
 
     /**
-     * @param int   $articleId
+     * @param int   $productId
      * @param int   $languageId
      * @param array $data
      *
      * @throws \Exception
      */
-    private function insertArticleTranslation($articleId, $languageId, array $data)
+    private function insertProductTranslation($productId, $languageId, array $data)
     {
-        $data = array_merge($data, ['languageID' => $languageId, 'articleID' => $articleId]);
+        $data = array_merge($data, ['languageID' => $languageId, 'articleID' => $productId]);
 
         $query = $this->connection->createQueryBuilder();
         $query->insert('s_articles_translations');
@@ -591,7 +593,7 @@ class Shopware_Components_Translation
      *
      * @throws \Exception
      */
-    private function updateArticleTranslation($id, array $data)
+    private function updateProductTranslation($id, array $data)
     {
         $query = $this->connection->createQueryBuilder();
 

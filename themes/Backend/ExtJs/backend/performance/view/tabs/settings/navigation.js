@@ -83,6 +83,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Navigation', {
                 leaf: true,
                 internalName: 'performance-tabs-settings-filter'
             }, {
+                text: "{s name=navigation/sitemap}Sitemap{/s}",
+                leaf: true,
+                internalName: 'performance-tabs-settings-sitemap'
+            },{
                 text: "{s name=navigation/various}Various{/s}",
                 leaf: true,
                 internalName: 'performance-tabs-settings-various'

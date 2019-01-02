@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.Customer', {
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
      * @array
      */
-    models: [ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'Order', 'Chart', 'Batch', 'Address', 'QuickView', 'CustomerStream' ],
+    models: [ 'Customer', 'Debit', 'PaymentData', 'Order', 'Chart', 'Batch', 'Address', 'QuickView', 'CustomerStream' ],
 
     /**
      * Returns the main application window for this is expected

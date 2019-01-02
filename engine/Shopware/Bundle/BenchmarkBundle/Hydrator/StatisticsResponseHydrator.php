@@ -24,17 +24,37 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
+use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 
 class StatisticsResponseHydrator implements HydratorInterface
 {
     /**
-     * @param array $data
+     * {@inheritdoc}
+     *
+     * @throws StatisticsHydratingException
      *
      * @return StatisticsResponse
      */
     public function hydrate(array $data)
     {
-        return new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), $data['html']);
+        $messageDataArrayKey = 'message';
+        $messageDataSuccessValue = 'Success';
+        if ($data[$messageDataArrayKey] !== $messageDataSuccessValue) {
+            throw new StatisticsHydratingException(
+                sprintf(
+                    'Expected field "%s" to be "%s", was "%s"',
+                    $messageDataArrayKey,
+                    $messageDataSuccessValue,
+                    $data[$messageDataArrayKey]
+                )
+            );
+        }
+
+        if (empty($data['responseToken'])) {
+            throw new StatisticsHydratingException('Missing field "responseToken" from server response');
+        }
+
+        return new StatisticsResponse($date = new \DateTime('now', new \DateTimeZone('UTC')), $data['responseToken'], false);
     }
 }

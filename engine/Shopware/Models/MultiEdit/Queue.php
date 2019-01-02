@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware SwagMultiEdit Plugin - Queue Model
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
@@ -43,11 +43,12 @@ class Queue extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\MultiEdit\QueueArticle>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\MultiEdit\QueueArticle", mappedBy="queue", cascade={"persist"},  fetch="EXTRA_LAZY")
      */
     protected $articleDetails;
+
     /**
      * Unique identifier
      *
@@ -95,32 +96,31 @@ class Queue extends ModelEntity
     private $active = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
 
     /**
-     * Class constructor.
+     * @param string $resource
      */
     public function __construct($resource)
     {
         $this->resource = $resource;
-
-        $this->details = new ArrayCollection();
+        $this->articleDetails = new ArrayCollection();
     }
 
     /**
-     * @param \DateTime $created
+     * @param \DateTimeInterface $created
      */
-    public function setCreated(\DateTime $created)
+    public function setCreated(\DateTimeInterface $created)
     {
         $this->created = $created;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreated()
     {
@@ -128,7 +128,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @param $filterString
+     * @param string $filterString
      */
     public function setFilterString($filterString)
     {

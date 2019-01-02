@@ -44,9 +44,10 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
         );
 
         if (!$staticPage) {
-            $this->Response()->setHttpResponseCode(404);
-
-            return $this->forward('index', 'index');
+            throw new Enlight_Controller_Exception(
+                'Custom page not found',
+                Enlight_Controller_Exception::PROPERTY_NOT_FOUND
+            );
         }
 
         if (!empty($staticPage['link'])) {
@@ -72,6 +73,6 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
             );
         }
 
-        $this->View()->sCustomPage = $staticPage;
+        $this->View()->assign('sCustomPage', $staticPage);
     }
 }

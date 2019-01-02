@@ -60,7 +60,13 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             errorTitle: '{s name=message/password/form/error_title}Error saving the form{/s}',
             errorMessage: '{s name=message/password/form/error_message}The field -[0]- is not valid{/s}'
         },
-        growlMessage:'{s name=message/growlMessage}User manager{/s}'
+        growlMessage:'{s name=message/growlMessage}User manager{/s}',
+        unlock: {
+            successTitle: '{s name="create_user/unlock/success_title"}Success{/s}',
+            successText: '{s name="create_user/unlock/success_text"}Successfully unlocked the user.{/s}',
+            errorTitle: '{s name="create_user/unlock/error_title"}Failure{/s}',
+            errorText: '{s name="create_user/unlock/error_text"}An error occurred while unlocking the user.{/s}'
+        }
     },
 
     refs: [
@@ -81,7 +87,8 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
 
         me.control({
             'usermanager-user-create': {
-                saveUser: me.onSaveUser
+                saveUser: me.onSaveUser,
+                unlockUser: me.onUnlockUser
             },
             'button[action=addUser]': {
                 click: me.onOpenAddUser
@@ -180,6 +187,44 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                             window.location.href = '{url controller=index}';
                         }
                     });
+                }
+            });
+        });
+    },
+
+    /**
+     * @param { Ext.container.Container } unlockContainer
+     * @param { Ext.data.Model } record
+     */
+    onUnlockUser: function (unlockContainer, record, formPnl) {
+        var me = this,
+            displayField = unlockContainer.down('displayfield'),
+            button = unlockContainer.down('button');
+
+        Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+
+            formPnl.up('window').setLoading(true);
+
+            Ext.Ajax.request({
+                url: '{url action=unlockUser}',
+                params: {
+                    userId: record.get('id')
+                },
+                success: function (response) {
+                    var result = Ext.JSON.decode(response.responseText);
+
+                    if (!result.success) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.unlock.errorTitle, me.snippets.unlock.errorText, me.snippets.growlMessage);
+                        return;
+                    }
+
+                    record.set('lockedUntil', new Date());
+                    record.set('failedLogins', 0);
+
+                    Shopware.Notification.createGrowlMessage(me.snippets.unlock.successTitle, me.snippets.unlock.successText, me.snippets.growlMessage);
+                    displayField.setValue('');
+                    button.setDisabled(true);
+                    formPnl.up('window').setLoading(false);
                 }
             });
         });

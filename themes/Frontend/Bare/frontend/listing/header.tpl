@@ -7,10 +7,12 @@
 
     {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
     {if $sCategoryContent.cmstext}
-        {$description = "{$sCategoryContent.cmstext|trim|strip_tags|truncate:240|escapeHtml}"}
+        {$description = "{$sCategoryContent.cmstext|trim|strip_tags|escapeHtml}"}
     {elseif $sCategoryContent.metaDescription}
         {$description = "{$sCategoryContent.metaDescription|trim|strip_tags|escapeHtml}"}
     {/if}
+
+    {$description = $description|truncate:$SeoDescriptionMaxLength:'…'}
 
     <meta property="og:type" content="product" />
     <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
@@ -50,10 +52,8 @@
         {$pages = ceil($sNumberArticles / $criteria->getLimit())}
     {/if}
 
-    {if empty($sPage) || ($SeoMetaRobots|strpos:'noindex' === false && $sPage == 1)}
-        {* Remove sPage-parameter *}
-        {assign var='canonical' value='?'|explode:{url params = $sCategoryContent.canonicalParams|array_unset:'sPage'}}
-        <link rel="canonical" href="{$canonical[0]}"/>
+    {if $SeoMetaRobots|strpos:'noindex' === false}
+        <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}"/>
     {/if}
 
     {if {config name=seoIndexPaginationLinks}}

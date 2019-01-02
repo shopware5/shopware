@@ -58,8 +58,6 @@ class CustomerService implements CustomerServiceInterface
      * @param Customer $customer
      *
      * @throws ValidationException
-     *
-     * @return Customer
      */
     public function update(Customer $customer)
     {

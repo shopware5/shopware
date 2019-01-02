@@ -52,9 +52,6 @@ Feature: Blog
             | headline | Neue Bewertung  |
             | comment  | Hallo Welt      |
 
-        Then I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail"
-
-        When  I click the link in my latest email
         Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
         But   I should not see "Hallo Welt"
 

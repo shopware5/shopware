@@ -27,12 +27,15 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CustomerStreamSearcher extends GenericSearcher
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function createQuery(SearchCriteria $criteria)
     {
         $query = parent::createQuery($criteria);

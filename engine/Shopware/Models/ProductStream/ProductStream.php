@@ -36,11 +36,12 @@ class ProductStream extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductStream", mappedBy="productStream", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\ProductStream
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductStream", mappedBy="productStream", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -65,24 +66,31 @@ class ProductStream extends ModelEntity
     private $description;
 
     /**
+     * @var int
+     *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
     private $type;
 
     /**
      * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Models\ProductStream\ProductStream::$sortingId instead
+     *
+     * @var string
+     *
      * @ORM\Column(name="sorting", type="string", nullable=false)
      */
     private $sorting;
 
     /**
-     * @var array
+     * @var string
+     *
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions = true;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="sorting_id", type="integer", nullable=true)
      */
     private $sortingId;
@@ -104,7 +112,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @param $name string
+     * @param string $name
      */
     public function setName($name)
     {
@@ -128,7 +136,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getConditions()
     {
@@ -136,7 +144,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @param array $conditions
+     * @param string $conditions
      */
     public function setConditions($conditions)
     {
@@ -172,7 +180,7 @@ class ProductStream extends ModelEntity
     /**
      * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Models\ProductStream\ProductStream::$sortingId instead
      *
-     * @param mixed $sorting
+     * @param string $sorting
      */
     public function setSorting($sorting)
     {

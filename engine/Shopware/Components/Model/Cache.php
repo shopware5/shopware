@@ -114,8 +114,6 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
 
     /**
      * Deletes all cache entries.
-     *
-     * @return bool TRUE if the cache entry was successfully deleted, FALSE otherwise
      */
     protected function doFlush()
     {
@@ -126,8 +124,6 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      * Retrieves cached information from data store
      *
      * @since   2.2
-     *
-     * @return array an associative array with server's statistics if available, NULL otherwise
      */
     protected function doGetStats()
     {

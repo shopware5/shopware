@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -78,7 +78,7 @@ class ListProduct extends BaseProduct
      * Defines the date when the product was released / will be
      * released and can be ordered.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $releaseDate;
 
@@ -115,9 +115,17 @@ class ListProduct extends BaseProduct
      * Defines the date which the product was created in the
      * database.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $createdAt;
+
+    /**
+     * Defines the date which the product was last updated in
+     * the database.
+     *
+     * @var \DateTimeInterface
+     */
+    protected $updatedAt;
 
     /**
      * Defines a list of keywords for this product.
@@ -199,7 +207,7 @@ class ListProduct extends BaseProduct
      * Flag if the product should be displayed
      * with a teaser flag within listings.
      *
-     * @var float
+     * @var bool
      */
     protected $highlight;
 
@@ -370,7 +378,7 @@ class ListProduct extends BaseProduct
     /**
      * Adds a new product state.
      *
-     * @param $state
+     * @param array $state
      */
     public function addState($state)
     {
@@ -396,7 +404,7 @@ class ListProduct extends BaseProduct
     /**
      * Checks if the product has a specify state.
      *
-     * @param $state
+     * @param string $state
      *
      * @return bool
      */
@@ -712,7 +720,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTime $releaseDate
+     * @param \DateTimeInterface $releaseDate
      */
     public function setReleaseDate($releaseDate)
     {
@@ -720,7 +728,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getReleaseDate()
     {
@@ -828,7 +836,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -836,11 +844,27 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     /**

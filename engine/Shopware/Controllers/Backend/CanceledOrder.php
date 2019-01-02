@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Models\Order\Order;
 
 /**
@@ -87,7 +86,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $detailModel->setNumber($newOrderNumber);
         }
 
-        // refreshes the in stock correctly for this order if the user confirmed it
+        // Refreshes the in stock correctly for this order if the user confirmed it
         if ((bool) $this->Request()->getParam('refreshInStock')) {
             $outOfStock = $this->getOutOfStockProducts($orderModel);
 
@@ -114,7 +113,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $customer = Shopware()->Models()->find(\Shopware\Models\Customer\Customer::class, $result[0]['customer']['id']);
 
-        // copy customer number into billing address from customer
+        // Copy customer number into billing address from customer
         $result[0]['customer']['defaultBillingAddress']['number'] = $customer->getNumber();
 
         // Casting null values to empty strings to fulfill the restrictions of the s_order_billingaddress table
@@ -160,8 +159,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
 
         $params = [
             'endDate' => $endDate,
@@ -227,7 +226,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
         // Insert the percentage into each field manually
-        if ($data !== null && isset($total)) {
+        if ($data !== null && $total === null) {
             for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
                 if ($total !== 0) {
                     $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
@@ -246,11 +245,9 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Get available vouchers for a customer who canceled his order.
-     * */
+     */
     public function getVoucherAction()
     {
-        $orderId = $this->Request()->getParam('id', null);
-
         $sql = 'SELECT s_emarketing_vouchers.id, s_emarketing_vouchers.description, s_emarketing_vouchers.value, s_emarketing_vouchers.percental
             FROM s_emarketing_vouchers
             WHERE  s_emarketing_vouchers.modus = 1 AND (s_emarketing_vouchers.valid_to >= CURDATE() OR s_emarketing_vouchers.valid_to is NULL)
@@ -274,7 +271,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * Sends a CanceledQuestion Mail to a given mail-adress
+     * Sends a CanceledQuestion Mail to a given mail-address
      */
     public function sendCanceledQuestionMailAction()
     {
@@ -323,6 +320,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return;
         }
 
+        $code = null;
         // Set the template depending on the voucherId. -1 is a special Id, which defines
         // the 'Ask for Reason' question.
         if ($template === 'sCANCELEDQUESTION') {
@@ -352,7 +350,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             ];
         }
 
-        // find the shop matching the order
+        // Find the shop matching the order
         $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
         if (!$orderModel instanceof Shopware\Models\Order\Order) {
             $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
@@ -381,7 +379,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->setParameter(1, $code[0]['id'])
                 ->getQuery()
                 ->execute();
-        $query = $builder->getQuery();
 
         // Write to db that Voucher/Mail was already sent
         // For compatibility reason this is done the same way it was done in Shopware 3
@@ -403,14 +400,14 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $this->View()->assign(['success' => true]);
     }
 
-    /*
+    /**
      * Get data for the statistics view
-     * */
+     */
     public function getStatisticsAction()
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
 
         $params = [
             'endDate' => $endDate,
@@ -449,8 +446,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter');
+        $sort = $this->Request()->getParam('sort');
 
         $params = [
             'endDate' => $endDate,
@@ -519,8 +516,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
-        $sort = $this->Request()->getParam('sort', null);
-        $filter = $this->Request()->getParam('filter', null);
+        $sort = $this->Request()->getParam('sort');
+        $filter = $this->Request()->getParam('filter');
 
         $params = [
             'endDate' => $endDate,
@@ -594,7 +591,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
-        $filter = $this->Request()->getParam('filter', null);
+        $filter = $this->Request()->getParam('filter');
         $filter = $filter[0]['value'];
         $sort = $this->Request()->getParam('sort', [['property' => 'orders.orderTime', 'direction' => 'DESC']]);
 
@@ -655,7 +652,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return;
         }
 
-        //iterate the posted orders and remove them.
+        // Iterate the posted orders and remove them.
         foreach ($orders as $order) {
             if (empty($order['id'])) {
                 continue;
@@ -674,6 +671,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Method to define acl dependencies in backend controllers
+     *
      * <code>
      * $this->addAclPermission("name_of_action_with_action_prefix","name_of_assigned_privilege","optionally error message");
      * // $this->addAclPermission("indexAction","read","Ops. You have no permission to view that...");
@@ -681,20 +679,20 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     protected function initAcl()
     {
-        // read
+        // Read
         $this->addAclPermission('getStatistics', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getArticle', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getBasket', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getOrder', 'read', 'Insufficient Permissions');
 
-        //delete
+        // Delete
         $this->addAclPermission('deleteOrder', 'delete', 'Insufficient Permissions');
     }
 
     /**
      * Read free codes from the database. If no free codes are available, null will be returned
      *
-     * @param $voucherId
+     * @param int $voucherId
      *
      * @return array|null
      */
@@ -763,7 +761,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function getOrderPositionByProduct(\Shopware\Models\Article\Detail $variant, Order $order)
     {
-        /** @var $detail \Shopware\Models\Order\Detail */
+        /** @var \Shopware\Models\Order\Detail $detail */
         foreach ($order->getDetails() as $detail) {
             if (!$this->isProductPosition($detail)) {
                 continue;
@@ -783,12 +781,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function getProductsOfOrder(Order $order)
     {
-        /** @var $repository \Shopware\Components\Model\ModelRepository */
+        /** @var \Shopware\Components\Model\ModelRepository $repository */
         $repository = $this->get('models')->getRepository(Shopware\Models\Article\Detail::class);
 
         $products = [];
         foreach ($order->getDetails() as $detail) {
-            /** @var $detail \Shopware\Models\Order\Detail */
+            /** @var \Shopware\Models\Order\Detail $detail */
             if (!$this->isProductPosition($detail)) {
                 continue;
             }
@@ -809,7 +807,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function convertCancelledOrderInStock(Shopware\Models\Order\Order $orderModel)
     {
-        /** @var $entityManager \Shopware\Components\Model\ModelManager */
+        /** @var \Shopware\Components\Model\ModelManager $entityManager */
         $entityManager = $this->get('models');
 
         $products = $this->getProductsOfOrder($orderModel);

@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -42,8 +42,6 @@ class SearcherResult
     private $count;
 
     /**
-     * SearchGatewayResult constructor.
-     *
      * @param int[]|string[] $identifiers
      * @param int            $count
      */

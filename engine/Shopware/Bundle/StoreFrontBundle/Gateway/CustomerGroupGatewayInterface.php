@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -50,7 +50,7 @@ interface CustomerGroupGatewayInterface
      * - Customer group base data
      * - Core attribute of the customer group
      *
-     * @param $key
+     * @param string $key
      *
      * @return Struct\Customer\Group
      */

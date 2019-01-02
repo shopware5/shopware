@@ -17,7 +17,7 @@ Ext.define('Shopware.apps.Benchmark.store.Industry', {
         { id: 4, name: '{s name="baby_toddler"}Baby & Toddler{/s}'},
         { id: 5, name: '{s name="business_industrial"}Business & Industrial{/s}'},
         { id: 6, name: '{s name="cameras_optics"}Cameras & Optics{/s}'},
-        { id: 7, name: '{s name="eletronics"}Electronics{/s}'},
+        { id: 7, name: '{s name="electronics"}Electronics{/s}'},
         { id: 8, name: '{s name="food_beverages_tobacco"}Food, Beverages & Tobacco{/s}'},
         { id: 9, name: '{s name="furniture"}Furniture{/s}'},
         { id: 10, name: '{s name="hardware"}Hardware{/s}'},

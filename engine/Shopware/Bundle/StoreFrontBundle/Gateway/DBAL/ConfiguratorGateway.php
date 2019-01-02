@@ -26,12 +26,11 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -72,7 +71,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      * @param FieldHelper                                                     $fieldHelper
      * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
-     * @param VariantHelper                                                   $variantHelper
      */
     public function __construct(
         Connection $connection,
@@ -103,7 +101,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         $query->where('products.id = :id')
             ->setParameter(':id', $product->getId());
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -141,7 +139,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->groupBy('optionRelation.option_id')
             ->setParameter(':articleId', $product->getId());
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -186,7 +184,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->groupBy('relations.option_id')
             ->setParameter(':articleId', $product->getId());
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);

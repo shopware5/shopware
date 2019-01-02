@@ -30,12 +30,27 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class BacklogSyncCommand extends ShopwareCommand
 {
+    /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
+     * @param int $batchSize
+     */
+    public function __construct($batchSize = 500)
+    {
+        $this->batchSize = (int) $batchSize;
+
+        parent::__construct(null);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -53,19 +68,19 @@ class BacklogSyncCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $reader = $this->container->get('shopware_elastic_search.backlog_reader');
-        $backlogs = $reader->read($reader->getLastBacklogId(), 500);
+        $backlogs = $reader->read($reader->getLastBacklogId(), $this->batchSize);
 
         if (empty($backlogs)) {
             return;
         }
 
-        /** @var $last Backlog */
+        /** @var Backlog $last */
         $last = $backlogs[count($backlogs) - 1];
         $reader->setLastBacklogId($last->getId());
 
         $shops = $this->container->get('shopware_elastic_search.identifier_selector')->getShops();
         foreach ($shops as $shop) {
-            $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
+            $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop, '');
             $this->container->get('shopware_elastic_search.backlog_processor')
                 ->process($index, $backlogs);
         }

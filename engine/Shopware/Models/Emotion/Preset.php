@@ -42,14 +42,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Preset extends ModelEntity
 {
     /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetTranslation", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\PresetTranslation>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetTranslation", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
      */
     protected $translations;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="required_plugins", type="text", nullable=false)
      */
     protected $requiredPlugins;
@@ -71,6 +72,7 @@ class Preset extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -79,6 +81,7 @@ class Preset extends ModelEntity
      * Indicates if the preset contains elements only available through premium plugins.
      *
      * @var bool
+     *
      * @ORM\Column(name="premium", type="boolean", nullable=false)
      */
     private $premium = false;
@@ -87,6 +90,7 @@ class Preset extends ModelEntity
      * Indicates if the preset is a custom user created preset.
      *
      * @var bool
+     *
      * @ORM\Column(name="custom", type="boolean", nullable=false)
      */
     private $custom = true;
@@ -95,6 +99,7 @@ class Preset extends ModelEntity
      * Contains the thumbnail path
      *
      * @var string
+     *
      * @ORM\Column(name="thumbnail", type="text", nullable=true)
      */
     private $thumbnail;
@@ -103,6 +108,7 @@ class Preset extends ModelEntity
      * Contains the preview image path
      *
      * @var string
+     *
      * @ORM\Column(name="preview", type="text", nullable=true)
      */
     private $preview;
@@ -111,7 +117,9 @@ class Preset extends ModelEntity
      * Contains the thumbnail path
      *
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="preset_data", type="text", nullable=false)
      */
     private $presetData;
@@ -119,7 +127,8 @@ class Preset extends ModelEntity
     /**
      * Contains the asset data for imports
      *
-     * @var string
+     * @var bool
+     *
      * @ORM\Column(name="assets_imported", type="boolean", nullable=false)
      */
     private $assetsImported = true;
@@ -127,20 +136,19 @@ class Preset extends ModelEntity
     /**
      * Contains the info if preset is hidden for internal im/export use.
      *
-     * @var string
+     * @var bool
+     *
      * @ORM\Column(name="hidden", type="boolean", nullable=false)
      */
     private $hidden = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="emotion_translations", type="text", nullable=false)
      */
     private $emotionTranslations;
 
-    /**
-     * Preset constructor.
-     */
     public function __construct()
     {
         $this->translations = new ArrayCollection();
@@ -304,17 +312,17 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @param array $translations
+     * @param \Shopware\Models\Emotion\PresetTranslation[] $translations
      *
-     * @return ModelEntity
+     * @return Preset
      */
     public function setTranslations(array $translations)
     {
-        return $this->setOneToMany($translations, '\Shopware\Models\Emotion\PresetTranslation', 'translations', 'preset');
+        return $this->setOneToMany($translations, \Shopware\Models\Emotion\PresetTranslation::class, 'translations', 'preset');
     }
 
     /**
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\PresetTranslation>
      */
     public function getTranslations()
     {

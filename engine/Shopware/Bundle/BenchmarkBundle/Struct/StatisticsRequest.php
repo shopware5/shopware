@@ -24,31 +24,43 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
+use Shopware\Models\Benchmark\BenchmarkConfig;
+
 class StatisticsRequest
 {
     /**
      * @var string
      */
-    private $token;
+    private $data;
 
     /**
-     * @param string $token
+     * @var BenchmarkConfig
      */
-    public function __construct($token)
-    {
-        $this->token = $token;
-    }
+    private $config;
 
-    public function __toString()
+    /**
+     * @param string          $data
+     * @param BenchmarkConfig $config
+     */
+    public function __construct($data, BenchmarkConfig $config)
     {
-        return sprintf('token=%s', $this->token);
+        $this->data = $data;
+        $this->config = $config;
     }
 
     /**
      * @return string
      */
-    public function getToken()
+    public function __toString()
     {
-        return $this->token;
+        return $this->data;
+    }
+
+    /**
+     * @return BenchmarkConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

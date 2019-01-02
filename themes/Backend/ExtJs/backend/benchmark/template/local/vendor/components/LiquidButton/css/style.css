@@ -1,0 +1,28 @@
+.btn-liquid {
+	display: inline-block;
+	position: relative;
+	width: 240px;
+	height: 62px;
+	border-radius: 27px;
+
+	color: #fff;
+	font: 700 14px/62px "Source Sans Pro", sans-serif;
+	letter-spacing: 0.05em;
+	text-align: center;
+	text-decoration: none;
+}
+
+.btn-liquid .inner {
+	position: relative;
+
+	z-index: 2;
+}
+
+.btn-liquid canvas {
+	position: absolute;
+	top: -50px;
+	right: -50px;
+	bottom: -50px;
+	left: -50px;
+	z-index: 1;
+}

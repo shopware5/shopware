@@ -37,6 +37,14 @@ class SitemapContext extends SubContext
     }
 
     /**
+     * @Given /^I am on the sitemap_index\.xml$/
+     */
+    public function iAmOnTheSitemapIndexXml()
+    {
+        $this->getPage('SitemapIndexXml')->open();
+    }
+
+    /**
      * @Then /^I should see the group "([^"]*)"$/
      * @Then /^I should see the group "([^"]*)":$/
      */
@@ -77,11 +85,11 @@ class SitemapContext extends SubContext
     }
 
     /**
-     * @Then /^there should be these links in the XML:$/
+     * @Then /^I should see the sitemap files:$/
      */
     public function thereShouldBeTheseLinksInTheXml(TableNode $links)
     {
         $links = $links->getHash();
-        $this->getPage('Sitemap')->checkXml($links);
+        $this->getPage('SitemapIndexXml')->checkXml($links);
     }
 }

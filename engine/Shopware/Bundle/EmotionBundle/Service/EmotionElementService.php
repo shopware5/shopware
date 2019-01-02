@@ -24,8 +24,10 @@
 
 namespace Shopware\Bundle\EmotionBundle\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use IteratorAggregate;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ComponentHandlerInterface;
-use Shopware\Bundle\EmotionBundle\Exception\ComponentHandlerNotFoundException;
+use Shopware\Bundle\EmotionBundle\ComponentHandler\EventComponentHandler;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
@@ -40,9 +42,14 @@ class EmotionElementService implements EmotionElementServiceInterface
     private $gateway;
 
     /**
-     * @var array
+     * @var ComponentHandlerInterface[]
      */
     private $componentHandler;
+
+    /**
+     * @var EventComponentHandler
+     */
+    private $eventComponentHandler;
 
     /**
      * @var DataCollectionResolverInterface
@@ -50,15 +57,29 @@ class EmotionElementService implements EmotionElementServiceInterface
     private $dataCollectionResolver;
 
     /**
-     * @param array                           $componentHandler
-     * @param EmotionElementGateway           $gateway
-     * @param DataCollectionResolverInterface $dataCollectionResolver
+     * @var \Enlight_Event_EventManager
      */
-    public function __construct(array $componentHandler, EmotionElementGateway $gateway, DataCollectionResolverInterface $dataCollectionResolver)
-    {
+    private $eventManager;
+
+    /**
+     * @param IteratorAggregate               $componentHandler
+     * @param EmotionElementGateway           $gateway
+     * @param EventComponentHandler           $eventComponentHandler
+     * @param DataCollectionResolverInterface $dataCollectionResolver
+     * @param \Enlight_Event_EventManager     $eventManager
+     */
+    public function __construct(
+        IteratorAggregate $componentHandler,
+        EmotionElementGateway $gateway,
+        EventComponentHandler $eventComponentHandler,
+        DataCollectionResolverInterface $dataCollectionResolver,
+        \Enlight_Event_EventManager $eventManager
+    ) {
         $this->gateway = $gateway;
-        $this->componentHandler = $componentHandler;
+        $this->eventComponentHandler = $eventComponentHandler;
         $this->dataCollectionResolver = $dataCollectionResolver;
+        $this->eventManager = $eventManager;
+        $this->componentHandler = $this->registerComponentHandlers(iterator_to_array($componentHandler, false));
     }
 
     /**
@@ -79,17 +100,13 @@ class EmotionElementService implements EmotionElementServiceInterface
     /**
      * @param array                $elementList
      * @param ShopContextInterface $context
-     *
-     * @throws ComponentHandlerNotFoundException
      */
     private function handleElements(array $elementList, ShopContextInterface $context)
     {
         $prepareCollection = new PrepareDataCollection();
 
-        /**
-         * @var int
-         * @var Element[] $elements
-         */
+        /** @var int $emotionId */
+        /** @var Element[] $elements */
         foreach ($elementList as $emotionId => $elements) {
             foreach ($elements as $element) {
                 $this->prepareElement($prepareCollection, $element, $context);
@@ -98,10 +115,8 @@ class EmotionElementService implements EmotionElementServiceInterface
 
         $resolvedCollection = $this->dataCollectionResolver->resolve($prepareCollection, $context);
 
-        /**
-         * @var int
-         * @var Element[] $elements
-         */
+        /** @var int $emotionId */
+        /** @var Element[] $elements */
         foreach ($elementList as $emotionId => $elements) {
             foreach ($elements as $element) {
                 $this->handleElement($resolvedCollection, $element, $context);
@@ -113,8 +128,6 @@ class EmotionElementService implements EmotionElementServiceInterface
      * @param PrepareDataCollection $collection
      * @param Element               $element
      * @param ShopContextInterface  $context
-     *
-     * @throws ComponentHandlerNotFoundException
      */
     private function prepareElement(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -126,8 +139,6 @@ class EmotionElementService implements EmotionElementServiceInterface
      * @param ResolvedDataCollection $collection
      * @param Element                $element
      * @param ShopContextInterface   $context
-     *
-     * @throws ComponentHandlerNotFoundException
      */
     private function handleElement(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -138,21 +149,35 @@ class EmotionElementService implements EmotionElementServiceInterface
     /**
      * @param Element $element
      *
-     * @throws ComponentHandlerNotFoundException
-     *
      * @return ComponentHandlerInterface
      */
     private function findElementHandler(Element $element)
     {
-        /*
-         * @var ComponentHandlerInterface
-         */
+        /** @var ComponentHandlerInterface $handler */
         foreach ($this->componentHandler as $handler) {
             if ($handler->supports($element)) {
                 return $handler;
             }
         }
 
-        throw new ComponentHandlerNotFoundException(sprintf('ComponentHandler for element "%s" not found.', $element->getComponent()->getName()));
+        return $this->eventComponentHandler;
+    }
+
+    /**
+     * @param array $serviceComponentHandlers
+     *
+     * @throws \Enlight_Event_Exception
+     *
+     * @return array
+     */
+    private function registerComponentHandlers(array $serviceComponentHandlers)
+    {
+        $componentHandlers = new ArrayCollection();
+        $componentHandlers = $this->eventManager->collect(
+            'Shopware_Emotion_Collect_Emotion_Component_Handlers',
+            $componentHandlers
+        );
+
+        return array_merge($serviceComponentHandlers, $componentHandlers->toArray());
     }
 }

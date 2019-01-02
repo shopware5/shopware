@@ -39,13 +39,20 @@ class ShopIndex
     private $shop;
 
     /**
+     * @var string
+     */
+    private $type;
+
+    /**
      * @param string $name
      * @param Shop   $shop
+     * @param string $type
      */
-    public function __construct($name, Shop $shop)
+    public function __construct($name, Shop $shop, $type)
     {
         $this->name = $name;
         $this->shop = $shop;
+        $this->type = $type;
     }
 
     /**
@@ -62,5 +69,13 @@ class ShopIndex
     public function getShop()
     {
         return $this->shop;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

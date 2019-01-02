@@ -32,7 +32,7 @@ use Shopware\Models\Customer\Customer;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -21,6 +21,30 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
+
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 class sAdminTest extends PHPUnit\Framework\TestCase
 {
     /**
@@ -193,11 +217,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertInternalType('array', $result['checkPayment']);
         $this->assertCount(2, $result['checkPayment']);
         $this->assertInternalType('array', $result['paymentData']);
-        $this->assertCount(20, $result['paymentData']);
+        $this->assertCount(21, $result['paymentData']);
         $this->assertInternalType('boolean', $result['sProcessed']);
         $this->assertTrue($result['sProcessed']);
         $this->assertInternalType('object', $result['sPaymentObject']);
-        $this->assertInstanceOf('ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod', $result['sPaymentObject']);
+        $this->assertInstanceOf(BasePaymentMethod::class, $result['sPaymentObject']);
     }
 
     /**
@@ -1166,6 +1190,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 $this->assertArrayHasKey('ordernumber', $detail);
                 $this->assertArrayHasKey('articleID', $detail);
                 $this->assertArrayHasKey('articleordernumber', $detail);
+                $this->assertArrayHasKey('amountNumeric', $detail);
+                $this->assertArrayHasKey('priceNumeric', $detail);
             }
 
             // This tests SW-5653
@@ -1248,6 +1274,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'display_state_in_registration' => '0',
                         'force_state_in_registration' => '0',
                         'countryarea' => 'welt',
+                        'allow_shipping' => '1',
                     ],
                     'countryShipping' => [
                         'id' => '20',
@@ -1265,6 +1292,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                         'display_state_in_registration' => '0',
                         'force_state_in_registration' => '0',
                         'countryarea' => 'welt',
+                        'allow_shipping' => '1',
                     ],
                     'stateShipping' => ['id' => 0],
                 ],
@@ -2081,6 +2109,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
+                'isNewRegistration' => true,
             ],
             $result
         );
@@ -2116,6 +2145,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
+                'isNewRegistration' => false,
             ],
             $result
         );
@@ -2128,6 +2158,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
+                'isNewRegistration' => false,
             ],
             $result
         );

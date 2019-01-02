@@ -29,8 +29,9 @@
 class Smarty_Compiler_Timestamp extends Smarty_Internal_CompileBase
 {
     /**
-     * @param $args
-     * @param $compiler
+     * @param array  $args
+     * @param object $compiler
+     *
      * @return int
      */
     public function compile($args, $compiler)

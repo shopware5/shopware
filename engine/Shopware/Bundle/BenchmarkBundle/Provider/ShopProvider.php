@@ -24,29 +24,101 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ShopProvider implements BenchmarkProviderInterface
 {
+    /**
+     * @var Connection
+     */
+    private $dbalConnection;
+
+    /**
+     * @var int
+     */
+    private $shopId;
+
+    public function __construct(Connection $dbalConnection)
+    {
+        $this->dbalConnection = $dbalConnection;
+    }
+
     public function getName()
     {
         return 'shop';
     }
 
-    public function getBenchmarkData()
+    /**
+     * {@inheritdoc}
+     */
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $this->shopId = $shopContext->getShop()->getId();
+
         return [
-            'id' => $this->getShopId(),
+            'id' => $this->getUniqueShopHash(),
             'industry' => $this->getIndustry(),
-            'datetime' => date('Y-m-d H:i:s'),
+            'type' => $this->getType(),
+            'datetime' => $now->format('Y-m-d H:i:s'),
         ];
     }
 
-    private function getShopId()
+    /**
+     * @return string
+     */
+    private function getUniqueShopHash()
     {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $shopHash = \Ramsey\Uuid\Uuid::fromBytes(
+            (string) $queryBuilder->select('config.id')
+            ->from('s_benchmark_config', 'config')
+            ->where('config.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetchColumn()
+        );
+
+        return $shopHash->toString();
     }
 
+    /**
+     * @return string
+     */
     private function getIndustry()
     {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return (string) $queryBuilder->select('industry')
+            ->from('s_benchmark_config', 'config')
+            ->where('config.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetchColumn();
+    }
+
+    /**
+     * @return string
+     */
+    private function getType()
+    {
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        $type = (string) $queryBuilder->select('type')
+            ->from('s_benchmark_config', 'config')
+            ->where('config.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetchColumn();
+
+        if (!in_array($type, ['b2b', 'b2c'])) {
+            $type = 'b2c';
+        }
+
+        return $type;
     }
 }

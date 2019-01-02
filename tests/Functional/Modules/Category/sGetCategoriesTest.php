@@ -27,7 +27,7 @@ namespace Shopware\Tests\Functional\Modules\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

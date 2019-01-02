@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -54,6 +54,10 @@ class ShopPageHydrator extends Hydrator
     public function hydrate(array $data)
     {
         $page = new Struct\ShopPage();
+
+        $translation = $this->getTranslation($data, '__page');
+        $data = array_merge($data, $translation);
+
         $this->assignData($page, $data);
 
         return $page;

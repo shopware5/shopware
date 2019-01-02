@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Shopware-licentie',
     'menuitem_configuration' => 'Configuratie',
     'menuitem_finish' => 'Gereed',
-    'menuitem_license' => 'Eindgebruikerslicentie',
+    'menuitem_license' => 'Algemene voorwaarden',
 
     'license_incorrect' => 'De ingevoerde licentiesleutel lijkt niet geldig te zijn',
     'license_does_not_match' => 'De ingevoerde licentiesleutel hoort bij geen enkele commerciële Shopware-versie',
@@ -49,6 +49,7 @@ return [
     'select_language_fr' => 'Français',
     'select_language_es' => 'Español',
     'select_language_pt' => 'Português',
+    'select_language_pl' => 'Polski',
 
     'language-selection_select_language' => 'Taal van installatiewizard',
     'language-selection_header' => 'Jouw Shopware-installatie',
@@ -73,7 +74,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => '<h3 class="alert-heading">Let op!</h3>Er is niet aan alle vereisten voor een geslaagde installatie voldaan',
     'requirements_success' => '<h3 class="alert-heading">Gefeliciteerd</h3>Er is aan alle vereisten voor een geslaagde installatie voldaan',
-    'requirements_ioncube' => '<small><strong>* Opmerking:</strong> De coderingssoftware ionCube is niet op jouw systeem geïnstalleerd. Deze software is alleen vereist als je later via onze <a href="https://store.shopware.com/en" target="_blank">Shopware Community Store</a> uitbreidingen wilt installeren die met ionCube versleuteld zijn. Je kunt ionCube altijd later nog installeren.</small>',
     'requirements_php_info' => 'Je server moet aan de volgende systeemvereisten voldoen om Shopware te kunnen gebruiken',
     'requirements_system_colcheck' => 'Vereiste',
     'requirements_system_colrequired' => 'Vereist',
@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(alles weergeven)',
     'requirements_hide_all' => '(alles verbergen)',
 
-    'license_agreement_header' => 'Gebruiksrechtovereenkomst ("EULA")',
-    'license_agreement_info' => 'Hierin vind je een verklaring van onze licentievoorwaarden, die je moet lezen en accepteren voor een geslaagde installatie. De Shopware Community-versie is gelicentieerd onder AGPL, terwijl delen van de plug-ins en de sjabloon onder licentie van New BSD vallen.',
-    'license_agreement_error' => 'Je moet akkoord gaan met onze licentievoorwaarden',
-    'license_agreement_checkbox' => 'Ik ga akkoord met de licentievoorwaarden',
+    'license_agreement_header' => 'Algemene voorwaarden',
+    'license_agreement_info' => 'Hierin vind je een verklaring van onze algemene voorwaarden, die je moet lezen en accepteren voor een geslaagde installatie. De Shopware Community-versie is gelicentieerd onder AGPL, terwijl delen van de plug-ins en de sjabloon onder licentie van New BSD vallen.',
+    'license_agreement_error' => 'Je moet akkoord gaan met onze algemene voorwaarden',
+    'license_agreement_checkbox' => 'Ik ga akkoord met de algemene voorwaarden',
 
     'database-configuration_header' => 'Database configureren',
     'database-configuration_field_host' => 'Databaseserver:',
@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Fijn dat je je bij onze community hebt aangesloten. Je hebt Shopware geïnstalleerd.
-<p>Je winkel is nu gebruiksklaar. Als je Shopware nog niet eerder hebt gebruikt, raden we je aan de gids <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Eerste stappen in Shopware"</a> eens door te lezen. Wanneer je je voor het eerst bij de Shop-backend aanmeldt, leidt onze "First Run Wizard" je verder door de basisinrichting.</p>
+<p>Je winkel is nu gebruiksklaar. Als je Shopware nog niet eerder hebt gebruikt, raden we je aan de gids <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"Eerste stappen in Shopware"</a> eens door te lezen. Wanneer je je voor het eerst bij de Shop-backend aanmeldt, leidt onze "First Run Wizard" je verder door de basisinrichting.</p>
 <p>Veel plezier met je nieuwe online winkel!</p>',
 ];

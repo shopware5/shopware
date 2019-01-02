@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -97,6 +97,11 @@ class Country extends Extendable
      * @var bool
      */
     protected $requiresStateSelection;
+
+    /**
+     * @var bool
+     */
+    protected $allowShipping;
 
     /**
      * @var State[] indexed by id
@@ -240,6 +245,14 @@ class Country extends Extendable
     }
 
     /**
+     * @param bool $allowShipping
+     */
+    public function setAllowShipping($allowShipping)
+    {
+        $this->allowShipping = (bool) $allowShipping;
+    }
+
+    /**
      * @return bool
      */
     public function isTaxFree()
@@ -277,6 +290,14 @@ class Country extends Extendable
     public function requiresStateSelection()
     {
         return $this->requiresStateSelection;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowShipping()
+    {
+        return $this->allowShipping;
     }
 
     /**

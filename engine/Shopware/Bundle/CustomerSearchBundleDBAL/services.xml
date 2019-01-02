@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
 
         <service id="customer_search.dbal.sorting.age_sorting_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\AgeSortingHandler">
             <tag name="customer_search.sorting_handler"/>
@@ -173,12 +174,12 @@
         </service>
 
         <service id="customer_search.dbal.handler_registry" class="Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry">
-            <argument type="collection"/>
-            <argument type="collection"/>
+            <argument type="tagged" tag="customer_search.condition_handler"/>
+            <argument type="tagged" tag="customer_search.sorting_handler"/>
         </service>
 
         <service id="customer_search.dbal.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundleDBAL\Commands\SearchIndexPopulateCommand">
-            <tag name="console.command"/>
+            <tag name="console.command" command="sw:customer:search:index:populate"/>
         </service>
 
         <service id="customer_search.dbal.indexing.order_gateway" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderGateway" >

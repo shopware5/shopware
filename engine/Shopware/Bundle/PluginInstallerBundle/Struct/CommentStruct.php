@@ -50,9 +50,9 @@ class CommentStruct implements \JsonSerializable
     private $rating;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
-    private $creationDate = null;
+    private $creationDate;
 
     /**
      * {@inheritdoc}
@@ -127,7 +127,7 @@ class CommentStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreationDate()
     {
@@ -135,9 +135,9 @@ class CommentStruct implements \JsonSerializable
     }
 
     /**
-     * @param \DateTime $creationDate
+     * @param \DateTimeInterface $creationDate
      */
-    public function setCreationDate(\DateTime $creationDate)
+    public function setCreationDate(\DateTimeInterface $creationDate)
     {
         $this->creationDate = $creationDate;
     }

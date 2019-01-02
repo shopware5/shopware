@@ -101,7 +101,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
 
     /**
      * Called when a field in the settings form changes
-     * @param field
+     * @param { object } form
      */
     onFormChanged: function(form) {
         var me = this,
@@ -258,7 +258,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         });
 
         customerStreamSelection.store.each(function(stream) {
-            var count = stream.get('newsletter_count');
+            var count = parseInt(stream.get('newsletter_count'));
             totalCount += count;
 
             record = Ext.create('Shopware.apps.NewsletterManager.model.RecipientGroup', {

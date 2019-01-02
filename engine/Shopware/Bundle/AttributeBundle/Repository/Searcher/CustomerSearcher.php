@@ -29,18 +29,21 @@ use Shopware\Models\Customer\Customer;
 use Shopware\Models\CustomerStream\Mapping;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CustomerSearcher extends GenericSearcher
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function createQuery(SearchCriteria $criteria)
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select($this->getIdentifierField());
         $builder->from(Customer::class, 'entity');
-        $builder->innerJoin('entity.billing', 'billing');
+        $builder->innerJoin('entity.defaultBillingAddress', 'billing');
         $builder->innerJoin('entity.group', 'customerGroup');
         $builder->setAlias('entity');
 
@@ -64,7 +67,7 @@ class CustomerSearcher extends GenericSearcher
             'entity.email^2',
             'entity.firstname^3',
             'entity.lastname^3',
-            'billing.zipCode^0.5',
+            'billing.zipcode^0.5',
             'billing.city^0.5',
             'billing.company^0.5',
         ];

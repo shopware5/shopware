@@ -24,8 +24,8 @@
 
 namespace Shopware\Tests\Unit\Components\Hook;
 
-use \Enlight_Hook_HookExecutionContext as HookExecutionContext;
-use \Enlight_Hook_HookHandler as HookHandler;
+use Enlight_Hook_HookExecutionContext as HookExecutionContext;
+use Enlight_Hook_HookHandler as HookHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,16 +35,16 @@ class HookManagerTest extends TestCase
 {
     const TEST_NAME_ARG = 'Test Name';
     const TEST_VALUES_ARG = [
-        'foo' => 'bar'
+        'foo' => 'bar',
     ];
     const TEST_ARGS = [
         'name' => self::TEST_NAME_ARG,
-        'values' => self::TEST_VALUES_ARG
+        'values' => self::TEST_VALUES_ARG,
     ];
     const TEST_RETURN_VALUE = 'ReturnValue';
     const RECURSIVE_TEST_LIMIT_ARG = 2;
     const RECURSIVE_TEST_ARGS = [
-        'limit' => self::RECURSIVE_TEST_LIMIT_ARG
+        'limit' => self::RECURSIVE_TEST_LIMIT_ARG,
     ];
 
     /**
@@ -58,7 +58,7 @@ class HookManagerTest extends TestCase
     private $hookManager;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setUp()
     {
@@ -73,7 +73,7 @@ class HookManagerTest extends TestCase
             new \Enlight_Loader(),
             [
                 'proxyDir' => $proxyDir,
-                'proxyNamespace' => 'Shopware_Test_Proxies'
+                'proxyNamespace' => 'Shopware_Test_Proxies',
             ]
         );
         if (!class_exists($this->hookManager->getProxyFactory()->getProxyClassName(HookManagerTestTarget::class))) {
@@ -83,6 +83,7 @@ class HookManagerTest extends TestCase
             $this->addHookListener(HookManagerTestTarget::TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME, HookHandler::TypeReplace);
+            $this->addHookListener(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
             $proxy = new $proxyClass();
         }
@@ -128,7 +129,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             HookHandler::TypeBefore,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -159,7 +160,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME,
             HookHandler::TypeBefore,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalProtectedMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -190,7 +191,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             HookHandler::TypeReplace,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -221,7 +222,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             HookHandler::TypeReplace,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -255,7 +256,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             HookHandler::TypeReplace,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -305,7 +306,7 @@ class HookManagerTest extends TestCase
                 $firstHookReturnValue,
                 $secondHookReturnValue
             ) {
-                $firstHookCallCounter++;
+                ++$firstHookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -341,7 +342,7 @@ class HookManagerTest extends TestCase
                 $secondHookReturnValue,
                 $thirdHookReturnValue
             ) {
-                $secondHookCallCounter++;
+                ++$secondHookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -377,7 +378,7 @@ class HookManagerTest extends TestCase
                 $secondHookReturnValue,
                 $thirdHookReturnValue
             ) {
-                $thirdHookCallCounter++;
+                ++$thirdHookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -432,7 +433,7 @@ class HookManagerTest extends TestCase
                 $firstHookReturnValue,
                 $secondHookReturnValue
             ) {
-                $firstHookCallCounter++;
+                ++$firstHookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -474,7 +475,7 @@ class HookManagerTest extends TestCase
                 $firstHookReturnValue,
                 $secondHookReturnValue
             ) {
-                $secondHookCallCounter++;
+                ++$secondHookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertTrue(in_array($args->getSubject()->originalMethodCallCounter, [0, 1]));
                 if ($secondHookCallCounter === 1) {
@@ -526,7 +527,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             HookHandler::TypeReplace,
             function (\Enlight_Hook_HookArgs $args) use (&$firstHookCallCounter, $firstHookReturnValue) {
-                $firstHookCallCounter++;
+                ++$firstHookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -568,7 +569,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME,
             HookHandler::TypeReplace,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertEquals(self::RECURSIVE_TEST_LIMIT_ARG, $args->limit);
                 $this->assertEquals(0, $args->getSubject()->originalRecursiveMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -600,7 +601,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME,
             HookHandler::TypeReplace,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 // The limit should only be reduced after this hook is called
                 $this->assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $hookCallCounter + 1), $args->limit);
                 // The original method should have been called less often than this hook
@@ -645,7 +646,7 @@ class HookManagerTest extends TestCase
                 &$secondHookCallCounter,
                 &$thirdHookCallCounter
             ) {
-                $firstHookCallCounter++;
+                ++$firstHookCallCounter;
                 // The limit should only be reduced after this hook is called
                 $this->assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $firstHookCallCounter + 1), $args->limit);
                 // The original method and the other hooks should have been called less often than this hook
@@ -675,7 +676,7 @@ class HookManagerTest extends TestCase
                 &$secondHookCallCounter,
                 &$thirdHookCallCounter
             ) {
-                $secondHookCallCounter++;
+                ++$secondHookCallCounter;
                 // The limit should only be reduced after this hook is called
                 $this->assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $secondHookCallCounter + 1), $args->limit);
                 // The original method and the third hook should have been called less often than this hook
@@ -705,7 +706,7 @@ class HookManagerTest extends TestCase
                 &$secondHookCallCounter,
                 &$thirdHookCallCounter
             ) {
-                $thirdHookCallCounter++;
+                ++$thirdHookCallCounter;
                 // The limit should only be reduced after this hook is called
                 $this->assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $thirdHookCallCounter + 1), $args->limit);
                 // The original method should have been called less often than this hook
@@ -754,7 +755,7 @@ class HookManagerTest extends TestCase
                 &$firstHookCallCounter,
                 &$secondHookCallCounter
             ) {
-                $firstHookCallCounter++;
+                ++$firstHookCallCounter;
 
                 // Call the parent and expect its result to be equal to the current limit
                 $expectedReturnValue = $args->limit;
@@ -776,7 +777,7 @@ class HookManagerTest extends TestCase
                 &$firstHookCallCounter,
                 &$secondHookCallCounter
             ) {
-                $secondHookCallCounter++;
+                ++$secondHookCallCounter;
 
                 // Call the parent and expect its result to be equal to the current limit
                 $expectedReturnValue = $args->limit;
@@ -816,7 +817,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME,
             HookHandler::TypeReplace,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(0, $args->getSubject()->originalProtectedMethodCallCounter);
                 $this->assertNull($args->getReturn());
@@ -847,7 +848,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             HookHandler::TypeAfter,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(1, $args->getSubject()->originalMethodCallCounter);
                 $this->assertEquals(self::TEST_NAME_ARG, $args->getReturn());
@@ -878,7 +879,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME,
             HookHandler::TypeAfter,
             function (\Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
-                $hookCallCounter++;
+                ++$hookCallCounter;
                 $this->assertHookArgs($args);
                 $this->assertEquals(1, $args->getSubject()->originalProtectedMethodCallCounter);
                 $this->assertEquals(self::TEST_NAME_ARG, $args->getReturn());
@@ -900,8 +901,52 @@ class HookManagerTest extends TestCase
     }
 
     /**
-     * @param string $methodName
-     * @param string $hookType
+     * Tests that method parameters named '$class', '$method', '$context' or '$hookManager' are not overwritten by any
+     * of the helper variables used in the generated proxy method or the hook args.
+     */
+    public function testVariableNamesDontCollide()
+    {
+        $classArg = 'A';
+        $methodArg = 'B';
+        $contextArg = 'C';
+        $hookManagerArg = 'D';
+        $expectedReturnValue = $classArg . $methodArg . $contextArg . $hookManagerArg;
+
+        $this->addHookListener(
+            HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME,
+            HookHandler::TypeAfter,
+            function (\Enlight_Hook_HookArgs $args) use ($classArg, $methodArg, $contextArg, $hookManagerArg, $expectedReturnValue) {
+                // Assert that no parameters were overwritten by the proxy
+                $this->assertCount(4, $args->getArgs());
+                $this->assertEquals($classArg, $args->get('class'));
+                $this->assertEquals($methodArg, $args->get('method'));
+                $this->assertEquals($contextArg, $args->get('context'));
+                $this->assertEquals($hookManagerArg, $args->get('hookManager'));
+                $this->assertEquals($expectedReturnValue, $args->getReturn());
+
+                // Assert that the subject and method name of the hook args is correct
+                $this->assertInstanceOf(HookManagerTestTarget::class, $args->getSubject());
+                $this->assertEquals(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, $args->getMethod());
+            }
+        );
+
+        $proxy = $this->createProxy();
+        $returnValue = $this->hookManager->executeHooks(
+            $proxy,
+            HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME,
+            [
+                'class' => $classArg,
+                'method' => $methodArg,
+                'context' => $contextArg,
+                'hookManager' => $hookManagerArg,
+            ]
+        );
+        $this->assertEquals($expectedReturnValue, $returnValue);
+    }
+
+    /**
+     * @param string        $methodName
+     * @param string        $hookType
      * @param callable|null $callback
      */
     private function addHookListener($methodName, $hookType, callable $callback = null)

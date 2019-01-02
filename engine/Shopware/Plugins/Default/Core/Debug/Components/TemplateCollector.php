@@ -27,7 +27,7 @@ namespace Shopware\Plugin\Debug\Components;
 use Shopware\Components\Logger;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -70,6 +70,8 @@ class TemplateCollector implements CollectorInterface
      * Logs all rendered templates into the internal log object.
      * Each logged template contains the template name, the required compile time,
      * the required render time and the required cache time.
+     *
+     * @param Logger $log
      */
     public function logResults(Logger $log)
     {

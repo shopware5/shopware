@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Config.model.form.Country', {
         { name: 'taxFreeUstId', type: 'boolean' },
         { name: 'forceStateInRegistration', type: 'boolean' },
         { name: 'displayStateInRegistration', type: 'boolean' },
+        { name: 'allowShipping', type: 'boolean' },
         { name: 'iso3', type: 'string' },
         { name: 'description', type: 'string' },
         { name: 'area', convert: function(v, record) {

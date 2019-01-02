@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <!--shopware_search.-->
         <service id="shopware_search.product_search" class="Shopware\Bundle\SearchBundle\ProductSearch">
             <argument type="service" id="shopware_storefront.list_product_service"/>
@@ -49,7 +51,7 @@
             <argument type="service" id="events" />
 
             <!--criteria request handlers-->
-            <argument type="collection" />
+            <argument type="tagged" tag="criteria_request_handler" />
         </service>
 
         <service id="shopware_search.batch_product_number_search" class="Shopware\Bundle\SearchBundle\BatchProductNumberSearch">

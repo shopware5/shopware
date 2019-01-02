@@ -75,7 +75,7 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
             ->where('variant.ordernumber IN(:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

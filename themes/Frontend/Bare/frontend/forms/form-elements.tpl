@@ -1,7 +1,7 @@
 {namespace name="frontend/forms/elements"}
 
 {block name='frontend_forms_form_elements'}
-    <form id="support" name="support" class="{$sSupport.class}" method="post" action="{url controller='forms' action='index' id=$id}" enctype="multipart/form-data">
+    <form id="support" name="support" class="{$sSupport.class}" method="post" action="{url action='index' id=$id}" enctype="multipart/form-data">
         <input type="hidden" name="forceMail" value="{$forceMail|escape}">
 
         {* Form Content *}
@@ -49,6 +49,13 @@
                 {* Required fields hint *}
                 {block name='frontend_forms_form_elements_form_required'}
                     <div class="forms--required">{s name='SupportLabelInfoFields'}{/s}</div>
+                {/block}
+
+                {* Data protection information *}
+                {block name='frontend_forms_form_elements_form_privacy'}
+                    {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                        {include file="frontend/_includes/privacy.tpl"}
+                    {/if}
                 {/block}
 
                 {* Forms actions *}

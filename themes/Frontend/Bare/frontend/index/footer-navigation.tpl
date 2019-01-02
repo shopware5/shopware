@@ -25,7 +25,7 @@
             <nav class="column--navigation column--content">
                 <ul class="navigation--list" role="menu">
                     {block name="frontend_index_footer_column_service_menu_before"}{/block}
-                    {foreach $sMenu.gBottom as $item}
+                    {foreach $sMenu.bottom as $item}
 
                         {block name="frontend_index_footer_column_service_menu_entry"}
                             <li class="navigation--entry" role="menuitem">
@@ -66,7 +66,7 @@
             <nav class="column--navigation column--content">
                 <ul class="navigation--list" role="menu">
                     {block name="frontend_index_footer_column_information_menu_before"}{/block}
-                        {foreach $sMenu.gBottom2 as $item}
+                        {foreach $sMenu.bottom2 as $item}
 
                             {block name="frontend_index_footer_column_information_menu_entry"}
                                 <li class="navigation--entry" role="menuitem">
@@ -103,7 +103,7 @@
         {/block}
 
         {block name="frontend_index_footer_column_newsletter_content"}
-            <div class="column--content">
+            <div class="column--content" data-newsletter="true">
                 <p class="column--desc">
                     {s name="sFooterNewsletter"}{/s}
                 </p>
@@ -112,17 +112,35 @@
                     <form class="newsletter--form" action="{url controller='newsletter'}" method="post">
                         <input type="hidden" value="1" name="subscribeToNewsletter" />
 
-                        {block name="frontend_index_footer_column_newsletter_form_field"}
-                            <input type="email" name="newsletter" class="newsletter--field" placeholder="{s name="IndexFooterNewsletterValue"}{/s}" />
-                            {if {config name="newsletterCaptcha"} !== "nocaptcha"}
-                                <input type="hidden" name="redirect">
-                            {/if}
+                        {block name="frontend_index_footer_column_newsletter_form_field_wrapper"}
+                            <div class="content">
+                                {block name="frontend_index_footer_column_newsletter_form_field"}
+                                    <input type="email" name="newsletter" class="newsletter--field" placeholder="{s name="IndexFooterNewsletterValue"}{/s}" />
+                                    {if {config name="newsletterCaptcha"} !== "nocaptcha"}
+                                        <input type="hidden" name="redirect">
+                                    {/if}
+                                {/block}
+
+                                {block name="frontend_index_footer_column_newsletter_form_submit"}
+                                    <button type="submit" class="newsletter--button btn">
+                                        <i class="icon--mail"></i> <span class="button--text">{s name='IndexFooterNewsletterSubmit'}{/s}</span>
+                                    </button>
+                                {/block}
+                            </div>
                         {/block}
 
-                        {block name="frontend_index_footer_column_newsletter_form_submit"}
-                            <button type="submit" class="newsletter--button btn">
-                                <i class="icon--mail"></i> <span class="button--text">{s name='IndexFooterNewsletterSubmit'}{/s}</span>
-                            </button>
+                        {* Data protection information *}
+                        {block name="frontend_index_footer_column_newsletter_privacy"}
+                            {if {config name=ACTDPRTEXT} || {config name=ACTDPRCHECK}}
+                                {$hideCheckbox=false}
+
+                                {* If a captcha is active, the user has to accept the privacy statement on the newsletter page *}
+                                {if {config name=newsletterCaptcha} !== "nocaptcha"}
+                                    {$hideCheckbox=true}
+                                {/if}
+
+                                {include file="frontend/_includes/privacy.tpl" hideCheckbox=$hideCheckbox}
+                            {/if}
                         {/block}
                     </form>
                 {/block}

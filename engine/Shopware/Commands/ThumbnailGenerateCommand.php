@@ -41,7 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class is used as a command to generate thumbnails from media albums.
  * If no album is defined, thumbnails from all album medias are created.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -136,7 +136,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
 
     protected function printExitMessage()
     {
-        if (0 === count($this->errors)) {
+        if (count($this->errors) === 0) {
             $this->output->writeln('<info>Thumbnail generation finished successfully</info>');
 
             return;
@@ -170,9 +170,10 @@ class ThumbnailGenerateCommand extends ShopwareCommand
         $total = $paginator->count();
 
         $progressBar = new ProgressBar($this->output, $total);
+        $progressBar->setRedrawFrequency(10);
         $progressBar->start();
 
-        /* @var $media Media */
+        /* @var Media $media */
         foreach ($paginator->getIterator() as $media) {
             try {
                 $this->createMediaThumbnails($media);
@@ -199,7 +200,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     private function createMediaThumbnails(Media $media)
     {
         if (!$this->imageExists($media)) {
-            throw new \Exception('Base image file does not exist: ' . $media->getPath());
+            throw new \Exception(sprintf('Base image file "%s" does not exist', $media->getPath()));
         }
 
         $thumbnails = $media->getThumbnailFilePaths();

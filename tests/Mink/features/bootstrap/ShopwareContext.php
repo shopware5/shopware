@@ -155,7 +155,7 @@ class ShopwareContext extends SubContext
         $link = $session->getCurrentUrl();
 
         foreach ($hashes as $optin) {
-            if ($optin['type'] === 'password') {
+            if ($optin['type'] === 'swPassword') {
                 $mask = '%saccount/resetPassword/hash/%s';
                 $link = $this->getPage('Homepage')->getShopUrl();
 

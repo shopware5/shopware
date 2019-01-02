@@ -73,45 +73,16 @@ class Sitemap extends Page
     }
 
     /**
-     * @param array $links
-     *
-     * @throws \Exception
+     * Its ok to be on sitemap_index.xml
+     * {@inheritdoc}
      */
-    public function checkXml(array $links)
+    protected function verifyUrl(array $urlParameters = [])
     {
-        $homepageUrl = rtrim($this->getParameter('base_url'), '/');
-        $xml = new \SimpleXMLElement($this->getContent());
-
-        $check = [];
-        $i = 0;
-
-        foreach ($xml as $link) {
-            if (empty($links[$i])) {
-                $messages = [
-                    'There are more links in the sitemap.xml as expected!',
-                    sprintf('(%d sites in sitemap.xml, %d in test data', count($xml), count($links)),
-                ];
-
-                Helper::throwException($messages);
-            }
-
-            $check[] = [(string) $link->loc, $homepageUrl . $links[$i]['link']];
-            ++$i;
-        }
-
-        $result = Helper::checkArray($check, true);
-
-        if ($result === true) {
+        if (strpos($this->getDriver()->getCurrentUrl(), '/sitemap_index.xml') !== false) {
             return;
         }
 
-        $messages = [
-            'A link is different!',
-            'Read: ' . $check[$result][0],
-            'Expected: ' . $check[$result][1],
-        ];
-
-        Helper::throwException($messages);
+        parent::verifyUrl($urlParameters);
     }
 
     /**

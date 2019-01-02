@@ -54,7 +54,7 @@ class EnlightRequestHandler implements RequestHandlerInterface
             return;
         }
 
-        $form->submit($data, 'PATCH' !== $method);
+        $form->submit($data, $method !== 'PATCH');
     }
 
     /**
@@ -93,7 +93,7 @@ class EnlightRequestHandler implements RequestHandlerInterface
     {
         // For request methods that must not have a request body we fetch data
         // from the query string. Otherwise we look for data in the request body.
-        if ('GET' === $method || 'HEAD' === $method || 'TRACE' === $method) {
+        if ($method === 'GET' || $method === 'HEAD' || $method === 'TRACE') {
             $data = $this->handleRequestWithoutBody($request, $name);
         } else {
             $data = $this->handleRequestWithBody($request, $name, $defaultValue);
@@ -127,7 +127,7 @@ class EnlightRequestHandler implements RequestHandlerInterface
      */
     private function handleRequestWithoutBody(\Enlight_Controller_Request_Request $request, $name)
     {
-        if ('' === $name) {
+        if ($name === '') {
             $data = $request->getQuery();
         } else {
             // Don't submit GET requests if the form's name does not exist
@@ -155,7 +155,7 @@ class EnlightRequestHandler implements RequestHandlerInterface
     {
         $params = [];
 
-        if ('' === $name) {
+        if ($name === '') {
             $params = $request->getParams();
         } elseif ($request->getParam($name)) {
             $params = $request->getParam($name, $defaultValue);

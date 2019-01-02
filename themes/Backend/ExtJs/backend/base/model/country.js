@@ -65,7 +65,8 @@ Ext.define('Shopware.apps.Base.model.Country', {
         { name: 'position', type: 'int' },
         { name: 'active', type: 'boolean' },
         { name: 'forceStateInRegistration', type: 'boolean' },
-        { name: 'displayStateInRegistration', type: 'boolean' }
+        { name: 'displayStateInRegistration', type: 'boolean' },
+        { name: 'allowShipping', type: 'boolean' }
     ]
 
 });

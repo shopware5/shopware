@@ -40,9 +40,9 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of defined
      * product feeds.
      *
-     * @param null $orderBy
-     * @param null $offset
-     * @param null $limit
+     * @param null     $orderBy
+     * @param null|int $offset
+     * @param null|int $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -71,6 +71,7 @@ class Repository extends ModelRepository
             [
                 'productFeed.id as id',
                 'productFeed.name as name',
+                'productFeed.active as active',
                 'productFeed.fileName as fileName',
                 'productFeed.countArticles as countArticles',
                 'productFeed.hash as hash',
@@ -121,7 +122,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which
      * holds the detail information of the product feed
      *
-     * @param $feedId
+     * @param int $feedId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -136,7 +137,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $feedId
+     * @param int $feedId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -158,7 +159,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the product feed attributes
      * for the passed id.
      *
-     * @param $productFeedId
+     * @param int $productFeedId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -173,7 +174,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $productFeedId
+     * @param int $productFeedId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

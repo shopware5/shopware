@@ -129,7 +129,7 @@
                         me.$inputs.not($el).attr('disabled', 'disabled').parent().addClass('is--disabled');
                         me.$inputs.not($el).prop('checked', false);
                     } else {
-                        me.$inputs.removeAttr('disabled').parent().removeClass('is--disabled');
+                        me.$inputs.prop('disabled', false).parent().removeClass('is--disabled');
                     }
                     me.onChange(event);
                 });
@@ -302,7 +302,6 @@
                  * Used to silently reset the input values.
                  */
                 if (!me.datePicker.suspended) {
-
                     /**
                      * If product live reload and time input are active, delay the ajax request, so the user is
                      * able to finish typing.
@@ -419,14 +418,14 @@
                 this.setDisabledClass(this.$el, disable);
 
                 if (me.isRangeSlider) {
-                    me.datePicker.$rangeEndInput.removeAttr('disabled');
-                    me.datePicker.$rangeStartInput.removeAttr('disabled');
+                    me.datePicker.$rangeEndInput.prop('disabled', false);
+                    me.datePicker.$rangeStartInput.prop('disabled', false);
                     if (disable) {
                         me.datePicker.$rangeEndInput.prop('disabled', 'disabled');
                         me.datePicker.$rangeStartInput.prop('disabled', 'disabled');
                     }
                 } else {
-                    me.$datePickerEl.removeAttr('disabled');
+                    me.$datePickerEl.prop('disabled', false);
                     if (disable) {
                         me.$datePickerEl.prop('disabled', 'disabled');
                     }
@@ -462,7 +461,7 @@
 
                     if ($el.is(':checked')) {
                         $el.parents('.rating-star--outer-container').addClass('is--active');
-                        $el.removeAttr('disabled');
+                        $el.prop('disabled', false);
                     }
 
                     me.onChange(event);
@@ -910,7 +909,7 @@
          * @param disabled
          */
         disableElement: function($element, disabled) {
-            $element.removeAttr('disabled');
+            $element.prop('disabled', false);
             if (disabled) {
                 $element.prop('disabled', 'disabled');
             }

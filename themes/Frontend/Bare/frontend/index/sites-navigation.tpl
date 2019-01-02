@@ -34,7 +34,7 @@
     </ul>
 {/function}
 
-{if $sMenu.gLeft}
+{if $sMenu.left}
     {block name="frontend_index_left_menu_container"}
         <div class="shop-sites--container is--rounded">
             {block name='frontend_index_left_menu_headline'}
@@ -43,7 +43,7 @@
                 </div>
             {/block}
 
-            {call name=customPages customPages=$sMenu.gLeft}
+            {call name=customPages customPages=$sMenu.left}
         </div>
     {/block}
 {/if}

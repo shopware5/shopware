@@ -109,7 +109,7 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData('article');
 
-        /** @var $translation \Shopware\Models\Translation\Translation */
+        /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->create($data);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
@@ -140,7 +140,7 @@ class TranslationTest extends TestCase
         $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
         $data['key'] = $article['ordernumber'];
 
-        /** @var $translation \Shopware\Models\Translation\Translation */
+        /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->createByNumber($data);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
@@ -179,7 +179,7 @@ class TranslationTest extends TestCase
         $article = Shopware()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
         $data['key'] = $article['ordernumber'];
 
-        /** @var $translation \Shopware\Models\Translation\Translation */
+        /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->createByNumber($data);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
@@ -393,7 +393,7 @@ class TranslationTest extends TestCase
             $data .= '-UpdateByNumber';
         }
 
-        /** @var $result \Shopware\Models\Translation\Translation */
+        /** @var \Shopware\Models\Translation\Translation $result */
         $result = $this->resource->updateByNumber($article['ordernumber'], $translation);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $result);

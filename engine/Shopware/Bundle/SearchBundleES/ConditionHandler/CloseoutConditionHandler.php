@@ -51,7 +51,7 @@ class CloseoutConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addFilter(new TermQuery('closeouts', 1));
+        $search->addFilter(new TermQuery('closeouts', true));
     }
 
     /**
@@ -63,6 +63,6 @@ class CloseoutConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addPostFilter(new TermQuery('closeouts', 1));
+        $search->addPostFilter(new TermQuery('closeouts', true));
     }
 }

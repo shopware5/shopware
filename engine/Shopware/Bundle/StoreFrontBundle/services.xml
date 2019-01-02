@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <!-- Shopware services definition. This classes contains the business logic-->
         <service id="shopware_storefront.context_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService">
             <argument type="service" id="service_container"/>
@@ -103,6 +105,11 @@
 
         <service id="shopware_storefront.cheapest_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
             <argument type="service" id="shopware_storefront.cheapest_price_gateway"/>
+            <argument type="service" id="config" />
+        </service>
+
+        <service id="shopware_storefront.cheapest_price_es_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
+            <argument type="service" id="shopware_storefront.cheapest_price_es_gateway"/>
             <argument type="service" id="config" />
         </service>
 
@@ -218,6 +225,13 @@
             <argument type="service" id="config" />
         </service>
 
+        <service id="shopware_storefront.cheapest_price_es_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CheapestPriceESGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
+            <argument type="service" id="config" />
+        </service>
+
         <service id="shopware_storefront.variant_cheapest_price_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VariantCheapestPriceGateway">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
@@ -236,7 +250,6 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.property_hydrator_dbal"/>
-            <argument type="service" id="config" />
         </service>
 
         <service id="shopware_storefront.product_property_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway">
@@ -257,7 +270,6 @@
 
         <service id="shopware_storefront.similar_products_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\SimilarProductsGateway">
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="config"/>
         </service>
 
         <service id="shopware_storefront.download_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\DownloadGateway">
@@ -301,6 +313,13 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.category_hydrator_dbal"/>
+            <argument type="service" id="shopware_storefront.media_service"/>
+        </service>
+
+        <service id="shopware_storefront.payment_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PaymentGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.payment_hydrator_dbal"/>
         </service>
 
         <!-- Helper classes -->
@@ -396,6 +415,7 @@
         </service>
 
         <service id="shopware_storefront.shop_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.template_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.category_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.locale_hydrator_dbal" />
@@ -405,7 +425,12 @@
 
         <service id="shopware_storefront.template_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TemplateHydrator" />
         <service id="shopware_storefront.currency_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CurrencyHydrator" />
+
         <service id="shopware_storefront.locale_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\LocaleHydrator" />
+
+        <service id="shopware_storefront.payment_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+        </service>
 
         <service id="shopware_storefront.shop_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ShopGateway">
             <argument type="service" id="shopware_storefront.shop_hydrator_dbal" />
@@ -508,5 +533,16 @@
             <argument type="service" id="router"/>
         </service>
 
+        <service id="shopware_storefront.href_lang_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware_storefront.cached_href_lang_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CachedHrefLangService">
+            <argument type="service" id="shopware_storefront.href_lang_service"/>
+            <argument type="service" id="cache"/>
+        </service>
     </services>
 </container>

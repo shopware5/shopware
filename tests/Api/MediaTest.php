@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
 {
     const UPLOAD_FILE_NAME = 'test-bild';
@@ -387,5 +386,13 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($result['success']);
 
         $this->assertArrayHasKey('message', $result);
+    }
+
+    public function testMediaUploadTraversal()
+    {
+        $file = '../../image.jpg';
+        $media = new \Shopware\Components\Api\Resource\Media();
+
+        return $this->assertEquals('image.jpg', $media->getUniqueFileName('/tmp', $file));
     }
 }

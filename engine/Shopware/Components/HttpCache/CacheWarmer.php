@@ -26,15 +26,24 @@ namespace Shopware\Components\HttpCache;
 
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Event\ErrorEvent;
+use GuzzleHttp\Pool;
+use Psr\Log\LoggerInterface;
+use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Logger;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Routing\Context;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
+use Shopware_Components_Config as Config;
 
 /**
  * Shopware Application
  *
  * Warm up the cache with direct http calls using the SEO URLs
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,7 +62,7 @@ class CacheWarmer
     protected $connection;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -63,20 +72,110 @@ class CacheWarmer
     private $guzzleClient;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var ModelManager
+     */
+    private $modelManager;
+
+    /**
+     * @var ContainerAwareEventManager
+     */
+    private $eventManager;
+
+    /**
      * standard constructor
      *
-     * @param Connection $connection
-     * @param Logger     $logger
+     * @param LoggerInterface            $logger
+     * @param GuzzleFactory              $guzzleFactory
+     * @param Config                     $config
+     * @param ModelManager               $modelManager
+     * @param ContainerAwareEventManager $eventManager
      */
-    public function __construct(Connection $connection, Logger $logger, GuzzleFactory $guzzleFactory)
+    public function __construct(LoggerInterface $logger, GuzzleFactory $guzzleFactory, Config $config, ModelManager $modelManager, ContainerAwareEventManager $eventManager)
     {
-        $this->connection = $connection;
+        $this->connection = $modelManager->getConnection();
         $this->logger = $logger;
         $this->guzzleClient = $guzzleFactory->createClient();
+        $this->config = $config;
+        $this->modelManager = $modelManager;
+        $this->eventManager = $eventManager;
     }
 
     /**
-     * calculates the amount of available urls based on a specific viewport and shop
+     * Calls every URL given with the specific context
+     *
+     * @param string[] $urls
+     * @param Context  $context
+     * @param int      $concurrentRequests
+     */
+    public function warmUpUrls($urls, Context $context, $concurrentRequests = 1)
+    {
+        $shopId = $context->getShopId();
+
+        $guzzleConfig = [];
+        if (!empty($this->getMainShopId($shopId))) {
+            $guzzleConfig['cookies'] = ['shop' => $shopId];
+        }
+
+        $requests = [];
+        foreach ($urls as $url) {
+            $requests[] = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
+        }
+
+        $events = $this->eventManager;
+
+        $pool = new Pool(
+            $this->guzzleClient,
+            $requests,
+            [
+                'pool_size' => $concurrentRequests,
+                'error' => function (ErrorEvent $e) use ($shopId, $events) {
+                    $events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
+                    if ($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 404) {
+                        $this->logger->notice(
+                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
+                        );
+                    } else {
+                        $this->logger->error(
+                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
+                        );
+                    }
+                },
+            ]);
+
+        $pool->wait();
+    }
+
+    /**
+     * @deprecated since version 5.5, to be removed in 5.7 - Use warmUpUrls instead
+     *
+     * Calls every URL given with the specific shop cookie
+     *
+     * @param string[] $urls
+     * @param array    $shop
+     * @param int      $concurrentRequests
+     */
+    public function callUrls($urls, $shop, $concurrentRequests = 1)
+    {
+        /** @var Repository $shopRepository */
+        $shopRepository = $this->modelManager->getRepository(Shop::class);
+
+        $context = Context::createFromShop(
+            $shopRepository->getById($shop['id']),
+            $this->config
+        );
+
+        $this->warmUpUrls($urls, $context, $concurrentRequests);
+    }
+
+    /**
+     * @deprecated since version 5.5, to be removed in 5.7 - Use the UrlProviders' getCount() of HttpCache instead
+     *
+     * Calculates the amount of available URLs based on a specific viewport and shop
      *
      * @param string $viewPort
      * @param int    $shopId
@@ -97,7 +196,9 @@ class CacheWarmer
     }
 
     /**
-     * returns the amount of all available seo urls
+     * @deprecated since version 5.5, to be removed in 5.7 - Use the UrlProviders' getCount() of HttpCache instead
+     *
+     * Returns the amount of all available SEO URLs
      *
      * @param int $shopId
      *
@@ -106,10 +207,10 @@ class CacheWarmer
     public function getAllSEOUrlCount($shopId)
     {
         $urlCount = $this->connection->fetchColumn(
-            'SELECT count(path)
+            'SELECT COUNT(path)
             FROM s_core_rewrite_urls
             WHERE main=1 AND subshopID = :shopId
-        ',
+            ',
             ['shopId' => $shopId]
         );
 
@@ -117,11 +218,14 @@ class CacheWarmer
     }
 
     /**
-     * returns all available seo urls
+     * @deprecated since version 5.5, to be removed in 5.7 - The cache warmer doesn't rely on SEO URLs anymore, so its
+     * highly recommended to use the UrlProviders of HttpCache instead.
      *
-     * @param int  $shopId
-     * @param null $limit
-     * @param null $offset
+     * Returns all available seo urls
+     *
+     * @param int      $shopId
+     * @param null|int $limit
+     * @param null|int $offset
      *
      * @return string[]
      */
@@ -148,7 +252,10 @@ class CacheWarmer
     }
 
     /**
-     * returns the urls from the seo url table by the given view ports
+     * @deprecated since version 5.5, to be removed in 5.7 - The cache warmer doesn't rely on SEO URLs anymore, so its
+     * highly recommended to use the UrlProviders of HttpCache instead.
+     *
+     * Returns the URLs from the SEO URL table by the given view ports
      *
      * @param string[] $viewPorts
      * @param int      $shopId
@@ -193,36 +300,19 @@ class CacheWarmer
         return $urls;
     }
 
-    /**
-     * calls every given url with the specific shop cookie
-     *
-     * @param string[] $urls
-     * @param int      $shopId
-     */
-    public function callUrls($urls, $shopId)
+    private function getMainShopId($shopId)
     {
-        $shop = $this->getShopDataById($shopId);
-
-        $guzzleConfig = [];
-        if (!empty($shop['main_id'])) {
-            //is not the main shop call url without shop cookie encoded in it
-            $guzzleConfig['cookies'] = ['shop' => $shopId];
-        }
-
-        foreach ($urls as $url) {
-            $request = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
-            try {
-                $this->guzzleClient->send($request);
-            } catch (\Exception $e) {
-                $this->logger->error(
-                    'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()
-                );
-            }
-        }
+        return $this->connection->fetchColumn(
+            'SELECT main_id FROM s_core_shops WHERE active = 1 AND id = :id',
+            ['id' => (int) $shopId]
+        );
     }
 
     /**
-     * helper to add the host and the basepath as a prefix to the url
+     * @deprecated since version 5.5, to be removed in 5.7 - The cache warmer doesn't rely on SEO URLs anymore, so its
+     * highly recommended to use the UrlProviders' getUrls() of HttpCache instead.
+     *
+     * Helper to add the host and the basepath as a prefix to the url
      *
      * @param int      $shopId
      * @param string[] $urls
@@ -239,22 +329,23 @@ class CacheWarmer
         if ($shop['base_url']) {
             $baseUrl = $shop['base_url'];
         } else {
-            // if no virtual url of the language shop is give us the one from the main shop. Otherwise use simply the base_path
+            // If no virtual url of the language shop is give us the one from the main shop. Otherwise use simply the base_path
             $baseUrl = $mainShop['base_url'] ?: $mainShop['base_path'];
         }
-        // use the main host if no language host ist available
+        // Use the main host if no language host ist available
         $shopHost = empty($shop['host']) ? $mainShop['host'] : $shop['host'];
 
         foreach ($urls as &$url) {
-            $url = strtolower($url);
-            $url = $httpHost . $shopHost . $baseUrl . '/' . $url;
+            $url = $httpHost . $shopHost . $baseUrl . '/' . strtolower($url);
         }
 
         return $urls;
     }
 
     /**
-     * returns the shop object by id
+     * @deprecated since version 5.5, to be removed in 5.7 - Only used by `prepareUrl` which is deprecated
+     *
+     * Returns the shop object by id
      *
      * @param int $shopId
      *
@@ -264,7 +355,7 @@ class CacheWarmer
     {
         $shopData = $this->connection->fetchAssoc(
             'SELECT * FROM s_core_shops WHERE active = 1 AND id = :id',
-            ['id' => $shopId]
+            ['id' => (int) $shopId]
         );
 
         return $shopData;

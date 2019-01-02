@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
@@ -162,7 +161,7 @@ class sCategories
 
     /**
      * @param Category $category
-     * @param $childrenCounts
+     * @param array    $childrenCounts
      *
      * @return array
      */
@@ -222,9 +221,9 @@ class sCategories
 
     /**
      * Returns the leaf category to which the
-     * article belongs, inside the category subtree.
+     * product belongs, inside the category subtree.
      *
-     * @param int  $articleId Id of the article to look for
+     * @param int  $articleId Id of the product to look for
      * @param int  $parentId  Category subtree root id. If null, the shop category is used.
      * @param null $shopId
      *
@@ -252,7 +251,7 @@ class sCategories
         }
 
         $sql = '
-           SELECT ac.categoryID as id
+           SELECT ac.categoryID AS id
             FROM s_articles_categories ac
                 INNER JOIN s_categories c
                     ON  ac.categoryID = c.id
@@ -336,7 +335,7 @@ class sCategories
      *
      * @param int $id
      *
-     * @return array
+     * @return array|null
      */
     public function sGetCategoryContent($id)
     {
@@ -356,7 +355,7 @@ class sCategories
     /**
      * @param int $categoryId
      *
-     * @return int
+     * @return int|string
      */
     public function getProductBoxLayout($categoryId)
     {
@@ -459,7 +458,7 @@ class sCategories
      * Returns a key value array which contains the category id
      * as key and the count of category children as value.
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return array
      */
@@ -474,7 +473,7 @@ class sCategories
             ->groupBy('parent')
             ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -485,7 +484,7 @@ class sCategories
      * of the category.
      * The category id is used as array key and the parent id as array value.
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return array
      */
@@ -501,7 +500,7 @@ class sCategories
             ->addOrderBy('category.id')
             ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -511,7 +510,7 @@ class sCategories
      * Returns all ids, additionally with the provided one,
      * of the category path of the provided id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return array
      */
@@ -523,7 +522,7 @@ class sCategories
             ->where('category.id = :id')
             ->setParameter(':id', $id);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         $path = $statement->fetch(PDO::FETCH_COLUMN);

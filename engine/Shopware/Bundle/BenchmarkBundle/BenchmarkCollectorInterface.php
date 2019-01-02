@@ -24,10 +24,15 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 interface BenchmarkCollectorInterface
 {
     /**
-     * @return string - Must be a JSON encoded string
+     * @param ShopContextInterface $shopContext
+     * @param int                  $batchSize   - If set, this will be used for the Orders, Customers and ProductsProvider
+     *
+     * @return array
      */
-    public function get();
+    public function get(ShopContextInterface $shopContext, $batchSize = null);
 }

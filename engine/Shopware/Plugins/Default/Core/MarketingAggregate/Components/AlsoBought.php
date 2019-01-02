@@ -28,7 +28,7 @@
  * This components refresh and initials the Also bought data
  * in the s_articles_also_bought_ro
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,6 +40,9 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      * of articles.
      * The articles are used for the aggregate query which is
      * faster if an constant where condition is used.
+     *
+     * @param null|int $offset
+     * @param null|int $limit
      */
     public function initAlsoBought($offset = null, $limit = null)
     {
@@ -71,13 +74,13 @@ class Shopware_Components_AlsoBought extends Enlight_Class
             VALUES (:article_id, :related_article_id, :sales);
         ');
 
-        //iterate all selected articles which has to be initialed
+        // Iterate all selected articles which has to be initialed
         foreach ($articles as $articleId) {
-            //now we select all bought articles for the current article id
+            // Now we select all bought articles for the current article id
             $preparedSelect->execute(['articleId' => $articleId]);
             $combinations = $preparedSelect->fetchAll();
 
-            //at least we have to insert each combination in the aggregate s_articles_also_bought_ro table.
+            // At least we have to insert each combination in the aggregate s_articles_also_bought_ro table.
             foreach ($combinations as $combination) {
                 $preparedInsert->execute($combination);
             }
@@ -88,8 +91,8 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      * This function is used to insert or update the bought articles table
      * for a single buy combination of two articles.
      *
-     * @param $articleId
-     * @param $relatedArticleId
+     * @param int $articleId
+     * @param int $relatedArticleId
      */
     public function refreshBoughtArticles($articleId, $relatedArticleId)
     {

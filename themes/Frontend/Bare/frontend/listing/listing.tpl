@@ -79,6 +79,7 @@
                                     data-categoryId="{$sCategoryContent.id}"
                                     data-pages="{$pages}"
                                     data-threshold="{$theme.infiniteThreshold}"
+                                    data-pageShortParameter="{$shortParameters.sPage}"
                                 {/if}>
 
                             {* Actual listing *}

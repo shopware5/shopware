@@ -7,6 +7,7 @@
 
 <title></title>
 <style type="text/css">
+{block name="document_index_css"}
 body {
     {$Containers.Body.style}
 }
@@ -70,10 +71,12 @@ td.head  {
 #info {
     {$Containers.Content_Info.style}
 }
+{/block}
 </style>
 </head>
 
 <body>
+{block name="document_index_body"}
 {foreach from=$Pages item=positions name="pagingLoop" key=page}
 
     {* @Deprecated: Wrong variable will be removed in next major release *}
@@ -94,7 +97,8 @@ td.head  {
                         <p class="sender">{$Containers.Header_Sender.value}</p>
                     {/block}
                     {block name="document_index_address_base"}
-                        {$User.$address.company}<br />
+                        {if $User.$address.company}{$User.$address.company}<br />{/if}
+                        {if $User.$address.department}{$User.$address.department}<br />{/if}
                         {$User.$address.salutation|salutation}
                         {if {config name="displayprofiletitle"}}
                             {$User.$address.title}<br/>
@@ -340,12 +344,15 @@ td.head  {
         {/block}
     {/if}
 
-    <div id="footer">
-    {$Containers.Footer.value}
-    </div>
-    {if !$smarty.foreach.pagingLoop.last}
-        <pagebreak />
-    {/if}
+    {block name="document_index_footer"}
+        <div id="footer">
+        {$Containers.Footer.value}
+        </div>
+        {if !$smarty.foreach.pagingLoop.last}
+            <pagebreak />
+        {/if}
+    {/block}
 {/foreach}
+{/block}
 </body>
 </html>

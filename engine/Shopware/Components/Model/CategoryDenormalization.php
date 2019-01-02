@@ -28,15 +28,15 @@ namespace Shopware\Components\Model;
  * CategoryDenormalization-Class
  *
  * This class contains various methods to maintain
- * the denormalized representation of the Article to Category assignments.
+ * the denormalized representation of the Product to Category assignments.
  *
- * The assignments between articles and categories are stored in s_articles_categories.
+ * The assignments between products and categories are stored in s_articles_categories.
  * The table s_articles_categories_ro contains each assignment of s_articles_categories
  * plus additional assignments for each child category.
  *
  * Most write operations take place in s_articles_categories_ro.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -88,17 +88,11 @@ class CategoryDenormalization
         return $this->enableTransactions;
     }
 
-    /**
-     * @return CategoryDenormalization
-     */
     public function enableTransactions()
     {
         $this->enableTransactions = true;
     }
 
-    /**
-     * @return CategoryDenormalization
-     */
     public function disableTransactions()
     {
         $this->enableTransactions = false;
@@ -205,12 +199,12 @@ class CategoryDenormalization
             ';
 
             $parameters = [
-                'categoryPath' => '%|' . $categoryId . '|%',
+                'categoryPath' => '%|' . (int) $categoryId . '|%',
             ];
         }
 
         if ($count !== null) {
-            $sql = $this->limit($sql, $count, $offset);
+            $sql = $this->limit($sql, (int) $count, $offset);
         }
 
         $stmt = $this->getConnection()->prepare($sql);
@@ -232,8 +226,8 @@ class CategoryDenormalization
     /**
      * Rebuilds the path for a single category
      *
-     * @param $categoryId
-     * @param $categoryPath
+     * @param int         $categoryId
+     * @param null|string $categoryPath
      *
      * @return int
      */
@@ -241,7 +235,7 @@ class CategoryDenormalization
     {
         $updateStmt = $this->connection->prepare('UPDATE s_categories set path = :path WHERE id = :categoryId');
 
-        $parents = $this->getParentCategoryIds($categoryId);
+        $parents = $this->getParentCategoryIds((int) $categoryId);
         array_shift($parents);
 
         if (empty($parents)) {
@@ -407,8 +401,8 @@ class CategoryDenormalization
         $count = 0;
 
         $this->beginTransaction();
-        foreach ($affectedCategories as $categoryId) {
-            $assignmentsStmt->execute(['categoryId' => $categoryId]);
+        foreach ($affectedCategories as $affectedCategoryId) {
+            $assignmentsStmt->execute(['categoryId' => $affectedCategoryId]);
 
             while ($assignment = $assignmentsStmt->fetch()) {
                 $count += $this->insertAssignment($assignment['articleID'], $assignment['categoryID']);
@@ -433,8 +427,7 @@ class CategoryDenormalization
             ON ac.categoryID = c.id
         ';
 
-        $stmt = $this->getConnection()->query($sql);
-        $rows = $stmt->fetchColumn();
+        $rows = $this->getConnection()->query($sql)->fetchColumn();
 
         return (int) $rows;
     }
@@ -575,7 +568,7 @@ class CategoryDenormalization
     }
 
     /**
-     * Removes assignments for non-existing articles or categories
+     * Removes assignments for non-existing products or categories
      *
      * @return int
      */
@@ -609,12 +602,12 @@ class CategoryDenormalization
     {
         $count = (int) $count;
         if ($count <= 0) {
-            throw new \Exception("LIMIT argument count=$count is not valid");
+            throw new \Exception(sprintf('LIMIT argument count=%s is not valid', $count));
         }
 
         $offset = (int) $offset;
         if ($offset < 0) {
-            throw new \Exception("LIMIT argument offset=$offset is not valid");
+            throw new \Exception(sprintf('LIMIT argument offset=%s is not valid', $offset));
         }
 
         $sql .= " LIMIT $count";
@@ -648,12 +641,12 @@ class CategoryDenormalization
     /**
      * Inserts missing assignments in s_articles_categories_ro
      *
-     * @param int $articleId
+     * @param int $productId
      * @param int $categoryId
      *
      * @return int
      */
-    private function insertAssignment($articleId, $categoryId)
+    private function insertAssignment($productId, $categoryId)
     {
         $count = 0;
 
@@ -677,7 +670,7 @@ class CategoryDenormalization
 
         foreach ($parents as $parentId) {
             $selectStmt->execute([
-                ':articleId' => $articleId,
+                ':articleId' => $productId,
                 ':categoryId' => $parentId,
                 ':parentCategoryId' => $categoryId,
             ]);
@@ -686,7 +679,7 @@ class CategoryDenormalization
                 ++$count;
 
                 $insertStmt->execute([
-                    ':articleId' => $articleId,
+                    ':articleId' => $productId,
                     ':categoryId' => $parentId,
                     ':parentCategoryId' => $categoryId,
                 ]);

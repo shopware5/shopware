@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,7 +53,6 @@ class CloseoutConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $query->innerJoin('product', 's_articles_details', 'variant', 'product.id = variant.articleID');
         $query->andWhere('variant.laststock = 1');
     }
 }

@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -42,8 +42,6 @@ class SearchResult
     private $data;
 
     /**
-     * SearchResult constructor.
-     *
      * @param int   $count
      * @param array $data
      */

@@ -109,17 +109,6 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
     },
 
     /**
-     * Creates new Grid-Translation Plugin
-     *
-     * @return [Shopware.grid.plugin.Translation]
-     */
-    getGridTranslationPlugin: function() {
-        return Ext.create('Shopware.grid.plugin.Translation', {
-            translationType: 'propertyoption'
-        });
-    },
-
-    /**
      * Creates editor Plugin
      *
      * @return [Ext.grid.plugin.RowEditing]

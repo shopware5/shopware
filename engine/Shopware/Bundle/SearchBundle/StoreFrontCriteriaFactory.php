@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -54,20 +54,18 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     private $requestHandlers;
 
     /**
-     * @param \Shopware_Components_Config       $config
-     * @param \Enlight_Event_EventManager       $eventManager
-     * @param CriteriaRequestHandlerInterface[] $requestHandlers
+     * @param \Shopware_Components_Config $config
+     * @param \Enlight_Event_EventManager $eventManager
+     * @param \IteratorAggregate          $requestHandlers
      */
     public function __construct(
         \Shopware_Components_Config $config,
         \Enlight_Event_EventManager $eventManager,
-        $requestHandlers = []
+        $requestHandlers
     ) {
         $this->config = $config;
         $this->eventManager = $eventManager;
-
-        $this->requestHandlers = $requestHandlers;
-        $this->requestHandlers = $this->registerRequestHandlers();
+        $this->requestHandlers = $this->registerRequestHandlers(iterator_to_array($requestHandlers, false));
     }
 
     /**
@@ -288,11 +286,13 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
+     * @param CriteriaRequestHandlerInterface[] $existingHandlers
+     *
      * @throws \Enlight_Event_Exception
      *
-     * @return array
+     * @return CriteriaRequestHandlerInterface[]
      */
-    private function registerRequestHandlers()
+    private function registerRequestHandlers(array $existingHandlers = [])
     {
         $requestHandlers = new ArrayCollection();
         $requestHandlers = $this->eventManager->collect(
@@ -300,6 +300,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
             $requestHandlers
         );
 
-        return array_merge($this->requestHandlers, $requestHandlers->toArray());
+        return array_merge($existingHandlers, $requestHandlers->toArray());
     }
 }

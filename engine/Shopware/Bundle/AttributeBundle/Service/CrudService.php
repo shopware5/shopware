@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\Configuration;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -58,8 +58,6 @@ class CrudService
     private $typeMapping;
 
     /**
-     * CrudService constructor.
-     *
      * @param ModelManager   $entityManager
      * @param SchemaOperator $schemaOperator
      * @param TableMapping   $tableMapping
@@ -332,6 +330,7 @@ class CrudService
             'tableName' => $table,
             'columnName' => $column,
             'columnType' => $unifiedType,
+            'defaultValue' => $defaultValue,
         ]);
 
         $configId = null;
@@ -394,12 +393,17 @@ class CrudService
     /**
      * @param string                $type
      * @param null|string|int|float $defaultValue
+     *
+     * @return null|string|int|float
      */
     private function parseDefaultValue($type, $defaultValue)
     {
         $types = $this->typeMapping->getTypes();
         $type = $types[$type];
 
+        if ($type['unified'] === TypeMapping::TYPE_BOOLEAN) {
+            return (bool) $defaultValue === true ? 1 : 0;
+        }
         if (!$type['allowDefaultValue'] || $defaultValue === null) {
             return self::NULL_STRING;
         }

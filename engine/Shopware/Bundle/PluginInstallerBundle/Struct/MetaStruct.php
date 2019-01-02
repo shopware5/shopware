@@ -52,19 +52,25 @@ class MetaStruct implements \JsonSerializable
     private $fileName;
 
     /**
+     * @var string
+     */
+    private $technicalName;
+
+    /**
      * @param string $uri
      * @param string $size
      * @param string $sha1
      * @param string $binaryVersion
      * @param string $fileName
      */
-    public function __construct($uri, $size, $sha1, $binaryVersion, $fileName)
+    public function __construct($uri, $size, $sha1, $binaryVersion, $fileName, $technicalName)
     {
         $this->uri = $uri;
         $this->size = $size;
         $this->sha1 = $sha1;
         $this->binaryVersion = $binaryVersion;
         $this->fileName = $fileName;
+        $this->technicalName = $technicalName;
     }
 
     /**
@@ -105,6 +111,14 @@ class MetaStruct implements \JsonSerializable
     public function getFileName()
     {
         return $this->fileName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTechnicalName()
+    {
+        return $this->technicalName;
     }
 
     public function jsonSerialize()

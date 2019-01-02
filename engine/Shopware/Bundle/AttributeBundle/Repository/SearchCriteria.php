@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -72,9 +72,7 @@ class SearchCriteria
     public $params = [];
 
     /**
-     * SearchCriteria constructor.
-     *
-     * @param $entity
+     * @param string $entity
      */
     public function __construct($entity)
     {

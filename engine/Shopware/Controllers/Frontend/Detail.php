@@ -21,11 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Random;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -42,15 +41,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     }
 
     /**
-     * Error action method for not found/inactive articles
+     * Error action method for not found/inactive products
      * Can throw an exception that is handled by the default error controller
-     * or show a custom page with related articles
+     * or show a custom page with related products
      */
     public function errorAction()
     {
         $config = $this->container->get('config');
         if (!$config->get('RelatedArticlesOnArticleNotFound')) {
-            throw new Enlight_Controller_Exception('Article not found', 404);
+            throw new Enlight_Controller_Exception('Product not found', 404);
         }
 
         $this->Response()->setHttpResponseCode(
@@ -91,7 +90,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             ];
         }
 
-        $number = $this->Request()->getParam('number', null);
+        $number = $this->Request()->getParam('number');
         $selection = $this->Request()->getParam('group', []);
 
         $categoryId = $this->Request()->get('sCategory');
@@ -100,45 +99,45 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         try {
-            $article = Shopware()->Modules()->Articles()->sGetArticleById(
+            $product = Shopware()->Modules()->Articles()->sGetArticleById(
                 $id,
                 $categoryId,
                 $number,
                 $selection
             );
         } catch (\Exception $e) {
-            $article = null;
+            $product = null;
         }
 
-        if (empty($article) || empty($article['articleName'])) {
+        if (empty($product) || empty($product['articleName'])) {
             return $this->forward('error');
         }
 
-        $this->Request()->setQuery('sCategory', $article['categoryID']);
+        $this->Request()->setQuery('sCategory', $product['categoryID']);
 
-        $template = trim($article['template']);
+        $template = trim($product['template']);
         if (!empty($template)) {
-            $this->View()->loadTemplate('frontend/detail/' . $article['template']);
-        } elseif (!empty($article['mode'])) {
+            $this->View()->loadTemplate('frontend/detail/' . $product['template']);
+        } elseif (!empty($product['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');
         } elseif ($tpl === 'ajax') {
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-        $article['sBundles'] = false;
+        $product = Shopware()->Modules()->Articles()->sGetConfiguratorImage($product);
+        $product['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryID)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble([
                 'sViewport' => 'support',
                 'sFid' => Shopware()->Config()->InquiryID,
                 'sInquiry' => 'detail',
-                'sOrdernumber' => $article['ordernumber'],
+                'sOrdernumber' => $product['ordernumber'],
             ]);
         }
 
-        if (!empty($article['categoryID'])) {
-            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article['categoryID']));
+        if (!empty($product['categoryID'])) {
+            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($product['categoryID']));
             $categoryInfo = end($breadcrumb);
         } else {
             $breadcrumb = [];
@@ -146,11 +145,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
-        $article['sReleaseDate'] = $article['sReleasedate'];
+        $product['sReleaseDate'] = $product['sReleasedate'];
 
         $this->View()->sBreadcrumb = $breadcrumb;
         $this->View()->sCategoryInfo = $categoryInfo;
-        $this->View()->sArticle = $article;
+        $this->View()->sArticle = $product;
         $this->View()->rand = Random::getAlphanumericString(32);
     }
 
@@ -185,8 +184,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             return $this->forward('error');
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetArticleNameByArticleId($id);
-        if (empty($article)) {
+        $product = Shopware()->Modules()->Articles()->sGetArticleNameByArticleId($id);
+        if (empty($product)) {
             return $this->forward('error');
         }
 
@@ -230,8 +229,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             ) {
                 $hash = \Shopware\Components\Random::getAlphanumericString(32);
                 $sql = '
-                    INSERT INTO s_core_optin (datum, hash, data)
-                    VALUES (NOW(), ?, ?)
+                    INSERT INTO s_core_optin (datum, hash, data, type)
+                    VALUES (NOW(), ?, ?, "swProductVote")
                 ';
                 Shopware()->Db()->query($sql, [
                     $hash, serialize(Shopware()->System()->_POST->toArray()),
@@ -246,7 +245,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
                 $context = [
                     'sConfirmLink' => $link,
-                    'sArticle' => ['articleName' => $article],
+                    'sArticle' => ['articleName' => $product],
                 ];
 
                 $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
@@ -263,7 +262,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         $this->View()->sAction = 'ratingAction';
 
-        $this->forward('index');
+        $this->forward(
+            $this->Request()->getParam('sTargetAction', 'index'),
+            $this->Request()->getParam('sTarget', 'detail')
+        );
     }
 
     /**
@@ -277,7 +279,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     {
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        /** @var $repository \Shopware\Models\Category\Repository */
+        /** @var \Shopware\Models\Category\Repository $repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $repository->getPathById($categoryId);
 

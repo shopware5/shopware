@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Components\Hook;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -34,21 +34,22 @@ class HookManagerTestTarget
     const TEST_METHOD_NAME = 'testMethod';
     const RECURSIVE_TEST_METHOD_NAME = 'recursiveTestMethod';
     const PROTECTED_TEST_METHOD_NAME = 'protectedTestMethod';
+    const VARIABLE_NAME_COLLISION_TEST_METHOD_NAME = 'variableNameCollisionTestMethod';
 
     public $originalMethodCallCounter = 0;
     public $originalRecursiveMethodCallCounter = 0;
     public $originalProtectedMethodCallCounter = 0;
 
-    public function testMethod($name, array $values = array())
+    public function testMethod($name, array $values = [])
     {
-        $this->originalMethodCallCounter++;
+        ++$this->originalMethodCallCounter;
 
         return $name;
     }
 
     public function recursiveTestMethod($limit)
     {
-        $this->originalRecursiveMethodCallCounter++;
+        ++$this->originalRecursiveMethodCallCounter;
 
         if ($limit === 0) {
             return 0;
@@ -57,9 +58,14 @@ class HookManagerTestTarget
         return 1 + $this->recursiveTestMethod($limit - 1);
     }
 
-    protected function protectedTestMethod($name, array $values = array())
+    public function variableNameCollisionTestMethod($class, $method, $context, $hookManager)
     {
-        $this->originalProtectedMethodCallCounter++;
+        return $class . $method . $context . $hookManager;
+    }
+
+    protected function protectedTestMethod($name, array $values = [])
+    {
+        ++$this->originalProtectedMethodCallCounter;
 
         return $name;
     }

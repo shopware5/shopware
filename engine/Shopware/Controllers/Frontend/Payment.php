@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Components\Random;
@@ -29,7 +28,7 @@ use Shopware\Components\Random;
 /**
  * Shopware Payment Controller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -38,7 +37,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     /**
      * Returns the current payment short name.
      *
-     * @return string
+     * @return string|null
      */
     public function getPaymentShortName()
     {
@@ -78,7 +77,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      * @param int    $paymentStatusId
      * @param bool   $sendStatusMail
      *
-     * @return int
+     * @return int|false
      */
     public function saveOrder($transactionId, $paymentUniqueId, $paymentStatusId = null, $sendStatusMail = false)
     {
@@ -184,7 +183,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     /**
      * Returns the full user data as array.
      *
-     * @return array
+     * @return array|null
      */
     public function getUser()
     {
@@ -198,7 +197,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     /**
      * Returns the full basket data as array.
      *
-     * @return array
+     * @return array|null
      */
     public function getBasket()
     {

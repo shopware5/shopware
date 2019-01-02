@@ -38,7 +38,7 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorOptionsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -61,18 +61,18 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     private $helper;
 
     /**
-     * @var ConfiguratorOptionsGateway
+     * @var ConfiguratorOptionsGatewayInterface
      */
     private $gateway;
 
     /**
-     * @param ConfiguratorOptionsGateway   $gateway
-     * @param QueryBuilderFactoryInterface $queryBuilderFactory
-     * @param QueryAliasMapper             $queryAliasMapper
-     * @param PriceHelperInterface         $helper
+     * @param ConfiguratorOptionsGatewayInterface $gateway
+     * @param QueryBuilderFactoryInterface        $queryBuilderFactory
+     * @param QueryAliasMapper                    $queryAliasMapper
+     * @param PriceHelperInterface                $helper
      */
     public function __construct(
-        ConfiguratorOptionsGateway $gateway,
+        ConfiguratorOptionsGatewayInterface $gateway,
         QueryBuilderFactoryInterface $queryBuilderFactory,
         QueryAliasMapper $queryAliasMapper,
         PriceHelperInterface $helper
@@ -113,7 +113,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         }
         $options = $this->getOptions($context, $reverted, $facet);
 
-        if (null === $options) {
+        if ($options === null) {
             return null;
         }
         $actives = $this->getFilteredValues($criteria);
@@ -133,7 +133,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($queryCriteria, $query, $facet);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);

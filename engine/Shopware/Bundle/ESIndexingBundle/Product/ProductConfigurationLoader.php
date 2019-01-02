@@ -27,7 +27,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductConfigurationLoader
@@ -77,18 +76,30 @@ class ProductConfigurationLoader
         ]);
 
         $query->from('s_article_configurator_option_relations', 'relations');
-        $query->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.articleId IN (:articleIds) AND variant.active = 1');
-        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
-        $query->addGroupBy('variant.articleID');
-        $query->addGroupBy('variant.id');
+        $query->innerJoin(
+            'relations',
+            's_articles_details',
+            'variant',
+            'variant.id = relations.article_id AND variant.articleId IN (:articleIds) AND variant.active = 1'
+        );
 
-        if ($this->config->get('hideNoInstock')) {
+        $query->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID'
+        );
+
+        if ($this->config->get('hideNoInStock')) {
             $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
         }
 
+        $query->addGroupBy('variant.articleID');
+        $query->addGroupBy('variant.id');
+
         $query->setParameter(':articleIds', $articleIds, Connection::PARAM_STR_ARRAY);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
@@ -100,7 +111,7 @@ class ProductConfigurationLoader
      * @param array                $articleIds
      * @param ShopContextInterface $context
      *
-     * @return Group[]
+     * @return array<int, array<\Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group>>
      */
     public function getConfigurations(array $articleIds, ShopContextInterface $context)
     {
@@ -140,7 +151,7 @@ class ProductConfigurationLoader
 
         $result = [];
         foreach ($data as $productId => $rows) {
-            $result[$productId] = $this->hydrator->hydrateGroups($rows);
+            $result[(int) $productId] = $this->hydrator->hydrateGroups($rows);
         }
 
         return $result;

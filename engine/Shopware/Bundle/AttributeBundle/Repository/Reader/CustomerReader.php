@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 use Shopware\Models\Customer\Customer;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -38,16 +38,36 @@ class CustomerReader extends GenericReader
         $query = $this->entityManager->createQueryBuilder();
         $query->select([
             'entity.id',
+            'entity.number',
             'entity.email',
             'entity.active',
+            'entity.title',
+            'entity.salutation',
             'entity.firstname',
             'entity.lastname',
+            'entity.lastLogin',
+            'entity.firstLogin',
+            'entity.newsletter',
+            'entity.birthday',
+            'entity.lockedUntil',
+            'entity.accountMode',
+            'shop.id as shopId',
+            'shop.name as shopName',
             'billing.company',
-            'entity.number',
-            'grp.name as customerGroup',
+            'billing.department',
+            'billing.street',
+            'billing.zipcode',
+            'billing.city',
+            'billing.phone',
+            'billingCountry.id as countryId',
+            'billingCountry.name as countryName',
+            'grp.id as customerGroupId',
+            'grp.name as customerGroupName',
         ]);
         $query->from(Customer::class, 'entity', $this->getIdentifierField());
         $query->innerJoin('entity.defaultBillingAddress', 'billing');
+        $query->innerJoin('entity.shop', 'shop');
+        $query->innerJoin('billing.country', 'billingCountry');
         $query->innerJoin('entity.group', 'grp');
 
         return $query;

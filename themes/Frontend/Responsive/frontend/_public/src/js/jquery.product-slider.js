@@ -82,7 +82,7 @@
              * @type {Number}
              */
             itemsPerSlide: 1,
-            
+
             /**
             * Turn infinite sliding on and off.
             *
@@ -153,7 +153,7 @@
              * @property animationSpeed
              * @type {Number}
              */
-            animationSpeed: 800,
+            animationSpeed: 400,
 
             /**
              * Turn arrow controls on and off.
@@ -518,10 +518,10 @@
 
             if (o === 'vertical') {
                 me.$items.css({ 'height': me.itemSizePercent + '%' });
-                me.itemSize = me.$items.outerHeight();
+                me.itemSize = Math.ceil(me.$items.outerHeight());
             } else {
                 me.$items.css({ 'width': me.itemSizePercent + '%' });
-                me.itemSize = me.$items.outerWidth();
+                me.itemSize = Math.ceil(me.$items.outerWidth());
             }
 
             /**
@@ -828,7 +828,7 @@
          */
         initInfiniteSlide: function () {
             var me = this;
-            
+
             if (!me.opts.infiniteSlide) {
                 return;
             }

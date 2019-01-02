@@ -26,6 +26,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ManufacturerProvider implements BenchmarkProviderInterface
 {
@@ -33,6 +34,11 @@ class ManufacturerProvider implements BenchmarkProviderInterface
      * @var Connection
      */
     private $dbalConnection;
+
+    /**
+     * @var ShopContextInterface
+     */
+    private $shopContext;
 
     public function __construct(Connection $dbalConnection)
     {
@@ -44,8 +50,13 @@ class ManufacturerProvider implements BenchmarkProviderInterface
         return 'manufacturers';
     }
 
-    public function getBenchmarkData()
+    /**
+     * {@inheritdoc}
+     */
+    public function getBenchmarkData(ShopContextInterface $shopContext)
     {
+        $this->shopContext = $shopContext;
+
         return [
             'total' => $this->getTotalSuppliers(),
         ];
@@ -56,11 +67,51 @@ class ManufacturerProvider implements BenchmarkProviderInterface
      */
     private function getTotalSuppliers()
     {
+        $productIds = $this->getProductIds();
+
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return (int) $queryBuilder->select('COUNT(supplier.id)')
-            ->from('s_articles_supplier', 'supplier')
+        return (int) $queryBuilder->select('COUNT(DISTINCT product.supplierID)')
+            ->from('s_articles', 'product')
+            ->where('product.id IN (:productIds)')
+            ->setParameter(':productIds', $productIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchColumn();
+    }
+
+    /**
+     * @return array
+     */
+    private function getProductIds()
+    {
+        $categoryIds = $this->getPossibleCategoryIds();
+
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('DISTINCT productCat.articleID')
+            ->from('s_articles_categories', 'productCat')
+            ->where('productCat.categoryID IN (:categoryIds)')
+            ->setParameter(':categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * @return array
+     */
+    private function getPossibleCategoryIds()
+    {
+        $categoryId = $this->shopContext->getShop()->getCategory()->getId();
+
+        $queryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $queryBuilder->select('category.id')
+            ->from('s_categories', 'category')
+            ->where('category.path LIKE :categoryIdPath')
+            ->orWhere('category.id = :categoryId')
+            ->setParameter(':categoryId', $categoryId)
+            ->setParameter(':categoryIdPath', '%|' . $categoryId . '|%')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

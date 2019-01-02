@@ -54,18 +54,11 @@ class DownloadService
     private $connection;
 
     /**
-     * @var string
-     */
-    private $downloadsDir;
-
-    /**
-     * @param string      $rootDir
      * @param array       $pluginDirectories
      * @param StoreClient $storeClient
      * @param Connection  $connection
      */
     public function __construct(
-        $rootDir,
         array $pluginDirectories,
         StoreClient $storeClient,
         Connection $connection
@@ -73,7 +66,6 @@ class DownloadService
         $this->pluginDirectories = $pluginDirectories;
         $this->storeClient = $storeClient;
         $this->connection = $connection;
-        $this->downloadsDir = $rootDir;
     }
 
     /**
@@ -160,7 +152,8 @@ class DownloadService
             $result['size'],
             $result['sha1'],
             $result['binaryVersion'],
-            md5($request->getTechnicalName()) . '.zip'
+            md5($request->getTechnicalName()) . '.zip',
+            $request->getTechnicalName()
         );
     }
 
@@ -189,28 +182,26 @@ class DownloadService
         $file = $this->createDownloadZip($response->getBody());
 
         $this->extractPluginZip($file, $request->getTechnicalName());
+        unlink($file);
 
         return true;
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string file path to the downloaded file
      */
     private function createDownloadZip($content)
     {
-        $name = 'plugin_' . md5(uniqid()) . '.zip';
-
-        $file = rtrim($this->downloadsDir, '/') . DIRECTORY_SEPARATOR . $name;
-
+        $file = tempnam(sys_get_temp_dir(), 'plugin_') . '.zip';
         file_put_contents($file, $content);
 
         return $file;
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -223,7 +214,7 @@ class DownloadService
             ->setParameter(':name', $name)
             ->setMaxResults(1);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_COLUMN);

@@ -35,7 +35,7 @@ use Shopware\Models\Shop;
  * The Theme\Compiler class is used for the less compiling in the store front.
  * This class handles additionally the css and javascript minification.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -67,7 +67,7 @@ class Compiler
     private $eventManager;
 
     /**
-     * @var Js
+     * @var CompressorInterface
      */
     private $jsCompressor;
 
@@ -244,7 +244,7 @@ class Compiler
 
         $dir = dirname($file);
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -424,7 +424,7 @@ class Compiler
      */
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
-        $config = $this->inheritance->buildConfig($template, $shop, true);
+        $config = $this->inheritance->buildConfig($template, $shop);
         $config['shopware-revision'] = $this->release->getRevision();
 
         $collection = new ArrayCollection();
@@ -437,7 +437,7 @@ class Compiler
 
         foreach ($collection as $temp) {
             if (!is_array($temp)) {
-                throw new \Exception("The passed plugin less config isn't an array!");
+                throw new \Exception('The passed plugin less config isn\'t an array!');
             }
             $config = array_merge($config, $temp);
         }

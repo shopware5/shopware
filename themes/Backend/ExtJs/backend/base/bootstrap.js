@@ -21,6 +21,22 @@
  * our trademarks remain entirely with us.
  */
 
+{* Include default components *}
+{include file='ExtJs/components/Enlight.app.Window.js'}
+{include file='ExtJs/components/Enlight.app.SubWindow.js'}
+{include file='ExtJs/components/Enlight.app.SubApplication.js'}
+{include file='ExtJs/components/Enlight.app.Controller.js'}
+{include file='ExtJs/components/Ext.util.FileUpload.js'}
+{include file='ExtJs/components/Enlight.app.WindowManagement.js'}
+{include file='ExtJs/components/Enlight.form.mixin.HelpSupportElements.js'}
+{include file='ExtJs/components/Enlight.app.SubWindow.js'}
+{include file='ExtJs/components/Ext.ux.DataView.DragSelector.js'}
+{include file='ExtJs/components/Ext.ux.DataView.LabelEditor.js'}
+{include file='ExtJs/components/Ext.ux.form.field.BoxSelect.js'}
+{include file='ExtJs/components/Ext.ux.RowExpander.js'}
+{include file='ExtJs/components/Ext.ux.form.MultiSelect.js'}
+{include file='ExtJs/components/Ext.ux.form.ItemSelector.js'}
+
 {* Include overrides *}
 {include file='ExtJs/overrides/Ext.Base.js'}
 {include file='ExtJs/overrides/Ext.grid.header.Container.js'}
@@ -33,6 +49,7 @@
 {include file='ExtJs/overrides/Ext.button.Button.js'}
 {include file='ExtJs/overrides/Ext.LoadMask.js'}
 {include file='ExtJs/overrides/Ext.form.Field.js'}
+{include file='ExtJs/overrides/Ext.form.field.HtmlEditor.js'}
 {include file='ExtJs/overrides/Ext.toolbar.Paging.js'}
 {include file='ExtJs/overrides/Ext.Template.js'}
 {include file='ExtJs/overrides/Ext.form.Base.js'}
@@ -52,26 +69,11 @@
 {include file='ExtJs/overrides/Ext.menu.Menu.js'}
 {include file='ExtJs/overrides/Ext.Timeout.js'}
 {include file='ExtJs/overrides/Ext.Ajax.js'}
+{include file='ExtJs/overrides/Ext.container.DockingContainer.js'}
 {include file='backend/base/component/Shopware.data.reader.Application.js'}
 {include file='ExtJs/overrides/Ext.form.field.Display.js'}
 {include file='ExtJs/overrides/Ext.String.js'}
 {include file='ExtJs/overrides/Ext.view.Table.js'}
-
-{* Include default components *}
-{include file='ExtJs/components/Enlight.app.Window.js'}
-{include file='ExtJs/components/Enlight.app.SubWindow.js'}
-{include file='ExtJs/components/Enlight.app.SubApplication.js'}
-{include file='ExtJs/components/Enlight.app.Controller.js'}
-{include file='ExtJs/components/Ext.util.FileUpload.js'}
-{include file='ExtJs/components/Enlight.app.WindowManagement.js'}
-{include file='ExtJs/components/Enlight.app.SubWindow.js'}
-{include file='ExtJs/components/Ext.ux.DataView.DragSelector.js'}
-{include file='ExtJs/components/Ext.ux.DataView.LabelEditor.js'}
-{include file='ExtJs/components/Ext.ux.form.field.BoxSelect.js'}
-{include file='ExtJs/components/Ext.ux.RowExpander.js'}
-{include file='ExtJs/components/Ext.ux.form.MultiSelect.js'}
-{include file='ExtJs/components/Ext.ux.form.ItemSelector.js'}
-
 
 //Shopware backend application components
 {include file='backend/base/application/Shopware.model.Helper.js'}
@@ -128,6 +130,7 @@
 {include file='backend/base/model/page_not_found_destination_options.js'}
 {include file='backend/base/model/attribute_config.js'}
 {include file='backend/base/model/corner_position.js'}
+{include file='backend/base/model/cookie_mode.js'}
 
 {* Include global stores *}
 {include file='backend/base/store/user.js'}
@@ -162,6 +165,7 @@
 {include file='backend/base/store/attribute_config.js'}
 {include file='backend/base/store/salutation.js'}
 {include file='backend/base/store/corner_position.js'}
+{include file='backend/base/store/cookie_mode.js'}
 
 
 {* Include shopware related components *}
@@ -190,6 +194,8 @@
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 {include file='backend/base/component/Shopware.notification.SubscriptionWarning.js'}
 {include file='backend/base/component/Shopware.component.ValidatePassword.js'}
+{include file='backend/base/component/Shopware.window.ExpiredPluginWarning.js'}
+{include file='backend/base/component/Shopware.window.ExpiredPluginStop.js'}
 
 {include file='backend/base/component/Shopware.form.field.ColorField.js'}
 {include file='backend/base/component/Shopware.form.field.ColorSelection.js'}

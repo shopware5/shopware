@@ -25,13 +25,20 @@
 namespace Shopware\Components\Snippet\Writer;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryWriter
 {
+    /**
+     * @var array
+     */
     private $queries;
+
+    /**
+     * @var bool
+     */
     private $update;
 
     public function __construct()
@@ -39,6 +46,16 @@ class QueryWriter
         $this->update = true;
     }
 
+    /**
+     * @param array  $data
+     * @param string $namespace
+     * @param int    $localeId
+     * @param int    $shopId
+     *
+     * @throws \Exception
+     *
+     * @return $this
+     */
     public function write($data, $namespace, $localeId, $shopId)
     {
         if (empty($data)) {
@@ -57,7 +74,7 @@ class QueryWriter
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getQueries()
     {
@@ -107,6 +124,14 @@ class QueryWriter
         }
     }
 
+    /**
+     * @param array  $data
+     * @param string $namespace
+     * @param int    $localeId
+     * @param int    $shopId
+     *
+     * @return $this
+     */
     private function generateInsertQueries($data, $namespace, $localeId, $shopId)
     {
         $insertSql = 'INSERT IGNORE INTO s_core_snippets (namespace, shopID, localeID, name, value, created, updated, dirty) VALUES ';

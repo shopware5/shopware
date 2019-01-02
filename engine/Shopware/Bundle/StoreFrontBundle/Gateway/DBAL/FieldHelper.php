@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -421,6 +421,7 @@ class FieldHelper
             'country.iso3 as __country_iso3',
             'country.display_state_in_registration as __country_display_state_in_registration',
             'country.force_state_in_registration as __country_force_state_in_registration',
+            'country.allow_shipping as __country_allow_shipping',
         ];
 
         $fields = array_merge(
@@ -688,7 +689,7 @@ class FieldHelper
 
     public function getShopFields()
     {
-        return [
+        $fields = [
             'shop.id as __shop_id',
             'shop.main_id as __shop_main_id',
             'shop.name as __shop_name',
@@ -710,6 +711,13 @@ class FieldHelper
             'shop.default as __shop_default',
             'shop.active as __shop_active',
         ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_core_shops_attributes', 'shopAttribute')
+        );
+
+        return $fields;
     }
 
     public function getCurrencyFields()
@@ -1275,6 +1283,15 @@ class FieldHelper
      * @param QueryBuilder         $query
      * @param ShopContextInterface $context
      */
+    public function addCategoryMainDataTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('category', 'category', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
     public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');
@@ -1301,6 +1318,25 @@ class FieldHelper
     public function addCategoryTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('categoryAttribute', 's_categories_attributes', $query, $context, 'category.id');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addShopPageTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('page', 'page', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addPaymentTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('payment', 'config_payment', $query, $context, '1');
+        $this->addTranslation('paymentAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentAttribute.paymentmeanID');
     }
 
     public function getCustomerFields()
@@ -1345,6 +1381,12 @@ class FieldHelper
         );
     }
 
+    /**
+     * Returns an array with all required payment fields.
+     * Requires that the s_core_paymentmeans table is included with table alias 'payment'
+     *
+     * @return array
+     */
     public function getPaymentFields()
     {
         $fields = [

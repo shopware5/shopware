@@ -29,12 +29,10 @@ use PHPUnit_Framework_Constraint_IsType as IsType;
 class PluginsProviderTest extends ProviderTestCase
 {
     const SERVICE_ID = 'shopware.benchmark_bundle.providers.plugins';
-    const EXPECTED_KEYS_COUNT = 4;
+    const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
         'total' => IsType::TYPE_INT,
-        'updateable' => IsType::TYPE_INT,
-        'shopware' => IsType::TYPE_INT,
-        'technical' => IsType::TYPE_ARRAY,
+        'shopwarePlugins' => IsType::TYPE_ARRAY,
     ];
 
     /**
@@ -44,25 +42,9 @@ class PluginsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('plugins');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertSame(6, $resultData['total']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
-    public function testGetUpdateablePlugins()
-    {
-        $this->installDemoData('plugins');
-
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(2, $resultData['updateable']);
     }
 
     /**
@@ -72,31 +54,22 @@ class PluginsProviderTest extends ProviderTestCase
     {
         $this->installDemoData('plugins');
 
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
-
-        $this->assertSame(4, $resultData['shopware']);
-    }
-
-    /**
-     * @group BenchmarkBundle
-     */
-    public function testGetTechnicalPluginNames()
-    {
-        $this->installDemoData('plugins');
-
-        $provider = $this->getProvider();
-
-        $resultData = $provider->getBenchmarkData();
+        $resultData = $this->getBenchmarkData();
 
         $this->assertArraySubset([
-            'SwagExample1',
-            'SwagExample2',
-            'SwagExample3',
-            'SwagExample4',
-            'SwagExample5',
-            'SwagExample6',
-        ], $resultData['technical']);
+            [
+                'name' => 'SwagExample2',
+                'active' => 0,
+            ], [
+                'name' => 'SwagExample3',
+                'active' => 1,
+            ], [
+                'name' => 'SwagExample4',
+                'active' => 1,
+            ], [
+                'name' => 'SwagExample5',
+                'active' => 0,
+            ],
+        ], $resultData['shopwarePlugins']);
     }
 }

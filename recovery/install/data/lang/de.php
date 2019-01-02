@@ -30,7 +30,7 @@ return [
     'menuitem_edition' => 'Shopware-Lizenz',
     'menuitem_configuration' => 'Konfiguration',
     'menuitem_finish' => 'Fertig',
-    'menuitem_license' => 'Endnutzer-Lizenz',
+    'menuitem_license' => 'AGB',
 
     'license_incorrect' => 'Der eingegebene Lizenzschlüssel scheint nicht gültig zu sein',
     'license_does_not_match' => 'Der eingegebene Lizenzschlüssel passt zu keiner kommerziellen Shopware Version',
@@ -49,6 +49,7 @@ return [
     'select_language_fr' => 'Français',
     'select_language_es' => 'Español',
     'select_language_pt' => 'Português',
+    'select_language_pl' => 'Polski',
 
     'language-selection_select_language' => 'Sprache Installationsassistent',
     'language-selection_header' => 'Deine Shopware-Installation',
@@ -73,7 +74,6 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => '<h3 class="alert-heading">Achtung!</h3>Es sind nicht alle Voraussetzungen für eine erfolgreiche Installation erfüllt',
     'requirements_success' => '<h3 class="alert-heading">Glückwunsch!</h3>Alle Voraussetzungen für eine erfolgreiche Installation sind erfüllt',
-    'requirements_ioncube' => '<small><strong>* Hinweis:</strong> Auf Deinem System ist die Codierungs-Software ionCube nicht installiert. Diese wird nur benötigt, wenn Du Dir später über unseren <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a> Erweiterungen installieren möchtest, die mit ionCube verschlüsselt sind. Du kannst die Installation von ionCube auch jederzeit nachholen.</small>',
     'requirements_php_info' => 'Dein Server muss die folgenden Systemvoraussetzungen erfüllen, damit Shopware lauffähig ist',
     'requirements_system_colcheck' => 'Voraussetzung',
     'requirements_system_colrequired' => 'Erforderlich',
@@ -82,10 +82,10 @@ EOT
     'requirements_show_all' => '(alles anzeigen)',
     'requirements_hide_all' => '(alles ausblenden)',
 
-    'license_agreement_header' => 'Endnutzer-Lizenzbestimmungen („EULA“)',
-    'license_agreement_info' => 'Hier findest Du eine Aufstellung unserer Lizenzbestimmungen, die für eine erfolgreiche Installation bitte zu lesen und zu akzeptieren sind. Die Shopware Community Edition ist unter AGPL lizensiert, während Teile der Plugins und das Template unter der New BSD Lizenz stehen.',
-    'license_agreement_error' => 'Sie müssen unseren Lizenzbestimmungen zustimmen',
-    'license_agreement_checkbox' => 'Ich stimme den Lizenzbestimmungen zu',
+    'license_agreement_header' => 'Allgemeine Geschäftsbedingungen („AGB“)',
+    'license_agreement_info' => 'Hier findest Du eine Aufstellung unserer allgemeinen Geschäftsbedingungen, die für eine erfolgreiche Installation bitte zu lesen und zu akzeptieren sind. Die Shopware Community Edition ist unter AGPL lizenziert, während Teile der Plugins und das Template unter der New BSD Lizenz stehen.',
+    'license_agreement_error' => 'Du musst unseren AGB zustimmen',
+    'license_agreement_checkbox' => 'Ich stimme den AGB zu',
 
     'database-configuration_header' => 'Datenbank konfigurieren',
     'database-configuration_field_host' => 'Datenbank Server:',
@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     wir freuen uns Dich in unserer Community begrüßen zu dürfen. Du hast Shopware erfolgreich installiert.
-<p>Dein Shop ist jetzt einsatzbereit. Falls Du neu bei Shopware bist, empfehlen wir Dir den Guide <a href="http://community.shopware.com/_detail_930.html" target="_blank">"Erste Schritte in Shopware"</a>. Wenn Du Dich zum ersten Mal im Shop-Backend anmeldest, wird Dich unser First Run Wizard durch die weitere grundlegende Einrichtung führen.</p>
+<p>Dein Shop ist jetzt einsatzbereit. Falls Du neu bei Shopware bist, empfehlen wir Dir den Guide <a href="https://docs.shopware.com/de/shopware-5-de/erste-schritte/erste-schritte-in-shopware" target="_blank">"Erste Schritte in Shopware"</a>. Wenn Du Dich zum ersten Mal im Shop-Backend anmeldest, wird Dich unser First Run Wizard durch die weitere grundlegende Einrichtung führen.</p>
 <p>Viel Spaß mit Deinem neuen Onlineshop!</p>',
 ];

@@ -31,7 +31,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -46,6 +46,7 @@ class AnalyzeCommand extends ShopwareCommand
             ->setName('sw:es:analyze')
             ->setDescription('Helper tool to test own analyzers.')
             ->addArgument('shopId', InputOption::VALUE_REQUIRED, null, 1)
+            ->addArgument('type', InputOption::VALUE_REQUIRED, 'Mapping type of the elasticsearch index (e.g. product, property)')
             ->addArgument('analyzer', InputOption::VALUE_REQUIRED)
             ->addArgument('query', InputOption::VALUE_REQUIRED)
         ;
@@ -57,12 +58,13 @@ class AnalyzeCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $shopId = $input->getArgument('shopId');
+        $type = $input->getArgument('type');
         $query = $input->getArgument('query');
         $analyzer = $input->getArgument('analyzer');
 
         $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
         $client = $this->container->get('shopware_elastic_search.client');
-        $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
+        $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop, $type);
 
         $analyzed = $client->indices()->analyze([
             'index' => $index->getName(),

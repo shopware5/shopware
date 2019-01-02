@@ -43,11 +43,12 @@ use Shopware\Components\Model\ModelEntity;
 class Snippet extends ModelEntity
 {
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="dirty", type="boolean", nullable=false)
      */
     protected $dirty = false;
+
     /**
      * @var int
      *
@@ -93,14 +94,14 @@ class Snippet extends ModelEntity
     private $value;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
@@ -239,13 +240,13 @@ class Snippet extends ModelEntity
     /**
      * Set created
      *
-     * @param \DateTime|string $created
+     * @param \DateTimeInterface|string $created
      *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setCreated($created = 'now')
     {
-        if (!$created instanceof \DateTime) {
+        if (!$created instanceof \DateTimeInterface) {
             $this->created = new \DateTime($created);
         } else {
             $this->created = $created;
@@ -257,7 +258,7 @@ class Snippet extends ModelEntity
     /**
      * Get created
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreated()
     {
@@ -267,13 +268,13 @@ class Snippet extends ModelEntity
     /**
      * Set updated
      *
-     * @param \DateTime|string $updated
+     * @param \DateTimeInterface|string $updated
      *
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setUpdated($updated = 'now')
     {
-        if (!$updated instanceof \DateTime) {
+        if (!$updated instanceof \DateTimeInterface) {
             $this->updated = new \DateTime($updated);
         } else {
             $this->updated = $updated;
@@ -285,7 +286,7 @@ class Snippet extends ModelEntity
     /**
      * Get updated
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getUpdated()
     {
@@ -314,7 +315,7 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @param int $dirty
+     * @param bool $dirty
      */
     public function setDirty($dirty)
     {
@@ -322,7 +323,7 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getDirty()
     {

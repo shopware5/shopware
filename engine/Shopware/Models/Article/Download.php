@@ -36,21 +36,22 @@ class Download extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="downloads")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Article
      */
     protected $article;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleDownload", mappedBy="articleDownload", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\ArticleDownload
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleDownload", mappedBy="articleDownload", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -61,9 +62,9 @@ class Download extends ModelEntity
     private $id;
 
     /**
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     * @var int
      *
-     * @var
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
     private $articleId;
 
@@ -209,6 +210,6 @@ class Download extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleDownload', 'attribute', 'articleDownload');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleDownload::class, 'attribute', 'articleDownload');
     }
 }

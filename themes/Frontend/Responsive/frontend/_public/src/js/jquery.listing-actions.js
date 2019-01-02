@@ -388,9 +388,9 @@
             var me = this,
                 opts = me.opts;
 
-            me.$filterForm.removeAttr('style');
-            me.$filterFacetContainer.removeAttr('style');
-            me.$filterActionButtonBottom.removeAttr('style');
+            me.$filterForm.prop('style', '');
+            me.$filterFacetContainer.prop('style', '');
+            me.$filterActionButtonBottom.prop('style', '');
 
             me.disableActiveFilterContainer(false);
 
@@ -405,14 +405,18 @@
          * @param {boolean} disabled
          */
         disableActiveFilterContainer: function (disabled) {
-            if (this.showInstantFilterResult || this.isFilterpanelInSidebar) {
+            var me = this;
+            
+            $.publish('plugin/swListingActions/disableActiveFilter', [this, disabled]);
+            
+            if (me.showInstantFilterResult || me.isFilterpanelInSidebar) {
                 return;
             }
 
             if (disabled) {
-                this.$activeFilterCont.addClass(this.opts.disabledCls);
-            } else if (this.$activeFilterCont.hasClass(this.opts.disabledCls)) {
-                this.$activeFilterCont.removeClass(this.opts.disabledCls);
+                me.$activeFilterCont.addClass(me.opts.disabledCls);
+            } else if (me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+                me.$activeFilterCont.removeClass(me.opts.disabledCls);
             }
         },
 
@@ -701,7 +705,7 @@
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
-            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls) || me.$filterCont.is('.off-canvas.is--open')) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
@@ -1257,7 +1261,7 @@
             if (count <= 0) {
                 this.$applyFilterBtn.attr('disabled', 'disabled');
             } else {
-                this.$applyFilterBtn.removeAttr('disabled');
+                this.$applyFilterBtn.prop('disabled', false);
             }
 
             $.publish('plugin/swListingActions/onUpdateFilterButton', [this, count]);
@@ -1393,7 +1397,7 @@
 
             if (param === 'rating') {
                 $input = this.$filterForm.find('.filter--rating .is--active input[name="rating"]');
-                $input.removeAttr('checked').trigger('change');
+                $input.prop('checked', false).trigger('change');
             } else {
                 $input = this.$filterForm.find('[name="' + this.escapeDoubleQuotes(param) + '"]');
                 if ($input.is('[data-range-input]')) {
@@ -1402,7 +1406,7 @@
                 } else if ($input.is('[data-datepicker="true"]') || $input.is('[data-date-range-input]')) {
                     $input.trigger('clear');
                 } else {
-                    $input.removeAttr('checked').trigger('change');
+                    $input.prop('checked', false).trigger('change');
                 }
             }
 

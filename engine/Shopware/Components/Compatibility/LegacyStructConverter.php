@@ -36,7 +36,7 @@ use Shopware\Models\Emotion\Emotion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -372,7 +372,7 @@ class LegacyStructConverter
             }
 
             $data['pseudopricePercent'] = [
-                'int' => round($discount, 0),
+                'int' => round($discount),
                 'float' => $discount,
             ];
         }
@@ -392,7 +392,9 @@ class LegacyStructConverter
             $data = array_merge($data, $this->convertUnitStruct($price->getUnit()));
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Product_Price', $data, [
+            'price' => $price,
+        ]);
     }
 
     /**
@@ -449,7 +451,7 @@ class LegacyStructConverter
             );
         }
 
-        /** @var $variantPrice Price */
+        /** @var Price $variantPrice */
         $variantPrice = $product->getVariantPrice();
         $data = array_merge($data, $this->convertProductPriceStruct($variantPrice));
         $data['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
@@ -512,7 +514,7 @@ class LegacyStructConverter
                 'attributes' => $link->getAttributes(),
             ];
 
-            if (!preg_match('/http/', $temp['link'])) {
+            if (strpos($temp['link'], 'http') === false) {
                 $temp['link'] = 'http://' . $link->getLink();
             }
 
@@ -554,7 +556,7 @@ class LegacyStructConverter
     public function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
     {
         $data = [
-            'average' => round($average->getAverage()),
+            'average' => round($average->getAverage(), 1),
             'count' => $average->getCount(),
             'pointCount' => $average->getPointCount(),
             'attributes' => $average->getAttributes(),
@@ -751,7 +753,7 @@ class LegacyStructConverter
         foreach ($set->getGroups() as $group) {
             $values = [];
             foreach ($group->getOptions() as $option) {
-                /* @var $option StoreFrontBundle\Struct\Property\Option */
+                /* @var StoreFrontBundle\Struct\Property\Option $option */
                 $values[$option->getId()] = $option->getName();
             }
 
@@ -759,7 +761,7 @@ class LegacyStructConverter
 
             $mediaValues = [];
             foreach ($group->getOptions() as $option) {
-                /** @var $option StoreFrontBundle\Struct\Property\Option */
+                /** @var StoreFrontBundle\Struct\Property\Option $option */
                 if ($option->getMedia()) {
                     $mediaValues[$option->getId()] = array_merge(['valueId' => $option->getId()], $this->convertMediaStruct($option->getMedia()));
                 }
@@ -1032,6 +1034,44 @@ class LegacyStructConverter
     }
 
     /**
+     * Converts a payment struct
+     *
+     * @param StoreFrontBundle\Struct\Payment $payment
+     *
+     * @return array
+     */
+    public function convertPaymentStruct(StoreFrontBundle\Struct\Payment $payment)
+    {
+        $data = [
+            'id' => $payment->getId(),
+            'name' => $payment->getName(),
+            'description' => $payment->getDescription(),
+            'template' => $payment->getTemplate(),
+            'class' => $payment->getClass(),
+            'table' => $payment->getTable(),
+            'hide' => $payment->getHide(),
+            'additionaldescription' => $payment->getAdditionalDescription(),
+            'debit_percent' => $payment->getDebitPercent(),
+            'surcharge' => $payment->getSurcharge(),
+            'surchargestring' => $payment->getSurchargeString(),
+            'position' => $payment->getPosition(),
+            'active' => $payment->getActive(),
+            'esdactive' => $payment->getEsdActive(),
+            'embediframe' => $payment->getEmbediframe(),
+            'hideprospect' => $payment->getHideProspect(),
+            'action' => $payment->getAction(),
+            'pluginID' => $payment->getPluginID(),
+            'source' => $payment->getSource(),
+            'mobile_inactive' => $payment->getMobileInactive(),
+            'attributes' => $payment->getAttributes(),
+        ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Payment', $data, [
+            'payment' => $payment,
+        ]);
+    }
+
+    /**
      * Returns the count of children categories of the provided category
      *
      * @param int $id
@@ -1144,6 +1184,10 @@ class LegacyStructConverter
         if ($product->getCreatedAt()) {
             $createDate = $product->getCreatedAt()->format('Y-m-d');
         }
+        $updateDate = null;
+        if ($product->getUpdatedAt()) {
+            $updateDate = $product->getUpdatedAt()->format('Y-m-d');
+        }
 
         $data = [
             'articleID' => $product->getId(),
@@ -1169,6 +1213,7 @@ class LegacyStructConverter
             'laststock' => $product->isCloseouts(),
             'additionaltext' => $product->getAdditional(),
             'datum' => $createDate,
+            'update' => $updateDate,
             'sales' => $product->getSales(),
             'filtergroupID' => null,
             'priceStartingFrom' => null,
@@ -1209,7 +1254,7 @@ class LegacyStructConverter
         }
 
         if ($product->hasAttribute('marketing')) {
-            /** @var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
+            /** @var StoreFrontBundle\Struct\Product\MarketingAttribute $marketing */
             $marketing = $product->getAttribute('marketing');
             $data['newArticle'] = $marketing->isNew();
             $data['sUpcoming'] = $marketing->comingSoon();
@@ -1263,11 +1308,11 @@ class LegacyStructConverter
     /**
      * @param StoreFrontBundle\Struct\Category $category
      *
-     * @return string
+     * @return array
      */
     private function getCategoryCanonicalParams(StoreFrontBundle\Struct\Category $category)
     {
-        $page = $this->container->get('front')->Request()->getQuery('sPage');
+        $page = (int) $this->container->get('front')->Request()->getQuery('sPage');
 
         $emotion = $this->modelManager->getRepository(Emotion::class)
             ->getCategoryBaseEmotionsQuery($category->getId())
@@ -1278,8 +1323,13 @@ class LegacyStructConverter
             'sCategory' => $category->getId(),
         ];
 
-        if ($this->config->get('seoIndexPaginationLinks') && (!$emotion || $page)) {
-            $canonicalParams['sPage'] = $page ?: 1;
+        /*
+         * Only include page parameter in canonical if...
+         * a) we are on a page > 1
+         * b) we are on the page 1 and the category has a ShoppingWorld (so /category and /category?p=1 show different content
+         */
+        if ($page > 1 || ($emotion && $page === 1)) {
+            $canonicalParams['sPage'] = $page;
         }
 
         return $canonicalParams;

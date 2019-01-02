@@ -1,0 +1,59 @@
+includes:
+    #- ../vendor/phpstan/phpstan-phpunit/rules.neon
+    #- ../vendor/phpstan/phpstan-phpunit/extension.neon
+    #- ../vendor/phpstan/phpstan-doctrine/extension.neon
+parameters:
+    level: 3
+
+    autoload_directories:
+        - %currentWorkingDirectory%/var/cache
+        - %currentWorkingDirectory%/engine/Library
+    autoload_files:
+        - %currentWorkingDirectory%/vendor/autoload.php
+
+    paths:
+        - %currentWorkingDirectory%/engine/Shopware
+    excludes_analyse:
+        - %currentWorkingDirectory%/engine/Shopware/Plugins
+        - %currentWorkingDirectory%/engine/Shopware/Configs/Default.php
+        # The following are added because of the Hack in Document/Document
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Document/Document.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/Api/Resource/Order.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/Document.php
+        - %currentWorkingDirectory%/engine/Shopware/Controllers/Api/Orders.php
+        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/CanceledOrder.php
+        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/Order.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Detail.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Order.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/OrderHistorySubscriber.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Repository.php
+        - %currentWorkingDirectory%/engine/Shopware/Bundle/EsBackendBundle/Subscriber/OrmBacklogSubscriber.php
+
+    ignoreErrors:
+        - '#apcu_#'
+        - '#ioncube_#'
+        - '#opcache_#'
+        - '#imagettftext#'
+        - '#class Redis#'
+
+        - '#Call to an undefined method#'
+        - '#Access to an undefined property#'
+        - '#Method Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\DumperInterface\:\:getProxyFactoryCode\(\)#'
+        - '#Shopware_Components_Snippet_Manager::__construct\(\) does not call parent constructor from Enlight_Components_Snippet_Manager#'
+        - '#does not call parent constructor from Enlight_Class#'
+        - '#Binary operation "|=" between string and string results in an error.#'
+        - '#does not call parent constructor from Elasticsearch#'
+        - '#does not accept Doctrine\\ORM\\EntityRepository#'
+        # "getRepository"-Methods
+        - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
+        # Return values in Models
+        - '# returns Shopware\\Components\\Model\\ModelEntity.#'
+        - '#does not accept Shopware\\Components\\Api\\Resource\\Resource#'
+        - '# but returns Doctrine\\ORM\\QueryBuilder#'
+        # Model properties with wrong default values
+        - '#\([a-z]+\) does not accept default value of type [a-z]+\.#'
+        # Models that are detached by cloning and nulling the id
+        - '#\([a-z]+\) does not accept null\.#'
+        - '#supplied for foreach, only iterables are supported#'
+
+    reportUnmatchedIgnoredErrors: false

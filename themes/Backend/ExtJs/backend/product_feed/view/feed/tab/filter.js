@@ -107,7 +107,11 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
                 mode: 'sql',
                 anchor:'100%',
                 height: '80px',
-                name: 'ownFilter'
+                name: 'ownFilter',
+                /*{if !{acl_is_allowed privilege=sqli}}*/
+                readOnly: true,
+                helpText: '{s name="insufficient_permissions" namespace="backend/application/main"}{/s}',
+                /*{/if}*/
             },
             {
                 xtype:'checkbox',

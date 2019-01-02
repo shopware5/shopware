@@ -25,13 +25,13 @@
 namespace Shopware\Components\Log\Handler;
 
 use Enlight_Controller_Request_Request as Request;
-use Enlight_Controller_Response_Response as Response;
+use Enlight_Controller_Response_ResponseHttp as Response;
 use Monolog\Handler\FirePHPHandler as BaseFirePHPHandler;
 
 /**
  * FirePHPHandler.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -70,6 +70,8 @@ class FirePHPHandler extends BaseFirePHPHandler
 
     /**
      * Adds the headers to the response once it's created
+     *
+     * @param \Enlight_Controller_EventArgs $args
      */
     public function onRouteStartUp(\Enlight_Controller_EventArgs $args)
     {
@@ -115,7 +117,7 @@ class FirePHPHandler extends BaseFirePHPHandler
      *
      * @param array $record
      *
-     * @return string
+     * @return array
      */
     protected function createRecordHeader(array $record)
     {

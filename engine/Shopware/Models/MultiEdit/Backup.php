@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware SwagMultiEdit Plugin - Backup Model
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
@@ -72,7 +72,7 @@ class Backup extends ModelEntity
     private $items;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -100,7 +100,7 @@ class Backup extends ModelEntity
     private $hash;
 
     /**
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -108,7 +108,7 @@ class Backup extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {

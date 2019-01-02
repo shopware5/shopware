@@ -24,19 +24,27 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use Ramsey\Uuid\Uuid;
+use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
+use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsSendingException;
 use Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
 use Shopware\Components\HttpClient\HttpClientInterface;
+use Shopware\Components\HttpClient\RequestException;
 use Shopware\Components\HttpClient\Response;
+use Shopware\Models\Benchmark\BenchmarkConfig;
 
+/**
+ * Responsible for converting business layer requests into HTTP requests and vice/versa.
+ */
 class StatisticsClient implements StatisticsClientInterface
 {
     /**
      * @var string
      */
-    private $statisticsEndpoint;
+    private $statisticsApiEndpoint;
 
     /**
      * @var HttpClientInterface
@@ -49,26 +57,34 @@ class StatisticsClient implements StatisticsClientInterface
     private $statisticsResponseHydrator;
 
     /**
-     * @var null|LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param string                     $statisticsEndpoint
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * @param string                     $statisticsApiEndpoint
      * @param HttpClientInterface        $client
      * @param StatisticsResponseHydrator $statisticsResponseHydrator
-     * @param LoggerInterface|null       $logger
+     * @param LoggerInterface            $logger
+     * @param Connection                 $connection
      */
     public function __construct(
-        $statisticsEndpoint,
+        $statisticsApiEndpoint,
         HttpClientInterface $client,
         StatisticsResponseHydrator $statisticsResponseHydrator,
-        LoggerInterface $logger = null
+        LoggerInterface $logger,
+        Connection $connection
     ) {
-        $this->statisticsEndpoint = (string) $statisticsEndpoint;
-        $this->statisticsResponseHydrator = $statisticsResponseHydrator;
+        $this->statisticsApiEndpoint = $statisticsApiEndpoint;
         $this->client = $client;
-        $this->logger = $logger ?: new NullLogger();
+        $this->statisticsResponseHydrator = $statisticsResponseHydrator;
+        $this->logger = $logger;
+        $this->connection = $connection;
     }
 
     /**
@@ -78,14 +94,26 @@ class StatisticsClient implements StatisticsClientInterface
      *
      * @return Struct\StatisticsResponse
      */
-    public function fetchStatistics(StatisticsRequest $statisticsRequest)
+    public function sendStatistics(StatisticsRequest $statisticsRequest)
     {
-        $headers = [];
+        $headers = [
+            'User-Agent' => 'Shopware',
+        ];
 
         try {
-            $response = $this->client->post($this->statisticsEndpoint, $headers, (string) $statisticsRequest);
+            $response = $this->client->post($this->statisticsApiEndpoint, $headers, (string) $statisticsRequest);
         } catch (\Exception $ex) {
-            $this->logger->warning(sprintf('Could not send statistics data to %s', $this->statisticsEndpoint), [$ex]);
+            $body = '';
+
+            if ($ex instanceof RequestException) {
+                $body = $ex->getBody();
+
+                if ($ex->getCode() === 420) {
+                    $this->resetBenchmarkConfig($statisticsRequest->getConfig());
+                }
+            }
+
+            $this->logger->warning(sprintf('Could not send statistics data to %s', $this->statisticsApiEndpoint), [$ex, $body]);
 
             throw new StatisticsSendingException('Could not send statistics data', 0, $ex);
         }
@@ -102,16 +130,37 @@ class StatisticsClient implements StatisticsClientInterface
      */
     private function hydrateStatisticsResponse(Response $response)
     {
-        if (empty($response->getBody())) {
-            throw new StatisticsHydratingException(sprintf('Could not read statistics response: %s', $response->getBody()));
-        }
+        $data = json_decode(
+            $response->getBody(),
+            true
+        );
 
-        $data = json_decode($response->getBody(), true);
-
-        if (!$data) {
-            throw new StatisticsHydratingException(sprintf('Statistics response coudln\'t be parsed as JSON: %s', $response->getBody()));
+        if (!is_array($data)) {
+            throw new StatisticsHydratingException(sprintf('Could not interpret statistics response from %s', $this->statisticsApiEndpoint));
         }
 
         return $this->statisticsResponseHydrator->hydrate($data);
+    }
+
+    /**
+     * @param BenchmarkConfig $config
+     */
+    private function resetBenchmarkConfig(BenchmarkConfig $config)
+    {
+        $this->connection->update('s_benchmark_config', [
+            'id' => Uuid::uuid4(),
+            'last_sent' => '1970-01-01 00:00:00',
+            'last_received' => '1970-01-01 00:00:00',
+            'last_updated_orders_date' => null,
+            'last_order_id' => 0,
+            'last_customer_id' => 0,
+            'last_product_id' => 0,
+            'last_analytics_id' => 0,
+            'response_token' => null,
+            'cached_template' => null,
+            'locked' => null,
+        ], [
+            'shop_id' => $config->getShopId(),
+        ]);
     }
 }

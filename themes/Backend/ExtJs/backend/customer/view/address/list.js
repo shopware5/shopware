@@ -138,12 +138,12 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
                 header: me.snippets.header.city,
                 flex: 1
             },
-            state_id: {
+            stateId: {
                 header: me.snippets.header.state,
                 flex: 1,
                 sortable: false
             },
-            country_id: {
+            countryId: {
                 header: me.snippets.header.country,
                 flex: 1,
                 sortable: false

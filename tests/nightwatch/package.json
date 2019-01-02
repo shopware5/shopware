@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "chromedriver": "^2.33.2",
-    "cross-spawn": "^5.1.0",
+    "cross-spawn": "^6.0.5",
     "nightwatch": "^0.9.19",
     "phantomjs-prebuilt": "^2.1.16",
     "selenium-server": "^3.8.1"

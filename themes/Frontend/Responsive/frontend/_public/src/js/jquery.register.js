@@ -216,6 +216,8 @@
                 opts = me.opts,
                 $el = me.$el;
 
+            me.applyDataAttributes();
+
             me.$personalEmail = $el.find(opts.personalEmailSelector);
             me.$personalPassword = $el.find(opts.personalPasswordSelector);
             me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
@@ -283,13 +285,17 @@
                 hideCompanyFields = (me.$typeSelection.length && me.$typeSelection.val() !== opts.companyType),
                 requiredFields = $fieldSet.find(opts.inputSelector),
                 requiredMethod = (!hideCompanyFields) ? me.setHtmlRequired : me.removeHtmlRequired,
-                classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass',
-                disabledMethod = (!hideCompanyFields) ? 'removeAttr' : 'attr';
+                classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass';
 
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
-            $fieldSet.find('input, select, textarea')[disabledMethod]('disabled', 'disabled');
+
+            if (!hideCompanyFields) {
+                $fieldSet.find('input, select, textarea').prop('disabled', false);
+            } else {
+                $fieldSet.find('input, select, textarea').attr('disabled', 'disabled');
+            }
 
             $.publish('plugin/swRegister/onCheckType', [ me, hideCompanyFields ]);
         },
@@ -373,7 +379,7 @@
             if ($stateContainers.length) {
                 $stateContainers.removeClass(me.opts.hiddenClass);
                 $select = $stateContainers.find('select');
-                $select.removeAttr('disabled');
+                $select.prop('disabled', false);
             }
 
             $.publish('plugin/swRegister/onCountryChanged', [ me, event, countryId, addressType ]);
@@ -489,25 +495,22 @@
             me.$targetElement = $(relatedTarget);
 
             switch (id) {
-            case 'register_personal_email':
-            case 'register_personal_emailConfirmation':
-                if (hasEmailConfirmation && (me.$personalEmail.val().length <= 0 || me.$personalEmailConfirmation.val().length <= 0)) {
+                case me.$personalEmail.prop('id'):
+                case me.$personalEmailConfirmation.prop('id'):
+                    if (hasEmailConfirmation && (me.$personalEmail.val().length <= 0 || me.$personalEmailConfirmation.val().length <= 0)) {
+                        break;
+                    }
+                    action = 'ajax_validate_email';
                     break;
-                }
-                action = 'ajax_validate_email';
-                break;
-            case 'register_billing_ustid':
-                action = 'ajax_validate_billing';
-                break;
-            case 'register_personal_password':
-            case 'register_personal_passwordConfirmation':
-                if (hasPasswordConfirmation && (me.$personalPassword.val().length <= 0 || me.$personalPasswordConfirmation.val().length <= 0)) {
+                case me.$personalPassword.prop('id'):
+                case me.$personalPasswordConfirmation.prop('id'):
+                    if (hasPasswordConfirmation && (me.$personalPassword.val().length <= 0 || me.$personalPasswordConfirmation.val().length <= 0)) {
+                        break;
+                    }
+                    action = 'ajax_validate_password';
                     break;
-                }
-                action = 'ajax_validate_password';
-                break;
-            default:
-                break;
+                default:
+                    break;
             }
 
             if (!$el.val() && $el.attr('required')) {
@@ -548,7 +551,9 @@
          * @param {jQuery} $inputs
          */
         removeHtmlRequired: function ($inputs) {
-            $inputs.removeAttr('required aria-required');
+            $inputs
+                .prop('required', false)
+                .prop('aria-required', false);
 
             $.publish('plugin/swRegister/onRemoveHtmlRequired', [ this, $inputs ]);
         },

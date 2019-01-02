@@ -8,7 +8,6 @@ Ext.define('Shopware.listing.FilterPanel', {
 
     alias: 'widget.shopware-listing-filter-panel',
 
-
     /**
      * List of classes to mix into this class.
      * @type { Object }
@@ -47,7 +46,6 @@ Ext.define('Shopware.listing.FilterPanel', {
      * #@type { String }
      */
     title: '{s name="filter_panel/title"}Filters{/s}',
-
 
     /**
      * Reference to the { @link Shopware.window.Listing } which contains
@@ -324,7 +322,6 @@ Ext.define('Shopware.listing.FilterPanel', {
         me.callParent(arguments);
     },
 
-
     /**
      * Helper function to get config access.
      *
@@ -485,31 +482,31 @@ Ext.define('Shopware.listing.FilterPanel', {
         var me = this, fields = { }, items = [], field, config,
             record = Ext.create(me.getConfig('model'));
 
-        //first we have to get all field association for the foreign key fields.
+        // First we have to get all field association for the foreign key fields.
         me.fieldAssociations = me.getAssociations(me.getConfig('model'), [
             { relation: 'ManyToOne' }
         ]);
 
         var configFields = me.getConfig('fields');
 
-        //iterate all model fields ({ @link #fields } property is checked in the first line of the foreach loop).
+        // Iterate all model fields ({ @link #fields } property is checked in the first line of the foreach loop).
         Ext.each(record.fields.items, function(modelField) {
-            //check if the fields property is set and if the current model field is configured in this property.
+            // Check if the fields property is set and if the current model field is configured in this property.
             if (Object.keys(configFields).length > 0 && !(configFields.hasOwnProperty(modelField.name))) {
                 //if the field isn't configured, the column won't be displayed in filter panel
                 return true;
             }
 
-            //get configuration of the current model field.
+            // Get configuration of the current model field.
             config = configFields[modelField.name];
             if (Ext.isString(config)) config = { fieldLabel: config };
 
             field = me.createModelField(record, modelField, undefined, config);
 
-            //field wasn't created? Continue with next iteration
+            // Field wasn't created? Continue with next iteration
             if (!field) return true;
 
-            //create filter field container to add a checkbox for each field.
+            // Create filter field container to add a checkbox for each field.
             var container = Ext.create('Shopware.filter.Field', {
                 field: field,
                 style: me.filterFieldStyle,
@@ -540,7 +537,6 @@ Ext.define('Shopware.listing.FilterPanel', {
             }
         });
     },
-
 
     /**
      * Creates the docked items for this component.
@@ -617,7 +613,6 @@ Ext.define('Shopware.listing.FilterPanel', {
         });
         return me.resetButton;
     },
-
 
     /**
      * This function filters the listing store if the user
