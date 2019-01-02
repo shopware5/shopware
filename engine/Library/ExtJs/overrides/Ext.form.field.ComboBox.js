@@ -30,6 +30,7 @@
  * The override adds an addtional HTML5 "data"-attrbute
  * to the element.
  */
+//{block name="extjs/overrides/comboBox"}
 Ext.override(Ext.form.field.ComboBox,
 /** @lends Ext.form.field.ComboBox */
 {
@@ -65,3 +66,4 @@ Ext.override(Ext.form.field.ComboBox,
         }
     }
 });
+//{/block}

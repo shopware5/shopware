@@ -1,3 +1,4 @@
+//{block name="extjs/overrides/base"}
 Ext.override(Ext.form.Basic, {
     submit: function (options) {
         options = options || {};
@@ -111,3 +112,4 @@ Ext.override(Ext.form.Basic, {
         return this;
     }
 });
+//{/block}

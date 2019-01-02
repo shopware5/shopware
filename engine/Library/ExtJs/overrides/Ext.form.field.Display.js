@@ -20,6 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/display"}
 Ext.override(Ext.form.field.Display, {
     /**
      * Property which enables the unescaped output of html content
@@ -42,3 +44,4 @@ Ext.override(Ext.form.field.Display, {
         return value;
     }
 });
+//{/block}

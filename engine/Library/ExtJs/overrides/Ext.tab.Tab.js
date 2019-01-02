@@ -26,6 +26,7 @@
  * an additional HTML5 data attribute to provide
  * a better adressing in selenium ui tests.
  */
+//{block name="extjs/overrides/tab"}
 Ext.override(Ext.tab.Tab, {
 
 	/** Suffix fpr the data attribute */
@@ -41,3 +42,4 @@ Ext.override(Ext.tab.Tab, {
         }
 	}
 });
+//{/block}

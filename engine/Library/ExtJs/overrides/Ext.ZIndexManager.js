@@ -1,3 +1,4 @@
+//{block name="extjs/overrides/zIndexManager"}
 Ext.override(Ext.ZIndexManager, {
 
     /**
@@ -79,3 +80,4 @@ Ext.override(Ext.ZIndexManager, {
         comp.on('hide', me.onComponentHide, me);
     }
 });
+//{/block}

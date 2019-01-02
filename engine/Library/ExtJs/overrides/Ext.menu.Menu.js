@@ -20,6 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/menu"}
 Ext.override(Ext.menu.Menu, {
 
     /**
@@ -39,3 +41,4 @@ Ext.override(Ext.menu.Menu, {
         this.callParent([ev]);
     }
 });
+//{/block}

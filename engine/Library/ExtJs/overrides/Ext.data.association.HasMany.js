@@ -39,6 +39,7 @@
  *      ]
  *  });
  */
+//{block name="extjs/overrides/hasMany"}
 Ext.define('Ext.data.association.HasMany-Shopware', {
     override: 'Ext.data.association.HasMany',
 
@@ -162,4 +163,4 @@ Ext.define('Ext.data.association.HasMany-Shopware', {
 
 
 });
-
+//{/block}

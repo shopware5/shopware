@@ -26,6 +26,7 @@
  * an additional HTML5 data attribute to provide
  * a better adressing in selenium ui tests.
  */
+//{block name="extjs/overrides/paging"}
 Ext.override(Ext.toolbar.Paging, {
     getPagingItems: function() {
         var me = this;
@@ -120,3 +121,4 @@ Ext.override(Ext.toolbar.Paging, {
         }
     }
 });
+//{/block}

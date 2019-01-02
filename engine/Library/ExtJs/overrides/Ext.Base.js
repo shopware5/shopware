@@ -45,6 +45,8 @@
  *    https://bugzilla.mozilla.org/show_bug.cgi?id=818023
  *
  */
+
+//{block name="extjs/overrides/base"}
 Ext.onReady(function () {
 
     if (Ext.firefoxVersion >= 18) {
@@ -161,3 +163,4 @@ Ext.onReady(function () {
         });
     }
 });
+//{/block}

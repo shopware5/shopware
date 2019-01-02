@@ -20,6 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/server"}
 Ext.define('Ext.data.proxy.Server-Shopware', {
     override: 'Ext.data.proxy.Server',
 
@@ -97,3 +99,4 @@ Ext.define('Ext.data.proxy.Server-Shopware', {
         return this.applyEncoding(min);
     }
 });
+//{/block}

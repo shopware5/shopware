@@ -32,6 +32,7 @@
  * either the "name" property of the ComboBox or
  * the action
  */
+//{block name="extjs/overrides/boundList"}
 Ext.override(Ext.view.BoundList,
 /** @lends Ext.view.BoundList# */
 {
@@ -61,3 +62,4 @@ Ext.override(Ext.view.BoundList,
         }
     }
 });
+//{/block}

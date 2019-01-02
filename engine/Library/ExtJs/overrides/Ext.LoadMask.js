@@ -27,6 +27,7 @@
  * delay to prevent the backend to be unusable
  * after a error was raised.
  */
+//{block name="extjs/overrides/loadMask"}
 Ext.define('Ext.LoadMask-Shopware', {
 
     override: 'Ext.LoadMask',
@@ -145,3 +146,4 @@ Ext.define('Ext.LoadMask-Shopware', {
         return this.callParent(arguments);
     }
 });
+//{/block}

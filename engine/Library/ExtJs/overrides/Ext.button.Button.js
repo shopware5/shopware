@@ -26,6 +26,7 @@
  * an additional HTML5 data attribute to provide
  * a better adressing in selenium ui tests.
  */
+//{block name="extjs/overrides/button"}
 Ext.override(Ext.button.Button, {
 
     /** Suffix for the data attribute */
@@ -118,3 +119,4 @@ Ext.override(Ext.button.Button, {
         return me;
     }
 });
+//{/block}

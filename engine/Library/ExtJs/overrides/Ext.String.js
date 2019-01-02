@@ -22,6 +22,7 @@
  */
 
 /** @lends Ext.String */
+//{block name="extjs/overrides/string"}
 Ext.override(Ext.String, {
     /**
      * Return the text content of the element
@@ -69,3 +70,4 @@ Ext.override(Ext.String, {
         return ret;
     }
 });
+//{/block}

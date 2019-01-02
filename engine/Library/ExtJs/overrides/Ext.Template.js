@@ -24,6 +24,7 @@
 /**
  * Override template syntax for smarty support.
  */
+//{block name="extjs/overrides/template"}
 //{literal}
 Ext.override(Ext.Template, {
     re: /[{\[]([\w\-]+)(?:\:([\w\.]*)(?:\((.*?)?\))?)?[}\]]/g
@@ -38,3 +39,4 @@ Ext.override(Ext.String, {
     }
 });
 //{/literal}
+//{/block}

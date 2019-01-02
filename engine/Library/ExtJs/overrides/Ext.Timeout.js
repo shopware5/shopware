@@ -21,6 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
+//{block name="extjs/overrides/timeout"}
 var ajaxTimeout = {if {config name="ajaxTimeout"}}{config name="ajaxTimeout"}{else}30{/if};
 
 if (ajaxTimeout >= 6) {
@@ -36,3 +37,4 @@ if (ajaxTimeout >= 6) {
         { timeout: Ext.Ajax.timeout }
     );
 }
+//{/block}
