@@ -260,9 +260,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertGreaterThan(0, $addressId);
 
         // Edit the entry
-        $expectedText = 'Herr
-Shop ManMusterstr. 5555555 Musterhausen
-Nordrhein-WestfalenDeutschland';
+        $expectedText = 'Herr Shop ManMusterstr. 5555555 Musterhausen Nordrhein-WestfalenDeutschland';
 
         $this->doRequest(
             'POST',

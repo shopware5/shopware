@@ -166,12 +166,15 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     public function onFilterRender(Enlight_Event_EventArgs $args)
     {
         $source = $args->getReturn();
+        $config = $this->get('config');
+
+        if (!empty($config['minifyHtml'])) {
+            $source = $this->get('shopware.components.template.html_minifier')->minify($source);
+        }
 
         if (strpos($source, '<html') === false) {
             return $source;
         }
-
-        $config = $this->get('config');
 
         // Remove comments
         if (!empty($config['sSEOREMOVECOMMENTS'])) {

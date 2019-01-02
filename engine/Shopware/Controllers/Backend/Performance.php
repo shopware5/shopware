@@ -552,6 +552,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'LastArticles:lastarticlestoshow',
                 'disableArticleNavigation',
                 'http2Push',
+                'minifyHtml',
             ]),
             'customer' => $this->genericConfigLoader([
                 'alsoBoughtShow',
