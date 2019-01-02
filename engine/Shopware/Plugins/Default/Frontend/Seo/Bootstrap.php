@@ -168,7 +168,10 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         $source = $args->getReturn();
         $config = $this->get('config');
 
-        if (!empty($config['minifyHtml'])) {
+        /** @var Enlight_Controller_Action $controller */
+        $controller = $args->get('subject')->Action();
+
+        if (!empty($config['minifyHtml']) && $this->canBeMinified($controller)) {
             $source = $this->get('shopware.components.template.html_minifier')->minify($source);
         }
 
@@ -193,5 +196,32 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         }
 
         return $source;
+    }
+
+    private function canBeMinified(Enlight_Controller_Action $controller): bool
+    {
+        /** @var Enlight_Event_EventManager $events */
+        $events = $this->get('events');
+
+        if ($event = $events->notifyUntil(__CLASS__ . '_canBeMinified', [
+            'controller' => $controller,
+            'subject' => $this,
+        ])) {
+            return $event->getReturn();
+        }
+
+        foreach ($controller->Response()->getHeaders() as $header) {
+            if ($header['name'] === 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
+                return false;
+            }
+        }
+
+        if (!$controller->View()->hasTemplate() || in_array(strtolower($controller->Request()->getModuleName()), ['backend', 'api'])) {
+            return false;
+        }
+
+        $templateFile = $controller->View()->Template()->template_resource;
+
+        return substr($templateFile, -3) !== '.js';
     }
 }
