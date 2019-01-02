@@ -176,7 +176,7 @@ class Article extends Resource implements BatchInterface
             ->where('article.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var ProductModel|array $product */
+        /** @var array $product */
         $product = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$product) {
