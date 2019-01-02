@@ -163,7 +163,7 @@ abstract class Resource
     /**
      * @param AclComponent $acl
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     public function setAcl(AclComponent $acl)
     {
@@ -183,7 +183,7 @@ abstract class Resource
     /**
      * @param string|\Zend_Acl_Role_Interface $role
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     public function setRole($role)
     {
