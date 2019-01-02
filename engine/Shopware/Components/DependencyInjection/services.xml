@@ -901,5 +901,8 @@
         </service>
 
         <service id="shopware.components.stream_protocol_validator" class="Shopware\Components\StreamProtocolValidator"/>
+
+        <service id="shopware.components.template.html_minifier"
+                 class="Shopware\Components\Template\HtmlMinCompressor"/>
     </services>
 </container>

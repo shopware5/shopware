@@ -1,7 +1,7 @@
 {namespace name="frontend/index/datepicker"}
 
 {block name="frontend_index_date_picker_config"}
-<script type="text/javascript">
+<script>
     var datePickerGlobalConfig = datePickerGlobalConfig || {ldelim}
         locale: {ldelim}
             weekdays: {ldelim}

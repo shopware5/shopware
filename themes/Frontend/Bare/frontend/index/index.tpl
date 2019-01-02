@@ -217,7 +217,7 @@
         {* let the user modify the data here *}
         {block name="frontend_index_header_javascript_data"}{/block}
 
-        <script type="text/javascript" id="footer--js-inline">
+        <script id="footer--js-inline">
             {block name="frontend_index_header_javascript_inline"}
                 var timeNow = {time() nocache};
 

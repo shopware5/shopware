@@ -50,7 +50,8 @@ Ext.define('Shopware.apps.Performance.model.Various', {
         { name: 'LastArticles:lastarticles_show', type: 'bool'},
         { name: 'LastArticles:lastarticlestoshow', type: 'int'},
         { name: 'disableArticleNavigation', type: 'bool'},
-        { name: 'http2Push', type: 'bool'}
+        { name: 'http2Push', type: 'bool'},
+        { name: 'minifyHtml', type: 'bool'}
     ]
 
 });
