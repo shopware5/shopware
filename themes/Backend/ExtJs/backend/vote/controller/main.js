@@ -33,6 +33,31 @@ Ext.define('Shopware.apps.Vote.controller.Main', {
 
     init: function() {
         var me = this;
+
+        if (typeof me.subApplication.params === 'object' && me.subApplication.params.voteId) {
+            var store = Ext.create('Shopware.apps.Vote.store.Vote', {
+                filters: [{
+                    property: 'id',
+                    value: me.subApplication.params.voteId
+                }]
+            });
+
+            store.on('load', function () {
+                var record = store.getAt(0);
+                if (record === null) {
+                    return;
+                }
+
+                me.mainWindow = me.getView('detail.Window').create({
+                    record: record
+                }).show();
+            });
+            store.load();
+
+
+            return;
+        }
+
         me.mainWindow = me.getView('list.Window').create({ }).show();
     }
 });
