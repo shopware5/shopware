@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
@@ -112,6 +113,16 @@ class ProductProvider implements ProductProviderInterface
      */
     private $configurationLoader;
 
+    /**
+     * @var CrudService
+     */
+    private $crudService;
+
+    /**
+     * @var array
+     */
+    private $attributeConfigList;
+
     public function __construct(
         ListProductGatewayInterface $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
@@ -125,7 +136,8 @@ class ProductProvider implements ProductProviderInterface
         ConfiguratorServiceInterface $configuratorService,
         VariantHelperInterface $variantHelper,
         ProductConfigurationLoader $configurationLoader,
-        ProductListingVariationLoader $visibilityLoader
+        ProductListingVariationLoader $visibilityLoader,
+        CrudService $crudService
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -140,6 +152,7 @@ class ProductProvider implements ProductProviderInterface
         $this->variantHelper = $variantHelper;
         $this->configurationLoader = $configurationLoader;
         $this->listingVariationLoader = $visibilityLoader;
+        $this->crudService = $crudService;
     }
 
     /**
@@ -253,6 +266,9 @@ class ProductProvider implements ProductProviderInterface
             );
             $product->setFormattedReleaseDate(
                 $this->formatDate($product->getReleaseDate())
+            );
+            $product->addAttributes(
+                $this->parseAttributes($product->getAttributes())
             );
 
             $product->setCreatedAt(null);
@@ -523,5 +539,36 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param array $attributes
+     *
+     * @return array
+     */
+    private function parseAttributes(array $attributes)
+    {
+        if (!isset($attributes['core'])) {
+            return $attributes;
+        }
+
+        if ($this->attributeConfigList === null) {
+            $this->attributeConfigList = $this->crudService->getList('s_articles_attributes');
+        }
+
+        foreach ($this->attributeConfigList as $attributeConfig) {
+            $columnName = $attributeConfig->getColumnName();
+            if ($attributes['core']->exists($columnName)) {
+                $value = $attributes['core']->get($columnName);
+
+                if ($attributeConfig->getColumnType() === 'boolean') {
+                    $value = $value === '1' ? true : false;
+                }
+
+                $attributes['core']->set($columnName, $value);
+            }
+        }
+
+        return $attributes;
     }
 }
