@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <!--shopware_search.-->
         <service id="shopware_search.product_search" class="Shopware\Bundle\SearchBundle\ProductSearch">
             <argument type="service" id="shopware_storefront.list_product_service"/>

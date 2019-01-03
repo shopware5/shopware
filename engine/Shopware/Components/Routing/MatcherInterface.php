@@ -35,7 +35,7 @@ interface MatcherInterface
      * @param string  $pathInfo
      * @param Context $context
      *
-     * @return array|false
+     * @return string|array|false
      */
     public function match($pathInfo, Context $context);
 }

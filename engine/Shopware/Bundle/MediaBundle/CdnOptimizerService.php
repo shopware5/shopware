@@ -44,7 +44,7 @@ class CdnOptimizerService implements OptimizerServiceInterface
     private $mediaService;
 
     /**
-     * @var Filesystem
+     * @var FilesystemInterface
      */
     private $filesystem;
 

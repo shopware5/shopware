@@ -40,10 +40,10 @@ class Address extends LazyFetchModelEntity
      * The customer property is the owning side of the association between customer and newsletter address.
      * The association is joined over the newsletter mail address and the customer mail address
      *
+     * @var \Shopware\Models\Customer\Customer
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="email", referencedColumnName="email")
-     *
-     * @var \Shopware\Models\Customer\Customer
      */
     protected $customer;
 
@@ -52,10 +52,10 @@ class Address extends LazyFetchModelEntity
      * The group property is the owning side of the association between group and newsletter group
      * The association is joined over the address groupId and the group's id
      *
+     * @var \Shopware\Models\Newsletter\Group
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Group")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Group
      */
     protected $newsletterGroup;
 
@@ -92,6 +92,7 @@ class Address extends LazyFetchModelEntity
      * The actual email address
      *
      * @var string
+     *
      * @ORM\Column(name="email", type="string", length=90, nullable=false)
      */
     private $email;
@@ -100,6 +101,7 @@ class Address extends LazyFetchModelEntity
      * ID of the last newsletter this user received
      *
      * @var int
+     *
      * @ORM\Column(name="lastmailing", type="integer", length=11, nullable=false)
      */
     private $lastNewsletterId = 0;
@@ -107,12 +109,12 @@ class Address extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      * The lastNewsletter property is the owning side of the association between a newsletter and a mail-address
-     * The association is joined over the lastNewletterId and Newsletter.id
+     * The association is joined over the lastNewsletterId and Newsletter.id
+     *
+     * @var \Shopware\Models\Newsletter\Newsletter
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="addresses")
      * @ORM\JoinColumn(name="lastmailing", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Newsletter
      */
     private $lastNewsletter;
 
@@ -120,6 +122,7 @@ class Address extends LazyFetchModelEntity
      * ID of the last mailing this user read
      *
      * @var int
+     *
      * @ORM\Column(name="lastread", type="integer", length=11, nullable=false)
      */
     private $lastReadId = 0;
@@ -127,7 +130,8 @@ class Address extends LazyFetchModelEntity
     /**
      * The Double-Opt-In registration date
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
      * @ORM\Column(name="added", type="datetime", nullable=true)
      */
     private $added;
@@ -135,7 +139,8 @@ class Address extends LazyFetchModelEntity
     /**
      * The Double-Opt-In confirmation date
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
      * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=true)
      */
     private $doubleOptinConfirmed;
@@ -281,11 +286,14 @@ class Address extends LazyFetchModelEntity
      */
     public function getCustomer()
     {
-        return $this->fetchLazy($this->customer, ['email' => $this->email]);
+        /** @var \Shopware\Models\Customer\Customer $customer */
+        $customer = $this->fetchLazy($this->customer, ['email' => $this->email]);
+
+        return $customer;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -293,7 +301,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTime $added
+     * @param \DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -301,7 +309,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDoubleOptinConfirmed()
     {
@@ -309,7 +317,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTime $doubleOptinConfirmed
+     * @param \DateTimeInterface $doubleOptinConfirmed
      */
     public function setDoubleOptinConfirmed($doubleOptinConfirmed)
     {

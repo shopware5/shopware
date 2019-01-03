@@ -36,24 +36,24 @@ use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 class SearchBundleDBALSubscriber implements SubscriberInterface
 {
     /**
-     * @var SortingHandlerInterface[]
+     * @var \Doctrine\Common\Collections\ArrayCollection<SortingHandlerInterface>
      */
-    private $sortingHandlers = [];
+    private $sortingHandlers;
 
     /**
-     * @var ConditionHandlerInterface[]
+     * @var \Doctrine\Common\Collections\ArrayCollection<ConditionHandlerInterface>
      */
-    private $conditionHandlers = [];
+    private $conditionHandlers;
 
     /**
-     * @var FacetHandlerInterface[]|PartialFacetHandlerInterface[]
+     * @var \Doctrine\Common\Collections\ArrayCollection<FacetHandlerInterface|PartialFacetHandlerInterface>
      */
-    private $facetHandlers = [];
+    private $facetHandlers;
 
     /**
-     * @var CriteriaRequestHandlerInterface[]
+     * @var \Doctrine\Common\Collections\ArrayCollection<CriteriaRequestHandlerInterface>
      */
-    private $criteriaRequestHandlers = [];
+    private $criteriaRequestHandlers;
 
     /**
      * @param array $handlers contains different CriteriaRequestHandlerInterface, SortingHandlerInterface, ConditionHandlerInterface and FacetHandlerInterface
@@ -87,7 +87,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return FacetHandlerInterface[]|PartialFacetHandlerInterface[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<FacetHandlerInterface|PartialFacetHandlerInterface>
      */
     public function registerFacetHandlers()
     {
@@ -95,7 +95,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return SortingHandlerInterface[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<SortingHandlerInterface>
      */
     public function registerSortingHandlers()
     {
@@ -103,7 +103,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return ConditionHandlerInterface[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<ConditionHandlerInterface>
      */
     public function registerConditionHandlers()
     {
@@ -111,7 +111,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return CriteriaRequestHandlerInterface[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<CriteriaRequestHandlerInterface>
      */
     public function registerRequestHandlers()
     {

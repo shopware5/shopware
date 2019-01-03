@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <service id="shopware_attribute.controller_subscriber" class="Shopware\Bundle\AttributeBundle\DependencyInjection\EventListener\ControllerSubscriber">
             <tag name="shopware.event_subscriber" />
         </service>

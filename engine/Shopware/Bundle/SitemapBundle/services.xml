@@ -4,9 +4,12 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <service id="shopware_bundle_sitemap.service.sitemap_writer" class="Shopware\Bundle\SitemapBundle\Service\SitemapWriter">
             <argument type="service" id="shopware_bundle_sitemap.service.sitemap_name_generator"/>
             <argument type="service" id="shopware_bundle_sitemap.service.filesystem"/>
+            <argument type="service" id="corelogger"/>
         </service>
 
         <service id="shopware_bundle_sitemap.service.sitemap_name_generator"
@@ -20,6 +23,7 @@
             <argument type="service" id="config" />
             <argument type="tagged" tag="sitemap_url_provider" />
             <argument type="service" id="config_writer" />
+            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_lock" />
         </service>
 
         <service id="shopware_bundle_sitemap.service.sitemap_lister" class="Shopware\Bundle\SitemapBundle\Service\SitemapLister">
@@ -30,6 +34,10 @@
         <service id="shopware_bundle_sitemap.service.filesystem" class="Shopware\Components\Filesystem\PrefixFilesystem">
             <argument type="service" id="shopware.filesystem.public"/>
             <argument>sitemap</argument>
+        </service>
+
+        <service class="Shopware\Bundle\SitemapBundle\Service\SitemapLock" id="shopware_bundle_sitemap.service.sitemap_lock">
+            <argument id="shopware_storefront.storefront_cache" type="service"/>
         </service>
 
         <!-- UrlProviders -->

@@ -42,7 +42,7 @@ use Shopware\Models\ProductStream\ProductStream;
 class Category extends ModelEntity
 {
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Customer\Group>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_categories_avoid_customergroups",
@@ -66,7 +66,7 @@ class Category extends ModelEntity
     protected $attribute;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Emotion\Emotion>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="categories")
      * @ORM\JoinTable(name="s_emotion_categories",
@@ -92,18 +92,21 @@ class Category extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="sorting_ids", type="string", nullable=true)
      */
     protected $sortingIds;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="hide_sortings", type="boolean", nullable=false)
      */
     protected $hideSortings = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="facet_ids", type="string", nullable=true)
      */
     protected $facetIds;
@@ -130,12 +133,14 @@ class Category extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="stream_id", type="integer", nullable=true)
      */
     private $streamId;
 
     /**
      * @var ProductStream
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\ProductStream\ProductStream")
      * @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
      */
@@ -278,7 +283,7 @@ class Category extends ModelEntity
     /**
      * Should any filter shown on the category page be hidden?
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="hidefilter", type="boolean", nullable=false)
      */
@@ -287,7 +292,7 @@ class Category extends ModelEntity
     /**
      * Should the top part of that category be displayed?
      *
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="hidetop", type="boolean", nullable=false)
      */
@@ -296,7 +301,7 @@ class Category extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<Category>
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
@@ -304,7 +309,7 @@ class Category extends ModelEntity
     private $children;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories",
@@ -319,7 +324,7 @@ class Category extends ModelEntity
     private $articles;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories_ro",
@@ -334,14 +339,14 @@ class Category extends ModelEntity
     private $allArticles;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
@@ -354,9 +359,6 @@ class Category extends ModelEntity
      */
     private $mediaId;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -452,12 +454,13 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param Category[] $children
+     * @param ArrayCollection<Category> $children
      *
      * @return Category
      */
     public function setChildren($children)
     {
+        /** @var Category $child */
         foreach ($children as $child) {
             $child->setParent($this);
         }
@@ -535,13 +538,13 @@ class Category extends ModelEntity
     /**
      * Set changed
      *
-     * @param \DateTime|string $changed
+     * @param \DateTimeInterface|string $changed
      *
      * @return Category
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTime) {
+        if (!$changed instanceof \DateTimeInterface) {
             $this->changed = new \DateTime($changed);
         } else {
             $this->changed = $changed;
@@ -553,7 +556,7 @@ class Category extends ModelEntity
     /**
      * Get changed
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {
@@ -563,7 +566,7 @@ class Category extends ModelEntity
     /**
      * Get added
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -881,7 +884,7 @@ class Category extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Category', 'attribute', 'category');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Category::class, 'attribute', 'category');
     }
 
     /**
@@ -933,7 +936,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Emotion\Emotion>
      */
     public function getEmotions()
     {
@@ -941,7 +944,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $emotions
+     * @param ArrayCollection<\Shopware\Models\Emotion\Emotion> $emotions
      *
      * @return Category
      */
@@ -987,7 +990,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getProductBoxLayout()
     {
@@ -995,7 +998,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param int $productBoxLayout
+     * @param string $productBoxLayout
      *
      * @return Category
      */

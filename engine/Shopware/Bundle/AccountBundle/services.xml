@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\AddressService">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_account.address_validator" />

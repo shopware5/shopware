@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article;
+
 /**
  * Shopware Backend Controller for the Notification Module
  *
@@ -45,7 +47,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $order = (array) $this->Request()->getParam('sort', []);
 
             /** @var \Shopware\Models\Article\Repository $repository */
-            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
+            $repository = Shopware()->Models()->getRepository(Article::class);
             $dataQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order);
             $data = $dataQuery->getArrayResult();
 
@@ -78,7 +80,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
         try {
             $limit = (int) $this->Request()->limit;
             $offset = (int) $this->Request()->start;
-            $articleOrderNumber = $this->Request()->orderNumber;
+            $productOrderNumber = $this->Request()->orderNumber;
 
             /** @var array $filter */
             $filter = $this->Request()->getParam('filter', []);
@@ -87,8 +89,8 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $order = (array) $this->Request()->getParam('sort', []);
 
             /** @var \Shopware\Models\Article\Repository $repository */
-            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
-            $dataQuery = $repository->getNotificationCustomerByArticleQuery($articleOrderNumber, $filter, $offset, $limit, $order);
+            $repository = Shopware()->Models()->getRepository(Article::class);
+            $dataQuery = $repository->getNotificationCustomerByArticleQuery($productOrderNumber, $filter, $offset, $limit, $order);
             $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
             $data = $dataQuery->getArrayResult();
 

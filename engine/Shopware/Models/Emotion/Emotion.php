@@ -50,7 +50,8 @@ class Emotion extends ModelEntity
      * which can be configured in the backend emotion module.
      * The assigned grid will be displayed in front of the categories.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Category\Category>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category", inversedBy="emotions")
      * @ORM\JoinTable(name="s_emotion_categories",
      *      joinColumns={
@@ -68,6 +69,7 @@ class Emotion extends ModelEntity
      * Contains the assigned \Shopware\Models\User\User which created this emotion.
      *
      * @var \Shopware\Models\User\User
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
@@ -79,18 +81,18 @@ class Emotion extends ModelEntity
      * The element model contains the configuration about the size and position of the element
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Element", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Element>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Element", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
      */
     protected $elements;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Emotion", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Emotion
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Emotion", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -187,7 +189,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_from", type="datetime", nullable=true)
      */
@@ -225,7 +227,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_to", type="datetime", nullable=true)
      */
@@ -234,7 +236,7 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="create_date", type="datetime", nullable=false)
      */
@@ -243,7 +245,7 @@ class Emotion extends ModelEntity
     /**
      * Date of the last edit.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="modified", type="datetime", nullable=false)
      */
@@ -251,30 +253,35 @@ class Emotion extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="`rows`", type="integer", nullable=false)
      */
     private $rows;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="cols", type="integer", nullable=false)
      */
     private $cols;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="cell_spacing", type="integer", nullable=false)
      */
     private $cellSpacing;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="cell_height", type="integer", nullable=false)
      */
     private $cellHeight;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="article_height", type="integer", nullable=false)
      */
     private $articleHeight;
@@ -283,7 +290,8 @@ class Emotion extends ModelEntity
      * Contains the assigned Shopware\Models\Shop\Shop.
      * Used for shop limitation of single emotion landingpages.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Shop>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_emotion_shops",
      *      joinColumns={
@@ -321,19 +329,18 @@ class Emotion extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="customer_stream_ids", type="string", nullable=true)
      */
     private $customerStreamIds;
 
     /**
      * @var string|null
+     *
      * @ORM\Column(name="replacement", type="string", nullable=true)
      */
     private $replacement;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->shops = new \Doctrine\Common\Collections\ArrayCollection();
@@ -379,8 +386,8 @@ class Emotion extends ModelEntity
             $this->attribute = $newAttribute;
         }
 
-        $this->elements = $elements;
-        $this->categories = $categories;
+        $this->elements = new \Doctrine\Common\Collections\ArrayCollection($elements);
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection($categories);
     }
 
     /**
@@ -416,11 +423,11 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @param \DateTime|string $createDate
+     * @param null|\DateTimeInterface|string $createDate
      */
     public function setCreateDate($createDate = 'now')
     {
-        if ($createDate !== null && !($createDate instanceof \DateTime)) {
+        if ($createDate !== null && !($createDate instanceof \DateTimeInterface)) {
             $this->createDate = new \DateTime($createDate);
         } else {
             $this->createDate = $createDate;
@@ -430,7 +437,7 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreateDate()
     {
@@ -441,11 +448,11 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime|string $validFrom
+     * @param null|\DateTimeInterface|string $validFrom
      */
     public function setValidFrom($validFrom)
     {
-        if ($validFrom !== null && !($validFrom instanceof \DateTime)) {
+        if ($validFrom !== null && !($validFrom instanceof \DateTimeInterface)) {
             $this->validFrom = new \DateTime($validFrom);
         } else {
             $this->validFrom = $validFrom;
@@ -456,7 +463,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -467,11 +474,11 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime|string $validTo
+     * @param null|\DateTimeInterface|string $validTo
      */
     public function setValidTo($validTo)
     {
-        if ($validTo !== null && !($validTo instanceof \DateTime)) {
+        if ($validTo !== null && !($validTo instanceof \DateTimeInterface)) {
             $this->validTo = new \DateTime($validTo);
         } else {
             $this->validTo = $validTo;
@@ -482,7 +489,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidTo()
     {
@@ -516,7 +523,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getModified()
     {
@@ -524,11 +531,11 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param \DateTime|string $modified
+     * @param null|\DateTimeInterface|string $modified
      */
     public function setModified($modified)
     {
-        if ($modified !== null && !($modified instanceof \DateTime)) {
+        if ($modified !== null && !($modified instanceof \DateTimeInterface)) {
             $this->modified = new \DateTime($modified);
         } else {
             $this->modified = $modified;
@@ -546,11 +553,11 @@ class Emotion extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Emotion|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Emotion
+     * @return Emotion
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Emotion', 'attribute', 'emotion');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Emotion::class, 'attribute', 'emotion');
     }
 
     /**
@@ -558,7 +565,7 @@ class Emotion extends ModelEntity
      * The element model contains the configuration about the size and position of the element
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Element>
      */
     public function getElements()
     {
@@ -571,13 +578,13 @@ class Emotion extends ModelEntity
      * The element model contains the configuration about the size and position of the element
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $elements
+     * @param \Shopware\Models\Emotion\Element[]|null $elements
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Emotion
      */
     public function setElements($elements)
     {
-        return $this->setOneToMany($elements, '\Shopware\Models\Emotion\Element', 'elements', 'emotion');
+        return $this->setOneToMany($elements, \Shopware\Models\Emotion\Element::class, 'elements', 'emotion');
     }
 
     /**

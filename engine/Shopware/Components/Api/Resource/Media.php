@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\ORMException;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Random;
 use Shopware\Components\Thumbnail\Manager;
@@ -70,7 +71,7 @@ class Media extends Resource
         $filters = [['property' => 'media.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getMediaListQuery($filters, [], 1);
 
-        /** @var MediaModel $media */
+        /** @var MediaModel|array $media */
         $media = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$media) {
@@ -78,7 +79,11 @@ class Media extends Resource
         }
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $media['path'] = $mediaService->getUrl($media['path']);
+        if (is_array($media)) {
+            $media['path'] = $mediaService->getUrl($media['path']);
+        } else {
+            $media->setPath($mediaService->getUrl($media->getPath()));
+        }
 
         return $media;
     }
@@ -266,7 +271,7 @@ class Media extends Resource
         try {
             // Persist the model into the model manager this uploads and resizes the image
             $this->getManager()->persist($media);
-        } catch (\Doctrine\ORM\ORMException $e) {
+        } catch (ORMException $e) {
             throw new ApiException\CustomValidationException(
                 sprintf('Some error occurred while persisting your media')
             );
@@ -394,7 +399,7 @@ class Media extends Resource
 
         $meta = stream_get_meta_data($get_handle);
         if (!strpos($meta['mediatype'], 'image/') === false) {
-            throw new ApiException\CustomValidationException(sprintf('No valid media type passed for the article image: %s', $url));
+            throw new ApiException\CustomValidationException(sprintf('No valid media type passed for the product image: %s', $url));
         }
 
         $extension = str_replace('image/', '', $meta['mediatype']);

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\FirstRunWizardPluginStoreService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
@@ -252,7 +253,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
      *
-     * @return LocaleStruct Information about the current locale
+     * @return LocaleStruct|null Information about the current locale
      */
     private function getCurrentLocale()
     {

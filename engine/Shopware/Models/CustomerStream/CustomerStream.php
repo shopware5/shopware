@@ -38,6 +38,7 @@ class CustomerStream extends ModelEntity
      * INVERSE SIDE
      *
      * @var \Shopware\Models\Attribute\CustomerStream
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerStream", mappedBy="customerStream", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
@@ -53,7 +54,9 @@ class CustomerStream extends ModelEntity
 
     /**
      * @var string
+     *
      * @Assert\NotBlank
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
@@ -67,19 +70,23 @@ class CustomerStream extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="static", type="boolean", nullable=false)
      */
     private $static = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
      * @Assert\DateTime
+     *
      * @ORM\Column(name="freeze_up", type="datetime", nullable=true)
      */
     private $freezeUp;
@@ -141,7 +148,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function getFreezeUp()
     {
@@ -149,7 +156,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param \DateTime|string|null $freezeUp
+     * @param \DateTimeInterface|string|null $freezeUp
      */
     public function setFreezeUp($freezeUp)
     {

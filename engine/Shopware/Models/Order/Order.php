@@ -79,26 +79,28 @@ class Order extends ModelEntity
 
     /**
      * @var \Shopware\Models\Customer\Customer
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="orders")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
     protected $customer;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var \Shopware\Models\Payment\Payment
+     *
+     * @Assert\NotBlank
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Payment\Payment")
      * @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
      */
     protected $payment;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var \Shopware\Models\Dispatch\Dispatch
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Dispatch\Dispatch")
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
+     *
+     * @Assert\NotBlank
      */
     protected $dispatch;
 
@@ -106,57 +108,58 @@ class Order extends ModelEntity
      * The shop property is the owning side of the association between order and shop.
      * The association is joined over the order userID field and the id field of the shop.
      *
-     * @Assert\NotBlank
-     *
      * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
+     *
+     * @Assert\NotBlank
      */
     protected $shop;
 
     /**
+     * @var \Shopware\Models\Partner\Partner
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Partner\Partner", inversedBy="orders")
      * @ORM\JoinColumn(name="partnerID", referencedColumnName="idcode")
-     *
-     * @var \Shopware\Models\Partner\Partner
      */
     protected $partner;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Order", mappedBy="order", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Order
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Order", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
+     * @var \Shopware\Models\Order\Status
+     *
      * @Assert\NotBlank
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="cleared", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Status
      */
     protected $paymentStatus;
 
     /**
      * @Assert\NotBlank
      *
+     * @var \Shopware\Models\Order\Status
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="status", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Order\Status
      */
     protected $orderStatus;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Detail", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\Detail>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Detail", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
     protected $details;
 
@@ -165,9 +168,9 @@ class Order extends ModelEntity
      * The billing property is the inverse side of the association between order and billing.
      * The association is joined over the billing orderID field and the id field of the order
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Billing", mappedBy="order", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Order\Billing
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Billing", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
     protected $billing;
 
@@ -176,40 +179,40 @@ class Order extends ModelEntity
      * The shipping property is the inverse side of the association between order and shipping.
      * The association is joined over the shipping orderID field and the id field of the order
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Shipping", mappedBy="order", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Order\Shipping
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Shipping", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
     protected $shipping;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Document\Document", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\Document\Document>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Document\Document", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
     protected $documents;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\History>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Order\History", mappedBy="order", orphanRemoval=true)
      * @ORM\JoinColumn(name="id", referencedColumnName="orderID")
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $history;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="order")
-     *
      * @var \Shopware\Models\Order\Esd
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="order")
      */
     protected $esd;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="order")
      */
@@ -220,16 +223,17 @@ class Order extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="id", type="integer", nullable=false)
      */
     private $id;
 
     /**
      * Time of the last modification of the order
      *
-     * @var DateTime
+     * @var \DateTimeInterface
+     *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
@@ -238,6 +242,7 @@ class Order extends ModelEntity
      * Contains the alphanumeric order number. If the
      *
      * @var string
+     *
      * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
     private $number;
@@ -292,36 +297,36 @@ class Order extends ModelEntity
     private $shopId;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var float
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="invoice_amount", type="float", nullable=false)
      */
     private $invoiceAmount;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var float
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="invoice_amount_net", type="float", nullable=false)
      */
     private $invoiceAmountNet;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var float
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="invoice_shipping", type="float", nullable=false)
      */
     private $invoiceShipping;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var float
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="invoice_shipping_net", type="float", nullable=false)
      */
@@ -335,7 +340,7 @@ class Order extends ModelEntity
     private $invoiceShippingTaxRate;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="ordertime", type="datetime", nullable=false)
      */
@@ -379,9 +384,9 @@ class Order extends ModelEntity
     private $net;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var int
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="taxfree", type="integer", nullable=false)
      */
@@ -402,7 +407,7 @@ class Order extends ModelEntity
     private $referer;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="cleareddate", type="datetime", nullable=true)
      */
@@ -416,9 +421,10 @@ class Order extends ModelEntity
     private $trackingCode;
 
     /**
+     * @var string
+     *
      * @Assert\NotBlank
      *
-     * @var string
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
     private $languageIso;
@@ -429,26 +435,25 @@ class Order extends ModelEntity
      * Used for the language subshop association
      *
      * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="language", referencedColumnName="id")
      */
     private $languageSubShop;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var string
      *
      * @ORM\Column(name="currency", type="string", length=5, nullable=false)
+     * @Assert\NotBlank
      */
     private $currency;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var float
      *
      * @ORM\Column(name="currencyfactor", type="float", nullable=false)
+     * @Assert\NotBlank
      */
     private $currencyFactor;
 
@@ -492,7 +497,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {
@@ -638,13 +643,13 @@ class Order extends ModelEntity
     /**
      * Set orderTime
      *
-     * @param \DateTime|string $orderTime
+     * @param \DateTimeInterface|string $orderTime
      *
      * @return Order
      */
     public function setOrderTime($orderTime)
     {
-        if (!$orderTime instanceof \DateTime && is_string($orderTime)) {
+        if (!$orderTime instanceof \DateTimeInterface && is_string($orderTime)) {
             $orderTime = new \DateTime($orderTime);
         }
         $this->orderTime = $orderTime;
@@ -655,7 +660,7 @@ class Order extends ModelEntity
     /**
      * Get orderTime
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getOrderTime()
     {
@@ -857,13 +862,13 @@ class Order extends ModelEntity
     /**
      * Set clearedDate
      *
-     * @param \DateTime|string $clearedDate
+     * @param \DateTimeInterface|string $clearedDate
      *
      * @return Order
      */
     public function setClearedDate($clearedDate)
     {
-        if (!$clearedDate instanceof \DateTime && is_string($clearedDate)) {
+        if (!$clearedDate instanceof \DateTimeInterface && is_string($clearedDate)) {
             $clearedDate = new \DateTime($clearedDate);
         }
         $this->clearedDate = $clearedDate;
@@ -874,7 +879,7 @@ class Order extends ModelEntity
     /**
      * Get clearedDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getClearedDate()
     {
@@ -1106,13 +1111,13 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Shipping|array|null $shipping
+     * @param \Shopware\Models\Order\Shipping|null $shipping
      *
-     * @return \Shopware\Models\Order\Shipping
+     * @return Order
      */
     public function setShipping($shipping)
     {
-        return $this->setOneToOne($shipping, '\Shopware\Models\Order\Shipping', 'shipping', 'order');
+        return $this->setOneToOne($shipping, \Shopware\Models\Order\Shipping::class, 'shipping', 'order');
     }
 
     /**
@@ -1124,17 +1129,17 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Billing|array|null $billing
+     * @param \Shopware\Models\Order\Billing|null $billing
      *
-     * @return \Shopware\Models\Order\Billing
+     * @return Order
      */
     public function setBilling($billing)
     {
-        return $this->setOneToOne($billing, '\Shopware\Models\Order\Billing', 'billing', 'order');
+        return $this->setOneToOne($billing, \Shopware\Models\Order\Billing::class, 'billing', 'order');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\Detail>
      */
     public function getDetails()
     {
@@ -1142,17 +1147,17 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $details
+     * @param \Shopware\Models\Order\Detail[]|null $details
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Order
      */
     public function setDetails($details)
     {
-        return $this->setOneToMany($details, '\Shopware\Models\Order\Detail', 'details', 'order');
+        return $this->setOneToMany($details, \Shopware\Models\Order\Detail::class, 'details', 'order');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\History>
      */
     public function getHistory()
     {
@@ -1160,7 +1165,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $history
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\History>
      */
     public function setHistory($history)
     {
@@ -1176,7 +1181,7 @@ class Order extends ModelEntity
         $invoiceAmount = 0;
         $invoiceAmountNet = 0;
 
-        //iterate order details to recalculate the amount.
+        // Iterate order details to recalculate the amount.
         /** @var Detail $detail */
         foreach ($this->getDetails() as $detail) {
             $price = round($detail->getPrice(), 2);
@@ -1226,12 +1231,10 @@ class Order extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Order', 'attribute', 'order');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Order::class, 'attribute', 'order');
     }
 
     /**
-     * Get Partner
-     *
      * @return \Shopware\Models\Partner\Partner
      */
     public function getPartner()
@@ -1240,8 +1243,6 @@ class Order extends ModelEntity
     }
 
     /**
-     * Set Partner
-     *
      * @param \Shopware\Models\Partner\Partner $partner
      */
     public function setPartner($partner)
@@ -1250,7 +1251,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\Document\Document>
      */
     public function getDocuments()
     {
@@ -1258,9 +1259,9 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $documents
+     * @param \Shopware\Models\Order\Document\Document[]|null $documents
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Order
      */
     public function setDocuments($documents)
     {
@@ -1300,7 +1301,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param mixed $paymentInstances
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\PaymentInstance> $paymentInstances
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -1308,7 +1309,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      */
     public function getPaymentInstances()
     {

@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <!-- Shopware services definition. This classes contains the business logic-->
         <service id="shopware_storefront.context_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService">
             <argument type="service" id="service_container"/>
@@ -248,7 +250,6 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.property_hydrator_dbal"/>
-            <argument type="service" id="config" />
         </service>
 
         <service id="shopware_storefront.product_property_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway">
@@ -269,7 +270,6 @@
 
         <service id="shopware_storefront.similar_products_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\SimilarProductsGateway">
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="config"/>
         </service>
 
         <service id="shopware_storefront.download_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\DownloadGateway">

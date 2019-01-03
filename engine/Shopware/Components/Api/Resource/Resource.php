@@ -25,6 +25,8 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\Collection;
+use Exception;
+use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
@@ -33,6 +35,7 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
+use Shopware_Components_Acl as AclComponent;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
@@ -73,7 +76,7 @@ abstract class Resource implements ContainerAwareInterface
     protected $resultMode = self::HYDRATE_ARRAY;
 
     /**
-     * @var \Shopware_Components_Acl
+     * @var AclComponent
      */
     protected $acl;
 
@@ -120,8 +123,9 @@ abstract class Resource implements ContainerAwareInterface
             return;
         }
 
-        $calledClass = get_called_class();
+        $calledClass = static::class;
         $calledClass = explode('\\', $calledClass);
+        /** @var \Zend_Acl_Resource_Interface|string $resource */
         $resource = strtolower(end($calledClass));
 
         if (!$this->getAcl()->has($resource)) {
@@ -158,11 +162,11 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @param \Shopware_Components_Acl $acl
+     * @param AclComponent $acl
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
-    public function setAcl(\Shopware_Components_Acl $acl)
+    public function setAcl(AclComponent $acl)
     {
         $this->acl = $acl;
 
@@ -170,7 +174,7 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @return \Shopware_Components_Acl
+     * @return AclComponent
      */
     public function getAcl()
     {
@@ -180,7 +184,7 @@ abstract class Resource implements ContainerAwareInterface
     /**
      * @param string|\Zend_Acl_Role_Interface $role
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     public function setRole($role)
     {
@@ -226,13 +230,13 @@ abstract class Resource implements ContainerAwareInterface
      */
     public function getResultMode()
     {
-        return $this->resultMode;
+        return (int) $this->resultMode;
     }
 
     /**
      * @param object $entity
      *
-     * @throws \Shopware\Components\Api\Exception\OrmException
+     * @throws ApiException\OrmException
      */
     public function flush($entity = null)
     {
@@ -242,7 +246,7 @@ abstract class Resource implements ContainerAwareInterface
                 $this->getManager()->flush($entity);
                 $this->getManager()->getConnection()->commit();
                 $this->getManager()->clear();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->getManager()->getConnection()->rollBack();
                 throw new ApiException\OrmException($e->getMessage(), 0, $e);
             }
@@ -264,6 +268,7 @@ abstract class Resource implements ContainerAwareInterface
 
         $results = [];
         foreach ($data as $key => $datum) {
+            /** @var BatchInterface $this */
             $id = $this->getIdByData($datum);
 
             try {
@@ -272,12 +277,12 @@ abstract class Resource implements ContainerAwareInterface
                     'operation' => 'delete',
                     'data' => $this->delete($id),
                 ];
-                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                if ($this->getResultMode() === self::HYDRATE_ARRAY) {
                     $results[$key]['data'] = Shopware()->Models()->toArray(
                         $results[$key]['data']
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
@@ -315,6 +320,7 @@ abstract class Resource implements ContainerAwareInterface
 
         $results = [];
         foreach ($data as $key => $datum) {
+            /** @var BatchInterface $this */
             $id = $this->getIdByData($datum);
 
             try {
@@ -336,7 +342,7 @@ abstract class Resource implements ContainerAwareInterface
                         $results[$key]['data']
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
@@ -401,7 +407,7 @@ abstract class Resource implements ContainerAwareInterface
      * @param string     $optionName
      * @param bool       $defaultReplace
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     protected function checkDataReplacement(Collection $collection, $data, $optionName, $defaultReplace)
     {
@@ -422,7 +428,7 @@ abstract class Resource implements ContainerAwareInterface
      * @param string           $property
      * @param mixed            $value
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return mixed|null
      */
@@ -432,7 +438,7 @@ abstract class Resource implements ContainerAwareInterface
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($entity, $method)) {
-                throw new \Exception(
+                throw new RuntimeException(
                     sprintf('Method %s not found on entity %s', $method, get_class($entity))
                 );
                 continue;
@@ -471,10 +477,10 @@ abstract class Resource implements ContainerAwareInterface
      * Helper function to execute different findOneBy statements which different conditions
      * until a passed entity instance found.
      *
-     * @param object $entity
+     * @param string $entity
      * @param array  $conditions
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return null|ModelEntity
      */
@@ -482,10 +488,11 @@ abstract class Resource implements ContainerAwareInterface
     {
         $repo = $this->getManager()->getRepository($entity);
         if (!$repo instanceof ModelRepository) {
-            throw new \Exception(sprintf('Passed entity has no configured repository: %s', $entity));
+            throw new RuntimeException(sprintf('Passed entity has no configured repository: %s', $entity));
         }
 
         foreach ($conditions as $condition) {
+            /** @var null|ModelEntity $instance */
             $instance = $repo->findOneBy($condition);
             if ($instance) {
                 return $instance;
@@ -512,9 +519,9 @@ abstract class Resource implements ContainerAwareInterface
      * @param string     $entityType
      * @param array      $conditions
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
-     * @return null|object
+     * @return ModelEntity
      */
     protected function getOneToManySubElement(Collection $collection, $data, $entityType, $conditions = ['id'])
     {
@@ -557,7 +564,7 @@ abstract class Resource implements ContainerAwareInterface
      * @param string     $entityType
      * @param array      $conditions
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return null|object
      */
@@ -598,8 +605,8 @@ abstract class Resource implements ContainerAwareInterface
     protected function resetEntityManager()
     {
         $this->getContainer()->reset('models')
-                                  ->reset('dbal_connection')
-                                  ->load('models');
+            ->reset('dbal_connection')
+            ->load('models');
 
         $this->getContainer()->load('dbal_connection');
 

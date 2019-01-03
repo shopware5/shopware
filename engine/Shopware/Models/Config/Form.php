@@ -36,6 +36,7 @@ class Form extends ModelEntity
 {
     /**
      * @var \Shopware\Models\Plugin\Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="configForms")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
      */
@@ -52,6 +53,7 @@ class Form extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -60,12 +62,14 @@ class Form extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
      * @var Form
+     *
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", nullable=true, referencedColumnName="id", onDelete="SET NULL")
      */
@@ -73,36 +77,42 @@ class Form extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $description;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="plugin_id", type="integer", nullable=false)
      */
     private $pluginId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var ArrayCollection<Element>
+     *
      * @ORM\OneToMany(targetEntity="Element", mappedBy="form", cascade={"all"})
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
@@ -110,14 +120,12 @@ class Form extends ModelEntity
 
     /**
      * @var ArrayCollection<Element>
+     *
      * @ORM\OneToMany(targetEntity="Form", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $children;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->elements = new ArrayCollection();
@@ -183,7 +191,7 @@ class Form extends ModelEntity
      *
      * @param string $description
      *
-     * @return string
+     * @return Form
      */
     public function setDescription($description)
     {
@@ -221,7 +229,7 @@ class Form extends ModelEntity
     /**
      * @param string $name
      *
-     * @return Element
+     * @return Element|null
      */
     public function getElement($name)
     {
@@ -298,7 +306,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection|Element[]
+     * @return ArrayCollection<Element>|Element[]
      */
     public function getElements()
     {

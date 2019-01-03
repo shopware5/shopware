@@ -188,7 +188,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         ";
         $content = Shopware()->Db()->fetchRow($sql, [$context->getShop()->getId(), $this->Request()->get('sID')]);
         if (!empty($content)) {
-            // todo@all Hash-Building in rework phase berücksichtigen
+            // todo@all Mind hash-building in rework phase
             $license = '';
             $content['hash'] = [$content['id'], $license];
             $content['hash'] = md5(implode('|', $content['hash']));

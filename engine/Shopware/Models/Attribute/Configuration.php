@@ -35,6 +35,7 @@ class Configuration extends ModelEntity
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -43,78 +44,91 @@ class Configuration extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="table_name", type="string", nullable=false)
      */
     private $tableName;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="column_name", type="string", nullable=false)
      */
     private $columnName;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="column_type", type="string", nullable=false)
      */
     private $columnType;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="default_value", type="string", nullable=true)
      */
     private $defaultValue;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="entity", type="string", nullable=false)
      */
     private $entity;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="help_text", type="string", nullable=true)
      */
     private $helpText;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="support_text", type="string", nullable=true)
      */
     private $supportText;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="translatable", type="boolean")
      */
     private $translatable = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="display_in_backend", type="boolean")
      */
     private $displayInBackend = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="custom", type="boolean")
      */
     private $custom = false;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="array_store", type="text", nullable=true)
      */
     private $arrayStore = null;

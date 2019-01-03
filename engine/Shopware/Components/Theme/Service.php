@@ -100,7 +100,7 @@ class Service
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(['settings'])
-            ->from('Shopware\Models\Theme\Settings', 'settings')
+            ->from(\Shopware\Models\Theme\Settings::class, 'settings')
             ->orderBy('settings.id', 'ASC')
             ->setFirstResult(0)
             ->setMaxResults(1);
@@ -172,7 +172,7 @@ class Service
         $builder->select([
             'elements',
         ])
-            ->from('Shopware\Models\Shop\TemplateConfig\Element', 'elements')
+            ->from(\Shopware\Models\Shop\TemplateConfig\Element::class, 'elements')
             ->where('elements.templateId = :templateId')
             ->orderBy('elements.id')
             ->setParameter('templateId', $template->getId());
@@ -207,7 +207,7 @@ class Service
             'template',
             'sets',
         ])
-            ->from('Shopware\Models\Shop\Template', 'template')
+            ->from(\Shopware\Models\Shop\Template::class, 'template')
             ->innerJoin('template.configSets', 'sets')
             ->where('sets.templateId = :templateId')
             ->orderBy('sets.name')
@@ -344,7 +344,7 @@ class Service
      * @param array                                 $set
      * @param \Enlight_Components_Snippet_Namespace $namespace
      *
-     * @return mixed
+     * @return array
      */
     public function translateConfigSet($set, \Enlight_Components_Snippet_Namespace $namespace)
     {
@@ -428,12 +428,12 @@ class Service
             $namespace
         );
 
-        //recursive call for sub children
+        // Recursive call for sub children
         foreach ($container['children'] as &$child) {
             $child = $this->translateContainer($child, $template, $namespace);
         }
 
-        //start recursive translation for the inheritance configuration
+        // Start recursive translation for the inheritance configuration
         if ($template->getParent() instanceof Shop\Template) {
             $parentNamespace = $this->getConfigSnippetNamespace($template->getParent());
             $namespace->read();
@@ -465,7 +465,7 @@ class Service
             'layout',
             'elements',
         ])
-            ->from('Shopware\Models\Shop\TemplateConfig\Layout', 'layout')
+            ->from(\Shopware\Models\Shop\TemplateConfig\Layout::class, 'layout')
             ->leftJoin('layout.elements', 'elements')
             ->where('layout.templateId = :templateId')
             ->orderBy('elements.id')
@@ -592,13 +592,13 @@ class Service
      * @param Collection $collection
      * @param string     $name
      *
-     * @return Shop\TemplateConfig\Element
+     * @return Shop\TemplateConfig\Element|null
      */
     private function getElementByName(Collection $collection, $name)
     {
         /** @var Shop\TemplateConfig\Element $element */
         foreach ($collection as $element) {
-            if ($element->getName() == $name) {
+            if ($element->getName() === $name) {
                 return $element;
             }
         }

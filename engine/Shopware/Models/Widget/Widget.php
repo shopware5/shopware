@@ -35,6 +35,7 @@ class Widget extends ModelEntity
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -43,24 +44,28 @@ class Widget extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var \Shopware\Models\Widget\View[]
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\View>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Widget\View", mappedBy="widget")
      */
     private $views;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
      * @var \Shopware\Models\Plugin\Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="widgets")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
      */
@@ -91,7 +96,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Widget\View[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\View>
      */
     public function getViews()
     {
@@ -99,7 +104,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Widget\View[] $views
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\View> $views
      */
     public function setViews($views)
     {

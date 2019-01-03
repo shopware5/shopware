@@ -80,7 +80,7 @@ class Holiday extends ModelEntity
     /**
      * Next date on which this is due.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -147,7 +147,7 @@ class Holiday extends ModelEntity
     /**
      * Set date
      *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      *
      * @return Holiday
      */
@@ -161,7 +161,7 @@ class Holiday extends ModelEntity
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {

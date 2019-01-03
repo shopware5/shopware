@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Random;
 
 /**
@@ -41,15 +42,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     }
 
     /**
-     * Error action method for not found/inactive articles
+     * Error action method for not found/inactive products
      * Can throw an exception that is handled by the default error controller
-     * or show a custom page with related articles
+     * or show a custom page with related products
      */
     public function errorAction()
     {
         $config = $this->container->get('config');
         if (!$config->get('RelatedArticlesOnArticleNotFound')) {
-            throw new Enlight_Controller_Exception('Article not found', 404);
+            throw new Enlight_Controller_Exception('Product not found', 404);
         }
 
         $this->Response()->setHttpResponseCode(
@@ -99,45 +100,45 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         try {
-            $article = Shopware()->Modules()->Articles()->sGetArticleById(
+            $product = Shopware()->Modules()->Articles()->sGetArticleById(
                 $id,
                 $categoryId,
                 $number,
                 $selection
             );
         } catch (\Exception $e) {
-            $article = null;
+            $product = null;
         }
 
-        if (empty($article) || empty($article['articleName'])) {
+        if (empty($product) || empty($product['articleName'])) {
             return $this->forward('error');
         }
 
-        $this->Request()->setQuery('sCategory', $article['categoryID']);
+        $this->Request()->setQuery('sCategory', $product['categoryID']);
 
-        $template = trim($article['template']);
+        $template = trim($product['template']);
         if (!empty($template)) {
-            $this->View()->loadTemplate('frontend/detail/' . $article['template']);
-        } elseif (!empty($article['mode'])) {
+            $this->View()->loadTemplate('frontend/detail/' . $product['template']);
+        } elseif (!empty($product['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');
         } elseif ($tpl === 'ajax') {
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-        $article['sBundles'] = false;
+        $product = Shopware()->Modules()->Articles()->sGetConfiguratorImage($product);
+        $product['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryID)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble([
                 'sViewport' => 'support',
                 'sFid' => Shopware()->Config()->InquiryID,
                 'sInquiry' => 'detail',
-                'sOrdernumber' => $article['ordernumber'],
+                'sOrdernumber' => $product['ordernumber'],
             ]);
         }
 
-        if (!empty($article['categoryID'])) {
-            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article['categoryID']));
+        if (!empty($product['categoryID'])) {
+            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($product['categoryID']));
             $categoryInfo = end($breadcrumb);
         } else {
             $breadcrumb = [];
@@ -145,11 +146,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
-        $article['sReleaseDate'] = $article['sReleasedate'];
+        $product['sReleaseDate'] = $product['sReleasedate'];
 
         $this->View()->sBreadcrumb = $breadcrumb;
         $this->View()->sCategoryInfo = $categoryInfo;
-        $this->View()->sArticle = $article;
+        $this->View()->sArticle = $product;
         $this->View()->rand = Random::getAlphanumericString(32);
     }
 
@@ -184,8 +185,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             return $this->forward('error');
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetArticleNameByArticleId($id);
-        if (empty($article)) {
+        $product = Shopware()->Modules()->Articles()->sGetArticleNameByArticleId($id);
+        if (empty($product)) {
             return $this->forward('error');
         }
 
@@ -245,7 +246,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
                 $context = [
                     'sConfirmLink' => $link,
-                    'sArticle' => ['articleName' => $article],
+                    'sArticle' => ['articleName' => $product],
                 ];
 
                 $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);

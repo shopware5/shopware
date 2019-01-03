@@ -89,7 +89,9 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function getCategoryComponent()
     {
-        $this->categoryDenormalization = $this->container->get('CategoryDenormalization');
+        /** @var CategoryDenormalization $categoryDenormalization */
+        $categoryDenormalization = $this->container->get('CategoryDenormalization');
+        $this->categoryDenormalization = $categoryDenormalization;
 
         $this->categoryDenormalization->disableTransactions();
 
@@ -178,7 +180,7 @@ class CategorySubscriber implements BaseEventSubscriber
                 continue;
             }
 
-            if ($oldParentCategory->getId() == $newParentCategory->getId()) {
+            if ((int) $oldParentCategory->getId() === (int) $newParentCategory->getId()) {
                 continue;
             }
 
@@ -201,24 +203,24 @@ class CategorySubscriber implements BaseEventSubscriber
                     continue;
                 }
 
-                /** @var Article $article */
-                $article = $col->getOwner();
-                $this->addPendingRemoveAssignment($article, $category);
+                /** @var Article $product */
+                $product = $col->getOwner();
+                $this->addPendingRemoveAssignment($product, $category);
             }
         }
 
         /* @var \Doctrine\ORM\PersistentCollection $col */
         foreach ($uow->getScheduledCollectionUpdates() as $col) {
             if ($col->getOwner() instanceof Article) {
-                /** @var Article $article */
-                $article = $col->getOwner();
+                /** @var Article $product */
+                $product = $col->getOwner();
 
                 foreach ($col->getInsertDiff() as $category) {
                     if (!$category instanceof Category) {
                         continue;
                     }
 
-                    $this->addPendingAddAssignment($article, $category);
+                    $this->addPendingAddAssignment($product, $category);
                 }
 
                 foreach ($col->getDeleteDiff() as $category) {
@@ -226,7 +228,7 @@ class CategorySubscriber implements BaseEventSubscriber
                         continue;
                     }
 
-                    $this->addPendingRemoveAssignment($article, $category);
+                    $this->addPendingRemoveAssignment($product, $category);
                 }
             }
 
@@ -234,20 +236,20 @@ class CategorySubscriber implements BaseEventSubscriber
                 /* @var Category $category */
                 $category = $col->getOwner();
 
-                foreach ($col->getInsertDiff() as $article) {
-                    if (!$article instanceof Article) {
+                foreach ($col->getInsertDiff() as $product) {
+                    if (!$product instanceof Article) {
                         continue;
                     }
 
-                    $this->addPendingAddAssignment($article, $category);
+                    $this->addPendingAddAssignment($product, $category);
                 }
 
-                foreach ($col->getDeleteDiff() as $article) {
-                    if (!$article instanceof Article) {
+                foreach ($col->getDeleteDiff() as $product) {
+                    if (!$product instanceof Article) {
                         continue;
                     }
 
-                    $this->addPendingRemoveAssignment($article, $category);
+                    $this->addPendingRemoveAssignment($product, $category);
                 }
             }
         }
@@ -264,7 +266,7 @@ class CategorySubscriber implements BaseEventSubscriber
             return;
         }
 
-        // Remove assignments that noutralize each other
+        // Remove assignments that neutralize each other
         foreach ($this->pendingRemoveAssignments as $key => $pendingRemove) {
             if (isset($this->pendingAddAssignments[$key])) {
                 unset($this->pendingAddAssignments[$key]);
@@ -275,19 +277,19 @@ class CategorySubscriber implements BaseEventSubscriber
         foreach ($this->pendingRemoveAssignments as $pendingRemove) {
             /** @var Category $category */
             $category = $pendingRemove['category'];
-            /** @var Article $article */
-            $article = $pendingRemove['article'];
+            /** @var Article $product */
+            $product = $pendingRemove['article'];
 
-            $this->backlogRemoveAssignment($article->getId(), $category->getId());
+            $this->backlogRemoveAssignment($product->getId(), $category->getId());
         }
 
         foreach ($this->pendingAddAssignments as $pendingAdd) {
             /** @var Category $category */
             $category = $pendingAdd['category'];
-            /** @var Article $article */
-            $article = $pendingAdd['article'];
+            /** @var Article $product */
+            $product = $pendingAdd['article'];
 
-            $this->backlogAddAssignment($article->getId(), $category->getId());
+            $this->backlogAddAssignment($product->getId(), $category->getId());
         }
 
         foreach ($this->pendingMoves as $pendingMove) {
@@ -306,8 +308,7 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function setPathForCategory(Category $category)
     {
-        $parent = $category->getParent();
-        $parentId = $parent->getId();
+        $parentId = $category->getParent()->getId();
 
         $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
         $path = implode('|', $parents);

@@ -38,40 +38,41 @@ class Esd extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleEsd", mappedBy="articleEsd", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\ArticleEsd
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleEsd", mappedBy="articleEsd", cascade={"persist"})
      */
     protected $attribute;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\EsdSerial", mappedBy="esd")
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\EsdSerial>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\EsdSerial", mappedBy="esd")
      */
     protected $serials;
 
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="esds")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Article
      */
     protected $article;
 
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Detail
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="esd")
      * @ORM\JoinColumn(name="articleDetailsID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Detail
      */
     protected $articleDetail;
+
     /**
      * @var int
      *
@@ -124,15 +125,12 @@ class Esd extends ModelEntity
     private $maxdownloads = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
     private $date = null;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->serials = new ArrayCollection();
@@ -153,7 +151,7 @@ class Esd extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleEsd', 'attribute', 'articleEsd');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleEsd::class, 'attribute', 'articleEsd');
     }
 
     /**
@@ -182,6 +180,8 @@ class Esd extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Article $article
+     *
+     * @throws \Exception
      */
     public function setArticle($article)
     {
@@ -214,13 +214,13 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param null|\DateTime|string $date
+     * @param null|\DateTimeInterface|string $date
      *
      * @return Esd
      */
     public function setDate($date = null)
     {
-        if ($date !== null && !($date instanceof \DateTime)) {
+        if ($date !== null && !($date instanceof \DateTimeInterface)) {
             $this->date = new \DateTime($date);
         } else {
             $this->date = $date;
@@ -230,7 +230,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {

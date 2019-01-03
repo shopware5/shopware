@@ -48,6 +48,8 @@ class Premium extends LazyFetchModelEntity
     protected $shop;
 
     /**
+     * @var \Shopware\Models\Article\Detail
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail")
      * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber")
      */
@@ -213,7 +215,10 @@ class Premium extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, ['number' => $this->orderNumber]);
+        /** @var \Shopware\Models\Article\Detail $return */
+        $return = $this->fetchLazy($this->articleDetail, ['number' => $this->orderNumber]);
+
+        return $return;
     }
 
     /**

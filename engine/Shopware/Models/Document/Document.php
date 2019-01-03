@@ -41,6 +41,7 @@ class Document extends ModelEntity
      * doctrine associations can be defined over this field
      *
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -51,6 +52,7 @@ class Document extends ModelEntity
      * Contains the name of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name = '';
@@ -60,6 +62,7 @@ class Document extends ModelEntity
      * from its id or name, because these values may have been changed by the user.
      *
      * @var string
+     *
      * @ORM\Column(name="`key`", type="string", nullable=true, unique=true)
      */
     private $key;
@@ -68,6 +71,7 @@ class Document extends ModelEntity
      * Contains the template-file of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="template", type="string", nullable=false)
      */
     private $template = '';
@@ -76,6 +80,7 @@ class Document extends ModelEntity
      * Contains the numbers of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="numbers", type="string", nullable=false)
      */
     private $numbers = '';
@@ -84,6 +89,7 @@ class Document extends ModelEntity
      * Contains the left-value of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="`left`", type="integer", nullable=false)
      */
     private $left = 0;
@@ -92,6 +98,7 @@ class Document extends ModelEntity
      * Contains the right-value of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="`right`", type="integer", nullable=false)
      */
     private $right = 0;
@@ -100,6 +107,7 @@ class Document extends ModelEntity
      * Contains the top-value of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="top", type="integer", nullable=false)
      */
     private $top = 0;
@@ -108,6 +116,7 @@ class Document extends ModelEntity
      * Contains the bottom-value of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="bottom", type="integer", nullable=false)
      */
     private $bottom = 0;
@@ -116,6 +125,7 @@ class Document extends ModelEntity
      * Contains the pageBreak-value of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="pagebreak", type="integer", nullable=false)
      */
     private $pageBreak = 0;
@@ -123,7 +133,8 @@ class Document extends ModelEntity
     /**
      * INVERSED SIDE
      *
-     * @var \Shopware\Models\Document\Element
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element>
+     *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Document\Element", mappedBy="document", orphanRemoval=true, cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="documentID")
      */
@@ -358,9 +369,9 @@ class Document extends ModelEntity
     /**
      * Sets the form-elements.
      *
-     * @param \Shopware\Models\Document\Element $elements
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element> $elements
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setElements($elements)
     {
@@ -372,7 +383,7 @@ class Document extends ModelEntity
     /**
      * Gets the form-elements.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element>
      */
     public function getElements()
     {

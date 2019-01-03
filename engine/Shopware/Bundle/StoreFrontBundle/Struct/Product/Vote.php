@@ -59,7 +59,7 @@ class Vote extends Extendable
     protected $points;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $createdAt;
 
@@ -74,7 +74,7 @@ class Vote extends Extendable
     protected $answer;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $answeredAt;
 
@@ -143,7 +143,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -151,7 +151,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -207,7 +207,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @param \DateTime $answeredAt
+     * @param \DateTimeInterface $answeredAt
      */
     public function setAnsweredAt($answeredAt)
     {
@@ -215,7 +215,7 @@ class Vote extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAnsweredAt()
     {

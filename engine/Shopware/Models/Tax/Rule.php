@@ -63,14 +63,14 @@ class Rule extends ModelEntity
     private $name;
 
     /**
-     * @var string
+     * @var float
      *
      * @ORM\Column(name="tax", type="float", nullable=false)
      */
     private $tax = 0;
 
     /**
-     * @var string
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean")
      */
@@ -82,6 +82,7 @@ class Rule extends ModelEntity
      * @ORM\Column(name="areaID", type="integer", nullable=true)
      */
     private $areaId = null;
+
     /**
      * @var int
      *
@@ -115,6 +116,7 @@ class Rule extends ModelEntity
      * The association is joined over the tax rule areaID field and the id field of the area.
      *
      * @var \Shopware\Models\Country\Area
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Area")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
      */
@@ -125,6 +127,7 @@ class Rule extends ModelEntity
      * The association is joined over the tax rule countryID field and the id field of the country.
      *
      * @var \Shopware\Models\Country\Country
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Country")
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
      */
@@ -145,6 +148,7 @@ class Rule extends ModelEntity
      * The association is joined over the tax rule groupID field and the id field of the group.
      *
      * @var \Shopware\Models\Tax\Tax
+     *
      * @ORM\ManyToOne(targetEntity="Tax", inversedBy="rules")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
      */
@@ -152,6 +156,7 @@ class Rule extends ModelEntity
 
     /**
      * @var \Shopware\Models\Customer\Group
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_groupID", referencedColumnName="id")
      */
@@ -328,7 +333,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param string $tax
+     * @param float $tax
      */
     public function setTax($tax)
     {
@@ -336,7 +341,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getTax()
     {

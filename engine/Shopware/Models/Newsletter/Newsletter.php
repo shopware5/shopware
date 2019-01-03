@@ -41,7 +41,8 @@ class Newsletter extends ModelEntity
      * This is the inverse side of the association between newsletters and mail-addresses which have already
      * received the given newsletter.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\Address>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Address", mappedBy="lastNewsletter")
      */
     protected $addresses;
@@ -60,15 +61,13 @@ class Newsletter extends ModelEntity
     /**
      * Date of the newsletter
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
-    private $date = null;
+    private $date;
 
     /**
-     * groups
-     *
      * @var string
      *
      * @ORM\Column(name="groups", type="string", nullable=false)
@@ -86,6 +85,7 @@ class Newsletter extends ModelEntity
      * Mail address of the sender
      *
      * @var string
+     *
      * @ORM\Column(name="sendermail", type="string", length=255, nullable=false)
      */
     private $senderMail = '';
@@ -94,6 +94,7 @@ class Newsletter extends ModelEntity
      * Name of the sender
      *
      * @var string
+     *
      * @ORM\Column(name="sendername", type="string", length=16777215 , nullable=false)
      */
     private $senderName = '';
@@ -102,6 +103,7 @@ class Newsletter extends ModelEntity
      * Is this mail a plaintext mail?
      *
      * @var bool
+     *
      * @ORM\Column(name="plaintext", type="boolean", nullable=false)
      */
     private $plaintext = false;
@@ -111,6 +113,7 @@ class Newsletter extends ModelEntity
      * Defaults to one as long as templates are not supported by the newsletter backend module
      *
      * @var int
+     *
      * @ORM\Column(name="templateID", type="integer", length=11, nullable=false)
      */
     private $templateId = 1;
@@ -119,6 +122,7 @@ class Newsletter extends ModelEntity
      * Id of the mail's language
      *
      * @var int
+     *
      * @ORM\Column(name="languageID", type="integer", nullable=false)
      */
     private $languageId = 0;
@@ -127,20 +131,23 @@ class Newsletter extends ModelEntity
      * Status of the mail
      *
      * @var int
+     *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
-    private $locked = null;
+    private $locked;
 
     /**
      * Number of recipients
      *
      * @var int
+     *
      * @ORM\Column(name="recipients", type="integer", nullable=false)
      */
     private $recipients = 0;
@@ -149,6 +156,7 @@ class Newsletter extends ModelEntity
      * Number of recipients who read the mail
      *
      * @var int
+     *
      * @ORM\Column(name="`read`", type="integer", nullable=false)
      */
     private $read = 0;
@@ -157,6 +165,7 @@ class Newsletter extends ModelEntity
      * Number of recipients who clicked a link in the mail
      *
      * @var int
+     *
      * @ORM\Column(name="clicked", type="integer", nullable=false)
      */
     private $clicked = 0;
@@ -165,6 +174,7 @@ class Newsletter extends ModelEntity
      * groupkey of the customerGroup this mail was sent to
      *
      * @var string
+     *
      * @ORM\Column(name="customergroup", type="string", length=255, nullable=false)
      */
     private $customerGroup = '';
@@ -173,6 +183,7 @@ class Newsletter extends ModelEntity
      * Is this a published mail?
      *
      * @var bool
+     *
      * @ORM\Column(name="publish", type="boolean", nullable=false)
      */
     private $publish = false;
@@ -180,7 +191,8 @@ class Newsletter extends ModelEntity
     /**
      * Should the mail delivered in future?
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
      * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
      */
     private $timedDelivery = null;
@@ -190,21 +202,19 @@ class Newsletter extends ModelEntity
      *
      * Inverse side of the mailing-container association
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\Container>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Container", mappedBy="newsletter", cascade={"persist", "remove"})
      */
     private $containers;
 
-    /**
-     * Class constructor. Initials the containers array.
-     */
     public function __construct()
     {
         $this->containers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -212,7 +222,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -284,7 +294,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTime $locked
+     * @param \DateTimeInterface $locked
      */
     public function setLocked($locked)
     {
@@ -292,7 +302,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLocked()
     {
@@ -444,17 +454,17 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $containers
+     * @param \Shopware\Models\Newsletter\Container[] $containers
      *
-     * @return ModelEntity
+     * @return Newsletter
      */
     public function setContainers($containers)
     {
-        return $this->setOneToMany($containers, '\Shopware\Models\Newsletter\Container', 'containers', 'newsletter');
+        return $this->setOneToMany($containers, \Shopware\Models\Newsletter\Container::class, 'containers', 'newsletter');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\Container>
      */
     public function getContainers()
     {
@@ -471,8 +481,6 @@ class Newsletter extends ModelEntity
 
     /**
      * @deprecated Will be removed without replacement in 6.0
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrders()
     {
@@ -481,8 +489,6 @@ class Newsletter extends ModelEntity
 
     /**
      * @deprecated Will be removed without replacement in 6.0
-     *
-     * @return \Shopware\Models\Newsletter\Address
      */
     public function getAlreadySendTo()
     {
@@ -490,7 +496,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function getTimedDelivery()
     {
@@ -498,7 +504,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \DateTime $timedDelivery
+     * @param \DateTimeInterface $timedDelivery
      */
     public function setTimedDelivery($timedDelivery)
     {

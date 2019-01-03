@@ -39,7 +39,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      *
      * @var \Zend_Auth_Adapter_Interface
      */
-    protected $_baseAdapter = null; // Current active adapter
+    protected $_baseAdapter; // Current active adapter
 
     /**
      * Get all adapters or certain one
@@ -183,7 +183,10 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
             self::$_instance = new self();
         }
 
-        return self::$_instance;
+        /** @var \Shopware_Components_Auth $return */
+        $return = self::$_instance;
+
+        return $return;
     }
 
     /**

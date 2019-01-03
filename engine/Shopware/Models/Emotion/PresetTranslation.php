@@ -46,6 +46,7 @@ class PresetTranslation extends ModelEntity
      * @ORM\JoinColumn(name="presetID", referencedColumnName="id")
      */
     protected $preset;
+
     /**
      * Unique identifier field for the shopware emotion translation.
      *

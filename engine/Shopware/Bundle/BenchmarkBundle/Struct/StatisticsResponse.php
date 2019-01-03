@@ -27,7 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\Struct;
 class StatisticsResponse
 {
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $dateUpdated;
 
@@ -47,12 +47,12 @@ class StatisticsResponse
     private $shopId;
 
     /**
-     * @param \DateTime $dateUpdated
-     * @param string    $token
-     * @param bool      $isFinished
-     * @param int       $shopId
+     * @param \DateTimeInterface $dateUpdated
+     * @param string             $token
+     * @param bool               $isFinished
+     * @param int                $shopId
      */
-    public function __construct(\DateTime $dateUpdated, $token, $isFinished, $shopId = null)
+    public function __construct(\DateTimeInterface $dateUpdated, $token, $isFinished, $shopId = null)
     {
         $this->dateUpdated = $dateUpdated;
         $this->token = $token;
@@ -61,7 +61,7 @@ class StatisticsResponse
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDateUpdated()
     {

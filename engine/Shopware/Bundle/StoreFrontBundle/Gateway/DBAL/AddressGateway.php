@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Gateway\AddressGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AddressHydrator;
 
-class AddressGateway
+class AddressGateway implements AddressGatewayInterface
 {
     /**
      * @var Connection
@@ -57,9 +58,7 @@ class AddressGateway
     }
 
     /**
-     * @param int[] $ids
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getList($ids)
     {

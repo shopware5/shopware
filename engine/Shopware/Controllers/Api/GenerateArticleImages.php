@@ -21,48 +21,53 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Manager;
+use Shopware\Components\Api\Resource\Article as ArticleResource;
+use Shopware\Models\Article\Article;
 
 class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Article
+     * @var ArticleResource
      */
-    protected $resource = null;
+    protected $resource;
 
     public function init()
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('article');
+        $this->resource = Manager::getResource('article');
     }
 
     /**
-     * Update article
+     * Generate product images
      *
      * PUT /api/generateArticleImages/{id}
      */
     public function putAction()
     {
-        $id = $this->Request()->getParam('id');
+        $request = $this->Request();
+        $id = $request->getParam('id');
 
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
         }
 
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);
         $id = $useNumberAsId ? $this->resource->getIdFromNumber($id) : (int) $id;
 
         if (!$useNumberAsId && $id <= 0) {
-            throw new ApiException\CustomValidationException('Invalid article id');
+            throw new ApiException\CustomValidationException('Invalid product id');
         }
 
-        /** @var \Shopware\Models\Article\Article $article */
-        $article = $this->resource->getRepository()->find($id);
+        /** @var Article $product */
+        $product = $this->resource->getRepository()->find($id);
 
-        if (!$article) {
-            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $id));
+        if (!$product) {
+            throw new ApiException\NotFoundException(sprintf('Product by id %d not found', $id));
         }
 
-        $this->resource->generateImages($article, (bool) $this->Request()->getParam('force', 0));
+        $this->resource->generateImages($product, (bool) $request->getParam('force', 0));
 
         $this->View()->assign(['success' => true]);
     }
@@ -75,7 +80,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
      */
     public function batchAction()
     {
-        throw new \Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
+        throw new ApiException\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
     }
 
     /**
@@ -86,6 +91,6 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
      */
     public function batchDeleteAction()
     {
-        throw new \Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
+        throw new ApiException\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
     }
 }

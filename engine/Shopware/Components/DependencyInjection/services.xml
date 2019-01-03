@@ -16,6 +16,7 @@
     </parameters>
 
     <services>
+        <defaults public="true" />
         <service id="application"     synthetic="true" />
         <service id="PasswordEncoder" synthetic="true" />
         <service id="db_connection"   synthetic="true" />
@@ -162,7 +163,7 @@
         <service id="shopware.db" alias="db"/>
         <service id="db" class="Enlight_Components_Db_Adapter_Pdo_Mysql">
             <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createEnlightDbAdapter" />
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="dbal_connection" />
             <argument>%shopware.db%</argument>
         </service>
 
@@ -383,7 +384,6 @@
 
         <service id="legacy_event_manager" class="Shopware\Components\Compatibility\LegacyEventManager">
             <argument type="service" id="events" />
-            <argument type="service" id="config" />
             <argument type="service" id="shopware_storefront.context_service" />
         </service>
 

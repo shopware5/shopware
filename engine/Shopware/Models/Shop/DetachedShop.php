@@ -29,7 +29,7 @@ namespace Shopware\Models\Shop;
  *
  * This has the same identity as Shopware\Models\Shop\Shop
  * but is no doctrine managed entity.
- * The ORM\Entity annotation is omited intentionally.
+ * The ORM\Entity annotation is omitted intentionally.
  */
 class DetachedShop extends Shop
 {

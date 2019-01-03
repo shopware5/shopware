@@ -615,7 +615,7 @@ class Repository extends ModelRepository
      * @param string   $field
      * @param string   $separator
      *
-     * @return array|string
+     * @return array|string|null
      */
     protected function getCategoryPathBefore($category, $field, $separator)
     {

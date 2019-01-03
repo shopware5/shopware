@@ -398,7 +398,7 @@ class User extends Resource
     /**
      * @param string $locale
      *
-     * @return int
+     * @return int|null
      */
     private function getLocaleIdFromLocale($locale)
     {

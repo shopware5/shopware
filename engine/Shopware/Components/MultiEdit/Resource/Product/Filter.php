@@ -24,8 +24,11 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Article\Detail;
+
 /**
- * The filter class will search for articles matching a given filter
+ * The filter class will search for products matching a given filter
  *
  * Class Filter
  */
@@ -97,7 +100,7 @@ class Filter
      * @param array $tokens
      * @param array $orderBy
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getFilterQueryBuilder($tokens, $orderBy)
     {
@@ -113,10 +116,11 @@ class Filter
         }
         $joinEntities = $this->filterJoinEntities($joinEntities);
 
+        /** @var QueryBuilder $builder */
         $builder = $this->getDqlHelper()->getEntityManager()->createQueryBuilder()
                 ->select('partial detail.{id}')
-                ->from('Shopware\Models\Article\Detail', 'detail')
-                // only articles with attributes are considered to be valid
+                ->from(Detail::class, 'detail')
+                // only products with attributes are considered to be valid
                 ->innerJoin('detail.attribute', 'attr')
                 ->leftJoin('detail.article', 'article');
 
@@ -147,7 +151,7 @@ class Filter
      *
      * @param int $detailId
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getArticleQueryBuilder($detailId)
     {
@@ -156,7 +160,7 @@ class Filter
             'partial detail.{id, number}',
             'partial article.{id, name}',
         ])
-        ->from('Shopware\Models\Article\Detail', 'detail')
+        ->from(Detail::class, 'detail')
         //~ ->leftJoin('detail.article', 'article')
         ->where('detail.id = ?1')
         ->setParameter(1, $detailId);
@@ -203,14 +207,14 @@ class Filter
         $query = $this->getFilterQuery($tokens, $offset, $limit, $orderBy);
         list($result, $totalCount) = $this->getPaginatedResult($query);
 
-        $articles = $this->getDqlHelper()->getProductsForListing($result);
+        $products = $this->getDqlHelper()->getProductsForListing($result);
 
         $sortedData = [];
         foreach ($result as $id) {
-            foreach ($articles as $key => $row) {
+            foreach ($products as $key => $row) {
                 if ($row['Detail_id'] == $id) {
                     $sortedData[] = $row;
-                    unset($articles[$key]);
+                    unset($products[$key]);
                     break;
                 }
             }

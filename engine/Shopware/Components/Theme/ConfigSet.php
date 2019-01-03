@@ -66,7 +66,7 @@ class ConfigSet
     protected $description;
 
     /**
-     * @var string
+     * @var array
      */
     protected $values;
 
@@ -125,7 +125,7 @@ class ConfigSet
     }
 
     /**
-     * @param mixed $values
+     * @param array $values
      *
      * @return $this
      */
@@ -137,7 +137,7 @@ class ConfigSet
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getValues()
     {

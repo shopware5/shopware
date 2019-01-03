@@ -53,6 +53,7 @@ class Country extends ModelEntity
      * The association is joined over the area id field and the areaID field of the country.
      *
      * @var \Shopware\Models\Country\Area
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Area", inversedBy="countries")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
      */
@@ -63,25 +64,26 @@ class Country extends ModelEntity
      * The countries property is the inverse side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\State>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
     protected $states;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Country
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -178,7 +180,8 @@ class Country extends ModelEntity
     private $allowShipping = true;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
      *      joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
@@ -189,6 +192,7 @@ class Country extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="areaID", type="integer", nullable=false)
      */
     private $areaId;
@@ -464,7 +468,7 @@ class Country extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Country', 'attribute', 'country');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Country::class, 'attribute', 'country');
     }
 
     /**
@@ -476,13 +480,13 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $states
+     * @param \Shopware\Models\Country\State[]|null $states
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Country
      */
     public function setStates($states)
     {
-        return $this->setOneToMany($states, '\Shopware\Models\Country\State', 'states', 'country');
+        return $this->setOneToMany($states, \Shopware\Models\Country\State::class, 'states', 'country');
     }
 
     /**
@@ -509,7 +513,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
      */
     public function getPayments()
     {
@@ -517,7 +521,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $payments
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment> $payments
      *
      * @return Country
      */
@@ -529,7 +533,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param int $displayStateInRegistration
+     * @param bool $displayStateInRegistration
      */
     public function setDisplayStateInRegistration($displayStateInRegistration)
     {
@@ -537,7 +541,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getDisplayStateInRegistration()
     {

@@ -63,11 +63,26 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     private $isActive;
 
     /**
-     * @param bool $isActive
+     * @var string
      */
-    final public function __construct($isActive)
+    private $namespace;
+
+    /**
+     * @param bool   $isActive
+     * @param string $namespace
+     */
+    final public function __construct($isActive, $namespace)
     {
         $this->isActive = (bool) $isActive;
+        $this->namespace = $namespace;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**

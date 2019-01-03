@@ -64,6 +64,7 @@ class PluginInitializer
     {
         $plugins = [];
         $shopwarePlugins = [];
+        $pluginsAvailable = [];
 
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
@@ -79,9 +80,10 @@ class PluginInitializer
         }
         unset($pluginData);
 
-        foreach ($this->pluginDirectories as $pluginDirectory) {
+        // As first we register all plugin namespaces, to make sure to all namespaces are available on plugin construction
+        foreach ($this->pluginDirectories as $pluginNamespace => $pluginDirectory) {
             foreach (new \DirectoryIterator($pluginDirectory) as $pluginDir) {
-                if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {
+                if ($pluginDir->isFile() || strpos($pluginDir->getBasename(), '.') === 0) {
                     continue;
                 }
 
@@ -91,24 +93,30 @@ class PluginInitializer
                     continue;
                 }
 
-                $namespace = $pluginName;
-                $className = '\\' . $namespace . '\\' . $pluginName;
-                $classLoader->addPrefix($namespace, $pluginDir->getPathname());
+                $classLoader->addPrefix($pluginName, $pluginDir->getPathname());
 
-                if (!class_exists($className)) {
-                    throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
-                }
-
-                $isActive = in_array($pluginName, $shopwarePlugins, true);
-
-                /** @var Plugin $plugin */
-                $plugin = new $className($isActive);
-
-                if (!$plugin instanceof Plugin) {
-                    throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));
-                }
-                $plugins[$plugin->getName()] = $plugin;
+                $pluginsAvailable[$pluginName] = [
+                    'className' => '\\' . $pluginName . '\\' . $pluginName,
+                    'isActive' => in_array($pluginName, $shopwarePlugins, true),
+                    'pluginFile' => $pluginFile,
+                    'pluginNamespace' => $pluginNamespace,
+                ];
             }
+        }
+
+        foreach ($pluginsAvailable as $pluginName => $pluginDetails) {
+            if (!class_exists($pluginDetails['className'])) {
+                throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $pluginDetails['className'], $pluginName, $pluginDetails['pluginFile']));
+            }
+
+            /** @var Plugin $plugin */
+            $plugin = new $pluginDetails['className']($pluginDetails['isActive'], $pluginDetails['pluginNamespace']);
+
+            if (!$plugin instanceof Plugin) {
+                throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginDetails['pluginFile']));
+            }
+
+            $plugins[$plugin->getName()] = $plugin;
         }
 
         return $plugins;

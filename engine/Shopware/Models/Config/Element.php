@@ -40,9 +40,9 @@ class Element extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\ElementTranslation>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
      */
     protected $translations;
 
@@ -98,7 +98,7 @@ class Element extends ModelEntity
     private $required = false;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -127,7 +127,7 @@ class Element extends ModelEntity
     private $form;
 
     /**
-     * @var Value[]
+     * @var \Doctrine\Common\Collections\ArrayCollection<Value>
      *
      * @ORM\OneToMany(targetEntity="Value", mappedBy="element", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="element_id")
@@ -135,8 +135,6 @@ class Element extends ModelEntity
     private $values;
 
     /**
-     * Class constructor.
-     *
      * @param string     $type
      * @param string     $name
      * @param null|array $options
@@ -298,7 +296,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $position
+     * @param int $position
      *
      * @return Element
      */
@@ -310,7 +308,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPosition()
     {
@@ -378,7 +376,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param Value[] $values
+     * @param \Doctrine\Common\Collections\ArrayCollection<Value> $values
      *
      * @return Element
      */
@@ -390,7 +388,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return Value[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<Value>
      */
     public function getValues()
     {
@@ -398,7 +396,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\ElementTranslation>
      */
     public function getTranslations()
     {
@@ -406,7 +404,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $translations
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\ElementTranslation> $translations
      */
     public function setTranslations($translations)
     {

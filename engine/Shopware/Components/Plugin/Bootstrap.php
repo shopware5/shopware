@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Config\ElementTranslation;
 use Shopware\Models\Config\Form;
@@ -93,7 +94,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * Returnswhether or not $updatePluginInfo contains a newer version than $currentPluginInfo
+     * Returns whether or not $updatePluginInfo contains a newer version than $currentPluginInfo
      *
      * @param \Enlight_Config $currentPluginInfo
      * @param \Enlight_Config $updatePluginInfo
@@ -231,19 +232,24 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     final public function Plugin()
     {
         if ($this->plugin === null) {
-            $repo = Shopware()->Models()->getRepository(Plugin::class);
-            $this->plugin = $repo->findOneBy(['id' => $this->getId()]);
+            /** @var Plugin $plugin */
+            $plugin = Shopware()->Models()->getRepository(Plugin::class)
+                ->findOneBy(['id' => $this->getId()]);
+            $this->plugin = $plugin;
         }
 
         return $this->plugin;
     }
 
     /**
-     * @return ModelRepository
+     * @return \Shopware\Models\Form\Repository
      */
     final public function Forms()
     {
-        return Shopware()->Models()->getRepository(Form::class);
+        /** @var \Shopware\Models\Form\Repository $return */
+        $return = Shopware()->Models()->getRepository(Form::class);
+
+        return $return;
     }
 
     /**
@@ -267,11 +273,15 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         if ($this->form === null && $this->getName() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(['name' => $this->getName()]);
+            /** @var Form $form */
+            $form = $formRepository->findOneBy(['name' => $this->getName()]);
+            $this->form = $form;
         }
         if ($this->form === null && $this->getId() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(['pluginId' => $this->getId()]);
+            /** @var Form $form */
+            $form = $formRepository->findOneBy(['pluginId' => $this->getId()]);
+            $this->form = $form;
         }
 
         return $this->form !== null;
@@ -356,6 +366,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (is_string($options)) {
             $options = ['template' => $options];
         }
+        /** @var Template $template */
         $template = $this->Payments()->findOneBy(['template' => $options['template']]);
         if ($template === null) {
             $template = new Template();
@@ -581,7 +592,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Returns plugin version
      *
-     * @return string
+     * @return null|string
      */
     public function getVersion()
     {
@@ -640,11 +651,14 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @param Enlight_Hook_HookHandler $handler
      *
-     * @return Shopware_Components_Plugin_Bootstrap
+     * @return \Shopware_Components_Plugin_Bootstrap
      */
     public function subscribeHook($handler)
     {
-        return $this->subscribeEvent($handler);
+        /** @var \Shopware_Components_Plugin_Bootstrap $return */
+        $return = $this->subscribeEvent($handler);
+
+        return $return;
     }
 
     /**
@@ -857,10 +871,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Notice if the Http Cache plugin isn't installed, this function
      * returns null.
      *
-     * @return Shopware_Plugins_Core_HttpCache_Bootstrap|null
+     * @return \Shopware_Plugins_Core_HttpCache_Bootstrap|null
      */
     protected function HttpCache()
     {
+        /** @var \Shopware_Plugins_Core_HttpCache_Bootstrap $httpCache */
         $httpCache = Shopware()->Plugins()->Core()->HttpCache();
 
         if (!$httpCache instanceof self) {

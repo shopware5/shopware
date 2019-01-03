@@ -84,7 +84,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $id;
 
         /**
-         * @var \DateTime
+         * @var \DateTimeInterface
          *
          * @ORM\Column(name="date", type="date", nullable=false)
          */
@@ -133,18 +133,18 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $hash;
 
         /**
+         * @var \Shopware\Models\Order\Order
+         *
          * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="documents")
          * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-         *
-         * @var \Shopware\Models\Order\Order
          */
         private $order;
 
         /**
+         * @var \Shopware\Models\Document\Document
+         *
          * @ORM\OneToOne(targetEntity="\Shopware\Models\Document\Document")
          * @ORM\JoinColumn(name="type", referencedColumnName="id")
-         *
-         * @var \Shopware\Models\Document\Document
          */
         private $type;
 
@@ -161,7 +161,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Set date
          *
-         * @param \DateTime $date
+         * @param \DateTimeInterface $date
          *
          * @return Document
          */
@@ -175,7 +175,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Get date
          *
-         * @return \DateTime
+         * @return \DateTimeInterface
          */
         public function getDate()
         {
@@ -390,9 +390,9 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * INVERSE SIDE
          *
-         * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
-         *
          * @var \Shopware\Models\Attribute\Document
+         *
+         * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
          */
         protected $attribute;
 
@@ -406,7 +406,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $id;
 
         /**
-         * @var \DateTime
+         * @var \DateTimeInterface
          *
          * @ORM\Column(name="date", type="date", nullable=false)
          */
@@ -455,18 +455,18 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $hash;
 
         /**
+         * @var \Shopware\Models\Order\Order
+         *
          * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="documents")
          * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-         *
-         * @var \Shopware\Models\Order\Order
          */
         private $order;
 
         /**
+         * @var \Shopware\Models\Document\Document
+         *
          * @ORM\OneToOne(targetEntity="\Shopware\Models\Document\Document")
          * @ORM\JoinColumn(name="type", referencedColumnName="id")
-         *
-         * @var \Shopware\Models\Document\Document
          */
         private $type;
 
@@ -483,7 +483,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Set date
          *
-         * @param \DateTime $date
+         * @param \DateTimeInterface $date
          *
          * @return Document
          */
@@ -497,7 +497,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Get date
          *
-         * @return \DateTime
+         * @return \DateTimeInterface
          */
         public function getDate()
         {
@@ -687,7 +687,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
          */
         public function setAttribute($attribute)
         {
-            return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Document', 'attribute', 'document');
+            return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Document::class, 'attribute', 'document');
         }
     }
 }

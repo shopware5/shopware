@@ -253,7 +253,7 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
     {
-        /** @var \Doctrine\ORM\Query\Expr\Select $select */
+        /** @var array<string, mixed> $select */
         $select = $this->getDQLPart('select');
         if (is_array($orderBy)) {
             foreach ($orderBy as $order) {

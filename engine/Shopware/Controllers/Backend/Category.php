@@ -21,7 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media;
 
@@ -123,7 +125,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     /**
      * Controller action which can be accessed over an request.
-     * This function adds the passed article ids which have to be in the "ids" parameter
+     * This function adds the passed product ids which have to be in the "ids" parameter
      * to the passed category.
      */
     public function addCategoryArticlesAction()
@@ -138,7 +140,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     /**
      * Controller action which can be accessed over an request.
-     * This function adds the passed article ids which have to be in the "ids" parameter
+     * This function adds the passed product ids which have to be in the "ids" parameter
      * to the passed category.
      */
     public function removeCategoryArticlesAction()
@@ -304,7 +306,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * returns a JSON string to the view the articles for the article mapping
+     * returns a JSON string to the view the products for the product mapping
      */
     public function getArticlesAction()
     {
@@ -351,7 +353,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     /**
      * Controller action which is used to get a paginated
-     * list of all assigned category articles.
+     * list of all assigned category products.
      */
     public function getCategoryArticlesAction()
     {
@@ -367,7 +369,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             'details.number',
             'suppliers.name as supplierName',
         ]);
-        $builder->from(\Shopware\Models\Article\Article::class, 'articles')
+        $builder->from(Article::class, 'articles')
             ->innerJoin('articles.categories', 'categories')
             ->innerJoin('articles.supplier', 'suppliers')
             ->innerJoin('articles.mainDetail', 'details')
@@ -491,7 +493,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $ids = json_decode($this->Request()->getParam('ids'));
         foreach ($ids as $key => $categoryId) {
             /** @var Category $category */
-            $category = Shopware()->Models()->getReference(\Shopware\Models\Category\Category::class, (int) $categoryId);
+            $category = Shopware()->Models()->getReference(Category::class, (int) $categoryId);
             $category->setPosition($key);
         }
         Shopware()->Models()->flush();
@@ -522,10 +524,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             // If Leaf-Category gets childcategory move all assignments to new childcategory
             if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
-                /** @var \Shopware\Models\Article\Article $article */
-                foreach ($parentCategory->getArticles() as $article) {
-                    $article->removeCategory($parentCategory);
-                    $article->addCategory($categoryModel);
+                /** @var Article $product */
+                foreach ($parentCategory->getArticles() as $product) {
+                    $product->removeCategory($parentCategory);
+                    $product->addCategory($categoryModel);
                 }
             }
         } else {
@@ -706,7 +708,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         /** @var \Shopware\Components\CategoryHandling\CategoryDuplicator $categoryDuplicator */
         $categoryDuplicator = $this->get('CategoryDuplicator');
 
-        $copyArticleAssociations = $this->Request()->getParam('reassignArticleAssociations');
+        $copyProductAssociations = $this->Request()->getParam('reassignArticleAssociations');
         $categoryIds = $this->Request()->getParam('children');
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
@@ -719,7 +721,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $newCategoryId = $categoryDuplicator->duplicateCategory(
                 $categoryId,
                 $newParentId,
-                $copyArticleAssociations
+                $copyProductAssociations
             );
 
             $childrenStmt = $this->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
@@ -771,7 +773,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * Internal function which is used to remove the passed article ids
+     * Internal function which is used to remove the passed product ids
      * from the assigned category.
      *
      * @param int   $categoryId
@@ -790,17 +792,17 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         /** @var Category $category */
-        $category = Shopware()->Models()->getReference(\Shopware\Models\Category\Category::class, (int) $categoryId);
+        $category = Shopware()->Models()->getReference(Category::class, (int) $categoryId);
 
         $counter = 0;
-        foreach ($articleIds as $articleId) {
-            if (empty($articleId)) {
+        foreach ($articleIds as $productId) {
+            if (empty($productId)) {
                 continue;
             }
 
-            /** @var \Shopware\Models\Article\Article $article */
-            $article = Shopware()->Models()->getReference(\Shopware\Models\Article\Article::class, (int) $articleId);
-            $article->removeCategory($category);
+            /** @var Article $product */
+            $product = Shopware()->Models()->getReference(Article::class, (int) $productId);
+            $product->removeCategory($category);
 
             ++$counter;
         }
@@ -811,7 +813,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
-     * Helper function to add multiple articles to an category.
+     * Helper function to add multiple products to an category.
      *
      * @param int   $categoryId
      * @param array $articleIds
@@ -821,7 +823,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     protected function addCategoryArticles($categoryId, $articleIds)
     {
         if (empty($articleIds)) {
-            return ['success' => false, 'error' => 'No articles selected'];
+            return ['success' => false, 'error' => 'No products selected'];
         }
 
         if (empty($categoryId)) {
@@ -829,17 +831,17 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         /** @var Category $category */
-        $category = Shopware()->Models()->getReference(\Shopware\Models\Category\Category::class, (int) $categoryId);
+        $category = Shopware()->Models()->getReference(Category::class, (int) $categoryId);
 
         $counter = 0;
-        foreach ($articleIds as $articleId) {
-            if (empty($articleId)) {
+        foreach ($articleIds as $productId) {
+            if (empty($productId)) {
                 continue;
             }
 
-            /** @var \Shopware\Models\Article\Article $article */
-            $article = Shopware()->Models()->getReference(\Shopware\Models\Article\Article::class, (int) $articleId);
-            $article->addCategory($category);
+            /** @var Article $product */
+            $product = Shopware()->Models()->getReference(Article::class, (int) $productId);
+            $product->addCategory($category);
 
             ++$counter;
         }

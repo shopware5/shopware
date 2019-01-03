@@ -72,7 +72,7 @@ class Filter extends ModelEntity
     private $description;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
@@ -93,15 +93,15 @@ class Filter extends ModelEntity
     private $isSimple = false;
 
     /**
-     * @param \DateTime $created
+     * @param \DateTimeInterface $created
      */
-    public function setCreated(\DateTime $created)
+    public function setCreated(\DateTimeInterface $created)
     {
         $this->created = $created;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreated()
     {

@@ -21,8 +21,8 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/swag_update/main}
-//{block name="backend/swag_update/controller/progress"}
+// {namespace name=backend/swag_update/main}
+// {block name="backend/swag_update/controller/progress"}
 Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
     extend: 'Enlight.app.Controller',
 
@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
             'offset': offset
         };
 
-        // Sends a request to create new thumbnails according to the batch informations
+        // Sends a request to create new thumbnails according to the batch information
         Ext.Ajax.request({
             url: config.url,
             method: 'GET',
@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
                 } catch (err) {
                     Shopware.Msg.createStickyGrowlMessage({
                         title: '{s name=progress/timeOutTitle}An error occured{/s}',
-                        text: "{s name=progress/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}"
+                        text: '{s name=progress/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}'
                     });
                 }
 
@@ -178,4 +178,4 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
     }
 });
 
-//{/block}
+// {/block}

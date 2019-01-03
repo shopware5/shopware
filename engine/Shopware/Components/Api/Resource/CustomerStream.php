@@ -383,13 +383,13 @@ class CustomerStream extends Resource
     /**
      * Returns true if frozen state has changed
      *
-     * @param int            $streamId
-     * @param \DateTime|null $freezeUp
-     * @param string         $conditions
+     * @param int                     $streamId
+     * @param \DateTimeInterface|null $freezeUp
+     * @param string                  $conditions
      *
      * @return array|bool
      */
-    public function updateFrozenState($streamId, \DateTime $freezeUp = null, $conditions)
+    public function updateFrozenState($streamId, \DateTimeInterface $freezeUp = null, $conditions)
     {
         $now = new \DateTime();
         if (!$freezeUp || $freezeUp >= $now) {

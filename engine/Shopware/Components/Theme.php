@@ -289,7 +289,7 @@ class Theme
     }
 
     /**
-     * @param bool $discardedLessThemes
+     * @param array $discardedLessThemes
      */
     public function setDiscardedLessThemes($discardedLessThemes)
     {

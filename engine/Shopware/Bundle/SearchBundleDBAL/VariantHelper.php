@@ -125,7 +125,9 @@ class VariantHelper implements VariantHelperInterface
             return $this->variantFacet = null;
         }
 
-        $this->variantFacet = $this->reflectionHelper->createInstanceFromNamedArguments(key($arr), reset($arr));
+        /** @var null|\Shopware\Bundle\SearchBundle\Facet\VariantFacet variantFacet */
+        $variantFacet = $this->reflectionHelper->createInstanceFromNamedArguments(key($arr), reset($arr));
+        $this->variantFacet = $variantFacet;
 
         return $this->variantFacet;
     }

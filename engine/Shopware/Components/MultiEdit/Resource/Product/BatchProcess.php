@@ -24,8 +24,11 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Doctrine\ORM\Query\Expr\Literal;
+use Shopware\Models\MultiEdit\Queue;
+
 /**
- * The batch process resource handles the batch processes for updating articles
+ * The batch process resource handles the batch processes for updating products
  *
  * Class BatchProcess
  */
@@ -195,7 +198,7 @@ class BatchProcess
             list($prefix, $column) = explode('.', $operation['column']);
 
             $type = $columnInfo[ucfirst($prefix) . ucfirst($column)]['type'];
-            if ($operation['value'] && $type == 'decimal' || $type === 'integer' || $type === 'float') {
+            if ($operation['value'] && $type === 'decimal' || $type === 'integer' || $type === 'float') {
                 $operation['value'] = str_replace(',', '.', $operation['value']);
             }
 
@@ -208,7 +211,7 @@ class BatchProcess
 
             switch (strtolower($operation['operator'])) {
                 case 'removestring':
-                    $builder->set("{$prefix}.$column", new \Doctrine\ORM\Query\Expr\Literal("REPLACE({$prefix}.{$column}, '{$operation['value']}', '')"));
+                    $builder->set("{$prefix}.$column", new Literal("REPLACE({$prefix}.{$column}, '{$operation['value']}', '')"));
                     break;
                 case 'divide':
                 case 'devide':
@@ -231,9 +234,9 @@ class BatchProcess
                     break;
                 case 'dql':
                     // This is quite limited, as many sql features are note supported. Also the update-statements
-                    // are limited to the current entity, so you will not be able to set an article's name
+                    // are limited to the current entity, so you will not be able to set an product's name
                     // to its details number because the detail cannot be joined here.
-                    $builder->set("{$prefix}.$column", new \Doctrine\ORM\Query\Expr\Literal($operation['value']));
+                    $builder->set("{$prefix}.$column", new Literal($operation['value']));
                     break;
                 case 'set':
                 default:
@@ -245,7 +248,7 @@ class BatchProcess
     }
 
     /**
-     * Updates a sine article details within batch mode
+     * Updates a sine product details within batch mode
      *
      * @param int[] $detailIds
      * @param array $nestedOperations
@@ -276,10 +279,10 @@ class BatchProcess
         }
 
         // Notify event - you might want register for this in order to clear the cache?
-        foreach ($this->getDqlHelper()->getIdForForeignEntity('article', $detailIds) as $articleId) {
+        foreach ($this->getDqlHelper()->getIdForForeignEntity('article', $detailIds) as $productId) {
             $this->getDqlHelper()->getEventManager()->notify(
                 'Shopware_Plugins_HttpCache_InvalidateCacheId',
-                ['subject' => $this, 'cacheId' => 'a' . $articleId]
+                ['subject' => $this, 'cacheId' => 'a' . $productId]
             );
         }
     }
@@ -299,7 +302,7 @@ class BatchProcess
         $connection = $entityManager->getConnection();
 
         /** @var \Shopware\Models\MultiEdit\Queue $queue */
-        $queue = $entityManager->find('\Shopware\Models\MultiEdit\Queue', $queueId);
+        $queue = $entityManager->find(Queue::class, $queueId);
 
         if (!$queue) {
             throw new \RuntimeException(sprintf('Queue with ID %s not found', $queueId));
@@ -324,7 +327,7 @@ class BatchProcess
         }
         $remaining = $queue->getArticleDetails()->count();
 
-        if ($remaining == 0) {
+        if ($remaining === 0) {
             $entityManager->remove($queue);
             $entityManager->flush();
         }
@@ -332,7 +335,7 @@ class BatchProcess
         return [
             'totalCount' => $queue->getInitialSize(),
             'remaining' => $remaining,
-            'done' => $remaining == 0,
+            'done' => $remaining === 0,
             'processed' => $queue->getInitialSize() - $remaining,
         ];
     }

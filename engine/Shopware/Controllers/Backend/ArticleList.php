@@ -21,9 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Components\Api\Resource\Article as ArticleResource;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 
@@ -237,7 +239,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         ksort($columns);
 
-        // yo dawg i heard you like functional programming…
         // Prepare the returned array structure for extjs
         $columns = array_map(
             function ($column, $operators) {
@@ -407,7 +408,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Save/update a given filter. Also called when a filter is (un)favorited
+     * Save/update a given filter. Also called when a filter is (un)favored
      */
     public function saveFilterAction()
     {
@@ -493,26 +494,26 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Event listener function of the article store of the backend module.
+     * Event listener function of the product store of the backend module.
      */
     public function deleteProductAction()
     {
         $id = (int) $this->Request()->getParam('Detail_id');
 
-        /** @var Detail $articleDetail */
-        $articleDetail = $this->getDetailRepository()->find($id);
-        if (!is_object($articleDetail)) {
+        /** @var Detail $variant */
+        $variant = $this->getDetailRepository()->find($id);
+        if (!is_object($variant)) {
             $this->View()->assign([
                 'success' => false,
             ]);
         } else {
-            $articleResource = new Shopware\Components\Api\Resource\Article();
+            $articleResource = new ArticleResource();
             $articleResource->setManager($this->get('models'));
 
-            if ($articleDetail->getKind() == 1) {
-                $articleResource->delete($articleDetail->getArticle()->getId());
+            if ($variant->getKind() == 1) {
+                $articleResource->delete($variant->getArticle()->getId());
             } else {
-                Shopware()->Models()->remove($articleDetail);
+                Shopware()->Models()->remove($variant);
             }
 
             Shopware()->Models()->flush();
@@ -555,13 +556,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Internal helper function to get access to the article repository.
+     * Internal helper function to get access to the product repository.
      *
      * @return \Shopware\Components\Model\ModelRepository
      */
     private function getDetailRepository()
     {
-        return Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class);
+        return Shopware()->Models()->getRepository(Detail::class);
     }
 
     /**

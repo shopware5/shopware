@@ -71,31 +71,23 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     private $fieldHelper;
 
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var Connection
      */
     private $connection;
 
     /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\PropertyHydrator   $propertyHydrator
-     * @param \Shopware_Components_Config $config
+     * @param Connection                $connection
+     * @param FieldHelper               $fieldHelper
+     * @param Hydrator\PropertyHydrator $propertyHydrator
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\PropertyHydrator $propertyHydrator,
-        \Shopware_Components_Config $config
+        Hydrator\PropertyHydrator $propertyHydrator
     ) {
         $this->propertyHydrator = $propertyHydrator;
         $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
-        $this->config = $config;
     }
 
     /**

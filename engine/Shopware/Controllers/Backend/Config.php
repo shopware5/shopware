@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
@@ -31,9 +32,9 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Components\Model\ModelRepository[]
+     * @var array<string, \Shopware\Components\Model\ModelRepository>
      */
-    public static $repositories = null;
+    public static $repositories;
 
     /**
      * @var array
@@ -821,7 +822,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     /**
      * @param string $name
      *
-     * @return Shopware\Components\Model\ModelRepository
+     * @return \Doctrine\ORM\EntityRepository|null
      */
     protected function getRepository($name)
     {

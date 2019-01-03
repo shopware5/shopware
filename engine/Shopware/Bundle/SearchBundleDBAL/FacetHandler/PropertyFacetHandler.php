@@ -117,7 +117,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
      * @param Struct\ShopContextInterface $context
      * @param Criteria                    $queryCriteria
      *
-     * @return Struct\Property\Set[]
+     * @return Struct\Property\Set[]|null
      */
     protected function getProperties(Struct\ShopContextInterface $context, Criteria $queryCriteria)
     {

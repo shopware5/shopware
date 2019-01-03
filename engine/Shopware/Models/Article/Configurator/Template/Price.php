@@ -37,6 +37,7 @@ class Price extends LazyFetchModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Article\Configurator\Template\Template
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", inversedBy="prices")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      * @ORM\OrderBy({"customerGroupKey" = "ASC", "from" = "ASC"})
@@ -46,22 +47,24 @@ class Price extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\TemplatePrice
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=false)
      */
     private $templateId;
@@ -80,7 +83,7 @@ class Price extends LazyFetchModelEntity
     private $from;
 
     /**
-     * @var int
+     * @var int|string
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
@@ -146,7 +149,10 @@ class Price extends LazyFetchModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
+        /** @var \Shopware\Models\Customer\Group $return */
+        $return = $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
+
+        return $return;
     }
 
     /**
@@ -176,7 +182,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param int|string $to
+     * @param null|int|string $to
      *
      * @return \Shopware\Models\Article\Configurator\Template\Price
      */
@@ -193,7 +199,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get to
      *
-     * @return int|null
+     * @return null|int|string
      */
     public function getTo()
     {
@@ -287,7 +293,7 @@ class Price extends LazyFetchModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\TemplatePrice', 'attribute', 'templatePrice');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\TemplatePrice::class, 'attribute', 'templatePrice');
     }
 
     /**

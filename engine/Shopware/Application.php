@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -147,7 +148,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns document path: <projectroot>/
+     * Returns document path: <project root>/
      *
      * @param string $path
      *
@@ -159,7 +160,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns the application path: <projectroot>/engine/Shopware/
+     * Returns the application path: <project root>/engine/Shopware/
      *
      * @param string $path
      *

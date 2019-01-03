@@ -77,7 +77,7 @@ class Router
             $action = 'put';
         } elseif ($method === 'POST') {
             $action = 'post';
-            // Set default http status code for successfull request
+            // Set default http status code for successful request
             $response->setHttpResponseCode(201);
         } elseif ($method === 'DELETE' && $id === false) {
             $action = 'batchDelete';

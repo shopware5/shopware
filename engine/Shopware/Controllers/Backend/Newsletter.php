@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -228,6 +229,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $template->assign('sCampaignHash', $hash, true);
             $template->assign('sRecommendations', $this->getMailingSuggest($mailing['id'], $user['userID']), true);
 
+            /** @var array $voucher */
             $voucher = $template->getTemplateVars('sVoucher');
             if (!empty($voucher['id'])) {
                 $voucher['code'] = $this->getVoucherCode($voucher['id']);
@@ -605,7 +607,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      *
      * @param int $voucherID
      *
-     * @return string
+     * @return string|false
      */
     public function getVoucherCode($voucherID)
     {

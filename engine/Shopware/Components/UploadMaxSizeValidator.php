@@ -87,7 +87,7 @@ class UploadMaxSizeValidator implements SubscriberInterface
         $iniMax = strtolower($this->getNormalizedIniPostMaxSize());
 
         if ($iniMax === '') {
-            return;
+            return null;
         }
 
         $max = ltrim($iniMax, '+');

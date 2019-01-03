@@ -70,25 +70,26 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
             $configurations = $this->configuratorService->getProductsConfigurations($products, $context);
         }
 
-        $urls = array_map(function ($article) use ($categoryId) {
+        $urls = array_map(function ($product) use ($categoryId) {
             if ($categoryId !== null) {
-                return $article['linkDetails'] . '&sCategory=' . (int) $categoryId;
+                return $product['linkDetails'] . '&sCategory=' . (int) $categoryId;
             }
 
-            return $article['linkDetails'];
+            return $product['linkDetails'];
         }, $articles);
 
         $rewrite = $this->router->generateList($urls);
 
-        foreach ($articles as $key => &$article) {
+        foreach ($articles as $key => &$product) {
             if (!array_key_exists($key, $rewrite)) {
                 continue;
             }
-            $article['linkDetails'] = $rewrite[$key];
+            $product['linkDetails'] = $rewrite[$key];
         }
+        unset($product);
 
-        foreach ($articles as &$article) {
-            $number = $article['ordernumber'];
+        foreach ($articles as &$product) {
+            $number = $product['ordernumber'];
 
             $config = [];
             if (isset($configurations[$number])) {
@@ -98,10 +99,10 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
             if (!empty($config)) {
                 $variantLink = $this->buildListingVariantLink($number, $config, $conditions);
 
-                if (strpos($article['linkDetails'], '?') !== false) {
-                    $article['linkDetails'] .= '&' . $variantLink;
+                if (strpos($product['linkDetails'], '?') !== false) {
+                    $product['linkDetails'] .= '&' . $variantLink;
                 } else {
-                    $article['linkDetails'] .= '?' . $variantLink;
+                    $product['linkDetails'] .= '?' . $variantLink;
                 }
             }
         }

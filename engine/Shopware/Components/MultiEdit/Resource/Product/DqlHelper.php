@@ -24,7 +24,24 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
+use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
+use Shopware\Models\Article\Configurator\Set;
+use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Image;
+use Shopware\Models\Article\Price;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Article\Unit;
+use Shopware\Models\Article\Vote;
+use Shopware\Models\Attribute\Article as ProductAttribute;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Property\Group;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Value;
+use Shopware\Models\Tax\Tax;
 
 /**
  * The dql helper class holds some general helper methods used by various components
@@ -63,23 +80,23 @@ class DqlHelper
      * All the entities, the user will be able to access via SwagMultiEdit
      */
     protected $entities = [
-        ['Shopware\Models\Article\Article', 'article'],
-        ['Shopware\Models\Article\Detail', 'detail'],
-        ['Shopware\Models\Article\Supplier', 'supplier'],
-        ['Shopware\Models\Category\Category', 'category'],
-        ['Shopware\Models\Article\Unit', 'unit'],
-        ['Shopware\Models\Attribute\Article', 'attribute'],
-        ['Shopware\Models\Tax\Tax', 'tax'],
-        ['Shopware\Models\Article\Vote', 'vote'],
-        ['Shopware\Models\Article\Configurator\Set', 'configuratorSet'],
-        ['Shopware\Models\Article\Configurator\Group', 'configuratorGroup'],
-        ['Shopware\Models\Article\Configurator\Option', 'configuratorOption'],
-        ['Shopware\Models\Property\Group', 'propertySet'],
-        ['Shopware\Models\Property\Option', 'propertyGroup'],
-        ['Shopware\Models\Property\Value', 'propertyOption'],
-        ['Shopware\Models\Article\Price', 'price'],
-        ['Shopware\Models\Article\Vote', 'vote'],
-        ['Shopware\Models\Article\Image', 'image'],
+        [Article::class, 'article'],
+        [Detail::class, 'detail'],
+        [Supplier::class, 'supplier'],
+        [Category::class, 'category'],
+        [Unit::class, 'unit'],
+        [ProductAttribute::class, 'attribute'],
+        [Tax::class, 'tax'],
+        [Vote::class, 'vote'],
+        [Set::class, 'configuratorSet'],
+        [ConfiguratorGroup::class, 'configuratorGroup'],
+        [ConfiguratorOption::class, 'configuratorOption'],
+        [Group::class, 'propertySet'],
+        [Option::class, 'propertyGroup'],
+        [Value::class, 'propertyOption'],
+        [Price::class, 'price'],
+        [Vote::class, 'vote'],
+        [Image::class, 'image'],
     ];
 
     protected $columnsNotToShowInGrid = [
@@ -211,12 +228,12 @@ class DqlHelper
      */
     public function getMainEntity()
     {
-        return \Shopware\Models\Article\Detail::class;
+        return Detail::class;
     }
 
     /**
      * Returns the prefix for a given entity.
-     * e.g. article => \Showpare\Models\Article\Article
+     * e.g. article => \Shopware\Models\Article\Article
      *
      * @param string $prefix
      *
@@ -339,13 +356,13 @@ class DqlHelper
             WHERE s_articles_details.id IN (:ids)
         ";
 
-        $articles = $this->em->getConnection()->fetchAll(
+        $products = $this->em->getConnection()->fetchAll(
             $sql,
             ['ids' => $ids],
-            ['ids' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+            ['ids' => Connection::PARAM_INT_ARRAY]
         );
 
-        return $this->addInfo($articles);
+        return $this->addInfo($products);
     }
 
     /**
@@ -430,7 +447,7 @@ class DqlHelper
                 $result[$key] = [
                     'entity' => $entityShort,
                     'field' => $name,
-                    'editable' => substr($name, -2) !== 'Id' && $name !== 'id' && substr($name, -2) !== 'ID' && $entity !== \Shopware\Models\Tax\Tax::class && $entity !== \Shopware\Models\Article\Supplier::class,
+                    'editable' => substr($name, -2) !== 'Id' && $name !== 'id' && substr($name, -2) !== 'ID' && $entity !== Tax::class && $entity !== Supplier::class,
                     'type' => $config['type'],
                     'precision' => $config['precision'],
                     'nullable' => (bool) $config['nullable'],
@@ -548,38 +565,38 @@ class DqlHelper
     {
         // Some custom references
         switch ($entity) {
-            case \Shopware\Models\Category\Category::class:
+            case Category::class:
                 return 'article.allCategories';
                 break;
 
-            case \Shopware\Models\Article\Image::class:
+            case Image::class:
                 return 'article.images';
                 break;
         }
 
         // Some generic searching for the association
-        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Article\Detail::class);
+        $metaData = $this->getEntityManager()->getClassMetadata(Detail::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'detail.' . $mapping['fieldName'];
             }
         }
 
-        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Article\Article::class);
+        $metaData = $this->getEntityManager()->getClassMetadata(Article::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'article.' . $mapping['fieldName'];
             }
         }
 
-        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Article\Configurator\Set::class);
+        $metaData = $this->getEntityManager()->getClassMetadata(Set::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'configuratorSet.' . $mapping['fieldName'];
             }
         }
 
-        $metaData = $this->getEntityManager()->getClassMetadata(\Shopware\Models\Property\Group::class);
+        $metaData = $this->getEntityManager()->getClassMetadata(Group::class);
         foreach ($metaData->associationMappings as $mapping) {
             if ($mapping['targetEntity'] == $entity) {
                 return 'propertySet.' . $mapping['fieldName'];
@@ -604,24 +621,24 @@ class DqlHelper
                 if ($entity == $this->getMainEntity()) {
                     continue;
                 }
-                // In some cases, additional joins are needed - e.g. a ConfiguratorGroup does neet the ConfiguratorSet
+                // In some cases, additional joins are needed - e.g. a ConfiguratorGroup does need the ConfiguratorSet
                 switch ($entity) {
-                    case 'Shopware\Models\Article\Configurator\Group':
-                        $join['Shopware\Models\Article\Configurator\Set'] = 'Shopware\Models\Article\Configurator\Set';
+                    case ConfiguratorGroup::class:
+                        $join[Set::class] = Set::class;
                         break;
-                    case 'Shopware\Models\Property\Option':
-                        $join['Shopware\Models\Property\Group'] = 'Shopware\Models\Property\Group';
+                    case Option::class:
+                        $join[Group::class] = Group::class;
                         break;
-                    case 'Shopware\Models\Article\Image':
+                    case Image::class:
                         break;
                 }
 
                 // Default: Join the associated entity
                 $join[$entity] = $entity;
             } elseif ($token['token'] === 'HASBLOCKPRICE') {
-                $join['Shopware\Models\Article\Price'] = 'Shopware\Models\Article\Price';
+                $join[Price::class] = Price::class;
             } elseif ($token['token'] === 'HASIMAGE' || $token['token'] === 'HASNOIMAGE') {
-                $join['Shopware\Models\Article\Image'] = 'Shopware\Models\Article\Image';
+                $join[Image::class] = Image::class;
             }
         }
 
@@ -994,7 +1011,7 @@ class DqlHelper
     }
 
     /**
-     * Will add additional information. Does the article
+     * Will add additional information. Does the product
      *
      *  * have a configurator
      *  * a category
@@ -1028,7 +1045,7 @@ class DqlHelper
             ->where('img.articleID IN (:ids)')
             ->andWhere('img.main = 1')
             ->andWhere('img.article_detail_id IS NULL')
-            ->setParameter('ids', $implode, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->setParameter('ids', $implode, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -1036,21 +1053,21 @@ class DqlHelper
         $categories = $qb->from('s_articles_categories_ro', 'cat')
             ->addSelect('DISTINCT articleID')
             ->where('cat.articleID IN (:ids)')
-            ->setParameter('ids', $implode, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->setParameter('ids', $implode, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
 
-        foreach ($articles as &$article) {
-            $id = $article['Article_id'];
+        foreach ($articles as &$product) {
+            $id = $product['Article_id'];
 
-            $article['hasConfigurator'] = !empty($article['Article_configuratorSetId']);
-            $article['imageSrc'] = null;
+            $product['hasConfigurator'] = !empty($product['Article_configuratorSetId']);
+            $product['imageSrc'] = null;
 
             if (array_key_exists($id, $images)) {
-                $article['imageSrc'] = $images[$id] . '_140x140.jpg';
+                $product['imageSrc'] = $images[$id] . '_140x140.jpg';
             }
 
-            $article['hasCategories'] = in_array($id, $categories, true);
+            $product['hasCategories'] = in_array($id, $categories, true);
         }
 
         return $articles;

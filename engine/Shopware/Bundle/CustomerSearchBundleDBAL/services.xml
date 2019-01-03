@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
 
         <service id="customer_search.dbal.sorting.age_sorting_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\SortingHandler\AgeSortingHandler">
             <tag name="customer_search.sorting_handler"/>

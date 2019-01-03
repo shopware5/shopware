@@ -97,7 +97,7 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
      * @param array  $item2
      * @param string $property
      *
-     * @return string
+     * @return float
      */
     private function mergeAmount(array $item1, array $item2, $property)
     {

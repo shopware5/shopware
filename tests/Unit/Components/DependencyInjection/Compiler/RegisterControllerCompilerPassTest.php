@@ -52,7 +52,7 @@ class RegisterControllerCompilerPassTest extends TestCase
 
     public function testWithPluginsWithoutControllers()
     {
-        $plugins = [new NoneController(true)];
+        $plugins = [new NoneController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
 
         $compilerPass = new RegisterControllerCompilerPass($plugins);
@@ -65,7 +65,7 @@ class RegisterControllerCompilerPassTest extends TestCase
 
     public function testWithBackendController()
     {
-        $plugins = [new BackendController(true)];
+        $plugins = [new BackendController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
 
         $compilerPass = new RegisterControllerCompilerPass($plugins);
@@ -83,7 +83,7 @@ class RegisterControllerCompilerPassTest extends TestCase
 
     public function testWithMultiplePlugins()
     {
-        $plugins = [new BackendController(true), new DifferentController(true)];
+        $plugins = [new BackendController(true, 'ShopwarePlugins'), new DifferentController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
 
         $compilerPass = new RegisterControllerCompilerPass($plugins);

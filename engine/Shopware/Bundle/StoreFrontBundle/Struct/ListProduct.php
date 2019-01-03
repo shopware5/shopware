@@ -78,7 +78,7 @@ class ListProduct extends BaseProduct
      * Defines the date when the product was released / will be
      * released and can be ordered.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $releaseDate;
 
@@ -115,7 +115,7 @@ class ListProduct extends BaseProduct
      * Defines the date which the product was created in the
      * database.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $createdAt;
 
@@ -123,7 +123,7 @@ class ListProduct extends BaseProduct
      * Defines the date which the product was last updated in
      * the database.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $updatedAt;
 
@@ -207,7 +207,7 @@ class ListProduct extends BaseProduct
      * Flag if the product should be displayed
      * with a teaser flag within listings.
      *
-     * @var float
+     * @var bool
      */
     protected $highlight;
 
@@ -720,7 +720,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTime $releaseDate
+     * @param \DateTimeInterface $releaseDate
      */
     public function setReleaseDate($releaseDate)
     {
@@ -728,7 +728,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getReleaseDate()
     {
@@ -836,7 +836,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreatedAt()
     {
@@ -844,7 +844,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTimeInterface $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -852,7 +852,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getUpdatedAt()
     {
@@ -860,7 +860,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param \DateTimeInterface $updatedAt
      */
     public function setUpdatedAt($updatedAt)
     {
