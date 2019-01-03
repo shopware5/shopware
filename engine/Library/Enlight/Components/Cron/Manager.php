@@ -254,10 +254,9 @@ class Enlight_Components_Cron_Manager
      *
      * @param Enlight_Components_Cron_Job $job
      *
-     * @throws Exception
+     * @throws Throwable
      *
      * @return Enlight_Event_EventArgs
-     * @throw Enlight_Exception
      */
     public function runJob(Enlight_Components_Cron_Job $job)
     {
@@ -294,7 +293,7 @@ class Enlight_Components_Cron_Manager
             ]);
 
             return $jobArgs;
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $job->setData(['error' => $e->getMessage()]);
 
             if ($job->getDisableOnError()) {
