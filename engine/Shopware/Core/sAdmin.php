@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
@@ -769,7 +770,7 @@ class sAdmin
             $addScopeSql = $this->db->quoteInto(' AND subshopID = ? ', $this->subshopId);
         }
 
-        // When working with a prehashed password, we need to limit the getUser query by password,
+        // When working with a pre-hashed password, we need to limit the getUser query by password,
         // as there might be multiple users with the same mail address (accountmode = 1).
         $preHashedSql = '';
         if ($isPreHashed) {
@@ -3208,7 +3209,7 @@ class sAdmin
         $liveMigration = $this->config->offsetGet('liveMigration');
         $defaultEncoderName = $this->passwordEncoder->getDefaultPasswordEncoderName();
 
-        // Do not allow live migration when the password is prehashed
+        // Do not allow live migration when the password is pre-hashed
         if ($liveMigration && !$isPreHashed && $encoderName !== $defaultEncoderName) {
             $newHash = $this->passwordEncoder->encodePassword($plaintext, $defaultEncoderName);
             $encoderName = $defaultEncoderName;

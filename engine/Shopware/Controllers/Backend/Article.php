@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -1709,7 +1710,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Event listener function of the product backend module.
-     * Deletes unused serialsnumbers
+     * Deletes unused serial numbers
      */
     public function deleteUnusedSerialsAction()
     {
@@ -1779,10 +1780,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         // Split string at newlines (WIN, Linux, OSX)
         $serials = preg_split('/$\R?^/m', $serials);
 
-        // Trim every serialnumber
+        // Trim every serial number
         array_walk($serials, 'trim');
 
-        // Remove empty serialnumbers
+        // Remove empty serial numbers
         $serials = array_filter($serials);
 
         // Remove duplicates

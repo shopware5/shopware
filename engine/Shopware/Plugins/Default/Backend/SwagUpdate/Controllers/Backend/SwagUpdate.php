@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Psr\Log\LoggerInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
@@ -447,7 +448,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      * Checks if two file handles contain the identical bytes.
      *
      * Warning:
-     * The file handles are rewinded and closes afterwards.
+     * The file handles are being rewound and closed afterwards.
      *
      * @param resource $fp1
      * @param resource $fp2

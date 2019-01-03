@@ -164,7 +164,7 @@ class sCms
     {
         $menu = [];
 
-        // fetch parent if exists
+        // Fetch parent if exists
         if ($pageId) {
             $sql = '
                 SELECT
@@ -177,7 +177,7 @@ class sCms
             $menu['parent'] = Shopware()->Db()->fetchRow($sql, ['parentId' => $pageId]);
         }
 
-        // fetch childrens
+        // Fetch children
         $sql = "
             SELECT
             p.id, p.description, p.link, p.target, p.parentID,
@@ -193,7 +193,7 @@ class sCms
     }
 
     /**
-     * Gets related pages for the given subpage
+     * Gets related pages for the given sub-page
      * If a shop id is provided, only content for that shop is displayed
      *
      * @param array    $staticPage

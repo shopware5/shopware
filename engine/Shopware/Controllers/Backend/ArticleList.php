@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
@@ -238,7 +239,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         ksort($columns);
 
-        // yo dawg i heard you like functional programming…
         // Prepare the returned array structure for extjs
         $columns = array_map(
             function ($column, $operators) {
@@ -408,7 +408,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Save/update a given filter. Also called when a filter is (un)favorited
+     * Save/update a given filter. Also called when a filter is (un)favored
      */
     public function saveFilterAction()
     {

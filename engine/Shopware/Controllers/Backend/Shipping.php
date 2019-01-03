@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Category\Category;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Dispatch\Dispatch;
@@ -165,7 +166,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     /**
      * This method is used to delete one single matrix entry. This data set is addressed through a given
      * id.
-     * //todo@js test fehlt noch
      */
     public function deleteCostsMatrixEntryAction()
     {
@@ -186,7 +186,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     /**
      * Removes all shipping costs for a given dispatch ID and returns the number of
      * deleted records.
-     * //todo@js test fehlt noch
      *
      * @param int $dispatchId
      *
@@ -416,7 +415,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
     /**
      * Saves the dispatch to the data base.
-     * //todo@js test fehlt noch
      */
     private function saveDispatch()
     {

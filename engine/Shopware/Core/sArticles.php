@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
@@ -502,7 +503,7 @@ class sArticles
     }
 
     /**
-     * Product price calucation
+     * Product price calculation
      *
      * @param float $price
      * @param float $tax
@@ -511,7 +512,7 @@ class sArticles
      *
      * @throws Enlight_Exception
      *
-     * @return float $price formated price
+     * @return float $price formatted price
      */
     public function sCalculatingPrice($price, $tax, $taxId = 0, $article = [])
     {
@@ -565,7 +566,7 @@ class sArticles
     }
 
     /**
-     * Product price calucation unformated return
+     * Product price calculation un-formatted return
      *
      * @param float $price
      * @param float $tax
@@ -1233,7 +1234,7 @@ class sArticles
     }
 
     /**
-     * Get basic product data in various modes (firmly definied by id, random, top,new)
+     * Get basic product data in various modes (firmly defined by id, random, top, new)
      *
      * @param string $mode      Modus (fix, random, top, new)
      * @param int    $category  filter by category
@@ -1804,7 +1805,7 @@ class sArticles
      * Get array of images from a certain configurator combination
      *
      * @param array  $sArticle     Associative array with all product data
-     * @param string $sCombination Currencly active combination
+     * @param string $sCombination Currently active combination
      *
      * @return array
      */

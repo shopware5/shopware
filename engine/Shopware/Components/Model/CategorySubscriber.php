@@ -266,7 +266,7 @@ class CategorySubscriber implements BaseEventSubscriber
             return;
         }
 
-        // Remove assignments that noutralize each other
+        // Remove assignments that neutralize each other
         foreach ($this->pendingRemoveAssignments as $key => $pendingRemove) {
             if (isset($this->pendingAddAssignments[$key])) {
                 unset($this->pendingAddAssignments[$key]);

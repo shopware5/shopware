@@ -188,7 +188,7 @@ class AppCache extends HttpCache
     {
         $response = parent::lookup($request, $catch);
 
-        // If Response is not fresh age > 0 AND contains a mathing no cache tag
+        // If Response is not fresh age > 0 AND contains a matching no cache tag
         if ($response->getAge() > 0 && $this->containsNoCacheTag($request, $response)) {
             $response = $this->fetch($request);
         }

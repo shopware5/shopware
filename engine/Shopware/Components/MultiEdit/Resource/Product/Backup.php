@@ -145,7 +145,7 @@ class Backup
 
     /**
      * Will create a backup for $detailIds. The columns and tables to backup will be generated from $operations
-     * Depending on $newBackup a existing file will be appended or overwritten. The name of the backup is choosen
+     * Depending on $newBackup a existing file will be appended or overwritten. The name of the backup is chosen
      * depending on $id.
      *
      * @param string $detailIds
@@ -236,7 +236,7 @@ class Backup
             $zip->close();
         }
 
-        // Get list of datasql files
+        // Get list of data sql files
         $dataFiles = $this->getDirectoryList($dir . '/', ['datasql']);
         $numFiles = null;
 
@@ -250,7 +250,7 @@ class Backup
                 $tables[$table][] = $file;
             }
 
-            // Get one table and one datasql file
+            // Get one table and one data sql file
             $table = array_pop(array_keys($tables));
             $dataPath = array_pop($tables[$table]);
             $headerPath = $dir . '/' . $table . '.headersql';

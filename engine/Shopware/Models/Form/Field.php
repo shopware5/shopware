@@ -123,7 +123,7 @@ class Field extends ModelEntity
     private $label;
 
     /**
-     * Class of display type. e.G. normal / strasse;nr
+     * Class of display type. e.G. normal / street;nr
      *
      * @var string
      *

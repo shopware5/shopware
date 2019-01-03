@@ -425,7 +425,7 @@ class Configurator
      * inheritance level becomes the same container instance passed into their
      * createConfig() function.
      *
-     * This allows the developer to display the theme configuration of extened
+     * This allows the developer to display the theme configuration of extended
      * themes.
      *
      * @param Theme                       $theme

@@ -100,7 +100,7 @@ class PriceGroup extends ModelEntity
     }
 
     /**
-     * Getter function for the id field which is an identifier proerty. This means
+     * Getter function for the id field which is an identifier property. This means
      * doctrine association can be declared over this field.
      * The id field has no setter function, because the value is generated automatically.
      *

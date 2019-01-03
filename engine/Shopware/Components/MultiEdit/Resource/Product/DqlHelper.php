@@ -233,7 +233,7 @@ class DqlHelper
 
     /**
      * Returns the prefix for a given entity.
-     * e.g. article => \Showpare\Models\Article\Article
+     * e.g. article => \Shopware\Models\Article\Article
      *
      * @param string $prefix
      *
@@ -621,7 +621,7 @@ class DqlHelper
                 if ($entity == $this->getMainEntity()) {
                     continue;
                 }
-                // In some cases, additional joins are needed - e.g. a ConfiguratorGroup does neet the ConfiguratorSet
+                // In some cases, additional joins are needed - e.g. a ConfiguratorGroup does need the ConfiguratorSet
                 switch ($entity) {
                     case ConfiguratorGroup::class:
                         $join[Set::class] = Set::class;

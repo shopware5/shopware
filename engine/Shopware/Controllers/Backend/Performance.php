@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\HttpCache\CacheWarmer;
@@ -385,7 +386,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
 
     /**
-     * Fixes categorie tree
+     * Fixes category tree
      */
     public function fixCategoriesAction()
     {

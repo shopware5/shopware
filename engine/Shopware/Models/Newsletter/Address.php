@@ -109,7 +109,7 @@ class Address extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      * The lastNewsletter property is the owning side of the association between a newsletter and a mail-address
-     * The association is joined over the lastNewletterId and Newsletter.id
+     * The association is joined over the lastNewsletterId and Newsletter.id
      *
      * @var \Shopware\Models\Newsletter\Newsletter
      *

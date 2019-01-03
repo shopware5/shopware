@@ -112,7 +112,7 @@ class Manager
     }
 
     /**
-     * Creates schama version table if not exists
+     * Creates schema version table if not exists
      */
     public function createSchemaTable()
     {

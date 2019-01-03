@@ -155,7 +155,7 @@ class PluginLicenceService
     /**
      * @param array $licenses
      *
-     * @return array $expirations
+     * @return array
      */
     private function getExpirations(array $licenses)
     {
