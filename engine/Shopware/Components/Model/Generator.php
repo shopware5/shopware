@@ -468,7 +468,7 @@ class %className% extends ModelEntity
         // Now all properties are declared, but the properties need getter and setter functions to be accessible
         $columnFunctions = $this->getColumnsFunctions($table);
 
-        // The association propertie needs getter and setter, too.
+        // The association property needs getter and setter, too.
         $associationFunctions = $this->getAssociationsFunctions($table);
 
         // To concat the different source code paths, we create an array with all source code fragments
