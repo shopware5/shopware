@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * Shopware Data model represents a non-customer shop visior contact data.
+ * Shopware Data model represents a non-customer shop visitor contact data.
  *
  * @ORM\Entity
  * @ORM\Table(name="s_campaigns_maildata")

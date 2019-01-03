@@ -36,7 +36,7 @@ use Shopware\Components\Model\ModelEntity;
  * Relations and Associations
  * Has no known Associations
  *
- * Indices for s_emarketing_banners_statistcs:
+ * Indices for s_emarketing_banners_statistics:
  * <code>
  *   - PRIMARY KEY (`id`)
  *   - UNIQUE (`displayDate`, `bannerID`)

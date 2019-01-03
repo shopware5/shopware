@@ -64,7 +64,7 @@ class Container extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * Inverse side of the association between the container and its link childs
+     * Inverse side of the association between the container and its link children
      *
      * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Link>
      *
@@ -75,7 +75,7 @@ class Container extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * Inverse side of the association between the container and its article childs
+     * Inverse side of the association between the container and its article children
      *
      * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Article>
      *

@@ -1785,7 +1785,7 @@ class Article extends Resource implements BatchInterface
                         if (!$relation) {
                             $propertyGroup->addOption($option);
                         }
-                        // get/create option depending on associated filtergroups
+                        // get/create option depending on associated filter groups
                     } elseif (isset($valueData['option']['name'])) {
                         // if a name is passed and there is a matching option/group relation, get this option
                         // if only a name is passed, create a new option

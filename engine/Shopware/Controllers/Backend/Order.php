@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
@@ -1522,7 +1523,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * Internal helper function to check if the order or payment status has been changed.
      * If one of the status changed, the function will create a status mail.
      * If the autoSend parameter is true, the created status mail will be sent directly,
-     * if addAttachments and documentType are true/selected aswell, the according documents will be attached.
+     * if addAttachments and documentType are true/selected as well, the according documents will be attached.
      *
      * @param Order                         $order
      * @param \Shopware\Models\Order\Status $statusBefore
@@ -1797,7 +1798,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         if ($renderer === 'html') {
             exit;
-        } // Debu//g-Mode
+        }
 
         return true;
     }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
@@ -1293,7 +1294,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
     /**
      * Check if a custom inquiry possibility should displayed on cart page
-     * Compare configured inquirevalue with current amount
+     * Compare configured inquiry value with current amount
      *
      * @return bool
      */
@@ -1316,7 +1317,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Get link to inquiry form if getInquiry returend true
+     * Get link to inquiry form if getInquiry returned true
      *
      * @return string
      */
@@ -2024,7 +2025,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Updates all currency dependies (e.g. in the shop model or in the shop context).
+     * Updates all currency dependencies (e.g. in the shop model or in the shop context).
      *
      * @param int $currencyId
      */

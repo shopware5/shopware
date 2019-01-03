@@ -141,7 +141,7 @@ EOF
 
     /**
      * Tries to resolve a string to a cronjob action name.
-     * This is neccessary since Shopware currently renames
+     * This is necessary since Shopware currently renames
      * a cronjob action after first run when it is in a
      * unknown format
      *

@@ -50,7 +50,7 @@ class DefaultRouteService
     }
 
     /**
-     * Returns an array mapping nocache-tags to controllernames
+     * Returns an array mapping nocache-tags to controller names
      *
      * @return array
      */
@@ -103,7 +103,7 @@ class DefaultRouteService
     }
 
     /**
-     * Returns an array mapping controllernames to their default max-age as set via the HttpCache Plugin.
+     * Returns an array mapping controller names to their default max-age as set via the HttpCache Plugin.
      *
      * @return array
      */

@@ -52,8 +52,6 @@ class DataPersister
     private $dataLoader;
 
     /**
-     * DataPersister constructor.
-     *
      * @param Connection   $connection
      * @param TableMapping $mapping
      * @param DataLoader   $dataLoader

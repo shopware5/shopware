@@ -196,7 +196,7 @@ class Dispatch extends ModelEntity
     private $multiShopId;
 
     /**
-     * The dipatch can be restricted to a given user group ID. If non ID is given
+     * The dispatch can be restricted to a given user group ID. If non ID is given
      * there will be no restriction to a user group.
      *
      * @var int
@@ -282,7 +282,7 @@ class Dispatch extends ModelEntity
 
     /**
      * This dispatch is only available if the weight of the shopping cart is between this start point and and the end point.
-     * The start poinit is defined here.
+     * The start point is defined here.
      *
      * @var float
      *
@@ -301,7 +301,7 @@ class Dispatch extends ModelEntity
     private $bindWeightTo;
 
     /**
-     * This dipatch is only available from this price to the end price.
+     * This dispatch is only available from this price to the end price.
      * The start price is defined here.
      *
      * @var float
@@ -311,7 +311,7 @@ class Dispatch extends ModelEntity
     private $bindPriceFrom;
 
     /**
-     * This dipatch is only available from a price to this end price.
+     * This dispatch is only available from a price to this end price.
      * The end price is defined here.
      *
      * @var float

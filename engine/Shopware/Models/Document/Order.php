@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Cart\Struct\Price;
 
 /**
@@ -448,7 +449,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     }
 
     /**
-     * Process basket positions and add tax-informations
+     * Process basket positions and add tax-information
      */
     public function processPositions()
     {
@@ -600,7 +601,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     }
 
     /**
-     * Get user billingaddress
+     * Get user's billing address
      */
     public function getBilling()
     {
@@ -632,7 +633,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     }
 
     /**
-     * Get user shippingaddress
+     * Get user's shipping address
      */
     public function getShipping()
     {

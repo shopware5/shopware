@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\LegacyRequestWrapper\CookieWrapper;
 use Shopware\Components\LegacyRequestWrapper\GetWrapper;
 use Shopware\Components\LegacyRequestWrapper\PostWrapper;
@@ -138,7 +139,7 @@ class sSystem
     public $sBotSession;
 
     /**
-     * Reference to $this, for compability reasons.
+     * Reference to $this, for compatibility reasons.
      *
      * @var sSystem
      *

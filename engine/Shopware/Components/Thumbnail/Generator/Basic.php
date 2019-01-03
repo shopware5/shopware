@@ -224,9 +224,9 @@ class Basic implements GeneratorInterface
             // Disables blending
             imagealphablending($newImage, false);
         }
-        // Saves the alpha informations
+        // Saves the alpha information
         imagesavealpha($newImage, true);
-        // Copies the original image into the new created image with resampling
+        // Copies the original image into the new created image with re-sampling
         imagecopyresampled(
             $newImage,
             $image,

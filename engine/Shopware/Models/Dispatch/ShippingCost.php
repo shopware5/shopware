@@ -87,7 +87,7 @@ class ShippingCost extends ModelEntity
     private $value;
 
     /**
-     * Multiplicator for this entry
+     * Multiplicand for this entry
      *
      * @var float
      *

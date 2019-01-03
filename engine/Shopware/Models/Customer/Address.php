@@ -33,7 +33,7 @@ use Shopware\Models\Country\State;
 /**
  * Shopware customer address model represents a single address of a customer.
  *
- * The Shopware customer address model represents a row of the s_user_addressses table.
+ * The Shopware customer address model represents a row of the s_user_addresses table.
  * One address has the follows associations:
  * <code>
  *   - Customer =>  Shopware\Models\Customer\Customer [1:n] [s_user]

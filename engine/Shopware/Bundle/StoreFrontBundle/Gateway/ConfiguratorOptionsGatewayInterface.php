@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface ConfiguratorOptionsGatewayInterface
 {
     /**
-     * Get groups with options by optionids
+     * Get groups with options by option-ids
      *
      * @param array                $optionIds
      * @param ShopContextInterface $context

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer;
@@ -94,14 +95,14 @@ class sOrder
     public $sShippingcosts;
 
     /**
-     * Shipping costs unformatted
+     * Shipping costs un-formatted
      *
      * @var float
      */
     public $sShippingcostsNumeric;
 
     /**
-     * Shipping costs net unformatted
+     * Shipping costs net un-formatted
      *
      * @var float
      */
@@ -1190,7 +1191,7 @@ class sOrder
 
         if ($shippingAddressId === null) {
             /** @var Customer $customer */
-            $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+            $customer = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Customer::class)
                 ->find($address['userID']);
             $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
         }
@@ -1203,7 +1204,7 @@ class sOrder
     }
 
     /**
-     * Check if this order could be refered to a previous recommendation
+     * Check if this order could be referred to a previous recommendation
      */
     public function sTellFriend()
     {
@@ -1937,7 +1938,7 @@ EOT;
     }
 
     /**
-     * Helper function which get formated order data for the passed order id.
+     * Helper function which gets the formatted order data for the passed order id.
      * This function is used if the order status changed and the status mail will be
      * send.
      *
