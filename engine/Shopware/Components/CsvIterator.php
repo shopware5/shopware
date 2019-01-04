@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 {
     const DEFAULT_DELIMITER = ';';
