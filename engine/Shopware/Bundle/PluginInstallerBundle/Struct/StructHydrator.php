@@ -639,6 +639,10 @@ class StructHydrator
                 $price->setSubscription((bool) $row['subscription']);
             }
 
+            if (isset($row['discount'])) {
+                $price->setDiscount($row['discount']);
+            }
+
             if (isset($row['duration'])) {
                 $price->setDuration($row['duration']);
             }

@@ -280,6 +280,16 @@
                 color: rgb(14, 56, 79);
                 display: inline-block;
             }
+
+            .original {
+                font-size: 20px;
+                text-decoration: line-through;
+            }
+
+            .reduced {
+                color: #e74c3c;
+                font-weight: bold;
+            }
         }
 
         .price-free {
