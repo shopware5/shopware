@@ -65,9 +65,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     ) {
         $this->config = $config;
         $this->eventManager = $eventManager;
-
-        $this->requestHandlers = iterator_to_array($requestHandlers, false);
-        $this->requestHandlers = $this->registerRequestHandlers();
+        $this->requestHandlers = $this->registerRequestHandlers(iterator_to_array($requestHandlers, false));
     }
 
     /**
@@ -288,11 +286,13 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
+     * @param CriteriaRequestHandlerInterface[] $existingHandlers
+     *
      * @throws \Enlight_Event_Exception
      *
-     * @return array
+     * @return CriteriaRequestHandlerInterface[]
      */
-    private function registerRequestHandlers()
+    private function registerRequestHandlers(array $existingHandlers = [])
     {
         $requestHandlers = new ArrayCollection();
         $requestHandlers = $this->eventManager->collect(
@@ -300,6 +300,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
             $requestHandlers
         );
 
-        return array_merge($this->requestHandlers, $requestHandlers->toArray());
+        return array_merge($existingHandlers, $requestHandlers->toArray());
     }
 }

@@ -36,6 +36,7 @@ use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
@@ -53,7 +54,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     const AGGREGATION_SIZE = 5000;
 
     /**
-     * @var ProductAttributeFacet[]
+     * @var FacetInterface[]|CriteriaPartInterface[]
      */
     private $criteriaParts = [];
 

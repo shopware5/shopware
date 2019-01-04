@@ -27,11 +27,11 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/plugin_manager/translation}
-//{block name="backend/plugin_manager/controller/plugin"}
+// {namespace name=backend/plugin_manager/translation}
+// {block name="backend/plugin_manager/controller/plugin"}
 Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     refs: [
         { ref: 'localListing', selector: 'plugin-manager-local-plugin-listing' }
@@ -42,9 +42,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     },
 
     snippets: {
-        'licencePluginDownloadInstall':  '{s name="licence_plugin_download_and_install"}The Shopware License Manager plugin is needed to install this plugin, but is currently not present in your system. <br><br><strong>Do you want to download and install the Shopware License Manager plugin?<strong>{/s}',
+        'licencePluginDownloadInstall': '{s name="licence_plugin_download_and_install"}The Shopware License Manager plugin is needed to install this plugin, but is currently not present in your system. <br><br><strong>Do you want to download and install the Shopware License Manager plugin?<strong>{/s}',
         'licencePluginDownloadActivate': '{s name="licence_plugin_install_and_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not installed on your system. <br><br><strong>Do you want to install the Shopware License Manager plugin?<strong>{/s}',
-        'licencePluginActivate':         '{s name="licence_plugin_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not active on your system. <br><br>Do you want to activate the Shopware License Manager plugin?<strong>{/s}',
+        'licencePluginActivate': '{s name="licence_plugin_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not active on your system. <br><br>Do you want to activate the Shopware License Manager plugin?<strong>{/s}',
 
         newRegistrationForm: {
             successTitle: '{s name=newRegistrationForm/successTitle}Shopware ID registration{/s}',
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             successMessage: '{s name=domainRegistration/successMessage}Domain registration successful{/s}',
             waitTitle: '{s name=domainRegistration/waitTitle}Registering domain{/s}',
             waitMessage: '{s name=domainRegistration/waitMessage}This process might take a few seconds{/s}',
-            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='http://en.wiki.shopware.com/Shopware-ID-Shopware-Account_detail_1433.html#Add_shop_.2F_domain' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
+            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='https://docs.shopware.com/en/shopware-5-en/first-steps/shopware-account#link-your-shop' title='Shopware Account documentation' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
         },
 
         login: {
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             waitMessage: '{s name=login/waitMessage}This process might take a few seconds{/s}'
         },
 
-        growlMessage:'{s name=growlMessage}Plugin Manager{/s}'
+        growlMessage: '{s name=growlMessage}Plugin Manager{/s}'
     },
 
     init: function() {
@@ -83,34 +83,34 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         return {
-            'install-plugin':              me.installPlugin,
-            'uninstall-plugin':            me.uninstallPlugin,
-            'secure-uninstall-plugin':     me.secureUninstallPlugin,
-            'reinstall-plugin':            me.reinstallPlugin,
-            'activate-plugin':             me.activatePlugin,
-            'deactivate-plugin':           me.deactivatePlugin,
-            'execute-plugin-update':       me.executePluginUpdate,
+            'install-plugin': me.installPlugin,
+            'uninstall-plugin': me.uninstallPlugin,
+            'secure-uninstall-plugin': me.secureUninstallPlugin,
+            'reinstall-plugin': me.reinstallPlugin,
+            'activate-plugin': me.activatePlugin,
+            'deactivate-plugin': me.deactivatePlugin,
+            'execute-plugin-update': me.executePluginUpdate,
 
-            'download-plugin-licence':     me.downloadPluginLicenceDirect,
-            'update-plugin':               me.updatePlugin,
-            'update-dummy-plugin':         me.updateDummyPlugin,
-            'buy-plugin':                  me.purchasePlugin,
-            'rent-plugin':                 me.purchasePlugin,
-            'download-free-plugin':        me.purchasePlugin,
+            'download-plugin-licence': me.downloadPluginLicenceDirect,
+            'update-plugin': me.updatePlugin,
+            'update-dummy-plugin': me.updateDummyPlugin,
+            'buy-plugin': me.purchasePlugin,
+            'rent-plugin': me.purchasePlugin,
+            'download-free-plugin': me.purchasePlugin,
             'request-plugin-test-version': me.purchasePlugin,
 
-            'upload-plugin':               me.uploadPlugin,
-            'delete-plugin':               me.deletePlugin,
-            'expired-delete-plugin':       me.deleteExpiredPlugin,
-            'reload-plugin':               me.reloadPlugin,
-            'reload-local-listing':        me.reloadLocalListing,
-            'save-plugin-configuration':   me.saveConfiguration,
-            'store-login':                 me.login,
-            'check-store-login':           me.checkLogin,
-            'open-login':                  me.openLogin,
-            'destroy-login':               me.destroyLogin,
-            'store-register':              me.register,
-            'clear-all-cache':             me.clearAllCache,
+            'upload-plugin': me.uploadPlugin,
+            'delete-plugin': me.deletePlugin,
+            'expired-delete-plugin': me.deleteExpiredPlugin,
+            'reload-plugin': me.reloadPlugin,
+            'reload-local-listing': me.reloadLocalListing,
+            'save-plugin-configuration': me.saveConfiguration,
+            'store-login': me.login,
+            'check-store-login': me.checkLogin,
+            'open-login': me.openLogin,
+            'destroy-login': me.destroyLogin,
+            'store-register': me.register,
+            'clear-all-cache': me.clearAllCache,
             scope: me
         };
     },
@@ -228,7 +228,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         me.checkout(plugin, price, function(basket) {
-
             me.displayLoadingMask(plugin, '{s name="order_is_being_executed"}Order is being processed{/s}');
 
             me.sendAjaxRequest(
@@ -262,7 +261,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         me.displayLoadingMask(plugin, '{s name="open_basket"}Preparing order process{/s}');
         me.checkLogin(function() {
-
             var store = Ext.create('Shopware.apps.PluginManager.store.Basket');
 
             var positions = [{
@@ -276,7 +274,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 positions: Ext.encode(positions)
             };
 
-            //add event listener to the model proxy to get access on thrown exceptions
+            // add event listener to the model proxy to get access on thrown exceptions
             store.getProxy().on('exception', function (proxy, response) {
                 response = Ext.decode(response.responseText);
                 me.displayErrorMessage(response);
@@ -298,7 +296,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     me.hideLoadingMask();
                 }
             });
-
         });
     },
 
@@ -328,7 +325,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 callback();
             }
         });
-
     },
 
     authenticateForUpdate: function(plugin, callback) {
@@ -376,17 +372,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         me.checkAccessToken(function(response) {
-
             if (response.success == false) {
                 me.openLogin(callback);
             } else {
-
                 if (response.hasOwnProperty('shopwareId')) {
                     me.fireRefreshAccountData(response);
                 }
 
                 callback();
-                return;
             }
         });
     },
@@ -414,7 +407,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     openLogin: function(callback) {
         var me = this;
 
-        if(!me.loginMask) {
+        if (!me.loginMask) {
             me.loginMask = Ext.create('Shopware.apps.PluginManager.view.account.LoginWindow', {
                 callback: callback
             }).show();
@@ -433,7 +426,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginManager action=login}',
             params,
             function(response) {
-
                 response.shopwareId = params.shopwareID;
                 me.splashScreen.close();
 
@@ -471,7 +463,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller="firstRunWizard" action="registerNewId"}',
             callback
         );
-
     },
 
     submitShopwareIdRequest: function(params, url, callback) {
@@ -490,12 +481,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 var result = Ext.JSON.decode(response.responseText, true);
 
                 if (!result || result.success == false) {
-
                     response = Ext.decode(response.responseText);
                     me.displayErrorMessage(response);
 
                     me.splashScreen.close();
-
                 } else if (result.success) {
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.newRegistrationForm.successTitle,
@@ -533,13 +522,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 var result = Ext.JSON.decode(response.responseText);
 
                 if (!result || result.success == false) {
-
                     response = Ext.decode(response.responseText);
                     me.displayErrorMessage({ message: me.snippets.domainRegistration.validationFailed });
                     me.displayErrorMessage(response);
 
                     me.splashScreen.close();
-
                 } else if (result.success) {
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.domainRegistration.successTitle,
@@ -548,8 +535,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     );
                     callback(response);
                 }
-
-
             }
         });
     },
@@ -588,7 +573,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         } else {
             me.doUninstall(plugin, callback);
         }
-
     },
 
     doUninstall: function(plugin, callback) {
@@ -741,7 +725,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         if (caches !== null) {
             this.clearCache(caches, plugin, callback, scope);
         } else {
-            Ext.callback(callback, scope)
+            Ext.callback(callback, scope);
         }
     },
 
@@ -803,7 +787,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 });
 
                 Ext.Ajax.request({
-                    url:'{url controller="Cache" action="clearCache"}',
+                    url: '{url controller="Cache" action="clearCache"}',
                     method: 'POST',
                     params: params,
                     callback: function() {
@@ -827,4 +811,4 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         Shopware.app.Application.fireEvent('reload-main-menu');
     }
 });
-//{/block}
+// {/block}

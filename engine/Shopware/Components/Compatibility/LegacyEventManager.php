@@ -39,27 +39,19 @@ class LegacyEventManager
     private $eventManager;
 
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * @var ContextServiceInterface
      */
     private $contextService;
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
-     * @param \Shopware_Components_Config $config
      * @param ContextServiceInterface     $contextService
      */
     public function __construct(
         \Enlight_Event_EventManager $eventManager,
-        \Shopware_Components_Config $config,
         ContextServiceInterface $contextService
     ) {
         $this->eventManager = $eventManager;
-        $this->config = $config;
         $this->contextService = $contextService;
     }
 
@@ -78,10 +70,10 @@ class LegacyEventManager
         $categoryId,
         \sArticles $module
     ) {
-        foreach ($result['sArticles'] as &$article) {
-            $article = Shopware()->Events()->filter(
+        foreach ($result['sArticles'] as &$product) {
+            $product = Shopware()->Events()->filter(
                 'Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd',
-                $article,
+                $product,
                 [
                     'subject' => $module,
                     'id' => $categoryId,

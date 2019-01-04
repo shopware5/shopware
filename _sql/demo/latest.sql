@@ -5240,7 +5240,15 @@ INSERT INTO `s_core_countries` (`id`, `countryname`, `countryiso`, `areaID`, `co
 (34, 'Slowakei', 'SK', 3, 'SLOVAKIA', 10, '', 0, 0, 0, 0, 'SVK', 0, 0),
 (35, 'Rum&auml;nien', 'RO', 3, 'ROMANIA', 10, '', 0, 0, 0, 0, 'ROU', 0, 0),
 (36, 'Brasilien', 'BR', 2, 'BRAZIL', 10, '', 0, 0, 0, 0, 'BRA', 0, 0),
-(37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 'ISR', 0, 0);
+(37, 'Israel', 'IL', 2, 'ISRAEL', 10, '', 0, 0, 0, 0, 'ISR', 0, 0),
+(38, 'Bulgarien', 'BG', 3, 'BULGARIA', 10, '', 0, 0, 0, 0, 'BGR', 0, 0),
+(39, 'Estland', 'EE', 3, 'ESTONIA', 10, '', 0, 0, 0, 0, 'EST', 0, 0),
+(40, 'Kroatien', 'HR', 3, 'CROATIA', 10, '', 0, 0, 0, 0, 'HRV', 0, 0),
+(41, 'Lettland', 'LV', 3, 'LATVIA', 10, '', 0, 0, 0, 0, 'LVA', 0, 0),
+(42, 'Litauen', 'LT', 3, 'LITHUANIA', 10, '', 0, 0, 0, 0, 'LTU', 0, 0),
+(43, 'Malta', 'MT', 3, 'MALTA', 10, '', 0, 0, 0, 0, 'MLT', 0, 0),
+(44, 'Slowenien', 'SI', 3, 'SLOVENIA', 10, '', 0, 0, 0, 0, 'SVN', 0, 0),
+(45, 'Zypern', 'CY', 3, 'CYPRUS', 10, '', 0, 0, 0, 0, 'CYP', 0, 0);
 UPDATE `s_core_countries` SET `allow_shipping` = 1;
 
 TRUNCATE TABLE `s_core_countries_areas`;
@@ -5991,9 +5999,9 @@ INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
 (1, 1),
 (1, 2),
 (1, 3),
-(2, 7),
-(2, 9),
-(2, 10);
+(2, 1),
+(2, 2),
+(2, 3);
 
 TRUNCATE TABLE `s_core_tax_rules`;
 
@@ -6119,7 +6127,8 @@ INSERT IGNORE INTO `s_core_translations` (`id`, `objecttype`, `objectdata`, `obj
 (262, 'article', 'a:2:{s:10:"txtArtikel";s:24:"Munsterland Aperitif 16%";s:19:"txtlangbeschreibung";s:432:"<p>Io copia moeror immo pro audio modestia. Permaneo animosus etsi furax, aversor, faenum Pecus, mus me dux ferociter interpellatio certo. infrequentia Illis Quamquam Invidus, indutus voco tot Velociter, rare qui Limbus in Uter sub Ferito. Hinc lacrima Tutor gens Stabulaus antrum levis se voveo quemadmodum ruo illa sidereus. Luo Modicus tutela sedo Uxor contineo, ait ait crebra exsecror Ruga Sospes gratuita se Quae praevideo</p>";}', 3, '2'),
 (263, 'article', 'a:2:{s:10:"txtArtikel";s:24:"Shipping costs by weight";s:19:"txtlangbeschreibung";s:226:"<p>This article weighs 8 KG. These requires a calculation by weight. If you add it to the cart, it will be charged with 19,90 Euro. To do so, use the follwing access data: max.mustermann@mail.com &amp; Password: shopware .</p>";}', 248, '2'),
 (270, 'article', 'a:1:{s:10:"txtArtikel";s:19:"Beach Towel "Ibiza"";}', 178, '2'),
-(272, 'config_payment', 'a:5:{i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionalDescription";s:141:"Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionalDescription";s:15:"Additional text";}i:3;a:2:{s:11:"description";s:16:"Cash on delivery";s:21:"additionalDescription";s:25:"(including 2.00 Euro VAT)";}i:5;a:2:{s:11:"description";s:15:"Paid in advance";s:21:"additionalDescription";s:57:"The goods are delivered directly upon receipt of payment.";}i:6;a:1:{s:21:"additionalDescription";s:17:"SEPA direct debit";}}', 1, '2');
+(272, 'config_payment', 'a:5:{i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionalDescription";s:141:"Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionalDescription";s:15:"Additional text";}i:3;a:2:{s:11:"description";s:16:"Cash on delivery";s:21:"additionalDescription";s:25:"(including 2.00 Euro VAT)";}i:5;a:2:{s:11:"description";s:15:"Paid in advance";s:21:"additionalDescription";s:57:"The goods are delivered directly upon receipt of payment.";}i:6;a:1:{s:21:"additionalDescription";s:17:"SEPA direct debit";}}', 1, '2'),
+(273, 'page', 'a:1:{s:11:"description";s:7:"Imprint";}', 3, '2');
 
 
 TRUNCATE TABLE `s_core_units`;

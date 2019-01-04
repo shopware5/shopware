@@ -425,7 +425,7 @@ class Configurator
      * inheritance level becomes the same container instance passed into their
      * createConfig() function.
      *
-     * This allows the developer to display the theme configuration of extened
+     * This allows the developer to display the theme configuration of extended
      * themes.
      *
      * @param Theme                       $theme
@@ -465,13 +465,13 @@ class Configurator
      * @param Shop\TemplateConfig\Set[] $collection
      * @param string                    $name
      *
-     * @return Shop\TemplateConfig\Set
+     * @return Shop\TemplateConfig\Set|null
      */
     private function getExistingConfigSet($collection, $name)
     {
         /** @var Shop\TemplateConfig\Set $item */
         foreach ($collection as $item) {
-            if ($item->getName() == $name) {
+            if ($item->getName() === $name) {
                 return $item;
             }
         }

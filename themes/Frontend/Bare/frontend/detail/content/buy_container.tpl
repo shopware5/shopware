@@ -76,9 +76,8 @@
                         <meta itemprop="lowPrice" content="{$lowestPrice}"/>
                         <meta itemprop="highPrice" content="{$highestPrice}"/>
                         <meta itemprop="offerCount" content="{$sArticle.sBlockPrices|count}"/>
-                    {else}
-                        <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {/if}
+                    <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                 {/block}
 

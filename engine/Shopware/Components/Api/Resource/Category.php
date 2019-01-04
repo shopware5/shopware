@@ -24,9 +24,13 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
+use RuntimeException;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Models\Attribute\Category as CategoryAttribute;
 use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Media\Media as MediaModel;
+use Shopware_Components_Translation as TranslationComponent;
 
 /**
  * Category API Resource
@@ -38,14 +42,14 @@ use Shopware\Models\Media\Media as MediaModel;
 class Category extends Resource
 {
     /**
-     * @var \Shopware_Components_Translation
+     * @var TranslationComponent
      */
     private $translationComponent;
 
     /**
-     * @param \Shopware_Components_Translation|null $translationComponent
+     * @param TranslationComponent|null $translationComponent
      */
-    public function __construct(\Shopware_Components_Translation $translationComponent = null)
+    public function __construct(TranslationComponent $translationComponent = null)
     {
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
     }
@@ -55,16 +59,16 @@ class Category extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Category\Category::class);
+        return $this->getManager()->getRepository(CategoryModel::class);
     }
 
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\NotFoundException
      *
-     * @return array|\Shopware\Models\Category\Category
+     * @return CategoryModel|array
      */
     public function getOne($id)
     {
@@ -76,20 +80,19 @@ class Category extends Resource
 
         $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
 
-        /** @var \Shopware\Models\Category\Category $category */
-        $category = $query->getOneOrNullResult($this->getResultMode());
+        /** @var array $categoryResult */
+        $categoryResult = $query->getOneOrNullResult($this->getResultMode());
 
-        if (!$category) {
+        if (!$categoryResult) {
             throw new ApiException\NotFoundException(sprintf('Category by id %d not found', $id));
         }
 
         if ($this->getResultMode() === Resource::HYDRATE_ARRAY) {
-            $category = $category[0] + $category;
+            $category = $categoryResult[0] + $categoryResult;
 
             $query = $this->getManager()->createQuery('SELECT shop FROM Shopware\Models\Shop\Shop as shop');
-            $shops = $query->getArrayResult();
 
-            foreach ($shops as $shop) {
+            foreach ($query->getArrayResult() as $shop) {
                 $translation = $this->translationComponent->read($shop['id'], 'category', $id);
                 if (!empty($translation)) {
                     $translation['shopId'] = $shop['id'];
@@ -108,7 +111,8 @@ class Category extends Resource
                 }
             }
         } else {
-            $category = $category[0];
+            /** @var CategoryModel $category */
+            $category = $categoryResult[0];
         }
 
         return $category;
@@ -143,16 +147,16 @@ class Category extends Resource
     /**
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws ApiException\ValidationException
      * @throws \Exception
      *
-     * @return \Shopware\Models\Category\Category
+     * @return CategoryModel
      */
     public function create(array $params)
     {
         $this->checkPrivilege('create');
 
-        $category = new \Shopware\Models\Category\Category();
+        $category = new CategoryModel();
 
         $params = $this->prepareCategoryData($params);
         $params = $this->prepareMediaData($params, $category);
@@ -160,8 +164,9 @@ class Category extends Resource
         $category->fromArray($params);
 
         if (isset($params['id'])) {
-            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Category\Category');
-            $metaData->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+            /** @var ClassMetaData $metaData */
+            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor(CategoryModel::class);
+            $metaData->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
             $category->setPrimaryIdentifier($params['id']);
         }
 
@@ -184,12 +189,12 @@ class Category extends Resource
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\ValidationException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\CustomValidationException
      *
-     * @return \Shopware\Models\Category\Category
+     * @return CategoryModel
      */
     public function update($id, array $params)
     {
@@ -199,7 +204,7 @@ class Category extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Category\Category $category */
+        /** @var CategoryModel $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
@@ -227,10 +232,10 @@ class Category extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\NotFoundException
      *
-     * @return \Shopware\Models\Category\Category
+     * @return CategoryModel
      */
     public function delete($id)
     {
@@ -240,7 +245,7 @@ class Category extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Category\Category $category */
+        /** @var CategoryModel $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
@@ -250,12 +255,14 @@ class Category extends Resource
         $this->getManager()->remove($category);
         $this->flush();
 
-        $this->getManager()->getConnection()->delete('s_core_translations', [
+        $connection = $this->getManager()->getConnection();
+
+        $connection->delete('s_core_translations', [
             'objecttype' => 'category',
             'objectkey' => $id,
         ]);
 
-        $this->getManager()->getConnection()->delete('s_core_translations', [
+        $connection->delete('s_core_translations', [
             'objecttype' => 's_categories_attributes',
             'objectkey' => $id,
         ]);
@@ -270,9 +277,9 @@ class Category extends Resource
      * @param string $path   Path of the category to search separated by pipe. Eg. Deutsch|Foo|Bar
      * @param bool   $create Should categories be created?
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
-     * @return null|\Shopware\Models\Category\Category
+     * @return null|CategoryModel
      */
     public function findCategoryByPath($path, $create = false)
     {
@@ -291,6 +298,7 @@ class Category extends Resource
                 break;
             }
 
+            /** @var CategoryModel $categoryModel */
             $categoryModel = $this->getRepository()->findOneBy(['name' => $categoryName, 'parentId' => $parentId]);
             if (!$categoryModel) {
                 if (!$create) {
@@ -298,10 +306,10 @@ class Category extends Resource
                 }
 
                 if ($parent === null) {
-                    /** @var \Shopware\Models\Category\Category $parent */
+                    /** @var CategoryModel $parent */
                     $parent = $this->getRepository()->find($parentId);
                     if (!$parent) {
-                        throw new \RuntimeException(sprintf('Could not find parent %s', $parentId));
+                        throw new RuntimeException(sprintf('Could not find parent %s', $parentId));
                     }
                 }
 
@@ -315,10 +323,6 @@ class Category extends Resource
             $parent = $categoryModel;
         }
 
-        if (empty($categoryModel)) {
-            return null;
-        }
-
         return $categoryModel;
     }
 
@@ -328,7 +332,7 @@ class Category extends Resource
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      */
     public function writeTranslations($categoryId, $translations)
     {
@@ -370,7 +374,7 @@ class Category extends Resource
         }
 
         if (!empty($params['parent'])) {
-            $params['parent'] = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class)->find($params['parent']);
+            $params['parent'] = Shopware()->Models()->getRepository(CategoryModel::class)->find($params['parent']);
             if (!$params['parent']) {
                 throw new ApiException\CustomValidationException(sprintf('Parent by id %s not found', $params['parent']));
             }
@@ -407,15 +411,12 @@ class Category extends Resource
         $media = null;
 
         if (isset($data['media']['link'])) {
+            /** @var Media $mediaResource */
+            $mediaResource = $this->getResource('media');
             /** @var MediaModel $media */
-            $media = $this->getResource('media')->internalCreateMediaByFileLink(
-                $data['media']['link']
-            );
+            $media = $mediaResource->internalCreateMediaByFileLink($data['media']['link']);
         } elseif (!empty($data['media']['mediaId'])) {
-            $media = $this->getManager()->find(
-                \Shopware\Models\Media\Media::class,
-                (int) $data['media']['mediaId']
-            );
+            $media = $this->getManager()->find(MediaModel::class, (int) $data['media']['mediaId']);
 
             if (!($media instanceof MediaModel)) {
                 throw new ApiException\CustomValidationException(sprintf('Media by mediaId %s not found', $data['media']['mediaId']));
@@ -435,24 +436,26 @@ class Category extends Resource
      */
     private function getAttributeProperties()
     {
-        $metaData = $this->getManager()->getClassMetadata(\Shopware\Models\Attribute\Category::class);
+        $metaData = $this->getManager()->getClassMetadata(CategoryAttribute::class);
         $properties = [];
 
+        /** @var \ReflectionProperty $property */
         foreach ($metaData->getReflectionProperties() as $property) {
-            if ($metaData->hasAssociation($property->getName())) {
+            $propertyName = $property->getName();
+            if ($metaData->hasAssociation($propertyName)) {
                 continue;
             }
-            $properties[$property->getName()] = $property->getName();
+            $properties[$propertyName] = $propertyName;
         }
 
-        foreach ($metaData->getAssociationMappings() as $property => $mapping) {
-            $name = $metaData->getSingleAssociationJoinColumnName($property);
+        foreach ($metaData->getAssociationMappings() as $propertyName => $mapping) {
+            $name = $metaData->getSingleAssociationJoinColumnName($propertyName);
             $field = $metaData->getFieldForColumn($name);
             unset($properties[$field]);
         }
 
-        foreach ($metaData->getIdentifierFieldNames() as $property) {
-            unset($properties[$property]);
+        foreach ($metaData->getIdentifierFieldNames() as $identifierFieldName) {
+            unset($properties[$identifierFieldName]);
         }
 
         $fields = [];

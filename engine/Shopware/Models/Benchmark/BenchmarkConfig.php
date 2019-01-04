@@ -56,7 +56,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * Defines the date and time when the statistics were sent the last time
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="last_sent", type="datetime", nullable=false)
      */
@@ -65,7 +65,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * Defines the date and time when the last statistics where retrieved from the server
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="last_received", type="datetime", nullable=false)
      */
@@ -110,7 +110,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * The most recent date to figure out which orders have been updated since they have last been transmitted
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="last_updated_orders_date", type="datetime", nullable=true)
      */
@@ -171,7 +171,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * Flag which defines if the current shop is locked for transmitting data.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
@@ -185,14 +185,14 @@ class BenchmarkConfig extends ModelEntity
         $this->id = $id;
 
         // Default values
-        $this->lastReceived = '1970-01-01 00:00:00';
-        $this->lastSent = '1970-01-01 00:00:00';
+        $this->lastReceived = new \DateTime('1970-01-01 00:00:00', new \DateTimeZone('UTC'));
+        $this->lastSent = new \DateTime('1970-01-01 00:00:00', new \DateTimeZone('UTC'));
         $this->lastOrderId = 0;
         $this->lastCustomerId = 0;
         $this->lastProductId = 0;
         $this->lastAnalyticsId = 0;
         $this->batchSize = 1000;
-        $this->active = 0;
+        $this->active = false;
     }
 
     /**
@@ -212,7 +212,7 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastSent()
     {
@@ -220,15 +220,15 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @param \DateTime $lastSent
+     * @param \DateTimeInterface $lastSent
      */
-    public function setLastSent(\DateTime $lastSent)
+    public function setLastSent(\DateTimeInterface $lastSent)
     {
         $this->lastSent = $lastSent;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastReceived()
     {
@@ -236,9 +236,9 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @param \DateTime $lastReceived
+     * @param \DateTimeInterface $lastReceived
      */
-    public function setLastReceived(\DateTime $lastReceived)
+    public function setLastReceived(\DateTimeInterface $lastReceived)
     {
         $this->lastReceived = $lastReceived;
     }
@@ -308,7 +308,7 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**#
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastUpdatedOrdersDate()
     {
@@ -316,9 +316,9 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @param \DateTime $lastUpdatedOrdersDate
+     * @param \DateTimeInterface $lastUpdatedOrdersDate
      */
-    public function setLastUpdatedOrdersDate(\DateTime $lastUpdatedOrdersDate)
+    public function setLastUpdatedOrdersDate(\DateTimeInterface $lastUpdatedOrdersDate)
     {
         $this->lastUpdatedOrdersDate = $lastUpdatedOrdersDate;
     }
@@ -420,7 +420,7 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLocked()
     {
@@ -428,9 +428,9 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @param \DateTime $locked
+     * @param \DateTimeInterface $locked
      */
-    public function setLocked(\DateTime $locked)
+    public function setLocked(\DateTimeInterface $locked)
     {
         $this->locked = $locked;
     }

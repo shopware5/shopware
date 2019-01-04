@@ -101,20 +101,20 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
         return $this->repo;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
     protected function removeDates($data)
     {
         foreach ($data as &$subCategory) {
-            unset($subCategory['changed']);
-            unset($subCategory['cmsText']);
-            unset($subCategory['added']);
+            unset($subCategory['changed'], $subCategory['cmsText'], $subCategory['added']);
             foreach ($subCategory['emotions'] as &$emotion) {
-                unset($emotion['createDate']);
-                unset($emotion['modified']);
+                unset($emotion['createDate'], $emotion['modified']);
             }
             foreach ($subCategory['articles'] as &$article) {
-                unset($article['added']);
-                unset($article['changed']);
-                unset($article['mainDetail']['releaseDate']);
+                unset($article['added'], $article['changed'], $article['mainDetail']['releaseDate']);
             }
         }
 

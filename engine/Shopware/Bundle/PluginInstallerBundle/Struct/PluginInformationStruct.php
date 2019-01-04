@@ -134,7 +134,7 @@ class PluginInformationStruct implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getSource()
     {
@@ -142,7 +142,7 @@ class PluginInformationStruct implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getType()
     {

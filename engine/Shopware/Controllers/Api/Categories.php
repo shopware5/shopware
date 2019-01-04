@@ -21,16 +21,20 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Shopware\Components\Api\Manager;
+use Shopware\Components\Api\Resource\Category;
+
 class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Category
+     * @var Category
      */
-    protected $resource = null;
+    protected $resource;
 
     public function init()
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('category');
+        $this->resource = Manager::getResource('category');
     }
 
     /**
@@ -40,21 +44,23 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit = (int) $this->Request()->getParam('limit', 1000);
-        $offset = (int) $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', []);
-        $filter = $this->Request()->getParam('filter', []);
+        $request = $this->Request();
+        $limit = (int) $request->getParam('limit', 1000);
+        $offset = (int) $request->getParam('start', 0);
+        $sort = $request->getParam('sort', []);
+        $filter = $request->getParam('filter', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort);
 
-        $this->View()->assign($result);
-        $this->View()->assign('success', true);
+        $view = $this->View();
+        $view->assign($result);
+        $view->assign('success', true);
     }
 
     /**
      * Get one category
      *
-     * GET /api/articles/{id}
+     * GET /api/categories/{id}
      */
     public function getAction()
     {
@@ -62,8 +68,9 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
 
         $category = $this->resource->getOne($id);
 
-        $this->View()->assign('data', $category);
-        $this->View()->assign('success', true);
+        $view = $this->View();
+        $view->assign('data', $category);
+        $view->assign('success', true);
     }
 
     /**
@@ -92,8 +99,9 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      */
     public function putAction()
     {
-        $id = $this->Request()->getParam('id');
-        $params = $this->Request()->getPost();
+        $request = $this->Request();
+        $id = $request->getParam('id');
+        $params = $request->getPost();
 
         $category = $this->resource->update($id, $params);
 
@@ -107,7 +115,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * Delete article
+     * Delete category
      *
      * DELETE /api/categories/{id}
      */

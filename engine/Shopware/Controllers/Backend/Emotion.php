@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\EmotionExporter;
@@ -45,9 +46,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var Shopware_Components_Translation
@@ -70,8 +71,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function listAction()
     {
-        $limit = $this->Request()->getParam('limit');
-        $offset = $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit');
+        $offset = (int) $this->Request()->getParam('start', 0);
         $filter = $this->Request()->getParam('filter');
         $filterBy = $this->Request()->getParam('filterBy');
         $categoryId = $this->Request()->getParam('categoryId');
@@ -155,14 +156,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $validFrom = $emotion['validFrom'];
         $validTo = $emotion['validTo'];
 
-        /** @var \DateTime $validFrom */
-        if ($validFrom instanceof \DateTime) {
+        /** @var \DateTimeInterface $validFrom */
+        if ($validFrom instanceof \DateTimeInterface) {
             $emotion['validFrom'] = $validFrom->format('d.m.Y');
             $emotion['validFromTime'] = $validFrom->format('H:i');
         }
 
-        /** @var \DateTime $validTo */
-        if ($validTo instanceof \DateTime) {
+        /** @var \DateTimeInterface $validTo */
+        if ($validTo instanceof \DateTimeInterface) {
             $emotion['validTo'] = $validTo->format('d.m.Y');
             $emotion['validToTime'] = $validTo->format('H:i');
         }
@@ -1091,6 +1092,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Internal helper function to get access to the entity manager.
+     *
+     * @return \Shopware\Components\Model\ModelManager
      */
     private function getManager()
     {

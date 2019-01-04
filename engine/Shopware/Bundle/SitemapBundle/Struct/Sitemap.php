@@ -32,7 +32,7 @@ class Sitemap
     private $filename;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $created;
 
@@ -42,11 +42,11 @@ class Sitemap
     private $urlCount;
 
     /**
-     * @param string         $filename
-     * @param int            $urlCount
-     * @param null|\DateTime $created
+     * @param string                  $filename
+     * @param int                     $urlCount
+     * @param null|\DateTimeInterface $created
      */
-    public function __construct($filename, $urlCount, \DateTime $created = null)
+    public function __construct($filename, $urlCount, \DateTimeInterface $created = null)
     {
         $this->filename = $filename;
         $this->created = $created ?: new \DateTime('NOW', new \DateTimeZone('UTC'));
@@ -86,7 +86,7 @@ class Sitemap
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreated()
     {
@@ -94,7 +94,7 @@ class Sitemap
     }
 
     /**
-     * @param \DateTime $created
+     * @param \DateTimeInterface $created
      */
     public function setCreated($created)
     {

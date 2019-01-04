@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DbAdapter;
 use Shopware\Models\Plugin\Plugin;
@@ -50,7 +51,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected $locale;
 
     /**
-     * @var Shopware\Models\Shop\Shop
+     * @var Shopware\Models\Shop\Shop|null
      */
     protected $shop;
 
@@ -70,7 +71,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     private $pluginDirectories;
 
     /**
-     * @var Locale
+     * @var Locale|null
      */
     private $fallbackLocale;
 
@@ -86,7 +87,10 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         $this->pluginDirectories = $pluginDirectories;
 
         $repository = $this->modelManager->getRepository(Locale::class);
-        $this->fallbackLocale = $repository->findOneBy(['locale' => 'en_GB']);
+
+        /** @var \Shopware\Models\Shop\Locale $fallbackLocale */
+        $fallbackLocale = $repository->findOneBy(['locale' => 'en_GB']);
+        $this->fallbackLocale = $fallbackLocale;
 
         if ($this->snippetConfig['readFromIni']) {
             $configDir = $this->getConfigDirs();

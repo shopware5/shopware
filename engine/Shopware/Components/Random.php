@@ -44,7 +44,7 @@ abstract class Random
      *
      * @param int $length
      *
-     * @return string
+     * @return string|false
      */
     public static function getBytes($length)
     {

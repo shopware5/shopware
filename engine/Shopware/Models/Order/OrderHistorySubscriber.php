@@ -56,7 +56,7 @@ class OrderHistorySubscriber implements EventSubscriber
             return;
         }
 
-        //order or payment status changed?
+        // Order or payment status changed?
         if (
             !$eventArgs->hasChangedField('paymentStatus') &&
             !$eventArgs->hasChangedField('orderStatus')
@@ -71,11 +71,11 @@ class OrderHistorySubscriber implements EventSubscriber
         ];
 
         if ($this->hasIdentity()) {
-            $user = $eventArgs->getEntityManager()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);
+            $user = $eventArgs->getEntityManager()->find(\Shopware\Models\User\User::class, Shopware()->Container()->get('Auth')->getIdentity()->id);
             $historyData['userID'] = $user->getId();
         }
 
-        //order status changed?
+        // Order status changed?
         if ($eventArgs->hasChangedField('orderStatus')) {
             $historyData['previous_order_status_id'] = $eventArgs->getOldValue('orderStatus')->getId();
             $historyData['order_status_id'] = $eventArgs->getNewValue('orderStatus')->getId();
@@ -84,7 +84,7 @@ class OrderHistorySubscriber implements EventSubscriber
             $historyData['order_status_id'] = $order->getOrderStatus()->getId();
         }
 
-        //payment status changed?
+        // Payment status changed?
         if ($eventArgs->hasChangedField('paymentStatus')) {
             $historyData['previous_payment_status_id'] = $eventArgs->getOldValue('paymentStatus')->getId();
             $historyData['payment_status_id'] = $eventArgs->getNewValue('paymentStatus')->getId();

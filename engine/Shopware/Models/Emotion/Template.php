@@ -42,10 +42,12 @@ use Shopware\Components\Model\ModelEntity;
 class Template extends ModelEntity
 {
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Emotion\Emotion>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="template")
      */
     protected $emotions;
+
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -68,6 +70,7 @@ class Template extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="file", type="string", length=255, nullable=false)
      */
     private $file;

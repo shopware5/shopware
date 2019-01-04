@@ -73,9 +73,9 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * The privileges property is the inverse side of the association between resource and privileges.
      * The association is joined over the s_core_acl_privileges.resourceID field and the s_core_acl_resources.id
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\User\Privilege", mappedBy="resource")
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\User\Privilege>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\User\Privilege", mappedBy="resource")
      */
     private $privileges;
 
@@ -102,7 +102,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      *
      * @param string $name
      *
-     * @return resource
+     * @return \Shopware\Models\User\Resource
      */
     public function setName($name)
     {
@@ -147,7 +147,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * the Resource.privileges property (INVERSE SIDE) and the Privilege.resource (OWNING SIDE) property.
      * The privilege data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\User\Privilege>
      */
     public function getPrivileges()
     {
@@ -160,7 +160,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * the Resource.privileges property (INVERSE SIDE) and the Privilege.resource (OWNING SIDE) property.
      * The privilege data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $privileges
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\User\Privilege> $privileges
      */
     public function setPrivileges($privileges)
     {

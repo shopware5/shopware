@@ -133,7 +133,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
 
             Enlight_Components_Session::regenerateId();
 
-            // close and restart session to make sure the db session handler writes updates.
+            // Close and restart session to make sure the db session handler writes updates.
             session_write_close();
             session_start();
 
@@ -142,7 +142,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             $this->updateExpiry();
             $this->updateSessionId();
 
-            //reset failed login count
+            // Reset failed login count
             $this->setFailedLogins(0);
         } else {
             // If more then 4 previous failed logins lock account for n * failedlogins seconds

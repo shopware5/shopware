@@ -254,13 +254,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         // Crawl original data
         $crawler = $this->doRequest('GET', '/account');
-        $originalText = trim($crawler->filter('.account--billing .panel--body p')->last()->text());
         $addressId = (int) $crawler->filter('.account--billing .panel--actions a:contains("oder andere Adresse wählen")')->attr('data-id');
 
         $this->assertGreaterThan(0, $addressId);
-
-        // Edit the entry
-        $expectedText = 'Herr Shop ManMusterstr. 5555555 Musterhausen Nordrhein-WestfalenDeutschland';
 
         $this->doRequest(
             'POST',
@@ -282,10 +278,15 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         // verify the changes
         $crawler = $this->doRequest('GET', '/account');
-        $currentText = trim($crawler->filter('.account--billing .panel--body p')->last()->text());
+        $panelBody = $crawler->filter('.account--billing .panel--body');
 
-        $this->assertNotEquals($originalText, $currentText);
-        $this->assertEquals($expectedText, $currentText);
+        $this->assertEquals('Muster GmbH', trim($panelBody->filter('.address--company')->text()));
+        $this->assertEquals('Herr', trim($panelBody->filter('.address--salutation')->text()));
+        $this->assertEquals('Shop', trim($panelBody->filter('.address--firstname')->text()));
+        $this->assertEquals('Man', trim($panelBody->filter('.address--lastname')->text()));
+        $this->assertEquals('Musterstr. 55', trim($panelBody->filter('.address--street')->text()));
+        $this->assertEquals('Nordrhein-Westfalen', trim($panelBody->filter('.address--statename')->text()));
+        $this->assertEquals('Deutschland', trim($panelBody->filter('.address--countryname')->text()));
     }
 
     /**

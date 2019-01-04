@@ -21,76 +21,84 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Shopware\Components\Api\Manager;
+use Shopware\Components\Api\Resource\Article;
+
 class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Article
+     * @var Article
      */
-    protected $resource = null;
+    protected $resource;
 
     public function init()
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('article');
+        $this->resource = Manager::getResource('article');
     }
 
     /**
-     * Get list of articles
+     * Get list of products
      *
      * GET /api/articles/
      */
     public function indexAction()
     {
-        $limit = (int) $this->Request()->getParam('limit', 1000);
-        $offset = (int) $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', []);
-        $filter = $this->Request()->getParam('filter', []);
+        $request = $this->Request();
+        $limit = (int) $request->getParam('limit', 1000);
+        $offset = (int) $request->getParam('start', 0);
+        $sort = $request->getParam('sort', []);
+        $filter = $request->getParam('filter', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort, [
-            'language' => $this->Request()->getParam('language'),
+            'language' => $request->getParam('language'),
         ]);
 
-        $this->View()->assign($result);
-        $this->View()->assign('success', true);
+        $view = $this->View();
+        $view->assign($result);
+        $view->assign('success', true);
     }
 
     /**
-     * Get one article
+     * Get one product
      *
      * GET /api/articles/{id}
      */
     public function getAction()
     {
-        $id = $this->Request()->getParam('id');
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $request = $this->Request();
+        $id = $request->getParam('id');
+        $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $article = $this->resource->getOneByNumber($id, [
-                'language' => $this->Request()->getParam('language'),
-                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
+            $product = $this->resource->getOneByNumber($id, [
+                'language' => $request->getParam('language'),
+                'considerTaxInput' => $request->getParam('considerTaxInput'),
             ]);
         } else {
-            $article = $this->resource->getOne($id, [
-                'language' => $this->Request()->getParam('language'),
-                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
+            $product = $this->resource->getOne($id, [
+                'language' => $request->getParam('language'),
+                'considerTaxInput' => $request->getParam('considerTaxInput'),
             ]);
         }
 
-        $this->View()->assign('data', $article);
-        $this->View()->assign('success', true);
+        $view = $this->View();
+        $view->assign('data', $product);
+        $view->assign('success', true);
     }
 
     /**
-     * Create new article
+     * Create new product
      *
      * POST /api/articles
      */
     public function postAction()
     {
-        $article = $this->resource->create($this->Request()->getPost());
+        $product = $this->resource->create($this->Request()->getPost());
 
-        $location = $this->apiBaseUrl . 'articles/' . $article->getId();
+        $location = $this->apiBaseUrl . 'articles/' . $product->getId();
         $data = [
-            'id' => $article->getId(),
+            'id' => $product->getId(),
             'location' => $location,
         ];
 
@@ -99,25 +107,26 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * Update article
+     * Update product
      *
      * PUT /api/articles/{id}
      */
     public function putAction()
     {
-        $id = $this->Request()->getParam('id');
-        $params = $this->Request()->getPost();
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $request = $this->Request();
+        $id = $request->getParam('id');
+        $params = $request->getPost();
+        $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $article = $this->resource->updateByNumber($id, $params);
+            $product = $this->resource->updateByNumber($id, $params);
         } else {
-            $article = $this->resource->update($id, $params);
+            $product = $this->resource->update($id, $params);
         }
 
-        $location = $this->apiBaseUrl . 'articles/' . $article->getId();
+        $location = $this->apiBaseUrl . 'articles/' . $product->getId();
         $data = [
-            'id' => $article->getId(),
+            'id' => $product->getId(),
             'location' => $location,
         ];
 
@@ -125,14 +134,15 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * Delete article
+     * Delete product
      *
      * DELETE /api/articles/{id}
      */
     public function deleteAction()
     {
-        $id = $this->Request()->getParam('id');
-        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
+        $request = $this->Request();
+        $id = $request->getParam('id');
+        $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);

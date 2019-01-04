@@ -38,7 +38,7 @@ class EmotionService implements EmotionServiceInterface
     private $gateway;
 
     /**
-     * @var EmotionElementService
+     * @var EmotionElementServiceInterface
      */
     private $elementService;
 

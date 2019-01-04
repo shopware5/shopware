@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\Common\EventArgs;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
@@ -280,8 +281,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Returns the configured proxy-url.
      *
-     * Fallbacks to autodetection if proxy-url is not configured and $request is given.
-     * Returns null if $request is not given or autodetection fails.
+     * Fallback to auto-detection if proxy-url is not configured and $request is given.
+     * Returns null if $request is not given or auto-detection fails.
      *
      * @param Request $request
      *

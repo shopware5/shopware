@@ -102,7 +102,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
      * @param Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return FacetResultInterface
+     * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,

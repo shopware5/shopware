@@ -36,7 +36,7 @@ class Url
     /**
      * Date and time of last modification
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $lastmod;
 
@@ -55,10 +55,10 @@ class Url
     private $priority;
 
     /**
-     * @param string    $loc
-     * @param \DateTime $lastmod
-     * @param string    $changefreq
-     * @param float     $priority
+     * @param string             $loc
+     * @param \DateTimeInterface $lastmod
+     * @param string             $changefreq
+     * @param float              $priority
      */
     public function __construct($loc, $lastmod, $changefreq, $priority = 0.5)
     {
@@ -97,7 +97,7 @@ class Url
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastmod()
     {
@@ -105,7 +105,7 @@ class Url
     }
 
     /**
-     * @param \DateTime $lastmod
+     * @param \DateTimeInterface $lastmod
      */
     public function setLastmod($lastmod)
     {

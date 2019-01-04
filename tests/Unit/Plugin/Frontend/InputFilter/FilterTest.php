@@ -143,7 +143,7 @@ class FilterTest extends TestCase
      * @dataProvider striptagsDataProvider
      *
      * @param string $input
-     * @param $expected
+     * @param array  $expected
      */
     public function testStripTagsDisabled($input, array $expected)
     {
@@ -151,5 +151,90 @@ class FilterTest extends TestCase
             $expected['disabled'],
             \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', false)
         );
+    }
+
+    /**
+     * @dataProvider stripxssDataProvider
+     *
+     * @param string $input
+     * @param string $expected
+     */
+    public function testXssFilter($input, $expected)
+    {
+        $result = \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#' . $this->inputFilter->xssRegex . '#msi');
+
+        $this->assertEquals(
+            $expected,
+            $result
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function stripxssDataProvider()
+    {
+        return [
+            [
+                'input' => 'data-foo', // Input value
+                'expected' => null, // Expected result
+            ],
+            [
+                'input' => 'data-foo="bar"',
+                'expected' => null,
+            ],
+            [
+                'input' => 'data-dosomething ',
+                'expected' => null,
+            ],
+            [
+                'input' => 'foo bar\'hallo welt" data-dosomething foo bar',
+                'expected' => null,
+            ],
+            [
+                'input' => 'someone@data-foo.com',
+                'expected' => 'someone@data-foo.com',
+            ],
+            [
+                'input' => 'foo bar jemand@data-foo.com foo bar',
+                'expected' => 'foo bar jemand@data-foo.com foo bar',
+            ],
+            [
+                'input' => 'foo barfoo bar data-dosomething="aweful" foo bar',
+                'expected' => null,
+            ],
+            [
+                'input' => 'foo bar data-dosomething',
+                'expected' => null,
+            ],
+            [
+                'input' => '      data-dosomething   ',
+                'expected' => null,
+            ],
+            [
+                'input' => 'data-dosomething   ',
+                'expected' => null,
+            ],
+            [
+                'input' => 'foodata-dosomething   ',
+                'expected' => 'foodata-dosomething   ',
+            ],
+            [
+                'input' => 'foo bar jemand@data-foo.com foo bar',
+                'expected' => 'foo bar jemand@data-foo.com foo bar',
+            ],
+            [
+                'input' => 'assdsa jemand@data-foo.com',
+                'expected' => 'assdsa jemand@data-foo.com',
+            ],
+            [
+                'input' => ' jemand@fara-data-foo.com  ',
+                'expected' => ' jemand@fara-data-foo.com  ',
+            ],
+            [
+                'input' => 'jemand@fara-data-foo.com',
+                'expected' => 'jemand@fara-data-foo.com',
+            ],
+        ];
     }
 }

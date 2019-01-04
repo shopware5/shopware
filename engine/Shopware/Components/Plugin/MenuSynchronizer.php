@@ -128,6 +128,7 @@ class MenuSynchronizer
         $item = null;
 
         if ($plugin->getId()) {
+            /** @var Menu $item */
             $item = $this->menuRepository->findOneBy([
                 'pluginId' => $plugin->getId(),
                 'label' => $menuItem['name'],

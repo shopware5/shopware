@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Shopware\Components\Model\QueryBuilder;
 
 /**
@@ -827,7 +829,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
              *
              * So we have to remove the first level of the posted data.
              */
-            if ($mapping['type'] === 1) {
+            if ($mapping['type'] === ClassMetadataInfo::ONE_TO_ONE) {
                 $mappingData = $data[$mapping['fieldName']];
                 if (array_key_exists(0, $mappingData)) {
                     $data[$mapping['fieldName']] = $data[$mapping['fieldName']][0];
@@ -838,7 +840,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 continue;
             }
 
-            if ($mapping['type'] === 2) {
+            if ($mapping['type'] === ClassMetadataInfo::MANY_TO_ONE) {
                 /**
                  * @ORM\ManyToOne associations.
                  *
@@ -865,7 +867,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     //remove the foreign key data.
                     unset($data[$field]);
                 }
-            } elseif ($mapping['type'] === 8) {
+            } elseif ($mapping['type'] === ClassMetadataInfo::MANY_TO_MANY) {
                 /**
                  * @ORM\ManyToMany associations.
                  *

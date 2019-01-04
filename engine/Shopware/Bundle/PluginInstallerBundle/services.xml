@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
 
         <service id="shopware_plugininstaller.http_client" class="Shopware\Components\HttpClient\GuzzleHttpClient">
             <argument type="service" id="guzzle_http_client_factory"/>
@@ -35,8 +36,8 @@
             <argument type="service" id="db_connection" />
             <argument type="service" id="events" />
             <argument type="collection">
-                <argument type="string">%shopware.plugin_directories.ShopwarePlugins%</argument>
-                <argument type="string">%shopware.plugin_directories.ProjectPlugins%</argument>
+                <argument type="string" key="ShopwarePlugins">%shopware.plugin_directories.ShopwarePlugins%</argument>
+                <argument type="string" key="ProjectPlugins">%shopware.plugin_directories.ProjectPlugins%</argument>
             </argument>
             <argument type="service" id="shopware.release" />
         </service>

@@ -38,6 +38,8 @@ class Template extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Article
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="configuratorTemplate")
      * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
@@ -46,18 +48,18 @@ class Template extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Template\Price", mappedBy="template", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Template\Price>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Template\Price", mappedBy="template", orphanRemoval=true, cascade={"persist"})
      */
     protected $prices;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Template", mappedBy="template", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Template
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Template", mappedBy="template", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -70,6 +72,7 @@ class Template extends ModelEntity
      * @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
      */
     protected $unit;
+
     /**
      * @var int
      *
@@ -91,10 +94,11 @@ class Template extends ModelEntity
      *
      * @ORM\Column(name="unit_id", type="integer", nullable=true)
      */
-    private $unitId = null;
+    private $unitId;
 
     /**
      * @var string
+     *
      * @Assert\NotBlank
      * @Assert\Regex("/^[a-zA-Z0-9-_. ]+$/")
      *
@@ -107,14 +111,14 @@ class Template extends ModelEntity
      *
      * @ORM\Column(name="suppliernumber", type="string", nullable=true)
      */
-    private $supplierNumber = null;
+    private $supplierNumber;
 
     /**
      * @var string
      *
      * @ORM\Column(name="additionaltext", type="string", nullable=true)
      */
-    private $additionalText = null;
+    private $additionalText;
 
     /**
      * @var int
@@ -128,53 +132,56 @@ class Template extends ModelEntity
      *
      * @ORM\Column(name="instock", type="integer", nullable=true)
      */
-    private $inStock = null;
+    private $inStock;
 
     /**
      * @var int
      *
      * @ORM\Column(name="stockmin", type="integer", nullable=true)
      */
-    private $stockMin = null;
+    private $stockMin;
 
     /**
      * @var int
      *
      * @ORM\Column(name="laststock", type="boolean", nullable=false)
      */
-    private $lastStock = null;
+    private $lastStock;
 
     /**
      * @var float
      *
      * @ORM\Column(name="weight", type="decimal", nullable=true, precision=3)
      */
-    private $weight = null;
+    private $weight;
 
     /**
      * @var float
      *
      * @ORM\Column(name="width", type="decimal", nullable=true, precision=3)
      */
-    private $width = null;
+    private $width;
 
     /**
      * @var float
+     *
      * @ORM\Column(name="length", type="decimal", nullable=true, precision=3)
      */
-    private $len = null;
+    private $len;
 
     /**
      * @var float
+     *
      * @ORM\Column(name="height", type="decimal", nullable=true, precision=3)
      */
-    private $height = null;
+    private $height;
 
     /**
-     * @var float ean
+     * @var string
+     *
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
-    private $ean = null;
+    private $ean;
 
     /**
      * @var float
@@ -185,24 +192,28 @@ class Template extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="minpurchase", type="integer", nullable=true)
      */
     private $minPurchase = null;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="purchasesteps", type="integer", nullable=true)
      */
     private $purchaseSteps = null;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="maxpurchase", type="integer", nullable=true)
      */
     private $maxPurchase = null;
@@ -219,35 +230,35 @@ class Template extends ModelEntity
      *
      * @ORM\Column(name="referenceunit", type="decimal", nullable=true)
      */
-    private $referenceUnit = null;
+    private $referenceUnit;
 
     /**
      * @var string
      *
      * @ORM\Column(name="packunit", type="text", nullable=true)
      */
-    private $packUnit = null;
+    private $packUnit;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
      */
     private $shippingFree = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
-    private $releaseDate = null;
+    private $releaseDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="shippingtime", type="string", length=11, nullable=true)
      */
-    private $shippingTime = null;
+    private $shippingTime;
 
     /**
      * Class constructor. Initials the array collections.
@@ -512,7 +523,7 @@ class Template extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Template', 'attribute', 'template');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Template::class, 'attribute', 'template');
     }
 
     /**
@@ -524,13 +535,13 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $prices
+     * @param \Shopware\Models\Article\Configurator\Template\Price[]|null $prices
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Template
      */
     public function setPrices($prices)
     {
-        return $this->setOneToMany($prices, '\Shopware\Models\Article\Configurator\Template\Price', 'prices', 'template');
+        return $this->setOneToMany($prices, \Shopware\Models\Article\Configurator\Template\Price::class, 'prices', 'template');
     }
 
     /**
@@ -582,7 +593,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getEan()
     {
@@ -590,7 +601,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param float $ean
+     * @param string $ean
      */
     public function setEan($ean)
     {
@@ -648,7 +659,7 @@ class Template extends ModelEntity
     /**
      * Set shippingFree
      *
-     * @param int $shippingFree
+     * @param bool $shippingFree
      *
      * @return \Shopware\Models\Article\Configurator\Template\Template
      */
@@ -662,7 +673,7 @@ class Template extends ModelEntity
     /**
      * Get shippingFree
      *
-     * @return int
+     * @return bool
      */
     public function getShippingFree()
     {
@@ -672,13 +683,13 @@ class Template extends ModelEntity
     /**
      * Set releaseDate
      *
-     * @param \DateTime|string|null $releaseDate
+     * @param \DateTimeInterface|string|null $releaseDate
      *
      * @return \Shopware\Models\Article\Configurator\Template\Template
      */
     public function setReleaseDate($releaseDate = null)
     {
-        if ($releaseDate !== null && !($releaseDate instanceof \DateTime)) {
+        if ($releaseDate !== null && !($releaseDate instanceof \DateTimeInterface)) {
             $this->releaseDate = new \DateTime($releaseDate);
         } else {
             $this->releaseDate = $releaseDate;
@@ -690,7 +701,7 @@ class Template extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getReleaseDate()
     {

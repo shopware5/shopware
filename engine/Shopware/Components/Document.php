@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
@@ -113,7 +114,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Document-Metadata / Properties
      *
-     * @var array
+     * @var ArrayObject
      */
     public $_document;
 
@@ -236,7 +237,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Start renderer / pdf-generation
      *
-     * @param string optional define renderer (pdf,html,return)
+     * @param string $_renderer optional define renderer (pdf,html,return)
      *
      * @throws \Enlight_Event_Exception
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException

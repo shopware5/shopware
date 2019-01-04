@@ -47,78 +47,91 @@ class Shop extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="main_id", type="integer", nullable=true)
      */
     protected $mainId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
     protected $categoryId;
 
     /**
      * @var Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shop", inversedBy="children")
      */
     protected $main;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     protected $title;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     protected $position = 0;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
      */
     protected $host;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="base_path", type="string", length=255, nullable=true)
      */
     protected $basePath;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="base_url", type="string", length=255, nullable=true)
      */
     protected $baseUrl;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="hosts", type="text", nullable=false)
      */
     protected $hosts = '';
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="secure", type="boolean", nullable=false)
      */
     protected $secure = false;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
     protected $templateId;
 
     /**
      * @var Template
+     *
      * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
@@ -126,6 +139,7 @@ class Shop extends ModelEntity
 
     /**
      * @var Template
+     *
      * @ORM\ManyToOne(targetEntity="Template")
      * @ORM\JoinColumn(name="document_template_id", referencedColumnName="id")
      */
@@ -133,12 +147,14 @@ class Shop extends ModelEntity
 
     /**
      * @var \Shopware\Models\Category\Category
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      */
     protected $category;
 
     /**
      * @var Locale
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      */
     protected $locale;
@@ -151,6 +167,7 @@ class Shop extends ModelEntity
 
     /**
      * @var \Shopware\Models\Customer\Group
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id")
      */
@@ -158,30 +175,35 @@ class Shop extends ModelEntity
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="`default`", type="boolean", nullable=false)
      */
     protected $default = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     protected $active = true;
 
     /**
      * @var Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shop")
      */
     protected $fallback;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="customer_scope", type="boolean", nullable=false)
      */
     protected $customerScope = false;
 
     /**
-     * @var Currency[]|\Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<Currency>
+     *
      * @ORM\ManyToMany(targetEntity="Currency")
      * @ORM\JoinTable(name="s_core_shop_currencies")
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
@@ -189,7 +211,8 @@ class Shop extends ModelEntity
     protected $currencies;
 
     /**
-     * @var \Shopware\Models\Site\Group[]|\Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Site\Group>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Site\Group")
      * @ORM\JoinTable(name="s_core_shop_pages")
      * @ORM\OrderBy({"id" = "ASC"})
@@ -197,7 +220,8 @@ class Shop extends ModelEntity
     protected $pages;
 
     /**
-     * @var Shop[]|\Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<Shop>
+     *
      * @ORM\OneToMany(targetEntity="Shop", mappedBy="main", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
@@ -438,7 +462,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getDefault()
     {
@@ -633,7 +657,7 @@ class Shop extends ModelEntity
      *
      * @throws \Exception
      *
-     * @return DetachedShop
+     * @return Shop
      */
     public function registerResources($bootstrap = null)
     {

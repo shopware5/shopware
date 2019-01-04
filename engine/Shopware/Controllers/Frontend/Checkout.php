@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
@@ -198,6 +199,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->sPayment = $payment;
 
+        /** @var array<string, mixed> $userData */
         $userData = $this->View()->sUserData;
         $userData['additional']['payment'] = $this->View()->sPayment;
         $this->View()->sUserData = $userData;
@@ -244,11 +246,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->sTargetAction = 'confirm';
 
-        $this->View()->assign('hasMixedArticles', $this->basketHasMixedArticles($this->View()->sBasket));
-        $this->View()->assign('hasServiceArticles', $this->basketHasServiceArticles($this->View()->sBasket));
+        $this->View()->assign('hasMixedArticles', $this->basketHasMixedProducts($this->View()->sBasket));
+        $this->View()->assign('hasServiceArticles', $this->basketHasServiceProducts($this->View()->sBasket));
 
         if (Shopware()->Config()->get('showEsdWarning')) {
-            $this->View()->assign('hasEsdArticles', $this->basketHasEsdArticles($this->View()->sBasket));
+            $this->View()->assign('hasEsdArticles', $this->basketHasEsdProducts($this->View()->sBasket));
         }
 
         $serviceChecked = $this->Request()->getParam('serviceAgreementChecked');
@@ -271,9 +273,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $this->View()->assign('sVoucherError', $voucherErrors);
         }
 
+        /** @var array<array<array>> $activeBillingAddressId */
         if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
             $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
         }
+        /** @var array<array<array>> $activeShippingAddressId */
         if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
             $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
         }
@@ -513,7 +517,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Add an article to cart directly from cart / confirm view
+     * Add an product to cart directly from cart / confirm view
      *
      * request param "sAdd" = ordernumber
      * request param "sQuantity" = quantity
@@ -566,10 +570,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Add more then one article directly from cart / confirm view
+     * Add more then one product directly from cart / confirm view
      *
-     * request param "sAddAccessories" = List of article order numbers separated by ;
-     * request param "sAddAccessoriesQuantity" = List of article quantities separated by ;
+     * request param "sAddAccessories" = List of product order numbers separated by ;
+     * request param "sAddAccessoriesQuantity" = List of product quantities separated by ;
      */
     public function addAccessoriesAction()
     {
@@ -582,7 +586,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Delete an article from cart -
+     * Delete a product from cart -
      *
      * request param "sDelete" = id from s_basket identifying the product to delete
      * Forward to cart / confirmation page after success
@@ -598,7 +602,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Change quantity of a certain product
      *
-     * request param "sArticle" = The article to update
+     * request param "sArticle" = The product to update
      * request param "sQuantity" = new quantity
      * Forward to cart / confirm view after success
      */
@@ -628,9 +632,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Add premium / bonus article to cart
+     * Add premium / bonus product to cart
      *
-     * request param "sAddPremium" - ordernumber of bonus article (defined in s_articles_premiums)
+     * request param "sAddPremium" - ordernumber of bonus product (defined in s_articles_premiums)
      * Return to cart / confirm page on success
      */
     public function addPremiumAction()
@@ -924,7 +928,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * Used in ajax add cart action
      * Check availability of product and return info / error - messages
      *
-     * @param string $orderNumber article order number
+     * @param string $orderNumber product order number
      * @param int    $quantity    quantity
      *
      * @return string|null
@@ -966,7 +970,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      *
      * @param string $ordernumber
      *
-     * @return array with article id / current basket quantity / instock / laststock
+     * @return array with product id / current basket quantity / instock / laststock
      */
     public function getAvailableStock($ordernumber)
     {
@@ -1290,7 +1294,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
     /**
      * Check if a custom inquiry possibility should displayed on cart page
-     * Compare configured inquirevalue with current amount
+     * Compare configured inquiry value with current amount
      *
      * @return bool
      */
@@ -1313,7 +1317,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Get link to inquiry form if getInquiry returend true
+     * Get link to inquiry form if getInquiry returned true
      *
      * @return string
      */
@@ -1337,7 +1341,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      *
      * @param null $paymentId
      *
-     * @return array list of dispatches
+     * @return array|false list of dispatches
      */
     public function getDispatches($paymentId = null)
     {
@@ -1365,7 +1369,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * Get current selected country - if no country is selected, choose first one from list
      * of available countries
      *
-     * @return array with country information
+     * @return array|false
      */
     public function getSelectedCountry()
     {
@@ -1517,7 +1521,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Ajax add article action
+     * Ajax add product action
      *
      * This action will get redirected from the default addArticleAction
      * when the request was an AJAX request.
@@ -1528,15 +1532,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Ajax add article cart action
+     * Ajax add product cart action
      *
-     * This action is a lightweight way to add an article by the passed
-     * article order number and quantity.
+     * This action is a lightweight way to add an product by the passed
+     * product order number and quantity.
      *
      * The order number is expected to get passed by the 'sAdd' parameter
      * This quantity is expected to get passed by the 'sQuantity' parameter.
      *
-     * After the article was added to the basket, the whole cart content will be returned.
+     * After the product was added to the basket, the whole cart content will be returned.
      *
      * @throws \LogicException
      */
@@ -1567,14 +1571,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Ajax delete article action
+     * Ajax delete product action
      *
-     * This action is a lightweight way to delete an article by the passed
+     * This action is a lightweight way to delete an product by the passed
      * basket item id.
      *
      * This id is expected to get passed by the 'sDelete' parameter.
      *
-     * After the article was removed from the basket, the whole cart content will be returned.
+     * After the product was removed from the basket, the whole cart content will be returned.
      */
     public function ajaxDeleteArticleCartAction()
     {
@@ -1698,14 +1702,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $esdAgreement = $request->getParam('esdAgreementChecked');
         if ($this->container->get('config')->get('showEsdWarning')
-            && $this->basketHasEsdArticles($basket)
+            && $this->basketHasEsdProducts($basket)
             && empty($esdAgreement)
         ) {
             $errors['esdError'] = true;
         }
 
         $serviceChecked = $request->getParam('serviceAgreementChecked');
-        if ($this->basketHasServiceArticles($basket) && empty($serviceChecked)) {
+        if ($this->basketHasServiceProducts($basket) && empty($serviceChecked)) {
             $errors['serviceError'] = true;
         }
 
@@ -1759,20 +1763,20 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Helper function that checks whether or not the given basket has an esd article in it.
+     * Helper function that checks whether or not the given basket has an esd product in it.
      *
      * @param array $basket
      *
      * @return bool
      */
-    private function basketHasEsdArticles($basket)
+    private function basketHasEsdProducts($basket)
     {
         if (!isset($basket['content'])) {
             return false;
         }
 
-        foreach ($basket['content'] as $article) {
-            if ($article['esd']) {
+        foreach ($basket['content'] as $cartItem) {
+            if ($cartItem['esd']) {
                 return true;
             }
         }
@@ -1781,15 +1785,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Helper function that iterates through the basket articles.
-     * It checks if an article is a service article by comparing its attributes
+     * Helper function that iterates through the basket products.
+     * It checks if an product is a service product by comparing its attributes
      * with the plugin config serviceAttrField value.
      *
      * @param array $basket
      *
      * @return bool
      */
-    private function basketHasServiceArticles($basket)
+    private function basketHasServiceProducts($basket)
     {
         $config = Shopware()->Config();
 
@@ -1802,8 +1806,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return false;
         }
 
-        foreach ($basket['content'] as $article) {
-            $serviceAttr = $article['additional_details'][$attrName];
+        foreach ($basket['content'] as $cartItem) {
+            $serviceAttr = $cartItem['additional_details'][$attrName];
 
             if ($serviceAttr && $serviceAttr != 'false') {
                 return true;
@@ -1814,15 +1818,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Helper function that iterates through the basket articles.
-     * If checks if the basket has a normal article e.g. not an esd article
-     * and not a article with the service attribute is set to true.
+     * Helper function that iterates through the basket products.
+     * If checks if the basket has a normal product e.g. not an esd product
+     * and not a product with the service attribute is set to true.
      *
      * @param array $basket
      *
      * @return bool
      */
-    private function basketHasMixedArticles($basket)
+    private function basketHasMixedProducts($basket)
     {
         $config = Shopware()->Config();
         $attrName = $config->serviceAttrField;
@@ -1831,12 +1835,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return false;
         }
 
-        foreach ($basket['content'] as $article) {
-            if ($article['modus'] == 4 || $article['esd']) {
+        foreach ($basket['content'] as $cartItem) {
+            if ((int) $cartItem['modus'] === 4 || $cartItem['esd']) {
                 continue;
             }
 
-            $serviceAttr = $article['additional_details'][$attrName];
+            $serviceAttr = $cartItem['additional_details'][$attrName];
             if (empty($attrName) || ($serviceAttr && $serviceAttr != 'false')) {
                 continue;
             }
@@ -2021,7 +2025,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * Updates all currency dependies (e.g. in the shop model or in the shop context).
+     * Updates all currency dependencies (e.g. in the shop model or in the shop context).
      *
      * @param int $currencyId
      */

@@ -387,13 +387,13 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $mappings
+     * @param \Shopware\Models\Article\Image\Mapping[]|null $mappings
      *
      * @return Image
      */
     public function setMappings($mappings)
     {
-        return $this->setOneToMany($mappings, Mapping::class, 'mappings', 'image');
+        return $this->setOneToMany($mappings, \Shopware\Models\Article\Image\Mapping::class, 'mappings', 'image');
     }
 
     /**

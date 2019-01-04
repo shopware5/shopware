@@ -50,8 +50,10 @@ class FormTranslation extends ModelEntity
      * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
     protected $locale;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -60,24 +62,28 @@ class FormTranslation extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
-    private $label = null;
+    private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="form_id", type="integer", nullable=false)
      */
     private $formId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="locale_id", type="integer", nullable=false)
      */
     private $localeId;

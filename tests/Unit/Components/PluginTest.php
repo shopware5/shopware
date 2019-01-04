@@ -33,7 +33,7 @@ class PluginTest extends TestCase
     public function testFilesystemRegistration()
     {
         $container = new ContainerBuilder();
-        $plugin = new SwagFilesystemTest(true);
+        $plugin = new SwagFilesystemTest(true, 'ShopwarePlugins');
 
         $plugin->build($container);
 

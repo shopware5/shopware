@@ -36,7 +36,7 @@ use Doctrine\ORM\Proxy\Proxy;
  *
  * Enlight event listener function can be registered over $this->subscribeEvent();
  * Example:
- *  - Before a new article created (Model: Shopware\Models\Article\Article) we want to call an own function named "beforeAnArticleCreated".
+ *  - Before a new product created (Model: Shopware\Models\Article\Article) we want to call an own function named "beforeAnArticleCreated".
  *
  * - Plugin Solution:
  * $this->subscribeEvent(

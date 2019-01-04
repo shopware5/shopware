@@ -34,7 +34,7 @@ class IsInCustomerGroupCondition implements ConditionInterface
     protected $ids;
 
     /**
-     * @param int[] $ids
+     * @param string[] $ids
      */
     public function __construct(array $ids)
     {

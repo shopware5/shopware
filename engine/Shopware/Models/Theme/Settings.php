@@ -44,30 +44,35 @@ class Settings extends ModelEntity
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_force", type="boolean", nullable=false)
      */
     private $forceCompile = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_create_source_map", type="boolean", nullable=false)
      */
     private $createSourceMap = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_compress_css", type="boolean", nullable=false)
      */
     private $compressCss = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_compress_js", type="boolean", nullable=false)
      */
     private $compressJs = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="force_reload_snippets", type="boolean", nullable=false)
      */
     private $reloadSnippets = false;

@@ -21,13 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Shop\Currency;
 
 /**
- * Deprecated Shopware Class to provide article export feeds
+ * Shopware Class to provide product export feeds
  *
  * @category Shopware
  *
@@ -60,17 +63,17 @@ class sExport
     /**
      * @var \Shopware\Models\Article\Repository
      */
-    protected $articleRepository = null;
+    protected $articleRepository;
 
     /**
      * @var \Shopware\Models\Media\Repository
      */
-    protected $mediaRepository = null;
+    protected $mediaRepository;
 
     /**
      * @var \Shopware\Models\Media\Album
      */
-    protected $articleMediaAlbum = null;
+    protected $articleMediaAlbum;
 
     /**
      * @var array Contains shop data in array format
@@ -124,7 +127,7 @@ class sExport
     /**
      * @param int|string $currency
      *
-     * @return array
+     * @return array|false
      */
     public function sGetCurrency($currency)
     {
@@ -280,9 +283,9 @@ class sExport
 
         $this->articleMediaAlbum = $this->getMediaRepository()
             ->getAlbumWithSettingsQuery(-1)
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
 
-        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
+        $repository = Shopware()->Models()->getRepository(Currency::class);
         $shop->setCurrency($repository->find($this->sCurrency['id']));
         $shop->registerResources();
 
@@ -535,8 +538,8 @@ class sExport
     }
 
     /**
-     * Returns the article image links with the frontend logic.
-     * Checks the image restriction of variant articles, too.
+     * Returns the product image links with the frontend logic.
+     * Checks the image restriction of variant products, too.
      *
      * @param int         $articleId
      * @param string      $orderNumber
@@ -563,7 +566,7 @@ class sExport
     }
 
     /**
-     * Returns an array with the article property data.
+     * Returns an array with the product property data.
      * Needs to be parsed over the feed smarty template
      *
      * @param int $articleId
@@ -680,7 +683,7 @@ class sExport
         $sql_add_join = [];
         $sql_add_select = [];
         $sql_add_where = [];
-        $sql_add_article_detail_join_condition = '';
+        $sql_add_product_variant_join_condition = '';
 
         $skipBackend = $this->shop->get('skipbackend');
         $isoCode = $this->shop->get('isocode');
@@ -734,8 +737,7 @@ class sExport
             ';
         }
 
-        if (
-            !empty($this->sCustomergroup['groupkey'])
+        if (!empty($this->sCustomergroup['groupkey'])
             && empty($this->sCustomergroup['mode'])
             && $this->sCustomergroup['groupkey'] !== 'EK'
         ) {
@@ -761,15 +763,14 @@ class sExport
             $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
 
             $sql_add_group_by = 'a.id';
-            $sql_add_article_detail_join_condition = 'AND d.kind=1';
+            $sql_add_product_variant_join_condition = 'AND d.kind=1';
         } elseif ($this->sSettings['variant_export'] == 2) {
             $sql_add_group_by = 'd.id';
-            $sql_add_article_detail_join_condition = '';
+            $sql_add_product_variant_join_condition = '';
         }
 
         $grouppricefield = 'gp.price';
-        if (
-            empty($this->sSettings['variant_export'])
+        if (empty($this->sSettings['variant_export'])
             || $this->sSettings['variant_export'] == 2
             || $this->sSettings['variant_export'] == 1
         ) {
@@ -910,7 +911,7 @@ class sExport
             FROM s_articles a
             INNER JOIN s_articles_details d
             ON d.articleID = a.id
-            $sql_add_article_detail_join_condition
+            $sql_add_product_variant_join_condition
             LEFT JOIN s_articles_attributes AS `at`
             ON d.id = `at`.articledetailsID
 
@@ -924,7 +925,7 @@ class sExport
             LEFT JOIN s_core_pricegroups_discounts pd
             ON a.pricegroupActive=1
             AND a.pricegroupID=groupID
-            AND customergroupID = 1
+            AND customergroupID = {$this->sSettings['customergroupID']}
             AND discountstart=1
 
             LEFT JOIN s_articles_esd e ON e.articledetailsID=d.id
@@ -1166,8 +1167,8 @@ class sExport
             $categoryID = $this->sSettings['categoryID'];
         }
 
-        $articleCategoryId = $this->sSYSTEM->sMODULES['sCategories']->sGetCategoryIdByArticleId($articleID, $categoryID);
-        $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($articleCategoryId));
+        $productCategoryId = $this->sSYSTEM->sMODULES['sCategories']->sGetCategoryIdByArticleId($articleID, $categoryID);
+        $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($productCategoryId));
         $breadcrumbs = [];
 
         foreach ($breadcrumb as $breadcrumbObj) {
@@ -1499,7 +1500,7 @@ class sExport
 
         $sql_basket = implode(', ', $sql_basket);
 
-        $articleId = $this->db->quote($basket['articleID']);
+        $productId = $this->db->quote($basket['articleID']);
 
         $sql = "
             SELECT d.id, d.name, d.description, d.calculation, d.status_link, d.surcharge_calculation, d.bind_shippingfree, tax_calculation, t.tax as tax_calculation_value, d.shippingfree
@@ -1512,7 +1513,7 @@ class sExport
                 SELECT dc.dispatchID
                 FROM s_articles_categories_ro ac,
                 s_premium_dispatch_categories dc
-                WHERE ac.articleID=$articleId
+                WHERE ac.articleID=$productId
                 AND dc.categoryID=ac.categoryID
                 GROUP BY dc.dispatchID
             ) as dk
@@ -1827,20 +1828,6 @@ class sExport
         ");
 
         return $cache[$id];
-    }
-
-    /**
-     * Helper function to get access to the article repository.
-     *
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getArticleRepository()
-    {
-        if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
-        }
-
-        return $this->articleRepository;
     }
 
     /**

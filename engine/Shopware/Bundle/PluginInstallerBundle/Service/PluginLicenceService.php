@@ -155,7 +155,7 @@ class PluginLicenceService
     /**
      * @param array $licenses
      *
-     * @return array $expirations
+     * @return array
      */
     private function getExpirations(array $licenses)
     {
@@ -268,11 +268,11 @@ class PluginLicenceService
     }
 
     /**
-     * @param \DateTime $expirationDate
+     * @param \DateTimeInterface $expirationDate
      *
      * @return bool
      */
-    private function isExpired(\DateTime $expirationDate)
+    private function isExpired(\DateTimeInterface $expirationDate)
     {
         $diff = $expirationDate->diff(new \DateTime('now'));
 
@@ -280,12 +280,12 @@ class PluginLicenceService
     }
 
     /**
-     * @param \DateTime $expirationDate
-     * @param int       $daysTillExpiration
+     * @param \DateTimeInterface $expirationDate
+     * @param int                $daysTillExpiration
      *
      * @return bool
      */
-    private function isSoonExpiring(\DateTime $expirationDate, $daysTillExpiration = 14)
+    private function isSoonExpiring(\DateTimeInterface $expirationDate, $daysTillExpiration = 14)
     {
         $diff = $expirationDate->diff(new \DateTime('now'));
 

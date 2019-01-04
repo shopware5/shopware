@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
@@ -256,7 +257,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
         $customerId = (int) $data['customerId'];
 
-        /** @var \DateTime $date */
+        /** @var \DateTimeInterface $date */
         $date = new \DateTime();
 
         /** @var Customer $customer */

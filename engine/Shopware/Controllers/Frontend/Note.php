@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 {
     /**
@@ -83,14 +84,14 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
             return false;
         }
 
-        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($orderNumber);
-        $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
+        $productId = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($orderNumber);
+        $productName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
 
-        if (empty($articleID)) {
+        if (empty($productId)) {
             return false;
         }
 
-        Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $orderNumber);
+        Shopware()->Modules()->Basket()->sAddNote($productId, $productName, $orderNumber);
 
         return true;
     }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 {
     const DEFAULT_DELIMITER = ';';
@@ -55,7 +56,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     private $_fieldmark = '"';
 
     /**
-     * The dafs
+     * The length
      *
      * @var int
      */
@@ -71,7 +72,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * The element that will be returned on each iteration.
      *
-     * @var null|int|false
+     * @var null|int|false|array
      */
     private $_current = null;
 
@@ -85,7 +86,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This is the constructor. It try to open the CSV file.
      *
-     * @param string $filename  the fullpath of the CSV file
+     * @param string $filename  the full path of the CSV file
      * @param string $delimiter the delimiter
      * @param int    $header
      *

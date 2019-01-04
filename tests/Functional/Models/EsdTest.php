@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Article\Esd;
 
 /**
@@ -106,7 +107,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
         }
     }
 
-    /**detail
+    /**
      * Test case
      */
     public function testEsdShouldBePersisted()
@@ -123,7 +124,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         $esdId = $esd->getId();
 
-        // remove esd from entity manager
+        // Remove esd from entity manager
         $this->em->detach($esd);
         unset($esd);
 
@@ -134,6 +135,40 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
             $this->assertEquals($esd->$getMethod(), $value);
         }
 
-        $this->assertInstanceOf('\DateTime', $esd->getDate());
+        $this->assertInstanceOf(\DateTime::class, $esd->getDate());
     }
+
+    /**
+     * Test case
+     */
+    public function testEsdShouldBePersistedWithCustomDateTime()
+    {
+        $esd = new Esd();
+
+        $articleDetail = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class)->findOneBy(['active' => true]);
+        $esd->setArticleDetail($articleDetail);
+
+        $esd->fromArray($this->testData);
+
+        $esd->setDate(new Carbon());
+
+        $this->assertInstanceOf(Carbon::class, $esd->getDate());
+
+        $this->em->persist($esd);
+        $this->em->flush();
+
+        $esdId = $esd->getId();
+
+        // Remove esd from entity manager
+        $this->em->detach($esd);
+        unset($esd);
+
+        $esd = $this->repo->find($esdId);
+
+        $this->assertInstanceOf(\DateTime::class, $esd->getDate());
+    }
+}
+
+class Carbon extends \DateTime
+{
 }

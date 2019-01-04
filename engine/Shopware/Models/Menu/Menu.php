@@ -38,48 +38,57 @@ class Menu extends ModelEntity
 {
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     public $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="onclick", type="string", length=255, nullable=true)
      */
     public $onclick;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="class", type="string", length=255, nullable=false)
      */
     public $class;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="controller", type="string", length=255, nullable=true)
      */
     public $controller;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="action", type="string", length=255, nullable=true)
      */
     public $action;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="shortcut", type="string", length=255, nullable=true)
      */
     public $shortcut;
 
     /**
      * @var \Shopware\Models\Plugin\Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="menuItems")
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
      */
     protected $plugin;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -88,45 +97,48 @@ class Menu extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = true;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="parent", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
      * @var Menu
+     *
      * @ORM\ManyToOne(targetEntity="Menu", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent", nullable=true, referencedColumnName="id", onDelete="SET NULL")
      */
     private $parent;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<Menu>
+     *
      * @ORM\OneToMany(targetEntity="Menu", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $children;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -305,7 +317,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return Menu[]|ArrayCollection
+     * @return ArrayCollection<Menu>
      */
     public function getChildren()
     {
@@ -313,7 +325,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param Menu[] $children
+     * @param ArrayCollection<Menu> $children
      */
     public function setChildren($children)
     {

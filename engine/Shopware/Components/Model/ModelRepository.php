@@ -44,7 +44,7 @@ use Doctrine\ORM\EntityRepository;
 class ModelRepository extends EntityRepository
 {
     /**
-     * Creates a new QueryBuilder instance that is prepopulated for this entity name.
+     * Creates a new QueryBuilder instance that is pre-populated for this entity name.
      *
      * @param string $alias
      * @param string $indexBy the index for the from

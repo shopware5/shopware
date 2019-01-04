@@ -39,12 +39,15 @@ class Discount extends ModelEntity
      * OWNING SIDE
      *
      * @var Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="discounts")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
      */
     protected $group;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")

@@ -122,7 +122,7 @@ class ShopPage extends Extendable
     protected $shops;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $changed;
 
@@ -414,7 +414,7 @@ class ShopPage extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {
@@ -422,9 +422,9 @@ class ShopPage extends Extendable
     }
 
     /**
-     * @param \DateTime $changed
+     * @param \DateTimeInterface $changed
      */
-    public function setChanged(\DateTime $changed)
+    public function setChanged(\DateTimeInterface $changed)
     {
         $this->changed = $changed;
     }

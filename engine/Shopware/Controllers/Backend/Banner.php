@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Banner\Banner;
 
 /**
@@ -299,7 +300,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * Build an array and reformats the date for a banner.
+     * Build an array and re-formats the date for a banner.
      * If the second parameter is set true, every banner will be tracked.
      *
      * @param array $banners
@@ -338,7 +339,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      * @param string $date
      * @param string $time
      *
-     * @return DateTime
+     * @return \DateTime|null
      */
     private function prepareDateAndTime($date, $time)
     {

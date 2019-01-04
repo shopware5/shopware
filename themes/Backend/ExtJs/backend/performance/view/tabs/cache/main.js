@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
      */
     getItems: function() {
         var me = this;
-        var info = '{s name=cache/info/text}Erfahren Sie genaueres über das Performance Module unter : <a href=http://wiki.shopware.de/Shopcache-leeren_detail_845_641.html target=_blank>Wiki</a>  {/s}';
+        var info = '{s name=cache/info/text}Erfahre genaueres über das Performance-Modul in der <a href=\'https://docs.shopware.com/de/shopware-5-de/einstellungen/cache-performance-modul\' title=\'Shopware Performance-Modul\' target=\'_blank\'>Dokumentation</a>{/s}';
 
         return [
         {

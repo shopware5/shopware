@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Models\Banner\Banner;
 
 /**
  * Deprecated Shopware Class that handles marketing related functions
  *
- * @category Shopware
+ * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -41,7 +42,7 @@ class sMarketing
     public $sSYSTEM;
 
     /**
-     * Array with blacklisted articles (already in basket)
+     * Array with blacklisted products (already in basket)
      *
      * @var array
      */
@@ -156,7 +157,7 @@ class sMarketing
             ORDER BY similarShown.viewed DESC, similarShown.related_article_id DESC
             LIMIT $limit";
 
-        $similarShownArticles = Shopware()->Db()->fetchAll($sql, [
+        $similarShownProducts = Shopware()->Db()->fetchAll($sql, [
             'articleId' => (int) $articleId,
             'categoryId' => (int) $this->categoryId,
             'customerGroupId' => (int) $this->customerGroupId,
@@ -164,10 +165,10 @@ class sMarketing
 
         Shopware()->Events()->notify('Shopware_Modules_Marketing_GetSimilarShownArticles', [
             'subject' => $this,
-            'articles' => $similarShownArticles,
+            'articles' => $similarShownProducts,
         ]);
 
-        return $similarShownArticles;
+        return $similarShownProducts;
     }
 
     public function sGetAlsoBoughtArticles($articleID, $limit = 0)
@@ -238,7 +239,7 @@ class sMarketing
      * @param int $sCategory
      * @param int $limit
      *
-     * @return array Contains all information about the banner-object
+     * @return array|false Contains all information about the banner-object
      */
     public function sBanner($sCategory, $limit = 1)
     {
@@ -392,11 +393,20 @@ class sMarketing
             }
 
             if (empty($premium['available'])) {
-                $premium['sDifference'] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium['startprice'] - $sBasketAmount);
+                $premium['sDifference'] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(
+                    $premium['startprice'] - $sBasketAmount
+                );
             }
-            $premium['sArticle'] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById('fix', 0, $premium['articleID']);
+            $premium['sArticle'] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById(
+                'fix',
+                0,
+                $premium['articleID']
+            );
             $premium['startprice'] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium['startprice']);
-            $premium['sVariants'] = $this->getVariantDetailsForPremiumArticles($premium['articleID'], $premium['main_detail_id']);
+            $premium['sVariants'] = $this->getVariantDetailsForPremiumProducts(
+                $premium['articleID'],
+                $premium['main_detail_id']
+            );
         }
 
         return $premiums;
@@ -450,18 +460,18 @@ class sMarketing
             LIMIT $tagSize
         ";
 
-        $articles = $this->db->fetchAssoc($sql);
-        array_walk($articles, function (&$article) {
-            unset($article['articleID']);
+        $products = $this->db->fetchAssoc($sql);
+        array_walk($products, function (&$product) {
+            unset($product['articleID']);
         });
 
-        if (empty($articles)) {
+        if (empty($products)) {
             return [];
         }
-        $articles = $this->sSYSTEM->sMODULES['sArticles']->sGetTranslations($articles, 'article');
+        $products = $this->sSYSTEM->sMODULES['sArticles']->sGetTranslations($products, 'article');
 
         $pos = 1;
-        $anz = count($articles);
+        $anz = count($products);
         if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'])) {
             $steps = (int) $this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'];
         } else {
@@ -474,34 +484,34 @@ class sMarketing
         }
         $link = $this->sSYSTEM->sCONFIG['sBASEFILE'] . '?sViewport=detail&sArticle=';
 
-        foreach ($articles as $articleId => $article) {
-            $name = strip_tags(html_entity_decode($article['articleName'], ENT_QUOTES, 'UTF-8'));
+        foreach ($products as $productId => $product) {
+            $name = strip_tags(html_entity_decode($product['articleName'], ENT_QUOTES, 'UTF-8'));
             $name = preg_replace('/[^\\w0-9äöüßÄÖÜ´`.-]/u', ' ', $name);
             $name = preg_replace('/\s\s+/', ' ', $name);
             $name = preg_replace('/\(.*\)/', '', $name);
             $name = trim($name, ' -');
-            $articles[$articleId]['articleID'] = $articleId;
-            $articles[$articleId]['name'] = $name;
+            $products[$productId]['articleID'] = $productId;
+            $products[$productId]['name'] = $name;
 
             if ($anz != 0) {
-                $articles[$articleId]['class'] = $class . round($pos / $anz * $steps);
+                $products[$productId]['class'] = $class . round($pos / $anz * $steps);
             } else {
-                $articles[$articleId]['class'] = $class . 0;
+                $products[$productId]['class'] = $class . 0;
             }
 
-            $articles[$articleId]['link'] = $link . $articleId;
+            $products[$productId]['link'] = $link . $productId;
             ++$pos;
         }
 
-        shuffle($articles);
+        shuffle($products);
 
-        return $articles;
+        return $products;
     }
 
     public function sGetSimilarArticles($articleId = null, $limit = null)
     {
         $limit = empty($limit) ? 6 : (int) $limit;
-        $articleId = empty($articleId) ? (int) $this->sSYSTEM->_GET['sArticle'] : (int) $articleId;
+        $productId = empty($articleId) ? (int) $this->sSYSTEM->_GET['sArticle'] : (int) $articleId;
 
         $sql = "
             SELECT
@@ -525,7 +535,7 @@ class sMarketing
             AND ag.customergroupID={$this->customerGroupId}
 
             LEFT JOIN s_articles o
-            ON o.id=$articleId
+            ON o.id=$productId
 
             LEFT JOIN s_articles_similar s
             ON s.articleID=o.id
@@ -540,25 +550,25 @@ class sMarketing
 
             WHERE a.active = 1
             AND ag.articleID IS NULL
-            AND a.id!=$articleId
+            AND a.id!=$productId
 
             GROUP BY a.id
             ORDER BY relevance DESC
             LIMIT $limit
         ";
-        $similarArticleIds = $this->db->fetchCol($sql);
+        $similarProductIds = $this->db->fetchCol($sql);
 
-        $similarArticles = [];
-        if (!empty($similarArticleIds)) {
-            foreach ($similarArticleIds as $similarArticleId) {
-                $article = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById('fix', 0, (int) $similarArticleId);
-                if (!empty($article)) {
-                    $similarArticles[] = $article;
+        $similarProducts = [];
+        if (!empty($similarProductIds)) {
+            foreach ($similarProductIds as $similarProductId) {
+                $product = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById('fix', 0, (int) $similarProductId);
+                if (!empty($product)) {
+                    $similarProducts[] = $product;
                 }
             }
         }
 
-        return $similarArticles;
+        return $similarProducts;
     }
 
     public function sMailCampaignsGetDetail($id)
@@ -578,71 +588,73 @@ class sMarketing
             WHERE promotionID=$id
             ORDER BY position
             ";
-        $sql = Shopware()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
-                [
-                    'subject' => $this,
-                    'id' => $id,
-                ]
-            );
+        $sql = Shopware()->Events()->filter(
+            'Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL',
+            $sql,
+            [
+                'subject' => $this,
+                'id' => $id,
+            ]
+        );
 
         $getCampaignContainers = $this->db->fetchAll($sql);
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($getCampaignContainers as $campaignKey => $campaignValue) {
             switch ($campaignValue['type']) {
-                    case 'ctBanner':
-                        // Query Banner
-                        $getBanner = $this->db->fetchRow("
+                case 'ctBanner':
+                    // Query Banner
+                    $getBanner = $this->db->fetchRow("
                         SELECT image, link, linkTarget, description FROM s_campaigns_banner
                         WHERE parentID={$campaignValue['id']}
                         ");
-                        // Rewrite banner
-                        if ($getBanner['image']) {
-                            $getBanner['image'] = $mediaService->getUrl($getBanner['image']);
-                        }
+                    // Rewrite banner
+                    if ($getBanner['image']) {
+                        $getBanner['image'] = $mediaService->getUrl($getBanner['image']);
+                    }
 
-                        if (strpos($getBanner['link'], 'http') === false && $getBanner['link']) {
-                            $getBanner['link'] = 'http://' . $getBanner['link'];
-                        }
+                    if (strpos($getBanner['link'], 'http') === false && $getBanner['link']) {
+                        $getBanner['link'] = 'http://' . $getBanner['link'];
+                    }
 
-                        $getCampaignContainers[$campaignKey]['description'] = $getBanner['description'];
-                        $getCampaignContainers[$campaignKey]['data'] = $getBanner;
-                        break;
-                    case 'ctLinks':
-                        // Query links
-                        $getLinks = $this->db->fetchAll("
+                    $getCampaignContainers[$campaignKey]['description'] = $getBanner['description'];
+                    $getCampaignContainers[$campaignKey]['data'] = $getBanner;
+                    break;
+                case 'ctLinks':
+                    // Query links
+                    $getLinks = $this->db->fetchAll("
                         SELECT description, link, target FROM s_campaigns_links
                         WHERE parentID={$campaignValue['id']}
                         ORDER BY position
                         ");
-                        $getCampaignContainers[$campaignKey]['data'] = $getLinks;
-                        break;
-                    case 'ctArticles':
-                        $sql = "
+                    $getCampaignContainers[$campaignKey]['data'] = $getLinks;
+                    break;
+                case 'ctArticles':
+                    $sql = "
                         SELECT articleordernumber, type FROM s_campaigns_articles
                         WHERE parentID={$campaignValue['id']}
                         ORDER BY position
                         ";
 
-                        $getArticles = $this->db->fetchAll($sql);
-                        $getCampaignContainers[$campaignKey]['data'] = $this->sGetMailCampaignsArticles($getArticles);
-                        break;
-                    case 'ctText':
-                    case 'ctVoucher':
-                        $getText = $this->db->fetchRow("
+                    $getProducts = $this->db->fetchAll($sql);
+                    $getCampaignContainers[$campaignKey]['data'] = $this->sGetMailCampaignsProducts($getProducts);
+                    break;
+                case 'ctText':
+                case 'ctVoucher':
+                    $getText = $this->db->fetchRow("
                             SELECT headline, html,image,alignment,link FROM s_campaigns_html
                             WHERE parentID={$campaignValue['id']}
                         ");
-                        if ($getText['image']) {
-                            $getText['image'] = $mediaService->getUrl($getText['image']);
-                        }
-                        if (strpos($getText['link'], 'http') === false && $getText['link']) {
-                            $getText['link'] = 'http://' . $getText['link'];
-                        }
-                        $getCampaignContainers[$campaignKey]['description'] = $getText['headline'];
-                        $getCampaignContainers[$campaignKey]['data'] = $getText;
-                        break;
-                }
+                    if ($getText['image']) {
+                        $getText['image'] = $mediaService->getUrl($getText['image']);
+                    }
+                    if (strpos($getText['link'], 'http') === false && $getText['link']) {
+                        $getText['link'] = 'http://' . $getText['link'];
+                    }
+                    $getCampaignContainers[$campaignKey]['description'] = $getText['headline'];
+                    $getCampaignContainers[$campaignKey]['data'] = $getText;
+                    break;
+            }
         }
         $getCampaigns['containers'] = $getCampaignContainers;
 
@@ -668,14 +680,14 @@ class sMarketing
     }
 
     /**
-     * For the provided article id, returns the associated variant numbers and additional texts
+     * For the provided product id, returns the associated variant numbers and additional texts
      *
-     * @param int $articleId
+     * @param int $productId
      * @param int $mainDetailId
      *
      * @return array
      */
-    private function getVariantDetailsForPremiumArticles($articleId, $mainDetailId)
+    private function getVariantDetailsForPremiumProducts($productId, $mainDetailId)
     {
         $context = $this->contextService->getShopContext();
 
@@ -686,12 +698,12 @@ class sMarketing
         $products = [];
         $variantsData = Shopware()->Db()->fetchAll(
             $sql,
-            ['articleId' => $articleId]
+            ['articleId' => $productId]
         );
 
         foreach ($variantsData as $variantData) {
             $product = new StoreFrontBundle\Struct\ListProduct(
-                $articleId,
+                $productId,
                 $variantData['id'],
                 $variantData['ordernumber']
             );
@@ -699,7 +711,7 @@ class sMarketing
             if ($variantData['id'] == $mainDetailId) {
                 $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
                     $variantData,
-                    $articleId,
+                    $productId,
                     'article'
                 );
             } else {
@@ -730,22 +742,23 @@ class sMarketing
     /**
      * Processes the newsletter articles and returns the corresponding data.
      *
-     * @param array $articles
+     * @param array $products
      *
      * @return array
      */
-    private function sGetMailCampaignsArticles($articles)
+    private function sGetMailCampaignsProducts($products)
     {
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
         $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
         $categoryId = $contextService->getShopContext()->getShop()->getCategory()->getId();
 
-        $articleData = [];
-        foreach ($articles as $article) {
-            $articleData[] = Shopware()->Modules()->Articles()->sGetPromotionById($article['type'], $categoryId, $article['articleordernumber']);
+        $productData = [];
+        foreach ($products as $article) {
+            $productData[] = Shopware()->Modules()->Articles()
+                ->sGetPromotionById($article['type'], $categoryId, $article['articleordernumber']);
         }
 
-        return $articleData;
+        return $productData;
     }
 
     /**

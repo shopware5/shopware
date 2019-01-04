@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Models\Customer\Address;
@@ -83,7 +84,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             $this->container->get('session')->get('sUserId')
         );
 
-        // Create a list of ids of occuring countries and states
+        // Create a list of ids of occurring countries and states
         $countryIds = array_unique(array_filter(array_column($addresses, 'countryId')));
         $stateIds = array_unique(array_filter(array_column($addresses, 'stateId')));
 

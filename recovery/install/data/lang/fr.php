@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Nous nous réjouissons de t\'accueillir dans notre communauté. Shopware a été installé.
-<p>Ta boutique est maintenant opérationnelle. Si tu utilises Shopware pour la première fois, nous te conseillons de consulter le guide <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Premiers pas sur Shopware"</a>. Si tu te connectes pour la première fois au backend de la boutique, notre "First Run Wizard" t\'accompagnera à travers l\'installation de base.</p>
+<p>Ta boutique est maintenant opérationnelle. Si tu utilises Shopware pour la première fois, nous te conseillons de consulter le guide <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"Premiers pas sur Shopware"</a>. Si tu te connectes pour la première fois au backend de la boutique, notre "First Run Wizard" t\'accompagnera à travers l\'installation de base.</p>
 <p>Profite bien de ta nouvelle boutique en ligne!</p>',
 ];

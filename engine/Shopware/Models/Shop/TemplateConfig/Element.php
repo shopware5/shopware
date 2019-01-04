@@ -274,7 +274,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $values
+     * @param \Shopware\Models\Shop\TemplateConfig\Value[]|null $values
      *
      * @return \Shopware\Components\Model\ModelEntity
      */
@@ -282,14 +282,14 @@ class Element extends ModelEntity
     {
         return $this->setOneToMany(
             $values,
-            '\Shopware\Models\Shop\TemplateConfig\Value',
+            \Shopware\Models\Shop\TemplateConfig\Value::class,
             'values',
             'element'
         );
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Value>
      */
     public function getValues()
     {

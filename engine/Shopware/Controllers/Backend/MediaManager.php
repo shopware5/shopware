@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
@@ -260,11 +261,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $mediaID = $this->Request()->getParam('mediaID');
         $query = $this->getMedia($mediaID)->getQuery();
-        /** @var Media $media */
-        $media = $query->getResult();
+        /** @var Media[] $mediaArray */
+        $mediaArray = $query->getResult();
         $data = $query->getArrayResult();
         $data = $data[0];
-        $media = $media[0];
+        $media = $mediaArray[0];
 
         if ($media->getType() === Media::TYPE_IMAGE) {
             $thumbnails = $media->getThumbnails();
@@ -813,7 +814,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         $found = [];
 
-        /** @var \Shopware\Models\Media\Album $album */
         foreach ($albums as $album) {
             if (stripos($album['text'], $search) === 0) {
                 $found[] = $album;
@@ -832,11 +832,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      * Returns all thumbnails paths according to the given media object
      *
      * @param array $media
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return array
      */

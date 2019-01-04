@@ -38,6 +38,7 @@ class Link extends ModelEntity
      * OWNING SIDE
      *
      * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="links")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      */
@@ -46,9 +47,9 @@ class Link extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\ArticleLink
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
      */
     protected $attribute;
 
@@ -69,19 +70,19 @@ class Link extends ModelEntity
     private $articleId;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var string
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\Url
-     *
      * @var string
+     *
+     * @Assert\Url
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="link", type="string", nullable=false)
      */
@@ -215,6 +216,6 @@ class Link extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleLink', 'attribute', 'articleLink');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleLink::class, 'attribute', 'articleLink');
     }
 }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -77,23 +78,23 @@ class sArticlesComparisons
     }
 
     /**
-     * Delete articles from comparision chart
+     * Delete products from comparision chart
      *
-     * @param int $articleId Unique article id - refers to s_articles.id
+     * @param int $articleId Unique product id - refers to s_articles.id
      */
     public function sDeleteComparison($articleId)
     {
-        $articleId = (int) $articleId;
-        if ($articleId) {
+        $productId = (int) $articleId;
+        if ($productId) {
             $this->db->executeUpdate(
                 'DELETE FROM s_order_comparisons WHERE sessionID=? AND articleID=?',
-                [$this->session->offsetGet('sessionId'), $articleId]
+                [$this->session->offsetGet('sessionId'), $productId]
             );
         }
     }
 
     /**
-     * Delete all articles from comparision chart
+     * Delete all products from comparision chart
      */
     public function sDeleteComparisons()
     {
@@ -105,44 +106,44 @@ class sArticlesComparisons
     }
 
     /**
-     * Insert articles in comparision chart
+     * Insert products in comparision chart
      *
      * @param int $articleId s_articles.id
      *
      * @throws Enlight_Exception
      *
-     * @return bool true/false
+     * @return bool|null|string true/false
      */
     public function sAddComparison($articleId)
     {
-        $articleId = (int) $articleId;
-        if (!$articleId) {
+        $productId = (int) $articleId;
+        if (!$productId) {
             return null;
         }
 
-        // Check if this article is already noted
-        $checkForArticle = $this->db->fetchRow(
+        // Check if this product is already noted
+        $checkForProduct = $this->db->fetchRow(
             'SELECT id FROM s_order_comparisons WHERE sessionID=? AND articleID=?',
-            [$this->session->offsetGet('sessionId'), $articleId]
+            [$this->session->offsetGet('sessionId'), $productId]
         );
 
-        // Check if max. numbers of articles for one comparison-session is reached
-        $checkNumberArticles = $this->db->fetchRow(
+        // Check if max. numbers of products for one comparison-session is reached
+        $checkNumberProducts = $this->db->fetchRow(
             'SELECT COUNT(id) AS countArticles FROM s_order_comparisons WHERE sessionID=?',
             [$this->session->offsetGet('sessionId')]
         );
 
-        if ($checkNumberArticles['countArticles'] >= $this->config->offsetGet('sMAXCOMPARISONS')) {
+        if ($checkNumberProducts['countArticles'] >= $this->config->offsetGet('sMAXCOMPARISONS')) {
             return 'max_reached';
         }
 
-        if (!$checkForArticle['id']) {
-            $articleName = $this->db->fetchOne(
+        if (!$checkForProduct['id']) {
+            $productName = $this->db->fetchOne(
                 'SELECT s_articles.name AS articleName FROM s_articles WHERE id = ?',
-                [$articleId]
+                [$productId]
             );
 
-            if (!$articleName) {
+            if (!$productName) {
                 return false;
             }
 
@@ -154,8 +155,8 @@ class sArticlesComparisons
             $queryNewPrice = $this->db->executeUpdate($sql, [
                 $this->session->offsetGet('sessionId'),
                 empty($this->session['sUserId']) ? 0 : $this->session['sUserId'],
-                $articleName,
-                $articleId,
+                $productName,
+                $productId,
             ]);
 
             if (!$queryNewPrice) {
@@ -167,9 +168,9 @@ class sArticlesComparisons
     }
 
     /**
-     * Get all articles from comparision chart
+     * Get all products from comparision chart
      *
-     * @return array Associative array with all articles or empty array
+     * @return array Associative array with all products or empty array
      */
     public function sGetComparisons()
     {
@@ -178,32 +179,32 @@ class sArticlesComparisons
         }
 
         // Get all comparisons for this user
-        $checkForArticle = $this->db->fetchAll(
+        $checkForProduct = $this->db->fetchAll(
             'SELECT * FROM s_order_comparisons WHERE sessionID=?',
             [$this->session->offsetGet('sessionId')]
         );
 
-        if (!count($checkForArticle)) {
+        if (!count($checkForProduct)) {
             return [];
         }
 
-        foreach ($checkForArticle as $k => $article) {
-            $checkForArticle[$k]['articlename'] = stripslashes($article['articlename']);
-            $checkForArticle[$k] = $this->articleModule->sGetTranslation($article, $article['articleID'], 'article');
-            if (!empty($checkForArticle[$k]['articleName'])) {
-                $checkForArticle[$k]['articlename'] = $checkForArticle[$k]['articleName'];
+        foreach ($checkForProduct as $k => $product) {
+            $checkForProduct[$k]['articlename'] = stripslashes($product['articlename']);
+            $checkForProduct[$k] = $this->articleModule->sGetTranslation($product, $product['articleID'], 'article');
+            if (!empty($checkForProduct[$k]['articleName'])) {
+                $checkForProduct[$k]['articlename'] = $checkForProduct[$k]['articleName'];
             }
 
-            $checkForArticle[$k]['articleId'] = $article['articleID'];
+            $checkForProduct[$k]['articleId'] = $product['articleID'];
         }
 
-        return $checkForArticle;
+        return $checkForProduct;
     }
 
     /**
-     * Get all articles and a table of their properties as an array
+     * Get all products and a table of their properties as an array
      *
-     * @return array Associative array with all articles or empty array
+     * @return array Associative array with all products or empty array
      */
     public function sGetComparisonList()
     {
@@ -211,34 +212,34 @@ class sArticlesComparisons
             return [];
         }
 
-        $articles = [];
+        $products = [];
 
         // Get all comparisons for this user
-        $checkForArticle = $this->db->fetchAll(
+        $checkForProduct = $this->db->fetchAll(
             'SELECT * FROM s_order_comparisons WHERE sessionID=?',
             [$this->session->offsetGet('sessionId')]
         );
 
-        if (!count($checkForArticle)) {
+        if (!count($checkForProduct)) {
             return [];
         }
 
-        foreach ($checkForArticle as $article) {
-            if ($article['articleID']) {
-                $promotion = $this->articleModule->sGetPromotionById('fix', 0, (int) $article['articleID']);
+        foreach ($checkForProduct as $product) {
+            if ($product['articleID']) {
+                $promotion = $this->articleModule->sGetPromotionById('fix', 0, (int) $product['articleID']);
                 $promotion['linkDetails'] = $promotion['linkVariant'];
-                $articles[] = $promotion;
+                $products[] = $promotion;
             }
         }
 
-        $properties = $this->sGetComparisonProperties($articles);
-        $articles = $this->sFillUpComparisonArticles($properties, $articles);
+        $properties = $this->sGetComparisonProperties($products);
+        $products = $this->sFillUpComparisonArticles($properties, $products);
 
-        return ['articles' => $articles, 'properties' => $properties];
+        return ['articles' => $products, 'properties' => $properties];
     }
 
     /**
-     * Returns all filterable properties depending on the given articles
+     * Returns all filterable properties depending on the given products
      *
      * @param array $articles
      *
@@ -249,7 +250,7 @@ class sArticlesComparisons
         $shopContext = $this->contextService->getShopContext();
         $properties = [];
 
-        foreach ($articles as $article) {
+        foreach ($articles as $product) {
             //get all properties in the right order
             $sql = "SELECT
                       options.id,
@@ -275,16 +276,16 @@ class sArticlesComparisons
                     AND filter.comparable = 1
                     ORDER BY relations.position ASC";
 
-            $articleProperties = $this->db->fetchAll($sql, [
-                'groupId' => $article['filtergroupID'],
+            $productProperties = $this->db->fetchAll($sql, [
+                'groupId' => $product['filtergroupID'],
                 'shopId' => $shopContext->getShop()->getId(),
                 'fallbackId' => $shopContext->getShop()->getFallbackId(),
             ]);
 
-            foreach ($articleProperties as $articleProperty) {
-                if (!array_key_exists($articleProperty['id'], $properties)) {
+            foreach ($productProperties as $productProperty) {
+                if (!array_key_exists($productProperty['id'], $properties)) {
                     //the key is not part of the array so add it to the end
-                    $properties[$articleProperty['id']] = $this->extractPropertyTranslation($articleProperty);
+                    $properties[$productProperty['id']] = $this->extractPropertyTranslation($productProperty);
                 }
             }
         }
@@ -293,7 +294,7 @@ class sArticlesComparisons
     }
 
     /**
-     * fills the article properties with the values and fills up empty values
+     * fills the product properties with the values and fills up empty values
      *
      * @param array $properties
      * @param array $articles
@@ -302,16 +303,16 @@ class sArticlesComparisons
      */
     public function sFillUpComparisonArticles($properties, $articles)
     {
-        foreach ($articles as $articleKey => $article) {
-            $articleProperties = [];
+        foreach ($articles as $productKey => $product) {
+            $productProperties = [];
             foreach ($properties as $propertyKey => $property) {
-                if (array_key_exists($propertyKey, $article['sProperties'])) {
-                    $articleProperties[$propertyKey] = $article['sProperties'][$propertyKey];
+                if (array_key_exists($propertyKey, $product['sProperties'])) {
+                    $productProperties[$propertyKey] = $product['sProperties'][$propertyKey];
                 } else {
-                    $articleProperties[$propertyKey] = null;
+                    $productProperties[$propertyKey] = null;
                 }
             }
-            $articles[$articleKey]['sProperties'] = $articleProperties;
+            $articles[$productKey]['sProperties'] = $productProperties;
         }
 
         return $articles;

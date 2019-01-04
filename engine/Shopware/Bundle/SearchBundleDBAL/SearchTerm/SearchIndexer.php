@@ -130,7 +130,7 @@ class SearchIndexer implements SearchIndexerInterface
         // Get a list of all tables and columns in this tables that should be processed by search
         /**
          * Example return:
-         * tableID | table      | where  | referenz_table        | fieldIDs | fields                    | foreign_key
+         * tableID | table      | where  | reference_table       | fieldIDs | fields                    | foreign_key
          * 1       | s_articles | NULL   | NULL                  | 3,4      | name, keywords            | NULL
          * 2       | s_categories | NULL | s_articles_categories | 1,2      | metakeywords, description | categoryID
          */

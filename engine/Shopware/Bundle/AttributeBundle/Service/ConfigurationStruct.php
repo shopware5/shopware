@@ -107,7 +107,7 @@ class ConfigurationStruct implements \JsonSerializable
     private $columnType;
 
     /**
-     * @var string
+     * @var array
      */
     private $elasticSearchType;
 
@@ -425,7 +425,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getElasticSearchType()
     {
@@ -433,7 +433,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param string $elasticSearchType
+     * @param array $elasticSearchType
      */
     public function setElasticSearchType($elasticSearchType)
     {

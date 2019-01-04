@@ -83,6 +83,7 @@ class Album extends ModelEntity
      * Unique identifier
      *
      * @var int
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -93,6 +94,7 @@ class Album extends ModelEntity
      * Name of the album, displayed in the tree, used to filter the tree.
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -101,6 +103,7 @@ class Album extends ModelEntity
      * Id of the parent album
      *
      * @var int
+     *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
     private $parentId = null;
@@ -109,6 +112,7 @@ class Album extends ModelEntity
      * Position of the album to configure the display order
      *
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
@@ -117,6 +121,7 @@ class Album extends ModelEntity
      * Defines if this album is allowed to be garbage collected using the GarbageCollector
      *
      * @var bool
+     *
      * @ORM\Column(name="garbage_collectable", type="boolean", nullable=false)
      */
     private $garbageCollectable;
@@ -139,7 +144,7 @@ class Album extends ModelEntity
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      */
-    private $parent = null;
+    private $parent;
 
     /**
      * An album can be assigned to multiple media.
@@ -300,7 +305,7 @@ class Album extends ModelEntity
     /**
      * Sets the associated media
      *
-     * @param array|\Doctrine\Common\Collections\ArrayCollection $media
+     * @param ArrayCollection<\Shopware\Models\Media\Media> $media
      */
     public function setMedia($media)
     {

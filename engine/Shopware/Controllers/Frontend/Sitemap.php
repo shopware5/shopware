@@ -21,7 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Shop\DetachedShop;
+use Shopware\Models\Site\Site;
 
 /**
  * @category Shopware
@@ -35,10 +38,10 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $categoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
+        $categoryTree = $this->getCategoryTree();
         $additionalTrees = $this->getAdditionalTrees();
 
-        $additionalTrees = Shopware()->Events()->filter(
+        $additionalTrees = $this->container->get('events')->filter(
             'Shopware_Modules_Sitemap_indexAction',
             $additionalTrees,
             ['subject' => $this]
@@ -46,6 +49,47 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
         $categoryTree = array_merge($categoryTree, $additionalTrees);
         $this->View()->assign('sCategoryTree', $categoryTree);
+    }
+
+    /**
+     * @return array
+     */
+    private function getCategoryTree()
+    {
+        $categoryTree = $this->container->get('modules')->sCategories()->sGetWholeCategoryTree();
+
+        $categoryTranslations = $this->fetchTranslations('category', $this->getTranslationKeys(
+            $categoryTree,
+            'id',
+            'sub'
+        ));
+
+        return $this->translateCategoryTree($categoryTree, $categoryTranslations);
+    }
+
+    /**
+     * @param array $categoryTree
+     * @param array $translations
+     *
+     * @return array
+     */
+    private function translateCategoryTree(array $categoryTree, array $translations)
+    {
+        foreach ($categoryTree as $key => $category) {
+            $translation = $this->fetchTranslation($category['id'], $translations);
+
+            if (!empty($translation['description'])) {
+                $translation['name'] = $translation['description'];
+            }
+
+            $categoryTree[$key] = array_merge($category, $translation);
+
+            if (!empty($category['sub'])) {
+                $categoryTree[$key]['sub'] = $this->translateCategoryTree($category['sub'], $translations);
+            }
+        }
+
+        return $categoryTree;
     }
 
     /**
@@ -69,10 +113,19 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getCustomPages()
     {
-        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
+        /** @var DetachedShop $shop */
+        $shop = $this->container->get('shop');
+
+        $sites = $this->getSitesByShopId($shop->getId());
+
+        $translations = $this->fetchTranslations('page', $this->getTranslationKeys(
+            $sites,
+            'id',
+            'children'
+        ));
 
         foreach ($sites as &$site) {
-            $site = $this->convertSite($site);
+            $site = $this->convertSite($site, $translations);
         }
 
         $staticPages = [
@@ -85,6 +138,28 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     }
 
     /**
+     * @param array  $array
+     * @param string $keyField
+     * @param string $recursiveField
+     *
+     * @return int[]
+     */
+    private function getTranslationKeys(array $array, $keyField, $recursiveField)
+    {
+        $translationkeys = [];
+
+        foreach ($array as $data) {
+            $translationkeys[] = $data[$keyField];
+
+            if (!empty($data[$recursiveField])) {
+                $translationkeys += $this->getTranslationKeys($data[$recursiveField], $keyField, $recursiveField);
+            }
+        }
+
+        return $translationkeys;
+    }
+
+    /**
      * Helper function to read all static pages of a shop from the database
      *
      * @param int $shopId
@@ -94,15 +169,14 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     private function getSitesByShopId($shopId)
     {
         $sql = '
-            SELECT groups.key
+            SELECT shopGroups.key
             FROM s_core_shop_pages shopPages
-              INNER JOIN s_cms_static_groups groups
-                ON groups.id = shopPages.group_id
+              INNER JOIN s_cms_static_groups shopGroups
+                ON shopGroups.id = shopPages.group_id
             WHERE shopPages.shop_id = ?
         ';
 
-        $statement = Shopware()->Db()->executeQuery($sql, [$shopId]);
-
+        $statement = $this->container->get('db')->executeQuery($sql, [$shopId]);
         $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
 
         /** @var Shopware\Models\Site\Repository $siteRepository */
@@ -112,7 +186,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
-                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->from(Site::class, 'sites', 'sites.id')
                 ->andWhere('sites.active = true')
                 ->getQuery()
                 ->getArrayResult();
@@ -127,11 +201,13 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      * Recursive helper function to convert a site to correct sitemap format
      *
      * @param array $site
+     * @param array $translations
      *
      * @return array
      */
-    private function convertSite($site)
+    private function convertSite($site, array $translations)
     {
+        $site = array_merge($site, $this->fetchTranslation($site['id'], $translations));
         $site['hideOnSitemap'] = !$this->filterLink($site['link']);
 
         $site = array_merge(
@@ -147,12 +223,53 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
         if (isset($site['children'])) {
             foreach ($site['children'] as &$child) {
-                $child = $this->convertSite($child);
+                $child = $this->convertSite($child, $translations);
             }
             $site['sub'] = $site['children'];
         }
 
         return $site;
+    }
+
+    /**
+     * @param string $type
+     * @param int[]  $ids
+     *
+     * @return array
+     */
+    private function fetchTranslations($type, array $ids)
+    {
+        /** @var DetachedShop $shop */
+        $shop = $this->container->get('shop');
+
+        $shopId = $shop->getId();
+        $fallbackShop = $shop->getFallback();
+
+        $fallbackId = null;
+        if ($fallbackShop !== null) {
+            $fallbackId = $fallbackShop->getId();
+        }
+
+        $translator = $this->container->get('translation');
+
+        return $translator->readBatchWithFallback($shopId, $fallbackId, $type, $ids, false);
+    }
+
+    /**
+     * @param int   $objectKey
+     * @param array $translations
+     *
+     * @return array
+     */
+    private function fetchTranslation($objectKey, array $translations)
+    {
+        foreach ($translations as $translation) {
+            if ((int) $translation['objectkey'] === $objectKey) {
+                return $translation['objectdata'];
+            }
+        }
+
+        return [];
     }
 
     /**
@@ -222,22 +339,15 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         /** @var Shopware\Models\Emotion\Repository $emotionRepository */
         $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
-        $shopId = Shopware()->Shop()->getId();
-        $fallbackId = null;
+        /** @var DetachedShop $shop */
+        $shop = $this->container->get('shop');
 
-        $fallbackShop = Shopware()->Shop()->getFallback();
-
-        if (!empty($fallbackShop)) {
-            $fallbackId = $fallbackShop->getId();
-        }
-
-        $translator = $this->container->get('translation');
-
-        $builder = $emotionRepository->getCampaignsByShopId($shopId);
+        $builder = $emotionRepository->getCampaignsByShopId($shop->getId());
         $campaigns = $builder->getQuery()->getArrayResult();
+        $translations = $this->fetchTranslations('emotion', array_column($campaigns, 'id'));
 
         foreach ($campaigns as &$campaign) {
-            $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $campaign['id']);
+            $translation = $this->fetchTranslation($campaign['id'], $translations);
 
             $translation['seo_title'] = $translation['seoTitle'];
             $translation['seo_keywords'] = $translation['seoKeywords'];

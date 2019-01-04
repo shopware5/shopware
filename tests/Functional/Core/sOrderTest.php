@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Order\Order;
 
 class sOrderTest extends PHPUnit\Framework\TestCase
@@ -206,15 +207,23 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             'billingaddress' => [
                 1 => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; now",
                 2 => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later",
+                'attributes' => [
+                    'foo' => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; now",
+                    'bar' => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later",
+                ],
             ],
             'shippingaddress' => [
                 1 => "I won't &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; now",
                 2 => "I won't &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later",
+                'attributes' => [
+                    'foo' => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; now",
+                    'bar' => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later",
+                ],
+            ],
+            'country' => [
+                1 => '&lt;span&gt;dog&lt;/span&gt;',
             ],
             'additional' => [
-                'country' => [
-                    1 => '&lt;span&gt;dog&lt;/span&gt;',
-                ],
                 'payment' => [
                     'description' => '&lt;span&gt;dog&lt;/span&gt;',
                 ],
@@ -228,16 +237,25 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         );
 
         $this->assertArrayHasKey('billingaddress', $processedUserData);
+        $this->assertArrayHasKey('attributes', $processedUserData['billingaddress']);
         $this->assertArrayHasKey('shippingaddress', $processedUserData);
+        $this->assertArrayHasKey('attributes', $processedUserData['shippingaddress']);
         $this->assertArrayHasKey('additional', $processedUserData);
+        $this->assertArrayHasKey('country', $processedUserData);
 
         $this->assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress'][1]);
         $this->assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress'][2]);
 
+        $this->assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress']['attributes']['foo']);
+        $this->assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress']['attributes']['bar']);
+
         $this->assertEquals("I won't \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress'][1]);
         $this->assertEquals("I won't \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress'][2]);
 
-        $this->assertEquals('<span>dog</span>', $processedUserData['additional']['country'][1]);
+        $this->assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress']['attributes']['foo']);
+        $this->assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress']['attributes']['bar']);
+
+        $this->assertEquals('<span>dog</span>', $processedUserData['country'][1]);
         $this->assertEquals('<span>dog</span>', $processedUserData['additional']['payment']['description']);
     }
 

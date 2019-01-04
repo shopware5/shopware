@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Random;
@@ -36,14 +37,14 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var \Shopware\Models\Voucher\Repository
      */
-    protected $voucherRepository = null;
+    protected $voucherRepository;
 
     /**
      * Disable template engine for all actions
@@ -68,7 +69,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $multipleVouchers = $this->Request()->getPost('vouchers');
         $voucherRequestData = empty($multipleVouchers) ? [['id' => $this->Request()->id]] : $multipleVouchers;
         foreach ($voucherRequestData as $voucher) {
-            //first delete the voucher codes because this could be to huge for doctrine
+            // First delete the voucher codes because this could be to huge for doctrine
             $this->deleteAllVoucherCodesById($voucher['id']);
 
             /** @var \Shopware\Models\Voucher\Voucher $model */

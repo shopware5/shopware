@@ -491,8 +491,8 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $initializer = new PluginInitializer(
             $this->connection,
             [
-                $this->config['plugin_directories']['ShopwarePlugins'],
-                $this->config['plugin_directories']['ProjectPlugins'],
+                'ShopwarePlugins' => $this->config['plugin_directories']['ShopwarePlugins'],
+                'ProjectPlugins' => $this->config['plugin_directories']['ProjectPlugins'],
             ]
         );
 

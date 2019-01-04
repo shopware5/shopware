@@ -52,14 +52,14 @@ class Locale extends ModelEntity
     private $locale;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="language", type="string", length=255, nullable=false)
      */
     private $language;
 
     /**
-     * @var float
+     * @var string
      *
      * @ORM\Column(name="territory", type="string", length=255, nullable=false)
      */

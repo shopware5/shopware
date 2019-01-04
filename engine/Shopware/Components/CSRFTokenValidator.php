@@ -127,7 +127,7 @@ class CSRFTokenValidator implements SubscriberInterface
         $controller = $args->getSubject();
         $request = $controller->Request();
 
-        // do not check internal subrequests or validated requests
+        // do not check internal sub-requests or validated requests
         if ($request->getAttribute('_isSubrequest') || $request->getAttribute('isValidated')) {
             return;
         }

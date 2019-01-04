@@ -36,19 +36,19 @@ class EsdSerial extends ModelEntity
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Esd
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Esd", inversedBy="serials")
      * @ORM\JoinColumn(name="esdID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Esd
      */
     protected $esd;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="serial")
-     *
      * @var \Shopware\Models\Order\Esd
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="serial")
      */
     protected $esdOrder;
 

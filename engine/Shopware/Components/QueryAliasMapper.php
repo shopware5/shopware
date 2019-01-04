@@ -118,7 +118,7 @@ class QueryAliasMapper
     }
 
     /**
-     * Replaces the query params with their mathing long form
+     * Replaces the query params with their matching long form
      *
      * @param \Enlight_Controller_Request_RequestHttp $request
      */

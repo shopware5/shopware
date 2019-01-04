@@ -99,7 +99,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns a query-object for all known order stati
+     * Returns a query-object for all known order statuses
      *
      * @param null|array  $filter
      * @param null|string $order

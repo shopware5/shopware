@@ -75,7 +75,7 @@ class DownloadService
      */
     public function downloadRange(RangeDownloadRequest $request)
     {
-        // Load SwagUpdate so the DownloadStep can be autoloaded
+        // Load SwagUpdate so the DownloadStep can be auto-loaded
         Shopware()->Plugins()->Backend()->SwagUpdate();
 
         $version = new Version([

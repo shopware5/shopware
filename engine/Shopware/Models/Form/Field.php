@@ -123,7 +123,7 @@ class Field extends ModelEntity
     private $label;
 
     /**
-     * Class of display type. e.G. normal / strasse;nr
+     * Class of display type. e.G. normal / street;nr
      *
      * @var string
      *
@@ -143,7 +143,8 @@ class Field extends ModelEntity
     /**
      * Defines the date and time when the field was created
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
@@ -304,7 +305,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * Set wether or not this field is required
+     * Set whether or not this field is required
      *
      * @param int $required
      *
@@ -318,7 +319,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * Get wether or not this field is required
+     * Get whether or not this field is required
      *
      * @return int
      */
