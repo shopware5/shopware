@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 use Shopware\Components\Logger;
 
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
