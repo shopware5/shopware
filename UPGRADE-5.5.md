@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed backend filter for variants with laststock
 * Changed namespace for plugins in custom/project directory to fix theme recognition in composer projects
 * Changed calculation of conversionrate in backend widget
+* Changed Symfony library to version 3.4.21
 
 ## 5.5.4
 
