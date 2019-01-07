@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             navigation = me.getNavigation(),
             storeListing = me.getStoreListing();
 
-        if (!term || term.length < 0) {
+        if (!term || term.length === 0) {
             return;
         }
 
@@ -407,7 +407,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
 
         me.displayListingPage();
         me.removeNavigationSelection();
-        
+
         storeListing.store.clearFilter();
 
         navigation.disable();
