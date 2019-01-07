@@ -16451,8 +16451,6 @@ Ext.dom.Element.override({
             
             prop = 'scroll' + (top ? 'Top' : 'Left');
             dom[prop] = value;
-            
-            dom[prop] = value;
         }
         else {
             animCfg = {

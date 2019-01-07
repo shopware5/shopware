@@ -120,8 +120,7 @@ Ext.onReady(function() {
         prevText: "Poprzedni miesiąc (Control+StrzałkaWLewo)",
         monthYearText: "Wybierz miesiąc (Control+Up/Down aby zmienić rok)",
         todayTip: "{0} (Spacja)",
-        format: "Y-m-d",
-        startDay: 1
+        format: "Y-m-d"
     });
 
     Ext.define("Ext.locale.pl.picker.Month", {
