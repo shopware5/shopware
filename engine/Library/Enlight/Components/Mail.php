@@ -71,6 +71,13 @@ class Enlight_Components_Mail extends Zend_Mail
     protected $_plainSubject = null;
 
     /**
+     * Property for the template name. Can be filled by setTemplateName function.
+     *
+     * @var null
+     */
+    protected $templateName = null;
+
+    /**
      * Magic setter method
      *
      * @param string $name
@@ -310,6 +317,22 @@ class Enlight_Components_Mail extends Zend_Mail
         $this->_plainSubject = $subject;
 
         return parent::setSubject($subject);
+    }
+
+    /**
+     * @param string $templateName
+     */
+    public function setTemplateName($templateName)
+    {
+        $this->templateName = $templateName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplateName()
+    {
+        return $this->templateName;
     }
 
     /**
