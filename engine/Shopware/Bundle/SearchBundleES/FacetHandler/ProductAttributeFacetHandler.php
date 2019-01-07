@@ -125,6 +125,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
             case ProductAttributeFacet::MODE_RANGE_RESULT:
                 $aggregation = new TermsAggregation($criteriaPart->getName());
                 $aggregation->setField($field);
+                $aggregation->addParameter('size', self::AGGREGATION_SIZE);
                 break;
 
             default:
