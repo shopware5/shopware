@@ -42,6 +42,7 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
             'ShopwarePlugins' => __DIR__ . '/fixtures/',
         ]);
         $this->plugins = $initializer->initializePlugins();
+
     }
 
     public function testMigrationWithDown(): void
@@ -54,13 +55,13 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
 
         $manager->run(AbstractPluginMigration::MODUS_INSTALL);
 
-        $this->assertNotNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testfoo'));
+        $this->assertTableExists('s_test_table');
         $this->assertMigrationExecuted('SwagTest', 1);
 
         $manager->run(AbstractPluginMigration::MODUS_UNINSTALL);
 
-        $this->assertNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testfoo'));
         $this->assertMigrationNotExecuted('SwagTest', 1);
+        $this->assertTableNotExists('s_test_table');
     }
 
     public function testMigrationWithDownWithKeepUserData(): void
@@ -73,13 +74,15 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
 
         $manager->run(AbstractPluginMigration::MODUS_INSTALL);
 
-        $this->assertNotNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testfoo'));
+        $this->assertTableExists('s_test_table');
         $this->assertMigrationExecuted('SwagTest', 1);
 
         $manager->run(AbstractPluginMigration::MODUS_UNINSTALL, true);
 
-        $this->assertNotNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testfoo'));
+        $this->assertTableExists('s_test_table');
         $this->assertMigrationNotExecuted('SwagTest', 1);
+
+        Shopware()->Db()->exec('DROP TABLE s_test_table');
     }
 
     public function testMigrationWithDownWithUpdate(): void
@@ -92,22 +95,23 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
 
         $manager->run(AbstractPluginMigration::MODUS_INSTALL);
 
-        $this->assertNotNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testfoo'));
+        $this->assertTableExists('s_test_table');
         $this->assertMigrationExecuted('SwagTest', 1);
 
         copy(__DIR__ . '/fixtures/2-rename-foo.php', __DIR__ . '/fixtures/SwagTest/Resources/migrations/2-rename-foo.php');
 
         $manager->run(AbstractPluginMigration::MODUS_UPDATE);
-        $this->assertNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testfoo'));
-        $this->assertNotNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testyay'));
+        $this->assertTableExists('s_test_table');
+        $this->assertTableColumnExists('s_test_table', 'name');
+        $this->assertTableColumnExists('s_test_table', 'newcolumn');
+
         $this->assertMigrationExecuted('SwagTest', 2);
 
         $manager->run(AbstractPluginMigration::MODUS_UNINSTALL);
 
         unlink(__DIR__ . '/fixtures/SwagTest/Resources/migrations/2-rename-foo.php');
 
-        $this->assertNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testfoo'));
-        $this->assertNull(Shopware()->Container()->get('shopware_attribute.crud_service')->get('s_articles_attributes', 'testyay'));
+        $this->assertTableNotExists('s_test_table');
         $this->assertMigrationNotExecuted('SwagTest', 1);
         $this->assertMigrationNotExecuted('SwagTest', 2);
     }
@@ -120,5 +124,25 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
     private function assertMigrationNotExecuted(string $pluginName, int $version): void
     {
         $this->assertFalse((bool) Shopware()->Db()->fetchOne('SELECT 1 FROM s_plugin_schema_version WHERE plugin_name = ? AND version = ? AND complete_date IS NOT NULL', [$pluginName, $version]));
+    }
+
+    private function assertTableExists(string $table): void
+    {
+        $this->assertTrue((bool) Shopware()->Db()->fetchOne('SHOW TABLES like ?', [$table]));
+    }
+
+    private function assertTableNotExists(string $table): void
+    {
+        $this->assertFalse((bool) Shopware()->Db()->fetchOne('SHOW TABLES like ?', [$table]));
+    }
+
+    private function assertTableColumnExists(string $table, string $column)
+    {
+        $this->assertTrue((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
+    }
+
+    private function assertTableColumnNotExists(string $table, string $column)
+    {
+        $this->assertFalse((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
     }
 }

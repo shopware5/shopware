@@ -32,12 +32,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CreateMigrationCommand extends ShopwareCommand
+class GenerateMigrationCommand extends ShopwareCommand
 {
     public function configure(): void
     {
-        $this->addOption('plugin', 'p', InputOption::VALUE_OPTIONAL, 'Plugin Name');
-        $this->addArgument('migrationName', InputArgument::REQUIRED, 'Migration Name');
+        $this
+            ->addOption('plugin', 'p', InputOption::VALUE_OPTIONAL, 'Plugin Name')
+            ->addArgument('migrationName', InputArgument::REQUIRED, 'Migration Name')
+            ->setDescription('Generates a migration file for the core or for a specific plugin');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): void
