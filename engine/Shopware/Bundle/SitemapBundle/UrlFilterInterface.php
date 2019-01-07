@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,56 +22,43 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Base config store which loads all needed config data
- */
-//{block name="backend/performance/store/config"}
-Ext.define('Shopware.apps.Performance.store.Config', {
-    /**
-     * Extend for the standard ExtJS 4
-     * @string
-     */
-    extend: 'Ext.data.Store',
+namespace Shopware\Bundle\SitemapBundle;
 
-    /**
-     * Disable auto loading
-     * @boolean
-     */
-    autoLoad: false,
+use Shopware\Bundle\SitemapBundle\Struct\FilterContainer;
+use Shopware\Bundle\SitemapBundle\Struct\Url;
+use Shopware\Bundle\SitemapBundle\UrlFilter\UrlFilterException;
 
+interface UrlFilterInterface
+{
     /**
-     * Define the used model for this store
-     * @string
+     * @param Url[] $urls
+     * @param int   $shopId
+     *
+     * @throws UrlFilterException
+     *
+     * @return Url[]
      */
-    model: 'Shopware.apps.Performance.model.Config',
+    public function filter(array $urls, $shopId);
 
     /**
-     * Configure the data communication
-     * @object
+     * @param FilterContainer $filterContainer
+     * @param int             $shopId
      */
-    proxy:{
-        /**
-         * Set proxy type to ajax
-         * @string
-         */
-        type: 'ajax',
+    public function addFilterContainer(FilterContainer $filterContainer, $shopId);
 
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        url: '{url action="getConfig"}',
+    /**
+     * @param string $resourceName
+     * @param int    $shopId
+     *
+     * @return FilterContainer
+     */
+    public function getFilterContainer($resourceName, $shopId);
 
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader:{
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
-    }
-});
-//{/block}
+    /**
+     * @param string $resourceName
+     * @param int    $shopId
+     *
+     * @return bool
+     */
+    public function hasFilterContainer($resourceName, $shopId);
+}

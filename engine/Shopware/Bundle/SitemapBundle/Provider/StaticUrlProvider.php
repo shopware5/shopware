@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use DateTime;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -39,20 +39,20 @@ class StaticUrlProvider implements UrlProviderInterface
     private $router;
 
     /**
-     * @var Connection
+     * @var ConnectionInterface
      */
     private $connection;
 
     /**
      * @var bool
      */
-    private $allExported = false;
+    private $allExported;
 
     /**
      * @param Routing\RouterInterface $router
-     * @param Connection              $connection
+     * @param ConnectionInterface     $connection
      */
-    public function __construct(Routing\RouterInterface $router, Connection $connection)
+    public function __construct(Routing\RouterInterface $router, ConnectionInterface $connection)
     {
         $this->router = $router;
         $this->connection = $connection;
@@ -98,7 +98,7 @@ class StaticUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly', \Shopware\Models\Site\Site::class, $sites[$i]['id']);
         }
 
         return $urls;

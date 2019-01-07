@@ -24,13 +24,32 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
+use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
+use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
-use Shopware\Models\Category\Category;
 
-class CategoryUrlProvider extends BaseUrlProvider
+class CustomUrlProvider implements UrlProviderInterface
 {
+    /**
+     * @var ConfigHandler
+     */
+    private $configHandler;
+
+    /**
+     * @var bool
+     */
+    private $allExported;
+
+    /**
+     * @param ConfigHandler $configHandler
+     */
+    public function __construct(ConfigHandler $configHandler)
+    {
+        $this->configHandler = $configHandler;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -40,40 +59,45 @@ class CategoryUrlProvider extends BaseUrlProvider
             return [];
         }
 
-        $parentId = $shopContext->getShop()->getCategory()->getId();
-        $categoryRepository = $this->modelManager->getRepository(Category::class);
-        $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId());
+        $sitemapCustomUrls = $this->configHandler->get(ConfigHandler::CUSTOM_URLS_KEY);
 
-        foreach ($categories as $key => &$category) {
-            if (!empty($category['external'])) {
-                unset($categories[$key]);
+        $urls = [];
+        foreach ($sitemapCustomUrls as $sitemapCustomUrl) {
+            if (!$this->isAvailableForShop($sitemapCustomUrl, (int) $shopContext->getShop()->getId())) {
                 continue;
             }
 
-            $category['urlParams'] = [
-                'sViewport' => 'cat',
-                'sCategory' => $category['id'],
-                'title' => $category['name'],
-            ];
-
-            if (array_key_exists('blog', $category)) {
-                $category['urlParams']['sViewport'] = 'blog';
-            }
-        }
-
-        unset($category);
-
-        $categories = array_values($categories);
-
-        $routes = $this->router->generateList(array_column($categories, 'urlParams'), $routingContext);
-        $urls = [];
-
-        for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $categories[$i]['changed'], 'weekly', Category::class, $categories[$i]['id']);
+            $urls[] = new Url(
+                $sitemapCustomUrl['url'],
+                $sitemapCustomUrl['lastMod'],
+                $sitemapCustomUrl['changeFreq'],
+                'custom',
+                null,
+                $sitemapCustomUrl['priority']
+            );
         }
 
         $this->allExported = true;
 
         return $urls;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->allExported = false;
+    }
+
+    /**
+     * @param array $url
+     * @param int   $shopId
+     *
+     * @return bool
+     */
+    private function isAvailableForShop(array $url, $shopId)
+    {
+        return in_array((int) $url['shopId'], [$shopId, 0], true);
     }
 }

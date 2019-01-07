@@ -24,6 +24,7 @@
             <argument type="tagged" tag="sitemap_url_provider" />
             <argument type="service" id="config_writer" />
             <argument type="service" id="shopware_bundle_sitemap.service.sitemap_lock" />
+            <argument type="service" id="shopware_bundle_sitemap.service.url_filter"/>
         </service>
 
         <service id="shopware_bundle_sitemap.service.sitemap_lister" class="Shopware\Bundle\SitemapBundle\Service\SitemapLister">
@@ -94,6 +95,38 @@
             <tag name="sitemap_url_provider" />
         </service>
 
+        <service id="shopware_bundle_sitemap.provider.url.custom"
+                 class="Shopware\Bundle\SitemapBundle\Provider\CustomUrlProvider"
+                 public="false">
+            <argument type="service" id="shopware_bundle_sitemap.service.config_handler"/>
+            <tag name="sitemap_url_provider" />
+        </service>
+
+        <!-- URL filter -->
+        <service id="shopware_bundle_sitemap.url_filter.product" class="Shopware\Bundle\SitemapBundle\UrlFilter\Product">
+            <tag name="shopware.sitemap.url_filter" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.url_filter.statics" class="Shopware\Bundle\SitemapBundle\UrlFilter\Statics">
+            <tag name="shopware.sitemap.url_filter" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.url_filter.manufacturer" class="Shopware\Bundle\SitemapBundle\UrlFilter\Manufacturer">
+            <tag name="shopware.sitemap.url_filter" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.url_filter.landing_page" class="Shopware\Bundle\SitemapBundle\UrlFilter\LandingPage">
+            <tag name="shopware.sitemap.url_filter" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.url_filter.category" class="Shopware\Bundle\SitemapBundle\UrlFilter\Category">
+            <tag name="shopware.sitemap.url_filter" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.url_filter.blog" class="Shopware\Bundle\SitemapBundle\UrlFilter\Blog">
+            <tag name="shopware.sitemap.url_filter" />
+        </service>
+
         <!-- Command -->
         <service id="shopware_bundle_sitemap.commands.sitemap_generate_command"
                  class="Shopware\Bundle\SitemapBundle\Commands\SitemapGenerateCommand">
@@ -112,6 +145,24 @@
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_bundle_sitemap.service.sitemap_exporter"/>
             <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.service.url_filter" class="Shopware\Bundle\SitemapBundle\Service\UrlFilter">
+            <argument type="service" id="shopware_bundle_sitemap.service.filter_container_factory"/>
+            <argument type="tagged" tag="shopware.sitemap.url_filter"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.service.filter_container_factory" class="Shopware\Bundle\SitemapBundle\Service\FilterContainerFactory">
+            <argument type="service" id="shopware_bundle_sitemap.service.config_handler"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.service.config_handler" class="Shopware\Bundle\SitemapBundle\Service\ConfigHandler">
+            <argument type="tagged" tag="shopware.sitemap.config_handler"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.config_handler.file" class="Shopware\Bundle\SitemapBundle\ConfigHandler\File">
+            <argument>%shopware.sitemap%</argument>
+            <tag name="shopware.sitemap.config_handler" />
         </service>
     </services>
 </container>

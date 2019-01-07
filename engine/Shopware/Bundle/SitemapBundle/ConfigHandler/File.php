@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,56 +22,44 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Base config store which loads all needed config data
- */
-//{block name="backend/performance/store/config"}
-Ext.define('Shopware.apps.Performance.store.Config', {
+namespace Shopware\Bundle\SitemapBundle\ConfigHandler;
+
+use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
+
+class File implements ConfigHandlerInterface
+{
     /**
-     * Extend for the standard ExtJS 4
-     * @string
+     * @var array
      */
-    extend: 'Ext.data.Store',
+    private $sitemapConfig;
 
-    /**
-     * Disable auto loading
-     * @boolean
-     */
-    autoLoad: false,
-
-    /**
-     * Define the used model for this store
-     * @string
-     */
-    model: 'Shopware.apps.Performance.model.Config',
-
-    /**
-     * Configure the data communication
-     * @object
-     */
-    proxy:{
-        /**
-         * Set proxy type to ajax
-         * @string
-         */
-        type: 'ajax',
-
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        url: '{url action="getConfig"}',
-
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader:{
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
+    public function __construct(array $sitemapConfig)
+    {
+        $this->sitemapConfig = $sitemapConfig;
     }
-});
-//{/block}
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSitemapConfig()
+    {
+        return [
+            ConfigHandler::EXCLUDED_URLS_KEY => $this->sitemapConfig['excluded_urls'],
+            ConfigHandler::CUSTOM_URLS_KEY => $this->getSitemapCustomUrls($this->sitemapConfig['custom_urls']),
+        ];
+    }
+
+    /**
+     * @param array $customUrls
+     *
+     * @return array
+     */
+    private function getSitemapCustomUrls(array $customUrls)
+    {
+        foreach ($customUrls as &$customUrl) {
+            $customUrl['lastMod'] = \DateTime::createFromFormat('Y-m-d H:i:s', $customUrl['lastMod']);
+        }
+
+        return $customUrls;
+    }
+}

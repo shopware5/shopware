@@ -25,40 +25,12 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use Shopware\Bundle\SitemapBundle\Struct\Url;
-use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing;
-use Shopware\Components\Routing\Router;
 use Shopware\Models\Emotion\Emotion;
 
-class LandingPageUrlProvider implements UrlProviderInterface
+class LandingPageUrlProvider extends BaseUrlProvider
 {
-    /**
-     * @var Routing\RouterInterface
-     */
-    private $router;
-
-    /**
-     * @var bool
-     */
-    private $allExported = false;
-
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    /**
-     * @param ModelManager            $modelManager
-     * @param Routing\RouterInterface $router
-     */
-    public function __construct(ModelManager $modelManager, Routing\RouterInterface $router)
-    {
-        $this->router = $router;
-        $this->modelManager = $modelManager;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -99,7 +71,7 @@ class LandingPageUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly', Emotion::class, $campaigns[$i]['id']);
         }
 
         unset($campaign);
@@ -107,14 +79,6 @@ class LandingPageUrlProvider implements UrlProviderInterface
         $this->allExported = true;
 
         return $urls;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function reset()
-    {
-        $this->allExported = false;
     }
 
     /**
@@ -130,11 +94,11 @@ class LandingPageUrlProvider implements UrlProviderInterface
     {
         $now = new \DateTime();
 
-        if (isset($from) && $now < $from) {
+        if ($from !== null && $now < $from) {
             return false;
         }
 
-        if (isset($to) && $now > $to) {
+        if ($to !== null && $now > $to) {
             return false;
         }
 

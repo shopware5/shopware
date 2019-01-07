@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,56 +22,44 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Base config store which loads all needed config data
- */
-//{block name="backend/performance/store/config"}
-Ext.define('Shopware.apps.Performance.store.Config', {
-    /**
-     * Extend for the standard ExtJS 4
-     * @string
-     */
-    extend: 'Ext.data.Store',
+namespace Shopware\Bundle\SitemapBundle\Provider;
 
+use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Routing;
+
+abstract class BaseUrlProvider implements UrlProviderInterface
+{
     /**
-     * Disable auto loading
-     * @boolean
+     * @var ModelManager
      */
-    autoLoad: false,
+    protected $modelManager;
 
     /**
-     * Define the used model for this store
-     * @string
+     * @var Routing\RouterInterface
      */
-    model: 'Shopware.apps.Performance.model.Config',
+    protected $router;
 
     /**
-     * Configure the data communication
-     * @object
+     * @var bool
      */
-    proxy:{
-        /**
-         * Set proxy type to ajax
-         * @string
-         */
-        type: 'ajax',
+    protected $allExported = false;
 
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        url: '{url action="getConfig"}',
-
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader:{
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
+    /**
+     * @param ModelManager            $modelManager
+     * @param Routing\RouterInterface $router
+     */
+    public function __construct(ModelManager $modelManager, Routing\RouterInterface $router)
+    {
+        $this->modelManager = $modelManager;
+        $this->router = $router;
     }
-});
-//{/block}
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->allExported = false;
+    }
+}

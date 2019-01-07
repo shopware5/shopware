@@ -37,13 +37,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.fields.Base',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-sitemap',
+    alias: 'widget.performance-tabs-settings-sitemap',
 
     /**
      * Description of the fieldSet
@@ -70,25 +70,23 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
      * @return { array }
      */
     getItems: function() {
-        var me = this;
-
         return [
             {
                 xtype: 'fieldset',
-                defaults: me.defaults,
+                defaults: this.defaults,
                 title: '{s name=fieldset/information}Information{/s}',
                 items: [
-                    me.createDescriptionContainer("{s name=fieldset/sitemap/info}{/s}")
-                ]},
-            {
+                    this.createDescriptionContainer("{s name=fieldset/sitemap/info}{/s}")
+                ]
+            }, {
                 xtype: 'fieldset',
-                defaults: me.defaults,
+                defaults: this.defaults,
                 title: '{s name=fieldset/configuration}Configuration{/s}',
                 items: [
-                    me.getRefreshButton(),
-                    me.getRefreshStrategyField(),
-                    me.getRefreshTimeField(),
-                    me.getLastUpdateField()
+                    this.getRefreshButton(),
+                    this.getRefreshStrategyField(),
+                    this.getRefreshTimeField(),
+                    this.getLastUpdateField()
                 ]
             }
         ];
@@ -170,6 +168,5 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
             }
         };
     }
-
 });
 //{/block}

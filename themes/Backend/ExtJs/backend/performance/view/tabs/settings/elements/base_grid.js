@@ -19,12 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Customer
- * @subpackage Order
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/performance/main}
@@ -34,11 +28,12 @@
  */
 //{block name="backend/performance/view/tabs/settings/elements/base_grid_time"}
 Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
+
     /**
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
 
     /**
      * The view needs to be scrollable
@@ -55,7 +50,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
      * default configuration
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.cellEditingPlugin = me.getEditingPlugin();
@@ -93,7 +88,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         var me = this,
             textField;
 

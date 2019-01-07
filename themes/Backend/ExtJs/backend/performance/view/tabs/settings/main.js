@@ -81,46 +81,33 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      * @return Array
      */
     createItems: function() {
-        var me = this;
-
-        me.panel = Ext.create('Ext.form.Panel', {
+        this.panel = Ext.create('Ext.form.Panel', {
             region: 'center',
             trackResetOnLoad: true,
             autoScroll: true,
             items: [
-                {
-                    xtype: 'performance-tabs-settings-home'
-                },{
-                    xtype: 'performance-tabs-settings-seo'
-                },{
-                    xtype: 'performance-tabs-settings-http-cache'
-                },{
-                    xtype: 'performance-tabs-settings-theme-cache'
-                },{
-                    xtype: 'performance-tabs-settings-search'
-                },{
-                    xtype: 'performance-tabs-settings-topseller'
-                },{
-                    xtype: 'performance-tabs-settings-various'
-                },{
-                    xtype: 'performance-tabs-settings-customers'
-                },{
-                    xtype: 'performance-tabs-settings-categories'
-                },{
-                    xtype: 'performance-tabs-settings-filter'
-                }, {
-                    xtype: 'performance-tabs-settings-sitemap'
-                }]
+                { xtype: 'performance-tabs-settings-home' },
+                { xtype: 'performance-tabs-settings-seo' },
+                { xtype: 'performance-tabs-settings-http-cache' },
+                { xtype: 'performance-tabs-settings-theme-cache' },
+                { xtype: 'performance-tabs-settings-search' },
+                { xtype: 'performance-tabs-settings-topseller' },
+                { xtype: 'performance-tabs-settings-various' },
+                { xtype: 'performance-tabs-settings-customers' },
+                { xtype: 'performance-tabs-settings-categories' },
+                { xtype: 'performance-tabs-settings-filter' },
+                { xtype: 'performance-tabs-settings-sitemap' }
+            ]
         });
 
-        me.navigation = Ext.create('Shopware.apps.Performance.view.tabs.settings.Navigation', {
+        this.navigation = Ext.create('Shopware.apps.Performance.view.tabs.settings.Navigation', {
             region: 'west',
             bodyStyle: 'background: #ffffff;'
         });
 
         return [
-            me.navigation,
-            me.panel
+            this.navigation,
+            this.panel
         ];
     },
 
@@ -128,8 +115,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      * @return Array
      */
     getButtons: function() {
-        var me = this;
-
         return ['->', {
             text: '{s name=settings/buttons/save}Save{/s}',
             action: 'save-settings',

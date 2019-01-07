@@ -37,20 +37,17 @@ Ext.define('Shopware.apps.Performance.model.Sitemap', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/sitemap/fields"}{/block}
-        { name:'id', type:'int' },
-
-        { name:'sitemapRefreshStrategy', type:'int' },
-        { name:'sitemapRefreshTime', type:'int' },
-        { name:'sitemapLastRefresh', type:'int' },
+        { name: 'sitemapRefreshStrategy', type:'int' },
+        { name: 'sitemapRefreshTime', type:'int' },
+        { name: 'sitemapLastRefresh', type:'int' },
     ]
-
 });
 //{/block}

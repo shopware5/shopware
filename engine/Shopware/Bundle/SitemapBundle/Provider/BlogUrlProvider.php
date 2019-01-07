@@ -31,6 +31,7 @@ use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing;
+use Shopware\Models\Blog\Blog;
 use Shopware\Models\Category\Category;
 use Shopware_Components_Translation as Translation;
 
@@ -128,7 +129,7 @@ class BlogUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $blogs[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $blogs[$i]['changed'], 'weekly', Blog::class, $blogs[$i]['id']);
         }
 
         $this->allExported = true;

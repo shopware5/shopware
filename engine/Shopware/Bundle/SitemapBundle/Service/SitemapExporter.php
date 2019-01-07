@@ -28,6 +28,7 @@ use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapLockInterface;
 use Shopware\Bundle\SitemapBundle\SitemapWriterInterface;
+use Shopware\Bundle\SitemapBundle\UrlFilterInterface;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\ConfigWriter;
@@ -68,12 +69,18 @@ class SitemapExporter implements SitemapExporterInterface
     private $sitemapLock;
 
     /**
+     * @var UrlFilterInterface
+     */
+    private $urlFilter;
+
+    /**
      * @param SitemapWriterInterface                   $sitemapWriter
      * @param ContextServiceInterface                  $contextService
      * @param ShopwareConfig                           $shopwareConfig
      * @param \IteratorAggregate<UrlProviderInterface> $urlProvider
      * @param ConfigWriter                             $configWriter
      * @param SitemapLockInterface                     $sitemapLock
+     * @param UrlFilterInterface                       $urlFilter
      */
     public function __construct(
         SitemapWriterInterface $sitemapWriter,
@@ -81,7 +88,8 @@ class SitemapExporter implements SitemapExporterInterface
         ShopwareConfig $shopwareConfig,
         \IteratorAggregate $urlProvider,
         ConfigWriter $configWriter,
-        SitemapLockInterface $sitemapLock
+        SitemapLockInterface $sitemapLock,
+        UrlFilterInterface $urlFilter
     ) {
         $this->sitemapWriter = $sitemapWriter;
         $this->urlProvider = iterator_to_array($urlProvider, false);
@@ -89,6 +97,7 @@ class SitemapExporter implements SitemapExporterInterface
         $this->contextService = $contextService;
         $this->configWriter = $configWriter;
         $this->sitemapLock = $sitemapLock;
+        $this->urlFilter = $urlFilter;
     }
 
     /**
@@ -106,6 +115,12 @@ class SitemapExporter implements SitemapExporterInterface
         foreach ($this->urlProvider as $urlProvider) {
             $urlProvider->reset();
             while ($urls = $urlProvider->getUrls($routerContext, $shopContext)) {
+                $urls = $this->urlFilter->filter($urls, (int) $shop->getId());
+
+                if (!$urls) {
+                    continue;
+                }
+
                 $this->sitemapWriter->writeFile($shop, $urls);
             }
         }

@@ -98,8 +98,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Main', {
      * @return Array
      */
     getButtons: function() {
-        var me = this;
-
         return ['->', {
             text: '{s name=form/buttons/select_all}Select all{/s}',
             action: 'select-all',
