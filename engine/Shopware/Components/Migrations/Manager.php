@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -187,28 +189,7 @@ class Manager
                 continue;
             }
 
-            $migrationClassName = 'Migrations_Migration' . $result['1'];
-            if (!class_exists($migrationClassName, false)) {
-                $file = $migrationPath . '/' . $result['0'];
-                require $file;
-            }
-
-            try {
-                /** @var AbstractMigration $migrationClass */
-                $migrationClass = new $migrationClassName($this->getConnection());
-            } catch (\Exception $e) {
-                throw new \Exception('Could not instantiate Object');
-            }
-
-            if (!($migrationClass instanceof AbstractMigration)) {
-                throw new \Exception(sprintf('%s is not instanceof AbstractMigration', $migrationClassName));
-            }
-
-            if ($migrationClass->getVersion() != $result['0']) {
-                throw new \Exception(
-                    sprintf('Version mismatch. Version in filename: %s, Version in Class: %s', $result['1'], $migrationClass->getVersion())
-                );
-            }
+            $migrationClass = $this->loadMigration($result, $migrationPath);
 
             $migrations[$migrationClass->getVersion()] = $migrationClass;
         }
@@ -232,40 +213,23 @@ class Manager
      */
     public function apply(AbstractMigration $migration, $modus = AbstractMigration::MODUS_INSTALL)
     {
-        $sql = 'REPLACE s_schema_version (version, start_date, name) VALUES (:version, :date, :name)';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            ':version' => $migration->getVersion(),
-            ':date' => date('Y-m-d H:i:s'),
-            ':name' => $migration->getLabel(),
-        ]);
+        $this->insertMigration($migration);
 
         try {
             $migration->up($modus);
-            $sqls = $migration->getSql();
 
-            foreach ($sqls as $sql) {
+            foreach ($migration->getSql() as $sql) {
                 $this->connection->exec($sql);
             }
         } catch (\Exception $e) {
-            $updateVersionSql = 'UPDATE s_schema_version SET error_msg = :msg WHERE version = :version';
-            $stmt = $this->connection->prepare($updateVersionSql);
-            $stmt->execute([
-                ':version' => $migration->getVersion(),
-                ':msg' => $e->getMessage(),
-            ]);
+            $this->markMigrationAsFailed($migration, $e);
 
             throw new \Exception(sprintf(
                 'Could not apply migration (%s). Error: %s ', get_class($migration), $e->getMessage()
             ));
         }
 
-        $sql = 'UPDATE s_schema_version SET complete_date = :date WHERE version = :version';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            ':version' => $migration->getVersion(),
-            ':date' => date('Y-m-d H:i:s'),
-        ]);
+        $this->markMigrationAsFinished($migration);
     }
 
     /**
@@ -287,6 +251,68 @@ class Manager
         foreach ($migrations as $migration) {
             $this->log(sprintf('Apply MigrationNumber: %s - %s', $migration->getVersion(), $migration->getLabel()));
             $this->apply($migration, $modus);
+        }
+    }
+
+    protected function loadMigration(array $result, string $migrationPath): AbstractMigration
+    {
+        $migrationClassName = 'Migrations_Migration' . $result['1'];
+        if (!class_exists($migrationClassName, false)) {
+            $file = $migrationPath . '/' . $result['0'];
+            require $file;
+        }
+
+        try {
+            /** @var AbstractMigration $migrationClass */
+            $migrationClass = new $migrationClassName($this->getConnection());
+        } catch (\Exception $e) {
+            throw new \RuntimeException(sprintf('Could not instantiate Object of class "%s"', $migrationClassName));
+        }
+
+        $this->validateMigration($migrationClass, $result);
+
+        return $migrationClass;
+    }
+
+    protected function insertMigration(AbstractMigration $migration): void
+    {
+        $sql = 'REPLACE s_schema_version (version, start_date, name) VALUES (:version, :date, :name)';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute([
+            ':version' => $migration->getVersion(),
+            ':date' => date('Y-m-d H:i:s'),
+            ':name' => $migration->getLabel(),
+        ]);
+    }
+
+    protected function markMigrationAsFinished(AbstractMigration $migration): void
+    {
+        $sql = 'UPDATE s_schema_version SET complete_date = :date WHERE version = :version';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute([
+            ':version' => $migration->getVersion(),
+            ':date' => date('Y-m-d H:i:s'),
+        ]);
+    }
+
+    protected function markMigrationAsFailed(AbstractMigration $migration, \Exception $e): void
+    {
+        $updateVersionSql = 'UPDATE s_schema_version SET error_msg = :msg WHERE version = :version';
+        $stmt = $this->connection->prepare($updateVersionSql);
+        $stmt->execute([
+            ':version' => $migration->getVersion(),
+            ':msg' => $e->getMessage(),
+        ]);
+    }
+
+    protected function validateMigration(AbstractMigration $migrationClass, $result): void
+    {
+        $version = (int) $result['0'];
+
+        if ($migrationClass->getVersion() !== $version) {
+            throw new \Exception(
+                sprintf('Version mismatch. Version in filename: %s, Version in Class: %s', $result['1'], $migrationClass->getVersion())
+            );
         }
     }
 }
