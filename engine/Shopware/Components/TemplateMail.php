@@ -317,6 +317,8 @@ class Shopware_Components_TemplateMail
             }
         }
 
+        $mail->setTemplateName($mailModel->getName());
+
         return $mail;
     }
 }
