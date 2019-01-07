@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 }, 2000);
             }
 
-            if (enableBetaFeedback && (typeof(Storage) !== "undefined")) {
+            if (enableBetaFeedback && (typeof Storage !== "undefined")) {
                 var item = window.localStorage.getItem("hideBetaFeedback");
                 if (!item) {
                     Ext.Function.defer(function() {

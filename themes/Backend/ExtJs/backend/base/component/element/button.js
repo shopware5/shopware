@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Base.view.element.Button', {
                 window.openAction(me.controller);
             }
         // Add support of own button handler
-        } else if (typeof(me.handler) == 'string' && me.handler.indexOf('function') !== -1) {
+        } else if (typeof me.handler === 'string' && me.handler.indexOf('function') !== -1) {
             eval('me.handler =' + me.handler + ';');
         }
 

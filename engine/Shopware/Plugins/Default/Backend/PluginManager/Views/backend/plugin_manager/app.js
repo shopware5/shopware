@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.PluginManager', {
                 return;
             }
             Ext.each(subApp.windowManager.zIndexStack, function (item) {
-                if (typeof(item) !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
+                if (typeof item !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
                     activeWindows.push(item);
                 }
             });
