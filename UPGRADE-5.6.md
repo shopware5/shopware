@@ -15,7 +15,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added product review widget
 * Added plugin migrations
     * Migrations are loaded from folder `SwagTestPlugin/Resources/migrations`
-    * The migration file can be generated using `./bin/console sw:make:migration SwagTestPlugin added-something-new`
+    * The migration file can be generated using `./bin/console sw:generate:migration added-something-new -p SwagTestPlugin`
 
 
 ### Changes

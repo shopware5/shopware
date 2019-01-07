@@ -24,14 +24,16 @@
 
 namespace SwagTest\Migrations;
 
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Schema\Comparator;
+use Doctrine\DBAL\Schema\Schema;
 use Shopware\Components\Migrations\AbstractPluginMigration;
 
 class Migration2 extends AbstractPluginMigration
 {
     public function up($modus): void
     {
-        Shopware()->Container()->get('shopware_attribute.crud_service')->update('s_articles_attributes', 'testfoo', TypeMapping::TYPE_TEXT, [], 'testyay');
+        $this->addSql(implode(';', (new Comparator())->compare($this->getOldSchema(), $this->getSchema())->toSql(new MySqlPlatform())));
     }
 
     public function down(bool $keepUserData): void
@@ -40,6 +42,25 @@ class Migration2 extends AbstractPluginMigration
             return;
         }
 
-        Shopware()->Container()->get('shopware_attribute.crud_service')->update('s_articles_attributes', 'testyay', TypeMapping::TYPE_TEXT, [], 'testfoo');
+        $this->addSql(implode(';', (new Comparator())->compare($this->getSchema(), $this->getOldSchema())->toSql(new MySqlPlatform())));
+    }
+
+    private function getOldSchema(): Schema
+    {
+        $schema = new Schema();
+        $migration = $schema->createTable('s_test_table');
+        $migration->addColumn('name', 'string', ['length' => 255]);
+
+        return $schema;
+    }
+
+    private function getSchema(): Schema
+    {
+        $schema = new Schema();
+        $migration = $schema->createTable('s_test_table');
+        $migration->addColumn('name', 'string', ['length' => 255]);
+        $migration->addColumn('newcolumn', 'string', ['length' => 255]);
+
+        return $schema;
     }
 }

@@ -24,14 +24,15 @@
 
 namespace SwagTest\Migrations;
 
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Schema\Schema;
 use Shopware\Components\Migrations\AbstractPluginMigration;
 
 class Migration1 extends AbstractPluginMigration
 {
     public function up($modus): void
     {
-        Shopware()->Container()->get('shopware_attribute.crud_service')->update('s_articles_attributes', 'testfoo', TypeMapping::TYPE_TEXT);
+        $this->addSql(implode(';', $this->getSchema()->toSql(new MySqlPlatform())));
     }
 
     public function down(bool $keepUserData): void
@@ -40,6 +41,15 @@ class Migration1 extends AbstractPluginMigration
             return;
         }
 
-        Shopware()->Container()->get('shopware_attribute.crud_service')->delete('s_articles_attributes', 'testfoo');
+        $this->addSql(implode(';', $this->getSchema()->toDropSql(new MySqlPlatform())));
+    }
+
+    private function getSchema(): Schema
+    {
+        $schema = new Schema();
+        $migration = $schema->createTable('s_test_table');
+        $migration->addColumn('name', 'string', ['length' => 255]);
+
+        return $schema;
     }
 }

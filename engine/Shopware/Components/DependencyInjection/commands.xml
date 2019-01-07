@@ -240,8 +240,8 @@
         </service>
 
         <service id="shopware.commands.make_migration_command"
-                 class="Shopware\Commands\CreateMigrationCommand">
-            <tag name="console.command" command="sw:make:migration"/>
+                 class="Shopware\Commands\GenerateMigrationCommand">
+            <tag name="console.command" command="sw:generate:migration"/>
         </service>
     </services>
 </container>
