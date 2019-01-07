@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added filter event `Shopware_Modules_Basket_CheckBasketQuantities_ProductQuantities` in order to modify variables for each basket item
 * Added `max_expansions` in config.php for the `phrase_prefixes` `name` and `number`
 * Added aggregation size to product attribute range sliders
+* Added product attribute parser for elasticsearch indexing to allow indexing of boolean values
 
 ### Changes
 
