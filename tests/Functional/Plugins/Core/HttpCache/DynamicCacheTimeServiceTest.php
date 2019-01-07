@@ -205,7 +205,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return null|Blog
+     * @return Blog|null
      */
     private function createTestBlog()
     {
@@ -225,7 +225,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return null|Blog
+     * @return Blog|null
      */
     private function createTestBlogWithCategory()
     {
@@ -265,7 +265,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return null|Emotion
+     * @return Emotion|null
      */
     private function createTestEmotion()
     {
@@ -285,7 +285,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return null|Category
+     * @return Category|null
      */
     private function createTestCategory()
     {
@@ -336,7 +336,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return null|Article
+     * @return Article|null
      */
     private function createTestProduct()
     {

@@ -72,7 +72,7 @@ class TreeFacetResult extends Extendable implements FacetResultInterface, Templa
      * @param bool        $active
      * @param string      $label
      * @param TreeItem[]  $values
-     * @param null|string $template
+     * @param string|null $template
      * @param Attribute[] $attributes
      */
     public function __construct(
@@ -142,7 +142,7 @@ class TreeFacetResult extends Extendable implements FacetResultInterface, Templa
     }
 
     /**
-     * @param null|string $template
+     * @param string|null $template
      */
     public function setTemplate($template)
     {

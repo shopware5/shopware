@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
     $template = '%s: ';
     if (PHP_SAPI !== 'cli') {

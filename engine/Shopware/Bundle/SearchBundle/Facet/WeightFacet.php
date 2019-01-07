@@ -34,7 +34,7 @@ class WeightFacet implements FacetInterface
     protected $label;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $suffix;
 
@@ -64,7 +64,7 @@ class WeightFacet implements FacetInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSuffix()
     {

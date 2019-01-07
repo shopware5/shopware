@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Models\Shop\DetachedShop;
 use Shopware\Models\Shop\Repository;
@@ -430,7 +431,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      * @param Request $request
      * @param Shop    $shop
      *
-     * @return null|string
+     * @return string|null
      */
     private function createPathInfo(Request $request, Shop $shop)
     {

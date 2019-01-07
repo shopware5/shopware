@@ -33,8 +33,8 @@ class Repository extends ModelRepository
      *
      * @param null     $filter
      * @param null     $order
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return \Doctrine\ORM\Query
      * @return \Doctrine\ORM\Query

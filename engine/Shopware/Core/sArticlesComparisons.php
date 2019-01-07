@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -111,7 +112,7 @@ class sArticlesComparisons
      *
      * @throws Enlight_Exception
      *
-     * @return bool|null|string true/false
+     * @return bool|string|null true/false
      */
     public function sAddComparison($articleId)
     {

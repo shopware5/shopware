@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
@@ -647,7 +648,7 @@ class sAdmin
      * Updates the payment mean of the user
      * Used in the Frontend Account controller
      *
-     * @param null|int $paymentId
+     * @param int|null $paymentId
      *
      * @throws Enlight_Exception On database error
      *
@@ -1033,7 +1034,7 @@ class sAdmin
      * Also includes fallback translations
      * Used internally in sAdmin
      *
-     * @param null|array $state
+     * @param array|null $state
      *
      * @return array States translations
      */
@@ -1138,7 +1139,7 @@ class sAdmin
      *
      * @param string $email Recipient email address
      *
-     * @return null|false False if stopped, null otherwise
+     * @return false|null False if stopped, null otherwise
      */
     public function sSaveRegisterSendConfirmation($email)
     {
@@ -3479,7 +3480,7 @@ SQL;
      *
      * @param string        $addScopeSql
      * @param string        $email
-     * @param null|string[] $sErrorMessages
+     * @param string[]|null $sErrorMessages
      * @param string        $password
      *
      * @return array

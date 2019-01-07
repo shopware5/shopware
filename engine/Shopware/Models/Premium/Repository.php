@@ -41,7 +41,7 @@ class Repository extends ModelRepository
      * @param int         $start
      * @param int         $limit
      * @param string      $order
-     * @param null|string $filterValue
+     * @param string|null $filterValue
      *
      * @return \Doctrine\ORM\Query
      */

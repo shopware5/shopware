@@ -70,7 +70,7 @@ interface CustomerStreamRepositoryInterface
     public function fetchSearchIndexIds($offset, $full = false);
 
     /**
-     * @param null|int $streamId
+     * @param int|null $streamId
      * @param int      $month
      *
      * @return array[]

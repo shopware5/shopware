@@ -33,7 +33,7 @@ interface ProductQueryFactoryInterface
 {
     /**
      * @param int      $categoryId
-     * @param null|int $limit
+     * @param int|null $limit
      *
      * @return LastIdQuery
      */

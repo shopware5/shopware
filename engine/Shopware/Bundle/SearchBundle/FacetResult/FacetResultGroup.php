@@ -126,7 +126,7 @@ class FacetResultGroup extends Extendable implements FacetResultInterface, Templ
     }
 
     /**
-     * @param null|string $template
+     * @param string|null $template
      */
     public function setTemplate($template)
     {

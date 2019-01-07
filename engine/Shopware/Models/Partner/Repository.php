@@ -39,9 +39,9 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partners for the backend list
      *
-     * @param null|array $order
-     * @param null|int   $offset
-     * @param null|int   $limit
+     * @param array|null $order
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */

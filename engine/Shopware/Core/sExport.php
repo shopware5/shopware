@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
@@ -333,7 +334,7 @@ class sExport
 
     /**
      * @param string      $string
-     * @param null|string $char_set
+     * @param string|null $char_set
      *
      * @return string
      */
@@ -349,7 +350,7 @@ class sExport
     /**
      * @param string      $string
      * @param string      $esc_type
-     * @param null|string $char_set
+     * @param string|null $char_set
      *
      * @return mixed|string
      */
@@ -361,7 +362,7 @@ class sExport
     /**
      * @param string      $string
      * @param string      $esc_type
-     * @param null|string $char_set
+     * @param string|null $char_set
      *
      * @return mixed|string
      */
@@ -490,9 +491,9 @@ class sExport
 
     /**
      * @param string      $hash
-     * @param null|string $imageSize
+     * @param string|null $imageSize
      *
-     * @return null|string
+     * @return string|null
      */
     public function sGetImageLink($hash, $imageSize = null)
     {
@@ -542,7 +543,7 @@ class sExport
      *
      * @param int         $articleId
      * @param string      $orderNumber
-     * @param null|string $imageSize
+     * @param string|null $imageSize
      * @param string      $separator
      *
      * @return string
@@ -1156,7 +1157,7 @@ class sExport
     /**
      * @param int      $articleID
      * @param string   $separator
-     * @param null|int $categoryID
+     * @param int|null $categoryID
      *
      * @return string
      */
@@ -1251,8 +1252,8 @@ class sExport
     }
 
     /**
-     * @param null|int|string $dispatch
-     * @param null|int|string $country
+     * @param int|string|null $dispatch
+     * @param int|string|null $country
      *
      * @return mixed
      */
@@ -1305,8 +1306,8 @@ class sExport
 
     /**
      * @param array    $article
-     * @param null|int $countryID
-     * @param null|int $paymentID
+     * @param int|null $countryID
+     * @param int|null $paymentID
      *
      * @return bool|mixed
      */
@@ -1450,9 +1451,9 @@ class sExport
 
     /**
      * @param array           $basket
-     * @param null|int|string $dispatch
+     * @param int|string|null $dispatch
      *
-     * @return null|array
+     * @return array|null
      */
     public function sGetPremiumDispatch($basket, $dispatch = null)
     {
@@ -1705,7 +1706,7 @@ class sExport
      * @param array      $article
      * @param array      $payment
      * @param array      $country
-     * @param null|array $dispatch
+     * @param array|null $dispatch
      *
      * @return bool|float
      */

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Country\Country;
 use Shopware\Models\Payment\Payment;
 use Shopware\Models\Shop\Shop;

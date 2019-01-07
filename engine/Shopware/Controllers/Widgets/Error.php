@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Controllers_Widgets_Error extends Shopware_Controllers_Frontend_Error
 {
     public function serviceAction()

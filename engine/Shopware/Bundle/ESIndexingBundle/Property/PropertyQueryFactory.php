@@ -46,7 +46,7 @@ class PropertyQueryFactory
     }
 
     /**
-     * @param null|int $limit
+     * @param int|null $limit
      *
      * @return LastIdQuery
      */
@@ -56,7 +56,7 @@ class PropertyQueryFactory
     }
 
     /**
-     * @param null|int $limit
+     * @param int|null $limit
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

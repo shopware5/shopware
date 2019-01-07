@@ -481,7 +481,7 @@ abstract class Resource
      *
      * @throws Exception
      *
-     * @return null|ModelEntity
+     * @return ModelEntity|null
      */
     protected function findEntityByConditions($entity, array $conditions)
     {
@@ -491,7 +491,7 @@ abstract class Resource
         }
 
         foreach ($conditions as $condition) {
-            /** @var null|ModelEntity $instance */
+            /** @var ModelEntity|null $instance */
             $instance = $repo->findOneBy($condition);
             if ($instance) {
                 return $instance;
@@ -565,7 +565,7 @@ abstract class Resource
      *
      * @throws ApiException\CustomValidationException
      *
-     * @return null|object
+     * @return object|null
      */
     protected function getManyToManySubElement(Collection $collection, $data, $entityType, $conditions = ['id'])
     {

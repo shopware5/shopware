@@ -33,7 +33,7 @@ trait InvalidationDateTrait
      *
      * @param DateTime[] $dates
      *
-     * @return null|DateTime
+     * @return DateTime|null
      */
     protected function getMostRecentDate(array $dates)
     {

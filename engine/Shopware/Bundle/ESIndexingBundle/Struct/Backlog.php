@@ -53,7 +53,7 @@ class Backlog
      * @param string   $event
      * @param array    $payload
      * @param string   $time
-     * @param null|int $id
+     * @param int|null $id
      */
     public function __construct($event, $payload, $time = 'now', $id = null)
     {

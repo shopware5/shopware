@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\EmotionExporter;
@@ -992,7 +993,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *  array('success' => false, 'error' => An error message)
      *
      *
-     * @param null|int $id
+     * @param int|null $id
      *
      * @return array
      */

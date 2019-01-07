@@ -125,9 +125,9 @@ class CrudService
      * @param string                $columnName
      * @param string                $unifiedType
      * @param array                 $data
-     * @param null|string           $newColumnName
+     * @param string|null           $newColumnName
      * @param bool                  $updateDependingTables
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      *
      * @throws \Exception
      */
@@ -276,7 +276,7 @@ class CrudService
      * @param ConfigurationStruct   $config
      * @param string                $name
      * @param string                $type
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      *
      * @return bool
      */
@@ -312,7 +312,7 @@ class CrudService
      * @param string                $table
      * @param string                $column
      * @param string                $unifiedType
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      * @param array                 $data
      *
      * @throws \Exception
@@ -346,7 +346,7 @@ class CrudService
      * @param string                $originalColumnName
      * @param string                $newColumnName
      * @param string                $unifiedType
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      * @param array                 $data
      *
      * @throws \Exception
@@ -392,9 +392,9 @@ class CrudService
 
     /**
      * @param string                $type
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      *
-     * @return null|string|int|float
+     * @return string|int|float|null
      */
     private function parseDefaultValue($type, $defaultValue)
     {

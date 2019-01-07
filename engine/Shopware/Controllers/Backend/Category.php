@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;

@@ -36,10 +36,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to access a list of media
      *
-     * @param null|string $filter
-     * @param null|string $orderBy
-     * @param null|int    $offset
-     * @param null|int    $limit
+     * @param string|null $filter
+     * @param string|null $orderBy
+     * @param int|null    $offset
+     * @param int|null    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -85,8 +85,8 @@ class Repository extends ModelRepository
      * @param int      $albumId
      * @param null     $filter
      * @param null     $orderBy
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      * @param null     $validTypes
      *
      * @return \Doctrine\ORM\Query

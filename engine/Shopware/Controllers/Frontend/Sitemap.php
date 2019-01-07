@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Shop\DetachedShop;
 use Shopware\Models\Site\Site;
@@ -383,8 +384,8 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param null|\DateTimeInterface $from
-     * @param null|\DateTimeInterface $to
+     * @param \DateTimeInterface|null $from
+     * @param \DateTimeInterface|null $to
      *
      * @return bool
      */

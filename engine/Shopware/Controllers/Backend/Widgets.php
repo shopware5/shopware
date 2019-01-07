@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\User\User;
 use Shopware\Models\Widget\View;

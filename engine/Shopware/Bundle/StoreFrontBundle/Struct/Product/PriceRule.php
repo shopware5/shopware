@@ -52,7 +52,7 @@ class PriceRule extends Extendable
     protected $from;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     protected $to = null;
 

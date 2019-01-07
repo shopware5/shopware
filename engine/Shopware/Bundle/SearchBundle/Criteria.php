@@ -239,7 +239,7 @@ class Criteria extends Extendable
     /**
      * @param string $name
      *
-     * @return null|ConditionInterface
+     * @return ConditionInterface|null
      */
     public function getCondition($name)
     {
@@ -277,7 +277,7 @@ class Criteria extends Extendable
     /**
      * @param string $name
      *
-     * @return null|FacetInterface
+     * @return FacetInterface|null
      */
     public function getFacet($name)
     {
@@ -287,7 +287,7 @@ class Criteria extends Extendable
     /**
      * @param string $name
      *
-     * @return null|SortingInterface
+     * @return SortingInterface|null
      */
     public function getSorting($name)
     {

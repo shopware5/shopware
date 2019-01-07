@@ -208,7 +208,7 @@ class RequirementValidatorTest extends TestCase
     /**
      * @param $args
      *
-     * @return null|Plugin
+     * @return Plugin|null
      */
     public function findPluginByName($args)
     {

@@ -139,7 +139,7 @@ class Album extends ModelEntity
     /**
      * An album can only be subordinated to another album.
      *
-     * @var null|\Shopware\Models\Media\Album
+     * @var \Shopware\Models\Media\Album|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -271,7 +271,7 @@ class Album extends ModelEntity
     /**
      * Returns the parent album instance
      *
-     * @return null|\Shopware\Models\Media\Album
+     * @return \Shopware\Models\Media\Album|null
      */
     public function getParent()
     {
@@ -281,7 +281,7 @@ class Album extends ModelEntity
     /**
      * Sets the parent album instance
      *
-     * @param null|\Shopware\Models\Media\Album $parent
+     * @param \Shopware\Models\Media\Album|null $parent
      *
      * @return \Shopware\Models\Media\Album
      */

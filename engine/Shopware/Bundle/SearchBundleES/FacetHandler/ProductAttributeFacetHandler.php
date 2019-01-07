@@ -262,7 +262,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      * @param array                 $data
      * @param Criteria              $criteria
      *
-     * @return null|RadioFacetResult|ValueListFacetResult
+     * @return RadioFacetResult|ValueListFacetResult|null
      */
     private function createItemListResult(
         ProductAttributeFacet $criteriaPart,
@@ -314,7 +314,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      * @param array                 $data
      * @param Criteria              $criteria
      *
-     * @return null|BooleanFacetResult
+     * @return BooleanFacetResult|null
      */
     private function createBooleanResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
     {

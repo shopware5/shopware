@@ -370,7 +370,7 @@ class Backup
      *
      * @param int|float $value
      *
-     * @return null|int
+     * @return int|null
      */
     public function getDataTypeForExport($value)
     {

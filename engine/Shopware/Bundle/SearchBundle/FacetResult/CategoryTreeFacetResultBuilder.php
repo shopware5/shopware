@@ -58,7 +58,7 @@ class CategoryTreeFacetResultBuilder
      * @param int           $systemCategoryId
      * @param CategoryFacet $facet
      *
-     * @return null|TreeFacetResult
+     * @return TreeFacetResult|null
      */
     public function buildFacetResult(array $categories, array $activeIds, $systemCategoryId, CategoryFacet $facet)
     {

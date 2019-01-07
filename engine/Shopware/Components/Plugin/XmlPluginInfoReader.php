@@ -122,7 +122,7 @@ class XmlPluginInfoReader
      * @param \DOMNode $node
      * @param string   $name
      *
-     * @return null|\DOMElement
+     * @return \DOMElement|null
      */
     private function getFirstChild(\DOMNode $node, $name)
     {
