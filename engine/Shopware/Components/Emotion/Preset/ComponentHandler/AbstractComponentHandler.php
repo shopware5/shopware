@@ -74,7 +74,7 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     /**
      * @param int $id
      *
-     * @return null|object
+     * @return object|null
      */
     protected function getMediaById($id)
     {
@@ -84,7 +84,7 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     /**
      * @param string $path
      *
-     * @return null|object
+     * @return object|null
      */
     protected function getMediaByPath($path)
     {

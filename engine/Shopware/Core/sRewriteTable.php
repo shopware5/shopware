@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
@@ -747,7 +748,7 @@ class sRewriteTable
      *
      * @param array $params
      *
-     * @return null|string Category path
+     * @return string|null Category path
      */
     public function sSmartyCategoryPath($params)
     {
@@ -866,7 +867,7 @@ class sRewriteTable
     /**
      * Getter function of the prepared update PDOStatement
      *
-     * @return null|PDOStatement
+     * @return PDOStatement|null
      */
     protected function getPreparedUpdate()
     {
@@ -891,7 +892,7 @@ class sRewriteTable
      * @param int $productId Id of the product to look for
      * @param int $parentId  Category subtree root id. If null, the shop category is used.
      *
-     * @return null|array Category path, or null if no category found
+     * @return array|null Category path, or null if no category found
      */
     private function sCategoryPathByProductId($productId, $parentId = null)
     {

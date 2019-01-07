@@ -72,7 +72,7 @@ class Attachment extends File
     /**
      * @param \Shopware\Models\Mail\Mail      $mail
      * @param \Shopware\Models\Media\Media    $media
-     * @param null|\Shopware\Models\Shop\Shop $shop
+     * @param \Shopware\Models\Shop\Shop|null $shop
      */
     public function __construct(\Shopware\Models\Mail\Mail $mail, \Shopware\Models\Media\Media $media, \Shopware\Models\Shop\Shop $shop = null)
     {

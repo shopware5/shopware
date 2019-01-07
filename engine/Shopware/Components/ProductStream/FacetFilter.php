@@ -117,7 +117,7 @@ class FacetFilter implements FacetFilterInterface
      * @param FacetResultInterface[] $facets
      * @param string                 $name
      *
-     * @return null|FacetResultInterface
+     * @return FacetResultInterface|null
      */
     private function getFacetByName(array $facets, $name)
     {

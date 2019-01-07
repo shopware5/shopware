@@ -186,7 +186,7 @@ class DefaultCaptcha implements CaptchaInterface
      *
      * @param string $fileName
      *
-     * @return null|string
+     * @return string|null
      */
     private function getCaptchaFile($fileName)
     {

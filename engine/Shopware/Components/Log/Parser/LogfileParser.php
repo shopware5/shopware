@@ -31,7 +31,7 @@ class LogfileParser
     /**
      * @param string   $file
      * @param int      $offset
-     * @param null|int $limit
+     * @param int|null $limit
      * @param bool     $reverse
      *
      * @return array

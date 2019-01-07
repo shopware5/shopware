@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\HttpCache\CacheWarmer;
@@ -342,7 +343,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @param string $configName
      * @param string $defaultValue
      *
-     * @return null|string
+     * @return string|null
      */
     public function readConfig($configName, $defaultValue = '')
     {
@@ -735,11 +736,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      *
      * @param string $name
      *
-     * @return null|Plugin
+     * @return Plugin|null
      */
     private function getPluginByName($name)
     {
-        /** @var null|Plugin $return */
+        /** @var Plugin|null $return */
         $return = $this->get('models')
             ->getRepository(\Shopware\Models\Plugin\Plugin::class)
             ->findOneBy(['name' => $name]);

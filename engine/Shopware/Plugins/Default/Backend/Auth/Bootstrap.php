@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\DependencyInjection\Bridge\Db;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Session\PdoSessionHandler;
@@ -217,7 +218,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * @throws Enlight_Controller_Exception
      *
-     * @return null|Shopware_Components_Auth
+     * @return Shopware_Components_Auth|null
      */
     public function checkAuth()
     {

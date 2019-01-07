@@ -115,7 +115,7 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param null|int $id
+     * @param int|null $id
      * @param int      $offset
      * @param null     $limit
      * @param array    $conditions
@@ -346,8 +346,8 @@ class CustomerStream extends Resource
 
     /**
      * @param CustomerStreamEntity $stream
-     * @param null|int             $offset
-     * @param null|int             $limit
+     * @param int|null             $offset
+     * @param int|null             $limit
      *
      * @throws \Shopware\Components\Api\Exception\PrivilegeException
      */

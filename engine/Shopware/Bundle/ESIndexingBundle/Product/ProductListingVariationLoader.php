@@ -81,7 +81,7 @@ class ProductListingVariationLoader
      * @param Shop              $shop
      * @param ListProduct[]     $products
      * @param array             $configurations
-     * @param null|VariantFacet $variantFacet
+     * @param VariantFacet|null $variantFacet
      *
      * @return array
      */
@@ -148,7 +148,7 @@ class ProductListingVariationLoader
     /**
      * @param ListProduct[]     $products
      * @param array             $configurations
-     * @param null|VariantFacet $variantFacet
+     * @param VariantFacet|null $variantFacet
      *
      * @return array
      */

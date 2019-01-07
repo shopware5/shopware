@@ -424,7 +424,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param null|\Shopware\Models\Shop\Template $parent
+     * @param \Shopware\Models\Shop\Template|null $parent
      */
     public function setParent(Template $parent = null)
     {

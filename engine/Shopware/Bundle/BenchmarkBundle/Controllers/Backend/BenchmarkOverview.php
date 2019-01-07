@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler;
 use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
@@ -114,7 +115,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     }
 
     /**
-     * @param null|BenchmarkConfig $config
+     * @param BenchmarkConfig|null $config
      */
     private function handleSettings(BenchmarkConfig $config = null)
     {

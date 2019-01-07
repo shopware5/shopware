@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Kernel;
 
 class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -550,7 +551,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param string   $association
      * @param int      $offset
      * @param int      $limit
-     * @param null|int $id
+     * @param int|null $id
      * @param array    $filter
      * @param array    $sort
      *
@@ -1124,7 +1125,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param string      $value
      * @param array       $field
-     * @param null|string $expression
+     * @param string|null $expression
      *
      * @return string
      */

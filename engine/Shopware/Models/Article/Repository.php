@@ -1747,10 +1747,10 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select article ids and names.
      * The passed article ids are excluded.
      *
-     * @param null|int[] $ids
+     * @param int[]|null $ids
      * @param null       $filter
-     * @param null|int   $offset
-     * @param null|int   $limit
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1769,7 +1769,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticlesWithExcludedIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|int[] $ids
+     * @param int[]|null $ids
      * @param null       $filter
      *
      * @internal param null $filter
@@ -1869,10 +1869,10 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which selects supplier ids, names and
      * description. The passed supplier ids are excluded.
      *
-     * @param null|int[] $ids
+     * @param int[]|null $ids
      * @param null       $filter
-     * @param null|int   $offset
-     * @param null|int   $limit
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1891,8 +1891,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getSuppliersWithExcludedIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|int[] $ids
-     * @param null|array $filter
+     * @param int[]|null $ids
+     * @param array|null $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1922,8 +1922,8 @@ class Repository extends ModelRepository
      *
      * @param array    $filter
      * @param array    $orderBy
-     * @param null|int $limit
-     * @param null|int $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -1981,10 +1981,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of article votes.
      *
-     * @param null|array $filter
-     * @param null|array $offset
-     * @param null|int   $limit
-     * @param null|int   $order
+     * @param array|null $filter
+     * @param array|null $offset
+     * @param int|null   $limit
+     * @param int|null   $order
      *
      * @return \Doctrine\ORM\Query
      */
@@ -2044,9 +2044,9 @@ class Repository extends ModelRepository
      *
      * @param null      $filter
      * @param null      $offset
-     * @param null|int  $limit
+     * @param int|null  $limit
      * @param null      $order
-     * @param null|bool $summarize
+     * @param bool|null $summarize
      *
      * @return \Doctrine\ORM\Query
      */

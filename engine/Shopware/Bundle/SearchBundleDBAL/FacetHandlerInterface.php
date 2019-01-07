@@ -45,7 +45,7 @@ interface FacetHandlerInterface
      * @param Criteria                    $criteria
      * @param Struct\ShopContextInterface $context
      *
-     * @return null|FacetResultInterface|FacetResultInterface[]
+     * @return FacetResultInterface|FacetResultInterface[]|null
      */
     public function generateFacet(
         FacetInterface $facet,

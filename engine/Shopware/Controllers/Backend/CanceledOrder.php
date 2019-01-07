@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Order\Order;
 
 /**
@@ -757,7 +758,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      * @param \Shopware\Models\Article\Detail $variant
      * @param Order                           $order
      *
-     * @return null|\Shopware\Models\Order\Detail
+     * @return \Shopware\Models\Order\Detail|null
      */
     private function getOrderPositionByProduct(\Shopware\Models\Article\Detail $variant, Order $order)
     {

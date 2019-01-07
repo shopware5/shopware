@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
@@ -1029,7 +1030,7 @@ SQL;
      * @throws \Enlight_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return null|false False on failure, null on success
+     * @return false|null False on failure, null on success
      */
     public function sInsertSurcharge()
     {
@@ -1142,7 +1143,7 @@ SQL;
      * @throws \Enlight_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return false|null|void False on failure, null on success
+     * @return false|void|null False on failure, null on success
      */
     public function sInsertSurchargePercent()
     {

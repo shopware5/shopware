@@ -656,7 +656,7 @@ class %className% extends ModelEntity
      * @param \Doctrine\DBAL\Schema\Table  $table
      * @param \Doctrine\DBAL\Schema\Column $column
      *
-     * @return null|\Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @return \Doctrine\DBAL\Schema\ForeignKeyConstraint|null
      */
     protected function getColumnForeignKey($table, $column)
     {

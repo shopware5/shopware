@@ -67,9 +67,9 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param null|array $filter
-     * @param null|array $filterBy
-     * @param null|int   $categoryId
+     * @param array|null $filter
+     * @param array|null $filterBy
+     * @param int|null   $categoryId
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

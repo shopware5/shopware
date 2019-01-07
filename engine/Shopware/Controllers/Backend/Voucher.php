@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Random;
@@ -529,7 +530,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
      * @param array  $range
      * @param string $pattern
      *
-     * @return null|string|string[]
+     * @return string|string[]|null
      */
     private function replaceAllMatchingPatterns($generatedCode, $range, $pattern)
     {

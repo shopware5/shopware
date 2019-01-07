@@ -36,7 +36,7 @@ class Repository extends ModelRepository
      * the current date will be used.
      *
      * @param int                     $bannerId
-     * @param null|\DateTimeInterface $date
+     * @param \DateTimeInterface|null $date
      *
      * @return Banner
      */
@@ -64,8 +64,8 @@ class Repository extends ModelRepository
      *
      * @param int                     $articleId
      * @param int                     $shopId
-     * @param null|\DateTimeInterface $date
-     * @param null|string             $deviceType
+     * @param \DateTimeInterface|null $date
+     * @param string|null             $deviceType
      *
      * @return \Doctrine\ORM\Query
      */
@@ -86,7 +86,7 @@ class Repository extends ModelRepository
      * @param int                $articleId
      * @param int                $shopId
      * @param \DateTimeInterface $date
-     * @param null|string        $deviceType
+     * @param string|null        $deviceType
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

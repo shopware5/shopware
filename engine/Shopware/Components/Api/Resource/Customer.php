@@ -505,7 +505,7 @@ class Customer extends Resource
      *
      * @throws ApiException\CustomValidationException
      *
-     * @return null|AddressModel
+     * @return AddressModel|null
      */
     private function createAddress(array $data = null)
     {

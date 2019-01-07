@@ -322,11 +322,11 @@ class ContextService implements ContextServiceInterface
     /**
      * @param string      $baseUrl
      * @param int         $shopId
-     * @param null|int    $currencyId
-     * @param null|string $currentCustomerGroupKey
-     * @param null|int    $areaId
-     * @param null|int    $countryId
-     * @param null|int    $stateId
+     * @param int|null    $currencyId
+     * @param string|null $currentCustomerGroupKey
+     * @param int|null    $areaId
+     * @param int|null    $countryId
+     * @param int|null    $stateId
      * @param int[]       $streamIds
      *
      * @return ShopContext

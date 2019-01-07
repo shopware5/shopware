@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Config\ElementTranslation;
 use Shopware\Models\Config\Form;
@@ -591,7 +592,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Returns plugin version
      *
-     * @return null|string
+     * @return string|null
      */
     public function getVersion()
     {

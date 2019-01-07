@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
@@ -717,7 +718,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @return null|AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     private function getAccessToken()
     {
@@ -875,7 +876,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      * @param string $orderNumber
      * @param array  $positions
      *
-     * @return null|string
+     * @return string|null
      */
     private function getTechnicalNameOfOrderNumber($orderNumber, array $positions)
     {

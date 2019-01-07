@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Category\Category;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Dispatch\Dispatch;
@@ -620,9 +621,9 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     }
 
     /**
-     * @param null|int|string $inputValue
+     * @param int|string|null $inputValue
      *
-     * @return null|int|string
+     * @return int|string|null
      */
     private function cleanData($inputValue)
     {

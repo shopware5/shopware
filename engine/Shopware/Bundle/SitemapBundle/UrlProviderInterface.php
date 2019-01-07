@@ -34,7 +34,7 @@ interface UrlProviderInterface
      * @param Routing\Context      $routingContext
      * @param ShopContextInterface $shopContext
      *
-     * @return null|Url[]
+     * @return Url[]|null
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);
 

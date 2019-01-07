@@ -72,7 +72,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the creation date of the media.
      *
-     * @return null|\DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getCreated()
     {
@@ -86,7 +86,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the id of the user, who uploaded the file.
      *
-     * @return null|int
+     * @return int|null
      */
     public function getUserId()
     {
@@ -170,7 +170,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the id of the assigned album.
      *
-     * @return null|int
+     * @return int|null
      */
     public function getAlbumId()
     {

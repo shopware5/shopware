@@ -85,7 +85,7 @@ class PathResolver
     /**
      * @param Shop\Template $template
      *
-     * @return null|string
+     * @return string|null
      */
     public function getDirectory(Shop\Template $template)
     {
@@ -95,7 +95,7 @@ class PathResolver
     /**
      * @param array $template
      *
-     * @return null|string
+     * @return string|null
      */
     public function getDirectoryByArray(array $template)
     {

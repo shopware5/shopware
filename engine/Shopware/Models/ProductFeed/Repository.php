@@ -41,8 +41,8 @@ class Repository extends ModelRepository
      * product feeds.
      *
      * @param null     $orderBy
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return \Doctrine\ORM\Query
      */

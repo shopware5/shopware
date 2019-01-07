@@ -277,7 +277,7 @@ class ProductProvider implements ProductProviderInterface
     /**
      * @param \DateTimeInterface|null $date
      *
-     * @return null|string
+     * @return string|null
      */
     private function formatDate(\DateTimeInterface $date = null)
     {
@@ -512,7 +512,7 @@ class ProductProvider implements ProductProviderInterface
      * @param int     $id
      * @param Group[] $groups
      *
-     * @return null|Group
+     * @return Group|null
      */
     private function getFullConfigurationGroup($id, $groups)
     {

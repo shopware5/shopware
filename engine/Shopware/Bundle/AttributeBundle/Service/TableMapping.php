@@ -99,7 +99,7 @@ class TableMapping
     /**
      * @param string $table
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTableModel($table)
     {

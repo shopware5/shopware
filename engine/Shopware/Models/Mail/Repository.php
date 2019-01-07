@@ -102,7 +102,7 @@ class Repository extends ModelRepository
      * the passed name. The passed mail id will be excluded.
      *
      * @param string   $name
-     * @param null|int $mailId
+     * @param int|null $mailId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -118,7 +118,7 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param string   $name
-     * @param null|int $mailId
+     * @param int|null $mailId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -141,9 +141,9 @@ class Repository extends ModelRepository
 
     /**
      * @param array[]      $filter
-     * @param null|array[] $order
-     * @param null|int     $offset
-     * @param null|int     $limit
+     * @param array[]|null $order
+     * @param int|null     $offset
+     * @param int|null     $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -157,8 +157,8 @@ class Repository extends ModelRepository
     /**
      * @param array      $filter
      * @param array|null $order
-     * @param null|int   $offset
-     * @param null|int   $limit
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
