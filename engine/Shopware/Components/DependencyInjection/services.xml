@@ -643,6 +643,9 @@
             <argument id="shopware.customer_stream.criteria_factory" type="service"/>
         </service>
 
+        <!-- Necessary because of implementation in \Shopware\Components\Api\Manager::getResource() -->
+        <service id="shopware.api.customerstream" alias="shopware.api.customer_stream" />
+
         <service id="shopware.emotion.emotion_presetdata_transformer" class="Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer">
             <argument type="service" id="models" />
         </service>
