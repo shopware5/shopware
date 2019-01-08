@@ -13,7 +13,7 @@
 </p>
 
 <form action="<?= $menuHelper->getCurrentUrl(); ?>" method="post">
-    <iframe class="license--agreement" src="<?= $tosUrl; ?>"></iframe>
+    <iframe id="license--agreement" class="license--agreement" src="<?= $tosUrl; ?>"></iframe>
 
     <p>
         <label>
