@@ -141,7 +141,7 @@ class ProductUrlProvider implements UrlProviderInterface
         }
 
         reset($products);
-        $this->lastId = array_pop($products)['id'];
+        $this->lastId = array_pop($productIds);
 
         return $urls;
     }
