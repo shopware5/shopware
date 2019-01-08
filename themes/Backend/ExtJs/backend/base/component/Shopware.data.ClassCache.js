@@ -112,8 +112,8 @@ Ext.define('Shopware.data.ClassCache',
     setStorage: function(storageType) {
         var me = this, old = me.storage;
 
-        if (!storageType === 'localStorage'
-            || !storageType === 'localSession') {
+        if (storageType !== 'localStorage'
+            || storageType !== 'localSession') {
             return false;
         }
 
