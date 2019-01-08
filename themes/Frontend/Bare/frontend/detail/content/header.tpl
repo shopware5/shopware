@@ -15,8 +15,9 @@
                     {block name='frontend_detail_supplier_info'}
                         {if $sArticle.supplierImg}
                             <div class="product--supplier">
+                                {s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description" assign="snippetDetailDescriptionLinkInformation"}{/s}
                                 <a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}"
-                                   title="{"{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}"|escape}"
+                                   title="{$snippetDetailDescriptionLinkInformation|escape}"
                                    class="product--supplier-link">
                                     <img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName|escape}">
                                 </a>
@@ -28,7 +29,8 @@
                     {block name="frontend_detail_comments_overview"}
                         {if !{config name=VoteDisable}}
                             <div class="product--rating-container">
-                                <a href="#product--publish-comment" class="product--rating-link" rel="nofollow" title="{"{s namespace="frontend/detail/actions" name='DetailLinkReview'}{/s}"|escape}">
+                                {s namespace="frontend/detail/actions" name="DetailLinkReview" assign="snippetDetailLinkReview"}{/s}
+                                <a href="#product--publish-comment" class="product--rating-link" rel="nofollow" title="{$snippetDetailLinkReview|escape}">
                                     {include file='frontend/_includes/rating.tpl' points=$sArticle.sVoteAverage.average type="aggregated" count=$sArticle.sVoteAverage.count}
                                 </a>
                             </div>

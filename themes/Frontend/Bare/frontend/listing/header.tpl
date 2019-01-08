@@ -5,7 +5,7 @@
 
 {block name='frontend_index_header_meta_tags_opengraph'}
 
-    {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
+    {s name="IndexMetaDescriptionStandard" assign="description"}{/s}
     {if $sCategoryContent.cmstext}
         {$description = "{$sCategoryContent.cmstext|trim|strip_tags|escapeHtml}"}
     {elseif $sCategoryContent.metaDescription}

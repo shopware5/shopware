@@ -4,7 +4,8 @@
 {block name='frontend_detail_description_buttons_offcanvas'}
     <div class="buttons--off-canvas">
         {block name='frontend_detail_description_buttons_offcanvas_inner'}
-            <a href="#" title="{"{s name="OffcanvasCloseMenu" namespace="frontend/detail/description"}{/s}"|escape}" class="close--off-canvas">
+            {s name="OffcanvasCloseMenu" namespace="frontend/detail/description" assign="snippetOffcanvasCloseMenu"}{/s}
+            <a href="#" title="{$snippetOffcanvasCloseMenu|escape}" class="close--off-canvas">
                 <i class="icon--arrow-left"></i>
                 {s name="OffcanvasCloseMenu" namespace="frontend/detail/description"}{/s}
             </a>
@@ -68,7 +69,8 @@
                 {block name='frontend_detail_actions_contact'}
                     {if $sInquiry}
                         <li class="list--entry">
-                            <a href="{$sInquiry}" rel="nofollow" class="content--link link--contact" title="{"{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}"|escape}">
+                            {s name="DetailLinkContact" namespace="frontend/detail/actions" assign="snippetDetailLinkContact"}{/s}
+                            <a href="{$sInquiry}" rel="nofollow" class="content--link link--contact" title="{$snippetDetailLinkContact|escape}">
                                 <i class="icon--arrow-right"></i> {s name="DetailLinkContact" namespace="frontend/detail/actions"}{/s}
                             </a>
                         </li>
@@ -81,10 +83,11 @@
                         {* Vendor landing page link *}
                         {block name='frontend_detail_description_links_supplier'}
                             <li class="list--entry">
+                                {s name="DetailDescriptionLinkInformation" assign="snippetDetailDescriptionLinkInformation"}{/s}
                                 <a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}"
                                    target="{$information.target}"
                                    class="content--link link--supplier"
-                                   title="{"{s name="DetailDescriptionLinkInformation"}{/s}"|escape}">
+                                   title="{$snippetDetailDescriptionLinkInformation|escape}">
 
                                     <i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkInformation"}{/s}
                                 </a>
@@ -126,7 +129,8 @@
                     {foreach $sArticle.sDownloads as $download}
                         {block name='frontend_detail_description_downloads_content_link'}
                             <li class="list--entry">
-                                <a href="{$download.filename}" target="_blank" class="content--link link--download" title="{"{s name="DetailDescriptionLinkDownload"}{/s}"|escape} {$download.description|escape}">
+                                {s name="DetailDescriptionLinkDownload" assign="snippetDetailDescriptionLinkDownload"}{/s}
+                                <a href="{$download.filename}" target="_blank" class="content--link link--download" title="{$snippetDetailDescriptionLinkDownload|escape} {$download.description|escape}">
                                     <i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkDownload"}{/s} {$download.description}
                                 </a>
                             </li>

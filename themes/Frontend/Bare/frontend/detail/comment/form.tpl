@@ -10,7 +10,8 @@
 {* Display notice if the shop owner needs to unlock a comment before it will be listed *}
 {block name='frontend_detail_comment_post_notice'}
     {if {config name=VoteUnlock}}
-        {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='DetailCommentTextReview'}{/s}"}
+        {s name="DetailCommentTextReview" assign="snippetDetailCommentTextReview"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetDetailCommentTextReview}
     {/if}
 {/block}
 

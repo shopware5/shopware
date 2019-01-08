@@ -46,9 +46,10 @@
 {block name='frontend_index_logo_trusted_shops'}
     {$smarty.block.parent}
     {if $theme.checkoutHeader}
+        {s name="FinishButtonBackToShop" assign="snippetFinishButtonBackToShop"}{/s}
         <a href="{url controller='index'}"
            class="btn is--small btn--back-top-shop is--icon-left"
-           title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
+           title="{$snippetFinishButtonBackToShop|escape}">
             <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop"}{/s}
         </a>
@@ -70,7 +71,8 @@
                 {block name='frontend_checkout_finish_teaser_content'}
                     <div class="panel--body is--wide is--align-center">
                         {if $confirmMailDeliveryFailed}
-                            {include file="frontend/_includes/messages.tpl" type="error" content="{s name="FinishInfoConfirmationMailFailed"}{/s}"}
+                            {s name="FinishInfoConfirmationMailFailed" assign="snippetFinishInfoConfirmationMailFailed"}{/s}
+                            {include file="frontend/_includes/messages.tpl" type="error" content=$snippetFinishInfoConfirmationMailFailed}
                         {/if}
 
                         <p class="teaser--text">
@@ -87,12 +89,14 @@
 
                                 {strip}
                                 {* Back to the shop button *}
-                                <a href="{url controller='index'}" class="btn is--secondary teaser--btn-back is--icon-left" title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
-                                    <i class="icon--arrow-left"></i>&nbsp;{"{s name="FinishButtonBackToShop"}{/s}"|replace:' ':'&nbsp;'}
+                                {s name="FinishButtonBackToShop" assign="snippetFinishButtonBackToShop"}{/s}
+                                <a href="{url controller='index'}" class="btn is--secondary teaser--btn-back is--icon-left" title="{$snippetFinishButtonBackToShop|escape}">
+                                    <i class="icon--arrow-left"></i>&nbsp;{$snippetFinishButtonBackToShop|replace:' ':'&nbsp;'}
                                 </a>
 
                                 {* Print button *}
-                                <a href="#" class="btn is--primary teaser--btn-print" onclick="self.print()" title="{"{s name='FinishLinkPrint'}{/s}"|escape}">
+                                {s name="FinishLinkPrint" assign="snippetFinishLinkPrint"}{/s}
+                                <a href="#" class="btn is--primary teaser--btn-print" onclick="self.print()" title="{$snippetFinishLinkPrint|escape}">
                                     {s name="FinishLinkPrint"}{/s}
                                 </a>
                                 {/strip}

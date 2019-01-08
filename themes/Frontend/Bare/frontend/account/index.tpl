@@ -3,7 +3,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {assign var='sBreadcrumb' value=[['name' => "{s name='AccountTitle'}{/s}", 'link' => {url controller='account' action='index'}]]}
+    {s name="AccountTitle" assign="snippetAccountTitle"}{/s}
+    {assign var='sBreadcrumb' value=[['name' => $snippetAccountTitle, 'link' => {url controller='account' action='index'}]]}
 {/block}
 
 {block name="frontend_index_left_categories_my_account"}{/block}
@@ -34,7 +35,8 @@
 
         {* Optin successful *}
         {if $smarty.get.optinconfirmed && {config name=optinregister}}
-            {include file="frontend/_includes/messages.tpl" type="success" content="{s name="AccountOptinConfirmed"}{/s}"}
+            {s name="AccountOptinConfirmed" assign="snippetAccountOptinConfirmed"}{/s}
+            {include file="frontend/_includes/messages.tpl" type="success" content=$snippetAccountOptinConfirmed}
         {/if}
 
         {* Error messages *}
@@ -123,7 +125,7 @@
                     {/block}
 
                     {block name="frontend_account_index_payment_method_actions"}
-                        {$paymentMethodTitle = {"{s name='AccountLinkChangePayment'}{/s}"|escape}}
+                        {s name="AccountLinkChangePayment" assign="paymentMethodTitle"}{/s}
 
                         <div class="panel--actions is--wide">
                             <a href="{url controller='account' action='payment'}"

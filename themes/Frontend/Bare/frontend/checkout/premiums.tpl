@@ -49,8 +49,9 @@
                                                                 <img srcset="{$premium.sArticle.image.thumbnails[0].sourceSet}"
                                                                      alt="{$premium.sArticle.articleName|escape}" />
                                                             {else}
+                                                                {s name="PremiumInfoNoPicture" assign="snippetPremiumInfoNoPicture"}{/s}
                                                                 <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
-                                                                     alt="{"{s name="PremiumInfoNoPicture"}{/s}"|escape}">
+                                                                     alt="{$snippetPremiumInfoNoPicture|escape}">
                                                             {/if}
                                                         </span>
                                                     {/block}

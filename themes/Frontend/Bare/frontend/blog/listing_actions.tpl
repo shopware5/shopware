@@ -13,7 +13,8 @@
                 {* Pagination - Previous page *}
                 {block name='frontend_listing_actions_paging_previous'}
                     {if $sPage > 1}
-                        <a href="{$sPages.previous}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="paging--link paging--prev">
+                        {s name="ListingLinkPrevious" assign="snippetListingLinkPrevious"}{/s}
+                        <a href="{$sPages.previous}" title="{$snippetListingLinkPrevious|escape}" class="paging--link paging--prev">
                             <i class="icon--arrow-left"></i>
                         </a>
                     {/if}
@@ -27,7 +28,8 @@
                 {* Pagination - Next page *}
                 {block name='frontend_listing_actions_paging_next'}
                     {if $sPage < $sNumberPages}
-                        <a href="{$sPages.next}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="paging--link paging--next">
+                        {s name="ListingLinkNext" assign="snippetListingLinkNext"}{/s}
+                        <a href="{$sPages.next}" title="{$snippetListingLinkNext|escape}" class="paging--link paging--next">
                             <i class="icon--arrow-right"></i>
                         </a>
                     {/if}
