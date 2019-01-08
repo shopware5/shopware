@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added `max_expansions` in config.php for the `phrase_prefixes` `name` and `number`
 * Added aggregation size to product attribute range sliders
 * Added product attribute parser for elasticsearch indexing to allow indexing of boolean values
+* Added alias `shopware.api.customerstream` to service with id `shopware.api.customer_stream` to fix problem in cronjob
 
 ### Changes
 
