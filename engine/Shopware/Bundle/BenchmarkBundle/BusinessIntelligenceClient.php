@@ -56,7 +56,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     private $benchmarkEncryption;
 
     /**
-     * @var null|LoggerInterface
+     * @var LoggerInterface|null
      */
     private $logger;
 

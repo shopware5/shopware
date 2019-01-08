@@ -133,7 +133,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * The parent property contains the instance of the inherited Shopware\Models\User\Role
      * model. The Role inherits all privileges from his parent.
      *
-     * @var null|\Shopware\Models\User\Role
+     * @var \Shopware\Models\User\Role|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")

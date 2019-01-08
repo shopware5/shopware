@@ -993,7 +993,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *  array('success' => false, 'error' => An error message)
      *
      *
-     * @param null|int $id
+     * @param int|null $id
      *
      * @return array
      */

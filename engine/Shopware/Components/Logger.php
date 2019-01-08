@@ -35,7 +35,7 @@ class Logger extends BaseLogger
 {
     /**
      * @param string|array $label
-     * @param null|array   $data
+     * @param array|null   $data
      */
     public function table($label, $data = null)
     {

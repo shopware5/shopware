@@ -87,7 +87,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface, Templ
     protected $suffix;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $template;
 
@@ -107,7 +107,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface, Templ
      * @param string      $minFieldName
      * @param string      $maxFieldName
      * @param Attribute[] $attributes
-     * @param null|string $suffix
+     * @param string|null $suffix
      * @param int         $digits
      * @param string|null $template
      */
@@ -222,7 +222,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface, Templ
     }
 
     /**
-     * @param null|string $template
+     * @param string|null $template
      */
     public function setTemplate($template)
     {
@@ -270,7 +270,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface, Templ
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSuffix()
     {

@@ -132,8 +132,8 @@ class Repository extends ModelRepository
      * @param int      $customerId
      * @param null     $filter
      * @param null     $orderBy
-     * @param null|int $limit
-     * @param null|int $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -153,8 +153,8 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param int         $customerId
-     * @param null|string $filter
-     * @param null|array  $orderBy
+     * @param string|null $filter
+     * @param array|null  $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -213,9 +213,9 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search for customers
      * with the passed email address. The passed customer id is excluded.
      *
-     * @param null|string $email
-     * @param null|int    $customerId
-     * @param null|int    $shopId
+     * @param string|null $email
+     * @param int|null    $customerId
+     * @param int|null    $shopId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -230,9 +230,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateEmailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|string $email
-     * @param null|int    $customerId
-     * @param null|int    $shopId
+     * @param string|null $email
+     * @param int|null    $customerId
+     * @param int|null    $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

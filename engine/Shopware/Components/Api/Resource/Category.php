@@ -279,7 +279,7 @@ class Category extends Resource
      *
      * @throws RuntimeException
      *
-     * @return null|CategoryModel
+     * @return CategoryModel|null
      */
     public function findCategoryByPath($path, $create = false)
     {

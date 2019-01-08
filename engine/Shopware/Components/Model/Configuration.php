@@ -135,7 +135,7 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @return null|CacheProvider
+     * @return CacheProvider|null
      */
     public function detectCacheProvider()
     {

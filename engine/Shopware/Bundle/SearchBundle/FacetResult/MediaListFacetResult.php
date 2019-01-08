@@ -142,7 +142,7 @@ class MediaListFacetResult extends Extendable implements FacetResultInterface, T
     }
 
     /**
-     * @param null|string $template
+     * @param string|null $template
      */
     public function setTemplate($template)
     {

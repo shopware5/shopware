@@ -252,7 +252,7 @@ class Address extends Resource
      * Resolves ids to models
      *
      * @param array    $data
-     * @param null|int $customerId
+     * @param int|null $customerId
      * @param bool     $filter
      *
      * @throws ApiException\NotFoundException         if the given customer id in the data array is invalid

@@ -230,7 +230,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      *
      * @param string $property
      *
-     * @return null|string
+     * @return string|null
      */
     public function getProperty($property)
     {

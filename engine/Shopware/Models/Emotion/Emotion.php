@@ -423,7 +423,7 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @param null|\DateTimeInterface|string $createDate
+     * @param \DateTimeInterface|string|null $createDate
      */
     public function setCreateDate($createDate = 'now')
     {
@@ -448,7 +448,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param null|\DateTimeInterface|string $validFrom
+     * @param \DateTimeInterface|string|null $validFrom
      */
     public function setValidFrom($validFrom)
     {
@@ -474,7 +474,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param null|\DateTimeInterface|string $validTo
+     * @param \DateTimeInterface|string|null $validTo
      */
     public function setValidTo($validTo)
     {
@@ -531,7 +531,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param null|\DateTimeInterface|string $modified
+     * @param \DateTimeInterface|string|null $modified
      */
     public function setModified($modified)
     {

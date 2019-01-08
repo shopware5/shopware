@@ -22,6 +22,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use League\Flysystem;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 

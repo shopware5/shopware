@@ -119,7 +119,7 @@ class Privilege extends ModelEntity
     /**
      * Set resourceId
      *
-     * @param null|int $resourceId
+     * @param int|null $resourceId
      *
      * @return Privilege
      */

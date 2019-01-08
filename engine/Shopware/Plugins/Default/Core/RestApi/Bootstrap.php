@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use ShopwarePlugins\RestApi\Components\BasicAuthResolver;
 use ShopwarePlugins\RestApi\Components\StaticResolver;
 
@@ -170,7 +171,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
      *
      * @param Enlight_Event_EventArgs $args
      *
-     * @return null|\Zend_Auth
+     * @return \Zend_Auth|null
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {

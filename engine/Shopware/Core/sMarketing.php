@@ -665,7 +665,7 @@ class sMarketing
      * @param StoreFrontBundle\Struct\Media[] $media
      * @param string                          $path
      *
-     * @return null|\Shopware\Bundle\StoreFrontBundle\Struct\Media
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
      */
     private function getMediaByPath($media, $path)
     {

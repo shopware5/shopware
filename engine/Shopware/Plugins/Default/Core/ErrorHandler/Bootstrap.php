@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Monolog\Handler\BufferHandler;
 use Shopware\Components\Log\Formatter\HtmlFormatter;
 use Shopware\Components\Log\Handler\EnlightMailHandler;

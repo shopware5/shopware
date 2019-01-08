@@ -621,9 +621,9 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     }
 
     /**
-     * @param null|int|string $inputValue
+     * @param int|string|null $inputValue
      *
-     * @return null|int|string
+     * @return int|string|null
      */
     private function cleanData($inputValue)
     {

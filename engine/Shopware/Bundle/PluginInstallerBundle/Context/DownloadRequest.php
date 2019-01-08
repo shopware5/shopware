@@ -44,7 +44,7 @@ class DownloadRequest
     private $domain;
 
     /**
-     * @var null|AccessTokenStruct
+     * @var AccessTokenStruct|null
      */
     private $token;
 
@@ -87,7 +87,7 @@ class DownloadRequest
     }
 
     /**
-     * @return null|AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     public function getToken()
     {

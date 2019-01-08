@@ -71,7 +71,7 @@ class ShopwareEditionValidationRequest
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLicense()
     {

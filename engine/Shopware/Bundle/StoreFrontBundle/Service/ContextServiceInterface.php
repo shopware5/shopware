@@ -120,7 +120,7 @@ interface ContextServiceInterface
      * @deprecated since version 5.2, to be removed in 6.0 - Use createShopContext instead
      *
      * @param int         $shopId
-     * @param null|int    $currencyId
+     * @param int|null    $currencyId
      * @param string|null $customerGroupKey
      *
      * @return Struct\ProductContextInterface
@@ -129,7 +129,7 @@ interface ContextServiceInterface
 
     /**
      * @param int         $shopId
-     * @param null|int    $currencyId
+     * @param int|null    $currencyId
      * @param string|null $customerGroupKey
      *
      * @return Struct\ProductContextInterface

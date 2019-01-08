@@ -50,7 +50,7 @@ class CombinedConditionFacet implements FacetInterface
      * @param string|array $conditions
      * @param string       $label
      * @param string       $requestParameter
-     * @param null|array   $stream
+     * @param array|null   $stream
      */
     public function __construct($conditions, $label, $requestParameter, $stream = null)
     {

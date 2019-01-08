@@ -215,9 +215,9 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
     /**
      * Helper method to do particular in code acl checks
      *
-     * @param null|string                             $privilege Name of privilege
-     * @param null|string|Zend_Acl_Role_Interface     $resource
-     * @param null|string|Zend_Acl_Resource_Interface $role
+     * @param string|null                             $privilege Name of privilege
+     * @param string|Zend_Acl_Role_Interface|null     $resource
+     * @param string|Zend_Acl_Resource_Interface|null $role
      *
      * @return bool
      */
@@ -231,7 +231,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
     }
 
     /**
-     * @param null|mixed $identity
+     * @param mixed|null $identity
      *
      * @return bool|string
      */

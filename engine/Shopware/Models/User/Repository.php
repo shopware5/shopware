@@ -73,10 +73,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of users.
      *
-     * @param null|array $filter
-     * @param null|int   $limit
-     * @param null|int   $offset
-     * @param null|array $orderBy
+     * @param array|null $filter
+     * @param int|null   $limit
+     * @param int|null   $offset
+     * @param array|null $orderBy
      *
      * @return \Doctrine\ORM\Query
      */
@@ -98,7 +98,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getUserListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|string $filter
+     * @param string|null $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -130,8 +130,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of roles.
      *
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -198,7 +198,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of resources.
      *
-     * @param null|string $filter
+     * @param string|null $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -213,7 +213,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getResourcesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|string $filter
+     * @param string|null $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

@@ -145,7 +145,7 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
      *
      * @param NodeElement $article
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTextProperty(NodeElement $article)
     {

@@ -252,7 +252,7 @@ class SearchIndexer implements SearchIndexerInterface
      * @param \DateTimeInterface|null $date
      * @param string                  $format
      *
-     * @return null|string
+     * @return string|null
      */
     private function formatDate(\DateTimeInterface $date = null, $format = 'Y-m-d H:i:s')
     {

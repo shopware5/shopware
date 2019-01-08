@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 require_once __DIR__ . '/../common/autoload.php';
 
 define('UPDATE_PATH', __DIR__);

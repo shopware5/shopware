@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;

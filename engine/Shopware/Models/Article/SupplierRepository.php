@@ -36,8 +36,8 @@ class SupplierRepository extends ModelRepository
      * Query to fetch all suppliers that can be used
      * to generate friendly routes
      *
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return Query
      */
@@ -50,8 +50,8 @@ class SupplierRepository extends ModelRepository
      * Query builder to fetch all suppliers that can be used
      * to generate friendly routes
      *
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

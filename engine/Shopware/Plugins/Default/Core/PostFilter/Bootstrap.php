@@ -259,7 +259,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
     /**
      * @param string $source
      *
-     * @return null|string|string[]
+     * @return string|string[]|null
      */
     protected function filterUrls($source)
     {

@@ -137,7 +137,7 @@ class Element extends ModelEntity
     /**
      * @param string     $type
      * @param string     $name
-     * @param null|array $options
+     * @param array|null $options
      */
     public function __construct($type, $name, $options = null)
     {

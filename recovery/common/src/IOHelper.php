@@ -176,7 +176,7 @@ class IOHelper
      * @param string|Question $question
      * @param bool|callable   $validator
      * @param bool|int        $attempts
-     * @param null|string     $default
+     * @param string|null     $default
      *
      * @return string
      */

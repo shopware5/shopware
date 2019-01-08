@@ -38,7 +38,7 @@ class Repository extends ModelRepository
      * Loads all banners. The $filter parameter can
      * be used to narrow the selection down to a category id.
      *
-     * @param null|int $filter
+     * @param int|null $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -89,7 +89,7 @@ class Repository extends ModelRepository
      * be used to narrow the selection down to a category id.
      * If the second parameter is set to false only banners which are active will be returned.
      *
-     * @param null|int $filter
+     * @param int|null $filter
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework\TestCase
 {
     public function testManagerInstance()

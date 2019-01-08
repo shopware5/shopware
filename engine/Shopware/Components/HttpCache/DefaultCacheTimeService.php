@@ -46,7 +46,7 @@ class DefaultCacheTimeService implements CacheTimeServiceInterface
      *
      * @param Request $request
      *
-     * @return null|int
+     * @return int|null
      */
     public function getCacheTime(Request $request)
     {

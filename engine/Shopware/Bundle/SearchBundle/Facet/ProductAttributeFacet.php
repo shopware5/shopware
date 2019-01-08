@@ -141,7 +141,7 @@ class ProductAttributeFacet implements FacetInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getTemplate()
     {

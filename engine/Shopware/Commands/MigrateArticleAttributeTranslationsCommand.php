@@ -151,7 +151,7 @@ EOL
      * @param array $data
      * @param array $columns
      *
-     * @return null|array
+     * @return array|null
      */
     private function filter($data, array $columns)
     {

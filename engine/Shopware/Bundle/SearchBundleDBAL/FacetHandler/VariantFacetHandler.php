@@ -126,7 +126,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
      * @param Criteria             $queryCriteria
      * @param VariantFacet         $facet
      *
-     * @return null|Group[]
+     * @return Group[]|null
      */
     protected function getOptions(ShopContextInterface $context, Criteria $queryCriteria, VariantFacet $facet)
     {

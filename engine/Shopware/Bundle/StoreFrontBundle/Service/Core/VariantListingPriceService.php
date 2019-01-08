@@ -177,7 +177,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
      * @param ShopContext $context
      * @param int         $quantity
      *
-     * @return null|PriceDiscount
+     * @return PriceDiscount|null
      */
     private function getHighestQuantityDiscount(ListProduct $product, ShopContext $context, $quantity)
     {

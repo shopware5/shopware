@@ -75,9 +75,9 @@ class Filter
      * Builds the actual query for the token list
      *
      * @param array      $tokens
-     * @param null|int   $offset
-     * @param null|int   $limit
-     * @param null|array $orderBy
+     * @param int|null   $offset
+     * @param int|null   $limit
+     * @param array|null $orderBy
      *
      * @return \Doctrine\ORM\Query
      */
