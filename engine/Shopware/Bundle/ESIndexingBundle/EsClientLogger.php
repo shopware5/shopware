@@ -454,7 +454,7 @@ class EsClientLogger extends Client
      * @param array  $result
      * @param array  $request
      */
-    private function handleResult($method, $result = [], $request = [])
+    protected function handleResult($method, array $result = [], array $request = [])
     {
         $message = $method;
         switch ($method) {
