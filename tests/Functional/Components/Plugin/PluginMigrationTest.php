@@ -42,7 +42,6 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
             'ShopwarePlugins' => __DIR__ . '/fixtures/',
         ]);
         $this->plugins = $initializer->initializePlugins();
-
     }
 
     public function testMigrationWithDown(): void
