@@ -168,7 +168,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Removes the controller directory for the given module.
      *
-     * @param $module
+     * @param string $module
      *
      * @return bool
      */
@@ -187,7 +187,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Adds the given path to the module directory
      *
-     * @param $path
+     * @param string $path
      *
      * @throws Enlight_Controller_Exception
      *
@@ -223,7 +223,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Returns the formatted controller name. Removes all '_' .
      *
-     * @param $unFormatted
+     * @param string $unFormatted
      *
      * @return mixed
      */
@@ -235,7 +235,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Returns the formatted action name. Removes all '_' .
      *
-     * @param $unFormatted
+     * @param string $unFormatted
      *
      * @return mixed
      */
@@ -247,7 +247,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Returns the formatted module name. Upper case the first character of the module name.
      *
-     * @param $unFormatted
+     * @param string $unFormatted
      *
      * @return string
      */
@@ -259,7 +259,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Sets the default controller name.
      *
-     * @param $controller
+     * @param string $controller
      *
      * @return Enlight_Controller_Dispatcher_Default
      */
@@ -283,7 +283,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Sets the default action name.
      *
-     * @param $action
+     * @param string $action
      *
      * @return Enlight_Controller_Dispatcher_Default
      */
@@ -307,7 +307,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Sets the default module name.
      *
-     * @param $module
+     * @param string $module
      *
      * @return Enlight_Controller_Dispatcher_Default
      */
@@ -370,6 +370,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerName = $request->getControllerName();
         $controllerName = $this->formatControllerName($controllerName);
         $moduleName = $this->formatModuleName($this->curModule);
+
         if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
                 ['subject' => $this, 'request' => $request]
@@ -469,7 +470,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Checks if a controller directory exists for the given module.
      *
-     * @param $module
+     * @param string $module
      *
      * @return bool
      */
@@ -525,7 +526,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         $proxy = Shopware()->Hooks()->getProxy($class);
 
-        /** @var $controller Enlight_Controller_Action */
+        /** @var Enlight_Controller_Action $controller */
         $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
 

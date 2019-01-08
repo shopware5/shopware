@@ -27,7 +27,7 @@ namespace Shopware\Components\Password;
 /**
  * Password Manager
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -110,7 +110,7 @@ class Manager
     {
         $encoderName = strtolower($this->config->defaultPasswordEncoder);
 
-        if (empty($encoderName) || $encoderName == 'auto') {
+        if (empty($encoderName) || $encoderName === 'auto') {
             $bryptEncoder = $this->encoder['bcrypt'];
             if ($bryptEncoder->isCompatible()) {
                 $encoderName = 'bcrypt';

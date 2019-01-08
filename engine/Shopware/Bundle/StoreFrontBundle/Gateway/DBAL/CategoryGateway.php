@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -158,7 +158,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $this->fieldHelper->addProductStreamTranslation($query, $context);
         $this->fieldHelper->addCategoryMainDataTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -184,7 +184,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return string[] indexed by product id
+     * @return array<int, string> indexed by product id
      */
     private function getMapping(array $ids)
     {
@@ -211,6 +211,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         foreach ($mapping as $row) {
             $ids = array_merge($ids, explode(',', $row));
         }
+        /** @var array<int> $ids */
         $ids = array_unique($ids);
 
         return $ids;

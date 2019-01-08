@@ -28,7 +28,8 @@
             {* Message if javascript is disabled *}
             {block name="frontend_index_no_script_message"}
                 <noscript class="noscript-main">
-                    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name="IndexNoscriptNotice"}{/s}" borderRadius=false}
+                    {s name="IndexNoscriptNotice" assign="snippetIndexNoscriptNotice"}{/s}
+                    {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetIndexNoscriptNotice borderRadius=false}
                 </noscript>
             {/block}
 
@@ -165,7 +166,7 @@
             'ajax_cart' => {url controller='checkout' action='ajaxCart' _seo=false},
             'ajax_validate' => {url controller="register" _seo=false},
             'ajax_add_article' => {url controller="checkout" action="addArticle" _seo=false},
-            'ajax_listing' => {url module="widgets" controller="Listing" action="ajaxListing" _seo=false},
+            'ajax_listing' => {url module="widgets" controller="listing" action="listingCount" _seo=false},
             'ajax_cart_refresh' => {url controller="checkout" action="ajaxAmount" _seo=false},
             'ajax_address_selection' => {url controller="address" action="ajaxSelection" fullPath _seo=false},
             'ajax_address_editor' => {url controller="address" action="ajaxEditor" fullPath _seo=false}

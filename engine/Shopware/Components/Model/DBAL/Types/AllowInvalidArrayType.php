@@ -32,7 +32,7 @@ use Doctrine\DBAL\Types\Type;
  *
  * @licence   This code was originally released under the MIT license
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

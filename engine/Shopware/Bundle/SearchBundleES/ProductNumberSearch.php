@@ -58,7 +58,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @param Client                $client
      * @param IndexFactoryInterface $indexFactory
-     * @param $handlers
+     * @param HandlerInterface[]    $handlers
      */
     public function __construct(
         Client $client,
@@ -164,7 +164,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @param CriteriaPartInterface $criteriaPart
      *
-     * @return null|HandlerInterface
+     * @return HandlerInterface|null
      */
     private function getHandler(CriteriaPartInterface $criteriaPart)
     {

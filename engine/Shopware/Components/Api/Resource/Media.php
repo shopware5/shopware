@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\ORMException;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Random;
 use Shopware\Components\Thumbnail\Manager;
@@ -35,7 +36,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Media API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -70,7 +71,7 @@ class Media extends Resource
         $filters = [['property' => 'media.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getMediaListQuery($filters, [], 1);
 
-        /** @var MediaModel $media */
+        /** @var MediaModel|array $media */
         $media = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$media) {
@@ -78,7 +79,11 @@ class Media extends Resource
         }
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $media['path'] = $mediaService->getUrl($media['path']);
+        if (is_array($media)) {
+            $media['path'] = $mediaService->getUrl($media['path']);
+        } else {
+            $media->setPath($mediaService->getUrl($media->getPath()));
+        }
 
         return $media;
     }
@@ -170,7 +175,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $media MediaModel */
+        /** @var MediaModel $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
@@ -254,6 +259,8 @@ class Media extends Resource
         /** @var Album $album */
         $album = $this->getManager()->find(Album::class, $albumId);
         if (!$album) {
+            // Cleanup temporary file
+            $this->deleteTmpFile($file);
             throw new ApiException\CustomValidationException(
                 sprintf('Album by id %s not found', $albumId)
             );
@@ -264,10 +271,13 @@ class Media extends Resource
         try {
             // Persist the model into the model manager this uploads and resizes the image
             $this->getManager()->persist($media);
-        } catch (\Doctrine\ORM\ORMException $e) {
+        } catch (ORMException $e) {
             throw new ApiException\CustomValidationException(
                 sprintf('Some error occurred while persisting your media')
             );
+        } finally {
+            // Cleanup temporary file
+            $this->deleteTmpFile($file);
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
@@ -331,7 +341,7 @@ class Media extends Resource
      * @param string      $destPath
      * @param string|null $baseFileName
      *
-     * @return null|string
+     * @return string|null
      */
     public function getUniqueFileName($destPath, $baseFileName = null)
     {
@@ -389,7 +399,7 @@ class Media extends Resource
 
         $meta = stream_get_meta_data($get_handle);
         if (!strpos($meta['mediatype'], 'image/') === false) {
-            throw new ApiException\CustomValidationException(sprintf('No valid media type passed for the article image: %s', $url));
+            throw new ApiException\CustomValidationException(sprintf('No valid media type passed for the product image: %s', $url));
         }
 
         $extension = str_replace('image/', '', $meta['mediatype']);
@@ -497,5 +507,16 @@ class Media extends Resource
         }
 
         return $oldPath;
+    }
+
+    /**
+     * @param string $file
+     */
+    private function deleteTmpFile($file)
+    {
+        if (file_exists($file)) {
+            unlink($file);
+            rmdir(dirname($file));
+        }
     }
 }

@@ -35,7 +35,7 @@ use Shopware\Models\Shop;
  * contains a getDirectory function which
  * returns the Theme directory of the passed shop template.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -85,7 +85,7 @@ class PathResolver
     /**
      * @param Shop\Template $template
      *
-     * @return null|string
+     * @return string|null
      */
     public function getDirectory(Shop\Template $template)
     {
@@ -95,7 +95,7 @@ class PathResolver
     /**
      * @param array $template
      *
-     * @return null|string
+     * @return string|null
      */
     public function getDirectoryByArray(array $template)
     {

@@ -37,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -95,7 +95,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
      * @param Criteria                     $criteria
      * @param ShopContextInterface         $context
      *
-     * @return FacetResultInterface
+     * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,

@@ -51,6 +51,11 @@ class EventExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->eventManager->notify('Shopware_Form_BuildForm', [
+            'reference' => $builder->getForm()->getConfig()->getType()->getBlockPrefix(),
+            'builder' => $builder,
+        ]);
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'triggerEvent']);
     }
 
@@ -65,12 +70,19 @@ class EventExtension extends AbstractTypeExtension
     }
 
     /**
-     * Trigger general form builder event with reference of the form type
+     * Trigger general form builder event with reference to the \Symfony\Component\Form\FormInterface type
      *
      * @param FormEvent $event
      */
     public function triggerEvent(FormEvent $event)
     {
+        /*
+         * This is a legacy event which returns the already build form (\Symfony\Component\Form\FormInterface)
+         * in the "builder" parameter. It is called on the Symfony internal event `FormEvents::PRE_SET_DATA.
+         *
+         * If you want to access the instance with \Symfony\Component\Form\FormBuilderInterface,
+         * use the event "Shopware_Form_BuildForm" instead.
+         */
         $this->eventManager->notify('Shopware_Form_Builder', [
             'reference' => $event->getForm()->getConfig()->getType()->getBlockPrefix(),
             'builder' => $event->getForm(),

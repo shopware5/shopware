@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Nos complace poder darte la bienvenida a nuestra comunidad. Has instalado Shopware correctamente.
-<p>Ya puedes empezar a utilizar tu tienda. Si eres nuevo en Shopware, te recomendamos que leas la guía <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Primeros pasos en Shopware"</a>. Cuando te registres por primera vez en el back-end de la tienda, nuestro asistente de instalación te guiará para que definas los ajustes básicos.</p>
+<p>Ya puedes empezar a utilizar tu tienda. Si eres nuevo en Shopware, te recomendamos que leas la guía <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"Primeros pasos en Shopware"</a>. Cuando te registres por primera vez en el back-end de la tienda, nuestro asistente de instalación te guiará para que definas los ajustes básicos.</p>
 <p>¡Disfruta mucho de tu nueva tienda online!</p>',
 ];

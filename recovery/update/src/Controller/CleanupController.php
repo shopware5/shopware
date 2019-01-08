@@ -35,7 +35,7 @@ use Slim\Slim;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -248,9 +248,9 @@ SQL;
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param $shopId
+     * @param string $field
+     * @param string $value
+     * @param int    $shopId
      */
     private function updateShopConfig($field, $value, $shopId)
     {

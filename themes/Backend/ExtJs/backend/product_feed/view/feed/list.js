@@ -134,6 +134,12 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                 flex:1
             },
             {
+                header: '{s name=list/column/active}Active{/s}',
+                dataIndex: 'active',
+                width: 50,
+                renderer:me.activeColumnRenderer
+            },
+            {
                 header:'{s name=list/column/file_name}File name{/s}',
                 dataIndex:'fileName',
                 renderer:me.fileNameRenderer,
@@ -143,12 +149,6 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.List', {
                 header:'{s name=list/column/count_articles}Number of articles{/s}',
                 dataIndex:'countArticles',
                 flex:1
-            },
-            {
-                header: '{s name=list/column/active}Active{/s}',
-                dataIndex: 'active',
-                width: 50,
-                renderer:me.activeColumnRenderer
             },
             {
                 header:'{s name=list/column/last_export}Last export{/s}',

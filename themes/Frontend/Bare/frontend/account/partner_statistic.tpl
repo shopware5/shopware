@@ -24,7 +24,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb[] = ['name' => "{s name='Provisions'}{/s}", 'link' => {url}]}
+    {s name="Provisions" assign="snippetProvisions"}{/s}
+    {$sBreadcrumb[] = ['name' => $snippetProvisions, 'link' => {url}]}
 {/block}
 
 {* Main content *}
@@ -124,7 +125,8 @@
         {else}
             {block name="frontend_account_partner_statistic_info_empty"}
                 <div class="account--no-orders-info">
-                    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='PartnerStatisticInfoEmpty'}{/s}"}
+                    {s name="PartnerStatisticInfoEmpty" assign="snippetPartnerStatisticInfoEmpty"}{/s}
+                    {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetPartnerStatisticInfoEmpty}
                 </div>
             {/block}
         {/if}

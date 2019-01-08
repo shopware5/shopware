@@ -28,7 +28,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
@@ -44,7 +45,7 @@ use Shopware\Models\Tax\Tax;
 /**
  * Variant API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,14 +56,14 @@ class Variant extends Resource implements BatchInterface
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Article\Detail::class);
+        return $this->getManager()->getRepository(Detail::class);
     }
 
     /**
      * @param string $number
      * @param array  $options
      *
-     * @return array|\Shopware\Models\Article\Detail
+     * @return array|Detail
      */
     public function getOneByNumber($number, array $options = [])
     {
@@ -75,10 +76,10 @@ class Variant extends Resource implements BatchInterface
      * @param int   $id
      * @param array $options
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
      *
-     * @return array|\Shopware\Models\Article\Detail
+     * @return array|Detail
      */
     public function getOne($id, array $options = [])
     {
@@ -89,23 +90,25 @@ class Variant extends Resource implements BatchInterface
         }
 
         $builder = $this->getRepository()->getVariantDetailQuery();
-        $builder->andWhere('variants.id = :variantId')
+        $builder->addSelect('article')
+                ->andWhere('variants.id = :variantId')
                 ->addOrderBy('variants.id', 'ASC')
                 ->addOrderBy('customerGroup.id', 'ASC')
                 ->addOrderBy('prices.from', 'ASC')
                 ->setParameter('variantId', $id);
 
-        /** @var \Shopware\Models\Article\Detail $articleDetail */
+        /** @var Detail|array $variant */
         $variant = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$variant) {
             throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
-        if ($this->getResultMode() === self::HYDRATE_ARRAY) {
-            if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
-                $variant = $this->considerTaxInput($variant);
-            }
+        if (($this->getResultMode() === self::HYDRATE_ARRAY)
+            && isset($options['considerTaxInput'])
+            && $options['considerTaxInput']
+        ) {
+            $variant = $this->considerTaxInput($variant);
         }
 
         return $variant;
@@ -124,13 +127,14 @@ class Variant extends Resource implements BatchInterface
     {
         $this->checkPrivilege('read');
 
-        /** @var \Doctrine\DBAL\Query\QueryBuilder */
+        /** @var QueryBuilder $builder */
         $builder = $this->getRepository()->createQueryBuilder('detail');
 
-        $builder->addSelect(['prices', 'attribute', 'customerGroup'])
+        $builder->addSelect(['prices', 'attribute', 'partial article.{id,name,active,taxId}', 'customerGroup'])
                 ->leftJoin('detail.prices', 'prices')
                 ->innerJoin('prices.customerGroup', 'customerGroup')
                 ->leftJoin('detail.attribute', 'attribute')
+                ->innerJoin('detail.article', 'article')
                 ->addFilter($criteria)
                 ->addOrderBy($orderBy)
                 ->setFirstResult($offset)
@@ -145,14 +149,15 @@ class Variant extends Resource implements BatchInterface
         // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        // Returns the article data
+        // Returns the product data
         $variants = $paginator->getIterator()->getArrayCopy();
 
-        if ($this->getResultMode() === self::HYDRATE_ARRAY) {
-            if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
-                foreach ($variants as &$variant) {
-                    $variant = $this->considerTaxInput($variant);
-                }
+        if (($this->getResultMode() === self::HYDRATE_ARRAY)
+            && isset($options['considerTaxInput'])
+            && $options['considerTaxInput']
+        ) {
+            foreach ($variants as &$variant) {
+                $variant = $this->considerTaxInput($variant);
             }
         }
 
@@ -164,8 +169,8 @@ class Variant extends Resource implements BatchInterface
      *
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
      *
      * @return int
      */
@@ -175,23 +180,23 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Article\Detail $articleDetail */
-        $articleDetail = $this->getRepository()->findOneBy(['number' => $number]);
+        /** @var Detail $productVariant */
+        $productVariant = $this->getRepository()->findOneBy(['number' => $number]);
 
-        if (!$articleDetail) {
+        if (!$productVariant) {
             throw new ApiException\NotFoundException(sprintf('Variant by number %s not found', $number));
         }
 
-        return $articleDetail->getId();
+        return $productVariant->getId();
     }
 
     /**
      * @param string $number
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\NotFoundException
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function deleteByNumber($number)
     {
@@ -203,10 +208,10 @@ class Variant extends Resource implements BatchInterface
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ApiException\ParameterMissingException
+     * @throws ApiException\NotFoundException
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function delete($id)
     {
@@ -216,21 +221,21 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
-        $articleDetail = $this->getRepository()->find($id);
+        /** @var Detail $productVariant */
+        $productVariant = $this->getRepository()->find($id);
 
-        if (!$articleDetail) {
+        if (!$productVariant) {
             throw new ApiException\NotFoundException(sprintf('Variant by id %d not found', $id));
         }
 
-        if ($articleDetail->getKind() === 1) {
-            $articleDetail->getArticle()->setMainDetail(null);
+        if ($productVariant->getKind() === 1) {
+            $productVariant->getArticle()->setMainDetail(null);
         }
 
-        $this->getManager()->remove($articleDetail);
+        $this->getManager()->remove($productVariant);
         $this->flush();
 
-        return $articleDetail;
+        return $productVariant;
     }
 
     /**
@@ -254,9 +259,9 @@ class Variant extends Resource implements BatchInterface
      * @param int   $id
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\ValidationException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
      *
      * @return Detail
      */
@@ -266,7 +271,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $variant Detail */
+        /** @var Detail $variant */
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
@@ -286,33 +291,33 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * Creates a new variant for an article.
+     * Creates a new variant for an product.
      * This function requires an articleId in the params parameter.
      *
      * @param array $params
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\ValidationException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
      *
      * @return Detail
      */
     public function create(array $params)
     {
-        $articleId = $params['articleId'];
+        $productId = $params['articleId'];
 
-        if (empty($articleId)) {
+        if (empty($productId)) {
             throw new ApiException\ParameterMissingException('Passed parameter array does not contain an articleId property');
         }
 
-        /** @var ArticleModel $article */
-        $article = $this->getManager()->find(\Shopware\Models\Article\Article::class, $articleId);
+        /** @var ProductModel $product */
+        $product = $this->getManager()->find(ProductModel::class, $productId);
 
-        if (!$article) {
-            throw new ApiException\NotFoundException(sprintf('Article by id %d not found', $articleId));
+        if (!$product) {
+            throw new ApiException\NotFoundException(sprintf('Product by id %d not found', $productId));
         }
 
-        $variant = $this->internalCreate($params, $article);
+        $variant = $this->internalCreate($params, $product);
 
         $violations = $this->getManager()->validate($variant);
         if ($violations->count() > 0) {
@@ -327,21 +332,21 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * Update function for the internal usage of the rest api.
-     * Used from the article resource. This function supports
-     * to pass an updated article entity which isn't updated in the database.
-     * Required for the article resource if the article data is already updated
+     * Used from the 'Article' resource. This function supports
+     * to pass an updated product entity which isn't updated in the database.
+     * Required for the 'Article' resource if the product data is already updated
      * in the entity but not in the database.
      *
-     * @param $id
+     * @param int          $id
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ApiException\NotFoundException
+     * @throws ApiException\ParameterMissingException
      *
      * @return Detail
      */
-    public function internalUpdate($id, array $data, ArticleModel $article)
+    public function internalUpdate($id, array $data, ProductModel $article)
     {
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
@@ -365,19 +370,19 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * Create function for the internal usage of the rest api.
-     * Used from the article resource. This function supports
-     * to pass an updated article entity which isn't updated in the database.
-     * Required for the article resource if the article data is already updated
+     * Used from the 'Article' resource. This function supports
+     * to pass an updated product entity which isn't updated in the database.
+     * Required for the 'Article' resource if the product data is already updated
      * in the entity but not in the database.
      *
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws ApiException\ValidationException
      *
      * @return Detail
      */
-    public function internalCreate(array $data, ArticleModel $article)
+    public function internalCreate(array $data, ProductModel $article)
     {
         $variant = new Detail();
         $variant->setKind(2);
@@ -393,21 +398,21 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * Interface which allows to use the data preparation in the article resource for the main variant.
+     * Interface which allows to use the data preparation in the 'Article' resource for the main variant.
      *
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param Detail       $variant
      *
      * @return array|mixed
      */
-    public function prepareMainVariantData(array $data, ArticleModel $article, Detail $variant)
+    public function prepareMainVariantData(array $data, ProductModel $article, Detail $variant)
     {
         return $this->prepareData($data, $article, $variant);
     }
 
     /**
-     * Helper function which creates a variant image for the passed article image.
+     * Helper function which creates a variant image for the passed product image.
      *
      * @param Image  $articleImage
      * @param Detail $variant
@@ -470,7 +475,7 @@ class Variant extends Resource implements BatchInterface
             return false;
         }
 
-        $model = $this->getManager()->find(\Shopware\Models\Article\Detail::class, $id);
+        $model = $this->getManager()->find(Detail::class, $id);
 
         if ($model) {
             return $id;
@@ -484,7 +489,10 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getArticleResource()
     {
-        return $this->getResource('Article');
+        /** @var Article $return */
+        $return = $this->getResource('Article');
+
+        return $return;
     }
 
     /**
@@ -492,21 +500,24 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        return $this->getResource('Media');
+        /** @var Media $return */
+        $return = $this->getResource('Media');
+
+        return $return;
     }
 
     /**
      * Resolves the association data for a single variant.
      *
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param Detail       $variant
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array|mixed
      */
-    protected function prepareData(array $data, ArticleModel $article, Detail $variant)
+    protected function prepareData(array $data, ProductModel $article, Detail $variant)
     {
         $data = $this->prepareUnitAssociation($data);
 
@@ -561,23 +572,23 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * Resolves the passed images array for the current variant.
-     * An image can be assigned to a variant over a media id of an existing article image
+     * An image can be assigned to a variant over a media id of an existing product image
      * or over the link property which can contain a image link.
-     * This image will be added automatically to the article.
+     * This image will be added automatically to the product.
      *
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param Detail       $variant
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareImageAssociation($data, ArticleModel $article, Detail $variant)
+    protected function prepareImageAssociation($data, ProductModel $article, Detail $variant)
     {
         if (empty($data['images'])) {
             if ($variant->getImages()->count() > 0) {
-                /** @var $image Image */
+                /** @var Image $image */
                 foreach ($variant->getImages() as $image) {
                     $mapping = $this->getVariantMappingOfImage($image, $variant);
 
@@ -599,20 +610,17 @@ class Variant extends Resource implements BatchInterface
         foreach ($data['images'] as $imageData) {
             // Check if a media id was passed.
             if (isset($imageData['mediaId'])) {
-                // First check if the media object is already assigned to the article
+                // First check if the media object is already assigned to the product
                 $image = $this->getAvailableMediaImage(
                     $article->getImages(),
                     $imageData['mediaId']
                 );
 
-                // Media image isn't assigned to the article?
+                // Media image isn't assigned to the product?
                 if (!$image) {
-                    // Find the media object and convert it to an article image.
+                    // Find the media object and convert it to an product image.
                     /** @var MediaModel $media */
-                    $media = $this->getManager()->find(
-                        \Shopware\Models\Media\Media::class,
-                        (int) $imageData['mediaId']
-                    );
+                    $media = $this->getManager()->find(MediaModel::class, (int) $imageData['mediaId']);
 
                     if (!$media) {
                         throw new ApiException\CustomValidationException(
@@ -620,18 +628,14 @@ class Variant extends Resource implements BatchInterface
                         );
                     }
 
-                    $image = $this->getArticleResource()->createNewArticleImage(
-                        $article, $media
-                    );
+                    $image = $this->getArticleResource()->createNewArticleImage($article, $media);
                 }
             } elseif (isset($imageData['link'])) {
-                // Check if an url passed and upload the passed image url and create a new article image.
+                // Check if an url passed and upload the passed image url and create a new product image.
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
                     $imageData['link']
                 );
-                $image = $this->getArticleResource()->createNewArticleImage(
-                    $article, $media
-                );
+                $image = $this->getArticleResource()->createNewArticleImage($article, $media);
             } else {
                 throw new ApiException\CustomValidationException("One of the passed variant images doesn't contain a mediaId or link property!");
             }
@@ -662,7 +666,7 @@ class Variant extends Resource implements BatchInterface
      * @param Image  $image
      * @param Detail $variant
      *
-     * @return null|Image\Mapping
+     * @return Image\Mapping|null
      */
     protected function getVariantMappingOfImage(Image $image, Detail $variant)
     {
@@ -693,16 +697,16 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param array                            $data
-     * @param \Shopware\Models\Article\Article $article
-     * @param \Shopware\Models\Article\Detail  $variant
-     * @param \Shopware\Models\Tax\Tax         $tax
+     * @param array        $data
+     * @param ProductModel $article
+     * @param Detail       $variant
+     * @param Tax          $tax
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return Collection
      */
-    protected function preparePriceAssociation($data, ArticleModel $article, Detail $variant, Tax $tax)
+    protected function preparePriceAssociation($data, ProductModel $article, Detail $variant, Tax $tax)
     {
         $prices = $this->checkDataReplacement($variant->getPrices(), $data, 'prices', true);
 
@@ -711,20 +715,20 @@ class Variant extends Resource implements BatchInterface
             $price = $this->getOneToManySubElement(
                 $prices,
                 $priceData,
-                \Shopware\Models\Article\Price::class
+                Price::class
             );
 
             if (empty($priceData['customerGroupKey'])) {
                 $priceData['customerGroupKey'] = 'EK';
             }
 
-            if (empty($priceData['from']) && $price->getFrom() == 0) {
+            if (empty($priceData['from']) && (int) $price->getFrom() === 0) {
                 $priceData['from'] = 1;
             }
 
             // Load the customer group of the price definition
             $customerGroup = $this->getManager()
-                ->getRepository(\Shopware\Models\Customer\Group::class)
+                ->getRepository(CustomerGroup::class)
                 ->findOneBy(['key' => $priceData['customerGroupKey']]);
 
             /** @var CustomerGroup $customerGroup */
@@ -746,17 +750,17 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * Resolves the passed configuratorOptions parameter for a single variant.
-     * Each passed configurator option, has to be configured in the article configurator set.
+     * Each passed configurator option, has to be configured in the product configurator set.
      *
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param Detail       $variant
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
-    protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
+    protected function prepareConfigurator(array $data, ProductModel $article, Detail $variant)
     {
         if (!$article->getConfiguratorSet()) {
             throw new ApiException\CustomValidationException('A configurator set has to be defined');
@@ -772,12 +776,12 @@ class Variant extends Resource implements BatchInterface
                 'name' => $optionData['group'],
             ]);
 
-            // Group is in the article configurator set configured?
+            // Group is in the product configurator set configured?
             if (!$availableGroup) {
                 continue;
             }
 
-            // Check if the option is available in the configured article configurator set.
+            // Check if the option is available in the configured product configurator set.
             $option = $this->getAvailableOption($availableGroup->getOptions(), [
                 'id' => $optionData['optionId'],
                 'name' => $optionData['option'],
@@ -809,12 +813,12 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * @param array        $data
-     * @param ArticleModel $article
+     * @param ProductModel $article
      * @param Detail       $variant
      *
      * @return array
      */
-    protected function prepareAttributeAssociation($data, ArticleModel $article, Detail $variant)
+    protected function prepareAttributeAssociation($data, ProductModel $article, Detail $variant)
     {
         if (!$variant->getAttribute()) {
             $data['attribute']['article'] = $article;
@@ -835,7 +839,7 @@ class Variant extends Resource implements BatchInterface
      *
      * @param array $data
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
@@ -843,7 +847,7 @@ class Variant extends Resource implements BatchInterface
     {
         // If unit id passed, assign existing unit.
         if (!empty($data['unitId'])) {
-            $data['unit'] = $this->getManager()->find(\Shopware\Models\Article\Unit::class, $data['unitId']);
+            $data['unit'] = $this->getManager()->find(Unit::class, $data['unitId']);
 
             if (empty($data['unit'])) {
                 throw new ApiException\CustomValidationException(sprintf('Unit by id %s not found', $data['unitId']));
@@ -864,15 +868,16 @@ class Variant extends Resource implements BatchInterface
      *
      * @param array $unitData
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return Unit
      */
     protected function updateUnitReference($unitData)
     {
-        $unitRepository = $this->getManager()->getRepository(\Shopware\Models\Article\Unit::class);
+        $unitRepository = $this->getManager()->getRepository(Unit::class);
 
         // Try to find an existing unit by the passed conditions "id", "name" or "unit"
+        /** @var Unit $unit */
         $unit = $unitRepository->findOneBy(
             $this->getUnitFindCondition($unitData)
         );
@@ -883,7 +888,7 @@ class Variant extends Resource implements BatchInterface
         }
 
         // To create a new unit, the unit name and unit is required. Otherwise we throw an exception
-        if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
+        if (!$unit && isset($unitData['name'], $unitData['unit'])) {
             $unit = new Unit();
         } elseif (!$unit) {
             throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
@@ -914,7 +919,7 @@ class Variant extends Resource implements BatchInterface
 
         if (empty($tax)) {
             throw new ApiException\CustomValidationException(
-                sprintf('No article tax configured for variant: %s', $variant['id'])
+                sprintf('No product tax configured for variant: %s', $variant['id'])
             );
         }
 
@@ -934,9 +939,9 @@ class Variant extends Resource implements BatchInterface
      */
     private function getAvailableMediaImage($availableImages, $mediaId)
     {
-        /** @var $image Image */
+        /** @var Image $image */
         foreach ($availableImages as $image) {
-            if ($image->getMedia()->getId() == $mediaId) {
+            if ((int) $image->getMedia()->getId() === (int) $mediaId) {
                 return $image;
             }
         }
@@ -992,17 +997,21 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed group data is already existing in the passed array collection.
      * The group data are checked for "id" and "name".
      *
-     * @param Collection|array $availableGroups
-     * @param array            $groupData
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Group> $availableGroups
+     * @param array                                                                                     $groupData
      *
-     * @return bool|Group
+     * @return false|Group
      */
     private function getAvailableGroup($availableGroups, array $groupData)
     {
-        /** @var $availableGroup Option */
+        // Convert string to lower case to avoid problems with case insensitivity in database
+        // vs case sensitivity in PHP
+        $groupName = mb_strtolower($groupData['name']);
+
+        /** @var Group $availableGroup */
         foreach ($availableGroups as $availableGroup) {
-            if (($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
-                || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
+            if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id']) ||
+                (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
                 return $availableGroup;
             }
         }
@@ -1014,17 +1023,21 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed option data is already existing in the passed array collection.
      * The option data are checked for "id" and "name".
      *
-     * @param Collection|array $availableOptions
-     * @param array            $optionData
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option> $availableOptions
+     * @param array                                                                                      $optionData
      *
-     * @return bool
+     * @return bool|Option
      */
     private function getAvailableOption($availableOptions, array $optionData)
     {
-        /** @var $availableOption Option */
+        // Convert string to lower case to avoid problems with case insensitivity in database
+        // vs case sensitivity in PHP
+        $optionName = mb_strtolower($optionData['name']);
+
+        /** @var Option $availableOption */
         foreach ($availableOptions as $availableOption) {
-            if (($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
-                || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
+            if ((mb_strtolower($availableOption->getName()) === $optionName && $optionData['name'] !== null)
+                || ((int) $availableOption->getId() === (int) $optionData['id'] && $optionData['id'] !== null)) {
                 return $availableOption;
             }
         }
@@ -1038,7 +1051,7 @@ class Variant extends Resource implements BatchInterface
      *
      * @param array $data
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
      * @return array
      */
@@ -1106,7 +1119,7 @@ class Variant extends Resource implements BatchInterface
 
             $esd->fromArray($data['esd']);
             $variant->setEsd($esd);
-        } elseif (is_null($data['esd'])) {
+        } elseif ($data['esd'] === null) {
             $variant->setEsd(null);
         }
 

@@ -40,7 +40,7 @@ class InstallContextTest extends TestCase
 
         $entity = new \Shopware\Models\Plugin\Plugin();
         $context = new ActivateContext($entity, $release['version'], '1.0.0');
-        $plugin = new MyPlugin(true);
+        $plugin = new MyPlugin(true, 'ShopwarePlugins');
         $plugin->activate($context);
 
         $this->assertArrayHasKey('cache', $context->getScheduled());
@@ -54,7 +54,7 @@ class InstallContextTest extends TestCase
 
         $entity = new \Shopware\Models\Plugin\Plugin();
         $context = new DeactivateContext($entity, $release['version'], '1.0.0');
-        $plugin = new MyPlugin(true);
+        $plugin = new MyPlugin(true, 'ShopwarePlugins');
 
         $plugin->deactivate($context);
         $this->assertArrayHasKey('message', $context->getScheduled());
@@ -68,7 +68,7 @@ class InstallContextTest extends TestCase
 
         $entity = new \Shopware\Models\Plugin\Plugin();
         $context = new InstallContext($entity, $release['version'], '1.0.0');
-        $plugin = new MyPlugin(true);
+        $plugin = new MyPlugin(true, 'ShopwarePlugins');
 
         $plugin->install($context);
         $this->assertArrayHasKey('cache', $context->getScheduled());
@@ -83,7 +83,7 @@ class InstallContextTest extends TestCase
 
         $entity = new \Shopware\Models\Plugin\Plugin();
         $context = new UninstallContext($entity, $release['version'], '1.0.0', true);
-        $plugin = new MyPlugin(true);
+        $plugin = new MyPlugin(true, 'ShopwarePlugins');
 
         $plugin->uninstall($context);
         $this->assertArrayHasKey('cache', $context->getScheduled());

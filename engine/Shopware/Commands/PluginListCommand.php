@@ -34,7 +34,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -165,6 +165,6 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
         $table->setHeaders(['Plugin', 'Label', 'Version', 'Author', 'Active', 'Installed'])
               ->setRows($rows);
 
-        $table->render($output);
+        $table->render();
     }
 }

@@ -35,6 +35,7 @@ class PriceVariation extends ModelEntity
 {
     /**
      * @var \Shopware\Models\Article\Configurator\Set
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="priceVariations")
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
      */
@@ -42,9 +43,11 @@ class PriceVariation extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="is_gross", type="integer", nullable=false)
      */
     protected $isGross;
+
     /**
      * @var int
      *
@@ -56,6 +59,7 @@ class PriceVariation extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="options", type="text", nullable=true)
      */
     private $options;
@@ -69,6 +73,7 @@ class PriceVariation extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
     private $configuratorSetId = null;

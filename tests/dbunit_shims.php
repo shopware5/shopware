@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 if (class_exists('PHPUnit\DbUnit\TestCase')) {
     return;
 }

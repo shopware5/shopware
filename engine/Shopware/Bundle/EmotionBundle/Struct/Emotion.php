@@ -71,12 +71,12 @@ class Emotion extends Extendable
     protected $rows;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $validFrom;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $validTo;
 
@@ -111,12 +111,12 @@ class Emotion extends Extendable
     protected $seoDescription;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $createDate;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $modifiedDate;
 
@@ -255,7 +255,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -263,7 +263,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidTo()
     {
@@ -319,7 +319,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreateDate()
     {
@@ -327,7 +327,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getModifiedDate()
     {
@@ -447,7 +447,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTime $validFrom
+     * @param \DateTimeInterface $validFrom
      */
     public function setValidFrom($validFrom)
     {
@@ -455,7 +455,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTime $validTo
+     * @param \DateTimeInterface $validTo
      */
     public function setValidTo($validTo)
     {
@@ -511,7 +511,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTime $createDate
+     * @param \DateTimeInterface $createDate
      */
     public function setCreateDate($createDate)
     {
@@ -519,7 +519,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \DateTime $modifiedDate
+     * @param \DateTimeInterface $modifiedDate
      */
     public function setModifiedDate($modifiedDate)
     {

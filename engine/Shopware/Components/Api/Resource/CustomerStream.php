@@ -115,7 +115,7 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param null|int $id
+     * @param int|null $id
      * @param int      $offset
      * @param null     $limit
      * @param array    $conditions
@@ -346,8 +346,8 @@ class CustomerStream extends Resource
 
     /**
      * @param CustomerStreamEntity $stream
-     * @param null|int             $offset
-     * @param null|int             $limit
+     * @param int|null             $offset
+     * @param int|null             $limit
      *
      * @throws \Shopware\Components\Api\Exception\PrivilegeException
      */
@@ -383,13 +383,13 @@ class CustomerStream extends Resource
     /**
      * Returns true if frozen state has changed
      *
-     * @param int            $streamId
-     * @param \DateTime|null $freezeUp
-     * @param string         $conditions
+     * @param int                     $streamId
+     * @param \DateTimeInterface|null $freezeUp
+     * @param string                  $conditions
      *
      * @return array|bool
      */
-    public function updateFrozenState($streamId, \DateTime $freezeUp = null, $conditions)
+    public function updateFrozenState($streamId, \DateTimeInterface $freezeUp = null, $conditions)
     {
         $now = new \DateTime();
         if (!$freezeUp || $freezeUp >= $now) {
@@ -483,7 +483,7 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param $stream \Shopware\Models\CustomerStream\CustomerStream
+     * @param \Shopware\Models\CustomerStream\CustomerStream $stream
      *
      * @throws CustomValidationException
      */

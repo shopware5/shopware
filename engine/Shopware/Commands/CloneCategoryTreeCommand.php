@@ -109,7 +109,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
                 'noArticleAssociations',
                 null,
                 InputOption::VALUE_NONE,
-                'If set, the article associations are not copied'
+                'If set, the product associations are not copied'
             );
     }
 
@@ -124,9 +124,11 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         /** @var Category $originalCategory */
         $originalCategory = $this->getCategoryFromInput($input->getArgument('category'));
 
-        if (empty($originalCategory)) {
+        if ($originalCategory === null) {
             return;
-        } elseif ($originalCategory->getId() == 1) {
+        }
+
+        if ((int) $originalCategory->getId() === 1) {
             $output->writeln('<error>Cannot duplicate root category</error>');
 
             return;
@@ -137,22 +139,22 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
             $parent = $originalCategory->getParent();
         } else {
             $parent = $this->getCategoryFromInput($parent);
-            if (empty($parent)) {
+            if ($parent === null) {
                 return;
             }
         }
 
-        $copyArticleAssociations = !$input->getOption('noArticleAssociations');
+        $copyProductAssociations = !$input->getOption('noArticleAssociations');
 
         $count = $this->container->get('models')
-            ->getRepository('Shopware\Models\Category\Category')
+            ->getRepository(Category::class)
             ->getChildrenCountList($originalCategory->getId());
 
         $this->progressBar = new ProgressBar($output, $count);
         $this->progressBar->start();
 
         try {
-            $this->duplicateCategory($originalCategory->getId(), $parent->getId(), $copyArticleAssociations);
+            $this->duplicateCategory($originalCategory->getId(), $parent->getId(), $copyProductAssociations);
         } catch (\RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
@@ -184,7 +186,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         }
 
         $category = $this->container->get('models')
-            ->getRepository('Shopware\Models\Category\Category')
+            ->getRepository(Category::class)
             ->$mode(
                 $categoryInput
             );
@@ -194,7 +196,9 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
                 $this->printCategoriesTable($category);
 
                 return null;
-            } elseif (count($category) == 1) {
+            }
+
+            if (count($category) === 1) {
                 $category = array_shift($category);
             }
         }
@@ -214,7 +218,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
      *
      * @param int  $categoryId
      * @param int  $newParentId
-     * @param bool $copyArticleAssociations
+     * @param bool $copyProductAssociations
      * @param int  $newRootCategoryId
      *
      * @throws \RuntimeException
@@ -222,12 +226,12 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
     private function duplicateCategory(
         $categoryId,
         $newParentId,
-        $copyArticleAssociations,
+        $copyProductAssociations,
         $newRootCategoryId = null
     ) {
         $categoryDuplicator = $this->container->get('CategoryDuplicator');
 
-        $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId, $copyArticleAssociations);
+        $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId, $copyProductAssociations);
         $this->progressBar->advance();
 
         $childrenStmt = $this->container->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
@@ -237,8 +241,8 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         $newRootCategoryId = $newRootCategoryId ?: $newCategoryId;
 
         foreach ($children as $child) {
-            if ($child != $newRootCategoryId) {
-                $this->duplicateCategory($child, $newCategoryId, $copyArticleAssociations, $newRootCategoryId);
+            if ((int) $child !== (int) $newRootCategoryId) {
+                $this->duplicateCategory($child, $newCategoryId, $copyProductAssociations, $newRootCategoryId);
             }
         }
     }

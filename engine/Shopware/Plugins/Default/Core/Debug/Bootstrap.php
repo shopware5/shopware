@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Monolog\Handler\HandlerInterface;
 use Shopware\Components\Logger;
 use Shopware\Plugin\Debug\Components\CollectorInterface;
@@ -35,7 +36,7 @@ use Shopware\Plugin\Debug\Components\TemplateVarCollector;
 use Shopware\Plugin\Debug\Components\Utils;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -134,7 +135,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     }
 
     /**
-     * Registeres active collectors
+     * Registers active collectors
      */
     public function registerCollectors()
     {

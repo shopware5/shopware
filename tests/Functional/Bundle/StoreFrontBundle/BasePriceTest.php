@@ -80,7 +80,7 @@ class BasePriceTest extends TestCase
         $this->helper->createArticle($data);
         $product = $this->helper->getListProduct($number, $context);
 
-        /** @var $first Price */
+        /** @var Price $first */
         $first = array_shift($product->getPrices());
         $this->assertEquals(100, $first->getCalculatedPrice());
         $this->assertEquals(20, $first->getCalculatedReferencePrice());

@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -78,7 +78,7 @@ class AttributeHydrator extends Hydrator
      * @param array             $data
      * @param string            $arrayKey
      * @param string            $attributeKey
-     * @param null|string       $translationKey
+     * @param string|null       $translationKey
      */
     public function addAttribute(Struct\Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
     {

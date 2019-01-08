@@ -10,6 +10,7 @@ RewriteEngine on
 RewriteRule shopware.dll shopware.php
 RewriteRule files/documents/.* engine [NC,L]
 RewriteRule backend/media/(.*) media/$1 [NC,L]
+RewriteRule custom/.*(config|menu|services|plugin)\.xml$ ./shopware.php?controller=Error&action=pageNotFoundError [NC,L]
 
 RewriteCond %{REQUEST_URI} !(\/(engine|files|templates|themes|web)\/)
 RewriteCond %{REQUEST_URI} !(\/media\/(archive|banner|image|music|pdf|unknown|video)\/)

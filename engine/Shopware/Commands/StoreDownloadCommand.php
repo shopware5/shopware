@@ -44,7 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -240,7 +240,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
     /**
      * @param PluginStruct $plugin
      * @param string       $version
-     * @param $domain
+     * @param string       $domain
      *
      * @throws \Exception
      */
@@ -294,7 +294,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
 
-        /* @var $service PluginLicenceService */
+        /* @var PluginLicenceService $service */
         $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
     }
 

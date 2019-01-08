@@ -36,6 +36,7 @@ class Form extends ModelEntity
 {
     /**
      * @var \Shopware\Models\Plugin\Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="configForms")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
      */
@@ -44,13 +45,15 @@ class Form extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
+     * @var ArrayCollection<\Shopware\Models\Config\FormTranslation>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\FormTranslation", mappedBy="form", cascade={"all"})
      */
     protected $translations;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -59,12 +62,14 @@ class Form extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
      * @var Form
+     *
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", nullable=true, referencedColumnName="id", onDelete="SET NULL")
      */
@@ -72,51 +77,55 @@ class Form extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $description;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="plugin_id", type="integer", nullable=false)
      */
     private $pluginId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
-     * @var Element[]
+     * @var ArrayCollection<Element>
+     *
      * @ORM\OneToMany(targetEntity="Element", mappedBy="form", cascade={"all"})
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
     private $elements;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<Element>
+     *
      * @ORM\OneToMany(targetEntity="Form", mappedBy="parent", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $children;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->elements = new ArrayCollection();
@@ -158,7 +167,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param $label
+     * @param string $label
      *
      * @return Form
      */
@@ -182,7 +191,7 @@ class Form extends ModelEntity
      *
      * @param string $description
      *
-     * @return string
+     * @return Form
      */
     public function setDescription($description)
     {
@@ -220,11 +229,11 @@ class Form extends ModelEntity
     /**
      * @param string $name
      *
-     * @return Element
+     * @return Element|null
      */
     public function getElement($name)
     {
-        /* @var $value Element */
+        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 return $element;
@@ -243,7 +252,7 @@ class Form extends ModelEntity
      */
     public function setElement($type, $name, $options = null)
     {
-        /* @var $value Element */
+        /* @var Element $value */
         foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
                 $element->setType($type);
@@ -297,7 +306,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection|Element[]
+     * @return ArrayCollection<Element>|Element[]
      */
     public function getElements()
     {
@@ -345,7 +354,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Element>
      */
     public function getChildren()
     {
@@ -353,7 +362,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $children
+     * @param ArrayCollection<Element> $children
      */
     public function setChildren($children)
     {
@@ -361,7 +370,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Config\FormTranslation>
      */
     public function getTranslations()
     {
@@ -369,7 +378,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param $translation FormTranslation
+     * @param ArrayCollection<\Shopware\Models\Config\FormTranslation> $translation
      *
      * @return \Shopware\Models\Config\Form
      */

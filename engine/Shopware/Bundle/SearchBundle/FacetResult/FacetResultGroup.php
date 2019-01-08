@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -126,7 +126,7 @@ class FacetResultGroup extends Extendable implements FacetResultInterface, Templ
     }
 
     /**
-     * @param null|string $template
+     * @param string|null $template
      */
     public function setTemplate($template)
     {

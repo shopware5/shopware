@@ -2,18 +2,101 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.5
+
+[View all changes from v5.5.4...v5.5.5](https://github.com/shopware/shopware/compare/v5.5.4...v5.5.5)
+
+### Additions
+
+* Added new event `TemplateMail_CreateMail_MailContext` to `engine/Shopware/Components/TemplateMail.php`
+* Added internal locking to sitemap generation so the sitemap isn't generated multiple times in parallel
+* Added event `plugin/swAjaxVariant/onHistoryChanged` in in order to listen to changes in browser history after variants did change
+* Added blocks `frontend_account_order_item_pseudo_price_inner` and `frontend_account_order_item_pseudo_price_inner_value` to `frontend/account/order_item_details.tpl` to modify price if necessary
+* Added filter event `Shopware_Modules_Basket_CheckBasketQuantities_ProductQuantities` in order to modify variables for each basket item
+* Added `max_expansions` in config.php for the `phrase_prefixes` `name` and `number`
+* Added aggregation size to product attribute range sliders
+* Added product attribute parser for elasticsearch indexing to allow indexing of boolean values
+* Added alias `shopware.api.customerstream` to service with id `shopware.api.customer_stream` to fix problem in cronjob
+
+### Changes
+
+* Changed user timeout to session `session.gc_maxlifetime`
+* Changed itemprop `priceCurrency` to be available for products with price groups
+* Changed `ajaxListing` action to `listingCount` action in Bare theme
+* Changed backend filter for variants with laststock
+* Changed namespace for plugins in custom/project directory to fix theme recognition in composer projects
+* Changed calculation of conversionrate in backend widget
+* Changed Symfony library to version 3.4.21
+
 ## 5.5.4
 
 [View all changes from v5.5.3...v5.5.4](https://github.com/shopware/shopware/compare/v5.5.3...v5.5.4)
 
 ### Additions
 
+* Added the following new blocks to `themes/Frontend/Bare/widgets/captcha/custom_captcha.tpl`
+    * `frontend_widgets_captcha_custom_captcha_config`
+    * `frontend_widgets_captcha_custom_captcha_honeypot`
 * Added dependency to Symfony Expression Language, this allows using something like `container.initialized('shop') ? service('shop') : null` in `services.xml`
-* Added deleteDocument acl privilege to order
+* Added `deleteDocument` ACL privilege to order
+* Added new event `Shopware_Controllers_Backend_CustomerQuickView_listQuerySearchFields`
+* Added forwarding to manufacturer listing for old supplier urls
+* Added support for own product box layouts via an ExtJS Plugin
+* Added AWS endpoint configuration
+* Added product notification attributes
+* Added `DISTINCT` for `priceListingQuery` to improve ES indexing performance with activated variant filter
+* Added media optimizer overview to backend systeminfo
+* Added `notify`-event `Shopware_Command_RebuildSeoIndexCommand_CreateRewriteTable` that is triggered after the SEO index is rebuilt via cli command `sw:rebuild:seo:index`
+* Added privilege check for sensitive data of API's user endpoint
+* Added functionality to restore expert mode status on snippet manager loading
+* Added possibility to create a customized product box layout with own ExtJS plugin
+* Added product information to `sARTICLEAVAILABLE` template
+* Added country filter to customer module
+* Added country entity to attributes multiselect
+* Added changetime to ListProduct struct
+* Added events indicating plugin-lifecycle changes to PluginInstaller
+* Added grunt development task
 
 ### Changes
 
-* Changed Symfony library to version 3.4.18
+* Changed Symfony library to version 3.4.19
+* Changed new countries created via programming interfaces default to allowing shipping to restore backwards compatibility to versions before Shopware 5.5.3.
+* Changed `themes/Frontend/Bare/widgets/captcha/custom_captcha.tpl` to also include the honeypot captcha template if the corresponding option is active
+* Changed `themes/Frontend/Responsive/frontend/_public/src/js/jquery.captcha.js`, so the plugin won't try to fetch the honeypot captcha template via AJAX
+* Changed the following templates to include the `custom_captcha.tpl` template, if any other captcha method than "legacy" is active:
+    * `themes/Frontend/Bare/frontend/blog/comment/form.tpl`
+    * `themes/Frontend/Bare/frontend/detail/comment/form.tpl`
+    * `themes/Frontend/Bare/frontend/newsletter/index.tpl`
+    * `themes/Frontend/Bare/frontend/tellafriend/index.tpl`
+* Changed seo product query to clarify select statement
+* Changed document view to hide document boxes on new entry
+* Changed `CronjobSynchronizer` to consider action names without Cronjob Prefix
+* Changed `Enlight_Template_Manager` to allow overriding file permissions
+* Changed API variant resource to compare configuration groups in lowercase
+* Changed type annotation on a product's EAN field
+* Changed ES backend `OrmBacklogSubscriber` to fix backlog sync
+* Changed adding items to the cart to use laststock from variant
+* Changed structured data properties on blog article page to meet the requirements
+* Changed default groupKey to get correct subpages of custom pages in mobile menu
+* Changed some mailer options to combo boxes to avoid wrong entries
+* Changed CSV import of snippets to only remove one apostrophe from the beginning of a line 
+* Changed field trackingcode to type "text" to be able to save multiple trackingcodes
+* Changed open-sans file size
+* Changed mailer config elements to combo box to simplify configuration
+* Changed `Kernel::getRootDir` to use `dirname` instead of `realpath`
+* Changed backend search to consider order documents
+* Changed customer orders to translate order state
+* Changed product preview combobox to show only active shops
+* Changed EventManager to improve plugin phpunit capability
+* Changed regex in media manager to filter all symbols
+* Changed cart item information to use laststock from variant instead product
+* Changed media normalizer to consider model objects
+* Changed `clear_cache.sh` to use `rsync` if available for faster cache clearing
+
+### Removals
+
+* Removed IE history check from ajax variants
+* Removed wrong css class from password reset page
 
 ## 5.5.3
 

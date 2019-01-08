@@ -44,6 +44,7 @@ Visit the forum at <http://forum.shopware.com/>
 -   <a href="http://php.net/manual/en/book.zip.php" target="_blank">zip</a>
 -   <a href="http://php.net/manual/en/book.zlib.php" target="_blank">zlib</a>
 -   <a href="http://php.net/manual/en/ref.pdo-mysql.php" target="_blank">PDO/MySQL</a>
+-   <a href="http://php.net/manual/de/book.fileinfo.php" target="_blank">fileinfo</a>
 
 ### Installation via Git
 
@@ -132,7 +133,7 @@ The changelog and all available commits are located under <https://github.com/sh
 
 * [Shopware AG](http://www.shopware.com) - Homepage of shopware AG
 * [Shopware Developer Documentation](https://devdocs.shopware.com/)
-* [Shopware Community](http://community.shopware.com/) - Shopware Community
+* [Shopware Docs](https://docs.shopware.com/) - Shopware documentation
 * [Shopware Forum](http://forum.shopware.com) - Community forum
 * [Shopware Marketplace](http://store.shopware.com) - Shopware Store
 * [Shopware on Crowdin](https://crowdin.com/project/shopware) - Crowdin (Translations)

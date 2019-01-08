@@ -56,7 +56,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('sw:migrate:article:attribute:translations');
-        $this->setDescription('Migrates article attribute translations from Shopware 5.1 to Shopware 5.2');
+        $this->setDescription('Migrates product attribute translations from Shopware 5.1 to Shopware 5.2');
         $this->setHelp('The <info>%command.name%</info> migrates article attribute translations from Shopware 5.1 to Shopware 5.2.');
     }
 
@@ -151,7 +151,7 @@ EOL
      * @param array $data
      * @param array $columns
      *
-     * @return null|array
+     * @return array|null
      */
     private function filter($data, array $columns)
     {

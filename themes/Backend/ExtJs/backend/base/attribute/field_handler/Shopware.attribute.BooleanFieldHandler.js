@@ -31,13 +31,19 @@ Ext.define('Shopware.attribute.BooleanFieldHandler', {
     extend: 'Shopware.attribute.FieldHandlerInterface',
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'boolean');
+        return (attribute.get('columnType') === 'boolean');
     },
 
     create: function(field, attribute) {
         field.xtype = 'checkbox';
         field.uncheckedValue = 0;
         field.inputValue = 1;
+
+        if (attribute.get('defaultValue') !== null) {
+            field.checked = parseInt(attribute.get('defaultValue')) === 1;
+            field.defaultValue = field.checked;
+        }
+
         return field;
     }
 });

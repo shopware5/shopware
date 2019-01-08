@@ -81,9 +81,9 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     public function onFilterRender(Enlight_Event_EventArgs $args)
     {
-        /** @var $request Enlight_Controller_Request_RequestHttp */
+        /** @var Enlight_Controller_Request_RequestHttp $request */
         $request = $args->getSubject()->Action()->Request();
-        /** @var $response Enlight_Controller_Response_ResponseHttp */
+        /** @var Enlight_Controller_Response_ResponseHttp $response */
         $response = $args->getSubject()->Action()->Response();
 
         $source = $args->getReturn();
@@ -259,11 +259,11 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
     /**
      * @param string $source
      *
-     * @return null|string|string[]
+     * @return string|string[]|null
      */
     protected function filterUrls($source)
     {
-        /** @var $router \Shopware\Components\Routing\RouterInterface */
+        /** @var \Shopware\Components\Routing\RouterInterface $router */
         $router = $this->get('router');
         $baseFile = preg_quote($router->getContext()->getBaseFile(), '#');
         $regex = '#<(a|form|iframe|link|img)[^<>]*(href|src|action)="(' . $baseFile . '[^"]*)".*>#Umsi';

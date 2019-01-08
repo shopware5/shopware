@@ -40,7 +40,6 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\QueryAliasMapper;
 
 class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
 {
@@ -62,7 +61,6 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper,
         VariantHelperInterface $variantHelper
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
@@ -137,7 +135,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
      * @param array                                                         $stats
      * @param Criteria                                                      $criteria
      *
-     * @return null|RangeFacetResult
+     * @return RangeFacetResult|null
      */
     private function createRangeFacet(FacetInterface $facet, array $stats, Criteria $criteria)
     {
@@ -155,7 +153,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition WeightCondition|WidthCondition|LengthCondition|HeightCondition */
+        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition $condition */
         if ($condition = $criteria->getCondition($name)) {
             $method = 'get' . ucfirst($minField);
             $activeMin = $condition->$method();

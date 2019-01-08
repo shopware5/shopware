@@ -43,7 +43,7 @@ interface DeviceConfigurationInterface
     /**
      * @param int $id
      *
-     * @return array
+     * @return array|null
      */
     public function getLandingPage($id);
 

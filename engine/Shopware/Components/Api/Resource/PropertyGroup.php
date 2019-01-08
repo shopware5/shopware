@@ -29,7 +29,7 @@ use Shopware\Components\Api\Exception as ApiException;
 /**
  * Property API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -195,7 +195,7 @@ class PropertyGroup extends Resource
 
     /**
      * @param array      $params
-     * @param null|array $propertyGroup
+     * @param array|null $propertyGroup
      *
      * @throws ApiException\CustomValidationException
      *

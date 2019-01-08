@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
@@ -189,8 +190,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Get documents of a specific type for the given orders
      *
-     * @param $orderIds
-     * @param $docType
+     * @param int[]  $orderIds
+     * @param string $docType
      *
      * @return \Doctrine\ORM\Query
      */
@@ -368,7 +369,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', [['property' => 'history.changeDate', 'direction' => 'DESC']]);
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
 
         //the backend order module have no function to create a new order so an order id must be passed.
@@ -402,7 +403,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $id = (int) $this->Request()->getParam('id');
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order/main');
 
         // The backend order module have no function to create a new order so an order id must be passed.
@@ -472,11 +473,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         // Prepares the associated data of an order.
-        $data = $this->getAssociatedData($data, $order, $billing, $shipping);
+        $data = $this->getAssociatedData($data);
 
         // Before we can create the status mail, we need to save the order data. Otherwise
         // the status mail would be created with the old order status and amount.
-        /** @var $order \Shopware\Models\Order\Order */
+        /** @var \Shopware\Models\Order\Order $order */
         $statusBefore = $order->getOrderStatus();
         $clearedBefore = $order->getPaymentStatus();
         $invoiceShippingBefore = $order->getInvoiceShipping();
@@ -533,7 +534,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function deleteAction()
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
 
         // Get posted customers
@@ -570,7 +571,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $orderId = $this->Request()->getParam('orderId');
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         // Check if an order id is passed. If no order id passed, return success false
@@ -626,12 +627,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $data['number'] = $order->getNumber();
 
         $data = $this->getPositionAssociatedData($data);
-        // If $data === null, the article was not found
+        // If $data === null, the product was not found
         if ($data === null) {
             $this->View()->assign([
                 'success' => false,
                 'data' => [],
-                'message' => 'The articlenumber "' . $this->Request()->getParam('articleNumber', '') . '" is not valid',
+                'message' => 'The productnumber "' . $this->Request()->getParam('articleNumber', '') . '" is not valid',
             ]);
 
             return;
@@ -645,12 +646,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         // If the passed data is a new position, the flush function will add the new id to the position model
         $data['id'] = $position->getId();
 
-        // The position model will refresh the article stock, so the article stock
+        // The position model will refresh the product stock, so the product stock
         // will be assigned to the view to refresh the grid or form panel.
-        $articleRepository = Shopware()->Models()->getRepository(ArticleDetail::class);
-        $article = $articleRepository->findOneBy(['number' => $position->getArticleNumber()]);
-        if ($article instanceof ArticleDetail) {
-            $data['inStock'] = $article->getInStock();
+        $variantRepository = Shopware()->Models()->getRepository(ArticleDetail::class);
+        $variant = $variantRepository->findOneBy(['number' => $position->getArticleNumber()]);
+        if ($variant instanceof ArticleDetail) {
+            $data['inStock'] = $variant->getInStock();
         }
         $order = $this->getRepository()->find($order->getId());
 
@@ -681,7 +682,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function deletePositionAction()
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order/controller/main');
 
         $positions = $this->Request()->getParam('positions', [['id' => $this->Request()->getParam('id')]]);
@@ -710,7 +711,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        /** @var $order \Shopware\Models\Order\Order */
+        /** @var \Shopware\Models\Order\Order $order */
         $order = $this->getRepository()->find($orderId);
         if (empty($order)) {
             $this->View()->assign([
@@ -778,7 +779,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $documentMode = $this->Request()->getParam('mode');
         $addAttachments = $this->request->getParam('addAttachments') === 'true';
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')->getNamespace('backend/order');
 
         if (empty($orders)) {
@@ -804,7 +805,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 continue;
             }
 
-            /** @var $order \Shopware\Models\Order\Order */
+            /** @var \Shopware\Models\Order\Order $order */
             $order = $modelManager->find(Order::class, $data['id']);
             if (!$order) {
                 continue;
@@ -920,7 +921,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = $this->request->getParam('orderId');
         $attachments = $this->request->getParam('attachment');
 
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
 
         if (empty($data)) {
@@ -1002,7 +1003,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = (int) $this->Request()->getParam('orderId');
         $mailTemplateName = $this->Request()->getParam('mailTemplateName', 'sORDERDOCUMENTS');
 
-        /** @var $mail Enlight_Components_Mail */
+        /** @var Enlight_Components_Mail $mail */
         $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, 0, $mailTemplateName);
 
         $this->view->assign([
@@ -1184,7 +1185,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Order\Repository
+     * @return Shopware\Models\Order\Repository|null
      */
     protected function getRepository()
     {
@@ -1198,7 +1199,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Shop\Repository
+     * @return Shopware\Models\Shop\Repository|null
      */
     protected function getShopRepository()
     {
@@ -1212,7 +1213,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Country\Repository
+     * @return Shopware\Models\Country\Repository|null
      */
     protected function getCountryRepository()
     {
@@ -1226,7 +1227,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Payment\Repository
+     * @return Shopware\Models\Payment\Repository|null
      */
     protected function getPaymentRepository()
     {
@@ -1240,7 +1241,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Dispatch\Repository
+     * @return Shopware\Models\Dispatch\Repository|null
      */
     protected function getDispatchRepository()
     {
@@ -1268,8 +1269,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * @param array[]  $filter
      * @param array[]  $sort
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return array
      */
@@ -1444,7 +1445,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to select a single order.
      *
-     * @param $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -1522,7 +1523,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * Internal helper function to check if the order or payment status has been changed.
      * If one of the status changed, the function will create a status mail.
      * If the autoSend parameter is true, the created status mail will be sent directly,
-     * if addAttachments and documentType are true/selected aswell, the according documents will be attached.
+     * if addAttachments and documentType are true/selected as well, the according documents will be attached.
      *
      * @param Order                         $order
      * @param \Shopware\Models\Order\Status $statusBefore
@@ -1734,7 +1735,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function getDefaultName($typeId)
     {
-        /** @var $queryBuilder \Doctrine\DBAL\Query\QueryBuilder $builder */
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $queryBuilder */
         $queryBuilder = $this->container->get('dbal_connection')->createQueryBuilder();
 
         return $queryBuilder->select('name')
@@ -1797,7 +1798,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         if ($renderer === 'html') {
             exit;
-        } // Debu//g-Mode
+        }
 
         return true;
     }
@@ -1829,16 +1830,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['tax']);
         }
 
-        /** @var ArticleDetail $articleDetails */
-        $articleDetails = Shopware()->Models()->getRepository(ArticleDetail::class)
+        /** @var ArticleDetail $variant */
+        $variant = Shopware()->Models()->getRepository(ArticleDetail::class)
             ->findOneBy(['number' => $data['articleNumber']]);
 
         // Load ean, unit and pack unit (translate if needed)
-        if ($articleDetails) {
-            $data['ean'] = $articleDetails->getEan() ?: $articleDetails->getArticle()->getMainDetail()->getEan();
-            $unit = $articleDetails->getUnit() ?: $articleDetails->getArticle()->getMainDetail()->getUnit();
+        if ($variant) {
+            $data['ean'] = $variant->getEan() ?: $variant->getArticle()->getMainDetail()->getEan();
+            $unit = $variant->getUnit() ?: $variant->getArticle()->getMainDetail()->getUnit();
             $data['unit'] = $unit ? $unit->getName() : null;
-            $data['packunit'] = $articleDetails->getPackUnit() ?: $articleDetails->getArticle()->getMainDetail()->getPackUnit();
+            $data['packunit'] = $variant->getPackUnit() ?: $variant->getArticle()->getMainDetail()->getPackUnit();
 
             $languageData = Shopware()->Db()->fetchRow(
                 'SELECT s_core_shops.default, s_order.language AS languageId
@@ -1867,30 +1868,30 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     }
                 }
 
-                $articleTranslation = [];
+                $productTranslation = [];
 
                 // Load variant translations if we are adding a variant to the order
-                if ($articleDetails->getId() != $articleDetails->getArticle()->getMainDetail()->getId()) {
-                    $articleTranslation = $translator->read(
+                if ($variant->getId() != $variant->getArticle()->getMainDetail()->getId()) {
+                    $productTranslation = $translator->read(
                         $languageData['languageId'],
                         'variant',
-                        $articleDetails->getId()
+                        $variant->getId()
                     );
                 }
 
-                // Load article translations if we are adding a main article or the variant translation is incomplete
-                if ($articleDetails->getId() == $articleDetails->getArticle()->getMainDetail()->getId()
-                    || empty($articleTranslation['packUnit'])
+                // Load product translations if we are adding a main product or the variant translation is incomplete
+                if ($variant->getId() == $variant->getArticle()->getMainDetail()->getId()
+                    || empty($productTranslation['packUnit'])
                 ) {
-                    $articleTranslation = $translator->read(
+                    $productTranslation = $translator->read(
                         $languageData['languageId'],
                         'article',
-                        $articleDetails->getArticle()->getId()
+                        $variant->getArticle()->getId()
                     );
                 }
 
-                if (!empty($articleTranslation['packUnit'])) {
-                    $data['packUnit'] = $articleTranslation['packUnit'];
+                if (!empty($productTranslation['packUnit'])) {
+                    $data['packUnit'] = $productTranslation['packUnit'];
                 }
             }
         }
@@ -1984,7 +1985,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $templateName = $this->getTemplateNameForDocumentTypeId($documentTypeId);
         }
 
-        /** @var $mail Enlight_Components_Mail */
+        /** @var Enlight_Components_Mail $mail */
         $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, (int) $statusId, $templateName);
 
         if ($mail instanceof Enlight_Components_Mail) {

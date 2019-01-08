@@ -33,7 +33,7 @@ namespace Shopware\Components;
  * The ShopwareKernel injects the loaded configuration and the Symfony DI-Container
  * into the Shopware_Application.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

@@ -37,7 +37,7 @@ class Value
     protected $dqlHelper;
 
     /**
-     * @param $dqlHelper DqlHelper
+     * @param DqlHelper $dqlHelper
      */
     public function __construct(DqlHelper $dqlHelper)
     {
@@ -102,9 +102,9 @@ class Value
         foreach ($paginator->getIterator()->getArrayCopy() as $item) {
             $item = array_pop($item);
             if ($item instanceof \DateTime) {
-                if ($columnType == 'date') {
+                if ($columnType === 'date') {
                     $item = $item->format('Y-m-d');
-                } elseif ($columnType == 'datetime') {
+                } elseif ($columnType === 'datetime') {
                     $item = $item->format('Y-m-d H:i:s');
                 }
             }

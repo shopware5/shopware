@@ -98,21 +98,21 @@ class License extends ModelEntity
     private $source;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="added", type="date", nullable=true)
      */
     private $added;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="creation", type="date", nullable=true)
      */
     private $creation;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="expiration", type="date", nullable=true)
      */
@@ -165,7 +165,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param \DateTime $added
+     * @param \DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -173,7 +173,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -181,7 +181,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $creation
+     * @param \DateTimeInterface $creation
      */
     public function setCreation($creation)
     {
@@ -189,7 +189,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return \DateTimeInterface
      */
     public function getCreation()
     {
@@ -197,7 +197,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $expiration
+     * @param \DateTimeInterface $expiration
      */
     public function setExpiration($expiration)
     {
@@ -205,7 +205,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getExpiration()
     {
@@ -293,7 +293,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param  $plugin
+     * @param Plugin $plugin
      */
     public function setPlugin($plugin)
     {

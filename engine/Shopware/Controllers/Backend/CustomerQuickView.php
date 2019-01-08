@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
@@ -119,12 +120,14 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             'groups.name as customerGroup',
             'billing.zipcode',
             'billing.city',
+            'country.name as countryName',
             'billing.company',
         ]);
 
         $query->from(Customer::class, 'customer');
         $query->leftJoin('customer.shop', 'shops');
         $query->leftJoin('customer.defaultBillingAddress', 'billing');
+        $query->leftJoin('billing.country', 'country');
         $query->leftJoin('customer.attribute', 'attribute');
         $query->leftJoin('customer.group', 'groups');
 
@@ -139,7 +142,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
 
         if ($search) {
             $builder = $this->container->get('shopware.model.search_builder');
-            $builder->addSearchTerm($query, $search, [
+            $searchfields = [
                 'customer.number^2',
                 'customer.email^2',
                 'customer.firstname^3',
@@ -147,7 +150,12 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
                 'billing.zipcode^0.5',
                 'billing.city^0.5',
                 'billing.company^0.5',
-            ]);
+            ];
+            $searchfields = $this->get('events')->filter(
+                'Shopware_Controllers_Backend_CustomerQuickView_listQuerySearchFields',
+                $searchfields
+            );
+            $builder->addSearchTerm($query, $search, $searchfields);
         }
 
         return $query;
@@ -199,6 +207,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             'shop' => ['alias' => 'shops.id', 'type' => 'int'],
             'zipcode' => ['alias' => 'billing.zipcode', 'type' => 'string'],
             'city' => ['alias' => 'billing.city', 'type' => 'string'],
+            'countryId' => ['alias' => 'billing.countryId', 'type' => 'int'],
             'company' => ['alias' => 'billing.company', 'type' => 'string'],
         ]);
 

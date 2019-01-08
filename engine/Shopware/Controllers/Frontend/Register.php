@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
@@ -126,7 +127,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             /** @var Address $billing */
             $billing = $billingForm->getData();
 
-            if (!$billing->getCountry()->getAllowShipping()) {
+            $country = $this->get('shopware_storefront.country_gateway')->getCountry($billing->getCountry()->getId(), $context);
+
+            if (!$country->allowShipping()) {
                 $errors['billing']['country'] = $this->get('snippets')->getNamespace('frontend/register/index')->get('CountryNotAvailableForShipping');
             }
         }
@@ -254,7 +257,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
         $customerId = (int) $data['customerId'];
 
-        /** @var \DateTime $date */
+        /** @var \DateTimeInterface $date */
         $date = new \DateTime();
 
         /** @var Customer $customer */
@@ -477,7 +480,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function getCustomerGroupKey()
     {
-        $customerGroupKey = $this->request->getParam('sValidation', null);
+        $customerGroupKey = $this->request->getParam('sValidation');
         $customerGroupId = $this->get('dbal_connection')->fetchColumn(
             'SELECT id FROM s_core_customergroups WHERE `groupkey` = ?',
             [$customerGroupKey]

@@ -28,7 +28,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -70,7 +70,7 @@ class FirstRunWizardEnableCommand extends ShopwareCommand
             $conn->insert('s_core_config_values', $data);
         }
 
-        /** @var $cacheManager \Shopware\Components\CacheManager */
+        /** @var \Shopware\Components\CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
         $cacheManager->clearConfigCache();
 

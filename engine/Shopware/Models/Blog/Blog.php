@@ -39,23 +39,24 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Tag", mappedBy="blog", orphanRemoval=true)
+     * @var ArrayCollection<\Shopware\Models\Blog\Tag>
      *
-     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Tag", mappedBy="blog", orphanRemoval=true)
      */
     protected $tags;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Media>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
      */
     protected $media;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_blog_assigned_articles",
      *      joinColumns={@ORM\JoinColumn(name="blog_id", referencedColumnName="id")},
@@ -67,20 +68,21 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Blog
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist"})
      */
     protected $attribute;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Comment", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Comment>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Blog\Comment Objects
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Comment", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
      */
     protected $comments;
+
     /**
      * @var int
      *
@@ -108,6 +110,7 @@ class Blog extends ModelEntity
      * Flag which shows if the blog is active or not. 1= active otherwise inactive
      *
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
@@ -134,7 +137,7 @@ class Blog extends ModelEntity
     private $views = null;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="display_date", type="datetime", nullable=false)
      */
@@ -148,6 +151,8 @@ class Blog extends ModelEntity
     private $categoryId = null;
 
     /**
+     * @var \Shopware\Models\Category\Category
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
@@ -184,14 +189,13 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
+     * @var \Shopware\Models\User\User
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User", inversedBy="blog")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->media = new ArrayCollection();
@@ -329,7 +333,7 @@ class Blog extends ModelEntity
     /**
      * Get DisplayDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDisplayDate()
     {
@@ -339,11 +343,11 @@ class Blog extends ModelEntity
     /**
      * Set DisplayDate
      *
-     * @param \DateTime|string $displayDate
+     * @param \DateTimeInterface|string $displayDate
      */
     public function setDisplayDate($displayDate)
     {
-        if (!$displayDate instanceof \DateTime && strlen($displayDate) > 0) {
+        if (!$displayDate instanceof \DateTimeInterface && strlen($displayDate) > 0) {
             $displayDate = new \DateTime($displayDate);
         }
         $this->displayDate = $displayDate;
@@ -382,7 +386,7 @@ class Blog extends ModelEntity
     /**
      * Set Tags
      *
-     * @param ArrayCollection
+     * @param ArrayCollection $tags
      */
     public function setTags($tags)
     {
@@ -422,19 +426,19 @@ class Blog extends ModelEntity
     /**
      * Set Media
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $media
+     * @param \Shopware\Models\Blog\Media[]|null $media
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Blog|ModelEntity
      */
     public function setMedia($media)
     {
-        return $this->setOneToMany($media, '\Shopware\Models\Blog\Media', 'media', 'blog');
+        return $this->setOneToMany($media, \Shopware\Models\Blog\Media::class, 'media', 'blog');
     }
 
     /**
      * Get the assigned articles
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
      */
     public function getAssignedArticles()
     {
@@ -444,7 +448,7 @@ class Blog extends ModelEntity
     /**
      * Set the assigned articles
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $assignedArticles
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article> $assignedArticles
      */
     public function setAssignedArticles($assignedArticles)
     {
@@ -506,15 +510,15 @@ class Blog extends ModelEntity
      *
      * @param \Shopware\Models\Attribute\Blog|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Blog
+     * @return \Shopware\Models\Attribute\Blog|ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Blog', 'attribute', 'blog');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Blog::class, 'attribute', 'blog');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Comment>
      */
     public function getComments()
     {
@@ -522,19 +526,19 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $comments
+     * @param \Shopware\Models\Blog\Comment[]|null $comments
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Blog|ModelEntity
      */
     public function setComments($comments)
     {
-        return $this->setOneToMany($comments, '\Shopware\Models\Blog\Comment', 'comments', 'blog');
+        return $this->setOneToMany($comments, \Shopware\Models\Blog\Comment::class, 'comments', 'blog');
     }
 
     /**
-     * returns the author
+     * Returns the author
      *
-     * @return mixed
+     * @return \Shopware\Models\User\User
      */
     public function getAuthor()
     {
@@ -542,9 +546,9 @@ class Blog extends ModelEntity
     }
 
     /**
-     * sets the author
+     * Sets the author
      *
-     * @param $author
+     * @param \Shopware\Models\User\User $author
      */
     public function setAuthor($author)
     {
@@ -552,7 +556,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * set the metaTitle
+     * Set the metaTitle
      *
      * @param string $metaTitle
      */
@@ -562,7 +566,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * returns the metaTitle
+     * Returns the metaTitle
      *
      * @return string
      */

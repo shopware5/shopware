@@ -39,7 +39,10 @@ class Repository extends EntityRepository
      */
     public function getConfigForShop($shopId)
     {
-        return $this->findOneBy(['shopId' => $shopId]);
+        /** @var BenchmarkConfig $return */
+        $return = $this->findOneBy(['shopId' => $shopId]);
+
+        return $return;
     }
 
     /**

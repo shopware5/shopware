@@ -37,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -90,7 +90,7 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
      * @param Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return FacetResultInterface
+     * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,
@@ -111,7 +111,7 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
         $query->select('product.id')
             ->setMaxResults(1);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);

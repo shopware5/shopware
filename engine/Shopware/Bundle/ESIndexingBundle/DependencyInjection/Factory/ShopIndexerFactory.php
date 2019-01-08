@@ -87,10 +87,10 @@ class ShopIndexerFactory
             $this->container->get('shopware_elastic_search.backlog_reader'),
             $this->container->get('shopware_elastic_search.backlog_processor'),
             $this->container->get('shopware_elastic_search.index_factory'),
+            $this->container->get('shopware_elastic_search.console.console_evaluation_helper'),
             $indexer,
             $mappings,
-            $settings,
-            $this->container->getParameter('shopware.es')
+            $settings
         );
     }
 

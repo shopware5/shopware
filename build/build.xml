@@ -389,4 +389,16 @@
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/fullscreen/editor_plugin.js" />
         </concat>
     </target>
+
+    <target name="phpstan" description="PHP Static Analysis Tool">
+        <get src="https://github.com/phpstan/phpstan/releases/download/0.10.5/phpstan.phar"
+             dest="${basedir}/build/artifacts/phpstan.phar" skipexisting="true"/>
+        <exec executable="php" searchpath="true" resolveexecutable="true" failonerror="true">
+            <arg value="${basedir}/build/artifacts/phpstan.phar"/>
+            <arg value="analyse"/>
+            <arg value="-c"/>
+            <arg value=".phpstan.neon"/>
+            <arg value="--no-progress"/>
+        </exec>
+    </target>
 </project>

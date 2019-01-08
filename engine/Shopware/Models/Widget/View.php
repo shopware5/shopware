@@ -35,6 +35,7 @@ class View extends ModelEntity
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -43,6 +44,7 @@ class View extends ModelEntity
 
     /**
      * @var Widget
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Widget\Widget", inversedBy="views")
      * @ORM\JoinColumn(name="widget_id", referencedColumnName="id")
      */
@@ -50,31 +52,36 @@ class View extends ModelEntity
 
     /**
      * @var \Shopware\Models\User\User
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User")
      * @ORM\JoinColumn(name="auth_id", referencedColumnName="id")
      */
     private $auth;
 
     /**
-     * @var null
+     * @var int
+     *
      * @ORM\Column(name="auth_id", type="integer", nullable=true)
      */
     private $authId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="`column`", type="integer", nullable=false)
      */
     private $column = 0;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var array|null
+     *
      * @ORM\Column(name="data", type="json_array", nullable=true)
      */
     private $data;
@@ -157,7 +164,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @param null $authId
+     * @param int $authId
      */
     public function setAuthId($authId)
     {

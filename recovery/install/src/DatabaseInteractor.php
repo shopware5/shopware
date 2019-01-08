@@ -25,7 +25,7 @@
 /**
  * Shopware SwagAboCommerce Plugin - Bootstrap
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
@@ -96,8 +96,8 @@ class DatabaseInteractor
     }
 
     /**
-     * @param $databaseName
-     * @param \PDO $pdo
+     * @param string $databaseName
+     * @param \PDO   $pdo
      *
      * @return bool
      */

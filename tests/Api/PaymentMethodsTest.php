@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
 {
     const API_PATH = '/PaymentMethods/';
@@ -176,7 +177,7 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
     /**
      * @depends testPostPaymentShouldBeSuccessful
      *
-     * @param $identifier
+     * @param string $identifier
      */
     public function testGetPaymentWithIdShouldBeSuccessful($identifier)
     {
@@ -202,7 +203,7 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
     /**
      * @depends testPostPaymentShouldBeSuccessful
      *
-     * @param $id
+     * @param int $id
      */
     public function testDeletePaymentWithIdShouldBeSuccessful($id)
     {

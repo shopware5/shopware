@@ -36,7 +36,7 @@ use Shopware\Models\Emotion\Emotion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -372,7 +372,7 @@ class LegacyStructConverter
             }
 
             $data['pseudopricePercent'] = [
-                'int' => round($discount, 0),
+                'int' => round($discount),
                 'float' => $discount,
             ];
         }
@@ -451,7 +451,7 @@ class LegacyStructConverter
             );
         }
 
-        /** @var $variantPrice Price */
+        /** @var Price $variantPrice */
         $variantPrice = $product->getVariantPrice();
         $data = array_merge($data, $this->convertProductPriceStruct($variantPrice));
         $data['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
@@ -753,7 +753,7 @@ class LegacyStructConverter
         foreach ($set->getGroups() as $group) {
             $values = [];
             foreach ($group->getOptions() as $option) {
-                /* @var $option StoreFrontBundle\Struct\Property\Option */
+                /* @var StoreFrontBundle\Struct\Property\Option $option */
                 $values[$option->getId()] = $option->getName();
             }
 
@@ -761,7 +761,7 @@ class LegacyStructConverter
 
             $mediaValues = [];
             foreach ($group->getOptions() as $option) {
-                /** @var $option StoreFrontBundle\Struct\Property\Option */
+                /** @var StoreFrontBundle\Struct\Property\Option $option */
                 if ($option->getMedia()) {
                     $mediaValues[$option->getId()] = array_merge(['valueId' => $option->getId()], $this->convertMediaStruct($option->getMedia()));
                 }
@@ -1034,6 +1034,44 @@ class LegacyStructConverter
     }
 
     /**
+     * Converts a payment struct
+     *
+     * @param StoreFrontBundle\Struct\Payment $payment
+     *
+     * @return array
+     */
+    public function convertPaymentStruct(StoreFrontBundle\Struct\Payment $payment)
+    {
+        $data = [
+            'id' => $payment->getId(),
+            'name' => $payment->getName(),
+            'description' => $payment->getDescription(),
+            'template' => $payment->getTemplate(),
+            'class' => $payment->getClass(),
+            'table' => $payment->getTable(),
+            'hide' => $payment->getHide(),
+            'additionaldescription' => $payment->getAdditionalDescription(),
+            'debit_percent' => $payment->getDebitPercent(),
+            'surcharge' => $payment->getSurcharge(),
+            'surchargestring' => $payment->getSurchargeString(),
+            'position' => $payment->getPosition(),
+            'active' => $payment->getActive(),
+            'esdactive' => $payment->getEsdActive(),
+            'embediframe' => $payment->getEmbediframe(),
+            'hideprospect' => $payment->getHideProspect(),
+            'action' => $payment->getAction(),
+            'pluginID' => $payment->getPluginID(),
+            'source' => $payment->getSource(),
+            'mobile_inactive' => $payment->getMobileInactive(),
+            'attributes' => $payment->getAttributes(),
+        ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Payment', $data, [
+            'payment' => $payment,
+        ]);
+    }
+
+    /**
      * Returns the count of children categories of the provided category
      *
      * @param int $id
@@ -1146,6 +1184,10 @@ class LegacyStructConverter
         if ($product->getCreatedAt()) {
             $createDate = $product->getCreatedAt()->format('Y-m-d');
         }
+        $updateDate = null;
+        if ($product->getUpdatedAt()) {
+            $updateDate = $product->getUpdatedAt()->format('Y-m-d');
+        }
 
         $data = [
             'articleID' => $product->getId(),
@@ -1171,6 +1213,7 @@ class LegacyStructConverter
             'laststock' => $product->isCloseouts(),
             'additionaltext' => $product->getAdditional(),
             'datum' => $createDate,
+            'update' => $updateDate,
             'sales' => $product->getSales(),
             'filtergroupID' => null,
             'priceStartingFrom' => null,
@@ -1211,7 +1254,7 @@ class LegacyStructConverter
         }
 
         if ($product->hasAttribute('marketing')) {
-            /** @var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
+            /** @var StoreFrontBundle\Struct\Product\MarketingAttribute $marketing */
             $marketing = $product->getAttribute('marketing');
             $data['newArticle'] = $marketing->isNew();
             $data['sUpcoming'] = $marketing->comingSoon();

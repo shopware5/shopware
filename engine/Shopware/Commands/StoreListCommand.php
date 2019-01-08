@@ -33,7 +33,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -105,7 +105,9 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
             return;
         }
 
-        /** @var $licence LicenceStruct */
+        $result = null;
+
+        /** @var LicenceStruct $licence */
         foreach ($licences as $licence) {
             $result[] = [
                 'technicalName' => $licence->getTechnicalName(),
@@ -120,6 +122,6 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
         $table->setHeaders(['Technical name', 'Description', 'domain', 'Creation date', 'Type'])
               ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

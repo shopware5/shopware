@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Logger;
 
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
@@ -99,6 +100,7 @@ return array_replace_recursive([
 
                 'bucket' => '',
                 'region' => '',
+                'endpoint' => null,
                 'credentials' => [
                     'key' => '',
                     'secret' => '',
@@ -156,6 +158,13 @@ return array_replace_recursive([
                 'localhost:9200',
             ],
         ],
+        'logger' => [
+            'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
+        ],
+        'max_expansions' => [
+            'name' => 2,
+            'number' => 2,
+        ],
     ],
     'front' => [
         'noErrorHandler' => false,
@@ -205,7 +214,7 @@ return array_replace_recursive([
         'cache_dir' => $this->getCacheDir() . '/html',
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
         /*
-         * The "ignored_url_parameters" configuration will spare your Shopware system from recaching a page when any
+         * The "ignored_url_parameters" configuration will spare your Shopware system from re-caching a page when any
          * of the parameters listed here is matched. This allows the caching system to be more efficient.
          */
         'ignored_url_parameters' => [
@@ -235,6 +244,7 @@ return array_replace_recursive([
            'cof',
            'siteurl',
            '_ga',
+           'fbclid',         // Facebook
         ],
     ],
     'bi' => [

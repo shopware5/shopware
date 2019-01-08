@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Customer
+     * @var \Shopware\Components\Api\Resource\Customer
      */
     protected $resource = null;
 

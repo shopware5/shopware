@@ -32,7 +32,7 @@ namespace Shopware\Components\Migrations;
  * $migrationManager->run();
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -102,7 +102,7 @@ class Manager
     /**
      * Log string to stdout
      *
-     * @param $str
+     * @param string $str
      */
     public function log($str)
     {
@@ -112,7 +112,7 @@ class Manager
     }
 
     /**
-     * Creates schama version table if not exists
+     * Creates schema version table if not exists
      */
     public function createSchemaTable()
     {
@@ -146,7 +146,7 @@ class Manager
      *
      * @param int $currentVersion
      *
-     * @return AbstractMigration
+     * @return AbstractMigration|null
      */
     public function getNextMigrationForVersion($currentVersion)
     {

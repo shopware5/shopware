@@ -38,21 +38,21 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
-    protected $customerId = null;
+    protected $customerId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="articleID", type="integer", nullable=true)
      */
-    protected $articleId = null;
+    protected $articleId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
-    protected $orderNumber = null;
+    protected $orderNumber;
 
     /**
      * @var float
@@ -64,11 +64,12 @@ class Basket extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\OrderBasket
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
@@ -90,7 +91,7 @@ class Basket extends ModelEntity
      *
      * @ORM\Column(name="partnerID", type="string", length=45, nullable=true)
      */
-    private $partnerId = null;
+    private $partnerId;
 
     /**
      * @var string
@@ -128,11 +129,11 @@ class Basket extends ModelEntity
     private $netPrice = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
-    private $date = null;
+    private $date;
 
     /**
      * @var int
@@ -191,7 +192,7 @@ class Basket extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\OrderBasket', 'attribute', 'orderBasket');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\OrderBasket::class, 'attribute', 'orderBasket');
     }
 
     /**
@@ -395,7 +396,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -403,7 +404,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {

@@ -38,7 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -204,7 +204,7 @@ EOF
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param $optionKey
+     * @param string          $optionKey
      *
      * @return mixed
      */

@@ -123,7 +123,7 @@ class %className% extends ModelEntity
     ';
 
     /**
-     * Definitition of a constructor for initializing properties.
+     * Definition of a constructor for initializing properties.
      */
     const CONSTRUCTOR = '
     public function __construct()
@@ -174,7 +174,7 @@ class %className% extends ModelEntity
     protected $schemaManager = null;
 
     /**
-     * Contains the table mapping for the existing showpare models.
+     * Contains the table mapping for the existing Shopware models.
      *
      * @var array
      */
@@ -253,7 +253,7 @@ class %className% extends ModelEntity
     /**
      * @param string $tableName
      *
-     * @return int
+     * @return string
      */
     public function getSourceCodeForTable($tableName)
     {
@@ -306,12 +306,12 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $sourceCode string
+     * @param \Doctrine\DBAL\Schema\Table $table
+     * @param string                      $sourceCode
      *
      * @throws \Exception
      *
-     * @return int
+     * @return bool
      */
     public function createModelFile($table, $sourceCode)
     {
@@ -344,7 +344,7 @@ class %className% extends ModelEntity
      * php types. For example the database type "text" will be converted
      * to "string"
      *
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -373,16 +373,16 @@ class %className% extends ModelEntity
 
         $classes = [];
 
-        /** @var $file \SplFileInfo */
+        /** @var \SplFileInfo $file */
         foreach ($iterator as $file) {
             $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
-            if ($file->isDir() || $extension !== 'php') {
+            if ($extension !== 'php' || $file->isDir()) {
                 continue;
             }
 
             $content = file_get_contents($file->getPathname());
 
-            //preg match for the model class name!
+            // preg match for the model class name!
             $matches = [];
             preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
             if (count($matches) === 0) {
@@ -390,7 +390,7 @@ class %className% extends ModelEntity
             }
             $className = $matches[1];
 
-            //preg match for the model namespace!
+            // preg match for the model namespace!
             $matches = [];
             preg_match('/namespace\s+(.*);/', $content, $matches);
             if (count($matches) === 0) {
@@ -398,11 +398,11 @@ class %className% extends ModelEntity
             }
             $namespace = $matches[1];
 
-            //preg match for the model table name!
+            // preg match for the model table name!
             $matches = [];
             preg_match('/@ORM\\\Table\\(name="(.*)"\\)/', $content, $matches);
 
-            //repositories has no table annoation.
+            // Repository has no table annotation
             if (count($matches) === 0) {
                 continue;
             }
@@ -437,41 +437,41 @@ class %className% extends ModelEntity
      * The generate model function create the doctrine model for
      * the passed table name.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
-     * @return int
+     * @return string
      */
     protected function generateModel($table)
     {
-        //first we have to create the file header for a standard php file
+        // First we have to create the file header for a standard php file
         $fileHeader = self::PHP_FILE_HEADER;
 
-        //after the file header created, we can add the shopware AGPLv3 licence tag
+        // After the file header has been created, we can add the shopware AGPLv3 licence tag
         $licenceHeader = self::SHOPWARE_LICENCE;
 
-        //after the licence added, we can declare all namespace and used namespaces
+        // After the licence has been added, we can declare all namespace and used namespaces
         $namespaceHeader = self::NAMESPACE_HEADER;
 
-        //the last header is the class header, which contains the definition of the class
+        // The last header is the class header, which contains the definition of the class
         $classHeader = $this->getClassDefinition($table);
 
-        //now all headers are defined, we can add the class content.
-        //first we create all normal column properties.
+        // Now, that all headers are defined, we can add the class content.
+        // First we create all normal column properties.
         $columnProperties = $this->getColumnsProperties($table);
 
-        //after the normal column properties created, we can add the association properties.
+        // After the normal column properties have been created, we can add the association properties.
         $associationProperties = $this->getAssociationProperties($table);
 
         // Add the constructor
         $constructor = $this->getConstructor($table);
 
-        //now all properties are declared, but the properties needs getter and setter function to get access from extern
+        // Now all properties are declared, but the properties need getter and setter functions to be accessible
         $columnFunctions = $this->getColumnsFunctions($table);
 
-        //the association properties needs getter and setter, too.
+        // The association property needs getter and setter, too.
         $associationFunctions = $this->getAssociationsFunctions($table);
 
-        //to concat the different source code paths, we create an array with all source code fragments
+        // To concat the different source code paths, we create an array with all source code fragments
         $paths = [
             $fileHeader,
             $licenceHeader,
@@ -485,7 +485,7 @@ class %className% extends ModelEntity
             '}',
         ];
 
-        //than we implode the source code paths with a line break
+        // Then we implode the source code paths with a line break
 
         return implode("\n", $paths);
     }
@@ -493,7 +493,7 @@ class %className% extends ModelEntity
     /**
      * Returns the class definition for the passed table object
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return mixed
      */
@@ -502,15 +502,15 @@ class %className% extends ModelEntity
         $source = self::CLASS_HEADER;
         $className = $table->getName();
 
-        //check if the passed table is an shopware attribute table.
+        // Check if the passed table is a Shopware attribute table.
         if (strpos($table->getName(), '_attributes')) {
             //if the table is an attribute table we have to use the class name of the parent table.
             $parentClass = str_replace('_attributes', '', $table->getName());
             $className = $this->getClassNameOfTableName($parentClass);
 
-        //if the passed table is not an attribute table, we have to check if the table is already declared
+        // If the passed table is not an attribute table, we have to check if the table is already declared
         } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
-            //if this is the case we will use the already declared class name
+            // If this is the case we will use the already declared class name
             $className = $this->tableMapping[$table->getName()]['class'];
         }
 
@@ -526,7 +526,7 @@ class %className% extends ModelEntity
      * The tableMapping array contains the class names and namespace for
      * each already declared shopware model/table.
      *
-     * @param $tableName
+     * @param string $tableName
      *
      * @return string
      */
@@ -552,16 +552,16 @@ class %className% extends ModelEntity
     /**
      * The getColumnsProperties function creates the source code
      * for all table column properties. This function returns
-     * only the defintion of the properties, not of the getters and seters.
+     * only the definition of the properties, not of the getters and setters.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
     protected function getColumnsProperties($table)
     {
         $columns = [];
-        /** @var $column \Doctrine\DBAL\Schema\Column */
+        /** @var \Doctrine\DBAL\Schema\Column $column */
         foreach ($table->getColumns() as $column) {
             $columns[] = $this->getColumnProperty($table, $column);
         }
@@ -576,8 +576,8 @@ class %className% extends ModelEntity
      * This function creates only the property definition for a single
      * column, not the getter and setter function.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -607,13 +607,13 @@ class %className% extends ModelEntity
 
     /**
      * Helper function to convert the table column name to the shopware standard definition of
-     * a class property. Filters the under score words to camcel case and
+     * a class property. Filters the under score words to camel case and
      * checks if the passed column is a foreign key column.
      * If the passed column is a foreign key column the function uses the class
      * name of the foreign table as property with an additional suffix "Id".
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -653,14 +653,14 @@ class %className% extends ModelEntity
      * If the column has a foreign key definition, the class name
      * of the foreign table will be used for the property name of the column.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
-     * @return bool|\Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @return \Doctrine\DBAL\Schema\ForeignKeyConstraint|null
      */
     protected function getColumnForeignKey($table, $column)
     {
-        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
+        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey */
         foreach ($table->getForeignKeys() as $foreignKey) {
             foreach ($foreignKey->getLocalColumns() as $foreignKeyColumn) {
                 if ($foreignKeyColumn === $column->getName()) {
@@ -673,10 +673,10 @@ class %className% extends ModelEntity
     }
 
     /**
-     * Helper function to covnert the boolean value of the function "column->getNotNull()" to
-     * a string which can be used for the doctrine annoation.
+     * Helper function to convert the boolean value of the function "column->getNotNull()" to
+     * a string which can be used for the doctrine annotation.
      *
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -692,11 +692,11 @@ class %className% extends ModelEntity
     /**
      * Helper function to check if the passed column is the primary key
      * column.
-     * In this case doctrine requires the @ORM\ID annoation and a primary key
+     * In this case doctrine requires the @ORM\ID annotation and a primary key
      * strategy.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return bool
      */
@@ -716,18 +716,18 @@ class %className% extends ModelEntity
 
     /**
      * The getAssociationProperties function creates the source
-     * code for the doctrine associaton properties for the passed table object.
+     * code for the doctrine association properties for the passed table object.
      * This function creates only the property definition source code, not the getter
      * and setter source code for the properties.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
     protected function getAssociationProperties($table)
     {
         $associations = [];
-        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
+        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey */
         foreach ($table->getForeignKeys() as $foreignKey) {
             $associations[] = $this->getAssociationProperty($table, $foreignKey);
         }
@@ -741,8 +741,8 @@ class %className% extends ModelEntity
      * The getter and setter function for the properties are created over the
      * "getAssociationFunctions" function.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @param \Doctrine\DBAL\Schema\Table                $table
+     * @param \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey
      *
      * @return string
      */
@@ -771,9 +771,9 @@ class %className% extends ModelEntity
 
     /**
      * Creates the source code for the custom constructor, which initializes all
-     * not-null properties with their respective default vaulue.
+     * not-null properties with their respective default value.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return string
      */
@@ -838,7 +838,7 @@ class %className% extends ModelEntity
      * The getColumnsFunctions function creates the source code for the
      * getter and setter for all table columns properties.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
@@ -856,8 +856,8 @@ class %className% extends ModelEntity
      * Helper function to create the getter and setter source code
      * for the passed column object.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
-     * @param $column \Doctrine\DBAL\Schema\Column
+     * @param \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
      */
@@ -877,14 +877,14 @@ class %className% extends ModelEntity
      * Creates the getter and setter functions source code for all association
      * properties of the passed table object.
      *
-     * @param $table \Doctrine\DBAL\Schema\Table
+     * @param \Doctrine\DBAL\Schema\Table $table
      *
      * @return array
      */
     protected function getAssociationsFunctions($table)
     {
         $columns = [];
-        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
+        /** @var \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey */
         foreach ($table->getForeignKeys() as $foreignKey) {
             $columns[] = $this->getAssociationFunctions($foreignKey);
         }
@@ -896,7 +896,7 @@ class %className% extends ModelEntity
      * Creates the getter and setter function source code for the passed
      * foreign key constraint object.
      *
-     * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     * @param \Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey
      *
      * @return string
      */
@@ -922,7 +922,7 @@ class %className% extends ModelEntity
     private function stringEndsWith($haystack, $needle)
     {
         $length = strlen($needle);
-        if ($length == 0) {
+        if ($length === 0) {
             return true;
         }
 

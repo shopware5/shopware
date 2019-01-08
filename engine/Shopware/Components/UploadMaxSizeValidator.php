@@ -80,14 +80,14 @@ class UploadMaxSizeValidator implements SubscriberInterface
     /**
      * Returns maximum post size in bytes.
      *
-     * @return null|int The maximum post size in bytes
+     * @return int|null The maximum post size in bytes
      */
     public function getPostMaxSize()
     {
         $iniMax = strtolower($this->getNormalizedIniPostMaxSize());
 
         if ($iniMax === '') {
-            return;
+            return null;
         }
 
         $max = ltrim($iniMax, '+');

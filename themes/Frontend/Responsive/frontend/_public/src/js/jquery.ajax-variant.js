@@ -135,10 +135,12 @@
 
                     if (pushState && me.hasHistorySupport) {
                         me.pushState(stateObj, ordernumber);
+                        $.publish('plugin/swAjaxVariant/onHistoryChanged', [me, response, values, stateObj.location]);
                     }
                 },
-                complete: function () {
+                complete: function (response, status) {
                     $.loadingIndicator.close();
+                    $.publish('plugin/swAjaxVariant/onRequestDataCompleted', [me, response, status, values, stateObj.location]);
                 }
             });
         },

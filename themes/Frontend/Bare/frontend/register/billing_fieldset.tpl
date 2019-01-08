@@ -33,7 +33,7 @@
                                placeholder="{s name='RegisterLabelDepartment'}{/s}"
                                id="register_billing_department"
                                value="{$form_data.department|escape}"
-                               class="register--field" />
+                               class="register--field{if isset($error_flags.department)} has--error{/if}" />
                     </div>
                 {/block}
 

@@ -31,7 +31,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Model\SearchBuilder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

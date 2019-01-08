@@ -32,7 +32,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -108,7 +108,7 @@ class SnippetsValidateCommand extends ShopwareCommand implements CompletionAware
      *
      * @throws \Exception
      *
-     * @return \string[]
+     * @return string[]
      */
     protected function validatePlugins(SnippetValidator $validator)
     {

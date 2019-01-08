@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -79,6 +80,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function viewAction()
     {
+        $hash = null;
+
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
             if (!Shopware()->Container()->get('Auth')->hasIdentity()) {
@@ -226,6 +229,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $template->assign('sCampaignHash', $hash, true);
             $template->assign('sRecommendations', $this->getMailingSuggest($mailing['id'], $user['userID']), true);
 
+            /** @var array $voucher */
             $voucher = $template->getTemplateVars('sVoucher');
             if (!empty($voucher['id'])) {
                 $voucher['code'] = $this->getVoucherCode($voucher['id']);
@@ -534,6 +538,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return false;
         }
 
+        $customerGroups = null;
+        $recipientGroups = null;
         $mailing['groups'] = unserialize($mailing['groups']);
 
         // The first element holds the selected customer groups for the current newsletter
@@ -601,7 +607,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      *
      * @param int $voucherID
      *
-     * @return string
+     * @return string|false
      */
     public function getVoucherCode($voucherID)
     {
@@ -789,7 +795,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return null;
         }
 
-        /** @var $plugin \Shopware\Models\Plugin\Plugin */
+        /** @var \Shopware\Models\Plugin\Plugin $plugin */
         $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $pluginBootstrap->getId());
         if (!$plugin) {
             return null;

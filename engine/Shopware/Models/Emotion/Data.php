@@ -38,28 +38,37 @@ use Shopware\Components\Model\ModelEntity;
 class Data extends ModelEntity
 {
     /**
+     * @var \Shopware\Models\Emotion\Element
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Element", inversedBy="data")
      * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
      */
     protected $element;
 
     /**
+     * @var \Shopware\Models\Emotion\Emotion
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
      * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
      */
     protected $emotion;
 
     /**
+     * @var \Shopware\Models\Emotion\Library\Component
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Emotion\Library\Component")
      * @ORM\JoinColumn(name="componentID", referencedColumnName="id")
      */
     protected $component;
 
     /**
+     * @var \Shopware\Models\Emotion\Library\Field
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Emotion\Library\Field")
      * @ORM\JoinColumn(name="fieldID", referencedColumnName="id")
      */
     protected $field;
+
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -93,18 +102,21 @@ class Data extends ModelEntity
      * Contains the id of the assigned element component
      *
      * @var int
+     *
      * @ORM\Column(name="componentID", type="integer", nullable=false)
      */
     private $componentId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="fieldID", type="integer", nullable=false)
      */
     private $fieldId;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="value", type="text", nullable=true)
      */
     private $value = null;
@@ -112,11 +124,8 @@ class Data extends ModelEntity
     public function __clone()
     {
         $this->id = null;
-
         $this->emotionId = null;
-
         $this->elementId = null;
-
         $this->fieldId = null;
     }
 
@@ -192,31 +201,49 @@ class Data extends ModelEntity
         return $this->value;
     }
 
+    /**
+     * @return \Shopware\Models\Emotion\Library\Field
+     */
     public function getField()
     {
         return $this->field;
     }
 
+    /**
+     * @param \Shopware\Models\Emotion\Library\Field $field
+     */
     public function setField($field)
     {
         $this->field = $field;
     }
 
+    /**
+     * @return \Shopware\Models\Emotion\Library\Component
+     */
     public function getComponent()
     {
         return $this->component;
     }
 
+    /**
+     * @param \Shopware\Models\Emotion\Library\Component $component
+     */
     public function setComponent($component)
     {
         $this->component = $component;
     }
 
+    /**
+     * @return Element
+     */
     public function getElement()
     {
         return $this->element;
     }
 
+    /**
+     * @param \Shopware\Models\Emotion\Element $element
+     */
     public function setElement($element)
     {
         $this->element = $element;
@@ -239,7 +266,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Emotion\Emotion
      */
     public function getEmotion()
     {
@@ -247,7 +274,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @param mixed $emotion
+     * @param \Shopware\Models\Emotion\Emotion $emotion
      */
     public function setEmotion($emotion)
     {

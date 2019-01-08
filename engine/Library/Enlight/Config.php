@@ -26,11 +26,10 @@
  * which can be used to initialize the different enlight components
  *
  * @category   Enlight
- * @package    Enlight_Config
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-
 class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
 {
     /**
@@ -41,7 +40,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     /**
      * Whether in-memory modifications to configuration data are allowed
      *
-     * @var boolean
+     * @var bool
      */
     protected $_allowModifications = false;
 
@@ -57,7 +56,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @var bool
      */
-    protected $_dirtyFields = array();
+    protected $_dirtyFields = [];
 
     /**
      * The current section.
@@ -89,14 +88,16 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * the Enlight_Config_Adapter.
      *
      * @param array|null|string $config
-     * @param array|bool $options
+     * @param array|bool        $options
+     *
      * @throws Enlight_Config_Exception
+     *
      * @return \Enlight_Config
      */
     public function __construct($config, $options = null)
     {
         if (!is_array($options)) {
-            $options = array('allowModifications' => $options);
+            $options = ['allowModifications' => $options];
         }
         if (isset($options['allowModifications'])) {
             $this->_allowModifications = (bool) $options['allowModifications'];
@@ -122,102 +123,18 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     }
 
     /**
-     * Sets the config name.
-     *
-     * @param string $name
-     * @return Enlight_Config
-     */
-    protected function setName($name)
-    {
-        $this->_name = $name;
-        return $this;
-    }
-
-    /**
-     * Returns the config name.
-     *
-     * @return Enlight_Config
-     */
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    /**
-     * Resets the internal data property and sets the given data array elements into the internal properties.
-     * If one of the data array elements is an array the function will capsule this value into a new config class.
-     * @param array $data
-     */
-    public function setData($data)
-    {
-        $this->_loadedSection = null;
-        $this->_index = 0;
-        $this->_data = array();
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $this->_data[$key] = new $this->_defaultConfigClass($value, $this->_allowModifications);
-            } else {
-                $this->_data[$key] = $value;
-            }
-        }
-        $this->_count = count($this->_data);
-    }
-
-    /**
-     * Retrieves a value and returns $default if there is no element set.
-     *
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     */
-    public function get($name, $default = null)
-    {
-        if ($this->_data === null) {
-            $this->read();
-        }
-
-        if (array_key_exists($name, $this->_data)) {
-            return $this->_data[$name];
-        } else {
-            return $default;
-        }
-    }
-
-    /**
-     * Sets value method
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return Enlight_Config
-     */
-    public function set($name, $value = null)
-    {
-        $this->__set($name, $value);
-        return $this;
-    }
-
-    /**
-     * Defined by Iterator interface
-     */
-    public function rewind()
-    {
-        if ($this->_data === null) {
-            $this->read();
-        }
-        parent::rewind();
-    }
-
-    /**
      * Supports isset() overloading on PHP 5.1
      *
      * @param string $name
-     * @return boolean
+     *
+     * @return bool
      */
     public function __isset($name)
     {
         if ($this->_data === null) {
             $this->read();
         }
+
         return isset($this->_data[$name]);
     }
 
@@ -225,7 +142,8 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * Sets value method
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @throws Enlight_Config_Exception
      */
     public function __set($name, $value)
@@ -247,10 +165,88 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     }
 
     /**
+     * Returns the config name.
+     *
+     * @return Enlight_Config
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
+
+    /**
+     * Resets the internal data property and sets the given data array elements into the internal properties.
+     * If one of the data array elements is an array the function will capsule this value into a new config class.
+     *
+     * @param array $data
+     */
+    public function setData($data)
+    {
+        $this->_loadedSection = null;
+        $this->_index = 0;
+        $this->_data = [];
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $this->_data[$key] = new $this->_defaultConfigClass($value, $this->_allowModifications);
+            } else {
+                $this->_data[$key] = $value;
+            }
+        }
+        $this->_count = count($this->_data);
+    }
+
+    /**
+     * Retrieves a value and returns $default if there is no element set.
+     *
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function get($name, $default = null)
+    {
+        if ($this->_data === null) {
+            $this->read();
+        }
+
+        if (array_key_exists($name, $this->_data)) {
+            return $this->_data[$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * Sets value method
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return Enlight_Config
+     */
+    public function set($name, $value = null)
+    {
+        $this->__set($name, $value);
+
+        return $this;
+    }
+
+    /**
+     * Defined by Iterator interface
+     */
+    public function rewind()
+    {
+        if ($this->_data === null) {
+            $this->read();
+        }
+        parent::rewind();
+    }
+
+    /**
      * Array access method
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function offsetSet($name, $value)
     {
@@ -261,6 +257,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * Array access method
      *
      * @param string $name
+     *
      * @return bool
      */
     public function offsetExists($name)
@@ -282,6 +279,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * Array access method
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function offsetGet($name)
@@ -294,6 +292,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * is passed in all sub-configurations.
      *
      * @param bool $option
+     *
      * @return Enlight_Config
      */
     public function setAllowModifications($option = true)
@@ -306,6 +305,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
                 }
             }
         }
+
         return $this;
     }
 
@@ -316,19 +316,22 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      */
     public function resetDirtyFields()
     {
-        $this->_dirtyFields = array();
+        $this->_dirtyFields = [];
+
         return $this;
     }
 
     /**
      * Returns the dirty field list as an array.
      *
-     * @param $fields
+     * @param array $fields
+     *
      * @return Enlight_Config
      */
     public function setDirtyFields($fields)
     {
         $this->_dirtyFields = array_unique($fields);
+
         return $this;
     }
 
@@ -356,6 +359,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * Sets the current section of the config list.
      *
      * @param string $section
+     *
      * @return Enlight_Config
      */
     public function setSection($section)
@@ -364,6 +368,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
             $section = implode($this->_sectionSeparator, $section);
         }
         $this->_section = $section;
+
         return $this;
     }
 
@@ -382,6 +387,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @param string $extendingSection
      * @param string $extendedSection
+     *
      * @return Enlight_Config
      */
     public function setExtend($extendingSection, $extendedSection = null)
@@ -389,6 +395,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
         if ($extendingSection !== $extendedSection) {
             parent::setExtend($extendingSection, $extendedSection);
         }
+
         return $this;
     }
 
@@ -396,6 +403,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * Sets the extends of the config list.
      *
      * @param array|string $extends
+     *
      * @return Enlight_Config
      */
     public function setExtends($extends)
@@ -419,6 +427,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
             $this->_assertValidExtend($this->_section, $extends);
             $this->setExtend($this->_section, $extends);
         }
+
         return $this;
     }
 
@@ -446,7 +455,6 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * Sets the default config adapter.
      *
      * @param Enlight_Config_Adapter $adapter
-     * @return void
      */
     public static function setDefaultAdapter(Enlight_Config_Adapter $adapter)
     {
@@ -463,6 +471,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
         if (isset($this->_adapter)) {
             $this->_adapter->read($this);
         }
+
         return $this;
     }
 
@@ -474,6 +483,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
         if (isset($this->_adapter)) {
             $this->_adapter->write($this);
         }
+
         return $this;
     }
 
@@ -483,5 +493,19 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     public function getSectionSeparator()
     {
         return $this->_sectionSeparator;
+    }
+
+    /**
+     * Sets the config name.
+     *
+     * @param string $name
+     *
+     * @return Enlight_Config
+     */
+    protected function setName($name)
+    {
+        $this->_name = $name;
+
+        return $this;
     }
 }

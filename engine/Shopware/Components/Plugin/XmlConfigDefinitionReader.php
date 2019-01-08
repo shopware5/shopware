@@ -29,9 +29,9 @@ use Symfony\Component\Config\Util\XmlUtils;
 class XmlConfigDefinitionReader
 {
     /**
-     * @param $file string
+     * @param string $file
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      *
      * @return array
      */
@@ -49,7 +49,7 @@ class XmlConfigDefinitionReader
     /**
      * @param \DOMDocument $xml
      *
-     * @return array
+     * @return array|void
      */
     private function parseForm(\DOMDocument $xml)
     {

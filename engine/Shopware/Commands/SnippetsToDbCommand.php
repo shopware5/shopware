@@ -34,7 +34,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -135,9 +135,9 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
     }
 
     /**
-     * @param $pluginName
+     * @param string $pluginName
      *
-     * @return null|\Shopware\Components\Plugin
+     * @return \Shopware\Components\Plugin|null
      */
     private function getPlugin($pluginName)
     {

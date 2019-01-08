@@ -31,7 +31,7 @@ use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 /**
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -187,7 +187,9 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $parameterKey = str_replace(['.'], ['_'], $exprKey) . uniqid();
+            // The return value of uniqid, even w/o parameters, may contain dots in some environments
+            // so we make sure to strip those as well
+            $parameterKey = str_replace(['.'], ['_'], $exprKey . uniqid());
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
@@ -251,7 +253,7 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
     {
-        /** @var $select \Doctrine\ORM\Query\Expr\Select */
+        /** @var array<string, mixed> $select */
         $select = $this->getDQLPart('select');
         if (is_array($orderBy)) {
             foreach ($orderBy as $order) {
@@ -294,7 +296,7 @@ class QueryBuilder extends BaseQueryBuilder
     {
         $query = parent::getQuery();
 
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $this->getEntityManager();
 
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {

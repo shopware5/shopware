@@ -31,12 +31,14 @@
  *
  * @param                          $params
  * @param Enlight_Template_Default $template
- * @return string
+ *
  * @throws Exception
+ *
+ * @return string
  */
 function smarty_function_action($params, Enlight_Template_Default $template)
 {
-    /** @var $front Enlight_Controller_Front */
+    /** @var Enlight_Controller_Front $front */
     $front = Shopware()->Front();
     $dispatcher = clone $front->Dispatcher();
 
@@ -66,12 +68,12 @@ function smarty_function_action($params, Enlight_Template_Default $template)
         $userParams = (array) $params['params'];
         unset($params['params']);
     } else {
-        $userParams = array();
+        $userParams = [];
     }
 
     $params = array_merge($userParams, $params);
 
-    $request  = clone $request;
+    $request = clone $request;
     $response = clone $response;
 
     $request->clearParams();

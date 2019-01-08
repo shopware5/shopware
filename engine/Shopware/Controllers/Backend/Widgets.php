@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\User\User;
 use Shopware\Models\Widget\View;
@@ -198,6 +199,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function getTurnOverVisitorsAction()
     {
+        $startDate = new DateTime();
+        $startDate->setTime(0, 0, 0)->sub(new DateInterval('P7D'));
+
         // Get turnovers
         $fetchAmount = Shopware()->Container()->get('db')->fetchRow(
             'SELECT
@@ -279,26 +283,26 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         '
         );
 
-        $timeBack = 7;
-
         $sql = "
         SELECT
             COUNT(id) AS `countOrders`,
-            DATE_FORMAT(DATE_SUB(now(),INTERVAL ? DAY),'%d.%m.%Y') AS point,
-            ((SELECT SUM(uniquevisits) FROM s_statistics_visitors WHERE datum >= DATE_SUB(now(),INTERVAL ? DAY) GROUP BY DATE_SUB(now(),INTERVAL ? DAY))) AS visitors
+            DATE_FORMAT(:startDate,'%d.%m.%Y') AS point,
+            ((SELECT SUM(uniquevisits) FROM s_statistics_visitors WHERE datum >= :startDate GROUP BY :startDate)) AS visitors
         FROM `s_order`
         WHERE
-            ordertime >= DATE_SUB(now(),INTERVAL ? DAY)
+            ordertime >= :startDate
         AND
             status != 4
         AND
             status != -1
         GROUP BY
-            DATE_SUB(now(), INTERVAL ? DAY)
+            :startDate
         ";
+
         $fetchConversion = Shopware()->Container()->get('db')->fetchRow(
-            $sql,
-            [$timeBack, $timeBack, $timeBack, $timeBack, $timeBack]
+            $sql, [
+                'startDate' => $startDate->format('Y-m-d H:i:s'),
+            ]
         );
 
         if ($fetchConversion['visitors'] != 0) {
@@ -401,10 +405,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
     public function getShopwareNewsAction()
     {
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('Auth');
         $user = $auth->getIdentity();
-        $result = $this->fetchRssFeedData($user->locale, 5);
+        $result = $this->fetchRssFeedData($user->locale);
 
         $this->View()->assign(
             [
@@ -706,9 +710,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Gets a widget by id and sets its column / row position
      *
-     * @param $viewId
-     * @param $position
-     * @param $column
+     * @param int $viewId
+     * @param int $position
+     * @param int $column
      *
      * @throws \Doctrine\ORM\ORMException
      */

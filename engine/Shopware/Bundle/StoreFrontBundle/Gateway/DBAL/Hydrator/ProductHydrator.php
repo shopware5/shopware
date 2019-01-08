@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -99,7 +99,7 @@ class ProductHydrator extends Hydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -187,7 +187,7 @@ class ProductHydrator extends Hydrator
      * data to the product. (data of s_articles)
      *
      * @param Struct\ListProduct $product
-     * @param $data
+     * @param array              $data
      */
     private function assignProductData(Struct\ListProduct $product, array $data)
     {
@@ -226,6 +226,11 @@ class ProductHydrator extends Hydrator
                 new \DateTime($data['__product_datum'])
             );
         }
+        if ($data['__product_changetime']) {
+            $product->setUpdatedAt(
+                new \DateTime($data['__product_changetime'])
+            );
+        }
 
         $product->setAdditional($data['__variant_additionaltext']);
         $product->setEan($data['__variant_ean']);
@@ -252,7 +257,7 @@ class ProductHydrator extends Hydrator
      * Iterates the attribute data and assigns the attribute struct to the product.
      *
      * @param Struct\ListProduct $product
-     * @param $data
+     * @param array              $data
      */
     private function assignAttributeData(Struct\ListProduct $product, array $data)
     {

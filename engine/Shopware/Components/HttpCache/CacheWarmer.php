@@ -35,6 +35,7 @@ use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
 use Shopware_Components_Config as Config;
 
 /**
@@ -42,7 +43,7 @@ use Shopware_Components_Config as Config;
  *
  * Warm up the cache with direct http calls using the SEO URLs
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -223,8 +224,8 @@ class CacheWarmer
      * Returns all available seo urls
      *
      * @param int      $shopId
-     * @param null|int $limit
-     * @param null|int $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return string[]
      */

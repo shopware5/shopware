@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * Each of this sorting, facet and condition classes are handled by their
  * own handler classes which implemented for each gateway engine.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -237,9 +237,9 @@ class Criteria extends Extendable
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
-     * @return null|ConditionInterface
+     * @return ConditionInterface|null
      */
     public function getCondition($name)
     {
@@ -277,7 +277,7 @@ class Criteria extends Extendable
     /**
      * @param string $name
      *
-     * @return null|FacetInterface
+     * @return FacetInterface|null
      */
     public function getFacet($name)
     {
@@ -287,7 +287,7 @@ class Criteria extends Extendable
     /**
      * @param string $name
      *
-     * @return null|SortingInterface
+     * @return SortingInterface|null
      */
     public function getSorting($name)
     {
@@ -376,7 +376,7 @@ class Criteria extends Extendable
     /**
      * Removes a condition of the current criteria object.
      *
-     * @param $name
+     * @param string $name
      */
     public function removeCondition($name)
     {
@@ -388,7 +388,7 @@ class Criteria extends Extendable
     /**
      * Removes a base condition of the current criteria object.
      *
-     * @param $name
+     * @param string $name
      */
     public function removeBaseCondition($name)
     {
@@ -400,7 +400,7 @@ class Criteria extends Extendable
     /**
      * Removes a facet of the current criteria object.
      *
-     * @param $name
+     * @param string $name
      */
     public function removeFacet($name)
     {
@@ -412,7 +412,7 @@ class Criteria extends Extendable
     /**
      * Removes a sorting of the current criteria object.
      *
-     * @param $name
+     * @param string $name
      */
     public function removeSorting($name)
     {

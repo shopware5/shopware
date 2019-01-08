@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,9 +56,9 @@ class BaseProduct extends Extendable
     protected $number;
 
     /**
-     * @param $id
-     * @param $variantId
-     * @param $number
+     * @param int    $id
+     * @param int    $variantId
+     * @param string $number
      */
     public function __construct($id, $variantId, $number)
     {

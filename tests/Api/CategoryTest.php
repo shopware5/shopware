@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';

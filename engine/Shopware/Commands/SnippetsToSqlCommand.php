@@ -34,7 +34,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -117,7 +117,7 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
 
         $output->writeln(sprintf('<info>Writing to file "%s".</info>', $input->getArgument('file')));
 
-        /** @var $queryLoader QueryHandler */
+        /** @var QueryHandler $queryLoader */
         $queryLoader = $this->container->get('shopware.snippet_query_handler');
 
         $this->exportCoreSnippets($input, $output, $queryLoader);

@@ -41,7 +41,7 @@ class DynamicCacheTimeService implements CacheTimeServiceInterface
     private $cacheTimeService;
 
     /**
-     * @var DefaultRouteService
+     * @var CacheRouteGenerationService
      */
     private $cacheRouteGeneration;
 
@@ -55,9 +55,9 @@ class DynamicCacheTimeService implements CacheTimeServiceInterface
         CacheTimeServiceInterface $cacheTimeService,
         \IteratorAggregate $invalidationDateProvider
     ) {
-        $this->invalidationDateProvider = $invalidationDateProvider;
         $this->cacheTimeService = $cacheTimeService;
         $this->cacheRouteGeneration = $cacheRouteGeneration;
+        $this->invalidationDateProvider = iterator_to_array($invalidationDateProvider, false);
     }
 
     /**
@@ -72,7 +72,7 @@ class DynamicCacheTimeService implements CacheTimeServiceInterface
         /** @var InvalidationDateInterface $dateProvider */
         foreach ($this->invalidationDateProvider as $dateProvider) {
             if ($dateProvider->supportsRoute($action) && $invalidationDate = $dateProvider->getInvalidationDate($request)) {
-                $difference = $invalidationDate->format('U') - (new DateTime())->format('U');
+                $difference = (int) $invalidationDate->format('U') - (int) (new DateTime())->format('U');
 
                 return $difference > 0 && $difference < $defaultInvalidationTime ? $difference : $defaultInvalidationTime;
             }

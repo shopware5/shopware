@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Models\Customer\Address as AddressModel;
@@ -70,7 +71,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     public function save($data)
     {
-        /* @var $model \Shopware\Models\Customer\Address */
+        /* @var \Shopware\Models\Customer\Address $model */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {

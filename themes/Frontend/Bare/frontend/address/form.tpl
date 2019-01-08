@@ -4,7 +4,8 @@
 {block name="frontend_address_error_messages"}
     {include file="frontend/register/error_message.tpl" error_messages=$error_messages}
     {if $countryNotAvailableForShipping}
-        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="CountryNotAvailableForShipping" namespace="frontend/address/index"}{/s}"}
+        {s name="CountryNotAvailableForShipping" namespace="frontend/address/index" assign="snippetCountryNotAvailableForShipping"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetCountryNotAvailableForShipping}
     {/if}
 {/block}
 

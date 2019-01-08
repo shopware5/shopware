@@ -14,10 +14,17 @@
 
                 {* Rich snippets *}
                 {block name='frontend_blog_detail_rich_snippets'}
-                    {if $sArticle.author.name}
-                        <meta itemprop="author" content="{$sArticle.author.name}">
-                    {/if}
+                    <meta itemprop="image" content="{if $sArticle.preview.thumbnails[1].source}{$sArticle.preview.thumbnails[1].source}{else}{link file=$theme.desktopLogo fullPath}{/if}">
+                    <meta itemprop="dateModified" content="{$sArticle.displayDate->format(DateTime::ATOM)|escapeHtml}">
+                    <meta itemprop="description" content="{$sArticle.shortDescription}">
+                    <meta itemprop="mainEntityOfPage" content="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}">
 
+                    <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+                        <meta itemprop="name" content="{{config name=sShopname}|escapeHtml}">
+                        <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                            <meta itemprop="url" content="{link file=$theme.desktopLogo fullPath}">
+                        </div>
+                    </div>
                     <meta itemprop="wordCount" content="{$sArticle.description|strip_tags|count_words}">
                 {/block}
 
@@ -28,6 +35,7 @@
                         {* Article name *}
                         {block name='frontend_blog_detail_title'}
                             <h1 class="blog--detail-headline" itemprop="name">{$sArticle.title}</h1>
+                            <meta itemprop="headline" content="{$sArticle.title}">
                         {/block}
 
                         {* Metadata *}
@@ -37,13 +45,13 @@
                                 {* Author *}
                                 {block name='frontend_blog_detail_author'}
                                     {if $sArticle.author.name}
-                                        <span class="blog--metadata-author blog--metadata is--first">{s name="BlogInfoFrom"}{/s}: {$sArticle.author.name}</span>
+                                        <span class="blog--metadata-author blog--metadata is--first" itemprop="author" itemscope itemtype="https://schema.org/Person">{s name="BlogInfoFrom"}{/s}: <span itemprop="name">{$sArticle.author.name}</span></span>
                                     {/if}
                                 {/block}
 
                                 {* Date *}
                                 {block name='frontend_blog_detail_date'}
-                                    <span class="blog--metadata-date blog--metadata{if !$sArticle.author.name} is--first{/if}" itemprop="dateCreated">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
+                                    <span class="blog--metadata-date blog--metadata{if !$sArticle.author.name} is--first{/if}" itemprop="datePublished" content="{$sArticle.displayDate->format(DateTime::ATOM)|escapeHtml}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
                                 {/block}
 
                                 {* Category *}
@@ -52,7 +60,8 @@
                                 {* Comments *}
                                 {block name='frontend_blog_detail_comments_count'}
                                     <span class="blog--metadata-comments blog--metadata">
-                                        <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" title="{"{s name="BlogLinkComments"}{/s}"|escape}">{$sArticle.comments|count|default:0} {s name="BlogInfoComments"}{/s}</a>
+                                        {s name="BlogLinkComments" assign="snippetBlogLinkComments"}{/s}
+                                        <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" title="{$snippetBlogLinkComments|escape}">{$sArticle.comments|count|default:0} {s name="BlogInfoComments"}{/s}</a>
                                     </span>
                                 {/block}
 
@@ -60,7 +69,8 @@
                                 {block name='frontend_blog_detail_rating'}
                                     {if $sArticle.sVoteAverage|round}
                                         <span class="blog--metadata-rating blog--metadata">
-                                            <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" class="blog--rating-link" rel="nofollow" title="{"{s name='BlogHeaderRating'}{/s}"|escape}">
+                                            {s name="BlogHeaderRating" assign="snippetBlogHeaderRating"}{/s}
+                                            <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" class="blog--rating-link" rel="nofollow" title="{$snippetBlogHeaderRating|escape}">
                                                 {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated" count=$sArticle.comments|count}
                                             </a>
                                         </span>

@@ -150,8 +150,8 @@ class CookieSubscriber implements SubscriberInterface
         $request = $controller->Request();
 
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-        $token = Uuid::uuid4();
-        $token .= '.' . $context->getShop()->getParentId();
+        $token = Uuid::uuid4()->toString();
+        $token .= '.' . (string) $context->getShop()->getParentId();
 
         $expire = time() + 365 * 24 * 60 * 60;
 

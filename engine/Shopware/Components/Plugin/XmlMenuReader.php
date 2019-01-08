@@ -112,9 +112,9 @@ class XmlMenuReader
 
     /**
      * @param \DOMNode $node
-     * @param $name
+     * @param string   $name
      *
-     * @return null|string
+     * @return string|null
      */
     private function getFirstChild(\DOMNode $node, $name)
     {

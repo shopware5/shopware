@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -143,7 +143,7 @@ class Hydrator
     /**
      * @param array    $data
      * @param string   $key
-     * @param null|int $id
+     * @param int|null $id
      *
      * @return array
      */

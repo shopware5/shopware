@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Components\Hook;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

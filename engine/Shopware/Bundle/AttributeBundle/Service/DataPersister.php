@@ -30,7 +30,7 @@ use Shopware\Components\Model\DBAL\Types\DateStringType;
 use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -52,8 +52,6 @@ class DataPersister
     private $dataLoader;
 
     /**
-     * DataPersister constructor.
-     *
      * @param Connection   $connection
      * @param TableMapping $mapping
      * @param DataLoader   $dataLoader

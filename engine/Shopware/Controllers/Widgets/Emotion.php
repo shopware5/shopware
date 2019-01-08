@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
@@ -33,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -203,7 +204,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 break;
         }
 
-        /** @var $result ProductSearchResult */
+        /** @var ProductSearchResult $result */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
         $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
@@ -242,7 +243,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $streamRepository = $this->get('shopware_product_stream.repository');
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
-        /** @var $result ProductSearchResult */
+        /** @var ProductSearchResult $result */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
         $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 

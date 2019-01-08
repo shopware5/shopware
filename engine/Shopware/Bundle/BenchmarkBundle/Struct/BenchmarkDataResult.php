@@ -27,18 +27,18 @@ namespace Shopware\Bundle\BenchmarkBundle\Struct;
 class BenchmarkDataResult
 {
     /**
-     * @var null|StatisticsResponse
+     * @var StatisticsResponse|null
      */
     private $statisticsResponse;
 
     /**
-     * @var null|BusinessIntelligenceResponse
+     * @var BusinessIntelligenceResponse|null
      */
     private $biResponse;
 
     /**
-     * @param null|\Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse           $statisticsResponse
-     * @param null|\Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse $biResponse
+     * @param \Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse|null           $statisticsResponse
+     * @param \Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse|null $biResponse
      */
     public function __construct(
         StatisticsResponse $statisticsResponse = null,
@@ -49,7 +49,7 @@ class BenchmarkDataResult
     }
 
     /**
-     * @return null|StatisticsResponse
+     * @return StatisticsResponse|null
      */
     public function getStatisticsResponse()
     {
@@ -57,7 +57,7 @@ class BenchmarkDataResult
     }
 
     /**
-     * @return null|BusinessIntelligenceResponse
+     * @return BusinessIntelligenceResponse|null
      */
     public function getBiResponse()
     {

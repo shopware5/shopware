@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{block name="backend/plugin_manager/model/price"}
+// {block name="backend/plugin_manager/model/price"}
 Ext.define('Shopware.apps.PluginManager.model.Price', {
     extend: 'Ext.data.Model',
 
@@ -36,7 +36,8 @@ Ext.define('Shopware.apps.PluginManager.model.Price', {
         { name: 'type', type: 'string' },
         { name: 'duration', type: 'string' },
         { name: 'price', type: 'float' },
+        { name: 'discount', type: 'float' },
         { name: 'subscription', type: 'boolean' }
     ]
 });
-//{/block}
+// {/block}

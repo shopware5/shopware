@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
@@ -72,7 +73,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $this->getAccessToken()
             );
 
-            /** @var $service DownloadService */
+            /** @var DownloadService $service */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->getMetaInformation($request);
             $this->get('BackendSession')->offsetSet('plugin_manager_meta_download', $result);
@@ -112,7 +113,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         );
 
         try {
-            /** @var $service DownloadService */
+            /** @var DownloadService $service */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->downloadRange($request);
         } catch (Exception $e) {
@@ -124,7 +125,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         if ($result instanceof FinishResult) {
             $this->View()->assign(['success' => true, 'finish' => true, 'destination' => $destination]);
         } else {
-            /* @var $result \Shopware\Recovery\Update\Steps\ValidResult */
+            /* @var \Shopware\Recovery\Update\Steps\ValidResult $result */
             $this->View()->assign(['success' => true, 'finish' => false, 'offset' => $result->getOffset()]);
         }
     }
@@ -322,8 +323,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $context = new ListingRequest(
             $this->getLocale(),
             $this->getVersion(),
-            $this->Request()->getParam('offset', null),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('offset'),
+            $this->Request()->getParam('limit'),
             $this->Request()->getParam('filter', []),
             $this->getListingSorting()
         );
@@ -717,7 +718,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @return null|AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     private function getAccessToken()
     {
@@ -875,7 +876,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      * @param string $orderNumber
      * @param array  $positions
      *
-     * @return null|string
+     * @return string|null
      */
     private function getTechnicalNameOfOrderNumber($orderNumber, array $positions)
     {

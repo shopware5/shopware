@@ -36,8 +36,8 @@ class SupplierRepository extends ModelRepository
      * Query to fetch all suppliers that can be used
      * to generate friendly routes
      *
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return Query
      */
@@ -50,8 +50,8 @@ class SupplierRepository extends ModelRepository
      * Query builder to fetch all suppliers that can be used
      * to generate friendly routes
      *
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -148,7 +148,7 @@ class SupplierRepository extends ModelRepository
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['supplier'])
             ->from('Shopware\Models\Article\Supplier', 'supplier');

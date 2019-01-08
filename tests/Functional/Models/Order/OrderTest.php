@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -84,6 +84,20 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $this->assertSame($previousOrderStatus, $history[0]->getPreviousOrderStatus());
     }
 
+    public function testSaveMoreThan255CharactersAsTrackingCode()
+    {
+        $order = $this->createOrder();
+        $this->orderIsSaved($order);
+
+        $trackingCode = 'trackingCodeWithMoreThan255Characters_1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890';
+
+        $order->setTrackingCode($trackingCode);
+        $this->em->flush($order);
+        $this->em->refresh($order);
+
+        $this->assertSame($trackingCode, $order->getTrackingCode());
+    }
+
     public function createOrder()
     {
         $paymentStatusOpen = $this->em->getReference('\Shopware\Models\Order\Status', 17);
@@ -105,8 +119,8 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $partner->setCountryName('Dummy');
         $partner->setEmail('Dummy');
         $partner->setWeb('Dummy');
-        $partner->setProfile('Dummy')
-        ;
+        $partner->setProfile('Dummy');
+
         $this->em->persist($partner);
 
         $order = new \Shopware\Models\Order\Order();

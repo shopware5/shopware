@@ -27,14 +27,14 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteAverageFacet implements FacetInterface
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $label;
 
@@ -47,7 +47,7 @@ class VoteAverageFacet implements FacetInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLabel()
     {

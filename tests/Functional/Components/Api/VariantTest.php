@@ -31,7 +31,7 @@ use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Esd;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -269,7 +269,7 @@ class VariantTest extends TestCase
     {
         $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $articleDetail */
         foreach ($article->getDetails() as $articleDetail) {
             $articleDetailById = $this->resource->getOne($articleDetail->getId());
             $articleDetailByNumber = $this->resource->getOneByNumber($articleDetail->getNumber());
@@ -306,7 +306,7 @@ class VariantTest extends TestCase
 
         $deleteByNumber = true;
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $articleDetail */
         foreach ($article->getDetails() as $articleDetail) {
             $deleteByNumber = !$deleteByNumber;
 
@@ -386,6 +386,14 @@ class VariantTest extends TestCase
                 'inStock' => 2000,
                 'number' => $variantData['number'] . '-Updated',
                 'unitId' => $this->getRandomId('s_core_units'),
+                // Make sure conf. options and groups work in a case insensitive way, just like in the DB
+                'configuratorOptions' => [[
+                    'group' => 'farbe',
+                    'option' => 'Grün',
+                ], [
+                    'group' => 'Gräße',
+                    'option' => 'xl',
+                ]],
             ];
             $variant = $this->resource->update($variantData['id'], $updateData);
 
@@ -410,7 +418,7 @@ class VariantTest extends TestCase
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $create['images'] = $this->getSimpleMedia(1);
 
-        /** @var $variant \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $variant */
         $variant = $this->resource->create($create);
 
         $this->assertCount(1, $variant->getImages());
@@ -441,7 +449,7 @@ class VariantTest extends TestCase
         $this->assertCount(0, $variant->getImages());
 
         $article = $variant->getArticle();
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $image */
         foreach ($article->getImages() as $image) {
             $this->assertCount(0, $image->getMappings());
         }
@@ -475,11 +483,11 @@ class VariantTest extends TestCase
         $variant = $this->resource->update($variantId, $add);
         $this->assertCount(8, $variant->getImages());
 
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $image */
         foreach ($variant->getArticle()->getImages() as $image) {
             $this->assertCount(1, $image->getMappings(), 'No image mapping created!');
 
-            /** @var $mapping \Shopware\Models\Article\Image\Mapping */
+            /** @var \Shopware\Models\Article\Image\Mapping $mapping */
             $mapping = $image->getMappings()->current();
             $this->assertCount(
                 $variant->getConfiguratorOptions()->count(),
@@ -512,13 +520,13 @@ class VariantTest extends TestCase
         $this->resourceArticle->setResultMode(Variant::HYDRATE_OBJECT);
         $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
 
-        /** @var $variant \Shopware\Models\Article\Detail */
+        /** @var \Shopware\Models\Article\Detail $variant */
         $variant = $this->resource->create($create);
         $article = $this->resourceArticle->getOne($article->getId());
 
         $this->assertCount(2, $article->getImages());
 
-        /** @var $image \Shopware\Models\Article\Image */
+        /** @var \Shopware\Models\Article\Image $image */
         foreach ($article->getImages() as $image) {
             $media = null;
             while ($media === null) {
@@ -538,7 +546,7 @@ class VariantTest extends TestCase
 
             $this->assertCount(1, $image->getMappings(), 'No image mapping created!');
 
-            /** @var $mapping \Shopware\Models\Article\Image\Mapping */
+            /** @var \Shopware\Models\Article\Image\Mapping $mapping */
             $mapping = $image->getMappings()->current();
             $this->assertCount(
                 $variant->getConfiguratorOptions()->count(),

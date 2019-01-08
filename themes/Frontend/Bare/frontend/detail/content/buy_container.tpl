@@ -36,14 +36,13 @@
         {/block}
 
         {block name='frontend_detail_buy_laststock'}
+            {s name="DetailBuyInfoNotAvailable" namespace="frontend/detail/buy" assign="snippetDetailBuyInfoNotAvailable"}{/s}
             {if !$sArticle.isAvailable && !$sArticle.sConfigurator}
-                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
-
+                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetDetailBuyInfoNotAvailable}
             {elseif !$sArticle.isAvailable && $sArticle.isSelectionSpecified}
-                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
-
+                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetDetailBuyInfoNotAvailable}
             {elseif !$sArticle.isAvailable && !$sArticle.hasAvailableVariant}
-                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
+                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetDetailBuyInfoNotAvailable}
             {/if}
         {/block}
 
@@ -76,9 +75,8 @@
                         <meta itemprop="lowPrice" content="{$lowestPrice}"/>
                         <meta itemprop="highPrice" content="{$highestPrice}"/>
                         <meta itemprop="offerCount" content="{$sArticle.sBlockPrices|count}"/>
-                    {else}
-                        <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {/if}
+                    <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                 {/block}
 

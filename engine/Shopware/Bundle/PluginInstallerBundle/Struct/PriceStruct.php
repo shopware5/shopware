@@ -36,24 +36,28 @@ class PriceStruct implements \JsonSerializable
 
     /**
      * @var int
+     *
      * @unique
      */
     private $id;
 
     /**
      * @var float
+     *
      * @optional
      */
     private $price;
 
     /**
      * @var string
+     *
      * @optional
      */
     private $duration;
 
     /**
      * @var string
+     *
      * @required
      */
     private $type;
@@ -64,7 +68,14 @@ class PriceStruct implements \JsonSerializable
     private $subscription;
 
     /**
-     * @param bool $type
+     * @var float
+     *
+     * @optional
+     */
+    private $discount;
+
+    /**
+     * @param string $type
      */
     public function __construct($type)
     {
@@ -157,5 +168,21 @@ class PriceStruct implements \JsonSerializable
     public function setSubscription($subscription)
     {
         $this->subscription = $subscription;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param float $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
     }
 }

@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -139,7 +139,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group $group
      * @param array                                                       $combinations
-     * @param $selection
+     * @param array                                                       $selection
      *
      * @return bool
      */

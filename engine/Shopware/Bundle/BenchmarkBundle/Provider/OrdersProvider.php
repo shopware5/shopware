@@ -191,6 +191,14 @@ class OrdersProvider implements BatchableProviderInterface
             $basicOrder['customer'] = $customerData[$basicOrder['userID']];
             $basicOrder['customer']['billing']['country'] = isset($billingCountries[$orderId]) ? $billingCountries[$orderId] : '--';
             $basicOrder['customer']['shipping']['country'] = isset($shippingCountries[$orderId]) ? $shippingCountries[$orderId] : '--';
+
+            if (strlen($basicOrder['customer']['billing']['country']) !== 2) {
+                $basicOrder['customer']['billing']['country'] = '--';
+            }
+
+            if (strlen($basicOrder['customer']['shipping']['country']) !== 2) {
+                $basicOrder['customer']['shipping']['country'] = '--';
+            }
         }
 
         return $ordersBasicData;
@@ -221,6 +229,12 @@ class OrdersProvider implements BatchableProviderInterface
             $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
             $currentHydratedOrder['datetime'] = $dateTime->format('Y-m-d H:i:s');
             $currentHydratedOrder['customer'] = $order['customer'];
+
+            // PHP DateTime can handle also invalid dates
+            if (!$this->isValidDate($currentHydratedOrder['datetime'])) {
+                $currentHydratedOrder['datetime'] = '1970-01-01 00:00:00';
+                $currentHydratedOrder['date'] = '1970-01-01';
+            }
 
             $currentHydratedOrder['analytics'] = [
                 'device' => empty($order['deviceType']) ? 'desktop' : $order['deviceType'],
@@ -459,5 +473,17 @@ class OrdersProvider implements BatchableProviderInterface
 
         // Values unique this way, faster than array_unique
         return array_keys(array_flip($columnValues));
+    }
+
+    /**
+     * @param string $date
+     *
+     * @return bool
+     */
+    private function isValidDate($date)
+    {
+        $re = '/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/m';
+
+        return preg_match($re, $date);
     }
 }

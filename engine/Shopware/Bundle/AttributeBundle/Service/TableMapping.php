@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -97,9 +97,9 @@ class TableMapping
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTableModel($table)
     {
@@ -121,7 +121,7 @@ class TableMapping
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
      * @return string
      */

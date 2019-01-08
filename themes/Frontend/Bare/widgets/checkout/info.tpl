@@ -1,7 +1,8 @@
 {* Notepad entry *}
 {block name="frontend_index_checkout_actions_notepad"}
     <li class="navigation--entry entry--notepad" role="menuitem">
-        <a href="{url controller='note'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s}"|escape}" class="btn">
+        {s namespace="frontend/index/checkout_actions" name="IndexLinkNotepad" assign="snippetIndexLinkNotepad"}{/s}
+        <a href="{url controller='note'}" title="{$snippetIndexLinkNotepad|escape}" class="btn">
             <i class="icon--heart"></i>
             {if $sNotesQuantity > 0}
                 <span class="badge notes--quantity">
@@ -68,7 +69,8 @@
 {* Cart entry *}
 {block name="frontend_index_checkout_actions_cart"}
     <li class="navigation--entry entry--cart" role="menuitem">
-        <a class="btn is--icon-left cart--link" href="{url controller='checkout' action='cart'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkCart'}{/s}"|escape}">
+        {s namespace="frontend/index/checkout_actions" name="IndexLinkCart" assign="snippetIndexLinkCart"}{/s}
+        <a class="btn is--icon-left cart--link" href="{url controller='checkout' action='cart'}" title="{$snippetIndexLinkCart|escape}">
             <span class="cart--display">
                 {if $sUserLoggedIn}
                     {s name='IndexLinkCheckout' namespace='frontend/index/checkout_actions'}{/s}

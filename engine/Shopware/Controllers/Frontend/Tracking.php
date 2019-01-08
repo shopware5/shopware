@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Banner\Banner;
 
 /**
@@ -31,7 +32,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
     /**
      * Needed for unit tests
      *
-     * @var
+     * @var mixed
      * @scope private
      */
     public static $testRepository;
@@ -54,23 +55,23 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public function countBannerClickAction()
     {
-        $bannerId = $this->Request()->getParam('bannerId', null);
+        $bannerId = $this->Request()->getParam('bannerId');
         if ($bannerId === null) {
             return false;
         }
-        /** @var $bannerMgn \Shopware\Models\Banner\Repository */
+        /** @var \Shopware\Models\Banner\Repository $bannerMgn */
         $bannerMgn = Shopware()->Models()->getRepository(Banner::class);
         $banner = $bannerMgn->findOneBy(['id' => $bannerId]);
         if ($banner === null) {
             return false;
         }
-        /** @var $statRepository \Shopware\Models\Tracking\Repository */
+        /** @var \Shopware\Models\Tracking\Repository $statRepository */
         $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
 
         $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
         $bannerStatistics->increaseClicks();
         Shopware()->Models()->flush($bannerStatistics);
-        // speichern
+        // Save
         $jumpTarget = $banner->getLink();
         if (!empty($jumpTarget)) {
             $this->redirect($jumpTarget);
@@ -86,12 +87,13 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public function countBannerViewAction()
     {
-        $bannerId = $this->Request()->getParam('bannerId', null);
+        $bannerId = $this->Request()->getParam('bannerId');
         if ($bannerId === null) {
             return false;
         }
+
         try {
-            /** @var $statRepository \Shopware\Models\Tracking\Repository */
+            /** @var \Shopware\Models\Tracking\Repository $statRepository */
             $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
             $bannerStatistics->increaseViews();

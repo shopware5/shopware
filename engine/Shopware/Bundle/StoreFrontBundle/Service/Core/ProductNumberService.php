@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -290,7 +290,7 @@ class ProductNumberService implements ProductNumberServiceInterface
      * @param int  $productId
      * @param Shop $shop
      *
-     * @return null|string
+     * @return string|null
      */
     private function isProductAvailableInShop($productId, $shop)
     {

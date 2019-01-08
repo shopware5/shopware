@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Models\Shop\DetachedShop;
 use Shopware\Models\Shop\Repository;
@@ -182,7 +183,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     protected function upgradeShop($request, $response)
     {
-        /** @var $shop DetachedShop */
+        /** @var DetachedShop $shop */
         $shop = $this->get('Shop');
 
         $cookieKey = null;
@@ -212,7 +213,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         if ($cookieKey === 'shop' && $this->shouldRedirect($request, $shop)) {
-            /** @var $repository Shopware\Models\Shop\Repository */
+            /** @var Shopware\Models\Shop\Repository $repository */
             $repository = $this->get('models')->getRepository(Shop::class);
 
             $newShop = $repository->getActiveById($cookieValue);
@@ -430,7 +431,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      * @param Request $request
      * @param Shop    $shop
      *
-     * @return null|string
+     * @return string|null
      */
     private function createPathInfo(Request $request, Shop $shop)
     {
@@ -444,7 +445,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $requestUri = substr($requestUri, 0, $pos);
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
+        /** @var Shopware\Models\Shop\Repository $repository */
         $repository = $this->get('models')->getRepository(Shop::class);
         $requestShop = $repository->getActiveShopByRequestAsArray($request);
 

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\PluginInstallerBundle\Service\DownloadService;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelRepository;
@@ -201,7 +202,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         try {
             $fileBag = new FileBag($_FILES);
 
-            /** @var $file UploadedFile */
+            /** @var UploadedFile $file */
             $file = $fileBag->get('plugin');
         } catch (Exception $e) {
             $this->View()->assign([

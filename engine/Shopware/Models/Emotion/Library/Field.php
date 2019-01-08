@@ -103,13 +103,16 @@ class Field extends ModelEntity
      * Contains the store name for a component field.
      *
      * @var string
+     *
      * @ORM\Column(name="store", type="string", length=255, nullable=false)
      */
     private $store;
+
     /**
      * Contains the field name which used as display for a combo box field
      *
      * @var string
+     *
      * @ORM\Column(name="display_field", type="string", length=255, nullable=false)
      */
     private $displayField;
@@ -118,6 +121,7 @@ class Field extends ModelEntity
      * Contains the field name which used as value for a combo box field
      *
      * @var string
+     *
      * @ORM\Column(name="value_field", type="string", length=255, nullable=false)
      */
     private $valueField;
@@ -126,6 +130,7 @@ class Field extends ModelEntity
      * Contains the default-value for the field
      *
      * @var string
+     *
      * @ORM\Column(name="default_value", type="string", length=255, nullable=false)
      */
     private $defaultValue;
@@ -134,6 +139,7 @@ class Field extends ModelEntity
      * Could this field be let unfilled
      *
      * @var int
+     *
      * @ORM\Column(name="allow_blank", type="integer", length=1, nullable=false)
      */
     private $allowBlank;
@@ -158,12 +164,14 @@ class Field extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="translatable", type="integer", length=1, nullable=false)
      */
     private $translatable;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
@@ -174,6 +182,7 @@ class Field extends ModelEntity
      * The assigned library component contains the data definition for the grid element.
      *
      * @var \Shopware\Models\Emotion\Library\Component
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Library\Component", inversedBy="fields")
      * @ORM\JoinColumn(name="componentID", referencedColumnName="id")
      */

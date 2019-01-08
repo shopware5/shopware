@@ -617,7 +617,7 @@ Ext.define('Shopware.Notification', {
      *     text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
      *     log: false,
      *     btnDetail: {
-     *         link: 'http://wiki.shopware.de'
+     *         link: 'https://docs.shopware.com/'
      *     }
      * });
      *

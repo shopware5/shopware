@@ -25,7 +25,7 @@
 /**
  * Mobile sitemap controller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
@@ -45,7 +45,7 @@ class Shopware_Controllers_Frontend_SitemapMobileXml extends Enlight_Controller_
 
         /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
         $sitemap = $this->get('sitemapxml.repository');
-        $this->View()->sitemap = $sitemap->getSitemapContent();
+        $this->View()->assign('sitemap', $sitemap->getSitemapContent());
     }
 
     private function assertMobileSitemapEnabled()

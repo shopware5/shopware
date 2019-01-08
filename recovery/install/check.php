@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 error_reporting(-1);
 ini_set('display_errors', true);
 
@@ -46,8 +47,4 @@ $result = [
     'phpversion' => phpversion(),
 ];
 
-if (defined(JSON_PRETTY_PRINT)) {
-    echo json_encode($result, JSON_PRETTY_PRINT);
-} else {
-    echo json_encode($result, JSON_PRETTY_PRINT);
-}
+echo json_encode($result, JSON_PRETTY_PRINT);

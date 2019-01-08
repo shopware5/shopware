@@ -35,7 +35,7 @@ namespace Shopware\Components\Routing;
  * @see \Enlight_Controller_Router
  * @see http://framework.zend.com/manual/1.12/de/zend.controller.router.html#zend.controller.router.subclassing
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

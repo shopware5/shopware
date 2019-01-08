@@ -32,26 +32,12 @@
  * </code>
  *
  * @category   Enlight
- * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bootstrap_Default
 {
-    /**
-     * Init this plugin. This Plugin should run before the dispatching process.
-     */
-    public function init()
-    {
-        if ($this->Collection() === null) {
-            return;
-        }
-        $event = new Enlight_Event_Handler_Default('Enlight_Controller_Action_PreDispatch', array(
-            $this, 'onPreDispatch'
-        ));
-        $this->Application()->Events()->registerListener($event);
-    }
-
     /**
      * @var bool
      */
@@ -65,18 +51,33 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
     /**
      * @var array
      */
-    protected $parseParams = array();
+    protected $parseParams = [];
+
+    /**
+     * Init this plugin. This Plugin should run before the dispatching process.
+     */
+    public function init()
+    {
+        if ($this->Collection() === null) {
+            return;
+        }
+        $event = new Enlight_Event_Handler_Default('Enlight_Controller_Action_PreDispatch', [
+            $this, 'onPreDispatch',
+        ]);
+        $this->Application()->Events()->registerListener($event);
+    }
 
     /**
      * Called from the event manager before the dispatch process.
      * Parse the json input data, when it was activated.
      *
-     * @param   Enlight_Event_EventArgs $args
-     * @return  bool
+     * @param Enlight_Event_EventArgs $args
+     *
+     * @return bool
      */
     public function onPreDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var $subject Enlight_Controller_Action */
+        /** @var Enlight_Controller_Action $subject */
         $subject = $args->get('subject');
         $request = $subject->Request();
 
@@ -116,7 +117,7 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
 
         // Rests the configuration for the next dispatch
         $this->parseInput = false;
-        $this->parseParams = array();
+        $this->parseParams = [];
         $this->padding = null;
     }
 
@@ -124,12 +125,14 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
      * Enables parsing the json input in pre-dispatch.
      * Reads the data from PHP-stream "php://input".
      *
-     * @param   bool $parseInput
-     * @return  Enlight_Controller_Plugins_JsonRequest_Bootstrap
+     * @param bool $parseInput
+     *
+     * @return Enlight_Controller_Plugins_JsonRequest_Bootstrap
      */
     public function setParseInput($parseInput = true)
     {
         $this->parseInput = (bool) $parseInput;
+
         return $this;
     }
 
@@ -137,12 +140,14 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
      * Enables parsing the json params in pre-dispatch.
      * Reads the data from post or get params.
      *
-     * @param   array $parseParams
-     * @return  Enlight_Controller_Plugins_JsonRequest_Bootstrap
+     * @param array $parseParams
+     *
+     * @return Enlight_Controller_Plugins_JsonRequest_Bootstrap
      */
-    public function setParseParams($parseParams = array())
+    public function setParseParams($parseParams = [])
     {
         $this->parseParams = (array) $parseParams;
+
         return $this;
     }
 
@@ -153,6 +158,7 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
     public function setPadding($padding = true)
     {
         $this->padding = $padding;
+
         return $this;
     }
 

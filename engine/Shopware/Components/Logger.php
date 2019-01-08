@@ -27,7 +27,7 @@ namespace Shopware\Components;
 use Monolog\Logger as BaseLogger;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -35,7 +35,7 @@ class Logger extends BaseLogger
 {
     /**
      * @param string|array $label
-     * @param null|array   $data
+     * @param array|null   $data
      */
     public function table($label, $data = null)
     {

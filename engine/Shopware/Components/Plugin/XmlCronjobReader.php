@@ -50,7 +50,7 @@ class XmlCronjobReader
     /**
      * @param \DOMDocument $xml
      *
-     * @return array
+     * @return array|void
      */
     private function parseInfo(\DOMDocument $xml)
     {
@@ -88,9 +88,9 @@ class XmlCronjobReader
 
     /**
      * @param \DOMNode $node
-     * @param $name
+     * @param string   $name
      *
-     * @return null|string
+     * @return string|null
      */
     private function getFirstChild(\DOMNode $node, $name)
     {

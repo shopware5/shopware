@@ -59,6 +59,7 @@ class Tax extends ModelEntity
 
     /**
      * @var float
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="tax", type="decimal", nullable=false)
      */
@@ -76,15 +77,13 @@ class Tax extends ModelEntity
      * The rules property is the inverse side of the association between a tax rule and tax group.
      * The association is joined over the id field and the groupID field of the tax rule.
      *
-     * @var Rule[]|ArrayCollection
+     * @var ArrayCollection<Rule>
+     *
      * @ORM\OneToMany(targetEntity="Rule", mappedBy="group", orphanRemoval=true, cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="groupID")
      */
     private $rules;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->rules = new ArrayCollection();
@@ -149,7 +148,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return ArrayCollection<Rule>
      */
     public function getRules()
     {
@@ -157,7 +156,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @param array $rules
+     * @param ArrayCollection<Rule> $rules
      */
     public function setRules($rules)
     {

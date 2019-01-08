@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
@@ -64,6 +65,11 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
      * @var \Shopware\Components\Model\ModelManager
      */
     protected $modelManager;
+
+    /**
+     * @var ContainerAwareEventManager
+     */
+    protected $events;
 
     /**
      * {@inheritdoc}
@@ -128,6 +134,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         $this->modelManager = $this->container->get('models');
         $this->seoIndex = $this->container->get('SeoIndex');
         $this->rewriteTable = $this->modules->RewriteTable();
+        $this->events = $this->container->get('events');
 
         $shops = $input->getArgument('shopId');
 
@@ -148,7 +155,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         foreach ($shops as $shopId) {
             $output->writeln('Rebuilding SEO index for shop ' . $shopId);
 
-            /** @var $repository \Shopware\Models\Shop\Repository */
+            /** @var \Shopware\Models\Shop\Repository $repository */
             $repository = $this->modelManager->getRepository(\Shopware\Models\Shop\Shop::class);
             $shop = $repository->getActiveById($shopId);
 
@@ -184,6 +191,14 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
             $this->rewriteTable->sCreateRewriteTableBlog();
             $this->rewriteTable->createManufacturerUrls($context);
             $this->rewriteTable->sCreateRewriteTableStatic();
+
+            $this->events->notify(
+                'Shopware_Command_RebuildSeoIndexCommand_CreateRewriteTable',
+                [
+                    'shopContext' => $context,
+                    'cachedTime' => $currentTime,
+                ]
+            );
         }
 
         $output->writeln('The SEO index was rebuild successfully.');

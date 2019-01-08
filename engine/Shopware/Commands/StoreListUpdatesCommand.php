@@ -33,7 +33,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -105,6 +105,6 @@ class StoreListUpdatesCommand extends StoreCommand implements CompletionAwareInt
         $table->setHeaders(['Id', 'Technical name', 'Label',  'CurrentVersion', 'AvailableVersion'])
               ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

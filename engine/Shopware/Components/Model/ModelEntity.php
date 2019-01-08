@@ -27,7 +27,7 @@ namespace Shopware\Components\Model;
 /**
  * Abstract class for shopware standard models.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -328,7 +328,7 @@ abstract class ModelEntity
      * @param \Doctrine\Common\Collections\ArrayCollection|array $collection
      * @param int                                                $id
      *
-     * @return null|ModelEntity
+     * @return ModelEntity|null
      */
     private function getArrayCollectionElementById($collection, $id)
     {

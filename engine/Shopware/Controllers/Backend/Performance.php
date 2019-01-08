@@ -21,11 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\HttpCache\CacheWarmer;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
-use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
@@ -171,7 +171,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * General helper method which triggers the prepare...ConfigForSaving methods
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -307,7 +307,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $findBy['form'] = $form;
         }
 
-        /** @var $element Shopware\Models\Config\Element */
+        /** @var Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy($findBy);
 
         // If the element is empty, the given setting does not exists. This might be the case for some plugins
@@ -343,7 +343,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @param string $configName
      * @param string $defaultValue
      *
-     * @return null|string
+     * @return string|null
      */
     public function readConfig($configName, $defaultValue = '')
     {
@@ -386,12 +386,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
 
     /**
-     * Fixes categorie tree
+     * Fixes category tree
      */
     public function fixCategoriesAction()
     {
         $offset = $this->Request()->getParam('offset', 0);
-        $limit = $this->Request()->getParam('limit', null);
+        $limit = $this->Request()->getParam('limit');
 
         $component = Shopware()->Container()->get('CategoryDenormalization');
 
@@ -704,7 +704,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     private function activeHttpCache($httpCache)
     {
-        /** @var $service InstallerService */
+        /** @var InstallerService $service */
         $service = Shopware()->Container()->get('shopware.plugin_manager');
 
         if (!$httpCache->getInstalled()) {
@@ -726,7 +726,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return;
         }
 
-        /** @var $service InstallerService */
+        /** @var InstallerService $service */
         $service = Shopware()->Container()->get('shopware.plugin_manager');
         $service->deactivatePlugin($httpCache);
     }
@@ -734,16 +734,18 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Get plugin orm-model by name
      *
-     * @param $name
+     * @param string $name
      *
-     * @return null|Plugin
+     * @return Plugin|null
      */
     private function getPluginByName($name)
     {
-        /** @var ModelRepository $repo */
-        $repo = $this->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
+        /** @var Plugin|null $return */
+        $return = $this->get('models')
+            ->getRepository(\Shopware\Models\Plugin\Plugin::class)
+            ->findOneBy(['name' => $name]);
 
-        return $repo->findOneBy(['name' => $name]);
+        return $return;
     }
 
     /**

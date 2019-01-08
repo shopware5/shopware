@@ -60,7 +60,7 @@ use Symfony\Component\HttpKernel\TerminableInterface;
  * Middleware class between the old Shopware bootstrap mechanism
  * and the Symfony Kernel handling
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -192,7 +192,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
             $this->boot();
         }
 
-        /** @var $front \Enlight_Controller_Front * */
+        /** @var \Enlight_Controller_Front $front */
         $front = $this->container->get('front');
 
         $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
@@ -209,7 +209,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
                 ->clearBody();
 
             $response->setHttpResponseCode(200);
-            $enlightRequest->setDispatched(true);
+            $enlightRequest->setDispatched();
             $dispatcher->dispatch($enlightRequest, $response);
         }
 
@@ -391,7 +391,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      */
     public function getRootDir()
     {
-        return realpath(__DIR__ . '/../../');
+        return dirname(dirname(__DIR__));
     }
 
     /**
@@ -490,8 +490,8 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $initializer = new PluginInitializer(
             $this->connection,
             [
-                $this->config['plugin_directories']['ShopwarePlugins'],
-                $this->config['plugin_directories']['ProjectPlugins'],
+                'ShopwarePlugins' => $this->config['plugin_directories']['ShopwarePlugins'],
+                'ProjectPlugins' => $this->config['plugin_directories']['ProjectPlugins'],
             ]
         );
 
@@ -696,9 +696,9 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      * Adds all shopware configuration as di container parameter.
      * Each shopware configuration has the alias "shopware."
      *
-     * @param \Shopware\Components\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string                                                                                                     $alias
-     * @param array                                                                                                      $options
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string                                                  $alias
+     * @param array                                                   $options
      */
     protected function addShopwareConfig(ContainerBuilder $container, $alias, $options)
     {

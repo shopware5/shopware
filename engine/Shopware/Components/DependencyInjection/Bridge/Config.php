@@ -27,7 +27,7 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,7 +39,7 @@ class Config
      * @param array                                    $config
      * @param ShopwareReleaseStruct                    $release
      *
-     * @return null|\Shopware_Components_Config
+     * @return \Shopware_Components_Config|null
      */
     public function factory(
         \Zend_Cache_Core $cache,

@@ -65,7 +65,7 @@ class UniqueIdGenerator implements UniqueIdGeneratorInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     private function readUniqueIdFromDb()
     {

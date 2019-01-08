@@ -119,7 +119,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
     {
         $activeAverage = null;
         if ($criteria->hasCondition('vote_average')) {
-            /** @var $condition VoteAverageCondition */
+            /** @var VoteAverageCondition $condition */
             $condition = $criteria->getCondition('vote_average');
             $activeAverage = $condition->getAverage();
         }

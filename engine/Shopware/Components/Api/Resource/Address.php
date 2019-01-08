@@ -35,7 +35,7 @@ use Shopware\Models\Shop\Shop as ShopModel;
 /**
  * Address API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -77,7 +77,7 @@ class Address extends Resource
 
         $query = $this->getRepository()->getOne($id);
 
-        /** @var $address \Shopware\Models\Customer\Address $address */
+        /** @var \Shopware\Models\Customer\Address $address $address */
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
@@ -252,7 +252,7 @@ class Address extends Resource
      * Resolves ids to models
      *
      * @param array    $data
-     * @param null|int $customerId
+     * @param int|null $customerId
      * @param bool     $filter
      *
      * @throws ApiException\NotFoundException         if the given customer id in the data array is invalid

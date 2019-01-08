@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Privilege;
 use Shopware\Models\User\Resource;
@@ -56,7 +57,7 @@ class Shopware_Components_Acl extends Zend_Acl
         $repository = $this->em->getRepository(Resource::class);
         $resources = $repository->findAll();
 
-        /** @var $resource Shopware\Models\User\Resource */
+        /** @var Shopware\Models\User\Resource $resource */
         foreach ($resources as $resource) {
             $this->addResource($resource);
         }
@@ -207,9 +208,9 @@ class Shopware_Components_Acl extends Zend_Acl
     {
         $repository = $this->em->getRepository(Resource::class);
 
-        /** @var resource $resource */
+        /** @var \Shopware\Models\User\Resource $resource */
         $resource = $repository->findOneBy(['name' => $resourceName]);
-        if (empty($resource)) {
+        if ($resource === null) {
             return false;
         }
 

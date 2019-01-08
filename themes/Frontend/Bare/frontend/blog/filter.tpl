@@ -15,16 +15,18 @@
             {block name="frontend_blog_filter_date_content"}
                 <div class="blog--filter-content blog--sidebar-body collapse--content">
                     <ul class="filter--list list--unstyled">
+                        {s name="BlogHeaderFilterDateFormat" assign="snippetBlogHeaderFilterDateFormat"}{/s}
                         {foreach $sFilterDate as $date}
                             {if !$date.removeProperty}
                                 {if $smarty.get.sFilterDate==$date.dateFormatDate}
                                     {$filterDateActive=true}
-                                    <li class="filter--entry is--active"><a href="{$date.link}" class="filter--entry-link is--active is--bold" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date_format:"{s name="BlogHeaderFilterDateFormat"}{/s}"} ({$date.dateCount})</a></li>
+                                    <li class="filter--entry is--active"><a href="{$date.link}" class="filter--entry-link is--active is--bold" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date_format:$snippetBlogHeaderFilterDateFormat} ({$date.dateCount})</a></li>
                                 {else}
-                                    <li class="filter--entry{if $date@last} is--last{/if}"><a href="{$date.link}" class="filter--entry-link" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date_format:"{s name="BlogHeaderFilterDateFormat"}{/s}"} ({$date.dateCount})</a></li>
+                                    <li class="filter--entry{if $date@last} is--last{/if}"><a href="{$date.link}" class="filter--entry-link" title="{$date.dateFormatDate|escape}">{$date.dateFormatDate|date_format:$snippetBlogHeaderFilterDateFormat} ({$date.dateCount})</a></li>
                                 {/if}
                             {elseif $filterDateActive}
-                                <li class="filter--entry close"><a href="{$date.link}" class="filter--entry-link" title="{"{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}"|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
+                                {s name="FilterLinkDefault" namespace="frontend/listing/filter_properties" assign="snippetFilterLinkDefault"}{/s}
+                                <li class="filter--entry close"><a href="{$date.link}" class="filter--entry-link" title="{$snippetFilterLinkDefault|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
                             {/if}
                         {/foreach}
                     </ul>
@@ -60,7 +62,8 @@
                                     <li class="filter--entry{if $author@last} is--last{/if}"><a href="{$author.link}" class="filter--entry-link" title="{$author.name|escape}">{$author.name} ({$author.authorCount})</a></li>
                                 {/if}
                             {elseif $filterAuthorActive}
-                                <li class="filter--entry close"><a href="{$author.link}" class="filter--entry-link" title="{"{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}"|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
+                                {s name="FilterLinkDefault" namespace="frontend/listing/filter_properties" assign="snippetFilterLinkDefault"}{/s}
+                                <li class="filter--entry close"><a href="{$author.link}" class="filter--entry-link" title="{$snippetFilterLinkDefault|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
                             {/if}
                         {/foreach}
                     </ul>
@@ -96,7 +99,8 @@
                                     <li class="filter--entry{if $tag@last} is--last{/if}"><a href="{$tag.link}" class="filter--entry-link" title="{$tag.name|escape}">{$tag.name} ({$tag.tagsCount})</a></li>
                                 {/if}
                             {elseif $filterTagsActive}
-                                <li class="filter--entry close"><a href="{$tag.link}" class="filter--entry-link" title="{"{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}"|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
+                                {s name="FilterLinkDefault" namespace="frontend/listing/filter_properties" assign="snippetFilterLinkDefault"}{/s}
+                                <li class="filter--entry close"><a href="{$tag.link}" class="filter--entry-link" title="{$snippetFilterLinkDefault|escape}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
                             {/if}
                         {/foreach}
                     </ul>

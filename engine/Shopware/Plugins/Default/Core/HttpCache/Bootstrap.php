@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\Common\EventArgs;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
@@ -31,7 +32,7 @@ use ShopwarePlugins\HttpCache\CacheIdCollector;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -224,7 +225,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     {
         $form = $this->Form();
 
-        /** @var $parent \Shopware\Models\Config\Form */
+        /** @var \Shopware\Models\Config\Form $parent */
         $parent = $this->Forms()->findOneBy(['name' => 'Core']);
 
         $form->setParent($parent);
@@ -280,8 +281,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Returns the configured proxy-url.
      *
-     * Fallbacks to autodetection if proxy-url is not configured and $request is given.
-     * Returns null if $request is not given or autodetection fails.
+     * Fallback to auto-detection if proxy-url is not configured and $request is given.
+     * Returns null if $request is not given or auto-detection fails.
      *
      * @param Request $request
      *
@@ -314,7 +315,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $url = sprintf(
             '%s://%s%s/',
-            'http',
+            $shop->getSecure() ? 'https' : 'http',
             $shop->getHost(),
             $shop->getBasePath()
         );

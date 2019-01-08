@@ -25,7 +25,7 @@
 namespace Shopware\Components;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -118,7 +118,7 @@ class QueryAliasMapper
     }
 
     /**
-     * Replaces the query params with their mathing long form
+     * Replaces the query params with their matching long form
      *
      * @param \Enlight_Controller_Request_RequestHttp $request
      */
@@ -148,7 +148,7 @@ class QueryAliasMapper
      *    'foo' => 'bar'
      * ]
      *
-     * @param string[]
+     * @param string[] $params
      *
      * @return string[]
      */
@@ -182,7 +182,7 @@ class QueryAliasMapper
      *   'foo'   => 'bar,
      * ]
      *
-     * @param string[]
+     * @param string[] $params
      *
      * @return string[]
      */

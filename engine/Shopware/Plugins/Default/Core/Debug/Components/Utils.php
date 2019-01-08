@@ -25,7 +25,7 @@
 namespace Shopware\Plugin\Debug\Components;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -50,12 +50,11 @@ class Utils
             if (strlen($data) > $length) {
                 $data = substr($data, 0, $length - 3) . '...';
             }
-            //$data = utf8_encode($data);
         } elseif ($data instanceof \ArrayObject) {
-            /** @var $data \ArrayObject */
+            /** @var \ArrayObject $data */
             $data = $this->encode($data->getArrayCopy());
         } elseif ($data instanceof \Zend_Config) {
-            /** @var $data \Zend_Config */
+            /** @var \Zend_Config $data */
             $data = $this->encode($data->toArray());
         } elseif (method_exists($data, '__toArray') || $data instanceof \stdClass) {
             $data = $this->encode((array) $data);

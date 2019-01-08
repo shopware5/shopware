@@ -40,7 +40,7 @@ use Shopware\Components\Model\ModelRepository;
  *  - s_core_tax
  *  - s_core_tax_rules
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

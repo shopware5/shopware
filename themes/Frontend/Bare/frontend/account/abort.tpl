@@ -5,7 +5,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb = [['name' => "{s name='OneTimeAbortTitle'}{/s}", 'link' => {url}]]}
+    {s name="OneTimeAbortTitle" assign="snippetOneTimeAbortTitle"}{/s}
+    {$sBreadcrumb = [['name' => $snippetOneTimeAbortTitle, 'link' => {url}]]}
 {/block}
 
 {block name='frontend_index_content'}
@@ -25,7 +26,8 @@
 
                 {block name="frontend_account_logout_info_actions"}
                     <div class="panel--actions is--wide">
-                        <a class="btn is--secondary is--icon-left" href="{url controller='index'}" title="{"{s name='OneTimeAbortButton'}{/s}"|escape}">
+                        {s name="OneTimeAbortButton" assign="snippetOneTimeAbortButton"}{/s}
+                        <a class="btn is--secondary is--icon-left" href="{url controller='index'}" title="{$snippetOneTimeAbortButton|escape}">
                             <i class="icon--arrow-left"></i>{s name="OneTimeAbortButton"}{/s}
                         </a>
                     </div>

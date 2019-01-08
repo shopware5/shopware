@@ -35,6 +35,7 @@ class Mapping extends ModelEntity
 {
     /**
      * @var int
+     *
      * @ORM\Id
      * @ORM\Column(name="stream_id", type="integer", nullable=false)
      */
@@ -42,6 +43,7 @@ class Mapping extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Id
      * @ORM\Column(name="customer_id", type="integer", nullable=false)
      */

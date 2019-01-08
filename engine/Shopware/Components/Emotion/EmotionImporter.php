@@ -125,7 +125,7 @@ class EmotionImporter implements EmotionImporterInterface
         }
 
         if ($zip->extractTo($extractPath) !== true) {
-            throw new EmotionImportException(sprintf('Could not extract zip file %s to $s!', $filePath, $extractPath));
+            throw new EmotionImportException(sprintf('Could not extract zip file %s to %s!', $filePath, $extractPath));
         }
 
         $zip->close();

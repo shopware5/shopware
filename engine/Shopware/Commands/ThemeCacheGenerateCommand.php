@@ -36,7 +36,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -104,7 +104,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
             return;
         }
 
-        /** @var $compiler Compiler */
+        /** @var Compiler $compiler */
         $compiler = $this->container->get('theme_compiler');
 
         foreach ($shopsWithThemes as $shop) {
@@ -123,7 +123,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
             return;
         }
 
-        /** @var $cacheManager CacheManager */
+        /** @var CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
         $output->writeln('Clearing HTTP cache ...');
         $cacheManager->clearHttpCache();

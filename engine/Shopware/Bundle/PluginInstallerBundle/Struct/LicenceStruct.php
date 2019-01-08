@@ -52,12 +52,12 @@ class LicenceStruct implements \JsonSerializable
     private $subscription;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $creationDate;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $expirationDate;
 
@@ -151,7 +151,7 @@ class LicenceStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreationDate()
     {
@@ -159,7 +159,7 @@ class LicenceStruct implements \JsonSerializable
     }
 
     /**
-     * @param \DateTime $creationDate
+     * @param \DateTimeInterface $creationDate
      */
     public function setCreationDate($creationDate)
     {
@@ -167,7 +167,7 @@ class LicenceStruct implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getExpirationDate()
     {
@@ -175,7 +175,7 @@ class LicenceStruct implements \JsonSerializable
     }
 
     /**
-     * @param \DateTime $expirationDate
+     * @param \DateTimeInterface $expirationDate
      */
     public function setExpirationDate($expirationDate)
     {

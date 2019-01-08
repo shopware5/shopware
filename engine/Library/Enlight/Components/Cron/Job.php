@@ -30,67 +30,67 @@
  * to the listener method.
  *
  * @category   Enlight
- * @package    Enlight_Cron
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Components_Cron_Job
 {
     /**
-     * @var Integer ID of the cronjob
+     * @var int ID of the cronjob
      */
     protected $id;
 
     /**
-     * @var String Name or the description of the cron job: Expected data type: String
+     * @var string Name or the description of the cron job: Expected data type: String
      */
     protected $name;
 
     /**
-     * @var String Name of the action which is called during the execution phase
+     * @var string Name of the action which is called during the execution phase
      */
     protected $action;
 
     /**
-     * @var String Data storage. Can be used to store answers from cron job call
+     * @var string Data storage. Can be used to store answers from cron job call
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
-     * @var String MySQL datetime
+     * @var string MySQL datetime
      */
     protected $next;
 
     /**
-     * @var String MySQL datetime. The next time the cronjob is due
+     * @var string MySQL datetime. The next time the cronjob is due
      */
     protected $start;
 
     /**
-     * @var String MySQL datetime. The time the last scheduled run ended.
+     * @var string MySQL datetime. The time the last scheduled run ended.
      */
     protected $end;
 
     /**
-     * @var Integer Time interval in minutes the cronjob is scheduled to run
+     * @var int Time interval in minutes the cronjob is scheduled to run
      */
     protected $interval;
 
     /**
-     * @var Integer Boolean value which indicates if a cronjob is enabled or not.
-     * If the cronjob is disabled the cronjob will not be executed
+     * @var int Boolean value which indicates if a cronjob is enabled or not.
+     *          If the cronjob is disabled the cronjob will not be executed
      */
     protected $active = true;
 
     /**
-     * @var bool Indication whether cronjob should be disabled if an error occurs during execution.
+     * @var bool indication whether cronjob should be disabled if an error occurs during execution
      */
     protected $disableOnError;
 
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * This is a Cronjob Model. Following option must be provided in the options array
@@ -117,6 +117,18 @@ class Enlight_Components_Cron_Job
     }
 
     /**
+     * Magic method to get parameters
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    /**
      * id - unique identifier for a specific cronjob eg. autoincrement database field. Expected data type: Integer
      * interval - Time interval in minutes the cronjob is scheduled to run
      * next - The next time the cronjob is due. Expected data type: String in form of yyyy-mm-dd hh:mm:ss
@@ -130,9 +142,9 @@ class Enlight_Components_Cron_Job
      * action - Name of the action which is called during the execution phase. Expected data type: String
      * data - Data storage. Can be used to store answers from cron job call. Expected data type: String
      *
-     * @throws Enlight_Exception|Exception
      * @param array $options
-     * @return void
+     *
+     * @throws Enlight_Exception|Exception
      */
     public function setOptions(array $options)
     {
@@ -179,18 +191,20 @@ class Enlight_Components_Cron_Job
      * Sets the data field
      *
      * @param mixed $data
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
     /**
      * Reads the data field and returns it
      *
-     * @return String
+     * @return string
      */
     public function getData()
     {
@@ -211,11 +225,13 @@ class Enlight_Components_Cron_Job
      * Set the value of the ID field
      *
      * @param int $id
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setId($id)
     {
         $this->id = (int) $id;
+
         return $this;
     }
 
@@ -232,19 +248,21 @@ class Enlight_Components_Cron_Job
     /**
      * Sets the name/description of the job.
      *
-     * @param String $name
+     * @param string $name
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setName($name)
     {
         $this->name = (string) $name;
+
         return $this;
     }
 
     /**
      * Returns the Action of the job
      *
-     * @return String
+     * @return string
      */
     public function getAction()
     {
@@ -254,12 +272,14 @@ class Enlight_Components_Cron_Job
     /**
      * Sets the Action of the job
      *
-     * @param String $action
+     * @param string $action
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setAction($action)
     {
         $this->action = (string) $action;
+
         return $this;
     }
 
@@ -277,6 +297,7 @@ class Enlight_Components_Cron_Job
      * Sets the next date when the cronjob is due
      *
      * @param string|\Zend_Date $next
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setNext($next = null)
@@ -285,11 +306,13 @@ class Enlight_Components_Cron_Job
             $next = new Zend_Date($next, is_string($next) ? Zend_Date::ISO_8601 : null);
         }
         $this->next = $next;
+
         return $this;
     }
 
     /**
      * Returns a Zend_Date object which contains the date on which the job last run
+     *
      * @return Zend_Date
      */
     public function getStart()
@@ -301,6 +324,7 @@ class Enlight_Components_Cron_Job
      * Sets the date and time when the cronjob has been started
      *
      * @param string|\Zend_Date $start
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setStart($start = null)
@@ -309,6 +333,7 @@ class Enlight_Components_Cron_Job
             $start = new Zend_Date($start);
         }
         $this->start = $start;
+
         return $this;
     }
 
@@ -326,6 +351,7 @@ class Enlight_Components_Cron_Job
      * Sets the date and time when the cronjob stopped its run.
      *
      * @param null|Zend_Date $end
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setEnd($end = null)
@@ -334,6 +360,7 @@ class Enlight_Components_Cron_Job
             $end = new Zend_Date($end);
         }
         $this->end = $end;
+
         return $this;
     }
 
@@ -351,11 +378,13 @@ class Enlight_Components_Cron_Job
      * Sets the interval in seconds a cron has to be scheduled
      *
      * @param int $interval
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setInterval($interval)
     {
         $this->interval = (int) $interval;
+
         return $this;
     }
 
@@ -383,11 +412,13 @@ class Enlight_Components_Cron_Job
      * Sets the cronjob either active or inactive
      *
      * @param bool $active
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setActive($active)
     {
-        $this->active = (boolean) $active;
+        $this->active = (bool) $active;
+
         return $this;
     }
 
@@ -405,20 +436,23 @@ class Enlight_Components_Cron_Job
      * Sets the indication for disabling the cronjob when an error occurs during execution.
      *
      * @param bool $disableOnError
+     *
      * @return Enlight_Components_Cron_Job
      */
     public function setDisableOnError($disableOnError)
     {
-        $this->disableOnError = (boolean) $disableOnError;
+        $this->disableOnError = (bool) $disableOnError;
+
         return $this;
     }
 
     /**
      * Method to get the options
      *
-     * @param   $name
-     * @param   mixed $default
-     * @return  mixed
+     * @param       $name
+     * @param mixed $default
+     *
+     * @return mixed
      */
     public function get($name, $default = null)
     {
@@ -427,17 +461,7 @@ class Enlight_Components_Cron_Job
         } elseif (isset($this->options[$name])) {
             return $this->options[$name];
         }
-        return $default;
-    }
 
-    /**
-     * Magic method to get parameters
-     *
-     * @param $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return $this->get($name);
+        return $default;
     }
 }

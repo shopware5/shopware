@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\LegacyRequestWrapper\CookieWrapper;
 use Shopware\Components\LegacyRequestWrapper\GetWrapper;
 use Shopware\Components\LegacyRequestWrapper\PostWrapper;
@@ -90,7 +91,7 @@ class sSystem
     public $_SESSION;
 
     /**
-     * Path to article images
+     * Path to product images
      *
      * @var string
      */
@@ -122,7 +123,7 @@ class sSystem
     /**
      * Pointer to PHP-Mailer Object
      *
-     * @var
+     * @var \Enlight_Components_Mail
      *
      * @deprecated Use Shopware()->Mail()
      */
@@ -138,7 +139,7 @@ class sSystem
     public $sBotSession;
 
     /**
-     * Reference to $this, for compability reasons.
+     * Reference to $this, for compatibility reasons.
      *
      * @var sSystem
      *
@@ -205,8 +206,8 @@ class sSystem
     /**
      * @deprecated Use Shopware()->Modules()->Core()->(method name)
      *
-     * @param $name
-     * @param null $params
+     * @param string $name
+     * @param null   $params
      *
      * @return mixed
      */

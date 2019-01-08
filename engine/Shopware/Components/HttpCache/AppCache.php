@@ -39,7 +39,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * $httpCacheApp->invalidate($request);
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -188,7 +188,7 @@ class AppCache extends HttpCache
     {
         $response = parent::lookup($request, $catch);
 
-        // If Response is not fresh age > 0 AND contains a mathing no cache tag
+        // If Response is not fresh age > 0 AND contains a matching no cache tag
         if ($response->getAge() > 0 && $this->containsNoCacheTag($request, $response)) {
             $response = $this->fetch($request);
         }
@@ -261,7 +261,7 @@ class AppCache extends HttpCache
     {
         $this->getKernel()->boot();
 
-        /** @var $container \Shopware\Components\DependencyInjection\Container */
+        /** @var \Shopware\Components\DependencyInjection\Container $container */
         $container = $this->getKernel()->getContainer();
         $container->set('HttpCache', $this);
 

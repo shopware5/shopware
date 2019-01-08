@@ -25,10 +25,12 @@
 /**
  * Format an given Date to local specific rules.
  *
- * @link http://framework.zend.com/manual/de/zend.date.constants.html
+ * @see http://framework.zend.com/manual/de/zend.date.constants.html
+ *
  * @param string $value
  * @param string $format
  * @param string $type
+ *
  * @return int|mixed|null|string
  */
 function smarty_modifier_date($value, $format = null, $type = null)
@@ -55,7 +57,7 @@ function smarty_modifier_date($value, $format = null, $type = null)
     if (is_string($value)) {
         $value = strtotime($value);
     } elseif ($value instanceof DateTime) {
-        /** @var $value DateTime */
+        /** @var \DateTime $value */
         $value = $value->getTimestamp();
     }
 

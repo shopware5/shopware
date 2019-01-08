@@ -38,7 +38,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -113,7 +113,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
             'COUNT(voteAverage.average) as count',
         ]);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -123,7 +123,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 
         $activeAverage = null;
         if ($criteria->hasCondition($facet->getName())) {
-            /** @var $condition VoteAverageCondition */
+            /** @var VoteAverageCondition $condition */
             $condition = $criteria->getCondition($facet->getName());
             $activeAverage = $condition->getAverage();
         }

@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Common\Archive\Entry;
 use ZipArchive;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */

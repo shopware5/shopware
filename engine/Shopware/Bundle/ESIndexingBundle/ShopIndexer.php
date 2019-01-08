@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Elasticsearch\Client;
+use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
@@ -63,34 +64,34 @@ class ShopIndexer implements ShopIndexerInterface
     private $indexFactory;
 
     /**
+     * @var EvaluationHelperInterface
+     */
+    private $evaluation;
+
+    /**
      * @var BacklogProcessorInterface
      */
     private $backlogProcessor;
-
-    /**
-     * @var array
-     */
-    private $configuration;
 
     /**
      * @param Client                    $client
      * @param BacklogReaderInterface    $backlogReader
      * @param BacklogProcessorInterface $backlogProcessor
      * @param IndexFactoryInterface     $indexFactory
+     * @param EvaluationHelperInterface $evaluation
      * @param DataIndexerInterface[]    $indexer
      * @param MappingInterface[]        $mappings
      * @param SettingsInterface[]       $settings
-     * @param array                     $configuration
      */
     public function __construct(
         Client $client,
         BacklogReaderInterface $backlogReader,
         BacklogProcessorInterface $backlogProcessor,
         IndexFactoryInterface $indexFactory,
+        EvaluationHelperInterface $evaluation,
         array $indexer,
         array $mappings,
-        array $settings,
-        array $configuration
+        array $settings
     ) {
         $this->client = $client;
         $this->backlogReader = $backlogReader;
@@ -99,7 +100,7 @@ class ShopIndexer implements ShopIndexerInterface
         $this->indexer = $indexer;
         $this->mappings = $mappings;
         $this->settings = $settings;
-        $this->configuration = $configuration;
+        $this->evaluation = $evaluation;
     }
 
     /**
@@ -205,6 +206,7 @@ class ShopIndexer implements ShopIndexerInterface
         foreach ($this->indexer as $indexer) {
             if ($indexer->supports() === $index->getType()) {
                 $indexer->populate($index, $progress);
+                $this->evaluation->finish();
             }
         }
 

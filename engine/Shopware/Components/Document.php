@@ -21,12 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Shopware document generator
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -113,7 +114,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Document-Metadata / Properties
      *
-     * @var array
+     * @var ArrayObject
      */
     public $_document;
 
@@ -169,10 +170,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $config['_preview'] = true;
         }
 
-        /** @var $document Shopware_Components_Document */
-        $document = Enlight_Class::Instance('Shopware_Components_Document'); //new Shopware_Components_Document();
+        /** @var Shopware_Components_Document $document */
+        $document = Enlight_Class::Instance('Shopware_Components_Document');
 
-        //$d->setOrder(new Shopware_Models_Document_Order($orderID,$config));
         $document->setOrder(Enlight_Class::Instance('Shopware_Models_Document_Order', [$orderID, $config]));
 
         $document->setConfig($config);
@@ -237,7 +237,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Start renderer / pdf-generation
      *
-     * @param string optional define renderer (pdf,html,return)
+     * @param string $_renderer optional define renderer (pdf,html,return)
      *
      * @throws \Enlight_Event_Exception
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
@@ -251,7 +251,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $this->assignValues();
         }
 
-        /* @var $template \Shopware\Models\Shop\Template */
+        /* @var \Shopware\Models\Shop\Template $template */
         if (!empty($this->_subshop['doc_template_id'])) {
             $template = Shopware()->Container()->get('models')->find(\Shopware\Models\Shop\Template::class, $this->_subshop['doc_template_id']);
 
@@ -358,7 +358,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Get voucher (s_vouchers.id)
      *
-     * @param $id
+     * @param int $id
      *
      * @return bool|mixed
      */
@@ -552,7 +552,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             \PDO::FETCH_ASSOC
         );
 
-        $translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
+        $translation = $this->translationComponent->read($this->_order->order->language, 'documents');
         $this->_document->containers = new ArrayObject();
         foreach ($containers as $key => $container) {
             if (!is_numeric($key)) {

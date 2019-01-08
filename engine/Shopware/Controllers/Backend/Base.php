@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\StateTranslatorService;
@@ -80,7 +81,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getDetailStatusAction()
     {
-        /** @var $repository \Shopware\Models\Order\Repository */
+        /** @var \Shopware\Models\Order\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class);
         $data = $repository->getDetailStatusQuery()->getArrayResult();
         $this->View()->assign(['success' => true, 'data' => $data]);
@@ -97,7 +98,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getTaxesAction()
     {
-        /** @var $repository Shopware\Components\Model\ModelRepository */
+        /** @var Shopware\Components\Model\ModelRepository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Tax\Tax::class);
 
         $query = $repository->queryBy(
@@ -131,7 +132,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getPaymentsAction()
     {
         // Load shop repository
-        /** @var $repository \Shopware\Models\Payment\Repository */
+        /** @var \Shopware\Models\Payment\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
 
         $query = $repository->getActivePaymentsQuery(
@@ -208,7 +209,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getCategoriesAction()
     {
-        /** @var $repository \Shopware\Models\Category\Repository */
+        /** @var \Shopware\Models\Category\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
 
         $query = $repository->getListQuery(
@@ -466,8 +467,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->groupBy('articles.id');
 
         // Don't search for normal articles
-        $displayArticles = (bool) $this->Request()->getParam('articles', true);
-        if (!$displayArticles) {
+        $displayProducts = (bool) $this->Request()->getParam('articles', true);
+        if (!$displayProducts) {
             $builder->andWhere('articles.configuratorSetId IS NOT NULL');
         }
 
@@ -584,7 +585,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $builder->execute();
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -654,7 +655,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getShopsAction()
     {
-        /** @var $repository \Shopware\Models\Shop\Repository */
+        /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $query = $repository->getBaseListQuery(
@@ -680,10 +681,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getShopsWithThemesAction()
     {
-        /** @var $repository \Shopware\Models\Shop\Repository */
+        /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
-        $shopId = $this->Request()->getParam('shopId', null);
+        $shopId = $this->Request()->getParam('shopId');
         $filter = $this->Request()->getParam('filter', []);
         if ($shopId) {
             $filter[] = [
@@ -716,7 +717,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Template::class);
         $templates = $repository->findAll();
 
-        /** @var $template \Shopware\Models\Shop\Template* */
+        /** @var \Shopware\Models\Shop\Template $template */
         $result = [];
         foreach ($templates as $template) {
             $data = [
@@ -824,7 +825,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getCountryStatesAction()
     {
-        $countryId = $this->Request()->getParam('countryId', null);
+        $countryId = $this->Request()->getParam('countryId');
 
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\State::class);
 
@@ -913,9 +914,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getPageNotFoundDestinationOptionsAction()
     {
-        $limit = $this->Request()->getParam('limit', null);
+        $limit = $this->Request()->getParam('limit');
         $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', null);
+        $sort = $this->Request()->getParam('sort');
 
         $namespace = Shopware()->Snippets()->getNamespace('backend/base/page_not_found_destination_options');
 
@@ -1100,9 +1101,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $tmpVariant = [];
 
         // Checks if an additional text is available
-        foreach ($data as $variantData) {
+        foreach ($data as $key => $variantData) {
             if (!empty($variantData['additionalText'])) {
-                $variantData['name'] = $variantData['name'] . ' ' . $variantData['additionalText'];
+                $data[$key]['name'] = $variantData['name'] . ' ' . $variantData['additionalText'];
             } else {
                 $variantIds[$variantData['id']] = $variantData['id'];
             }

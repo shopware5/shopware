@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Used as meta information container for a theme.
  * Contains the inheritance and config definition of a theme.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -139,7 +139,7 @@ class Theme
      * from the backend template module
      * to get the template hierarchy
      *
-     * @return null|string
+     * @return string|null
      */
     public function getExtend()
     {
@@ -289,7 +289,7 @@ class Theme
     }
 
     /**
-     * @param bool $discardedLessThemes
+     * @param array $discardedLessThemes
      */
     public function setDiscardedLessThemes($discardedLessThemes)
     {

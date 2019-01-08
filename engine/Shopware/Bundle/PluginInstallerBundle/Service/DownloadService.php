@@ -75,7 +75,7 @@ class DownloadService
      */
     public function downloadRange(RangeDownloadRequest $request)
     {
-        // Load SwagUpdate so the DownloadStep can be autoloaded
+        // Load SwagUpdate so the DownloadStep can be auto-loaded
         Shopware()->Plugins()->Backend()->SwagUpdate();
 
         $version = new Version([
@@ -188,7 +188,7 @@ class DownloadService
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string file path to the downloaded file
      */
@@ -201,7 +201,7 @@ class DownloadService
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -214,7 +214,7 @@ class DownloadService
             ->setParameter(':name', $name)
             ->setMaxResults(1);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_COLUMN);

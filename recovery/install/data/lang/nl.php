@@ -146,6 +146,6 @@ EOT
 </p>
 <p>
     Fijn dat je je bij onze community hebt aangesloten. Je hebt Shopware geïnstalleerd.
-<p>Je winkel is nu gebruiksklaar. Als je Shopware nog niet eerder hebt gebruikt, raden we je aan de gids <a href="http://en.community.shopware.com/_detail_1195.html" target="_blank">"Eerste stappen in Shopware"</a> eens door te lezen. Wanneer je je voor het eerst bij de Shop-backend aanmeldt, leidt onze "First Run Wizard" je verder door de basisinrichting.</p>
+<p>Je winkel is nu gebruiksklaar. Als je Shopware nog niet eerder hebt gebruikt, raden we je aan de gids <a href="https://docs.shopware.com/en/shopware-5-en/first-steps/first-steps-in-shopware" target="_blank">"Eerste stappen in Shopware"</a> eens door te lezen. Wanneer je je voor het eerst bij de Shop-backend aanmeldt, leidt onze "First Run Wizard" je verder door de basisinrichting.</p>
 <p>Veel plezier met je nieuwe online winkel!</p>',
 ];
