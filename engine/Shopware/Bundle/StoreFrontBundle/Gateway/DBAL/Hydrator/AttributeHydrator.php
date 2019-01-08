@@ -78,7 +78,7 @@ class AttributeHydrator extends Hydrator
      * @param array             $data
      * @param string            $arrayKey
      * @param string            $attributeKey
-     * @param null|string       $translationKey
+     * @param string|null       $translationKey
      */
     public function addAttribute(Struct\Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
     {

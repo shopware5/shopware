@@ -107,7 +107,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param null|\Doctrine\Common\Collections\ArrayCollection<Discount> $discounts
+     * @param \Doctrine\Common\Collections\ArrayCollection<Discount>|null $discounts
      *
      * @return Group
      */

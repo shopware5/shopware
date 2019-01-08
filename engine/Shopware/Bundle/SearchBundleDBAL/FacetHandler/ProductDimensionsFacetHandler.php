@@ -135,7 +135,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
      * @param array                                                         $stats
      * @param Criteria                                                      $criteria
      *
-     * @return null|RangeFacetResult
+     * @return RangeFacetResult|null
      */
     private function createRangeFacet(FacetInterface $facet, array $stats, Criteria $criteria)
     {

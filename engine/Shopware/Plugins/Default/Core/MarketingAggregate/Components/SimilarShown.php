@@ -60,8 +60,8 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      * The articles are used for the aggregate query which is
      * faster if an constant where condition is used.
      *
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      */
     public function initSimilarShown($offset = null, $limit = null)
     {
@@ -109,7 +109,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      * This function use the getSimilarShownValidationTime to get the date
      * of invalid data.
      *
-     * @param null|int $limit
+     * @param int|null $limit
      */
     public function updateElapsedSimilarShownArticles($limit = null)
     {

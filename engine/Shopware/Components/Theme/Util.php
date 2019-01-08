@@ -72,7 +72,7 @@ class Util
      *
      * @param Shop\Template $template
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPreviewImage(Shop\Template $template)
     {
@@ -185,7 +185,7 @@ class Util
      *
      * @param \Shopware\Models\Shop\Template $theme
      *
-     * @return null|string
+     * @return string|null
      */
     private function getThemeImage(Shop\Template $theme)
     {

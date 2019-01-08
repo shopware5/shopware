@@ -395,7 +395,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return null|ArticleDetail
+     * @return ArticleDetail|null
      */
     public function getArticleDetail()
     {
@@ -403,7 +403,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param null|ArticleDetail $articleDetail
+     * @param ArticleDetail|null $articleDetail
      */
     public function setArticleDetail(ArticleDetail $articleDetail = null)
     {

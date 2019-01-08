@@ -148,7 +148,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @param Criteria                    $criteria
      * @param Struct\ShopContextInterface $context
      *
-     * @return null|RadioFacetResult|ValueListFacetResult
+     * @return RadioFacetResult|ValueListFacetResult|null
      */
     private function createValueListFacetResult(
         QueryBuilder $query,
@@ -215,7 +215,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @param ProductAttributeFacet $facet
      * @param Criteria              $criteria
      *
-     * @return null|RangeFacetResult
+     * @return RangeFacetResult|null
      */
     private function createRangeFacetResult(
         QueryBuilder $query,
@@ -275,7 +275,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @param ProductAttributeFacet $facet
      * @param Criteria              $criteria
      *
-     * @return null|BooleanFacetResult
+     * @return BooleanFacetResult|null
      */
     private function createBooleanFacetResult(
         QueryBuilder $query,
@@ -343,7 +343,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @param array  $row
      * @param string $fieldName
      *
-     * @return null|string
+     * @return string|null
      */
     private function extractTranslations($row, $fieldName)
     {

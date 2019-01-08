@@ -121,7 +121,7 @@ class PluginConfigSetCommand extends ShopwareCommand
      *
      * @param string $value
      *
-     * @return bool|int|null|string
+     * @return bool|int|string|null
      */
     private function castValue($value)
     {

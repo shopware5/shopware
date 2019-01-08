@@ -224,8 +224,8 @@ class CacheWarmer
      * Returns all available seo urls
      *
      * @param int      $shopId
-     * @param null|int $limit
-     * @param null|int $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return string[]
      */

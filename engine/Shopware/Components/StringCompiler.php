@@ -126,7 +126,7 @@ class Shopware_Components_StringCompiler
      * Abstracts optional $context and compatibilityMode
      *
      * @param string     $value
-     * @param null|array $context
+     * @param array|null $context
      *
      * @return string
      */

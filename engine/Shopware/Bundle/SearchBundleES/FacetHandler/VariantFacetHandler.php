@@ -51,7 +51,7 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     private $gateway;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $fieldName;
 

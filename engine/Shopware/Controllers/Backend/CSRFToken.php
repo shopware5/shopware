@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware

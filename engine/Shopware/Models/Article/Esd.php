@@ -214,7 +214,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param null|\DateTimeInterface|string $date
+     * @param \DateTimeInterface|string|null $date
      *
      * @return Esd
      */

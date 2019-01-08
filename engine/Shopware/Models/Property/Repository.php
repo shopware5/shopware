@@ -32,10 +32,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to get property relations
      *
-     * @param null|array  $filter
-     * @param null|string $order
-     * @param null|int    $limit
-     * @param null|int    $offset
+     * @param array|null  $filter
+     * @param string|null $order
+     * @param int|null    $limit
+     * @param int|null    $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -54,8 +54,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPropertyRelationQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array  $filter
-     * @param null|string $order
+     * @param array|null  $filter
+     * @param string|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

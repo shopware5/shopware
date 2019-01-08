@@ -124,12 +124,12 @@ class Category extends Extendable
     protected $blockedCustomerGroupIds = [];
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $productBoxLayout = null;
 
     /**
-     * @var null|ProductStream
+     * @var ProductStream|null
      */
     protected $productStream;
 
@@ -462,7 +462,7 @@ class Category extends Extendable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getProductBoxLayout()
     {
@@ -470,7 +470,7 @@ class Category extends Extendable
     }
 
     /**
-     * @param null|string $productBoxLayout
+     * @param string|null $productBoxLayout
      */
     public function setProductBoxLayout($productBoxLayout)
     {
@@ -478,7 +478,7 @@ class Category extends Extendable
     }
 
     /**
-     * @return null|ProductStream
+     * @return ProductStream|null
      */
     public function getProductStream()
     {
@@ -486,7 +486,7 @@ class Category extends Extendable
     }
 
     /**
-     * @param null|ProductStream $productStream
+     * @param ProductStream|null $productStream
      */
     public function setProductStream(ProductStream $productStream = null)
     {

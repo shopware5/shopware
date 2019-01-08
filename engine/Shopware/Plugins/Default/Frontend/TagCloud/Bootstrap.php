@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()

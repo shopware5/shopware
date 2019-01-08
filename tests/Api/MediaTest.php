@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
 {
     const UPLOAD_FILE_NAME = 'test-bild';

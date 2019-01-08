@@ -1030,7 +1030,7 @@ SQL;
      * @throws \Enlight_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return null|false False on failure, null on success
+     * @return false|null False on failure, null on success
      */
     public function sInsertSurcharge()
     {
@@ -1143,7 +1143,7 @@ SQL;
      * @throws \Enlight_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return false|null|void False on failure, null on success
+     * @return false|void|null False on failure, null on success
      */
     public function sInsertSurchargePercent()
     {

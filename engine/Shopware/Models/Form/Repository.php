@@ -31,8 +31,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all list of forms.
      *
-     * @param null|array $filter
-     * @param null|array $orderBy
+     * @param array|null $filter
+     * @param array|null $orderBy
      * @param int        $offset
      * @param int        $limit
      *
@@ -51,8 +51,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array $filter
-     * @param null|array $orderBy
+     * @param array|null $filter
+     * @param array|null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

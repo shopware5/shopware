@@ -39,7 +39,7 @@ interface EmotionImporterInterface
 
     /**
      * @param string   $filePath
-     * @param null|int $presetId
+     * @param int|null $presetId
      *
      * @return mixed
      */

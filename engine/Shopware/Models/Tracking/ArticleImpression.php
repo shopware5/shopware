@@ -99,7 +99,7 @@ class ArticleImpression extends ModelEntity
     /**
      * @param int                     $articleId
      * @param int                     $shopId
-     * @param null|\DateTimeInterface $date
+     * @param \DateTimeInterface|null $date
      * @param int                     $impressions
      * @param string                  $deviceType
      */

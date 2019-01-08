@@ -134,8 +134,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Return cms menu items
      *
-     * @param null|int $shopId
-     * @param null|int $activePageId
+     * @param int|null $shopId
+     * @param int|null $activePageId
      *
      * @return array
      */

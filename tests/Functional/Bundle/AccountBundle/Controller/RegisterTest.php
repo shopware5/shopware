@@ -411,7 +411,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @param \Enlight_Controller_Response_Response $response
      *
-     * @return null|string
+     * @return string|null
      */
     private function getHeaderLocation(\Enlight_Controller_Response_Response $response)
     {

@@ -164,7 +164,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @param CriteriaPartInterface $criteriaPart
      *
-     * @return null|HandlerInterface
+     * @return HandlerInterface|null
      */
     private function getHandler(CriteriaPartInterface $criteriaPart)
     {

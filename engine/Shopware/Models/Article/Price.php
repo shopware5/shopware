@@ -224,7 +224,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param null|int|string $to
+     * @param int|string|null $to
      *
      * @return Price
      */

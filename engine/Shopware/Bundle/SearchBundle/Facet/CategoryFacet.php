@@ -34,7 +34,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 class CategoryFacet implements FacetInterface
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $label;
 
@@ -54,7 +54,7 @@ class CategoryFacet implements FacetInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLabel()
     {

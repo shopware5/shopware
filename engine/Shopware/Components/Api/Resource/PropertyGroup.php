@@ -195,7 +195,7 @@ class PropertyGroup extends Resource
 
     /**
      * @param array      $params
-     * @param null|array $propertyGroup
+     * @param array|null $propertyGroup
      *
      * @throws ApiException\CustomValidationException
      *

@@ -143,7 +143,7 @@ class Hydrator
     /**
      * @param array    $data
      * @param string   $key
-     * @param null|int $id
+     * @param int|null $id
      *
      * @return array
      */

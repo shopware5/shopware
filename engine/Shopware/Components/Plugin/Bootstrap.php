@@ -592,7 +592,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Returns plugin version
      *
-     * @return null|string
+     * @return string|null
      */
     public function getVersion()
     {

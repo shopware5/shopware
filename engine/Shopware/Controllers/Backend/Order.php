@@ -1185,7 +1185,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Order\Repository
+     * @return Shopware\Models\Order\Repository|null
      */
     protected function getRepository()
     {
@@ -1199,7 +1199,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Shop\Repository
+     * @return Shopware\Models\Shop\Repository|null
      */
     protected function getShopRepository()
     {
@@ -1213,7 +1213,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Country\Repository
+     * @return Shopware\Models\Country\Repository|null
      */
     protected function getCountryRepository()
     {
@@ -1227,7 +1227,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Payment\Repository
+     * @return Shopware\Models\Payment\Repository|null
      */
     protected function getPaymentRepository()
     {
@@ -1241,7 +1241,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Helper function to get access on the static declared repository
      *
-     * @return null|Shopware\Models\Dispatch\Repository
+     * @return Shopware\Models\Dispatch\Repository|null
      */
     protected function getDispatchRepository()
     {
@@ -1269,8 +1269,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * @param array[]  $filter
      * @param array[]  $sort
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return array
      */

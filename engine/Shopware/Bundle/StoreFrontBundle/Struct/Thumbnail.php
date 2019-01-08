@@ -82,7 +82,7 @@ class Thumbnail extends Extendable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getRetinaSource()
     {

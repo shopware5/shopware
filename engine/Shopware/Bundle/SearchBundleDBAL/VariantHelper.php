@@ -54,7 +54,7 @@ class VariantHelper implements VariantHelperInterface
     protected $fieldHelper;
 
     /**
-     * @var null|VariantFacet|bool
+     * @var VariantFacet|bool|null
      */
     protected $variantFacet = false;
 
@@ -98,7 +98,7 @@ class VariantHelper implements VariantHelperInterface
     /**
      * @throws \ReflectionException
      *
-     * @return null|VariantFacet
+     * @return VariantFacet|null
      */
     public function getVariantFacet()
     {
@@ -125,7 +125,7 @@ class VariantHelper implements VariantHelperInterface
             return $this->variantFacet = null;
         }
 
-        /** @var null|\Shopware\Bundle\SearchBundle\Facet\VariantFacet variantFacet */
+        /** @var \Shopware\Bundle\SearchBundle\Facet\VariantFacet|null variantFacet */
         $variantFacet = $this->reflectionHelper->createInstanceFromNamedArguments(key($arr), reset($arr));
         $this->variantFacet = $variantFacet;
 

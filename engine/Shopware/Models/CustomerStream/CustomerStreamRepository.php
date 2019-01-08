@@ -347,7 +347,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 
     /**
      * @param DateTime $date
-     * @param null|int $streamId
+     * @param int|null $streamId
      *
      * @return QueryBuilder
      */

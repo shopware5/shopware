@@ -116,7 +116,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return null|\Shopware\Models\Site\Group
+     * @return \Shopware\Models\Site\Group|null
      */
     public function getMapping()
     {
@@ -124,7 +124,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param null|\Shopware\Models\Site\Group $mapping
+     * @param \Shopware\Models\Site\Group|null $mapping
      */
     public function setMapping($mapping)
     {

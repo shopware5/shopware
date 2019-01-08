@@ -81,7 +81,7 @@ class MediaReader extends GenericReader
     /**
      * @param array $media
      *
-     * @return null|string
+     * @return string|null
      */
     private function getMediaThumbnail($media)
     {

@@ -341,7 +341,7 @@ class Media extends Resource
      * @param string      $destPath
      * @param string|null $baseFileName
      *
-     * @return null|string
+     * @return string|null
      */
     public function getUniqueFileName($destPath, $baseFileName = null)
     {

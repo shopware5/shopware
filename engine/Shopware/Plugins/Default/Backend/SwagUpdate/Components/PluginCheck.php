@@ -126,7 +126,7 @@ class PluginCheck
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getLocale()
     {

@@ -72,14 +72,14 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * The element that will be returned on each iteration.
      *
-     * @var null|int|false|array
+     * @var int|false|array|null
      */
     private $_current = null;
 
     /**
      * The element that will be returned on each iteration.
      *
-     * @var null|int|false
+     * @var int|false|null
      */
     private $_header = null;
 
@@ -126,7 +126,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     }
 
     /**
-     * @return null|int|false
+     * @return int|false|null
      */
     public function GetHeader()
     {
@@ -156,7 +156,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This method returns the current row number.
      *
-     * @return null|int
+     * @return int|null
      */
     public function key()
     {

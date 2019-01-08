@@ -1815,7 +1815,7 @@ EOT;
      *
      * @param int $userAffiliate Affiliate flag of the user data
      *
-     * @return null|string
+     * @return string|null
      */
     private function getPartnerCode($userAffiliate)
     {

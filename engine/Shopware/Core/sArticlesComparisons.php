@@ -112,7 +112,7 @@ class sArticlesComparisons
      *
      * @throws Enlight_Exception
      *
-     * @return bool|null|string true/false
+     * @return bool|string|null true/false
      */
     public function sAddComparison($articleId)
     {

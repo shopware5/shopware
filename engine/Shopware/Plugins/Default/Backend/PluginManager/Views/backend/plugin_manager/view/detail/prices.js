@@ -26,9 +26,9 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+// {namespace name=backend/plugin_manager/translation}
 
-//{block name="backend/plugin_manager/view/detail/prices"}
+// {block name="backend/plugin_manager/view/detail/prices"}
 Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
     extend: 'PluginManager.tab.Panel',
     cls: 'store-plugin-detail-prices-tab shopware-plugin-manager-tab',
@@ -144,17 +144,13 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
      * clicked open a new window with the given URL to the Store.
      */
     onShowInCommunityStore: function() {
-        var me = this;
-
-        window.open(me.plugin.get('link'));
+        window.open(this.plugin.get('link'));
     },
 
     /**
      * @param { object } prices
      */
     getLowestPrice: function(prices) {
-        var me = this;
-
         if (prices.lowestPrice) {
             return Ext.create('Shopware.apps.PluginManager.model.Price', {
                 price: prices.lowestPrice,
@@ -167,7 +163,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
             return prices.freePrice;
         }
 
-        if(prices.buyPrice) {
+        if (prices.buyPrice) {
             return prices;
         }
 
@@ -226,7 +222,9 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
     },
 
     createBuyTab: function(price) {
-        var me = this, items = [];
+        var me = this,
+            priceString,
+            items = [];
 
         items.push({
             xtype: 'plugin-manager-container-container',
@@ -237,10 +235,19 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
             }
         });
 
+        priceString = me.formatPrice(price.get('price')) + ' *';
+
+        if (price.get('discount') > 0) {
+            priceString = Ext.String.format('<span class="reduced">[0]</span> <span class="original">[1]</small>',
+                priceString,
+                me.formatPrice(price.get('price') / price.get('discount') * 100)
+            );
+        }
+
         items.push({
             xtype: 'component',
             cls: 'price',
-            html: me.formatPrice(price.get('price')) + ' *'
+            html: priceString
         });
 
         if (price.get('subscription')) {
@@ -326,10 +333,10 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
     },
 
     getPriceByType: function(prices, type) {
-        var me = this, price = null;
+        var price = null;
 
         prices.each(function(item) {
-            if (item.get('type') == type) {
+            if (item.get('type') === type) {
                 price = item;
             }
         });
@@ -341,4 +348,4 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
     }
 
 });
-//{/block}
+// {/block}

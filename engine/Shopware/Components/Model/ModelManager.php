@@ -299,7 +299,7 @@ class ModelManager extends EntityManager
      * @see        http://borisguery.github.com/bgylibrary
      * @see         https://gist.github.com/1034079#file_serializable_entity.php
      *
-     * @param null|object $entity
+     * @param object|null $entity
      *
      * @return array
      */

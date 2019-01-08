@@ -57,7 +57,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
      *
      * @throws \Exception
      *
-     * @return null|object
+     * @return object|null
      */
     public function fetchLazy($object, $condition, EntityManager $em = null)
     {

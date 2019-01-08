@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -507,7 +508,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param ProductSearchResult $result
-     * @param null|int            $categoryId
+     * @param int|null            $categoryId
      *
      * @return array
      */

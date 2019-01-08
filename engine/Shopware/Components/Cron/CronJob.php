@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
 {
     /**

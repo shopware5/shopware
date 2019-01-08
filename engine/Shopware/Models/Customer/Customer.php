@@ -1320,7 +1320,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param null|\DateTimeInterface|string $birthday
+     * @param \DateTimeInterface|string|null $birthday
      */
     public function setBirthday($birthday = null)
     {

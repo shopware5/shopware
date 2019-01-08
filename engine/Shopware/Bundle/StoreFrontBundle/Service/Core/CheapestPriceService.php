@@ -186,7 +186,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      * @param Struct\ProductContextInterface $context
      * @param int                            $quantity
      *
-     * @return null|Struct\Product\PriceDiscount
+     * @return Struct\Product\PriceDiscount|null
      */
     private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ProductContextInterface $context, $quantity)
     {

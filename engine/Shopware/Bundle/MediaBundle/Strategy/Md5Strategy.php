@@ -121,7 +121,7 @@ class Md5Strategy implements StrategyInterface
     /**
      * @param string $path
      *
-     * @return null|string
+     * @return string|null
      */
     private function substringPath($path)
     {

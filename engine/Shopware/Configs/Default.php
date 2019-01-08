@@ -161,6 +161,10 @@ return array_replace_recursive([
         'logger' => [
             'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
         ],
+        'max_expansions' => [
+            'name' => 2,
+            'number' => 2,
+        ],
     ],
     'front' => [
         'noErrorHandler' => false,

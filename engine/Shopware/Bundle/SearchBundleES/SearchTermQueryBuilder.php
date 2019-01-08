@@ -31,6 +31,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 {
     /**
+     * @var array
+     */
+    private $maxExpansions;
+
+    public function __construct(array $maxExpansions)
+    {
+        $this->maxExpansions = $maxExpansions;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildQuery(ShopContextInterface $context, $term)
@@ -38,7 +48,9 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $boolQuery = new BoolQuery();
         $boolQuery->addParameter('minimum_should_match', 1);
         $boolQuery->add($this->getBestFieldQuery($term), BoolQuery::SHOULD);
-        $boolQuery->add($this->getPhrasePrefixQuery($term), BoolQuery::SHOULD);
+        foreach ($this->maxExpansions as $field => $maxExpansion) {
+            $boolQuery->add($this->getPhrasePrefixQuery($term, $field, $maxExpansion), BoolQuery::SHOULD);
+        }
 
         return $boolQuery;
     }
@@ -71,15 +83,17 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
     /**
      * @param string $term
+     * @param string $field
+     * @param int    $maxExpansion
      *
      * @return MultiMatchQuery
      */
-    private function getPhrasePrefixQuery($term)
+    private function getPhrasePrefixQuery($term, $field, $maxExpansion)
     {
         return new MultiMatchQuery(
-            ['number', 'name'],
+            [$field],
             $term,
-            ['type' => 'phrase_prefix', 'max_expansions' => 2]
+            ['type' => 'phrase_prefix', 'max_expansions' => $maxExpansion]
         );
     }
 }

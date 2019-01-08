@@ -157,6 +157,7 @@
             <argument type="service" id="shopware_searchdbal.variant_helper"/>
             <argument type="service" id="shopware_elastic_search.product_configuration_loader"/>
             <argument type="service" id="shopware_elastic_search.product_listing_variation_loader"/>
+            <argument type="service" id="shopware_attribute.crud_service"/>
         </service>
 
         <service id="shopware_elastic_search.product_mapping"

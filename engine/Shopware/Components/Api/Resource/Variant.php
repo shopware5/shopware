@@ -667,7 +667,7 @@ class Variant extends Resource implements BatchInterface
      * @param Image  $image
      * @param Detail $variant
      *
-     * @return null|Image\Mapping
+     * @return Image\Mapping|null
      */
     protected function getVariantMappingOfImage(Image $image, Detail $variant)
     {

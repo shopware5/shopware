@@ -62,7 +62,7 @@ class ResourceSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return null|ArrayCollection
+     * @return ArrayCollection|null
      */
     public function onCollectJavascript()
     {
@@ -75,7 +75,7 @@ class ResourceSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return null|ArrayCollection
+     * @return ArrayCollection|null
      */
     public function onCollectCss()
     {
@@ -88,7 +88,7 @@ class ResourceSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return null|LessDefinition
+     * @return LessDefinition|null
      */
     public function onCollectLess()
     {

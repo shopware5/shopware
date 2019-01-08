@@ -43,7 +43,7 @@ class ProductUrlProvider implements UrlProviderInterface
     private $router;
 
     /**
-     * @var null|int|null
+     * @var int|null|null
      */
     private $lastId;
 

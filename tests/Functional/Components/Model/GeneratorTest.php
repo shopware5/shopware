@@ -204,7 +204,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      * @param string         $type
      * @param string         $phpType
      * @param string         $ormType
-     * @param null|float|int $default
+     * @param float|int|null $default
      */
     private function addAndEvaluateInitialization($type, $phpType, $ormType, $default = null)
     {

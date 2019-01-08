@@ -243,9 +243,9 @@ class Context implements \JsonSerializable
 
     /**
      * @param string     $name
-     * @param null|mixed $default
+     * @param mixed|null $default
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     public function getParam($name, $default = null)
     {

@@ -182,7 +182,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param null|int|string $to
+     * @param int|string|null $to
      *
      * @return \Shopware\Models\Article\Configurator\Template\Price
      */
@@ -199,7 +199,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get to
      *
-     * @return null|int|string
+     * @return int|string|null
      */
     public function getTo()
     {

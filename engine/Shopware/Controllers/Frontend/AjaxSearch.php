@@ -118,7 +118,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         // If the search for product numbers is active, do that first
         if ((int) $this->get('config')->get('activateNumberSearch') === 1) {
             // Check if search-term is a valid product-number
-            /** @var null|ListProduct $directHit */
+            /** @var ListProduct|null $directHit */
             $directHit = $this->get('shopware_storefront.list_product_service')
                 ->get($term, $context);
 

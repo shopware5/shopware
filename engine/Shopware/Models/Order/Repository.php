@@ -48,10 +48,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query-object for all known payment status
      *
-     * @param null|array                              $filter
+     * @param array|null                              $filter
      * @param string|\Doctrine\ORM\Query\Expr\OrderBy $order
-     * @param null|int                                $offset
-     * @param null|int                                $limit
+     * @param int|null                                $offset
+     * @param int|null                                $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -70,7 +70,7 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getPaymentStatusQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array                              $filter
+     * @param array|null                              $filter
      * @param string|\Doctrine\ORM\Query\Expr\OrderBy $order
      *
      * @return QueryBuilder
@@ -101,10 +101,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query-object for all known order statuses
      *
-     * @param null|array  $filter
-     * @param null|string $order
-     * @param null|int    $offset
-     * @param null|int    $limit
+     * @param array|null  $filter
+     * @param string|null $order
+     * @param int|null    $offset
+     * @param int|null    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -123,8 +123,8 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getOrderStatusQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array  $filter
-     * @param null|string $order
+     * @param array|null  $filter
+     * @param string|null $order
      *
      * @return QueryBuilder
      */
@@ -154,10 +154,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param null|array[] $filters
-     * @param null|string  $orderBy
-     * @param null|int     $offset
-     * @param null|int     $limit
+     * @param array[]|null $filters
+     * @param string|null  $orderBy
+     * @param int|null     $offset
+     * @param int|null     $limit
      *
      * @internal param $ids
      *
@@ -178,8 +178,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getOrdersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array[] $filters
-     * @param null|string  $orderBy
+     * @param array[]|null $filters
+     * @param string|null  $orderBy
      *
      * @return QueryBuilder
      */
@@ -288,9 +288,9 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
      * @param int         $orderId
-     * @param null|string $orderBy
-     * @param null|int    $offset
-     * @param null|int    $limit
+     * @param string|null $orderBy
+     * @param int|null    $offset
+     * @param int|null    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -505,8 +505,8 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      * @param array[]  $filters
      * @param array[]  $sortings
      *
