@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Emotion;
+namespace Shopware\Models\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;

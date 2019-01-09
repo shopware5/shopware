@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Newsletter;
+namespace Shopware\Models\Newsletter;
 
 use Shopware\Components\Model\ModelRepository;
 

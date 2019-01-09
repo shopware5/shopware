@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Payment;
+namespace Shopware\Models\Payment;
 
 use Shopware\Components\Model\ModelRepository;
 

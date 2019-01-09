@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Order\Document;
+namespace Shopware\Models\Order\Document;
 
 use Shopware\Components\Model\ModelRepository;
 
