@@ -28,6 +28,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed calculation of conversionrate in backend widget
 * Changed Symfony library to version 3.4.21
 
+### Removals
+
+* Removed unused `Shopware.data.ClassCache` ExtJs class
+
 ## 5.5.4
 
 [View all changes from v5.5.3...v5.5.4](https://github.com/shopware/shopware/compare/v5.5.3...v5.5.4)
