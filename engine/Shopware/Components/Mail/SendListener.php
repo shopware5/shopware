@@ -22,28 +22,36 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\Components\Mail;
+
+use Enlight_Event_EventManager as EventManager;
+use Swift_Events_SendListener as SendListenerInterface;
+use Swift_Events_SendEvent as SendEvent;
 
 /**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Class SendListener
  */
-class Mail
+class SendListener implements SendListenerInterface
 {
-    /**
-     * @param Shopware_Components_Config $config
-     * @param array $options
-     * @return Enlight_Components_Mail|null
-     */
-    public function factory(Shopware_Components_Config $config, array $options)
+    private $eventManager;
+
+    public function __construct(EventManager $eventManager)
     {
-        $mail = new Enlight_Components_Mail();
-        if (!empty($options['charset'])) {
-            $mail->setCharset($options['charset']);
-        } elseif ($config->get('charset')) {
-            $mail->setCharset($config->get('charset'));
-        }
-        return $mail;
+        $this->eventManager = $eventManager;
+    }
+
+    public function beforeSendPerformed(SendEvent $event)
+    {
+        $this->eventManager->notify(
+            'Enlight_Components_Mail_Send',
+            [
+                'mail' => $event->getMessage(),
+                'transport' => $event->getTransport()
+            ]
+        );
+    }
+
+    public function sendPerformed(SendEvent $event)
+    {
     }
 }
