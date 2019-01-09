@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Customer;
+namespace Shopware\Models\Customer;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
