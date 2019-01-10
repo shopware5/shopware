@@ -325,10 +325,22 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                             interval = 43200000;
                         }
 
+                        if (!res.success) {
+                            interval = 43200000;
+                            var cur = new Date();
+                            cur.setSeconds(cur.getSeconds() + 900);
+
+                            Ext.util.Cookies.set('benchmarkWait', '1', cur);
+                        }
+
                         window.setTimeout(checkBenchmarksFn, interval);
                     }
                 });
             };
+
+        if (Ext.util.Cookies.get('benchmarkWait')) {
+            return;
+        }
 
         window.setTimeout(checkBenchmarksFn, interval);
     }
