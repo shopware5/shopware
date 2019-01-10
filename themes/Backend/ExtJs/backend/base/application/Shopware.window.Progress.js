@@ -679,12 +679,12 @@ Ext.define('Shopware.window.Progress', {
         var me = this, record;
 
         //no current task passed? Take the first task in the tasks array
-        if (current == undefined && tasks.length > 0) {
+        if (typeof current === 'undefined' && tasks.length > 0) {
             current = tasks.shift();
         }
 
         //contains the current task no more record/data? Then get the next from the array
-        if (current.data && current.data.length <= 0) {
+        if (typeof current !== 'undefined' && current.data && current.data.length <= 0) {
             current = tasks.shift();
         }
 

@@ -403,7 +403,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             return;
         }
         var baseField = mainWindow.down('article-base-field-set');
-        baseField.numberField.validationRequestParam = article.getMainDetail().first().get('id');
+        if (article) {
+            baseField.numberField.validationRequestParam = article.getMainDetail().first().get('id');
+        }
 
         mainWindow.article = article;
         me.subApplication.article = article;
@@ -412,7 +414,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         me.loadPropertyStore(article);
 
-        esdTab.setDisabled(article.get('id') === null);
+        if (article) {
+            esdTab.setDisabled(article.get('id') === null);
+        }
         esdListing.esdStore.getProxy().extraParams.articleId = article.get('id');
         esdListing.filteredStore.getProxy().extraParams.articleId = article.get('id');
         esdListing.article = article;

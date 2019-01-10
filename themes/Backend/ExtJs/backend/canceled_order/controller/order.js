@@ -484,7 +484,6 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
 
         var me = this,
             searchString = Ext.String.trim(field.getValue()),
-            tabPanel = me.subApplication.mainWindow.tabPanel,
             active = me.getCurrentTab(),
             title = active.internalTitle;
 
@@ -508,17 +507,19 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
                     return;
             }
 
-            //scroll the store to first page
-            store.currentPage = 1;
+            if (typeof store !== 'undefined') {
+                //scroll the store to first page
+                store.currentPage = 1;
 
-            //If the search-value is empty, reset the filter
-            if ( searchString.length === 0 ) {
-                store.clearFilter();
-            } else {
-                //This won't reload the store
-                store.filters.clear();
-                //Loads the store with a special filter
-                store.filter('filter', searchString);
+                //If the search-value is empty, reset the filter
+                if ( searchString.length === 0 ) {
+                    store.clearFilter();
+                } else {
+                    //This won't reload the store
+                    store.filters.clear();
+                    //Loads the store with a special filter
+                    store.filter('filter', searchString);
+                }
             }
     }
 
