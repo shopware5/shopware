@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1450 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -243,7 +244,6 @@ class Migrations_Migration1450 extends Shopware\Components\Migrations\AbstractMi
             'YE' => ['countryName' => 'Jemen', 'areaID' => 2, 'countryNameEng' => 'Yemen', 'countryIso' => 'YE', 'countryEn' => 'YEMEN', 'iso3' => 'YEM'],
             'ZM' => ['countryName' => 'Sambia', 'areaID' => 2, 'countryNameEng' => 'Zambia', 'countryIso' => 'ZM', 'countryEn' => 'ZAMBIA', 'iso3' => 'ZMB'],
             'ZW' => ['countryName' => 'Simbabwe', 'areaID' => 2, 'countryNameEng' => 'Zimbabwe', 'countryIso' => 'ZW', 'countryEn' => 'ZIMBABWE', 'iso3' => 'ZWE'],
-
         ];
 
         $newCountryIsos = array_keys($newCountries);
