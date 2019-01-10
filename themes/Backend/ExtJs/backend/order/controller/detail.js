@@ -304,7 +304,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
         e.record.save({
             params: {
-                changed: order.get('changed'),
+                changed: order.get('changed') ? order.get('changed').toISOString() : null,
             },
             callback:function (data, operation) {
                 var records = operation.getRecords(),
@@ -426,7 +426,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             store.remove(positions);
             store.getProxy().extraParams = {
                 orderID: orderId,
-                changed: order.get('changed')
+                changed: order.get('changed') ? order.get('changed').toISOString() : null,
             };
             store.sync({
                 callback:function (batch, operation) {

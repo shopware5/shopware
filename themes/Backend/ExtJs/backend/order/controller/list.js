@@ -321,7 +321,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
             position.destroy({
                 params: {
                     orderID: position.get('orderId'),
-                    changed: order.get('changed'),
+                    changed: order.get('changed') ? order.get('changed').toISOString() : null,
                 },
                 callback: function(data, operation) {
                     if (orderPositionGrid) {
