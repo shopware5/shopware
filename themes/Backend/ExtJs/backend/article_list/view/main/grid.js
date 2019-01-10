@@ -605,10 +605,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                             disabled: false,
                             format: 'Y-m-d H:i:s'
                         });
-                        return new Shopware.apps.Base.view.element.DateTime({
-                            timeCfg: { format: 'H:i:s' },
-                            dateCfg: { format: 'Y-m-d' }
-                        });
                         break;
                     default:
                         break;

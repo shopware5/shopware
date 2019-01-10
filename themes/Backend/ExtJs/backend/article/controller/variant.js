@@ -942,11 +942,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                         if (success) {
                             me.openProgressWindow(article);
                         } else {
-                            if (failure === 'no_valid_form') {
-                                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.messages.noValidForm, me.snippets.growlMessage);
-                            } else {
-                                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.messages.noValidForm, me.snippets.growlMessage);
-                            }
+                            Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.messages.noValidForm, me.snippets.growlMessage);
                         }
                     }
                 });

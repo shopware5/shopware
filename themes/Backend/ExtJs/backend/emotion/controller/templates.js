@@ -260,18 +260,6 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
     },
 
     /**
-     * Event listener method which will be triggered when the user wants to
-     * create a new grid.
-     *
-     * @returns { Void }
-     */
-    onCreate: function() {
-        var me = this;
-
-        me.getView('templates.Settings').create();
-    },
-
-    /**
      * Event listener method which will be triggered when the user clicks on the save
      * button in the `settings` window.
      *

@@ -129,7 +129,6 @@ Ext.define('Ext.ux.ColorPicker', {
         return me.processEvent();
     },
     processEvent: function () {
-        return;
         var me = this;
         me.picker.clearListeners();
         me.relayEvents(me.picker, ['select']);

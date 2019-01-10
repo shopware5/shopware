@@ -100,14 +100,12 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                     isSubscriptionExpired = subscriptionExpirationDate < today;
                     daysDiffSubscription = Math.round(Math.abs((subscriptionExpirationDate.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
 
-                    if (isSubscriptionExpired) {
-                        preparedData.expiredPluginSubscriptions.push({
-                            label: plugin.label,
-                            expired: isSubscriptionExpired,
-                            daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription,
-                            dayDiff: daysDiffSubscription
-                        });
-                    }
+                    preparedData.expiredPluginSubscriptions.push({
+                        label: plugin.label,
+                        expired: isSubscriptionExpired,
+                        daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription,
+                        dayDiff: daysDiffSubscription
+                    });
                 }
             }
             if (plugin.unknownLicense) {
