@@ -32,9 +32,6 @@ use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-/**
- * Class ProductMapping
- */
 class ProductMapping implements MappingInterface
 {
     const TYPE = 'product';
@@ -65,24 +62,32 @@ class ProductMapping implements MappingInterface
     private $client;
 
     /**
+     * @var bool
+     */
+    private $isDynamic;
+
+    /**
      * @param IdentifierSelector    $identifierSelector
      * @param FieldMappingInterface $fieldMapping
      * @param TextMappingInterface  $textMapping
      * @param CrudService           $crudService
      * @param Client                $client
+     * @param bool                  $isDynamic
      */
     public function __construct(
         IdentifierSelector $identifierSelector,
         FieldMappingInterface $fieldMapping,
         TextMappingInterface $textMapping,
         CrudService $crudService,
-        Client $client
+        Client $client,
+        $isDynamic = true
     ) {
         $this->identifierSelector = $identifierSelector;
         $this->fieldMapping = $fieldMapping;
         $this->textMapping = $textMapping;
         $this->crudService = $crudService;
         $this->client = $client;
+        $this->isDynamic = $isDynamic;
     }
 
     /**
@@ -99,6 +104,7 @@ class ProductMapping implements MappingInterface
     public function get(Shop $shop)
     {
         return [
+            'dynamic' => $this->isDynamic,
             '_source' => [
                 'includes' => ['id', 'mainVariantId', 'variantId', 'number'],
             ],
