@@ -63,7 +63,7 @@ class BackendTheme
 
         $this->container->get('template')->setTemplateDir([
             'backend' => $directory,
-            'include_dir' => '.',
+            'include_dir' => 'ExtJs/../',
         ]);
     }
 }

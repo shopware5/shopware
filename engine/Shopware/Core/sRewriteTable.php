@@ -57,7 +57,7 @@ class sRewriteTable
     protected $template;
 
     /**
-     * @var Smarty_Data
+     * @var Smarty_Internal_TemplateBase
      */
     protected $data;
 
@@ -792,7 +792,7 @@ class sRewriteTable
     }
 
     /**
-     * @return Smarty_Data
+     * @return Smarty_Internal_TemplateBase
      */
     public function getData()
     {

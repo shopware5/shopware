@@ -164,7 +164,6 @@ EOD;
      * Test case
      *
      * @expectedException \Enlight_Exception
-     * @expectedExceptionMessage Syntax Error 74&quot;  on line 1 &quot;Hallo {$user|invalidmodifier}&quot; unknown modifier &quot;invalidmodifier&quot
      */
     public function testInvalidSmartyShouldThrowExceptionAndCustomExceptionMessage()
     {

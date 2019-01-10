@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-require_once 'Smarty/Smarty.class.php';
 
 /**
  * The Enlight_Template_Default class is an extension of Smarty_Internal_Template to extend the
@@ -78,7 +77,6 @@ class Enlight_Template_Default extends Smarty_Internal_Template
                 parent::assign($tpl_var, $value, $nocache);
             }
         }
-
         return $this;
     }
 
@@ -123,36 +121,12 @@ class Enlight_Template_Default extends Smarty_Internal_Template
      * @param        $spec
      * @param        $content
      * @param string $mode
+     * @return void
      */
     public function extendsBlock($spec, $content, $mode = self::BLOCK_REPLACE)
     {
-        if ($mode === null) {
-            $mode = self::BLOCK_REPLACE;
-        }
-        $complete = $this->smarty->left_delimiter . '$smarty.block.child' . $this->smarty->right_delimiter;
-
-        if (strpos($content, $complete) !== false) {
-            if (isset($this->block_data[$spec])) {
-                $content = str_replace(
-                    $complete,
-                    $this->block_data[$spec]['source'],
-                    $content
-                );
-                unset($this->block_data[$spec]);
-            } else {
-                $content = str_replace($complete, '', $content);
-            }
-        }
-        if (isset($this->block_data[$spec])) {
-            if (strpos($this->block_data[$spec]['source'], '%%%%SMARTY_PARENT%%%%') !== false) {
-                $content = str_replace('%%%%SMARTY_PARENT%%%%', $content, $this->block_data[$spec]['source']);
-            } elseif ($this->block_data[$spec]['mode'] == 'prepend') {
-                $content = $this->block_data[$spec]['source'] . $content;
-            } elseif ($this->block_data[$spec]['mode'] == 'append') {
-                $content .= $this->block_data[$spec]['source'];
-            }
-        }
-        $this->block_data[$spec] = ['source' => $content, 'mode' => $mode, 'file' => null];
+        $template = 'string:base64:' . base64_encode(sprintf( '{block %s %s}%s{/block}', $spec, $mode, $content));
+        $this->extendsTemplate($template);
     }
 
     /**
@@ -162,6 +136,9 @@ class Enlight_Template_Default extends Smarty_Internal_Template
      */
     public function extendsTemplate($templateName)
     {
+        if (strpos($this->template_resource, 'extends:') !== 0) {
+            $this->template_resource = 'extends:' . $this->template_resource;
+        }
         $this->template_resource .= '|' . $templateName;
     }
 
@@ -171,6 +148,7 @@ class Enlight_Template_Default extends Smarty_Internal_Template
      * @param null $cacheId
      *
      * @return Enlight_Template_Default
+     * @deprecated since 5.6, to be removed in 5.7
      */
     public function setCacheId($cacheId = null)
     {
@@ -185,29 +163,27 @@ class Enlight_Template_Default extends Smarty_Internal_Template
     /**
      * Extends the cache id.
      *
-     * @param null $cacheId
-     *
-     * @return Enlight_Template_Default
+     * @param   null $cacheId
+     * @return  Enlight_Template_Default
+     * @deprecated since 5.6, to be removed in 5.7
      */
     public function addCacheId($cacheId)
     {
         if (is_array($cacheId)) {
             $cacheId = implode('|', $cacheId);
         } else {
-            $cacheId = (string) $cacheId;
+            $cacheId = (string)$cacheId;
         }
         if ($this->cache_id === null) {
             $this->cache_id = $cacheId;
         } else {
             $this->cache_id .= '|' . $cacheId;
         }
-
         return $this;
     }
 
     /**
      * Returns the instance of the Enlight_Template_Manager
-     *
      * @return Enlight_Template_Manager
      */
     public function Engine()
@@ -217,8 +193,8 @@ class Enlight_Template_Default extends Smarty_Internal_Template
 
     /**
      * Returns the instance of the Enlight_Template_Default
-     *
      * @return Enlight_Template_Default
+     * @deprecated since 5.6, to be removed in 5.7
      */
     public function Template()
     {

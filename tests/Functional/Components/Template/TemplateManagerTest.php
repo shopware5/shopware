@@ -70,7 +70,7 @@ class TemplateManagerTest extends TestCase
         $templateManager->addTemplateDir(Shopware()->Container()->getParameter('kernel.root_dir') . '/media/temp/');
 
         $this->expectException(\SmartyException::class);
-        $this->expectExceptionMessage('Unknown path');
+        $this->expectExceptionMessage('Unable to load template');
 
         $templateManager->fetch('frontend/detail2/index.tpl');
     }

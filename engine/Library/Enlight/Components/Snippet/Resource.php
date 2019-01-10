@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-require_once 'Smarty/Smarty.class.php';
 
 /**
  * Enlight resource to compile snippets.
@@ -33,7 +32,7 @@ require_once 'Smarty/Smarty.class.php';
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Extends
+class Enlight_Components_Snippet_Resource
 {
     /**
      * @var Enlight_Components_Snippet_Manager Snippet manager which has to be set in the constructor
@@ -58,33 +57,11 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     }
 
     /**
-     * populate Source Object with meta data from Resource
-     *
-     * @param Smarty_Template_Source   $source    source object
-     * @param Smarty_Internal_Template $_template template object
-     */
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
-    {
-        if (!isset($source->smarty->registered_plugins[Smarty::PLUGIN_BLOCK]['snippet'])) {
-            $source->smarty->registerPlugin(Smarty::PLUGIN_BLOCK, 'snippet', [__CLASS__, 'compileSnippetBlock']);
-        }
-        if (!isset($source->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER]['snippet'])) {
-            $source->smarty->registerPlugin(Smarty::PLUGIN_MODIFIER, 'snippet', [$this, 'compileSnippetModifier']);
-        }
-        $default_resource = $source->smarty->default_resource_type;
-        $source->smarty->default_resource_type = 'file';
-        parent::populate($source, $_template);
-        $source->smarty->default_resource_type = $default_resource;
-    }
-
-    /**
      * Compiles the given snippet block if the content parameter is filled.
-     *
-     * @param                              $params
-     * @param                              $content
-     * @param Smarty_Internal_TemplateBase $template
-     *
-     * @return string
+     * @param                                $params
+     * @param                                $content
+     * @param   Smarty_Internal_TemplateBase $template
+     * @return  string
      */
     public static function compileSnippetBlock($params, $content, Smarty_Internal_TemplateBase $template = null)
     {
@@ -129,12 +106,11 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     /**
      * Compiles the snippet modifier
      *
-     * @param string                                      $content
-     * @param string                                      $name
-     * @param string|Enlight_Components_Snippet_Namespace $namespace
-     * @param bool                                        $force
-     *
-     * @return string
+     * @param   string $content
+     * @param   string $name
+     * @param   string|Enlight_Components_Snippet_Namespace $namespace
+     * @param   bool $force
+     * @return  string
      */
     public function compileSnippetModifier($content, $name = null, $namespace = null, $force = false)
     {
@@ -157,42 +133,23 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     }
 
     /**
-     * Load template's source from files into current template object
-     *
-     * @param Smarty_Template_Source $source source object
-     *
-     * @throws SmartyException if source cannot be loaded
-     *
-     * @return string template source
-     */
-    public function getContent(Smarty_Template_Source $source)
-    {
-        foreach ($source->components as $_component) {
-            /* @var Smarty_Template_Source $content */
-            $_component->content = $this->getSnippetContent($_component);
-        }
-        $this->snippetManager->write();
-
-        return parent::getContent($source);
-    }
-
-    /**
      * Returns the snippet content of the passed smarty template source instance.
      *
-     * @param Smarty_Template_Source $source
-     *
-     * @throws SmartyException
-     *
+     * @param $content
+     * @param Smarty_Internal_Template $template
      * @return string
      */
-    public function getSnippetContent(Smarty_Template_Source $source)
+    public function compileSnippetContent($content, \Smarty_Internal_Template $template)
     {
-        $_rdl = preg_quote($source->smarty->right_delimiter);
-        $_ldl = preg_quote($source->smarty->left_delimiter);
+        $source = $template->source;
+        $source->content = $content;
 
-        $_block_namespace = $this->getSnippetNamespace($source);
+        $_rdl = preg_quote($template->smarty->right_delimiter);
+        $_ldl = preg_quote($template->smarty->left_delimiter);
 
-        $pattern = "!{$_ldl}s(e?)(\s.+?)?{$_rdl}(.*?){$_ldl}/se?{$_rdl}!msi";
+        $_block_namespace = $this->getSnippetNamespace($template->source);
+
+        $pattern = "!{$_ldl}s(e?)(\\s.+?)?{$_rdl}(.*?){$_ldl}/se?{$_rdl}!msi";
         while (preg_match($pattern, $source->content, $_block_match, PREG_OFFSET_CAPTURE)) {
             $_block_editable = !empty($_block_match[1][0]);
             $_block_args = $_block_match[2][0];
@@ -225,7 +182,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
                 $_block_args .= ' namespace=' . var_export($_block_namespace, true);
             }
             if (!empty($_block_editable)) {
-                $_block_args .= ' tag=\'span\'';
+                $_block_args .= ' tag="span"';
             }
             if (!empty($_block_force)) {
                 $_block_args = str_replace('force', 'force=true', $_block_args);
@@ -243,71 +200,68 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             $source->content = substr_replace($source->content, $_block_content, $_block_start, $_block_length);
         }
 
+        $this->snippetManager->write();
+
         return $source->content;
-    }
-
-    /**
-     * Returns the snippet namespace class for the given smarty template source.
-     *
-     * @param Smarty_Template_Source $source
-     *
-     * @throws Enlight_Exception
-     *
-     * @return null|string
-     */
-    public function getSnippetNamespace(Smarty_Template_Source $source)
-    {
-        $_rdl = preg_quote($source->smarty->right_delimiter);
-        $_ldl = preg_quote($source->smarty->left_delimiter);
-
-        if (preg_match("!{$_ldl}namespace(\s.+?)?{$_rdl}!msi", $source->content, $_namespace_match)) {
-            $source->content = str_replace($_namespace_match[0], '', $source->content);
-            if (preg_match("!.?name=(.*?)(?=(\s|$))!", $_namespace_match[1], $_name_match)) {
-                $_name_match[1] = trim($_name_match[1], '"\' ');
-
-                return $_name_match[1];
-            } elseif (strpos($_namespace_match[1], 'ignore') !== false) {
-                return null;
-            }
-            throw new Enlight_Exception('Missing name attribute in namespace block');
-        }
-        $path = Enlight_Loader::realpath($source->filepath);
-        foreach ($source->smarty->getTemplateDir() as $template_dir) {
-            $template_dir = Enlight_Loader::realpath($template_dir);
-            if (strpos($path, $template_dir) === 0) {
-                $namespace = substr($path, strlen($template_dir));
-                $namespace = strtr($namespace, DIRECTORY_SEPARATOR, '/');
-                $namespace = dirname($namespace) . '/' . pathinfo($namespace, PATHINFO_FILENAME);
-                $namespace = trim($namespace, '/');
-
-                return $namespace;
-            }
-        }
-
-        return null;
     }
 
     /**
      * Returns the snippet content for the given snippet namespace and name.
      * If the force parameter is set to true, the default value will be set and returned.
      *
-     * @param string $namespace
-     * @param string $name
-     * @param mixed  $default
-     * @param bool   $force
-     *
+     * @param $namespace
+     * @param $name
+     * @param $default
+     * @param bool $force
      * @return mixed
      */
-    protected function getSnippet($namespace, $name, $default, $force = false)
+    private function getSnippet($namespace, $name, $default, $force = false)
     {
         $snippet = $this->snippetManager->getNamespace($namespace);
         $content = $snippet->get($name);
         if ($content === null || $force) {
             $snippet->set($name, $default);
-
             return $default;
+        } else {
+            return $content;
+        }
+    }
+
+    /**
+     * Returns the snippet namespace class for the given smarty template source.
+     * @throws  Enlight_Exception
+     * @param   Smarty_Template_Source $source
+     * @return  null|string
+     */
+    private function getSnippetNamespace(Smarty_Template_Source $source)
+    {
+        $_rdl = preg_quote($source->smarty->right_delimiter);
+        $_ldl = preg_quote($source->smarty->left_delimiter);
+
+        if (preg_match("!{$_ldl}namespace(\\s.+?)?{$_rdl}!msi", $source->content, $_namespace_match)) {
+            $source->content = str_replace($_namespace_match[0], '', $source->content);
+            if (preg_match("!.?name=(.*?)(?=(\\s|$))!", $_namespace_match[1], $_name_match)) {
+                $_name_match[1] = trim($_name_match[1], '"\' ');
+                return $_name_match[1];
+            } elseif (strpos($_namespace_match[1], 'ignore') !== false) {
+                return null;
+            } else {
+                throw new Enlight_Exception("Missing name attribute in namespace block");
+            }
+        } else {
+            $path = Enlight_Loader::realpath($source->filepath);
+            foreach ($source->smarty->getTemplateDir() as $template_dir) {
+                $template_dir = Enlight_Loader::realpath($template_dir);
+                if (strpos($path, $template_dir) === 0) {
+                    $namespace = substr($path, strlen($template_dir));
+                    $namespace = strtr($namespace, DIRECTORY_SEPARATOR, '/');
+                    $namespace = dirname($namespace) . '/' . pathinfo($namespace, PATHINFO_FILENAME);
+                    $namespace = trim($namespace, '/');
+                    return $namespace;
+                }
+            }
         }
 
-        return $content;
+        return null;
     }
 }

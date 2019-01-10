@@ -1,4 +1,4 @@
-{extends file="parent:frontend/listing/index.tpl"}
+{extends file="frontend/listing/index.tpl"}
 
 {namespace name="frontend/listing/listing"}
 
