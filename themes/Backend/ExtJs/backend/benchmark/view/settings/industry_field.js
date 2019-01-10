@@ -17,7 +17,7 @@ Ext.define('Shopware.apps.Benchmark.view.settings.IndustryField', {
     initComponent: function () {
         var me = this;
 
-        if (!me.store || !me.store instanceof Ext.data.Store) {
+        if (!me.store || !(me.store instanceof Ext.data.Store)) {
             throw new Error('The industry field requires a store');
         }
 

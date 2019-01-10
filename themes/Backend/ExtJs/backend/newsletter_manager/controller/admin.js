@@ -337,7 +337,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Admin', {
             values = form.getValues(),
             record = form.getRecord();
 
-        if(!record instanceof Ext.data.Model){
+        if(!(record instanceof Ext.data.Model)){
             return;
         }
 

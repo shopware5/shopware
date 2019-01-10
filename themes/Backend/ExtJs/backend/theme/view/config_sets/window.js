@@ -54,10 +54,10 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
 
         me.store.each(function(theme) {
 
-            if (!theme.getConfigSets() instanceof Ext.data.Store) {
+            if (!(theme.getConfigSets() instanceof Ext.data.Store)) {
                 return true;
             }
-            if (!theme.getConfigSets().getCount() > 0) {
+            if (!(theme.getConfigSets().getCount() > 0)) {
                 return true;
             }
             var item = me.createFieldSet(theme);

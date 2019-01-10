@@ -464,7 +464,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             grid = me.getSimpleGrid();
 
         // If no operators available, disable value editor and operator editor
-        if (!operators instanceof Array) {
+        if (!(operators instanceof Array)) {
             operatorColumn.setEditor(false);
             valueColumn.setEditor(false);
             return;
@@ -526,7 +526,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 operators = me.filterableColumns[columnName];
 
             // If no operators available, disable value editor and operator editor
-            if (!operators instanceof Array) {
+            if (!(operators instanceof Array)) {
                 operatorColumn.setEditor(false);
                 valueColumn.setEditor(false);
                 return;

@@ -421,7 +421,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
 
         // Handle single choice
         if (selModel.getCount() === 1) {
-            if (!selModel.selected instanceof Ext.data.Model) {
+            if (!(selModel.selected instanceof Ext.data.Model)) {
                 return false;
             }
 
@@ -650,7 +650,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             downloadButton.setDisabled(disabled);
         }
 
-        if (!disabled) {
+        if (!disabled && selected !== null) {
             previewButton.setDisabled(selected.get('main') === 1);
         }
     },
@@ -665,9 +665,11 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     onMediaMoved: function(mediaStore, draggedRecord, targetRecord) {
         var index, indexOfDragged;
 
-        if (!mediaStore instanceof Ext.data.Store
-                || !draggedRecord instanceof Ext.data.Model
-                || !targetRecord instanceof Ext.data.Model) {
+        if (
+            !(mediaStore instanceof Ext.data.Store) ||
+            !(draggedRecord instanceof Ext.data.Model) ||
+            !(targetRecord instanceof Ext.data.Model)
+        ) {
             return false;
         }
         index = mediaStore.indexOf(targetRecord);
