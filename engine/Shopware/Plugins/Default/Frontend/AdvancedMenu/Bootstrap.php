@@ -140,7 +140,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . $context->getCurrentCustomerGroup()->getId();
+        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . ($this->Config()->get('excludeCustomergroup') ?: '_' . $context->getCurrentCustomerGroup()->getId());
         $cache = Shopware()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
@@ -196,6 +196,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $form->setElement('number', 'hoverDelay', [
             'label' => 'Hover Verzögerung (ms)',
             'value' => 250,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('text', 'levels', [
@@ -225,11 +226,20 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $form->setElement('boolean', 'caching', [
             'label' => 'Caching aktivieren',
             'value' => 1,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('number', 'cachetime', [
             'label' => 'Cachezeit',
             'value' => 86400,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+        ]);
+
+        $form->setElement('boolean', 'excludeCustomergroup', [
+            'label' => 'Kundengruppen ausschließen',
+            'value' => 0,
+            'description' => 'Alle Kundengruppen erhalten das gleiche Menü (bessere Perfomance)',
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $this->translateForm();
@@ -245,6 +255,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 'cachetime' => ['label' => 'Caching time'],
                 'columnAmount' => ['label' => 'Teaser width'],
                 'hoverDelay' => ['label' => 'Hover delay (ms)'],
+                'excludeCustomergroup' => ['label' => 'Exclude Customergroup', 'description' => 'All customergroups will have the same menu (better perfomance)'],
             ],
         ];
 
