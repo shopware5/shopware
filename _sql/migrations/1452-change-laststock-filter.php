@@ -21,15 +21,34 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1452 extends \Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
         $sql = <<<'SQL'
 UPDATE s_multi_edit_filter 
-SET filter_string = REPLACE ("   ARTICLE.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= 0	", "ARTICLE", "DETAIL")  
+SET filter_string = "DETAIL.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= '0' AND ISMAIN"
 WHERE filter_string = "   ARTICLE.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= 0";
 SQL;
+        $sql2 = <<<'SQL'
+UPDATE s_multi_edit_filter
+SET `name` = "<b>Abverkauf-Hauptartikel</b><br><small>nicht auf Lager</small>"
+WHERE `name` = "<b>Abverkauf</b><br><small>nicht auf Lager</small>";
+SQL;
+        $sql3 = <<<'SQL'
+UPDATE s_multi_edit_filter 
+SET description = "Abverkauf-Hauptartikel ohne Lagerbestand"
+WHERE description = "Abverkauf-Artikel ohne Lagerbestand";
+SQL;
+        $sql4 = <<<'SQL'
+INSERT INTO s_multi_edit_filter
+VALUES (6,'<b>Abverkauf-Variantenartikel</b><br><small>nicht auf Lager</small>','   DETAIL.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= 0','Abverkauf-Variantenartikel ohne Lagerbestand',NULL,1,0);
+SQL;
+
         $this->addSql($sql);
+        $this->addSql($sql2);
+        $this->addSql($sql3);
+        $this->addSql($sql4);
     }
 }
