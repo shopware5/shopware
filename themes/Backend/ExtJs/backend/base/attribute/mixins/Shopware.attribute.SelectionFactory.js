@@ -77,10 +77,6 @@ Ext.define('Shopware.attribute.SelectionFactory', {
         return this.createEntitySearchStore(attribute.get('entity'), null);
     },
 
-    createModelSearchStore: function(attribute, model) {
-        return this.createEntitySearchStore(attribute.get('entity'), model);
-    },
-
     createEntitySearchStore: function(entity, extJsModel) {
         if (!extJsModel) {
             return Ext.create('Ext.data.Store', {
