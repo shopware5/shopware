@@ -28,7 +28,7 @@ class Migrations_Migration1452 extends \Shopware\Components\Migrations\AbstractM
     {
         $sql = <<<'SQL'
 UPDATE s_multi_edit_filter 
-SET filter_string = "DETAIL.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= '0' AND ISMAIN"
+SET filter_string = "DETAIL.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= \"0\" AND ISMAIN"
 WHERE filter_string = "   ARTICLE.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= 0";
 SQL;
         $sql2 = <<<'SQL'
