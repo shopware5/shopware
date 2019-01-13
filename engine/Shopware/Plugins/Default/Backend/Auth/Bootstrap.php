@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\DependencyInjection\Bridge\Db;
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\Session\PdoSessionHandler;
 use Shopware\Models\Shop\Locale;
 
 /**
@@ -364,18 +361,11 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * @throws Exception
      *
      * @return Enlight_Components_Session_Namespace
+     * @return \Shopware\Components\Session\SessionInterface
      */
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
-        $options = $this->getSessionOptions();
-        $saveHandler = $this->createSaveHandler(Shopware()->Container());
-        if ($saveHandler) {
-            session_set_save_handler($saveHandler);
-        }
-
-        Enlight_Components_Session::start($options);
-
-        return new Enlight_Components_Session_Namespace('ShopwareBackend');
+        return $this->get('session');
     }
 
     /**
@@ -384,19 +374,16 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      *
      * @param Enlight_Event_EventArgs $args
      *
-     * @throws \Exception
-     * @throws \SmartyException
-     * @throws \Enlight_Exception
-     *
      * @return \Zend_Auth
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
-        Shopware()->Container()->load('BackendSession');
+        /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
+        $session = $this->get('session');
 
         $resource = Shopware_Components_Auth::getInstance();
-        $adapter = new Shopware_Components_Auth_Adapter_Default();
-        $storage = new Zend_Auth_Storage_Session('Shopware', 'Auth');
+        $adapter = new Shopware_Components_Auth_Adapter_Default($session);
+        $storage = new Shopware_Components_Auth_Storage_Session($session);
         $resource->setBaseAdapter($adapter);
         $resource->addAdapter($adapter);
         $resource->setStorage($storage);
@@ -446,16 +433,11 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Loads current user's locale or, if none exists, the default fallback
      *
-     * @throws \Exception
-     *
      * @return \Shopware\Models\Shop\Locale
      */
     protected function getCurrentLocale()
     {
-        $options = $this->getSessionOptions();
         $modelManager = $this->get('models');
-
-        Enlight_Components_Session::setOptions($options);
 
         if (Enlight_Components_Session::sessionExists()) {
             $auth = $this->get('Auth');
@@ -475,59 +457,5 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $default = $this->getDefaultLocale();
 
         return $modelManager->getRepository(Locale::class)->find($default);
-    }
-
-    /**
-     * Filters and transforms the session options array
-     * so it complies with the format expected by Enlight_Components_Session
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     *
-     * @return array
-     */
-    private function getSessionOptions()
-    {
-        $options = Shopware()->Container()->getParameter('shopware.backendsession');
-
-        if ($this->request !== null && !isset($options['cookie_path'])) {
-            $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/') . '/backend/';
-        }
-        if (empty($options['gc_maxlifetime'])) {
-            $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
-            $options['gc_maxlifetime'] = (int) $backendTimeout ?: PHP_INT_MAX;
-        }
-        unset($options['locking']);
-
-        return $options;
-    }
-
-    /**
-     * @param Container $container
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return \SessionHandlerInterface|null
-     */
-    private function createSaveHandler(Container $container)
-    {
-        $sessionOptions = $container->getParameter('shopware.backendsession');
-        if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
-            return null;
-        }
-
-        $dbOptions = $container->getParameter('shopware.db');
-        $conn = Db::createPDO($dbOptions);
-
-        return new PdoSessionHandler(
-            $conn,
-            [
-                'db_table' => 's_core_sessions_backend',
-                'db_id_col' => 'id',
-                'db_data_col' => 'data',
-                'db_expiry_col' => 'expiry',
-                'db_time_col' => 'modified',
-                'lock_mode' => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
-            ]
-        );
     }
 }

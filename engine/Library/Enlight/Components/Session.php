@@ -30,6 +30,21 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Session extends Zend_Session
+class Enlight_Components_Session
 {
+    /**
+     * sessionExists() - whether or not a session exists for the current request
+     *
+     * @return bool
+     */
+    public static function sessionExists()
+    {
+        if ((bool)ini_get('session.use_cookies') == true && isset($_COOKIE[session_name()])) {
+            return true;
+        } elseif (isset($_REQUEST[session_name()])) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -40,6 +40,9 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         'gc_divisor' => 100,
         'save_handler' => 'db',
     ],
+    'backendSession' => [
+        'unitTestEnabled' => true,
+    ],
     'mail' => [
         'type' => 'file',
         'path' => $this->getCacheDir(),

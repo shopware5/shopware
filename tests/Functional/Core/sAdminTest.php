@@ -99,7 +99,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->systemModule = Shopware()->System();
         $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->systemModule->sSESSION_ID = null;
-        $this->session->offsetSet('sessionId', null);
+        $this->session->clear();
+        $this->session->setId('');
     }
 
     protected function tearDown()

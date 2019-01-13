@@ -3276,7 +3276,7 @@ class sAdmin
      */
     private function regenerateSessionId()
     {
-        $oldSessionId = session_id();
+        $oldSessionId = $this->session->getId();
 
         if ($this->eventManager->notifyUntil(
             'Shopware_Modules_Admin_regenerateSessionId_Start',
@@ -3285,17 +3285,10 @@ class sAdmin
             return;
         }
 
-        session_regenerate_id(true);
-        $newSessionId = session_id();
-
-        // Close and restart session to make sure the db session handler writes updates.
-        session_write_close();
-        session_start();
+        $this->session->migrate(true);
+        $newSessionId = $this->session->getId();
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
-        $this->session->offsetSet('sessionId', $newSessionId);
-        Shopware()->Container()->reset('SessionId');
-        Shopware()->Container()->set('SessionId', $newSessionId);
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Regenerate_Session_Id',

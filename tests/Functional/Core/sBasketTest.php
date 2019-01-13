@@ -45,7 +45,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var array The session data
+     * @var Enlight_Components_Session_Namespace The session data
      */
     private $session;
 
@@ -64,13 +64,13 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->db = Shopware()->Db();
         $this->module = Shopware()->Modules()->Basket();
         $this->session = Shopware()->Session();
-        $this->session->offsetSet('sessionId', null);
         $this->module->sSYSTEM->_POST = [];
         $this->module->sSYSTEM->_GET = [];
         $this->config = Shopware()->Config();
         $this->module->sSYSTEM->sCONFIG = &$this->config;
         $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->sSESSION_ID = null;
+        $this->session->invalidate();
     }
 
     /**

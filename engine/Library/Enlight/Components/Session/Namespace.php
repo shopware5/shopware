@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use \Symfony\Component\HttpFoundation\Session\Session as BaseSession;
+
 /**
  * Enlight session namespace component.
  *
@@ -32,73 +34,96 @@
  * @copyright   Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license     http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implements Countable, IteratorAggregate, ArrayAccess
+class Enlight_Components_Session_Namespace extends BaseSession implements ArrayAccess
 {
     /**
-     * Whether an offset exists
-     *
-     * @param mixed $key a key to check for
-     *
-     * @return bool returns true on success or false on failure
+     * {@inheritdoc}
      */
     public function offsetExists($key)
     {
-        return $this->__isset($key);
+        return $this->has($key);
     }
 
     /**
      * Unset the given offset.
-     *
-     * @param string $key key to unset
+     * @param string $key Key to unset.
      */
     public function offsetUnset($key)
     {
-        $this->__unset($key);
+        $this->remove($key);
     }
 
     /**
-     * Offset to retrieve
-     *
-     * @param mixed $key the offset to retrieve
-     *
-     * @return mixed can return all value types
+     * {@inheritdoc}
      */
     public function offsetGet($key)
     {
-        return $this->__get($key);
+        return $this->get($key);
     }
 
     /**
-     * Offset to set
-     *
-     * @param mixed $key   the offset to assign the value to
-     * @param mixed $value the value to set
+     * {@inheritdoc}
      */
     public function offsetSet($key, $value)
     {
-        $this->__set($key, $value);
+        if ($key == 'sessionId') {
+            $this->setId($value);
+        } else {
+            $this->set($key, $value);
+        }
     }
 
     /**
-     * Count elements of the object
-     *
-     * @return int The custom count as an integer
-     */
-    public function count()
-    {
-        return $this->apply('count');
-    }
-
-    /**
-     * @param string $name
-     * @param mixed  $default
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function get($name, $default = null)
     {
-        $value = $this->offsetGet($name);
+        if ($name == 'sessionId') {
+            return $this->getId();
+        }
+        return parent::get($name, $default);
+    }
 
-        return $value !== null ? $value : $default;
+    /**
+     * unsetAll() - unset all variables in this session
+     *
+     * @return true
+     */
+    public function unsetAll()
+    {
+        $this->clear();
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __set($name, $value)
+    {
+        $this->set($name, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __isset($name)
+    {
+        return $this->has($name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __unset($name)
+    {
+        return $this->remove($name);
     }
 }

@@ -153,6 +153,8 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     {
         $app = Shopware();
 
+        $container = $app->Container();
+
         $this->resetRequest();
         $this->resetResponse();
 
@@ -167,8 +169,6 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 
         $app->Plugins()->reset();
         $app->Events()->reset();
-
-        $container = Shopware()->Container();
 
         $container->get('models')->clear();
 
