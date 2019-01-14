@@ -31,6 +31,18 @@ Ext.define('Shopware.apps.Config.store.form.Country', {
     model:'Shopware.apps.Config.model.form.Country',
     remoteSort: true,
     remoteFilter: true,
+
+    sorters: [
+        {
+            property: 'area.name',
+            direction: 'ASC'
+        },
+        {
+            property: 'name',
+            direction: 'ASC'
+        },
+    ],
+
     pageSize: 20,
     proxy: {
         type: 'ajax',

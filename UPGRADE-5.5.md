@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Additions
 
 * Added attributes to shop entities
+* Added missing countries to list of available countries (table `s_core_countries`)
 * Added new event `TemplateMail_CreateMail_MailContext` to `engine/Shopware/Components/TemplateMail.php`
 * Added new event `Shopware_Modules_Basket_CheckBasketQuantities_ProductsQuantity`
 * Added new config option to define Elasticsearch version
@@ -32,7 +33,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added help text icon and support text icon to ExtJs HTML fields
 * Added new template blocks `frontend_account_order_item_pseudo_price_inner` and `frontend_account_order_item_pseudo_price_inner_value` in `account/order_item_details.tpl`
 * Added the interfaces to the classes in the StoreFrontBundle where they are missing
-* Added `setTemplate` and `getTemplate` methods to `Enlight_Components_Mail`
+* Added `setTemplateName` and `getTemplateName` methods to `Enlight_Components_Mail`
 
 ### Changes
 
