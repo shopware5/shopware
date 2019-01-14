@@ -51,10 +51,9 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
     initComponent: function() {
         var me = this;
 
-        me.store = Ext.create('Shopware.apps.UserManager.store.Roles');
         me.dockedItems = me.createDockedToolBar();
         me.plugins = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit: 1,
+            clicksToEdit: 2,
             listeners: {
                 canceledit: function (editor, e) {
                     if (!Ext.isDefined(e.record.get('id'))) {

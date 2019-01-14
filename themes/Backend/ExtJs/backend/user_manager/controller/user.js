@@ -64,7 +64,8 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
     refs: [
         { ref: 'userCreateWindow', selector: 'usermanager-user-create' },
         { ref: 'userCreateForm', selector: 'usermanager-user-create form[name=main-form]' },
-        { ref: 'attributeForm', selector: 'usermanager-user-create shopware-attribute-form' }
+        { ref: 'attributeForm', selector: 'usermanager-user-create shopware-attribute-form' },
+        { ref: 'userListGrid', selector: 'usermanager-user-list' }
     ],
 
     /**

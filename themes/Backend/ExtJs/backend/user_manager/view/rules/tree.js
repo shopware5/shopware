@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         },
         addResource: '{s name=rules/add_resource}Add resource{/s}',
         addPrivilege: '{s name=rules/add_privilege}Add privilege{/s}',
-        saveRole: '{s name=rules/save_role}Assign the checked privileges to the selected role{/s}',
+        saveRole: '{s name=rules/save_role}Save{/s}',
         search: '{s name=rules/search}Search...{/s}',
         notSelectedTitle: '{s name=rules/not_selected_title}Error{/s}',
         notSelectedMessage: '{s name=rules/not_selected_message}No resource selected!{/s}',
@@ -266,44 +266,44 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
     createToolbar: function() {
         var me = this;
 
-        // me.roleStore = Ext.create('Shopware.apps.UserManager.store.Roles', {
-        //     pageSize: 5
-        // });
-        //
-        // me.roleCombo = Ext.create('Shopware.form.field.PagingComboBox', {
-        //     pageSize: 5,
-        //     queryMode: 'remote',
-        //     store: me.roleStore,
-        //     valueField: 'id',
-        //     displayField: 'name',
-        //     forceSelection: true,
-        //     allowBlank:false,
-        //     labelWidth: 50,
-        //     emptyText: me.snippets.role.empty,
-        //     fieldLabel: me.snippets.role.label,
-        //     listeners: {
-        //         change: function(field, value) {
-        //             me.fireEvent('roleSelect', me.store, value);
-        //         }
-        //     }
-        // });
+        me.roleStore = Ext.create('Shopware.apps.UserManager.store.Roles', {
+            pageSize: 5
+        });
 
-        // /**
-        //  * The save role button assign the selected privileges
-        //  * to the selected role.
-        //  * @type Ext.button.Button
-        //  */
-        // /* {if {acl_is_allowed privilege=update}} */
-        // me.saveRoleButton = Ext.create('Ext.button.Button', {
-        //     text: me.snippets.saveRole,
-        //     disabled:true,
-        //     name: 'saveRolePrivileges',
-        //     iconCls:'sprite-disk',
-        //     handler: function() {
-        //         me.fireEvent('saveRolePrivileges', me.store, me.roleCombo.getValue(), me.getChecked());
-        //     }
-        // });
-        // /* {/if} */
+        me.roleCombo = Ext.create('Shopware.form.field.PagingComboBox', {
+            pageSize: 5,
+            queryMode: 'remote',
+            store: me.roleStore,
+            valueField: 'id',
+            displayField: 'name',
+            forceSelection: true,
+            allowBlank:false,
+            labelWidth: 50,
+            emptyText: me.snippets.role.empty,
+            fieldLabel: me.snippets.role.label,
+            listeners: {
+                change: function(field, value) {
+                    me.fireEvent('roleSelect', me.store, value);
+                }
+            }
+        });
+
+        /**
+         * The save role button assign the selected privileges
+         * to the selected role.
+         * @type Ext.button.Button
+         */
+        /* {if {acl_is_allowed privilege=update}} */
+        me.saveRoleButton = Ext.create('Ext.button.Button', {
+            text: me.snippets.saveRole,
+            disabled:true,
+            name: 'saveRolePrivileges',
+            iconCls:'sprite-disk',
+            handler: function() {
+                me.fireEvent('saveRolePrivileges', me.store, me.roleCombo.getValue(), me.getChecked());
+            }
+        });
+        /* {/if} */
 
         /**
          * The add resource button creates a new resource
@@ -342,35 +342,19 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         });
         /* {/if} */
 
-        me.searchField = Ext.create('Ext.form.field.Text', {
-            name:'searchfield',
-            cls:'searchfield',
-            width:170,
-            emptyText: me.snippets.search,
-            enableKeyEvents:true,
-            checkChangeBuffer:500,
-            listeners: {
-                change: function(field, value) {
-                    me.fireEvent('searchResource', me.store, value);
-                }
-            }
-        });
-
         return Ext.create('Ext.toolbar.Toolbar', {
             dock:'top',
             ui: 'shopware-ui',
             items: [
-        //         me.roleCombo,
-        // /* {if {acl_is_allowed privilege=update}} */
-        //         { xtype:'tbspacer', width:6 },
-        //         me.saveRoleButton,
-        // /* {/if} */
+                me.roleCombo,
+        /* {if {acl_is_allowed privilege=update}} */
+                { xtype:'tbspacer', width:6 },
+                me.saveRoleButton,
+        /* {/if} */
         /* {if {acl_is_allowed privilege=create}} */
                 me.addResourceButton,
                 me.addPrivilegeButton,
         /* {/if} */
-                '->',
-                me.searchField
             ]
         });
     },

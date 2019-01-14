@@ -59,13 +59,14 @@ Ext.define('Shopware.apps.UserManager.view.main.Window', {
 
         me.items = [{
             xtype: 'tabpanel',
-            deferredRender: false,
             items: [{
                 xtype: 'usermanager-user-list',
-                title: '{s name=navigation/navigation_usermanager}{/s}'
+                title: '{s name=navigation/navigation_usermanager}{/s}',
+                store: me.userStore
             }, {
                 xtype: 'usermanager-roles-list',
-                title: '{s name=navigation/navigation_rolemanager}{/s}'
+                title: '{s name=navigation/navigation_rolemanager}{/s}',
+                store: me.roleStore
             }, {
                 xtype: 'user-manager-rules-tree',
                 title: '{s name=navigation/navigation_rights_assignment}{/s}'

@@ -71,8 +71,6 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             me.getStore().load();
         });
 
-        me.store = Ext.create('Shopware.apps.UserManager.store.User');
-
         me.selModel = Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox

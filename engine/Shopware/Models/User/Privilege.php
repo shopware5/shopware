@@ -84,9 +84,9 @@ class Privilege extends ModelEntity
     /**
      * @ORM\ManyToMany(targetEntity="Shopware\Models\User\Privilege")
      * @ORM\JoinTable(name="s_core_acl_privilege_requirements",
-     *      joinColumns={@ORM\JoinColumn(name="privilege_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="required_privilege_id", referencedColumnName="id")}
-     *  )
+     *     joinColumns={@ORM\JoinColumn(name="privilege_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="required_privilege_id", referencedColumnName="id")}
+     * )
      *
      * @var ArrayCollection
      */
@@ -184,9 +184,6 @@ class Privilege extends ModelEntity
         return $this->requirements;
     }
 
-    /**
-     * @param ArrayCollection $requirements
-     */
     public function setRequirements(ArrayCollection $requirements)
     {
         $this->requirements = $requirements;
@@ -204,8 +201,5 @@ class Privilege extends ModelEntity
     {
         $sql = 'DELETE FROM s_core_acl_roles WHERE resourceID = ? AND privilegeID = ?';
         Shopware()->Db()->query($sql, [$this->resourceId, $this->id]);
-
-        $sql = 'DELETE FROM s_core_acl_privileges_requirements WHERE privilege_id = ? OR required_privilege_id = ?';
-        Shopware()->Db()->query($sql, [$this->id]);
     }
 }

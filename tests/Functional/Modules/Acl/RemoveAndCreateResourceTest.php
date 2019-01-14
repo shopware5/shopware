@@ -22,8 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
 class RemoveAndCreateResourceTest extends Enlight_Components_Test_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     public function testRemoveAndCreateAresource()
     {
         $em = Shopware()->Container()->get('models');

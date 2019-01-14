@@ -193,13 +193,13 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         }
         $params = $this->Request()->getParams();
 
-        if ('on' === $params['enabled'] || true === $params['enabled'] || 1 === $params['enabled']) {
+        if ($params['enabled'] === 'on' || $params['enabled'] === true || $params['enabled'] === 1) {
             $params['enabled'] = true;
         } else {
             $params['enabled'] = false;
         }
 
-        if ('on' === $params['admin'] || true === $params['admin'] || 1 === $params['admin']) {
+        if ($params['admin'] === 'on' || $params['admin'] === true || $params['admin'] === 1) {
             $params['admin'] = true;
         } else {
             $params['admin'] = false;
@@ -390,8 +390,8 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $role = $this->Request()->getParam('role');
         $resourceAdmins = [];
 
-        /** @var $role \Shopware\Models\User\Role */
-        if (null !== $role && is_numeric($role)) {
+        /** @var \Shopware\Models\User\Role $role */
+        if ($role !== null && is_numeric($role)) {
             $manager = $this->get('models');
             $role = $manager->find(Role::class, $role);
 
@@ -430,7 +430,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function deleteResourceAction()
     {
         $id = $this->Request()->getParam('id', null);
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')->getNamespace('backend/user_manager');
 
         if (empty($id)) {
@@ -470,7 +470,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function deletePrivilegeAction()
     {
         $id = $this->Request()->getParam('id', null);
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')->getNamespace('backend/user_manager');
 
         if (empty($id)) {
@@ -576,7 +576,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     public function updateRolePrivilegesAction()
     {
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')->getNamespace('backend/user_manager');
 
         $id = $this->Request()->getParam('id');
@@ -591,10 +591,10 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         }
 
         //check if role exist
-        /** @var $role \Shopware\Models\User\Role */
+        /** @var \Shopware\Models\User\Role|null $role */
         $role = $this->get('models')->find(Role::class, $id);
 
-        if (null === $role) {
+        if ($role === null) {
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->Request()->getParams(),
@@ -701,7 +701,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     private function getUserRepository()
     {
-        if (null === $this->userRepository) {
+        if ($this->userRepository === null) {
             $this->userRepository = $this->get('models')->getRepository(User::class);
         }
 
@@ -713,7 +713,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     private function getManager()
     {
-        if (null === $this->manager) {
+        if ($this->manager === null) {
             $this->manager = $this->get('models');
         }
 
@@ -747,37 +747,36 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      *
      * @param \Shopware\Models\User\Resource|null $resource
      * @param \Shopware\Models\User\Role|null     $role
-     * @param array                               $resourceAdmins
      *
      * @return array
      */
-    private function getResourceNode(array $resource, $role, array $resourceAdmins)
+    private function getResourceNode($resource, $role, array $resourceAdmins)
     {
         if (!$resource) {
             return [];
         }
 
         $resourceNode = [
-            'id' => $resource['id'],
-            'helperId' => $resource['id'],
-            'resourceId' => $resource['id'],
+            'id' => $resource->getId(),
+            'helperId' => $resource->getId(),
+            'resourceId' => $resource->getId(),
             'parentId' => null,
             'type' => 'resource',
-            'name' => $resource['name'],
+            'name' => $resource->getName(),
             'checked' => false,
             'expanded' => false,
         ];
 
         if ($role) {
-            if (array_key_exists($resource['id'], $resourceAdmins) || 1 === $role->getAdmin()) {
+            if (array_key_exists($resource->getId(), $resourceAdmins) || $role->getAdmin() === 1) {
                 $resourceNode['checked'] = true;
                 $resourceNode['expanded'] = true;
             }
         }
 
-        if (count($resource['privileges']) > 0) {
+        if (count($resource->getPrivileges()) > 0) {
             $children = [];
-            foreach ($resource['privileges'] as $privilege) {
+            foreach ($resource->getPrivileges() as $privilege) {
                 $children[] = $this->getPrivilegeNode($resourceNode, $privilege, $role);
             }
             $resourceNode['data'] = $children;
@@ -794,39 +793,38 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      * Internal helper function which converts a privilege shopware model
      * to an tree panel node with checkboxes.
      *
-     * @param array                                $resourceNode
      * @param \Shopware\Models\User\Privilege|null $privilege
      * @param \Shopware\Models\User\Role|null      $role
      *
      * @return array
      */
-    private function getPrivilegeNode(array &$resourceNode, array $privilege, $role)
+    private function getPrivilegeNode(&$resourceNode, $privilege, $role)
     {
         if (!$privilege) {
             return [];
         }
         $privilegeNode = [
-            'id' => $privilege['resourceId'] . '_' . $privilege['id'],
-            'helperId' => $privilege['id'],
-            'resourceId' => $privilege['resourceId'],
+            'id' => $privilege->getResourceId() . '_' . $privilege->getId(),
+            'helperId' => $privilege->getId(),
+            'resourceId' => $privilege->getResourceId(),
             'type' => 'privilege',
-            'name' => $privilege['name'],
+            'name' => $privilege->getName(),
             'checked' => $resourceNode['checked'] ? true : false,
             'expanded' => false,
             'leaf' => true,
             'requirements' => [],
         ];
 
-        if (count($privilege['requirements']) > 0) {
+        if (count($privilege->getRequirements()) > 0) {
             $requirements = [];
-            foreach ($privilege['requirements'] as $requirement) {
+            foreach ($privilege->getRequirements() as $requirement) {
                 $requirements[] = $requirement['id'];
             }
             $privilegeNode['requirements'] = $requirements;
         }
 
         if ($role) {
-            if ($role->getPrivileges()->contains($privilege) || 1 === $role->getAdmin()) {
+            if ($role->getPrivileges()->contains($privilege) || $role->getAdmin() === 1) {
                 $privilegeNode['checked'] = true;
                 $resourceNode['checked'] = true;
             }

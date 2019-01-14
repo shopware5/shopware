@@ -55,7 +55,10 @@ Ext.define('Shopware.apps.UserManager.controller.Main', {
 
         var me = this;
 
-        me.mainWindow = Ext.create('Shopware.apps.UserManager.view.main.Window');
+        me.mainWindow = Ext.create('Shopware.apps.UserManager.view.main.Window', {
+            userStore: me.subApplication.getStore('User'),
+            roleStore: me.subApplication.getStore('Roles')
+        });
 
         me.callParent(arguments);
     }
