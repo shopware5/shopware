@@ -364,14 +364,13 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     boldColumnRenderer: function (value, metaData, record) {
         var result = value;
-        var checkbox = this.up('window').down('checkbox[name=displayVariants]');
 
         var additional = record.get('Detail_additionalText');
         if (!additional) {
             additional = record.get('Detail_additionalText_dynamic');
         }
 
-        if (checkbox.getValue() && additional) {
+        if (additional) {
             result = value + ' - ' + additional;
         }
         return '<b>' + this.defaultColumnRenderer(result) + '</b>';
