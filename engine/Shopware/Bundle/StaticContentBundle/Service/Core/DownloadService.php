@@ -55,16 +55,23 @@ class DownloadService implements DownloadServiceInterface
      */
     private $privateFilesystemRoot;
 
+    /**
+     * @var bool
+     */
+    private $unitTestMode;
+
     public function __construct(
         Enlight_Controller_Front $front,
         Shopware_Components_Config $config,
         PublicUrlGeneratorInterface $publicUrlGenerator,
-        string $privateFilesystemRoot
+        string $privateFilesystemRoot,
+        bool $unitTestMode
     ) {
         $this->front = $front;
         $this->config = $config;
         $this->publicUrlGenerator = $publicUrlGenerator;
         $this->privateFilesystemRoot = $privateFilesystemRoot;
+        $this->unitTestMode = $unitTestMode;
     }
 
     /**
@@ -119,7 +126,9 @@ class DownloadService implements DownloadServiceInterface
         $upstream = $filesystem->readStream($location);
         $downstream = fopen('php://output', 'wb');
 
-        ob_end_clean();
+        if (!$this->unitTestMode) {
+            ob_end_clean();
+        }
 
         while (!feof($upstream)) {
             fwrite($downstream, fread($upstream, 4096));

@@ -2,11 +2,11 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-[View all changes from v5.5.2...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.2...v5.6.0)
+[View all changes from v5.5.5...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.2...v5.6.0)
 
 ### Additions
 
-* Added definition signature `getAttributeRawField` to `Shopware\Bundle\ESIndexingBundle\TextMappingInterface` to reduce info request of 
+* Added definition signature `getAttributeRawField` to `Shopware\Bundle\ESIndexingBundle\TextMappingInterface` to reduce info request of
     Elasticsearch and added method implementation to TextMappings
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2::getAttributeRawField`
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5::getAttributeRawField`
@@ -16,11 +16,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added plugin migrations
     * Migrations are loaded from folder `SwagTestPlugin/Resources/migrations`
     * The migration file can be generated using `./bin/console sw:generate:migration added-something-new -p SwagTestPlugin`
-
+* Added new theme configuration to disable ajax loading for emotions
 
 ### Changes
 
-* Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password` 
+* Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password`
 * Changed the following cart actions to redirect the request to allow customers to press reload:
     `\Shopware_Controllers_Frontend_Checkout::addArticleAction`
     `\Shopware_Controllers_Frontend_Checkout::addAccessoriesAction`

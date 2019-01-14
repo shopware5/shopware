@@ -1504,6 +1504,18 @@ class Theme extends \Shopware\Components\Theme
             )
         );
 
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'ajaxEmotionLoading',
+                '__ajax_emotion_loading__',
+                true,
+                ['attributes' => [
+                    'lessCompatible' => false,
+                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_emotion_loading_description'),
+                ]]
+            )
+        );
+
         $tab->addElement($fieldSet);
 
         $fieldSet = $this->createFieldSet(
