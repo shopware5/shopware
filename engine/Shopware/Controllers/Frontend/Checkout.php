@@ -1553,12 +1553,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $orderNumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
 
-        $this->basket->sAddArticle($orderNumber, $quantity);
-
         $this->View()->assign(
             'basketInfoMessage',
             $this->getInstockInfo($orderNumber, $quantity)
         );
+
+        $this->basket->sAddArticle($orderNumber, $quantity);
 
         if ($this->Request()->get('sAddAccessories')) {
             $this->addAccessories(
