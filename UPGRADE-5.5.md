@@ -37,6 +37,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Changes
 
+* Changed all occurences of snippets embedded in strings
+    * The snippets content now gets assigned to a variable instead
+    * This may lead to broken links or text, in case a snippet contains escaped quotemarks (`\"`), since escaping them is not necessary anymore
 * Changed Symfony library to version 3.4.21
 * Changed non-idempotent basket actions to forward the current request
 * Changed user timeout to session `session.gc_maxlifetime`
@@ -63,6 +66,12 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Removals
 
 * Removed unused `Shopware.data.ClassCache` ExtJs class
+
+### Changed occurences of snippets embedded in strings
+
+Wherever a snippet's content was embedded inside a string, it's value now gets assigned to a variable instead. This may lead to broken links or text, in case a snippet contains escaped quotemarks (`\"`), since escaping them is not necessary anymore.
+
+Please check all snippets with escaped quotation marks after upgrading. 
 
 ### Defining Elasticsearch version to reduce calls
 
