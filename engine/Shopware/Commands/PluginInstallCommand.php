@@ -94,7 +94,7 @@ EOF
 
         if ($input->getOption('activate')) {
             $activationContext = $pluginManager->activatePlugin($plugin);
-            $output->writeln(sprintf('Plugin %s has been activated successfully. Consider sw:cache:clear to enable possible behaviors that come with the plugin.', $pluginName));
+            $output->writeln(sprintf('Plugin %s has been activated successfully.', $pluginName));
         }
 
         $this->clearCachesIfRequested($input, $output, $installationContext, $activationContext);

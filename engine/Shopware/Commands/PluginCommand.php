@@ -58,8 +58,8 @@ abstract class PluginCommand extends ShopwareCommand
             $this->clearCaches($output, ...$contexts);
         } elseif (!empty($this->getScheduledCaches(...$contexts))) {
             $output->writeln([
-                'Consider sw:cache:clear to refresh the installation to keep up to the current changes.',
-                'Try the --clear-cache option if you run into this more often.',
+                'Consider sw:cache:clear to clear all relevant caches and see the latest changes.',
+                'Try the --clear-cache option to do so automatically.',
             ]);
         }
     }
