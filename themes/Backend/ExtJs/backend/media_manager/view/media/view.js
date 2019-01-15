@@ -629,11 +629,11 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             menu: {
                 items: [{
                     text: '{s name=toolbar/view_chart}Grid{/s}',
-                    layout: 'table',
+                    layout: 'grid',
                     iconCls: 'sprite-application-icon-large'
                 },{
                     text: '{s name=toolbar/view_table}Table{/s}',
-                    layout: 'grid',
+                    layout: 'table',
                     checked: true,
                     iconCls: 'sprite-application-table'
                 }]
