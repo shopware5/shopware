@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Check;
 
+use Symfony\Component\Process\ExecutableFinder;
+
 /**
  * @category Shopware
  *
@@ -405,6 +407,22 @@ class Requirements
         }
 
         return version_compare($required, $version, '<=');
+    }
+
+    /**
+     * Checks sendmail
+     *
+     * @return bool
+     */
+    private function checkSendmail()
+    {
+        $command = 'sendmail';
+        $default = '/usr/sbin/sendmail';
+
+        $finder = new ExecutableFinder();
+        $bin = $finder->find($command, $default);
+
+        return !empty($bin) && is_executable($bin);
     }
 
     /**

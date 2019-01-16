@@ -33,42 +33,233 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Mail extends Zend_Mail
+class Enlight_Components_Mail extends Swift_Message
 {
     /**
-     * Flag if the body is a html body
+     * Public constructor
      *
-     * @var bool
+     * @param string $charset
      */
-    protected $_isHtml = false;
+    public function __construct($charset = null)
+    {
+        parent::__construct(null, null, null, $charset);
+    }
 
     /**
-     * Mail address from the mail sender
+     * Get / set mail mode
      *
-     * @var null|array|string
+     * @param null|bool $isHtml
+     * @return bool
      */
-    protected $_fromName = null;
+    public function IsHTML($isHtml = null)
+    {
+        $type = 'text/html';
+        if ($isHtml === true) {
+            $this->setContentType($type);
+        } elseif ($isHtml === false) {
+            $this->setContentType('text/plain');
+        }
+        return $this->getContentType() === $type;
+    }
 
     /**
-     * Property for the plain body
+     * Add a recipient to mail
      *
-     * @var null
+     * @param string $email
+     * @param string $name
+     * @return Enlight_Components_Mail
      */
-    protected $_plainBody = null;
+    public function AddAddress($email, $name = '')
+    {
+        return $this->addTo($email, $name);
+    }
 
     /**
-     * Property for the plain body text. Can be filled by setBodyText function.
+     * Clears list of recipient email addresses
      *
-     * @var null
+     * @return Enlight_Components_Mail
      */
-    protected $_plainBodyText = null;
+    public function ClearAddresses()
+    {
+        return $this->clearRecipients();
+    }
 
     /**
-     * Property for the plain subject. Can be filled by setSubject function.
+     * Returns from name
      *
-     * @var null
+     * @return string
      */
-    protected $_plainSubject = null;
+    public function getFromName()
+    {
+        $addresses = parent::getFrom();
+        foreach ($addresses as $address => $name) {
+            return $name;
+        }
+        return null;
+    }
+
+    /**
+     * Returns from address
+     *
+     * @return string
+     */
+    public function getFromAddress()
+    {
+        $addresses = parent::getFrom();
+        foreach ($addresses as $address => $name) {
+            return $address;
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyText($txt, $charset = null)
+    {
+        if ($charset === null) {
+            $charset = $this->getCharset();
+        }
+        if ($this->IsHTML()) {
+            foreach ($this->getChildren() as $child) {
+                if ($child->getContentType() == 'text/plain') {
+                    $child->setBody($txt);
+                    return $this;
+                }
+            }
+            return $this->addPart($txt, 'text/plain', $charset);
+        } else {
+            return $this->setBody($txt, 'text/plain', $charset);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyHtml($html, $charset = null)
+    {
+        if ($charset === null) {
+            $charset = $this->getCharset();
+        }
+        if ($this->getBody() && !$this->IsHTML()) {
+            $this->addPart($this->getBody(), $this->getContentType(), $this->getCharset());
+        }
+        return $this->setBody($html, 'text/html', $charset);
+    }
+
+    /**
+     * Returns plain body text
+     *
+     * @return string|null
+     */
+    public function getPlainBodyText()
+    {
+        if ($this->getContentType() == 'text/plain') {
+            return $this->getBody();
+        }
+        foreach ($this->getChildren() as $child) {
+            if ($child->getContentType() == 'text/plain') {
+                return $child->getBody();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns plain body html
+     *
+     * @return string|null
+     */
+    public function getPlainBody()
+    {
+        if ($this->IsHTML()) {
+            return $this->getBody();
+        }
+        return null;
+    }
+
+    /**
+     * Returns the plain subject
+     * @return string|null
+     */
+    public function getPlainSubject()
+    {
+        return $this->getSubject();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBodyText()
+    {
+        return $this->getPlainBodyText();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBodyHtml()
+    {
+        return $this->getPlainBody();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clearRecipients()
+    {
+        $this->setTo([]);
+        $this->setCc([]);
+        $this->setBcc([]);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clearFrom()
+    {
+        return parent::setFrom([]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clearSubject()
+    {
+        $this->getHeaders()->remove('Subject');
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clearReplyTo()
+    {
+        return $this->setReplyTo([]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function send($transport = null)
+    {
+        Shopware()->Container()->get('mailer')->send($this);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createAttachment($body,
+                                     $mimeType = Zend_Mime::TYPE_OCTETSTREAM,
+                                     $disposition = Zend_Mime::DISPOSITION_ATTACHMENT,
+                                     $encoding = Zend_Mime::ENCODING_BASE64,
+                                     $filename = null)
+    {
+        $attachment = new Swift_Attachment($body, $filename, $mimeType);
+        $this->attach($attachment);
+    }
 
     /**
      * Magic setter method
@@ -85,7 +276,7 @@ class Enlight_Components_Mail extends Zend_Mail
                 $this->setFrom($value, $fromName);
                 break;
             case 'FromName':
-                $from = $this->getFrom();
+                $from = $this->getFromAddress();
                 $this->clearFrom();
                 $this->setFrom($from, $value);
                 break;
@@ -94,16 +285,14 @@ class Enlight_Components_Mail extends Zend_Mail
                 $this->setSubject($value);
                 break;
             case 'Body':
-                if ($this->_isHtml) {
+                if ($this->IsHTML()) {
                     $this->setBodyHtml($value);
-                } else {
+                }  else {
                     $this->setBodyText($value);
                 }
                 break;
             case 'AltBody':
-                if ($this->_isHtml) {
                     $this->setBodyText($value);
-                }
                 break;
         }
     }
@@ -113,13 +302,13 @@ class Enlight_Components_Mail extends Zend_Mail
      *
      * @param string $name
      *
-     * @return null|string|\unknown
+     * @return mixed
      */
     public function __get($name)
     {
         switch ($name) {
             case 'From':
-                return $this->getFrom();
+                return $this->getFromAddress();
                 break;
             case 'FromName':
                 return $this->getFromName();
@@ -128,210 +317,11 @@ class Enlight_Components_Mail extends Zend_Mail
                 return $this->getSubject();
                 break;
             case 'Body':
-                if ($this->_isHtml) {
-                    return $this->_plainBody;
-                }
-
-                    return $this->_plainBodyText;
-
+                return $this->getBody();
                 break;
             case 'AltBody':
-                return $this->_plainBodyText;
+                return $this->getPlainBodyText();
                 break;
         }
-    }
-
-    /**
-     * Set mail html mode
-     *
-     * @deprecated
-     *
-     * @param bool $isHtml
-     */
-    public function IsHTML($isHtml = true)
-    {
-        $this->_isHtml = (bool) $isHtml;
-    }
-
-    /**
-     * Add a recipient to mail
-     *
-     * @deprecated
-     *
-     * @param string $email
-     * @param string $name
-     *
-     * @return Zend_Mail
-     */
-    public function AddAddress($email, $name = '')
-    {
-        return $this->addTo($email, $name);
-    }
-
-    /**
-     * Clears list of recipient email addresses
-     *
-     * @deprecated
-     *
-     * @return Zend_Mail
-     */
-    public function ClearAddresses()
-    {
-        return $this->clearRecipients();
-    }
-
-    /**
-     * Sets From-header and sender of the message
-     *
-     * @param string $email
-     * @param string $name
-     *
-     * @throws Zend_Mail_Exception if called subsequent times
-     *
-     * @return Zend_Mail Provides fluent interface
-     */
-    public function setFrom($email, $name = null)
-    {
-        // mitigate "pwnscriptum" attack
-        // see https://framework.zend.com/security/advisory/ZF2016-04 for ZF2+ fix
-        if (preg_match('/\\\"/', $email)) {
-            throw new \RuntimeException('Potential code injection in From header');
-        }
-
-        $this->_fromName = $name;
-
-        return parent::setFrom($email, $name);
-    }
-
-    /**
-     * Clears the sender from the mail
-     *
-     * @return Zend_Mail Provides fluent interface
-     */
-    public function clearFrom()
-    {
-        $this->_fromName = null;
-
-        return parent::clearFrom();
-    }
-
-    /**
-     * Returns from name
-     *
-     * @return unknown
-     */
-    public function getFromName()
-    {
-        return $this->_fromName;
-    }
-
-    /**
-     * Returns a list of recipient email addresses
-     *
-     * @return array
-     */
-    public function getTo()
-    {
-        return $this->_to;
-    }
-
-    /**
-     * Sets the text body for the message.
-     *
-     * @param string $txt
-     * @param string $charset
-     * @param string $encoding
-     *
-     * @return Zend_Mail Provides fluent interface
-     */
-    public function setBodyText($txt, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
-    {
-        $this->_plainBodyText = $txt;
-
-        return parent::setBodyText($txt, $charset, $encoding);
-    }
-
-    /**
-     * Sets the HTML body for the message
-     *
-     * @param string $html
-     * @param string $charset
-     * @param string $encoding
-     *
-     * @return Zend_Mail Provides fluent interface
-     */
-    public function setBodyHtml($html, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
-    {
-        $this->_plainBody = $html;
-
-        return parent::setBodyHtml($html, $charset, $encoding);
-    }
-
-    /**
-     * Returns plain body html
-     *
-     * @return string|null
-     */
-    public function getPlainBody()
-    {
-        return $this->_plainBody;
-    }
-
-    /**
-     * Returns plain body text
-     *
-     * @return string|null
-     */
-    public function getPlainBodyText()
-    {
-        return $this->_plainBodyText;
-    }
-
-    /**
-     * Returns the plain subject
-     *
-     * @return string|null
-     */
-    public function getPlainSubject()
-    {
-        return $this->_plainSubject;
-    }
-
-    /**
-     * Overwrites the setSubject function of the Zend_Mail object, to set the plain subject text in the internal
-     * helper property.
-     *
-     * @param string $subject
-     *
-     * @return Zend_Mail
-     */
-    public function setSubject($subject)
-    {
-        $this->_plainSubject = $subject;
-
-        return parent::setSubject($subject);
-    }
-
-    /**
-     * Sends this email using the given transport or a previously
-     * set DefaultTransport or the internal mail function if no
-     * default transport had been set.
-     *
-     * @param Zend_Mail_Transport_Abstract $transport
-     *
-     * @return Zend_Mail Provides fluent interface
-     * @events  Enlight_Components_Mail_Send
-     */
-    public function send($transport = null)
-    {
-        Shopware()->Events()->notify(
-            'Enlight_Components_Mail_Send',
-            [
-                'mail' => $this,
-                'transport' => $transport,
-            ]
-        );
-
-        return parent::send($transport);
     }
 }

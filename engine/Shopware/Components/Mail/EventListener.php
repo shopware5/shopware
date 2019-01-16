@@ -22,25 +22,36 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Library;
+namespace Shopware\Components\Mail;
 
-use PHPUnit\Framework\TestCase;
-use Zend\Mail\Protocol\ProtocolTrait;
+use Enlight_Event_EventManager as EventManager;
+use Swift_Events_SendEvent as SendEvent;
+use Swift_Events_SendListener as SendListenerInterface;
 
 /**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Class SendListener
  */
-class ZendMailProtocolTest extends TestCase
+class EventListener implements SendListenerInterface
 {
-    use ProtocolTrait;
+    private $eventManager;
 
-    /**
-     * Check if the required TLS version is used
-     */
-    public function testGetCryptoMethod()
+    public function __construct(EventManager $eventManager)
     {
-        $this->assertGreaterThan(STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT, $this->getCryptoMethod(), 'TLS protocol version should be greater than TLSv1.0');
+        $this->eventManager = $eventManager;
+    }
+
+    public function beforeSendPerformed(SendEvent $event)
+    {
+        $this->eventManager->notify(
+            'Enlight_Components_Mail_Send',
+            [
+                'mail' => $event->getMessage(),
+                'transport' => $event->getTransport(),
+            ]
+        );
+    }
+
+    public function sendPerformed(SendEvent $event)
+    {
     }
 }

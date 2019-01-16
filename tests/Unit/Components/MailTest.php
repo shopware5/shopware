@@ -38,15 +38,6 @@ class MailTest extends TestCase
         $mail = new \Enlight_Components_Mail();
         $mail->setFrom('foo@example.com', 'Sender\'s name');
 
-        $this->assertSame('foo@example.com', $mail->getFrom());
-    }
-
-    public function testCodeInjectionInFromHeader()
-    {
-        $mail = new \Enlight_Components_Mail();
-
-        $this->expectException(\RuntimeException::class);
-
-        $mail->setFrom('"AAA\" code injection"@domain', 'Sender\'s name');
+        $this->assertSame('foo@example.com', $mail->getFromAddress());
     }
 }

@@ -934,9 +934,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mail = clone $this->container->get('mail');
+        $mail = $this->get('mail');
         $mail = $this->addAttachments($mail, $orderId, $attachments);
-        $mail->clearRecipients();
         $mail->setSubject($this->Request()->getParam('subject', ''));
 
         if ($this->Request()->getParam('isHtml')) {
@@ -1012,8 +1011,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'content' => $mail->getPlainBodyText(),
                 'contentHtml' => $mail->getPlainBody(),
                 'subject' => $mail->getPlainSubject(),
-                'to' => implode(', ', $mail->getTo()),
-                'fromMail' => $mail->getFrom(),
+                'to' => implode(', ', array_keys($mail->getTo())),
+                'fromMail' => $mail->getFromAddress(),
                 'fromName' => $mail->getFromName(),
                 'sent' => false,
                 'isHtml' => !empty($mail->getPlainBody()),
@@ -1658,7 +1657,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 continue;
             }
 
-            $mail->addAttachment($this->createAttachment($filePath, $fileName));
+            $mail->attach($this->createAttachment($filePath, $fileName));
         }
 
         return $mail;
@@ -1670,20 +1669,18 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @param string $filePath
      * @param string $fileName
      *
-     * @return Zend_Mime_Part
+     * @return Swift_Attachment
      */
     private function createAttachment($filePath, $fileName)
     {
         $filesystem = $this->container->get('shopware.filesystem.private');
 
-        $content = $filesystem->read($filePath);
-        $zendAttachment = new Zend_Mime_Part($content);
-        $zendAttachment->type = 'application/pdf';
-        $zendAttachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-        $zendAttachment->encoding = Zend_Mime::ENCODING_BASE64;
-        $zendAttachment->filename = $fileName;
+        $mailAttachment = new Swift_Attachment(
+            $filesystem->read($filePath),
+            $fileName
+        );
 
-        return $zendAttachment;
+        return $mailAttachment;
     }
 
     /**
@@ -1996,8 +1993,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     'content' => $mail->getPlainBodyText(),
                     'contentHtml' => $mail->getPlainBody(),
                     'subject' => $mail->getPlainSubject(),
-                    'to' => implode(', ', $mail->getTo()),
-                    'fromMail' => $mail->getFrom(),
+                    'to' => implode(', ', array_keys($mail->getTo())),
+                    'fromMail' => $mail->getFromAddress(),
                     'fromName' => $mail->getFromName(),
                     'sent' => false,
                     'isHtml' => !empty($mail->getPlainBody()),

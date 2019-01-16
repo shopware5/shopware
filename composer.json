@@ -61,7 +61,7 @@
         "zendframework/zend-escaper": "2.5.2",
         "oyejorge/less.php": "1.7.0.14",
         "guzzlehttp/guzzle": "5.3.3",
-        "egulias/email-validator": "1.2.14",
+        "egulias/email-validator": "2.1.7",
         "elasticsearch/elasticsearch": "2.3.2",
         "ongr/elasticsearch-dsl": "2.2.2",
         "paragonie/random_compat": "2.0.11",
@@ -79,7 +79,8 @@
         "fig/link-util": "1.0.0",
         "league/flysystem": "1.0.46",
         "league/flysystem-aws-s3-v3": "1.0.19",
-        "superbalist/flysystem-google-storage": "6.0.0"
+        "superbalist/flysystem-google-storage": "6.0.0",
+        "swiftmailer/swiftmailer": "^5.4"
     },
     "suggest": {
         "ext-apcu": "*",

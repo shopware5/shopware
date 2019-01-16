@@ -942,7 +942,7 @@ class sOrder
             $mail = $event->getReturn();
         }
 
-        if (!($mail instanceof \Zend_Mail)) {
+        if (!($mail instanceof \Enlight_Components_Mail)) {
             $mail = Shopware()->TemplateMail()->createMail('sORDER', $context);
         }
 
@@ -958,7 +958,7 @@ class sOrder
             'variables' => $variables,
         ]);
 
-        if (!($mail instanceof \Zend_Mail)) {
+        if (!($mail instanceof \Enlight_Components_Mail)) {
             return;
         }
 

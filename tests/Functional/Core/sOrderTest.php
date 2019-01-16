@@ -90,6 +90,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             ],
         ];
 
+        // Fix Swift_RfcComplianceException
+        $this->module->sUserData['additional']['user']['email'] = 'info@example.com';
+
         $this->module->sendMail($variables);
     }
 

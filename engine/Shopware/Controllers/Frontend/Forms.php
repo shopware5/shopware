@@ -62,7 +62,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * @throws \Exception
      * @throws \DomainException
      * @throws \Enlight_Exception
-     * @throws \Zend_Mail_Exception
      * @throws \Enlight_Event_Exception
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -94,7 +93,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * Commit form via email (default) or database (ticket system)
      *
      * @throws \Enlight_Exception
-     * @throws \Zend_Mail_Exception
      * @throws \Enlight_Event_Exception
      */
     public function commitForm()
@@ -639,7 +637,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * @param int $formId
      *
      * @throws \Enlight_Exception
-     * @throws \Zend_Mail_Exception
      * @throws \Enlight_Event_Exception
      */
     private function handleFormPost($formId)

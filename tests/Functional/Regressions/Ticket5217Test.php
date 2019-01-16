@@ -42,6 +42,6 @@ class Shopware_RegressionTests_Ticket5217 extends Enlight_Components_Test_TestCa
         $mail->addTo('test@example.com');
 
         $mail = $mail->send($mailTransport);
-        $this->assertInstanceOf('Zend_Mail', $mail);
+        $this->assertInstanceOf(Enlight_Components_Mail::class, $mail);
     }
 }

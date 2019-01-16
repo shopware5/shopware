@@ -24,7 +24,8 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\Container;
+use Enlight_Components_Mail as MailMessage;
+use Shopware_Components_Config as Config;
 
 /**
  * @category Shopware
@@ -34,26 +35,20 @@ use Shopware\Components\DependencyInjection\Container;
 class Mail
 {
     /**
-     * @param Container                   $container
-     * @param \Shopware_Components_Config $config
-     * @param array                       $options
+     * @param Config $config
+     * @param array  $options
      *
-     * @return \Enlight_Components_Mail|null
+     * @return MailMessage
      */
-    public function factory(Container $container, \Shopware_Components_Config $config, array $options)
+    public function factory(Config $config, array $options)
     {
-        if (!$container->load('MailTransport')) {
-            return null;
+        $mail = new MailMessage();
+        if (!empty($options['charset'])) {
+            $mail->setCharset($options['charset']);
+        } elseif ($config->get('charset')) {
+            $mail->setCharset($config->get('charset'));
         }
 
-        if (isset($options['charset'])) {
-            $defaultCharSet = $options['charset'];
-        } elseif (!empty($config->CharSet)) {
-            $defaultCharSet = $config->CharSet;
-        } else {
-            $defaultCharSet = null;
-        }
-
-        return new \Enlight_Components_Mail($defaultCharSet);
+        return $mail;
     }
 }
