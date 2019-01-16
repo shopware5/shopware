@@ -371,9 +371,6 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             property: 'active',
             direction: 'DESC'
         }, {
-            property: 'position',
-            direction: 'ASC'
-        }, {
             property: 'name',
             direction: 'ASC'
         }]);

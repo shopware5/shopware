@@ -74,6 +74,18 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
     configure: function () {
         var me = this;
 
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        var countryStore = factory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
+
+        countryStore.sort([{
+            property: 'active',
+            direction: 'DESC'
+        }, {
+            property: 'name',
+            direction: 'ASC'
+        }]);
+        countryStore.load();
+
         return {
             controller: 'Address',
             fieldSets: [
@@ -172,7 +184,8 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             listeners: {
                                 select: me.onCountrySelect,
                                 scope: me
-                            }
+                            },
+                            store: countryStore
                         },
                         stateId: {
                             fieldLabel: me.snippets.fields.state,
