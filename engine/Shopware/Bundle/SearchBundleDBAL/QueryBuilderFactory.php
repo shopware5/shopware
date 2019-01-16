@@ -173,7 +173,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
                  AND product.active = 1'
             );
         }
-        $query->innerJoin(
+        $query->leftJoin(
             'variant',
             's_articles_attributes',
             'productAttribute',
