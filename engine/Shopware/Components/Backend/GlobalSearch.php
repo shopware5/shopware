@@ -65,7 +65,7 @@ class GlobalSearch
     public function search($term)
     {
         return [
-            'articles' => $this->getArticles($term),
+            'articles' => $this->getArticles($term) ?: $this->getDetails($term),
             'customers' => $this->getCustomers($term),
             'orders' => $this->getOrders($term),
         ];
@@ -86,6 +86,22 @@ class GlobalSearch
 
         return $result->getData();
     }
+    
+	/**
+	 * @param string $term
+	 *
+	 * @return array
+	 */
+	private function getDetails($term)
+	{
+		$criteria = new SearchCriteria(Detail::class);
+		$criteria->term = $term;
+		$criteria->limit = 5;
+		
+		$result = $this->productRepository->search($criteria);
+		
+		return $result->getData();
+	}
 
     /**
      * @param string $term
