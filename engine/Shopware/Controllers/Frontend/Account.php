@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use League\Flysystem\Adapter\Local;
 use Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\ProfileUpdateFormType;
