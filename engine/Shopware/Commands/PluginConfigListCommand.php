@@ -49,7 +49,7 @@ class PluginConfigListCommand extends ShopwareCommand implements CompletionAware
             return $this->completeShopIds($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -61,7 +61,7 @@ class PluginConfigListCommand extends ShopwareCommand implements CompletionAware
             return $this->queryPluginNames($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**

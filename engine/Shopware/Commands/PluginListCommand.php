@@ -62,7 +62,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
             return array_diff($namespaces, array_intersect($namespaces, $context->getWords()));
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -70,7 +70,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

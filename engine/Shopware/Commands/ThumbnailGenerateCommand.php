@@ -95,7 +95,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
             return array_column($result, 'id');
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -103,7 +103,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

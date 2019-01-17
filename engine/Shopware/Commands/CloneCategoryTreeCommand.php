@@ -57,7 +57,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -84,7 +84,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
             return array_column($result, $columnOfChoice);
         }
 
-        return false;
+        return [];
     }
 
     /**

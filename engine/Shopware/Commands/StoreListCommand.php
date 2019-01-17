@@ -52,7 +52,7 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
             return $this->completeShopwareVersions($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -60,7 +60,7 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

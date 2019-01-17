@@ -60,7 +60,7 @@ class PluginDeleteCommand extends ShopwareCommand implements CompletionAwareInte
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -84,7 +84,7 @@ class PluginDeleteCommand extends ShopwareCommand implements CompletionAwareInte
             return array_column($result, 'name');
         }
 
-        return false;
+        return [];
     }
 
     /**

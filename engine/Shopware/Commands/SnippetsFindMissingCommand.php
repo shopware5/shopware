@@ -64,7 +64,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
             return array_diff(array_column($result, 'locale'), [$context->getWordAtIndex(2)]);
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -76,7 +76,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
             return $this->completeInstalledLocaleKeys($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**

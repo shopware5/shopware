@@ -3068,8 +3068,7 @@
             "time": "2017-05-11T14:25:49+00:00"
         },
         {
-            "name": "
-          ",
+            "name": "stecman/symfony-console-completion",
             "version": "0.7.0",
             "source": {
                 "type": "git",

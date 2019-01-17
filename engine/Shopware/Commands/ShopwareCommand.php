@@ -156,7 +156,7 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
      * @param string           $input
      * @param string           $modelClass
      * @param string           $property
-     * @param null|array|mixed $conditionCallback
+     * @param array|mixed|null $conditionCallback
      *
      * @return array
      */
@@ -177,7 +177,7 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
     /**
      * @param string           $modelClass
      * @param string           $property
-     * @param null|array|mixed $conditionCallback
+     * @param array|mixed|null $conditionCallback
      *
      * @return array
      */

@@ -52,7 +52,7 @@ class MediaOptimizeCommand extends ShopwareCommand implements CompletionAwareInt
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -65,7 +65,7 @@ class MediaOptimizeCommand extends ShopwareCommand implements CompletionAwareInt
             exit(ShellPathCompletion::PATH_COMPLETION_EXIT_CODE);
         }
 
-        return false;
+        return [];
     }
 
     /**

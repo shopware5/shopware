@@ -66,7 +66,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
             return array_column($result, 'id');
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -74,7 +74,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

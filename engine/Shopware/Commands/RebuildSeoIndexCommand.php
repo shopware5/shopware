@@ -76,7 +76,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -106,7 +106,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
             return array_diff(array_column($result, 'id'), $alreadyTakenShopIds);
         }
 
-        return false;
+        return [];
     }
 
     /**

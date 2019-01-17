@@ -47,7 +47,7 @@ class SnippetsToIniCommand extends ShopwareCommand implements CompletionAwareInt
             return $this->completeDirectoriesInDirectory();
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -59,7 +59,7 @@ class SnippetsToIniCommand extends ShopwareCommand implements CompletionAwareInt
             return $this->completeInstalledLocaleKeys($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**

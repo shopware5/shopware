@@ -46,7 +46,7 @@ class PluginInstallCommand extends ShopwareCommand implements CompletionAwareInt
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -67,7 +67,7 @@ class PluginInstallCommand extends ShopwareCommand implements CompletionAwareInt
             return array_column($result, 'name');
         }
 
-        return false;
+        return [];
     }
 
     /**

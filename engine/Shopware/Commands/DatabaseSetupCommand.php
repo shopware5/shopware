@@ -58,7 +58,7 @@ class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInt
             return $this->validSteps;
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -66,7 +66,7 @@ class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInt
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

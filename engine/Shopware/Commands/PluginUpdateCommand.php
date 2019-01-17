@@ -45,7 +45,7 @@ class PluginUpdateCommand extends ShopwareCommand implements CompletionAwareInte
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -57,7 +57,7 @@ class PluginUpdateCommand extends ShopwareCommand implements CompletionAwareInte
             return $this->queryPluginNames($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**

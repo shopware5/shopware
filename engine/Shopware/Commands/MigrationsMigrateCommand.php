@@ -51,7 +51,7 @@ class MigrationsMigrateCommand extends ShopwareCommand implements CompletionAwar
             return array_intersect_key($constants, array_combine($modeConstantKeys, $modeConstantPseudoValues));
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -59,7 +59,7 @@ class MigrationsMigrateCommand extends ShopwareCommand implements CompletionAwar
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

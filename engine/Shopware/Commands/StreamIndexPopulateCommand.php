@@ -63,7 +63,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
             return array_column($result, 'id');
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -71,7 +71,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

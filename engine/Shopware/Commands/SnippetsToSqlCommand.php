@@ -49,7 +49,7 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
             return ['true', 'false'];
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -61,7 +61,7 @@ class SnippetsToSqlCommand extends ShopwareCommand implements CompletionAwareInt
             return $this->completeInDirectory();
         }
 
-        return false;
+        return [];
     }
 
     /**

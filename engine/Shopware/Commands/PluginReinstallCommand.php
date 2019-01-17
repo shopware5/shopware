@@ -39,7 +39,7 @@ class PluginReinstallCommand extends ShopwareCommand implements CompletionAwareI
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -51,7 +51,7 @@ class PluginReinstallCommand extends ShopwareCommand implements CompletionAwareI
             return $this->queryPluginNames($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**

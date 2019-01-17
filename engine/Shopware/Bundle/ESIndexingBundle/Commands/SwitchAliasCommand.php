@@ -48,7 +48,7 @@ class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInter
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -75,13 +75,13 @@ class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInter
         }
 
         if ($argumentName === 'index') {
-            /** @var $client Client */
+            /** @var Client $client */
             $client = $this->container->get('shopware_elastic_search.client');
 
             return array_keys($client->indices()->getAliases());
         }
 
-        return false;
+        return [];
     }
 
     /**

@@ -46,7 +46,7 @@ class PluginUninstallCommand extends ShopwareCommand implements CompletionAwareI
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -67,7 +67,7 @@ class PluginUninstallCommand extends ShopwareCommand implements CompletionAwareI
             return array_column($result, 'name');
         }
 
-        return false;
+        return [];
     }
 
     /**

@@ -54,7 +54,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
             return array_diff($this->completeShopIds($context->getCurrentWord()), array_map('intval', $selectedShopIds));
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -62,7 +62,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

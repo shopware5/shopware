@@ -43,7 +43,7 @@ class SnippetsValidateCommand extends ShopwareCommand implements CompletionAware
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -55,7 +55,7 @@ class SnippetsValidateCommand extends ShopwareCommand implements CompletionAware
             return $this->completeInDirectory();
         }
 
-        return false;
+        return [];
     }
 
     /**

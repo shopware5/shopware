@@ -68,7 +68,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
             return $this->completeShopwareVersions($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -91,7 +91,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
             }
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -478,7 +478,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
     /**
      * @param string[] $arguments
      *
-     * @return AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     private function getAuthenticationFromArguments(array $arguments)
     {

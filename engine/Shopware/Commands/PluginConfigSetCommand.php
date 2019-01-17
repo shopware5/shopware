@@ -53,7 +53,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
             return $this->completeShopIds($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -78,7 +78,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
             try {
                 $plugin = $pluginManager->getPluginByName($pluginName);
             } catch (\Exception $e) {
-                return false;
+                return [];
             }
 
             /** @var Repository $shopRepository */
@@ -86,13 +86,13 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
 
             $shops = $shopRepository->findAll();
 
-            /** @var string[]|false $result */
-            $result = false;
+            /** @var string[] $result */
+            $result = [];
 
             foreach ($shops as $shop) {
                 $configKeys = array_keys($pluginManager->getPluginConfig($plugin, $shop));
 
-                if ($result === false) {
+                if (empty($result)) {
                     $result = $configKeys;
                 } else {
                     $result = array_intersect($result, $configKeys);
@@ -115,11 +115,11 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
 
             if (strpos($context->getCurrentWord(), '[') === 0 &&
                 stripos($context->getCurrentWord(), ']') === false) {
-                return "{$context->getCurrentWord()}]";
+                return ["{$context->getCurrentWord()}]"];
             }
         }
 
-        return false;
+        return [];
     }
 
     /**

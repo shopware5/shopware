@@ -42,7 +42,7 @@ class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareIn
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -54,7 +54,7 @@ class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareIn
             return $this->completeDirectoriesInDirectory($this->container->getParameter('kernel.root_dir'));
         }
 
-        return false;
+        return [];
     }
 
     /**

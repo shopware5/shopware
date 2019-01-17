@@ -51,7 +51,7 @@ class ThemeCreateCommand extends ShopwareCommand implements CompletionAwareInter
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -75,7 +75,7 @@ class ThemeCreateCommand extends ShopwareCommand implements CompletionAwareInter
             return array_column($result, 'template');
         }
 
-        return false;
+        return [];
     }
 
     /**

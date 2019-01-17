@@ -47,7 +47,7 @@ class ImageMigrateCommand extends ShopwareCommand implements CompletionAwareInte
             return array_keys($this->getContainer()->getParameter('shopware.cdn.adapters'));
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -55,7 +55,7 @@ class ImageMigrateCommand extends ShopwareCommand implements CompletionAwareInte
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

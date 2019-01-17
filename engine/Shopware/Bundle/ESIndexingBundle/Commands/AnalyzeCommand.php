@@ -94,7 +94,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -121,7 +121,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
         }
 
         if ($argumentName === 'analyzer') {
-            /** @var $client Client */
+            /** @var Client $client */
             $client = $this->container->get('shopware_elastic_search.client');
 
             $recursive = new RecursiveIteratorIterator(
@@ -139,7 +139,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
             return array_unique(array_merge($analyzer, self::DEFAULT_ANALYZERS));
         }
 
-        return false;
+        return [];
     }
 
     /**

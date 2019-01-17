@@ -45,7 +45,7 @@ class CronRunCommand extends ShopwareCommand implements CompletionAwareInterface
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**
@@ -62,7 +62,7 @@ class CronRunCommand extends ShopwareCommand implements CompletionAwareInterface
             }, $manager->getAllJobs());
         }
 
-        return false;
+        return [];
     }
 
     /**

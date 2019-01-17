@@ -49,7 +49,7 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
             return $this->completeInDirectory($this->container->getParameter('kernel.root_dir'));
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -57,7 +57,7 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        return false;
+        return [];
     }
 
     /**

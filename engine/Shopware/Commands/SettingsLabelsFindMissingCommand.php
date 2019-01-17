@@ -48,7 +48,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
             return $this->completeDirectoriesInDirectory($this->container->get('application')->DocPath());
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -60,7 +60,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
             return $this->completeInstalledLocaleKeys($context->getCurrentWord());
         }
 
-        return false;
+        return [];
     }
 
     /**
