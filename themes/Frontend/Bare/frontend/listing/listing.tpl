@@ -11,10 +11,9 @@
                         {$fullscreen = true}
                     {/if}
 
-                    <div class="emotion--wrapper"
-                         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                         data-availableDevices="{$emotion.devices}">
-                    </div>
+                    {block name="frontend_listing_emotions_emotion"}
+                        {include file="frontend/_includes/emotion.tpl"}
+                    {/block}
                 {/foreach}
 
                 {block name="frontend_listing_list_promotion_link_show_listing"}

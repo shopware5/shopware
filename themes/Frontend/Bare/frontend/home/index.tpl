@@ -40,10 +40,7 @@
                 <div class="content--emotions">
                     {foreach $emotions as $emotion}
                         {block name='frontend_home_index_emotion_wrapper'}
-                            <div class="emotion--wrapper"
-                                 data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                                 data-availableDevices="{$emotion.devices}">
-                            </div>
+                            {include file="frontend/_includes/emotion.tpl"}
                         {/block}
                     {/foreach}
                 </div>

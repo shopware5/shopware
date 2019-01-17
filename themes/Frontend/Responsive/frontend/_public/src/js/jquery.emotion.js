@@ -61,7 +61,14 @@
              * @property loadingOverlaySelector
              * @type {string}
              */
-            loadingOverlaySelector: '.emotion--overlay'
+            loadingOverlaySelector: '.emotion--overlay',
+
+            /**
+             * Should the emotion loaded with ajax
+             * @property ajax
+             * @type {boolean}
+             */
+            ajax: true
         },
 
         /**
@@ -152,37 +159,43 @@
                 return;
             }
 
-            /**
-             * Show the loading indicator and load the emotion world.
-             */
-            me.showEmotion();
+            if (me.opts.ajax) {
+                /**
+                 * Show the loading indicator and load the emotion world.
+                 */
+                me.showEmotion();
 
-            if (me.isLoading) {
-                return;
-            }
-
-            me.isLoading = true;
-            me.$overlay.insertBefore('.content-main');
-
-            $.ajax({
-                url: url,
-                method: 'GET',
-                success: function (response) {
-                    me.isLoading = false;
-                    me.$overlay.remove();
-
-                    $.publish('plugin/swEmotionLoader/onLoadEmotionLoaded', [ me ]);
-
-                    if (!response.length) {
-                        me.hideEmotion();
-                        return;
-                    }
-
-                    me.initEmotion(response);
-
-                    $.publish('plugin/swEmotionLoader/onLoadEmotionFinished', [ me ]);
+                if (me.isLoading) {
+                    return;
                 }
-            });
+
+                me.isLoading = true;
+                me.$overlay.insertBefore('.content-main');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        me.isLoading = false;
+                        me.$overlay.remove();
+
+                        $.publish('plugin/swEmotionLoader/onLoadEmotionLoaded', [ me ]);
+
+                        if (!response.length) {
+                            me.hideEmotion();
+                            return;
+                        }
+
+                        me.initEmotion(response);
+
+                        $.publish('plugin/swEmotionLoader/onLoadEmotionFinished', [ me ]);
+                    }
+                });
+            } else {
+                me.$overlay.remove();
+                me.showEmotion();
+                me.initEmotion();
+            }
 
             $.publish('plugin/swEmotionLoader/onLoadEmotion', [ me ]);
         },
@@ -191,12 +204,14 @@
          * Removes the content of the container by
          * the new emotion world markup and initializes it.
          *
-         * @param html
          */
         initEmotion: function(html) {
             var me = this;
 
-            me.$el.html(html);
+            if (html) {
+                me.$el.html(html);
+            }
+
             me.$emotion = me.$el.find('*[data-emotion="true"]');
 
             if (!me.$emotion.length) {
