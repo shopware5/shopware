@@ -189,10 +189,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
-                if ($element['name'] === 'sordernumber') {
-                    if ($sOrdernumber = $this->Request()->getParam('sOrdernumber')) {
-                        $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
-                        $element['value'] = sprintf('%s (%s)', $product, $sOrdernumber);
+                
+                if ($element['name'] === 'sordernumber' && $sOrdernumber = $this->Request()->getParam('sOrdernumber')) {
+                    $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
+                    if ($product) {
+                        $element['value'] = sprintf('%s (%s)', $product, htmlspecialchars($sOrdernumber));
                         $this->_elements[$id]['value'] = $element['value'];
                     }
                 }
