@@ -69,6 +69,10 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         ]);
     }
 
+    /**
+     * Assigns the amount of the seo links which to build for this shop
+     * Bind for: Shopware_Controllers_Seo_filterCounts
+     */
     public function getCountAction()
     {
         $shopId = (int) $this->Request()->getParam('shopId', 1);
@@ -93,7 +97,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         $counts = $this->get('events')->filter(
             'Shopware_Controllers_Seo_filterCounts',
-            $counts
+            $counts,
+            ['shopId' => $shopId]
         );
 
         $this->View()->assign([
