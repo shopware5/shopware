@@ -2,6 +2,15 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.6
+
+### Additions
+
+
+### Changes
+
+* Changed the default value in column `s_core_auth.lockeduntil to `2010-01-01 00:00:00``
+
 ## 5.5.5
 
 [View all changes from v5.5.4...v5.5.5](https://github.com/shopware/shopware/compare/v5.5.4...v5.5.5)
