@@ -76,6 +76,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
 
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
         var countryStore = factory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
+        countryStore.remoteSort = true;
 
         countryStore.sort([{
             property: 'active',
@@ -185,7 +186,10 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                                 select: me.onCountrySelect,
                                 scope: me
                             },
-                            store: countryStore
+                            store: countryStore,
+                            xtype: 'pagingcombobox',
+                            valueField:'id',
+                            displayField: 'name'
                         },
                         stateId: {
                             fieldLabel: me.snippets.fields.state,

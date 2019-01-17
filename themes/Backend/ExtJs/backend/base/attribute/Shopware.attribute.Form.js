@@ -394,6 +394,7 @@ Ext.define('Shopware.attribute.Form', {
             Ext.create('Shopware.attribute.MediaFieldHandler'),
             Ext.create('Shopware.attribute.ProductFieldHandler'),
             Ext.create('Shopware.attribute.BlogFieldHandler'),
+            Ext.create('Shopware.attribute.CountryFieldHandler'),
             Ext.create('Shopware.attribute.BooleanFieldHandler'),
             Ext.create('Shopware.attribute.DateFieldHandler'),
             Ext.create('Shopware.attribute.DateTimeFieldHandler'),

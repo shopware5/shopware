@@ -53,6 +53,18 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWit
 
     _create: function() {
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        var store = factory.createEntitySearchStore('Shopware\\Models\\Country\\Country');
+        store.remoteSort = true;
+        store.sort([
+            {
+                property: 'active',
+                direction: 'DESC'
+            },
+            {
+                property: 'name',
+                direction: 'ASC'
+            }
+        ]);
 
         return {
             title: '{s name="has_address_with_country_condition_selection"}{/s}',
@@ -65,7 +77,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWit
                 useSeparator: false,
                 allowBlank: false,
                 store: factory.createEntitySearchStore('Shopware\\Models\\Country\\Country'),
-                searchStore: factory.createEntitySearchStore('Shopware\\Models\\Country\\Country')
+                searchStore: store,
             }]
         };
     }

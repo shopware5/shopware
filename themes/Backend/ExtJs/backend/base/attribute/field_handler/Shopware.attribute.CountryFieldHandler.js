@@ -20,36 +20,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Payment
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
-/**
- * Shopware Store - Country list backend module.
- *
- * The countries store is used to display all available countries.
- */
-
-//{block name="backend/payment/store/countries"}
-Ext.define('Shopware.apps.Payment.store.Countries', {
-    extend : 'Ext.data.Store',
-    autoLoad : false,
-    pageSize : 30,
-    model : 'Shopware.apps.Payment.model.Country',
-
-    remoteSort: true,
-    sorters: [
-        {
-            property: 'countries.active',
-            direction: 'DESC'
-        },
-        {
-            property: 'countries.name',
-            direction: 'ASC'
-        }
-    ]
+// {block name="backend/base/attribute/field_handler/country"}
+Ext.define('Shopware.attribute.CountryFieldHandler', {
+    extend: 'Shopware.attribute.AbstractEntityFieldHandler',
+    entity: "Shopware\\Models\\Country\\Country",
+    singleSelectionClass: 'Shopware.form.field.CountrySingleSelection',
+    multiSelectionClass: 'Shopware.form.field.CountryGrid'
 });
-//{/block}
+// {/block}

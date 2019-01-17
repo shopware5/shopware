@@ -107,6 +107,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Country', {
         me.usedCountriesStore.each(function(element) {
             ids.push(element.get('id'));
         });
+        me.availableCountries.remoteSort = true;
         me.availableCountries.filters.clear();
         me.availableCountries.filter('usedIds', ids);
         me.availableCountries.sort([
