@@ -68,14 +68,15 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
             renderer: function(v) { return v && (v.charAt(0).toUpperCase() + v.substr(1)); },
             flex: 1
         }, {
-            dataIndex: 'position',
-            text: '{s name=country/table/position_text}Position{/s}',
-            flex: 1
-        }, {
             dataIndex: 'iso',
             text: '{s name=country/table/iso_text}Short code{/s}',
             flex: 1
-        }, me.getActionColumn()];
+        }, {
+            dataIndex: 'position',
+            text: '{s name=country/table/position_text}Position{/s}',
+            flex: 1
+        },
+        me.getActionColumn()];
     },
 
     getFormItems: function() {
