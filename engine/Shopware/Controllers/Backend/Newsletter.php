@@ -768,9 +768,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function createHash()
     {
-        // todo@all Create new method to get same secret hashes for values
-        $license = '';
-        //($license = Shopware()->License()->getLicense('sCORE')) || ($license = Shopware()->License()->getLicense('sCOMMUNITY'));
+        $license = $this->get('shopware_plugininstaller.unique_id_generator')->getUniqueId();
         $parts = func_get_args();
         $parts[] = $license;
 

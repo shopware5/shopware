@@ -188,8 +188,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         ";
         $content = Shopware()->Db()->fetchRow($sql, [$context->getShop()->getId(), $this->Request()->get('sID')]);
         if (!empty($content)) {
-            // todo@all Mind hash-building in rework phase
-            $license = '';
+            $license = $this->get('shopware_plugininstaller.unique_id_generator')->getUniqueId();
             $content['hash'] = [$content['id'], $license];
             $content['hash'] = md5(implode('|', $content['hash']));
             $content['link'] = $this->Front()->Router()->assemble(['module' => 'backend', 'controller' => 'newsletter', 'id' => $content['id'], 'hash' => $content['hash'], 'fullPath' => true]);
