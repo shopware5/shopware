@@ -20,36 +20,23 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Payment
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
-/**
- * Shopware Store - Country list backend module.
- *
- * The countries store is used to display all available countries.
- */
+//{namespace name="backend/attributes/fields"}
 
-//{block name="backend/payment/store/countries"}
-Ext.define('Shopware.apps.Payment.store.Countries', {
-    extend : 'Ext.data.Store',
-    autoLoad : false,
-    pageSize : 30,
-    model : 'Shopware.apps.Payment.model.Country',
+// {block name="backend/base/attribute/field/country_grid"}
+Ext.define('Shopware.form.field.CountryGrid', {
+    extend: 'Shopware.form.field.Grid',
+    alias: 'widget.shopware-form-field-country-grid',
+    mixins: ['Shopware.model.Helper'],
 
-    remoteSort: true,
-    sorters: [
-        {
-            property: 'countries.active',
-            direction: 'DESC'
-        },
-        {
-            property: 'countries.name',
-            direction: 'ASC'
-        }
-    ]
+    createSearchField: function() {
+        return Ext.create('Shopware.form.field.CountrySingleSelection', this.getComboConfig());
+    }
 });
-//{/block}
+// {/block}

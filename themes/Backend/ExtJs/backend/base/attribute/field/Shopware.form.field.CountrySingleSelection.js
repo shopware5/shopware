@@ -20,36 +20,37 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Payment
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
-/**
- * Shopware Store - Country list backend module.
- *
- * The countries store is used to display all available countries.
- */
+//{namespace name="backend/attributes/fields"}
 
-//{block name="backend/payment/store/countries"}
-Ext.define('Shopware.apps.Payment.store.Countries', {
-    extend : 'Ext.data.Store',
-    autoLoad : false,
-    pageSize : 30,
-    model : 'Shopware.apps.Payment.model.Country',
+// {block name="backend/base/attribute/field/country"}
+Ext.define('Shopware.form.field.CountrySingleSelection', {
+    extend: 'Shopware.form.field.SingleSelection',
+    alias: 'widget.shopware-form-field-country-single-selection',
 
-    remoteSort: true,
-    sorters: [
-        {
-            property: 'countries.active',
-            direction: 'DESC'
-        },
-        {
-            property: 'countries.name',
-            direction: 'ASC'
-        }
-    ]
+    getComboConfig: function() {
+        var me = this;
+        var config = me.callParent(arguments);
+
+        config.store.remoteSort = true;
+        config.store.sort([
+            {
+                property: 'active',
+                direction: 'DESC'
+            },
+            {
+                property: 'name',
+                direction: 'ASC'
+            }
+        ]);
+
+        return config;
+    }
 });
-//{/block}
+// {/block}

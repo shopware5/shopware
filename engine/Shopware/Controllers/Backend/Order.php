@@ -276,8 +276,19 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return $paymentStateItem;
         }, $paymentState);
 
+        $countriesSort = [
+            [
+                'property' => 'countries.active',
+                'direction' => 'DESC',
+            ],
+            [
+                'property' => 'countries.name',
+                'direction' => 'ASC',
+            ],
+        ];
+
         $shops = $this->getShopRepository()->getBaseListQuery()->getArrayResult();
-        $countries = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
+        $countries = $this->getCountryRepository()->getCountriesQuery(null, $countriesSort)->getArrayResult();
         $payments = $this->getPaymentRepository()->getAllPaymentsQuery()->getArrayResult();
         $dispatches = $this->getDispatchRepository()->getDispatchesQuery()->getArrayResult();
         $documentTypes = $this->getRepository()->getDocumentTypesQuery()->getArrayResult();
