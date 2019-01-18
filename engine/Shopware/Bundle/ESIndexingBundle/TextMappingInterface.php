@@ -35,6 +35,8 @@ interface TextMappingInterface
     public function getTextField();
 
     /**
+     * @deprecated Will be removed with Shopware 5.7
+     *
      * @return array
      */
     public function getNotAnalyzedField();
@@ -45,6 +47,8 @@ interface TextMappingInterface
     public function getKeywordField();
 
     /**
+     * @deprecated Will be removed with Shopware 5.7
+     *
      * @return array
      */
     public function getAttributeRawField(): array;

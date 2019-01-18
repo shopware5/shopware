@@ -110,7 +110,7 @@ class ProductMapping implements MappingInterface
 
                 // Number fields
                 'number' => array_merge($this->textMapping->getTextField(), ['analyzer' => 'standard']),
-                'ean' => $this->textMapping->getNotAnalyzedField(),
+                'ean' => $this->textMapping->getKeywordField(),
                 'manufacturerNumber' => $this->fieldMapping->getLanguageField($shop),
 
                 // Language fields
@@ -336,13 +336,13 @@ class ProductMapping implements MappingInterface
             switch ($type['type']) {
                 case 'keyword':
                     $type = $this->textMapping->getKeywordField();
-                    $type['fields']['raw'] = $this->textMapping->getAttributeRawField();
+                    $type['fields']['raw'] = $this->textMapping->getKeywordField();
                     break;
 
                 case 'string':
                 case 'text':
                     $type = $this->textMapping->getTextField();
-                    $type['fields']['raw'] = $this->textMapping->getAttributeRawField();
+                    $type['fields']['raw'] = $this->textMapping->getKeywordField();
                     break;
             }
 

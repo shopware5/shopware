@@ -89,10 +89,10 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'customerId' => ['type' => 'long'],
                 'billingCountryId' => ['type' => 'long'],
                 'shippingCountryId' => ['type' => 'long'],
-                'groupKey' => $this->textMapping->getNotAnalyzedField(),
+                'groupKey' => $this->textMapping->getKeywordField(),
                 'email' => $this->getTextFieldWithRawData(),
                 'orderDocuments' => $this->getTextFieldWithRawData(),
-                'transactionId' => $this->textMapping->getNotAnalyzedField(),
+                'transactionId' => $this->textMapping->getKeywordField(),
                 'firstname' => $this->getTextFieldWithRawData(),
                 'lastname' => $this->getTextFieldWithRawData(),
                 'paymentId' => ['type' => 'long'],
@@ -105,9 +105,9 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'company' => $this->textMapping->getTextField(),
                 'department' => $this->textMapping->getTextField(),
                 'street' => $this->textMapping->getTextField(),
-                'zipcode' => $this->textMapping->getNotAnalyzedField(),
+                'zipcode' => $this->textMapping->getKeywordField(),
                 'city' => $this->textMapping->getTextField(),
-                'phone' => $this->textMapping->getNotAnalyzedField(),
+                'phone' => $this->textMapping->getKeywordField(),
                 'countryName' => $this->textMapping->getTextField(),
 
                 'swag_all' => $this->textMapping->getTextField(),
@@ -129,7 +129,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
             $this->textMapping->getTextField(),
             [
                 'fields' => [
-                    'raw' => $this->textMapping->getNotAnalyzedField(),
+                    'raw' => $this->textMapping->getKeywordField(),
                 ],
                 'copy_to' => 'swag_all',
             ]

@@ -79,9 +79,6 @@ class BatchProductSearchTest extends TestCase
 
     public function testWithNumericArticleNumbers()
     {
-        $this->assertTrue(true);
-
-        return;
         $context = $this->getContext();
         $category = $this->helper->createCategory();
         $this->createProducts([10002 => [], 'SW10001' => []], $context, $category);

@@ -91,7 +91,7 @@ class ProductRepository extends GenericRepository implements EsAwareRepository
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'number' => array_merge($this->textMapping->getNotAnalyzedField(), ['copy_to' => 'swag_all']),
+                'number' => array_merge($this->textMapping->getKeywordField(), ['copy_to' => 'swag_all']),
                 'categoryIds' => ['type' => 'long'],
                 'variantId' => ['type' => 'long'],
                 'taxId' => ['type' => 'long'],
@@ -101,14 +101,14 @@ class ProductRepository extends GenericRepository implements EsAwareRepository
                     $this->textMapping->getTextField(),
                     [
                         'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                            'raw' => $this->textMapping->getKeywordField(),
                         ],
                         'copy_to' => 'swag_all',
                     ]
                 ),
                 'inStock' => ['type' => 'long'],
-                'ean' => $this->textMapping->getNotAnalyzedField(),
-                'supplierNumber' => $this->textMapping->getNotAnalyzedField(),
+                'ean' => $this->textMapping->getKeywordField(),
+                'supplierNumber' => $this->textMapping->getKeywordField(),
                 'additionalText' => $this->textMapping->getTextField(),
                 'articleActive' => ['type' => 'boolean'],
                 'variantActive' => ['type' => 'boolean'],
@@ -117,7 +117,7 @@ class ProductRepository extends GenericRepository implements EsAwareRepository
                     $this->textMapping->getTextField(),
                     [
                         'fields' => [
-                            'raw' => $this->textMapping->getNotAnalyzedField(),
+                            'raw' => $this->textMapping->getKeywordField(),
                         ],
                         'copy_to' => 'swag_all',
                     ]
