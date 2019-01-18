@@ -136,10 +136,6 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        if ($request->isPost() && $request->isXmlHttpRequest()) {
-            return;
-        }
-
         // skip whitelisted actions
         if ($this->isWhitelisted($controller)) {
             return;
