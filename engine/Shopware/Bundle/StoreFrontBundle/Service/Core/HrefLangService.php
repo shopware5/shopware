@@ -55,7 +55,7 @@ class HrefLangService implements HrefLangServiceInterface
     /**
      * @var array
      */
-    private $routerCache = [];
+    private $contextCache = [];
 
     /**
      * @var ModelManager
@@ -93,7 +93,7 @@ class HrefLangService implements HrefLangServiceInterface
             $href = new HrefLang();
             $href->setShopId($languageShop['id']);
             $href->setLocale($languageShop['locale']);
-            $href->setLink($this->getRouter($languageShop['id'])->assemble($parameters));
+            $href->setLink($this->router->assemble($parameters, $this->getContext($languageShop['id'])));
 
             if (!$this->config->get('hrefLangCountry')) {
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
@@ -158,20 +158,17 @@ class HrefLangService implements HrefLangServiceInterface
     /**
      * @param int $shopId
      *
-     * @return RouterInterface
+     * @return Context
      */
-    private function getRouter($shopId)
+    private function getContext($shopId)
     {
-        if (isset($this->routerCache[$shopId])) {
-            return $this->routerCache[$shopId];
+        if (!isset($this->contextCache[$shopId])) {
+            $shop = $this->modelManager->getRepository(ShopModel::class)->getById($shopId);
+            $config = clone $this->config;
+            $config->setShop($shop);
+            $this->contextCache[$shopId] = Context::createFromShop($shop, $config);
         }
 
-        $shop = $this->modelManager->getRepository(ShopModel::class)->getById($shopId);
-        $languageRouter = clone $this->router;
-        $languageRouter->setContext(Context::createFromShop($shop, $this->config));
-
-        $this->routerCache[$shopId] = $languageRouter;
-
-        return $languageRouter;
+        return $this->contextCache[$shopId];
     }
 }
