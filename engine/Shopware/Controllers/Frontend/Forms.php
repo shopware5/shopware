@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\OrderNumberValidator\Exception\InvalidOrderNumberException;
 use Shopware\Components\Random;
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
@@ -190,10 +191,23 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
-                    if ($sOrdernumber = $this->Request()->getParam('sOrdernumber')) {
-                        $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
-                        $element['value'] = sprintf('%s (%s)', $product, $sOrdernumber);
+                    $orderNumber = $this->Request()->getParam('sOrdernumber');
+
+                    try {
+                        $this->get('shopware.components.order_number_validator')
+                            ->validate($orderNumber);
+
+                        $product = Shopware()->Modules()
+                            ->Articles()
+                            ->sGetArticleNameByOrderNumber($orderNumber, false, true);
+
+                        $element['value'] = sprintf('%s (%s)', $product, $this->get('shopware.escaper')
+                            ->escapeHtml($orderNumber));
                         $this->_elements[$id]['value'] = $element['value'];
+                    } catch (InvalidOrderNumberException $exception) {
+                        // Explicit empty catch
+                    } catch (\TypeError $exception) {
+                        // Explicit empty catch
                     }
                 }
 

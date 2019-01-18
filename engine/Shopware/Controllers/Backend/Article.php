@@ -1894,6 +1894,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $this->View()->assign(['success' => true]);
     }
 
+    public function loadAction()
+    {
+        parent::loadAction();
+        $this->view->assign('orderNumberRegex', $this->container->getParameter('shopware.product.orderNumberRegex'));
+    }
+
     /**
      * Event listener function of the product backend module.
      * Downloads ESD-File

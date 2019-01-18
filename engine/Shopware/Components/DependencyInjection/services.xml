@@ -915,5 +915,17 @@
 
         <service id="shopware.components.template.html_minifier"
                  class="Shopware\Components\Template\HtmlMinCompressor"/>
+
+        <service id="shopware.components.order_number_validator"
+                 class="Shopware\Components\OrderNumberValidator\RegexOrderNumberValidator">
+            <argument type="string">%shopware.product.orderNumberRegex%</argument>
+        </service>
+
+        <service id="shopware.components.validator.order_number_constraint_validator"
+                 class="Shopware\Components\Model\DBAL\Validator\OrderNumberValidator">
+            <argument type="service" id="shopware.components.order_number_validator"/>
+
+            <tag name="validator.constraint_validator" alias="order_number_constraint_validator" />
+        </service>
     </services>
 </container>

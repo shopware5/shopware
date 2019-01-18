@@ -509,7 +509,7 @@ class ArticleTest extends TestCase
     public function testFlipArticleMainVariantShouldBeSuccessful($id)
     {
         $originalArticle = $this->resource->getOne($id);
-        $mainVariantNumber = $originalArticle['mainDetailId'];
+        $mainVariantNumber = (string) $originalArticle['mainDetailId'];
 
         $testData = [
             'mainDetail' => [
