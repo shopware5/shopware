@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
             title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
             message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
         },
+        warningTitle:'{s name=message/save/warning_title}Warning{/s}',
         changeStatus: {
             successMessage: '{s name=message/status/success}The status has been changed successfully{/s}',
             failureMessage: '{s name=message/status/failure}An error has occurred while changing the status.{/s}'
@@ -143,6 +144,10 @@ Ext.define('Shopware.apps.Order.controller.List', {
 
                 if (operation.success === true) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.changeStatus.successMessage, me.snippets.growlMessage);
+                    if (rawData && rawData.warning) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.warningTitle, rawData.warning, me.snippets.growlMessage);
+                    }
+
                     record.set('invoiceAmount', rawData.data.invoiceAmount);
 
                     //Check if a status mail is created and create a model with the returned data and open the mail window.
