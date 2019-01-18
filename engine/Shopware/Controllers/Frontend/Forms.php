@@ -190,9 +190,15 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
-                    if ($sOrdernumber = $this->Request()->getParam('sOrdernumber')) {
-                        $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
-                        $element['value'] = sprintf('%s (%s)', $product, $sOrdernumber);
+                    $sOrdernumber = $this->Request()->getParam('sOrdernumber');
+
+                    if ($this->isValidOrderNumber($sOrdernumber)) {
+                        $product = Shopware()->Modules()
+                            ->Articles()
+                            ->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
+
+                        $element['value'] = sprintf('%s (%s)', $product, $this->get('shopware.escaper')
+                            ->escapeHtml($sOrdernumber));
                         $this->_elements[$id]['value'] = $element['value'];
                     }
                 }
@@ -431,7 +437,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function _filterInput($input)
     {
-        // remove all control characters, unassigned, private use, formatting and surrogate code points
+        // Remove all control characters, unassigned, private use, formatting and surrogate code points
         $input = preg_replace('#[^\PC\s]#u', '', $input);
 
         $temp = str_replace('"', '', $input);
@@ -439,7 +445,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             return '';
         }
 
-        return $input;
+        return $this->get('shopware.escaper')->escapeHtml($input);
     }
 
     /**
@@ -610,6 +616,17 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         return $form;
+    }
+
+    /**
+     * @param string $orderNumber
+     *
+     * @return bool
+     */
+    protected function isValidOrderNumber($orderNumber)
+    {
+        // This regex needs to match with the one in the assert in \Shopware\Models\Article\Detail::$number
+        return preg_match('/^[a-zA-Z0-9-_.]+$/', $orderNumber) === 1;
     }
 
     /**
