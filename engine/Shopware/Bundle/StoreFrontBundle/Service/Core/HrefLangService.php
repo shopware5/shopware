@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
-use Shopware\Components\Routing\Router;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Config as Config;
 
@@ -43,7 +43,7 @@ class HrefLangService implements HrefLangServiceInterface
     private $connection;
 
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
@@ -63,12 +63,12 @@ class HrefLangService implements HrefLangServiceInterface
     private $modelManager;
 
     /**
-     * @param Connection   $connection
-     * @param Router       $router
-     * @param Config       $config
-     * @param ModelManager $modelManager
+     * @param Connection      $connection
+     * @param RouterInterface $router
+     * @param Config          $config
+     * @param ModelManager    $modelManager
      */
-    public function __construct(Connection $connection, Router $router, Config $config, ModelManager $modelManager)
+    public function __construct(Connection $connection, RouterInterface $router, Config $config, ModelManager $modelManager)
     {
         $this->connection = $connection;
         $this->router = $router;
@@ -194,7 +194,7 @@ class HrefLangService implements HrefLangServiceInterface
     /**
      * @param int $shopId
      *
-     * @return Router
+     * @return RouterInterface
      */
     private function getRouter($shopId)
     {
