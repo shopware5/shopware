@@ -818,16 +818,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
 
             if (empty($data) || empty($data['id'])) {
-                $data['success'] = false;
-                $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
                 continue;
             }
 
             /** @var \Shopware\Models\Order\Order $order */
             $order = $modelManager->find(Order::class, $data['id']);
             if (!$order) {
-                $data['success'] = false;
-                $data['errorMessage'] = $namespace->get('no_order_id_passed', 'No valid order id passed.');
                 continue;
             }
 
