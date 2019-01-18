@@ -636,6 +636,9 @@ SQL;
     private function applyMigrations(PluginComponent $plugin, string $mode, bool $keepUserData = false): void
     {
         $manager = new PluginMigrationManager($this->pdo, $plugin, $this->logger);
+        if (!is_dir($manager->getMigrationPath())) {
+            return;
+        }
         $manager->run($mode, $keepUserData);
     }
 }
