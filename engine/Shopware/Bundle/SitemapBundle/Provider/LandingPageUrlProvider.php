@@ -29,13 +29,13 @@ use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing;
-use Shopware\Components\Routing\Router;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Emotion\Emotion;
 
 class LandingPageUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
@@ -50,10 +50,10 @@ class LandingPageUrlProvider implements UrlProviderInterface
     private $modelManager;
 
     /**
-     * @param ModelManager $modelManager
-     * @param Router       $router
+     * @param ModelManager    $modelManager
+     * @param RouterInterface $router
      */
-    public function __construct(ModelManager $modelManager, Router $router)
+    public function __construct(ModelManager $modelManager, RouterInterface $router)
     {
         $this->router = $router;
         $this->modelManager = $modelManager;

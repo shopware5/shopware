@@ -33,12 +33,12 @@ use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
-use Shopware\Components\Routing\Router;
+use Shopware\Components\Routing\RouterInterface;
 
 class ProductUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
@@ -68,14 +68,14 @@ class ProductUrlProvider implements UrlProviderInterface
     private $batchSize;
 
     /**
-     * @param Router                             $router
+     * @param RouterInterface                    $router
      * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
      * @param Connection                         $connection
      * @param int                                $batchSize
      */
     public function __construct(
-        Router $router,
+        RouterInterface $router,
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
         Connection $connection,
