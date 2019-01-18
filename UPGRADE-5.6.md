@@ -30,6 +30,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * the template cache is disabled
   * `$this->Response()->setHeader('Cache-Control', 'private', true);` is used in the controller
 
+* Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
+
 ### Removals
 
 * Removed `s_articles_attributes`.`articleID` which was not set for new article variants anymore since Shopware 5.2.0
