@@ -476,6 +476,7 @@
 
         <service id="shopware.plugin.cached_config_reader" class="Shopware\Components\Plugin\CachedConfigReader">
             <argument type="service" id="shopware.plugin.config_reader" />
+            <argument type="service" id="cache" />
         </service>
 
         <service id="shopware.plugin.config_reader" class="Shopware\Components\Plugin\DBALConfigReader">
