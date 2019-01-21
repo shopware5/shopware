@@ -42,8 +42,8 @@ SET description = "Abverkauf-Hauptartikel ohne Lagerbestand"
 WHERE description = "Abverkauf-Artikel ohne Lagerbestand";
 SQL;
         $sql4 = <<<'SQL'
-INSERT INTO s_multi_edit_filter
-VALUES (6,'<b>Abverkauf-Variantenartikel</b><br><small>nicht auf Lager</small>','   DETAIL.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= 0','Abverkauf-Variantenartikel ohne Lagerbestand',NULL,1,0);
+INSERT INTO s_multi_edit_filter (`name`, `filter_string`, `description`, `created`, `is_favorite`, `is_simple`)
+VALUES ('<b>Abverkauf-Variantenartikel</b><br><small>nicht auf Lager</small>','   DETAIL.LASTSTOCK  ISTRUE and DETAIL.INSTOCK <= 0','Abverkauf-Variantenartikel ohne Lagerbestand',NULL,1,0);
 SQL;
 
         $this->addSql($sql);

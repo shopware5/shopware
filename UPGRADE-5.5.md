@@ -8,7 +8,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Changes
 
-* Changed the selector for the emotion-wrapper in `jquery.emotion.js` to fix an issue with emotions using the 'resize' layout 
+* Changed the selector for the emotion-wrapper in `jquery.emotion.js` to fix an issue with emotions using the 'resize' layout
+* Changed SQL in migration to fix possible issues
 
 ## 5.5.5
 
