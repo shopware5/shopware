@@ -294,7 +294,17 @@ class Enlight_Template_Manager extends Smarty
                 $after[] = $dir;
             }
         }
-        return array_merge($after, $pluginDirs, $before);
+
+        $folders = array_merge($after, $pluginDirs, $before);
+
+        if ($this->eventManager) {
+            $folders = $this->eventManager->filter('Enlight_Template_Manager_FilterBuildInheritance', $folders, [
+                'themeDirectories' => $themeDirectories,
+                'pluginDirectories' => $pluginDirs,
+            ]);
+        }
+
+        return $folders;
     }
 
     /**
