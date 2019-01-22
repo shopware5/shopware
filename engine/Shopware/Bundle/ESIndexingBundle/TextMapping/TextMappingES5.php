@@ -41,7 +41,7 @@ class TextMappingES5 implements TextMappingInterface
      */
     public function getNotAnalyzedField()
     {
-        return ['type' => 'keyword', 'index' => false];
+        return ['type' => 'keyword', 'index' => 'not_analyzed'];
     }
 
     /**
