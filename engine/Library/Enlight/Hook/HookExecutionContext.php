@@ -149,6 +149,7 @@ class Enlight_Hook_HookExecutionContext
         // again, to allow repeated calls of 'executeParent()' in the same listener to call the whole chain again.
         $currentLevel = $this->parentExecutionLevel;
         $this->parentExecutionLevel++;
+        $listeners = array_values($listeners);
         $listeners[$currentLevel]->execute($this->args);
         $this->parentExecutionLevel--;
 
