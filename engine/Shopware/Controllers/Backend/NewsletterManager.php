@@ -128,27 +128,27 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         // Get Newsletter-Groups, empty newsletter groups and customer groups
         $sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM
-        (SELECT groups.id as internalId, COUNT(groupID) as number, groups.name, NULL as groupkey, FALSE as isCustomerGroup
+        (SELECT campaignGroup.id as internalId, COUNT(groupID) as number, campaignGroup.name, NULL as groupkey, FALSE as isCustomerGroup
             FROM s_campaigns_mailaddresses as addresses
-            JOIN s_campaigns_groups AS groups ON groupID = groups.id
+            JOIN s_campaigns_groups AS campaignGroup ON groupID = campaignGroup.id
             WHERE customer=0
             GROUP BY groupID
         UNION
-            SELECT groups.id as internalId, 0 as number, groups.name, NULL as groupkey, FALSE as isCustomerGroup
-            FROM s_campaigns_groups groups
+            SELECT campaignGroup.id as internalId, 0 as number, campaignGroup.name, NULL as groupkey, FALSE as isCustomerGroup
+            FROM s_campaigns_groups campaignGroup
             WHERE NOT EXISTS
             (
                 SELECT groupID
                 FROM s_campaigns_mailaddresses addresses
-                WHERE addresses.groupID = groups.id
+                WHERE addresses.groupID = campaignGroup.id
             )
         UNION
-            SELECT groups.id as internalId, COUNT(customergroup) as number, groups.description, groups.groupkey as groupkey, TRUE as isCustomerGroup
+            SELECT campaignGroup.id as internalId, COUNT(customergroup) as number, campaignGroup.description, campaignGroup.groupkey as groupkey, TRUE as isCustomerGroup
             FROM s_campaigns_mailaddresses as addresses
             LEFT JOIN s_user as users ON users.email = addresses.email
-            JOIN s_core_customergroups AS groups ON users.customergroup = groups.groupkey
+            JOIN s_core_customergroups AS campaignGroup ON users.customergroup = campaignGroup.groupkey
             WHERE customer=1
-            GROUP BY groups.groupkey) as t
+            GROUP BY campaignGroup.groupkey) as t
             ORDER BY :field :direction LIMIT :limit OFFSET :offset';
 
         /** @var \Doctrine\DBAL\Connection $db */

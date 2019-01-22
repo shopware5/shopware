@@ -47,6 +47,16 @@ class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Componen
     }
 
     /**
+     * @ticket SW-23211
+     */
+    public function testNewsletterGroup()
+    {
+        $this->dispatch('/backend/newsletter/getGroups');
+
+        $this->assertTrue($this->View()->getAssign('success'));
+    }
+
+    /**
      * Returns the test dataset
      *
      * @return PHPUnit_Extensions_Database_DataSet_IDataSet

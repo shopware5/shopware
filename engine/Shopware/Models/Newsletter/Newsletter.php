@@ -70,7 +70,7 @@ class Newsletter extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="groups", type="string", nullable=false)
+     * @ORM\Column(name="`groups`", type="string", nullable=false)
      */
     private $groups = '';
 
