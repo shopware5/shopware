@@ -47,7 +47,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:theme:cache:generate')
-            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop')
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop (multiple Ids -> shopId={1,2})')
             ->addOption('current', 'c', InputOption::VALUE_NONE, 'Compile from current asset timestamp')
             ->setDescription('Generates theme caches.')
         ;

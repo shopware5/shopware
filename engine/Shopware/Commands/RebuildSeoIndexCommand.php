@@ -27,7 +27,9 @@ namespace Shopware\Commands;
 use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class RebuildSeoIndexCommand extends ShopwareCommand
 {
@@ -74,7 +76,9 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         $this
             ->setName('sw:rebuild:seo:index')
             ->setDescription('Rebuild the SEO index')
-            ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop')
+            /* @deprecated since 5.6, to be removed in 6.0 */
+            ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop (deprecated)')
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop (multiple Ids -> shopId={1,2})')
             ->setHelp('The <info>%command.name%</info> rebuilds the SEO index')
         ;
     }
@@ -93,7 +97,15 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         $this->rewriteTable = $this->modules->RewriteTable();
         $this->events = $this->container->get('events');
 
-        $shops = $input->getArgument('shopId');
+        $shops = null;
+
+        if ($input->getArgument('shopId')) {
+            $io = new SymfonyStyle($input, $output);
+            $io->warning('Argument "shopId" will be replaced by option "--shopId" in the next major version');
+            $shops = $input->getArgument('shopId');
+        } elseif ($input->getOption('shopId')) {
+            $shops = $input->getOption('shopId');
+        }
 
         if (empty($shops)) {
             /** @var \Doctrine\DBAL\Query\QueryBuilder $query */

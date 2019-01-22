@@ -30,6 +30,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @category Shopware
@@ -46,8 +47,15 @@ class PluginConfigListCommand extends ShopwareCommand
         $this
             ->setName('sw:plugin:config:list')
             ->setDescription('Lists plugin configuration.')
+            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addOption(
                 'shop',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Get configuration for shop id (deprecated)'
+            )
+            ->addOption(
+                'shopId',
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Get configuration for shop id'
@@ -82,10 +90,20 @@ EOF
         /** @var ModelManager $em */
         $em = $this->container->get('models');
 
+        $shopId = null;
+
         if ($input->getOption('shop')) {
-            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->find($input->getOption('shop'));
+            $io = new SymfonyStyle($input, $output);
+            $io->warning('Option "--shop" will be replaced by option "--shopId" in the next major version');
+            $shopId = $input->getOption('shop');
+        } elseif ($input->getOption('shopId')) {
+            $shopId = $input->getOption('shopId');
+        }
+
+        if ($shopId) {
+            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->find($shopId);
             if (!$shop) {
-                $output->writeln(sprintf('Could not find shop with id %s.', $input->getOption('shop')));
+                $output->writeln(sprintf('Could not find shop with id %s.', $shopId));
 
                 return 1;
             }
