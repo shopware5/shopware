@@ -2,14 +2,16 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
-## 5.5.6
+## 5.5.7
 
 ### Additions
+
+* Added license synchronization button in Plugin Manager
 
 
 ### Changes
 
-* Changed the default value in column `s_core_auth.lockeduntil to `2010-01-01 00:00:00``
+* Changed the default value in column `s_core_auth.lockeduntil` to `2010-01-01 00:00:00`
 
 ## 5.5.5
 
