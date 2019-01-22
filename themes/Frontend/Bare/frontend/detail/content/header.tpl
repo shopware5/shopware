@@ -13,12 +13,23 @@
 
                     {* Product - Supplier information *}
                     {block name='frontend_detail_supplier_info'}
-                        {if $sArticle.supplierImg}
+                        {$imgSrc = $sArticle.supplierImg}
+                        {$imgSrcSet = ''}
+                        {if $sArticle.supplierMedia.thumbnails[0].source}
+                            {$imgSrc = $sArticle.supplierMedia.thumbnails[0].source}
+
+                            {if $sArticle.supplierMedia.thumbnails[0].retinaSource}
+                                {$retinaSource = $sArticle.supplierMedia.thumbnails[0].retinaSource}
+                                {$imgSrcSet = "$imgSrc, $retinaSource 2x"}
+                            {/if}
+                        {/if}
+
+                        {if $imgsrc}
                             <div class="product--supplier">
                                 <a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}"
                                    title="{"{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}"|escape}"
                                    class="product--supplier-link">
-                                    <img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName|escape}">
+                                    <img src="{$imgSrc}" {if !empty($imgSrcSet)}srcset="{$imgSrcSet}" {/if} alt="{$sArticle.supplierName|escape}">
                                 </a>
                             </div>
                         {/if}

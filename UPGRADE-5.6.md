@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * `$this->Response()->setHeader('Cache-Control', 'private', true);` is used in the controller
 
 * Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
+* Changed the manufacturer image to appropriate thumbnails
 
 ### Removals
 

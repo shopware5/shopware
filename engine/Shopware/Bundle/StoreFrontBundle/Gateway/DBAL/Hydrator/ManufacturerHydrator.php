@@ -121,6 +121,10 @@ class ManufacturerHydrator extends Hydrator
             );
         }
 
+        if (isset($data['__manufacturer_img_id'])) {
+            $manufacturer->setCoverId($data['__manufacturer_img_id']);
+        }
+
         if (isset($data['__manufacturerAttribute_id'])) {
             $this->attributeHydrator->addAttribute($manufacturer, $data, 'manufacturerAttribute', null, 'manufacturer');
         }

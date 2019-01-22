@@ -139,6 +139,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->addSelect('(' . $customerGroupQuery->getSQL() . ') as __product_blocked_customer_groups')
             ->addSelect('(' . $availableVariantQuery->getSQL() . ') as __product_has_available_variants')
             ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
+            ->addSelect('manufacturerMedia.id as __manufacturer_img_id')
         ;
         $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
 
@@ -159,6 +160,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->leftJoin('product', 's_articles_top_seller_ro', 'topSeller', 'topSeller.article_id = product.id')
             ->leftJoin('variant', 's_articles_esd', 'esd', 'esd.articledetailsID = variant.id')
             ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esdAttribute.esdID = esd.id')
+            ->leftJoin('manufacturer', 's_media', 'manufacturerMedia', 'manufacturerMedia.path = manufacturer.img')
             ->where('variant.ordernumber IN (:numbers)')
             ->andWhere('variant.active = 1')
             ->andWhere('product.active = 1')

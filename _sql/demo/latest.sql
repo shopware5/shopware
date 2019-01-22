@@ -7624,17 +7624,17 @@ INSERT INTO `s_media` (`id`, `albumID`, `name`, `description`, `path`, `type`, `
 (662, -1, 'Dartscheibe-Dartona', '', 'media/image/Dartscheibe-Dartona.jpg', 'IMAGE', 'jpg', 75884, 53, '2012-08-29'),
 (663, -1, 'Steel-Dartpfeil-Atomic', '', 'media/image/Steel-Dartpfeil-Atomic.jpg', 'IMAGE', 'jpg', 29237, 53, '2012-08-29'),
 (664, -1, 'Steel-Dartpfeil', '', 'media/image/Steel-Dartpfeil.jpg', 'IMAGE', 'jpg', 34912, 53, '2012-08-29'),
-(665, 1, 'accessoires', '', 'media/image/accessoires.png', 'IMAGE', 'png', 6172, 51, '2012-08-29'),
-(666, 1, 'beachdreams', '', 'media/image/beachdreams.png', 'IMAGE', 'png', 5747, 51, '2012-08-29'),
-(667, 1, 'blaueshaus', '', 'media/image/blaueshaus.png', 'IMAGE', 'png', 6566, 51, '2012-08-29'),
-(668, 1, 'deligarage', '', 'media/image/deligarage.png', 'IMAGE', 'png', 11086, 51, '2012-08-29'),
-(669, 1, 'heiku', '', 'media/image/heiku.png', 'IMAGE', 'png', 5322, 51, '2012-08-29'),
-(670, 1, 'sasse', '', 'media/image/sasse.png', 'IMAGE', 'png', 6420, 51, '2012-08-29'),
-(672, 1, 'stopthewater', '', 'media/image/stopthewater.png', 'IMAGE', 'png', 5442, 51, '2012-08-29'),
-(674, 1, 'tea', '', 'media/image/tea.png', 'IMAGE', 'png', 4576, 51, '2012-08-29'),
-(675, 1, 'vintage', '', 'media/image/vintage.png', 'IMAGE', 'png', 6877, 51, '2012-08-29'),
-(676, 1, 'sonnenschirm', '', 'media/image/sonnenschirm.png', 'IMAGE', 'png', 3952, 51, '2012-08-29'),
-(677, 1, 'sunsmile', '', 'media/image/sunsmile.png', 'IMAGE', 'png', 4735, 51, '2012-08-29'),
+(665, -12, 'accessoires', '', 'media/image/accessoires.png', 'IMAGE', 'png', 6172, 51, '2012-08-29'),
+(666, -12, 'beachdreams', '', 'media/image/beachdreams.png', 'IMAGE', 'png', 5747, 51, '2012-08-29'),
+(667, -12, 'blaueshaus', '', 'media/image/blaueshaus.png', 'IMAGE', 'png', 6566, 51, '2012-08-29'),
+(668, -12, 'deligarage', '', 'media/image/deligarage.png', 'IMAGE', 'png', 11086, 51, '2012-08-29'),
+(669, -12, 'heiku', '', 'media/image/heiku.png', 'IMAGE', 'png', 5322, 51, '2012-08-29'),
+(670, -12, 'sasse', '', 'media/image/sasse.png', 'IMAGE', 'png', 6420, 51, '2012-08-29'),
+(672, -12, 'stopthewater', '', 'media/image/stopthewater.png', 'IMAGE', 'png', 5442, 51, '2012-08-29'),
+(674, -12, 'tea', '', 'media/image/tea.png', 'IMAGE', 'png', 4576, 51, '2012-08-29'),
+(675, -12, 'vintage', '', 'media/image/vintage.png', 'IMAGE', 'png', 6877, 51, '2012-08-29'),
+(676, -12, 'sonnenschirm', '', 'media/image/sonnenschirm.png', 'IMAGE', 'png', 3952, 51, '2012-08-29'),
+(677, -12, 'sunsmile', '', 'media/image/sunsmile.png', 'IMAGE', 'png', 4735, 51, '2012-08-29'),
 (678, -1, 'Koffer-rot-gruen-gelb-blau503f1b16660bd', '', 'media/image/Koffer-rot-gruen-gelb-blau503f1b16660bd.jpg', 'IMAGE', 'jpg', 257592, 53, '2012-08-30'),
 (680, -1, 'shopware_packshot_professional_edition_72dpi_rgb', '', 'media/image/shopware_packshot_professional_edition_72dpi_rgb.png', 'IMAGE', 'png', 157116, 53, '2012-08-30'),
 (683, -1, 'Rennanzug-Jim-Clark-Style-FIA-Tasche', '', 'media/image/Rennanzug-Jim-Clark-Style-FIA-Tasche.jpg', 'IMAGE', 'jpg', 51491, 53, '2012-08-30'),
@@ -7729,7 +7729,7 @@ INSERT INTO `s_media` (`id`, `albumID`, `name`, `description`, `path`, `type`, `
 TRUNCATE TABLE `s_media_album`;
 INSERT INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
 (-13, 'Papierkorb', NULL, 12),
-(-12, 'Hersteller', NULL, 12),
+(-12, 'Hersteller', NULL, 8),
 (-11, 'Blog', NULL, 3),
 (-10, 'Unsortiert', NULL, 7),
 (-9, 'Sonstiges', -6, 3),
@@ -7740,8 +7740,7 @@ INSERT INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
 (-4, 'Aktionen', NULL, 5),
 (-3, 'Einkaufswelten', NULL, 3),
 (-2, 'Banner', NULL, 1),
-(-1, 'Artikel', NULL, 2),
-(1, 'Hersteller', NULL, 8);
+(-1, 'Artikel', NULL, 2);
 
 TRUNCATE TABLE `s_media_album_settings`;
 INSERT INTO `s_media_album_settings` (`id`, `albumID`, `create_thumbnails`, `thumbnail_size`, `icon`, `thumbnail_high_dpi`, `thumbnail_quality`, `thumbnail_high_dpi_quality`) VALUES
@@ -7756,9 +7755,8 @@ INSERT INTO `s_media_album_settings` (`id`, `albumID`, `create_thumbnails`, `thu
 (9, -2, 1, '800x800;1280x1280;1920x1920', 'sprite-pictures', 1, 90, 60),
 (10, -1, 1, '200x200;600x600;1280x1280', 'sprite-inbox', 1, 90, 60),
 (11, -11, 1, '200x200;600x600;1280x1280', 'sprite-leaf', 1, 90, 60),
-(12, 1, 0, '', 'sprite-hard-hat', 0, 90, 60),
-(13, -12, 0, '', 'sprite-blue-folder', 0, 90, 60),
-(14, -13, 0, '', 'sprite-bin-metal-full', 0, 90, 60);
+(12, -12, 1, '200x200;600x600;1280x1280', 'sprite-hard-hat', 1, 90, 60),
+(13, -13, 0, '', 'sprite-bin-metal-full', 0, 90, 60);
 
 TRUNCATE TABLE `s_media_association`;
 TRUNCATE TABLE `s_media_attributes`;

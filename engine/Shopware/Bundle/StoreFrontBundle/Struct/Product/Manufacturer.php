@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
 /**
  * @category Shopware
@@ -91,6 +92,18 @@ class Manufacturer extends Extendable
      * @var string
      */
     protected $coverFile;
+
+    /**
+     * @var int
+     */
+    protected $coverId;
+
+    /**
+     * Returns a Media struct with the thumbnails
+     *
+     * @var Media
+     */
+    protected $coverMedia;
 
     /**
      * @param string $description
@@ -238,10 +251,54 @@ class Manufacturer extends Extendable
 
     /**
      * @param string $coverFile
+     *
+     * @return Manufacturer
      */
     public function setCoverFile($coverFile)
     {
         $this->coverFile = $coverFile;
+
+        return $this;
+    }
+
+    /**
+     * @param Media $media
+     *
+     * @return Manufacturer
+     */
+    public function setCoverMedia(Media $media)
+    {
+        $this->coverMedia = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getCoverMedia()
+    {
+        return $this->coverMedia;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCoverId()
+    {
+        return $this->coverId;
+    }
+
+    /**
+     * @param int $coverId
+     *
+     * @return Manufacturer
+     */
+    public function setCoverId(int $coverId)
+    {
+        $this->coverId = $coverId;
+
+        return $this;
     }
 
     /**
