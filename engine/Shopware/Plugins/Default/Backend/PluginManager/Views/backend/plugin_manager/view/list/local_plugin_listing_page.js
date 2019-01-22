@@ -306,7 +306,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             items = me.callParent(arguments);
 
         Ext.Array.insert(items, 0, [
-            me.createUploadButton()
+            me.createUploadButton(),
+            me.createLicenseRefreshButton()
         ]);
 
         return items;
@@ -324,6 +325,50 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         });
 
         return me.uploadButton;
+    },
+
+    createLicenseRefreshButton: function() {
+        var me = this;
+
+        me.uploadButton = Ext.create('Ext.button.Button', {
+            text: '{s name="refresh_license"}Synchronize licenses{/s}',
+            iconCls: 'sprite-license-key',
+            handler: function() {
+                me.refreshPluginLicenses();
+            },
+            disabled: !Shopware.app.Application.sbpAvailable
+        });
+
+        return me.uploadButton;
+    },
+
+    refreshPluginLicenses: function() {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller="PluginManager" action="getPluginInformation"}',
+            params: {
+                force: true
+            },
+            success: function (response) {
+                response = JSON.parse(response.responseText);
+
+                if (response.data.live) {
+                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_success"}{/s}')
+
+                    me.store.load();
+                } else if(response.data.shopSecretMissing) {
+                    Shopware.app.Application.fireEvent('open-login', function () {
+                        setTimeout(function () {
+                            me.refreshPluginLicenses();
+                        }, 1000);
+                    });
+                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_login"}{/s}')
+                } else {
+                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_unknown"}{/s}')
+                }
+            }
+        });
     },
 
     updateSafeModeCheckbox: function() {
