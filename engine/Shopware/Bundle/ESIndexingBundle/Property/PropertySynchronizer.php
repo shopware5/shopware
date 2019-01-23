@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
-use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSubscriber;
@@ -37,30 +36,16 @@ class PropertySynchronizer implements SynchronizerInterface
      */
     private $propertyIndexer;
 
-    /**
-     * @var IndexFactoryInterface
-     */
-    private $indexFactory;
-
-    /**
-     * @param PropertyIndexer       $propertyIndexer
-     * @param IndexFactoryInterface $indexFactory
-     */
-    public function __construct(PropertyIndexer $propertyIndexer, IndexFactoryInterface $indexFactory)
+    public function __construct(PropertyIndexer $propertyIndexer)
     {
         $this->propertyIndexer = $propertyIndexer;
-        $this->indexFactory = $indexFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function synchronize(ShopIndex $shopIndex, $backlog)
+    public function synchronize(ShopIndex $shopIndex, array $backlog)
     {
-        if (empty($shopIndex->getType())) {
-            $shopIndex = $this->indexFactory->createShopIndex($shopIndex->getShop(), PropertyMapping::TYPE);
-        }
-
         $ids = $this->getPropertyIdsOfBacklog($backlog);
 
         if (empty($ids)) {
@@ -72,6 +57,14 @@ class PropertySynchronizer implements SynchronizerInterface
         foreach ($chunks as $chunk) {
             $this->propertyIndexer->indexProperties($shopIndex, $chunk);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports(): string
+    {
+        return $this->propertyIndexer->supports();
     }
 
     /**

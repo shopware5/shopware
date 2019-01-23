@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
-use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
@@ -45,35 +44,19 @@ class ProductSynchronizer implements SynchronizerInterface
      */
     private $queryFactory;
 
-    /**
-     * @var IndexFactoryInterface
-     */
-    private $indexFactory;
-
-    /**
-     * @param ProductQueryFactoryInterface $queryFactory
-     * @param ProductIndexer               $productIndexer
-     * @param IndexFactoryInterface        $indexFactory
-     */
     public function __construct(
         ProductQueryFactoryInterface $queryFactory,
-        ProductIndexer $productIndexer,
-        IndexFactoryInterface $indexFactory
+        ProductIndexer $productIndexer
     ) {
         $this->productIndexer = $productIndexer;
         $this->queryFactory = $queryFactory;
-        $this->indexFactory = $indexFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function synchronize(ShopIndex $shopIndex, $backlogs)
+    public function synchronize(ShopIndex $shopIndex, array $backlogs)
     {
-        if (empty($shopIndex->getType())) {
-            $shopIndex = $this->indexFactory->createShopIndex($shopIndex->getShop(), ProductMapping::TYPE);
-        }
-
         $numbers = $this->getBacklogNumbers($backlogs);
         $queries = $this->getBacklogQueries($backlogs);
 
@@ -83,6 +66,14 @@ class ProductSynchronizer implements SynchronizerInterface
                 $this->productIndexer->indexProducts($shopIndex, $queryNumbers);
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports(): string
+    {
+        return $this->productIndexer->supports();
     }
 
     /**

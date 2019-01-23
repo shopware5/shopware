@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use IteratorAggregate;
 use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\ESIndexingBundle\SettingsInterface;
@@ -55,12 +54,7 @@ class ShopIndexerFactory
      */
     private $settings;
 
-    /**
-     * @param IteratorAggregate $indexer
-     * @param IteratorAggregate $mappings
-     * @param IteratorAggregate $settings
-     */
-    public function __construct(IteratorAggregate $indexer, IteratorAggregate $mappings, IteratorAggregate $settings)
+    public function __construct(\Traversable $indexer, \Traversable $mappings, \Traversable $settings)
     {
         $this->indexer = iterator_to_array($indexer, false);
         $this->mappings = iterator_to_array($mappings, false);

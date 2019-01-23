@@ -17,6 +17,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * Migrations are loaded from folder `SwagTestPlugin/Resources/migrations`
     * The migration file can be generated using `./bin/console sw:generate:migration added-something-new -p SwagTestPlugin`
 * Added new theme configuration to disable ajax loading for emotions
+* Added signature `supports` to `Shopware\Bundle\ESIndexingBundle\SynchronizerInterface` to reduce wrong typed backlog sync request.
+    * Added method implementation to 
+    `Shopware\Bundle\ESIndexingBundle\Property\PropertySynchronizer::supports`
+    `Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer::supports`
 
 ### Changes
 
@@ -47,12 +51,14 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Removals
 
 * Removed `s_articles_attributes`.`articleID` which was not set for new article variants anymore since Shopware 5.2.0
+* Removed `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory.php`
+* Removed `Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer.php
 * Removed following classes, use `Shopware\Components\Plugin\XmlReader\*` instead
     * `Shopware\Components\Plugin\XmlPluginInfoReader`
     * `Shopware\Components\Plugin\XmlConfigDefinitionReader`
     * `Shopware\Components\Plugin\XmlCronjobReader`
     * `Shopware\Components\Plugin\XmlMenuReader`
-* Removed `storeType` `php` from Plugin config.xml
+* Removed `storeType` `php` from Plugin config.xml`
 
 ### Deprecations
 
