@@ -31,7 +31,7 @@ use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 /**
- * @group elasticsearch
+ * @group elasticSearch
  */
 class TextMappingTest extends TestCase
 {
