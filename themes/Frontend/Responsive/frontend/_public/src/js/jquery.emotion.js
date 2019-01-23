@@ -193,6 +193,8 @@
                 });
             } else {
                 me.$overlay.remove();
+
+                me.$el.html(me.$el.find('template').html());
                 me.showEmotion();
                 me.initEmotion();
             }
