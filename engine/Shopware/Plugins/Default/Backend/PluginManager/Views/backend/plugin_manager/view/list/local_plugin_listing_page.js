@@ -358,9 +358,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
                     me.store.load();
                 } else if(response.data.shopSecretMissing) {
+                    me.setLoading(true);
                     Shopware.app.Application.fireEvent('open-login', function () {
                         setTimeout(function () {
                             me.refreshPluginLicenses();
+                            me.setLoading(false);
                         }, 1000);
                     });
                     Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_login"}{/s}')
