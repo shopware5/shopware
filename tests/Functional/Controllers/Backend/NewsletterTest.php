@@ -29,6 +29,13 @@
  */
 class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+    }
+
     /**
      * @ticket SW-4747
      */
@@ -51,7 +58,7 @@ class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Componen
      */
     public function testNewsletterGroup()
     {
-        $this->dispatch('/backend/newsletter/getGroups');
+        $this->dispatch('/backend/NewsletterManager/getGroups');
 
         $this->assertTrue($this->View()->getAssign('success'));
     }
