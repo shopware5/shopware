@@ -41,7 +41,7 @@ class TextMappingES2 implements TextMappingInterface
      */
     public function getNotAnalyzedField()
     {
-        return ['type' => 'string', 'index' => 'not_analyzed'];
+        return $this->getKeywordField();
     }
 
     /**
@@ -49,7 +49,7 @@ class TextMappingES2 implements TextMappingInterface
      */
     public function getKeywordField()
     {
-        return ['type' => 'string'];
+        return ['type' => 'string', 'index' => 'not_analyzed'];
     }
 
     /**
@@ -57,6 +57,6 @@ class TextMappingES2 implements TextMappingInterface
      */
     public function getAttributeRawField(): array
     {
-        return $this->getNotAnalyzedField();
+        return $this->getKeywordField();
     }
 }

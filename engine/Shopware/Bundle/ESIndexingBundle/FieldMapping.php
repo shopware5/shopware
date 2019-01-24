@@ -77,7 +77,7 @@ class FieldMapping implements FieldMappingInterface
         $analyzers = $this->shopAnalyzer->get($shop);
 
         $fields = [
-            'raw' => $this->textMapping->getNotAnalyzedField(),
+            'raw' => $this->textMapping->getKeywordField(),
         ];
 
         foreach ($analyzers as $analyzer) {

@@ -331,6 +331,11 @@ class Helper
         return $this->articleApi->create($data);
     }
 
+    public function updateArticle($id, array $data)
+    {
+        return $this->articleApi->update($id, $data);
+    }
+
     public function createArticleTranslation($articleId, $shopId)
     {
         $data = [

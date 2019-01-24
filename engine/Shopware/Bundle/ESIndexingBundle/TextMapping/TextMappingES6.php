@@ -41,7 +41,7 @@ class TextMappingES6 implements TextMappingInterface
      */
     public function getNotAnalyzedField()
     {
-        return ['type' => 'keyword', 'index' => 'false'];
+        return $this->getKeywordField();
     }
 
     /**
