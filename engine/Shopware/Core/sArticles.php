@@ -1108,7 +1108,7 @@ class sArticles
              * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
              * 3. $configuration is empty (Customer hasn't not set an own configuration)
              */
-            if ($providedNumber && $providedNumber == $productNumber && empty($configuration) || $type === 0) {
+            if ($providedNumber && $providedNumber == $productNumber || $type === 0 || $this->config->get('configuratorAutoselectVariant')) {
                 $selection = $product->getSelectedOptions();
             }
         }
