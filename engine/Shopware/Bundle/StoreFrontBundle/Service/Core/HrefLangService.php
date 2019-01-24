@@ -93,7 +93,7 @@ class HrefLangService implements HrefLangServiceInterface
             $href = new HrefLang();
             $href->setShopId($languageShop['id']);
             $href->setLocale($languageShop['locale']);
-            $href->setLink($this->getRouter($languageShop['id'])->assemble($parameters));
+            $href->setLink($this->filterUrl($this->getRouter($languageShop['id'])->assemble($parameters), $parameters));
 
             if (!$this->config->get('hrefLangCountry')) {
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
@@ -130,6 +130,28 @@ class HrefLangService implements HrefLangServiceInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param string $url
+     * @param array  $parameters
+     *
+     * @return string
+     */
+    protected function filterUrl($url, array $parameters)
+    {
+        // We don't filter canonical href links
+        if (isset($parameters['controller']) && $parameters['controller'] === 'listing') {
+            return $url;
+        }
+
+        $query = parse_url($url, PHP_URL_QUERY);
+
+        if ($query === null) {
+            return $url;
+        }
+
+        return str_replace('?' . $query, '', $url);
     }
 
     /**

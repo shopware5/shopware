@@ -93,6 +93,23 @@ class HrefLangTest extends TestCase
         }
     }
 
+    public function testHrefLinksListingWithParameters()
+    {
+        $category = $this->createCategory();
+
+        $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => $category, 'foo' => 'bar'], $this->getContext());
+
+        $this->assertNotEmpty($urls);
+
+        foreach ($urls as $href) {
+            if ($href->getLocale() === 'de-DE') {
+                $this->assertEquals('/my-fancy-german-category/', parse_url($href->getLink(), PHP_URL_PATH));
+            } else {
+                $this->assertEquals('/en/my-fancy-english-category/', parse_url($href->getLink(), PHP_URL_PATH));
+            }
+        }
+    }
+
     private function createCategory()
     {
         $category = Manager::getResource('Category');
