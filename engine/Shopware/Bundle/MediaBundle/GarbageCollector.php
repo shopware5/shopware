@@ -125,7 +125,7 @@ class GarbageCollector
             LEFT JOIN s_media_album a
             ON m.albumID = a.id
             SET albumID=-13
-            WHERE a.garbage_collectable = 1 
+            WHERE a.garbage_collectable = 1
             AND u.id IS NULL
         ';
         $this->connection->exec($sql);
@@ -223,6 +223,8 @@ class GarbageCollector
             preg_match_all("/{{1}media[\s+]?path=[\"'](?'mediaTag'\S*)[\"']}{1}/mi", $value, $mediaMatches);
             // Src tag matches
             preg_match_all("/<?img[^<]*src=[\"'](?'srcTag'[^{]*?)[\"'][^>]*\/?>?/mi", $value, $srcMatches);
+            // Link matches
+            preg_match_all("/<?a[^<]*href=[\"'](?'hrefTag'[^{]*?)[\"'][^>]*\/?>?/mi", $value, $hrefMatches);
 
             if ($mediaMatches['mediaTag']) {
                 foreach ($mediaMatches['mediaTag'] as $match) {
@@ -235,6 +237,17 @@ class GarbageCollector
                 foreach ($srcMatches['srcTag'] as $match) {
                     $match = $this->mediaService->normalize($match);
                     $this->addMediaByPath($match);
+                }
+            }
+
+            if ($hrefMatches['hrefTag']) {
+                foreach ($hrefMatches['hrefTag'] as $match) {
+                    $match = $this->mediaService->normalize($match);
+
+                    // Only add normalized media links and not arbitrary links
+                    if (strpos($match, 'media/') === 0) {
+                        $this->addMediaByPath($match);
+                    }
                 }
             }
         }
