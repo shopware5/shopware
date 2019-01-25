@@ -56,11 +56,8 @@ class ReflectionHelper
 
         $folders = Shopware()->Container()->getParameter('shopware.plugin_directories');
 
-        if ($docPath === Shopware()->DocPath()) {
-            $folders[] = Shopware()->DocPath('engine_Shopware');
-        } else {
-            $folders[] = Shopware()->DocPath();
-        }
+        $folders[] = Shopware()->DocPath('engine_Shopware');
+        $folders[] = Shopware()->DocPath('vendor_shopware_shopware');
 
         foreach ($folders as $folder) {
             $directories[] = substr($folder, strlen($docPath));
