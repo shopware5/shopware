@@ -2,7 +2,7 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-[View all changes from v5.5.5...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.2...v5.6.0)
+[View all changes from v5.5.7...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.7...v5.6.0)
 
 ### Additions
 
@@ -26,9 +26,18 @@ This changelog references changes done in Shopware 5.6 patch versions.
     `\Shopware_Controllers_Frontend_Checkout::addAccessoriesAction`
     `\Shopware_Controllers_Frontend_Checkout::deleteArticleAction`
 
-* Changed browser cache handling in backend to cache javascript `index` and `load` actions. Caching will be disabled when
-  * the template cache is disabled
-  * `$this->Response()->setHeader('Cache-Control', 'private', true);` is used in the controller
+* Changed browser cache handling in backend to cache javascript `index` and `load` actions. Caching will be disabled when...
+    * the template cache is disabled
+    * `$this->Response()->setHeader('Cache-Control', 'private', true);` is used in the controller
+* Changed mapping of Elasticsearch fields:
+    * Fields previously handled as `notAnalyzedFields` are now treated as `keyword` fields, meaning they are only searchable completely, not in parts instead of not searchable. Examples of these fields are:
+        * EAN
+        * SKU
+        * ZIP codes
+        * transaction Ids
+        * Phone numbers
+        * .raw fields
+        * and some more
 
 * Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
 
@@ -38,4 +47,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 ### Deprecations
 
+* Deprecated `Shopware\Bundle\ESIndexingBundle::getNotAnalyzedField`. It will be removed in 5.7, use the getKeywordField instead.
+* Deprecated `Shopware\Bundle\ESIndexingBundle::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead.
 

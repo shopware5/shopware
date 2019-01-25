@@ -331,6 +331,12 @@ class Helper
         return $this->articleApi->create($data);
     }
 
+    /**
+     * @param int   $id
+     * @param array $data
+     *
+     * @return Models\Article\Article
+     */
     public function updateArticle($id, array $data)
     {
         return $this->articleApi->update($id, $data);
@@ -436,6 +442,11 @@ class Helper
         $this->translationApi->create($data);
     }
 
+    /**
+     * @param array $discounts
+     *
+     * @return Models\Price\Group
+     */
     public function createPriceGroup($discounts = [])
     {
         if (empty($discounts)) {
@@ -474,6 +485,11 @@ class Helper
         return $priceGroup;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return Models\Customer\Group
+     */
     public function createCustomerGroup($data = [])
     {
         $data = array_merge(
@@ -502,6 +518,11 @@ class Helper
         return $customer;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return Tax
+     */
     public function createTax($data = [])
     {
         $data = array_merge(
@@ -526,6 +547,11 @@ class Helper
         return $tax;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return Models\Shop\Currency
+     */
     public function createCurrency(array $data = [])
     {
         $currency = new Models\Shop\Currency();
@@ -590,6 +616,11 @@ class Helper
         return $manufacturer;
     }
 
+    /**
+     * @param int      $articleId
+     * @param array    $points
+     * @param int|null $shopId
+     */
     public function createVotes($articleId, $points = [], $shopId = null)
     {
         $data = [
@@ -647,6 +678,10 @@ class Helper
         ];
     }
 
+    /**
+     * @param int   $articleId
+     * @param array $data
+     */
     public function updateConfiguratorVariants($articleId, $data)
     {
         foreach ($data as $updateInformation) {
@@ -665,6 +700,12 @@ class Helper
         }
     }
 
+    /**
+     * @param int      $articleId
+     * @param string[] $optionNames
+     *
+     * @return array
+     */
     public function getProductOptionsByName($articleId, $optionNames)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
@@ -724,6 +765,9 @@ class Helper
         );
     }
 
+    /**
+     * @return array
+     */
     public function getCategoryData()
     {
         return [
@@ -732,6 +776,9 @@ class Helper
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getManufacturerData()
     {
         return [
@@ -739,6 +786,11 @@ class Helper
         ];
     }
 
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
     public function getVariantData(array $data = [])
     {
         return array_merge(
@@ -764,6 +816,11 @@ class Helper
         );
     }
 
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
     public function getUnitData(array $data = [])
     {
         return array_merge(
@@ -782,6 +839,12 @@ class Helper
         );
     }
 
+    /**
+     * @param string $group
+     * @param int    $priceOffset
+     *
+     * @return array
+     */
     public function getGraduatedPrices($group = 'EK', $priceOffset = 0)
     {
         return [
@@ -864,6 +927,13 @@ class Helper
         );
     }
 
+    /**
+     * @param int    $groupCount
+     * @param int    $optionCount
+     * @param string $namePrefix
+     *
+     * @return array
+     */
     public function getProperties($groupCount, $optionCount, $namePrefix = 'Test')
     {
         $properties = $this->createProperties($groupCount, $optionCount, $namePrefix);
@@ -1055,6 +1125,13 @@ class Helper
         return $variants;
     }
 
+    /**
+     * @param int    $groupCount
+     * @param int    $optionCount
+     * @param string $namePrefix
+     *
+     * @return array
+     */
     private function createProperties($groupCount, $optionCount, $namePrefix = 'Test')
     {
         $this->propertyNames[] = $namePrefix;
@@ -1091,6 +1168,9 @@ class Helper
         return $data;
     }
 
+    /**
+     * @param string $namePrefix
+     */
     private function deleteProperties($namePrefix = 'Test')
     {
         $this->db->query("DELETE FROM s_filter WHERE name = '" . $namePrefix . "-Set'");
@@ -1104,6 +1184,9 @@ class Helper
         $this->db->query("DELETE FROM s_filter_values WHERE value LIKE '" . $namePrefix . "-Option%'");
     }
 
+    /**
+     * @param string $name
+     */
     private function deleteCategory($name)
     {
         $ids = Shopware()->Db()->fetchCol('SELECT id FROM s_categories WHERE description = ?', [$name]);
@@ -1113,6 +1196,12 @@ class Helper
         }
     }
 
+    /**
+     * @param int   $articleId
+     * @param array $options
+     *
+     * @return array
+     */
     private function getVariantsByOptions($articleId, $options)
     {
         $ids = $this->getProductOptionsByName($articleId, $options);
@@ -1140,6 +1229,9 @@ class Helper
         return array_column($ids, 'article_id');
     }
 
+    /**
+     * @param string $key
+     */
     private function deleteCustomerGroup($key)
     {
         $ids = $this->db->fetchCol('SELECT id FROM s_core_customergroups WHERE groupkey = ?', [$key]);
@@ -1158,6 +1250,9 @@ class Helper
         $this->entityManager->clear();
     }
 
+    /**
+     * @param string $name
+     */
     private function deleteTax($name)
     {
         $ids = $this->db->fetchCol('SELECT id FROM s_core_tax WHERE description = ?', [$name]);
@@ -1173,6 +1268,9 @@ class Helper
         $this->entityManager->clear();
     }
 
+    /**
+     * @param string $name
+     */
     private function deleteCurrency($name)
     {
         $ids = $this->db->fetchCol('SELECT id FROM s_core_currencies WHERE name = ?', [$name]);
@@ -1241,8 +1339,7 @@ class Helper
     {
         foreach ($combinations as &$combination) {
             $combination[] = ['option' => $combination['option'], 'groupId' => $combination['groupId']];
-            unset($combination['groupId']);
-            unset($combination['option']);
+            unset($combination['groupId'], $combination['option']);
         }
 
         return $combinations;
