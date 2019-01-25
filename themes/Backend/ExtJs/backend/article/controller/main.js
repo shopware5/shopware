@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         // Create main window
         me.openMainWindow();
 
-        //the batch store is responsible to load all required stores for the detail page in one request
+        // The batch store is responsible to load all required stores for the detail page in one request
         me.batchStore = me.getStore('Batch');
         me.batchStore.getProxy().extraParams.articleId = id;
         me.batchStore.load({
@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         me.subApplication.firstCustomerGroup = data.getCustomerGroups().first();
 
-        //get the store for the global configurator groups.
+        // Get the store for the global configurator groups.
         var configuratorGroupStore = data.getConfiguratorGroups();
         configuratorGroupStore.each(function(item) {
              item.set('active', false);
@@ -249,34 +249,34 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         }
 
         if (articleConfiguratorSet) {
-            //get the defined configurator groups which used for the current article configurator set.
+            // Get the defined configurator groups which used for the current article configurator set.
             var groups = articleConfiguratorSet.getConfiguratorGroups();
             articleOptions = articleConfiguratorSet.getConfiguratorOptions();
 
-            //iterate all configurator groups of the article
+            // Iterate all configurator groups of the article
             groups.each(function(group) {
-                //get the global configurator group by the id of the used configurator set group.
+                // Get the global configurator group by the id of the used configurator set group.
                 globalGroup = configuratorGroupStore.getById(group.get('id'));
 
                 if (!globalGroup) {
                     return true;
                 }
 
-                //set the global group to active, that means the article has already configurations for the group
+                // Set the global group to active, that means the article has already configurations for the group
                 globalGroup.set('active', true);
                 globalOptions = globalGroup.getConfiguratorOptions();
 
-                //if no article options exists, continue
+                // If no article options exists, continue
                 if (!articleOptions) {
                     return true;
                 }
 
-                //iterate the configured article options to set the active flag in the global options
+                // Iterate the configured article options to set the active flag in the global options
                 articleOptions.each(function(articleOption) {
-                    //find the global options with the same id.
+                    // Find the global options with the same id.
                     globalOption = globalOptions.getById(articleOption.get('id'));
 
-                    //set active flag to true
+                    // Set active flag to true
                     if (globalOption) {
                         globalOption.set('active', true);
                     }
@@ -294,10 +294,10 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             ]);
         });
 
-        //set store grouping field
+        // Set store grouping field
         configuratorGroupStore.groupField = 'active';
 
-        //group the current records
+        // Group the current records
         configuratorGroupStore.group('active', 'DESC');
         configuratorGroupStore.sort([
             { property: 'active', 'direction': 'DESC' },
@@ -330,10 +330,10 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         edit = edit || false;
 
-        //when store has been loaded use the first record as data array to create the required stores
+        // When store has been loaded use the first record as data array to create the required stores
         if (operation.success === true) {
 
-            //prepare the associated stores to use them in the detail page
+            // Prepare the associated stores to use them in the detail page
             stores = me.prepareAssociationStores(storeData);
 
             if(edit) {
@@ -426,7 +426,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 me.getVariantTab().setDisabled(true);
 
                 if(me.getEsdTab().tab.active) {
-                    //only reload the esd if the tab is activated
+                    // Only reload the esd if the tab is activated
                     me.getEsdListing().getStore().load();
                 }
                 me.getController('Esd').resetToList();
@@ -436,13 +436,13 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                     var statisticListStore = statisticList.getStore(),
                         statisticChartStore = me.getStatisticChart().getStore();
 
-                    //set the new article id to the extra params
+                    // Set the new article id to the extra params
                     statisticListStore.getProxy().extraParams.articleId = options.articleId;
                     statisticChartStore.getProxy().extraParams.articleId = options.articleId;
                     statisticChartStore.getProxy().extraParams.chart = true;
 
-                    //only reload the statistic if the tab is activated
-                    //reload the list and the chart store
+                    // Only reload the statistic if the tab is activated
+                    // Reload the list and the chart store
                     statisticListStore.load();
                     statisticChartStore.load();
                 }
