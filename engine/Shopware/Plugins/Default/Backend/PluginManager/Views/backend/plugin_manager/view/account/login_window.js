@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
                     html: 'X',
                     cls: 'headline-close',
                     handler: function() {
-                        Shopware.app.Application.fireEvent('destroy-login', me);
+                        Shopware.app.Application.fireEvent('destroy-login', me, true);
                     }
                 })
             ]

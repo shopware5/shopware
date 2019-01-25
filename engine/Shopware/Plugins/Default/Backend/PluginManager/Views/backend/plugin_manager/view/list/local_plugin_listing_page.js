@@ -41,6 +41,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         markDirty: false
     },
 
+    /**
+     * @var boolean
+     */
+    hasTriedLogin: false,
+
     configure: function() {
         return {
             addButton: false,
@@ -344,6 +349,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
     refreshPluginLicenses: function() {
         var me = this;
+        me.setLoading(true);
 
         Ext.Ajax.request({
             url: '{url controller="PluginManager" action="getPluginInformation"}',
@@ -354,20 +360,30 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 response = JSON.parse(response.responseText);
 
                 if (response.data.live) {
-                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_success"}{/s}')
+                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_success"}{/s}');
 
                     me.store.load();
-                } else if(response.data.shopSecretMissing) {
-                    me.setLoading(true);
-                    Shopware.app.Application.fireEvent('open-login', function () {
+                    me.setLoading(false);
+                } else if(response.data.shopSecretMissing && !me.hasTriedLogin) {
+                    Shopware.app.Application.on('destroy-login', function (window, userPressed) {
+                        if (userPressed) {
+                            me.setLoading(false);
+                        }
+                    });
+                    Shopware.app.Application.fireEvent('open-login', function (response) {
+                        me.hasTriedLogin = true;
                         setTimeout(function () {
                             me.refreshPluginLicenses();
                             me.setLoading(false);
                         }, 1000);
                     });
-                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_login"}{/s}')
+                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_login"}{/s}');
+                } else if(response.data.shopSecretMissing) {
+                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_no_token"}{/s}');
+                    me.setLoading(false);
                 } else {
-                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_unknown"}{/s}')
+                    Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_unknown"}{/s}');
+                    me.setLoading(false);
                 }
             }
         });
