@@ -38,8 +38,8 @@ class EmailValidator implements EmailValidatorInterface
      */
     public function isValid($emailAddress)
     {
-        // Inspired by the regex used in symfony/validator
-        // See: https://github.com/symfony/validator/blob/dae70b74fe173461395cfd61a5c5245e05e511f5/Constraints/EmailValidator.php#L72
-        return (bool) preg_match('/^\S+\@\S+\.\S+$/', $emailAddress);
+        // Proposed regex by the w3c for the input[type="email"]
+        // see https://www.w3.org/TR/html5/sec-forms.html#valid-e-mail-address
+        return (bool) preg_match('/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/', $emailAddress);
     }
 }
