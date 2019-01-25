@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\SearchBundle;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler;
 
 class CriteriaTest extends TestCase
 {
@@ -75,6 +76,34 @@ class CriteriaTest extends TestCase
         $criteria = new Criteria();
         $criteria->offset($offset);
         $this->assertEquals($offset, $criteria->getOffset());
+    }
+
+    public function testAdditionalCategoryFilter()
+    {
+        $configMock = $this->createMock(\Shopware_Components_Config::class);
+        $searchTermProcessorMock = $this->createMock(\Shopware\Bundle\SearchBundle\SearchTermPreProcessor::class);
+        $contextMock = $this->createMock(\Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface::class);
+        $cusomterGroupMock = $this->createMock(\Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group::class);
+
+        $cusomterGroupMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(1));
+        $contextMock->expects($this->any())
+            ->method('getCurrentCustomerGroup')
+            ->will($this->returnValue($cusomterGroupMock));
+
+        $requestHandler = new CoreCriteriaRequestHandler($configMock, $searchTermProcessorMock);
+        $criteria = new Criteria();
+
+        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request->setParams([
+            'sCategory' => '1',
+            'categoryFilter' => '2',
+        ]);
+        $requestHandler->handleRequest($request, $criteria, $contextMock);
+
+        $this->assertEquals(1, $criteria->getBaseCondition('category')->getCategoryIds()[0]);
+        $this->assertEquals(2, $criteria->getUserCondition('category')->getCategoryIds()[0]);
     }
 
     public function validCriteriaLimit()

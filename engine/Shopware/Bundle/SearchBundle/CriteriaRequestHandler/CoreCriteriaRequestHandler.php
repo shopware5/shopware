@@ -109,7 +109,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             $criteria->addBaseCondition(
                 new CategoryCondition($ids)
             );
-        } elseif ($request->has('categoryFilter')) {
+        }
+        if ($request->has('categoryFilter')) {
             $ids = explode('|', $request->getParam('categoryFilter'));
 
             $criteria->addCondition(
