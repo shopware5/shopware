@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Changes
 
 * Changed the default value in column `s_core_auth.lockeduntil` to `2010-01-01 00:00:00`
+* Changed order module sorting to consider sorting also when elasticsearch is activated
 
 ## 5.5.5
 
