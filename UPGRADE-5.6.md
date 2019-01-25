@@ -50,3 +50,45 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getNotAnalyzedField`. It will be removed in 5.7, use the getKeywordField instead.
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead.
 
+
+### Controller Registration using DI-Tag
+
+Controllers can be now registered using di tag ``shopware.controller``. This di tag needs attributes `module` and `controller`. These controllers are also lazy-loaded and should extend from `Shopware\Components\Controller`.
+
+Example:
+
+DI:
+
+```xml
+<service id="swag_example.controller.frontend.test" class="SwagExample\Controller\Frontend\Test">
+    <argument type="service" id="dbal_connection"/>
+    <tag name="shopware.controller" module="frontend" controller="test"/>
+</service>
+```
+
+Controller:
+
+```php
+<?php
+
+namespace SwagExample\Controller\Frontend;
+
+use Doctrine\DBAL\Connection;
+use Shopware\Components\Controller;
+
+class Test extends Controller
+{
+    private $connection;
+
+    public function __construct(Connection $connection)
+    {
+        parent::__construct();
+        $this->connection = $connection;
+    }
+
+    public function indexAction()
+    {
+        // Do something with $this->connection
+    }
+}
+```

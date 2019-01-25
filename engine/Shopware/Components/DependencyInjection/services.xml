@@ -124,7 +124,10 @@
             <argument type="tagged" tag="router.post_filter"/>
         </service>
 
-        <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default" />
+        <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default">
+            <argument>%shopware.controllers%</argument>
+            <argument type="service" id="service_container"/>
+        </service>
 
         <service id="front_factory" class="Shopware\Components\DependencyInjection\Bridge\Front" />
         <service id="front" class="Enlight_Controller_Front">

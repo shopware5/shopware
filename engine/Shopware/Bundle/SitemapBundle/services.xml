@@ -99,18 +99,18 @@
             <tag name="console.command" command="sw:generate:sitemap"/>
         </service>
 
-        <service id="shopware_bundle_sitemap.service_subscriber" class="Shopware\Bundle\SitemapBundle\Subscriber\SitemapSubscriber">
-            <argument type="service" id="config"/>
-            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_exporter"/>
-            <argument type="service" id="models"/>
-            <tag name="shopware.event_subscriber" />
-        </service>
-
         <service id="shopware_bundle_sitemap.cronjob_subscriber" class="Shopware\Bundle\SitemapBundle\Subscriber\CronjobSubscriber">
             <argument type="service" id="config"/>
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_bundle_sitemap.service.sitemap_exporter"/>
             <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.sitemap_controller" class="Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml">
+            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_lister"/>
+            <argument type="service" id="shopware_bundle_sitemap.service.sitemap_exporter"/>
+            <argument type="service" id="config"/>
+            <tag name="shopware.controller" module="frontend" controller="SitemapIndexXml"/>
         </service>
     </services>
 </container>

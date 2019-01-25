@@ -43,6 +43,7 @@ parameters:
         - '#does not call parent constructor from Enlight_Class#'
         - '#Binary operation "|=" between string and string results in an error.#'
         - '#does not call parent constructor from Elasticsearch#'
+        - '#does not call parent constructor from Enlight_Controller_Action#'
         - '#does not accept Doctrine\\ORM\\EntityRepository#'
         # "getRepository"-Methods
         - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
