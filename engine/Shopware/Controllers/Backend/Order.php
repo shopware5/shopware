@@ -491,6 +491,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
         }
 
+        if (isset($data['orderTime'])) {
+            unset($data['orderTime']);
+        }
+
         $order->fromArray($data);
 
         // Check if the invoice shipping has been changed
