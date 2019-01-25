@@ -116,7 +116,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             partnerId: '{s name=overview/details/partner_id}Partner ID{/s}',
             changed: '{s name=overview/details/changed}Last changed{/s}'
         },
-        customerDeleted: '{s name=overview/details/customer_deleted_text}Caution: The assigned customer has been deleted.{/s}'
+        customerDeleted: '{s name=overview/details/customer_deleted_text}Caution: The assigned customer has been deleted.{/s}',
+        openCustomer: '{s name=overview/details/customer_open}Open customer{/s}'
     },
 
     /**
@@ -524,6 +525,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
 
         me.detailsForm = Ext.create('Ext.form.Panel', {
             title: me.snippets.details.title,
+            titleAlign: 'left',
             bodyPadding: 10,
             layout: 'anchor',
             defaults: {
@@ -532,6 +534,9 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             margin: '10 0',
             items: [
                 me.createInnerDetailContainer()
+            ],
+            tools: [
+                me.createCustomerButton(),
             ]
         });
         return me.detailsForm;
@@ -637,6 +642,28 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType},
             { name: 'changed', fieldLabel: me.snippets.details.changed}
         ];
+    },
+
+    /**
+     * Adds a link to the customer that placed the order
+     *
+     * @returns Ext.Button|null
+     */
+    createCustomerButton: function() {
+        var me = this;
+        return {
+            disabled: !me.record.getCustomer().first(),
+            iconCls:'sprite-user',
+            action:'openCustomer',
+            xtype: 'button',
+            align: 'right',
+            title: me.snippets.openCustomer,
+            tooltip: me.snippets.openCustomer,
+            handler: function () {
+                me.fireEvent('openCustomer', me.record);
+            }
+        }
+
     },
 
     /**
