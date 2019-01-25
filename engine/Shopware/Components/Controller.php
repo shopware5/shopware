@@ -22,41 +22,31 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle\Subscriber;
+namespace Shopware\Components;
 
-use Enlight\Event\SubscriberInterface;
-use Enlight_Event_EventArgs;
-use Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml;
-
-class SitemapSubscriber implements SubscriberInterface
+abstract class Controller extends \Enlight_Controller_Action
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
+    public function __construct()
     {
-        return [
-            'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SitemapIndexXml' => 'registerSitemapIndexXmlController',
-        ];
     }
 
-    /**
-     * @return string
-     */
-    public function registerSitemapIndexXmlController()
+    public function init()
     {
-        return SitemapIndexXml::class;
+        $this->controller_name = $this->Front()->Dispatcher()->getFullControllerName($this->Request());
+
+        Shopware()->Events()->notify(
+            'Enlight_Controller_Action_Init',
+            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
+        );
+        Shopware()->Events()->notify(
+            'Enlight_Controller_Action_Init_' . $this->controller_name,
+            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
+        );
     }
 
-    /**
-     * Sitemaps are now generated live in \Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml::indexAction
-     * when they are requested
-     *
-     * @deprecated Will be removed in 5.6 without replacement
-     *
-     * @param Enlight_Event_EventArgs $args
-     */
-    public function onKernelTerminate(Enlight_Event_EventArgs $args)
+    public function dispatch($action)
     {
+        $this->init();
+        parent::dispatch($action);
     }
 }

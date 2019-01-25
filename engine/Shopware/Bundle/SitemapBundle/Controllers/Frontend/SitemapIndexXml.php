@@ -27,9 +27,38 @@ namespace Shopware\Bundle\SitemapBundle\Controller;
 use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
+use Shopware\Components\Controller;
 
-class SitemapIndexXml extends \Enlight_Controller_Action
+class SitemapIndexXml extends Controller
 {
+    /**
+     * @var SitemapListerInterface
+     */
+    private $sitemapLister;
+
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * @var SitemapExporterInterface
+     */
+    private $sitemapExporter;
+
+    /**
+     * @param SitemapListerInterface      $sitemapLister
+     * @param SitemapExporterInterface    $sitemapExporter
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(SitemapListerInterface $sitemapLister, SitemapExporterInterface $sitemapExporter, \Shopware_Components_Config $config)
+    {
+        parent::__construct();
+        $this->sitemapLister = $sitemapLister;
+        $this->sitemapExporter = $sitemapExporter;
+        $this->config = $config;
+    }
+
     /**
      * Redirect to sitemap_index.xml if the old sitemap is being requested
      */
@@ -44,30 +73,24 @@ class SitemapIndexXml extends \Enlight_Controller_Action
 
     public function indexAction()
     {
-        /** @var SitemapListerInterface $sitemap */
-        $sitemapLister = $this->get('shopware_bundle_sitemap.service.sitemap_lister');
-        $sitemaps = $sitemapLister->getSitemaps($this->get('shop')->getId());
+        $sitemaps = $this->sitemapLister->getSitemaps($this->get('shop')->getId());
 
-        $config = $this->get('config');
-        $lastGenerated = $config->get('sitemapLastRefresh');
-        $refreshInterval = $config->get('sitemapRefreshTime');
+        $lastGenerated = $this->config->get('sitemapLastRefresh');
+        $refreshInterval = $this->config->get('sitemapRefreshTime');
 
         // If there are no sitemaps yet (or they are too old) and the generation strategy is "live", generate sitemaps
         if ((empty($sitemaps) || time() > $refreshInterval + $lastGenerated) &&
-            $this->get('config')->get('sitemapRefreshStrategy') === SitemapExporterInterface::STRATEGY_LIVE) {
+            $this->config->get('sitemapRefreshStrategy') === SitemapExporterInterface::STRATEGY_LIVE) {
             // Close session to prevent session locking from waiting in case there is another request coming in
             session_write_close();
 
-            /** @var SitemapExporterInterface $exporter */
-            $exporter = $this->get('shopware_bundle_sitemap.service.sitemap_exporter');
-
             try {
-                $exporter->generate($this->get('shop'));
+                $this->sitemapExporter->generate($this->get('shop'));
             } catch (AlreadyLockedException $exception) {
                 // Silent catch, lock couldn't be acquired. Some other process already generates the sitemap.
             }
 
-            $sitemaps = $sitemapLister->getSitemaps($this->get('shop')->getId());
+            $sitemaps = $this->sitemapLister->getSitemaps($this->get('shop')->getId());
         }
 
         $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');

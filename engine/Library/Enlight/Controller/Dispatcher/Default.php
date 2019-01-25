@@ -21,7 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
  * Implements all methods to register single or multiple controllers and load them automatically.
@@ -97,6 +99,23 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      *            directory of a module
      */
     protected $controllerDirectory = [];
+
+    /**
+     * @var array
+     */
+    private $controllers;
+
+    /**
+     * @var Container
+     */
+    private $container;
+
+    public function __construct(array $controllers, Container $container)
+    {
+        $this->controllers = $controllers;
+        $this->container = $container;
+        parent::__construct();
+    }
 
     /**
      * Adds a controller directory. If no module is given, the default module will be used.
@@ -209,7 +228,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $module = $file->getFilename();
 
             // Don't use SCCS directories as modules
-            if (preg_match('/^[^a-z]/i', $module) || ($module == 'CVS')) {
+            if (preg_match('/^[^a-z]/i', $module) || ($module === 'CVS')) {
                 continue;
             }
 
@@ -370,6 +389,11 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerName = $request->getControllerName();
         $controllerName = $this->formatControllerName($controllerName);
         $moduleName = $this->formatModuleName($this->curModule);
+        $controllerKey = strtolower(sprintf('%s_%s', $moduleName, $controllerName));
+
+        if (isset($this->controllers[$controllerKey])) {
+            return $this->container->get($this->controllers[$controllerKey]);
+        }
 
         if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
@@ -464,7 +488,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         }
         $path = $this->getControllerPath($request);
 
-        return class_exists($path) || Enlight_Loader::isReadable($path);
+        return is_object($path) || class_exists($path) || Enlight_Loader::isReadable($path);
     }
 
     /**
@@ -513,21 +537,29 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $class = $this->getControllerClass($request);
         $path = $this->getControllerPath($request);
 
-        if (class_exists($path)) {
+        if (is_object($path) || class_exists($path)) {
             $class = $path;
             $path = null;
         }
 
-        try {
-            Shopware()->Loader()->loadClass($class, $path);
-        } catch (Exception $e) {
-            throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
+        if (!is_object($class)) {
+            try {
+                Shopware()->Loader()->loadClass($class, $path);
+            } catch (Exception $e) {
+                throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
+            }
+
+            $proxy = Shopware()->Hooks()->getProxy($class);
+
+            /** @var Enlight_Controller_Action $controller */
+            $controller = new $proxy($request, $response);
+        } else {
+            /** @var \Shopware\Components\Controller $controller */
+            $controller = $class;
+            $controller->setRequest($request)->setResponse($response);
+            $controller->init();
         }
 
-        $proxy = Shopware()->Hooks()->getProxy($class);
-
-        /** @var Enlight_Controller_Action $controller */
-        $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
 
         if ($controller instanceof ContainerAwareInterface) {
