@@ -40,6 +40,6 @@ class EmailValidator implements EmailValidatorInterface
     {
         // Proposed regex by the w3c for the input[type="email"]
         // see https://www.w3.org/TR/html5/sec-forms.html#valid-e-mail-address
-        return (bool) preg_match('/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/', $emailAddress);
+        return (bool) preg_match('/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/', $emailAddress);
     }
 }
