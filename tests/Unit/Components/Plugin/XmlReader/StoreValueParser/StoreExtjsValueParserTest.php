@@ -49,7 +49,7 @@ class StoreExtjsValueParserTest extends TestCase
      */
     private $xpath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parser = StoreValueParserFactory::create('extjs');
 
@@ -61,10 +61,7 @@ class StoreExtjsValueParserTest extends TestCase
         $this->xpath = new DOMXPath($this->xmlFile);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreExtjsValueParser::parse()
-     */
-    public function testThatParserReturnsValidData()
+    public function testThatParserReturnsValidData(): void
     {
         $store = $this->getStoreElement(1);
         $options = $this->parser->parse($store);
@@ -73,10 +70,7 @@ class StoreExtjsValueParserTest extends TestCase
         self::assertEquals('Shopware.apps.Base.store.Category', $options);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreExtjsValueParser::parse()
-     */
-    public function testThatEmptyOptionsReturnsEmptyArray()
+    public function testThatEmptyOptionsReturnsEmptyArray(): void
     {
         $store = $this->getStoreElement(2);
         $options = $this->parser->parse($store);
@@ -85,14 +79,7 @@ class StoreExtjsValueParserTest extends TestCase
         self::assertEquals('', $options);
     }
 
-    /**
-     * returns store element at index
-     *
-     * @param int $elementIndex
-     *
-     * @return DOMElement
-     */
-    private function getStoreElement($elementIndex)
+    private function getStoreElement(int $elementIndex): DOMElement
     {
         $stores = $this->xpath->query(
             sprintf(

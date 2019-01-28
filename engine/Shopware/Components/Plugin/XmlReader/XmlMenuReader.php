@@ -37,14 +37,7 @@ class XmlMenuReader extends XmlReaderBase
      */
     protected $xsdFile = __DIR__ . '/../schema/menu.xsd';
 
-    /**
-     * This method should be overridden as main entry point to parse a xml file.
-     *
-     * @param DOMDocument $xml
-     *
-     * @return array
-     */
-    protected function parseFile(DOMDocument $xml)
+    protected function parseFile(DOMDocument $xml): array
     {
         $xpath = new DOMXPath($xml);
 
@@ -62,14 +55,7 @@ class XmlMenuReader extends XmlReaderBase
         return $menu;
     }
 
-    /**
-     * parses one menu entry
-     *
-     * @param DOMElement $entry
-     *
-     * @return array
-     */
-    private function parseEntry(DOMElement $entry)
+    private function parseEntry(DOMElement $entry): array
     {
         $menuEntry = [];
 

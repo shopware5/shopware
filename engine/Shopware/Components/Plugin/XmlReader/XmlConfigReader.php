@@ -33,14 +33,7 @@ class XmlConfigReader extends XmlReaderBase
 {
     protected $xsdFile = __DIR__ . '/../schema/config.xsd';
 
-    /**
-     * Validates scope attribute.
-     *
-     * @param string $scope
-     *
-     * @return int
-     */
-    public static function validateAttributeScope($scope)
+    public static function validateAttributeScope(string $scope): int
     {
         if ($scope === '' || $scope === 'locale') {
             return self::SCOPE_LOCALE;
@@ -50,17 +43,10 @@ class XmlConfigReader extends XmlReaderBase
             return self::SCOPE_SHOP;
         }
 
-        throw new InvalidArgumentException(sprintf("Invalid scope '%s", $scope));
+        throw new InvalidArgumentException(sprintf('Invalid scope "%s"', $scope));
     }
 
-    /**
-     * This method should be overridden as main entry point to parse a xml file.
-     *
-     * @param DOMDocument $xml
-     *
-     * @return array
-     */
-    protected function parseFile(DOMDocument $xml)
+    protected function parseFile(DOMDocument $xml): array
     {
         $xpath = new \DOMXPath($xml);
 
@@ -80,14 +66,7 @@ class XmlConfigReader extends XmlReaderBase
         return $form;
     }
 
-    /**
-     * parses DOMNodeList with elements
-     *
-     * @param DOMNodeList $list
-     *
-     * @return array
-     */
-    private function parseElementNodeList(DOMNodeList $list)
+    private function parseElementNodeList(DOMNodeList $list): array
     {
         if ($list->length === 0) {
             return [];

@@ -34,14 +34,7 @@ class XmlCronjobReader extends XmlReaderBase
 {
     protected $xsdFile = __DIR__ . '/../schema/cronjob.xsd';
 
-    /**
-     * This method should be overridden as main entry point to parse a xml file.
-     *
-     * @param DOMDocument $xml
-     *
-     * @return array
-     */
-    protected function parseFile(DOMDocument $xml)
+    protected function parseFile(DOMDocument $xml): array
     {
         $xpath = new DOMXPath($xml);
 
@@ -50,14 +43,7 @@ class XmlCronjobReader extends XmlReaderBase
         return $this->parseList($nodeList);
     }
 
-    /**
-     * Parses cronjob list.
-     *
-     * @param DOMNodeList $list
-     *
-     * @return array
-     */
-    private function parseList(DOMNodeList $list)
+    private function parseList(DOMNodeList $list): array
     {
         if ($list->length === 0) {
             return [];
@@ -73,14 +59,7 @@ class XmlCronjobReader extends XmlReaderBase
         return $items;
     }
 
-    /**
-     * Parses cronjob item.
-     *
-     * @param DOMElement $element
-     *
-     * @return array
-     */
-    private function parseItem(DOMElement $element)
+    private function parseItem(DOMElement $element): array
     {
         $item = [];
 

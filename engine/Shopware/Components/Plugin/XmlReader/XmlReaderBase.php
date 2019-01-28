@@ -33,9 +33,6 @@ use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactor
 use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserInterface;
 use Symfony\Component\Config\Util\XmlUtils;
 
-/**
- * Class XmlReaderBase
- */
 abstract class XmlReaderBase implements XmlReaderInterface
 {
     const SCOPE_LOCALE = 0;
@@ -58,32 +55,18 @@ abstract class XmlReaderBase implements XmlReaderInterface
      */
     protected $xsdFile;
 
-    /**
-     * load and validate xml file - parse to array
-     *
-     * @param string $xmlFile
-     *
-     * @return array
-     */
-    public function read($xmlFile)
+    public function read(string $xmlFile): array
     {
         try {
             $dom = XmlUtils::loadFile($xmlFile, $this->xsdFile);
         } catch (\Exception $e) {
-            throw new InvalidArgumentException(sprintf('Unable to parse file "%s".', $xmlFile), $e->getCode(), $e);
+            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $xmlFile, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseFile($dom);
     }
 
-    /**
-     * Parses translatable node list.
-     *
-     * @param DOMNodeList $list
-     *
-     * @return array|null
-     */
-    public static function parseTranslatableNodeList(DOMNodeList $list)
+    public static function parseTranslatableNodeList(DOMNodeList $list): ?array
     {
         if ($list->length === 0) {
             return null;
@@ -104,15 +87,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $translations;
     }
 
-    /**
-     * Get child elements by name.
-     *
-     * @param DOMNode $node
-     * @param mixed   $name
-     *
-     * @return array
-     */
-    public static function getChildren(DOMNode $node, $name)
+    public static function getChildren(DOMNode $node, string $name): array
     {
         $children = [];
         foreach ($node->childNodes as $child) {
@@ -124,15 +99,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $children;
     }
 
-    /**
-     * Returns first item of DOMNodeList or null.
-     *
-     * @param DOMNode $list
-     * @param string  $name
-     *
-     * @return DOMElement|null
-     */
-    public static function getFirstChildren(DOMNode $list, $name)
+    public static function getFirstChildren(DOMNode $list, string $name): ?DOMElement
     {
         $children = self::getChildren($list, $name);
 
@@ -143,15 +110,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $children[0];
     }
 
-    /**
-     * Validates boolean attribute.
-     *
-     * @param string $value
-     * @param bool   $defaultValue
-     *
-     * @return bool
-     */
-    public static function validateBooleanAttribute($value, $defaultValue = false)
+    public static function validateBooleanAttribute(string $value, bool $defaultValue = false): bool
     {
         if ($value === '') {
             return $defaultValue;
@@ -165,8 +124,6 @@ abstract class XmlReaderBase implements XmlReaderInterface
      * - null if no store found.
      * - string if it is an extjs store
      * - array if it is a xml store
-     *
-     * @param DOMNodeList $list
      *
      * @return array|string|null
      */
@@ -186,12 +143,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $parser->parse($storeItem);
     }
 
-    /**
-     * @param DOMNodeList $optionsList
-     *
-     * @return array|null
-     */
-    public static function parseOptionsNodeList(DOMNodeList $optionsList)
+    public static function parseOptionsNodeList(DOMNodeList $optionsList): ?array
     {
         if ($optionsList->length === 0) {
             return null;
@@ -217,18 +169,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $options;
     }
 
-    /**
-     * Returns all element child values by nodeName.
-     *
-     * @param DOMElement $element
-     * @param string     $name
-     * @param bool       $throwException
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return string|null
-     */
-    public static function getElementChildValueByName(DOMElement $element, $name, $throwException = false)
+    public static function getElementChildValueByName(DOMElement $element, string $name, bool $throwException = false): ?string
     {
         $children = $element->getElementsByTagName($name);
 
@@ -246,15 +187,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $children->item(0)->nodeValue;
     }
 
-    /**
-     * Validates attribute type.
-     *
-     * @param string $type
-     * @param string $defaultValue
-     *
-     * @return string
-     */
-    public static function validateTextAttribute($type, $defaultValue = '')
+    public static function validateTextAttribute(string $type, string $defaultValue = ''): string
     {
         if ($type === '') {
             return $defaultValue;
@@ -263,12 +196,5 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $type;
     }
 
-    /**
-     * This method should be overridden as main entry point to parse a xml file.
-     *
-     * @param DOMDocument $xml
-     *
-     * @return array
-     */
-    abstract protected function parseFile(DOMDocument $xml);
+    abstract protected function parseFile(DOMDocument $xml): array;
 }

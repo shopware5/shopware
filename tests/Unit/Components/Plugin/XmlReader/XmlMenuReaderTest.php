@@ -36,16 +36,16 @@ class XmlMenuReaderTest extends TestCase
      */
     private $menuReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->menuReader = new XmlMenuReader();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testThatEmptyEntriesThrowException()
+    public function testThatEmptyEntriesThrowException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Required element "entry" is missing.');
+
         $dom = new DOMDocument();
         $dom->loadXML('<entries></entries>');
 
@@ -56,11 +56,7 @@ class XmlMenuReaderTest extends TestCase
         $method->invokeArgs($this->menuReader, [$dom]);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlMenuReader::parseFile()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlMenuReader::parseEntry()
-     */
-    public function testReadFile()
+    public function testReadFile(): void
     {
         $result = $this->readFile('menu.xml');
 
@@ -95,14 +91,7 @@ class XmlMenuReaderTest extends TestCase
         self::assertCount(1, $firstMenu['children']);
     }
 
-    /**
-     * Helper function to read a plugin xml file.
-     *
-     * @param string $file
-     *
-     * @return array
-     */
-    private function readFile($file)
+    private function readFile(string $file): array
     {
         return $this->menuReader->read(
             sprintf('%s/examples/menu/%s', __DIR__, $file)

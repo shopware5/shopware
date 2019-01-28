@@ -40,12 +40,6 @@ class RequirementValidator
      */
     private $infoReader;
 
-    /**
-     * RequirementValidator constructor.
-     *
-     * @param ModelManager    $em
-     * @param XmlPluginReader $infoReader
-     */
     public function __construct(ModelManager $em, XmlPluginReader $infoReader)
     {
         $this->em = $em;
@@ -91,13 +85,7 @@ class RequirementValidator
         return version_compare($version, $required, $operator);
     }
 
-    /**
-     * @param array  $compatibility
-     * @param string $shopwareVersion
-     *
-     * @throws \Exception
-     */
-    private function assertShopwareVersion(array $compatibility, $shopwareVersion)
+    private function assertShopwareVersion(array $compatibility, string $shopwareVersion): void
     {
         if (isset($compatibility['blacklist']) && in_array($shopwareVersion, $compatibility['blacklist'])) {
             throw new \Exception(sprintf('Shopware version %s is blacklisted by the plugin', $shopwareVersion));
@@ -118,12 +106,7 @@ class RequirementValidator
         }
     }
 
-    /**
-     * @param array[] $requiredPlugins
-     *
-     * @throws \Exception
-     */
-    private function assertRequiredPlugins(array $requiredPlugins)
+    private function assertRequiredPlugins(array $requiredPlugins): void
     {
         $pluginRepository = $this->em->getRepository(Plugin::class);
 

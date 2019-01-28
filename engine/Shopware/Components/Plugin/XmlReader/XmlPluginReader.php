@@ -36,14 +36,7 @@ class XmlPluginReader extends XmlReaderBase
      */
     protected $xsdFile = __DIR__ . '/../schema/plugin.xsd';
 
-    /**
-     * parse required plugin blacklist
-     *
-     * @param DOMNodeList $items
-     *
-     * @return array|null
-     */
-    public static function parseBlacklist(DOMNodeList $items)
+    public static function parseBlacklist(DOMNodeList $items): ?array
     {
         if ($items->length === 0) {
             return null;
@@ -59,14 +52,7 @@ class XmlPluginReader extends XmlReaderBase
         return $blacklist;
     }
 
-    /**
-     * This method should be overridden as main entry point to parse a xml file.
-     *
-     * @param DOMDocument $xml
-     *
-     * @return array
-     */
-    protected function parseFile(DOMDocument $xml)
+    protected function parseFile(DOMDocument $xml): array
     {
         $xpath = new DOMXPath($xml);
 
@@ -126,14 +112,7 @@ class XmlPluginReader extends XmlReaderBase
         return $info;
     }
 
-    /**
-     * parse required plugins
-     *
-     * @param DOMElement $requiredPluginNode
-     *
-     * @return array
-     */
-    private function parseRequiredPlugins(DOMElement $requiredPluginNode)
+    private function parseRequiredPlugins(DOMElement $requiredPluginNode): array
     {
         $plugins = [];
 

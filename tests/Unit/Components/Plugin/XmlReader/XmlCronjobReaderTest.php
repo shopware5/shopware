@@ -34,18 +34,12 @@ class XmlCronjobReaderTest extends TestCase
      */
     private $cronjobReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cronjobReader = new XmlCronjobReader();
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlCronjobReader::read()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlCronjobReader::parseFile()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlCronjobReader::parseList()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlCronjobReader::parseItem()
-     */
-    public function testReadFile()
+    public function testReadFile(): void
     {
         $result = $this->readFile('cronjob.xml');
 
@@ -81,10 +75,7 @@ class XmlCronjobReaderTest extends TestCase
         self::assertEquals(false, $secondCron['disable_on_error']);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlCronjobReader::parseList()
-     */
-    public function testReadEmptyFile()
+    public function testReadEmptyFile(): void
     {
         $reflection = new \ReflectionClass(get_class($this->cronjobReader));
         $method = $reflection->getMethod('parseList');
@@ -96,14 +87,7 @@ class XmlCronjobReaderTest extends TestCase
         self::assertCount(0, $result);
     }
 
-    /**
-     * Helper function to read a plugin xml file.
-     *
-     * @param string $file
-     *
-     * @return array
-     */
-    private function readFile($file)
+    private function readFile(string $file): array
     {
         return $this->cronjobReader->read(
             sprintf('%s/examples/cronjob/%s', __DIR__, $file)

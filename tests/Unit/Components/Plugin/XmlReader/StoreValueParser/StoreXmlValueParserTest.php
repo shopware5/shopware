@@ -64,15 +64,12 @@ class StoreXmlValueParserTest extends TestCase
         $this->xpath = new DOMXPath($this->xmlFile);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parser = StoreValueParserFactory::create('xml');
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreXmlValueParser::parse()
-     */
-    public function testThatParserReturnsValidArray()
+    public function testThatParserReturnsValidArray(): void
     {
         $store = $this->getStoreElement(1);
         $options = $this->parser->parse($store);
@@ -110,10 +107,7 @@ class StoreXmlValueParserTest extends TestCase
         self::assertEquals('EN 2', $secondOptionLabels['en']);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreXmlValueParser::parse()
-     */
-    public function testThatEmptyOptionsReturnsEmptyArray()
+    public function testThatEmptyOptionsReturnsEmptyArray(): void
     {
         $store = $this->getStoreElement(2);
         $options = $this->parser->parse($store);
@@ -122,14 +116,7 @@ class StoreXmlValueParserTest extends TestCase
         self::assertCount(0, $options);
     }
 
-    /**
-     * returns store element at index
-     *
-     * @param int $elementIndex
-     *
-     * @return DOMElement
-     */
-    private function getStoreElement($elementIndex)
+    private function getStoreElement(int $elementIndex): DOMElement
     {
         $stores = $this->xpath->query(
             sprintf(

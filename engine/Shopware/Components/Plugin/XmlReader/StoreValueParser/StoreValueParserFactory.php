@@ -26,14 +26,7 @@ namespace Shopware\Components\Plugin\XmlReader\StoreValueParser;
 
 class StoreValueParserFactory
 {
-    /**
-     * Creates instance of store value parser by given type.
-     *
-     * @param string $type
-     *
-     * @return StoreValueParserInterface
-     */
-    public static function create($type)
+    public static function create(string $type): StoreValueParserInterface
     {
         switch ($type) {
             case 'extjs':

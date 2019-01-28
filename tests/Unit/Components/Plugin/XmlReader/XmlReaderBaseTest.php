@@ -43,10 +43,7 @@ class XmlReaderBaseTest extends TestCase
      */
     private $xpath;
 
-    /**
-     * set up test
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->xmlFile = XmlUtils::loadFile(
             __DIR__ . '/examples/base/config.xml',
@@ -56,20 +53,14 @@ class XmlReaderBaseTest extends TestCase
         $this->xpath = new DOMXPath($this->xmlFile);
     }
 
-    /**
-     * testing constants
-     */
-    public function testConstantsHaveCorrectValue()
+    public function testConstantsHaveCorrectValue(): void
     {
         self::assertEquals(0, XmlReaderBase::SCOPE_LOCALE);
         self::assertEquals(1, XmlReaderBase::SCOPE_SHOP);
         self::assertEquals('en', XmlReaderBase::DEFAULT_LANG);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::read()
-     */
-    public function testReadValidFile()
+    public function testReadValidFile(): void
     {
         $xmlReader = new XmlConfigReader();
         $data = $xmlReader->read(__DIR__ . '/examples/base/config.xml');
@@ -78,20 +69,16 @@ class XmlReaderBaseTest extends TestCase
         self::assertCount(3, $data);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::read()
-     * @expectedException \InvalidArgumentException
-     */
-    public function testReadInvalidFile()
+    public function testReadInvalidFile(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('#Unable to parse file#');
+
         $xmlReader = new XmlConfigReader();
         $xmlReader->read(__DIR__ . '/examples/base/config_invalid.xml');
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::parseTranslatableNodeList()
-     */
-    public function testParseTranslatableNodeList()
+    public function testParseTranslatableNodeList(): void
     {
         $formDescriptions = $this->xpath->query('//config/description');
 
@@ -120,10 +107,7 @@ class XmlReaderBaseTest extends TestCase
         self::assertNull($firstElementDescriptionResult);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::getFirstChildren()
-     */
-    public function testGetFirstItemOfNodeList()
+    public function testGetFirstItemOfNodeList(): void
     {
         $config = $this->xpath->query('//config')->item(0);
         $element = XmlReaderBase::getFirstChildren($config, 'label');
@@ -135,10 +119,7 @@ class XmlReaderBaseTest extends TestCase
         self::assertNull(XmlReaderBase::getFirstChildren($emptyNodeList, 'description'));
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::validateBooleanAttribute()
-     */
-    public function testValidateBooleanAttribute()
+    public function testValidateBooleanAttribute(): void
     {
         //required="true"
         $element1 = $this->xpath->query('//config/elements/element')->item(0);
@@ -160,10 +141,7 @@ class XmlReaderBaseTest extends TestCase
         self::assertEquals(false, $element2Result);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::parseStoreNodeList()
-     */
-    public function testParseStoreNodeList()
+    public function testParseStoreNodeList(): void
     {
         //ExtJs Store
         $store1 = $this->xpath->query('//config/elements/element[3]/store');
@@ -188,10 +166,7 @@ class XmlReaderBaseTest extends TestCase
         self::assertNull(null, $store3Result);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::parseOptionsNodeList()
-     */
-    public function testParseOptionsNodeList()
+    public function testParseOptionsNodeList(): void
     {
         $options = $this->xpath->query('//config/elements/element[6]/options');
         $optionsResult = XmlReaderBase::parseOptionsNodeList($options);
@@ -204,10 +179,7 @@ class XmlReaderBaseTest extends TestCase
         self::assertEquals('2', $optionsResult['maxValue']);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::parseOptionsNodeList()
-     */
-    public function testParseOptionsNodeListNoOptions()
+    public function testParseOptionsNodeListNoOptions(): void
     {
         //cannot test with file because of the xsd validation
         $dom = new DOMDocument();
@@ -221,10 +193,7 @@ class XmlReaderBaseTest extends TestCase
         ));
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::parseOptionsNodeList()
-     */
-    public function testParseOptionsNodeListEmptyOptions()
+    public function testParseOptionsNodeListEmptyOptions(): void
     {
         //cannot test with file because of the xsd validation
         $dom = new DOMDocument();
@@ -238,10 +207,7 @@ class XmlReaderBaseTest extends TestCase
         ));
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::getElementChildValueByName()
-     */
-    public function testGetElementChildValueByName()
+    public function testGetElementChildValueByName(): void
     {
         $options = $this->xpath->query('//config/elements/element[6]/options');
         $value = XmlReaderBase::getElementChildValueByName($options->item(0), 'minValue', false);
@@ -249,10 +215,7 @@ class XmlReaderBaseTest extends TestCase
         self::assertEquals('1', $value);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::getElementChildValueByName()
-     */
-    public function testGetElementChildValueByNameReturnsNull()
+    public function testGetElementChildValueByNameReturnsNull(): void
     {
         $options = $this->xpath->query('//config/elements/element[6]/options');
         $value = XmlReaderBase::getElementChildValueByName($options->item(0), 'invalid', false);
@@ -260,20 +223,16 @@ class XmlReaderBaseTest extends TestCase
         self::assertNull($value);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::getElementChildValueByName()
-     * @expectedException \InvalidArgumentException
-     */
-    public function testGetElementChildValueByNameThrowsException()
+    public function testGetElementChildValueByNameThrowsException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Element with invalid not found');
+
         $options = $this->xpath->query('//config/elements/element[6]/options');
         XmlReaderBase::getElementChildValueByName($options->item(0), 'invalid', true);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlReaderBase::validateTextAttribute()
-     */
-    public function testValidateTextAttribute()
+    public function testValidateTextAttribute(): void
     {
         self::assertEquals('combo', XmlConfigReader::validateTextAttribute('', 'combo'));
         self::assertEquals('select', XmlConfigReader::validateTextAttribute('select'));

@@ -31,8 +31,6 @@ interface StoreValueParserInterface
     /**
      * Parses store options.
      *
-     * @param DOMElement $element
-     *
      * @return string|array
      */
     public function parse(DOMElement $element);

@@ -30,11 +30,7 @@ use Shopware\Components\Plugin\XmlReader\XmlReaderBase;
 class StoreXmlValueParser implements StoreValueParserInterface
 {
     /**
-     * Parses store options.
-     *
-     * @param DOMElement $element
-     *
-     * @return string|array
+     * {@inheritdoc}
      */
     public function parse(DOMElement $element)
     {

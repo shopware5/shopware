@@ -41,10 +41,17 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
 * Changed the manufacturer image to appropriate thumbnails
+* Changed `plugin.xsd` to make pluginName in `requiredPlugins` required
 
 ### Removals
 
 * Removed `s_articles_attributes`.`articleID` which was not set for new article variants anymore since Shopware 5.2.0
+* Removed following classes, use `Shopware\Components\Plugin\XmlReader\*` instead
+    * `Shopware\Components\Plugin\XmlPluginInfoReader`
+    * `Shopware\Components\Plugin\XmlConfigDefinitionReader`
+    * `Shopware\Components\Plugin\XmlCronjobReader`
+    * `Shopware\Components\Plugin\XmlMenuReader`
+* Removed `storeType` `php` from Plugin config.xml
 
 ### Deprecations
 

@@ -31,10 +31,7 @@ use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreXmlValueParser;
 
 class StoreValueParserFactoryTest extends TestCase
 {
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactory::create()
-     */
-    public function testThatFactoryReturnsCorrectInstance()
+    public function testThatFactoryReturnsCorrectInstance(): void
     {
         self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create(''));
         self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create('xml'));

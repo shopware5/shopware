@@ -27,9 +27,6 @@ namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\XmlReader\XmlConfigReader;
 
-/**
- * Class XmlConfigReaderTest
- */
 class XmlConfigReaderTest extends TestCase
 {
     /**
@@ -37,17 +34,12 @@ class XmlConfigReaderTest extends TestCase
      */
     private $configReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configReader = new XmlConfigReader();
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlConfigReader::read()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlConfigReader::parseFile()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlConfigReader::parseElementNodeList()
-     */
-    public function testReadFile()
+    public function testReadFile(): void
     {
         $result = $this->readFile('config.xml');
 
@@ -102,10 +94,7 @@ class XmlConfigReaderTest extends TestCase
         self::assertArrayHasKey('store', $element2);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlConfigReader::parseElementNodeList()
-     */
-    public function testParseElementNodeListEmpty()
+    public function testParseElementNodeListEmpty(): void
     {
         $reflection = new \ReflectionClass(get_class($this->configReader));
         $method = $reflection->getMethod('parseElementNodeList');
@@ -117,10 +106,7 @@ class XmlConfigReaderTest extends TestCase
         self::assertCount(0, $result);
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlConfigReader::validateAttributeScope()
-     */
-    public function testValidateAttributeScope()
+    public function testValidateAttributeScope(): void
     {
         //default value SCOPE_LOCALE
         self::assertEquals(
@@ -141,23 +127,14 @@ class XmlConfigReaderTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlConfigReader::validateAttributeScope()
-     * @expectedException \InvalidArgumentException
-     */
-    public function testValidateAttributeScopeThrowsException()
+    public function testValidateAttributeScopeThrowsException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid scope "invalid value"');
         XmlConfigReader::validateAttributeScope('invalid value');
     }
 
-    /**
-     * Helper function to read a plugin xml file.
-     *
-     * @param string $file
-     *
-     * @return array
-     */
-    private function readFile($file)
+    private function readFile(string $file): array
     {
         return $this->configReader->read(
             sprintf('%s/examples/config/%s', __DIR__, $file)

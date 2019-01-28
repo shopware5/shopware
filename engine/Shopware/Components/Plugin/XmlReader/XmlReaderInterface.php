@@ -26,10 +26,5 @@ namespace Shopware\Components\Plugin\XmlReader;
 
 interface XmlReaderInterface
 {
-    /**
-     * @param string $xmlFile
-     *
-     * @return array
-     */
-    public function read($xmlFile);
+    public function read(string $xmlFile): array;
 }

@@ -34,17 +34,12 @@ class XmlPluginReaderTest extends TestCase
      */
     private $pluginReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pluginReader = new XmlPluginReader();
     }
 
-    /**
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlPluginReader::parseFile()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlPluginReader::parseRequiredPlugins()
-     * @covers \Shopware\Components\Plugin\XmlReader\XmlPluginReader::parseBlacklist()
-     */
-    public function testReadFile()
+    public function testReadFile(): void
     {
         $result = $this->readFile('plugin.xml');
 
@@ -111,14 +106,7 @@ class XmlPluginReaderTest extends TestCase
         self::assertArrayNotHasKey('blacklist', $secondRequiredPlugin);
     }
 
-    /**
-     * Helper function to read a plugin xml file.
-     *
-     * @param string $file
-     *
-     * @return array
-     */
-    private function readFile($file)
+    private function readFile(string $file): array
     {
         return $this->pluginReader->read(
             sprintf('%s/examples/plugin/%s', __DIR__, $file)
