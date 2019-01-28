@@ -25,8 +25,8 @@
 use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\OptinServiceInterface;
 use Shopware\Components\StateTranslatorService;
-use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
 
@@ -109,7 +109,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function getWhitelistedCSRFActions()
     {
         return [
-            'performOrder',
             'performOrderRedirect',
         ];
     }
@@ -460,12 +459,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         ];
         Shopware()->Modules()->Admin()->sLogin(true);
 
+        $hash = $this->container->get('shopware.components.optin_service')->add(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, 300, [
+            'sessionId' => Shopware()->Session()->get('sessionId'),
+            'shopId' => $shop->getId(),
+        ]);
+
         $url = $this->Front()->Router()->assemble([
             'action' => 'performOrderRedirect',
-            'shopId' => $shop->getId(),
-            'hash' => $this->createPerformOrderRedirectHash($user['password']),
-            'sessionId' => Shopware()->Session()->get('sessionId'),
-            'userId' => $user['id'],
+            'hash' => $hash,
             'fullPath' => true,
         ]);
 
@@ -485,32 +486,27 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function performOrderRedirectAction()
     {
-        $shopId = (int) $this->Request()->getQuery('shopId');
-        $userId = (int) $this->Request()->getQuery('userId');
-        $sessionId = $this->Request()->getQuery('sessionId');
         $hash = $this->Request()->getQuery('hash');
 
-        $userPasswordHash = $this->get('dbal_connection')->fetchColumn(
-            'SELECT password FROM s_user WHERE id = :userId',
-            [
-                ':userId' => $userId,
-            ]
-        );
+        $optinService = $this->container->get('shopware.components.optin_service');
 
-        // Don't trust anyone without this information
-        if (empty($shopId) || empty($sessionId) || empty($hash) || $hash !== $this->createPerformOrderRedirectHash($userPasswordHash)) {
-            return;
+        $data = $optinService->get(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, $hash);
+
+        if ($data === null) {
+            $this->redirect(['module' => 'backend', 'controller' => 'index', 'action' => 'index']);
         }
+
+        $optinService->delete(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, $hash);
 
         /** @var Shopware\Models\Shop\Repository $repository */
         $repository = $this->getShopRepository();
-        $shop = $repository->getActiveById($shopId);
+        $shop = $repository->getActiveById($data['shopId']);
 
         $path = rtrim($shop->getBasePath(), '/') . '/';
 
         // Update right domain cookies
-        $this->Response()->setCookie('shop', $shopId, 0, $path);
-        $this->Response()->setCookie('session-' . $shopId, $sessionId, 0, '/');
+        $this->Response()->setCookie('shop', $data['shopId'], 0, $path);
+        $this->Response()->setCookie('session-' . $data['shopId'], $data['sessionId'], 0, '/');
 
         $this->redirect($shop->getBaseUrl());
     }
@@ -830,36 +826,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         return $params;
-    }
-
-    /**
-     * generates a hash value for the performOrderRedirectAction
-     *
-     * @param string $userPasswordHash
-     *
-     * @return string
-     */
-    private function createPerformOrderRedirectHash($userPasswordHash)
-    {
-        return sha1($userPasswordHash);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return Address|null
-     */
-    private function fetchAddress($id)
-    {
-        /** @var \Doctrine\ORM\QueryBuilder $query */
-        $query = $this->get('models')->createQueryBuilder();
-        $query->select('address');
-        $query->from(Address::class, 'address');
-        $query->where('address.id = :id');
-        $query->setParameter('id', $id);
-        $query->setMaxResults(1);
-
-        return $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
     }
 
     /**

@@ -47,13 +47,6 @@ class FrontendPostFilter implements PostFilterInterface
                 . '/' . $url;
         }
 
-        //@todo make session postfilter
-        if (!empty($params['appendSession'])) {
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= session_name() . '=' . session_id();
-            $url .= '&__shop=' . $context->getShopId();
-        }
-
         return $url;
     }
 
