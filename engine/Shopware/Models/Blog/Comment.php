@@ -103,6 +103,21 @@ class Comment extends ModelEntity
     private $points;
 
     /**
+     * @var \Shopware\Models\Shop\Shop
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     */
+    private $shop;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="shop_id", type="integer", nullable=true)
+     */
+    private $shopId;
+
+    /**
      * @var \Shopware\Models\Blog\Blog
      *
      * @ORM\ManyToOne(targetEntity="Blog", inversedBy="comments")
@@ -167,7 +182,7 @@ class Comment extends ModelEntity
      */
     public function setCreationDate($creationDate)
     {
-        if (!$creationDate instanceof \DateTimeInterface && strlen($creationDate) > 0) {
+        if (!$creationDate instanceof \DateTimeInterface && !empty($creationDate)) {
             $creationDate = new \DateTime($creationDate);
         }
         $this->creationDate = $creationDate;
@@ -281,5 +296,37 @@ class Comment extends ModelEntity
     public function setPoints($points)
     {
         $this->points = $points;
+    }
+
+    /**
+     * @return \Shopware\Models\Shop\Shop|null
+     */
+    public function getShop()
+    {
+        return $this->shop;
+    }
+
+    /**
+     * @param \Shopware\Models\Shop\Shop|null $shop
+     */
+    public function setShop($shop)
+    {
+        $this->shop = $shop;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
     }
 }

@@ -493,13 +493,16 @@ class sCategories
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['category.id', 'category.parent']);
+        $shopId = $this->contextService->getShopContext()->getShop()->getId();
 
         $query->from('s_categories', 'category')
             ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
             ->andWhere('category.active = 1')
+            ->andWhere('category.shops IS NULL OR category.shops LIKE :shopId')
             ->orderBy('category.position', 'ASC')
             ->addOrderBy('category.id')
-            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->setParameter(':shopId', '%|' . $shopId . '|%');
 
         /** @var PDOStatement $statement */
         $statement = $query->execute();

@@ -70,7 +70,9 @@ class CategoryProvider implements UrlProviderInterface
             ->addSelect(['cat.id', 'cat.blog'])
             ->orderBy('ISNULL(cat.path)', 'DESC')
             ->addOrderBy('id', 'ASC')
-            ->setParameter(':shop', $context->getShopId());
+            ->setParameter(':shop', $context->getShopId())
+            ->andWhere('cat.shops IS NULL OR cat.shops LIKE :shopLike')
+            ->setParameter(':shopLike', '%|' . $context->getShopId() . '|%');
 
         if ($limit !== null && $offset !== null) {
             $qb->setFirstResult($offset)
@@ -107,6 +109,8 @@ class CategoryProvider implements UrlProviderInterface
         return (int) $this->getBaseQuery()
             ->addSelect(['COUNT(cat.id)'])
             ->setParameter(':shop', $context->getShopId())
+            ->andWhere('cat.shops IS NULL OR cat.shops LIKE :shopLike')
+            ->setParameter(':shopLike', '%|' . $context->getShopId() . '|%')
             ->execute()
             ->fetchColumn();
     }

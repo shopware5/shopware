@@ -145,7 +145,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
             $this->rewriteTable->sCreateRewriteTableCategories();
             $this->rewriteTable->sCreateRewriteTableCampaigns();
             $this->rewriteTable->sCreateRewriteTableContent();
-            $this->rewriteTable->sCreateRewriteTableBlog();
+            $this->rewriteTable->sCreateRewriteTableBlog(null, null, $context);
             $this->rewriteTable->createManufacturerUrls($context);
             $this->rewriteTable->sCreateRewriteTableStatic();
 

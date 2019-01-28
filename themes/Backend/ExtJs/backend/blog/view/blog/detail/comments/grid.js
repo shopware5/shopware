@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
     ui:'shopware-ui',
     split: true,
     selType:'cellmodel',
+
     /**
      * Initialize the Shopware.apps.Blog.view.blog.detail.comments and defines the necessary
      * default configuration
@@ -56,12 +57,19 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
         var me = this;
         me.selModel = me.getGridSelModel();
 
+        me.shopStore = Ext.create('Shopware.apps.Base.store.Shop');
+        me.shopStore.clearFilter();
+        me.shopStore.load();
+
         me.columns = me.getColumns();
         me.pagingbar = me.getPagingBar();
         me.store = me.commentStore;
         me.dockedItems = [ me.pagingbar ];
+        me.plugins = me.createPlugins();
+
         me.callParent(arguments);
     },
+
     /**
      * Defines additional events which will be
      * fired from the component
@@ -102,8 +110,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
                  */
                 'selectionChange'
         );
-
-        return true;
     },
     /**
      * Creates the grid columns
@@ -113,38 +119,47 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
     getColumns:function () {
         var me = this;
 
-        var columnsData = [
+        return [
             {
-                header:'{s name=detail/main/comments/column/status}Status{/s}',
-                dataIndex:'active',
+                header: '{s name=detail/main/comments/column/status}Status{/s}',
+                dataIndex: 'active',
                 renderer: me.activeColumnRenderer,
-                flex:1
+                flex: 1
             },
             {
-                header:'{s name=detail/main/comments/column/date}Date{/s}',
-                dataIndex:'creationDate',
+                header: '{s name=detail/main/comments/column/date}Date{/s}',
+                dataIndex: 'creationDate',
                 renderer: me.dateRenderer,
-                flex:3
+                flex: 3
             },
             {
-                header:'{s name=detail/main/comments/column/author}Author{/s}',
-                dataIndex:'name',
-//                renderer: me.viewsRenderer,
-                flex:3
+                header: '{s name=detail/main/comments/column/author}Author{/s}',
+                dataIndex: 'name',
+                flex: 3
             },
             {
-                header:'{s name=detail/main/comments/column/headline}Headline{/s}',
-                dataIndex:'headline',
-//
-                flex:3
+                header: '{s name=detail/main/comments/column/headline}Headline{/s}',
+                dataIndex: 'headline',
+                flex: 3
             },
             {
-                xtype:'actioncolumn',
-                width:50,
-                items:me.getActionColumnItems()
+                header: '{s name=detail/main/comments/column/shop}Shop{/s}',
+                dataIndex: 'shopId',
+                flex: 3,
+                renderer: me.shopRenderer,
+                editor: {
+                    xtype: 'combobox',
+                    store: me.shopStore,
+                    valueField: 'id',
+                    displayField: 'name'
+                }
+            },
+            {
+                xtype: 'actioncolumn',
+                width: 50,
+                items: me.getActionColumnItems()
             }
         ];
-        return columnsData;
     },
     /**
      * Creates the items of the action column
@@ -161,7 +176,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
             cls:'addBtn',
             tooltip:'{s name=detail/main/comments/action_column/add}Accept comment{/s}',
             getClass: function(value, metadata, record) {
-                if (record.get("active")) {
+                if (record.get('active')) {
                     return 'x-hidden';
                 }
             },
@@ -243,7 +258,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
     /**
      * Renderer for the active flag
      *
-     * @param [object] - value
+     * @param { bool } value
      */
     activeColumnRenderer: function(value) {
         if (value) {
@@ -251,6 +266,40 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
         } else {
             return '<div class="sprite-cross" style="width: 25px; height: 25px">&nbsp;</div>';
         }
+    },
+
+    /**
+     * @param { string } value
+     * @returns { string }
+     */
+    shopRenderer: function(value) {
+        if (value === null) {
+            return '-';
+        }
+
+        var shop = this.shopStore.getById(value);
+
+        if (shop) {
+            return shop.get('name');
+        }
+
+        return value;
+    },
+
+    /**
+     * @return { Ext.grid.plugin.RowEditing }
+     */
+    createPlugins: function () {
+        return [
+            Ext.create('Ext.grid.plugin.RowEditing', {
+                clicksToEdit: 2,
+                listeners: {
+                    edit: function (editor, opts) {
+                        opts.record.save();
+                    }
+                }
+            })
+        ];
     }
 });
 //{/block}

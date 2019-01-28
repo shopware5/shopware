@@ -128,7 +128,8 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
             title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
             table: 's_blog_attributes',
             bodyPadding: 10,
-            autoScroll: true
+            autoScroll: true,
+            allowTranslation: true,
         });
 
         return Ext.create('Ext.form.Panel', {
@@ -139,6 +140,10 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
             border: 0,
             bodyPadding: 10,
             title:'{s name=detail_general/title}General Settings{/s}',
+            plugins: [{
+                ptype: 'translation',
+                translationType: 'blog'
+            }],
             items: [
                 me.mainView,
                 {
