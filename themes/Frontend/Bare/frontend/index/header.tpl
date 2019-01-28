@@ -89,7 +89,9 @@
 {block name="frontend_index_header_css_screen"}
     {{compileLess timestamp={themeTimestamp} output="lessFiles"}}
     {foreach $lessFiles as $stylesheet}
-        <link href="{$stylesheet}" media="all" rel="stylesheet" type="text/css" />
+        {block name="frontend_index_header_css_screen_stylesheet"}
+            <link href="{$stylesheet}" media="all" rel="stylesheet" type="text/css" />
+        {/block}
     {/foreach}
 
     {if $theme.additionalCssData}
