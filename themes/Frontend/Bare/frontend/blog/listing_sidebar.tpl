@@ -53,7 +53,9 @@
 
                             {* Blog filter *}
                             {block name='frontend_blog_index_filter'}
-                                {include file="frontend/blog/filter.tpl"}
+                                {if !$sCategoryInfo.hideFilter}
+                                    {include file="frontend/blog/filter.tpl"}
+                                {/if}
                             {/block}
                         </div>
                     {/block}

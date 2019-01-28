@@ -29,6 +29,13 @@
  */
 class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+    }
+
     /**
      * @ticket SW-4747
      */
@@ -44,6 +51,16 @@ class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Componen
         $this->dispatch('/backend/newsletter/cron');
         $this->assertRegExp('#Wait [0-9]+ seconds ...#', $this->Response()->getBody());
         $this->reset();
+    }
+
+    /**
+     * @ticket SW-23211
+     */
+    public function testNewsletterGroup()
+    {
+        $this->dispatch('/backend/NewsletterManager/getGroups');
+
+        $this->assertTrue($this->View()->getAssign('success'));
     }
 
     /**

@@ -2,6 +2,21 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.7
+
+[View all changes from v5.5.6...v5.5.7](https://github.com/shopware/shopware/compare/v5.5.6...v5.5.7)
+
+
+### Additions
+
+* Added license synchronization button in Plugin Manager
+
+
+### Changes
+
+* Changed the default value in column `s_core_auth.lockeduntil` to `2010-01-01 00:00:00`
+* Changed order module sorting to consider sorting also when elasticsearch is activated
+
 ## 5.5.6
 
 [View all changes from v5.5.5...v5.5.6](https://github.com/shopware/shopware/compare/v5.5.5...v5.5.6)
@@ -80,7 +95,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 Wherever a snippet's content was embedded inside a string, it's value now gets assigned to a variable instead. This may lead to broken links or text, in case a snippet contains escaped quotemarks (`\"`), since escaping them is not necessary anymore.
 
-Please check all snippets with escaped quotation marks after upgrading. 
+Please check all snippets with escaped quotation marks after upgrading.
 
 ### Defining Elasticsearch version to reduce calls
 

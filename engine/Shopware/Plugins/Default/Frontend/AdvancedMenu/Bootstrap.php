@@ -144,7 +144,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $cache = Shopware()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
-            $menu = $cache->load($cacheKey);
+            $menu = $cache->load($cacheKey, true);
         } else {
             $ids = $this->getCategoryIdsOfDepth($category, $depth);
             $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList($ids, $context);

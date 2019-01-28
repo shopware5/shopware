@@ -22,70 +22,29 @@
  *
  * @category   Shopware
  * @package    Order
- * @subpackage Store
+ * @subpackage Model
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Shopware Store - Order list backend module
- *
- * The list store is used from the order list grid.
- */
-//{block name="backend/order/store/list"}
-Ext.define('Shopware.apps.Order.store.Order', {
+//{block name="backend/order/model/batch"}
+Ext.define('Shopware.apps.Order.model.Batch', {
+
     /**
-     * Extend for the standard ExtJS 4
+     * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Shopware.apps.Order.model.Order',
 
     /**
-     * Auto load the store after the component is initialized
-     * @boolean
-     */
-    autoLoad:false,
-
-    /**
-     * Enable remote sort.
-     * @boolean
-     */
-    remoteSort:true,
-
-    /**
-     * Enable remote filtering
-     * @boolean
-     */
-    remoteFilter:true,
-
-    /**
-     * Amount of data loaded at once
-     * @integer
-     */
-    pageSize:20,
-
-    /**
-     * to upload all selected items in one request
-     * @boolean
-     */
-    batch:true,
-
-    /**
-     * Define the used model for this store
-     * @string
-     */
-    model:'Shopware.apps.Order.model.Order',
-
-    /**
-     * Default sorters
+     * Add properties for the batch processing status
      * @array
      */
-    sorters: [
-        {
-            property: 'orderTime',
-            direction: 'DESC'
-        }
-    ]
+    fields: [
+        //{block name="backend/order/model/batch/fields"}{/block}
+        { name : 'success', type: 'bool', default: null },
+        { name : 'errorMessage', type: 'string', useNull: true, default: null }
+    ],
 });
 //{/block}
 

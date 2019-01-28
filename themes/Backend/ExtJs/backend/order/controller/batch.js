@@ -70,6 +70,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             message: '{s name=cancel_message}{/s}',
             title: '{s name=cancel_title}{/s}'
         },
+        orderErrorTitle: '{s name=batch/order_error/title}Error at order [0]{/s}',
         errorTitle: '{s name=batch/error/title}Error{/s}',
         growlMessage: '{s name=growlMessage}{/s}',
         formInvalid: '{s name=settings/form_invalid}Please correct the information in the form{/s}',
@@ -216,6 +217,17 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
                 if (!mailSent && settings && settings.autoSendMail) {
                     Shopware.Msg.createGrowlMessage('', me.snippets.noEmailsWillBeSent);
                 }
+
+                Ext.Array.forEach(resultSet, function (batchResult) {
+                    if (batchResult.get('success') !== false) {
+                        return;
+                    }
+                    Shopware.Notification.createGrowlMessage(
+                        Ext.String.format(me.snippets.orderErrorTitle, batchResult.get('number')),
+                        batchResult.get('errorMessage'),
+                        'order'
+                    )
+                });
 
                 listingStore.load();
             }
@@ -500,6 +512,16 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
 
         // Add the resulting record to our result store
         resultStore.add(operation.resultSet.records);
+
+        var resultRecord = operation.resultSet.records[0];
+        if (resultRecord.get('success') === false) {
+            Shopware.Notification.createGrowlMessage(
+                Ext.String.format(me.snippets.orderErrorTitle, resultRecord.get('number')),
+                resultRecord.get('errorMessage'),
+                'order'
+            );
+        }
+
 
         // Checks if the user clicks the cancel button on the detail window.
         if (me.currentStatus === me.processStatus.cancel) {
