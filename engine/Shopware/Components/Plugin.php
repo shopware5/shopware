@@ -80,7 +80,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     /**
      * @return string
      */
-    public function getNamespace()
+    final public function getNamespace()
     {
         return $this->namespace;
     }

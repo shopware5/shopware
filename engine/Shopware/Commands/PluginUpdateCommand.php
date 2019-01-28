@@ -36,13 +36,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginUpdateCommand extends ShopwareCommand
+class PluginUpdateCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:update')
             ->setDescription('Updates specified plugins.')
@@ -80,7 +82,7 @@ EOF
 
         if (!empty($pluginNames)) {
             foreach ($pluginNames as $pluginName) {
-                $this->updatePlugin($pluginManager, $pluginName, $output);
+                $this->updatePlugin($pluginManager, $pluginName, $input, $output);
             }
 
             return 0;
@@ -151,11 +153,12 @@ EOF
     /**
      * @param InstallerService $pluginManager
      * @param string           $pluginName
+     * @param InputInterface   $input
      * @param OutputInterface  $output
      *
      * @return int 0 if everything went fine, or an error code
      */
-    private function updatePlugin(InstallerService $pluginManager, $pluginName, OutputInterface $output)
+    private function updatePlugin(InstallerService $pluginManager, $pluginName, InputInterface $input, OutputInterface $output)
     {
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
@@ -171,9 +174,10 @@ EOF
             return 0;
         }
 
-        $pluginManager->updatePlugin($plugin);
-
+        $updateContext = $pluginManager->updatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been updated successfully.', $pluginName));
+
+        $this->clearCachesIfRequested($input, $output, $updateContext);
 
         return 0;
     }

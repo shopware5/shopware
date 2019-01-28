@@ -1182,8 +1182,8 @@ Example: `<i class="icon--cart"></i>`
         </tr>
 
         <tr>
-            <td><i class="icon--instagram"></i><br/>
-                icon--instagram
+            <td><i class="icon--instagram3"></i><br/>
+                icon--instagram3
             </td>
 
             <td><i class="icon--dropbox"></i><br/>
@@ -1257,6 +1257,32 @@ Example: `<i class="icon--cart"></i>`
             <td><i class="icon--feed2"></i><br/>
                 icon--feed2
             </td>
+
+            <td><i class="icon--instagram"></i><br/>
+                icon--instagram
+            </td>
+
+            <td><i class="icon--instagram2"></i><br/>
+                icon--instagram2
+            </td>
+
+            <td><i class="icon--xing"></i><br/>
+                icon--xing
+            </td>
+        </tr>
+
+        <tr>
+            <td><i class="icon--xing2"></i><br/>
+                icon--xing2
+            </td>
+
+            <td><i class="icon--youtube"></i><br/>
+                icon--youtube
+            </td>
+
+            <td><i class="icon--youtube2"></i><br/>
+                icon--youtube2
+            </td>
         </tr>
     </tbody>
 </table>
@@ -1265,8 +1291,7 @@ Example: `<i class="icon--cart"></i>`
 
 @font-face {
     font-family: @sw-icon-fontname;
-    src:url('@{font-directory}/shopware.eot?@{shopware-revision}');
-    src:url('@{font-directory}/shopware.eot?#@{shopware-revision}') format('embedded-opentype'),
+    src:url('@{font-directory}/shopware.woff2?#@{shopware-revision}') format('woff2'),
         url('@{font-directory}/shopware.woff?@{shopware-revision}') format('woff'),
         url('@{font-directory}/shopware.ttf?@{shopware-revision}') format('truetype'),
         url('@{font-directory}/shopware.svg?@{shopware-revision}') format('svg');
@@ -2126,8 +2151,8 @@ Example: `<i class="icon--cart"></i>`
 .icon--qq:before {
     content: @sw-icon-qq;
 }
-.icon--instagram:before {
-    content: @sw-icon-instagram;
+.icon--instagram3:before {
+    content: @sw-icon-instagram3;
 }
 .icon--dropbox:before {
     content: @sw-icon-dropbox;
@@ -2179,4 +2204,22 @@ Example: `<i class="icon--cart"></i>`
 }
 .icon--feed2:before {
     content: @sw-icon-feed2;
+}
+.icon--instagram:before {
+    content: @sw-icon-instagram;
+}
+.icon--instagram2:before {
+    content: @sw-icon-instagram2;
+}
+.icon--xing:before {
+    content: @sw-icon-xing;
+}
+.icon--xing2:before {
+    content: @sw-icon-xing2;
+}
+.icon--youtube:before {
+    content: @sw-icon-youtube;
+}
+.icon--youtube2:before {
+    content: @sw-icon-youtube2;
 }
