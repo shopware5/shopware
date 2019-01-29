@@ -2,13 +2,41 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.7
+
+[View all changes from v5.5.6...v5.5.7](https://github.com/shopware/shopware/compare/v5.5.6...v5.5.7)
+
+
+### Additions
+
+* Added license synchronization button in Plugin Manager
+
+
+### Changes
+
+* Changed the default value in column `s_core_auth.lockeduntil` to `2010-01-01 00:00:00`
+* Changed order module sorting to consider sorting also when elasticsearch is activated
+
+## 5.5.6
+
+[View all changes from v5.5.5...v5.5.6](https://github.com/shopware/shopware/compare/v5.5.5...v5.5.6)
+
+### Changes
+
+* Changed the selector for the emotion-wrapper in `jquery.emotion.js` to fix an issue with emotions using the 'resize' layout
+* Changed SQL in migration to fix possible issues
+
 ## 5.5.5
 
 [View all changes from v5.5.4...v5.5.5](https://github.com/shopware/shopware/compare/v5.5.4...v5.5.5)
 
 ### Additions
 
+* Added attributes to shop entities
+* Added missing countries to list of available countries (table `s_core_countries`)
 * Added new event `TemplateMail_CreateMail_MailContext` to `engine/Shopware/Components/TemplateMail.php`
+* Added new event `Shopware_Modules_Basket_CheckBasketQuantities_ProductsQuantity`
+* Added new config option to define Elasticsearch version
 * Added internal locking to sitemap generation so the sitemap isn't generated multiple times in parallel
 * Added event `plugin/swAjaxVariant/onHistoryChanged` in in order to listen to changes in browser history after variants did change
 * Added blocks `frontend_account_order_item_pseudo_price_inner` and `frontend_account_order_item_pseudo_price_inner_value` to `frontend/account/order_item_details.tpl` to modify price if necessary
@@ -16,16 +44,76 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added `max_expansions` in config.php for the `phrase_prefixes` `name` and `number`
 * Added aggregation size to product attribute range sliders
 * Added product attribute parser for elasticsearch indexing to allow indexing of boolean values
+* Added alias `shopware.api.customerstream` to service with id `shopware.api.customer_stream` to fix problem in cronjob
+* Added new property `showIdColumn` to `Shopware.grid.Panel` to add the possibility of showing the id column
+* Added `CustomEventPolyfill` for IE 11 on Windows 7
+* Added article details to api variant endpoint
+* Added `IN` and `NOT IN` operators for filters in backend's article overview
+* Added a new event `onRequestDataCompleted` to jQuery plugin `swAjaxVariant`
+* Added support for attribute html fields in the media garbage collector
+* Added block 'backend/search/index/result' to the backend search result template
+* Added loading of payment attributed to the frontend
+* Added new console command `sw:refresh:topseller` to refresh the topsellers
+* Added help text icon and support text icon to ExtJs HTML fields
+* Added new template blocks `frontend_account_order_item_pseudo_price_inner` and `frontend_account_order_item_pseudo_price_inner_value` in `account/order_item_details.tpl`
+* Added the interfaces to the classes in the StoreFrontBundle where they are missing
+* Added `setTemplateName` and `getTemplateName` methods to `Enlight_Components_Mail`
 
 ### Changes
 
+* Changed all occurences of snippets embedded in strings
+    * The snippets content now gets assigned to a variable instead
+    * This may lead to broken links or text, in case a snippet contains escaped quotemarks (`\"`), since escaping them is not necessary anymore
+* Changed Symfony library to version 3.4.21
+* Changed non-idempotent basket actions to forward the current request
 * Changed user timeout to session `session.gc_maxlifetime`
 * Changed itemprop `priceCurrency` to be available for products with price groups
 * Changed `ajaxListing` action to `listingCount` action in Bare theme
 * Changed backend filter for variants with laststock
 * Changed namespace for plugins in custom/project directory to fix theme recognition in composer projects
-* Changed calculation of conversionrate in backend widget
-* Changed Symfony library to version 3.4.21
+* Changed calculation of conversion rate in backend widget
+* Changed wrong exception instantiation in `\Shopware\Components\Thumbnail\Manager`
+* Changed snippet namespace parsing to improve compatibility to windows installations 
+* Changed Querybuilder to fix compatibility with PHP7 on cygwin
+* Changed `\Shopware_Controllers_Backend_Base::addAdditionalTextForVariant` to show variant text on new order position
+* Changed the jQuery swRegister plugin to use the correct input ids for input validation if they were changed by data attributes
+* Changed `\Shopware_Controllers_Backend_Application::resolveExtJsData` to use constants instead of numbers in ORM relation mapping
+* Changes category links in HTML sitemap to now also be translated
+* Changed filter for `data-` attributes
+* Changed display of translatable checkbox attributes in backend to show the fallback value if no translation is configured
+* Changed sitemap export to contain the correct lastmod in sitemap entries of products
+* Changed the internally stored last exported product ids to prevent duplicate exports of single products in the sitemap
+* Changed the reset of the account number when saving a costumer
+* Changed the overwrite protection time zone when saving an order detail or deleting one
+* Changed Plugin Manager in backend to also show strikethrough prices of plugins
+
+### Removals
+
+* Removed unused `Shopware.data.ClassCache` ExtJs class
+
+### Changed occurences of snippets embedded in strings
+
+Wherever a snippet's content was embedded inside a string, it's value now gets assigned to a variable instead. This may lead to broken links or text, in case a snippet contains escaped quotemarks (`\"`), since escaping them is not necessary anymore.
+
+Please check all snippets with escaped quotation marks after upgrading.
+
+### Defining Elasticsearch version to reduce calls
+
+By default, Shopware makes an `info` request to the Elasticsearch backend to be able to determine the version of Elasticsearch that is being used. In high load environments, this can create unnecessary additional load on all services due to the slight overhead these requests create.
+
+Starting with Shopware 5.5.5, it is possible to define the version of Elasticsearch being used in the `config.php` like described below. Doing so will keep Shopware from making these `info` requests.
+
+```php
+
+<?php
+return [
+     ...
+     'es' => [
+         ...
+         'version' => '5.6.5',
+     ],
+];
+```
 
 ## 5.5.4
 

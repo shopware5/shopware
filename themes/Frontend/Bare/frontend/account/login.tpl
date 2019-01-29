@@ -3,7 +3,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb = [['name' => "{s name='AccountLoginTitle'}{/s}", 'link' => {url}]]}
+    {s name="AccountLoginTitle" assign="snippetAccountLoginTitle"}{/s}
+    {$sBreadcrumb = [['name' => $snippetAccountLoginTitle, 'link' => {url}]]}
 {/block}
 
 {* Main content *}
@@ -57,7 +58,8 @@
                 </fieldset>
 
                 <p class="password">
-                    <a href="{url action=password}" title="{"{s name='LoginLinkLostPassword'}{/s}"|escape}">
+                    {s name="LoginLinkLostPassword" assign="snippetLoginLinkLostPassword"}{/s}
+                    <a href="{url action=password}" title="{$snippetLoginLinkLostPassword|escape}">
                         {s name="LoginLinkLostPassword"}{/s}
                     </a>
                 </p>

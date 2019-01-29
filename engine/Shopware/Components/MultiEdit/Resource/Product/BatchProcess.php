@@ -163,10 +163,6 @@ class BatchProcess
                 default:
                     throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
             }
-            // Technically we're able to process DQL here. This should not be enabled by default and is quite limited
-            if (false) {
-                $attributes[$attribute][] = 'dql';
-            }
         }
 
         return $attributes;

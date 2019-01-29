@@ -10,10 +10,12 @@
     <div class="content tellafriend--content right">
 
         {if $sSuccess}
-            {include file="frontend/_includes/messages.tpl" type="success" content="{s name='TellAFriendHeaderSuccess'}{/s}"}
+            {s name="TellAFriendHeaderSuccess" assign="snippetTellAFriendHeaderSuccess"}{/s}
+            {include file="frontend/_includes/messages.tpl" type="success" content=$snippetTellAFriendHeaderSuccess}
         {else}
             {if $sError}
-                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='TellAFriendInfoFields'}{/s}"}
+                {s name="TellAFriendInfoFields" assign="snippetTellAFriendInfoFields"}{/s}
+                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetTellAFriendInfoFields}
             {/if}
         {/if}
 

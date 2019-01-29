@@ -3,7 +3,8 @@
 {* Breadcrumb *}
 {block name="frontend_index_start"}
     {$smarty.block.parent}
-    {$sBreadcrumb[] = ['name' => "{s name='MyDownloadsTitle'}{/s}", 'link' => {url}]}
+    {s name="MyDownloadsTitle" assign="snippetMyDownloadsTitle"}{/s}
+    {$sBreadcrumb[] = ['name' => $snippetMyDownloadsTitle, 'link' => {url}]}
 {/block}
 
 {* Main content *}
@@ -13,9 +14,9 @@
         {* Error message *}
         {block name="frontend_account_downloads_error_messages"}
             {if $sErrorCode}
-                {$errorText="{s name='DownloadsInfoNotFound'}{/s}"}
+                {s name="DownloadsInfoNotFound" assign="errorText"}{/s}
                 {if $sErrorCode == 1}
-                    {$errorText="{s name='DownloadsInfoAccessDenied'}{/s}"}
+                    {s name="DownloadsInfoAccessDenied" assign="errorText"}{/s}
                 {/if}
 
                 <div class="account--error">
@@ -43,7 +44,8 @@
         {if !$sDownloads}
             {block name="frontend_account_downloads_info_empty"}
                 <div class="account--error">
-                    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='DownloadsInfoEmpty'}{/s}"}
+                    {s name="DownloadsInfoEmpty" assign="snippetDownloadsInfoEmpty"}{/s}
+                    {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetDownloadsInfoEmpty}
                 </div>
             {/block}
         {else}
@@ -97,7 +99,8 @@
                                         {block name="frontend_account_downloads_link"}
                                             <div class="download--actions panel--td column--actions">
                                                 {if $article.esdarticle && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
-                                                    <a href="{$article.esdLink}" title="{"{s name='DownloadsLink'}{/s}"|escape} {$article.name|escape}" class="btn is--primary is--small">
+                                                    {s name="DownloadsLink" assign="snippetDownloadsLink"}{/s}
+                                                    <a href="{$article.esdLink}" title="{$snippetDownloadsLink|escape} {$article.name|escape}" class="btn is--primary is--small">
                                                         {s name="DownloadsLink"}{/s}
                                                     </a>
                                                 {/if}

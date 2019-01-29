@@ -59,11 +59,6 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
         var me = this;
         return [
         {
-            dataIndex: 'id',
-            text: '{s name=country/table/id_text}Id{/s}',
-            flex: 1
-        },
-        {
             dataIndex: 'name',
             text: '{s name=country/table/name_text}Name{/s}',
             flex: 1
@@ -76,7 +71,12 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
             dataIndex: 'iso',
             text: '{s name=country/table/iso_text}Short code{/s}',
             flex: 1
-        }, me.getActionColumn()];
+        }, {
+            dataIndex: 'position',
+            text: '{s name=country/table/position_text}Position{/s}',
+            flex: 1
+        },
+        me.getActionColumn()];
     },
 
     getFormItems: function() {

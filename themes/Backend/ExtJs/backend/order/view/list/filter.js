@@ -339,29 +339,42 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
     },
 
     createDeliveryCountrySelection: function() {
-        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
-        return Ext.create('Shopware.form.field.PagingComboBox', {
+        return Ext.create('Ext.form.field.ComboBox', {
             name: 'shipping.countryId',
-            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
+            store: this.getCountryStore(),
             valueField: 'id',
             queryMode: 'remote',
             displayField: 'name',
-            fieldLabel: this.snippets.shipping,
-            pageSize: 7
+            fieldLabel: this.snippets.shipping
         });
     },
 
     createBillingCountrySelection: function() {
-        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
-        return Ext.create('Shopware.form.field.PagingComboBox', {
+        return Ext.create('Ext.form.field.ComboBox', {
             name: 'billing.countryId',
-            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
+            store: this.getCountryStore(),
             valueField: 'id',
             queryMode: 'remote',
             displayField: 'name',
-            fieldLabel: this.snippets.billing,
-            pageSize: 7
+            fieldLabel: this.snippets.billing
         });
+    },
+
+    getCountryStore: function() {
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
+        var store = selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
+        store.pageSize = 999;
+        store.remoteSort = true;
+
+        store.sort([{
+            property: 'active',
+            direction: 'DESC'
+        }, {
+            property: 'name',
+            direction: 'ASC'
+        }]);
+
+        return store;
     },
 
 

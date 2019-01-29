@@ -610,13 +610,11 @@ class Article extends Resource implements BatchInterface
 
             /** @var Detail $variant */
             foreach ($builder->getQuery()->getResult() as $variant) {
-                $exist = $this->getCollectionElementByProperty(
+                if (!$force && $this->getCollectionElementByProperty(
                     $variant->getImages(),
                     'parent',
                     $mapping->getImage()
-                );
-
-                if (!$force && $exist) {
+                )) {
                     continue;
                 }
 

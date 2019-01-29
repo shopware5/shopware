@@ -38,6 +38,18 @@ Ext.define('Shopware.apps.Payment.store.Countries', {
     extend : 'Ext.data.Store',
     autoLoad : false,
     pageSize : 30,
-    model : 'Shopware.apps.Payment.model.Country'
+    model : 'Shopware.apps.Payment.model.Country',
+
+    remoteSort: true,
+    sorters: [
+        {
+            property: 'countries.active',
+            direction: 'DESC'
+        },
+        {
+            property: 'countries.name',
+            direction: 'ASC'
+        }
+    ]
 });
 //{/block}

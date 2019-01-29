@@ -2381,6 +2381,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $mainData['width'] = $mainDetail->getWidth();
             $mainData['height'] = $mainDetail->getHeight();
             $mainData['len'] = $mainDetail->getLen();
+            $mainData['lastStock'] = $mainDetail->getLastStock();
         }
         if ($mapping['attributes']) {
             $builder = Shopware()->Models()->createQueryBuilder();

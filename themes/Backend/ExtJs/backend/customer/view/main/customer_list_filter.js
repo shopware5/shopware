@@ -45,6 +45,16 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
         var shopStore = factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop");
         var salutationStore = Ext.create('Shopware.apps.Base.store.Salutation');
         var countryStore = factory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
+        countryStore.remoteSort = true;
+
+        countryStore.sort([{
+            property: 'active',
+            direction: 'DESC'
+        }, {
+            property: 'name',
+            direction: 'ASC'
+        }]);
+
         var modeStore = Ext.create('Ext.data.Store', {
             fields: ['key', 'label'],
             data: [
@@ -97,7 +107,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                     expression: 'LIKE'
                 },
                 countryId: {
-                    xtype: 'combobox',
+                    xtype: 'pagingcombobox',
                     displayField: 'name',
                     valueField: 'id',
                     store: countryStore,

@@ -32,7 +32,7 @@
  * Shopware Payment Methods plugin - Customer backend module.
  */
 
-//{block name="backend/customer/controller/detail" append}
+// {block name="backend/customer/controller/detail" append}
 Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
     override: 'Shopware.apps.Customer.controller.Detail',
 
@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
      * @param [object] container - The field container which contains the debit account fields
      * @return void
      */
-    onChangePayment:function (value, container) {
+    onChangePayment: function (value, container) {
         var me = this;
         var window = me.getDetailWindow();
         var store = window.paymentStore;
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
         }
     },
 
-    onSaveCustomer:function (btn) {
+    onSaveCustomer: function (btn) {
         var me = this;
         var window = me.getDetailWindow();
         var form = window.down('form');
@@ -105,25 +105,25 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
         if (form.getForm().isValid() && paymentData) {
             switch (paymentMean.get('name')) {
                 case 'sepa':
-                    values['paymentData[accountHolder]'] = "";
-                    values['paymentData[accountHolder]'] = "";
-                    values['paymentData[bankCode]'] = "";
+                    values['paymentData[accountHolder]'] = '';
+                    values['paymentData[accountNumber]'] = '';
+                    values['paymentData[bankCode]'] = '';
                     break;
                 case 'debit':
-                    values['paymentData[bic]'] = "";
-                    values['paymentData[iban]'] = "";
+                    values['paymentData[bic]'] = '';
+                    values['paymentData[iban]'] = '';
                     values['paymentData[useBillingData]'] = false;
                     break;
                 default:
-                    values['paymentData[accountHolder]'] = "";
-                    values['paymentData[accountNumber]'] = "";
-                    values['paymentData[bankCode]'] = "";
-                    values['paymentData[bankName]'] = "";
-                    values['paymentData[bic]'] = "";
-                    values['paymentData[iban]'] = "";
+                    values['paymentData[accountHolder]'] = '';
+                    values['paymentData[accountNumber]'] = '';
+                    values['paymentData[bankCode]'] = '';
+                    values['paymentData[bankName]'] = '';
+                    values['paymentData[bic]'] = '';
+                    values['paymentData[iban]'] = '';
                     values['paymentData[useBillingData]'] = false;
                     record['getPaymentDataStore'] = Ext.create('Ext.data.Store', {
-                        model:  "Shopware.apps.Customer.model.PaymentData"
+                        model: 'Shopware.apps.Customer.model.PaymentData'
                     });
 
                     break;
@@ -136,5 +136,4 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
 });
 //
 
-
-//{/block}
+// {/block}

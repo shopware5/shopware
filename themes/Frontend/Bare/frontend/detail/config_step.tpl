@@ -1,6 +1,7 @@
 {block name='frontend_detail_configurator_error'}
     {if $sArticle.sError && $sArticle.sError.variantNotAvailable}
-        {include file="frontend/_includes/messages.tpl" type="error" content="{s name='VariantAreNotAvailable'}{/s}"}
+        {s name="VariantAreNotAvailable" assign="snippetVariantAreNotAvailable"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetVariantAreNotAvailable}
     {/if}
 {/block}
 

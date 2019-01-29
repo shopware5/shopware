@@ -22,12 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\User;
+namespace Shopware\Models\User;
 
 use Shopware\Components\Model\ModelRepository;
 
 /**
- * Repository for the customer model (Shopware\Models\Customer\Customer).
+ * Repository for the customer model (Shopware\Models\User\User).
  * <br>
  * The customer model repository is responsible to load all customer data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for

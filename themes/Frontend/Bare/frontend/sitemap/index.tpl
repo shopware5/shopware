@@ -2,7 +2,8 @@
 
 {* Breadcrumb *}
 {block name="frontend_index_start"}
-    {$sBreadcrumb = [['name' => "{s name='SitemapTitle'}{/s}", 'link' => {url controller=sitemap}]]}
+    {s name="SitemapTitle" assign="snippetSitemapTitle"}{/s}
+    {$sBreadcrumb = [['name' => $snippetSitemapTitle, 'link' => {url controller=sitemap}]]}
     {$smarty.block.parent}
 {/block}
 
@@ -48,19 +49,22 @@
 
                                     {if $categoryTree.name == 'SitemapStaticPages'}
                                         {block name="frontend_sitemap_navigation_staticpages"}
-                                            <a href="{$categoryTree.link}" title="{"{s name='SitemapStaticPages'}{/s}"|escape}" class="sitemap--navigation-head-link is--active">
+                                            {s name="SitemapStaticPages" assign="snippetSitemapStaticPages"}{/s}
+                                            <a href="{$categoryTree.link}" title="{$snippetSitemapStaticPages|escape}" class="sitemap--navigation-head-link is--active">
                                                 {s name='SitemapStaticPages'}{/s}
                                             </a>
                                         {/block}
                                     {elseif $categoryTree.name == 'SitemapSupplierPages'}
                                         {block name="frontend_sitemap_navigation_supplierpages"}
-                                            <a href="{$categoryTree.link}" title="{"{s name='SitemapSupplierPages'}{/s}"|escape}" class="sitemap--navigation-head-link is--active">
+                                            {s name="SitemapSupplierPages" assign="snippetSitemapSupplierPages"}{/s}
+                                            <a href="{$categoryTree.link}" title="{$snippetSitemapSupplierPages|escape}" class="sitemap--navigation-head-link is--active">
                                                 {s name='SitemapSupplierPages'}{/s}
                                             </a>
                                         {/block}
                                     {elseif $categoryTree.name == 'SitemapLandingPages'}
                                         {block name="frontend_sitemap_navigation_landingpages"}
-                                            <a href="{$categoryTree.link}" title="{"{s name='SitemapLandingPages'}{/s}"|escape}" class="sitemap--navigation-head-link is--active">
+                                            {s name="SitemapLandingPages" assign="snippetSitemapLandingPages"}{/s}
+                                            <a href="{$categoryTree.link}" title="{$snippetSitemapLandingPages|escape}" class="sitemap--navigation-head-link is--active">
                                                 {s name='SitemapLandingPages'}{/s}
                                             </a>
                                         {/block}

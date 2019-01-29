@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Banner;
+namespace Shopware\Models\Banner;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;

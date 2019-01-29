@@ -273,6 +273,10 @@ class SubscriptionService
      */
     private function isPluginsSubscriptionCookieValid(Request $request)
     {
+        if ($request->getParam('force')) {
+            return true;
+        }
+
         $lastCheck = $request->getCookie('lastCheckSubscriptionDate');
 
         return $lastCheck !== date('dmY');

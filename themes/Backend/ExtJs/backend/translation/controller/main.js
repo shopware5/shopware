@@ -357,7 +357,6 @@ Ext.define('Shopware.apps.Translation.controller.Main',
                 }
 
                 data.push({ valueField: field.emptyText, displayField: label || field.fieldLabel });
-                delete label;
             }
         });
 

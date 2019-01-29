@@ -34,13 +34,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginDeactivateCommand extends ShopwareCommand
+class PluginDeactivateCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:deactivate')
             ->setDescription('Deactivates a plugin.')
@@ -78,8 +80,9 @@ EOF
             return 1;
         }
 
-        $pluginManager->deactivatePlugin($plugin);
-
+        $deactivationContext = $pluginManager->deactivatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
+
+        $this->clearCachesIfRequested($input, $output, $deactivationContext);
     }
 }

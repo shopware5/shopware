@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Order;
+namespace Shopware\Models\Order;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;

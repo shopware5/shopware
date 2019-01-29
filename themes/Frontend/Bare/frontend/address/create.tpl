@@ -4,7 +4,8 @@
 {* Breadcrumb *}
 {block name="frontend_index_start"}
     {$smarty.block.parent}
-    {$sBreadcrumb[] = ["name" => "{s name="AddressesTitleCreate"}Create new address{/s}", "link" => {url}]}
+    {s name="AddressesTitleCreate" assign="snippetAddressesTitleCreate"}Create new address{/s}
+    {$sBreadcrumb[] = ["name" => $snippetAddressesTitleCreate, "link" => {url}]}
 {/block}
 
 {* Main content *}

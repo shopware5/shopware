@@ -78,21 +78,24 @@
                     {block name='frontend_checkout_ajax_cart_open_checkout'}
                         {if !($sDispatchNoOrder && !$sDispatches)}
                             {block name='frontend_checkout_ajax_cart_open_checkout_inner'}
-                                <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" class="btn is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape}">
+                                {s name="AjaxCartLinkConfirm" assign="snippetAjaxCartLinkConfirm"}{/s}
+                                <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" class="btn is--primary button--checkout is--icon-right" title="{$snippetAjaxCartLinkConfirm|escape}">
                                     <i class="icon--arrow-right"></i>
                                     {s name='AjaxCartLinkConfirm'}{/s}
                                 </a>
                             {/block}
                         {else}
                             {block name='frontend_checkout_ajax_cart_open_checkout_inner_disabled'}
-                                <span class="btn is--disabled is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape}">
+                                {s name="AjaxCartLinkConfirm" assign="snippetAjaxCartLinkConfirm"}{/s}
+                                <span class="btn is--disabled is--primary button--checkout is--icon-right" title="{$snippetAjaxCartLinkConfirm|escape}">
                                     <i class="icon--arrow-right"></i>
                                     {s name='AjaxCartLinkConfirm'}{/s}
                                 </span>
                             {/block}
                         {/if}
                         {block name='frontend_checkout_ajax_cart_open_basket'}
-                            <a href="{url controller='checkout' action='cart'}" class="btn button--open-basket is--icon-right" title="{"{s name='AjaxCartLinkBasket'}{/s}"|escape}">
+                            {s name="AjaxCartLinkBasket" assign="snippetAjaxCartLinkBasket"}{/s}
+                            <a href="{url controller='checkout' action='cart'}" class="btn button--open-basket is--icon-right" title="{$snippetAjaxCartLinkBasket|escape}">
                                 <i class="icon--arrow-right"></i>
                                 {s name='AjaxCartLinkBasket'}{/s}
                             </a>

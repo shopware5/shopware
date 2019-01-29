@@ -205,7 +205,6 @@ class PluginExtractor
 
         $backupFile = $oldFile . '.' . uniqid();
         $this->filesystem->rename($oldFile, $backupFile);
-        rename($oldFile, $backupFile);
 
         return $backupFile;
     }

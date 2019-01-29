@@ -24,16 +24,17 @@
 
 namespace Shopware\Components\Plugin\Context;
 
+use Shopware\Components\CacheManager;
 use Shopware\Models\Plugin\Plugin;
 
 class InstallContext implements \JsonSerializable
 {
-    const CACHE_TAG_TEMPLATE = 'template';
-    const CACHE_TAG_CONFIG = 'config';
-    const CACHE_TAG_ROUTER = 'router';
-    const CACHE_TAG_PROXY = 'proxy';
-    const CACHE_TAG_THEME = 'theme';
-    const CACHE_TAG_HTTP = 'http';
+    const CACHE_TAG_TEMPLATE = CacheManager::CACHE_TAG_TEMPLATE;
+    const CACHE_TAG_CONFIG = CacheManager::CACHE_TAG_CONFIG;
+    const CACHE_TAG_ROUTER = CacheManager::CACHE_TAG_ROUTER;
+    const CACHE_TAG_PROXY = CacheManager::CACHE_TAG_PROXY;
+    const CACHE_TAG_THEME = CacheManager::CACHE_TAG_THEME;
+    const CACHE_TAG_HTTP = CacheManager::CACHE_TAG_HTTP;
 
     /**
      * pre defined list to invalidate simple caches

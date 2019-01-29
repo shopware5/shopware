@@ -2,19 +2,19 @@
 <div class="account--success">
     {$content = ''}
     {if $type == 'create'}
-        {$content = "{s name='AddressesCreateSuccess'}{/s}"}
+        {s name="AddressesCreateSuccess" assign="content"}{/s}
     {elseif $type == 'default_billing'}
-        {$content = "{s name='AddressesSetDefaultBillingSuccess'}{/s}"}
+        {s name="AddressesSetDefaultBillingSuccess" assign="content"}{/s}
     {elseif $type == 'default_shipping'}
-        {$content = "{s name='AddressesSetDefaultShippingSuccess'}{/s}"}
+        {s name="AddressesSetDefaultShippingSuccess" assign="content"}{/s}
     {elseif $type == 'update'}
-        {$content = "{s name='AddressesUpdateSuccess'}{/s}"}
+        {s name="AddressesUpdateSuccess" assign="content"}{/s}
     {elseif $type == 'delete'}
-        {$content = "{s name='AddressesDeleteSuccess'}{/s}"}
+        {s name="AddressesDeleteSuccess" assign="content"}{/s}
     {/if}
 
     {* for your custom messages *}
     {block name="frontend_address_success_messages_content"}{/block}
 
-    {include file="frontend/_includes/messages.tpl" type="success" content="{$content}"}
+    {include file="frontend/_includes/messages.tpl" type="success" content=$content}
 </div>

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 require_once 'Smarty/Smarty.class.php';
 
 /**
@@ -62,7 +63,7 @@ class Enlight_Template_Manager extends Smarty
      * Class constructor, initializes basic smarty properties:
      * Template, compile, plugin, cache and config directory.
      *
-     * @param null|array|Enlight_Config $options
+     * @param array|Enlight_Config|null $options
      * @param array                     $backendOptions
      */
     public function __construct($options = null, $backendOptions = [])
@@ -319,7 +320,16 @@ class Enlight_Template_Manager extends Smarty
             }
         }
 
-        return array_merge($after, $pluginDirs, $before);
+        $folders = array_merge($after, $pluginDirs, $before);
+
+        if ($this->eventManager) {
+            $folders = $this->eventManager->filter('Enlight_Template_Manager_FilterBuildInheritance', $folders, [
+                'themeDirectories' => $themeDirectories,
+                'pluginDirectories' => $pluginDirs,
+            ]);
+        }
+
+        return $folders;
     }
 
     /**

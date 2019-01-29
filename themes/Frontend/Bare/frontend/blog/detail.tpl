@@ -60,7 +60,8 @@
                                 {* Comments *}
                                 {block name='frontend_blog_detail_comments_count'}
                                     <span class="blog--metadata-comments blog--metadata">
-                                        <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" title="{"{s name="BlogLinkComments"}{/s}"|escape}">{$sArticle.comments|count|default:0} {s name="BlogInfoComments"}{/s}</a>
+                                        {s name="BlogLinkComments" assign="snippetBlogLinkComments"}{/s}
+                                        <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" title="{$snippetBlogLinkComments|escape}">{$sArticle.comments|count|default:0} {s name="BlogInfoComments"}{/s}</a>
                                     </span>
                                 {/block}
 
@@ -68,7 +69,8 @@
                                 {block name='frontend_blog_detail_rating'}
                                     {if $sArticle.sVoteAverage|round}
                                         <span class="blog--metadata-rating blog--metadata">
-                                            <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" class="blog--rating-link" rel="nofollow" title="{"{s name='BlogHeaderRating'}{/s}"|escape}">
+                                            {s name="BlogHeaderRating" assign="snippetBlogHeaderRating"}{/s}
+                                            <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" class="blog--rating-link" rel="nofollow" title="{$snippetBlogHeaderRating|escape}">
                                                 {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage|round type="aggregated" count=$sArticle.comments|count}
                                             </a>
                                         </span>

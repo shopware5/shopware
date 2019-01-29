@@ -417,11 +417,11 @@ Ext.define('Enlight.app.WindowManagement', {
             }
 
             Ext.each(subApp.windowManager.zIndexStack, function (item) {
-                if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Shopware.apps.Deprecated.view.main.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
+                if (typeof item !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Shopware.apps.Deprecated.view.main.Window' || item.$className === 'Enlight.app.Window' || item.$className === 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
                     activeWindows.push(item);
                 }
 
-                if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Shopware.apps.Deprecated.view.main.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
+                if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Shopware.apps.Deprecated.view.main.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName === 'Ext.Window' && item.$className !== "Ext.window.MessageBox") {
                     activeWindows.push(item);
                 }
             });

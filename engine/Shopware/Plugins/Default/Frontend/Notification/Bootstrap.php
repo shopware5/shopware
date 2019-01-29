@@ -134,7 +134,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             if (empty($email) || !$validator->isValid($email)) {
                 $sError = true;
                 $action->View()->NotifyEmailError = true;
-            } elseif (!empty($notifyOrderNumber)) {
+            } else {
                 if (!empty(Shopware()->Session()->sNotificatedArticles)) {
                     if (in_array($notifyOrderNumber, Shopware()->Session()->sNotificatedArticles)) {
                         $sError = true;
@@ -146,8 +146,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 } else {
                     Shopware()->Session()->sNotificatedArticles = [$notifyOrderNumber];
                 }
-            } else {
-                $sError = true;
             }
 
             if (!$sError) {

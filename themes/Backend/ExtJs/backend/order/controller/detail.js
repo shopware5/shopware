@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     snippets: {
         successTitle:'{s name=message/save/success_title}Successful{/s}',
         failureTitle:'{s name=message/save/error_title}Error{/s}',
+        warningTitle:'{s name=message/save/warning_title}Warning{/s}',
         internalComment: {
             successMessage: '{s name=message/internal_comment/success}Internal comment has been saved successfully for order [0]{/s}',
             failureMessage: '{s name=message/internal_comment/failure}An error has occurred while saving the internal comment for order [0].{/s}'
@@ -304,7 +305,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
         e.record.save({
             params: {
-                changed: order.get('changed'),
+                changed: order.get('changed') ? order.get('changed').toISOString() : null,
             },
             callback:function (data, operation) {
                 var records = operation.getRecords(),
@@ -426,7 +427,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             store.remove(positions);
             store.getProxy().extraParams = {
                 orderID: orderId,
-                changed: order.get('changed')
+                changed: order.get('changed') ? order.get('changed').toISOString() : null,
             };
             store.sync({
                 callback:function (batch, operation) {
@@ -753,6 +754,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
                 if ( operation.success === true ) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, successMessage, me.snippets.growlMessage);
+                    if (rawData && rawData.warning) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.warningTitle, rawData.warning, me.snippets.growlMessage);
+                    }
+
                     order.set('invoiceAmount', rawData.data.invoiceAmount);
 
                     //Check if a status mail content created and create a model with the returned data and open the mail window.

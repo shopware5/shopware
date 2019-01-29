@@ -91,7 +91,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     public function getCountriesAction()
     {
         $result = $this->getCountryRepository()
-            ->getCountriesQuery()
+            ->getCountriesQuery(null, $this->Request()->getParam('sort', []))
             ->getArrayResult();
         $this->View()->assign(['success' => true, 'data' => $result]);
     }

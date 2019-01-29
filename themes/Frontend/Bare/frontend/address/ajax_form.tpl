@@ -4,7 +4,8 @@
 {* Error messages *}
 {block name="frontend_address_error_messages"}
     <div class="address-editor--errors is--hidden">
-        {include file="frontend/_includes/messages.tpl" type="error" content="{s namespace="frontend/account/internalMessages" name="ErrorFillIn"}{/s}"}
+        {s namespace="frontend/account/internalMessages" name="ErrorFillIn" assign="snippetErrorFillIn"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="error" content=$snippetErrorFillIn}
     </div>
 {/block}
 
