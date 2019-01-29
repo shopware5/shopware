@@ -205,6 +205,11 @@ class Enlight_Components_Mail extends Zend_Mail
             throw new \RuntimeException('Potential code injection in From header');
         }
 
+        // explicit nulling so fallback to parent::setFromToDefaultFrom() works
+        if (empty($email)) {
+            $email = null;
+        }
+
         $this->_fromName = $name;
 
         return parent::setFrom($email, $name);
