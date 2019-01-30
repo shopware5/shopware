@@ -1913,7 +1913,7 @@ class sAdmin
             if (!empty($value[0]) && isset($value[1])) {
                 $number = (int) str_ireplace('attr', '', $value[0]);
 
-                $sql_productOrdernumber = $this->connection->createQueryBuilder()
+                $sqlProductOrderNumber = $this->connection->createQueryBuilder()
                    ->select(['s_articles_attributes.id'])
                    ->from('s_order_basket, s_articles_attributes, s_articles_details')
                    ->where('s_order_basket.sessionID = :sessionID')
@@ -1927,7 +1927,7 @@ class sAdmin
                    ])
                    ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                $sql_productId = $this->connection->createQueryBuilder()
+                $sqlProductId = $this->connection->createQueryBuilder()
                   ->select(['s_articles_attributes.id'])
                   ->from('s_order_basket, s_articles_attributes, s_articles_details')
                   ->where('s_order_basket.sessionID = :sessionID')
@@ -1941,7 +1941,7 @@ class sAdmin
                   ])
                   ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                return (bool) $sql_productOrdernumber || (bool) $sql_productId;
+                return (bool) $sqlProductOrderNumber || (bool) $sqlProductId;
             }
 
             return false;
@@ -1964,7 +1964,7 @@ class sAdmin
             if (!empty($value[0]) && isset($value[1])) {
                 $number = (int) str_ireplace('attr', '', $value[0]);
 
-                $sql_productOrdernumber = $this->connection->createQueryBuilder()
+                $sqlProductOrderNumber = $this->connection->createQueryBuilder()
                    ->select(['s_articles_attributes.id'])
                    ->from('s_order_basket, s_articles_attributes, s_articles_details')
                    ->where('s_order_basket.sessionID = :sessionID')
@@ -1978,7 +1978,7 @@ class sAdmin
                    ])
                    ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                $sql_productId = $this->connection->createQueryBuilder()
+                $sqlProductId = $this->connection->createQueryBuilder()
                   ->select(['s_articles_attributes.id'])
                   ->from('s_order_basket, s_articles_attributes, s_articles_details')
                   ->where('s_order_basket.sessionID = :sessionID')
@@ -1992,7 +1992,7 @@ class sAdmin
                   ])
                   ->execute()->fetch(\PDO::FETCH_ASSOC);
 
-                return (bool) $sql_productOrdernumber || (bool) $sql_productId;
+                return (bool) $sqlProductOrderNumber || (bool) $sqlProductId;
             }
 
             return false;
