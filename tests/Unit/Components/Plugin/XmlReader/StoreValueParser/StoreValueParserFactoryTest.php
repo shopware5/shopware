@@ -22,41 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Components\Plugin;
+namespace Shopware\Tests\Unit\Components\Plugin\XmlReader\StoreValueParser;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Plugin\XmlCronjobReader;
+use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreExtjsValueParser;
+use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactory;
+use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreXmlValueParser;
 
-class XmlCronjobReaderReaderTest extends TestCase
+class StoreValueParserFactoryTest extends TestCase
 {
-    /**
-     * @var XmlCronjobReader
-     */
-    private $SUT;
-
-    private $result = [
-        'name' => 'Article Importer',
-        'action' => 'ImportArticle',
-        'active' => true,
-        'interval' => 3600,
-        'disable_on_error' => false,
-    ];
-
-    protected function setUp()
+    public function testThatFactoryReturnsCorrectInstance(): void
     {
-        $this->SUT = new XmlCronjobReader();
-    }
-
-    public function testCanReadAndVerify()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/cronjob.xml');
-        $this->assertInternalType('array', $result);
-    }
-
-    public function testReadCronjob()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/cronjob.xml');
-
-        $this->assertArraySubset(current($result), $this->result);
+        self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create(''));
+        self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create('xml'));
+        self::assertInstanceOf(StoreExtjsValueParser::class, StoreValueParserFactory::create('extjs'));
     }
 }

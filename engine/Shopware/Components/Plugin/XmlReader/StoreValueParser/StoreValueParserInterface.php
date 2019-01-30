@@ -22,39 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Components\Plugin;
+namespace Shopware\Components\Plugin\XmlReader\StoreValueParser;
 
-use PHPUnit\Framework\TestCase;
-use Shopware\Components\Plugin\XmlMenuReader;
+use DOMElement;
 
-class XmlMenuReaderTest extends TestCase
+interface StoreValueParserInterface
 {
     /**
-     * @var XmlMenuReader
+     * Parses store options.
+     *
+     * @return string|array
      */
-    private $SUT;
-
-    protected function setUp()
-    {
-        $this->SUT = new XmlMenuReader();
-    }
-
-    public function testCanReadAndVerifyMinimal()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/menu_minimal.xml');
-        $this->assertInternalType('array', $result);
-    }
-
-    public function testCanReadAndVerify()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/menu.xml');
-        $this->assertInternalType('array', $result);
-    }
-
-    public function testCanReadMenuWithRootEntry()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/menu_root_entry.xml');
-        $this->assertInternalType('array', $result);
-        $this->assertTrue($result[0]['isRootMenu']);
-    }
+    public function parse(DOMElement $element);
 }

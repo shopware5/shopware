@@ -52,10 +52,10 @@ use Shopware\Components\Plugin\CronjobSynchronizer;
 use Shopware\Components\Plugin\FormSynchronizer;
 use Shopware\Components\Plugin\MenuSynchronizer;
 use Shopware\Components\Plugin\RequirementValidator;
-use Shopware\Components\Plugin\XmlConfigDefinitionReader;
-use Shopware\Components\Plugin\XmlCronjobReader;
-use Shopware\Components\Plugin\XmlMenuReader;
-use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\Plugin\XmlReader\XmlConfigReader;
+use Shopware\Components\Plugin\XmlReader\XmlCronjobReader;
+use Shopware\Components\Plugin\XmlReader\XmlMenuReader;
+use Shopware\Components\Plugin\XmlReader\XmlPluginReader;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
@@ -338,7 +338,7 @@ class PluginInstaller
         foreach ($plugins as $plugin) {
             $pluginInfoPath = $plugin->getPath() . '/plugin.xml';
             if (is_file($pluginInfoPath)) {
-                $xmlConfigReader = new XmlPluginInfoReader();
+                $xmlConfigReader = new XmlPluginReader();
                 $info = $xmlConfigReader->read($pluginInfoPath);
             } else {
                 $info = [];
@@ -475,7 +475,7 @@ class PluginInstaller
      */
     private function installForm(Plugin $plugin, $file)
     {
-        $xmlConfigReader = new XmlConfigDefinitionReader();
+        $xmlConfigReader = new XmlConfigReader();
         $config = $xmlConfigReader->read($file);
 
         $formSynchronizer = new FormSynchronizer($this->em);
