@@ -44,14 +44,15 @@ class Repository extends ModelRepository
      * @param int|null   $offset
      * @param int|null   $limit
      * @param array|null $filter
+     * @param int|null   $shopId
      *
      * @internal param $blogCategory
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($blogCategoryIds, $offset = null, $limit = null, array $filter = null)
+    public function getListQuery($blogCategoryIds, $offset = null, $limit = null, array $filter = null, $shopId = null)
     {
-        $builder = $this->getListQueryBuilder($blogCategoryIds, $filter);
+        $builder = $this->getListQueryBuilder($blogCategoryIds, $filter, $shopId);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
         }
@@ -66,12 +67,13 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[] $blogCategoryIds
-     * @param array $filter
+     * @param int[]    $blogCategoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListQueryBuilder($blogCategoryIds, $filter)
+    public function getListQueryBuilder($blogCategoryIds, $filter, $shopId = null)
     {
         $builder = $this->createQueryBuilder('blog');
         $builder->select([
@@ -88,7 +90,6 @@ class Repository extends ModelRepository
         ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
         ->leftJoin('mappingMedia.media', 'media')
         ->leftJoin('blog.attribute', 'attribute')
-        ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1')
         ->where('blog.active = 1')
         ->andWhere('blog.displayDate < :now')
         ->setParameter('now', new \DateTime())
@@ -97,6 +98,14 @@ class Repository extends ModelRepository
         if (!empty($blogCategoryIds)) {
             $builder->andWhere('blog.categoryId IN (:categoryIds)')
                 ->setParameter('categoryIds', $blogCategoryIds, Connection::PARAM_INT_ARRAY);
+        }
+
+        if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
+            $builder
+                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
+                ->setParameter('shopId', $shopId);
+        } else {
+            $builder->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1');
         }
 
         if (!empty($filter)) {
@@ -109,35 +118,41 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the backend list
      *
-     * @param int $blogId
+     * @param int      $blogId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getAverageVoteQuery($blogId)
+    public function getAverageVoteQuery($blogId, $shopId = null)
     {
-        $builder = $this->getAverageVoteQueryBuilder($blogId);
-
-        return $builder->getQuery();
+        return $this->getAverageVoteQueryBuilder($blogId, $shopId)->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getAverageVoteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int $blogId
+     * @param int      $blogId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getAverageVoteQueryBuilder($blogId)
+    public function getAverageVoteQueryBuilder($blogId, $shopId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
             'AVG(comment.points) as avgVote',
         ])
-        ->from('Shopware\Models\Blog\Comment', 'comment')
+        ->from(Comment::class, 'comment')
         ->where('comment.active = 1')
         ->andWhere('comment.blogId = :blogId')
         ->setParameter('blogId', $blogId);
+
+        if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
+            $builder
+                ->andWhere('comment.shopId IS NULL OR comment.shopId = :shopId')
+                ->setParameter('shopId', $shopId);
+        }
 
         return $builder;
     }
@@ -389,13 +404,14 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article for the detail page
      *
-     * @param int $blogArticleId
+     * @param int      $blogArticleId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getDetailQuery($blogArticleId)
+    public function getDetailQuery($blogArticleId, $shopId = null)
     {
-        $builder = $this->getDetailQueryBuilder($blogArticleId);
+        $builder = $this->getDetailQueryBuilder($blogArticleId, $shopId);
 
         return $builder->getQuery();
     }
@@ -404,11 +420,12 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int $blogArticleId
+     * @param int      $blogArticleId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getDetailQueryBuilder($blogArticleId)
+    public function getDetailQueryBuilder($blogArticleId, $shopId = null)
     {
         $builder = $this->createQueryBuilder('blog');
         $builder->select(['blog', 'tags', 'author', 'media', 'mappingMedia', 'assignedArticles', 'assignedArticlesDetail', 'attribute', 'comments'])
@@ -418,11 +435,18 @@ class Repository extends ModelRepository
                 ->leftJoin('assignedArticles.mainDetail', 'assignedArticlesDetail')
                 ->leftJoin('blog.media', 'mappingMedia')
                 ->leftJoin('blog.attribute', 'attribute')
-                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1')
                 ->leftJoin('mappingMedia.media', 'media')
                 ->where('blog.id = :blogArticleId')
                 ->addOrderBy('comments.creationDate', 'ASC')
                 ->setParameter('blogArticleId', $blogArticleId);
+
+        if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
+            $builder
+                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
+                ->setParameter('shopId', $shopId);
+        } else {
+            $builder->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1');
+        }
 
         return $builder;
     }
@@ -510,6 +534,7 @@ class Repository extends ModelRepository
                 'comment.points as points',
                 'comment.headline as headline',
                 'comment.comment as content',
+                'comment.shopId',
             ])
                 ->from('Shopware\Models\Blog\Comment', 'comment')
                 ->where('comment.blogId = ?1')

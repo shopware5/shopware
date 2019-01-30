@@ -162,7 +162,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shop = $this->SeoIndex()->registerShop($shopId);
 
         $this->RewriteTable()->baseSetup();
-        $this->RewriteTable()->sCreateRewriteTableBlog($offset, $limit);
+        $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+        $this->RewriteTable()->sCreateRewriteTableBlog($offset, $limit, $context);
 
         $this->View()->assign([
             'success' => true,

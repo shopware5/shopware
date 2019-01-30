@@ -174,7 +174,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $query = $this->getCategoryRepository()->getBlogCategoriesByParentQuery($categoryId);
         $blogCategoryIds = array_column($query->getArrayResult(), 'id');
         $blogCategoryIds[] = $categoryId;
-        $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $limitStart, $limitEnd, $filter);
+        $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $limitStart, $limitEnd, $filter, $this->get('shop')->getId());
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = Shopware()->Models()->createPaginator($blogArticlesQuery);
@@ -184,6 +184,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // Returns the blog article data
         $blogArticles = $paginator->getIterator()->getArrayCopy();
+
+        $blogArticles = $this->translateBlogArticles($blogArticles);
 
         $mediaIds = array_map(function ($blogArticle) {
             if (isset($blogArticle['media']) && $blogArticle['media'][0]['mediaId']) {
@@ -199,12 +201,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $blogArticles[$key]['numberOfComments'] = count($blogArticle['comments']);
 
             // Adding tags and tag filter links to the blog article
-            $tagsQuery = $this->repository->getTagsByBlogId($blogArticle['id']);
-            $tagsData = $tagsQuery->getArrayResult();
+            $tagsData = $this->repository->getTagsByBlogId($blogArticle['id'])->getArrayResult();
             $blogArticles[$key]['tags'] = $this->addLinksToFilter($tagsData, 'sFilterTags', 'name', false);
 
             // Adding average vote data to the blog article
-            $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticle['id']);
+            $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticle['id'], $this->get('shop')->getId());
             $blogArticles[$key]['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
             // Adding thumbnails to the blog article
@@ -233,6 +234,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+
+        if (empty($categoryContent)) {
+            throw new Enlight_Controller_Exception(sprintf('Blog category by id "%d" is invalid', $categoryId), Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
+        }
 
         if (!empty($categoryContent['external'])) {
             return $this->redirect($categoryContent['external'], ['code' => 301]);
@@ -278,8 +283,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             );
         }
 
-        $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
+        $shop = $this->get('shop');
+
+        $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId, $shop->getId());
         $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $translation = $this->get('translation')->readWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $blogArticleId);
+        $blogArticleData = array_merge($blogArticleData, $translation);
 
         // Redirect if the blog item is not available
         if (empty($blogArticleData) || empty($blogArticleData['active'])) {
@@ -345,7 +355,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         // Adding average vote data to the blog article
-        $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticleId);
+        $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticleId, $shop->getId());
         $blogArticleData['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
         // Count the views of this blog item
@@ -568,6 +578,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogCommentModel->setHeadline($commentData['headline']);
         $blogCommentModel->setComment($commentData['comment']);
         $blogCommentModel->setPoints($commentData['points']);
+        $blogCommentModel->setShop($this->getModelManager()->getReference(\Shopware\Models\Shop\Shop::class, $this->get('shop')->getId()));
 
         Shopware()->Models()->persist($blogCommentModel);
         Shopware()->Models()->flush();
@@ -686,5 +697,36 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         return $filter;
+    }
+
+    /**
+     * @param array $blogArticles
+     *
+     * @return array
+     */
+    private function translateBlogArticles(array $blogArticles)
+    {
+        $ids = array_column($blogArticles, 'id');
+        $shop = $this->get('shop');
+        $data = [];
+
+        foreach ($blogArticles as $blogArticle) {
+            $data[$blogArticle['id']] = $blogArticle;
+        }
+
+        $translations = $this->get('translation')->readBatchWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $ids, false);
+
+        foreach ($translations as $translation) {
+            $active = (bool) $translation['objectdata']['active'];
+            if (!$active) {
+                unset($data[$translation['objectkey']]);
+                continue;
+            }
+
+            $translation['objectdata']['active'] = $active;
+            $data[$translation['objectkey']] = array_merge($data[$translation['objectkey']], $translation['objectdata']);
+        }
+
+        return $data;
     }
 }

@@ -246,7 +246,7 @@ class sRewriteTable
         $this->sCreateRewriteTableCleanup();
         $this->sCreateRewriteTableStatic();
         $this->sCreateRewriteTableCategories();
-        $this->sCreateRewriteTableBlog();
+        $this->sCreateRewriteTableBlog(null, null, $context);
         $this->sCreateRewriteTableCampaigns();
         $lastUpdate = $this->sCreateRewriteTableArticles($lastUpdate);
         $this->sCreateRewriteTableContent(null, null, $context);
@@ -525,7 +525,7 @@ class sRewriteTable
      * @param int|null $offset
      * @param int|null $limit
      */
-    public function sCreateRewriteTableBlog($offset = null, $limit = null)
+    public function sCreateRewriteTableBlog($offset = null, $limit = null, ShopContextInterface $context = null)
     {
         $query = $this->modelManager->getRepository(\Shopware\Models\Category\Category::class)
             ->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
@@ -537,6 +537,10 @@ class sRewriteTable
             $blogCategoryIds[] = $blogCategory['id'];
         }
 
+        if ($context === null) {
+            $context = $this->contextService->getShopContext();
+        }
+
         /** @var \Shopware\Models\Blog\Repository $repository */
         $blogArticlesQuery = $this->modelManager->getRepository(\Shopware\Models\Blog\Blog::class)
             ->getListQuery($blogCategoryIds, $offset, $limit);
@@ -545,6 +549,18 @@ class sRewriteTable
 
         $routerBlogTemplate = $this->config->get('routerBlogTemplate');
         foreach ($blogArticles as $blogArticle) {
+            $blogTranslation = $this->translationComponent->readWithFallback(
+                $context->getShop()->getId(),
+                $context->getShop()->getFallbackId(),
+                'blog',
+                $blogArticle['id'],
+                false
+            );
+
+            if (!empty($blogTranslation)) {
+                $blogArticle = array_merge($blogArticle, $blogTranslation);
+            }
+
             $this->data->assign('blogArticle', $blogArticle);
             $path = $this->template->fetch('string:' . $routerBlogTemplate, $this->data);
             $path = $this->sCleanupPath($path);

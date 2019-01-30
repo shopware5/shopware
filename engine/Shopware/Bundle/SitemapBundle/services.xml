@@ -75,6 +75,7 @@
             <argument type="service" id="models"/>
             <argument type="service" id="router"/>
             <tag name="sitemap_url_provider" />
+            <argument type="service" id="translation"/>
         </service>
 
         <service id="shopware_bundle_sitemap.provider.url.manufacturer"

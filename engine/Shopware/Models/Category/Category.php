@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\ProductStream\ProductStream;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Categories
@@ -110,6 +111,13 @@ class Category extends ModelEntity
      * @ORM\Column(name="facet_ids", type="string", nullable=true)
      */
     protected $facetIds;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shops", type="string",length=255, nullable=false)
+     */
+    protected $shops;
 
     /**
      * Identifier for a single category. This is an autoincrement value.
@@ -1095,6 +1103,26 @@ class Category extends ModelEntity
     public function setFacetIds($facetIds)
     {
         $this->facetIds = $facetIds;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShops()
+    {
+        return $this->shops;
+    }
+
+    /**
+     * @param string $shops
+     *
+     * @return $this
+     */
+    public function setShops($shops)
+    {
+        $this->shops = $shops;
+
+        return $this;
     }
 
     /**

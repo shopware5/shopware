@@ -134,10 +134,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
             padding: 10,
             title:'{s name=detail/sidebar/seo/field_set/on_page/title}On-Page Optimization{/s}',
             defaults: {
-                labelWidth:100,
-                anchor: '100%',
-                labelStyle:'font-weight: 700;',
-                xtype:'textfield'
+                xtype:'textfield',
+                anchor: '100%'
             },
             items: me.createFormItems()
         });
@@ -150,29 +148,37 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
     createFormItems: function() {
         var me = this;
         me.metaDescription = Ext.create('Ext.form.field.TextArea', {
-            fieldLabel:'{s name=detail/sidebar/seo/field/description}Description{/s}',
+            fieldLabel: '{s name=detail/sidebar/seo/field/description}Description{/s}',
+            translationLabel: 'Seo-{s name=detail/sidebar/seo/field/description}Description{/s}',
             enableKeyEvents: true,
-            maxLength:150,
+            maxLength: 150,
             supportText: ' ',
-            name:'metaDescription',
+            name: 'metaDescription',
             listeners: {
                 keyup: function() {
                     me.fireEvent('metaDescriptionChanged', this);
                 }
-            }
+            },
+            anchor: '100%',
+            translatable: true
         });
 
         me.metaTitle = Ext.create('Ext.form.field.Text', {
-            fieldLabel:'{s name=detail/sidebar/seo/field/title}Title{/s}',
-            name:'metaTitle'
+            fieldLabel: '{s name=detail/sidebar/seo/field/title}Title{/s}',
+            translationLabel: 'Seo-{s name=detail/sidebar/seo/field/title}Title{/s}',
+            name: 'metaTitle',
+            translatable: true,
+            anchor: '100%'
         });
 
         return [
             me.metaTitle,
             {
-                xtype:'textareafield',
-                fieldLabel:'{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
-                name:'metaKeyWords'
+                xtype: 'textareafield',
+                fieldLabel: '{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
+                translationLabel: 'Seo-{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
+                name: 'metaKeyWords',
+                translatable: true
             },
             me.metaDescription
         ];
