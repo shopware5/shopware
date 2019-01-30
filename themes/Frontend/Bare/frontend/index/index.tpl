@@ -221,6 +221,7 @@
         <script id="footer--js-inline">
             {block name="frontend_index_header_javascript_inline"}
                 var timeNow = {time() nocache};
+                var secureShop = {if $Shop->getSecure() eq 1}true{else}false{/if};
 
                 var asyncCallbacks = [];
 

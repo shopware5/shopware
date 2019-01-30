@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Changes
 
 * Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password`
+* Changed cookie `x-ua-device` to be `secure` if the shop runs on SSL
 * Changed the following cart actions to redirect the request to allow customers to press reload:
     `\Shopware_Controllers_Frontend_Checkout::addArticleAction`
     `\Shopware_Controllers_Frontend_Checkout::addAccessoriesAction`
