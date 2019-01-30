@@ -110,6 +110,21 @@ class HrefLangTest extends TestCase
         }
     }
 
+    public function testHrefLinksWithParameters()
+    {
+        $category = $this->createCategory();
+
+        $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => $category, 'foo' => 'bar'], $this->getContext());
+
+        $this->assertNotEmpty($urls);
+        $this->assertContains('foo=bar', $urls[0]->getLink());
+
+        $urls = $this->service->getUrls(['controller' => 'forms', 'action' => 'index', 'sFid' => 5, 'foo' => 'bar'], $this->getContext());
+
+        $this->assertNotEmpty($urls);
+        $this->assertNotContains('foo=bar', $urls[0]->getLink());
+    }
+
     private function createCategory()
     {
         $category = Manager::getResource('Category');

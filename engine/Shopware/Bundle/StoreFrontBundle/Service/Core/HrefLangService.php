@@ -140,8 +140,8 @@ class HrefLangService implements HrefLangServiceInterface
      */
     protected function filterUrl($url, array $parameters)
     {
-        // We don't filter canonical href links
-        if (isset($parameters['controller']) && $parameters['controller'] === 'listing') {
+        // We don't filter category href links
+        if ($this->isCategoryLink($parameters)) {
             return $url;
         }
 
@@ -152,6 +152,20 @@ class HrefLangService implements HrefLangServiceInterface
         }
 
         return str_replace('?' . $query, '', $url);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return bool
+     */
+    protected function isCategoryLink(array $parameters)
+    {
+        return
+            (isset($parameters['controller']) && $parameters['controller'] === 'listing') ||
+            (isset($parameters['controller']) && $parameters['controller'] === 'cat') ||
+            (isset($parameters['sViewport']) && $parameters['sViewport'] === 'cat') ||
+            (isset($parameters['sViewport']) && $parameters['sViewport'] === 'listing');
     }
 
     /**
