@@ -144,6 +144,8 @@ class ListProductService implements Service\ListProductServiceInterface
 
         $categories = $this->categoryService->getProductsCategories($products, $context);
 
+        $manufacturerCovers = $this->mediaService->getList($this->getManufacturerCoverIds($products), $context);
+
         $result = [];
         foreach ($numbers as $number) {
             if (!array_key_exists($number, $products)) {
@@ -169,6 +171,10 @@ class ListProductService implements Service\ListProductServiceInterface
 
             if (isset($categories[$number])) {
                 $product->setCategories($categories[$number]);
+            }
+
+            if (isset($manufacturerCovers[$product->getManufacturer()->getCoverId()])) {
+                $product->getManufacturer()->setCoverMedia($manufacturerCovers[$product->getManufacturer()->getCoverId()]);
             }
 
             $product->addAttribute('marketing', $this->marketingService->getProductAttribute($product));
@@ -233,5 +239,19 @@ class ListProductService implements Service\ListProductServiceInterface
             && $product->isAvailable()
             && $product->getUnit()->getMinPurchase() <= 1
             && !$product->displayFromPrice();
+    }
+
+    /**
+     * @param Struct\ListProduct[] $products
+     *
+     * @return array
+     */
+    private function getManufacturerCoverIds($products)
+    {
+        $ids = array_map(function (Struct\ListProduct $product) {
+            return $product->getManufacturer()->getCoverId();
+        }, $products);
+
+        return array_filter($ids);
     }
 }

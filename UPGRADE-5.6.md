@@ -40,6 +40,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
         * and some more
 
 * Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
+* Changed the manufacturer image to appropriate thumbnails
 
 ### Removals
 

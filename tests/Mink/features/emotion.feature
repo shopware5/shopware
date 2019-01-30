@@ -24,17 +24,17 @@ Feature: Emotion
         And   I should see a banner on position 4 with image "bienen_teaser"
 
         And   I should see a manufacturer slider:
-            | image            | link                           | name                          |
-            | deligarage.png   | /the-deli-garage               | The Deli Garage               |
-            | stopthewater.png | /stop-the-water-while-using-me | stop the water while using me |
-            | blaueshaus.png   | /das-blaue-haus                | Das blaue Haus                |
-            | tea.png          | /teapavilion                   | Teapavilion                   |
-            | sasse.png        | /feinbrennerei-sasse           | Feinbrennerei Sasse           |
-            | vintage.png      | /vintage-driver                | Vintage Driver                |
-            | accessoires.png  | /access-oires-sisters          | Access Oires Sisters          |
-            | beachdreams.png  | /beachdreams-clothes           | Beachdreams Clothes           |
-            | sonnenschirm.png | /sonnenschirm-versand          | Sonnenschirm Versand          |
-            | sunsmile.png     | /sun-smile-and-protect         | Sun Smile and Protect         |
+            | image                    | link                           | name                          |
+            | deligarage_200x200.png   | /the-deli-garage               | The Deli Garage               |
+            | stopthewater_200x200.png | /stop-the-water-while-using-me | stop the water while using me |
+            | blaueshaus_200x200.png   | /das-blaue-haus                | Das blaue Haus                |
+            | tea_200x200.png          | /teapavilion                   | Teapavilion                   |
+            | sasse_200x200.png        | /feinbrennerei-sasse           | Feinbrennerei Sasse           |
+            | vintage_200x200.png      | /vintage-driver                | Vintage Driver                |
+            | accessoires_200x200.png  | /access-oires-sisters          | Access Oires Sisters          |
+            | beachdreams_200x200.png  | /beachdreams-clothes           | Beachdreams Clothes           |
+            | sonnenschirm_200x200.png | /sonnenschirm-versand          | Sonnenschirm Versand          |
+            | sunsmile_200x200.png     | /sun-smile-and-protect         | Sun Smile and Protect         |
 
         And   I should see some blog articles:
             | title                             | link                                                            | text                                                                                                  |

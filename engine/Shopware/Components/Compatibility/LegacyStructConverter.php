@@ -846,6 +846,7 @@ class LegacyStructConverter
             'metaKeywords' => $manufacturer->getMetaKeywords(),
             'link' => $manufacturer->getLink(),
             'image' => $manufacturer->getCoverFile(),
+            'media' => $manufacturer->getCoverMedia() ? $this->convertMediaStruct($manufacturer->getCoverMedia()) : null,
             'attributes' => $manufacturer->getAttributes(),
         ];
 
@@ -1247,6 +1248,7 @@ class LegacyStructConverter
                 'supplierImg' => $product->getManufacturer()->getCoverFile(),
                 'supplierID' => $product->getManufacturer()->getId(),
                 'supplierDescription' => $product->getManufacturer()->getDescription(),
+                'supplierMedia' => $product->getManufacturer()->getCoverMedia() ? $this->convertMediaStruct($product->getManufacturer()->getCoverMedia()) : null,
             ];
 
             $data = array_merge($data, $manufacturer);
