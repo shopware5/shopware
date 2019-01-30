@@ -64,18 +64,18 @@ class MediaCleanupCommand extends ShopwareCommand
         $io->text(sprintf('%s unused item(s) found.', $total));
 
         if ($total === 0) {
-            return;
+            return null;
         }
 
         if ($input->getOption('delete')) {
             if ($input->isInteractive() && !$io->confirm('Are you sure you want to delete every item in the recycle bin?')) {
-                return;
+                return null;
             }
 
             $deleted = $this->handleCleanup($io);
             $io->success(sprintf('%d item(s) deleted.', $deleted));
 
-            return;
+            return null;
         }
 
         $io->success(sprintf('%d item(s) in recycle bin.', $total));

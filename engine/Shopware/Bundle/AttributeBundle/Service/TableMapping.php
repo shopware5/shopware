@@ -111,7 +111,7 @@ class TableMapping
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public function getAttributeTables()
     {

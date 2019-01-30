@@ -78,13 +78,13 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
         }
 
         /** @var Locale $locale */
-        $locale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale(
-            $input->getArgument('locale')
-        );
+        $locale = $this->container->get('models')
+            ->getRepository(\Shopware\Models\Shop\Locale::class)
+            ->findOneByLocale($input->getArgument('locale'));
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
 
-            return;
+            return null;
         }
 
         $this->exportFormLabels($output, $locale, $dir);

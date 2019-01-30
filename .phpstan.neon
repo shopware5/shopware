@@ -55,5 +55,9 @@ parameters:
         # Models that are detached by cloning and nulling the id
         - '#\([a-z]+\) does not accept null\.#'
         - '#supplied for foreach, only iterables are supported#'
+        # Broken return value of Components/DependencyInjection/Container.php
+        - '#Return type \(bool\) of method Shopware\\Components\\DependencyInjection\\Container\:\:load\(\) should be compatible with return type \(object\) of method Symfony\\Component\\DependencyInjection\\Container\:\:load\(\)#'
+        # Broken return value of Components/Log/Handler/FirePHPHandler.php
+        - '#Return type \(array\) of method Shopware\\Components\\Log\\Handler\\FirePHPHandler\:\:createRecordHeader\(\) should be compatible with return type \(string\) of method Monolog\\Handler\\FirePHPHandler\:\:createRecordHeader\(\)#'
 
     reportUnmatchedIgnoredErrors: false
