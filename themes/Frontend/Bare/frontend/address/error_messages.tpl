@@ -2,7 +2,7 @@
 <div class="account--error">
     {$message = ''}
     {if $type == 'delete'}
-        {$message = "{s name="AddressesDeleteErrorMessage"}{/s}"}
+        {s name="AddressesDeleteErrorMessage" assign="message"}{/s}
     {/if}
 
     {include file="frontend/register/error_message.tpl" error_messages=[$message]}

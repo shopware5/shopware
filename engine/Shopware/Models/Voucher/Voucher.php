@@ -382,7 +382,7 @@ class Voucher extends ModelEntity
      */
     public function setValidFrom($validFrom)
     {
-        if (!$validFrom instanceof \DateTimeInterface && $validFrom !== '') {
+        if (!$validFrom instanceof \DateTimeInterface && !empty($validFrom)) {
             $validFrom = new \DateTime($validFrom);
         }
         $this->validFrom = $validFrom;
@@ -409,7 +409,7 @@ class Voucher extends ModelEntity
      */
     public function setValidTo($validTo)
     {
-        if (!$validTo instanceof \DateTimeInterface && $validTo !== '') {
+        if (!$validTo instanceof \DateTimeInterface && !empty($validTo)) {
             $validTo = new \DateTime($validTo);
         }
         $this->validTo = $validTo;

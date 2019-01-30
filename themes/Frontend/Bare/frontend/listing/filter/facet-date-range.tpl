@@ -17,10 +17,11 @@
         {$rangeMax = $facet->getMax()}
 
         {block name="frontend_listing_filter_facet_date_range_input"}
+            {s name="datePickerInputPlaceholder" namespace="frontend/index/datepicker" assign="snippetDatePickerInputPlaceholder"}{/s}
             <input type="text"
                    class="filter-panel--input"
                    id="{$facet->getFacetName()|escape:'htmlall'}"
-                   placeholder="{"{s name="datePickerInputPlaceholder" namespace="frontend/index/datepicker"}{/s}"|escape:'htmlall'}"
+                   placeholder="{$snippetDatePickerInputPlaceholder|escape:'htmlall'}"
                    data-datepicker="true"
                    data-mode="range"
                    data-enableTime="{$enableTime}"

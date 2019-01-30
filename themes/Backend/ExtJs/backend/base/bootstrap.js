@@ -253,9 +253,11 @@
 {include file='backend/base/attribute/field/Shopware.form.field.ProductGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.PropertyOptionGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.BlogGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CountryGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CategoryGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ProductSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.BlogSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CountrySingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.PropertyOptionSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CategorySingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.VoucherSingleSelection.js'}
@@ -292,6 +294,7 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CategoryFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.BlogFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.CountryFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ProductFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.PropertyOptionFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.MediaFieldHandler.js'}

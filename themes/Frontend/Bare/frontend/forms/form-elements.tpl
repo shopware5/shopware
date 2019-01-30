@@ -12,7 +12,8 @@
                         {block name='frontend_forms_form_elements_form_builder'}
                             <div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="forms--checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select select-field"{/if}>
 
-                                {$sSupport.sFields[$sKey]|replace:'%*%':"{s name='RequiredField' namespace='frontend/register/index'}{/s}"}
+                                {s name="RequiredField" namespace="frontend/register/index" assign="snippetRequiredField"}{/s}
+                                {$sSupport.sFields[$sKey]|replace:'%*%':$snippetRequiredField}
 
                                 {if $sSupport.sElements[$sKey].typ eq 'checkbox'}
                                     {$sSupport.sLabels.$sKey|replace:':':''}

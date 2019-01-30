@@ -26,11 +26,9 @@ namespace Shopware\Components\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * Class ConfigureApiResourcesPass
- */
 class ConfigureApiResourcesPass implements CompilerPassInterface
 {
     /**
@@ -40,7 +38,12 @@ class ConfigureApiResourcesPass implements CompilerPassInterface
     {
         foreach ($container->getServiceIds() as $id) {
             if (strpos($id, 'shopware.api.') === 0) {
-                $definition = $container->getDefinition($id);
+                try {
+                    $definition = $container->getDefinition($id);
+                } catch (ServiceNotFoundException $exception) {
+                    // Might be an alias, we don't want to register those
+                    continue;
+                }
 
                 $definition->addMethodCall('setContainer', [new Reference('service_container')]);
                 $definition->addMethodCall('setManager', [new Reference('models')]);

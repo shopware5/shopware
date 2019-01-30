@@ -137,11 +137,11 @@ class ProductUrlProvider implements UrlProviderInterface
 
         $urls = [];
         for ($i = 0, $productCount = count($products); $i < $productCount; ++$i) {
-            $urls[] = new Url($routes[$i], new \DateTime($product[$i]['changed']), 'weekly');
+            $urls[] = new Url($routes[$i], new \DateTime($products[$i]['changetime']), 'weekly');
         }
 
         reset($products);
-        $this->lastId = array_pop($products)['id'];
+        $this->lastId = array_pop($productIds);
 
         return $urls;
     }

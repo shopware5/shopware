@@ -22,7 +22,8 @@
 
                     {* Error message *}
                     {block name='frontend_newsletter_listing_error_message'}
-                        {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='NewsletterDetailInfoEmpty'}{/s}"}
+                        {s name="NewsletterDetailInfoEmpty" assign="snippetNewsletterDetailInfoEmpty"}{/s}
+                        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetNewsletterDetailInfoEmpty}
                     {/block}
                 {/if}
 

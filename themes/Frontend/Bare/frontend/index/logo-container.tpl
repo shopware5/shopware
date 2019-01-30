@@ -3,13 +3,15 @@
     {* Main shop logo *}
     {block name='frontend_index_logo'}
         <div class="logo--shop block">
-            <a class="logo--link" href="{url controller='index'}" title="{"{config name=shopName}"|escapeHtml} - {"{s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}"|escape}">
+            {s name="IndexLinkDefault" namespace="frontend/index/index" assign="snippetIndexLinkDefault"}{/s}
+            <a class="logo--link" href="{url controller='index'}" title="{"{config name=shopName}"|escapeHtml} - {$snippetIndexLinkDefault|escape}">
                 <picture>
                     <source srcset="{link file=$theme.desktopLogo}" media="(min-width: 78.75em)">
                     <source srcset="{link file=$theme.tabletLandscapeLogo}" media="(min-width: 64em)">
                     <source srcset="{link file=$theme.tabletLogo}" media="(min-width: 48em)">
 
-                    <img srcset="{link file=$theme.mobileLogo}" alt="{"{config name=shopName}"|escapeHtml} - {"{s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}"|escape}" />
+                    {s name="IndexLinkDefault" namespace="frontend/index/index" assign="snippetIndexLinkDefault"}{/s}
+                    <img srcset="{link file=$theme.mobileLogo}" alt="{"{config name=shopName}"|escapeHtml} - {$snippetIndexLinkDefault|escape}" />
                 </picture>
             </a>
         </div>

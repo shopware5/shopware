@@ -22,18 +22,18 @@
                 {if isset($sErrorFlag)}
                     {$type = "error"}
                     {if $sErrorFlag['sCaptcha']}
-                        {$snippet = "{s name="BlogInfoFailureCaptcha"}{/s}"}
+                        {s name="BlogInfoFailureCaptcha" assign="snippet"}{/s}
                     {elseif $sErrorFlag['invalidHash']}
-                        {$snippet = "{s name="BlogInfoFailureDoubleOptIn"}{/s}"}
+                        {s name="BlogInfoFailureDoubleOptIn" assign="snippet"}{/s}
                     {else}
-                        {$snippet = "{s name="BlogInfoFailureFields"}{/s}"}
+                        {s name="BlogInfoFailureFields" assign="snippet"}{/s}
                     {/if}
                 {else}
                     {$type = "success"}
                     {if {config name=OptInVote} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
-                        {$snippet = "{s name="BlogInfoSuccessOptin"}{/s}"}
+                        {s name="BlogInfoSuccessOptin" assign="snippet"}{/s}
                     {else}
-                        {$snippet = "{s name="BlogInfoSuccess"}{/s}"}
+                        {s name="BlogInfoSuccess" assign="snippet"}{/s}
                     {/if}
                 {/if}
                 {include file="frontend/_includes/messages.tpl" type=$type content=$snippet}
@@ -48,8 +48,10 @@
                 {* Name *}
                 {block name='frontend_blog_comments_input_name'}
                     <div class="blog--comments-name">
+                        {s name="BlogLabelName" assign="snippetBlogLabelName"}{/s}
+                        {s name="RequiredField" namespace="frontend/register/index" assign="snippetRequiredField"}{/s}
                         <input name="name" type="text"
-                               placeholder="{"{s name="BlogLabelName"}{/s}"|escape}{"{s name="RequiredField" namespace="frontend/register/index"}{/s}"|escape}"
+                               placeholder="{$snippetBlogLabelName|escape}{$snippetRequiredField|escape}"
                                required="required" aria-required="true"
                                value="{$sFormData.name|escape}"
                                class="input--field{if $sErrorFlag.name} has--error{/if}" />
@@ -59,9 +61,10 @@
                 {* E-Mail *}
                 {block name='frontend_blog_comments_input_mail'}
                     <div class="blog--comments-email">
+                        {s name="BlogLabelMail" assign="snippetBlogLabelMail"}{/s}
+                        {s name="RequiredField" namespace="frontend/register/index" assign="snippetRequiredField"}{/s}
                         <input name="eMail" type="email"
-                            placeholder="{s name="BlogLabelMail"}{/s}{if {config name=OptInVote}}{s name="RequiredField"
-                            namespace="frontend/register/index"}{/s}{/if}"
+                            placeholder="{$snippetBlogLabelMail}{if {config name=OptInVote}}{$snippetRequiredField}{/if}"
                             {if {config name=OptInVote}}required="required" aria-required="true"{/if}
                             value="{$sFormData.eMail|escape}"
                             class="input--field{if $sErrorFlag.eMail} has--error{/if}" />
@@ -71,9 +74,10 @@
                 {* Summary *}
                 {block name='frontend_blog_comments_input_summary'}
                     <div class="blog--comments-summary">
+                        {s name="BlogLabelSummary" assign="snippetBlogLabelSummary"}{/s}
                         <input name="headline"
                                type="text"
-                               placeholder="{"{s name='BlogLabelSummary'}{/s}"|escape}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
+                               placeholder="{$snippetBlogLabelSummary|escape}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                required="required" aria-required="true"
                                value="{$sFormData.headline|escape}"
                                class="input--field{if $sErrorFlag.headline} has--error{/if}" />
@@ -102,7 +106,8 @@
                 {* Opinion *}
                 {block name='frontend_blog_comments_input_comment'}
                     <div class="blog--comments-opinion">
-                        <textarea name="comment" type="text" placeholder="{"{s name='BlogLabelComment'}{/s}"|escape}" class="input--field{if $sErrorFlag.comment} has--error{/if}" rows="5" cols="5">
+                        {s name="BlogLabelComment" assign="snippetBlogLabelComment"}{/s}
+                        <textarea name="comment" type="text" placeholder="{$snippetBlogLabelComment|escape}" class="input--field{if $sErrorFlag.comment} has--error{/if}" rows="5" cols="5">
                             {$sFormData.comment|escape}
                         </textarea>
                     </div>

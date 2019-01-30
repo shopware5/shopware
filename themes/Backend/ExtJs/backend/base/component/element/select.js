@@ -61,13 +61,13 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
             me.valueField = me.displayField;
         }
         // Eval the store string if it contains a statement.
-        if (typeof(me.store) == 'string' && me.store.indexOf('new ') !== -1) {
+        if (typeof me.store === 'string' && me.store.indexOf('new ') !== -1) {
             eval('me.store = ' + me.store + ';');
             // if is no custom store remove value field for reasons of compatibility
             if(!me.isCustomStore) {
                 me.valueField = me.displayField;
             }
-        } else if (typeof(me.store) === 'string' && me.store.substring(0, 5) !== 'base.') {
+        } else if (typeof me.store === 'string' && me.store.substring(0, 5) !== 'base.') {
             me.store = me.getStoreById(me.store);
         }
 

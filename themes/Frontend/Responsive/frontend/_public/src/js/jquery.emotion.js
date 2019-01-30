@@ -50,7 +50,7 @@
             /**
              * The DOM selector of emotion wrapper elements
              *
-             * @property wrapperSelector,
+             * @property wrapperSelector
              * @type {string}
              */
             wrapperSelector: '.emotion--wrapper',
@@ -347,7 +347,15 @@
              * @property videoElSelector
              * @type {string}
              */
-            videoElSelector: '.emotion--video'
+            videoElSelector: '.emotion--video',
+
+            /**
+             * The DOM selector of emotion wrapper elements
+             *
+             * @property wrapperSelector
+             * @type {string}
+             */
+            wrapperSelector: '.emotion--wrapper'
         },
 
         /**

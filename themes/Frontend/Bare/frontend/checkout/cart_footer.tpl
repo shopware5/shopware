@@ -31,7 +31,8 @@
 
                     <div class="add-voucher--panel is--hidden block-group">
                         {block name='frontend_checkout_cart_footer_add_voucher_field'}
-                            <input type="text" class="add-voucher--field is--medium block" name="sVoucher" placeholder="{"{s name='CheckoutFooterAddVoucherLabelInline'}{/s}"|escape}" />
+                            {s name="CheckoutFooterAddVoucherLabelInline" assign="snippetCheckoutFooterAddVoucherLabelInline"}{/s}
+                            <input type="text" class="add-voucher--field is--medium block" name="sVoucher" placeholder="{$snippetCheckoutFooterAddVoucherLabelInline|escape}" />
                         {/block}
 
                         {block name='frontend_checkout_cart_footer_add_voucher_button'}

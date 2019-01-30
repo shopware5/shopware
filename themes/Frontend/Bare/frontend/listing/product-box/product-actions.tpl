@@ -21,8 +21,9 @@
         {* Note button *}
         {block name='frontend_listing_box_article_actions_save'}
             <form action="{url controller='note' action='add' ordernumber=$sArticle.ordernumber _seo=false}" method="post">
+                {s name="DetailLinkNotepad" namespace="frontend/detail/actions" assign="snippetDetailLinkNotepad"}{/s}
                 <button type="submit"
-                   title="{"{s name='DetailLinkNotepad' namespace='frontend/detail/actions'}{/s}"|escape}"
+                   title="{$snippetDetailLinkNotepad|escape}"
                    class="product--action action--note"
                    data-ajaxUrl="{url controller='note' action='ajaxAdd' ordernumber=$sArticle.ordernumber _seo=false}"
                    data-text="{s name="DetailNotepadMarked"}{/s}">

@@ -26,9 +26,9 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+// {namespace name=backend/plugin_manager/translation}
 
-//{block name="backend/plugin_manager/view/account/login_window"}
+// {block name="backend/plugin_manager/view/account/login_window"}
 Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
     extend: 'Ext.window.Window',
     modal: true,
@@ -76,7 +76,6 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
                 me.createRegisterPanel()
             ]
         };
-
     },
 
     createHeadline: function () {
@@ -97,7 +96,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
                     html: 'X',
                     cls: 'headline-close',
                     handler: function() {
-                        Shopware.app.Application.fireEvent('destroy-login', me);
+                        Shopware.app.Application.fireEvent('destroy-login', me, true);
                     }
                 })
             ]
@@ -112,7 +111,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
             cls: 'description-text',
             width: 720,
             border: false
-        }
+        };
     },
 
     createLoginPanel: function () {
@@ -135,4 +134,4 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
     }
 
 });
-//{/block}
+// {/block}

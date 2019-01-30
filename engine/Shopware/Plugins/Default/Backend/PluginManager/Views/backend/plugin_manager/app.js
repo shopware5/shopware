@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{block name="backend/plugin_manager/applications"}
+// {block name="backend/plugin_manager/applications"}
 Ext.define('Shopware.apps.PluginManager', {
     extend: 'Enlight.app.SubApplication',
     name: 'Shopware.apps.PluginManager',
@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'Producer'
     ],
 
-    //remove listeners
+    // remove listeners
     globalEvents: [
         'load-update-listing',
         'display-plugin',
@@ -179,7 +179,6 @@ Ext.define('Shopware.apps.PluginManager', {
         return me.getController('Main').mainWindow;
     },
 
-
     _destroyGlobalListeners: function(callback) {
         var me = this;
         var events = Shopware.app.Application.events;
@@ -189,7 +188,7 @@ Ext.define('Shopware.apps.PluginManager', {
 
             if (me.globalEvents.indexOf(event.name) >= 0 && event.listeners.length > 0) {
                 Ext.each(event.listeners, function(listener) {
-                    if(!listener) {
+                    if (!listener) {
                         return;
                     }
 
@@ -228,12 +227,11 @@ Ext.define('Shopware.apps.PluginManager', {
         }
 
         Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
-
             if (!subApp || !subApp.windowManager || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
                 return;
             }
             Ext.each(subApp.windowManager.zIndexStack, function (item) {
-                if (typeof(item) !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
+                if (typeof item !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
                     activeWindows.push(item);
                 }
             });
@@ -254,4 +252,4 @@ Ext.define('Shopware.apps.PluginManager', {
         }
     }
 });
-//{/block}
+// {/block}

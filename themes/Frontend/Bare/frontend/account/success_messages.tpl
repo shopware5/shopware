@@ -1,19 +1,19 @@
 {if $sSuccessAction}
     {$successText=''}
     {if $sSuccessAction == 'address'}
-        {$successText="{s name='AccountAddressSuccess'}{/s}"}
+        {s name="AccountAddressSuccess" assign="successText"}{/s}
     {elseif $sSuccessAction == 'payment'}
-        {$successText="{s name='AccountPaymentSuccess'}{/s}"}
+        {s name="AccountPaymentSuccess" assign="successText"}{/s}
     {elseif $sSuccessAction == 'account'}
-        {$successText="{s name='AccountAccountSuccess'}{/s}"}
+        {s name="AccountAccountSuccess" assign="successText"}{/s}
     {elseif $sSuccessAction == 'newsletter'}
-        {$successText="{s name='AccountNewsletterSuccess'}{/s}"}
+        {s name="AccountNewsletterSuccess" assign="successText"}{/s}
     {elseif $sSuccessAction == 'optinnewsletter'}
-        {$successText="{s name='sMailConfirmation' namespace='frontend'}{/s}"}
+        {s name="sMailConfirmation" namespace="frontend" assign="successText"}{/s}
     {elseif $sSuccessAction == 'deletenewsletter'}
-        {$successText="{s name='NewsletterMailDeleted' namespace='frontend/account/internalMessages'}{/s}"}
+        {s name="NewsletterMailDeleted" namespace="frontend/account/internalMessages" assign="successText"}{/s}
     {elseif $sSuccessAction == 'resetPassword'}
-        {$successText="{s name='PasswordResetNewSuccess' namespace='frontend/account/reset_password'}{/s}"}
+        {s name="PasswordResetNewSuccess" namespace="frontend/account/reset_password" assign="successText"}{/s}
     {/if}
 
     <div class="account--success">

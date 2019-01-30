@@ -165,6 +165,38 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         self::assertFalse($this->View()->success);
     }
 
+    public function testSavingOrderWithDifferentTimeZone()
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        $this->dispatch('/backend/order/getList');
+        $data = $this->View()->getAssign('data')[0];
+
+        $this->reset();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        /** @var DateTime $orderTime */
+        $orderTime = $data['orderTime'];
+        $oldDate = clone $orderTime;
+        $orderTime->setTimezone(new DateTimeZone('US/Alaska'));
+
+        $data['orderTime'] = new DateTime($orderTime->format(\DateTime::ATOM));
+        $data['changed'] = $data['changed']->format('Y-m-d H:i:s');
+
+        $data['billing'] = [$data['billing']];
+        $data['shipping'] = [$data['shipping']];
+        $data['languageSubShop'] = Shopware()->Models()->find(\Shopware\Models\Shop\Shop::class, $data['languageSubShop']['id']);
+
+        $this->Request()->setParams($data);
+
+        $this->dispatch('/backend/order/save');
+
+        $this->assertTrue($this->View()->getAssign('success'));
+        $this->assertEquals($oldDate, $this->View()->getAssign('data')['orderTime']);
+    }
+
     /**
      * Helper method to return the order amount
      *

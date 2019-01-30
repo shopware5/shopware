@@ -74,19 +74,14 @@ class ShopIndexer implements ShopIndexerInterface
     private $backlogProcessor;
 
     /**
-     * @var array
-     */
-    private $configuration;
-
-    /**
      * @param Client                    $client
      * @param BacklogReaderInterface    $backlogReader
      * @param BacklogProcessorInterface $backlogProcessor
      * @param IndexFactoryInterface     $indexFactory
+     * @param EvaluationHelperInterface $evaluation
      * @param DataIndexerInterface[]    $indexer
      * @param MappingInterface[]        $mappings
      * @param SettingsInterface[]       $settings
-     * @param array                     $configuration
      */
     public function __construct(
         Client $client,
@@ -96,8 +91,7 @@ class ShopIndexer implements ShopIndexerInterface
         EvaluationHelperInterface $evaluation,
         array $indexer,
         array $mappings,
-        array $settings,
-        array $configuration
+        array $settings
     ) {
         $this->client = $client;
         $this->backlogReader = $backlogReader;
@@ -106,7 +100,6 @@ class ShopIndexer implements ShopIndexerInterface
         $this->indexer = $indexer;
         $this->mappings = $mappings;
         $this->settings = $settings;
-        $this->configuration = $configuration;
         $this->evaluation = $evaluation;
     }
 

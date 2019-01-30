@@ -191,7 +191,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
             $query->addSelect('COUNT(DISTINCT ROUND(prices.price * priceVariant.minpurchase, 2)) as priceCount');
         } else {
-            $query->addSelect('COUNT(DISTINCT prices.price) as priceCount');
+            $query->addSelect('COUNT(DISTINCT ROUND(prices.price, 2)) as priceCount');
         }
 
         $query->from('s_articles_prices', 'prices')
