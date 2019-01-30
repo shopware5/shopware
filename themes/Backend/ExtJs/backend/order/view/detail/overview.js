@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             changed: '{s name=overview/details/changed}Last changed{/s}'
         },
         customerDeleted: '{s name=overview/details/customer_deleted_text}Caution: The assigned customer has been deleted.{/s}',
-        openCustomer: '{s name=overview/details/customer_open}Open customer{/s}'
+        openCustomer: '{s name=overview/details/open_customer}Open customer{/s}'
     },
 
     /**
@@ -534,9 +534,6 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             margin: '10 0',
             items: [
                 me.createInnerDetailContainer()
-            ],
-            tools: [
-                me.createCustomerButton(),
             ]
         });
         return me.detailsForm;
@@ -640,25 +637,25 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             { name: 'referer', fieldLabel: me.snippets.details.referer},
             { name: 'remoteAddressConverted', fieldLabel: me.snippets.details.remoteAddress},
             { name: 'deviceTypeHuman', fieldLabel: me.snippets.details.deviceType},
-            { name: 'changed', fieldLabel: me.snippets.details.changed}
+            { name: 'changed', fieldLabel: me.snippets.details.changed},
+            me.createCustomerButton()
         ];
     },
 
     /**
      * Adds a link to the customer that placed the order
      *
-     * @returns Ext.Button|null
+     * @returns Ext.Button
      */
     createCustomerButton: function() {
         var me = this;
         return {
             disabled: !me.record.getCustomer().first(),
-            iconCls:'sprite-user',
             action:'openCustomer',
             xtype: 'button',
-            align: 'right',
-            title: me.snippets.openCustomer,
-            tooltip: me.snippets.openCustomer,
+            cls: 'primary',
+            text: me.snippets.openCustomer,
+            margin: '10 0 0 0',
             handler: function () {
                 me.fireEvent('openCustomer', me.record);
             }
