@@ -119,10 +119,20 @@ class Application extends BaseApplication
             $command->setContainer($this->kernel->getContainer());
         }
 
-        $exitCode = parent::doRunCommand($command, $input, $output);
-
         /** @var \Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
+
+        $event = $eventManager->notifyUntil('Shopware_Command_Before_Run', [
+            'command' => $command,
+            'input' => $input,
+            'output' => $output,
+        ]);
+
+        if ($event) {
+            return (int) $event->getReturn();
+        }
+
+        $exitCode = parent::doRunCommand($command, $input, $output);
 
         $eventManager->notify('Shopware_Command_After_Run', [
            'exitCode' => $exitCode,
