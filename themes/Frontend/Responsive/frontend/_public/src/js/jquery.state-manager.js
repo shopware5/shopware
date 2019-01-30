@@ -1331,13 +1331,14 @@
                 return;
             }
 
-            var device = this._getCurrentDevice();
+            var device = this._getCurrentDevice(),
+                cookieString = 'x-ua-device=' + device + '; path=/';
 
             if (window.secureShop !== undefined && window.secureShop === true) {
-                document.cookie = 'x-ua-device=' + device + ';secure; path=/';
-            } else {
-                document.cookie = 'x-ua-device=' + device + '; path=/';
+                cookieString = 'x-ua-device=' + device + ';secure; path=/';
             }
+
+            document.cookie = cookieString;
         },
 
         /**
