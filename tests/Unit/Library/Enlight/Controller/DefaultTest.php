@@ -30,7 +30,7 @@ class DefaultTest extends TestCase
 {
     public function testFormatControllerNameReturnsProperControllerName()
     {
-        $dispatcher = $this->getDispatcher();
+        $dispatcher = Shopware()->Front()->Dispatcher();
 
         $testedStrings = [
             'abc' => 'Abc',
@@ -56,7 +56,7 @@ class DefaultTest extends TestCase
 
     public function testFormatActionNameReturnsProperActionName()
     {
-        $dispatcher = $this->getDispatcher();
+        $dispatcher = Shopware()->Front()->Dispatcher();
 
         $testedStrings = [
             'abc' => 'Abc',
@@ -82,7 +82,7 @@ class DefaultTest extends TestCase
 
     public function testFormatModuleNameReturnsProperModuleName()
     {
-        $dispatcher = $this->getDispatcher();
+        $dispatcher = Shopware()->Front()->Dispatcher();
 
         $testedStrings = [
             'foo_' => 'Foo_',
@@ -96,13 +96,5 @@ class DefaultTest extends TestCase
         foreach ($testedStrings as $invalid => $expected) {
             $this->assertSame($expected, $dispatcher->formatModuleName($invalid));
         }
-    }
-
-    /**
-     * @return \Enlight_Controller_Dispatcher_Default
-     */
-    private function getDispatcher()
-    {
-        return new \Enlight_Controller_Dispatcher_Default();
     }
 }
