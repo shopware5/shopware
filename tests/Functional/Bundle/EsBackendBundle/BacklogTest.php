@@ -37,20 +37,12 @@ class BacklogTest extends \Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        if (Shopware()->Container()->getParameter('shopware.es.backend.enabled')) {
-            $indexer = Shopware()->Container()->get('shopware_es_backend.indexer');
-            $indexer->index(new ProgressHelper());
-        }
+        $indexer = Shopware()->Container()->get('shopware_es_backend.indexer');
+        $indexer->index(new ProgressHelper());
     }
 
     public function testBacklogWillBeWritten()
     {
-        if (!Shopware()->Container()->getParameter('shopware.es.backend.enabled')) {
-            $this->markTestSkipped('ES not activated');
-
-            return;
-        }
-
         $customers = Shopware()->Models()->getRepository(Customer::class)->findAll();
         $customers[0]->setReferer(Random::getAlphanumericString(12));
 

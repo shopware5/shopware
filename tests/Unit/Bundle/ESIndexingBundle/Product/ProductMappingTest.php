@@ -37,11 +37,11 @@ class ProductMappingTest extends TestCase
 {
     public function testDynamicIsTrueInDefault()
     {
-        $identifierSelector =
-            $this->getMockBuilder(IdentifierSelector::class)->disableOriginalConstructor()->getMock();
+        $identifierSelector = $this->getIdentifierSelector();
+
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
-        $textMapping = $this->getMockBuilder(TextMappingES5::class)->disableOriginalConstructor()->getMock();
-        $crudService = $this->getMockBuilder(CrudService::class)->disableOriginalConstructor()->getMock();
+        $textMapping = new TextMappingES5();
+        $crudService = $this->getCrudService();
         $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
@@ -54,11 +54,11 @@ class ProductMappingTest extends TestCase
 
     public function testDynamicIsFalseWhenFalseIsPassed()
     {
-        $identifierSelector =
-            $this->getMockBuilder(IdentifierSelector::class)->disableOriginalConstructor()->getMock();
+        $identifierSelector = $this->getIdentifierSelector();
+
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
-        $textMapping = $this->getMockBuilder(TextMappingES5::class)->disableOriginalConstructor()->getMock();
-        $crudService = $this->getMockBuilder(CrudService::class)->disableOriginalConstructor()->getMock();
+        $textMapping = new TextMappingES5();
+        $crudService = $this->getCrudService();
         $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
@@ -78,11 +78,11 @@ class ProductMappingTest extends TestCase
 
     public function testDynamicIsTrueWhenTrueIsPassed()
     {
-        $identifierSelector =
-            $this->getMockBuilder(IdentifierSelector::class)->disableOriginalConstructor()->getMock();
+        $identifierSelector = $this->getIdentifierSelector();
+
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
-        $textMapping = $this->getMockBuilder(TextMappingES5::class)->disableOriginalConstructor()->getMock();
-        $crudService = $this->getMockBuilder(CrudService::class)->disableOriginalConstructor()->getMock();
+        $textMapping = new TextMappingES5();
+        $crudService = $this->getCrudService();
         $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
@@ -97,5 +97,30 @@ class ProductMappingTest extends TestCase
         $mapping = $productMapping->get($shop);
 
         self::assertTrue($mapping['dynamic']);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getIdentifierSelector()
+    {
+        $identifierSelector = $this->createMock(IdentifierSelector::class);
+
+        $identifierSelector->method('getCustomerGroupKeys')->willReturn(['EK']);
+        $identifierSelector->method('getShopCurrencyIds')->willReturn([1]);
+
+        return $identifierSelector;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getCrudService()
+    {
+        $crudService = $this->createMock(CrudService::class);
+
+        $crudService->method('getList')->willReturn([]);
+
+        return $crudService;
     }
 }
