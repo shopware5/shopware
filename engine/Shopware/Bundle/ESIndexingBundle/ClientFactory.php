@@ -26,6 +26,7 @@ namespace Shopware\Bundle\ESIndexingBundle;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Psr\Log\LoggerInterface;
 
 /**
  * @category Shopware
@@ -34,12 +35,7 @@ use Elasticsearch\ClientBuilder;
  */
 class ClientFactory
 {
-    /**
-     * @param array $config
-     *
-     * @return Client
-     */
-    public static function createClient(array $config)
+    public static function createClient(array $config, LoggerInterface $eslogger): Client
     {
         $clientBuilder = ClientBuilder::create();
 
@@ -55,6 +51,9 @@ class ClientFactory
                 ],
             ]
         );
+
+        $clientBuilder->setLogger($eslogger);
+        $clientBuilder->setTracer($eslogger);
 
         return $clientBuilder->build();
     }
