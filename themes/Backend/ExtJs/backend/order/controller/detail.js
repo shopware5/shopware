@@ -123,7 +123,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             'order-detail-window order-overview-panel': {
                 saveOverview: me.onSaveOverview,
                 updateForms: me.onUpdateDetailPage,
-                convertOrder: me.onConvertOrder
+                convertOrder: me.onConvertOrder,
+                openCustomer: me.onOpenCustomer
             },
             'order-billing-field-set': {
                 countryChanged: me.onCountryChanged
