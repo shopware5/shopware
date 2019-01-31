@@ -22,7 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-require __DIR__ . '/../../autoload.php';
+$searchDirectory = __DIR__;
+
+while (true) {
+    $newSearchDirectory = realpath($searchDirectory . DIRECTORY_SEPARATOR . '..');
+
+    if ($searchDirectory === false || strlen($searchDirectory) < 3 || $newSearchDirectory === $searchDirectory) {
+        throw new RuntimeException('No autoloader found');
+    }
+
+    $searchDirectory = $newSearchDirectory;
+
+    if (file_exists($autoloadFile = implode(DIRECTORY_SEPARATOR, [$searchDirectory, 'app', 'autoload.php']))) {
+        require $autoloadFile;
+        break;
+    }
+
+    if (file_exists($autoloadFile = implode(DIRECTORY_SEPARATOR, [$searchDirectory, 'vendor', 'autoload.php']))) {
+        require $autoloadFile;
+        break;
+    }
+}
 
 class TestKernel extends \Shopware\Kernel
 {
@@ -48,6 +68,12 @@ class TestKernel extends \Shopware\Kernel
 
     protected function getConfigPath()
     {
+        if (file_exists(__DIR__ . '/../../../../../app/config/config.php')) {
+            // shopware as composer dependency
+            return __DIR__ . '/../../../../../app/config/config.php';
+        }
+
+        // shopware standalone
         return __DIR__ . '/config.php';
     }
 }
