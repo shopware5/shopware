@@ -43,6 +43,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
 * Changed the manufacturer image to appropriate thumbnails
 * Changed `plugin.xsd` to make pluginName in `requiredPlugins` required
+* Changed `Shopware\Components\DependencyInjection\Container` to trigger InitResource and AfterInitResource events for alias services, introduced by decorations
 
 ### Removals
 

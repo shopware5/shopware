@@ -118,7 +118,7 @@ class Container extends BaseContainer
     }
 
     /**
-     * @param $id
+     * @param string $id
      *
      * @return string
      */
@@ -216,6 +216,12 @@ class Container extends BaseContainer
             ['subject' => $this]
         );
 
+        if ($fallbackName !== null && !$event && $fallbackName !== $id) {
+            $event = $eventManager->notifyUntil(
+                'Enlight_Bootstrap_InitResource_' . $fallbackName, ['subject' => $this]
+            );
+        }
+
         $circularReference = false;
 
         try {
@@ -233,8 +239,7 @@ class Container extends BaseContainer
                     'Enlight_Bootstrap_AfterInitResource_' . $id, ['subject' => $this]
                 );
 
-                if(!empty($fallbackName) )
-                {
+                if ($fallbackName !== null && $fallbackName !== $id) {
                     $eventManager->notify(
                         'Enlight_Bootstrap_AfterInitResource_' . $fallbackName, ['subject' => $this]
                     );
