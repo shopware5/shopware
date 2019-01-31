@@ -71,7 +71,7 @@ class BacklogSyncCommand extends ShopwareCommand
         $backlogs = $reader->read($reader->getLastBacklogId(), $this->batchSize);
 
         if (empty($backlogs)) {
-            return;
+            return null;
         }
 
         /** @var Backlog $last */

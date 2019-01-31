@@ -37,7 +37,7 @@ interface PartialFacetHandlerInterface
      * @param Criteria             $criteria
      * @param ShopContextInterface $context
      *
-     * @return FacetResultInterface|null
+     * @return FacetResultInterface|FacetResultInterface[]|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,

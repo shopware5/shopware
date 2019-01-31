@@ -118,7 +118,8 @@ class StoreDownloadCommand extends StoreCommand
                     $plugin = array_shift($licences);
                 } catch (\Exception $e) {
                     $io->error('An error occured: ' . $e->getMessage());
-                    exit(1);
+
+                    return 1;
                 }
             }
         }
@@ -126,7 +127,7 @@ class StoreDownloadCommand extends StoreCommand
         if (!$plugin) {
             $io->error(sprintf('Plugin %s not found', $technicalName));
 
-            return;
+            return null;
         }
 
         $io->section($plugin->getLabel());
