@@ -10,6 +10,7 @@
         <service id="shopware_elastic_search.client" class="Elasticsearch\Client">
             <factory class="Shopware\Bundle\ESIndexingBundle\ClientFactory" method="createClient"/>
             <argument>%shopware.es.client%</argument>
+            <argument type="service" id="eslogger"/>
         </service>
 
         <service id="shopware_elastic_search.client.logger" class="Shopware\Bundle\ESIndexingBundle\EsClientLogger" decorates="shopware_elastic_search.client">
