@@ -35,7 +35,7 @@ use Shopware\Models\Emotion\Emotion;
 class LandingPageUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
@@ -50,10 +50,10 @@ class LandingPageUrlProvider implements UrlProviderInterface
     private $modelManager;
 
     /**
-     * @param ModelManager $modelManager
-     * @param Router       $router
+     * @param ModelManager            $modelManager
+     * @param Routing\RouterInterface $router
      */
-    public function __construct(ModelManager $modelManager, Router $router)
+    public function __construct(ModelManager $modelManager, Routing\RouterInterface $router)
     {
         $this->router = $router;
         $this->modelManager = $modelManager;

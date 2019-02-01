@@ -42,7 +42,7 @@ class BlogUrlProvider implements UrlProviderInterface
     private $modelManager;
 
     /**
-     * @var Routing\Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
@@ -57,11 +57,11 @@ class BlogUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * @param ModelManager   $modelManager
-     * @param Routing\Router $router
-     * @param Translation    $translation
+     * @param ModelManager            $modelManager
+     * @param Routing\RouterInterface $router
+     * @param Translation             $translation
      */
-    public function __construct(ModelManager $modelManager, Routing\Router $router, Translation $translation)
+    public function __construct(ModelManager $modelManager, Routing\RouterInterface $router, Translation $translation)
     {
         $this->modelManager = $modelManager;
         $this->router = $router;

@@ -34,7 +34,7 @@ use Shopware\Components\Routing;
 class StaticUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Routing\Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
@@ -49,10 +49,10 @@ class StaticUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * @param Routing\Router $router
-     * @param Connection     $connection
+     * @param Routing\RouterInterface $router
+     * @param Connection              $connection
      */
-    public function __construct(Routing\Router $router, Connection $connection)
+    public function __construct(Routing\RouterInterface $router, Connection $connection)
     {
         $this->router = $router;
         $this->connection = $connection;
@@ -121,8 +121,7 @@ class StaticUrlProvider implements UrlProviderInterface
      */
     private function getSitesByShopId($shopId)
     {
-        $qb = $this->connection->createQueryBuilder();
-        $keys = $qb
+        $keys = $this->connection->createQueryBuilder()
             ->select('shopGroups.key')
             ->from('s_core_shop_pages', 'shopPages')
             ->innerJoin('shopPages', 's_cms_static_groups', 'shopGroups', 'shopGroups.id = shopPages.group_id')
@@ -159,10 +158,12 @@ class StaticUrlProvider implements UrlProviderInterface
                 ->execute()
                 ->fetchAll(\PDO::FETCH_ASSOC);
 
-            $sites = array_merge($sites, $current);
+            foreach ($current as $item) {
+                $sites[$item['id']] = $item;
+            }
         }
 
-        return $sites;
+        return array_values($sites);
     }
 
     /**

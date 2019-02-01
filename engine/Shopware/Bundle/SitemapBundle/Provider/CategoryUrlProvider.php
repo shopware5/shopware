@@ -39,7 +39,7 @@ class CategoryUrlProvider implements UrlProviderInterface
     private $modelManager;
 
     /**
-     * @var Routing\Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
@@ -49,10 +49,10 @@ class CategoryUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * @param ModelManager   $modelManager
-     * @param Routing\Router $router
+     * @param ModelManager            $modelManager
+     * @param Routing\RouterInterface $router
      */
-    public function __construct(ModelManager $modelManager, Routing\Router $router)
+    public function __construct(ModelManager $modelManager, Routing\RouterInterface $router)
     {
         $this->modelManager = $modelManager;
         $this->router = $router;
