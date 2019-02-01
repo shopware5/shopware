@@ -435,9 +435,6 @@ class Zend_Session extends Zend_Session_Abstract
             self::setOptions(is_array($options) ? $options : array());
         }
 
-        if(!self::getId() && !empty($_REQUEST[session_name()])) {
-            self::setId($_REQUEST[session_name()]);
-        }
         if(!self::getId() && ini_get('session.use_cookies')==1 && !empty($_COOKIE[session_name()])) {
             self::setId($_COOKIE[session_name()]);
         }
