@@ -26,6 +26,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added `shopware.controller.blacklisted_controllers` parameter to the DI container to blacklist controllers for dispatching
 * Added default table options of Doctrine to config
 * Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
+* Added configuration to show the voucher field on checkout confirm page
 
 ### Changes
 
@@ -59,6 +60,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `type` of `logMailAddress` config in `s_core_config_elements` to `textarea`
 * Changed mail error handler to consider multiple recipient addresses
 * Changed `Shopware_Controllers_Frontend_Note` forwards to redirects
+* Changed display mode of voucher field on the shopping cart page into a configurable display mode
 
 ### Removals
 
@@ -73,6 +75,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Shopware\Components\Plugin\XmlMenuReader`
 * Removed `storeType` `php` from Plugin config.xml
 * Removed the unspecific request params assignment to view in `\Shopware_Controllers_Widgets_Listing::productsAction` and `\Shopware_Controllers_Widgets_Listing::streamAction`. Use a *PostDispatchEvent to assign necessary variables in a plugin.
+* Removed voucher field from additional feature
 
 ### Deprecations
 
