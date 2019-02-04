@@ -26,6 +26,13 @@ namespace Shopware\Components\Plugin;
 
 use Symfony\Component\Config\Util\XmlUtils;
 
+/**
+ * @deprecated This class will be removed in 5.6
+ *
+ * Use new class Shopware\Components\Plugin\XmlReader\XmlMenuReader (see Shopware 5.6)
+ *
+ * https://github.com/shopware/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
+ */
 class XmlMenuReader
 {
     /**

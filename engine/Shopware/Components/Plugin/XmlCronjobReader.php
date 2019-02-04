@@ -27,7 +27,11 @@ namespace Shopware\Components\Plugin;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**
- * Class XmlCronjobReader
+ * @deprecated This class will be removed in 5.6
+ *
+ * Use new class Shopware\Components\Plugin\XmlReader\XmlCronjobReader (see Shopware 5.6)
+ *
+ * https://github.com/shopware/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlCronjobReader.php
  */
 class XmlCronjobReader
 {
