@@ -890,6 +890,6 @@
 
         <service id="shopware.components.stream_protocol_validator" class="Shopware\Components\StreamProtocolValidator"/>
 
-        <service id="shopware.components.name_formatter" class="Shopware\Components\DispatchFormatHelper"/>
+        <service id="shopware.components.dispatch_format_helper" class="Shopware\Components\DispatchFormatHelper"/>
     </services>
 </container>

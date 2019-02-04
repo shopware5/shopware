@@ -213,7 +213,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function getNameFormatter()
     {
         if ($this->nameFormatter === null) {
-            $this->nameFormatter = Shopware()->Container()->get('shopware.components.name_formatter');
+            $this->nameFormatter = Shopware()->Container()->get('shopware.components.dispatch_format_helper');
         }
 
         return $this->nameFormatter;
