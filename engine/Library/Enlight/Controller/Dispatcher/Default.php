@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -91,18 +92,18 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * @var \Shopware\Components\DispatchFormatHelper
      */
-    protected $nameFormatter;
+    protected $dispatchFormatHelper;
 
     /**
      * @return \Shopware\Components\DispatchFormatHelper
      */
-    public function getNameFormatter()
+    public function getDispatchFormatHelper()
     {
-        if ($this->nameFormatter === null) {
-            $this->nameFormatter = Shopware()->Container()->get('shopware.components.name_formatter');
+        if ($this->dispatchFormatHelper === null) {
+            $this->dispatchFormatHelper = Shopware()->Container()->get('shopware.components.dispatch_format_helper');
         }
 
-        return $this->nameFormatter;
+        return $this->dispatchFormatHelper;
     }
 
     /**
@@ -236,9 +237,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function formatControllerName($unFormatted)
     {
-        $nameFormatter = $this->getNameFormatter();
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
 
-        return str_replace('_', '', $nameFormatter->formatNameForDispatch($unFormatted));
+        return str_replace('_', '', $dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
@@ -250,9 +251,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function formatActionName($unFormatted)
     {
-        $nameFormatter = $this->getNameFormatter();
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
 
-        return str_replace('_', '', $nameFormatter->formatNameForDispatch($unFormatted));
+        return str_replace('_', '', $dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
@@ -264,9 +265,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function formatModuleName($unFormatted)
     {
-        $nameFormatter = $this->getNameFormatter();
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
 
-        return ucfirst($nameFormatter->formatNameForDispatch($unFormatted));
+        return ucfirst($dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**

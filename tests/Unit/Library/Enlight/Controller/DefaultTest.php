@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Unit\Library\Enlight\Controller;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\DispatchFormatHelper;
 
 class DefaultTest extends TestCase
 {
@@ -103,6 +104,14 @@ class DefaultTest extends TestCase
      */
     private function getDispatcher()
     {
-        return new \Enlight_Controller_Dispatcher_Default();
+        return new Enlight_Controller_Dispatcher_Default_TestMock();
+    }
+}
+
+class Enlight_Controller_Dispatcher_Default_TestMock extends \Enlight_Controller_Dispatcher_Default
+{
+    public function getDispatchFormatHelper()
+    {
+        return new DispatchFormatHelper();
     }
 }
