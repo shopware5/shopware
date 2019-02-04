@@ -34,7 +34,7 @@ use Shopware\Components\Routing;
 class ManufacturerUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Routing\Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
@@ -49,10 +49,10 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     private $allExported = false;
 
     /**
-     * @param Connection     $connection
-     * @param Routing\Router $router
+     * @param Connection              $connection
+     * @param Routing\RouterInterface $router
      */
-    public function __construct(Connection $connection, Routing\Router $router)
+    public function __construct(Connection $connection, Routing\RouterInterface $router)
     {
         $this->router = $router;
         $this->connection = $connection;

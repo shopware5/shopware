@@ -38,7 +38,7 @@ use Shopware\Components\Routing\Router;
 class ProductUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
@@ -68,14 +68,14 @@ class ProductUrlProvider implements UrlProviderInterface
     private $batchSize;
 
     /**
-     * @param Router                             $router
+     * @param Routing\RouterInterface            $router
      * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
      * @param Connection                         $connection
      * @param int                                $batchSize
      */
     public function __construct(
-        Router $router,
+        Routing\RouterInterface $router,
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
         Connection $connection,
