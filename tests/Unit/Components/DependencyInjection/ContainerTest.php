@@ -117,7 +117,9 @@ class ContainerTest extends TestCase
 
         $service->notify('Enlight_Bootstrap_AfterRegisterResource_events', Argument::any())->shouldBeCalled();
         $service->notifyUntil('Enlight_Bootstrap_InitResource_bar', Argument::any())->shouldBeCalled();
+        $service->notifyUntil('Enlight_Bootstrap_InitResource_alias', Argument::any())->shouldBeCalled();
         $service->notify('Enlight_Bootstrap_AfterInitResource_bar', Argument::any())->shouldBeCalled();
+        $service->notify('Enlight_Bootstrap_AfterInitResource_alias', Argument::any())->shouldBeCalled();
 
         $service = $service->reveal();
         $this->container->set('events', $service);
