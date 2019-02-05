@@ -18,6 +18,16 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed order module sorting to consider sorting also when elasticsearch is activated
 * Changed StaticUrlProvider to unique urls
 
+### Deprecations
+
+* The following classes have been deprecated:
+    * `\Shopware\Components\Plugin\XmlMenuReader`
+    * `\Shopware\Components\Plugin\XmlCronjobReader`
+    * `\Shopware\Components\Plugin\XmlPluginInfoReader`
+    * `\Shopware\Components\Plugin\XmlConfigDefinitionReader`
+    
+    The have been replaced with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
+
 ## 5.5.6
 
 [View all changes from v5.5.5...v5.5.6](https://github.com/shopware/shopware/compare/v5.5.5...v5.5.6)
