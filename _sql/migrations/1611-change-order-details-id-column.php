@@ -22,34 +22,26 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * <code>
- * $pointComponent = new Shopware_Components_Benchmark_Point
- * $pointComponent->Start($label);
- * </code>
- */
-class Shopware_Components_Benchmark_Point
+class Migrations_Migration1611 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public $start;
-    public $end;
-    public $label;
-    public $start_ram;
-    public $stop_ram;
-    public $stopped = false;
-
-    public function Start($label)
+    public function up($modus)
     {
-        $this->label = $label;
-        $this->start = microtime(true);
-        $this->start_ram = memory_get_peak_usage(true);
+        $columns = $this->connection->query('DESCRIBE `s_order_documents`')->fetchAll(\PDO::FETCH_ASSOC);
+        if (in_array('id', $columns, true)) {
+            return;
+        }
 
-        return $this;
-    }
+        if ($modus !== self::MODUS_UPDATE) {
+            return;
+        }
 
-    public function Stop()
-    {
-        $this->stopped = true;
-        $this->end = microtime(true);
-        $this->stop_ram = memory_get_peak_usage(true);
+        $sql = <<<'SQL'
+'ALTER TABLE `s_order_documents` CHANGE COLUMN `ID` `id_tmp` int auto_increment;'
+SQL;
+        $this->addSql($sql);
+        $sql = <<<'SQL'
+'ALTER TABLE `s_order_documents` CHANGE COLUMN `id_tmp` `id` int auto_increment;'
+SQL;
+        $this->addSql($sql);
     }
 }

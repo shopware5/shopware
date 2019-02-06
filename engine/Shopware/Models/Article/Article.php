@@ -436,8 +436,8 @@ class Article extends ModelEntity
     /**
      * @var bool
      *
-     * @deprecated Since version 5.4, to be removed in 6.0
-     * @ORM\Column(name="laststock", type="boolean", nullable=false)
+     * @deprecated 5.6 will be removed in 5.8
+     * @ORM\Column(name="laststock", type="boolean", nullable=true)
      */
     private $lastStock = false;
 
@@ -739,6 +739,8 @@ class Article extends ModelEntity
     }
 
     /**
+     * @deprecated 5.6 will be removed in 5.7
+     *
      * @param bool $lastStock
      *
      * @return Article
@@ -751,6 +753,8 @@ class Article extends ModelEntity
     }
 
     /**
+     * @deprecated 5.6 will be removed in 5.7
+     *
      * @return bool
      */
     public function getLastStock()

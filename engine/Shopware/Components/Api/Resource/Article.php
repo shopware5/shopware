@@ -268,7 +268,6 @@ class Article extends Resource implements BatchInterface
         /** @var QueryBuilder $builder */
         $builder = $this->getRepository()->createQueryBuilder('article')
             ->addSelect(['mainDetail', 'attribute'])
-            ->addSelect('mainDetail.lastStock')
             ->leftJoin('article.mainDetail', 'mainDetail')
             ->leftJoin('mainDetail.attribute', 'attribute')
             ->addFilter($criteria)
@@ -285,18 +284,7 @@ class Article extends Resource implements BatchInterface
         // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        /**
-         * @Deprecated Since 5.4, to be removed in 5.6
-         *
-         * To support Shopware <= 5.3 we make sure the lastStock-column of the main variant is being used instead of the
-         * one on the product itself.
-         */
-        $products = array_map(function (array $val) {
-            $val[0]['lastStock'] = $val['lastStock'];
-            unset($val['lastStock']);
-
-            return $val[0];
-        }, $paginator->getIterator()->getArrayCopy());
+        $products = $paginator->getIterator()->getArrayCopy();
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY
             && isset($options['language'])
@@ -351,21 +339,6 @@ class Article extends Resource implements BatchInterface
 
         if (!empty($translations)) {
             $this->writeTranslations($product->getId(), $translations);
-        }
-
-        /*
-         * @Deprecated Since 5.4, to be removed in 5.6
-         *
-         * Necessary for backward compatibility with < 5.4, will be removed in 5.6
-         *
-         * If `lastStock` was only defined on the main product, apply it to all it's variants
-         */
-        if (!array_key_exists('mainDetail', $params) && array_key_exists('lastStock', $params)) {
-            $db = $this->getContainer()->get('dbal_connection');
-            $db->executeQuery('UPDATE `s_articles_details` SET lastStock=:lastStock WHERE `articleID`=:articleId', [
-                'lastStock' => $product->getLastStock(),
-                'articleId' => $product->getId(),
-            ]);
         }
 
         return $product;
@@ -1084,17 +1057,6 @@ class Article extends Resource implements BatchInterface
         }
 
         foreach ($data['variants'] as $variantData) {
-            /*
-             * @Deprecated Since 5.4, to be removed in 5.6
-             *
-             * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
-             *
-             * If `lastStock` was only defined on the main product, apply it to all it's variants
-             */
-            if (!isset($variantData['lastStock'])) {
-                $variantData['lastStock'] = $article->getLastStock();
-            }
-
             if (isset($variantData['id'])) {
                 $variant = $this->getVariantResource()->internalUpdate(
                     $variantData['id'],

@@ -69,6 +69,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `s_article_configurator_template_prices`
     * `s_articles_prices`
     * `s_campaigns_mailings` to varchar limit of 15 for customer group key.
+* Changed plugin initialization to alphabetical by default
 
 ### Removals
 
@@ -90,6 +91,23 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed checkbox show in all categories on the category filter detail page
 * Removed category filter facet from filter listing in category settings 
 * Removed category filter from category page in frontend
+* Removed deprecated `Shopware_Controllers_Backend_Deprecated`
+* Removed deprecated `Shopware` constants
+    * Removed `Shopware::VERSION` use the DIC-Parameter `shopware.release.version` instead
+    * Removed `Shopware::VERSION_TEXT` use the DIC-Parameter `shopware.release.version_text` instead
+    * Removed `Shopware::REVISION` use the DIC-Parameter `shopwqare.release.REVISION` instead
+* Removed deprecated `Kernel` constants
+    * Removed `Kernel::VERSION` use the DIC-Parameter `shopware.release.version` instead
+    * Removed `Kernel::VERSION_TEXT` use the DIC-Parameter `shopware.release.version_text` instead
+    * Removed `Kernel::REVISION` use the DIC-Parameter `shopware.release.revision` instead
+* Removed deprecated `Shopware_Controllers_Frontend_SitemapMobileXml`
+* Removed deprecated `Shopware\Components\SitemapXMLRepository`
+* Removed deprecated `$legacyGroups` in `Shopware\Components\SitemapXMLRepository`
+* Removed deprecated older `Shopware\Models\Order\Document\Document`
+* Removed deprecations of `Shopware\Components\Api\Resource\Article`
+* Removed deprecations of `Shopware\Components\Api\Resource\Variant`
+* Removed deprecated `Shopware_Components_Benchmark_Point`
+* Removed deprecated `Shopware_Components_Benchmark_Container`
 
 ### Deprecations
 
@@ -97,6 +115,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead.
 * Deprecated `Shopware\Components\Model\ModelRepository::queryAll`. It will be removed in 5.7, use findBy([], null, $limit, $offset) instead
 * Deprecated `Shopware\Components\Model\ModelRepository::queryBy`. It will be removed in 5.7, use findBy instead
+* Deprecated `Shopware\Models\Article\Article::getAttributeRawField`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::getAttributeRawField `.
+* Deprecated `Shopware\Models\Article\Article::setLastStock`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::setLastStock`.
+* Deprecated `Shopware\Models\Article\Article::lastStock`. It will be removed in 5.8, use `Shopware\Models\Article\Detail::lastStock`.
 
 ### Improved ExtJS auto-loading
 

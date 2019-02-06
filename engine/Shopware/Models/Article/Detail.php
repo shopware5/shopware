@@ -200,7 +200,7 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="laststock", type="boolean", nullable=false)
      */
-    private $lastStock;
+    private $lastStock = false;
 
     /**
      * @var float

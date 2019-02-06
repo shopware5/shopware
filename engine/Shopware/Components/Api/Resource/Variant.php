@@ -531,17 +531,6 @@ class Variant extends Resource implements BatchInterface
             $data['purchasePrice'] = (float) str_replace(',', '.', $data['purchasePrice']);
         }
 
-        /*
-         * @Deprecated Since 5.4, to be removed in 5.6
-         *
-         * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
-         *
-         * If `lastStock` was only defined on the main product, apply it to all it's variants
-         */
-        if (!isset($data['lastStock'])) {
-            $data['lastStock'] = $article->getLastStock();
-        }
-
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
 
         if (isset($data['configuratorOptions'])) {

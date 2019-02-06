@@ -28,614 +28,295 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @deprecated The condition below will be removed in Shopware 5.6, together with the old version of the model.
+ * Shopware order detail model represents a single detail data of an order .
+ * <br>
+ * The Shopware order detail model represents a row of the order_details table.
+ * The s_order_details table has the follows indices:
+ * <code>
+ *   - PRIMARY KEY (`ID`),
+ *   - KEY `orderID` (`orderID`),
+ *   - KEY `userID` (`userID`)
+ * </code>
  *
- * This is a hack to support both an uppercase "ID" as well as a lowercase "id" in the table `s_core_documents`.
- *
- * Historically it was named "ID" but to support MySQL 8, the column name had to be changed to "id" (See comment in
- * \Shopware\Components\Compatibility\LegacyDocumentIdConverter for a deeper explanation). This change of
- * the column name is only being done when MySQL 8 is currently being used, in order to otherwise be able
- * to downgrade the Shopware installation to a previous version.
+ * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Table(name="s_order_documents")
  */
-$documentIdConversion = Shopware()->Container()->get('legacy_documentid_converter');
-
-if ($documentIdConversion->isMigrationNecessary()) {
-    $documentIdConversion->migrateTable();
-    $cacheManager = Shopware()->Container()->get('shopware.cache_manager');
-    $cacheManager->clearProxyCache();
-    $cacheManager->clearOpCache();
-}
-
-if ($documentIdConversion->isDocumentIdUpperCase()) {
+class Document extends ModelEntity
+{
     /**
-     * OLD VERSION!
+     * INVERSE SIDE
      *
-     * Shopware order detail model represents a single detail data of an order .
-     * <br>
-     * The Shopware order detail model represents a row of the order_details table.
-     * The s_order_details table has the follows indices:
-     * <code>
-     *   - PRIMARY KEY (`ID`),
-     *   - KEY `orderID` (`orderID`),
-     *   - KEY `userID` (`userID`)
-     * </code>
+     * @var \Shopware\Models\Attribute\Document
      *
-     * @ORM\Entity(repositoryClass="Repository")
-     * @ORM\Table(name="s_order_documents")
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
      */
-    class Document extends ModelEntity
+    protected $attribute;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \DateTimeInterface
+     *
+     * @ORM\Column(name="date", type="date", nullable=false)
+     */
+    private $date;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="type", type="integer", nullable=false)
+     */
+    private $typeId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="userID", type="integer", nullable=false)
+     */
+    private $customerId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="orderID", type="integer", nullable=false)
+     */
+    private $orderId;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="amount", type="float", nullable=false)
+     */
+    private $amount;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="docID", type="string", nullable=false)
+     */
+    private $documentId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length=255, nullable=false)
+     */
+    private $hash;
+
+    /**
+     * @var \Shopware\Models\Order\Order
+     *
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="documents")
+     * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
+     */
+    private $order;
+
+    /**
+     * @var \Shopware\Models\Document\Document
+     *
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Document\Document")
+     * @ORM\JoinColumn(name="type", referencedColumnName="id")
+     */
+    private $type;
+
+    /**
+     * @return int
+     */
+    public function getId()
     {
-        /**
-         * INVERSE SIDE
-         *
-         * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
-         *
-         * @var \Shopware\Models\Attribute\Document
-         */
-        protected $attribute;
-
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="ID", type="integer", nullable=false)
-         * @ORM\Id
-         * @ORM\GeneratedValue(strategy="IDENTITY")
-         */
-        private $id;
-
-        /**
-         * @var \DateTimeInterface
-         *
-         * @ORM\Column(name="date", type="date", nullable=false)
-         */
-        private $date;
-
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="type", type="integer", nullable=false)
-         */
-        private $typeId;
-
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="userID", type="integer", nullable=false)
-         */
-        private $customerId;
-
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="orderID", type="integer", nullable=false)
-         */
-        private $orderId;
-
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="amount", type="float", nullable=false)
-         */
-        private $amount;
-
-        /**
-         * @var string
-         *
-         * @ORM\Column(name="docID", type="string", nullable=false)
-         */
-        private $documentId;
-
-        /**
-         * @var string
-         *
-         * @ORM\Column(name="hash", type="string", length=255, nullable=false)
-         */
-        private $hash;
-
-        /**
-         * @var \Shopware\Models\Order\Order
-         *
-         * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="documents")
-         * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-         */
-        private $order;
-
-        /**
-         * @var \Shopware\Models\Document\Document
-         *
-         * @ORM\OneToOne(targetEntity="\Shopware\Models\Document\Document")
-         * @ORM\JoinColumn(name="type", referencedColumnName="id")
-         */
-        private $type;
-
-        /**
-         * @return int
-         */
-        public function getId()
-        {
-            return $this->id;
-        }
-
-        /**
-         * @param \DateTimeInterface $date
-         *
-         * @return Document
-         */
-        public function setDate($date)
-        {
-            $this->date = $date;
-
-            return $this;
-        }
-
-        /**
-         * @return \DateTimeInterface
-         */
-        public function getDate()
-        {
-            return $this->date;
-        }
-
-        /**
-         * @param int $customerId
-         *
-         * @return Document
-         */
-        public function setCustomerId($customerId)
-        {
-            $this->customerId = $customerId;
-
-            return $this;
-        }
-
-        /**
-         * @return int
-         */
-        public function getCustomerId()
-        {
-            return $this->customerId;
-        }
-
-        /**
-         * @param int $orderId
-         *
-         * @return Document
-         */
-        public function setOrderId($orderId)
-        {
-            $this->orderId = $orderId;
-
-            return $this;
-        }
-
-        /**
-         * @return int
-         */
-        public function getOrderId()
-        {
-            return $this->orderId;
-        }
-
-        /**
-         * @param float $amount
-         *
-         * @return Document
-         */
-        public function setAmount($amount)
-        {
-            $this->amount = $amount;
-
-            return $this;
-        }
-
-        /**
-         * @return float
-         */
-        public function getAmount()
-        {
-            return $this->amount;
-        }
-
-        /**
-         * @param string $documentId
-         *
-         * @return Document
-         */
-        public function setDocumentId($documentId)
-        {
-            $this->documentId = $documentId;
-
-            return $this;
-        }
-
-        /**
-         * @return string
-         */
-        public function getDocumentId()
-        {
-            return $this->documentId;
-        }
-
-        /**
-         * @param string $hash
-         *
-         * @return Document
-         */
-        public function setHash($hash)
-        {
-            $this->hash = $hash;
-
-            return $this;
-        }
-
-        /**
-         * @return string
-         */
-        public function getHash()
-        {
-            return $this->hash;
-        }
-
-        /**
-         * @return \Shopware\Models\Order\Order
-         */
-        public function getOrder()
-        {
-            return $this->order;
-        }
-
-        /**
-         * @param \Shopware\Models\Order\Order $order
-         */
-        public function setOrder($order)
-        {
-            $this->order = $order;
-        }
-
-        /**
-         * @return int
-         */
-        public function getTypeId()
-        {
-            return $this->typeId;
-        }
-
-        /**
-         * @param int $typeId
-         */
-        public function setTypeId($typeId)
-        {
-            $this->typeId = $typeId;
-        }
-
-        /**
-         * @return \Shopware\Models\Document\Document
-         */
-        public function getType()
-        {
-            return $this->type;
-        }
-
-        /**
-         * @param \Shopware\Models\Document\Document $type
-         */
-        public function setType($type)
-        {
-            $this->type = $type;
-        }
-
-        /**
-         * @return \Shopware\Models\Attribute\Document
-         */
-        public function getAttribute()
-        {
-            return $this->attribute;
-        }
-
-        /**
-         * @param \Shopware\Models\Attribute\Document|array|null $attribute
-         *
-         * @return \Shopware\Models\Attribute\Document
-         */
-        public function setAttribute($attribute)
-        {
-            return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Document', 'attribute', 'document');
-        }
+        return $this->id;
     }
-} else {
+
     /**
-     * NEW VERSION!
+     * @param \DateTimeInterface $date
      *
-     * Shopware order detail model represents a single detail data of an order .
-     * <br>
-     * The Shopware order detail model represents a row of the order_details table.
-     * The s_order_details table has the follows indices:
-     * <code>
-     *   - PRIMARY KEY (`ID`),
-     *   - KEY `orderID` (`orderID`),
-     *   - KEY `userID` (`userID`)
-     * </code>
-     *
-     * @ORM\Entity(repositoryClass="Repository")
-     * @ORM\Table(name="s_order_documents")
+     * @return Document
      */
-    class Document extends ModelEntity
+    public function setDate($date)
     {
-        /**
-         * INVERSE SIDE
-         *
-         * @var \Shopware\Models\Attribute\Document
-         *
-         * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
-         */
-        protected $attribute;
+        $this->date = $date;
 
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="id", type="integer", nullable=false)
-         * @ORM\Id
-         * @ORM\GeneratedValue(strategy="IDENTITY")
-         */
-        private $id;
+        return $this;
+    }
 
-        /**
-         * @var \DateTimeInterface
-         *
-         * @ORM\Column(name="date", type="date", nullable=false)
-         */
-        private $date;
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
 
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="type", type="integer", nullable=false)
-         */
-        private $typeId;
+    /**
+     * @param int $customerId
+     *
+     * @return Document
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
 
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="userID", type="integer", nullable=false)
-         */
-        private $customerId;
+        return $this;
+    }
 
-        /**
-         * @var int
-         *
-         * @ORM\Column(name="orderID", type="integer", nullable=false)
-         */
-        private $orderId;
+    /**
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
 
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="amount", type="float", nullable=false)
-         */
-        private $amount;
+    /**
+     * @param int $orderId
+     *
+     * @return Document
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
 
-        /**
-         * @var string
-         *
-         * @ORM\Column(name="docID", type="string", nullable=false)
-         */
-        private $documentId;
+        return $this;
+    }
 
-        /**
-         * @var string
-         *
-         * @ORM\Column(name="hash", type="string", length=255, nullable=false)
-         */
-        private $hash;
+    /**
+     * @return int
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
 
-        /**
-         * @var \Shopware\Models\Order\Order
-         *
-         * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="documents")
-         * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
-         */
-        private $order;
+    /**
+     * @param float $amount
+     *
+     * @return Document
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
 
-        /**
-         * @var \Shopware\Models\Document\Document
-         *
-         * @ORM\OneToOne(targetEntity="\Shopware\Models\Document\Document")
-         * @ORM\JoinColumn(name="type", referencedColumnName="id")
-         */
-        private $type;
+        return $this;
+    }
 
-        /**
-         * @return int
-         */
-        public function getId()
-        {
-            return $this->id;
-        }
+    /**
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
 
-        /**
-         * @param \DateTimeInterface $date
-         *
-         * @return Document
-         */
-        public function setDate($date)
-        {
-            $this->date = $date;
+    /**
+     * @param string $documentId
+     *
+     * @return Document
+     */
+    public function setDocumentId($documentId)
+    {
+        $this->documentId = $documentId;
 
-            return $this;
-        }
+        return $this;
+    }
 
-        /**
-         * @return \DateTimeInterface
-         */
-        public function getDate()
-        {
-            return $this->date;
-        }
+    /**
+     * @return string
+     */
+    public function getDocumentId()
+    {
+        return $this->documentId;
+    }
 
-        /**
-         * @param int $customerId
-         *
-         * @return Document
-         */
-        public function setCustomerId($customerId)
-        {
-            $this->customerId = $customerId;
+    /**
+     * @param string $hash
+     *
+     * @return Document
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
 
-            return $this;
-        }
+        return $this;
+    }
 
-        /**
-         * @return int
-         */
-        public function getCustomerId()
-        {
-            return $this->customerId;
-        }
+    /**
+     * @return string
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
 
-        /**
-         * @param int $orderId
-         *
-         * @return Document
-         */
-        public function setOrderId($orderId)
-        {
-            $this->orderId = $orderId;
+    /**
+     * @return \Shopware\Models\Order\Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
 
-            return $this;
-        }
+    /**
+     * @param \Shopware\Models\Order\Order $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
 
-        /**
-         * @return int
-         */
-        public function getOrderId()
-        {
-            return $this->orderId;
-        }
+    /**
+     * @return int
+     */
+    public function getTypeId()
+    {
+        return $this->typeId;
+    }
 
-        /**
-         * @param float $amount
-         *
-         * @return Document
-         */
-        public function setAmount($amount)
-        {
-            $this->amount = $amount;
+    /**
+     * @param int $typeId
+     */
+    public function setTypeId($typeId)
+    {
+        $this->typeId = $typeId;
+    }
 
-            return $this;
-        }
+    /**
+     * @return \Shopware\Models\Document\Document
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
-        /**
-         * @return float
-         */
-        public function getAmount()
-        {
-            return $this->amount;
-        }
+    /**
+     * @param \Shopware\Models\Document\Document $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 
-        /**
-         * @param string $documentId
-         *
-         * @return Document
-         */
-        public function setDocumentId($documentId)
-        {
-            $this->documentId = $documentId;
+    /**
+     * @return \Shopware\Models\Attribute\Document
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
 
-            return $this;
-        }
-
-        /**
-         * @return string
-         */
-        public function getDocumentId()
-        {
-            return $this->documentId;
-        }
-
-        /**
-         * @param string $hash
-         *
-         * @return Document
-         */
-        public function setHash($hash)
-        {
-            $this->hash = $hash;
-
-            return $this;
-        }
-
-        /**
-         * @return string
-         */
-        public function getHash()
-        {
-            return $this->hash;
-        }
-
-        /**
-         * @return \Shopware\Models\Order\Order
-         */
-        public function getOrder()
-        {
-            return $this->order;
-        }
-
-        /**
-         * @param \Shopware\Models\Order\Order $order
-         */
-        public function setOrder($order)
-        {
-            $this->order = $order;
-        }
-
-        /**
-         * @return int
-         */
-        public function getTypeId()
-        {
-            return $this->typeId;
-        }
-
-        /**
-         * @param int $typeId
-         */
-        public function setTypeId($typeId)
-        {
-            $this->typeId = $typeId;
-        }
-
-        /**
-         * @return \Shopware\Models\Document\Document
-         */
-        public function getType()
-        {
-            return $this->type;
-        }
-
-        /**
-         * @param \Shopware\Models\Document\Document $type
-         */
-        public function setType($type)
-        {
-            $this->type = $type;
-        }
-
-        /**
-         * @return \Shopware\Models\Attribute\Document
-         */
-        public function getAttribute()
-        {
-            return $this->attribute;
-        }
-
-        /**
-         * @param \Shopware\Models\Attribute\Document|array|null $attribute
-         *
-         * @return \Shopware\Models\Attribute\Document
-         */
-        public function setAttribute($attribute)
-        {
-            return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Document::class, 'attribute', 'document');
-        }
+    /**
+     * @param \Shopware\Models\Attribute\Document|array|null $attribute
+     *
+     * @return \Shopware\Models\Attribute\Document
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Document::class, 'attribute', 'document');
     }
 }
