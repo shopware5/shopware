@@ -11,7 +11,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added license synchronization button in Plugin Manager
 
-
 ### Changes
 
 * Changed the default value in column `s_core_auth.lockeduntil` to `2010-01-01 00:00:00`
@@ -28,14 +27,16 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `\Shopware\Components\Plugin\XmlPluginInfoReader`
     * `\Shopware\Components\Plugin\XmlConfigDefinitionReader`
     
-    They have been replaced with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
+    They will be replaced in Shopware 5.6 with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
 
 ### Excluding URLs from sitemap and adding custom URLs
+
 With Shopware 5.5.0, we added a better way to handle a lot of sitemap URLs. 
 Unfortunately this way we also dropped the support for customizing the URLs being used in a sitemap.
 
 With Shopware 5.5.7, we've reimplemented a way to deal with unwanted URLs, as well as a way to add custom URLs to your
 generated sitemaps.
+
 Just add the example configuration mentioned below into your `config.php` file.
 
 ```php

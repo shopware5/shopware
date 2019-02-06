@@ -1637,8 +1637,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->Response()->setBody(
             json_encode([
-                    'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
-                    'quantity' => $quantity,
+                'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
+                'quantity' => $quantity,
             ])
         );
     }
