@@ -75,21 +75,11 @@
             <argument type="service" id="shopware_storefront.shop_gateway_dbal"/>
         </service>
 
-        <service id="shopware_elastic_search.composite_synchronizer_factory"
-                 class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory">
-            <argument type="tagged" tag="shopware_elastic_search.synchronizer"/>
-        </service>
-
-        <service id="shopware_elastic_search.composite_synchronizer"
-                 class="Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer">
-            <factory service="shopware_elastic_search.composite_synchronizer_factory" method="factory"/>
-            <argument type="service" id="service_container"/>
-        </service>
-
         <service id="shopware_elastic_search.backlog_processor"
                  class="Shopware\Bundle\ESIndexingBundle\BacklogProcessor">
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_elastic_search.composite_synchronizer"/>
+            <argument type="service" id="events"/>
+            <argument type="tagged" tag="shopware_elastic_search.synchronizer" />
         </service>
 
         <service id="shopware_elastic_search.backlog_reader" class="Shopware\Bundle\ESIndexingBundle\BacklogReader">
@@ -108,7 +98,6 @@
                  class="Shopware\Bundle\ESIndexingBundle\Property\PropertySynchronizer">
             <argument type="service" id="shopware_elastic_search.property_indexer"/>
             <tag name="shopware_elastic_search.synchronizer"/>
-            <argument type="service" id="shopware_elastic_search.index_factory"/>
         </service>
 
         <service id="shopware_elastic_search.property_provider"
@@ -142,7 +131,6 @@
             <argument type="service" id="shopware_elastic_search.product_query_factory"/>
             <argument type="service" id="shopware_elastic_search.product_indexer"/>
             <tag name="shopware_elastic_search.synchronizer"/>
-            <argument type="service" id="shopware_elastic_search.index_factory"/>
         </service>
 
         <service id="shopware_elastic_search.product_provider"
@@ -231,6 +219,7 @@
         <service class="Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand"
                  id="shopware_elastic_search.commands.backlog_sync_command">
             <argument>%shopware.es.batchsize%</argument>
+            <argument type="tagged" tag="shopware_elastic_search.mapping"/>
 
             <tag name="console.command" command="sw:es:backlog:sync"/>
         </service>
