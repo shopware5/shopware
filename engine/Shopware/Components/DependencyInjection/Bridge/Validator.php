@@ -24,26 +24,24 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Doctrine\Common\Annotations\Reader;
 use Shopware\Bundle\FormBundle\DependencyInjection\Factory\ConstraintValidatorFactory;
-use Shopware\Components\Model\Configuration;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Validator
 {
     /**
-     * @param Configuration              $modelConfig
+     * @param Reader                     $annotationsReader
      * @param ConstraintValidatorFactory $validatorFactory
      *
      * @return ValidatorInterface
      */
-    public static function create(Configuration $modelConfig, ConstraintValidatorFactory $validatorFactory)
+    public static function create(Reader $annotationsReader, ConstraintValidatorFactory $validatorFactory)
     {
         $validatorBuilder = Validation::createValidatorBuilder();
 
-        $reader = $modelConfig->getAnnotationsReader();
-
-        $validatorBuilder->enableAnnotationMapping($reader);
+        $validatorBuilder->enableAnnotationMapping($annotationsReader);
         $validatorBuilder->setConstraintValidatorFactory($validatorFactory);
 
         return $validatorBuilder->getValidator();
