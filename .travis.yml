@@ -16,7 +16,7 @@ before_script:
     - if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-    - ant -f build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint
+    - ./psh.phar travis:build-continuous
 
 notifications:
     email: false

@@ -75,3 +75,12 @@ environments:
       REVISION: echo "${SW_REVISION}"
       PARENT_REVISION: echo "${SW_PARENT_REVISION}"
       OCULAR_ACCESS_TOKEN: echo "${OCULAR_ACCESS_TOKEN}"
+  travis:
+    paths:
+      - "dev-ops/common/actions"
+    const:
+      DB_HOST: "127.0.0.1"
+      DB_USER: "travis"
+      DB_NAME: "shopware"
+      SW_HOST: "localhost"
+      SW_BASE_PATH: ""
