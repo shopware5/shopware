@@ -26,6 +26,7 @@ namespace Shopware\Components\Api;
 
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 /**
  * API Manger
@@ -46,7 +47,12 @@ class Manager
         $container = Shopware()->Container();
         try {
             /** @var Resource\Resource $resource */
-            $resource = $container->get('shopware.api.' . strtolower($name));
+            $serviceId = 'shopware.api.' . (new CamelCaseToSnakeCaseNameConverter())->normalize($name);
+            if ($container->has($serviceId)) {
+                $resource = $container->get($serviceId);
+            } else {
+                $resource = $container->get('shopware.api.' . strtolower($name));
+            }
         } catch (ServiceNotFoundException $e) {
             $name = ucfirst($name);
             $class = __NAMESPACE__ . '\\Resource\\' . $name;
