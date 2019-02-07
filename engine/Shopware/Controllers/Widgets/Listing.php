@@ -128,7 +128,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $convertedProducts = $this->container->get('legacy_struct_converter')->convertListProductStructList($products);
 
         $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
-        $this->View()->assign($this->Request()->getParams());
     }
 
     public function streamAction()
@@ -158,7 +157,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             ->convertListProductStructList($products->getProducts());
 
         $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
-        $this->View()->assign($this->Request()->getParams());
     }
 
     /**
