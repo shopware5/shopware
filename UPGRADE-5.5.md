@@ -16,7 +16,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Changed the default value in column `s_core_auth.lockeduntil` to `2010-01-01 00:00:00`
 * Changed order module sorting to consider sorting also when elasticsearch is activated
-* Changed StaticUrlProvider to unique urls
+* Changed `StaticUrlProvider` to prevent duplicate URLs
+* Changed minibasket to also update amount/number badge when the last product is being removed from offcanvas basket
+* Changed updater libraries to most recent versions
 
 ### Deprecations
 
