@@ -1911,7 +1911,6 @@ class sAdmin
         if (!empty($order['content'])) {
             $value = explode('|', $value);
             if (!empty($value[0]) && isset($value[1])) {
-                $number = (int) str_ireplace('attr', '', $value[0]);
 
                 $sql = "
                     SELECT s_articles_attributes.id
@@ -1923,7 +1922,7 @@ class sAdmin
                         OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
                     )
                     AND s_articles_details.id = s_articles_attributes.articledetailsID
-                    AND s_articles_attributes.attr{$number} = ?
+                    AND s_articles_attributes.{$value[0]} = ?
                     LIMIT 1
                 ";
 
@@ -1953,7 +1952,6 @@ class sAdmin
         if (!empty($order['content'])) {
             $value = explode('|', $value);
             if (!empty($value[0]) && isset($value[1])) {
-                $number = (int) str_ireplace('attr', '', $value[0]);
 
                 $sql = "
                 SELECT s_articles_attributes.id
@@ -1966,7 +1964,7 @@ class sAdmin
                 OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
                 )
                 AND s_articles_details.id = s_articles_attributes.articledetailsID
-                AND s_articles_attributes.attr{$number}!= ?
+                AND s_articles_attributes.{$value[0]}!= ?
                 LIMIT 1
                 ";
                 $checkProduct = $this->db->fetchOne(
