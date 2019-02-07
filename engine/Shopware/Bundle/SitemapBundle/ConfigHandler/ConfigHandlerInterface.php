@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,43 +20,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware Store - Global Stores and Models
- *
- * todo@all: Documentation
- */
-Ext.define('Shopware.apps.Base.store.Shop', {
-    extend: 'Ext.data.Store',
+namespace Shopware\Bundle\SitemapBundle\ConfigHandler;
 
-    alternateClassName: 'Shopware.store.Shop',
-    storeId: 'base.Shop',
-    model : 'Shopware.apps.Base.model.Shop',
-    pageSize: 1000,
-
-    remoteSort: true,
-    remoteFilter: true,
-
-    proxy:{
-        type: 'ajax',
-        url: '{url action=getShops}',
-        reader: {
-            type:'json',
-            root:'data',
-            totalProperty:'total'
-        }
-    },
-
-    filters: [{
-        property: 'main',
-        value: null
-    }]
-}).create();
-
+interface ConfigHandlerInterface
+{
+    /**
+     * @return array
+     */
+    public function getSitemapConfig();
+}

@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,56 +22,43 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Base config store which loads all needed config data
- */
-//{block name="backend/performance/store/config"}
-Ext.define('Shopware.apps.Performance.store.Config', {
+namespace Shopware\Bundle\SitemapBundle\Struct;
+
+class FilterContainer
+{
     /**
-     * Extend for the standard ExtJS 4
-     * @string
+     * @var string
      */
-    extend: 'Ext.data.Store',
+    private $resourceName;
 
     /**
-     * Disable auto loading
-     * @boolean
+     * @var array
      */
-    autoLoad: false,
+    private $filters;
 
     /**
-     * Define the used model for this store
-     * @string
+     * @param string $resourceName
+     * @param array  $filters
      */
-    model: 'Shopware.apps.Performance.model.Config',
-
-    /**
-     * Configure the data communication
-     * @object
-     */
-    proxy:{
-        /**
-         * Set proxy type to ajax
-         * @string
-         */
-        type: 'ajax',
-
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        url: '{url action="getConfig"}',
-
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader:{
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
+    public function __construct($resourceName, array $filters)
+    {
+        $this->resourceName = $resourceName;
+        $this->filters = $filters;
     }
-});
-//{/block}
+
+    /**
+     * @return string
+     */
+    public function getResourceName()
+    {
+        return $this->resourceName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+}

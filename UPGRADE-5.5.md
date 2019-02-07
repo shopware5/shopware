@@ -28,7 +28,63 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `\Shopware\Components\Plugin\XmlPluginInfoReader`
     * `\Shopware\Components\Plugin\XmlConfigDefinitionReader`
     
-    The have been replaced with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
+    They have been replaced with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
+
+### Excluding URLs from sitemap and adding custom URLs
+With Shopware 5.5.0, we added a better way to handle a lot of sitemap URLs. 
+Unfortunately this way we also dropped the support for customizing the URLs being used in a sitemap.
+
+With Shopware 5.5.7, we've reimplemented a way to deal with unwanted URLs, as well as a way to add custom URLs to your
+generated sitemaps.
+Just add the example configuration mentioned below into your `config.php` file.
+
+```php
+<?php
+return [
+    ...
+    'sitemap' => [
+        'excluded_urls' => [
+            [
+                // Possible resources:
+                // - product (\Shopware\Models\Article\Article::class)
+                // - campaign (\Shopware\Models\Emotion\Emotion::class)
+                // - manufacturer (\Shopware\Models\Article\Supplier::class)
+                // - blog (\Shopware\Models\Blog\Blog::class)
+                // - category (\Shopware\Models\Category\Category::class)
+                // - static (\Shopware\Models\Site\Site::class)
+                'resource' => \Shopware\Models\Article\Article::class,
+
+                // The ID for the entity mentioned above (e.g. 5 excludes the URL for the product with ID 5).
+                // If left empty (or 0), the whole resource will be skipped for URL generation
+                'identifier' => '',
+                
+                // The ID of the shop to which this exclusion applies. If left empty (or 0), this applies for every shop
+                'shopId' => 0
+            ]
+        ],
+        'custom_urls' => [
+            [
+                // The custom URL
+                'url' => 'https://myCustomUrl.de',
+
+                // Date in format Y-m-d H:i:s
+                'lastMod' => '2019-01-01 00:00:00',
+
+                // How frequently the page is likely to change
+                // Possible values: always, hourly, daily, weekly, monthly, yearly, always
+                'changeFreq' => 'weekly',
+
+                // The priority of this URL relative to other URLs on your site
+                // Must be a value between 0 and 1
+                'priority' => 0.5,
+
+                // The ID for the shop to which this custom URL applies. If left empty (or 0), this applies for every shop
+                'shopId' => 2,
+            ]
+        ]
+    ]
+];
+```
 
 ## 5.5.6
 

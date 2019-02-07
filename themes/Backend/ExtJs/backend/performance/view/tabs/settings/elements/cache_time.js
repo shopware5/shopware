@@ -19,12 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Customer
- * @subpackage Order
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/performance/main}
@@ -38,16 +32,16 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      * Extend from our base grid
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-elements-cache-time',
+    alias: 'widget.performance-tabs-settings-elements-cache-time',
 
     /**
-     * Desciptive title for the grid
+     * Descriptive title for the grid
      */
     title: '{s name=grid/cacheTime}Define cache times for controller (actions) here{/s}',
 
@@ -57,7 +51,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      * default configuration
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.columns = me.getColumns();
@@ -72,7 +66,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      * to open the order in a new window.
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
         );
     },
@@ -82,9 +76,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
-        var me = this;
-
+    getColumns: function () {
         return [
             {
                 header: '{s name=grid/column/controller}Controller{/s}',
@@ -111,19 +103,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.CacheTime', {
                  * Special column type which provides
                  * clickable icons in each row
                  */
-                xtype:'actioncolumn',
-                width:50,
-                items:[
+                xtype: 'actioncolumn',
+                width: 50,
+                items: [
                     {
-                        cls:'delteBtn',
-                        iconCls:'sprite-minus-circle-frame',
-                        action:'http-cache-delete-controller-time',
-                        tooltip:'{s name=grid/actionButton/delete}Delete entry{/s}',
+                        cls: 'delteBtn',
+                        iconCls: 'sprite-minus-circle-frame',
+                        action: 'http-cache-delete-controller-time',
+                        tooltip: '{s name=grid/actionButton/delete}Delete entry{/s}',
                         /**
                          * Add button handler to fire the generatePassword event which is handled
                          * in the detail controller. The detail controller generates a password and set it into the password field
                          */
-                        handler:function (view, rowIndex, colIndex, item) {
+                        handler: function (view, rowIndex) {
                             var store = view.getStore(),
                                 record = store.getAt(rowIndex);
 

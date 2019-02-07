@@ -24,12 +24,13 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
+use Shopware\Models\Article\Supplier as Manufacturer;
 
 class ManufacturerUrlProvider implements UrlProviderInterface
 {
@@ -39,20 +40,20 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     private $router;
 
     /**
-     * @var Connection
+     * @var ConnectionInterface
      */
     private $connection;
 
     /**
      * @var bool
      */
-    private $allExported = false;
+    private $allExported;
 
     /**
-     * @param Connection              $connection
+     * @param ConnectionInterface     $connection
      * @param Routing\RouterInterface $router
      */
-    public function __construct(Connection $connection, Routing\RouterInterface $router)
+    public function __construct(ConnectionInterface $connection, Routing\RouterInterface $router)
     {
         $this->router = $router;
         $this->connection = $connection;
@@ -84,7 +85,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $manufacturers[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $manufacturers[$i]['changed'], 'weekly', Manufacturer::class, $manufacturers[$i]['id']);
         }
 
         $this->allExported = true;

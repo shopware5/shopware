@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,43 +20,37 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Base
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware Store - Global Stores and Models
- *
- * todo@all: Documentation
- */
-Ext.define('Shopware.apps.Base.store.Shop', {
-    extend: 'Ext.data.Store',
+namespace Shopware\Tests\Unit\Bundle\SitemapBundle\UrlFilter;
 
-    alternateClassName: 'Shopware.store.Shop',
-    storeId: 'base.Shop',
-    model : 'Shopware.apps.Base.model.Shop',
-    pageSize: 1000,
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\SitemapBundle\UrlFilter\Base;
 
-    remoteSort: true,
-    remoteFilter: true,
+class ExampleTest extends TestCase
+{
+    public function testIsFilteredShouldReturnTrueIdentifierAvailable()
+    {
+        $example = new Example();
 
-    proxy:{
-        type: 'ajax',
-        url: '{url action=getShops}',
-        reader: {
-            type:'json',
-            root:'data',
-            totalProperty:'total'
-        }
-    },
+        $this->assertTrue($example->isFiltered(5, [5]));
+    }
 
-    filters: [{
-        property: 'main',
-        value: null
-    }]
-}).create();
+    public function testIsFilteredShouldReturnFalse()
+    {
+        $example = new Example();
 
+        $this->assertFalse($example->isFiltered(5, [4]));
+    }
+}
+
+class Example extends Base
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($resourceName)
+    {
+        return $resourceName === 'example';
+    }
+}
