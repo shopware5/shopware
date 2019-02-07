@@ -84,7 +84,7 @@
         <service id="shopware.mail_transport" alias="MailTransport" />
         <service id="MailTransport" class="Zend_Mail_Transport_Abstract">
             <factory service="mailtransport_factory" method="factory" />
-            <argument type="service" id="Loader"/>
+            <argument type="service" id="loader"/>
             <argument type="service" id="config"/>
             <argument>%shopware.mail%</argument>
         </service>
@@ -108,7 +108,7 @@
         <service id="plugins" class="Enlight_Plugin_PluginManager">
             <factory service="plugins_factory" method="factory" />
             <argument type="service" id="service_container"/>
-            <argument type="service" id="Loader"/>
+            <argument type="service" id="loader"/>
             <argument type="service" id="events"/>
             <argument type="service" id="application"/>
             <argument>%shopware.plugin_directories%</argument>
@@ -138,8 +138,8 @@
             <argument type="service" id="locale"/>
         </service>
 
-        <service id="shopware.loader" alias="Loader" />
-        <service id="Loader"     class="Enlight_Loader" />
+        <service id="shopware.loader" alias="loader" />
+        <service id="loader"     class="Enlight_Loader" />
         <service id="snippets"   class="Shopware_Components_Snippet_Manager">
             <argument type="service" id="shopware.model_manager"/>
             <argument>%shopware.plugin_directories%</argument>
@@ -201,15 +201,15 @@
         </service>
 
         <service id="shopware.hook_manager" alias="Hooks" />
-        <service id="Hooks" class="Enlight_Hook_HookManager">
+        <service id="hooks" class="Enlight_Hook_HookManager">
             <argument type="service" id="shopware.event_manager" />
             <argument type="service" id="shopware.loader" />
             <argument>%shopware.hook%</argument>
         </service>
 
-        <service id="shopware.model_config" alias="ModelConfig" />
-        <service id="ModelConfig" class="Shopware\Components\Model\Configuration">
-            <argument>%shopware.Model%</argument>
+        <service id="shopware.model_config" alias="modelconfig" />
+        <service id="modelconfig" class="Shopware\Components\Model\Configuration">
+            <argument>%shopware.model%</argument>
             <argument type="service" id="cache" />
             <argument type="service" id="model_repository_factory" />
             <argument type="service" id="shopware.release" />
@@ -247,33 +247,33 @@
             <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
         </service>
 
-        <service id="model_event_manager" class="Doctrine\Common\EventManager" public="false" />
+        <service id="model_event_manager" class="Doctrine\Common\EventManager"/>
 
         <service id="model_repository_factory" class="Shopware\Components\Model\ProxyAwareRepositoryFactory" public="false">
             <argument type="service" id="Hooks" />
         </service>
 
-        <service id="EventSubscriber" class="Shopware\Components\Model\EventSubscriber" public="false">
+        <service id="eventsubscriber" class="Shopware\Components\Model\EventSubscriber">
             <argument type="service" id="shopware.event_manager" />
             <tag name="doctrine.event_subscriber" />
         </service>
 
-        <service id="OrderHistorySubscriber" class="Shopware\Models\Order\OrderHistorySubscriber" public="false">
+        <service id="orderhistorysubscriber" class="Shopware\Models\Order\OrderHistorySubscriber">
             <tag name="doctrine.event_subscriber" />
         </service>
 
-        <service id="CategorySubscriber" class="Shopware\Components\Model\CategorySubscriber">
+        <service id="categorysubscriber" class="Shopware\Components\Model\CategorySubscriber">
             <argument type="service" id="service_container" />
             <tag name="doctrine.event_subscriber" />
         </service>
 
-        <service id="CategoryDuplicator" class="Shopware\Components\CategoryHandling\CategoryDuplicator">
+        <service id="categoryduplicator" class="Shopware\Components\CategoryHandling\CategoryDuplicator">
             <argument type="service" id="db_connection" />
             <argument type="service" id="CategoryDenormalization" />
             <argument type="service" id="shopware_attribute.data_persister" />
         </service>
 
-        <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
+        <service id="categorydenormalization" class="Shopware\Components\Model\CategoryDenormalization">
             <argument type="service" id="db_connection" />
         </service>
 
@@ -306,7 +306,7 @@
             <argument type="service" id="service_container" />
         </service>
 
-        <service id="MediaSubscriber" class="Shopware\Models\Media\MediaSubscriber" public="false">
+        <service id="mediasubscriber" class="Shopware\Models\Media\MediaSubscriber">
             <tag name="doctrine.event_subscriber" />
             <argument type="service" id="service_container" />
         </service>
@@ -319,7 +319,7 @@
 
         <service id="thumbnail_manager" class="Shopware\Components\Thumbnail\Manager">
             <argument type="service" id="thumbnail_generator_basic" />
-            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.app.rootDir%</argument>
             <argument type="service" id="events" />
             <argument type="service" id="shopware_media.media_service" />
         </service>
@@ -655,7 +655,7 @@
             <argument type="service" id="shopware.emotion.preset_data_synchronizer" />
             <argument type="service" id="shopware.api.emotionpreset" />
             <argument type="service" id="shopware_media.media_service" />
-            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.app.rootDir%</argument>
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.slug" />
         </service>
@@ -691,7 +691,7 @@
             <argument type="service" id="events" />
             <!--preset element handlers-->
             <argument type="tagged" tag="shopware.emotion.preset_component_handler" />
-            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.app.rootDir%</argument>
         </service>
 
         <service id="shopware.emotion.preset_banner_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerComponentHandler">
@@ -828,7 +828,7 @@
             <argument id="dbal_connection" type="service"/>
         </service>
 
-        <service id="shopware.components.privacy.ip_anonymizer" class="Shopware\Components\Privacy\ConfigDependentIpAnonymizer" public="true">
+        <service id="shopware.components.privacy.ip_anonymizer" class="Shopware\Components\Privacy\ConfigDependentIpAnonymizer">
             <argument type="service" id="shopware.components.privacy.ip_anonymizer_service"/>
             <argument type="service" id="config"/>
         </service>
@@ -863,7 +863,7 @@
 
         <service id="shopware.filesystem.public.url_generator" class="Shopware\Components\Filesystem\PublicUrlGenerator">
             <argument type="service" id="service_container"/>
-            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.app.rootDir%</argument>
             <argument>%shopware.filesystem.public.config.root%</argument>
             <argument>%shopware.filesystem.public.config.url%</argument>
         </service>

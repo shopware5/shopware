@@ -19,6 +19,16 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `StaticUrlProvider` to prevent duplicate URLs
 * Changed minibasket to also update amount/number badge when the last product is being removed from offcanvas basket
 * Changed updater libraries to most recent versions
+* Changed following services to lower-case:
+    * `Loader`
+    * `Hooks`
+    * `Modelconfig`
+    * `EventSubscriber`
+    * `OrderHistorySubscriber`
+    * `CategorySubscriber`
+    * `CategoryDuplicator`
+    * `CategoryDenormalization`
+    * `MediaSubscriber`
 
 ### Deprecations
 
