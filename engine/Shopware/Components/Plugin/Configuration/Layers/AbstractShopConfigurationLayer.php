@@ -107,7 +107,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
             ->fetchAll(\PDO::FETCH_KEY_PAIR)
         ;
 
-        // TODO use a serialization helepr
+        // TODO use a serialization helper
         return $this->mergeValues($this->getParent()->readValues($shopId, $pluginName), $this->unserializeArray($values));
     }
 
