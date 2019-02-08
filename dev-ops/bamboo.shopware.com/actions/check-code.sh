@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #DESCRIPTION: Check the code for php-cs-fixer and php-stan issues
 
+docker exec -u __USERKEY__ __APP_ID__ /usr/local/bin/wait-for-it.sh --timeout=120 mysql:3306
+
 docker exec -u __USERKEY__ __APP_ID__ ant -f build/build.xml build-composer-install
 docker exec -u __USERKEY__ __APP_ID__ ant -f build/build.xml build-cache-dir
 docker exec -u __USERKEY__ __APP_ID__ ant -f build/build.xml build-config
