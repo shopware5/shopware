@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * Added method implementation to 
     `Shopware\Bundle\ESIndexingBundle\Property\PropertySynchronizer::supports`
     `Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer::supports`
+* Added configuration to define the format of a valid order number 
 
 ### Changes
 
@@ -30,7 +31,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
     `\Shopware_Controllers_Frontend_Checkout::addArticleAction`
     `\Shopware_Controllers_Frontend_Checkout::addAccessoriesAction`
     `\Shopware_Controllers_Frontend_Checkout::deleteArticleAction`
-
 * Changed browser cache handling in backend to cache javascript `index` and `load` actions. Caching will be disabled when...
     * the template cache is disabled
     * `$this->Response()->setHeader('Cache-Control', 'private', true);` is used in the controller
@@ -44,10 +44,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
         * .raw fields
         * and some more
 
-* Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
 * Changed the manufacturer image to appropriate thumbnails
+* Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
 * Changed `plugin.xsd` to make pluginName in `requiredPlugins` required
 * Changed `Shopware\Components\DependencyInjection\Container` to trigger InitResource and AfterInitResource events for alias services, introduced by decorations
+* Changed the `Regex`-Constraint on `\Shopware\Models\Article\Detail::$number` to a new `OrderNumber`-Constraint to be more configurable
 
 ### Removals
 
@@ -67,10 +68,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getNotAnalyzedField`. It will be removed in 5.7, use the getKeywordField instead.
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead.
 
-
 ### Controller Registration using DI-Tag
 
-Controllers can be now registered using di tag ``shopware.controller``. This di tag needs attributes `module` and `controller`. These controllers are also lazy-loaded and should extend from `Shopware\Components\Controller`.
+Controllers can be now registered using the DI tag `shopware.controller`. This DI tag needs attributes `module` and `controller`. These controllers are also lazy-loaded and should extend from `Shopware\Components\Controller`.
 
 Example:
 
@@ -109,3 +109,21 @@ class Test extends Controller
     }
 }
 ```
+
+### Custom validation of order numbers (SKU)
+
+Up to now, the validation of order numbers (or SKUs) was done in form of a Regex-Assertion in the Doctrine model at `\Shopware\Models\Article\Detail::$number`. That solution was not flexible and didn't allow any modifications of said regex, let alone a complete custom implementation of a validation.
+ 
+Now, a new constraint `\Shopware\Components\Model\DBAL\Constraints\OrderNumber` is used instead, which is a wrapper around `\Shopware\Components\OrderNumberValidator\RegexOrderNumberValidator`.
+
+This way you can either change the regex which is being used for validation by defining one yourself in the `config.php`:
+```php
+<?php
+return [
+    'product' => [
+        'orderNumberRegex' => '/^[a-zA-Z0-9-_.]+$/' // This is the default
+    ],
+    'db' => [...],
+]
+``` 
+Or you can create your own implementation of the underlying interface `\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface` and use it for the validation by simply decorating the current service with id `shopware.components.ordernumber_validator` and e.g. query some API. 

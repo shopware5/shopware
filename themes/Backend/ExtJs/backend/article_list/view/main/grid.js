@@ -135,35 +135,35 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         me.selModel = me.getGridSelModel();
 
         me.addEvents(
-                /**
-                 * Fired when the user edited a product in the grid
-                 */
-                'saveProduct',
+            /**
+             * Fired when the user edited a product in the grid
+             */
+            'saveProduct',
 
-                /**
-                 * Delete a single article
-                 */
-                'deleteProduct',
+            /**
+             * Delete a single article
+             */
+            'deleteProduct',
 
-                /**
-                 * Delete multiple articles
-                 */
-                'deleteMultipleProducts',
+            /**
+             * Delete multiple articles
+             */
+            'deleteMultipleProducts',
 
-                /**
-                 * Trigger the split view
-                 */
-                'triggerSplitView',
+            /**
+             * Trigger the split view
+             */
+            'triggerSplitView',
 
-                /**
-                 * Triggered when the product selection changes
-                 */
-                'productchange',
+            /**
+             * Triggered when the product selection changes
+             */
+            'productchange',
 
-                /**
-                 * A search was triggered
-                 */
-                'search'
+            /**
+             * A search was triggered
+             */
+            'search'
         );
 
         me.rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
@@ -188,7 +188,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     onAfterRender: function() {
         var me = this;
         Ext.each(me.columns, function(col) {
-            if (col.dataIndex == 'Detail_active') {
+            if (col.dataIndex === 'Detail_active') {
                 me.detailActiveColumn = col;
                 window.setTimeout(function() { col.setVisible(false); }, 0);
             }
@@ -349,7 +349,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     getXtypeForColumn: function (column) {
         var me = this;
 
-        if (column.alias == 'Price_price') {
+        if (column.alias === 'Price_price') {
             return 'numbercolumn';
         }
 
@@ -443,19 +443,19 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     getRendererForColumn: function (column) {
         var me = this;
 
-        if (column.alias == 'Article_name') {
+        if (column.alias === 'Article_name') {
             return me.boldColumnRenderer;
         }
 
-        if (column.type == 'boolean') {
+        if (column.type === 'boolean') {
             return me.booleanColumnRenderer;
         }
 
-        if (column.alias == 'Detail_inStock') {
+        if (column.alias === 'Detail_inStock') {
             return me.colorColumnRenderer;
         }
 
-        if (column.alias == 'Price_price') {
+        if (column.alias === 'Price_price') {
             return undefined;
         }
 
@@ -504,7 +504,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
     getWidthForColumn: function (column) {
         var me = this;
 
-        if (column.alias.slice(-2).toLowerCase() == 'id') {
+        if (column.alias.slice(-2).toLowerCase() === 'id') {
             return 60;
         }
 
@@ -575,17 +575,19 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                         var precision = 0;
                         if (column.precision) {
                             precision = column.precision
-                        } else if (column.type == 'float') {
+                        } else if (column.type === 'float') {
                             precision = 3;
-                        } else if (column.type == 'decimal') {
+                        } else if (column.type === 'decimal') {
                             precision = 3;
                         }
                         return { xtype: 'numberfield', decimalPrecision: precision };
                         break;
+
                     case 'string':
                     case 'text':
                         return 'textfield';
                         break;
+
                     case 'boolean':
                         return {
                             xtype: 'checkbox',
@@ -593,22 +595,26 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                             uncheckedValue: 0
                         };
                         break;
+
                     case 'date':
                         return new Ext.form.DateField({
                             disabled: false,
                             format: 'Y-m-d'
                         });
                         break;
+
                     case 'datetime':
                         return new Ext.form.DateField({
                             disabled: false,
                             format: 'Y-m-d H:i:s'
                         });
+
                         return new Shopware.apps.Base.view.element.DateTime({
                             timeCfg: { format: 'H:i:s' },
                             dateCfg: { format: 'Y-m-d' }
                         });
                         break;
+
                     default:
                         break;
                 }
@@ -655,7 +661,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         );
         /*{/if}*/
 
-        //creates the delete button to remove all selected esds in one request.
+        // Creates the delete button to remove all selected esds in one request.
         me.deleteButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-minus-circle-frame',
             text: '{s name=deleteProduct}Delete{/s}',
@@ -675,7 +681,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         /*{/if}*/
 
         buttons.push('->');
-
 
         buttons.push({
             xtype: 'textfield',
@@ -750,8 +755,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * a entry in the "number of orders"-combo box.
      *
      * @event select
-     * @param [object] combo - Ext.form.field.ComboBox
-     * @param [array] records - Array of selected entries
+     * @param { object } combo - Ext.form.field.ComboBox
+     * @param { array } records - Array of selected entries
      * @return void
      */
     onPageSizeChange: function (combo, records) {

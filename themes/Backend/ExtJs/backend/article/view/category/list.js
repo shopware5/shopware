@@ -40,16 +40,19 @@ Ext.define('Shopware.apps.Article.view.category.List', {
      * @string
      */
     extend:'Ext.grid.Panel',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
     alias:'widget.article-category-list',
+
     /**
      * Set css class for this component
      * @string
      */
     cls: Ext.baseCSSPrefix + 'category-list',
+
     /**
      * Contains all snippets for the view component
      * @object
@@ -182,6 +185,5 @@ Ext.define('Shopware.apps.Article.view.category.List', {
             }
         ];
     }
-
 });
 //{/block}

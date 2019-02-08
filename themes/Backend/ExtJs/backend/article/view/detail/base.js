@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
      * @string
      */
     alias:'widget.article-base-field-set',
+
     /**
      * Set css class for this component
      * @string
@@ -63,9 +64,9 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
      * @object
      */
     snippets:{
-        titleEdit:'{s name=detail/base/title_edit}Head data - last edit [0]{/s}',
-        titleNew:'{s name=detail/base/title_new}Head data{/s}',
-        empty:'{s name=empty}Please select...{/s}',
+        titleEdit: '{s name=detail/base/title_edit}Head data - last edit [0]{/s}',
+        titleNew: '{s name=detail/base/title_new}Head data{/s}',
+        empty: '{s name=empty}Please select...{/s}',
         name: '{s name=detail/base/description}Article description{/s}',
         supplier: '{s name=detail/base/supplier}Supplier{/s}',
         number: '{s name=detail/base/number}Article number{/s}',
@@ -131,7 +132,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
      * Creates the both containers for the field set
      * to display the form fields in two columns.
      *
-     * @return [Array] Contains the left and right container
+     * @return Ext.container.Container[] Contains the left and right container
      */
     createElements:function () {
         var leftContainer, rightContainer, me = this;
@@ -159,17 +160,19 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             items:me.createRightElements()
         });
 
-        return [ leftContainer, rightContainer ] ;
+        return [
+            leftContainer,
+            rightContainer
+        ] ;
     },
-
 
     /**
      * Creates the field set items which displayed in the left column of the base field set
+     *
      * @return Array
      */
     createLeftElements: function() {
-        var me =this, articleId = null, additionalText = null;
-
+        var me = this, articleId = null, additionalText = null;
 
         if (me.article instanceof Ext.data.Model && me.article.getMainDetail().first() instanceof Ext.data.Model) {
             articleId = me.article.getMainDetail().first().get('id');
@@ -180,19 +183,18 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             name: 'mainDetail[number]',
             dataIndex: 'mainDetail[number]',
             fieldLabel: me.snippets.number,
-            regex: /^[a-zA-Z0-9-_.]+$/,
+            regex: {$orderNumberRegex},
             regexText: me.snippets.regexNumberValidation,
             allowBlank: false,
-            enableKeyEvents:true,
-            checkChangeBuffer:700,
+            enableKeyEvents: true,
+            checkChangeBuffer: 700,
             labelWidth: 155,
             anchor: '100%',
-            vtype:'remote',
+            vtype: 'remote',
             validationUrl: '{url action="validateNumber"}',
             validationRequestParam: articleId,
             validationErrorMsg: me.snippets.numberValidation
         });
-
 
         var hideVariantTab = true;
         if(me.article !== Ext.undefined) {

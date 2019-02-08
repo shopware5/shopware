@@ -379,6 +379,13 @@ return array_replace_recursive([
             'format' => 'A4',
         ],
     ],
+    'product' => [
+        /*
+         * This regex is used to validate SKUs, aka ordernumbers.
+         * If you change this, please make sure the new format also works in URLs!
+         */
+        'orderNumberRegex' => '/^[a-zA-Z0-9-_.]+$/',
+    ],
     'backward_compatibility' => [
         /*
          * @deprecated since 5.5, sorting will be default and this parameter will be removed with Shopware 5.6
