@@ -27,6 +27,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 ### Changes
 
+* Increased minimum required PHP version to PHP >= 7.2.0.
 * Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password`
 * Changed cookie `x-ua-device` to be `secure` if the shop runs on SSL
 * Changed the following cart actions to redirect the request to allow customers to press reload:
@@ -51,6 +52,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Components\DependencyInjection\Container` to trigger InitResource and AfterInitResource events for alias services, introduced by decorations
 * Changed the `Regex`-Constraint on `\Shopware\Models\Article\Detail::$number` to a new `OrderNumber`-Constraint to be more configurable
 * Changed interface `Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface` to contain new method `joinVariants(QueryBuilder $query)` which was already a necessary part of the default implementation
+* Changed Doctrine orm version to 2.6.3
 
 ### Removals
 

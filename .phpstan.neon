@@ -34,6 +34,7 @@ parameters:
         - '#ioncube_#'
         - '#opcache_#'
         - '#imagettftext#'
+        - '#easter_days#'
         - '#class Redis#'
 
         - '#Call to an undefined method#'
@@ -44,9 +45,11 @@ parameters:
         - '#Binary operation "|=" between string and string results in an error.#'
         - '#does not call parent constructor from Elasticsearch#'
         - '#does not call parent constructor from Enlight_Controller_Action#'
-        - '#does not accept Doctrine\\ORM\\EntityRepository#'
+        - '#does not accept Doctrine\\Common\\Persistence\\ObjectRepository#'
         # "getRepository"-Methods
-        - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
+        - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '# should return Doctrine\\ORM\\EntityRepository|null but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
         # Return values in Models
         - '# returns Shopware\\Components\\Model\\ModelEntity.#'
         - '#does not accept Shopware\\Components\\Api\\Resource\\Resource#'
