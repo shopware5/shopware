@@ -166,7 +166,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         }
 
         $query->innerJoin($variantAlias, 's_article_configurator_option_relations', 'variantOptions', 'variantOptions.article_id = ' . $variantAlias . '.id');
-        //        $query->andWhere('(availableVariant.laststock * availableVariant.instock) >= (availableVariant.laststock * availableVariant.minpurchase)');
 
         $query->resetQueryPart('orderBy');
         $query->innerJoin('variantOptions', 's_article_configurator_options', 'options', 'options.id = variantOptions.option_id AND options.group_id IN (:variantGroupIds)');
