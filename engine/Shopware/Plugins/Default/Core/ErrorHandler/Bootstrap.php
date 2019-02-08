@@ -126,7 +126,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function onStartDispatch($args)
     {
-        $this->throwOnRecoverableError = Shopware()->Container()->getParameter('shopware.errorHandler.throwOnRecoverableError');
+        $this->throwOnRecoverableError = Shopware()->Container()->getParameter('shopware.errorhandler.throwOnRecoverableError');
 
         // Register ErrorHandler for all errors, including strict
         $this->registerErrorHandler(E_ALL | E_STRICT);
