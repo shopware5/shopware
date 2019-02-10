@@ -92,13 +92,8 @@ EOF
 
             return 1;
         }
-
-        $pluginPath = Shopware()->AppPath(implode('_', [
-            'Plugins',
-            $plugin->getSource(),
-            $plugin->getNamespace(),
-            $plugin->getName(),
-        ]));
+        
+        $pluginPath = $pluginManager->getPluginPath($pluginName);
 
         if ($plugin->getSource() === 'Default') {
             $message = "'Default' Plugins may not be deleted.";
