@@ -142,7 +142,7 @@ class Site extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="grouping", type="string", nullable=false)
+     * @ORM\Column(name="`grouping`", type="string", nullable=false)
      */
     private $grouping;
 

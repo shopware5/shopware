@@ -288,7 +288,7 @@ class sBasket
             $extraConditions[] = $this->db->quoteInto('ordernumber IN (?) ', $articles);
         }
         if (!empty($supplier)) {
-            $extraConditions[] .= $this->db->quoteInto('s_articles.supplierID = ?', $supplier);
+            $extraConditions[] = $this->db->quoteInto('s_articles.supplierID = ?', $supplier);
         }
 
         if (count($extraConditions)) {

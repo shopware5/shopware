@@ -76,7 +76,7 @@ class StoreListCommand extends StoreCommand
                 'message' => $e->getMessage(),
             ]);
 
-            return;
+            return null;
         }
 
         $result = null;

@@ -39,11 +39,13 @@ class GarbageCollectorTest extends TestCase
 
         $propertyValue = $queueProperty->getValue($garbageCollector);
 
-        $this->assertCount(9, $propertyValue['path']);
+        $this->assertCount(11, $propertyValue['path']);
 
         $this->assertArraySubset([
             'media/image/foo.png',
             'media/image/bar.png',
+            'media/pdf/foo.pdf',
+            'media/pdf/bar.pdf',
             'media/image/foo2.png',
             'media/image/bar2.png',
             'media/image/foo3.png',
@@ -117,8 +119,11 @@ class QueryBuilderMock
                 'Minions ipsum quis consequat belloo! <img src="{media path=\'media/image/foo.png\'}" />Et quis. Bee do bee do bee do dolore adipisicing minim.',
                 // Src Tag
                 'Bacon ipsum dolor amet t-bone brisket prosciutto <img src="media/image/bar.png" /> biltong rump drumstick pancetta andouille salami jerky beef ribs ball tip.',
+                // Href Link Tag
+                'Minions ipsum quis consequat belloo! <a href="{media path=\'media/pdf/foo.pdf\'}" >Et quis</a>. <a href="media/pdf/bar.pdf">Bee do</a> bee do bee do dolore adipisicing minim.',
                 // Should not match
                 'Lorem ipsum dolor sit amet <img src="{file link=\'media/image/foobar.png\'" />',
+                'Minions ipsum quis consequat belloo! <a href="{file link=\'media/pdf/foo1.pdf\'}" >Et quis</a>. <a href="https://example.com">Bee do</a> bee do bee do <a href="foo/bar/media/pdf/foobar.pdf">dolore</a> adipisicing minim.',
                 // Multiple matches
                 'Minions ipsum quis consequat belloo! <img src="{media path=\'media/image/foo2.png\'}" />Et quis. <img src="media/image/bar2.png"/> Bee do bee do bee do dolore adipisicing minim.',
                 // data-src match

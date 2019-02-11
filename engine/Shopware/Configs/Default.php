@@ -265,6 +265,8 @@ return array_replace_recursive([
     ],
     'sitemap' => [
         'batchsize' => 10000,
+        'excluded_urls' => [],
+        'custom_urls' => [],
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,

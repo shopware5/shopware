@@ -100,6 +100,7 @@ EOF
             $plugin->getName(),
         ]));
 
+        $message = null;
         if ($plugin->getSource() === 'Default') {
             $message = "'Default' Plugins may not be deleted.";
         } elseif ($plugin->getInstalled() !== null) {
@@ -111,7 +112,7 @@ EOF
             Shopware()->Models()->flush();
         }
 
-        if (isset($message)) {
+        if ($message) {
             $output->writeln($message);
 
             return 1;

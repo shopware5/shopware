@@ -34,7 +34,7 @@ use Shopware\Components\Form\Interfaces\Element;
 class Container extends Base implements ContainerInterface
 {
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Components\Form\Interfaces\Element>
      */
     protected $elements;
 
@@ -73,7 +73,7 @@ class Container extends Base implements ContainerInterface
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $elements
+     * @param ArrayCollection<\Shopware\Components\Form\Interfaces\Element> $elements
      */
     public function setElements($elements)
     {
@@ -81,7 +81,7 @@ class Container extends Base implements ContainerInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Components\Form\Interfaces\Element>
      */
     public function getElements()
     {

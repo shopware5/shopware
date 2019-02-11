@@ -550,6 +550,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $params['changed'] = new \DateTime();
         $categoryModel->fromArray($params);
+        $categoryModel->setShops($this->Request()->getParam('shops'));
         Shopware()->Models()->flush();
 
         $categoryId = $categoryModel->getId();
@@ -867,20 +868,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         return $data;
-    }
-
-    /**
-     * Helper Method to get access to the media repository.
-     *
-     * @return \Shopware\Models\Media\Repository
-     */
-    private function getMediaRepository()
-    {
-        if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class);
-        }
-
-        return $this->mediaRepository;
     }
 
     /**

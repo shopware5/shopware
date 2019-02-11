@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.MultiRequestBu
      * Initialize the button
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = [ me.createButton() ];

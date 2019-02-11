@@ -62,13 +62,11 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
             collapsible: true,
             autoScroll: true,
             defaults:{
-                labelWidth:120,
                 minWidth:250,
                 anchor: '100%',
-                labelStyle:'font-weight: 700;',
                 xtype:'textfield'
             },
-            items: me.createGeneralForm()
+            items: me.createGeneralForm(),
         });
 
         me.contentFieldset = Ext.create('Ext.panel.Panel', {
@@ -125,8 +123,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
             fieldLabel:'{s name=detail/main/field/title}Title{/s}',
             allowBlank:false,
             required:true,
-            labelWidth:120,
-            name:'title'
+            name:'title',
+            translatable: true
         });
 
         return [
@@ -139,7 +137,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
                 valueField:'id',
                 editable:true,
                 displayField:'name',
-                pageSize: 10
+                pageSize: 10,
             },
             {
                 xtype:'checkbox',
@@ -147,8 +145,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
                 inputValue:1,
                 uncheckedValue:0,
                 name:'active',
-                boxLabel:'{s name=detail/main/field/active/help}Blog article will be shown in the storefront{/s}'
-
+                boxLabel:'{s name=detail/main/field/active/help}Blog article will be shown in the storefront{/s}',
+                translatable: true
             }
         ]
     },
@@ -163,14 +161,13 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
         return [
             {
                 xtype: 'textarea',
-                labelWidth:120,
                 minWidth:250,
                 height:40,
-                labelStyle:'font-weight: 700;',
                 fieldLabel:'{s name=detail/main/field/short_description}Short description{/s}',
                 allowBlank:false,
                 required:true,
-                name:'shortDescription'
+                name:'shortDescription',
+                translatable: true
             },
             {
                 xtype: 'container',
@@ -181,7 +178,9 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
             {
                 xtype: 'tinymce',
                 height: 370,
-                name: 'description'
+                name: 'description',
+                translatable: true,
+                translationLabel: '{s name=detail/main/field/description}{/s}'
             }
         ]
     }

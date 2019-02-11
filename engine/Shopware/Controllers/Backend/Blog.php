@@ -364,16 +364,39 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
 
     /**
      * Delete blog comments
+     *
+     * @deprecated since 5.5, will be removed with 5.7
      */
     public function acceptBlogCommentAction()
     {
         $multipleBlogComments = $this->Request()->getPost('blogComments');
-        $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->id]] : $multipleBlogComments;
+        $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->getParam('id')]] : $multipleBlogComments;
         try {
             foreach ($blogCommentRequestData as $blogComment) {
                 /** @var \Shopware\Models\Blog\Comment $model */
                 $model = $this->getBlogCommentRepository()->find($blogComment['id']);
                 $model->setActive(true);
+            }
+            $this->getManager()->flush();
+            $this->View()->assign(['success' => true, 'data' => $blogCommentRequestData]);
+        } catch (Exception $e) {
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Update blog comment(s)
+     */
+    public function updateBlogCommentAction()
+    {
+        $multipleBlogComments = $this->Request()->getPost('blogComments');
+        $blogCommentRequestData = empty($multipleBlogComments) ? [$this->Request()->getParams()] : $multipleBlogComments;
+
+        try {
+            foreach ($blogCommentRequestData as $blogComment) {
+                /** @var \Shopware\Models\Blog\Comment $model */
+                $model = $this->getBlogCommentRepository()->find($blogComment['id']);
+                $model->fromArray($blogComment);
             }
             $this->getManager()->flush();
             $this->View()->assign(['success' => true, 'data' => $blogCommentRequestData]);

@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
     {
         $this->getApiResource()->delete($id);
 
-        return true;
+        return ['success' => true];
     }
 
     public function save($data)

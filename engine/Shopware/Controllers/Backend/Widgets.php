@@ -379,7 +379,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $fetchLoggedInUsers = Shopware()->Container()->get('db')->fetchAll("
             SELECT s.userID,
             (SELECT SUM(quantity * price) AS amount FROM s_order_basket WHERE userID = s.userID GROUP BY sessionID ORDER BY id DESC LIMIT 1) AS amount,
-            (SELECT IF(ub.company,ub.company,CONCAT(ub.firstname,' ',ub.lastname)) FROM s_user_addresses AS ub INNER JOIN s_user AS u ON u.default_billing_address_id = ub.id WHERE u.id = s.userID) AS customer
+            (SELECT IF(ub.company<>'',ub.company,CONCAT(ub.firstname,' ',ub.lastname)) FROM s_user_addresses AS ub INNER JOIN s_user AS u ON u.default_billing_address_id = ub.id WHERE u.id = s.userID) AS customer
             FROM s_statistics_currentusers s
             WHERE userID != 0
             GROUP BY remoteaddr

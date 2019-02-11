@@ -261,7 +261,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
      */
     onCountrySelect: function(countryCombo, records) {
         var me = this,
-            countryStateCombo = me.down('combobox[name=state_id]'),
+            countryStateCombo = me.down('combobox[name=stateId]'),
             oldState = countryStateCombo.getValue(),
             store = countryStateCombo.store;
 

@@ -76,7 +76,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
         if (empty($shopsWithThemes)) {
             $output->writeln('No theme shops found');
 
-            return;
+            return null;
         }
 
         /** @var Compiler $compiler */
@@ -95,7 +95,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
         }
 
         if ($current) {
-            return;
+            return null;
         }
 
         /** @var CacheManager $cacheManager */

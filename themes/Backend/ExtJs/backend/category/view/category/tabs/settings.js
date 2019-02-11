@@ -428,7 +428,12 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                     {
                         boxLabel:me.snippets.defaultSettingsBlogLabel,
                         name:'blog',
-                        dataIndex:'blog'
+                        dataIndex:'blog',
+                        listeners: {
+                            change: function (element, value) {
+                                me.shopSelector.setDisabled(!value)
+                            }
+                        }
                     }
                 ]
             },
@@ -498,8 +503,34 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                     uncheckedValue:false
                 }, me.defaults),
                 items: me.getSettingsCheckboxes()
-            }
+            },
+            me.getShopSelector()
         ];
+    },
+
+    /**
+     * Returns the shop selector
+     *
+     * @return { Shopware.form.field.ShopGrid }
+     */
+    getShopSelector: function () {
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory');
+
+        this.on('recordloaded', function (record) {
+            this.shopSelector.setDisabled(!record.get('blog'));
+        });
+
+        return this.shopSelector = Ext.create('Shopware.form.field.ShopGrid', {
+            name: 'shops',
+            fieldLabel: '{s name=label_shop}Limit to shop(s){/s}',
+            helpText: '{s name=shop_helper}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',
+            editable: false,
+            allowSorting: false,
+            height: 130,
+            labelWidth: 155,
+            store: selectionFactory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop'),
+            searchStore: selectionFactory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop'),
+        });
     },
 
     /**

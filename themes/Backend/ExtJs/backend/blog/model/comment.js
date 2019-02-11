@@ -53,7 +53,8 @@ Ext.define('Shopware.apps.Blog.model.Comment', {
         { name : 'creationDate', type : 'date' },
         { name : 'active', type : 'boolean' },
         { name : 'points', type : 'float' },
-        { name : 'eMail', type : 'string' }
+        { name : 'eMail', type : 'string' },
+        { name : 'shopId', type : 'int', useNull: true },
     ],
     /**
     * If the name of the field is 'id' extjs assumes autmagical that
@@ -68,7 +69,7 @@ Ext.define('Shopware.apps.Blog.model.Comment', {
         type : 'ajax',
         api:{
             read:   '{url action=getBlogComments}',
-            update: '{url action="acceptBlogComment" targetField=blogComments}',
+            update: '{url action=updateBlogComment targetField=blogComments}',
             destroy:'{url action=deleteBlogComment targetField=blogComments}'
         },
         reader : {

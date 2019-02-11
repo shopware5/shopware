@@ -48,7 +48,7 @@ class OrderNumberValidatorTest extends TestCase
             ['somearray', 'somearray'],
             function () {},
             new \stdClass(),
-            new Constraints\Ordernumber(),
+            new Constraints\OrderNumber(),
         ];
 
         $catch = null;

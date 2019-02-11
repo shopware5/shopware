@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
 use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
@@ -33,12 +34,12 @@ use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
-use Shopware\Components\Routing\Router;
+use Shopware\Models\Article\Article as Product;
 
 class ProductUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
@@ -58,7 +59,7 @@ class ProductUrlProvider implements UrlProviderInterface
     private $storeFrontCriteriaFactory;
 
     /**
-     * @var Connection
+     * @var ConnectionInterface
      */
     private $connection;
 
@@ -68,17 +69,17 @@ class ProductUrlProvider implements UrlProviderInterface
     private $batchSize;
 
     /**
-     * @param Router                             $router
+     * @param Routing\RouterInterface            $router
      * @param ProductNumberSearchInterface       $productNumberSearch
      * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
-     * @param Connection                         $connection
+     * @param ConnectionInterface                $connection
      * @param int                                $batchSize
      */
     public function __construct(
-        Router $router,
+        Routing\RouterInterface $router,
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
-        Connection $connection,
+        ConnectionInterface $connection,
         $batchSize
     ) {
         $this->router = $router;
@@ -137,7 +138,7 @@ class ProductUrlProvider implements UrlProviderInterface
 
         $urls = [];
         for ($i = 0, $productCount = count($products); $i < $productCount; ++$i) {
-            $urls[] = new Url($routes[$i], new \DateTime($products[$i]['changetime']), 'weekly');
+            $urls[] = new Url($routes[$i], new \DateTime($products[$i]['changetime']), 'weekly', Product::class, $products[$i]['id']);
         }
 
         reset($products);

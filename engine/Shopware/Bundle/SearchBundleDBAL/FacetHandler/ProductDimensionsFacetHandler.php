@@ -75,7 +75,7 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
         ShopContextInterface $context
     ) {
         if ($criteria->hasAttribute('product_dimensions_handled')) {
-            return;
+            return null;
         }
 
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);

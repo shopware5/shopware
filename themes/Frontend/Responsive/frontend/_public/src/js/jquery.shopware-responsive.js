@@ -201,14 +201,14 @@
                 url: ajaxCartRefresh,
                 dataType: 'json',
                 success: function (cart) {
-                    if (!cart.amount || !cart.quantity) {
+                    if (!cart.amount || isNaN(cart.quantity)) {
                         return;
                     }
 
                     $cartAmount.html(cart.amount);
                     $cartQuantity.html(cart.quantity).removeClass('is--hidden');
 
-                    if (cart.quantity == 0) {
+                    if (cart.quantity === 0) {
                         $cartQuantity.addClass('is--hidden');
                     }
 

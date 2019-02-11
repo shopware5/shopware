@@ -46,7 +46,6 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' },
         { ref: 'noCache', selector: 'performance-tabs-settings-elements-no-cache' },
         { ref: 'checkGrid', selector: 'performance-tabs-settings-home grid' }
-
     ],
 
     snippets: {
@@ -65,14 +64,14 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
     currentItem: null,
 
     /**
-     * Init the controller, registert to some events
+     * Init the controller, register to some events
      */
     init: function () {
         var me = this;
 
         me.control({
             'performance-tabs-settings-main button[action=save-settings]': {
-                click: function(button, event) {
+                click: function() {
                     me.onSave();
                 }
             },
@@ -108,13 +107,11 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
      */
     injectConfig: function(config) {
         var me = this;
-        var store = config.getPerformanceCheck();
-        var grid = me.getCheckGrid();
 
         me.getSettings().panel.loadRecord(config);
-        grid.reconfigure(store);
 
         // reconfigure grids and inject the stores
+        me.getCheckGrid().reconfigure(config.getPerformanceCheck());
         me.getCacheTime().reconfigure(config.getHttpCache().first().getCacheControllers());
         me.getNoCache().reconfigure(config.getHttpCache().first().getNoCacheControllers());
 
@@ -149,8 +146,6 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         me.currentItem = itemName;
     },
 
-
-
     /**
      * Callback function called when the users clicks the 'save' button on the settings form
      */
@@ -166,18 +161,20 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
             });
             return false;
         }
+
         settings.getForm().updateRecord(configRecord);
 
-        //save the model and check in the callback function if the operation was successfully
+        // save the model and check in the callback function if the operation was successfully
         configRecord.save({
-            callback:function (data, operation) {
+            callback: function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
 
-                if ( operation.success === true ) {
+                if (operation.success === true) {
                     // Load the returned data
                     me.loadConfigStore();
+
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.successMessage, me.snippets.growlMessage);
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
@@ -186,21 +183,5 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         });
 
     },
-
-    deepCloneStore: function (source) {
-        var target = Ext.create ('Ext.data.Store', {
-            model: source.model
-        });
-
-        Ext.each (source.getRange (), function (record) {
-            var newRecordData = Ext.clone (record.copy().data);
-            var model = new source.model (newRecordData, newRecordData.id);
-
-            target.add (model);
-        });
-
-        return target;
-    }
-
 });
 //{/block}

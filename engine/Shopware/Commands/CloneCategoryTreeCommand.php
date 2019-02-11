@@ -87,13 +87,13 @@ class CloneCategoryTreeCommand extends ShopwareCommand
         $originalCategory = $this->getCategoryFromInput($input->getArgument('category'));
 
         if ($originalCategory === null) {
-            return;
+            return null;
         }
 
         if ((int) $originalCategory->getId() === 1) {
             $output->writeln('<error>Cannot duplicate root category</error>');
 
-            return;
+            return null;
         }
 
         $parent = $input->getArgument('target');
@@ -102,7 +102,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
         } else {
             $parent = $this->getCategoryFromInput($parent);
             if ($parent === null) {
-                return;
+                return null;
             }
         }
 
@@ -120,7 +120,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
         } catch (\RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
-            return;
+            return null;
         }
 
         $this->progressBar->finish();

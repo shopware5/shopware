@@ -55,17 +55,31 @@ class Url
     private $priority;
 
     /**
+     * @var string
+     */
+    private $resource;
+
+    /**
+     * @var int
+     */
+    private $identifier;
+
+    /**
      * @param string             $loc
      * @param \DateTimeInterface $lastmod
      * @param string             $changefreq
+     * @param string             $resource
+     * @param int                $identifier
      * @param float              $priority
      */
-    public function __construct($loc, $lastmod, $changefreq, $priority = 0.5)
+    public function __construct($loc, $lastmod, $changefreq, $resource, $identifier, $priority = 0.5)
     {
         $this->loc = $loc;
         $this->lastmod = $lastmod;
         $this->changefreq = $changefreq;
         $this->priority = $priority;
+        $this->resource = $resource;
+        $this->identifier = (int) $identifier;
     }
 
     /**
@@ -142,5 +156,37 @@ class Url
     public function setPriority($priority)
     {
         $this->priority = $priority;
+    }
+
+    /**
+     * @param string $resource
+     */
+    public function setResource($resource)
+    {
+        $this->resource = $resource;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * @param int $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }

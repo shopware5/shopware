@@ -42,7 +42,10 @@ class GenerateMigrationCommand extends ShopwareCommand
             ->setDescription('Generates a migration file for the core or for a specific plugin');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $pluginName = $input->getOption('plugin');
         $migrationName = $input->getArgument('migrationName');

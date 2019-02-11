@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+
 /**
  * @category  Shopware
  *
@@ -29,13 +31,21 @@
  */
 class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 {
+    /**
+     * @var Connection
+     */
+    private $connection;
+    private $userId;
+
     public function setUp()
     {
         parent::setUp();
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection->beginTransaction();
+
         Shopware()->Db()->exec('DELETE FROM s_statistics_visitors');
         Shopware()->Db()->exec('DELETE FROM s_order');
         Shopware()->Db()->exec('DELETE FROM s_user');
@@ -45,7 +55,10 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
     {
         parent::tearDown();
 
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
+
+        $this->connection->rollBack();
     }
 
     public function testConversionIsEmpty()
@@ -63,7 +76,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         $date = new DateTime();
         $date->sub(new DateInterval('P7DT1M'));
 
-        Shopware()->Container()->get('dbal_connection')
+        $this->connection
             ->insert('s_statistics_visitors', [
                 'shopID' => 1,
                 'datum' => $date->format('Y-m-d'),
@@ -72,7 +85,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
                 'deviceType' => 'desktop',
             ]);
 
-        Shopware()->Container()->get('dbal_connection')
+        $this->connection
             ->insert('s_order', [
                 'ordernumber' => 999,
                 'userID' => 97,
@@ -96,7 +109,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         $date = new DateTime();
         $date->sub(new DateInterval('P6DT59M'));
 
-        Shopware()->Container()->get('dbal_connection')
+        $this->connection
             ->insert('s_statistics_visitors', [
                 'shopID' => 1,
                 'datum' => $date->format('Y-m-d'),
@@ -105,7 +118,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
                 'deviceType' => 'desktop',
             ]);
 
-        Shopware()->Container()->get('dbal_connection')
+        $this->connection
             ->insert('s_order', [
                 'ordernumber' => 999,
                 'userID' => 97,
@@ -129,7 +142,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         $date = new DateTime();
         $date->sub(new DateInterval('P8D'));
 
-        Shopware()->Container()->get('dbal_connection')
+        $this->connection
             ->insert('s_statistics_visitors', [
                 'shopID' => 1,
                 'datum' => $date->format('Y-m-d'),
@@ -138,7 +151,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
                 'deviceType' => 'desktop',
             ]);
 
-        Shopware()->Container()->get('dbal_connection')
+        $this->connection
             ->insert('s_order', [
                 'ordernumber' => 999,
                 'userID' => 97,
@@ -155,5 +168,136 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->assertTrue($response['success']);
         $this->assertEquals('0.00', $response['conversion']);
+    }
+
+    /**
+     * test the getVisitorsAction
+     */
+    public function testGetVisitorsWithCompanyAction()
+    {
+        $addressData = [
+            'company' => 'TestCompany',
+            'salutation' => 'mr',
+            'firstname' => 'Peter',
+            'lastname' => 'Test',
+            'street' => 'Teststreet 1',
+            'country_id' => 2,
+        ];
+
+        $this->prepareTestGetVisitors($addressData);
+
+        $this->dispatch('backend/widgets/getVisitors?page=1&start=0&limit=25');
+
+        $response = $this->View()->getAssign();
+
+        //check if success
+        $this->assertArrayHasKey('success', $response);
+        //check if has data
+        $this->assertArrayHasKey('data', $response);
+        //check if data contains customers
+        $this->assertArrayHasKey('customers', $response['data']);
+
+        //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
+        $this->assertEquals($this->userId, $response['data']['customers'][0]['userID']);
+        $this->assertEquals($addressData['company'], $response['data']['customers'][0]['customer']);
+    }
+
+    public function testGetVisitorsWithoutCompanyAction()
+    {
+        $addressData = [
+            'salutation' => 'mr',
+            'firstname' => 'Peter',
+            'lastname' => 'Test',
+            'street' => 'Teststreet 1',
+            'country_id' => 2,
+        ];
+
+        $this->prepareTestGetVisitors($addressData);
+
+        $this->dispatch('backend/widgets/getVisitors?page=1&start=0&limit=25');
+
+        $response = $this->View()->getAssign();
+
+        //check if success
+        $this->assertArrayHasKey('success', $response);
+        //check if has data
+        $this->assertArrayHasKey('data', $response);
+        //check if data contains customers
+        $this->assertArrayHasKey('customers', $response['data']);
+
+        //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
+        $this->assertEquals($this->userId, $response['data']['customers'][0]['userID']);
+        $this->assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'],
+            $response['data']['customers'][0]['customer']);
+    }
+
+    public function testGetVisitorsWithEmptyCompanyAction()
+    {
+        $addressData = [
+            'company' => '',
+            'salutation' => 'mr',
+            'firstname' => 'Peter',
+            'lastname' => 'Test',
+            'street' => 'Teststreet 1',
+            'country_id' => 2,
+        ];
+
+        $this->prepareTestGetVisitors($addressData);
+
+        $this->dispatch('backend/widgets/getVisitors?page=1&start=0&limit=25');
+
+        $response = $this->View()->getAssign();
+
+        //check if success
+        $this->assertArrayHasKey('success', $response);
+        //check if has data
+        $this->assertArrayHasKey('data', $response);
+        //check if data contains customers
+        $this->assertArrayHasKey('customers', $response['data']);
+
+        //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
+        $this->assertEquals($this->userId, $response['data']['customers'][0]['userID']);
+        $this->assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'], $response['data']['customers'][0]['customer']);
+    }
+
+    private function prepareTestGetVisitors($addressData)
+    {
+        $this->connection->insert('s_user', [
+            'password' => '098f6bcd4621d373cade4e832627b4f6',
+            'encoder' => 'md5',
+            'email' => uniqid('test', true) . '@test.com',
+            'accountmode' => 1,
+            'active' => '1',
+            'firstlogin' => '1990-01-01',
+            'lastlogin' => '1990-01-01',
+            'subshopID' => '1',
+            'customergroup' => 'EK',
+            'salutation' => 'mr',
+            'firstname' => '',
+            'lastname' => '',
+            'birthday' => '1990-01-01',
+        ]);
+
+        $this->userId = $this->connection->lastInsertId('s_user');
+
+        $addressData = array_merge(['user_id' => $this->userId], $addressData);
+        $this->connection->insert('s_user_addresses', $addressData);
+
+        $addressId = $this->connection->lastInsertId('s_user_addresses');
+
+        /*
+         * set default_billing_address_id
+         */
+        $this->connection->update('s_user', [
+            'default_billing_address_id' => $addressId,
+        ], ['id' => $this->userId]);
+
+        $this->connection->insert('s_statistics_currentusers', [
+            'remoteaddr' => '127.0.0.1',
+            'page' => '/',
+            'time' => new Zend_Db_Expr('NOW()'),
+            'userID' => $this->userId,
+            'deviceType' => 'Test',
+        ]);
     }
 }

@@ -66,10 +66,14 @@ class PluginInitializer
         $shopwarePlugins = [];
         $pluginsAvailable = [];
 
+        // @todo: Replace me in Shopware 5.6
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
 
-        $stmt = $this->connection->query('SELECT name, version, namespace FROM s_core_plugins WHERE active = 1 AND installation_date IS NOT NULL;');
+        // Clearing the deprecation notice in the error stack from the deprecated classloader above
+        error_clear_last();
+
+        $stmt = $this->connection->query('SELECT `name`, `version`, `namespace` FROM s_core_plugins WHERE `active` = 1 AND `installation_date` IS NOT NULL;');
         $this->activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
 
         foreach ($this->activePlugins as $pluginName => &$pluginData) {

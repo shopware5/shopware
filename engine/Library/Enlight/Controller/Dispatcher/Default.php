@@ -85,20 +85,15 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     protected $frontController;
 
     /**
-     * @var string contains the path delimiter character used to format action, controller and module names
-     */
-    protected $pathDelimiter = '_';
-
-    /**
-     * @var array contains the word delimiter characters used to format action, controller and module names
-     */
-    protected $wordDelimiter = ['-', '.'];
-
-    /**
      * @var array Contains all added controller directories. Used to get the controller
      *            directory of a module
      */
     protected $controllerDirectory = [];
+
+    /**
+     * @var \Shopware\Components\DispatchFormatHelper
+     */
+    protected $dispatchFormatHelper;
 
     /**
      * @var array
@@ -115,6 +110,18 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $this->controllers = $controllers;
         $this->container = $container;
         parent::__construct();
+    }
+
+    /**
+     * @return \Shopware\Components\DispatchFormatHelper
+     */
+    public function getDispatchFormatHelper()
+    {
+        if ($this->dispatchFormatHelper === null) {
+            $this->dispatchFormatHelper = Shopware()->Container()->get('shopware.components.dispatch_format_helper');
+        }
+
+        return $this->dispatchFormatHelper;
     }
 
     /**
@@ -248,7 +255,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function formatControllerName($unFormatted)
     {
-        return str_replace('_', '', $this->formatName($unFormatted));
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
+
+        return str_replace('_', '', $dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
@@ -260,7 +269,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function formatActionName($unFormatted)
     {
-        return str_replace('_', '', $this->formatName($unFormatted));
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
+
+        return str_replace('_', '', $dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
@@ -272,7 +283,9 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function formatModuleName($unFormatted)
     {
-        return ucfirst($this->formatName($unFormatted));
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
+
+        return ucfirst($dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
@@ -594,31 +607,5 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $content = ob_get_clean();
             $response->appendBody($content);
         }
-    }
-
-    /**
-     * Internal helper function to format action, controller and module names.
-     *
-     * @param      $unFormatted
-     * @param bool $isAction
-     *
-     * @return string
-     */
-    protected function formatName($unFormatted, $isAction = false)
-    {
-        if (!$isAction) {
-            $segments = explode($this->pathDelimiter, $unFormatted);
-        } else {
-            $segments = (array) $unFormatted;
-        }
-
-        foreach ($segments as $key => $segment) {
-            $segment = preg_replace('#[A-Z]#', ' $0', $segment);
-            $segment = str_replace($this->wordDelimiter, ' ', strtolower($segment));
-            $segment = preg_replace('/[^a-z0-9 ]/', '', $segment);
-            $segments[$key] = str_replace(' ', '', ucwords($segment));
-        }
-
-        return implode('_', $segments);
     }
 }

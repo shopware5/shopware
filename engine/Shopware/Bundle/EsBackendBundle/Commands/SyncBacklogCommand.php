@@ -61,7 +61,7 @@ class SyncBacklogCommand extends ShopwareCommand
         if (empty($backlogs)) {
             $output->writeln('Backlog empty');
 
-            return;
+            return null;
         }
 
         $registry = $this->container->get('shopware_attribute.repository_registry');
