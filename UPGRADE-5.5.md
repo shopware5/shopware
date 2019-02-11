@@ -6,7 +6,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 [View all changes from v5.5.6...v5.5.7](https://github.com/shopware/shopware/compare/v5.5.6...v5.5.7)
 
-
 ### Additions
 
 * Added license synchronization button in Plugin Manager
@@ -31,13 +30,13 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Deprecations
 
-* The following classes have been deprecated:
+* Deprecated the global `$Shopware` variable in templates. It will be removed in 5.6 without replacement.
+* Deprecated the following classes:
     * `\Shopware\Components\Plugin\XmlMenuReader`
     * `\Shopware\Components\Plugin\XmlCronjobReader`
     * `\Shopware\Components\Plugin\XmlPluginInfoReader`
     * `\Shopware\Components\Plugin\XmlConfigDefinitionReader`
-    
-    They will be replaced in Shopware 5.6 with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
+    They have been replaced in Shopware 5.6 with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
 
 ### Excluding URLs from sitemap and adding custom URLs
 
