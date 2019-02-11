@@ -1,47 +1,47 @@
 {
-  "name": "shopwareresponsivetheme",
-  "version": "1.0.0",
-  "description": "The default responsive theme for Shopware",
-  "main": "karma.conf.js",
-  "private": true,
-  "directories": {
-    "test": "tests"
-  },
-  "scripts": {
-    "build": "grunt",
-    "test": "karma start karma.conf.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shopware/shopware.git"
-  },
-  "keywords": [
-    "shopware",
-    "theme",
-    "responsive",
-    "default",
-    "ecommcerce"
-  ],
-  "author": "shopware AG",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://issues.shopware.com"
-  },
-  "homepage": "https://github.com/shopware/shopware#readme",
-  "dependencies": {
-    "flatpickr": "2.4.7",
-    "jquery": "^3.3.1",
-    "jquery.event.move": "git+https://github.com/stephband/jquery.event.move.git",
-    "jquery.event.swipe": "^0.5.4",
-    "jquery.transit": "^0.9.12",
-    "normalize.css.less": "^3.0.3",
-    "open-sans-fontface": "git+https://github.com/FontFaceKit/open-sans.git#gh-pages",
-    "picturefill": "^3.0.1",
-    "pocketgrid-less": "^1.0.1"
-  },
-  "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-copy": "^1.0.0"
-  }
+    "name": "shopwareresponsivetheme",
+    "version": "1.0.0",
+    "description": "The default responsive theme for Shopware",
+    "main": "karma.conf.js",
+    "private": true,
+    "directories": {
+        "test": "tests"
+    },
+    "scripts": {
+        "build": "grunt",
+        "test": "karma start karma.conf.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shopware/shopware.git"
+    },
+    "keywords": [
+        "shopware",
+        "theme",
+        "responsive",
+        "default",
+        "ecommcerce"
+    ],
+    "author": "shopware AG",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://issues.shopware.com"
+    },
+    "homepage": "https://github.com/shopware/shopware#readme",
+    "dependencies": {
+        "flatpickr": "2.4.7",
+        "jquery": "3.3.1",
+        "jquery.event.move": "git+https://github.com/stephband/jquery.event.move.git",
+        "jquery.event.swipe": "0.5.4",
+        "jquery.transit": "0.9.12",
+        "normalize.css.less": "3.0.3",
+        "open-sans-fontface": "git+https://github.com/FontFaceKit/open-sans.git#gh-pages",
+        "picturefill": "3.0.2",
+        "pocketgrid-less": "1.0.1"
+    },
+    "devDependencies": {
+        "grunt": "1.0.3",
+        "grunt-contrib-clean": "1.1.0",
+        "grunt-contrib-copy": "1.0.0"
+    }
 }
