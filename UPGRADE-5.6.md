@@ -43,18 +43,18 @@ This changelog references changes done in Shopware 5.6 patch versions.
         * Phone numbers
         * .raw fields
         * and some more
-
 * Changed the manufacturer image to appropriate thumbnails
 * Changed `Shopware\Components\Plugin\CachedConfigReader` to cache into `Zend_Cache_Core`
 * Changed `plugin.xsd` to make pluginName in `requiredPlugins` required
 * Changed `Shopware\Components\DependencyInjection\Container` to trigger InitResource and AfterInitResource events for alias services, introduced by decorations
 * Changed the `Regex`-Constraint on `\Shopware\Models\Article\Detail::$number` to a new `OrderNumber`-Constraint to be more configurable
+* Changed interface `Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface` to contain new method `joinVariants(QueryBuilder $query)` which was already a necessary part of the default implementation
 
 ### Removals
 
 * Removed `s_articles_attributes`.`articleID` which was not set for new article variants anymore since Shopware 5.2.0
-* Removed `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory.php`
-* Removed `Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer.php
+* Removed `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory`
+* Removed `Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer`
 * Removed following classes, use `Shopware\Components\Plugin\XmlReader\*` instead
     * `Shopware\Components\Plugin\XmlPluginInfoReader`
     * `Shopware\Components\Plugin\XmlConfigDefinitionReader`
@@ -72,9 +72,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 Controllers can be now registered using the DI tag `shopware.controller`. This DI tag needs attributes `module` and `controller`. These controllers are also lazy-loaded and should extend from `Shopware\Components\Controller`.
 
-Example:
+#### Example:
 
-DI:
+##### DI:
 
 ```xml
 <service id="swag_example.controller.frontend.test" class="SwagExample\Controller\Frontend\Test">
@@ -83,7 +83,7 @@ DI:
 </service>
 ```
 
-Controller:
+##### Controller:
 
 ```php
 <?php
