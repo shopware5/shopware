@@ -67,7 +67,6 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
 
         $shop = Shopware()->Shop();
         $view->Controller = $args->getSubject()->Request()->getControllerName();
-        $view->Shopware = Shopware();
 
         $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
         $view->sBasketAmount = $view->sBasketAmount ?: 0;

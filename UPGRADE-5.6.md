@@ -55,6 +55,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed `s_articles_attributes`.`articleID` which was not set for new article variants anymore since Shopware 5.2.0
 * Removed `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory`
 * Removed `Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer`
+* Removed global `$Shopware` template variable
 * Removed following classes, use `Shopware\Components\Plugin\XmlReader\*` instead
     * `Shopware\Components\Plugin\XmlPluginInfoReader`
     * `Shopware\Components\Plugin\XmlConfigDefinitionReader`
