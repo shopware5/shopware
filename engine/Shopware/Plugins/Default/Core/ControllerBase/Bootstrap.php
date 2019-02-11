@@ -67,6 +67,12 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
 
         $shop = Shopware()->Shop();
         $view->Controller = $args->getSubject()->Request()->getControllerName();
+
+        /*
+         * @deprecated
+         *
+         * This assignment is deprecated and will be removed in Shopware 5.6 without replacement
+         */
         $view->Shopware = Shopware();
 
         $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
