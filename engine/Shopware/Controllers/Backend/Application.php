@@ -60,7 +60,7 @@ use Shopware\Components\Model\QueryBuilder;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Backend_ExtJs
 {
     /**
      * Contains the repository class of the configured

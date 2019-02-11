@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     `Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer::supports`
 * Added configuration to define the format of a valid order number 
 * Added service `\Doctrine\Common\Annotations\Reader` as `models.annotations_reader`
+* Added `shopware.controller.blacklisted_controllers` parameter to the DI container to blacklist controllers for dispatching
 
 ### Changes
 
