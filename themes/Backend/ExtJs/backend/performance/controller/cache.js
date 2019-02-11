@@ -82,15 +82,15 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
 
         me.control({
             'performance-tabs-cache-main button[action=clear]': {
-                click: function(button, event) {
+                click: function() {
                     me.getForm().submit({
-                        success: function(form, action) {
+                        success: function(form) {
                             var themeCacheCleared = form.getFields().findBy(function(record) {
-                                return (record.name !== undefined && record.name == 'cache[theme]' && record.checked == true);
+                                return (record.name !== undefined && record.name === 'cache[theme]' && record.checked == true);
                             });
 
                             me.getStore('Info').load({
-                                callback: function(records, operation) {
+                                callback: function() {
                                     if (themeCacheCleared) {
                                         Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
                                     }
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
             },
 
             'performance-tabs-cache-main button[action=select-all]': {
-                click: function(button, event) {
+                click: function() {
                     me.getForm().getForm().getFields().each(function(item) {
                         item.setValue(true);
                     });

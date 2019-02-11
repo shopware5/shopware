@@ -152,6 +152,11 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     private $attributes = [];
 
     /**
+     * @var \Shopware\Components\DispatchFormatHelper
+     */
+    private $nameFormatter;
+
+    /**
      * Constructor
      *
      * If a $uri is passed, the object will attempt to populate itself using
@@ -200,6 +205,18 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function __isset($key)
     {
         return $this->has($key);
+    }
+
+    /**
+     * @return \Shopware\Components\DispatchFormatHelper
+     */
+    public function getNameFormatter()
+    {
+        if ($this->nameFormatter === null) {
+            $this->nameFormatter = Shopware()->Container()->get('shopware.components.dispatch_format_helper');
+        }
+
+        return $this->nameFormatter;
     }
 
     /**
@@ -287,7 +304,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         if ($this->_module === null) {
             $module = $this->getParam($this->getModuleKey());
             if ($module) {
-                $this->_module = strtolower($this->formatName($module));
+                $this->_module = strtolower($this->getNameFormatter()->formatNameForRequest($module));
             }
         }
 
@@ -320,7 +337,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function getControllerName()
     {
         if ($this->_controller === null) {
-            $this->_controller = $this->formatName($this->getParam($this->getControllerKey()), true);
+            $this->_controller = $this->getNameFormatter()->formatNameForRequest($this->getParam($this->getControllerKey()), true);
         }
 
         return $this->_controller;
@@ -342,7 +359,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function getActionName()
     {
         if ($this->_action === null) {
-            $this->_action = $this->formatName($this->getParam($this->getActionKey()));
+            $this->_action = $this->getNameFormatter()->formatNameForRequest($this->getParam($this->getActionKey()));
         }
 
         return $this->_action;
@@ -549,7 +566,9 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             unset($_GET[$spec]);
 
             return $this;
-        } elseif (is_array($spec) && empty($spec)) {
+        }
+
+        if (is_array($spec) && empty($spec)) {
             $_GET = [];
 
             return $this;
@@ -600,7 +619,9 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             unset($_POST[$spec]);
 
             return $this;
-        } elseif (is_array($spec) && empty($spec)) {
+        }
+
+        if (is_array($spec) && empty($spec)) {
             $_POST = [];
 
             return $this;
@@ -1166,24 +1187,5 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function getClientIp()
     {
         return $this->getServer('REMOTE_ADDR');
-    }
-
-    /**
-     * Internal helper function to format action, controller and module names.
-     *
-     * @param string $unFormatted
-     * @param bool   $isController
-     *
-     * @return string
-     */
-    protected function formatName($unFormatted, $isController = false)
-    {
-        $allowedCharacters = 'a-zA-Z0-9_';
-
-        if ($isController) {
-            $allowedCharacters .= '\.';
-        }
-
-        return preg_replace('#[^' . $allowedCharacters . ']+#', '', $unFormatted);
     }
 }

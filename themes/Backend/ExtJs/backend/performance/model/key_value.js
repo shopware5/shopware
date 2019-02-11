@@ -37,17 +37,17 @@ Ext.define('Shopware.apps.Performance.model.KeyValue', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/key_value/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'key', type:'string' },
-        { name:'value', type:'string' }
+        { name: 'id', type: 'int' },
+        { name: 'key', type: 'string' },
+        { name: 'value', type: 'string' }
     ]
 
 });

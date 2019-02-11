@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
     snippets: {
         successTitle: '{s name=message/save/success_title}Successful{/s}',
         failureTitle: '{s name=message/save/error_title}Error{/s}',
+        customerDoesNotExistAnymore: '{s name=customer_does_not_exist_anymore}{/s}',
         overwriteOrder: {
             title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
             message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
@@ -274,6 +275,11 @@ Ext.define('Shopware.apps.Order.controller.List', {
      * @param [Ext.data.Model] record - The row record
      */
     onOpenCustomer: function(record) {
+        if (!record.getCustomer().first()) {
+            Shopware.Notification.createGrowlMessage(this.snippets.failureTitle, this.snippets.customerDoesNotExistAnymore);
+            return;
+        }
+
         Shopware.app.Application.addSubApplication({
             name: 'Shopware.apps.Customer',
             action: 'detail',

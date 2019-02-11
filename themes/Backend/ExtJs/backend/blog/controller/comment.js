@@ -164,9 +164,10 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
                             } else {
                                 Shopware.Notification.createGrowlMessage('',me.snippets.deleteSingleBlogCommentError + rawData.errorMsg, me.snippets.growlMessage);
                             }
+
+                            store.load();
                         }
                     });
-                    store.load();
                 });
 
     },
@@ -224,7 +225,7 @@ Ext.define('Shopware.apps.Blog.controller.Comment', {
 
         var model = Ext.create('Shopware.apps.Blog.model.Comment', record.data);
         //Set active to true, so the comment will be accepted
-        model['active'] = true;
+        model.set('active', true)
         model.save({
             callback: function(data, operation){
                 var records = operation.getRecords(),

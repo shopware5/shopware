@@ -112,7 +112,7 @@ class MediaSubscriber implements EventSubscriber
                     ) {
                         $attr = $xml->attributes();
 
-                        if ($attr->width > 0 && $attr->height > 0) {
+                        if ((int) $attr->width > 0 && (int) $attr->height > 0) {
                             $width = (int) $attr->width;
                             $height = (int) $attr->height;
                         } elseif ($attr->viewBox && count($size = explode(' ', $attr->viewBox)) === 4) {

@@ -168,7 +168,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     /**
      * Returns shipment amount as float
      *
-     * @return float
+     * @return string
      */
     public function getShipment()
     {

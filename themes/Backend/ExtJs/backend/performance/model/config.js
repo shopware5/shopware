@@ -34,71 +34,59 @@
 Ext.define('Shopware.apps.Performance.model.Config', {
 
     /**
-     * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
-     * Contains the model fields
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/performance/model/config/fields"}{/block}
-        { name:'id', type:'int' }
+        { name: 'id', type: 'int' }
     ],
 
-
     /**
-     * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
-         * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
-         * Configure the url mapping for the different
-         * store operations based on
          * @object
          */
-        api:{
-            update:'{url action="saveConfig"}',
-            create:'{url action="saveConfig"}'
+        api: {
+            update: '{url action="saveConfig"}',
+            create: '{url action="saveConfig"}'
         },
 
         /**
-         * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
-
     },
 
     /**
-     * Define the associations of the customer model.
-     * One customer has a billing, shipping address and a debit information.
      * @array
      */
-    associations:[
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Check', name:'getPerformanceCheck', associationKey:'check' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.HttpCache', name:'getHttpCache', associationKey:'httpCache' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.TopSeller', name:'getTopSeller', associationKey:'topSeller' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Seo', name:'getSeo', associationKey:'seo' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Search', name:'getSearch', associationKey:'search' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Categories', name:'getCategories', associationKey:'categories' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Filter', name:'getFilter', associationKey:'filters' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Various', name:'getVarious', associationKey:'various' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Customer', name:'getCustomer', associationKey:'customer' },
-        { type:'hasMany', model:'Shopware.apps.Performance.model.Sitemap', name:'getSitemap', associationKey:'sitemap' },
-    ]
-
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Check', name: 'getPerformanceCheck', associationKey: 'check' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.HttpCache', name: 'getHttpCache', associationKey: 'httpCache' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.TopSeller', name: 'getTopSeller', associationKey: 'topSeller' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Seo', name: 'getSeo', associationKey: 'seo' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Search', name: 'getSearch', associationKey: 'search' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Categories', name: 'getCategories', associationKey: 'categories' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Filter', name: 'getFilter', associationKey: 'filters' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Various', name: 'getVarious', associationKey: 'various' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Customer', name: 'getCustomer', associationKey: 'customer' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.Sitemap', name: 'getSitemap', associationKey: 'sitemap' },
+    ],
 });
 //{/block}

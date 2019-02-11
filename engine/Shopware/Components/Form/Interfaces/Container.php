@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Form\Interfaces;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Interface Container
  */
@@ -32,14 +34,14 @@ interface Container
     /**
      * Overrides all elements of this container
      *
-     * @param Element[] $elements
+     * @param ArrayCollection<\Shopware\Components\Form\Interfaces\Element> $elements
      */
     public function setElements($elements);
 
     /**
      * Returns all elements of this container.
      *
-     * @return Element[]
+     * @return ArrayCollection<\Shopware\Components\Form\Interfaces\Element>
      */
     public function getElements();
 

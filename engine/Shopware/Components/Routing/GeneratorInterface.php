@@ -35,7 +35,7 @@ interface GeneratorInterface
      * @param array   $params
      * @param Context $context
      *
-     * @return array|string
+     * @return array|string|false
      */
     public function generate(array $params, Context $context);
 }

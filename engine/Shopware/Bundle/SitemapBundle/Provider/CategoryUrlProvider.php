@@ -25,39 +25,12 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use Shopware\Bundle\SitemapBundle\Struct\Url;
-use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing;
 use Shopware\Models\Category\Category;
 
-class CategoryUrlProvider implements UrlProviderInterface
+class CategoryUrlProvider extends BaseUrlProvider
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    /**
-     * @var Routing\Router
-     */
-    private $router;
-
-    /**
-     * @var bool
-     */
-    private $allExported = false;
-
-    /**
-     * @param ModelManager   $modelManager
-     * @param Routing\Router $router
-     */
-    public function __construct(ModelManager $modelManager, Routing\Router $router)
-    {
-        $this->modelManager = $modelManager;
-        $this->router = $router;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -74,6 +47,7 @@ class CategoryUrlProvider implements UrlProviderInterface
         foreach ($categories as $key => &$category) {
             if (!empty($category['external'])) {
                 unset($categories[$key]);
+                continue;
             }
 
             $category['urlParams'] = [
@@ -95,19 +69,11 @@ class CategoryUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $categories[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $categories[$i]['changed'], 'weekly', Category::class, $categories[$i]['id']);
         }
 
         $this->allExported = true;
 
         return $urls;
-    }
-
-    /**
-     * Resets the provider for next sitemap generation
-     */
-    public function reset()
-    {
-        $this->allExported = false;
     }
 }

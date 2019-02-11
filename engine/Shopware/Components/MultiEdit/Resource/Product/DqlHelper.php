@@ -40,7 +40,7 @@ use Shopware\Models\Attribute\Article as ProductAttribute;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Property\Group;
 use Shopware\Models\Property\Option;
-use Shopware\Models\Property\Value;
+use Shopware\Models\Property\Value as PropertyValue;
 use Shopware\Models\Tax\Tax;
 
 /**
@@ -93,7 +93,7 @@ class DqlHelper
         [ConfiguratorOption::class, 'configuratorOption'],
         [Group::class, 'propertySet'],
         [Option::class, 'propertyGroup'],
-        [Value::class, 'propertyOption'],
+        [PropertyValue::class, 'propertyOption'],
         [Price::class, 'price'],
         [Vote::class, 'vote'],
         [Image::class, 'image'],

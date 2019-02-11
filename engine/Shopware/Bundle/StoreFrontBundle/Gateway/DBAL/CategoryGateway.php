@@ -150,8 +150,10 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'stream.id = productStreamAttribute.streamId')
             ->where('category.id IN (:categories)')
             ->andWhere('category.active = 1')
+            ->andWhere('category.shops IS NULL OR category.shops LIKE :shopId')
             ->addGroupBy('category.id')
-            ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':shopId', '%|' . $context->getShop()->getId() . '|%');
 
         $this->fieldHelper->addCategoryTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);
