@@ -127,8 +127,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $convertedProducts = $this->container->get('legacy_struct_converter')->convertListProductStructList($products);
 
-        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
+        /*
+         * @Deprecated
+         * The assignment of all request parameters to the view below is deprecated
+         * and about to be removed in 5.6
+         */
         $this->View()->assign($this->Request()->getParams());
+        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
     }
 
     public function streamAction()
@@ -156,9 +161,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $convertedProducts = $this->container->get('legacy_struct_converter')
             ->convertListProductStructList($products->getProducts());
-
-        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
+        /*
+         * @Deprecated
+         * The assignment of all request parameters to the view below is deprecated
+         * and about to be removed in 5.6
+         */
         $this->View()->assign($this->Request()->getParams());
+        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
     }
 
     /**
