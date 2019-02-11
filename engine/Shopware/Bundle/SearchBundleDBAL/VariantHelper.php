@@ -150,7 +150,7 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param QueryBuilder $query
+     * {@inheritdoc}
      */
     public function joinVariants(QueryBuilder $query)
     {

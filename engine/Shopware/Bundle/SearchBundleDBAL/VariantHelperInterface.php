@@ -50,4 +50,9 @@ interface VariantHelperInterface
      * @param Criteria             $criteria
      */
     public function joinPrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria);
+
+    /**
+     * @param QueryBuilder $query
+     */
+    public function joinVariants(QueryBuilder $query);
 }
