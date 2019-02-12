@@ -518,7 +518,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $invoiceShippingNetChanged = (bool) ($invoiceShippingNetBefore != $order->getInvoiceShippingNet());
         if ($invoiceShippingChanged || $invoiceShippingNetChanged) {
             // Recalculate the new invoice amount
-            $order->calculateInvoiceAmount();
+            /** @var \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface $calculationService */
+            $calculationService = $this->container->get('shopware_bundle_order.service.calculation_service');
+            $calculationService->recalculateOrderTotals($order);
         }
 
         Shopware()->Models()->flush();
@@ -787,7 +789,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         // After each model has been removed to executes the doctrine flush.
         Shopware()->Models()->flush();
 
-        $order->calculateInvoiceAmount();
+        /** @var \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface $calculationService */
+        $calculationService = $this->container->get('shopware_bundle_order.service.calculation_service');
+        $calculationService->recalculateOrderTotals($order);
+
         Shopware()->Models()->flush();
 
         $data = $this->getOrder($order->getId());
