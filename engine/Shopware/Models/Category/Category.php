@@ -438,7 +438,7 @@ class Category extends ModelEntity
     /**
      * Get parents category id
      *
-     * @return Category
+     * @return Category|null
      */
     public function getParent()
     {

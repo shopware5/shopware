@@ -196,7 +196,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPosition()
     {

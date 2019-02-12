@@ -98,7 +98,7 @@ class PluginStoreService
     /**
      * @param PluginsByTechnicalNameRequest $context
      *
-     * @return PluginStruct
+     * @return PluginStruct|null
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
     {

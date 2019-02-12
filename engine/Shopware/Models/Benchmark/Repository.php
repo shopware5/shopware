@@ -35,7 +35,7 @@ class Repository extends EntityRepository
     /**
      * @param int $shopId
      *
-     * @return BenchmarkConfig
+     * @return BenchmarkConfig|null
      */
     public function getConfigForShop($shopId)
     {

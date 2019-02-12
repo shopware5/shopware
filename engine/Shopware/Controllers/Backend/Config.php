@@ -903,7 +903,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     /**
      * @param string $name
      *
-     * @return string
+     * @return string|null
      */
     protected function getTable($name)
     {

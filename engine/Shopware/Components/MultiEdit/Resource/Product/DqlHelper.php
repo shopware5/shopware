@@ -664,14 +664,8 @@ class DqlHelper
     {
         $params = [];
         $newTokens = [];
-        $skipNext = false;
 
         foreach ($tokens as $key => $token) {
-            if ($skipNext) {
-                $skipNext = false;
-                continue;
-            }
-
             // Allow anyone to subscribe to any token and replace it with his own logic
             // Also allows you to add own tokens
             if ($event = $this->getEventManager()->notifyUntil(

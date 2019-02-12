@@ -176,7 +176,7 @@ class Emotion extends Extendable
     protected $categories = [];
 
     /**
-     * @var EmotionTemplate
+     * @var EmotionTemplate|null
      */
     protected $template;
 
@@ -607,7 +607,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return EmotionTemplate
+     * @return EmotionTemplate|null
      */
     public function getTemplate()
     {

@@ -73,7 +73,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function toggleProductiveModeAction()
     {
-        /** @var Plugin $httpCache */
+        /** @var Plugin|null $httpCache */
         $httpCache = $this->getPluginByName('HttpCache');
 
         if (!$httpCache) {
@@ -364,7 +364,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return $defaultValue;
         }
 
-        /** @var \Shopware\Models\Config\Element $element */
+        /** @var \Shopware\Models\Config\Element|null $element */
         $element = $elementRepository->findOneBy(['name' => $config, 'form' => $form]);
 
         if (!$element) {

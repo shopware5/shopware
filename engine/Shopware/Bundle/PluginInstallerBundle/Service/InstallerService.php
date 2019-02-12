@@ -131,7 +131,7 @@ class InstallerService
      */
     public function getPluginByName($pluginName)
     {
-        /** @var Plugin $plugin */
+        /** @var Plugin|null $plugin */
         $plugin = $this->pluginRepository->findOneBy([
             'name' => $pluginName,
             'capabilityEnable' => 1,

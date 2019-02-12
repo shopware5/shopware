@@ -54,7 +54,7 @@ class DatabaseHandler
     protected $db;
 
     /**
-     * @var OutputInterface optional output used in CLI
+     * @var OutputInterface|null optional output used in CLI
      */
     protected $output;
 
@@ -216,8 +216,8 @@ class DatabaseHandler
      * Loads all snippets from all files in $snippetsDir
      * (including subfolders) and removes them from the database.
      *
-     * @param null $snippetsDir
-     * @param bool $removeDirty
+     * @param string|null $snippetsDir
+     * @param bool        $removeDirty
      */
     public function removeFromDatabase($snippetsDir = null, $removeDirty = false)
     {
@@ -226,7 +226,7 @@ class DatabaseHandler
             return;
         }
 
-        $localeRepository = $this->em->getRepository('Shopware\Models\Shop\Locale');
+        $localeRepository = $this->em->getRepository(\Shopware\Models\Shop\Locale::class);
 
         $inputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,

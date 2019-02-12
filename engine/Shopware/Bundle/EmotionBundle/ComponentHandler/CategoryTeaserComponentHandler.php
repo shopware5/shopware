@@ -166,7 +166,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
                 $products = $collection->getBatchResult()->get($key);
                 shuffle($products);
 
-                /** @var ListProduct $product */
+                /** @var ListProduct|null $product */
                 $product = reset($products);
 
                 if (!$product || !$product->getCover()) {
@@ -201,7 +201,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
      * @param int                  $categoryId
      * @param ShopContextInterface $context
      *
-     * @return Blog
+     * @return Blog|null
      */
     private function getRandomBlog($categoryId, ShopContextInterface $context)
     {

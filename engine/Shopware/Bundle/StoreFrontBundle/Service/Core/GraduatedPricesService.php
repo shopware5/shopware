@@ -162,7 +162,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 
         $firstDiscount = $discounts[0];
 
-        /** @var Struct\Product\PriceRule $previous */
+        /** @var Struct\Product\PriceRule|null $previous */
         $previous = null;
         if ($firstDiscount->getQuantity() > 1) {
             $firstGraduation = clone $reference;

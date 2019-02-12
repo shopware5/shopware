@@ -774,9 +774,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Helper method to prepare the customer for saving
      *
-     * @param array                                 $params
-     * @param Shopware\Models\Customer\Customer     $customer
-     * @param \Shopware\Models\Customer\PaymentData $paymentData
+     * @param array                                      $params
+     * @param Shopware\Models\Customer\Customer          $customer
+     * @param \Shopware\Models\Customer\PaymentData|null $paymentData
      *
      * @return array
      */
@@ -812,7 +812,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['shipping'][0] = $params['billing'][0];
         }
 
-        if (!empty($params['paymentData']) && $paymentData) {
+        if ($paymentData && !empty($params['paymentData'])) {
             $paymentData->fromArray(array_shift($params['paymentData']));
         }
 

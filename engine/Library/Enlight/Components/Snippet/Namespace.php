@@ -46,7 +46,7 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
     protected $fallback;
 
     /**
-     * @return Enlight_Components_Snippet_Namespace
+     * @return Enlight_Components_Snippet_Namespace|null
      */
     public function getFallback()
     {

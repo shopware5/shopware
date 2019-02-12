@@ -152,7 +152,7 @@ class sArticles
     private $queryAliasMapper;
 
     /**
-     * @var Enlight_Controller_Front
+     * @var Enlight_Controller_Front|null
      */
     private $frontController;
 
@@ -1048,10 +1048,10 @@ class sArticles
     /**
      * Get one product with all available data
      *
-     * @param int   $id          article id
-     * @param null  $sCategoryID
-     * @param null  $number
-     * @param array $selection
+     * @param int         $id          article id
+     * @param string|null $sCategoryID
+     * @param string|null $number
+     * @param array       $selection
      *
      * @return array
      */

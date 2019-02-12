@@ -50,7 +50,7 @@ interface ProductServiceInterface
      * @param string                         $number
      * @param Struct\ProductContextInterface $context
      *
-     * @return Struct\Product
+     * @return Struct\Product|null
      */
     public function get($number, Struct\ProductContextInterface $context);
 }

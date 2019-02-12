@@ -50,7 +50,7 @@ class BatchProductSearchResult
      *
      * @throws \OutOfBoundsException
      *
-     * @return ListProduct[]
+     * @return array<string, ListProduct|null>
      */
     public function get($key)
     {

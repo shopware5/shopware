@@ -87,7 +87,7 @@ abstract class Resource
     protected $role;
 
     /**
-     * @var Container
+     * @var Container|null
      */
     protected $container;
 
@@ -173,7 +173,7 @@ abstract class Resource
     }
 
     /**
-     * @return AclComponent
+     * @return AclComponent|null
      */
     public function getAcl()
     {
@@ -193,7 +193,7 @@ abstract class Resource
     }
 
     /**
-     * @return string|\Zend_Acl_Role_Interface
+     * @return string|\Zend_Acl_Role_Interface|null
      */
     public function getRole()
     {
@@ -319,7 +319,7 @@ abstract class Resource
 
         $results = [];
         foreach ($data as $key => $datum) {
-            /** @var BatchInterface $this */
+            /** @var BatchInterface|null $this */
             $id = $this->getIdByData($datum);
 
             try {

@@ -126,7 +126,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
 
         $values = $this->buildItems($buckets, $activeAverage);
 
-        /** @var VoteAverageFacet $facet */
+        /** @var VoteAverageFacet|null $facet */
         $facet = $criteria->getFacet('vote_average');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

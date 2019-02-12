@@ -360,7 +360,6 @@ class sCategories
      */
     public function getProductBoxLayout($categoryId)
     {
-        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->repository->find($categoryId);
 
         if (!$category) {

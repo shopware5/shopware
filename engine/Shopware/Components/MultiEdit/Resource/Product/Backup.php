@@ -216,7 +216,7 @@ class Backup
     public function restore($id, $offset = 0)
     {
         $entityManager = $this->getDqlHelper()->getEntityManager();
-        /** @var \Shopware\Models\MultiEdit\Backup $backup */
+        /** @var \Shopware\Models\MultiEdit\Backup|null $backup */
         $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
 
         if (!$backup) {
@@ -295,7 +295,7 @@ class Backup
     public function delete($id)
     {
         $entityManager = $this->getDqlHelper()->getEntityManager();
-        /** @var \Shopware\Models\MultiEdit\Backup $backup */
+        /** @var \Shopware\Models\MultiEdit\Backup|null $backup */
         $backup = $entityManager->find(\Shopware\Models\MultiEdit\Backup::class, $id);
 
         if (!$backup) {

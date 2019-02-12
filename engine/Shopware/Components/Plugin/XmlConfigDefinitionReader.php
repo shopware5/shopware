@@ -74,18 +74,21 @@ class XmlConfigDefinitionReader
             $form['description'][$lang] = $description->nodeValue;
         }
 
-        if (false === $elemements = $xpath->query('//elements/element')) {
+        /** @var \DOMNodeList|false $elements */
+        $elements = $xpath->query('//elements/element');
+
+        if ($elements === false) {
             return;
         }
 
-        $elements = [];
+        $parsedElements = [];
 
         /* @var \DOMElement $entry */
-        foreach ($elemements as $elemement) {
-            $elements[] = $this->parseElement($elemement);
+        foreach ($elements as $element) {
+            $parsedElements[] = $this->parseElement($element);
         }
 
-        $form['elements'] = $elements;
+        $form['elements'] = $parsedElements;
 
         return $form;
     }

@@ -60,7 +60,9 @@ class XmlMenuReader
     {
         $xpath = new \DOMXPath($xml);
 
-        if (false === $entries = $xpath->query('//entries/entry')) {
+        /** @var \DOMNodeList|false $entries */
+        $entries = $xpath->query('//entries/entry');
+        if ($entries === false) {
             throw new \RuntimeException('Required element "entry" is missing.');
         }
 

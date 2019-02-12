@@ -425,7 +425,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getInstalled()
     {

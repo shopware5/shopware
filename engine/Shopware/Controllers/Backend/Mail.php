@@ -726,7 +726,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return $mailName;
         }
         $documentTypeKey = str_replace($documentEmailsNamePrefix, '', $mailName);
-        /** @var Document $documentType */
+        /** @var Document|null $documentType */
         $documentType = $this->getModelManager()->getRepository(Document::class)->findOneBy([
             'key' => $documentTypeKey,
         ]);

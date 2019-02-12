@@ -175,7 +175,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var MediaModel $media */
+        /** @var MediaModel|null $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
@@ -214,7 +214,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var MediaModel $media */
+        /** @var MediaModel|null $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
@@ -256,7 +256,7 @@ class Media extends Resource
         $media->setCreated(new \DateTime());
         $media->setUserId(0);
 
-        /** @var Album $album */
+        /** @var Album|null $album */
         $album = $this->getManager()->find(Album::class, $albumId);
         if (!$album) {
             // Cleanup temporary file

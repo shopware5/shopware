@@ -67,9 +67,9 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param array|null $filter
-     * @param array|null $filterBy
-     * @param int|null   $categoryId
+     * @param array|null  $filter
+     * @param string|null $filterBy
+     * @param int|null    $categoryId
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -192,10 +192,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object
      *
-     * @param null  $filter
-     * @param array $orderBy
-     * @param int   $offset
-     * @param int   $limit
+     * @param bool|null $filter
+     * @param array     $orderBy
+     * @param int       $offset
+     * @param int       $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -214,7 +214,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getLandingPageListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filter
+     * @param bool  $filter
      * @param array $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder

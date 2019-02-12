@@ -307,7 +307,7 @@ class RegisterService implements RegisterServiceInterface
      */
     private function doubleOptInSaveHash(Customer $customer, $hash)
     {
-        /** @var Request $request */
+        /** @var Request|null $request */
         $request = Shopware()->Container()->get('front')->Request();
         $fromCheckout = ($request && $request->getParam('sTarget') === 'checkout');
 

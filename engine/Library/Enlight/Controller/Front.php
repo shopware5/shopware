@@ -369,7 +369,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Returns the request instance.
      *
-     * @return  Enlight_Controller_Request_Request
+     * @return  Enlight_Controller_Request_Request|null
      */
     public function Request()
     {

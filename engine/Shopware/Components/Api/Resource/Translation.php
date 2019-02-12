@@ -567,7 +567,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getProductIdByNumber($number)
     {
-        /** @var Detail $entity */
+        /** @var Detail|null $entity */
         $entity = $this->findEntityByConditions(
             Detail::class,
             [['number' => $number]]
@@ -594,7 +594,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getProductVariantIdByNumber($number)
     {
-        /** @var Detail $entity */
+        /** @var Detail|null $entity */
         $entity = $this->findEntityByConditions(
             Detail::class,
             [['number' => $number]]
@@ -652,7 +652,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getManufacturerIdByNumber($number)
     {
-        /** @var Supplier $entity */
+        /** @var Supplier|null $entity */
         $entity = $this->findEntityByConditions(
             Supplier::class,
             [['name' => $number]]
@@ -679,7 +679,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getCountryIdByNumber($number)
     {
-        /** @var Country $country */
+        /** @var Country|null $country */
         $country = $this->findEntityByConditions(
             Country::class,
             [
@@ -709,7 +709,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getCountryStateIdByNumber($number)
     {
-        /** @var State $entity */
+        /** @var State|null $entity */
         $entity = $this->findEntityByConditions(
             State::class,
             [
@@ -738,7 +738,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getDispatchIdByNumber($number)
     {
-        /** @var Dispatch $entity */
+        /** @var Dispatch|null $entity */
         $entity = $this->findEntityByConditions(
             Dispatch::class,
             [
@@ -766,7 +766,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getPaymentIdByNumber($number)
     {
-        /** @var Payment $entity */
+        /** @var Payment|null $entity */
         $entity = $this->findEntityByConditions(
             Payment::class,
             [
@@ -795,7 +795,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getFilterSetIdByNumber($number)
     {
-        /** @var Group $entity */
+        /** @var Group|null $entity */
         $entity = $this->findEntityByConditions(
             Group::class,
             [
@@ -836,7 +836,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var Group $set */
+        /** @var Group|null $set */
         $set = $this->findEntityByConditions(
             Group::class,
             [
@@ -850,7 +850,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var Option $group */
+        /** @var Option|null $group */
         $group = $this->getCollectionElementByProperty(
             $set->getOptions(),
             'name',
@@ -890,7 +890,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var Group $set */
+        /** @var Group|null $set */
         $set = $this->findEntityByConditions(
             Group::class,
             [
@@ -904,7 +904,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var Option $group */
+        /** @var Option|null $group */
         $group = $this->getCollectionElementByProperty(
             $set->getOptions(),
             'name',
@@ -917,7 +917,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var Value $option */
+        /** @var Value|null $option */
         $option = $this->getCollectionElementByProperty(
             $group->getValues(),
             'value',
@@ -944,7 +944,7 @@ class Translation extends Resource implements BatchInterface
      */
     protected function getConfiguratorGroupIdByNumber($number)
     {
-        /** @var ConfiguratorGroup $entity */
+        /** @var ConfiguratorGroup|null $entity */
         $entity = $this->findEntityByConditions(
             ConfiguratorGroup::class,
             [['name' => $number]]
@@ -983,7 +983,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var ConfiguratorGroup $group */
+        /** @var ConfiguratorGroup|null $group */
         $group = $this->findEntityByConditions(
             ConfiguratorGroup::class,
             [['name' => $numbers[0]]]
@@ -995,7 +995,7 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        /** @var ConfiguratorOption $option */
+        /** @var ConfiguratorOption|null $option */
         $option = $this->getCollectionElementByProperty(
             $group->getOptions(),
             'name',

@@ -173,7 +173,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return;
         }
 
-        /** @var Preset $preset */
+        /** @var Preset|null $preset */
         $preset = $this->container->get('models')->getRepository(Preset::class)->find($id);
 
         if (!$preset || $preset->getAssetsImported()) {

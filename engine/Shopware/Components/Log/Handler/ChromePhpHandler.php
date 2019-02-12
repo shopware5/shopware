@@ -43,7 +43,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
     private $headers = [];
 
     /**
-     * @var \Enlight_Controller_Response_ResponseHttp
+     * @var \Enlight_Controller_Response_ResponseHttp|null
      */
     private $response;
 

@@ -204,7 +204,7 @@ class Category extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var CategoryModel $category */
+        /** @var CategoryModel|null $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
@@ -245,7 +245,7 @@ class Category extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var CategoryModel $category */
+        /** @var CategoryModel|null $category */
         $category = $this->getRepository()->find($id);
 
         if (!$category) {
@@ -298,7 +298,7 @@ class Category extends Resource
                 break;
             }
 
-            /** @var CategoryModel $categoryModel */
+            /** @var CategoryModel|null $categoryModel */
             $categoryModel = $this->getRepository()->findOneBy(['name' => $categoryName, 'parentId' => $parentId]);
             if (!$categoryModel) {
                 if (!$create) {
@@ -306,7 +306,7 @@ class Category extends Resource
                 }
 
                 if ($parent === null) {
-                    /** @var CategoryModel $parent */
+                    /** @var CategoryModel|null $parent */
                     $parent = $this->getRepository()->find($parentId);
                     if (!$parent) {
                         throw new RuntimeException(sprintf('Could not find parent %s', $parentId));

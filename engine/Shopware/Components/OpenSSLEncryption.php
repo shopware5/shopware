@@ -77,7 +77,7 @@ class OpenSSLEncryption
         $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, false, $iv);
 
         $encryptedKey = '';
-        if (!true === openssl_public_encrypt($key, $encryptedKey, $publicKey)) {
+        if (!openssl_public_encrypt($key, $encryptedKey, $publicKey)) {
             $errors = [];
             while ($errors[] = openssl_error_string());
             $errorString = implode("\n", $errors);

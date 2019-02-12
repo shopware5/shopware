@@ -110,6 +110,7 @@ class MediaSubscriber implements EventSubscriber
                         $media->getExtension() === 'svg' &&
                         $xml = simplexml_load_string($mediaService->read($media->getPath()))
                     ) {
+                        /** @var \SimpleXMLElement|null $attr */
                         $attr = $xml->attributes();
 
                         if ((int) $attr->width > 0 && (int) $attr->height > 0) {

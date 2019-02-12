@@ -298,7 +298,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function cronAction()
     {
-        /** @var Shopware_Plugins_Core_Cron_Bootstrap $cronBootstrap */
+        /** @var Shopware_Plugins_Core_Cron_Bootstrap|null $cronBootstrap */
         $cronBootstrap = $this->getPluginBootstrap('Cron');
         if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
             $this->Response()
@@ -770,7 +770,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         // todo@all Create new method to get same secret hashes for values
         $license = '';
-        //($license = Shopware()->License()->getLicense('sCORE')) || ($license = Shopware()->License()->getLicense('sCOMMUNITY'));
         $parts = func_get_args();
         $parts[] = $license;
 
@@ -795,8 +794,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return null;
         }
 
-        /** @var \Shopware\Models\Plugin\Plugin $plugin */
-        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $pluginBootstrap->getId());
+        /** @var \Shopware\Models\Plugin\Plugin|null $plugin */
+        $plugin = Shopware()->Models()->find(\Shopware\Models\Plugin\Plugin::class, $pluginBootstrap->getId());
         if (!$plugin) {
             return null;
         }

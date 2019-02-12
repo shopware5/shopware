@@ -67,7 +67,7 @@ class SitemapGenerateCommand extends ShopwareCommand
         $shopId = $input->getOption('shopId');
 
         if ($shopId) {
-            /** @var Shop $shop */
+            /** @var Shop|null $shop */
             $shop = $repository->getById($shopId);
             if ($shop) {
                 $shops = [$shop];

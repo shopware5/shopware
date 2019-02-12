@@ -409,7 +409,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             $fileBag = new FileBag($_FILES);
 
-            /** @var UploadedFile $file */
+            /** @var UploadedFile|null $file */
             $file = $fileBag->get('fileId');
         } catch (Exception $e) {
             die(json_encode(['success' => false, 'message' => $e->getMessage()]));
@@ -934,7 +934,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             return false;
         }
 
-        /** @var \Shopware\Models\Media\Album $album */
+        /** @var \Shopware\Models\Media\Album|null $album */
         $album = Shopware()->Models()->find(\Shopware\Models\Media\Album::class, $albumId);
         $repo = Shopware()->Models()->getRepository(\Shopware\Models\Media\Settings::class);
         $settings = $repo->findOneBy(['albumId' => $albumId]);
@@ -1012,7 +1012,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         // Check if a new album id is passed and is valid
         if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
-            /** @var Album $album */
+            /** @var Album|null $album */
             $album = Shopware()->Container()->get('models')->getRepository(Album::class)->find($params['newAlbumID']);
             if ($album) {
                 $media->setAlbum($album);
@@ -1050,7 +1050,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
 
-        /** @var Album $album */
+        /** @var Album|null $album */
         $album = $albumRepository->find($media->getAlbumId());
         if ($album) {
             $media->removeAlbumThumbnails($album->getSettings()->getThumbnailSize(), $media->getFileName());
@@ -1136,9 +1136,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $node['thumbnailSize'] = [];
             $count = count($thumbnails);
 
-            //convert the thumbnail to an array width the index and value
+            // Convert the thumbnail to an array width the index and value
             for ($i = 0; $i <= $count; ++$i) {
-                if ($thumbnails[$i] === '' || $thumbnails[$i] === null) {
+                if (empty($thumbnails[$i])) {
                     continue;
                 }
                 $node['thumbnailSize'][] = ['id' => $i, 'index' => $i, 'value' => $thumbnails[$i]];

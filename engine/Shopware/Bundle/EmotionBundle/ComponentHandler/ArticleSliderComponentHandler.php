@@ -195,7 +195,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
                 $products = [];
                 foreach ($productNumbers as $productNumber) {
-                    /** @var ListProduct $product */
+                    /** @var ListProduct|null $product */
                     $product = $listProducts[$productNumber];
                     if (!$product) {
                         continue;

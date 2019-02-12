@@ -102,7 +102,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     protected $config;
 
     /**
-     * @var Container
+     * @var Container|null
      */
     protected $container;
 

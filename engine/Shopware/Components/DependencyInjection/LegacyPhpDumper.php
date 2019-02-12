@@ -87,7 +87,7 @@ class LegacyPhpDumper extends Dumper
     private $circularReferences = [];
 
     /**
-     * @var ProxyDumper
+     * @var ProxyDumper|null
      */
     private $proxyDumper;
 

@@ -62,7 +62,7 @@ class PropertyGroup extends Resource
         $filters = [['property' => 'groups.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getListGroupsQuery($filters);
 
-        /** @var \Shopware\Models\Property\Group $property */
+        /** @var \Shopware\Models\Property\Group|null $property */
         $property = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$property) {
@@ -144,7 +144,7 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Property\Group $propertyGroup */
+        /** @var \Shopware\Models\Property\Group|null $propertyGroup */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
@@ -180,7 +180,7 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Property\Group $propertyGroup */
+        /** @var \Shopware\Models\Property\Group|null $propertyGroup */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {

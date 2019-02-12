@@ -66,7 +66,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      *
      * @param string $name
      *
-     * @return Attribute
+     * @return Attribute|null
      */
     public function getAttribute($name)
     {

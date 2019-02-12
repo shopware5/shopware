@@ -73,12 +73,12 @@ class LegacyPluginInstaller
         }
 
         $pluginName = $plugin->getName();
-        $plugin = $namespace->get($pluginName);
-        if ($plugin === null) {
+        $pluginByName = $namespace->get($pluginName);
+        if ($pluginByName === null) {
             throw new \RuntimeException(sprintf('Plugin by name "%s" was not found.', $pluginName));
         }
 
-        return $plugin;
+        return $pluginByName;
     }
 
     /**
