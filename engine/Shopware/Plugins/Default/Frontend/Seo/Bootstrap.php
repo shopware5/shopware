@@ -153,8 +153,9 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
             $params = $request->getParams();
+            $sCategoryContent = $view->getAssign('sCategoryContent');
 
-            if ($sCategoryContent = $view->getAssign('sCategoryContent')) {
+            if ($sCategoryContent && isset($sCategoryContent['canonicalParams']) && is_array($sCategoryContent['canonicalParams'])) {
                 $params = $sCategoryContent['canonicalParams'];
             }
 
