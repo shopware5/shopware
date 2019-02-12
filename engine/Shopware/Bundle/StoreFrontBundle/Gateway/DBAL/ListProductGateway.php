@@ -66,21 +66,29 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     private $connection;
 
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
      * @param Connection                  $connection
      * @param FieldHelper                 $fieldHelper
      * @param Hydrator\ProductHydrator    $hydrator
      * @param \Shopware_Components_Config $config
+     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
         Hydrator\ProductHydrator $hydrator,
-        \Shopware_Components_Config $config
+        \Shopware_Components_Config $config,
+        \Enlight_Event_EventManager $eventManager
     ) {
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;
         $this->connection = $connection;
         $this->config = $config;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -173,6 +181,11 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $this->fieldHelper->addManufacturerTranslation($query, $context);
         $this->fieldHelper->addUnitTranslation($query, $context);
         $this->fieldHelper->addEsdTranslation($query, $context);
+
+        $query = $this->eventManager->filter('Shopware_StoreFrontBundle_ListProductGateway_GetQuery', $query, [
+            'numbers' => $numbers,
+            'context' => $context,
+        ]);
 
         return $query;
     }
