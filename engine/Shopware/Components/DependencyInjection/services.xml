@@ -234,6 +234,10 @@
             <factory service="ModelConfig" method="getMetadataCacheImpl" />
         </service>
 
+        <service id="models.annotations_reader" class="\Doctrine\Common\Annotations\Reader">
+            <factory service="ModelConfig" method="getAnnotationsReader" />
+        </service>
+
         <service id="dbal_connection" class="Doctrine\DBAL\Connection">
             <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createDbalConnection" />
             <argument>%shopware.db%</argument>
@@ -429,7 +433,7 @@
 
         <service id="validator" class="Symfony\Component\Validator\Validator\ValidatorInterface" >
             <factory class="Shopware\Components\DependencyInjection\Bridge\Validator" method="create" />
-            <argument type="service" id="ModelConfig" />
+            <argument type="service" id="models.annotations_reader" />
             <argument type="service" id="validator.validator_factory" />
         </service>
 
