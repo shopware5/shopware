@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <!-- Subscriber to update the totals of the order when a order detail will be added, updated, removed. -->
+        <service id="shopware_bundle_order.service.calculation_service" class="Shopware\Bundle\OrderBundle\Service\CalculationService" >
+            <argument id="models" type="service" />
+        </service>
+        <!-- Subscriber to update the product stock size when a order detail will be added, updated, removed. -->
+        <service id="shopware_bundle_order.service.stock_service" class="Shopware\Bundle\OrderBundle\Service\StockService" >
+            <argument id="models" type="service" />
+        </service>
+
+
+        <!-- Subscriber to update the totals of the order when a order detail will be added, updated, removed. (calls a service) -->
+        <service class="Shopware\Bundle\OrderBundle\Subscriber\OrderRecalculationSubscriber" id="shopware_bundle_order.subscriber.order_recalculation_subscriber">
+            <argument id="shopware_bundle_order.service.calculation_service" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <!-- Subscriber to update the product stock size when a order detail will be added, updated, removed.  (calls a service) -->
+        <service class="Shopware\Bundle\OrderBundle\Subscriber\ProductStockSubscriber" id="shopware_bundle_order.subscriber.product_stock_subscriber">
+            <argument id="shopware_bundle_order.service.stock_service" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+    </services>
+</container>

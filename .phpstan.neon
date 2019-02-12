@@ -28,6 +28,8 @@ parameters:
         - %currentWorkingDirectory%/engine/Shopware/Models/Order/OrderHistorySubscriber.php
         - %currentWorkingDirectory%/engine/Shopware/Models/Order/Repository.php
         - %currentWorkingDirectory%/engine/Shopware/Bundle/EsBackendBundle/Subscriber/OrmBacklogSubscriber.php
+        - %currentWorkingDirectory%/engine/Shopware/Bundle/OrderBundle/Service/CalculationService.php
+        - %currentWorkingDirectory%/engine/Shopware/Bundle/OrderBundle/Service/StockService.php
 
     ignoreErrors:
         - '#apcu_#'
