@@ -64,8 +64,9 @@ class XmlMenuReader extends XmlReaderBase
             false
         );
 
-        $label = $label = self::parseTranslatableNodeList(
-            $entry->getElementsByTagName('label')
+        $label = $label = self::parseTranslatableElement(
+            $entry,
+            'label'
         );
 
         if ($label !== null) {
@@ -98,8 +99,9 @@ class XmlMenuReader extends XmlReaderBase
             $menuEntry['position'] = (int) $position;
         }
 
-        if (($children = $entry->getElementsByTagName('children')) !== null) {
-            foreach ($children as $child) {
+        if (($children = $entry->getElementsByTagName('children')) !== null && $children->length) {
+            $children = $children->item(0);
+            foreach (XmlReaderBase::getChildren($children, 'entry') as $child) {
                 $menuEntry['children'][] = $this->parseEntry($child);
             }
         }
