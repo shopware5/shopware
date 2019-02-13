@@ -13,8 +13,6 @@ services:
 
   app_mysql:
     build: dev-ops/docker/containers/mysql
-    tmpfs:
-      - /var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: app
