@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/menu.xsd">
+    <entries>
+        <entry>
+            <name>PayPal</name>
+            <label lang="en">PayPal</label>
+            <label lang="de">PayPal</label>
+            <class>sprite--paypal-unified</class>
+            <parent identifiedBy="controller">Payments</parent>
+            <children>
+                <entry>
+                    <name>SwagPaymentPayPalUnifiedOrders</name>
+                    <label lang="en">Orders</label>
+                    <label lang="de">Bestellungen</label>
+                    <controller>PaypalUnified</controller>
+                    <action>index</action>
+                    <class>sprite--paypal-unified</class>
+                </entry>
+                <entry>
+                    <name>SwagPaymentPayPalUnifiedSettings</name>
+                    <label lang="en">Settings</label>
+                    <label lang="de">Einstellungen</label>
+                    <controller>PaypalUnifiedSettings</controller>
+                    <action>index</action>
+                    <class>settings--basic-settings</class>
+                </entry>
+            </children>
+        </entry>
+    </entries>
+</menu>

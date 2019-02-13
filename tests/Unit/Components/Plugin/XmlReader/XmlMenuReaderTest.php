@@ -91,6 +91,18 @@ class XmlMenuReaderTest extends TestCase
         self::assertCount(1, $firstMenu['children']);
     }
 
+    public function testMultipleChildren(): void
+    {
+        $result = $this->readFile('paypal.xml');
+
+        self::assertEquals('PayPal', $result[0]['label']['de']);
+        self::assertNotNull($result[0]);
+        self::assertArrayHasKey('children', $result[0]);
+        self::assertCount(2, $result[0]['children']);
+        self::assertEquals('PaypalUnified', $result[0]['children'][0]['controller']);
+        self::assertEquals('PaypalUnifiedSettings', $result[0]['children'][1]['controller']);
+    }
+
     private function readFile(string $file): array
     {
         return $this->menuReader->read(

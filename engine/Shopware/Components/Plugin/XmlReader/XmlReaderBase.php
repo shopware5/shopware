@@ -87,6 +87,29 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $translations;
     }
 
+    public static function parseTranslatableElement(DOMNode $element, string $name): ?array
+    {
+        $list = self::getChildren($element, $name);
+
+        if (count($list) === 0) {
+            return null;
+        }
+
+        $translations = [];
+
+        /** @var DOMElement $item */
+        foreach ($list as $item) {
+            $language = $item->getAttribute('lang') ?: self::DEFAULT_LANG;
+
+            // XSD Requires en-GB, Zend uses en_GB
+            $language = str_replace('-', '_', $language);
+
+            $translations[$language] = trim($item->nodeValue);
+        }
+
+        return $translations;
+    }
+
     public static function getChildren(DOMNode $node, string $name): array
     {
         $children = [];
@@ -149,9 +172,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
             return null;
         }
 
-        $optionsItem = $optionsList->item(0);
-
-        $optionList = $optionsItem->childNodes;
+        $optionList = $optionsList->item(0)->childNodes;
 
         if ($optionList->length === 0) {
             return null;
@@ -171,9 +192,9 @@ abstract class XmlReaderBase implements XmlReaderInterface
 
     public static function getElementChildValueByName(DOMElement $element, string $name, bool $throwException = false): ?string
     {
-        $children = $element->getElementsByTagName($name);
+        $children = self::getChildren($element, $name);
 
-        if ($children->length === 0) {
+        if (count($children) === 0) {
             if ($throwException) {
                 throw new InvalidArgumentException(sprintf(
                     'Element with %s not found',
@@ -184,7 +205,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
             return null;
         }
 
-        return $children->item(0)->nodeValue;
+        return $children[0]->nodeValue;
     }
 
     public static function validateTextAttribute(string $type, string $defaultValue = ''): string
