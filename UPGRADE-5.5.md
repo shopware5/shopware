@@ -16,7 +16,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed order module sorting to consider sorting also when elasticsearch is activated
 * Changed `StaticUrlProvider` to prevent duplicate URLs
 * Changed minibasket to also update amount/number badge when the last product is being removed from offcanvas basket
-* Changed updater libraries to most recent versions
+* Changed libraries in Updater-app to most recent versions
+* Changed `jquery.datepicker.js` to initialize component value by element value on init 
 * Changed following services to lower-case:
     * `Loader`
     * `Hooks`
