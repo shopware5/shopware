@@ -167,7 +167,7 @@ class LessDefinition
     }
 
     /**
-     * @return Theme
+     * @return Theme|null
      */
     public function getTheme()
     {

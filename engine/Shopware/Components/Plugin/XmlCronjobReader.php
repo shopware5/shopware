@@ -60,7 +60,9 @@ class XmlCronjobReader
     {
         $xpath = new \DOMXPath($xml);
 
-        if (false === $entries = $xpath->query('//cronjobs/cronjob')) {
+        /** @var \DOMNodeList|false $entries */
+        $entries = $xpath->query('//cronjobs/cronjob');
+        if ($entries === false) {
             return;
         }
 

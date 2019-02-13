@@ -345,8 +345,8 @@ EOD;
     /**
      * Generates the whole theme structure tree.
      *
-     * @param string[] $directory
-     * @param string   $baseDir
+     * @param string[]|array<string[]> $directory
+     * @param string                   $baseDir
      */
     private function generateStructure($directory, $baseDir)
     {

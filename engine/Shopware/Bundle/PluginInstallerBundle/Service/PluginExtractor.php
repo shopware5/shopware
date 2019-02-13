@@ -193,7 +193,7 @@ class PluginExtractor
     }
 
     /**
-     * @param string $oldFile
+     * @param string|false $oldFile
      *
      * @return bool|string
      */

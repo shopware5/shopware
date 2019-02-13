@@ -265,7 +265,7 @@ class CustomerStream extends Resource
             throw new ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\CustomerStream\CustomerStream $stream */
+        /** @var \Shopware\Models\CustomerStream\CustomerStream|null $stream */
         $stream = $this->getManager()->find(CustomerStreamEntity::class, $id);
 
         if (!$stream) {

@@ -155,7 +155,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 continue;
             }
 
-            /** @var ConfigurationStruct $attribute */
+            /** @var ConfigurationStruct|null $attribute */
             $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
 
             $type = $attribute ? $attribute->getColumnType() : null;
@@ -203,10 +203,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      */
     private function switchTemplate($type, FacetResultInterface $result, ProductAttributeFacet $facet)
     {
-        if ($result === null) {
-            return $result;
-        }
-
         if (!$result instanceof TemplateSwitchable) {
             return $result;
         }
@@ -235,25 +231,24 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     {
         switch (true) {
             case $type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
-
                 return 'frontend/listing/filter/facet-date-range.tpl';
+
             case $type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-
                 return 'frontend/listing/filter/facet-date-multi.tpl';
+
             case $type === TypeMapping::TYPE_DATE && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-
                 return 'frontend/listing/filter/facet-date.tpl';
+
             case $type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime-range.tpl';
+
             case $type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime-multi.tpl';
+
             case $type === TypeMapping::TYPE_DATETIME && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime.tpl';
-            default:
 
+            default:
                 return $defaultTemplate;
         }
     }

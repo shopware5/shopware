@@ -1592,7 +1592,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $variantId = $this->Request()->getPost('articleDetailId');
 
-        /** @var Detail $variant */
+        /** @var Detail|null $variant */
         $variant = Shopware()->Models()->getRepository(Detail::class)->find($variantId);
         if (!$variant) {
             $this->View()->assign([
@@ -1622,7 +1622,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $esdId = $this->Request()->getPost('id');
 
-        /** @var Esd $esd */
+        /** @var Esd|null $esd */
         $esd = Shopware()->Models()->getRepository(Esd::class)->find($esdId);
         if (!$esd) {
             $this->View()->assign([
@@ -1763,7 +1763,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $esdId = $this->Request()->getParam('esdId');
 
-        /** @var Esd $esd */
+        /** @var Esd|null $esd */
         $esd = Shopware()->Models()->getRepository(Esd::class)->find($esdId);
 
         if (!$esd) {
@@ -1851,7 +1851,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function uploadEsdFileAction()
     {
         $fileBag = new \Symfony\Component\HttpFoundation\FileBag($_FILES);
-        /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+        /** @var Symfony\Component\HttpFoundation\File\UploadedFile|null $file */
         $file = $fileBag->get('fileId');
 
         if ($file === null) {
@@ -1944,15 +1944,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getChartData()
     {
         $productId = $this->Request()->getParam('articleId');
-        $format = 'month';
-
-        if ($format === 'month') {
-            $dateFormat = '%Y%m';
-            $limit = 12;
-        } else {
-            $dateFormat = '%Y%m%d';
-            $limit = 32;
-        }
+        $dateFormat = '%Y%m';
+        $limit = 12;
 
         $sql = sprintf("
             SELECT
@@ -2771,8 +2764,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $data['prices'] = $prices;
 
             // unset configuratorOptions and images. These are variant specific and are going to be recreated later
-            unset($data['images']);
-            unset($data['configuratorOptions']);
+            unset($data['images'], $data['configuratorOptions']);
 
             if (!empty($data['unitId'])) {
                 $data['unit'] = Shopware()->Models()->find(Unit::class, $data['unitId']);

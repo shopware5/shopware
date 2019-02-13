@@ -158,7 +158,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria
         );
 
-        /** @var Manufacturer $manufacturer */
+        /** @var Manufacturer|null $manufacturer */
         $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
             $manufacturerId,
             $this->get('shopware_storefront.context_service')->getShopContext()
@@ -462,7 +462,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return;
         }
 
-        /** @var CustomSorting $default */
+        /** @var CustomSorting|null $default */
         $default = array_shift($sortings);
 
         if (!$default) {

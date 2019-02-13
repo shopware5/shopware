@@ -140,7 +140,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set|null
      */
     public function getPropertySet()
     {

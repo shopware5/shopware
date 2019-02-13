@@ -55,7 +55,9 @@ class XmlPluginInfoReader
     {
         $xpath = new \DOMXPath($xml);
 
-        if (false === $entries = $xpath->query('//plugin')) {
+        /** @var \DOMNodeList|false $entries */
+        $entries = $xpath->query('//plugin');
+        if ($entries === false) {
             return;
         }
 

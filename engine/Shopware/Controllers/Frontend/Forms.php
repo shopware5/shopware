@@ -491,7 +491,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         } else {
                             $value = mktime(0, 0, 0, $values[0], $values[2], $values[1]);
                         }
-                        if (empty($value) || $value = -1) {
+                        if (empty($value) || ((int) $value === -1)) {
                             unset($value);
                             $valid = false;
                             break;

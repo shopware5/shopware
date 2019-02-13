@@ -223,10 +223,10 @@ class ModelManager extends EntityManager
     /**
      * Helper function to add mysql specified command to increase the sql performance.
      *
-     * @param Query $query
-     * @param null  $index        Name of the forced index
-     * @param bool  $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
-     * @param bool  $sqlNoCache
+     * @param Query      $query
+     * @param mixed|null $index        Name of the forced index
+     * @param bool       $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
+     * @param bool       $sqlNoCache
      *
      * @return Query
      */

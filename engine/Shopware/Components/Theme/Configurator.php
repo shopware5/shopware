@@ -433,8 +433,8 @@ class Configurator
      */
     private function injectConfig(Theme $theme, Form\Container\TabContainer $container)
     {
-        //check if theme wants to inject parent configuration
-        if (!$theme->useInheritanceConfig() || $theme->getExtend() == null) {
+        // Check if theme wants to inject parent configuration
+        if (!$theme->useInheritanceConfig() || $theme->getExtend() === null) {
             return;
         }
 
@@ -443,7 +443,7 @@ class Configurator
             'template' => $theme->getTemplate(),
         ]);
 
-        //no parent configured? cancel injection.
+        // No parent configured? cancel injection.
         if (!$template->getParent()) {
             return;
         }

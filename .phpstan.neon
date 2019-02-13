@@ -3,7 +3,7 @@ includes:
     #- ../vendor/phpstan/phpstan-phpunit/extension.neon
     #- ../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
-    level: 3
+    level: 4
 
     autoload_directories:
         - %currentWorkingDirectory%/var/cache
@@ -16,6 +16,21 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/engine/Shopware/Plugins
         - %currentWorkingDirectory%/engine/Shopware/Configs/Default.php
+        # Broken external interface definition
+        - %currentWorkingDirectory%/engine/Shopware/Bundle/SearchBundleES/CombinedConditionQueryBuilder.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/Emotion/EmotionImporter.php # zip::locateName does not annotate correct return type
+        - %currentWorkingDirectory%/engine/Shopware/Components/Theme/Compiler.php # fwrite does not annotate correct return type
+        # Broken internal interface usage
+        - %currentWorkingDirectory%/engine/Shopware/Components/Log/Handler/FirePHPHandler.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/Container.php
+        # Unsure how to fix
+        - %currentWorkingDirectory%/engine/Shopware/Models/Media/MediaSubscriber.php
+        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/Property.php
+        - %currentWorkingDirectory%/engine/Shopware/Models/Document/Order.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/Session/PdoSessionHandler.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/LegacyPhpDumper.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/ContainerAwareEventManager.php
+        - %currentWorkingDirectory%/engine/Shopware/Components/Install/Database.php
         # The following are added because of the Hack in Document/Document
         - %currentWorkingDirectory%/engine/Shopware/Models/Order/Document/Document.php
         - %currentWorkingDirectory%/engine/Shopware/Components/Api/Resource/Order.php
@@ -43,6 +58,7 @@ parameters:
         - '#does not call parent constructor from Enlight_Class#'
         - '#Binary operation "|=" between string and string results in an error.#'
         - '#does not call parent constructor from Elasticsearch#'
+        - '#does not call parent constructor from Enlight_Controller_Action#'
         - '#does not accept Doctrine\\ORM\\EntityRepository#'
         # "getRepository"-Methods
         - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
@@ -55,9 +71,6 @@ parameters:
         # Models that are detached by cloning and nulling the id
         - '#\([a-z]+\) does not accept null\.#'
         - '#supplied for foreach, only iterables are supported#'
-        # Broken return value of Components/DependencyInjection/Container.php
-        - '#Return type \(bool\) of method Shopware\\Components\\DependencyInjection\\Container\:\:load\(\) should be compatible with return type \(object\) of method Symfony\\Component\\DependencyInjection\\Container\:\:load\(\)#'
-        # Broken return value of Components/Log/Handler/FirePHPHandler.php
-        - '#Return type \(array\) of method Shopware\\Components\\Log\\Handler\\FirePHPHandler\:\:createRecordHeader\(\) should be compatible with return type \(string\) of method Monolog\\Handler\\FirePHPHandler\:\:createRecordHeader\(\)#'
+        #
 
     reportUnmatchedIgnoredErrors: false

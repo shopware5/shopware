@@ -351,7 +351,7 @@ class Detail extends ModelEntity
     /**
      * Get number
      *
-     * @return string
+     * @return string|null
      */
     public function getNumber()
     {
@@ -603,7 +603,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Article
+     * @return \Shopware\Models\Attribute\Article|null
      */
     public function getAttribute()
     {
@@ -972,7 +972,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection|null
      */
     public function getConfiguratorOptions()
     {
@@ -996,7 +996,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Esd
+     * @return \Shopware\Models\Article\Esd|null
      */
     public function getEsd()
     {

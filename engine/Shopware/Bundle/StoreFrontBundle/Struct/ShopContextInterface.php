@@ -96,7 +96,7 @@ interface ShopContextInterface
      *
      * @param int $taxId
      *
-     * @return Tax
+     * @return Tax|null
      */
     public function getTaxRule($taxId);
 

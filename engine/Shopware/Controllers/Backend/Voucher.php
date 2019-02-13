@@ -211,7 +211,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function updateVoucherCodesAction()
     {
         $codeId = (int) $this->Request()->getParam('id');
-        /** @var Code $code */
+        /** @var Code|null $code */
         $code = $this->get('models')->getRepository(Code::class)->find($codeId);
 
         if (!$code) {

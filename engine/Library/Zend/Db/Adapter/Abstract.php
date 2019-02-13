@@ -521,7 +521,9 @@ abstract class Zend_Db_Adapter_Abstract
      *
      * @param mixed $table The table to insert data into.
      * @param array $bind Column-value pairs.
-     * @return int The number of affected rows.
+     *
+     * @return int|false The number of affected rows.
+     *
      * @throws Zend_Db_Adapter_Exception
      */
     public function insert($table, array $bind)
@@ -715,7 +717,8 @@ abstract class Zend_Db_Adapter_Abstract
      * @param string|Zend_Db_Select $sql  An SQL SELECT statement.
      * @param mixed                 $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
-     * @return array
+     *
+     * @return array|false
      */
     public function fetchAll($sql, $bind = array(), $fetchMode = null)
     {
@@ -809,7 +812,8 @@ abstract class Zend_Db_Adapter_Abstract
      *
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
-     * @return string
+     *
+     * @return string|false|null
      */
     public function fetchOne($sql, $bind = array())
     {

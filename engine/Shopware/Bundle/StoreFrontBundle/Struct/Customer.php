@@ -376,7 +376,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return Group
+     * @return Group|null
      */
     public function getCustomerGroup()
     {
@@ -664,7 +664,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return Address
+     * @return Address|null
      */
     public function getBillingAddress()
     {

@@ -64,7 +64,7 @@ class Manufacturer extends Resource
 
         $query = $this->getRepository()->getDetailQuery($id);
 
-        /** @var \Shopware\Models\Article\Supplier $manufacturer */
+        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$manufacturer) {
@@ -153,7 +153,7 @@ class Manufacturer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Article\Supplier $manufacturer */
+        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
@@ -190,7 +190,7 @@ class Manufacturer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Article\Supplier $manufacturer */
+        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {

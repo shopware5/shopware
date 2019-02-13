@@ -45,7 +45,7 @@ class Repository extends ModelRepository
         if ($date === null) {
             $date = new \DateTime();
         }
-        /** @var Banner $bannerStatistics */
+        /** @var Banner|null $bannerStatistics */
         $bannerStatistics = $this->findOneBy(['bannerId' => $bannerId, 'displayDate' => $date]);
 
         // If no Entry for this day exists - create a new one

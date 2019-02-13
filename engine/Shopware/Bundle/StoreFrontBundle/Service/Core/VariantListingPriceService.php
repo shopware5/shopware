@@ -193,7 +193,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var PriceDiscount $highest */
+        /** @var PriceDiscount|null $highest */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

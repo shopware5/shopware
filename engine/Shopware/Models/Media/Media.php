@@ -531,7 +531,7 @@ class Media extends ModelEntity
     /**
      * Returns the instance of the assigned album
      *
-     * @return \Shopware\Models\Media\Album
+     * @return \Shopware\Models\Media\Album|null
      */
     public function getAlbum()
     {
@@ -783,8 +783,8 @@ class Media extends ModelEntity
      * passed file name. The file name have to be passed, because on update the internal
      * file name property is already changed to the new name.
      *
-     * @param array  $thumbnailSizes
-     * @param string $fileName
+     * @param array|null $thumbnailSizes
+     * @param string     $fileName
      */
     public function removeAlbumThumbnails($thumbnailSizes, $fileName)
     {

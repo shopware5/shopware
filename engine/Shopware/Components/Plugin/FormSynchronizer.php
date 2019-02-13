@@ -179,7 +179,7 @@ class FormSynchronizer
      */
     private function getForm(Plugin $plugin)
     {
-        /** @var Form $form */
+        /** @var Form|null $form */
         $form = $this->formRepository->findOneBy([
             'pluginId' => $plugin->getId(),
         ]);

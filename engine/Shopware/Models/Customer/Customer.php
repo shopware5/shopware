@@ -1080,11 +1080,11 @@ class Customer extends LazyFetchModelEntity
      *
      * of the association between customers and group
      *
-     * @return \Shopware\Models\Customer\Group
+     * @return \Shopware\Models\Customer\Group|null
      */
     public function getGroup()
     {
-        /** @var \Shopware\Models\Customer\Group $return */
+        /** @var \Shopware\Models\Customer\Group|null $return */
         $return = $this->fetchLazy($this->group, ['key' => $this->groupKey]);
 
         return $return;
@@ -1212,7 +1212,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return Address
+     * @return Address|null
      */
     public function getDefaultBillingAddress()
     {
@@ -1230,7 +1230,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return Address
+     * @return Address|null
      */
     public function getDefaultShippingAddress()
     {
@@ -1428,7 +1428,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getDoubleOptinConfirmDate()
     {

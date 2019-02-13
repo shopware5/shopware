@@ -44,6 +44,7 @@ class CategoryUrlProvider extends BaseUrlProvider
         $categoryRepository = $this->modelManager->getRepository(Category::class);
         $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId());
 
+        /** @var array<string, array> $category */
         foreach ($categories as $key => &$category) {
             if (!empty($category['external'])) {
                 unset($categories[$key]);

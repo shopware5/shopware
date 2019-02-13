@@ -297,7 +297,7 @@ class BatchProcess
         $entityManager = $this->getDqlHelper()->getEntityManager();
         $connection = $entityManager->getConnection();
 
-        /** @var \Shopware\Models\MultiEdit\Queue $queue */
+        /** @var \Shopware\Models\MultiEdit\Queue|null $queue */
         $queue = $entityManager->find(Queue::class, $queueId);
 
         if (!$queue) {

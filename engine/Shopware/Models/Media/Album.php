@@ -106,7 +106,7 @@ class Album extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
-    private $parentId = null;
+    private $parentId;
 
     /**
      * Position of the album to configure the display order
@@ -315,7 +315,7 @@ class Album extends ModelEntity
     /**
      * Returns the album settings
      *
-     * @return \Shopware\Models\Media\Settings
+     * @return \Shopware\Models\Media\Settings|null
      */
     public function getSettings()
     {

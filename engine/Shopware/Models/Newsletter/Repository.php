@@ -34,20 +34,20 @@ class Repository extends ModelRepository
     /**
      * Receives all known newsletter groups
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int|null                                     $limit
+     * @param int|null                                     $offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getListGroupsQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
-        // get the query and prepare the limit statement
+        // Get the query and prepare the limit statement
         $builder = $this->getListGroupsQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                   ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -57,8 +57,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -68,7 +68,7 @@ class Repository extends ModelRepository
         $builder->select([
             'groups',
         ]);
-        $builder->from('Shopware\Models\Newsletter\Group', 'groups');
+        $builder->from(\Shopware\Models\Newsletter\Group::class, 'groups');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -83,10 +83,10 @@ class Repository extends ModelRepository
     /**
      * Receives all known addresses
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int|null                                     $limit
+     * @param int|null                                     $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -96,7 +96,7 @@ class Repository extends ModelRepository
         $builder = $this->getListAddressesQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                   ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -106,8 +106,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListAddressesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -120,7 +120,7 @@ class Repository extends ModelRepository
             'newsletterGroup',
             'lastNewsletter',
         ]);
-        $builder->from('Shopware\Models\Newsletter\Address', 'address')
+        $builder->from(\Shopware\Models\Newsletter\Address::class, 'address')
             ->leftJoin('address.customer', 'customer', 'WITH', 'address.isCustomer = true')
             ->leftJoin('address.newsletterGroup', 'newsletterGroup')
             ->leftJoin('address.lastNewsletter', 'lastNewsletter');
@@ -143,20 +143,20 @@ class Repository extends ModelRepository
     /**
      * Receives all known senders
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int|null                                     $limit
+     * @param int|null                                     $offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getListSenderQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
-        // get the query and prepare the limit statement
+        // Get the query and prepare the limit statement
         $builder = $this->getListSenderQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                   ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -166,8 +166,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListSendersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -177,7 +177,7 @@ class Repository extends ModelRepository
         $builder->select([
             'sender',
         ]);
-        $builder->from('Shopware\Models\Newsletter\Sender', 'sender');
+        $builder->from(\Shopware\Models\Newsletter\Sender::class, 'sender');
 
         if ($filter !== null) {
             $builder->andWhere($builder->expr()->orX(
@@ -195,10 +195,10 @@ class Repository extends ModelRepository
     /**
      * Receives all known mailings with status > -1
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int|null                                     $limit
+     * @param int|null                                     $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -208,7 +208,7 @@ class Repository extends ModelRepository
         $builder = $this->getListNewslettersQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                   ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder->getQuery();
@@ -218,8 +218,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListNewslettersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -234,16 +234,14 @@ class Repository extends ModelRepository
             'articles',
             'links',
             'banner',
-//            'addresses'
         ]);
-        $builder->from('Shopware\Models\Newsletter\Newsletter', 'mailing')
-                ->leftJoin('mailing.containers', 'container')
-                ->leftJoin('container.text', 'text')
-                ->leftJoin('container.articles', 'articles')
-                ->leftJoin('container.links', 'links')
-                ->leftJoin('container.banner', 'banner')
-//                ->leftJoin('mailing.addresses', 'addresses')
-                ->where('mailing.status > -1');
+        $builder->from(\Shopware\Models\Newsletter\Newsletter::class, 'mailing')
+            ->leftJoin('mailing.containers', 'container')
+            ->leftJoin('container.text', 'text')
+            ->leftJoin('container.articles', 'articles')
+            ->leftJoin('container.links', 'links')
+            ->leftJoin('container.banner', 'banner')
+            ->where('mailing.status > -1');
 
         if ($filter !== null) {
             $builder->andWhere($builder->expr()->orX(

@@ -357,7 +357,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns view instance
      *
-     * @return Enlight_View_Default
+     * @return Enlight_View_Default|null
      */
     public function View()
     {

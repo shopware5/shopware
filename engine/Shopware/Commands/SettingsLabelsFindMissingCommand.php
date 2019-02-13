@@ -77,7 +77,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
             return 1;
         }
 
-        /** @var Locale $locale */
+        /** @var Locale|null $locale */
         $locale = $this->container->get('models')
             ->getRepository(\Shopware\Models\Shop\Locale::class)
             ->findOneByLocale($input->getArgument('locale'));

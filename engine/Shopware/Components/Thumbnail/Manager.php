@@ -57,7 +57,7 @@ class Manager
     protected $rootDir;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var \Enlight_Event_EventManager|null
      */
     protected $eventManager;
 
@@ -292,7 +292,7 @@ class Manager
      *
      * array('width' => 100, 'height' => 200)
      *
-     * @param string[] $thumbnailSizes
+     * @param int[]|string[]|array<string[]>|array<int[]> $thumbnailSizes
      *
      * @return array
      */
@@ -311,7 +311,7 @@ class Manager
                 }
 
                 if (is_int($size)) {
-                    $size = ['width' => $size[0], 'height' => isset($size[1]) ? $size[1] : $size[0]];
+                    $size = ['width' => $size, 'height' => $size];
                 }
             }
         }
