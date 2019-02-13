@@ -24,6 +24,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added configuration to define the format of a valid order number 
 * Added service `\Doctrine\Common\Annotations\Reader` as `models.annotations_reader`
 * Added `shopware.controller.blacklisted_controllers` parameter to the DI container to blacklist controllers for dispatching
+* Added default table options of Doctrine to config
 
 ### Changes
 
@@ -130,3 +131,23 @@ return [
 ]
 ``` 
 Or you can create your own implementation of the underlying interface `\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface` and use it for the validation by simply decorating the current service with id `shopware.components.ordernumber_validator` and e.g. query some API. 
+
+### Definition of MySQL version in config
+
+It is now possible to define the MySQL version being used in the `config.php` as part of the Doctrine default configuration.
+The version can be determined by running the SQL query `SELECT version()`, the result needs to be provided in the `db.serverVersion` config:
+
+```php
+
+<?php
+return [
+     ...
+     'db' => [
+         ...
+         'serverVersion' => '5.7.24',
+     ],
+];
+```
+Providing this value via config makes it unnecessary for Doctrine to figure the version out by itself, thus reducing the number of database calls Shopware makes per request by one.
+
+If you are running a MariaDB database, you should prefix the `serverVersion` with `mariadb`- (e.g.: `mariadb-10.2.12`).

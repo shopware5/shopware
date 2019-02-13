@@ -138,6 +138,11 @@ return array_replace_recursive([
         'host' => 'localhost',
         'charset' => 'utf8mb4',
         'adapter' => 'pdo_mysql',
+        'serverVersion' => null,
+        'defaultTableOptions' => [
+            'charset' => 'utf8',
+            'collate' => 'utf8_unicode_ci',
+        ],
     ],
     'es' => [
         'prefix' => 'sw_shop',
