@@ -140,7 +140,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . $context->getCurrentCustomerGroup()->getId();
+        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . ($this->Config()->get('excludeCustomergroup') ? '' : '_' . $context->getCurrentCustomerGroup()->getId());
         $cache = Shopware()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
@@ -196,6 +196,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $form->setElement('number', 'hoverDelay', [
             'label' => 'Hover Verzögerung (ms)',
             'value' => 250,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('text', 'levels', [
@@ -225,11 +226,20 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $form->setElement('boolean', 'caching', [
             'label' => 'Caching aktivieren',
             'value' => 1,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('number', 'cachetime', [
             'label' => 'Cachezeit',
             'value' => 86400,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+        ]);
+
+        $form->setElement('boolean', 'excludeCustomergroup', [
+            'label' => 'Kundengruppen ausschließen',
+            'value' => 0,
+            'description' => 'Alle Kundengruppen erhalten das gleiche Menü (bessere Perfomance)',
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $this->translateForm();
@@ -245,6 +255,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 'cachetime' => ['label' => 'Caching time'],
                 'columnAmount' => ['label' => 'Teaser width'],
                 'hoverDelay' => ['label' => 'Hover delay (ms)'],
+                'excludeCustomergroup' => ['label' => 'Exclude Customergroup', 'description' => 'All customergroups will have the same menu (better perfomance)'],
             ],
         ];
 
@@ -282,9 +293,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
 
         $query->select('category.path')
-            ->from('s_categories', 'category')
-            ->where('category.id = :id')
-            ->setParameter(':id', $categoryId);
+              ->from('s_categories', 'category')
+              ->where('category.id = :id')
+              ->setParameter(':id', $categoryId);
 
         $path = $query->execute()->fetch(PDO::FETCH_COLUMN);
         $path = explode('|', $path);
@@ -306,13 +317,13 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     {
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
         $query->select('DISTINCT category.id')
-            ->from('s_categories', 'category')
-            ->where('category.path LIKE :path')
-            ->andWhere('category.active = 1')
-            ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
-            ->orderBy('category.position')
-            ->setParameter(':depth', $depth)
-            ->setParameter(':path', '%|' . $parentId . '|%');
+              ->from('s_categories', 'category')
+              ->where('category.path LIKE :path')
+              ->andWhere('category.active = 1')
+              ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
+              ->orderBy('category.position')
+              ->setParameter(':depth', $depth)
+              ->setParameter(':path', '%|' . $parentId . '|%');
 
         /** @var PDOStatement $statement */
         $statement = $query->execute();
