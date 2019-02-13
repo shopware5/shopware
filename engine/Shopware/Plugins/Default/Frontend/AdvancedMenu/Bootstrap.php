@@ -140,7 +140,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . ($this->Config()->get('excludeCustomergroup') ?: '_' . $context->getCurrentCustomerGroup()->getId());
+        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . ($this->Config()->get('excludeCustomergroup') ? '' : '_' . $context->getCurrentCustomerGroup()->getId());
         $cache = Shopware()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
