@@ -51,7 +51,8 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         if (!empty($this->Request()->sDelete)) {
             Shopware()->Modules()->Basket()->sDeleteNote($this->Request()->sDelete);
         }
-        $this->forward('index');
+
+        $this->redirect(['action' => 'index']);
     }
 
     public function addAction()
@@ -62,7 +63,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
             $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
         }
 
-        $this->forward('index');
+        $this->redirect(['action' => 'index']);
     }
 
     public function ajaxAddAction()
