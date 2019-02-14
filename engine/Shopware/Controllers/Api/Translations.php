@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\Translation;
+
+class Shopware_Controllers_Api_Translations extends RestController
 {
     /**
-     * @var \Shopware\Components\Api\Resource\Translation
+     * @var Translation
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Translation $translation)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('translation');
+        $this->resource = $translation;
+        parent::__construct();
     }
 
     public function preDispatch()

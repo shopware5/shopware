@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\PropertyGroup;
+
+class Shopware_Controllers_Api_PropertyGroups extends RestController
 {
     /**
-     * @var Shopware\Components\Api\Resource\PropertyGroup
+     * @var PropertyGroup
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(PropertyGroup $resource)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('PropertyGroup');
+        $this->resource = $resource;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +43,7 @@ class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_R
      *
      * GET /api/properties/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +61,7 @@ class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_R
      *
      * GET /api/properties/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -72,7 +76,7 @@ class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_R
      *
      * POST /api/properties
      */
-    public function postAction()
+    public function postAction(): void
     {
         $category = $this->resource->create($this->Request()->getPost());
 
@@ -91,7 +95,7 @@ class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_R
      *
      * PUT /api/properties/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -112,7 +116,7 @@ class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_R
      *
      * DELETE /api/properties/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

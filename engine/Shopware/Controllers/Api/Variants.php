@@ -22,19 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Api\Manager;
+use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Variant;
 
-class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
+class Shopware_Controllers_Api_Variants extends RestController
 {
     /**
      * @var Variant
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Variant $resource)
     {
-        $this->resource = Manager::getResource('variant');
+        $this->resource = $resource;
+        parent::__construct();
     }
 
     /**
@@ -42,7 +43,7 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      *
      * GET /api/variants/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $request = $this->Request();
         $limit = (int) $request->getParam('limit', 1000);
@@ -64,7 +65,7 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      *
      * GET /api/variants/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $request = $this->Request();
         $id = $request->getParam('id');
@@ -90,7 +91,7 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      *
      * POST /api/variants
      */
-    public function postAction()
+    public function postAction(): void
     {
         $variant = $this->resource->create($this->Request()->getPost());
 
@@ -109,7 +110,7 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/variants/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $request = $this->Request();
         $id = $request->getParam('id');
@@ -136,7 +137,7 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/variants/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $request = $this->Request();
         $id = $request->getParam('id');

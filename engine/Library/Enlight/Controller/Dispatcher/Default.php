@@ -572,10 +572,10 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             /** @var Enlight_Controller_Action $controller */
             $controller = new $proxy($request, $response);
         } else {
-            /** @var \Shopware\Components\Controller $controller */
+            /** @var \Shopware\Bundle\ControllerBundle\Controller $controller */
             $controller = $class;
             $controller->setRequest($request)->setResponse($response);
-            $controller->init();
+            $controller->initController();
         }
 
         $controller->setFront($this->Front());

@@ -22,24 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
+namespace Shopware\Bundle\ControllerBundle;
 
-class Shopware_Controllers_Api_Version extends RestController
+abstract class ExtjsApplicationController extends \Shopware_Controllers_Backend_Application
 {
-    /**
-     * Returns the current version
-     */
-    public function indexAction(): void
-    {
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
-        $shopwareRelease = $this->container->get('shopware.release');
-
-        $result['data'] = [
-            'version' => $shopwareRelease->getVersion(),
-            'revision' => $shopwareRelease->getRevision(),
-        ];
-
-        $this->View()->assign($result);
-        $this->View()->assign('success', true);
-    }
+    use DiControllerTrait;
 }

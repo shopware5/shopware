@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\Order;
+
+class Shopware_Controllers_Api_Orders extends RestController
 {
     /**
      * @var Shopware\Components\Api\Resource\Order
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Order $order)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('order');
+        $this->resource = $order;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +43,7 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
      *
      * GET /api/orders/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +61,7 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
      *
      * GET /api/orders/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
@@ -77,7 +81,7 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
      *
      * POST /api/orders
      */
-    public function postAction()
+    public function postAction(): void
     {
         $order = $this->resource->create($this->Request()->getPost());
 
@@ -96,7 +100,7 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/orders/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);

@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\SitemapBundle\Controller;
 
+use Shopware\Bundle\ControllerBundle\Controller;
 use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
-use Shopware\Components\Controller;
 
 class SitemapIndexXml extends Controller
 {
@@ -62,7 +62,7 @@ class SitemapIndexXml extends Controller
     /**
      * Redirect to sitemap_index.xml if the old sitemap is being requested
      */
-    public function preDispatch()
+    public function preDispatch(): void
     {
         if ($this->Request()->getPathInfo() !== '/sitemap_index.xml') {
             $this->redirect(['controller' => 'sitemap_index.xml']);
@@ -71,7 +71,7 @@ class SitemapIndexXml extends Controller
         }
     }
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $sitemaps = $this->sitemapLister->getSitemaps($this->get('shop')->getId());
 

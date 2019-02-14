@@ -22,24 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
+namespace Shopware\Bundle\ControllerBundle;
 
-class Shopware_Controllers_Api_Version extends RestController
+trait DiControllerTrait
 {
-    /**
-     * Returns the current version
-     */
-    public function indexAction(): void
+    public function __construct()
     {
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
-        $shopwareRelease = $this->container->get('shopware.release');
+    }
 
-        $result['data'] = [
-            'version' => $shopwareRelease->getVersion(),
-            'revision' => $shopwareRelease->getRevision(),
-        ];
+    public function initController(): void
+    {
+        $this->controller_name = $this->Front()->Dispatcher()->getFullControllerName($this->Request());
 
-        $this->View()->assign($result);
-        $this->View()->assign('success', true);
+        Shopware()->Events()->notify(
+            'Enlight_Controller_Action_Init',
+            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
+        );
+        Shopware()->Events()->notify(
+            'Enlight_Controller_Action_Init_' . $this->controller_name,
+            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
+        );
+
+        if (method_exists($this, 'init')) {
+            $this->init();
+        }
     }
 }

@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\Shop;
+
+class Shopware_Controllers_Api_Shops extends RestController
 {
     /**
      * @var Shopware\Components\Api\Resource\Shop
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Shop $shop)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('shop');
+        $this->resource = $shop;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +43,7 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
      *
      * GET /api/shops/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +61,7 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
      *
      * GET /api/shops/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -72,7 +76,7 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
      *
      * POST /api/shop
      */
-    public function postAction()
+    public function postAction(): void
     {
         $shop = $this->resource->create($this->Request()->getPost());
 
@@ -91,7 +95,7 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/shops/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -112,7 +116,7 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/shop/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

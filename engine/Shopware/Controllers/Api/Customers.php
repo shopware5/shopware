@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\Customer;
+
+class Shopware_Controllers_Api_Customers extends RestController
 {
     /**
-     * @var \Shopware\Components\Api\Resource\Customer
+     * @var Customer
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Customer $customer)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('customer');
+        $this->resource = $customer;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +43,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
      *
      * GET /api/customers/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +61,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
      *
      * GET /api/customers/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
@@ -77,7 +81,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
      *
      * POST /api/customers
      */
-    public function postAction()
+    public function postAction(): void
     {
         $customer = $this->resource->create($this->Request()->getPost());
 
@@ -96,7 +100,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/customers/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
@@ -122,7 +126,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/customers/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
