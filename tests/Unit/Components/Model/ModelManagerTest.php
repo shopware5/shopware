@@ -24,38 +24,10 @@
 
 namespace Shopware\Tests\Unit\Components\Model;
 
-use Shopware\Components\Model\ModelManager;
+use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 
 class ModelManagerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    public function setUp()
-    {
-        $this->modelManager = $this->createPartialMock(ModelManager::class, []);
-    }
-
-    /**
-     * Call protected/private method of a class.
-     *
-     * @param object $object     instantiated object that we will run method on
-     * @param string $methodName Method name to call
-     * @param array  $parameters array of parameters to pass into method
-     *
-     * @return mixed method return
-     */
-    public function invokeMethod($object, $methodName, array $parameters = [])
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
-    }
-
     /**
      * @return array
      */
@@ -114,9 +86,44 @@ class ModelManagerTest extends \PHPUnit\Framework\TestCase
      * @param string $sqlType
      * @param string $expectedAttributeType
      */
-    public function testConvertSqlTypeToAttributeType($sqlType, $expectedAttributeType)
+    public function testConvertSqlTypeToAttributeType($sqlType, $expectedAttributeType): void
     {
-        $convertedSqlType = $this->invokeMethod($this->modelManager, 'convertColumnType', [$sqlType]);
-        $this->assertEquals($expectedAttributeType, $convertedSqlType);
+        $this->assertEquals($expectedAttributeType, $this->convertColumnType($sqlType));
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    private function convertColumnType($type): string
+    {
+        switch (true) {
+            case (bool) preg_match('#\b(char\b|varchar)\b#i', $type):
+                $type = TypeMapping::TYPE_STRING;
+                break;
+            case (bool) preg_match('#\b(text|blob|array|simple_array|json_array|object|binary|guid)\b#i', $type):
+                $type = TypeMapping::TYPE_TEXT;
+                break;
+            case (bool) preg_match('#\b(datetime|timestamp)\b#i', $type):
+                $type = TypeMapping::TYPE_DATETIME;
+                break;
+            case (bool) preg_match('#\b(date|datetimetz)\b#i', $type):
+                $type = TypeMapping::TYPE_DATE;
+                break;
+            case (bool) preg_match('#\b(int|integer|smallint|tinyint|mediumint|bigint)\b#i', $type):
+                $type = TypeMapping::TYPE_INTEGER;
+                break;
+            case (bool) preg_match('#\b(float|double|decimal|dec|fixed|numeric)\b#i', $type):
+                $type = TypeMapping::TYPE_FLOAT;
+                break;
+            case (bool) preg_match('#\b(bool|boolean)\b#i', $type):
+                $type = TypeMapping::TYPE_BOOLEAN;
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf('Column type "%s" cannot be converted.', $type));
+        }
+
+        return $type;
     }
 }

@@ -33,7 +33,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\Query\SqlWalker;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -346,43 +345,5 @@ class ModelManager extends EntityManager
         }
 
         return $data;
-    }
-
-    /**
-     * Convert SQL column types to attribute bundle type mapping
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    private function convertColumnType($type)
-    {
-        switch (true) {
-            case (bool) preg_match('#\b(char\b|varchar)\b#i', $type):
-                $type = TypeMapping::TYPE_STRING;
-                break;
-            case (bool) preg_match('#\b(text|blob|array|simple_array|json_array|object|binary|guid)\b#i', $type):
-                $type = TypeMapping::TYPE_TEXT;
-                break;
-            case (bool) preg_match('#\b(datetime|timestamp)\b#i', $type):
-                $type = TypeMapping::TYPE_DATETIME;
-                break;
-            case (bool) preg_match('#\b(date|datetimetz)\b#i', $type):
-                $type = TypeMapping::TYPE_DATE;
-                break;
-            case (bool) preg_match('#\b(int|integer|smallint|tinyint|mediumint|bigint)\b#i', $type):
-                $type = TypeMapping::TYPE_INTEGER;
-                break;
-            case (bool) preg_match('#\b(float|double|decimal|dec|fixed|numeric)\b#i', $type):
-                $type = TypeMapping::TYPE_FLOAT;
-                break;
-            case (bool) preg_match('#\b(bool|boolean)\b#i', $type):
-                $type = TypeMapping::TYPE_BOOLEAN;
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf('Column type "%s" cannot be converted.', $type));
-        }
-
-        return $type;
     }
 }

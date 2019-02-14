@@ -110,7 +110,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @expectedException \Doctrine\ORM\ORMInvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithEmptyCustomer()
     {

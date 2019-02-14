@@ -1255,7 +1255,7 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException('At least the groupname is required');
             }
 
-            $groupOptions = [];
+            $groupOptions = $group->getOptions();
             $optionPosition = 0;
             foreach ($groupData['options'] as $optionData) {
                 $option = null;
