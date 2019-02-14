@@ -79,9 +79,6 @@ class BatchProductSearchTest extends TestCase
 
     public function testWithNumericArticleNumbers()
     {
-        $this->assertTrue(true);
-
-        return;
         $context = $this->getContext();
         $category = $this->helper->createCategory();
         $this->createProducts([10002 => [], 'SW10001' => []], $context, $category);
@@ -97,8 +94,6 @@ class BatchProductSearchTest extends TestCase
 
     public function testWithLessProductsThanRequested()
     {
-        $this->markTestIncomplete('Known failing.');
-
         $context = $this->getContext();
         $category = $this->helper->createCategory();
         $this->createProducts(
@@ -130,7 +125,7 @@ class BatchProductSearchTest extends TestCase
         $result = $this->batchProductSearch->search($request, $context);
 
         $products = $result->get('test-criteria-1');
-        $this->assertCount(11, $products);
+        $this->assertCount(10, $products);
         $this->assertProductNumbersExists(
             $products,
             [
