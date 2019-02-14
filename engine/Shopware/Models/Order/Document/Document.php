@@ -119,9 +119,9 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $amount;
 
         /**
-         * @var int
+         * @var string
          *
-         * @ORM\Column(name="docID", type="integer", nullable=false)
+         * @ORM\Column(name="docID", type="string", nullable=false)
          */
         private $documentId;
 
@@ -257,7 +257,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Set documentId
          *
-         * @param int $documentId
+         * @param string $documentId
          *
          * @return Document
          */
@@ -271,7 +271,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Get documentId
          *
-         * @return int
+         * @return string
          */
         public function getDocumentId()
         {
@@ -441,9 +441,9 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $amount;
 
         /**
-         * @var int
+         * @var string
          *
-         * @ORM\Column(name="docID", type="integer", nullable=false)
+         * @ORM\Column(name="docID", type="string", nullable=false)
          */
         private $documentId;
 
@@ -579,7 +579,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Set documentId
          *
-         * @param int $documentId
+         * @param string $documentId
          *
          * @return Document
          */
@@ -593,7 +593,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * Get documentId
          *
-         * @return int
+         * @return string
          */
         public function getDocumentId()
         {
