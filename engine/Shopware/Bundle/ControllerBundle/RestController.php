@@ -22,24 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
+namespace Shopware\Bundle\ControllerBundle;
 
-class Shopware_Controllers_Api_Version extends RestController
+use Shopware\Components\Api\Resource\Resource;
+
+abstract class RestController extends \Shopware_Controllers_Api_Rest
 {
+    use DiControllerTrait;
     /**
-     * Returns the current version
+     * @var resource
      */
-    public function indexAction(): void
+    protected $resource;
+
+    public function preDispatch()
     {
-        /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
-        $shopwareRelease = $this->container->get('shopware.release');
+        parent::preDispatch();
 
-        $result['data'] = [
-            'version' => $shopwareRelease->getVersion(),
-            'revision' => $shopwareRelease->getRevision(),
-        ];
-
-        $this->View()->assign($result);
-        $this->View()->assign('success', true);
+        if (($this->resource instanceof Resource) && $this->container->initialized('Auth')) {
+            $this->resource->setAcl($this->container->get('acl'));
+            $this->resource->setRole($this->container->get('auth')->getIdentity()->role);
+        }
     }
 }

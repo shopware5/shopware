@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\Country;
+
+class Shopware_Controllers_Api_Countries extends RestController
 {
     /**
-     * @var \Shopware\Components\Api\Resource\Country
+     * @var Country
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Country $country)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('country');
+        $this->resource = $country;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +43,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
      *
      * GET /api/countries
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +61,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
      *
      * GET /api/countries/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -72,7 +76,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
      *
      * POST /api/countries
      */
-    public function postAction()
+    public function postAction(): void
     {
         $params = $this->Request()->getPost();
 
@@ -94,7 +98,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/countries/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -116,7 +120,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/countries/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

@@ -97,7 +97,7 @@ Controllers can be now registered using the DI tag `shopware.controller`. This D
 namespace SwagExample\Controller\Frontend;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Controller;
+use Shopware\Bundle\ControllerBundle\Controller;
 
 class Test extends Controller
 {
@@ -105,8 +105,8 @@ class Test extends Controller
 
     public function __construct(Connection $connection)
     {
-        parent::__construct();
         $this->connection = $connection;
+        parent::__construct();
     }
 
     public function indexAction()

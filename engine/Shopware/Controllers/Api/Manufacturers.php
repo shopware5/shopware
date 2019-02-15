@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_Manufacturers extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\Manufacturer;
+
+class Shopware_Controllers_Api_Manufacturers extends RestController
 {
     /**
-     * @var Shopware\Components\Api\Resource\Manufacturer
+     * @var Manufacturer
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Manufacturer $manufacturer)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('manufacturer');
+        $this->resource = $manufacturer;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +43,7 @@ class Shopware_Controllers_Api_Manufacturers extends Shopware_Controllers_Api_Re
      *
      * GET /api/manufacturers/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +61,7 @@ class Shopware_Controllers_Api_Manufacturers extends Shopware_Controllers_Api_Re
      *
      * GET /api/manufacturers/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -72,7 +76,7 @@ class Shopware_Controllers_Api_Manufacturers extends Shopware_Controllers_Api_Re
      *
      * POST /api/manufacturers
      */
-    public function postAction()
+    public function postAction(): void
     {
         $manufacturer = $this->resource->create($this->Request()->getPost());
 
@@ -91,7 +95,7 @@ class Shopware_Controllers_Api_Manufacturers extends Shopware_Controllers_Api_Re
      *
      * PUT /api/manufacturers/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -112,7 +116,7 @@ class Shopware_Controllers_Api_Manufacturers extends Shopware_Controllers_Api_Re
      *
      * DELETE /api/manufacturers/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

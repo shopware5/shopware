@@ -6,6 +6,7 @@
 
     <imports>
         <import resource="../HttpCache/services.xml"/>
+        <import resource="api_controller.xml"/>
     </imports>
 
     <parameters>
@@ -652,6 +653,8 @@
             <argument type="service" id="translation" />
         </service>
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
+        <service id="shopware.api.payment_methods" class="Shopware\Components\Api\Resource\PaymentMethods" shared="false" />
+        <service id="shopware.api.user" class="Shopware\Components\Api\Resource\User" shared="false" />
 
         <service id="shopware.api.emotionpreset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
             <argument type="service" id="dbal_connection" />

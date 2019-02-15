@@ -22,31 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components;
+namespace Shopware\Bundle\ControllerBundle;
 
 abstract class Controller extends \Enlight_Controller_Action
 {
-    public function __construct()
-    {
-    }
-
-    public function init()
-    {
-        $this->controller_name = $this->Front()->Dispatcher()->getFullControllerName($this->Request());
-
-        Shopware()->Events()->notify(
-            'Enlight_Controller_Action_Init',
-            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
-        );
-        Shopware()->Events()->notify(
-            'Enlight_Controller_Action_Init_' . $this->controller_name,
-            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
-        );
-    }
-
-    public function dispatch($action)
-    {
-        $this->init();
-        parent::dispatch($action);
-    }
+    use DiControllerTrait;
 }

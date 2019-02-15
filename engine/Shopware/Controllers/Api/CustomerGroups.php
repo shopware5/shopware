@@ -22,16 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\CustomerGroup;
+
+class Shopware_Controllers_Api_CustomerGroups extends RestController
 {
     /**
      * @var Shopware\Components\Api\Resource\CustomerGroup
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(CustomerGroup $customerGroup)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('CustomerGroup');
+        $this->resource = $customerGroup;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +43,7 @@ class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_R
      *
      * GET /api/customerGroups/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +61,7 @@ class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_R
      *
      * GET /api/customergroup/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -72,7 +76,7 @@ class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_R
      *
      * POST /api/customerGroups
      */
-    public function postAction()
+    public function postAction(): void
     {
         $result = $this->resource->create($this->Request()->getPost());
 
@@ -91,7 +95,7 @@ class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_R
      *
      * PUT /api/customerGroups/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -112,7 +116,7 @@ class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_R
      *
      * DELETE /api/customerGroups/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

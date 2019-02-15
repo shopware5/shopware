@@ -22,22 +22,26 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_Rest
+use Shopware\Bundle\ControllerBundle\RestController;
+use Shopware\Components\Api\Resource\CustomerStream;
+
+class Shopware_Controllers_Api_CustomerStreams extends RestController
 {
     /**
      * @var Shopware\Components\Api\Resource\CustomerStream
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(CustomerStream $resource)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('customer_stream');
+        $this->resource = $resource;
+        parent::__construct();
     }
 
     /**
      * GET /api/customer_streams/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 100);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -54,7 +58,7 @@ class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_
      * Returns the customers of a stream or of a collection of conditions
      * GET /api/customer_streams/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $customers = $this->resource->getOne(
             $this->Request()->getParam('id'),
@@ -73,7 +77,7 @@ class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_
      * POST /api/customer_streams
      * POST /api/customer_streams?buildSearchIndex=1
      */
-    public function postAction()
+    public function postAction(): void
     {
         if ($this->Request()->has('buildSearchIndex')) {
             $this->resource->buildSearchIndex(0, true);
@@ -101,7 +105,7 @@ class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_
     /**
      * PUT /api/customer_streams/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $customer = $this->resource->update(
             $this->Request()->getParam('id'),
@@ -121,7 +125,7 @@ class Shopware_Controllers_Api_CustomerStreams extends Shopware_Controllers_Api_
     /**
      * DELETE /api/customer_streams/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $this->resource->delete(
             $this->Request()->getParam('id')
