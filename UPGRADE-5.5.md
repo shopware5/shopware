@@ -8,7 +8,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Additions
 
-* Added license synchronization button in Plugin Manager
+* Added a license synchronization button in Plugin Manager
+* Added a standardized way to filter certain entities from being exported to the sitemap, or have custom URLs exported as well (see paragraph "Excluding URLs from sitemap and adding custom URLs" below)
 
 ### Changes
 
@@ -17,8 +18,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `StaticUrlProvider` to prevent duplicate URLs
 * Changed minibasket to also update amount/number badge when the last product is being removed from offcanvas basket
 * Changed libraries in Updater-app to most recent versions
+* Changed initial BI teaser to only show after a few days
 * Changed `jquery.datepicker.js` to initialize component value by element value on init 
-* Changed following services to lower-case:
+* Changed following service ids to lower-case:
     * `Loader`
     * `Hooks`
     * `Modelconfig`
