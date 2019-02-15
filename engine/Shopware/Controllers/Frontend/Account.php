@@ -277,12 +277,14 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         if (empty($this->View()->getAssign('sErrorMessages')) && $this->admin->sCheckUser()) {
-            return $this->redirect(
-                [
-                    'controller' => $this->Request()->getParam('sTarget', 'account'),
-                    'action' => $this->Request()->getParam('sTargetAction', 'index'),
-                ]
-            );
+            $redirect = [
+                'controller' => $this->Request()->getParam('sTarget', 'account'),
+                'action' => $this->Request()->getParam('sTargetAction', 'index'),
+            ];
+
+            $redirect = $this->get('events')->filter('Shopware_Controllers_Frontend_Account_Login_Redirect', $redirect, ['subject' => $this]);
+
+            return $this->redirect($redirect);
         }
 
         $this->forward('index', 'register', 'frontend', [
