@@ -198,6 +198,9 @@
             var me = this,
                 config = $.extend({}, me.opts);
 
+            // Set basic value
+            me.currentValue = me.$el.val();
+
             /**
              * Convert the initial value to flatpickr friendly format if custom separator is used.
              */
