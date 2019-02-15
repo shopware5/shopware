@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 /**
  * @category Shopware
@@ -39,16 +42,16 @@ class ProductSearch implements ProductSearchInterface
     private $searchGateway;
 
     /**
-     * @var StoreFrontBundle\Service\ListProductServiceInterface
+     * @var ListProductServiceInterface
      */
     private $productService;
 
     /**
-     * @param StoreFrontBundle\Service\ListProductServiceInterface $productService
-     * @param ProductNumberSearchInterface                         $searchGateway
+     * @param ListProductServiceInterface  $productService
+     * @param ProductNumberSearchInterface $searchGateway
      */
     public function __construct(
-        StoreFrontBundle\Service\ListProductServiceInterface $productService,
+        ListProductServiceInterface $productService,
         ProductNumberSearchInterface $searchGateway
     ) {
         $this->productService = $productService;
@@ -60,7 +63,7 @@ class ProductSearch implements ProductSearchInterface
      */
     public function search(
         Criteria $criteria,
-        StoreFrontBundle\Struct\ProductContextInterface $context
+        ProductContextInterface $context
     ) {
         $numberResult = $this->searchGateway->search($criteria, $context);
 
@@ -82,10 +85,10 @@ class ProductSearch implements ProductSearchInterface
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct[] $products
-     * @param StoreFrontBundle\Struct\BaseProduct[] $searchProducts
+     * @param ListProduct[] $products
+     * @param BaseProduct[] $searchProducts
      *
-     * @return StoreFrontBundle\Struct\ListProduct[]
+     * @return ListProduct[]
      */
     private function assignAttributes($products, $searchProducts)
     {

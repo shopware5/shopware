@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.8
+
+[View all changes from v5.5.5...v5.5.6](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
+
+### Changes
+
+* Undeprecated `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface` which was deprecated since 5.3.0
+
 ## 5.5.7
 
 [View all changes from v5.5.6...v5.5.7](https://github.com/shopware/shopware/compare/v5.5.6...v5.5.7)

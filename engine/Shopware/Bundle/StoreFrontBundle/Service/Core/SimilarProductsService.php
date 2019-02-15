@@ -28,28 +28,32 @@ use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware_Components_Config;
 
 /**
  * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SimilarProductsService implements Service\SimilarProductsServiceInterface
+class SimilarProductsService implements SimilarProductsServiceInterface
 {
     /**
-     * @var Gateway\SimilarProductsGatewayInterface
+     * @var SimilarProductsGatewayInterface
      */
     private $gateway;
 
     /**
-     * @var Service\ListProductServiceInterface
+     * @var ListProductServiceInterface
      */
     private $listProductService;
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -64,18 +68,18 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     private $factory;
 
     /**
-     * @param Gateway\SimilarProductsGatewayInterface $gateway
-     * @param Service\ListProductServiceInterface     $listProductService
-     * @param \Shopware_Components_Config             $config
-     * @param ProductSearchInterface                  $search
-     * @param StoreFrontCriteriaFactoryInterface      $factory
+     * @param SimilarProductsGatewayInterface    $gateway
+     * @param ListProductServiceInterface        $listProductService
+     * @param Shopware_Components_Config         $config
+     * @param ProductSearchInterface             $search
+     * @param StoreFrontCriteriaFactoryInterface $factory
      */
     public function __construct(
-        Gateway\SimilarProductsGatewayInterface $gateway,
-        Service\ListProductServiceInterface $listProductService,
+        SimilarProductsGatewayInterface $gateway,
+        ListProductServiceInterface $listProductService,
         ProductSearchInterface $search,
         StoreFrontCriteriaFactoryInterface $factory,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->gateway = $gateway;
         $this->listProductService = $listProductService;
@@ -87,7 +91,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    public function get(ListProduct $product, ProductContextInterface $context)
     {
         $similar = $this->getList([$product], $context);
 
@@ -97,7 +101,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, ProductContextInterface $context)
     {
         /**
          * returns an array which is associated with the different product numbers.
@@ -138,7 +142,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
         }
 
         $fallbackResult = [];
-        /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product */
+        /** @var ListProduct $product */
         foreach ($fallback as $product) {
             $criteria = $this->factory->createBaseCriteria([$context->getShop()->getCategory()->getId()], $context);
             $criteria->limit($limit);
@@ -159,10 +163,10 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     }
 
     /**
-     * @param Struct\BaseProduct[] $products
-     * @param array                $numbers
+     * @param BaseProduct[] $products
+     * @param array         $numbers
      *
-     * @return Struct\BaseProduct[]
+     * @return BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
     {

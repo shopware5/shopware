@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 /**
  * @category Shopware
@@ -36,12 +37,12 @@ interface RelatedProductsServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface::get()
      *
-     * @param Struct\BaseProduct[]           $products
-     * @param Struct\ProductContextInterface $context
+     * @param BaseProduct[]           $products
+     * @param ProductContextInterface $context
      *
-     * @return array indexed with the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct array
+     * @return array indexed with the product number, each array element contains a BaseProduct array
      */
-    public function getList($products, Struct\ProductContextInterface $context);
+    public function getList($products, ProductContextInterface $context);
 
     /**
      * Selects all related products for the provided product.
@@ -55,10 +56,10 @@ interface RelatedProductsServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
      *
-     * @param Struct\BaseProduct             $product
-     * @param Struct\ProductContextInterface $context
+     * @param BaseProduct             $product
+     * @param ProductContextInterface $context
      *
-     * @return Struct\BaseProduct[] indexed by the product order number
+     * @return BaseProduct[] indexed by the product order number
      */
-    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context);
+    public function get(BaseProduct $product, ProductContextInterface $context);
 }

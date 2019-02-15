@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 /**
  * @category Shopware
@@ -36,12 +38,12 @@ interface GraduatedPricesServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\GraduatedPricesServiceInterface::get()
      *
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\ProductContextInterface $context
+     * @param ListProduct[]           $products
+     * @param ProductContextInterface $context
      *
-     * @return array indexed by the product number, each array element contains a Struct\Product\PriceRule array
+     * @return array indexed by the product number, each array element contains a PriceRule array
      */
-    public function getList($products, Struct\ProductContextInterface $context);
+    public function getList($products, ProductContextInterface $context);
 
     /**
      * Returns the graduated product prices for the provided context and product.
@@ -57,10 +59,10 @@ interface GraduatedPricesServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
      *
-     * @param Struct\ListProduct             $product
-     * @param Struct\ProductContextInterface $context
+     * @param ListProduct             $product
+     * @param ProductContextInterface $context
      *
-     * @return Struct\Product\PriceRule[]
+     * @return PriceRule[]
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);
+    public function get(ListProduct $product, ProductContextInterface $context);
 }

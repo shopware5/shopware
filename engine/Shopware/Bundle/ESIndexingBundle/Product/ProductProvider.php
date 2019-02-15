@@ -428,7 +428,6 @@ class ProductProvider implements ProductProviderInterface
             }
             $rules = $priceRules[$number];
 
-            /** @var ProductContextInterface $context */
             foreach ($contexts as $context) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();
@@ -440,6 +439,8 @@ class ProductProvider implements ProductProviderInterface
 
                 /* @var PriceRule $rule */
                 $product->setCheapestPriceRule($rule);
+
+                /* @var ProductContextInterface $context */
                 $this->priceCalculationService->calculateProduct($product, $context);
 
                 if ($product->getCheapestPrice()) {

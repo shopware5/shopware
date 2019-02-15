@@ -24,11 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface instead
- *
  * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
@@ -38,27 +37,27 @@ interface PriceHelperInterface
     /**
      * Returns the full selection for the cheapest price
      *
-     * @param Struct\ProductContextInterface $context
+     * @param ProductContextInterface $context
      *
      * @return string
      */
-    public function getSelection(Struct\ProductContextInterface $context);
+    public function getSelection(ProductContextInterface $context);
 
     /**
      * Joins the customer prices to the provided query
      *
-     * @param QueryBuilder                $query
-     * @param Struct\ShopContextInterface $context
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
      */
-    public function joinPrices(QueryBuilder $query, Struct\ShopContextInterface $context);
+    public function joinPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins the fallback customer group prices for the provided query
      *
-     * @param QueryBuilder                $query
-     * @param Struct\ShopContextInterface $context
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
      */
-    public function joinDefaultPrices(QueryBuilder $query, Struct\ShopContextInterface $context);
+    public function joinDefaultPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins variants to the selected products which are available
