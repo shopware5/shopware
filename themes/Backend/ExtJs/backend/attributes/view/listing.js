@@ -67,6 +67,17 @@ Ext.define('Shopware.apps.Attributes.view.Listing', {
         };
     },
 
+    createPlugins: function () {
+        var me = this, items = me.callParent(arguments);
+
+        items.push({
+            ptype: 'grid-attributes',
+            table: 's_attribute_configuration_attributes'
+        });
+
+        return items;
+    },
+
     initComponent: function() {
         this.typeStore = Ext.create('Shopware.apps.Attributes.store.Types').load();
         return this.callParent(arguments);

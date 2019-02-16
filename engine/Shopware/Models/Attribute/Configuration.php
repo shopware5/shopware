@@ -34,6 +34,15 @@ use Shopware\Components\Model\ModelEntity;
 class Configuration extends ModelEntity
 {
     /**
+     * INVERSE SIDE
+     *
+     * @var \Shopware\Models\Attribute\AttributeConfiguration
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\AttributeConfiguration", mappedBy="attributeConfiguration", orphanRemoval=true, cascade={"persist"})
+     */
+    protected $attribute;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -347,5 +356,23 @@ class Configuration extends ModelEntity
     public function setDefaultValue($defaultValue)
     {
         $this->defaultValue = $defaultValue;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\AttributeConfiguration
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\AttributeConfiguration|array|null $attribute
+     *
+     * @return \Shopware\Models\Attribute\AttributeConfiguration
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\AttributeConfiguration::class, 'attribute', 'attributeConfiguration');
     }
 }

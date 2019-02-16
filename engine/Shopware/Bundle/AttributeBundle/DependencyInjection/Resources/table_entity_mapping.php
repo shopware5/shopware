@@ -376,4 +376,12 @@ return [
         'coreAttributes' => [],
         'dependingTables' => [],
     ],
+    's_attribute_configuration_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\AttributeConfiguration',
+        'identifiers' => ['id', 'configuration_id'],
+        'foreignKey' => 'configuration_id',
+        'coreAttributes' => [],
+        'dependingTables' => [],
+    ],
 ];
