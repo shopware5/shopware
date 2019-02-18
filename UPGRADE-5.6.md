@@ -54,6 +54,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the `Regex`-Constraint on `\Shopware\Models\Article\Detail::$number` to a new `OrderNumber`-Constraint to be more configurable
 * Changed interface `Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface` to contain new method `joinVariants(QueryBuilder $query)` which was already a necessary part of the default implementation
 * Changed Doctrine orm version to 2.6.3
+* Changed mpdf to 7.1.9
 
 ### Removals
 

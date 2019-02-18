@@ -71,7 +71,7 @@
         "setasign/fpdf": "1.8.1",
         "setasign/fpdi": "1.6.2",
         "ocramius/proxy-manager": "2.2.2",
-        "mpdf/mpdf": "7.0.3",
+        "mpdf/mpdf": "7.1.9",
         "php-http/curl-client": "1.7.1",
         "guzzlehttp/psr7": "1.4.2",
         "php-http/message": "1.6.0",
