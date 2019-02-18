@@ -58,6 +58,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed mpdf to 7.1.9
 * Changed `type` of `logMailAddress` config in `s_core_config_elements` to `textarea`
 * Changed mail error handler to consider multiple recipient addresses
+* Changed `Shopware_Controllers_Frontend_Note` forwards to redirects
 
 ### Removals
 
