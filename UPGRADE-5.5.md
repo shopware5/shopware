@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Changes
 
 * Changed url plugin to resolve base-url on cli
+* Changed variant switch to consider url parameters without value
 
 ## 5.5.7
 
