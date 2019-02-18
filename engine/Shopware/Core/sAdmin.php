@@ -3258,6 +3258,11 @@ class sAdmin
                 'userId' => $getUser['id'],
                 'uniqueId' => $uniqueId,
             ]);
+
+            $this->eventManager->notify(
+                'Shopware_Modules_Admin_Login_Notes_Updated',
+                ['subject' => $this, 'userId' => $getUser['id'], 'uniqueId' => $uniqueId]
+            );
         }
 
         $this->sCheckUser();
