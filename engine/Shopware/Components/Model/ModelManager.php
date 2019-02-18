@@ -114,9 +114,7 @@ class ModelManager extends EntityManager
      */
     public function getQueryCount(Query $query)
     {
-        $pagination = $this->createPaginator($query);
-
-        return $pagination->count();
+        return $this->createPaginator($query)->count();
     }
 
     /**

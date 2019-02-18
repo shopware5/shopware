@@ -37,7 +37,7 @@
 
         <service id="shopware_controllers_api_customers" class="Shopware_Controllers_Api_Customers">
             <argument type="service" id="shopware.api.customer"/>
-            <tag name="shopware.controller" module="api" controller="Customer"/>
+            <tag name="shopware.controller" module="api" controller="Customers"/>
         </service>
 
         <service id="shopware_controllers_api_customer_streams" class="Shopware_Controllers_Api_CustomerStreams">
