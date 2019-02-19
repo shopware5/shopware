@@ -86,5 +86,18 @@ function smarty_function_flink($params, $template)
         $file = $request->getScheme() . '://' . $request->getHttpHost() . $file;
     }
 
+    if ($request === null && Shopware()->Container()->initialized('shop')) {
+        $shop = Shopware()->Container()->get('shop');
+        $scheme = $shop->getSecure() ? 'https' : 'http';
+
+        $host = $scheme . '://' . $shop->getHost();
+
+        if ($shop->getBasePath()) {
+            $host .= $shop->getBasePath();
+        }
+
+        $file = $host . '/' . ltrim($file, '/');
+    }
+
     return $file;
 }
