@@ -112,43 +112,51 @@ class CacheWarmer
      * @param Context  $context
      * @param int      $concurrentRequests
      */
-    public function warmUpUrls($urls, Context $context, $concurrentRequests = 1)
-    {
-        $shopId = $context->getShopId();
+	public function warmUpUrls($urls, Context $context, $concurrentRequests = 1)
+	{
+		$shopId = $context->getShopId();
 
-        $guzzleConfig = [];
-        if (!empty($this->getMainShopId($shopId))) {
-            $guzzleConfig['cookies'] = ['shop' => $shopId];
-        }
+		$guzzleConfig = [];
+		if (!empty($this->getMainShopId($shopId))) {
+			$guzzleConfig['cookies'] = ['shop' => $shopId];
+		}
 
-        $requests = [];
-        foreach ($urls as $url) {
-            $requests[] = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
-        }
+		$requests = [];
+		foreach ($urls as $url) {
+			$requests[] = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
+		}
 
-        $events = $this->eventManager;
+		$events = $this->eventManager;
 
-        $pool = new Pool(
-            $this->guzzleClient,
-            $requests,
-            [
-                'pool_size' => $concurrentRequests,
-                'error' => function (ErrorEvent $e) use ($shopId, $events) {
-                    $events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
-                    if ($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 404) {
-                        $this->logger->notice(
-                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
-                        );
-                    } else {
-                        $this->logger->error(
-                            'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
-                        );
-                    }
-                },
-            ]);
+		$pool = new Pool(
+			$this->guzzleClient,
+			$requests,
+			[
+				'pool_size' => $concurrentRequests,
+				'error' => function (ErrorEvent $e) use ($shopId, $events) {
+					$events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
+					
+					$this->logger->notice(
+							$errorMsg . $e->getException()->getMessage()
+						);
+					if ($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 404) {
+						$this->logger->notice(
+							'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
+						);
+					} else if($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 503) {
+						$this->logger->notice(
+							'Warm up http-cache error with shopId ' . $shopId . '. Got a 503 response code. Maybe maintenance mode is enabled? ' . $e->getException()->getMessage()
+						);
+					} else {
+						$this->logger->error(
+							'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
+						);
+					}
+				},
+			]);
 
-        $pool->wait();
-    }
+		$pool->wait();
+	}
 
     /**
      * @deprecated since version 5.5, to be removed in 5.7 - Use warmUpUrls instead
