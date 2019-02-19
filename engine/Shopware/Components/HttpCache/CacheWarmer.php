@@ -139,8 +139,8 @@ class CacheWarmer
                         $this->logger->notice(
                             'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
                         );
-					} elseif($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 503) {
-						$this->logger->notice(
+                    } elseif ($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 503) {
+                        $this->logger->notice(
                             'Warm up http-cache error with shopId ' . $shopId . '. Got a 503 response code. Maybe maintenance mode is enabled? ' . $e->getException()->getMessage()
                         );
                     } else {
