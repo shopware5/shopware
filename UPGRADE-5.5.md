@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed variant switch to consider url parameters without value
 * Changed `CategoryProvider` to skip excluded categories from sitemap 
 * Changed `CookieSubscriber` to clear session value for `userInfo` after a login
+* Changed article REST api to properly deal with configuration option positions
 
 ## 5.5.7
 
