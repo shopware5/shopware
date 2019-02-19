@@ -8,7 +8,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Changes
 
-* Changed availability filter for es condition - (SW-22625)
+* Changed Elasticsearch variant filter to fix issue with availability
+* Changed url plugin to resolve base-url on cli
 
 ## 5.5.7
 
