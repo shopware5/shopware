@@ -51,10 +51,10 @@ SQL;
         $sql = <<<'SQL'
 INSERT IGNORE INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope, options) VALUES(
 @formID,
-'excludeCustomergroup',
-'b:0;',
-'Kundengruppen ausschließen',
-'Alle Kundengruppen erhalten das gleiche Menü (bessere Perfomance)',
+'includeCustomergroup',
+'b:1;',
+'Kundengruppen für Cache berücksichtigen:',
+'Falls aktiv, wird der Cache des Menüs für jede Kundengruppe separat aufgebaut. Nutzen Sie diese Option, falls Sie Kategorien für gewisse Kundengruppen ausgeschlossen haben.<br>Falls inaktiv, erhalten alle Kundengruppen das gleiche Menü aus dem Cache. Diese Einstellung ist zwar performanter, jedoch funktioniert der Kategorieausschluss nach Kundengruppen dann nicht mehr korrekt.',
 'boolean',
 0,
 0,
@@ -64,15 +64,15 @@ INSERT IGNORE INTO s_core_config_elements (form_id, name, value, label, descript
 SQL;
         $this->addSql($sql);
         $sql = <<<'SQL'
-SET @elementID = (SELECT id FROM s_core_config_elements WHERE form_id=@formID AND `name`='excludeCustomergroup');
+SET @elementID = (SELECT id FROM s_core_config_elements WHERE form_id=@formID AND `name`='includeCustomergroup');
 SQL;
         $this->addSql($sql);
         $sql = <<<'SQL'
 INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES (
 @elementID,
 2,
-'Exclude Customergroup',
-'All customergroups will have the same menu (better perfomance)');
+'Consider customer groups for cache:',
+'If active, the menu cache is created separately for each customer group. Use this option if you have excluded categories for certain customer groups. <br>If inactive, all customer groups receive the same menu from the cache. This setting is more performant, but the category exclusion by customer groups will then no longer work correctly.');
 SQL;
         $this->addSql($sql);
     }
