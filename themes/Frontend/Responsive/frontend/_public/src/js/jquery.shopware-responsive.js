@@ -175,7 +175,7 @@
             $('.add-voucher--panel')[method]('is--hidden');
         });
 
-        $('.table--shipping-costs-trigger').on('click touchstart', function (event) {
+        $('body').on('click touchstart', '.table--shipping-costs-trigger', function (event) {
             event.preventDefault();
 
             var $this = $(this),

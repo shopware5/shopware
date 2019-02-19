@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Additions
 
 * Added license synchronization button in Plugin Manager
+* Added configuration for displaying shipping costs pre calculation in off canvas shopping cart
 
 ### Changes
 
@@ -49,6 +50,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `CategoryDuplicator`
     * `CategoryDenormalization`
     * `MediaSubscriber`
+* Changed shipping costs pre calculation display configuration
 
 ### Deprecations
 
