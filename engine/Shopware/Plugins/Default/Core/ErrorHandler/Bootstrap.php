@@ -290,17 +290,19 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function createMailHandler()
     {
-        $mail = Shopware()->Config()->get('logMailAddress');
-        $logLevel = Shopware()->Config()->get('logMailLevel');
-        $logLevel = \Monolog\Logger::toMonologLevel($logLevel);
+        /** @var $config Shopware_Components_Config */
+        $config = $this->get('config');
 
-        if (empty($mail)) {
-            $mail = Shopware()->Config()->Mail;
+        $logLevel = \Monolog\Logger::toMonologLevel($config->get('logMailLevel'));
+        $recipients = array_filter(explode("\n", $config->get('logMailAddress')));
+
+        if (count($recipients) < 1) {
+            $recipients[] = $config->get('mail');
         }
 
         $mailer = new \Enlight_Components_Mail();
-        $mailer->addTo($mail);
-        $mailer->setSubject('Error in shop "' . Shopware()->Config()->Shopname . '".');
+        $mailer->addTo($recipients);
+        $mailer->setSubject('Error in shop "' . $config->get('shopName') . '".');
         $mailHandler = new EnlightMailHandler($mailer, $logLevel);
         $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
         $mailHandler->setFormatter(new HtmlFormatter());

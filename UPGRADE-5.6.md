@@ -56,6 +56,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed interface `Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface` to contain new method `joinVariants(QueryBuilder $query)` which was already a necessary part of the default implementation
 * Changed Doctrine orm version to 2.6.3
 * Changed mpdf to 7.1.9
+* Changed `type` of `logMailAddress` config in `s_core_config_elements` to `textarea`
+* Changed mail error handler to consider multiple recipient addresses
 
 ### Removals
 
