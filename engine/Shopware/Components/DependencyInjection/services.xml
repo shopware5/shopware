@@ -888,5 +888,9 @@
         <service id="shopware.components.stream_protocol_validator" class="Shopware\Components\StreamProtocolValidator"/>
 
         <service id="shopware.components.dispatch_format_helper" class="Shopware\Components\DispatchFormatHelper"/>
+
+        <service id="shopware.components.optin_service" class="Shopware\Components\OptinService">
+            <argument type="service" id="dbal_connection"/>
+        </service>
     </services>
 </container>

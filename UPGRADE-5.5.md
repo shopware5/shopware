@@ -42,6 +42,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `\Shopware\Components\Plugin\XmlConfigDefinitionReader`
     They have been replaced in Shopware 5.6 with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
 
+### Removals
+
+* Removed `appendSession` parameter from router due to possible security implications. Use the `OptinService` to store the session name and id internally and use the generated hash in combination with a ListenerService instead to restore the session where necessary
+
 ### Excluding URLs from sitemap and adding custom URLs
 
 With Shopware 5.5.0, we added a better way to handle a lot of sitemap URLs. 

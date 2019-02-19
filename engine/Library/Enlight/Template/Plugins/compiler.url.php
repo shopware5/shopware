@@ -94,7 +94,7 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
 
         $params = [];
         foreach ($_attr as $index => $param) {
-            if (isset($extractParams) || !preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $param, $match) || !empty($_attr['appendSession'])) {
+            if (isset($extractParams) || !preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $param, $match)) {
                 $params = '';
                 foreach ($_attr as $index => $param) {
                     $params .= var_export($index, true) . ' => ' . $param . ', ';
