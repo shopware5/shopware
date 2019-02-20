@@ -538,6 +538,7 @@
             <argument type="service" id="router"/>
             <argument type="service" id="config"/>
             <argument type="service" id="models"/>
+            <argument type="tagged" tag="router.pre_filter"/>
         </service>
 
         <service id="shopware_storefront.cached_href_lang_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CachedHrefLangService">
