@@ -78,6 +78,7 @@ class BlogUrlProvider implements UrlProviderInterface
             return [];
         }
 
+        $shopId = $shopContext->getShop()->getId();
         $parentId = $shopContext->getShop()->getCategory()->getId();
 
         $categoryRepository = $this->modelManager->getRepository(Category::class);
@@ -96,10 +97,13 @@ class BlogUrlProvider implements UrlProviderInterface
 
         $qb = $this->modelManager->getConnection()->createQueryBuilder();
         $statement = $qb
-            ->addSelect('id, category_id, DATE(display_date) as changed')
+            ->addSelect('blog.id, blog.category_id, DATE(blog.display_date) as changed')
             ->from('s_blog', 'blog')
-            ->where('active = 1')
+            ->where('blog.active = 1')
+            ->innerJoin('blog', 's_categories', 'cat', 'cat.id = blog.category_id')
             ->andWhere('category_id IN (:ids)')
+            ->andWhere('cat.shops IS NULL OR cat.shops LIKE :shopLike')
+            ->setParameter(':shopLike', '%|' . $shopId . '|%')
             ->setParameter('ids', $blogIds, Connection::PARAM_INT_ARRAY)
             ->execute();
 

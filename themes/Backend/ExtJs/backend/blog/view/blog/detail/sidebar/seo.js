@@ -149,7 +149,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
         var me = this;
         me.metaDescription = Ext.create('Ext.form.field.TextArea', {
             fieldLabel: '{s name=detail/sidebar/seo/field/description}Description{/s}',
-            translationLabel: 'Seo-{s name=detail/sidebar/seo/field/description}Description{/s}',
+            translationLabel: 'SEO-{s name=detail/sidebar/seo/field/description}Description{/s}',
             enableKeyEvents: true,
             maxLength: 150,
             supportText: ' ',
@@ -165,7 +165,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
 
         me.metaTitle = Ext.create('Ext.form.field.Text', {
             fieldLabel: '{s name=detail/sidebar/seo/field/title}Title{/s}',
-            translationLabel: 'Seo-{s name=detail/sidebar/seo/field/title}Title{/s}',
+            translationLabel: 'SEO-{s name=detail/sidebar/seo/field/title}Title{/s}',
             name: 'metaTitle',
             translatable: true,
             anchor: '100%'
@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
             {
                 xtype: 'textareafield',
                 fieldLabel: '{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
-                translationLabel: 'Seo-{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
+                translationLabel: 'SEO-{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
                 name: 'metaKeyWords',
                 translatable: true
             },

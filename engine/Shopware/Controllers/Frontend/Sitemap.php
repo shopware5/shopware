@@ -56,7 +56,8 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getCategoryTree()
     {
-        $categoryTree = $this->container->get('modules')->sCategories()->sGetWholeCategoryTree();
+        $shop = $this->container->get('shop');
+        $categoryTree = $this->container->get('modules')->sCategories()->sGetWholeCategoryTree(null, null, $shop->getId());
 
         $categoryTranslations = $this->fetchTranslations('category', $this->getTranslationKeys(
             $categoryTree,
