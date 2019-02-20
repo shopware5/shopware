@@ -136,7 +136,7 @@ class CacheWarmer
                 'error' => function (ErrorEvent $e) use ($shopId, $events) {
                     $events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
                     if ($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 404) {
-                        $this->logger->notice(
+                        $this->logger->error(
                             'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
                         );
                     } else {
