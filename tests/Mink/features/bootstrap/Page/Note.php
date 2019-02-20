@@ -90,4 +90,17 @@ class Note extends Page
             Helper::throwException($messages);
         }
     }
+
+    /**
+     * Its ok to be on the note index page, we're being redirected here.
+     * {@inheritdoc}
+     */
+    protected function verifyUrl(array $urlParameters = [])
+    {
+        if (strpos($this->getDriver()->getCurrentUrl(), '/note') !== false) {
+            return;
+        }
+
+        parent::verifyUrl($urlParameters);
+    }
 }
