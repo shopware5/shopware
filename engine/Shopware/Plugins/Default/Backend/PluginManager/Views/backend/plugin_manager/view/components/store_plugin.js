@@ -186,7 +186,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         if (me.record.allowUpdate()) {
             items.push({
                 cls: 'update badge',
-                html: template + '{s name="update"}Update{/s}</div>'
+                html: template + 'v ' + me.record.get('availableVersion') + '</div>'
             });
         }
 
