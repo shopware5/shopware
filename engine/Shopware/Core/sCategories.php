@@ -316,16 +316,17 @@ class sCategories
      *
      * @param int $parentId Id of the root category, defaults to the current shop category
      * @param int $depth    Depth to use, defaults to null (unlimited depth)
+     * @param int $shopId   Needed for shop limitation
      *
      * @return array Category tree for the provided args
      */
-    public function sGetWholeCategoryTree($parentId = null, $depth = null)
+    public function sGetWholeCategoryTree($parentId = null, $depth = null, $shopId = null)
     {
         if ($parentId === null) {
             $parentId = $this->baseId;
         }
 
-        $result = $this->repository->getActiveChildrenTree($parentId, $this->customerGroupId, $depth);
+        $result = $this->repository->getActiveChildrenTree($parentId, $this->customerGroupId, $depth, $shopId);
         $result = $this->mapCategoryTree($result);
 
         return $result;
