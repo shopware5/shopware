@@ -239,10 +239,10 @@ class ProductProvider implements ProductProviderInterface
                         $product->setAvailability($availability[$number]);
                     }
                 }
-            } elseif (!$product->isMainVariant()) {
-                continue;
-            } elseif ($listProduct->getStock() < $listProduct->getUnit()->getMinPurchase()) {
-                $product->setHasAvailableVariant(false);
+            } else {
+                if (!$product->isMainVariant()) {
+                    continue;
+                }
             }
 
             if (isset($average[$number])) {
