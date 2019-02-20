@@ -10,7 +10,6 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added a license synchronization button in Plugin Manager
 * Added a standardized way to filter certain entities from being exported to the sitemap, or have custom URLs exported as well (see paragraph "Excluding URLs from sitemap and adding custom URLs" below)
-* Added clearing of note entries, that are older than a year, by the "CronRefresh" cronjob
 
 ### Changes
 

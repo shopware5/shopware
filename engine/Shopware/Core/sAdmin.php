@@ -3251,20 +3251,6 @@ class sAdmin
         $this->session->offsetSet('sUserPassword', $hash);
         $this->session->offsetSet('sUserId', $getUser['id']);
 
-        // Update note userID
-        $uniqueId = $this->front->Request()->getCookie('sUniqueID');
-        if (!empty($uniqueId)) {
-            $this->connection->executeQuery('UPDATE s_order_notes SET userID = :userId WHERE sUniqueID = :uniqueId AND userID = 0', [
-                'userId' => $getUser['id'],
-                'uniqueId' => $uniqueId,
-            ]);
-
-            $this->eventManager->notify(
-                'Shopware_Modules_Admin_Login_Notes_Updated',
-                ['subject' => $this, 'userId' => $getUser['id'], 'uniqueId' => $uniqueId]
-            );
-        }
-
         $this->sCheckUser();
     }
 
