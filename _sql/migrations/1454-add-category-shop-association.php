@@ -88,7 +88,7 @@ EOD;
 INSERT IGNORE INTO `s_core_config_elements`
   (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
 VALUES
-(@blogId, 'displayOnlySubShopBlogComments', 'b:0;', 'Nur Subshopspezifische Blog Kommentare anzeigen', 'Wenn aktiv, werden nur Blog-Kommentare des zugehörigen Shops angezeigt.<br>Falls inaktiv, werden unabhängig vom Sprach- oder Subshop stets alle Blog-Kommentare angezeigt', 'checkbox', 0, 0, 1);
+(@blogId, 'displayOnlySubShopBlogComments', 'b:0;', 'Nur subshopspezifische Blog-Kommentare anzeigen', 'Wenn aktiv, werden nur Blog-Kommentare des zugehörigen Shops angezeigt.<br>Falls inaktiv, werden unabhängig vom Sprach- oder Subshop stets alle Blog-Kommentare angezeigt', 'checkbox', 0, 0, 1);
 SQL;
 
         $this->addSql($sql);
