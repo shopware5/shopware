@@ -25,7 +25,6 @@
 namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
-use Webmozart\Assert\Assert;
 
 class OptinService implements OptinServiceInterface
 {
@@ -47,8 +46,13 @@ class OptinService implements OptinServiceInterface
      */
     public function add($type, $duration, array $data)
     {
-        Assert::string($type, '$type has to be of type string');
-        Assert::integer($duration, '$duration has to be of type integer');
+        if (!is_string($type)) {
+            throw new \InvalidArgumentException('$type has to be of type string');
+        }
+
+        if (!is_numeric($duration)) {
+            throw new \InvalidArgumentException('$duration has to be of type integer');
+        }
 
         $hash = Random::getAlphanumericString(32);
 
@@ -67,8 +71,13 @@ class OptinService implements OptinServiceInterface
      */
     public function get($type, $hash)
     {
-        Assert::string($type, '$type has to be of type string');
-        Assert::string($hash, '$hash has to be of type string');
+        if (!is_string($type)) {
+            throw new \InvalidArgumentException('$type has to be of type string');
+        }
+
+        if (!is_string($hash)) {
+            throw new \InvalidArgumentException('$hash has to be of type string');
+        }
 
         $data = $this->connection->createQueryBuilder()->from('s_core_optin', 'optin')
             ->select('data')
@@ -97,8 +106,13 @@ class OptinService implements OptinServiceInterface
      */
     public function delete($type, $hash)
     {
-        Assert::string($type, '$type has to be of type string');
-        Assert::string($hash, '$hash has to be of type string');
+        if (!is_string($type)) {
+            throw new \InvalidArgumentException('$type has to be of type string');
+        }
+
+        if (!is_string($hash)) {
+            throw new \InvalidArgumentException('$hash has to be of type string');
+        }
 
         $this->connection->createQueryBuilder()
             ->delete('s_core_optin')
