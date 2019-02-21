@@ -124,7 +124,7 @@ class TermHelper implements TermHelperInterface
         $result = [];
 
         foreach ($words as $word) {
-            if ($this->filterBadWordFromString($word)) {
+            if (mb_strlen($word) >= $this->config->get('minSearchIndexLength') && $this->filterBadWordFromString($word)) {
                 $result[] = $word;
             }
         }
