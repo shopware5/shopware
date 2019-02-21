@@ -177,8 +177,14 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             '<div class="badge-text">';
 
         if (me.record.get('id')) {
+            var cls = 'installed';
+
+            if(me.record.allowUpdate()) {
+                cls = 'outdated';
+            }
+
             items.push({
-                cls: 'installed badge',
+                cls: cls + ' badge',
                 html: template + 'v ' + me.record.get('version') + '</div>'
             });
         }

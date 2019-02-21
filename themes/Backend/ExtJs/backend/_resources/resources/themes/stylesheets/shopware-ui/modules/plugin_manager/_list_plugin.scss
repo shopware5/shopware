@@ -188,13 +188,13 @@
         left: 3px;
     }
 
-    .badge.update { background: #e3390b; }
-    .badge.installed { background: #10ca1d; }
+    .badge.outdated { background: #e3390b; }
+    .badge.installed, .badge.update { background: #10ca1d; }
 
-    .badge.update .badge-image {
+    .badge.outdated .badge-image {
         background: theme-image($theme, 'plugin_manager/red-update.png') no-repeat;
     }
-    .badge.installed .badge-image {
+    .badge.installed .badge-image, .badge.update .badge-image {
         background: theme-image($theme, 'plugin_manager/green-check.png') no-repeat;
     }
 

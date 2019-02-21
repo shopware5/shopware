@@ -206,16 +206,22 @@ Ext.define('Shopware.apps.PluginManager.view.components.ExpiredPlugin', {
             '<div class="badge-text">';
 
         if (me.record.get('id')) {
+            var cls = 'installed';
+
+            if(me.record.allowUpdate()) {
+                cls = 'outdated';
+            }
+
             items.push({
-                cls: 'installed badge',
-                html: template + 'v '+ me.record.get('version') +'</div>'
+                cls: cls + ' badge',
+                html: template + 'v ' + me.record.get('version') + '</div>'
             });
         }
 
         if (me.record.allowUpdate()) {
             items.push({
                 cls: 'update badge',
-                html: template + '{s name="update"}Update{/s}</div>'
+                html: template + 'v ' + me.record.get('availableVersion') + '</div>'
             });
         }
 
