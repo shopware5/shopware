@@ -157,6 +157,7 @@ class CookieSubscriber implements SubscriberInterface
 
         $session = $this->container->get('session');
         $session->offsetSet('auto-user', null);
+        $session->offsetSet('userInfo', null);
 
         $response->setCookie(
             'slt',
