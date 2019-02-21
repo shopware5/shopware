@@ -92,7 +92,7 @@ class Group extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="groupkey", type="string", length=5, nullable=false)
+     * @ORM\Column(name="groupkey", type="string", length=15, nullable=false)
      */
     private $key;
 
