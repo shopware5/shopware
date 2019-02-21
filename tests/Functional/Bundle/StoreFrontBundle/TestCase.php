@@ -71,7 +71,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     {
         $articles = [];
         foreach ($products as $number => $additionally) {
-            $articles[] = $this->createProduct(
+            $articles[$number] = $this->createProduct(
                 $number,
                 $context,
                 $category,
