@@ -10,6 +10,12 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added a license synchronization button in Plugin Manager
 * Added a standardized way to filter certain entities from being exported to the sitemap, or have custom URLs exported as well (see paragraph "Excluding URLs from sitemap and adding custom URLs" below)
+* Added new blocks `frontend_listing_actions_paging_inner` to `listing/actions/action-pagination.tpl` and `frontend_listing_actions_sort_inner` to `listing/actions/action-sorting.tpl`
+* Added `shopId` to the `Shopware_Controllers_Seo_filterCounts` Event
+* Added `laststock` to "Apply Standard Data"
+* Added blocks "frontend_index_header_css_screen_stylesheet" and `frontend_index_header_javascript_jquery_lib_file`
+* Added button to order module detail window, to open customer directly
+* Added new option to AdvancedMenu to improve performance when not using customer groups
 
 ### Changes
 
@@ -20,6 +26,17 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed libraries in Updater-app to most recent versions
 * Changed initial BI teaser to only show after a few days
 * Changed `jquery.datepicker.js` to initialize component value by element value on init 
+* Changed return array of `\Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5::getNotAnalyzedField` to fix warning thrown on indexing in an Elasticsearch 5 server
+* Changed double cache testing in advanced menu
+* Changed `ReflectionHelper` to improve support for Composer projects
+* Changed filters in blog categories can now be hidden in mobile view
+* Changed plugin CLI commands to clear relevant caches
+* Changed jQuery preloader plugin to fix reset function
+* Changed SQL query in risk management to avoid block nested loops
+* Changed `GarbageCollector` to consider links
+* Changed the type of the `docId` column in `s_order_documents` to VARCHAR, the models and backend module have been changed accordingly
+* Changed pluginPath assignment in `\Shopware\Commands\PluginDeleteCommand::execute` to delete plugins located in "/custom/plugins/" correctly
+* Changed the backend search for chars like 'ß'
 * Changed following service ids to lower-case:
     * `Loader`
     * `Hooks`
@@ -44,6 +61,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Removals
 
 * Removed `appendSession` parameter from router due to possible security implications. Use the `OptinService` to store the session name and id internally and use the generated hash in combination with a ListenerService instead to restore the session where necessary
+* Removed duplicate folder renaming in `PluginExtractor`
 
 ### Excluding URLs from sitemap and adding custom URLs
 
