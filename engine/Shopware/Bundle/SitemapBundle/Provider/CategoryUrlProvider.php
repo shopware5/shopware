@@ -57,7 +57,7 @@ class CategoryUrlProvider extends BaseUrlProvider
                 'title' => $category['name'],
             ];
 
-            if (array_key_exists('blog', $category)) {
+            if ($category['blog']) {
                 $category['urlParams']['sViewport'] = 'blog';
             }
         }
