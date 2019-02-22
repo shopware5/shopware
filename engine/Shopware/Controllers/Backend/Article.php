@@ -1886,7 +1886,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         $filesystem = $this->container->get('shopware.filesystem.private');
-        $destinationPath = $this->container->get('config')->offsetGet('esdKey') . '/' . $file->getClientOriginalName();
+        $destinationPath = $this->container->get('config')->offsetGet('esdKey') . '/' . ltrim($file->getClientOriginalName(), '.');
 
         $upstream = fopen($file->getRealPath(), 'rb');
         $filesystem->writeStream($destinationPath, $upstream);
