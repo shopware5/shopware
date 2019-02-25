@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 [View all changes from v5.5.7...v5.5.8](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
 
+### Additions
+
+* Added new config `alwaysShowMainFeatures` to show the template from `mainfeatures` in the whole checkout process
+
 ### Changes
 
 * Changed url plugin to resolve base-url on cli
