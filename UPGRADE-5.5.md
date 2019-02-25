@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Changed url plugin to resolve base-url on cli
 * Changed variant switch to consider url parameters without value
+* Changed `CategoryProvider` to skip excluded categories from sitemap 
 
 ## 5.5.7
 
