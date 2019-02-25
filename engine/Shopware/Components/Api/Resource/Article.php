@@ -1274,7 +1274,10 @@ class Article extends Resource implements BatchInterface
 
                 $option->fromArray($optionData);
                 $option->setGroup($group);
-                if (!isset($optionData['position'])) {
+
+                // Only set new position if option doesn't exist yet
+                // Otherwise the position might have been set manually already and we do not want to change that
+                if (!isset($optionData['position']) && !$option->getId()) {
                     $option->setPosition($optionPosition++);
                 }
                 $allOptions[] = $option;
