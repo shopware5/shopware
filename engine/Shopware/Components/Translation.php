@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 /**
  * Shopware Translation Component
@@ -532,7 +533,15 @@ class Shopware_Components_Translation
         $columns = $schemaManager->listTableColumns('s_articles_translations');
         $columns = array_keys($columns);
 
+        $converter = new CamelCaseToSnakeCaseNameConverter();
+
         foreach ($data as $key => $value) {
+            if (strpos($key, '__attribute_') !== false) {
+                $columnname = str_replace('__attribute_', '', $key);
+                $columnname = $converter->normalize($columnname);
+                $data[$columnname] = $value;
+            }
+
             $column = strtolower($key);
             $column = str_replace(CrudService::EXT_JS_PREFIX, '', $column);
 
