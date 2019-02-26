@@ -218,6 +218,11 @@ class CategoryTest extends TestCase
 
     public function testCreateCategoryWithTranslation()
     {
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
+        $crud = Shopware()->Container()->get('shopware_attribute.crud_service');
+
+        $crud->update('s_categories_attributes', 'underscore_test', 'string');
+
         $categoryData = [
             'name' => 'German',
             'parent' => 3,
@@ -226,6 +231,7 @@ class CategoryTest extends TestCase
                     'shopId' => 2,
                     'description' => 'Englisch',
                     '__attribute_attribute1' => 'Attr1',
+                    '__attribute_underscore_test' => 'Attribute with underscore',
                 ],
             ],
         ];
@@ -247,6 +253,8 @@ class CategoryTest extends TestCase
         static::assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
             $category->getId(),
         ]));
+
+        $crud->delete('s_categories_attributes', 'underscore_test');
     }
 
     public function testCreateCategoryWithTranslationWithUpdate()
