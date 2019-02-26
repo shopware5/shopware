@@ -391,5 +391,7 @@ class Store extends BaseStore
         }
 
         @chmod($path, 0666 & ~umask());
+
+        return true;
     }
 }
