@@ -386,11 +386,21 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function getPositions()
     {
+        // Workaround to fetch all attribute columns without shadowing id columns from other tables
+        $attributeColumns = 'at.attr1, at.attr2, at.attr3, at.attr4, at.attr5,
+                             at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
+                             at.attr11, at.attr12, at.attr13, at.attr14,
+                             at.attr15, at.attr16, at.attr17, at.attr18,
+                             at.attr19, at.attr20';
+        $attributeColumnNames = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_attributes LIMIT 1');
+        if (!empty($attributeColumnNames)) {
+            unset($attributeColumnNames['id'], $attributeColumnNames['articleID'], $attributeColumnNames['articledetailsID']);
+            $attributeColumns = 'at.' . implode(', at.', array_keys($attributeColumnNames));
+        }
+
         $this->_positions = new ArrayObject(Shopware()->Db()->fetchAll('
-        SELECT
-            od.*, a.taxID as articleTaxID,
-            at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
-            at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
+        SELECT od.*, a.taxID as articleTaxID,
+        ' . $attributeColumns . '
         FROM  s_order_details od
 
         LEFT JOIN s_articles_details d
