@@ -3,18 +3,73 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
     <services>
         <defaults public="true"/>
-        <service id="shopware_bundle_mail.autocomplete_resolver.short_foreach_resolver" class="Shopware\Bundle\MailBundle\AutocompleteResolver\ShortForeachResolver">
+
+        <service id="shopware_bundle_mail.autocomplete_resolver.short_foreach_resolver"
+                 class="Shopware\Bundle\MailBundle\AutocompleteResolver\ShortForeachResolver">
             <tag name="shopware.mail.completer"/>
         </service>
 
-        <service id="shopware_bundle_mail.autocomplete_resolver.foreach_resolver" class="Shopware\Bundle\MailBundle\AutocompleteResolver\ForeachResolver">
+        <service id="shopware_bundle_mail.autocomplete_resolver.foreach_resolver"
+                 class="Shopware\Bundle\MailBundle\AutocompleteResolver\ForeachResolver">
             <tag name="shopware.mail.completer"/>
         </service>
 
-        <service id="shopware_bundle_mail.auto_complete_resolver" class="Shopware\Bundle\MailBundle\AutoCompleteResolver">
+        <service id="shopware_bundle_mail.auto_complete_resolver"
+                 class="Shopware\Bundle\MailBundle\AutoCompleteResolver">
             <argument type="tagged" tag="shopware.mail.completer"/>
+        </service>
+
+        <service id="shopware.mail_bundle.filter.administrative_mail_filter"
+                 class="Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter">
+            <argument type="expression">false</argument>
+            <tag name="shopware.mail_bundle.filter"/>
+        </service>
+
+        <service id="shopware.mail_bundle.filter.newsletter_mail_filter"
+                 class="Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter">
+            <argument type="expression">false</argument>
+            <tag name="shopware.mail_bundle.filter"/>
+        </service>
+
+        <service id="shopware.mail_bundle.log_entry_builder"
+                 class="Shopware\Bundle\MailBundle\Service\LogEntryBuilder">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware.mail_bundle.log_entry_mail_builder"
+                 class="Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder">
+            <argument type="service" id="shopware.filesystem.private" />
+        </service>
+
+        <service id="shopware.mail_bundle.log_service"
+                 class="Shopware\Bundle\MailBundle\Service\LogService">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware.mail_bundle.log_entry_builder"/>
+            <argument type="tagged" tag="shopware.mail_bundle.filter"/>
+        </service>
+
+        <service id="shopware.mail_bundle.mail_subscriber"
+                 class="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\MailSubscriber">
+            <argument type="service" id="shopware.mail_bundle.log_service"/>
+            <argument type="expression">true</argument>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service id="shopware.mail_bundle.termination_subscriber"
+                 class="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\TerminationSubscriber">
+            <argument type="service" id="shopware.mail_bundle.log_service"/>
+            <argument type="expression">true</argument>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service id="shopware.mail_bundle.mail_log_cleanup_cron_subscriber"
+                 class="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\MailLogCleanupCronSubscriber">
+            <argument type="service" id="models"/>
+            <argument type="expression">365</argument>
+            <tag name="shopware.event_subscriber"/>
         </service>
     </services>
 </container>

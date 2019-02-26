@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter;
 use Shopware\Components\CSRFWhitelistAware;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -254,6 +255,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $mail->setSubject($subject);
             $mail->clearRecipients();
             $mail->addTo($user['email']);
+            $mail->setAssociation(NewsletterMailFilter::NEWSLETTER_MAIL, true);
             $validator = $this->container->get('validator.email');
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";

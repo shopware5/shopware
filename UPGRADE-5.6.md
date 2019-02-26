@@ -30,6 +30,21 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added information text to detail page of category filter 
 * Added string type cast in return statement of method `sOrder::sGetOrdernumber`
 * Added configuration to decide whether user basket should be cleared after logout or not
+* Added the following new models and repositories to enable e-mail logging
+    * `\Shopware\Models\Mail\Log`
+    * `\Shopware\Models\Mail\Contact`
+    * `\Shopware\Models\Mail\LogRepository`
+* Added the following new services to enable e-mail logging
+    * `shopware.mail_bundle.log_entry_builder`
+    * `shopware.mail_bundle.log_entry_mail_builder`
+    * `shopware.mail_bundle.log_service`
+    * `shopware.mail_bundle.filter.administrative_mail_filter`
+    * `shopware.mail_bundle.filter.newsletter_mail_filter`
+* Added the `MailLogCleanup` cron job which clears old entries from the e-mail log
+* Added new basic settings in the mailer section
+    * `mailLogActive`
+    * `mailLogCleanupMaximumAgeInDays`
+* Added the `associations` property to `Enlight_Components_Mail`
 * Added option symbols for `{include file="frontend/_includes/rating.tpl"}` to hide rating symbols
 * Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details  
 
@@ -333,6 +348,7 @@ The settings for the logger can be configured using the DI parameters `swag_plug
 In this case the logger would write into a file like `var/log/swag_plugin_production-2019-03-06.log`.
 
 Support for easier log message writing is enabled:
+
 ```php
 <?php
 

@@ -25,6 +25,7 @@
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Random;
@@ -990,6 +991,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $mail->setFrom($this->Request()->getParam('fromMail', ''), $this->Request()->getParam('fromName', ''));
         $mail->addTo($this->Request()->getParam('to', ''));
+
+        $mail->setAssociation(LogEntryBuilder::ORDER_ID_ASSOCIATION, $orderId);
 
         Shopware()->Modules()->Order()->sendStatusMail($mail);
 
