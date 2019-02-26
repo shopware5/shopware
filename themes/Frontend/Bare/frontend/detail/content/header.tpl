@@ -24,7 +24,7 @@
                             {/if}
                         {/if}
 
-                        {if $imgsrc}
+                        {if $imgSrc}
                             <div class="product--supplier">
                                 {s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description" assign="snippetDetailDescriptionLinkInformation"}{/s}
                                 <a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}"
