@@ -121,9 +121,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function __call($name, $value = null)
     {
-        if ('Action' === substr($name, -6)) {
+        if (substr($name, -6) === 'Action') {
             throw new Enlight_Controller_Exception(
-                'Action "' . $this->controller_name . '_' . $name . '" not found failure for request url ' . $this->request->getScheme() . "://" . $this->request->getHttpHost() . $this->request->getRequestUri(),
+                'Action "' . $this->controller_name . '_' . $name . '" not found failure for request url ' . $this->request->getScheme() . '://' . $this->request->getHttpHost() . $this->request->getRequestUri(),
                 Enlight_Controller_Exception::ActionNotFound
             );
         }
@@ -190,7 +190,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
                 ['subject' => $this]
             )
             ) {
-                $this->$action();
+                $this->$action(...$this->getActionArguments($action));
             }
             $this->postDispatch();
         }
@@ -383,7 +383,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns request instance
      *
-     * @return Enlight_Controller_Request_Request
+     * @return Enlight_Controller_Request_RequestHttp
      */
     public function Request()
     {
@@ -438,5 +438,10 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected function createForm($type, $data = null, array $options = [])
     {
         return $this->container->get('shopware.form.factory')->create($type, $data, $options);
+    }
+
+    protected function getActionArguments(string $actionMethodName): array
+    {
+        return [];
     }
 }

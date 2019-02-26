@@ -28,13 +28,13 @@ use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
 use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\MatcherCompilerPass;
+use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\ControllerCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\ConfigureApiResourcesPass;
-use Shopware\Components\DependencyInjection\Compiler\ControllerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -52,6 +52,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\DependencyInjection\RegisterControllerArgumentLocatorsPass;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
@@ -231,14 +232,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         // Overwrite superglobals with state of the SymfonyRequest
         $request->overrideGlobals();
 
-        // Create enlight request from global state
-        $enlightRequest = new EnlightRequest();
-
-        // Let the symfony request handle the trusted proxies
-        $enlightRequest->setRemoteAddress($request->getClientIp());
-        $enlightRequest->setSecure($request->isSecure());
-
-        return $enlightRequest;
+        return EnlightRequest::createFromGlobals();
     }
 
     /**
@@ -692,6 +686,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new MatcherCompilerPass());
         $container->addCompilerPass(new ConfigureApiResourcesPass());
         $container->addCompilerPass(new ControllerCompilerPass());
+        $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

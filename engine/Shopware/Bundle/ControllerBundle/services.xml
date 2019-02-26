@@ -10,4 +10,32 @@
         </parameter>
     </parameters>
 
+    <services>
+        <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory" />
+
+        <service id="argument_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver">
+            <argument type="service" id="argument_metadata_factory" />
+            <argument type="tagged" tag="controller.argument_value_resolver"/>
+        </service>
+
+        <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
+            <tag name="controller.argument_value_resolver" priority="0" />
+            <argument />
+        </service>
+
+        <service id="argument_resolver.request_parameter" class="Shopware\Bundle\ControllerBundle\ArgumentResolver\RequestParameterResolver">
+            <tag name="controller.argument_value_resolver" priority="-20" />
+            <argument />
+        </service>
+
+        <service id="argument_resolver.request_value" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver">
+            <tag name="controller.argument_value_resolver" priority="-40" />
+            <argument />
+        </service>
+
+        <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
+            <tag name="controller.argument_value_resolver" priority="-100" />
+            <argument />
+        </service>
+    </services>
 </container>

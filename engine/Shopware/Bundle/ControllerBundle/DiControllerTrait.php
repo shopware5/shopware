@@ -47,4 +47,16 @@ trait DiControllerTrait
             $this->init();
         }
     }
+
+    protected function getActionArguments(string $actionMethodName): array
+    {
+        $controllerArray = [
+            $this,
+            $actionMethodName,
+        ];
+
+        $this->Request()->setAttribute('_controller', $this->Request()->getAttribute('controllerId') . ':' . $actionMethodName);
+
+        return $this->container->get('argument_resolver')->getArguments($this->Request(), $controllerArray);
+    }
 }

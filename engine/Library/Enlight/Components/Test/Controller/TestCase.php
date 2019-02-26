@@ -198,7 +198,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function resetRequest()
     {
-        if ($this->_request instanceof Enlight_Controller_Request_Request) {
+        if ($this->_request instanceof Enlight_Controller_Request_RequestTestCase) {
             $this->_request->clearQuery()
                     ->clearPost()
                     ->clearCookies();
@@ -266,7 +266,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function Request()
     {
         if ($this->_request === null) {
-            $this->_request = new Enlight_Controller_Request_RequestTestCase();
+            $this->_request = Enlight_Controller_Request_RequestTestCase::createFromGlobals();
         }
 
         return $this->_request;

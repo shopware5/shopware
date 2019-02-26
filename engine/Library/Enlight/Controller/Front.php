@@ -315,7 +315,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     public function setRequest($request)
     {
         if (is_string($request)) {
-            $request = new $request();
+            $request = $request::createFromGlobals();
         }
         if (!$request instanceof Enlight_Controller_Request_Request) {
             throw new Enlight_Exception('Invalid request class');
