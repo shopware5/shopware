@@ -40,6 +40,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
+        $this->admin = Shopware()->Modules()->Admin();
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
     }
 
@@ -75,7 +76,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->View()->assign('isAccountless', $this->get('session')->get('isAccountless'));
         $this->View()->assign('register', $this->getRegisterData());
-        $this->View()->assign('countryList', $this->getCountries());
+        $this->View()->assign('countryList', $this->admin->sGetCountryList());
     }
 
     /**
@@ -590,17 +591,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     }
 
     /**
-     * @return array
+     * @param Customer $customer
      */
-    private function getCountries()
-    {
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $service = $this->get('shopware_storefront.location_service');
-        $countries = $service->getCountries($context);
-
-        return $this->get('legacy_struct_converter')->convertCountryStructList($countries);
-    }
-
     private function sendRegistrationMail(Customer $customer)
     {
         try {
