@@ -54,8 +54,6 @@ class CSRFTokenValidator implements SubscriberInterface
     private $isEnabledBackend;
 
     /**
-     * CSRFTokenValidator constructor.
-     *
      * @param ContainerInterface $container
      * @param bool               $isEnabledFrontend
      * @param bool               $isEnabledBackend

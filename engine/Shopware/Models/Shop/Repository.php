@@ -278,7 +278,7 @@ class Repository extends ModelRepository
     /**
      * @param int $id
      *
-     * @return DetachedShop
+     * @return DetachedShop|null
      */
     public function getById($id)
     {

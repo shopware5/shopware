@@ -101,7 +101,7 @@ class Manufacturer extends Extendable
     /**
      * Returns a Media struct with the thumbnails
      *
-     * @var Media
+     * @var Media|null
      */
     protected $coverMedia;
 
@@ -274,7 +274,7 @@ class Manufacturer extends Extendable
     }
 
     /**
-     * @return Media
+     * @return Media|null
      */
     public function getCoverMedia()
     {

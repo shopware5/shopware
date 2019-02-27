@@ -52,6 +52,9 @@ parameters:
         - '#easter_days#'
         - '#class Redis#'
 
+        # Ignore safety casts
+        - "#Casting to [a-zA-Z<>]+ something that's already [a-zA-Z<>]+#"
+        # Ignore direct view assigns
         - '#Call to an undefined method#'
         - '#Access to an undefined property#'
         - '#Method Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\DumperInterface\:\:getProxyFactoryCode\(\)#'
@@ -62,10 +65,13 @@ parameters:
         - '#does not call parent constructor from Enlight_Controller_Action#'
         - '#does not accept Doctrine\\Common\\Persistence\\ObjectRepository#'
         - '#does not call parent constructor from Enlight_Controller_Action#'
-        - '#does not accept Doctrine\\ORM\\EntityRepository#'
         # "getRepository"-Methods
+        - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
         - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '#Static property [a-zA-Z\\_\$\:]+ \(Shopware\\Models\\[a-zA-Z]+\\Repository\|null\) does not accept Doctrine\\ORM\\EntityRepository#'
+        - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\ORM\\EntityRepository#'
         - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '#Array \(array<string, Shopware\\Components\\Model\\ModelRepository>\) does not accept Doctrine\\ORM\\EntityRepository#'
         - '# should return Doctrine\\ORM\\EntityRepository|null but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
         # Return values in Models
         - '# returns Shopware\\Components\\Model\\ModelEntity.#'

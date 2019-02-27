@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityRepository;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Model\QueryBuilder;
@@ -65,11 +66,13 @@ class Translation extends Resource implements BatchInterface
     const TYPE_CONFIGURATOR_GROUP = 'configuratorgroup';
     const TYPE_CONFIGURATOR_OPTION = 'configuratoroption';
 
-    /** @var \Shopware_Components_Translation $translationWriter */
+    /**
+     * @var \Shopware_Components_Translation
+     */
     protected $translationWriter;
 
     /**
-     * @var TranslationModel
+     * @var EntityRepository
      */
     protected $repository;
 

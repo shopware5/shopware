@@ -339,7 +339,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $customer = new Customer();
         }
 
-        if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
+        if (!($paymentData instanceof PaymentData) && !empty($params['paymentData']) && !empty(array_filter($params['paymentData'][0]))) {
             $paymentData = new PaymentData();
             $customer->addPaymentData($paymentData);
             $paymentData->setPaymentMean(

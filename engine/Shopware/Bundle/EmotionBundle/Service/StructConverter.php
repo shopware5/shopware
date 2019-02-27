@@ -176,7 +176,9 @@ class StructConverter
                 break;
 
             case ArticleSliderComponentHandler::COMPONENT_NAME:
-                if (!$element->getData()->get('products') || !array_filter($element->getData()->get('products'))) {
+                if (
+                    !$element->getData()->get('products') ||
+                    empty(array_filter($element->getData()->get('products')))) {
                     break;
                 }
 
