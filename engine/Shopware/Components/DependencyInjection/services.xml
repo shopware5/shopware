@@ -937,5 +937,16 @@
         <service id="shopware.components.optin_service" class="Shopware\Components\OptinService">
             <argument type="service" id="dbal_connection"/>
         </service>
+
+        <service id="shopware.components.cart.payment_token" class="Shopware\Components\Cart\PaymentTokenService">
+            <argument type="service" id="shopware.components.optin_service"/>
+            <argument type="service" id="session"/>
+        </service>
+
+        <service id="shopware.components.cart.payment_token_subscriber" class="Shopware\Components\Cart\PaymentTokenSubscriber">
+            <argument type="service" id="shopware.components.cart.payment_token"/>
+            <argument type="service" id="session" on-invalid="null"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
     </services>
 </container>

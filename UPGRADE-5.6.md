@@ -173,3 +173,40 @@ return [
 Providing this value via config makes it unnecessary for Doctrine to figure the version out by itself, thus reducing the number of database calls Shopware makes per request by one.
 
 If you are running a MariaDB database, you should prefix the `serverVersion` with `mariadb`- (e.g.: `mariadb-10.2.12`).
+
+
+### Payment Token
+
+Some internet security software packages open a new clean browser without cookies for payments.
+After returning from the payment provider, the customer will be redirected to the home page, because the new browser instance does not contain the previous session.
+For this reason there is now a service to generate a token, which can be added to the returning url (e.g /payment_paypal/return?paymentId=test123&swPaymentToken=abc123def).
+This parameter will be resolved in the PreDispatch.
+If the user is not logged in, but the URL contains a valid token, he will get back his former session and will be redirected to the original URL, but without the token
+
+Example implementation:
+
+```php
+<?php
+
+use \Shopware\Components\Cart\PaymentTokenService;
+
+class MyPaymentController extends Controller {
+
+    public function gatewayAction()
+    {
+        // do some payment things
+        $token = $this->get('shopware.components.cart.payment_token')->generate();
+        
+        $returnParamters = [
+            'controller' => 'payment_paypal',
+            'action' => 'return',
+            PaymentTokenService::TYPE_PAYMENT_TOKEN => $token
+        ];
+        $returnLink = $this->router->assemble($returnParamters);
+        
+        $redirectUrl = $this->paymentProviderApi->createPayment($cart, $returnLink);
+        
+        $this->redirect($redirectUrl);
+    }
+}
+```
