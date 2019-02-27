@@ -297,7 +297,7 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @return AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     private function checkAuthentication()
     {

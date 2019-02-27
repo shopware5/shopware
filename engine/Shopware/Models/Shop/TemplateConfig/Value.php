@@ -118,7 +118,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return \Shopware\Models\Shop\Shop|null
      */
     public function getShop()
     {

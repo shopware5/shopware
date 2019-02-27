@@ -441,8 +441,8 @@ class SitemapXMLRepository
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param null $from
-     * @param null $to
+     * @param \DateTimeInterface|null $from
+     * @param \DateTimeInterface|null $to
      *
      * @return bool
      */

@@ -55,7 +55,7 @@ interface PropertyServiceInterface
      * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
      *
-     * @return Struct\Property\Set
+     * @return Struct\Property\Set|null
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

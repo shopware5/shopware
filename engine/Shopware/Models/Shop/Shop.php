@@ -366,7 +366,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return Template
+     * @return Template|null
      */
     public function getTemplate()
     {
@@ -398,7 +398,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Category\Category
+     * @return \Shopware\Models\Category\Category|null
      */
     public function getCategory()
     {
@@ -494,7 +494,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return \Shopware\Models\Shop\Shop|null
      */
     public function getMain()
     {
@@ -526,7 +526,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return \Shopware\Models\Shop\Shop|null
      */
     public function getFallback()
     {

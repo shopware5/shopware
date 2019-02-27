@@ -42,8 +42,9 @@ class CategoryUrlProvider extends BaseUrlProvider
 
         $parentId = $shopContext->getShop()->getCategory()->getId();
         $categoryRepository = $this->modelManager->getRepository(Category::class);
-        $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId());
+        $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId(), null, $shopContext->getShop()->getId());
 
+        /** @var array<string, array> $category */
         foreach ($categories as $key => &$category) {
             if (!empty($category['external'])) {
                 unset($categories[$key]);
@@ -56,7 +57,7 @@ class CategoryUrlProvider extends BaseUrlProvider
                 'title' => $category['name'],
             ];
 
-            if (array_key_exists('blog', $category)) {
+            if ($category['blog']) {
                 $category['urlParams']['sViewport'] = 'blog';
             }
         }

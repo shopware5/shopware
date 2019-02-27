@@ -38,7 +38,7 @@ use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 class QueryBuilder extends BaseQueryBuilder
 {
     /**
-     * @var string
+     * @var string|null
      */
     protected $alias;
 
@@ -253,7 +253,7 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
     {
-        /** @var array<string, mixed> $select */
+        /** @var array<int, mixed|null> $select */
         $select = $this->getDQLPart('select');
         if (is_array($orderBy)) {
             foreach ($orderBy as $order) {
@@ -261,14 +261,13 @@ class QueryBuilder extends BaseQueryBuilder
                     continue;
                 }
 
-                if (isset($select[0])
-                    && $select[0]->count() === 1
-                    && isset($this->alias)
-                    && strpos($order['property'], '.') === false) {
+                if (isset($select[0], $this->alias) &&
+                    $select[0]->count() === 1 &&
+                    strpos($order['property'], '.') === false) {
                     $order['property'] = $this->alias . '.' . $order['property'];
                 }
 
-                if (isset($order['direction']) && $order['direction'] == 'DESC') {
+                if (isset($order['direction']) && $order['direction'] === 'DESC') {
                     $order['direction'] = 'DESC';
                 } else {
                     $order['direction'] = 'ASC';

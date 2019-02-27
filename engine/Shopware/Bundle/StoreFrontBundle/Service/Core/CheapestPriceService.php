@@ -109,9 +109,9 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\Product\PriceRule[]     $prices
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct[]                         $products
+     * @param array<string, Struct\Product\PriceRule|null> $prices
+     * @param Struct\ProductContextInterface               $context
      *
      * @return Struct\Product\PriceRule[]
      */
@@ -202,7 +202,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var Struct\Product\PriceDiscount $highest */
+        /** @var Struct\Product\PriceDiscount|null $highest */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

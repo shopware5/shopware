@@ -32,10 +32,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to get property relations
      *
-     * @param array|null  $filter
-     * @param string|null $order
-     * @param int|null    $limit
-     * @param int|null    $offset
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int|null                                     $limit
+     * @param int|null                                     $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -54,8 +54,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPropertyRelationQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null  $filter
-     * @param string|null $order
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -65,7 +65,7 @@ class Repository extends ModelRepository
         $builder->select([
             'relations',
         ]);
-        $builder->from('Shopware\Models\Property\Relation', 'relations')
+        $builder->from(\Shopware\Models\Property\Relation::class, 'relations')
             ->leftJoin('relations.option', 'options')
             ->leftJoin('relations.group', 'groups');
 
@@ -82,16 +82,16 @@ class Repository extends ModelRepository
     /**
      * Receives all known property groups
      *
-     * @param null $filter
-     * @param null $order
-     * @param int  $limit
-     * @param int  $offset
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int                                          $limit
+     * @param int                                          $offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getListGroupsQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
-        // get the query and prepare the limit statement
+        // Get the query and prepare the limit statement
         $builder = $this->getListGroupsQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
@@ -105,8 +105,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -118,7 +118,7 @@ class Repository extends ModelRepository
             'options',
             'attributes',
         ]);
-        $builder->from('Shopware\Models\Property\Group', 'groups')
+        $builder->from(\Shopware\Models\Property\Group::class, 'groups')
             ->leftJoin('groups.options', 'options')
             ->leftJoin('groups.attribute', 'attributes');
 
@@ -167,7 +167,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['groups', 'attribute'])
-                ->from('Shopware\Models\Property\Group', 'groups')
+                ->from(\Shopware\Models\Property\Group::class, 'groups')
                 ->leftJoin('groups.attribute', 'attribute')
                 ->orderBy('groups.position');
 
@@ -214,7 +214,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['options'])
-                ->from('Shopware\Models\Property\Option', 'options')
+                ->from(\Shopware\Models\Property\Option::class, 'options')
                 ->orderBy('options.name');
 
         if (!empty($filter[0]['value'])) {
@@ -257,7 +257,7 @@ class Repository extends ModelRepository
             'relations.position',
         ]);
 
-        $builder->from('Shopware\Models\Property\Option', 'options')
+        $builder->from(\Shopware\Models\Property\Option::class, 'options')
                 ->innerJoin('options.relations', 'relations')
                 ->where('relations.groupId = :id')
                 ->setParameter('id', $setId)
@@ -293,7 +293,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from('Shopware\Models\Attribute\PropertyGroup', 'attribute')
+                      ->from(\Shopware\Models\Attribute\PropertyGroup::class, 'attribute')
                       ->where('attribute.propertyGroupId = ?1')
                       ->setParameter(1, $groupId);
 
@@ -327,7 +327,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['groups', 'attribute'])
-                ->from('Shopware\Models\Property\Group', 'groups')
+                ->from(\Shopware\Models\Property\Group::class, 'groups')
                 ->leftJoin('groups.attribute', 'attribute')
                 ->where('groups.id = ?1')
                 ->setParameter(1, $groupId);
@@ -361,7 +361,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['value', 'media'])
-                ->from('Shopware\Models\Property\Value', 'value')
+                ->from(\Shopware\Models\Property\Value::class, 'value')
                 ->leftJoin('value.media', 'media')
                 ->where('value.optionId = ?0')
                 ->orderBy('value.position', 'ASC')

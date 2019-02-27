@@ -157,7 +157,7 @@ class Shop extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Shop\Shop $shop */
+        /** @var \Shopware\Models\Shop\Shop|null $shop */
         $shop = $this->getRepository()->find($id);
 
         if (!$shop) {
@@ -193,7 +193,7 @@ class Shop extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Shop\Shop $shop */
+        /** @var \Shopware\Models\Shop\Shop|null $shop */
         $shop = $this->getRepository()->find($id);
 
         if (!$shop) {

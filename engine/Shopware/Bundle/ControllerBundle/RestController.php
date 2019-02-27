@@ -24,13 +24,14 @@
 
 namespace Shopware\Bundle\ControllerBundle;
 
-use Shopware\Components\Api\Resource\Resource;
+use Shopware\Components\Api\Resource;
 
 abstract class RestController extends \Shopware_Controllers_Api_Rest
 {
     use DiControllerTrait;
+
     /**
-     * @var resource
+     * @var Resource\Resource
      */
     protected $resource;
 
@@ -38,7 +39,7 @@ abstract class RestController extends \Shopware_Controllers_Api_Rest
     {
         parent::preDispatch();
 
-        if (($this->resource instanceof Resource) && $this->container->initialized('Auth')) {
+        if (($this->resource instanceof Resource\Resource) && $this->container->initialized('Auth')) {
             $this->resource->setAcl($this->container->get('acl'));
             $this->resource->setRole($this->container->get('auth')->getIdentity()->role);
         }

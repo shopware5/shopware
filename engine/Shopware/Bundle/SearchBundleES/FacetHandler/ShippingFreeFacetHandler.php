@@ -127,7 +127,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
             $fieldName = 'shippingFree';
         }
 
-        /** @var ShippingFreeFacet $facet */
+        /** @var ShippingFreeFacet|null $facet */
         $facet = $criteria->getFacet('shipping_free');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

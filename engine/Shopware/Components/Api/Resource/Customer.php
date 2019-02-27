@@ -143,7 +143,7 @@ class Customer extends Resource
             ->where('customer.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var \Shopware\Models\Customer\Customer $customer */
+        /** @var \Shopware\Models\Customer\Customer|null $customer */
         $customer = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$customer) {
@@ -265,7 +265,7 @@ class Customer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Customer\Customer $customer */
+        /** @var \Shopware\Models\Customer\Customer|null $customer */
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
@@ -327,7 +327,7 @@ class Customer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Customer\Customer $customer */
+        /** @var \Shopware\Models\Customer\Customer|null $customer */
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {

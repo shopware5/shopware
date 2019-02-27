@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing\Router;
+use Shopware\Components\Routing\RouterInterface;
 
 class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
 {
@@ -40,11 +40,11 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
      */
     private $configuratorService;
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
-    public function __construct(ConfiguratorServiceInterface $configuratorService, Router $router)
+    public function __construct(ConfiguratorServiceInterface $configuratorService, RouterInterface $router)
     {
         $this->configuratorService = $configuratorService;
         $this->router = $router;

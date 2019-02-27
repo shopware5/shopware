@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Controller
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -32,7 +33,7 @@
  * response object. Finally it sends the response if nothing else is specified in the configuration.
  *
  * @category   Enlight
- * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -45,42 +46,42 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
 
     /**
      * @var Enlight_Controller_Router contains an instance of the Enlight_Controller_Router.
-     * Used to route the request to the controller/action.
+     *                                Used to route the request to the controller/action.
      */
     protected $router;
 
     /**
      * @var Enlight_Controller_Dispatcher contains in instance of the
-     * Enlight_Controller_Dispatcher. Used to dispatch the request.
+     *                                    Enlight_Controller_Dispatcher. Used to dispatch the request.
      */
     protected $dispatcher;
 
     /**
      * @var Enlight_Controller_Request_Request contains an instance of the
-     * Enlight_Controller_Request_Request. Used for the routing,
-     * the different events which will be notified in the dispatch function and for the
-     * dispatch itself.
+     *                                         Enlight_Controller_Request_Request. Used for the routing,
+     *                                         the different events which will be notified in the dispatch function and for the
+     *                                         dispatch itself.
      */
     protected $request;
 
     /**
      * @var Enlight_Controller_Response_ResponseHttp contains an
-     * instance of the Enlight_Controller_Response_ResponseHttp. Used for the dispatch of the request
-     * and to log the thrown exception. After the dispatch, the response will be sent.
+     *                                               instance of the Enlight_Controller_Response_ResponseHttp. Used for the dispatch of the request
+     *                                               and to log the thrown exception. After the dispatch, the response will be sent.
      */
     protected $response;
 
     /**
      * @var bool Flag whether an exception should be thrown directly at the dispatch. If the
-     * flag is set to false, the exceptions is set in the response instance.
+     *           flag is set to false, the exceptions is set in the response instance.
      */
     protected $throwExceptions;
 
     /**
      * @var array Contains all invoked params. The invoked params can be set by the setParam/s function and
-     * can be accessed by the getParams function.
+     *            can be accessed by the getParams function.
      */
-    protected $invokeParams = array();
+    protected $invokeParams = [];
 
     /**
      * @var Enlight_Event_EventManager
@@ -114,8 +115,9 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      *  - Enlight_Controller_Front_PostDispatch => after the dispatch<br><br>
      * When everything is dispatched the Enlight_Controller_Front_DispatchLoopShutdown event will be notified.
      *
-     * @throws  Exception
-     * @return  Enlight_Controller_Response_ResponseHttp
+     * @throws Exception
+     *
+     * @return Enlight_Controller_Response_ResponseHttp
      */
     public function dispatch()
     {
@@ -123,9 +125,9 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             $this->Plugins()->load('ViewRenderer');
         }
 
-        $eventArgs = new Enlight_Controller_EventArgs(array(
-            'subject' => $this
-        ));
+        $eventArgs = new Enlight_Controller_EventArgs([
+            'subject' => $this,
+        ]);
 
         $this->eventManager->notify(
             'Enlight_Controller_Front_StartDispatch',
@@ -149,7 +151,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         $eventArgs->set('request', $this->Request());
         $eventArgs->set('response', $this->Response());
 
-        /**
+        /*
          * Notify plugins of router startup
          */
         $this->eventManager->notify(
@@ -157,7 +159,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             $eventArgs
         );
 
-        /**
+        /*
          * Route request to controller/action, if a router is provided
          */
         try {
@@ -169,7 +171,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             $this->response->setException($e);
         }
 
-        /**
+        /*
          * Notify plugins of router completion
          */
         $this->eventManager->notify(
@@ -177,14 +179,14 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             $eventArgs
         );
 
-        /**
+        /*
          * Early exit the dispatch if we have a redirect
          */
         if ($this->response->isRedirect()) {
             return $this->response;
         }
 
-        /**
+        /*
          * Notify plugins of dispatch loop startup
          */
         $this->eventManager->notify(
@@ -192,7 +194,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             $eventArgs
         );
 
-        /**
+        /*
          * Attempts to dispatch the controller/action. If the $this->request
          * indicates that it needs to be dispatched, it moves to the next
          * action in the request.
@@ -200,7 +202,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         do {
             $this->request->setDispatched(true);
 
-            /**
+            /*
              * Notify plugins of dispatch startup
              */
             try {
@@ -209,14 +211,14 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                     $eventArgs
                 );
 
-                /**
+                /*
                  * Skip requested action if preDispatch() has reset it
                  */
                 if (!$this->request->isDispatched()) {
                     continue;
                 }
 
-                /**
+                /*
                  * Dispatch request
                  */
                 $this->dispatcher->dispatch($this->request, $this->response);
@@ -226,7 +228,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                 }
                 $this->response->setException($e);
             }
-            /**
+            /*
              * Notify plugins of dispatch completion
              */
             $this->eventManager->notify(
@@ -235,7 +237,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             );
         } while (!$this->request->isDispatched());
 
-        /**
+        /*
          * Notify plugins of dispatch loop completion
          */
         $this->eventManager->notify(
@@ -249,9 +251,11 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Setter method for the plugin property.
      *
-     * @throws  Enlight_Exception
-     * @param   string|Enlight_Plugin_Namespace $plugins
-     * @return  Enlight_Controller_Front
+     * @param string|Enlight_Plugin_Namespace $plugins
+     *
+     * @throws Enlight_Exception
+     *
+     * @return Enlight_Controller_Front
      */
     public function setPlugins(Enlight_Plugin_Namespace $plugins = null)
     {
@@ -260,6 +264,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             $plugins->addPrefixPath('Enlight_Controller_Plugins', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Plugins');
         }
         $this->plugins = $plugins;
+
         return $this;
     }
 
@@ -267,9 +272,11 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      * Setter method for the router. Sets the front controller instance
      * automatically in the given router.
      *
-     * @throws  Enlight_Exception
-     * @param   string|Enlight_Controller_Router $router
-     * @return  Enlight_Controller_Front
+     * @param string|Enlight_Controller_Router $router
+     *
+     * @throws Enlight_Exception
+     *
+     * @return Enlight_Controller_Front
      */
     public function setRouter($router)
     {
@@ -281,6 +288,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         }
         $router->setFront($this);
         $this->router = $router;
+
         return $this;
     }
 
@@ -288,9 +296,11 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      * Setter method for the dispatcher. Sets the front controller instance
      * automatically in the given dispatcher.
      *
-     * @throws  Enlight_Exception
-     * @param   string|Enlight_Controller_Dispatcher $dispatcher
-     * @return  Enlight_Controller_Front
+     * @param string|Enlight_Controller_Dispatcher $dispatcher
+     *
+     * @throws Enlight_Exception
+     *
+     * @return Enlight_Controller_Front
      */
     public function setDispatcher($dispatcher)
     {
@@ -302,15 +312,18 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         }
         $dispatcher->setFront($this);
         $this->dispatcher = $dispatcher;
+
         return $this;
     }
 
     /**
      * Sets the request instance
      *
-     * @throws  Enlight_Exception
-     * @param   $request
-     * @return  Enlight_Controller_Front
+     * @param $request
+     *
+     * @throws Enlight_Exception
+     *
+     * @return Enlight_Controller_Front
      */
     public function setRequest($request)
     {
@@ -321,15 +334,18 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             throw new Enlight_Exception('Invalid request class');
         }
         $this->request = $request;
+
         return $this;
     }
 
     /**
      * Sets the response instance
      *
-     * @throws  Enlight_Exception
-     * @param   $response
-     * @return  Enlight_Controller_Front
+     * @param $response
+     *
+     * @throws Enlight_Exception
+     *
+     * @return Enlight_Controller_Front
      */
     public function setResponse($response)
     {
@@ -340,6 +356,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             throw new Enlight_Exception('Invalid response class');
         }
         $this->response = $response;
+
         return $this;
     }
 
@@ -353,13 +370,14 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         if ($this->plugins === null) {
             $this->setPlugins();
         }
+
         return $this->plugins;
     }
 
     /**
      * Returns the router instance.
      *
-     * @return  Enlight_Controller_Router
+     * @return Enlight_Controller_Router
      */
     public function Router()
     {
@@ -369,7 +387,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Returns the request instance.
      *
-     * @return  Enlight_Controller_Request_Request
+     * @return Enlight_Controller_Request_Request|null
      */
     public function Request()
     {
@@ -379,88 +397,99 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Returns the response instance.
      *
-     * @return  Enlight_Controller_Response_Response
+     * @return Enlight_Controller_Response_Response
      */
     public function Response()
     {
         if ($this->response === null) {
             $this->setResponse('Enlight_Controller_Response_ResponseHttp');
         }
+
         return $this->response;
     }
 
     /**
      * Returns the dispatcher instance.
      *
-     * @return  Enlight_Controller_Dispatcher_Default
+     * @return Enlight_Controller_Dispatcher_Default
      */
     public function Dispatcher()
     {
         if ($this->dispatcher === null) {
             $this->setDispatcher('Enlight_Controller_Dispatcher_Default');
         }
+
         return $this->dispatcher;
     }
 
     /**
      * Setter method for the throwException property.
      *
-     * @param   bool|null $flag
-     * @return  bool|Enlight_Controller_Front
+     * @param bool|null $flag
+     *
+     * @return bool|Enlight_Controller_Front
      */
     public function throwExceptions($flag = null)
     {
         if ($flag !== null) {
             $this->throwExceptions = (bool) $flag;
+
             return $this;
         }
+
         return $this->throwExceptions;
     }
 
     /**
      * Setter method to set a single parameter into the invokeParams property.
      *
-     * @param   string $name
-     * @param   mixed  $value
-     * @return  Enlight_Controller_Front
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return Enlight_Controller_Front
      */
     public function setParam($name, $value)
     {
         $name = (string) $name;
         $this->invokeParams[$name] = $value;
+
         return $this;
     }
 
     /**
      * Setter method for the invokeParams property.
      *
-     * @param   array $params
-     * @return  Enlight_Controller_Front
+     * @param array $params
+     *
+     * @return Enlight_Controller_Front
      */
     public function setParams(array $params)
     {
         $this->invokeParams = array_merge($this->invokeParams, $params);
+
         return $this;
     }
 
     /**
      * Sets a invoke param by name.
      *
-     * @param   $name
-     * @return  mixed
+     * @param $name
+     *
+     * @return mixed
      */
     public function getParam($name)
     {
         if (isset($this->invokeParams[$name])) {
             return $this->invokeParams[$name];
         }
+
         return null;
     }
 
     /**
      * Returns the list of invoked params.
      *
-     * @return  array
+     * @return array
      */
     public function getParams()
     {

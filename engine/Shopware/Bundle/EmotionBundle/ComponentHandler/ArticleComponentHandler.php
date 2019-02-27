@@ -120,7 +120,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         $key = 'emotion-element--' . $element->getId();
         $type = $element->getConfig()->get('article_type');
 
-        /** @var ListProduct $product */
+        /** @var ListProduct|false $product */
         $product = current($collection->getBatchResult()->get($key));
         if ($product && $type === self::TYPE_STATIC_VARIANT) {
             $this->additionalTextService->buildAdditionalText($product, $context);

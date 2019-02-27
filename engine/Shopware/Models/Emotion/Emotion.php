@@ -543,7 +543,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Emotion
+     * @return \Shopware\Models\Attribute\Emotion|null
      */
     public function getAttribute()
     {

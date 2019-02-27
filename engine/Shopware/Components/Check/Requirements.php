@@ -460,9 +460,6 @@ class Requirements
                 // no break
             case 'KB':
                 $val *= 1024;
-                // no break
-            case 'B':
-                $val = (float) $val;
         }
 
         return $val;

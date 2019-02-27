@@ -957,7 +957,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Property\Group
+     * @return \Shopware\Models\Property\Group|null
      */
     public function getPropertyGroup()
     {
@@ -1134,7 +1134,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return Detail
+     * @return Detail|null
      */
     public function getMainDetail()
     {
@@ -1257,7 +1257,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return Configurator\Set
+     * @return Configurator\Set|null
      */
     public function getConfiguratorSet()
     {

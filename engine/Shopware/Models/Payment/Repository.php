@@ -36,10 +36,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query-object for all known and active payments
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
+     * @param array|null        $filter
+     * @param string|array|null $order
+     * @param int|null          $offset
+     * @param int|null          $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -57,8 +57,8 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getActivePaymentsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null        $filter
+     * @param string|array|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -89,10 +89,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query-object for all payments
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
+     * @param array|null        $filter
+     * @param string|array|null $order
+     * @param int|null          $offset
+     * @param int|null          $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -110,8 +110,8 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getAllPaymentsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null        $filter
+     * @param string|array|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -169,10 +169,10 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('payment', 'countries', 'shops', 'attribute')
-                ->from($this->getEntityName(), 'payment')
-                ->leftJoin('payment.countries', 'countries')
-                ->leftJoin('payment.attribute', 'attribute')
-                ->leftJoin('payment.shops', 'shops');
+            ->from($this->getEntityName(), 'payment')
+            ->leftJoin('payment.countries', 'countries')
+            ->leftJoin('payment.attribute', 'attribute')
+            ->leftJoin('payment.shops', 'shops');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -219,9 +219,9 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from(\Shopware\Models\Attribute\Payment::class, 'attribute')
-                      ->where('attribute.paymentId = ?1')
-                      ->setParameter(1, $paymentId);
+            ->from(\Shopware\Models\Attribute\Payment::class, 'attribute')
+            ->where('attribute.paymentId = ?1')
+            ->setParameter(1, $paymentId);
 
         return $builder;
     }

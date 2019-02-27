@@ -68,7 +68,7 @@ class JavascriptDefinition
     }
 
     /**
-     * @return Theme
+     * @return Theme|null
      */
     public function getTheme()
     {

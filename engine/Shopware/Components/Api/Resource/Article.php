@@ -104,7 +104,7 @@ class Article extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var Detail $productVariant */
+        /** @var Detail|null $productVariant */
         $productVariant = $this->getDetailRepository()->findOneBy(['number' => $number]);
 
         if (!$productVariant) {
@@ -430,7 +430,7 @@ class Article extends Resource implements BatchInterface
             ->where('product.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var ProductModel $product */
+        /** @var ProductModel|null $product */
         $product = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
         if (!$product) {
@@ -488,7 +488,7 @@ class Article extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var ProductModel $product */
+        /** @var ProductModel|null $product */
         $product = $this->getRepository()->find($id);
 
         if (!$product) {
@@ -1493,7 +1493,7 @@ class Article extends Resource implements BatchInterface
             );
 
             if (isset($categoryData['shopId'])) {
-                /** @var Shop $shop */
+                /** @var Shop|null $shop */
                 $shop = $this->manager->find(
                     Shop::class,
                     $categoryData['shopId']
@@ -1515,7 +1515,7 @@ class Article extends Resource implements BatchInterface
             }
 
             if (isset($categoryData['categoryId'])) {
-                /** @var Category $category */
+                /** @var Category|null $category */
                 $category = $this->manager->find(
                     Category::class,
                     $categoryData['categoryId']
@@ -1769,9 +1769,9 @@ class Article extends Resource implements BatchInterface
                 }
                 // Get / create value by name
             } elseif (isset($valueData['value'])) {
-                //get option
+                // Get option
                 if (isset($valueData['option'])) {
-                    // get option by id
+                    // Get option by id
                     if (isset($valueData['option']['id'])) {
                         $option = $this->getManager()->getRepository(Option::class)->find($valueData['option']['id']);
                         if (!$option) {
@@ -1782,21 +1782,21 @@ class Article extends Resource implements BatchInterface
                             ['property' => 'groups.id', 'expression' => '=', 'value' => $propertyGroup->getId()],
                         ];
                         $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
-                        /** @var \Shopware\Models\Property\Relation $relation */
+                        /** @var \Shopware\Models\Property\Relation|null $relation */
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
                         if (!$relation) {
                             $propertyGroup->addOption($option);
                         }
                         // get/create option depending on associated filter groups
                     } elseif (isset($valueData['option']['name'])) {
-                        // if a name is passed and there is a matching option/group relation, get this option
-                        // if only a name is passed, create a new option
+                        // If a name is passed and there is a matching option/group relation, get this option
+                        // If only a name is passed, create a new option
                         $filters = [
                             ['property' => 'options.name', 'expression' => '=', 'value' => $valueData['option']['name']],
                             ['property' => 'groups.name', 'expression' => '=', 'value' => $propertyGroup->getName()],
                         ];
                         $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
-                        /** @var \Shopware\Models\Property\Relation $relation */
+                        /** @var \Shopware\Models\Property\Relation|null $relation */
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
                         if (!$relation) {
                             //checks if a new option was created
@@ -1806,7 +1806,7 @@ class Article extends Resource implements BatchInterface
                                 'name',
                                 $valueData['option']['name']
                             );
-                            //creates a new option
+                            // Creates a new option
                             if ($groupOption === null) {
                                 $option = new Option();
                                 $propertyGroup->addOption($option);
@@ -1826,7 +1826,7 @@ class Article extends Resource implements BatchInterface
                 } else {
                     throw new ApiException\CustomValidationException('A property option needs to be given for each property value');
                 }
-                // create the value
+                // Create the value
                 // If there is a filter value with matching name and option, load this value, else create a new one
                 $value = $this->getManager()->getRepository(Value::class)->findOneBy([
                     'value' => $valueData['value'],

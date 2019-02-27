@@ -181,7 +181,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var Detail $productVariant */
+        /** @var Detail|null $productVariant */
         $productVariant = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$productVariant) {
@@ -222,7 +222,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var Detail $productVariant */
+        /** @var Detail|null $productVariant */
         $productVariant = $this->getRepository()->find($id);
 
         if (!$productVariant) {
@@ -272,7 +272,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var Detail $variant */
+        /** @var Detail|null $variant */
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
@@ -311,7 +311,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException('Passed parameter array does not contain an articleId property');
         }
 
-        /** @var ProductModel $product */
+        /** @var ProductModel|null $product */
         $product = $this->getManager()->find(ProductModel::class, $productId);
 
         if (!$product) {
@@ -353,7 +353,7 @@ class Variant extends Resource implements BatchInterface
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var Detail $variant */
+        /** @var Detail|null $variant */
         $variant = $this->getRepository()->find($id);
 
         if (!$variant) {
@@ -620,7 +620,7 @@ class Variant extends Resource implements BatchInterface
                 // Media image isn't assigned to the product?
                 if (!$image) {
                     // Find the media object and convert it to an product image.
-                    /** @var MediaModel $media */
+                    /** @var MediaModel|null $media */
                     $media = $this->getManager()->find(MediaModel::class, (int) $imageData['mediaId']);
 
                     if (!$media) {
@@ -873,7 +873,7 @@ class Variant extends Resource implements BatchInterface
         $unitRepository = $this->getManager()->getRepository(Unit::class);
 
         // Try to find an existing unit by the passed conditions "id", "name" or "unit"
-        /** @var Unit $unit */
+        /** @var Unit|null $unit */
         $unit = $unitRepository->findOneBy(
             $this->getUnitFindCondition($unitData)
         );

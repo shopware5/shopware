@@ -272,8 +272,8 @@ class sBasket
      * Get cart amount for certain products / suppliers
      * Used only internally in sBasket
      *
-     * @param array $articles Products numbers to filter
-     * @param int   $supplier Supplier id to filter
+     * @param array|null $articles Products numbers to filter
+     * @param int        $supplier Supplier id to filter
      *
      * @return array Amount of products in current basket that match the current filter
      */

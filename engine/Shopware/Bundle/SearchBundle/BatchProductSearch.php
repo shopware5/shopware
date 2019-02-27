@@ -90,8 +90,8 @@ class BatchProductSearch
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\BaseProduct[] $searchProducts
+     * @param array<string, Struct\ListProduct|null> $products
+     * @param Struct\BaseProduct[]                   $searchProducts
      *
      * @return Struct\ListProduct[]
      */

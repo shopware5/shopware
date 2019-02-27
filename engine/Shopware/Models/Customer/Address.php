@@ -465,7 +465,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\CustomerAddress
+     * @return \Shopware\Models\Attribute\CustomerAddress|null
      */
     public function getAttribute()
     {
@@ -539,7 +539,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * @return Country
+     * @return Country|null
      */
     public function getCountry()
     {
@@ -555,7 +555,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * @return State
+     * @return State|null
      */
     public function getState()
     {

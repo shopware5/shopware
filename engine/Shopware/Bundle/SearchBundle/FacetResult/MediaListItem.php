@@ -53,7 +53,7 @@ class MediaListItem extends ValueListItem
     }
 
     /**
-     * @return Media
+     * @return Media|null
      */
     public function getMedia()
     {

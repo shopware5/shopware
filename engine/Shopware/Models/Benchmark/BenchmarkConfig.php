@@ -420,7 +420,7 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLocked()
     {

@@ -60,7 +60,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected $articleImpressionRepository;
 
     /**
-     * @var Repository
+     * @var Repository|null
      */
     protected $repository;
 

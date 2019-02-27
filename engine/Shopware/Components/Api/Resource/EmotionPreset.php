@@ -92,7 +92,7 @@ class EmotionPreset extends Resource
             throw new ParameterMissingException('id');
         }
 
-        /** @var Preset $preset */
+        /** @var Preset|null $preset */
         $preset = $this->models->find(Preset::class, $presetId);
 
         if (!$preset) {
@@ -138,7 +138,7 @@ class EmotionPreset extends Resource
      */
     public function update($id, array $data, $locale = 'de_DE')
     {
-        /** @var Preset $preset */
+        /** @var Preset|null $preset */
         $preset = $this->models->getRepository(Preset::class)->find($id);
         if (!$preset) {
             throw new NotFoundException(sprintf('Preset with id %s not found', $id));

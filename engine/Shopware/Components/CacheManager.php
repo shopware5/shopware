@@ -247,7 +247,7 @@ class CacheManager
     /**
      * Returns cache information
      *
-     * @param null $request
+     * @param \Enlight_Controller_Request_Request|null $request
      *
      * @return array
      */

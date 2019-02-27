@@ -202,7 +202,7 @@ class Store extends BaseStore
             // but save a lot of reads when invalidating
             $content[$cacheKey] = $headerKey;
 
-            if (!false === $this->save($key, json_encode($content))) {
+            if (!$this->save($key, json_encode($content))) {
                 throw new \RuntimeException(sprintf('Could not write cacheKey "%s"', $key));
             }
         }

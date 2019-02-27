@@ -183,6 +183,7 @@ class Router extends EnlightRouter implements RouterInterface
                 $userParams = $preFilter->preFilter($userParams, $context);
             }
         }
+        /** @var array|string|false $url */
         $url = false;
         foreach ($this->generators as $route) {
             if ($route instanceof GeneratorInterface) {

@@ -99,7 +99,7 @@ Ext.define('Lexer', {
             expectation,
             valid,
             finalCheck,
-            i, token, tokenType, tokenLength = tokens.length;
+            i, token, originalToken, tokenType, tokenLength = tokens.length;
 
         me.tokens = tokens;
         me.canceled = false;
@@ -128,6 +128,7 @@ Ext.define('Lexer', {
             if (me.canceled) {
                 return;
             }
+            originalToken = token;
             token = token.toUpperCase();
             tokenType = me.getTokenType(token);
 
@@ -170,7 +171,7 @@ Ext.define('Lexer', {
             }
 
 
-            me.addToAst(token, tokenType);
+            me.addToAst(token, originalToken, tokenType);
 
             if (me.inList && token == ')') {
                 me.inList = false;
@@ -248,8 +249,18 @@ Ext.define('Lexer', {
      * @param token
      * @param tokenType
      */
-    addToAst: function(token, tokenType) {
+    addToAst: function(token, originalToken, tokenType) {
         var me = this;
+
+        if (tokenType === 'values') {
+            /* 
+             * Do not use `token` which was usually generated from `originalToken.toUpperCase()`
+             * because the following is not always true and would make filtering certain values impossible:
+             * str.toUpperCase().toLowerCase() === str.toLowerCase()
+             * e.g. 'ß'.toUpperCase() == 'SS'
+             */
+            token = originalToken;
+        }
 
         this.astFlat.push({
             type: tokenType,

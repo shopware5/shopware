@@ -77,7 +77,7 @@ class Address extends Resource
 
         $query = $this->getRepository()->getOne($id);
 
-        /** @var \Shopware\Models\Customer\Address $address $address */
+        /** @var \Shopware\Models\Customer\Address|null $address $address */
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
@@ -175,7 +175,7 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Customer\Address $address */
+        /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
@@ -216,7 +216,7 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Customer\Address $address */
+        /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {

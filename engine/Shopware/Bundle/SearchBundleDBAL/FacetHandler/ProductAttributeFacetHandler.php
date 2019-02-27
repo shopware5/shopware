@@ -54,6 +54,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
+
     /**
      * @var CrudService
      */
@@ -101,7 +102,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         $query->andWhere($sqlField . ' IS NOT NULL')
             ->andWhere($sqlField . " NOT IN ('', '0', '0000-00-00')");
 
-        /** @var ConfigurationStruct $attribute */
+        /** @var ConfigurationStruct|null $attribute */
         $attribute = $this->crudService->get('s_articles_attributes', $facet->getField());
 
         $type = $attribute ? $attribute->getColumnType() : null;

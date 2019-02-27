@@ -32,7 +32,7 @@ class OpenSSLVerifier
     private $publicKeyPath;
 
     /**
-     * @var resource
+     * @var resource|null
      */
     private $keyResource;
 

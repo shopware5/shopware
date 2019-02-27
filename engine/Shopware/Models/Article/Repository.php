@@ -810,11 +810,11 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleDetailForTableConfiguratorOptionCombinationQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int     $articleId
-     * @param int     $firstOptionId
-     * @param int     $secondOptionId
-     * @param Article $article
-     * @param string  $customerGroupKey
+     * @param int           $articleId
+     * @param int           $firstOptionId
+     * @param int           $secondOptionId
+     * @param array|Article $article
+     * @param string        $customerGroupKey
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1274,9 +1274,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfiguratorListIdsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int  $articleId
-     * @param null $filter
-     * @param null $sort
+     * @param int                                          $articleId
+     * @param array|null                                   $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $sort
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -1284,7 +1284,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('details.id')
-                ->from('Shopware\Models\Article\Detail', 'details')
+                ->from(\Shopware\Models\Article\Detail::class, 'details')
                 ->where('details.articleId = ?1')
                 ->setParameter(1, $articleId);
 
@@ -1325,8 +1325,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailsByArticleIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[] $ids
-     * @param null  $sort
+     * @param int[]                                        $ids
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $sort
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

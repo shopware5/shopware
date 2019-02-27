@@ -167,14 +167,14 @@ class UpdateCommand extends Command
         $step = new MigrationStep($manager);
         $offset = 0;
         do {
-            $progress->setCurrent($offset);
+            $progress->setProgress($offset);
             $result = $step->run($offset);
             if ($result instanceof ErrorResult) {
                 throw new \Exception($result->getMessage(), 0, $result->getException());
             }
 
             $offset = $result->getOffset();
-            $progress->setCurrent($offset);
+            $progress->setProgress($offset);
         } while ($result instanceof ValidResult);
         $progress->finish();
         $this->IOHelper->writeln('');
@@ -202,13 +202,13 @@ class UpdateCommand extends Command
 
         $offset = 0;
         do {
-            $progress->setCurrent($offset);
+            $progress->setProgress($offset);
             $result = $snippetStep->run($offset);
             if ($result instanceof ErrorResult) {
                 throw new \Exception($result->getMessage(), 0, $result->getException());
             }
             $offset = $result->getOffset();
-            $progress->setCurrent($offset);
+            $progress->setProgress($offset);
         } while ($result instanceof ValidResult);
         $progress->finish();
         $this->IOHelper->writeln('');

@@ -46,7 +46,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected $snippetConfig;
 
     /**
-     * @var Shopware\Models\Shop\Locale
+     * @var Shopware\Models\Shop\Locale|null
      */
     protected $locale;
 
@@ -56,7 +56,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected $shop;
 
     /**
-     * @var Enlight_Config_Adapter_File
+     * @var Enlight_Config_Adapter_File|null
      */
     protected $fileAdapter;
 

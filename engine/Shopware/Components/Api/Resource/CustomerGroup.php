@@ -165,7 +165,7 @@ class CustomerGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Customer\Group $result */
+        /** @var \Shopware\Models\Customer\Group|null $result */
         $result = $this->getRepository()->find($id);
 
         if (!$result) {
@@ -207,7 +207,7 @@ class CustomerGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Customer\Group $result */
+        /** @var \Shopware\Models\Customer\Group|null $result */
         $result = $this->getRepository()->find($id);
 
         if (!$result) {

@@ -109,7 +109,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @return Shop
+     * @return Shop|null
      */
     public function getShop()
     {

@@ -40,7 +40,7 @@ class Country extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Country\Country');
+        return $this->getManager()->getRepository(\Shopware\Models\Country\Country::class);
     }
 
     /**
@@ -69,7 +69,7 @@ class Country extends Resource
             ],
         ];
         $builder = $this->getRepository()->getCountriesWithStatesQueryBuilder($filters);
-        /** @var \Shopware\Models\Country\Country $country */
+        /** @var \Shopware\Models\Country\Country|null $country */
         $country = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
         if (!$country) {
             throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
@@ -164,7 +164,7 @@ class Country extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Country\Country $country */
+        /** @var \Shopware\Models\Country\Country|null $country */
         $country = $this->getRepository()->find($id);
         if (!$country) {
             throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
@@ -201,7 +201,7 @@ class Country extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Country\Country $country */
+        /** @var \Shopware\Models\Country\Country|null $country */
         $country = $this->getRepository()->find($id);
         if (!$country) {
             throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
@@ -282,9 +282,8 @@ class Country extends Resource
                 throw new ApiException\CustomValidationException('You need to specify the id of the state you want to modify');
             }
 
-            // Find the state
-            /** @var \Shopware\Models\Country\State $stateModel */
-            $stateModel = $this->getManager()->find('Shopware\Models\Country\State', $state['id']);
+            /** @var \Shopware\Models\Country\State|null $stateModel */
+            $stateModel = $this->getManager()->find(\Shopware\Models\Country\State::class, $state['id']);
             if (!$stateModel) {
                 throw new ApiException\NotFoundException(sprintf('State by id %d not found', (int) $state['id']));
             }

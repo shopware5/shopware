@@ -54,7 +54,7 @@ class ElementData implements \JsonSerializable
      * @param string $name
      * @param mixed  $default
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function get($name, $default = null)
     {

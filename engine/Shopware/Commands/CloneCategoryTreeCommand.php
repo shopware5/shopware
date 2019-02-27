@@ -83,7 +83,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand
         $this->input = $input;
         $this->output = $output;
 
-        /** @var Category $originalCategory */
+        /** @var Category|null $originalCategory */
         $originalCategory = $this->getCategoryFromInput($input->getArgument('category'));
 
         if ($originalCategory === null) {
