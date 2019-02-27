@@ -169,7 +169,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             $fieldName = 'sSupplier';
         }
 
-        /** @var ManufacturerFacet $facet */
+        /** @var ManufacturerFacet|null $facet */
         $facet = $criteria->getFacet('manufacturer');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

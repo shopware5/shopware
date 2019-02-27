@@ -400,7 +400,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin
+     * @return \Shopware\Models\Plugin\Plugin|null
      */
     public function getPlugin()
     {
@@ -432,7 +432,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Template
+     * @return \Shopware\Models\Shop\Template|null
      */
     public function getParent()
     {

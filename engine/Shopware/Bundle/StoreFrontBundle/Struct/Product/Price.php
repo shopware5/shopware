@@ -141,7 +141,7 @@ class Price extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit|null
      */
     public function getUnit()
     {

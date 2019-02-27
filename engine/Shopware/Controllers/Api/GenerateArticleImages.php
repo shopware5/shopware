@@ -61,7 +61,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends RestController
             throw new ApiException\CustomValidationException('Invalid product id');
         }
 
-        /** @var Article $product */
+        /** @var Article|null $product */
         $product = $this->resource->getRepository()->find($id);
 
         if (!$product) {

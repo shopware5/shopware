@@ -100,7 +100,7 @@ class Criteria extends Extendable
     }
 
     /**
-     * @param int $limit
+     * @param int|null $limit
      *
      * @return $this
      */

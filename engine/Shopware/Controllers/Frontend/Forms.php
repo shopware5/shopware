@@ -445,7 +445,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function _filterInput($input)
     {
-        // remove all control characters, unassigned, private use, formatting and surrogate code points
+        // Remove all control characters, unassigned, private use, formatting and surrogate code points
         $input = preg_replace('#[^\PC\s]#u', '', $input);
 
         $temp = str_replace('"', '', $input);
@@ -453,7 +453,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             return '';
         }
 
-        return $input;
+        return $this->get('shopware.escaper')->escapeHtml($input);
     }
 
     /**
@@ -505,7 +505,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         } else {
                             $value = mktime(0, 0, 0, $values[0], $values[2], $values[1]);
                         }
-                        if (empty($value) || $value = -1) {
+                        if (empty($value) || ((int) $value === -1)) {
                             unset($value);
                             $valid = false;
                             break;

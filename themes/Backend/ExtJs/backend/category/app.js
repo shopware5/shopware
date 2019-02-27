@@ -79,7 +79,8 @@ Ext.define('Shopware.apps.Category', {
         'category.tabs.Settings',
         'category.tabs.ArticleMapping',
         'category.tabs.restriction',
-        'category.tabs.CustomListing'
+        'category.tabs.CustomListing',
+        'fields.ShopGrid'
     ],
 
     /**

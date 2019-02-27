@@ -30,16 +30,16 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * The CSV file handler.
      *
-     * @var resource
+     * @var resource|null
      */
-    private $_handler = null;
+    private $_handler;
 
     /**
      * The delimiter of the CSV file.
      *
      * @var string
      */
-    private $_delimiter = null;
+    private $_delimiter;
 
     /**
      * The delimiter of the CSV file.
@@ -67,21 +67,21 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @var int
      */
-    private $_key = null;
+    private $_key;
 
     /**
      * The element that will be returned on each iteration.
      *
      * @var int|false|array|null
      */
-    private $_current = null;
+    private $_current;
 
     /**
      * The element that will be returned on each iteration.
      *
      * @var int|false|null
      */
-    private $_header = null;
+    private $_header;
 
     /**
      * This is the constructor. It try to open the CSV file.

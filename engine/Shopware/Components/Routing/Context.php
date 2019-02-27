@@ -144,7 +144,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getHost()
     {
@@ -152,7 +152,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param string $host
+     * @param string|null $host
      */
     public function setHost($host)
     {
@@ -226,7 +226,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getShopId()
     {

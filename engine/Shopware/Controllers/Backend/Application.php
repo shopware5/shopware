@@ -1176,8 +1176,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * The returned array is associated with the model field names.
      *
-     * @param string $model - Model class name
-     * @param null   $alias - Allows to add an query alias like 'article.name'.
+     * @param string      $model - Model class name
+     * @param string|null $alias - Allows to add an query alias like 'article.name'.
      *
      * @return array
      */

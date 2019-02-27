@@ -111,7 +111,7 @@ class Rule extends ModelEntity
      * Returns the instance of the Shopware\Models\User\Resource model which
      * contains all data about the assigned resource.
      *
-     * @return \Shopware\Models\User\Resource
+     * @return \Shopware\Models\User\Resource|null
      */
     public function getResource()
     {
@@ -122,7 +122,7 @@ class Rule extends ModelEntity
      * Returns the instance of the Shopware\Models\User\Privilege model which
      * contains all data about the assigned privilege.
      *
-     * @return \Shopware\Models\User\Privilege
+     * @return \Shopware\Models\User\Privilege|null
      */
     public function getPrivilege()
     {

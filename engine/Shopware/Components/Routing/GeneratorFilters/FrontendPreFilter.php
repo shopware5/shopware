@@ -51,7 +51,7 @@ class FrontendPreFilter implements PreFilterInterface
             $params = array_merge(['controller' => null], $params);
         }
 
-        unset($params['sUseSSL'], $params['fullPath'], $params['appendSession'], $params['forceSecure'],
+        unset($params['sUseSSL'], $params['fullPath'], $params['forceSecure'],
             $params['sCoreId'], $params['rewriteOld'], $params['rewriteAlias'], $params['rewriteUrl']);
 
         if (isset($params['controller']) && $params['controller'] === 'detail' && $context->isRemoveCategory()) {

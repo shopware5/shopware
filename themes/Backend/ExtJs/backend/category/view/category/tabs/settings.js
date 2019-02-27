@@ -520,7 +520,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             this.shopSelector.setDisabled(!record.get('blog'));
         });
 
-        return this.shopSelector = Ext.create('Shopware.form.field.ShopGrid', {
+        return this.shopSelector = Ext.create('Shopware.apps.Category.view.fields.ShopGrid', {
             name: 'shops',
             fieldLabel: '{s name=label_shop}Limit to shop(s){/s}',
             helpText: '{s name=shop_helper}Limit page visibility to the following shops. If left empty, page will be accessible in all shops.{/s}',

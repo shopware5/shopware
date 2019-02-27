@@ -34,10 +34,10 @@ class Repository extends ModelRepository
     /**
      * Returns a builder-object in order to get all locales
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
+     * @param array|null        $filter
+     * @param string|array|null $order
+     * @param int|null          $offset
+     * @param int|null          $limit
      *
      * @return Query
      */
@@ -56,8 +56,8 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getLocalesListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null        $filter
+     * @param string|array|null $order
      *
      * @return QueryBuilder
      */
@@ -68,7 +68,7 @@ class Repository extends ModelRepository
             'locale',
         ];
         $builder->select($fields);
-        $builder->from('Shopware\Models\Shop\Locale', 'locale');
+        $builder->from(\Shopware\Models\Shop\Locale::class, 'locale');
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
@@ -82,10 +82,10 @@ class Repository extends ModelRepository
     /**
      * Returns a builder-object in order to get all shops
      *
-     * @param array $filter
-     * @param array $order
-     * @param int   $offset
-     * @param int   $limit
+     * @param array|null        $filter
+     * @param string|array|null $order
+     * @param int|null          $offset
+     * @param int|null          $limit
      *
      * @return Query
      */
@@ -103,10 +103,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query object for all shops with themes.
      *
-     * @param array $filter
-     * @param array $order
-     * @param int   $offset
-     * @param int   $limit
+     * @param array|null        $filter
+     * @param string|array|null $order
+     * @param int               $offset
+     * @param int               $limit
      *
      * @return Query
      */
@@ -138,8 +138,8 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getBaseListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filter
-     * @param array $order
+     * @param array|null        $filter
+     * @param string|array|null $order
      *
      * @return QueryBuilder
      */
@@ -259,7 +259,7 @@ class Repository extends ModelRepository
     /**
      * @param int $id
      *
-     * @return DetachedShop
+     * @return DetachedShop|null
      */
     public function getActiveById($id)
     {

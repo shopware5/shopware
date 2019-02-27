@@ -67,14 +67,14 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Billingdata for this order / user (s_order_billingaddress)
      *
-     * @var ArrayObject
+     * @var ArrayObject|null
      */
     protected $_billing;
 
     /**
      * Shippingdata for this order / user (s_order_shippingaddress)
      *
-     * @var ArrayObject
+     * @var ArrayObject|null
      */
     protected $_shipping;
 

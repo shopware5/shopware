@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\PluginInstallerBundle\Service\ZipUtils;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\OptinServiceInterface;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Symfony\Component\Filesystem\Filesystem;
@@ -95,8 +96,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
         $shop->registerResources();
 
-        Shopware()->Session()->template = $theme->getTemplate();
-        Shopware()->Session()->Admin = true;
+        $session = $this->get('session');
+
+        $session->template = $theme->getTemplate();
+        $session->Admin = true;
 
         if (!$this->Request()->isXmlHttpRequest()) {
             $this->get('events')->notify('Shopware_Theme_Preview_Starts', [
@@ -105,10 +108,15 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 'theme' => $theme,
             ]);
 
+            $hash = $this->container->get('shopware.components.optin_service')->add(OptinServiceInterface::TYPE_THEME_PREVIEW, 300, [
+                'sessionName' => session_name(),
+                'sessionValue' => $session->get('sessionId'),
+            ]);
+
             $url = $this->Front()->Router()->assemble([
                 'module' => 'frontend',
                 'controller' => 'index',
-                'appendSession' => true,
+                'themeHash' => $hash,
             ]);
 
             $this->redirect($url);

@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\OptinServiceInterface;
 
 /**
  * @category Shopware
@@ -39,6 +40,10 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
     public function indexAction()
     {
+        if ($this->handleThemeHash()) {
+            return;
+        }
+
         /** @var ShopContextInterface $context */
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
@@ -56,5 +61,46 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
             'sCategoryContent' => $categoryContent,
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
         ]);
+    }
+
+    /**
+     * Handle theme preview hash
+     *
+     * @return bool
+     */
+    private function handleThemeHash()
+    {
+        $hash = $this->Request()->getParam('themeHash');
+
+        if (!$hash) {
+            return false;
+        }
+
+        $optinService = $this->container->get('shopware.components.optin_service');
+
+        $data = $optinService->get(OptinServiceInterface::TYPE_THEME_PREVIEW, $hash);
+
+        if (!$data) {
+            return false;
+        }
+
+        $optinService->delete(OptinServiceInterface::TYPE_THEME_PREVIEW, $hash);
+
+        $this->Response()->setCookie(
+            $data['sessionName'],
+            $data['sessionValue'],
+            0,
+            $this->Request()->getBaseUrl(),
+            null,
+            $this->Request()->isSecure(),
+            true
+        );
+
+        // Disable http cache for this Request
+        $this->Response()->setHeader('Cache-Control', 'private', true);
+
+        $this->redirect(['controller' => 'index', 'action' => 'index']);
+
+        return true;
     }
 }

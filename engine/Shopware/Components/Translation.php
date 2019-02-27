@@ -46,9 +46,9 @@ class Shopware_Components_Translation
     /**
      * Filter translation data for saving.
      *
-     * @param string $type
-     * @param array  $data
-     * @param null   $key
+     * @param string      $type
+     * @param array       $data
+     * @param string|null $key
      *
      * @return string
      */
@@ -86,9 +86,9 @@ class Shopware_Components_Translation
     /**
      * Un filter translation data for output.
      *
-     * @param string $type
-     * @param mixed  $data
-     * @param null   $key
+     * @param string      $type
+     * @param mixed       $data
+     * @param string|null $key
      *
      * @return array
      */

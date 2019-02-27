@@ -106,11 +106,11 @@ class Hydrator
     }
 
     /**
-     * @param array  $data
-     * @param string $prefix
-     * @param array  $mapping
-     * @param null   $id        used for `merged` translations
-     * @param bool   $addPrefix
+     * @param array       $data
+     * @param string|null $prefix
+     * @param array       $mapping
+     * @param int|null    $id        used for `merged` translations
+     * @param bool        $addPrefix
      *
      * @return array
      */

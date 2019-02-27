@@ -27,13 +27,24 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Class FormTest
- */
 class FormTest extends Enlight_Components_Test_Plugin_TestCase
 {
     const GERMAN_NAME = 'Partnerformular';
     const ENGLISH_NAME = 'Partner Form';
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        Shopware()->Container()->get('dbal_connection')->rollBack();
+    }
 
     /**
      * Request form page
@@ -43,11 +54,11 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
         try {
             $this->dispatch('/partnerformular');
         } catch (\Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
+            static::fail('Exception thrown. This should not occur.');
         }
 
-        $this->assertTrue(!$this->Response()->isRedirect());
-        $this->assertContains(self::GERMAN_NAME, $this->Response()->getBody());
+        static::assertTrue(!$this->Response()->isRedirect());
+        static::assertContains(self::GERMAN_NAME, $this->Response()->getBody());
     }
 
     /**
@@ -64,14 +75,34 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
         try {
             $this->dispatch('/partnerformular');
         } catch (\Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
+            static::fail('Exception thrown. This should not occur.');
         }
 
-        $this->assertTrue(!$this->Response()->isRedirect());
-        $this->assertContains(self::ENGLISH_NAME, $this->Response()->getBody());
+        static::assertNotTrue($this->Response()->isRedirect());
+        static::assertContains(self::ENGLISH_NAME, $this->Response()->getBody());
 
         Shopware()->Models()->getRepository(Shop::class)->getActiveDefault()->registerResources();
 
         $this->Request()->clearCookies();
+    }
+
+    public function testValidOrderNumberIsResolved()
+    {
+        $this->dispatch('/anfrage-formular?sInquiry=detail&sOrdernumber=sw10010');
+
+        static::assertContains(
+            '<input type="hidden" class="normal " value="Aperitif-Glas Demi Sec (sw10010)" id="sordernumber" placeholder="Artikelnummer" name="sordernumber"/>',
+            $this->Response()->getBody()
+        );
+    }
+
+    public function testInvalidOrderNumberIsRemoved()
+    {
+        $this->dispatch('/anfrage-formular?sInquiry=detail&sOrdernumber="this" [is] #not a {valid} <order> $number');
+
+        static::assertContains(
+            '<input type="hidden" class="normal " value="" id="sordernumber" placeholder="Artikelnummer" name="sordernumber"/>',
+            $this->Response()->getBody()
+        );
     }
 }

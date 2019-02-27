@@ -151,7 +151,7 @@ class PaymentMethods extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var PaymentModel $payment */
+        /** @var PaymentModel|null $payment */
         $payment = $this->getRepository()->find($id);
 
         if (!$payment) {
@@ -188,7 +188,7 @@ class PaymentMethods extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var PaymentModel $payment */
+        /** @var PaymentModel|null $payment */
         $payment = $this->getRepository()->find($id);
 
         if (!$payment) {

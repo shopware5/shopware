@@ -77,8 +77,8 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         $result = Shopware()->Db()->query($sql);
         $data['log']['rows'] = $result->rowCount();
 
-        $data['referrer']['rows'] = $this->deleteOldReferrerData(Shopware()->Config()->maximumReferrerAge);
-        $data['article_impression']['rows'] = $this->deleteOldArticleImpressionData(Shopware()->Config()->maximumImpressionAge);
+        $data['referrer']['rows'] = $this->deleteOldReferrerData($this->get('config')->get('maximumReferrerAge'));
+        $data['article_impression']['rows'] = $this->deleteOldArticleImpressionData($this->get('config')->get('maximumImpressionAge'));
 
         return $data;
     }

@@ -145,7 +145,7 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
             $maxFieldName = 'priceMax';
         }
 
-        /** @var PriceFacet $facet */
+        /** @var PriceFacet|null $facet */
         $facet = $criteria->getFacet('price');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

@@ -309,7 +309,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $response = $this->dispatch('backend/' . $newLocation[1]);
 
         $cookie = $this->getCookie($response, 'session-1');
-        $this->assertTrue(strpos($headerLocation, $cookie['value']) !== false);
+        $this->assertNotEmpty($cookie);
         $this->assertEquals(0, $cookie['expire']);
     }
 

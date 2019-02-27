@@ -82,15 +82,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         }
 
         $model = new \Shopware\Models\Newsletter\Address();
-        if ($model === null) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => $this->translateMessage('error_msg/cannot_create_address', 'Could not create address'),
-            ]);
-
-            return;
-        }
-
         $model->setGroupId($groupId);
         $model->setEmail($email);
         $model->setIsCustomer(false);
@@ -361,7 +352,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     public function createNewsletterAction()
     {
         $data = $this->Request()->getParams();
-        if ($data === null) {
+        if (empty($data)) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('error_msg/no_data_passed', 'No data passed'),
@@ -407,7 +398,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         }
 
         $data = $this->Request()->getParams();
-        if ($data === null) {
+        if (empty($data)) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('error_msg/no_data_passed', 'No data passed'),
@@ -694,7 +685,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $active = $this->Request()->getParam('status');
         $id = (int) $this->Request()->getParam('id');
 
-        if ($id === null) {
+        if ($id === 0) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('error_msg/no_id_passed', 'No ID passed'),

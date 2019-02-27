@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 
 /**
@@ -66,7 +67,7 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
      *
      * @throws Zend_Db_Adapter_Exception to re-throw PDOException
      *
-     * @return Zend_Db_Statement_Pdo
+     * @return Zend_Db_Statement_Pdo|false
      */
     public function query($sql, $bind = [])
     {

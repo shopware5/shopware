@@ -504,10 +504,7 @@
             <argument type="service" id="corelogger" />
         </service>
 
-        <service id="shopware_product_stream.facet_filter" class="Shopware\Components\ProductStream\FacetFilter" >
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.custom_facet_service" />
-        </service>
+        <service id="shopware_product_stream.facet_filter" class="Shopware\Components\ProductStream\FacetFilter" />
 
         <service id="shopware.upload_max_size_validator" class="Shopware\Components\UploadMaxSizeValidator">
             <tag name="shopware.event_subscriber" />
@@ -935,6 +932,10 @@
             <argument type="service" id="shopware.components.order_number_validator"/>
 
             <tag name="validator.constraint_validator" alias="order_number_constraint_validator" />
+        </service>
+
+        <service id="shopware.components.optin_service" class="Shopware\Components\OptinService">
+            <argument type="service" id="dbal_connection"/>
         </service>
     </services>
 </container>

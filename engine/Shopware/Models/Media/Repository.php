@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelRepository;
 
 /**
  * The media repository used for the media manager backend module.
- * <br>
+ *
  * The repository is responsible to load the media data into the models.
  */
 class Repository extends ModelRepository
@@ -82,12 +82,12 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select the media of the passed album id.
      * Used for the backend media manager listing of the media.
      *
-     * @param int      $albumId
-     * @param null     $filter
-     * @param null     $orderBy
-     * @param int|null $offset
-     * @param int|null $limit
-     * @param null     $validTypes
+     * @param int                                          $albumId
+     * @param string|null                                  $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $orderBy
+     * @param int|null                                     $offset
+     * @param int|null                                     $limit
+     * @param array|null                                   $validTypes
      *
      * @return \Doctrine\ORM\Query
      */
@@ -106,10 +106,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAlbumMediaQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int  $albumId
-     * @param null $filter
-     * @param null $orderBy
-     * @param null $validTypes
+     * @param int                                          $albumId
+     * @param string|null                                  $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $orderBy
+     * @param array|null                                   $validTypes
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

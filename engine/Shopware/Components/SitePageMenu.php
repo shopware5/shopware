@@ -27,7 +27,6 @@ namespace Shopware\Components;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Components\Routing\Router;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
@@ -159,7 +158,6 @@ class SitePageMenu
             $menu[$key][] = $site;
         }
 
-        /** @var Router $router */
         $seoUrls = $this->router->generateList($links);
         $menu = $this->assignSeoUrls($menu, $seoUrls);
 

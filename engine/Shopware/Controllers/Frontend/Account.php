@@ -749,9 +749,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $this->deleteExpiredOptInItems();
 
-        /** @var \Shopware\Models\CommentConfirm\CommentConfirm $confirmModel */
+        /** @var \Shopware\Models\CommentConfirm\CommentConfirm|null $confirmModel */
         $confirmModel = $this->get('models')
-            ->getRepository('Shopware\Models\CommentConfirm\CommentConfirm')
+            ->getRepository(\Shopware\Models\CommentConfirm\CommentConfirm::class)
             ->findOneBy(['hash' => $hash, 'type' => 'swPassword']);
 
         if (!$confirmModel) {
@@ -763,7 +763,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             );
         }
 
-        /** @var Customer $customer */
+        /** @var Customer|null $customer */
         $customer = $this->get('models')->find(\Shopware\Models\Customer\Customer::class, $confirmModel->getData());
         if (!$customer) {
             throw new Exception(

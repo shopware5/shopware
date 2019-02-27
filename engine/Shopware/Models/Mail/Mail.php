@@ -546,7 +546,7 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\Status
+     * @return \Shopware\Models\Order\Status|null
      */
     public function getStatus()
     {

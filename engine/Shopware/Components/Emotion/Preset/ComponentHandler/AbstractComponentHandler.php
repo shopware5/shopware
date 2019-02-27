@@ -64,9 +64,7 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     {
         $media = $this->mediaResource->internalCreateMediaByFileLink($assetPath, $albumId);
 
-        if ($media) {
-            $this->mediaResource->getManager()->flush($media);
-        }
+        $this->mediaResource->getManager()->flush($media);
 
         return $media;
     }

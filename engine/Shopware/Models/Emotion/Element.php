@@ -321,7 +321,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection|null
      */
     public function getData()
     {

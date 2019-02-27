@@ -385,12 +385,13 @@ class Repository extends ModelRepository
      * @param int      $id
      * @param int|null $customerGroupId
      * @param int|null $depth
+     * @param int|null $shopId
      *
      * @return array
      */
-    public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null)
+    public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null, $shopId = null)
     {
-        $builder = $this->getActiveQueryBuilder($customerGroupId);
+        $builder = $this->getActiveQueryBuilder($customerGroupId, $shopId);
         $builder->andWhere('c.parentId = :parent')
             ->setParameter('parent', $id);
 
@@ -406,7 +407,7 @@ class Repository extends ModelRepository
 
             // Check if no depth passed or the current depth is lower than the passed depth
             if ($depth === null || $depth > 0) {
-                $category['sub'] = $this->getActiveChildrenTree($child['category']['id'], $customerGroupId, $depth);
+                $category['sub'] = $this->getActiveChildrenTree($child['category']['id'], $customerGroupId, $depth, $shopId);
             }
             $categories[] = $category;
         }
@@ -424,12 +425,13 @@ class Repository extends ModelRepository
      * @param int      $id
      * @param int|null $customerGroupId
      * @param int|null $depth
+     * @param int|null $shopId
      *
      * @return array
      */
-    public function getActiveChildrenList($id, $customerGroupId = null, $depth = null)
+    public function getActiveChildrenList($id, $customerGroupId = null, $depth = null, $shopId = null)
     {
-        $builder = $this->getActiveQueryBuilder($customerGroupId);
+        $builder = $this->getActiveQueryBuilder($customerGroupId, $shopId);
         $builder->andWhere('c.parentId = :parent')
             ->setParameter('parent', $id);
 
@@ -696,10 +698,11 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param int|null $customerGroupId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    protected function getActiveQueryBuilder($customerGroupId = null)
+    protected function getActiveQueryBuilder($customerGroupId = null, $shopId = null)
     {
         /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
@@ -712,6 +715,12 @@ class Repository extends ModelRepository
                 ->leftJoin('c.media', 'media')
                 ->leftJoin('c.attribute', 'attribute')
                 ->andWhere('c.active = 1');
+
+        if ($shopId) {
+            $builder
+                ->andWhere('c.shops IS NULL OR c.shops LIKE :shopLike')
+                ->setParameter(':shopLike', '%|' . $shopId . '|%');
+        }
 
         $builder = $this->addArticleCountSelect($builder, true);
         $builder = $this->addChildrenCountSelect($builder);

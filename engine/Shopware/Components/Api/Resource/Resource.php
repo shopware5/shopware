@@ -88,7 +88,7 @@ abstract class Resource implements ContainerAwareInterface
     protected $role;
 
     /**
-     * @var Container
+     * @var Container|null
      */
     protected $container;
 
@@ -174,7 +174,7 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @return AclComponent
+     * @return AclComponent|null
      */
     public function getAcl()
     {
@@ -194,7 +194,7 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @return string|\Zend_Acl_Role_Interface
+     * @return string|\Zend_Acl_Role_Interface|null
      */
     public function getRole()
     {
@@ -320,7 +320,7 @@ abstract class Resource implements ContainerAwareInterface
 
         $results = [];
         foreach ($data as $key => $datum) {
-            /** @var BatchInterface $this */
+            /** @var BatchInterface|null $this */
             $id = $this->getIdByData($datum);
 
             try {

@@ -123,7 +123,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
      */
     private function createFacet(Criteria $criteria)
     {
-        /** @var ImmediateDeliveryFacet $facet */
+        /** @var ImmediateDeliveryFacet|null $facet */
         $facet = $criteria->getFacet('immediate_delivery');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

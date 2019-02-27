@@ -103,10 +103,10 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
      * Returns a plugin by name. If the plugin isn't registered, the Enlight_Plugin_PluginCollection
      * loads it automatically.
      *
-     * @param      $name
-     * @param bool $throwException
+     * @param string $name
+     * @param bool   $throwException
      *
-     * @return \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace
+     * @return \Enlight_Plugin_Bootstrap|\Enlight_Plugin_Namespace|null
      */
     public function get($name, $throwException = false)
     {
@@ -123,8 +123,8 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     /**
      * Loads the plugin instance of the given plugin name.
      *
-     * @param   $name
-     * @param   $throwException
+     * @param $name
+     * @param $throwException
      *
      * @throws Enlight_Exception
      *

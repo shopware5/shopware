@@ -83,20 +83,20 @@ EOD;
 
     private function createSubshopBlogCommentElement()
     {
-        $sql = <<<'EOD'
+        $sql = <<<'SQL'
 
 INSERT IGNORE INTO `s_core_config_elements`
   (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
 VALUES
-(@blogId, 'displayOnlySubShopBlogComments', 'b:0;', 'Nur Subshopspezifische Blog Kommentare anzeigen', NULL, 'checkbox', 0, 0, 1);
-EOD;
+(@blogId, 'displayOnlySubShopBlogComments', 'b:0;', 'Nur subshopspezifische Blog-Kommentare anzeigen', 'Wenn aktiv, werden nur Blog-Kommentare des zugehörigen Shops angezeigt.<br>Falls inaktiv, werden unabhängig vom Sprach- oder Subshop stets alle Blog-Kommentare angezeigt', 'checkbox', 0, 0, 1);
+SQL;
 
         $this->addSql($sql);
 
-        $sql = <<<'EOD'
+        $sql = <<<'SQL'
         SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'displayOnlySubShopBlogComments' AND form_id = @blogId LIMIT 1);
-        INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`) VALUES (@elementId, 2, 'Display shop specific blog comments only', NULL);
-EOD;
+        INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`) VALUES (@elementId, 2, 'Display shop specific blog comments only', 'If active, only blog comments of the corresponding shop are displayed. <br>If inactive, all blog comments are always displayed regardless of the language or subshop.');
+SQL;
         $this->addSql($sql);
     }
 }

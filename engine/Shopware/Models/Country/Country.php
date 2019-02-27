@@ -493,7 +493,7 @@ class Country extends ModelEntity
      * OWNING SIDE
      * of the association between countries and area
      *
-     * @return \Shopware\Models\Country\Area
+     * @return \Shopware\Models\Country\Area|null
      */
     public function getArea()
     {
