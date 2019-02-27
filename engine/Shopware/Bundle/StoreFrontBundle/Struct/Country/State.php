@@ -54,6 +54,11 @@ class State extends Extendable
     protected $position;
 
     /**
+     * @var bool
+     */
+    private $active;
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -123,5 +128,21 @@ class State extends Extendable
     public function setPosition($position)
     {
         $this->position = $position;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }
