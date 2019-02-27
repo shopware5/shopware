@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="shopware.cart.proportional_tax_calculator"
+                 class="Shopware\Components\Cart\ProportionalTaxCalculator"/>
+
+        <service id="shopware.cart.basket_query_helper" class="Shopware\Components\Cart\BasketQueryHelper">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
+            <argument type="service" id="shopware.cart.proportional_tax_calculator"/>
+            <argument type="service" id="shopware.cart.basket_query_helper" />
+        </service>
+
+        <service id="shopware.cart.proportional_cart_merger" class="Shopware\Components\Cart\ProportionalCartMerger">
+            <argument type="service" id="modules"/>
+        </service>
+
+        <service id="shopware.cart.net_rounding.after_quantity"
+                 class="Shopware\Components\Cart\NetRounding\RoundLineAfterQuantity"/>
+
+        <service id="shopware.cart.net_rounding.after_tax"
+                 class="Shopware\Components\Cart\NetRounding\RoundLineAfterTax"/>
+
+        <service id="shopware.cart.net_rounding" class="Shopware\Components\Cart\NetRounding\RoundingInterface">
+            <factory class="Shopware\Components\DependencyInjection\SimpleFactory" method="factory"/>
+            <argument type="expression">container.get('config').offsetGet('roundNetAfterTax') ? service('shopware.cart.net_rounding.after_tax') : service('shopware.cart.net_rounding.after_quantity')</argument>
+        </service>
+    </services>
+</container>
