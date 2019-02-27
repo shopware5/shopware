@@ -27,13 +27,12 @@ namespace Shopware\Tests\Unit\Bundle\ESIndexingBundle\DependencyInjection\Factor
 use Elasticsearch\Client;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory;
-use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
 
 class TextMappingFactoryTest extends TestCase
 {
-    public function testReturnsES2WhenESIsNotEnabled()
+    public function testReturnsES5WhenESIsNotEnabled()
     {
         $factory = new TextMappingFactory(true, null);
 
@@ -41,25 +40,7 @@ class TextMappingFactoryTest extends TestCase
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES2::class, $textMapping);
-    }
-
-    public function testReturnsES2WhenClientReturn2()
-    {
-        $factory = new TextMappingFactory(true, null);
-
-        $client = $this->getMockBuilder(Client::class)
-            ->disableOriginalConstructor()->setMethods(['info'])->getMock();
-
-        $client->expects($this->once())
-            ->method('info')
-            ->will($this->returnCallback(function () {
-                return ['version' => ['number' => 2]];
-            }));
-
-        $textMapping = $factory->factory($client);
-
-        self::assertInstanceOf(TextMappingES2::class, $textMapping);
+        self::assertInstanceOf(TextMappingES5::class, $textMapping);
     }
 
     public function testReturnsES5WhenClientReturn5()
@@ -96,17 +77,6 @@ class TextMappingFactoryTest extends TestCase
         $textMapping = $factory->factory($client);
 
         self::assertInstanceOf(TextMappingES6::class, $textMapping);
-    }
-
-    public function testReturnsES2WhenVersionIs2()
-    {
-        $factory = new TextMappingFactory(true, 2);
-
-        $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
-
-        $textMapping = $factory->factory($client);
-
-        self::assertInstanceOf(TextMappingES2::class, $textMapping);
     }
 
     public function testReturnsES5WhenVersionIs5()

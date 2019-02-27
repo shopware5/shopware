@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\TermsQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -52,8 +53,9 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var PropertyCondition $criteriaPart */
-        $search->addFilter(
-            new TermsQuery('properties.id', $criteriaPart->getValueIds())
+        $search->addQuery(
+            new TermsQuery('properties.id', $criteriaPart->getValueIds()),
+            BoolQuery::FILTER
         );
     }
 

@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\RangeQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ReleaseDateCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -52,8 +53,9 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var ReleaseDateCondition $criteriaPart */
-        $search->addFilter(
-            $this->createQuery($criteriaPart)
+        $search->addQuery(
+            $this->createQuery($criteriaPart),
+            BoolQuery::FILTER
         );
     }
 

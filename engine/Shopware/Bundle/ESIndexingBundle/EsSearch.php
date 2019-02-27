@@ -22,41 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ESIndexingBundle\TextMapping;
+namespace Shopware\Bundle\ESIndexingBundle;
 
-use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
+use ONGR\ElasticsearchDSL\BuilderInterface;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Search;
 
-class TextMappingES2 implements TextMappingInterface
+class EsSearch extends Search implements EsSearchInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getTextField()
+    public function addFilter(BuilderInterface $query)
     {
-        return ['type' => 'string'];
+        $this->addQuery($query, BoolQuery::FILTER);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getNotAnalyzedField()
+    public function getFilters(BuilderInterface $query): BuilderInterface
     {
-        return $this->getKeywordField();
-    }
+        $boolQuery = new BoolQuery();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getKeywordField()
-    {
-        return ['type' => 'string', 'index' => 'not_analyzed'];
-    }
+        foreach ($this->getQueries()->getQueries(BoolQuery::FILTER) as $filterQuerys) {
+            $boolQuery->add($filterQuerys, BoolQuery::FILTER);
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributeRawField(): array
-    {
-        return $this->getKeywordField();
+        return $boolQuery;
     }
 }

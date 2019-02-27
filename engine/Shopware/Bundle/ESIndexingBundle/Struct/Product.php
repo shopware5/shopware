@@ -108,6 +108,7 @@ class Product extends ListProduct
             $listProduct->getVariantId(),
             $listProduct->getNumber()
         );
+
         foreach ($listProduct as $key => $value) {
             $product->$key = $value;
         }

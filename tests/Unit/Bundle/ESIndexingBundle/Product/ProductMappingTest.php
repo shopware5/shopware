@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Unit\Bundle\ESIndexingBundle\Property;
 
-use Elasticsearch\Client;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\FieldMapping;
@@ -42,10 +41,9 @@ class ProductMappingTest extends TestCase
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
         $textMapping = new TextMappingES5();
         $crudService = $this->getCrudService();
-        $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
-        $productMapping = new ProductMapping($identifierSelector, $fieldMapping, $textMapping, $crudService, $client);
+        $productMapping = new ProductMapping($identifierSelector, $fieldMapping, $textMapping, $crudService);
 
         $mapping = $productMapping->get($shop);
 
@@ -59,7 +57,6 @@ class ProductMappingTest extends TestCase
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
         $textMapping = new TextMappingES5();
         $crudService = $this->getCrudService();
-        $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
         $productMapping = new ProductMapping(
@@ -67,7 +64,6 @@ class ProductMappingTest extends TestCase
             $fieldMapping,
             $textMapping,
             $crudService,
-            $client,
             false
         );
 
@@ -83,14 +79,13 @@ class ProductMappingTest extends TestCase
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
         $textMapping = new TextMappingES5();
         $crudService = $this->getCrudService();
-        $client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->getMock();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
         $productMapping = new ProductMapping(
             $identifierSelector,
             $fieldMapping,
             $textMapping,
-            $crudService, $client,
+            $crudService,
             true
         );
 

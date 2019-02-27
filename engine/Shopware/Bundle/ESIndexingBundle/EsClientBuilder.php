@@ -22,18 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleES;
+namespace Shopware\Bundle\ESIndexingBundle;
 
-use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Elasticsearch\ClientBuilder;
+use Elasticsearch\Transport;
 
-interface SearchTermQueryBuilderInterface
+class EsClientBuilder extends ClientBuilder
 {
     /**
-     * @param ShopContextInterface $context
-     * @param string               $term
+     * @param Transport $transport
+     * @param callable  $endpoint
+     * @param object[]  $registeredNamespaces
      *
-     * @return BoolQuery
+     * @return EsClientLogger
      */
-    public function buildQuery(ShopContextInterface $context, $term);
+    protected function instantiate(Transport $transport, callable $endpoint, array $registeredNamespaces)
+    {
+        return new EsClientLogger($transport, $endpoint, $registeredNamespaces);
+    }
 }

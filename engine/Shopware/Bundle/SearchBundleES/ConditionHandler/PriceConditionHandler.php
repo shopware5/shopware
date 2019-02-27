@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\RangeQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -62,8 +63,9 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addFilter(
-            $this->createQuery($criteria, $criteriaPart, $context)
+        $search->addQuery(
+            $this->createQuery($criteria, $criteriaPart, $context),
+            BoolQuery::FILTER
         );
     }
 
@@ -88,7 +90,7 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
      *
      * @return RangeQuery
      */
-    private function createQuery(Criteria $criteria, CriteriaPartInterface $criteriaPart, ShopContextInterface $context)
+    private function createQuery(Criteria $criteria, CriteriaPartInterface $criteriaPart, ShopContextInterface $context): RangeQuery
     {
         $range = [];
 

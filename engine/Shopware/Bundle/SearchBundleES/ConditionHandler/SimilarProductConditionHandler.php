@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use ONGR\ElasticsearchDSL\Query\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\MultiMatchQuery;
-use ONGR\ElasticsearchDSL\Query\TermQuery;
-use ONGR\ElasticsearchDSL\Query\TermsQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\FullText\MultiMatchQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -84,7 +84,7 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
         $not = new BoolQuery();
         $not->add(new TermQuery('id', $productId), BoolQuery::MUST_NOT);
 
-        $search->addFilter($not);
+        $search->addQuery($not, BoolQuery::FILTER);
         $search->addQuery($query);
     }
 

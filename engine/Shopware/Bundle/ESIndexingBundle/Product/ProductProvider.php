@@ -42,7 +42,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -428,7 +427,6 @@ class ProductProvider implements ProductProviderInterface
             }
             $rules = $priceRules[$number];
 
-            /** @var ProductContextInterface $context */
             foreach ($contexts as $context) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();

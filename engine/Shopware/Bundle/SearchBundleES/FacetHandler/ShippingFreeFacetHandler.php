@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
-use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
-use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
-use ONGR\ElasticsearchDSL\Query\TermQuery;
+use ONGR\ElasticsearchDSL\Aggregation\Bucketing\FilterAggregation;
+use ONGR\ElasticsearchDSL\Aggregation\Metric\ValueCountAggregation;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -37,11 +37,12 @@ use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
+use Shopware_Components_Snippet_Manager;
 
 class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     private $snippetManager;
 
@@ -51,11 +52,11 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
     private $queryAliasMapper;
 
     /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
+     * @param Shopware_Components_Snippet_Manager $snippetManager
+     * @param QueryAliasMapper                    $queryAliasMapper
      */
     public function __construct(
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
         $this->snippetManager = $snippetManager;

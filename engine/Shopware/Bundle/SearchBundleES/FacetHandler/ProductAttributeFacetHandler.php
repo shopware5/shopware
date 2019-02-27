@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
-use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
-use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
-use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
-use ONGR\ElasticsearchDSL\Query\ExistsQuery;
+use ONGR\ElasticsearchDSL\Aggregation\Bucketing\FilterAggregation;
+use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
+use ONGR\ElasticsearchDSL\Aggregation\Metric\ValueCountAggregation;
+use ONGR\ElasticsearchDSL\Query\TermLevel\ExistsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;

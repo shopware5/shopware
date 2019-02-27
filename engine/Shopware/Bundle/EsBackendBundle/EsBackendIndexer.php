@@ -48,8 +48,9 @@ class EsBackendIndexer
     private $evaluation;
 
     /**
-     * @param Client             $client
-     * @param \IteratorAggregate $repositories
+     * @param Client                    $client
+     * @param \IteratorAggregate        $repositories
+     * @param EvaluationHelperInterface $evaluation
      */
     public function __construct(Client $client, \IteratorAggregate $repositories, EvaluationHelperInterface $evaluation)
     {

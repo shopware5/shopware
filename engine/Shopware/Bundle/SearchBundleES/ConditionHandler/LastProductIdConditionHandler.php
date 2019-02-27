@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
@@ -49,10 +50,11 @@ class LastProductIdConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var LastProductIdCondition $criteriaPart */
-        $search->addFilter(
+        $search->addQuery(
             new RangeQuery('id', [
                 'gt' => $criteriaPart->getLastId(),
-            ])
+            ]),
+            BoolQuery::FILTER
         );
     }
 

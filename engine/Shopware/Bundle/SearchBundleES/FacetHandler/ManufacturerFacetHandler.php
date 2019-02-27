@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
-use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
+use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -39,6 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
+use Shopware_Components_Snippet_Manager;
 
 class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
@@ -50,7 +51,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     private $manufacturerService;
 
     /**
-     * @var \Shopware_Components_Snippet_Manager
+     * @var Shopware_Components_Snippet_Manager
      */
     private $snippetManager;
 
@@ -60,13 +61,13 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     private $queryAliasMapper;
 
     /**
-     * @param ManufacturerServiceInterface         $manufacturerService
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
+     * @param ManufacturerServiceInterface        $manufacturerService
+     * @param Shopware_Components_Snippet_Manager $snippetManager
+     * @param QueryAliasMapper                    $queryAliasMapper
      */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
-        \Shopware_Components_Snippet_Manager $snippetManager,
+        Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
         $this->manufacturerService = $manufacturerService;

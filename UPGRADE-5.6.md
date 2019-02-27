@@ -70,6 +70,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `s_articles_prices`
     * `s_campaigns_mailings` to varchar limit of 15 for customer group key.
 * Changed plugin initialization to alphabetical by default
+* Changed elasticsearch/elasticsearch to 5.4.0
+* Changed ongr/elasticsearch-dsl to 5.0.6
 
 ### Removals
 
@@ -108,6 +110,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed deprecations of `Shopware\Components\Api\Resource\Variant`
 * Removed deprecated `Shopware_Components_Benchmark_Point`
 * Removed deprecated `Shopware_Components_Benchmark_Container`
+* Removed unused `Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPassSearchHandlerCompilerPass` which was not used at all.
 
 ### Deprecations
 
@@ -115,9 +118,13 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Bundle\ESIndexingBundle::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead.
 * Deprecated `Shopware\Components\Model\ModelRepository::queryAll`. It will be removed in 5.7, use findBy([], null, $limit, $offset) instead
 * Deprecated `Shopware\Components\Model\ModelRepository::queryBy`. It will be removed in 5.7, use findBy instead
+* Deprecated `Shopware\Bundle\ESIndexingBundle\EsClientLogger`. Use `Shopware\Bundle\ESIndexingBundle\EsClient` instead.
+* Deprecated `shopware_elastic_search.client.logger`. Use `shopware_elastic_search.client` instead.
 * Deprecated `Shopware\Models\Article\Article::getAttributeRawField`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::getAttributeRawField `.
 * Deprecated `Shopware\Models\Article\Article::setLastStock`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::setLastStock`.
 * Deprecated `Shopware\Models\Article\Article::lastStock`. It will be removed in 5.8, use `Shopware\Models\Article\Detail::lastStock`.
+* Deprecated `EsSearch::addFilter`. Use `EsSearch::addQuery(BuilderInterface, BoolQuery::FILTER)` instead.
+* Deprecated `EsSearch::getFilters`. Use `EsSearch::getQueries(BuilderInterface, BoolQuery::FILTER)` instead.
 
 ### Improved ExtJS auto-loading
 
