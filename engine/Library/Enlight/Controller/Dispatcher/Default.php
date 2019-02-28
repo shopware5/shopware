@@ -402,10 +402,12 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerName = $request->getControllerName();
         $controllerName = $this->formatControllerName($controllerName);
         $moduleName = $this->formatModuleName($this->curModule);
-        $controllerKey = strtolower(sprintf('%s_%s', $moduleName, $controllerName));
+        $controllerId = $this->getControllerServiceId($moduleName, $controllerName);
+        $request->unsetAttribute('controllerId');
 
-        if (isset($this->controllers[$controllerKey])) {
-            return $this->container->get($this->controllers[$controllerKey]);
+        if ($controllerId) {
+            $request->setAttribute('controllerId', $controllerId);
+            return $this->container->get($controllerId);
         }
 
         if ($event = Shopware()->Events()->notifyUntil(
@@ -612,6 +614,13 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $content = ob_get_clean();
             $response->appendBody($content);
         }
+    }
+
+    private function getControllerServiceId(string $module, string $name): ?string
+    {
+        $controllerKey = strtolower(sprintf('%s_%s', $module, $name));
+
+        return isset($this->controllers[$controllerKey]) ? $this->controllers[$controllerKey] : null;
     }
 
     private function isForbiddenController(string $className): bool

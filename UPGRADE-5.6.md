@@ -133,8 +133,29 @@ class Test extends Controller
     {
         // Do something with $this->connection
     }
+    
+    public function detailAction(int $productNumber = null, ListProductServiceInterface $listProductService, ContextServiceInterface $contextService)
+    {
+        if (!$productNumber) {
+            throw new \RuntimeException('No product number provided');
+        }
+        
+        $this->View()->assign('product', $listProductService->getList([$productNumber], $contextService->getShopContext()));
+    }
 }
 ```
+
+### Autowire of controller actions parameters
+
+The new controllers tagged with `shopware.controller` tag, can now have parameters in action methods. Possible parameters are
+
+* Services (e.g ListProductService $listProductService)
+* $request (e.g Request $request)
+* $requestParameters (e.g int $limit = 0  /action?limit=5)
+
+### Enlight_Controller_Request_RequestHttp is now extending Symfony\Component\HttpFoundation\Request
+
+The request instance in Shopware now extends from Symfony Request.
 
 ### Custom validation of order numbers (SKU)
 

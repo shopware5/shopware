@@ -190,7 +190,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
                 ['subject' => $this]
             )
             ) {
-                $this->$action();
+                $this->$action(...$this->getActionArguments($action));
             }
             $this->postDispatch();
         }
@@ -383,7 +383,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns request instance
      *
-     * @return Enlight_Controller_Request_Request
+     * @return Enlight_Controller_Request_RequestHttp
      */
     public function Request()
     {
@@ -438,5 +438,10 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected function createForm($type, $data = null, array $options = [])
     {
         return $this->container->get('shopware.form.factory')->create($type, $data, $options);
+    }
+
+    protected function getActionArguments(string $actionMethodName): array
+    {
+        return [];
     }
 }

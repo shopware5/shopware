@@ -78,7 +78,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $request = $this->Request()
             ->setModuleName('frontend')
             ->setDispatched(true)
-            ->setRemoteAddress('192.168.33.10')
+            ->setClientIp('192.168.33.10')
             ->setRequestUri('/foobar');
 
         /* @var \Enlight_Controller_Request_RequestTestCase $request */
