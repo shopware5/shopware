@@ -61,6 +61,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed mail error handler to consider multiple recipient addresses
 * Changed `Shopware_Controllers_Frontend_Note` forwards to redirects
 * Changed display mode of voucher field on the shopping cart page into a configurable display mode
+* Changed symfony form request handler to `Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler`
 
 ### Removals
 
@@ -76,6 +77,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed `storeType` `php` from Plugin config.xml
 * Removed the unspecific request params assignment to view in `\Shopware_Controllers_Widgets_Listing::productsAction` and `\Shopware_Controllers_Widgets_Listing::streamAction`. Use a *PostDispatchEvent to assign necessary variables in a plugin.
 * Removed voucher field from additional feature
+* Removed following classes without replacement
+    * `Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension`
+    * `Shopware\Bundle\FormBundle\EnlightRequestHandler`
 
 ### Deprecations
 
