@@ -3,7 +3,7 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_date_title"}
-    <label class="filter-panel--title" for="{$facet->getFacetName()|escape:'htmlall'}">
+    <label class="filter-panel--title" for="{$facet->getFacetName()|escape:'htmlall'}" title="{$facet->getLabel()|escape:'htmlall'}">
         {$facet->getLabel()|escape}
     </label>
 {/block}
