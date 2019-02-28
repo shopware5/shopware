@@ -32,25 +32,24 @@ class Migrations_Migration1607 extends Shopware\Components\Migrations\AbstractMi
         INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`) VALUES
         (NULL, @parent, 'showVoucherModeForCheckout', 'i:2;', 'Gutscheinfeld im Bestellabschluss anzeigen', NULL, 'select', 0, 0, 0, 'a:2:{s:5:"store";s:37:"Shopware.apps.Base.store.VoucherModes";s:9:"queryMode";s:5:"local";}');
 
-        SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showVoucherModeForCheckout' LIMIT 1);
+        SET @voucherModeElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showVoucherModeForCheckout' LIMIT 1);
         INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
-        VALUES (@elementId, '2', 'Display voucher field on checkout page');
-
-		SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'commentVoucherArticle'); 
-		UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion' WHERE id = @elementId;
-		UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @elementId;
-
+        VALUES (@voucherModeElementId, '2', 'Display voucher field on checkout page');
+        
+        SET @commentArticleElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'commentVoucherArticle'); 
+		UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion', name = 'commentArticle' WHERE id = @commentArticleElementId;
+		UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @commentArticleElementId;
 SQL;
         $this->addSql($sql);
 
         if ($modus === self::MODUS_UPDATE) {
-            $sql = "INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`)
-                    SELECT 
-                      @elementId,
-                      `id`,
-                      'i:1;'
-                    FROM s_core_shops
-                    WHERE id NOT IN (SELECT `shop_id` FROM `s_core_config_values` WHERE `element_id` = @elementId)";
+            $sql = <<<'SQL'
+            INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`)
+            SELECT @voucherModeElementId, `id`, 'i:0;' FROM s_core_shops
+            WHERE id NOT IN (SELECT `shop_id` FROM `s_core_config_values` WHERE `element_id` = @voucherModeElementId);
+            DELETE FROM `s_core_config_values` WHERE `element_id` = @voucherModeElementId && 
+            (SELECT value FROM `s_core_config_values` WHERE `element_id` = @commentArticleElementId) = 'b:1;';
+SQL;
             $this->addSql($sql);
         }
     }

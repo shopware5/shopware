@@ -599,7 +599,7 @@
 
                                 {* Additional feature - Add product using the sku *}
                                 {block name="frontend_checkout_confirm_additional_features_add_product"}
-                                    <div class="feature--add-product">
+                                    <div class="feature--add-product block">
                                         <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
 
                                             {block name='frontend_checkout_confirm_add_product_field'}
