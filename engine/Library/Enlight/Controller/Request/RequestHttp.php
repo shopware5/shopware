@@ -182,8 +182,9 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
      */
     public function setSecure($value = true)
     {
-        $_SERVER['HTTPS'] = $value ? 'on' : null;
-        $this->server->set('HTTPS', 'on');
+        $secure = $value ? 'on' : null;
+        $_SERVER['HTTPS'] = $secure;
+        $this->server->set('HTTPS', $secure);
 
         return $this;
     }

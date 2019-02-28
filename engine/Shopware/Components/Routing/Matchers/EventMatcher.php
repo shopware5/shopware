@@ -61,7 +61,7 @@ class EventMatcher implements MatcherInterface
             return $pathInfo;
         }
 
-        $request = new EnlightRequest();
+        $request = EnlightRequest::createFromGlobals();
         $request->setBaseUrl($context->getBaseUrl());
         $request->setPathInfo($pathInfo);
 
