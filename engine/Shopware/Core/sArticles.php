@@ -26,19 +26,34 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Compatibility\LegacyEventManager;
+use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Repository as ArticleRepository;
 use Shopware\Models\Article\Supplier;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Album;
+use Shopware\Models\Media\Repository as MediaRepository;
 
 /**
  * Shopware Class that handle products
@@ -52,12 +67,12 @@ class sArticles
     /**
      * Pointer to sSystem object
      *
-     * @var \sSystem
+     * @var sSystem
      */
     public $sSYSTEM;
 
     /**
-     * @var \Shopware\Models\Category\Category
+     * @var Category
      */
     public $category;
 
@@ -77,17 +92,17 @@ class sArticles
     public $customerGroupId;
 
     /**
-     * @var \Shopware\Models\Article\Repository
+     * @var ArticleRepository
      */
     protected $articleRepository = null;
 
     /**
-     * @var \Shopware\Models\Media\Repository
+     * @var MediaRepository
      */
     protected $mediaRepository = null;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var ContextServiceInterface
      */
     private $contextService;
 
@@ -97,27 +112,27 @@ class sArticles
     private $config;
 
     /**
-     * @var StoreFrontBundle\Service\ListProductServiceInterface
+     * @var ListProductServiceInterface
      */
     private $listProductService;
 
     /**
-     * @var StoreFrontBundle\Service\ProductServiceInterface
+     * @var ProductServiceInterface
      */
     private $productService;
 
     /**
-     * @var StoreFrontBundle\Service\ConfiguratorServiceInterface
+     * @var ConfiguratorServiceInterface
      */
     private $configuratorService;
 
     /**
-     * @var StoreFrontBundle\Service\PropertyServiceInterface
+     * @var PropertyServiceInterface
      */
     private $propertyService;
 
     /**
-     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     * @var AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
@@ -137,12 +152,12 @@ class sArticles
     private $db;
 
     /**
-     * @var \Shopware\Components\Compatibility\LegacyStructConverter
+     * @var LegacyStructConverter
      */
     private $legacyStructConverter;
 
     /**
-     * @var \Shopware\Components\Compatibility\LegacyEventManager
+     * @var LegacyEventManager
      */
     private $legacyEventManager;
 
@@ -167,7 +182,7 @@ class sArticles
     private $session;
 
     /**
-     * @var SearchBundle\StoreFrontCriteriaFactoryInterface
+     * @var StoreFrontCriteriaFactoryInterface
      */
     private $storeFrontCriteriaFactory;
 
@@ -182,17 +197,17 @@ class sArticles
     private $productComparisons;
 
     /**
-     * @var StoreFrontBundle\Service\ProductNumberServiceInterface
+     * @var ProductNumberServiceInterface
      */
     private $productNumberService;
 
     /**
-     * @var StoreFrontBundle\Service\Core\ListingLinkRewriteService
+     * @var ListingLinkRewriteService
      */
     private $listingLinkRewriteService;
 
     public function __construct(
-        \Shopware\Models\Category\Category $category = null,
+        Category $category = null,
         $translationId = null,
         $customerGroupId = null
     ) {
@@ -316,6 +331,7 @@ class sArticles
         }
 
         $productContext = $this->contextService->getShopContext();
+        /** @var ProductContextInterface $productContext */
         $product = $this->listProductService->get($orderNumber, $productContext);
         if (!$product || !$product->hasProperties()) {
             return [];
@@ -635,7 +651,7 @@ class sArticles
     /**
      * Get product topsellers for a specific category
      *
-     * @param int $category
+     * @param int $category|null
      *
      * @return array
      */
@@ -679,7 +695,7 @@ class sArticles
      *
      * @param int  $id        s_articles.id
      * @param int  $detailsID s_articles_details.id
-     * @param bool $realtime  deprecated
+     * @param bool $realtime  @deprecated 5.6
      *
      * @return bool
      */
@@ -1993,7 +2009,7 @@ class sArticles
     /**
      * Helper function to get access to the media repository.
      *
-     * @return \Shopware\Models\Media\Repository
+     * @return MediaRepository
      */
     private function getMediaRepository()
     {
@@ -2007,7 +2023,7 @@ class sArticles
     /**
      * Helper function to get access to the product repository.
      *
-     * @return \Shopware\Models\Article\Repository
+     * @return ArticleRepository
      */
     private function getProductRepository()
     {
@@ -2019,9 +2035,9 @@ class sArticles
     }
 
     /**
-     * @param int                                          $categoryId
-     * @param StoreFrontBundle\Struct\ShopContextInterface $context
-     * @param Enlight_Controller_Request_RequestHttp       $request
+     * @param int                                    $categoryId
+     * @param ShopContextInterface                   $context
+     * @param Enlight_Controller_Request_RequestHttp $request
      *
      * @throws \Exception
      *
@@ -2029,7 +2045,7 @@ class sArticles
      */
     private function createProductNavigationCriteria(
         $categoryId,
-        StoreFrontBundle\Struct\ShopContextInterface $context,
+        ShopContextInterface $context,
         Enlight_Controller_Request_RequestHttp $request
     ) {
         $streamId = $this->getStreamIdOfCategory($categoryId);
@@ -2064,18 +2080,18 @@ class sArticles
     }
 
     /**
-     * @param SearchBundle\ProductNumberSearchResult $searchResult
-     * @param string                                 $orderNumber
-     * @param int                                    $categoryId
-     * @param ProductContextInterface                $context
+     * @param ProductNumberSearchResult $searchResult
+     * @param string                    $orderNumber
+     * @param int                       $categoryId
+     * @param ShopContextInterface      $context
      *
      * @return array
      */
     private function buildNavigation(
-        SearchBundle\ProductNumberSearchResult $searchResult,
+        ProductNumberSearchResult $searchResult,
         $orderNumber,
         $categoryId,
-        ProductContextInterface $context
+        ShopContextInterface $context
     ) {
         $products = $searchResult->getProducts();
         $products = array_values($products);
@@ -2349,7 +2365,7 @@ class sArticles
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
      * @param int                                $categoryId
-     * @param ProductContextInterface            $context
+     * @param ShopContextInterface               $context
      * @param Enlight_Controller_Request_Request $request
      * @param Criteria                           $criteria
      *
@@ -2357,7 +2373,7 @@ class sArticles
      */
     private function getListing(
         $categoryId,
-        ProductContextInterface $context,
+        ShopContextInterface $context,
         Enlight_Controller_Request_Request $request,
         Criteria $criteria
     ) {

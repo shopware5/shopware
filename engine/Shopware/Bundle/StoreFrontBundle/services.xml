@@ -51,7 +51,6 @@
             <argument type="service" id="shopware_storefront.product_link_service"/>
             <argument type="service" id="shopware_storefront.property_service"/>
             <argument type="service" id="shopware_storefront.configurator_service"/>
-            <argument type="service" id="events"/>
         </service>
 
         <service id="shopware_storefront.marketing_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\MarketingService">
