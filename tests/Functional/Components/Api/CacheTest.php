@@ -26,7 +26,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Cache;
 
-
 class CacheTest extends TestCase
 {
     /**

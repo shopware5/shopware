@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Newsletter controller
- */
 class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 {
     /**

@@ -40,8 +40,6 @@ class MediaReader extends GenericReader
     private $mediaService;
 
     /**
-     * MediaReader constructor.
-     *
      * @param string                $entity
      * @param ModelManager          $entityManager
      * @param MediaServiceInterface $mediaService

@@ -24,9 +24,6 @@
 
 use Shopware\Components\CSRFWhitelistAware;
 
-/**
- * Shopware document / pdf controller
- */
 class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**

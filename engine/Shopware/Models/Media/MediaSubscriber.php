@@ -29,7 +29,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Components\DependencyInjection\Container;
 
-
 class MediaSubscriber implements EventSubscriber
 {
     /**

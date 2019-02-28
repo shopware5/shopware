@@ -26,13 +26,6 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Partner\Partner;
 
-/**
- * Shopware Backend Controller for the Partner Module
- *
- * Backend Controller for the partner backend module.
- * Displays all data in an Ext.grid.Panel and allows to delete,
- * add and edit items. On the detail page the partner data are displayed and can be edited
- */
 class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**

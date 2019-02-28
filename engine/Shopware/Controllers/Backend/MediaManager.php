@@ -31,12 +31,6 @@ use Shopware\Models\Media\Settings;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
-/**
- * Shopware MediaManager Controller
- *
- * The media manager backend controller handles all actions around the media manager backend module
- * and the quick selection in other modules.
- */
 class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     public static $fileUploadBlacklist = [

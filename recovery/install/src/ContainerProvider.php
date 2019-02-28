@@ -40,7 +40,6 @@ use Shopware\Recovery\Install\Service\ThemeService;
 use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Service\WebserverCheck;
 
-
 class ContainerProvider implements ServiceProviderInterface
 {
     /**

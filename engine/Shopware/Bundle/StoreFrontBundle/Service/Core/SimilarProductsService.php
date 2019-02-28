@@ -32,7 +32,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class SimilarProductsService implements Service\SimilarProductsServiceInterface
 {
     /**

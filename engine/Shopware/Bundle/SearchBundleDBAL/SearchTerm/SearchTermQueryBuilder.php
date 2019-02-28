@@ -29,7 +29,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
 
-
 class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 {
     /**

@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\Keyword;
 
-
 interface KeywordFinderInterface
 {
     /**

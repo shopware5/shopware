@@ -149,8 +149,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $type;
 
         /**
-         * Get id
-         *
          * @return int
          */
         public function getId()
@@ -159,8 +157,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set date
-         *
          * @param \DateTimeInterface $date
          *
          * @return Document
@@ -173,8 +169,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get date
-         *
          * @return \DateTimeInterface
          */
         public function getDate()
@@ -183,8 +177,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set customerId
-         *
          * @param int $customerId
          *
          * @return Document
@@ -197,8 +189,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get customerId
-         *
          * @return int
          */
         public function getCustomerId()
@@ -207,8 +197,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set orderId
-         *
          * @param int $orderId
          *
          * @return Document
@@ -221,8 +209,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get orderId
-         *
          * @return int
          */
         public function getOrderId()
@@ -231,8 +217,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set amount
-         *
          * @param float $amount
          *
          * @return Document
@@ -245,8 +229,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get amount
-         *
          * @return float
          */
         public function getAmount()
@@ -255,8 +237,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set documentId
-         *
          * @param string $documentId
          *
          * @return Document
@@ -269,8 +249,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get documentId
-         *
          * @return string
          */
         public function getDocumentId()
@@ -279,8 +257,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set hash
-         *
          * @param string $hash
          *
          * @return Document
@@ -293,8 +269,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get hash
-         *
          * @return string
          */
         public function getHash()
@@ -471,8 +445,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         private $type;
 
         /**
-         * Get id
-         *
          * @return int
          */
         public function getId()
@@ -481,8 +453,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set date
-         *
          * @param \DateTimeInterface $date
          *
          * @return Document
@@ -495,8 +465,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get date
-         *
          * @return \DateTimeInterface
          */
         public function getDate()
@@ -505,8 +473,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set customerId
-         *
          * @param int $customerId
          *
          * @return Document
@@ -519,8 +485,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get customerId
-         *
          * @return int
          */
         public function getCustomerId()
@@ -529,8 +493,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set orderId
-         *
          * @param int $orderId
          *
          * @return Document
@@ -543,8 +505,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get orderId
-         *
          * @return int
          */
         public function getOrderId()
@@ -553,8 +513,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set amount
-         *
          * @param float $amount
          *
          * @return Document
@@ -567,8 +525,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get amount
-         *
          * @return float
          */
         public function getAmount()
@@ -577,8 +533,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set documentId
-         *
          * @param string $documentId
          *
          * @return Document
@@ -591,8 +545,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get documentId
-         *
          * @return string
          */
         public function getDocumentId()
@@ -601,8 +553,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Set hash
-         *
          * @param string $hash
          *
          * @return Document
@@ -615,8 +565,6 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * Get hash
-         *
          * @return string
          */
         public function getHash()

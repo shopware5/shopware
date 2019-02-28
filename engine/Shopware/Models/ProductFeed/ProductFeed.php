@@ -308,8 +308,6 @@ class ProductFeed extends ModelEntity
     private $categories;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -318,8 +316,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return ProductFeed
@@ -332,8 +328,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -342,8 +336,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set lastExport
-     *
      * @param \DateTimeInterface|string $lastExport
      *
      * @return ProductFeed
@@ -359,8 +351,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get lastExport
-     *
      * @return \DateTimeInterface
      */
     public function getLastExport()
@@ -369,8 +359,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param int $active
      *
      * @return ProductFeed
@@ -383,8 +371,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return int
      */
     public function getActive()
@@ -393,8 +379,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set hash
-     *
      * @param string $hash
      *
      * @return ProductFeed
@@ -407,8 +391,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get hash
-     *
      * @return string
      */
     public function getHash()
@@ -417,8 +399,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set show
-     *
      * @param int $show
      *
      * @return ProductFeed
@@ -431,8 +411,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get show
-     *
      * @return int
      */
     public function getShow()
@@ -441,8 +419,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set countArticles
-     *
      * @param int $countArticles
      *
      * @return ProductFeed
@@ -455,8 +431,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get countArticles
-     *
      * @return int
      */
     public function getCountArticles()
@@ -465,8 +439,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set expiry
-     *
      * @param \DateTimeInterface|string $expiry
      *
      * @return ProductFeed
@@ -482,8 +454,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get expiry
-     *
      * @return \DateTimeInterface
      */
     public function getExpiry()
@@ -492,8 +462,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set interval
-     *
      * @param int $interval
      *
      * @return ProductFeed
@@ -506,8 +474,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get interval
-     *
      * @return int
      */
     public function getInterval()
@@ -516,8 +482,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set formatId
-     *
      * @param int $formatId
      *
      * @return ProductFeed
@@ -530,8 +494,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get formatId
-     *
      * @return int
      */
     public function getFormatId()
@@ -540,8 +502,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set lastChange
-     *
      * @param \DateTimeInterface|string $lastChange
      *
      * @return ProductFeed
@@ -557,8 +517,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get lastChange
-     *
      * @return \DateTimeInterface
      */
     public function getLastChange()
@@ -567,8 +525,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set filename
-     *
      * @param string $fileName
      *
      * @return ProductFeed
@@ -581,8 +537,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get filename
-     *
      * @return string
      */
     public function getFileName()
@@ -591,8 +545,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set encodingId
-     *
      * @param int $encodingId
      *
      * @return ProductFeed
@@ -605,8 +557,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get encodingId
-     *
      * @return int
      */
     public function getEncodingId()
@@ -615,8 +565,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set categoryId
-     *
      * @param int $categoryId
      *
      * @return ProductFeed
@@ -629,8 +577,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get categoryId
-     *
      * @return int
      */
     public function getCategoryId()
@@ -639,8 +585,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set currencyId
-     *
      * @param int $currencyId
      *
      * @return ProductFeed
@@ -653,8 +597,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get currencyId
-     *
      * @return int
      */
     public function getCurrencyId()
@@ -663,8 +605,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set customerGroupId
-     *
      * @param int $customerGroupId
      *
      * @return ProductFeed
@@ -677,8 +617,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get customerGroupId
-     *
      * @return int
      */
     public function getCustomerGroupId()
@@ -687,8 +625,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set partnerId
-     *
      * @param string $partnerId
      *
      * @return ProductFeed
@@ -701,8 +637,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get partnerId
-     *
      * @return string
      */
     public function getPartnerId()
@@ -711,8 +645,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set languageId
-     *
      * @param int $languageId
      *
      * @return ProductFeed
@@ -725,8 +657,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get languageId
-     *
      * @return int
      */
     public function getLanguageId()
@@ -735,8 +665,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set activeFilter
-     *
      * @param int $activeFilter
      *
      * @return ProductFeed
@@ -749,8 +677,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get activeFilter
-     *
      * @return int
      */
     public function getActiveFilter()
@@ -759,8 +685,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set imageFilter
-     *
      * @param int $imageFilter
      *
      * @return ProductFeed
@@ -773,8 +697,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get imageFilter
-     *
      * @return int
      */
     public function getImageFilter()
@@ -783,8 +705,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set stockMinFilter
-     *
      * @param int $stockMinFilter
      *
      * @return ProductFeed
@@ -797,8 +717,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get stockMinFilter
-     *
      * @return int
      */
     public function getStockMinFilter()
@@ -807,8 +725,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set instockFilter
-     *
      * @param int $instockFilter
      *
      * @return ProductFeed
@@ -821,8 +737,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get instockFilter
-     *
      * @return int
      */
     public function getInstockFilter()
@@ -831,8 +745,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set priceFilter
-     *
      * @param float $priceFilter
      *
      * @return ProductFeed
@@ -845,8 +757,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get priceFilter
-     *
      * @return float
      */
     public function getPriceFilter()
@@ -855,8 +765,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set ownFilter
-     *
      * @param string $ownFilter
      *
      * @return ProductFeed
@@ -869,8 +777,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get ownFilter
-     *
      * @return string
      */
     public function getOwnFilter()
@@ -879,8 +785,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set header
-     *
      * @param string $header
      *
      * @return ProductFeed
@@ -893,8 +797,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get header
-     *
      * @return string
      */
     public function getHeader()
@@ -903,8 +805,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set body
-     *
      * @param string $body
      *
      * @return ProductFeed
@@ -917,8 +817,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get body
-     *
      * @return string
      */
     public function getBody()
@@ -927,8 +825,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set footer
-     *
      * @param string $footer
      *
      * @return ProductFeed
@@ -941,8 +837,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get footer
-     *
      * @return string
      */
     public function getFooter()
@@ -951,8 +845,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set countFilter
-     *
      * @param int $countFilter
      *
      * @return ProductFeed
@@ -965,8 +857,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get countFilter
-     *
      * @return int
      */
     public function getCountFilter()
@@ -975,8 +865,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set shopId
-     *
      * @param int $shopId
      *
      * @return ProductFeed
@@ -989,8 +877,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get shopId
-     *
      * @return int
      */
     public function getShopId()
@@ -999,8 +885,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Set variantExport
-     *
      * @param int $variantExport
      *
      * @return ProductFeed
@@ -1013,8 +897,6 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * Get variantExport
-     *
      * @return int
      */
     public function getVariantExport()

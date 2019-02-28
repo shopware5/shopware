@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Configurator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
-
 class Option extends Extendable
 {
     /**

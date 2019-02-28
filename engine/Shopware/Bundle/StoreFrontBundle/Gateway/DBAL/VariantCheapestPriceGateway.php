@@ -32,7 +32,6 @@ use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGatewayInterface
 {
     /**

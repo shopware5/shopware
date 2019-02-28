@@ -38,7 +38,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
-
 class ManufacturerFacetHandler implements PartialFacetHandlerInterface
 {
     /**

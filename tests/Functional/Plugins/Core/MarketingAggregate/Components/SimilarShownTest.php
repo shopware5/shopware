@@ -26,7 +26,6 @@ namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Components;
 
 use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
-
 class SimilarShownTest extends AbstractMarketing
 {
     public function testResetSimilarShown()

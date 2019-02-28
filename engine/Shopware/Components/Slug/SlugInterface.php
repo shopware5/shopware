@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Slug;
 
-
 interface SlugInterface
 {
     /**

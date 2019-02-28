@@ -388,8 +388,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -398,8 +396,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Set id
-     *
      * @param int $id
      *
      * @return int
@@ -544,8 +540,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Set changed
-     *
      * @param \DateTimeInterface|string $changed
      *
      * @return Category
@@ -562,8 +556,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Get changed
-     *
      * @return \DateTimeInterface
      */
     public function getChanged()
@@ -572,8 +564,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Get added
-     *
      * @return \DateTimeInterface
      */
     public function getAdded()
@@ -682,8 +672,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Set template
-     *
      * @param string $template
      *
      * @return Category
@@ -696,8 +684,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Get template
-     *
      * @return string
      */
     public function getTemplate()
@@ -706,8 +692,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param bool $active
      *
      * @return Category

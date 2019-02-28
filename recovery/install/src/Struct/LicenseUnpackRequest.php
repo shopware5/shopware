@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Install\Struct;
 
-
 class LicenseUnpackRequest
 {
     /**

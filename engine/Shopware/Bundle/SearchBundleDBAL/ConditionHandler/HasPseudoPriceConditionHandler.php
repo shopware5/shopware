@@ -33,7 +33,6 @@ use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
     /**

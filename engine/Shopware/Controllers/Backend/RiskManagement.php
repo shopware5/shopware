@@ -23,19 +23,12 @@
  */
 
 /**
- * Shopware Premium Controller
- *
  * This controller handles all actions made by the user in the premium module.
  * It reads all premium-articles, creates new ones, edits and deletes them.
  * Additionally it also validates the form.
  */
 class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_Backend_ExtJs
 {
-    //    /**
-//     * @var Shopware\Models\RiskManagement\Repository
-//     */
-//    private $repository;
-
     public function initAcl()
     {
         $this->addAclPermission('getPayments', 'read', "You're not allowed to see the rules.");

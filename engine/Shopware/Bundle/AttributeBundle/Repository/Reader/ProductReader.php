@@ -47,8 +47,6 @@ class ProductReader extends GenericReader
     private $additionalTextService;
 
     /**
-     * ProductReader constructor.
-     *
      * @param string                         $entity
      * @param ModelManager                   $entityManager
      * @param ContextServiceInterface        $contextService

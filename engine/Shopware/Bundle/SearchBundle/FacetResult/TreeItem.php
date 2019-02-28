@@ -27,7 +27,6 @@ namespace Shopware\Bundle\SearchBundle\FacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-
 class TreeItem extends Extendable
 {
     /**

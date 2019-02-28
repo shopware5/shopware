@@ -24,7 +24,6 @@
 
 use Shopware\Models\Order\Order;
 
-
 class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**

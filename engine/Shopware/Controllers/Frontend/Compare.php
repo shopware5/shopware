@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Compare controller
- */
 class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
 {
     /**

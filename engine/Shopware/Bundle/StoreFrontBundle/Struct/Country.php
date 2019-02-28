@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
-
 class Country extends Extendable
 {
     /**

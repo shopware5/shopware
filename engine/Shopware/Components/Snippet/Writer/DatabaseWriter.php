@@ -26,7 +26,6 @@ namespace Shopware\Components\Snippet\Writer;
 
 use Doctrine\DBAL\Connection;
 
-
 class DatabaseWriter
 {
     /**

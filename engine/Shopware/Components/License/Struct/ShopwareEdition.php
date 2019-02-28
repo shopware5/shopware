@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\License\Struct;
 
-
 class ShopwareEdition
 {
     const CE = 'CE'; // Community Edition

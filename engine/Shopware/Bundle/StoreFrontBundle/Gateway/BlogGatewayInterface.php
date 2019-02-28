@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 interface BlogGatewayInterface
 {
     /**

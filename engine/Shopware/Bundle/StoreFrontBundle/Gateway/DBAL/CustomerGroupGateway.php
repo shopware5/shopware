@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
-
 class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
 {
     /**

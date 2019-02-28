@@ -27,7 +27,6 @@ namespace Shopware\Components;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Theme\PathResolver;
 
-
 class CacheManager
 {
     const CACHE_TAG_TEMPLATE = 'template';

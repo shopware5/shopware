@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Customer\Customer;
 
-
 class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 {
     const TEST_MAIL = 'unittest@mail.com';

@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Models\Shop\Currency as CurrencyEntity;
 
-
 class Currency extends Extendable
 {
     /**

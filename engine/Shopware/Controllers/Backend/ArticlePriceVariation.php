@@ -26,7 +26,6 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\PriceVariation;
 use Shopware\Models\Article\Configurator\Set;
 
-
 class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Controllers_Backend_ExtJs
 {
     /**

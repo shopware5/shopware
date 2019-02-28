@@ -26,7 +26,6 @@ namespace Shopware\Plugin\Debug\Components;
 
 use Shopware\Components\Logger;
 
-
 class ControllerCollector implements CollectorInterface
 {
     /**

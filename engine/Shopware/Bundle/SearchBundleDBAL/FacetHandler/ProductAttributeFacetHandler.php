@@ -43,7 +43,6 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 {
     /**

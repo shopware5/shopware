@@ -27,7 +27,6 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 interface QueryBuilderFactoryInterface
 {
     /**

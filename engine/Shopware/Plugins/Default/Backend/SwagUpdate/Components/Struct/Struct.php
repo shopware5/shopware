@@ -24,7 +24,6 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Struct;
 
-
 abstract class Struct
 {
     /**

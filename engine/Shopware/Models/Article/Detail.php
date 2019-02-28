@@ -323,8 +323,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -333,8 +331,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set number
-     *
      * @param string $number
      *
      * @return Detail
@@ -347,8 +343,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get number
-     *
      * @return string|null
      */
     public function getNumber()
@@ -357,8 +351,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set supplierNumber
-     *
      * @param string $supplierNumber
      *
      * @return Detail
@@ -371,8 +363,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get supplierNumber
-     *
      * @return string
      */
     public function getSupplierNumber()
@@ -381,8 +371,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set kind
-     *
      * @param int $kind
      *
      * @return Detail
@@ -395,8 +383,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get kind
-     *
      * @return int
      */
     public function getKind()
@@ -405,8 +391,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set additionalText
-     *
      * @param string $additionalText
      *
      * @return Detail
@@ -419,8 +403,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get additionalText
-     *
      * @return string
      */
     public function getAdditionalText()
@@ -429,8 +411,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param int $active
      *
      * @return \Shopware\Models\Article\Detail
@@ -443,8 +423,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return int
      */
     public function getActive()
@@ -453,8 +431,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set inStock
-     *
      * @param int $inStock
      *
      * @return \Shopware\Models\Article\Detail
@@ -467,8 +443,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get inStock
-     *
      * @return int
      */
     public function getInStock()
@@ -477,8 +451,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set stockMin
-     *
      * @param int $stockMin
      *
      * @return Detail
@@ -491,8 +463,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get stockMin
-     *
      * @return int
      */
     public function getStockMin()
@@ -501,8 +471,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set lastStock
-     *
      * @param int $lastStock
      *
      * @return Detail
@@ -515,8 +483,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get lastStock
-     *
      * @return int
      */
     public function getLastStock()
@@ -525,8 +491,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set weight
-     *
      * @param float $weight
      *
      * @return Detail
@@ -539,8 +503,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get weight
-     *
      * @return float
      */
     public function getWeight()
@@ -549,8 +511,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return Detail
@@ -563,8 +523,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()
@@ -749,8 +707,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set shippingFree
-     *
      * @param int $shippingFree
      *
      * @return Detail
@@ -763,8 +719,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get shippingFree
-     *
      * @return int
      */
     public function getShippingFree()
@@ -773,8 +727,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set releaseDate
-     *
      * @param \DateTimeInterface|string|null $releaseDate
      *
      * @return Detail
@@ -791,8 +743,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get releaseDate
-     *
      * @return \DateTimeInterface
      */
     public function getReleaseDate()
@@ -801,8 +751,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set minPurchase
-     *
      * @param int $minPurchase
      *
      * @return Detail
@@ -819,8 +767,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get minPurchase
-     *
      * @return int
      */
     public function getMinPurchase()
@@ -829,8 +775,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set purchaseSteps
-     *
      * @param int $purchaseSteps
      *
      * @return Detail
@@ -843,8 +787,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get purchaseSteps
-     *
      * @return int
      */
     public function getPurchaseSteps()
@@ -853,8 +795,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set maxPurchase
-     *
      * @param int $maxPurchase
      *
      * @return Detail
@@ -867,8 +807,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get maxPurchase
-     *
      * @return int
      */
     public function getMaxPurchase()
@@ -877,8 +815,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set purchaseUnit
-     *
      * @param float $purchaseUnit
      *
      * @return Detail
@@ -891,8 +827,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get purchaseUnit
-     *
      * @return float
      */
     public function getPurchaseUnit()
@@ -901,8 +835,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set referenceUnit
-     *
      * @param float $referenceUnit
      *
      * @return Detail
@@ -915,8 +847,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get referenceUnit
-     *
      * @return float
      */
     public function getReferenceUnit()
@@ -925,8 +855,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Set packUnit
-     *
      * @param string $packUnit
      *
      * @return Detail
@@ -939,8 +867,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * Get packUnit
-     *
      * @return string
      */
     public function getPackUnit()

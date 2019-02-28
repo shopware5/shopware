@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Supplier Management
- */
 class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend_ExtJs
 {
     /**

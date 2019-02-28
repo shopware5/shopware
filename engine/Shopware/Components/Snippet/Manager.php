@@ -28,7 +28,6 @@ use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 
-
 class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Manager
 {
     /**

@@ -31,7 +31,6 @@ use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\DomCrawler\Crawler;
 
-
 class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**

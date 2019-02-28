@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Components_SeoIndex extends Enlight_Class
 {
     /**

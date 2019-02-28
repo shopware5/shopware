@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
-
 class ImmediateDeliveryFacet implements FacetInterface
 {
     /**

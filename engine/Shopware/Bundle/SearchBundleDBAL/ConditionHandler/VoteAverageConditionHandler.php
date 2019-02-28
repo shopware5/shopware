@@ -30,7 +30,6 @@ use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class VoteAverageConditionHandler implements ConditionHandlerInterface
 {
     /**

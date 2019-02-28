@@ -30,9 +30,6 @@ use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class MediaService
- */
 class MediaService implements MediaServiceInterface
 {
     /**

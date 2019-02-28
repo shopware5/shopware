@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 {
     /**

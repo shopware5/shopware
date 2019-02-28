@@ -89,8 +89,6 @@ class FormTranslation extends ModelEntity
     private $localeId;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -119,8 +117,6 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return FormTranslation
@@ -133,8 +129,6 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()

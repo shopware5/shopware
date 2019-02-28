@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Country;
 use Shopware\Models\Country\State;
 
-
 class CountryTest extends TestCase
 {
     /**

@@ -24,7 +24,6 @@
 
 use Shopware\Components\Random;
 
-
 class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 {
     /**

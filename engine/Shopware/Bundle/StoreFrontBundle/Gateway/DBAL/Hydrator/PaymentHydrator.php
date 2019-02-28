@@ -39,8 +39,6 @@ class PaymentHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
-     * PaymentHydrator constructor.
-     *
      * @param AttributeHydrator $attributeHydrator
      */
     public function __construct(AttributeHydrator $attributeHydrator)

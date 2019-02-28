@@ -26,7 +26,6 @@ namespace Shopware\Recovery\Install\Service;
 
 use Shopware\Recovery\Install\Struct\Shop;
 
-
 class CurrencyService
 {
     private $currencySettings = [

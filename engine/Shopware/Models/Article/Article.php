@@ -505,8 +505,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -515,8 +513,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Article
@@ -529,8 +525,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -539,8 +533,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return Article
@@ -553,8 +545,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -563,8 +553,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set descriptionLong
-     *
      * @param string $descriptionLong
      *
      * @return Article
@@ -577,8 +565,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get descriptionLong
-     *
      * @return string
      */
     public function getDescriptionLong()
@@ -587,8 +573,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set date
-     *
      * @param \DateTimeInterface|string $added
      *
      * @return Article
@@ -605,8 +589,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get date
-     *
      * @return \DateTimeInterface
      */
     public function getAdded()
@@ -615,8 +597,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param bool $active
      *
      * @return Article
@@ -629,8 +609,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return bool
      */
     public function getActive()
@@ -639,8 +617,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set pseudoSales
-     *
      * @param int $pseudoSales
      *
      * @return Article
@@ -653,8 +629,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get pseudoSales
-     *
      * @return int
      */
     public function getPseudoSales()
@@ -663,8 +637,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set highlight
-     *
      * @param bool $highlight
      *
      * @return Article
@@ -677,8 +649,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get highlight
-     *
      * @return bool
      */
     public function getHighlight()
@@ -687,8 +657,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set keywords
-     *
      * @param string $keywords
      *
      * @return Article
@@ -701,8 +669,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get keywords
-     *
      * @return string
      */
     public function getKeywords()
@@ -711,8 +677,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set metaTitle
-     *
      * @param string $metaTitle
      *
      * @return Article
@@ -725,8 +689,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get metaTitle
-     *
      * @return string
      */
     public function getMetaTitle()
@@ -735,8 +697,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set changed
-     *
      * @param \DateTimeInterface|string $changed
      *
      * @return Article
@@ -753,8 +713,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get changed
-     *
      * @return \DateTimeInterface
      */
     public function getChanged()
@@ -763,8 +721,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set priceGroupActive
-     *
      * @param bool $priceGroupActive
      *
      * @return Article
@@ -777,8 +733,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get priceGroupActive
-     *
      * @return bool
      */
     public function getPriceGroupActive()
@@ -787,8 +741,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set lastStock
-     *
      * @param bool $lastStock
      *
      * @return Article
@@ -801,8 +753,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get lastStock
-     *
      * @return bool
      */
     public function getLastStock()
@@ -811,8 +761,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set notification
-     *
      * @param bool $notification
      *
      * @return Article
@@ -825,8 +773,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get notification
-     *
      * @return bool
      */
     public function getNotification()
@@ -835,8 +781,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set template
-     *
      * @param string $template
      *
      * @return Article
@@ -849,8 +793,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get template
-     *
      * @return string
      */
     public function getTemplate()
@@ -859,8 +801,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Set mode
-     *
      * @param int $mode
      *
      * @return Article
@@ -873,8 +813,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * Get mode
-     *
      * @return int
      */
     public function getMode()

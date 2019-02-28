@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Password\Encoder;
 
-
 class LegacyBackendMd5 implements PasswordEncoderInterface
 {
     /**

@@ -28,7 +28,6 @@ use Shopware\Components\Theme\Installer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 class ThemeInitializeCommand extends ShopwareCommand
 {
     /**

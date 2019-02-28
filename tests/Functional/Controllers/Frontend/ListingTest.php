@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components_Test_Controller_TestCase
 {
     public function setUp()

@@ -26,7 +26,6 @@ namespace Shopware\Tests\Unit\Components\Event;
 
 use PHPUnit\Framework\TestCase;
 
-
 class SubscriberArrayTest extends TestCase
 {
     /**

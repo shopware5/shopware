@@ -26,7 +26,6 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 
-
 class NumberRangeIncrementer implements NumberRangeIncrementerInterface
 {
     /**

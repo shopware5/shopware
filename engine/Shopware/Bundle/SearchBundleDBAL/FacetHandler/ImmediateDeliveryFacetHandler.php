@@ -36,7 +36,6 @@ use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
-
 class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
 {
     /**

@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Category;
 use Shopware\Components\Api\Resource\Resource;
 
-
 class CategoryTest extends TestCase
 {
     /**

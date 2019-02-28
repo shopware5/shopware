@@ -31,7 +31,6 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class SearchTermConditionHandler implements ConditionHandlerInterface
 {
     const STATE_INCLUDES_RANKING = 'ranking';

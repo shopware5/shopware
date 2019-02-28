@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-
 interface FacetInterface extends CriteriaPartInterface
 {
 }

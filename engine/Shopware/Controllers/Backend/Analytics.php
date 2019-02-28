@@ -25,9 +25,6 @@
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Analytics\Repository;
 
-/**
- * Statistics controller
- */
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     protected $dateFields = [

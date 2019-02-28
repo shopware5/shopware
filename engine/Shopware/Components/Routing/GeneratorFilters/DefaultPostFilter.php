@@ -27,7 +27,6 @@ namespace Shopware\Components\Routing\GeneratorFilters;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\PostFilterInterface;
 
-
 class DefaultPostFilter implements PostFilterInterface
 {
     /**

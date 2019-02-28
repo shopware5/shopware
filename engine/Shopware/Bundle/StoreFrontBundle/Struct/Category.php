@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Models\Category\Category as CategoryEntity;
 
-
 class Category extends Extendable
 {
     /**

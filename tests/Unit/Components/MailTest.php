@@ -26,7 +26,6 @@ namespace Shopware\Tests\Unit\Components;
 
 use PHPUnit\Framework\TestCase;
 
-
 class MailTest extends TestCase
 {
     public function testValidFromAddress()

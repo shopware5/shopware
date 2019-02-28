@@ -57,8 +57,6 @@ class CurrentPasswordValidator extends ConstraintValidator
     private $modelManager;
 
     /**
-     * CurrentPasswordValidator constructor.
-     *
      * @param \Enlight_Components_Session_Namespace $session
      * @param \Enlight_Components_Snippet_Manager   $snippets
      * @param Manager                               $passwordManager

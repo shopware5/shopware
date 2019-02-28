@@ -26,7 +26,6 @@ namespace Shopware\Tests\Unit\Plugin\Frontend\InputFilter;
 
 use PHPUnit\Framework\TestCase;
 
-
 class FilterTest extends TestCase
 {
     /** @var \Shopware_Plugins_Frontend_InputFilter_Bootstrap */

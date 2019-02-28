@@ -30,7 +30,6 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-
 class SearchTermLogger implements SearchTermLoggerInterface
 {
     /**

@@ -27,7 +27,6 @@ namespace Shopware\Components\Log\Handler;
 use Monolog\Handler\MailHandler;
 use Monolog\Logger;
 
-
 class EnlightMailHandler extends MailHandler
 {
     /**

@@ -26,7 +26,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Resource;
 
-
 class ResourceTest extends \Enlight_Components_Test_TestCase
 {
     /**

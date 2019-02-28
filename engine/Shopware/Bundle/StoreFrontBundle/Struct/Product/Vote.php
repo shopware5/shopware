@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-
 class Vote extends Extendable
 {
     /**

@@ -24,7 +24,6 @@
 
 use Shopware\Models\Article\Esd;
 
-
 class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 {
     /**

@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
 
 use Shopware\Bundle\SearchBundle\SortingInterface;
 
-
 class SimpleSorting extends Sorting
 {
     /**

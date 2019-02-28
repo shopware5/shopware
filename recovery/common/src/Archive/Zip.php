@@ -26,7 +26,6 @@ namespace Shopware\Recovery\Common\Archive;
 
 use ZipArchive;
 
-
 class Zip extends Adapter
 {
     /**

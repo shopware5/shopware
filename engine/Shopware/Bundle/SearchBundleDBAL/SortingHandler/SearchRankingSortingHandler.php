@@ -31,7 +31,6 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class SearchRankingSortingHandler implements SortingHandlerInterface
 {
     /**

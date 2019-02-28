@@ -88,9 +88,6 @@ class Element implements \JsonSerializable
      */
     protected $data;
 
-    /**
-     * Element constructor.
-     */
     public function __construct()
     {
         $this->data = new ElementData();

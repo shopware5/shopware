@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * Class PriceStruct
- */
 class SubscriptionStateStruct implements \JsonSerializable
 {
     /**

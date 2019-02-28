@@ -27,9 +27,6 @@ namespace Shopware\Components\ProductStream;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
-/**
- * Class FacetFilter
- */
 interface FacetFilterInterface
 {
     /**

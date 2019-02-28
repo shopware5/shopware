@@ -199,8 +199,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -209,8 +207,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set username
-     *
      * @param string $username
      *
      * @return User
@@ -223,8 +219,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get username
-     *
      * @return string
      */
     public function getUsername()
@@ -233,8 +227,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set password
-     *
      * @param string $password
      *
      * @return User
@@ -247,8 +239,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get password
-     *
      * @return string
      */
     public function getPassword()
@@ -285,8 +275,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set sessionid
-     *
      * @param string $sessionId
      *
      * @return User
@@ -299,8 +287,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get sessionId
-     *
      * @return string
      */
     public function getSessionId()
@@ -309,8 +295,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set lastLogin
-     *
      * @param \DateTimeInterface|string $lastLogin
      *
      * @return User
@@ -326,8 +310,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get lastlogin
-     *
      * @return \DateTimeInterface
      */
     public function getLastLogin()
@@ -336,8 +318,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return User
@@ -350,8 +330,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -360,8 +338,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return User
@@ -374,8 +350,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -384,8 +358,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param int $active
      *
      * @return User
@@ -398,8 +370,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return int
      */
     public function getActive()
@@ -408,8 +378,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set failedLogins
-     *
      * @param int $failedLogins
      *
      * @return User
@@ -422,8 +390,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get failedLogins
-     *
      * @return int
      */
     public function getFailedLogins()
@@ -432,8 +398,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set lockedUntil
-     *
      * @param \DateTimeInterface|string $lockedUntil|
      *
      * @return User
@@ -449,8 +413,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Get lockedUntil
-     *
      * @return \DateTimeInterface
      */
     public function getLockedUntil()

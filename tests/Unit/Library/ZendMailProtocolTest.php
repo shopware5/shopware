@@ -27,7 +27,6 @@ namespace Shopware\Tests\Unit\Library;
 use PHPUnit\Framework\TestCase;
 use Zend\Mail\Protocol\ProtocolTrait;
 
-
 class ZendMailProtocolTest extends TestCase
 {
     use ProtocolTrait;

@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class AdditionalTextService implements AdditionalTextServiceInterface
 {
     /**

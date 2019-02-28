@@ -29,7 +29,6 @@ use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\GeneratorListInterface;
 
-
 class RewriteGenerator implements GeneratorListInterface
 {
     /**

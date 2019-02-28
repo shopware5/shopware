@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Tests_Components_StringCompilerTest extends Enlight_Components_Test_TestCase
 {
     /**

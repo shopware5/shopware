@@ -28,7 +28,6 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 interface VariantListingPriceServiceInterface
 {
     /**

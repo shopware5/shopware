@@ -25,7 +25,6 @@
 use Shopware\Models\Order\Order;
 
 /**
- * Shopware Backend Controller
  * Backend for various ajax queries
  */
 class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Backend_ExtJs

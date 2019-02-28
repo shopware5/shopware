@@ -26,7 +26,6 @@ namespace Shopware\Components\Snippet;
 
 use Doctrine\DBAL\Connection;
 
-
 class SnippetValidator
 {
     /**

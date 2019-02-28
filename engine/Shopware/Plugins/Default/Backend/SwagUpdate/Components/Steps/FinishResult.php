@@ -24,7 +24,6 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Steps;
 
-
 class FinishResult
 {
     /**

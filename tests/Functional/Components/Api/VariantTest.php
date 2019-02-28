@@ -30,7 +30,6 @@ use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Esd;
 
-
 class VariantTest extends TestCase
 {
     /**

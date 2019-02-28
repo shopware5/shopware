@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**

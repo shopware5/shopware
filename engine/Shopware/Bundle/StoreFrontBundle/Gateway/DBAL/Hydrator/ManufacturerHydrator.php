@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class ManufacturerHydrator extends Hydrator
 {
     /**

@@ -26,7 +26,6 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\ShopwareReleaseStruct;
 
-
 class Config
 {
     /**

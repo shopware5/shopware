@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
-
 class ReleaseDateSorting extends Sorting
 {
     /**

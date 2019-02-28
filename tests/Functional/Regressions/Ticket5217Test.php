@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_RegressionTests_Ticket5217 extends Enlight_Components_Test_TestCase
 {
     /**

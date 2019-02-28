@@ -31,7 +31,6 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Slim;
 
-
 class RequirementsController
 {
     /**

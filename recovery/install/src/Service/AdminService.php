@@ -26,7 +26,6 @@ namespace Shopware\Recovery\Install\Service;
 
 use Shopware\Recovery\Install\Struct\AdminUser;
 
-
 class AdminService
 {
     /**

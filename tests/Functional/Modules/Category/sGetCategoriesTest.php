@@ -26,7 +26,6 @@ namespace Shopware\Tests\Functional\Modules\Category;
 
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
-
 class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 {
     /**

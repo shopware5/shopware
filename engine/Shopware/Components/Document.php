@@ -332,8 +332,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * Set renderer
-     *
      * @param string $renderer
      */
     public function setRenderer($renderer)

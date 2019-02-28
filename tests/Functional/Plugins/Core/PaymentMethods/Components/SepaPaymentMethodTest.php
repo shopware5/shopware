@@ -24,7 +24,6 @@
 
 use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
 
-
 class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlight_Components_Test_Plugin_TestCase
 {
     /**

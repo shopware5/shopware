@@ -31,7 +31,6 @@ use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-
 class DatabaseHandler
 {
     /**

@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class MarketingService implements Service\MarketingServiceInterface
 {
     /**

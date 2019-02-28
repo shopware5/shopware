@@ -26,7 +26,6 @@ namespace Shopware\Tests\Functional\Components;
 
 use Shopware\Components\Model\Generator;
 
-
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TABLE_NAME = 's_articles_attributes';

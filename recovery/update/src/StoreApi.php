@@ -26,7 +26,6 @@ namespace Shopware\Recovery\Update;
 
 use Shopware\Recovery\Common\HttpClient\Client;
 
-
 class StoreApi
 {
     /**

@@ -204,8 +204,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -214,8 +212,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Country
@@ -228,8 +224,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -238,8 +232,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set iso
-     *
      * @param string $iso
      *
      * @return Country
@@ -252,8 +244,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get iso
-     *
      * @return string
      */
     public function getIso()
@@ -262,8 +252,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set en
-     *
      * @param string $isoName
      *
      * @return Country
@@ -276,8 +264,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get en
-     *
      * @return string
      */
     public function getIsoName()
@@ -286,8 +272,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return Country
@@ -300,8 +284,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()
@@ -310,8 +292,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return Country
@@ -324,8 +304,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -334,8 +312,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set taxFree
-     *
      * @param int $taxFree
      *
      * @return Country
@@ -348,8 +324,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get taxFree
-     *
      * @return int
      */
     public function getTaxFree()
@@ -358,8 +332,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set taxFreeUstId
-     *
      * @param int $taxFreeUstId
      *
      * @return Country
@@ -372,8 +344,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get taxFreeUstId
-     *
      * @return int
      */
     public function getTaxFreeUstId()
@@ -382,8 +352,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set taxFreeUstIdChecked
-     *
      * @param int $taxFreeUstIdChecked
      *
      * @return Country
@@ -396,8 +364,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get taxFreeUstIdChecked
-     *
      * @return int
      */
     public function getTaxFreeUstIdChecked()
@@ -406,8 +372,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param bool $active
      *
      * @return Country
@@ -420,8 +384,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return bool
      */
     public function getActive()
@@ -430,8 +392,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Set iso3
-     *
      * @param string $iso3
      *
      * @return Country
@@ -444,8 +404,6 @@ class Country extends ModelEntity
     }
 
     /**
-     * Get iso3
-     *
      * @return string
      */
     public function getIso3()

@@ -26,7 +26,6 @@ namespace Shopware\Tests\Unit\Controller\Backend;
 
 use PHPUnit\Framework\TestCase;
 
-
 class ExtJsTest extends TestCase
 {
     public function exampleData()

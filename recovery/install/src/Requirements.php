@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Install;
 
-
 class Requirements
 {
     /**

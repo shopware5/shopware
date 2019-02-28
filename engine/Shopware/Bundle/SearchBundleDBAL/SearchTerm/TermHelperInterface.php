@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
-
 interface TermHelperInterface
 {
     /**

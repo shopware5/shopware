@@ -34,7 +34,6 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
 class QueryBuilderFactory implements QueryBuilderFactoryInterface
 {
     /**

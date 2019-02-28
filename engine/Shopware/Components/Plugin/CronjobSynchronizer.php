@@ -36,8 +36,6 @@ class CronjobSynchronizer
     private $connection;
 
     /**
-     * CronjobSyncronizer constructor.
-     *
      * @param Connection $connection
      */
     public function __construct(Connection $connection)

@@ -37,7 +37,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
 class ContextService implements ContextServiceInterface
 {
     const FALLBACK_CUSTOMER_GROUP = 'EK';

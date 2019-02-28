@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Common\HttpClient;
 
-
 class CurlClient implements Client
 {
     const METHOD_GET = 'GET';

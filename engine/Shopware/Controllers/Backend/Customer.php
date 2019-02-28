@@ -30,12 +30,6 @@ use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
 
-/**
- * Backend Controller for the customer backend module.
- * Displays all customers in an Ext.grid.Panel and allows to delete,
- * add and edit customers. On the detail page the customer data displayed
- * and a list of all done orders shown.
- */
 class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**

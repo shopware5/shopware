@@ -27,7 +27,6 @@ namespace Shopware\Components\Log\Handler;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
-
 class DoctrineDBALHandler extends AbstractProcessingHandler
 {
     /**

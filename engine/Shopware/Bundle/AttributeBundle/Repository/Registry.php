@@ -29,7 +29,6 @@ use Shopware\Bundle\AttributeBundle\Repository\Reader\GenericReader;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher;
 use Shopware\Components\Model\ModelManager;
 
-
 class Registry implements RegistryInterface
 {
     /**

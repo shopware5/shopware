@@ -27,7 +27,6 @@ namespace Shopware\Components\HttpClient;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
-
 class GuzzleHttpClient implements HttpClientInterface
 {
     /**

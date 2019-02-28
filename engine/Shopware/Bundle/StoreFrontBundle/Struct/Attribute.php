@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class Attribute extends Struct implements \JsonSerializable
 {
     /**

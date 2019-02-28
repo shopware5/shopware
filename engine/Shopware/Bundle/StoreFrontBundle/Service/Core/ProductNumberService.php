@@ -29,7 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class ProductNumberService implements ProductNumberServiceInterface
 {
     /**

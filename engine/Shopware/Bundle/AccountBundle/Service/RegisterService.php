@@ -76,8 +76,6 @@ class RegisterService implements RegisterServiceInterface
     private $addressService;
 
     /**
-     * RegisterService constructor.
-     *
      * @param ModelManager                    $modelManager
      * @param CustomerValidatorInterface      $validator
      * @param Shopware_Components_Config      $config

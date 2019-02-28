@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Query\QueryBuilder;
 
-
 class ConfigWriter
 {
     /**

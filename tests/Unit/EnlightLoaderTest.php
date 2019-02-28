@@ -26,7 +26,6 @@ namespace Shopware\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-
 class EnlightLoaderTest extends TestCase
 {
     /**

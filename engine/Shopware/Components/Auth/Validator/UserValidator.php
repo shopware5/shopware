@@ -46,8 +46,6 @@ class UserValidator implements UserValidatorInterface
     private $validationContext;
 
     /**
-     * CustomerValidator constructor.
-     *
      * @param ValidatorInterface $validator
      */
     public function __construct(ValidatorInterface $validator)

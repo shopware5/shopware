@@ -28,7 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class ConfiguratorService implements Service\ConfiguratorServiceInterface
 {
     const CONFIGURATOR_TYPE_STANDARD = 0;

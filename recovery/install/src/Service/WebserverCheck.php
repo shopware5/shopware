@@ -28,7 +28,6 @@ use Shopware\Recovery\Common\HttpClient\Client;
 use Shopware\Recovery\Common\HttpClient\ClientException;
 use Shopware\Recovery\Install\Struct\Shop;
 
-
 class WebserverCheck
 {
     /**

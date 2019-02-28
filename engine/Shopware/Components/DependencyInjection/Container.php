@@ -27,7 +27,6 @@ namespace Shopware\Components\DependencyInjection;
 use Symfony\Component\DependencyInjection\Container as BaseContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 
-
 class Container extends BaseContainer
 {
     /**

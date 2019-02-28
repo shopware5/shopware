@@ -41,7 +41,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
-
 class PropertyFacetHandler implements PartialFacetHandlerInterface
 {
     /**

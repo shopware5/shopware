@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components;
 use Shopware\Components\NumberRangeIncrementer;
 use Shopware\Components\NumberRangeIncrementerInterface;
 
-
 class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
 {
     /**

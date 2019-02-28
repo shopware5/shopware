@@ -27,7 +27,6 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
-
 class VariantFacet implements FacetInterface
 {
     /**

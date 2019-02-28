@@ -33,7 +33,6 @@ use Shopware\Models\Article\Article;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 class SyncBacklogCommand extends ShopwareCommand
 {
     /**

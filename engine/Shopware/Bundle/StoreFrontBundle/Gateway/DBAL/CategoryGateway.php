@@ -29,7 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class CategoryGateway implements Gateway\CategoryGatewayInterface
 {
     /**

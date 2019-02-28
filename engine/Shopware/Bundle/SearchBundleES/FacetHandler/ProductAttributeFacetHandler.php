@@ -64,8 +64,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     private $crudService;
 
     /**
-     * ProductAttributeFacetHandler constructor.
-     *
      * @param CrudService $crudService
      */
     public function __construct(CrudService $crudService)

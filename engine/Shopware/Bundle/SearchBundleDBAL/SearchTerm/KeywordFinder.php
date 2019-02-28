@@ -27,7 +27,6 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 
-
 class KeywordFinder implements KeywordFinderInterface
 {
     /**

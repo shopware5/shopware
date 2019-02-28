@@ -27,7 +27,6 @@ namespace Shopware\Components\License\Service;
 use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 
-
 interface LicenseUnpackServiceInterface
 {
     /**

@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 abstract class Struct
 {
     public function __clone()

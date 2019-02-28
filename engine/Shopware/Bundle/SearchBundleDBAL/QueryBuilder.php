@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-
 class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
 {
     /**

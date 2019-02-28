@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Snippet\Writer;
 
-
 class QueryWriter
 {
     /**

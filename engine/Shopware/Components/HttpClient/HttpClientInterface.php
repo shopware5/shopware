@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\HttpClient;
 
-
 interface HttpClientInterface
 {
     /**

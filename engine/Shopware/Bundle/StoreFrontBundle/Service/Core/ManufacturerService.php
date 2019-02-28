@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Routing\RouterInterface;
 
-
 class ManufacturerService implements Service\ManufacturerServiceInterface
 {
     /**

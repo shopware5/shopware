@@ -26,7 +26,6 @@ namespace Shopware\Components\Compatibility;
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
-
 class LegacyEventManager
 {
     /**

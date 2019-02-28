@@ -29,9 +29,6 @@ use Shopware\Bundle\AccountBundle\Form\Account\ResetPasswordFormType;
 use Shopware\Bundle\StaticContentBundle\Exception\EsdNotFoundException;
 use Shopware\Models\Customer\Customer;
 
-/**
- * Account controller
- */
 class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 {
     /**

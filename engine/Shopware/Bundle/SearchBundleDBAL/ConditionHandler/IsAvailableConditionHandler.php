@@ -34,7 +34,6 @@ use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class IsAvailableConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
     /**

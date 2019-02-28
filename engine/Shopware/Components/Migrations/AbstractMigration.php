@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Migrations;
 
-
 abstract class AbstractMigration
 {
     public const MODUS_UPDATE = 'update';

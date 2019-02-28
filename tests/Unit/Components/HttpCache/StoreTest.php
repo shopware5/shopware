@@ -27,7 +27,6 @@ namespace Shopware\Tests\Unit\Components\HttpCache;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-
 class StoreTest extends TestCase
 {
     public function setUp()

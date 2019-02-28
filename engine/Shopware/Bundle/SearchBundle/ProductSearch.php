@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle;
 
-
 class ProductSearch implements ProductSearchInterface
 {
     /**

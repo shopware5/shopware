@@ -34,7 +34,6 @@ use Slim\Http\Response;
 use Slim\Slim;
 use Symfony\Component\Finder\Finder;
 
-
 class CleanupController
 {
     /**

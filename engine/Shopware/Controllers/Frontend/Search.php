@@ -26,7 +26,6 @@ use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 {
     /**

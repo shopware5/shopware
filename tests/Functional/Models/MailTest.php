@@ -25,7 +25,6 @@
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Status;
 
-
 class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 {
     /**

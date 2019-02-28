@@ -26,7 +26,6 @@ namespace Shopware\Components;
 
 use Monolog\Logger as BaseLogger;
 
-
 class Logger extends BaseLogger
 {
     /**

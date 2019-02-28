@@ -43,8 +43,6 @@ class LocationService implements LocationServiceInterface
     private $connection;
 
     /**
-     * LocationService constructor.
-     *
      * @param CountryGatewayInterface $gateway
      * @param Connection              $connection
      */

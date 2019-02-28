@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
-
 class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**

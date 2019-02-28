@@ -30,9 +30,6 @@ use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
 
-/**
- * Class PropertyIndexer
- */
 class PropertyIndexer implements DataIndexerInterface
 {
     /**

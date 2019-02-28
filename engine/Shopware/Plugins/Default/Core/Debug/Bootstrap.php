@@ -35,7 +35,6 @@ use Shopware\Plugin\Debug\Components\TemplateCollector;
 use Shopware\Plugin\Debug\Components\TemplateVarCollector;
 use Shopware\Plugin\Debug\Components\Utils;
 
-
 class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**

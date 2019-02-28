@@ -26,7 +26,6 @@ namespace Shopware\Components\Slug;
 
 use Cocur\Slugify\SlugifyInterface;
 
-
 class CocurSlugifyAdapter implements SlugInterface
 {
     /**

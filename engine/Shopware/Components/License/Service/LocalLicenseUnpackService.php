@@ -31,7 +31,6 @@ use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
 
-
 class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
 {
     /**

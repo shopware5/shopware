@@ -28,7 +28,6 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
-
 class OrderHistorySubscriber implements EventSubscriber
 {
     /**

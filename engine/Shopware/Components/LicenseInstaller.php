@@ -27,7 +27,6 @@ namespace Shopware\Components;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\License\Struct\LicenseInformation;
 
-
 class LicenseInstaller
 {
     /**

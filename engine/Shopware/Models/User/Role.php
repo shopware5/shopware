@@ -150,8 +150,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -160,8 +158,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Set parentId
-     *
      * @param int $parentId
      *
      * @return Role
@@ -174,8 +170,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Get parentId
-     *
      * @return int
      */
     public function getParentId()
@@ -184,8 +178,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Role
@@ -198,8 +190,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -208,8 +198,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return Role
@@ -222,8 +210,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -232,8 +218,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Set source
-     *
      * @param string $source
      *
      * @return Role
@@ -246,8 +230,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Get source
-     *
      * @return string
      */
     public function getSource()
@@ -256,8 +238,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Set enabled
-     *
      * @param int $enabled
      *
      * @return Role
@@ -270,8 +250,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Get enabled
-     *
      * @return int
      */
     public function getEnabled()
@@ -280,8 +258,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Set admin
-     *
      * @param int $admin
      *
      * @return Role
@@ -294,8 +270,6 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     }
 
     /**
-     * Get admin
-     *
      * @return int
      */
     public function getAdmin()

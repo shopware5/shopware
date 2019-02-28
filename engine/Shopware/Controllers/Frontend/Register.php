@@ -33,9 +33,6 @@ use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * Register controller
- */
 class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 {
     /**

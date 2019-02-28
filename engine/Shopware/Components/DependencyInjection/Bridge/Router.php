@@ -31,7 +31,6 @@ use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\Router as RoutingRouter;
 use Shopware\Components\Routing\RouterInterface;
 
-
 class Router
 {
     /**

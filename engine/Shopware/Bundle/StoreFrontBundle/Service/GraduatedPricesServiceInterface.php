@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 interface GraduatedPricesServiceInterface
 {
     /**

@@ -24,7 +24,6 @@
 
 use PHPUnit\DbUnit\DataSet\IDataSet;
 
-
 class Shopware_RegressionTests_Ticket4609 extends Enlight_Components_Test_Plugin_TestCase
 {
     /**

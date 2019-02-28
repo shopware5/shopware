@@ -33,7 +33,6 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
-
 class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
 {
     /**

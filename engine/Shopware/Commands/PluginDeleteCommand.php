@@ -31,7 +31,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
-
 class PluginDeleteCommand extends ShopwareCommand
 {
     public function deletePath($path)

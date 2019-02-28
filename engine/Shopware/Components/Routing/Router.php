@@ -27,7 +27,6 @@ namespace Shopware\Components\Routing;
 use Enlight_Controller_Request_Request as EnlightRequest;
 use Enlight_Controller_Router as EnlightRouter;
 
-
 class Router extends EnlightRouter implements RouterInterface
 {
     /**

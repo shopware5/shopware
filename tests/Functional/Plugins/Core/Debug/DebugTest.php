@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Tests_Plugins_Core_Debug_Debug extends Enlight_Components_Test_Plugin_TestCase
 {
     /**

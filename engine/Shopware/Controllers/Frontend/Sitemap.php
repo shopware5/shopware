@@ -26,7 +26,6 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Shop\DetachedShop;
 use Shopware\Models\Site\Site;
 
-
 class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 {
     /**

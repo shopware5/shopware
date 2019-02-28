@@ -37,8 +37,6 @@ class EventExtension extends AbstractTypeExtension
     private $eventManager;
 
     /**
-     * FormTypeEventExtension constructor.
-     *
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(\Enlight_Event_EventManager $eventManager)

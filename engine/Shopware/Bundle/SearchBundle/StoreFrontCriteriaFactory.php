@@ -31,7 +31,6 @@ use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 {
     /**

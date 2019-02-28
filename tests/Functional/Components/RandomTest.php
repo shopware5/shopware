@@ -24,7 +24,6 @@
 
 use Shopware\Components\Random;
 
-
 class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestCase
 {
     /**

@@ -81,8 +81,6 @@ class sMarketing
     private $db;
 
     /**
-     * Class constructor.
-     *
      * @param StoreFrontBundle\Service\ContextServiceInterface|null        $contextService
      * @param StoreFrontBundle\Service\AdditionalTextServiceInterface|null $additionalTextService
      */

@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Tests_Models_Order_StatusTest extends Enlight_Components_Test_TestCase
 {
     public function testStatusIsPersistableViaOrm()

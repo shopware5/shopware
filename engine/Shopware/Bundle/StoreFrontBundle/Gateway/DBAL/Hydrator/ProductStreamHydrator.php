@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class ProductStreamHydrator extends Hydrator
 {
     /**
@@ -35,8 +34,6 @@ class ProductStreamHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
-     * ProductStreamHydrator constructor.
-     *
      * @param AttributeHydrator $attributeHydrator
      */
     public function __construct(AttributeHydrator $attributeHydrator)

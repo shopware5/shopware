@@ -49,8 +49,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
     private $attributeService;
 
     /**
-     * ProductAttributeConditionHandler constructor.
-     *
      * @param CrudService $attributeService
      */
     public function __construct(CrudService $attributeService)

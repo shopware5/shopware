@@ -46,8 +46,6 @@ class EsClientLogger extends Client
     private $evaluation;
 
     /**
-     * EsClient constructor.
-     *
      * @param Client          $client
      * @param LoggerInterface $logger
      */

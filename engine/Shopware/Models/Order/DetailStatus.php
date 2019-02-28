@@ -72,8 +72,6 @@ class DetailStatus extends ModelEntity
     private $mail;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -82,8 +80,6 @@ class DetailStatus extends ModelEntity
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return DetailStatus
@@ -96,8 +92,6 @@ class DetailStatus extends ModelEntity
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -106,8 +100,6 @@ class DetailStatus extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return DetailStatus
@@ -120,8 +112,6 @@ class DetailStatus extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()
@@ -130,8 +120,6 @@ class DetailStatus extends ModelEntity
     }
 
     /**
-     * Set mail
-     *
      * @param int $mail
      *
      * @return DetailStatus
@@ -144,8 +132,6 @@ class DetailStatus extends ModelEntity
     }
 
     /**
-     * Get mail
-     *
      * @return int
      */
     public function getMail()

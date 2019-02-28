@@ -39,8 +39,6 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     private $siblings;
 
     /**
-     * Constructor
-     *
      * @param Session $session
      * @param Factory $factory
      */

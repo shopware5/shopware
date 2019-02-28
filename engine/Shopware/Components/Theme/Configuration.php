@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Theme;
 
-
 class Configuration implements \JsonSerializable
 {
     /**

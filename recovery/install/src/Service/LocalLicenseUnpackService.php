@@ -31,7 +31,6 @@ use Shopware\Recovery\Install\Struct\LicenseInformation;
 use Shopware\Recovery\Install\Struct\LicenseUnpackRequest;
 use Shopware\Recovery\Install\Struct\ShopwareEdition;
 
-
 class LocalLicenseUnpackService implements LicenseUnpackService
 {
     /**

@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Common;
 
-
 class DumpIterator implements \SeekableIterator, \Countable
 {
     /**

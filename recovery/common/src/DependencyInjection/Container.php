@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Common\DependencyInjection;
 
-
 abstract class Container implements ContainerInterface
 {
     /**

@@ -24,7 +24,6 @@
 
 namespace Shopware\Plugin\Debug\Components;
 
-
 class Utils
 {
     /**

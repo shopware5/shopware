@@ -27,7 +27,6 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\Escaper\EscaperInterface;
 use Shopware\Components\Template\Security;
 
-
 class Template
 {
     /**

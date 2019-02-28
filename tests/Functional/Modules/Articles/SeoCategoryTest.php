@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**

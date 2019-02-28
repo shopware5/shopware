@@ -29,7 +29,6 @@ use Shopware\Bundle\SearchBundle\TemplateSwitchable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-
 class ValueListFacetResult extends Extendable implements FacetResultInterface, TemplateSwitchable
 {
     /**

@@ -26,7 +26,6 @@ namespace Shopware\Recovery\Install\Service;
 
 use Pimple\Container;
 
-
 class LocaleSettingsService
 {
     /**

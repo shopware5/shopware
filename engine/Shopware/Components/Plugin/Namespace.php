@@ -49,8 +49,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     private $configReader;
 
     /**
-     * Shopware_Components_Plugin_Namespace constructor.
-     *
      * @param string              $name
      * @param Enlight_Config|null $storage
      * @param array               $pluginDirectories

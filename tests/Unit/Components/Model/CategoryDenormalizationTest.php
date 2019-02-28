@@ -37,7 +37,6 @@ class PDOMock extends \PDO
     }
 }
 
-
 class CategoryDenormalizationTest extends TestCase
 {
     /**

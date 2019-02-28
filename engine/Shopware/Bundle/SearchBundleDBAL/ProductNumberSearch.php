@@ -32,7 +32,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 
-
 class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 {
     /**

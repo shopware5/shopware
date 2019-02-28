@@ -30,7 +30,6 @@ use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 
-
 class CustomerTest extends TestCase
 {
     /**

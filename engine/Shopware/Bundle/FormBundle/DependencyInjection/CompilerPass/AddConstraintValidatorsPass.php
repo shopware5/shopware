@@ -28,9 +28,6 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class AddConstraintValidatorsPass
- *
- *
  * @see    https://github.com/symfony/framework-bundle/blob/master/DependencyInjection/Compiler/AddConstraintValidatorsPass.php
  *
  * @license https://opensource.org/licenses/MIT MIT License

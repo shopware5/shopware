@@ -26,7 +26,6 @@ namespace Shopware\Recovery\Common\Archive\Entry;
 
 use ZipArchive;
 
-
 class Zip
 {
     /**

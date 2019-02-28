@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 interface ProductNumberSearchInterface
 {
     /**

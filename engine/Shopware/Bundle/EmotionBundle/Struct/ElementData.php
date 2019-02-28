@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
-
 class ElementData implements \JsonSerializable
 {
     /**

@@ -26,7 +26,6 @@ namespace Shopware\Recovery\Install\Service;
 
 use Shopware\Components\Theme\Installer as ThemeInstaller;
 
-
 class ThemeService
 {
     /**

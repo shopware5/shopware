@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
-
 class ProductAttributeFacet implements FacetInterface
 {
     const MODE_VALUE_LIST_RESULT = 'value_list';

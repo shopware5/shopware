@@ -28,7 +28,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
 use PHPUnit\Framework\TestCase;
 
-
 class EventManagerTest extends TestCase
 {
     private $eventManager;

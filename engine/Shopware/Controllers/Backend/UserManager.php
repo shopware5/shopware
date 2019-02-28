@@ -28,9 +28,6 @@ use Shopware\Models\User\Role;
 use Shopware\Models\User\Rule;
 use Shopware\Models\User\User;
 
-/*
- * Backend Controller for the backend user management
- */
 class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Backend_ExtJs
 {
     /**

@@ -24,7 +24,6 @@
 
 use Shopware\Models\Form\Form;
 
-
 class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
 {
     /**

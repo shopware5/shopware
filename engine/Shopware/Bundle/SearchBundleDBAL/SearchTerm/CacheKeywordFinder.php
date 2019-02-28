@@ -27,7 +27,6 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 
-
 class CacheKeywordFinder implements KeywordFinderInterface
 {
     /**

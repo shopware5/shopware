@@ -25,8 +25,6 @@
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
- * Export controller
- *
  * This controller is used by the ProductFeed module.
  * The ProductFeed module will call this controller to export the chosen ProductFeed with all options.
  * The controller uses the base class sExport for all export relevant methods.

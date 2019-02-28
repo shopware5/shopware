@@ -24,7 +24,6 @@
 
 use Shopware\Models\Snippet\Snippet;
 
-
 class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
 {
     /**

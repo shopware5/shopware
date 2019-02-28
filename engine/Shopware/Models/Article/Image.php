@@ -204,8 +204,6 @@ class Image extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()

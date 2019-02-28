@@ -45,8 +45,6 @@ class GenericReader implements ReaderInterface
     protected $entityManager;
 
     /**
-     * GenericReader constructor.
-     *
      * @param string       $entity
      * @param ModelManager $entityManager
      */

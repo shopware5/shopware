@@ -31,7 +31,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
 {
     /**

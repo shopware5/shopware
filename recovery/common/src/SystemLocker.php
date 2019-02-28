@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Common;
 
-
 class SystemLocker
 {
     /**

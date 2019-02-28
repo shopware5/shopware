@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class PriceHelper implements PriceHelperInterface
 {
     const STATE_INCLUDES_CHEAPEST_PRICE = 'cheapest_price';

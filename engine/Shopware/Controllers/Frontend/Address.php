@@ -29,9 +29,6 @@ use Shopware\Models\Customer\AddressRepository;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * Address controller
- */
 class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 {
     /**

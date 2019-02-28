@@ -33,9 +33,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * Listing controller
- */
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
     /**

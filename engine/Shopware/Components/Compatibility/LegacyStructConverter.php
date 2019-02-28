@@ -35,7 +35,6 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
 class LegacyStructConverter
 {
     /**

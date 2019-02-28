@@ -29,9 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
 
-/**
- * Class Product
- */
 class Product extends ListProduct
 {
     /**

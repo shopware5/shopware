@@ -28,7 +28,6 @@ use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs as EventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
 class AttributeSubscriber implements SubscriberInterface
 {
     const redirectCookieString = 'ShopwarePluginsCoreSelfHealingRedirect';

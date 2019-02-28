@@ -45,8 +45,6 @@ class TableMapping
     private $tables;
 
     /**
-     * TableMapping constructor.
-     *
      * @param Connection $connection
      * @param array      $tableMapping
      */

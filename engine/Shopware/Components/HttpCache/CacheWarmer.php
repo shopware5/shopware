@@ -83,8 +83,6 @@ class CacheWarmer
     private $eventManager;
 
     /**
-     * standard constructor
-     *
      * @param LoggerInterface            $logger
      * @param GuzzleFactory              $guzzleFactory
      * @param Config                     $config

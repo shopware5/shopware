@@ -27,7 +27,6 @@ namespace Shopware\Recovery\Common\Archive;
 use Countable;
 use SeekableIterator;
 
-
 abstract class Adapter implements SeekableIterator, Countable
 {
     /**

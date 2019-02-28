@@ -24,7 +24,6 @@
 
 use Shopware\Models\Voucher\Voucher;
 
-
 class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
 {
     /**

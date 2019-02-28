@@ -30,7 +30,6 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-
 class ProductNameSortingHandler implements SortingHandlerInterface
 {
     const TRANSLATION = 'productTranslationName';

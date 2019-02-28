@@ -27,7 +27,6 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-
 class VariantCondition implements ConditionInterface, \JsonSerializable
 {
     /**

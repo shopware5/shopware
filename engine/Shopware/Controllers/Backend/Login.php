@@ -24,9 +24,6 @@
 
 use Shopware\Components\CSRFWhitelistAware;
 
-/**
- * Shopware Login Controller
- */
 class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**

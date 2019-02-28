@@ -27,7 +27,6 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 use Shopware\Components\OpenSSLEncryption;
 use Shopware\Components\ShopwareReleaseStruct;
 
-
 class FeedbackCollector
 {
     /**

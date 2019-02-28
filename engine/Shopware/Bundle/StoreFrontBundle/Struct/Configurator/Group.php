@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Configurator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-
 class Group extends Extendable
 {
     /**

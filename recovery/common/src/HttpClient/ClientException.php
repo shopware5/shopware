@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Common\HttpClient;
 
-
 class ClientException extends \RuntimeException
 {
 }

@@ -27,7 +27,6 @@ namespace ShopwarePlugins\RestApi\Components;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_Response as Response;
 
-
 class Router
 {
     public function assembleRoute(Request $request, Response $response)

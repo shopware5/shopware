@@ -24,7 +24,6 @@
 
 use Shopware\Models\Analytics\Repository;
 
-
 class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
 {
     /** @var Shopware\Models\Analytics\Repository */

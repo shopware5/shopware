@@ -25,8 +25,6 @@
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
- * Shopware Systeminfo Controller
- *
  * This controller reads out all necessary configs.
  */
 class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware

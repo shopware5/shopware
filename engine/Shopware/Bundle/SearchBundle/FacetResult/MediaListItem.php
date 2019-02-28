@@ -27,7 +27,6 @@ namespace Shopware\Bundle\SearchBundle\FacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
-
 class MediaListItem extends ValueListItem
 {
     /**

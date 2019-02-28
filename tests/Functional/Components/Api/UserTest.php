@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\User;
 
-
 class UserTest extends TestCase
 {
     /**

@@ -26,7 +26,6 @@ namespace Shopware\Tests\Unit\Core;
 
 use PHPUnit\Framework\TestCase;
 
-
 class sArticlesTest extends TestCase
 {
     public function provideData()

@@ -37,7 +37,6 @@ use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use Shopware\Components\ShopwareReleaseStruct;
 
-
 class Configuration extends BaseConfiguration
 {
     /**

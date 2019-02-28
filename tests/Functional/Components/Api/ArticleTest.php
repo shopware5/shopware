@@ -30,7 +30,6 @@ use Shopware\Components\Random;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Category\Category;
 
-
 class ArticleTest extends TestCase
 {
     /**

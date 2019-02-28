@@ -25,7 +25,6 @@
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 
-
 class sArticlesComparisons
 {
     /**

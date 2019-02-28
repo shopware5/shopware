@@ -219,7 +219,6 @@ class sOrder
     private $attributePersister;
 
     /**
-     * Class constructor.
      * Injects all dependencies which are required for this class.
      *
      * @param ContextServiceInterface $contextService

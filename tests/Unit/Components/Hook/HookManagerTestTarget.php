@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Unit\Components\Hook;
 
-
 class HookManagerTestTarget
 {
     const TEST_METHOD_NAME = 'testMethod';

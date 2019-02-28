@@ -26,6 +26,9 @@ namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
 
+/**
+ * Used to handle SEPA payment
+ */
 class SepaPaymentMethod extends GenericPaymentMethod
 {
     /**

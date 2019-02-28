@@ -28,9 +28,6 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class MediaMigration
- */
 class MediaMigration
 {
     /**

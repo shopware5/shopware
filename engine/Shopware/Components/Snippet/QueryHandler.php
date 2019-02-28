@@ -27,7 +27,6 @@ namespace Shopware\Components\Snippet;
 use Shopware\Components\Snippet\Writer\QueryWriter;
 use Symfony\Component\Finder\Finder;
 
-
 class QueryHandler
 {
     /**

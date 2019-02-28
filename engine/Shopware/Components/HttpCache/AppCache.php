@@ -57,8 +57,6 @@ class AppCache extends HttpCache
     protected $options = [];
 
     /**
-     * Constructor.
-     *
      * @param HttpKernelInterface $kernel  An HttpKernelInterface instance
      * @param array               $options
      */

@@ -74,8 +74,6 @@ class Value extends ModelEntity
     private $value;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -84,8 +82,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Set element
-     *
      * @param Element $element
      *
      * @return Value
@@ -98,8 +94,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Get element
-     *
      * @return Element
      */
     public function getElement()
@@ -108,8 +102,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Set shop
-     *
      * @param Shop $shop
      *
      * @return Value
@@ -122,8 +114,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Get shop
-     *
      * @return Shop
      */
     public function getShop()
@@ -132,8 +122,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Set value
-     *
      * @param mixed $value
      *
      * @return Value
@@ -146,8 +134,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Get value
-     *
      * @return mixed
      */
     public function getValue()

@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\PropertyGroup;
 use Shopware\Components\Api\Resource\Resource;
 
-
 class PropertyGroupTest extends TestCase
 {
     /**

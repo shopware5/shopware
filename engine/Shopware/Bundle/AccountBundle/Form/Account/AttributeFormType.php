@@ -52,8 +52,6 @@ class AttributeFormType extends AbstractType
     private $logger;
 
     /**
-     * AttributeFormType constructor.
-     *
      * @param ModelManager    $entityManager
      * @param CrudService     $attributeService
      * @param LoggerInterface $logger

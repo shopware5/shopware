@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-
 class IsNewCondition implements ConditionInterface, \JsonSerializable
 {
     /**

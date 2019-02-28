@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
-
 class ProductAttributeSorting extends Sorting
 {
     /**

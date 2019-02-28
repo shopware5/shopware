@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-
 class Hydrator
 {
     /**

@@ -26,7 +26,6 @@ namespace ShopwarePlugins\SwagUpdate\Components\Archive;
 
 use ZipArchive;
 
-
 class Zip extends Adapter
 {
     /**

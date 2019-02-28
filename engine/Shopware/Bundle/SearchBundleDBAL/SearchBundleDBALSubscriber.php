@@ -28,7 +28,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 
-
 class SearchBundleDBALSubscriber implements SubscriberInterface
 {
     /**

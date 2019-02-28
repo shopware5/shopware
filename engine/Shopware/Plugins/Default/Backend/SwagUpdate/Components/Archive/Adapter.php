@@ -27,7 +27,6 @@ namespace ShopwarePlugins\SwagUpdate\Components\Archive;
 use Countable;
 use SeekableIterator;
 
-
 abstract class Adapter implements SeekableIterator, Countable
 {
     /**

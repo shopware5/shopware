@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Common\DependencyInjection;
 
-
 interface ContainerInterface
 {
     const EXCEPTION_ON_INVALID_REFERENCE = 1;

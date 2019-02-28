@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Check;
 
-
 class Requirements
 {
     /**

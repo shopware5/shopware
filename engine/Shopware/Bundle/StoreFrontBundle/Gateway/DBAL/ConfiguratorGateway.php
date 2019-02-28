@@ -29,7 +29,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 {
     /**

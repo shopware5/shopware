@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Routing;
 
-
 interface MatcherInterface
 {
     /**

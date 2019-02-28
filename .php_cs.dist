@@ -33,6 +33,7 @@ our trademarks remain entirely with us.
 EOF;
 
 return PhpCsFixer\Config::create()
+    ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
     ->setUsingCache(false)
     ->setRules([
         '@PSR2' => true,
@@ -48,6 +49,8 @@ return PhpCsFixer\Config::create()
         'concat_space' => ['spacing' => 'one'],
         'array_syntax' => ['syntax' => 'short'],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        PhpCsFixerCustomFixers\Fixer\NoUselessClassCommentFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\NoUselessConstructorCommentFixer::name() => true,
     ])
     ->setFinder($finder)
 ;

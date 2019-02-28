@@ -24,7 +24,6 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Struct;
 
-
 class Version extends Struct
 {
     /**

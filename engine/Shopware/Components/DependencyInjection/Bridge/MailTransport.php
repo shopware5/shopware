@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-
 class MailTransport
 {
     /**

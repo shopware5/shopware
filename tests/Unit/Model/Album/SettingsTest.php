@@ -24,7 +24,6 @@
 
 use PHPUnit\Framework\TestCase;
 
-
 class Shopware_Tests_Models_Album_SettingsTest extends TestCase
 {
     public function testGetThumbnailSizeReturnValue()

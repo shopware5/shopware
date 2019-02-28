@@ -27,7 +27,6 @@ namespace Shopware\Recovery\Install\Service;
 use Shopware\Recovery\Common\Service\UniqueIdGenerator;
 use Shopware\Recovery\Install\Struct\Shop;
 
-
 class ShopService
 {
     /**

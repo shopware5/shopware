@@ -28,7 +28,6 @@ use Shopware\Components\OpenSSLVerifier;
 use Shopware\Components\ShopwareReleaseStruct;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
-
 class UpdateCheck
 {
     /**
