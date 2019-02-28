@@ -82,6 +82,7 @@ phpstan.phar
 /dev-ops/docker/containers/app/Dockerfile
 /dev-ops/docker/containers/elasticsearch/Dockerfile
 /dev-ops/docker/containers/mysql/Dockerfile
+/dev-ops/docker/containers/mysql/dev.cnf
 /.psh.yaml.override
 /.psh.yml.override
 
