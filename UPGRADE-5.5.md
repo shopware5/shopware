@@ -18,6 +18,11 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `CookieSubscriber` to clear session value for `userInfo` after a login
 * Changed article REST api to properly deal with configuration option positions
 
+### Deprecations
+
+* Deprecated the class `Shopware_Components_Benchmark_Point`. It will be removed in 5.6 without replacement.
+* Deprecated the class `Shopware_Components_Benchmark_Container`. It will be removed in 5.6 without replacement.
+
 ## 5.5.7
 
 [View all changes from v5.5.6...v5.5.7](https://github.com/shopware/shopware/compare/v5.5.6...v5.5.7)

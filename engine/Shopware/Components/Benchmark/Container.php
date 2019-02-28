@@ -27,6 +27,8 @@
  * $benchmarkComponent = new Shopware_Components_Benchmark_Container;
  * $benchmarkComponent->getBenchmarks();
  * </code>
+ *
+ * @deprecated Will be removed without replacement in 5.6
  */
 class Shopware_Components_Benchmark_Container
 {
