@@ -29,7 +29,6 @@ use Doctrine\ORM\AbstractQuery;
 /**
  * Replacement class for legacy core/paymentmeans/debit.php class.
  *
- * Class DebitPaymentMethod
  * Used to handle debit payment
  */
 class DebitPaymentMethod extends GenericPaymentMethod

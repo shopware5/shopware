@@ -40,10 +40,6 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Abstract API Resource Class
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Resource implements ContainerAwareInterface
 {

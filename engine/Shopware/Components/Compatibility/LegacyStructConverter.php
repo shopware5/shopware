@@ -35,11 +35,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class LegacyStructConverter
 {
     /**

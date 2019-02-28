@@ -33,10 +33,6 @@ use Shopware\Models\Media\Media;
  * Backend Controller for the category backend module.
  * Displays all data in an Ext JS TreePanel and allows to delete,
  * add and edit items. On the detail page the category data is displayed and can be edited
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend_ExtJs
 {

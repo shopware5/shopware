@@ -30,11 +30,7 @@ use Shopware\Components\Api\Resource\Variant;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Esd;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class VariantTest extends TestCase
 {
     /**

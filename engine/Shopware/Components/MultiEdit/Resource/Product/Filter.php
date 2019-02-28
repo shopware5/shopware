@@ -29,8 +29,6 @@ use Shopware\Models\Article\Detail;
 
 /**
  * The filter class will search for products matching a given filter
- *
- * Class Filter
  */
 class Filter
 {

@@ -37,11 +37,7 @@ class PDOMock extends \PDO
     }
 }
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class CategoryDenormalizationTest extends TestCase
 {
     /**

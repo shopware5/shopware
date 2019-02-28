@@ -31,11 +31,7 @@ use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class DatabaseHandler
 {
     /**

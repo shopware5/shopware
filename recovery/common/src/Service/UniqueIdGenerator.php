@@ -25,8 +25,6 @@
 namespace Shopware\Recovery\Common\Service;
 
 /**
- * Class UniqueIdGenerator
- *
  * Generates a random unique Id and caches it in a local file.
  */
 class UniqueIdGenerator

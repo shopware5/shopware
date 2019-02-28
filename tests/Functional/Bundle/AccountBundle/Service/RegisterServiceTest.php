@@ -34,9 +34,6 @@ use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
-/**
- * Class AddressServiceTest
- */
 class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 {
     /**

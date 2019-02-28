@@ -34,10 +34,6 @@ use Symfony\Component\DependencyInjection\Container;
 
 /**
  * CategorySubscriber
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategorySubscriber implements BaseEventSubscriber
 {

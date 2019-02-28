@@ -1,23 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Collection
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -27,7 +29,7 @@
  * The interface allows an easy implementation for the Countable, IteratorAggregate, ArrayAccess class.
  *
  * @category   Enlight
- * @package    Enlight_Collection
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -41,14 +43,89 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     protected $_elements;
 
     /**
-     * Constructor method
      * Expects an array as a parameter with default elements.
      *
-     * @param   array $elements
+     * @param array $elements
      */
-    public function __construct($elements = array())
+    public function __construct($elements = [])
     {
         $this->_elements = (array) $elements;
+    }
+
+    /**
+     * Sets a value of an element in the list.
+     *
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function __set($key, $value = null)
+    {
+        $this->set($key, $value);
+    }
+
+    /**
+     * Returns a value of an element in the list.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * Checks whether an element with a given name is stored.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function __isset($key)
+    {
+        return $this->containsKey($key);
+    }
+
+    /**
+     * Deletes an item from the list.
+     *
+     * @param string $key
+     *
+     * @return Enlight_Collection_ArrayCollection
+     */
+    public function __unset($key)
+    {
+        $this->remove($key);
+    }
+
+    /**
+     * Captures the magic phone calls and executes them accordingly.
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @return mixed
+     */
+    public function __call($name, $args = null)
+    {
+        switch (substr($name, 0, 3)) {
+            case 'get':
+                $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
+                $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
+
+                return $this->get($key);
+            case 'set':
+                $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
+                $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
+
+                return $this->set($key, isset($args[0]) ? $args[0] : null);
+            default:
+                throw new Enlight_Exception(
+                    'Method "' . get_class($this) . '::' . $name . '" not found failure',
+                    Enlight_Exception::METHOD_NOT_FOUND
+                );
+        }
     }
 
     /**
@@ -65,12 +142,14 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Sets a value of an element in the list.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return Enlight_Collection_ArrayCollection
      */
     public function set($key, $value)
     {
         $this->_elements[$key] = $value;
+
         return $this;
     }
 
@@ -78,6 +157,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Returns a value of an element in the list.
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function get($key)
@@ -89,6 +169,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Checks whether an element with a given name is stored.
      *
      * @param string $key
+     *
      * @return bool
      */
     public function containsKey($key)
@@ -100,11 +181,13 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Deletes an item from the list.
      *
      * @param string $key
+     *
      * @return Enlight_Collection_ArrayCollection
      */
     public function remove($key)
     {
         unset($this->_elements[$key]);
+
         return $this;
     }
 
@@ -112,6 +195,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Checks whether an element with a given name is stored.
      *
      * @param string $key
+     *
      * @return bool
      */
     public function offsetExists($key)
@@ -133,6 +217,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Returns a value of an element in the list.
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function offsetGet($key)
@@ -144,7 +229,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      * Sets a value of an element in the list.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function offsetSet($key, $value)
     {
@@ -159,77 +244,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     public function getIterator()
     {
         $ref = &$this->_elements;
+
         return new ArrayIterator($ref);
-    }
-
-    /**
-     * Sets a value of an element in the list.
-     *
-     * @param string $key
-     * @param mixed $value
-     */
-    public function __set($key, $value = null)
-    {
-        $this->set($key, $value);
-    }
-
-    /**
-     * Returns a value of an element in the list.
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->get($key);
-    }
-
-    /**
-     * Checks whether an element with a given name is stored.
-     *
-     * @param string $key
-     * @return bool
-     */
-    public function __isset($key)
-    {
-        return $this->containsKey($key);
-    }
-
-    /**
-     * Deletes an item from the list.
-     *
-     * @param string $key
-     * @return Enlight_Collection_ArrayCollection
-     */
-    public function __unset($key)
-    {
-        $this->remove($key);
-    }
-
-    /**
-     * Captures the magic phone calls and executes them accordingly.
-     *
-     * @param string $name
-     * @param array $args
-     * @return mixed
-     */
-    public function __call($name, $args = null)
-    {
-        switch (substr($name, 0, 3)) {
-            case 'get':
-                $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
-                $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
-                return $this->get($key);
-            case 'set':
-                $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
-                $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
-
-                return $this->set($key, isset($args[0]) ? $args[0] : null);
-            default:
-                throw new Enlight_Exception(
-                    'Method "' . get_class($this) . '::' . $name . '" not found failure',
-                    Enlight_Exception::METHOD_NOT_FOUND
-                );
-        }
     }
 }

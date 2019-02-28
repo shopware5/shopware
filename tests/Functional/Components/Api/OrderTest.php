@@ -27,11 +27,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Order;
 use Shopware\Components\Api\Resource\Resource;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class OrderTest extends TestCase
 {
     /**

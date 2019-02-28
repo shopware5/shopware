@@ -28,9 +28,6 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Plugin\Plugin;
 
-/**
- * Class CronjobSynchronizer
- */
 class CronjobSynchronizer
 {
     /**

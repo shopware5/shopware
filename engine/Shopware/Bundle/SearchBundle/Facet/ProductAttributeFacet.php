@@ -26,11 +26,7 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class ProductAttributeFacet implements FacetInterface
 {
     const MODE_VALUE_LIST_RESULT = 'value_list';

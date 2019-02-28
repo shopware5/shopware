@@ -42,10 +42,6 @@ use Shopware\Models\Tax\Tax;
 
 /**
  * Order API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Order extends Resource
 {

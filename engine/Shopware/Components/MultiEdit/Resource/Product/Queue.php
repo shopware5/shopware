@@ -28,8 +28,6 @@ use Shopware\Models\MultiEdit\QueueArticle;
 
 /**
  * The queue class will handle the queues
- *
- * Class Queue
  */
 class Queue
 {

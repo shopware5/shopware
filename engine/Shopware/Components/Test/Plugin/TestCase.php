@@ -39,10 +39,6 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
  * );
  *
  * @runInSeparateProcess
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {

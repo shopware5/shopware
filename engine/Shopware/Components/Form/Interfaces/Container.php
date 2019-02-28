@@ -26,9 +26,6 @@ namespace Shopware\Components\Form\Interfaces;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Interface Container
- */
 interface Container
 {
     /**

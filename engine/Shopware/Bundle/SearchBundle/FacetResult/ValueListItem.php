@@ -27,11 +27,7 @@ namespace Shopware\Bundle\SearchBundle\FacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class ValueListItem extends Extendable
 {
     /**

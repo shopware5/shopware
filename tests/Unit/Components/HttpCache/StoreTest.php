@@ -27,11 +27,7 @@ namespace Shopware\Tests\Unit\Components\HttpCache;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class StoreTest extends TestCase
 {
     public function setUp()

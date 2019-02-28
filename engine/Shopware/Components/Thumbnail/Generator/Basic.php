@@ -34,12 +34,6 @@ use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
  * This is a generator which creates image objects
  * based on the passed image path which will be used
  * for further manipulation.
- *
- * Class Basic
- *
- * @category    Shopware
- *
- * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Basic implements GeneratorInterface
 {

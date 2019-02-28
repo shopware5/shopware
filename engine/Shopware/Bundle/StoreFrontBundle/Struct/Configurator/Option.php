@@ -27,11 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Configurator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Option extends Extendable
 {
     /**

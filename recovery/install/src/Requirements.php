@@ -24,11 +24,7 @@
 
 namespace Shopware\Recovery\Install;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Requirements
 {
     /**

@@ -32,11 +32,7 @@ use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class LicenseServiceSubscriber implements SubscriberInterface
 {
     /**

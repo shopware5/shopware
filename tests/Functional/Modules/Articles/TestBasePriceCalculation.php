@@ -26,10 +26,6 @@
  * tests the base price calculation
  *
  * @ticket SW-7204
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_Components_Test_Plugin_TestCase
 {

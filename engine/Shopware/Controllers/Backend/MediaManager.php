@@ -36,10 +36,6 @@ use Symfony\Component\HttpFoundation\FileBag;
  *
  * The media manager backend controller handles all actions around the media manager backend module
  * and the quick selection in other modules.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {

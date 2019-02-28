@@ -24,9 +24,6 @@
 
 namespace Shopware\Components\Filesystem;
 
-/**
- * Interface PublicUrlGeneratorInterface
- */
 interface PublicUrlGeneratorInterface
 {
     /**

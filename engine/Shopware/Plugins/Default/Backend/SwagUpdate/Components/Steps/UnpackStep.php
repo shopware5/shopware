@@ -28,11 +28,7 @@ use ShopwarePlugins\SwagUpdate\Components\Archive\Entry\Zip as ZipEntry;
 use ShopwarePlugins\SwagUpdate\Components\Archive\Zip;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class UnpackStep
 {
     /**

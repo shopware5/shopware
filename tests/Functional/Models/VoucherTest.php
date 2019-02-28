@@ -24,11 +24,7 @@
 
 use Shopware\Models\Voucher\Voucher;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
 {
     /**

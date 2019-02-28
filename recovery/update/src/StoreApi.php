@@ -26,11 +26,7 @@ namespace Shopware\Recovery\Update;
 
 use Shopware\Recovery\Common\HttpClient\Client;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class StoreApi
 {
     /**

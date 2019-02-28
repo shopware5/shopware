@@ -29,9 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Routing\RouterInterface;
 
-/**
- * Class SitePageMenu
- */
 class SitePageMenu
 {
     /**

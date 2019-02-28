@@ -22,11 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Components_Test_Plugin_TestCase
 {
     const FIRST_DUMMY_SESSION_ID = '1231231231231231231231231231231231231320';

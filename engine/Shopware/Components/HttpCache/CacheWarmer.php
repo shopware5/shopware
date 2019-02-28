@@ -42,10 +42,6 @@ use Shopware_Components_Config as Config;
  * Shopware Application
  *
  * Warm up the cache with direct http calls using the SEO URLs
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheWarmer
 {

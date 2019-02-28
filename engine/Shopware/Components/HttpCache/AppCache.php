@@ -38,10 +38,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * $httpCacheApp = new Shopware\Components\HttpCache\AppCache($kernel);
  * $httpCacheApp->invalidate($request);
  * </code>
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AppCache extends HttpCache
 {

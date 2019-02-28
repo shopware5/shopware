@@ -26,11 +26,7 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\PriceVariation;
 use Shopware\Models\Article\Configurator\Set;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Controllers_Backend_ExtJs
 {
     /**

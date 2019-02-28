@@ -30,10 +30,6 @@ use Shopware\Components\Session\PdoSessionHandler;
 /**
  * Session Dependency Injection Bridge
  * Starts and handles the session
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Session
 {

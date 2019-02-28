@@ -24,10 +24,6 @@
 
 /**
  * Shopware System Plugin
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {

@@ -27,11 +27,7 @@ namespace Shopware\Components\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class EventSubscriberCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)

@@ -26,11 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Models\Shop\Currency as CurrencyEntity;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Currency extends Extendable
 {
     /**

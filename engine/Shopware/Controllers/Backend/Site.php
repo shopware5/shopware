@@ -28,10 +28,6 @@ use Shopware\Models\Site\Site;
  * Shopware Site Controller
  *
  * The site backend controller handles all actions concerning the Site backend module
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_ExtJs
 {

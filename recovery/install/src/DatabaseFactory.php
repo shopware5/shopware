@@ -26,11 +26,7 @@ namespace Shopware\Recovery\Install;
 
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class DatabaseFactory
 {
     /**

@@ -35,10 +35,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * Each of this sorting, facet and condition classes are handled by their
  * own handler classes which implemented for each gateway engine.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Criteria extends Extendable
 {

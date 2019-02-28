@@ -37,10 +37,6 @@ use Shopware\Models\Widget\Widget;
 
 /**
  * Shopware Plugin Bootstrap
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Bootstrap_Config
 {

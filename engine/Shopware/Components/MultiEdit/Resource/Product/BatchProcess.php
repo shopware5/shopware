@@ -29,8 +29,6 @@ use Shopware\Models\MultiEdit\Queue;
 
 /**
  * The batch process resource handles the batch processes for updating products
- *
- * Class BatchProcess
  */
 class BatchProcess
 {

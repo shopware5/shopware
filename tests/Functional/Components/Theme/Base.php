@@ -27,9 +27,6 @@ namespace Shopware\Tests\Functional\Components\Theme;
 use Shopware\Components\Theme\Configurator;
 use Shopware\Models\Shop\Template;
 
-/**
- * Class Shopware_Tests_Components_Theme_Base
- */
 class Base extends \Enlight_Components_Test_TestCase
 {
     /**

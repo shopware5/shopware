@@ -26,10 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @deprecated since version 5.2, to be removed in 6.0 - Use ShopContext instead
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductContext extends ShopContext
 {

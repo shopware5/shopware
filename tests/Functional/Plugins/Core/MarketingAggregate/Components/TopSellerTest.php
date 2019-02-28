@@ -26,11 +26,7 @@ namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Components;
 
 use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class TopSellerTest extends AbstractMarketing
 {
     public function testInitTopSeller()

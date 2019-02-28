@@ -29,11 +29,7 @@ use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\GeneratorListInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class RewriteGenerator implements GeneratorListInterface
 {
     /**

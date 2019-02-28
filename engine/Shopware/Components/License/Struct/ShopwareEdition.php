@@ -24,11 +24,7 @@
 
 namespace Shopware\Components\License\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class ShopwareEdition
 {
     const CE = 'CE'; // Community Edition

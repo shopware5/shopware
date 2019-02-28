@@ -25,11 +25,7 @@
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Status;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 {
     /**

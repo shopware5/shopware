@@ -27,11 +27,7 @@ namespace Shopware\Tests\Unit;
 use Enlight_Collection_ArrayCollection as ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class ArrayCollectionTest extends TestCase
 {
     /**

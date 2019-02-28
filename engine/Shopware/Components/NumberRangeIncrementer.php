@@ -26,11 +26,7 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class NumberRangeIncrementer implements NumberRangeIncrementerInterface
 {
     /**

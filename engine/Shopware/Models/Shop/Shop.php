@@ -236,9 +236,6 @@ class Shop extends ModelEntity
      */
     protected $attribute;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->currencies = new ArrayCollection();

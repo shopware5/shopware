@@ -31,10 +31,6 @@ use Doctrine\DBAL\Types\Type;
  * Type that maps a PHP array to a clob SQL type.
  *
  * @licence   This code was originally released under the MIT license
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AllowInvalidArrayType extends Type
 {

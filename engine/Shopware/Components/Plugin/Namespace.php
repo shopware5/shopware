@@ -30,10 +30,6 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Plugin Namespace
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Config
 {

@@ -114,8 +114,6 @@ class Value extends ModelEntity
     private $media;
 
     /**
-     * Class constructor.
-     *
      * @param \Shopware\Models\Property\Option $option
      * @param string                           $value
      */

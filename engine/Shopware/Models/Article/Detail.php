@@ -314,9 +314,6 @@ class Detail extends ModelEntity
      */
     private $shippingTime;
 
-    /**
-     * Class constructor. Initials the array collections.
-     */
     public function __construct()
     {
         $this->prices = new ArrayCollection();

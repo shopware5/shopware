@@ -26,10 +26,6 @@ use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Shopware document generator
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 {

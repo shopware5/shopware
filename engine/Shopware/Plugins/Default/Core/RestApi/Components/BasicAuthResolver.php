@@ -27,11 +27,7 @@ namespace ShopwarePlugins\RestApi\Components;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\User;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class BasicAuthResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
 {
     /**

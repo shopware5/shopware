@@ -24,11 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Hook;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class HookManagerTestTarget
 {
     const TEST_METHOD_NAME = 'testMethod';

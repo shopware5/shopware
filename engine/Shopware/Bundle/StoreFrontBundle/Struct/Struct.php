@@ -24,11 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 abstract class Struct
 {
     public function __clone()

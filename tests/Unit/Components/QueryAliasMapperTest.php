@@ -27,11 +27,7 @@ namespace Shopware\Tests\Unit\Components;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\QueryAliasMapper;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class QueryAliasMapperTest extends TestCase
 {
     public function testCanBeInitializedByArray()

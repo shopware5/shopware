@@ -27,9 +27,6 @@ namespace Shopware\Components\DependencyInjection\Compiler;
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Api\Resource\Resource;
 
-/**
- * Class ConfigureApiResourcesPassTest
- */
 class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**

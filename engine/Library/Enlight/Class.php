@@ -43,8 +43,6 @@ abstract class Enlight_Class
     protected static $instances = [];
 
     /**
-     * Constructor method.
-     *
      * The constructor will prevent the initialization and thrown an Enlight_Exception if the class is flagged
      * as singleton and has already initialed.
      * If an hook proxy exist for the class, the constructor will prevent the initialization and throw an exception

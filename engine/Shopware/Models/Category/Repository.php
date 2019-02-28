@@ -41,10 +41,6 @@ use Shopware\Components\Model\ModelRepository;
  *  - s_categories
  *  - s_articles
  *  - s_articles_categories
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {

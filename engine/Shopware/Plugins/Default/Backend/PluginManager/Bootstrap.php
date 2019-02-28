@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Class Shopware_Plugins_Backend_PluginManager_Bootstrap
- */
 class Shopware_Plugins_Backend_PluginManager_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()

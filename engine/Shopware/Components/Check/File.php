@@ -29,10 +29,6 @@
  * $list = new Shopware_Components_Check_File();
  * $data = $list->toArray();
  * </code>
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Check_File
 {

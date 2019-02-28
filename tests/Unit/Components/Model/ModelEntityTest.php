@@ -39,10 +39,6 @@ use Shopware\Models\Tax\Tax;
  * @uses \Shopware\Models\Article\Supplier
  * @uses \Shopware\Models\Article\Configurator\Template\Template
  * @uses \Shopware\Models\Tax\Tax
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ModelEntityTest extends TestCase
 {

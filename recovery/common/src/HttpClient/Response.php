@@ -24,11 +24,7 @@
 
 namespace Shopware\Recovery\Common\HttpClient;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Response
 {
     /**

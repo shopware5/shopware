@@ -22,11 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Backend_ExtJs
 {
     /**

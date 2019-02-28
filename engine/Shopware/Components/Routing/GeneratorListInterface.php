@@ -24,11 +24,7 @@
 
 namespace Shopware\Components\Routing;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 interface GeneratorListInterface extends GeneratorInterface
 {
     /**

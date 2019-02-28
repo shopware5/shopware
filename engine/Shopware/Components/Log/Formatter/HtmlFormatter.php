@@ -29,10 +29,6 @@ use Monolog\Logger;
 
 /**
  * Formats a log message as an HTML table
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class HtmlFormatter extends NormalizerFormatter
 {

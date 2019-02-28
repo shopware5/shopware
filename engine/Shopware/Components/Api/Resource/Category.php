@@ -34,10 +34,6 @@ use Shopware_Components_Translation as TranslationComponent;
 
 /**
  * Category API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Category extends Resource
 {

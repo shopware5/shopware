@@ -26,11 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class ProductSearch implements ProductSearchInterface
 {
     /**

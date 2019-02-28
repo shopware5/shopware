@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-/**
- * Interface CriteriaPartInterface
- */
 interface CriteriaPartInterface
 {
     /**

@@ -26,10 +26,6 @@
  * Shopware Compare Plugin - Bootstrap
  * The plugin bootstrap of the marketing data plugin registers all events
  * and configurations for the shopware aggregate functions within shopware.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {

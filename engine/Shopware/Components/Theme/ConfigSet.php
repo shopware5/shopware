@@ -48,10 +48,6 @@ namespace Shopware\Components\Theme;
  *   }
  *
  * </code>
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfigSet
 {
@@ -71,8 +67,6 @@ class ConfigSet
     protected $values;
 
     /**
-     * Class constructor which allows to set the internal values in the class construct.
-     *
      * @param string $description
      * @param string $name
      * @param array  $values

@@ -27,11 +27,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 interface ConditionHandlerInterface
 {
     /**

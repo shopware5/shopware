@@ -27,11 +27,7 @@ namespace Shopware\Components\Routing;
 use Enlight_Controller_Request_Request as EnlightRequest;
 use Enlight_Controller_Router as EnlightRouter;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Router extends EnlightRouter implements RouterInterface
 {
     /**

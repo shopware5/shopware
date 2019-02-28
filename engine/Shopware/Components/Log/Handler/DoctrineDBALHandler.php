@@ -27,11 +27,7 @@ namespace Shopware\Components\Log\Handler;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class DoctrineDBALHandler extends AbstractProcessingHandler
 {
     /**

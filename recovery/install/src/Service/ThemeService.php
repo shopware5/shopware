@@ -26,11 +26,7 @@ namespace Shopware\Recovery\Install\Service;
 
 use Shopware\Components\Theme\Installer as ThemeInstaller;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class ThemeService
 {
     /**

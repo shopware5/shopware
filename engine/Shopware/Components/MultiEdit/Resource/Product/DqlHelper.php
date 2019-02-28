@@ -45,8 +45,6 @@ use Shopware\Models\Tax\Tax;
 
 /**
  * The dql helper class holds some general helper methods used by various components
- *
- * Class DqlHelper
  */
 class DqlHelper
 {

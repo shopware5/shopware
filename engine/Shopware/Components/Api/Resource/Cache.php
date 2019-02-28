@@ -34,10 +34,6 @@ use Shopware\Components\DependencyInjection\Container;
  *
  * This resource provides access to all shopware caches.
  * It is used internally by the Cache/Performance backend module
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Cache extends Resource implements BatchInterface
 {

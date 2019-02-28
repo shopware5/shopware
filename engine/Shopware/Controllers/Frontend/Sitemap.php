@@ -26,11 +26,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Shop\DetachedShop;
 use Shopware\Models\Site\Site;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 {
     /**

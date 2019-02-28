@@ -26,11 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Country extends Extendable
 {
     /**

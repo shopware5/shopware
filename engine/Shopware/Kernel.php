@@ -62,10 +62,6 @@ use Symfony\Component\HttpKernel\TerminableInterface;
 /**
  * Middleware class between the old Shopware bootstrap mechanism
  * and the Symfony Kernel handling
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Kernel implements HttpKernelInterface, TerminableInterface
 {

@@ -36,8 +36,6 @@ use Shopware\Models\Article\Detail;
 /**
  * The main product resource will delegate the controller requests to the corresponding classes
  * and inject dependencies
- *
- * Class Shopware_Components_MultiEdit_Resource_Product
  */
 class Product implements ResourceInterface
 {

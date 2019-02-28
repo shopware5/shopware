@@ -35,12 +35,6 @@ use Shopware\Models\Media\Settings;
  * This class handles the generation of thumbnails.
  * It uses a passed thumbnail generator which will be used for creating the thumbnails.
  * It expects a passed media object for further information handling.
- *
- * Class Manager
- *
- * @category    Shopware
- *
- * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {

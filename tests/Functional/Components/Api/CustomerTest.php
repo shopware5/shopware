@@ -30,11 +30,7 @@ use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class CustomerTest extends TestCase
 {
     /**

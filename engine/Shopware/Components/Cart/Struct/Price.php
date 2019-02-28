@@ -24,9 +24,6 @@
 
 namespace Shopware\Components\Cart\Struct;
 
-/**
- * Class Price
- */
 class Price
 {
     /**

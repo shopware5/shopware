@@ -27,11 +27,7 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 use Shopware\Components\OpenSSLEncryption;
 use Shopware\Components\ShopwareReleaseStruct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class FeedbackCollector
 {
     /**

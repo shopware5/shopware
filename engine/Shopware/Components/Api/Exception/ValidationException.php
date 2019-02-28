@@ -32,10 +32,6 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * API Exception
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ValidationException extends \Enlight_Exception
 {

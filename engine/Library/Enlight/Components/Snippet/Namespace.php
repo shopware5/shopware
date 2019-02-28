@@ -47,8 +47,6 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
     protected $fallback;
 
     /**
-     * Constructor method
-     *
      * @param array|bool $options
      */
     public function __construct($options = null)

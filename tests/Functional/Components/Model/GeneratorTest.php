@@ -26,11 +26,7 @@ namespace Shopware\Tests\Functional\Components;
 
 use Shopware\Components\Model\Generator;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TABLE_NAME = 's_articles_attributes';

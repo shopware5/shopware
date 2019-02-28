@@ -26,11 +26,7 @@ namespace Shopware\Tests\Unit\Core;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class sArticlesTest extends TestCase
 {
     public function provideData()

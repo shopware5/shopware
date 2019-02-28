@@ -26,11 +26,7 @@ namespace Shopware\Components;
 
 use Monolog\Logger as BaseLogger;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Logger extends BaseLogger
 {
     /**

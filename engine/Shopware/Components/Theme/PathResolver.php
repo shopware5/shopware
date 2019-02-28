@@ -34,10 +34,6 @@ use Shopware\Models\Shop;
  * for themes. For example the class
  * contains a getDirectory function which
  * returns the Theme directory of the passed shop template.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PathResolver
 {

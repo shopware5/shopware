@@ -24,11 +24,7 @@
 
 namespace Shopware\Components\Theme;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Configuration implements \JsonSerializable
 {
     /**

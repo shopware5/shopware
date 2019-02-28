@@ -28,10 +28,6 @@ use Doctrine\ORM\Query\SqlWalker;
 
 /**
  * Quick hack to allow adding a SQL specified commands
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ForceIndexWalker extends SqlWalker
 {

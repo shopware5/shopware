@@ -33,11 +33,7 @@ use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class PriceConditionHandler implements ConditionHandlerInterface, CriteriaAwareInterface
 {
     const LISTING_PRICE_JOINED = 'listing_price';

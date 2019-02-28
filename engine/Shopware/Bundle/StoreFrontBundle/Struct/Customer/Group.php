@@ -26,11 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class Group extends Extendable
 {
     /**

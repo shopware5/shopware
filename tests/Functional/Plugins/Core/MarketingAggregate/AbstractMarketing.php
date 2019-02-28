@@ -29,11 +29,7 @@ use Shopware\Models\Config\Form;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
 {
     public function setUp()

@@ -27,9 +27,6 @@ namespace Shopware\Bundle\ESIndexingBundle;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 
-/**
- * Interface DataIndexerInterface
- */
 interface DataIndexerInterface
 {
     /**

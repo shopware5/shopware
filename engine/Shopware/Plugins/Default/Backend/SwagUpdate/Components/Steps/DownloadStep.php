@@ -27,11 +27,7 @@ namespace ShopwarePlugins\SwagUpdate\Components\Steps;
 use ShopwarePlugins\SwagUpdate\Components\Download;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
+
 class DownloadStep
 {
     /**

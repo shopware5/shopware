@@ -26,9 +26,6 @@ namespace Shopware\Bundle\AccountBundle\Service;
 
 use Shopware\Models\Customer\Customer;
 
-/**
- * Interface AccountServiceInterface
- */
 interface CustomerServiceInterface
 {
     /**
