@@ -27,6 +27,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added default table options of Doctrine to config
 * Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
 * Added configuration to show the voucher field on checkout confirm page
+* Added information text to detail page of category filter 
 
 ### Changes
 
@@ -80,6 +81,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed following classes without replacement
     * `Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension`
     * `Shopware\Bundle\FormBundle\EnlightRequestHandler`
+* Removed checkbox show in all categories on the category filter detail page
+* Removed category filter facet from filter listing in category settings 
+* Removed category filter from category page in frontend
 
 ### Deprecations
 

@@ -49,7 +49,9 @@ Ext.define('Shopware.form.field.SingleSelection', {
             model: store.model,
             proxy: store.getProxy(),
             remoteSort: store.remoteSort,
+            remoteFilter: store.remoteFilter,
             sorters: store.getSorters(),
+            filters: store.filters.items
         });
         me.items = me.createItems();
 

@@ -83,6 +83,12 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Detail', {
             uncheckedValue: false
         });
 
+        me.informationTextCategoryFilter = Ext.create('Ext.container.Container', {
+            html: '{s name="category_filter_not_on_categories"}{/s}',
+            margin: '10 0 10 0',
+            hidden: true
+        });
+
         return [{
             xtype: 'fieldset',
             layout: 'anchor',
@@ -90,7 +96,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Detail', {
                 anchor: '100%'
             },
             title: '{s name="facet_settings"}{/s}',
-            items: [me.nameField, me.activeField, me.displayInCategoriesField]
+            items: [me.nameField, me.activeField, me.displayInCategoriesField, me.informationTextCategoryFilter]
         }, {
             xtype: 'fieldset',
             title: '{s name="facet_configuration"}{/s}',
@@ -144,6 +150,14 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Detail', {
         facetDefinition = Ext.JSON.decode(record.get('facet'));
         facetClass = Object.keys(facetDefinition);
         handler = me.getHandler(facetClass[0], facetDefinition[facetClass]);
+
+        if (facetClass[0] === 'Shopware\\Bundle\\SearchBundle\\Facet\\CategoryFacet') {
+            me.displayInCategoriesField.hide();
+            me.informationTextCategoryFilter.show();
+        } else {
+            me.displayInCategoriesField.show();
+            me.informationTextCategoryFilter.hide();
+        }
 
         me.setDisabled(false);
 

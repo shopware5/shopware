@@ -506,6 +506,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
         $facetFilter->add($criteria);
 
+        $criteria->removeFacet('category');
+
         return $criteria;
     }
 
