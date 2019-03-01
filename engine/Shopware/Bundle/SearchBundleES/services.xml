@@ -186,6 +186,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.product_name_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\ProductNumberSortingHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.release_date_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\ReleaseDateSortingHandler">
             <tag name="shopware_search_es.search_handler" />
         </service>
