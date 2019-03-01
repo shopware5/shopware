@@ -229,6 +229,10 @@
             <tag name="sorting_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.product_number_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductNumberSortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.popularity_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\PopularitySortingHandler">
             <tag name="sorting_handler_dbal"/>
         </service>
