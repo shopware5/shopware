@@ -1606,18 +1606,23 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $view = $this->View();
         $basket = $this->getBasket();
+        $view->assign('sCountryList', $this->getCountryList());
+        $view->assign('sPayments', $this->getPayments());
+        $view->assign('sCountry', $this->getSelectedCountry());
+        $view->assign('sPayment', $this->getSelectedPayment());
+        $view->assign('sDispatch', $this->getSelectedDispatch());
 
         $view->sBasket = $basket;
 
-        $view->sShippingcosts = $basket['sShippingcosts'];
-        $view->sShippingcostsDifference = $basket['sShippingcostsDifference'];
-        $view->sAmount = $basket['sAmount'];
-        $view->sAmountWithTax = $basket['sAmountWithTax'];
-        $view->sAmountTax = $basket['sAmountTax'];
-        $view->sAmountNet = $basket['AmountNetNumeric'];
-        $view->sDispatches = $this->getDispatches();
+        $view->assign('sShippingcosts', $basket['sShippingcosts']);
+        $view->assign('sShippingcostsDifference', $basket['sShippingcostsDifference']);
+        $view->assign('sAmount', $basket['sAmount']);
+        $view->assign('sAmountWithTax', $basket['sAmountWithTax']);
+        $view->assign('sAmountTax', $basket['sAmountTax']);
+        $view->assign('sAmountNet', $basket['AmountNetNumeric']);
+        $view->assign('sDispatches', $this->getDispatches());
         $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
-        $view->sDispatchNoOrder = ($accountMode === 0 && $this->getDispatchNoOrder());
+        $view->assign('sDispatchNoOrder', ($accountMode === 0 && $this->getDispatchNoOrder()));
     }
 
     /**
