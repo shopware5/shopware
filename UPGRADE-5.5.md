@@ -4,7 +4,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ## 5.5.8
 
-[View all changes from v5.5.5...v5.5.6](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
+[View all changes from v5.5.7...v5.5.8](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
 
 ### Additions
 
@@ -13,13 +13,14 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ### Changes
 
-* Undeprecated `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface` which was deprecated since 5.3.0
-* Changed url plugin to resolve base-url on cli
+* Changed deprecation on `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface`. It was deprecated since 5.3.0, that deprecation got removed
+* Changed url plugin to resolve base-url on CLI
 * Changed variant switch to consider url parameters without value
 * Changed `CategoryProvider` to skip excluded categories from sitemap 
 * Changed `CookieSubscriber` to clear session value for `userInfo` after a login
 * Changed article REST api to properly deal with configuration option positions
 * Changed shipping costs pre calculation display configuration
+* Changed `HreflangService` to only consider active subshops
 
 ### Deprecations
 

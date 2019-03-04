@@ -198,6 +198,7 @@ class HrefLangService implements HrefLangServiceInterface
             ->innerJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
             ->where('shop.id = :shopId')
             ->orWhere('shop.main_id = :shopId')
+            ->andWhere('active=1')
             ->setParameter('shopId', $parentId)
             ->execute()
             ->fetchAll();
