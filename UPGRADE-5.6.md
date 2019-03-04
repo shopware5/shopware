@@ -62,6 +62,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware_Controllers_Frontend_Note` forwards to redirects
 * Changed display mode of voucher field on the shopping cart page into a configurable display mode
 * Changed symfony form request handler to `Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler`
+* Changed `.htaccess`-file to no longer contain references to PHP5
 
 ### Removals
 

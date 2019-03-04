@@ -102,20 +102,8 @@ DirectoryIndex shopware.php
     Options -MultiViews
 </IfModule>
 
-<IfModule mod_php5.c>
-#  php_value memory_limit 256M
-#  php_value max_execution_time 120
-#  php_value upload_max_filesize 20M
-   php_flag phar.readonly off
-   php_flag magic_quotes_gpc off
-   php_flag session.auto_start off
-   php_flag suhosin.session.cryptua off
-   php_flag zend.ze1_compatibility_mode off
-   php_value always_populate_raw_post_data -1
-</IfModule>
-
-#   AddType x-mapp-php5 .php
-#   AddHandler x-mapp-php5 .php
+#   AddType x-mapp-php7 .php
+#   AddHandler x-mapp-php7.php
 
 <IfModule mod_headers.c>
     Header append X-Frame-Options SAMEORIGIN
