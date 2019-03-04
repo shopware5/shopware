@@ -33,6 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Api\Resource;
+use Shopware\Components\Random;
 use Shopware\Kernel;
 use Shopware\Models;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
@@ -738,7 +739,7 @@ class Helper
     {
         return array_merge(
             [
-                'number' => 'Variant-' . uniqid(rand()),
+                'number' => 'Variant-' . uniqid(Random::getInteger(0, PHP_INT_MAX), true),
                 'supplierNumber' => 'kn12lk3nkl213',
                 'active' => 1,
                 'inStock' => 222,

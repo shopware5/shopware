@@ -22,6 +22,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed shipping costs pre calculation display configuration
 * Changed `HreflangService` to only consider active subshops
 * Changed HTTPCache to fix issues with the first request of a URL when debugging is active
+* Changed availability filter for ES condition
 
 ### Deprecations
 
