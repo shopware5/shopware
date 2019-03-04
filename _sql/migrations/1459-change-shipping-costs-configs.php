@@ -22,29 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * <code>
- * $benchmarkComponent = new Shopware_Components_Benchmark_Container;
- * $benchmarkComponent->getBenchmarks();
- * </code>
- *
- * @deprecated Will be removed without replacement in 5.6
- */
-class Shopware_Components_Benchmark_Container
+class Migrations_Migration1459 extends Shopware\Components\Migrations\AbstractMigration
 {
-    protected $Benchmarks;
-
-    public function Start($label)
+    public function up($modus)
     {
-        $object = new Shopware_Components_Benchmark_Point();
-        $object->Start($label);
-        $this->Benchmarks[] = $object;
+        $sql = <<<'SQL'
+        SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend79' LIMIT 1);
+        SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'basketShowCalculation' and form_id=@parent LIMIT 1);
+        SET @value = (SELECT value FROM `s_core_config_values` WHERE `element_id` = @elementId);
+        UPDATE s_core_config_elements set type='select', options='a:2:{s:5:"store";s:57:"Shopware.apps.Base.store.ShippingCalculationsDisplayModes";s:9:"queryMode";s:5:"local";}', value='i:1;' where id=@elementId;
 
-        return $object;
-    }
-
-    public function getBenchmarks()
-    {
-        return $this->Benchmarks;
+		UPDATE s_core_config_values SET value = 'i:0;'
+        FROM s_core_config_values
+        WHERE element_id = @elementId);
+SQL;
+        $this->addSql($sql);
     }
 }

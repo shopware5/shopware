@@ -1202,26 +1202,7 @@ class ArticleTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $article = $this->resource->create(
-            [
-                'name' => 'Turnschuhe',
-                'active' => true,
-                'tax' => 19,
-                'supplier' => 'Turnschuhe Inc.',
-                'categories' => [
-                    ['id' => 15],
-                ],
-                'mainDetail' => [
-                    'number' => 'turn',
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'EK',
-                            'price' => 999,
-                        ],
-                    ],
-                ],
-            ]
-        );
+        $article = $this->createConfiguratorSetProduct();
 
         $updateArticle = [
             'configuratorSet' => [
@@ -1350,26 +1331,7 @@ class ArticleTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $article = $this->resource->create(
-            [
-                'name' => 'Turnschuhe',
-                'active' => true,
-                'tax' => 19,
-                'supplier' => 'Turnschuhe Inc.',
-                'categories' => [
-                    ['id' => 15],
-                ],
-                'mainDetail' => [
-                    'number' => 'turn',
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'EK',
-                            'price' => 999,
-                        ],
-                    ],
-                ],
-            ]
-        );
+        $article = $this->createConfiguratorSetProduct();
 
         $updateArticle = [
             'configuratorSet' => [
@@ -1514,26 +1476,7 @@ class ArticleTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $article = $this->resource->create(
-            [
-                'name' => 'Turnschuhe',
-                'active' => true,
-                'tax' => 19,
-                'supplier' => 'Turnschuhe Inc.',
-                'categories' => [
-                    ['id' => 15],
-                ],
-                'mainDetail' => [
-                    'number' => 'turn',
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'EK',
-                            'price' => 999,
-                        ],
-                    ],
-                ],
-            ]
-        );
+        $article = $this->createConfiguratorSetProduct();
 
         $updateArticle = [
             'configuratorSet' => [
@@ -1626,6 +1569,140 @@ class ArticleTest extends TestCase
         /** @var \Shopware\Models\Article\Article $article */
         $updated = $this->resource->update($article->getId(), $updateArticle);
         $this->assertEquals($updated->getConfiguratorSet()->getType(), 2, "ConfiguratorSet.Type doesn't match");
+
+        try {
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (\Exception $e) {
+        }
+    }
+
+    public function testUpdateToConfiguratorSetPositionsShouldBeGenerated()
+    {
+        try {
+            $id = $this->resource->getIdFromNumber('turn');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (\Exception $e) {
+        }
+
+        $article = $this->createConfiguratorSetProduct();
+
+        $updateArticle = [
+            'configuratorSet' => [
+                'type' => 2,
+                'groups' => [
+                    [
+                        'name' => 'Foo Farbe',
+                        'options' => [
+                            ['name' => 'Rot'],
+                            ['name' => 'Blau'],
+                            ['name' => 'Weiß'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        /** @var \Shopware\Models\Article\Article $article */
+        $updated = $this->resource->update($article->getId(), $updateArticle);
+        $options = $updated->getConfiguratorSet()->getOptions();
+
+        $this->assertSame(0, $options[0]->getPosition());
+        $this->assertSame(1, $options[1]->getPosition());
+        $this->assertSame(2, $options[2]->getPosition());
+
+        try {
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (\Exception $e) {
+        }
+    }
+
+    /**
+     * @depends testUpdateToConfiguratorSetPositionsShouldBeGenerated
+     */
+    public function testUpdateToConfiguratorSetPositionsShouldOverwritePositions()
+    {
+        try {
+            $id = $this->resource->getIdFromNumber('turn');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (\Exception $e) {
+        }
+
+        $article = $this->createConfiguratorSetProduct();
+
+        $updateArticle = [
+            'configuratorSet' => [
+                'type' => 2,
+                'groups' => [
+                    [
+                        'name' => 'Foo Farbe',
+                        'options' => [
+                            ['name' => 'Rot', 'position' => 5],
+                            ['name' => 'Blau', 'position' => 6],
+                            ['name' => 'Weiß', 'position' => 11],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        /** @var \Shopware\Models\Article\Article $article */
+        $updated = $this->resource->update($article->getId(), $updateArticle);
+        $options = $updated->getConfiguratorSet()->getOptions();
+
+        $this->assertSame(5, $options[0]->getPosition());
+        $this->assertSame(6, $options[1]->getPosition());
+        $this->assertSame(11, $options[2]->getPosition());
+
+        try {
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (\Exception $e) {
+        }
+    }
+
+    /**
+     * @depends testUpdateToConfiguratorSetPositionsShouldBeGenerated
+     * @depends testUpdateToConfiguratorSetPositionsShouldOverwritePositions
+     */
+    public function testUpdateToConfiguratorSetPositionsShouldRemainUntouched()
+    {
+        try {
+            $id = $this->resource->getIdFromNumber('turn');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch (\Exception $e) {
+        }
+
+        $article = $this->createConfiguratorSetProduct();
+
+        $updateArticle = [
+            'configuratorSet' => [
+                'type' => 2,
+                'groups' => [
+                    [
+                        'name' => 'Foo Farbe',
+                        'options' => [
+                            ['name' => 'Rot'],
+                            ['name' => 'Weiß'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        /** @var \Shopware\Models\Article\Article $article */
+        $updated = $this->resource->update($article->getId(), $updateArticle);
+        $options = $updated->getConfiguratorSet()->getOptions();
+
+        $this->assertSame(5, $options[0]->getPosition());
+        $this->assertSame(11, $options[1]->getPosition());
 
         try {
             if (!empty($id)) {
@@ -3178,5 +3255,32 @@ class ArticleTest extends TestCase
         }
 
         return $options;
+    }
+
+    /**
+     * @return \Shopware\Models\Article\Article
+     */
+    private function createConfiguratorSetProduct()
+    {
+        return $this->resource->create(
+            [
+                'name' => 'Turnschuhe',
+                'active' => true,
+                'tax' => 19,
+                'supplier' => 'Turnschuhe Inc.',
+                'categories' => [
+                    ['id' => 15],
+                ],
+                'mainDetail' => [
+                    'number' => 'turn',
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ],
+                    ],
+                ],
+            ]
+        );
     }
 }
