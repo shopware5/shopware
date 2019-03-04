@@ -99,7 +99,11 @@ Ext.define('Shopware.form.field.Grid', {
 
         return Ext.create('Ext.data.Store', {
             model: me.store.model,
-            proxy: me.store.getProxy()
+            proxy: me.store.getProxy(),
+            remoteSort: me.store.remoteSort,
+            remoteFilter: me.store.remoteFilter,
+            sorters: me.store.getSorters(),
+            filters: me.store.filters.items
         });
     },
 
