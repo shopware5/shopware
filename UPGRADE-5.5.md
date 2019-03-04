@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed article REST api to properly deal with configuration option positions
 * Changed shipping costs pre calculation display configuration
 * Changed `HreflangService` to only consider active subshops
+* Changed HTTPCache to fix issues with the first request of a URL when debugging is active
 
 ### Deprecations
 
