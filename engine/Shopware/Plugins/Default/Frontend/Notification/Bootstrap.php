@@ -361,6 +361,12 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
             /* @var \Shopware\Models\Shop\Shop $shop */
             $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($notify['language']);
+
+            // Continue if shop is inactive or deleted
+            if ($shop === null) {
+                continue;
+            }
+
             $shop->registerResources();
 
             $shopContext = Context::createFromShop($shop, $this->get('config'));

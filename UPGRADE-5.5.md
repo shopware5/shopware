@@ -6,9 +6,25 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 [View all changes from v5.5.5...v5.5.6](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
 
+### Additions
+
+* Added new config `alwaysShowMainFeatures` to show the template from `mainfeatures` in the whole checkout process
+* Added configuration for displaying shipping costs pre calculation in off canvas shopping cart
+
 ### Changes
 
 * Undeprecated `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface` which was deprecated since 5.3.0
+* Changed url plugin to resolve base-url on cli
+* Changed variant switch to consider url parameters without value
+* Changed `CategoryProvider` to skip excluded categories from sitemap 
+* Changed `CookieSubscriber` to clear session value for `userInfo` after a login
+* Changed article REST api to properly deal with configuration option positions
+* Changed shipping costs pre calculation display configuration
+
+### Deprecations
+
+* Deprecated the class `Shopware_Components_Benchmark_Point`. It will be removed in 5.6 without replacement.
+* Deprecated the class `Shopware_Components_Benchmark_Container`. It will be removed in 5.6 without replacement.
 
 ## 5.5.7
 
