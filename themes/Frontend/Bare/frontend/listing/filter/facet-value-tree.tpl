@@ -16,7 +16,7 @@
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_value_tree_title"}
-                    <label class="filter-panel--title">
+                    <label class="filter-panel--title" title="{$facet->getLabel()|escape:'htmlall'}">
                         {$facet->getLabel()|escape}
                     </label>
                 {/block}
