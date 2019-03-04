@@ -303,7 +303,15 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch($url);
 
         if ($this->Response()->isRedirect()) {
-            $parts = parse_url($this->Response()->getHeaders()[0]['value']);
+            $location = null;
+
+            foreach ($this->Response()->getHeaders() as $header) {
+                if ($header['name'] === 'location') {
+                    $location = $header['value'];
+                }
+            }
+
+            $parts = parse_url($location);
             $followUrl = $parts['path'];
 
             if (isset($parts['query'])) {

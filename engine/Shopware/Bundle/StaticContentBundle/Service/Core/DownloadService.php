@@ -121,7 +121,6 @@ class DownloadService implements DownloadServiceInterface
         $response->setHeader('Content-Length', $meta['size']);
         $response->setHeader('Content-Transfer-Encoding', 'binary');
         $response->sendHeaders();
-        $response->sendResponse();
 
         $upstream = $filesystem->readStream($location);
         $downstream = fopen('php://output', 'wb');

@@ -59,12 +59,9 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/account/download');
 
-        $header = $this->Response()->getHeaders();
-        $this->assertEquals('Content-Disposition', $header[1]['name']);
-        $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $header[1]['value']);
-        $this->assertEquals('Content-Length', $header[2]['name']);
-        $this->assertGreaterThan(630, (int) $header[2]['value']);
-        $this->assertEquals(strlen($this->Response()->getBody()), (int) $header[2]['value']);
+        $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $this->Response()->getHeader('Content-Disposition'));
+        $this->assertGreaterThan(630, (int) $this->Response()->getHeader('Content-Length'));
+        $this->assertEquals(strlen($this->Response()->getBody()), (int) $this->Response()->getHeader('Content-Length'));
 
         if ($deleteFolderOnTearDown) {
             $filesystem->delete($filePath);

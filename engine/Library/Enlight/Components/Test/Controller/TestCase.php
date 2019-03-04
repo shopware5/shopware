@@ -129,7 +129,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 
         $front->dispatch();
 
-        if ($followRedirects && $this->Response()->getHttpResponseCode() === 302) {
+        if ($followRedirects && $this->Response()->getStatusCode() === 302) {
             $link = parse_url($this->Response()->getHeader('Location'), PHP_URL_PATH);
             $this->resetResponse();
             $cookies = $this->Response()->getCookies();

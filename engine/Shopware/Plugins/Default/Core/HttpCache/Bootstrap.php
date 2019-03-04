@@ -450,7 +450,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         if ($cacheControl->useNoCacheControl($this->request, $this->response, $shopId)) {
-            $this->response->setHeader('Cache-Control', 'private, no-cache');
+            $this->response->setHeader('Cache-Control', 'private, no-cache', true);
 
             return false;
         }
@@ -458,11 +458,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $cacheTime = (int) $cacheControl->getCacheTime($this->request);
 
         $this->request->setParam('__cache', $cacheTime);
-        $this->response->setHeader('Cache-Control', 'public, max-age=' . $cacheTime . ', s-maxage=' . $cacheTime);
+        $this->response->setHeader('Cache-Control', 'public, max-age=' . $cacheTime . ', s-maxage=' . $cacheTime, true);
 
         $noCacheTags = $cacheControl->getNoCacheTagsForRequest($this->request, $shopId);
         if (!empty($noCacheTags)) {
-            $this->response->setHeader('x-shopware-allow-nocache', implode(', ', $noCacheTags));
+            $this->response->setHeader('x-shopware-allow-nocache', implode(', ', $noCacheTags), true);
         }
 
         $cacheCollector = $this->get('http_cache.cache_id_collector');
@@ -625,7 +625,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         $cacheIds = ';' . implode(';', $cacheIds) . ';';
-        $this->response->setHeader('x-shopware-cache-id', $cacheIds);
+        $this->response->setHeader('x-shopware-cache-id', $cacheIds, true);
     }
 
     /**
@@ -864,7 +864,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     private function addSurrogateControl(Response $response)
     {
-        $response->setHeader('Surrogate-Control', 'content="ESI/1.0"');
+        $response->setHeader('Surrogate-Control', 'content="ESI/1.0"', true);
     }
 
     /**

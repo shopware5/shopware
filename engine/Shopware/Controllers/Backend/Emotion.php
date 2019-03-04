@@ -32,7 +32,9 @@ use Shopware\Models\Emotion\Element;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -281,14 +283,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         @set_time_limit(0);
-        $this->Response()
-            ->setHeader('Content-type', 'application/zip')
-            ->setHeader('Content-Transfer-Encoding', 'binary')
-            ->setHeader('Content-disposition', 'attachment; filename="' . basename($exportFilePath) . '"')
-            ->sendHeaders();
 
-        readfile($exportFilePath);
-        $this->container->get('file_system')->remove($exportFilePath);
+        $binaryResponse = new BinaryFileResponse($exportFilePath, 200, [], true, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        $binaryResponse->deleteFileAfterSend(true);
+        $binaryResponse->send();
 
         exit;
     }

@@ -1,39 +1,42 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/bsd-license.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
  * This class is highly based on Zend_Controller_Response_HttpTestCase
  *
- * @link https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/HttpTestCase.php
+ * @see https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/HttpTestCase.php
  */
 class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Response_ResponseHttp
 {
     /**
      * Sends all cookies
      *
-     * @return Enlight_Controller_Response_Response
+     * @return Enlight_Controller_Response_ResponseTestCase
      */
     public function sendCookies()
     {
-        if (!empty($this->_cookies)) {
-            $this->canSendHeaders(true);
-        }
+        $this->canSendHeaders(true);
 
         return $this;
     }
@@ -43,22 +46,28 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
      *
      * @param string $name
      * @param string $default
+     *
      * @return mixed
      */
     public function getCookie($name, $default = null)
     {
-        return isset($this->_cookies[$name]['value']) ? $this->_cookies[$name]['value'] : $default;
+        $cookies = $this->getCookies();
+
+        return isset($cookies[$name]['value']) ? $cookies[$name]['value'] : $default;
     }
 
     /**
      * Gets all the information for a cookie
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function getFullCookie($name)
     {
-        return isset($this->_cookies[$name]) ? $this->_cookies[$name] : null;
+        $cookies = $this->getCookies();
+
+        return isset($cookies[$name]) ? $cookies[$name] : null;
     }
 
     /**
@@ -66,11 +75,12 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
      *
      * @param string $name
      * @param string $default
+     *
      * @return mixed
      */
     public function getHeader($name, $default = null)
     {
-        foreach ($this->_headers as $header) {
+        foreach ($this->getHeaders() as $header) {
             if (isset($header['name']) && $header['name'] === $name) {
                 return $header['value'];
             }
@@ -80,34 +90,8 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
     }
 
     /**
-     * "send" headers by returning array of all headers that would be sent
-     *
-     * @return array
-     */
-    public function sendHeaders()
-    {
-        $headers = [];
-        foreach ($this->_headersRaw as $header) {
-            $headers[] = $header;
-        }
-        foreach ($this->_headers as $header) {
-            $name = $header['name'];
-            $key  = strtolower($name);
-            if (array_key_exists($name, $headers)) {
-                if ($header['replace']) {
-                    $headers[$key] = $header['name'] . ': ' . $header['value'];
-                }
-            } else {
-                $headers[$key] = $header['name'] . ': ' . $header['value'];
-            }
-        }
-        return $headers;
-    }
-
-    /**
      * Can we send headers?
      *
-     * @param  bool $throw
      * @return bool
      */
     public function canSendHeaders($throw = false)
@@ -122,30 +106,19 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
      */
     public function outputBody()
     {
-        $fullContent = '';
-        foreach ($this->_body as $content) {
-            $fullContent .= $content;
-        }
-        return $fullContent;
+        return $this->content;
     }
 
     /**
      * Get body and/or body segments
      *
-     * @param  bool|string $spec
+     * @param bool|string $spec
+     *
      * @return string|array|null
      */
     public function getBody($spec = false)
     {
-        if (false === $spec) {
-            return $this->outputBody();
-        } elseif (true === $spec) {
-            return $this->_body;
-        } elseif (is_string($spec) && isset($this->_body[$spec])) {
-            return $this->_body[$spec];
-        }
-
-        return null;
+        return $this->content;
     }
 
     /**
