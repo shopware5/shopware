@@ -648,7 +648,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $this;
         }
 
-        $this->prepareRequestUri();
+        $this->requestUri = $this->prepareRequestUri();
 
         return $this;
     }
@@ -668,7 +668,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $this;
         }
 
-        $this->prepareBaseUrl();
+        $this->baseUrl = $this->prepareBaseUrl();
 
         return $this;
     }
@@ -679,7 +679,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
     public function getBaseUrl($raw = false)
     {
         if ($this->baseUrl === null) {
-            $this->prepareBaseUrl();
+            $this->baseUrl = $this->prepareBaseUrl();
         }
 
         return ($raw == false) ? urldecode($this->baseUrl) : $this->baseUrl;
@@ -696,7 +696,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $this;
         }
 
-        $this->prepareBasePath();
+        $this->basePath = $this->prepareBasePath();
 
         return $this;
     }
@@ -712,7 +712,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $this;
         }
 
-        $this->preparePathInfo();
+        $this->pathInfo = $this->preparePathInfo();
 
         return $this;
     }
