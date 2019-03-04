@@ -305,8 +305,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
             if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed'])) {
                 if (empty($sourceIsCheckoutConfirm)) {
-                    $this->View()->sErrorFlag = $checkData['checkPayment']['sErrorFlag'];
-                    $this->View()->sErrorMessages = $checkData['checkPayment']['sErrorMessages'];
+                    $this->View()->assign('sErrorFlag', $checkData['checkPayment']['sErrorFlag']);
+                    $this->View()->assign('sErrorMessages', $checkData['checkPayment']['sErrorMessages']);
                 }
 
                 return $this->forward('payment');

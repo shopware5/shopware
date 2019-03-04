@@ -99,8 +99,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
 
-        $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
-        $this->View()->sUserData = $this->getUserData();
+        $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
+        $this->View()->assign('sUserData', $this->getUserData());
     }
 
     /**
@@ -140,32 +140,32 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function cartAction()
     {
-        $this->View()->sCountry = $this->getSelectedCountry();
-        $this->View()->sPayment = $this->getSelectedPayment();
-        $this->View()->sDispatch = $this->getSelectedDispatch();
-        $this->View()->sCountryList = $this->getCountryList();
-        $this->View()->sPayments = $this->getPayments();
-        $this->View()->sDispatches = $this->getDispatches();
-        $this->View()->sDispatchNoOrder = ($this->View()->sUserData['additional']['user']['accountmode'] == 0 && $this->getDispatchNoOrder());
-        $this->View()->sState = $this->getSelectedState();
+        $this->View()->assign('sCountry', $this->getSelectedCountry());
+        $this->View()->assign('sPayment', $this->getSelectedPayment());
+        $this->View()->assign('sDispatch', $this->getSelectedDispatch());
+        $this->View()->assign('sCountryList', $this->getCountryList());
+        $this->View()->assign('sPayments', $this->getPayments());
+        $this->View()->assign('sDispatches', $this->getDispatches());
+        $this->View()->assign('sDispatchNoOrder', $this->View()->sUserData['additional']['user']['accountmode'] == 0 && $this->getDispatchNoOrder());
+        $this->View()->assign('sState', $this->getSelectedState());
 
-        $this->View()->sUserData = $this->getUserData();
-        $this->View()->sBasket = $this->getBasket();
+        $this->View()->assign('sUserData', $this->getUserData());
+        $this->View()->assign('sBasket', $this->getBasket());
 
-        $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
-        $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
-        $this->View()->sAmount = $this->View()->sBasket['sAmount'];
-        $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
-        $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
-        $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
+        $this->View()->assign('sShippingcosts', $this->View()->sBasket['sShippingcosts']);
+        $this->View()->assign('sShippingcostsDifference', $this->View()->sBasket['sShippingcostsDifference']);
+        $this->View()->assign('sAmount', $this->View()->sBasket['sAmount']);
+        $this->View()->assign('sAmountWithTax', $this->View()->sBasket['sAmountWithTax']);
+        $this->View()->assign('sAmountTax', $this->View()->sBasket['sAmountTax']);
+        $this->View()->assign('sAmountNet', $this->View()->sBasket['AmountNetNumeric']);
 
-        $this->View()->sMinimumSurcharge = $this->getMinimumCharge();
-        $this->View()->sPremiums = $this->getPremiums();
+        $this->View()->assign('sMinimumSurcharge', $this->getMinimumCharge());
+        $this->View()->assign('sPremiums', $this->getPremiums());
 
-        $this->View()->sInquiry = $this->getInquiry();
-        $this->View()->sInquiryLink = $this->getInquiryLink();
+        $this->View()->assign('sInquiry', $this->getInquiry());
+        $this->View()->assign('sInquiryLink', $this->getInquiryLink());
 
-        $this->View()->sTargetAction = 'cart';
+        $this->View()->assign('sTargetAction', 'cart');
     }
 
     /**
@@ -187,8 +187,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return $this->forward('cart');
         }
 
-        $this->View()->sCountry = $this->getSelectedCountry();
-        $this->View()->sState = $this->getSelectedState();
+        $this->View()->assign('sCountry', $this->getSelectedCountry());
+        $this->View()->assign('sState', $this->getSelectedState());
 
         $payment = $this->getSelectedPayment();
         if (array_key_exists('validation', $payment) && !empty($payment['validation'])) {
@@ -197,35 +197,35 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return;
         }
 
-        $this->View()->sPayment = $payment;
+        $this->View()->assign('sPayment', $payment);
 
         /** @var array<string, mixed> $userData */
         $userData = $this->View()->sUserData;
         $userData['additional']['payment'] = $this->View()->sPayment;
-        $this->View()->sUserData = $userData;
+        $this->View()->assign('sUserData', $userData);
 
-        $this->View()->sDispatch = $this->getSelectedDispatch();
-        $this->View()->sPayments = $this->getPayments();
-        $this->View()->sDispatches = $this->getDispatches();
+        $this->View()->assign('sDispatch', $this->getSelectedDispatch());
+        $this->View()->assign('sPayments', $this->getPayments());
+        $this->View()->assign('sDispatches', $this->getDispatches());
 
-        $this->View()->sBasket = $this->getBasket();
+        $this->View()->assign('sBasket', $this->getBasket());
 
-        $this->View()->sLaststock = $this->basket->sCheckBasketQuantities();
-        $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
-        $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
-        $this->View()->sAmount = $this->View()->sBasket['sAmount'];
-        $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
-        $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
-        $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
+        $this->View()->assign('sLaststock', $this->basket->sCheckBasketQuantities());
+        $this->View()->assign('sShippingcosts', $this->View()->sBasket['sShippingcosts']);
+        $this->View()->assign('sShippingcostsDifference', $this->View()->sBasket['sShippingcostsDifference']);
+        $this->View()->assign('sAmount', $this->View()->sBasket['sAmount']);
+        $this->View()->assign('sAmountWithTax', $this->View()->sBasket['sAmountWithTax']);
+        $this->View()->assign('sAmountTax', $this->View()->sBasket['sAmountTax']);
+        $this->View()->assign('sAmountNet', $this->View()->sBasket['AmountNetNumeric']);
 
-        $this->View()->sPremiums = $this->getPremiums();
+        $this->View()->assign('sPremiums', $this->getPremiums());
 
-        $this->View()->sNewsletter = isset($this->session['sNewsletter']) ? $this->session['sNewsletter'] : null;
-        $this->View()->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : null;
+        $this->View()->assign('sNewsletter', isset($this->session['sNewsletter']) ? $this->session['sNewsletter'] : null);
+        $this->View()->assign('sComment', isset($this->session['sComment']) ? $this->session['sComment'] : null);
 
-        $this->View()->sShowEsdNote = $this->getEsdNote();
-        $this->View()->sDispatchNoOrder = $this->getDispatchNoOrder();
-        $this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
+        $this->View()->assign('sShowEsdNote', $this->getEsdNote());
+        $this->View()->assign('sDispatchNoOrder', $this->getDispatchNoOrder());
+        $this->View()->assign('sRegisterFinished', !empty($this->session['sRegisterFinished']));
 
         $this->saveTemporaryOrder();
 
@@ -244,7 +244,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $this->View()->assign('sAGBChecked', true);
         }
 
-        $this->View()->sTargetAction = 'confirm';
+        $this->View()->assign('sTargetAction', 'confirm');
 
         $this->View()->assign('hasMixedArticles', $this->basketHasMixedProducts($this->View()->sBasket));
         $this->View()->assign('hasServiceArticles', $this->basketHasServiceProducts($this->View()->sBasket));
@@ -375,7 +375,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $agreements = $this->getInvalidAgreements($basket, $this->Request());
 
         if (!empty($agreements)) {
-            $this->View()->sAGBError = array_key_exists('agbError', $agreements);
+            $this->View()->assign('sAGBError', array_key_exists('agbError', $agreements));
 
             return $this->forward(
                 'confirm',
@@ -483,13 +483,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         if (!Shopware()->Config()->get('IgnoreAGB') && !$this->Request()->getParam('sAGB')) {
-            $this->View()->sAGBError = true;
+            $this->View()->assign('sAGBError', true);
 
             return $this->forward('confirm');
         }
 
         $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
-        $this->View()->sAGBError = false;
+        $this->View()->assign('sAGBError', false);
 
         if (empty($this->View()->sPayment['embediframe'])
                 && empty($this->View()->sPayment['action'])) {
@@ -506,7 +506,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $embedded .= '?sCoreId=' . Shopware()->Session()->get('sessionId');
             $embedded .= '&sAGB=1';
             $embedded .= '&__basket_signature=' . $this->persistBasket();
-            $this->View()->sEmbedded = $embedded;
+            $this->View()->assign('sEmbedded', $embedded);
         } else {
             $action = explode('/', $this->View()->sPayment['action']);
             $this->redirect([
@@ -534,27 +534,27 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $quantity = (int) $this->Request()->getParam('sQuantity');
         $productId = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
 
-        $this->View()->sBasketInfo = $this->getInstockInfo($ordernumber, $quantity);
+        $this->View()->assign('sBasketInfo', $this->getInstockInfo($ordernumber, $quantity));
 
         if (!empty($productId)) {
             $insertId = $this->basket->sAddArticle($ordernumber, $quantity);
-            $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
+            $this->View()->assign('sArticleName', Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber));
             if (!empty($insertId)) {
                 $basket = $this->getBasket();
                 foreach ($basket['content'] as $item) {
                     if ($item['id'] == $insertId) {
-                        $this->View()->sArticle = $item;
+                        $this->View()->assign('sArticle', $item);
                         break;
                     }
                 }
             }
 
             if (Shopware()->Config()->get('similarViewedShow', true)) {
-                $this->View()->sCrossSimilarShown = $this->getSimilarShown($productId);
+                $this->View()->assign('sCrossSimilarShown', $this->getSimilarShown($productId));
             }
 
             if (Shopware()->Config()->get('alsoBoughtShow', true)) {
-                $this->View()->sCrossBoughtToo = $this->getBoughtToo($productId);
+                $this->View()->assign('sCrossBoughtToo', $this->getBoughtToo($productId));
             }
         }
 
@@ -609,7 +609,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     public function changeQuantityAction()
     {
         if ($this->Request()->getParam('sArticle') && $this->Request()->getParam('sQuantity')) {
-            $this->View()->sBasketInfo = $this->basket->sUpdateArticle((int) $this->Request()->getParam('sArticle'), (int) $this->Request()->getParam('sQuantity'));
+            $this->View()->assign('sBasketInfo', $this->basket->sUpdateArticle((int) $this->Request()->getParam('sArticle'), (int) $this->Request()->getParam('sQuantity')));
         }
         $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'index')]);
     }
@@ -625,7 +625,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if ($this->Request()->isPost()) {
             $voucher = $this->basket->sAddVoucher($this->Request()->getParam('sVoucher'));
             if (!empty($voucher['sErrorMessages'])) {
-                $this->View()->sVoucherError = $voucher['sErrorMessages'];
+                $this->View()->assign('sVoucherError', $voucher['sErrorMessages']);
             }
         }
         $this->forward($this->Request()->getParam('sTargetAction', 'index'));
@@ -641,11 +641,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         if ($this->Request()->isPost()) {
             if (!$this->Request()->getParam('sAddPremium')) {
-                $this->View()->sBasketInfo = Shopware()->Snippets()->getNamespace()->get(
+                $this->View()->assign('sBasketInfo', Shopware()->Snippets()->getNamespace()->get(
                     'CheckoutSelectPremiumVariant',
                     'Please select an option to place the required premium to the cart',
                     true
-                );
+                ));
             } else {
                 $this->basket->sSYSTEM->_GET['sAddPremium'] = $this->Request()->getParam('sAddPremium');
                 $this->basket->sInsertPremium();
@@ -704,8 +704,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         // Load payment options, select option and details
-        $this->View()->sPayments = $this->getPayments();
-        $this->View()->sFormData = ['payment' => $this->View()->sUserData['additional']['user']['paymentID']];
+        $this->View()->assign('sPayments', $this->getPayments());
+        $this->View()->assign('sFormData', ['payment' => $this->View()->sUserData['additional']['user']['paymentID']]);
         $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
         $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
@@ -719,27 +719,27 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $values = $this->Request()->getPost();
             $values['payment'] = $this->Request()->getPost('payment');
             $values['isPost'] = true;
-            $this->View()->sFormData = $values;
+            $this->View()->assign('sFormData', $values);
         }
 
         // Load current and all shipping methods
-        $this->View()->sDispatch = $this->getSelectedDispatch();
-        $this->View()->sDispatches = $this->getDispatches($this->View()->sFormData['payment']);
+        $this->View()->assign('sDispatch', $this->getSelectedDispatch());
+        $this->View()->assign('sDispatches', $this->getDispatches($this->View()->sFormData['payment']));
 
         // We might change the shop context here so we need to initialize it again
         $this->get('shopware_storefront.context_service')->initializeShopContext();
 
-        $this->View()->sBasket = $this->getBasket();
+        $this->View()->assign('sBasket', $this->getBasket());
 
-        $this->View()->sLaststock = $this->basket->sCheckBasketQuantities();
-        $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
-        $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
-        $this->View()->sAmount = $this->View()->sBasket['sAmount'];
-        $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
-        $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
-        $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
-        $this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
-        $this->View()->sTargetAction = 'shippingPayment';
+        $this->View()->assign('sLaststock', $this->basket->sCheckBasketQuantities());
+        $this->View()->assign('sShippingcosts', $this->View()->sBasket['sShippingcosts']);
+        $this->View()->assign('sShippingcostsDifference', $this->View()->sBasket['sShippingcostsDifference']);
+        $this->View()->assign('sAmount', $this->View()->sBasket['sAmount']);
+        $this->View()->assign('sAmountWithTax', $this->View()->sBasket['sAmountWithTax']);
+        $this->View()->assign('sAmountTax', $this->View()->sBasket['sAmountTax']);
+        $this->View()->assign('sAmountNet', $this->View()->sBasket['AmountNetNumeric']);
+        $this->View()->assign('sRegisterFinished', !empty($this->session['sRegisterFinished']));
+        $this->View()->assign('sTargetAction', 'shippingPayment');
 
         if ($this->Request()->getParam('isXHR')) {
             return $this->View()->loadTemplate('frontend/checkout/shipping_payment_core.tpl');
@@ -875,7 +875,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order = Shopware()->Modules()->Order();
 
         $orgBasketData = $this->View()->sBasket;
-        $this->View()->sBasket = $this->getBasket(false);
+        $this->View()->assign('sBasket', $this->getBasket(false));
 
         $order->sUserData = $this->View()->sUserData;
         $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
@@ -890,7 +890,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
         $order->deviceType = $this->Request()->getDeviceType();
 
-        $this->View()->sBasket = $orgBasketData;
+        $this->View()->assign('sBasket', $orgBasketData);
 
         $order->sDeleteTemporaryOrder();    // Delete previous temporary orders
         $order->sCreateTemporaryOrder();    // Create new temporary order
@@ -904,7 +904,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order = Shopware()->Modules()->Order();
 
         $orgBasketData = $this->View()->sBasket;
-        $this->View()->sBasket = $this->getBasket(false);
+        $this->View()->assign('sBasket', $this->getBasket(false));
 
         $order->sUserData = $this->View()->sUserData;
         $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
@@ -919,7 +919,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order->sNet = !$this->View()->sUserData['additional']['charge_vat'];
         $order->deviceType = $this->Request()->getDeviceType();
 
-        $this->View()->sBasket = $orgBasketData;
+        $this->View()->assign('sBasket', $orgBasketData);
 
         return $order->sSaveOrder();
     }
@@ -1098,7 +1098,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $basket['sAmountTax'] = round($basket['AmountNumeric'] - $basket['AmountNetNumeric'], 2);
         }
 
-        $this->View()->sBasketProportional = $basket;
+        $this->View()->assign('sBasketProportional', $basket);
         if ($mergeProportional && $hasDifferentTaxes && $this->get('config')->get('proportionalTaxCalculation')) {
             $basket['content'] = $this->get('shopware.cart.proportional_cart_merger')->mergeProportionalItems($basket['content']);
         }
@@ -1612,7 +1612,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view->assign('sPayment', $this->getSelectedPayment());
         $view->assign('sDispatch', $this->getSelectedDispatch());
 
-        $view->sBasket = $basket;
+        $view->assign('sBasket', $basket);
 
         $view->assign('sShippingcosts', $basket['sShippingcosts']);
         $view->assign('sShippingcostsDifference', $basket['sShippingcostsDifference']);
@@ -1635,8 +1635,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
 
-        $this->View()->sBasketQuantity = $quantity;
-        $this->View()->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
+        $this->View()->assign('sBasketQuantity', $quantity);
+        $this->View()->assign('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 

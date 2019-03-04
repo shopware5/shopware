@@ -29,6 +29,6 @@ class Shopware_Controllers_Widgets_Compare extends Enlight_Controller_Action
 {
     public function indexAction()
     {
-        $this->View()->sComparisons = Shopware()->Modules()->Articles()->sGetComparisons();
+        $this->View()->assign('sComparisons', Shopware()->Modules()->Articles()->sGetComparisons());
     }
 }

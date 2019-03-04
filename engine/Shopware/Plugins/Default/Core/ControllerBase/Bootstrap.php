@@ -54,6 +54,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     {
         $request = $args->getSubject()->Request();
         $response = $args->getSubject()->Response();
+
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
 
         if (!$request->isDispatched() || $response->isException()
@@ -63,36 +65,36 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             return;
         }
 
-        $view->baseUrl = $request->getBaseUrl() . $request->getPathInfo();
+        $view->assign('baseUrl', $request->getBaseUrl() . $request->getPathInfo());
 
         $shop = Shopware()->Shop();
-        $view->Controller = $args->getSubject()->Request()->getControllerName();
+        $view->assign('Controller', $args->getSubject()->Request()->getControllerName());
 
         /*
          * @deprecated
          *
          * This assignment is deprecated and will be removed in Shopware 5.6 without replacement
          */
-        $view->Shopware = Shopware();
+        $view->assign('Shopware', Shopware());
 
-        $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
-        $view->sBasketAmount = $view->sBasketAmount ?: 0;
-        $view->sNotesQuantity = $view->sNotesQuantity ?: 0;
-        $view->sUserLoggedIn = $view->sUserLoggedIn ?: false;
+        $view->assign('sBasketQuantity', $view->sBasketQuantity ?: 0);
+        $view->assign('sBasketAmount', $view->sBasketAmount ?: 0);
+        $view->assign('sNotesQuantity', $view->sNotesQuantity ?: 0);
+        $view->assign('sUserLoggedIn', $view->sUserLoggedIn ?: false);
 
-        $view->Shop = $shop;
-        $view->Locale = $shop->getLocale()->getLocale();
+        $view->assign('Shop', $shop);
+        $view->assign('Locale', $shop->getLocale()->getLocale());
 
-        $view->sCategoryStart = $shop->getCategory()->getId();
-        $view->sCategoryCurrent = $this->getCategoryCurrent($view->sCategoryStart);
-        $view->sCategories = $this->getCategories($view->sCategoryCurrent);
-        $view->sMainCategories = $view->sCategories;
-        $view->sOutputNet = Shopware()->Session()->sOutputNet;
+        $view->assign('sCategoryStart', $shop->getCategory()->getId());
+        $view->assign('sCategoryCurrent', $this->getCategoryCurrent($view->sCategoryStart));
+        $view->assign('sCategories', $this->getCategories($view->sCategoryCurrent));
+        $view->assign('sMainCategories', $view->sCategories);
+        $view->assign('sOutputNet', Shopware()->Session()->sOutputNet);
 
         $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
-        $view->sMenu = $this->getMenu($shop->getId(), $activePage);
+        $view->assign('sMenu', $this->getMenu($shop->getId(), $activePage));
 
-        $view->sShopname = Shopware()->Config()->shopName;
+        $view->assign('sShopname', Shopware()->Config()->shopName);
     }
 
     /**

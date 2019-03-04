@@ -56,10 +56,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->Response()->setHttpResponseCode(
             $config->get('PageNotFoundCode', 404)
         );
-        $this->View()->sRelatedArticles = Shopware()->Modules()->Marketing()->sGetSimilarArticles(
+        $this->View()->assign('sRelatedArticles', Shopware()->Modules()->Marketing()->sGetSimilarArticles(
             $this->Request()->sArticle,
             4
-        );
+        ));
     }
 
     /**
@@ -85,10 +85,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
           && $this->Request()->getParam('__cache') !== null) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
-            $this->View()->sFormData = [
+            $this->View()->assign('sFormData', [
                 'sVoteMail' => $userData['additional']['user']['email'],
                 'sVoteName' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname'],
-            ];
+            ]);
         }
 
         $number = $this->Request()->getParam('number');
@@ -129,12 +129,12 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $product['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryID)) {
-            $this->View()->sInquiry = $this->Front()->Router()->assemble([
+            $this->View()->assign('sInquiry', $this->Front()->Router()->assemble([
                 'sViewport' => 'support',
                 'sFid' => Shopware()->Config()->InquiryID,
                 'sInquiry' => 'detail',
                 'sOrdernumber' => $product['ordernumber'],
-            ]);
+            ]));
         }
 
         if (!empty($product['categoryID'])) {
@@ -148,10 +148,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
         $product['sReleaseDate'] = $product['sReleasedate'];
 
-        $this->View()->sBreadcrumb = $breadcrumb;
-        $this->View()->sCategoryInfo = $categoryInfo;
-        $this->View()->sArticle = $product;
-        $this->View()->rand = Random::getAlphanumericString(32);
+        $this->View()->assign('sBreadcrumb', $breadcrumb);
+        $this->View()->assign('sCategoryInfo', $categoryInfo);
+        $this->View()->assign('sArticle', $product);
+        $this->View()->assign('rand', Random::getAlphanumericString(32));
     }
 
     /**
@@ -170,7 +170,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         /** @var sArticles $articleModule */
         $articleModule = Shopware()->Modules()->Articles();
-        $this->View()->sArticle = $articleModule->sGetProductByOrdernumber($orderNumber);
+        $this->View()->assign('sArticle', $articleModule->sGetProductByOrdernumber($orderNumber));
     }
 
     /**
@@ -257,11 +257,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 Shopware()->Modules()->Articles()->sSaveComment($id);
             }
         } else {
-            $this->View()->sFormData = Shopware()->System()->_POST->toArray();
-            $this->View()->sErrorFlag = $sErrorFlag;
+            $this->View()->assign('sFormData', Shopware()->System()->_POST->toArray());
+            $this->View()->assign('sErrorFlag', $sErrorFlag);
         }
 
-        $this->View()->sAction = 'ratingAction';
+        $this->View()->assign('sAction', 'ratingAction');
 
         $this->forward(
             $this->Request()->getParam('sTargetAction', 'index'),
