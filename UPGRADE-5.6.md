@@ -64,6 +64,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed display mode of voucher field on the shopping cart page into a configurable display mode
 * Changed symfony form request handler to `Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler`
 * Changed `.htaccess`-file to no longer contain references to PHP5
+* Changed following tables 
+    * `s_core_customergroups`
+    * `s_article_configurator_template_prices`
+    * `s_articles_prices`
+    * `s_campaigns_mailings` to varchar limit of 15 for customer group key.
 
 ### Removals
 

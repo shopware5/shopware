@@ -71,7 +71,7 @@ class Price extends LazyFetchModelEntity
 
     /**
      * @var string
-     * @ORM\Column(name="customer_group_key", type="string", length=30, nullable=false)
+     * @ORM\Column(name="customer_group_key", type="string", length=15, nullable=false)
      */
     private $customerGroupKey = '';
 
