@@ -23,16 +23,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1607 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1609 extends Shopware\Components\Migrations\AbstractMigration
 {
     /**
      * @param string $modus
      */
     public function up($modus): void
     {
-        $this->addSql("ALTER TABLE `s_core_customergroups` CHANGE `groupkey` `groupkey` VARCHAR(15);");
-        $this->addSql("ALTER TABLE `s_article_configurator_template_prices` CHANGE `customer_group_key` `customer_group_key` VARCHAR(15);");
-        $this->addSql("ALTER TABLE `s_articles_prices` CHANGE `pricegroup` `pricegroup` VARCHAR(15);");
-        $this->addSql("ALTER TABLE `s_campaigns_mailings` CHANGE `customergroup` `customergroup` VARCHAR(15);");
+        $this->addSql('ALTER TABLE `s_core_customergroups` CHANGE `groupkey` `groupkey` VARCHAR(15);');
+        $this->addSql('ALTER TABLE `s_article_configurator_template_prices` CHANGE `customer_group_key` `customer_group_key` VARCHAR(15);');
+        $this->addSql('ALTER TABLE `s_articles_prices` CHANGE `pricegroup` `pricegroup` VARCHAR(15);');
+        $this->addSql('ALTER TABLE `s_campaigns_mailings` CHANGE `customergroup` `customergroup` VARCHAR(15);');
     }
 }
