@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,41 +20,11 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Styling
- * @subpackage Widgets
- * @version    $Id$
- * @author shopware AG
  */
 
-/** General widgets */
-@import 'widgets/viewport';
-@import 'widgets/toolbar';
-@import 'widgets/panel';
-@import 'widgets/grid';
-@import 'widgets/window';
-@import 'widgets/button';
-@import 'widgets/menu';
-@import 'widgets/loadmask';
-@import 'widgets/mediadropzone';
-@import 'widgets/desktopswitcher';
-@import 'widgets/tree';
-@import 'widgets/widgets';
-@import 'widgets/headertooltip';
-@import 'widgets/accordion';
-@import 'widgets/tab';
-@import 'widgets/article-dd';
-@import 'widgets/keynav';
-@import 'widgets/notification';
-@import 'widgets/datepicker';
-@import 'widgets/progressbar';
-@import 'widgets/boundlist';
-@import 'widgets/tooltip';
-@import 'widgets/rowediting';
+namespace Shopware\Bundle\MailBundle;
 
-/** Include global form widgets */
-@import 'widgets/form/all';
-@import 'widgets/attribute/media_multi_selection';
-
-
+interface AutoCompleteResolverInterface
+{
+    public function completer(array $context, string $smartyCode): array;
+}

@@ -103,7 +103,8 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 },
                 name: 'contentHtml',
                 translationLabel: '{s name=codemirrorHtml_translationLabel}Html-Content{/s}',
-                translatable: true // Indicates that this field is translatable
+                translatable: true, // Indicates that this field is translatable
+                completers: me.getCompletion()
             });
         } else {
             me.editorField = Ext.create('Shopware.form.field.CodeMirror', {
@@ -111,7 +112,8 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 mode: 'smarty',
                 name: 'content',
                 translationLabel: '{s name=codemirror_translationLabel}Content{/s}',
-                translatable: true // Indicates that this field is translatable
+                translatable: true, // Indicates that this field is translatable
+                completers: me.getCompletion()
             });
             me.editorField.name = 'content';
             me.editorField.translationLabel = 'content';
@@ -178,6 +180,44 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
                 }
             ]
         };
+    },
+
+    /**
+     * @return { array }
+     */
+    getCompletion: function () {
+        var me = this,
+            Range = ace.require('ace/range').Range;
+
+        var smartyCompleter = {
+            getCompletions: function(editor, session, pos, prefix, callback) {
+                var record = me.up('form').getRecord(),
+                    range = new Range(0, 0, pos.row, pos.column);
+
+                if (prefix.length === 0 || !Ext.isDefined(record)) { callback(null, []); return }
+                Ext.Ajax.request({
+                    url: '{url controller=Mail action=getMailVariables}',
+                    params: {
+                        prefix: prefix,
+                        mailId: record.get('id'),
+                        smartyCode: editor.getSession().getTextRange(range)
+                    },
+                    success: function(response){
+                        var text = JSON.parse(response.responseText);
+
+                        callback(null, text.data.map(function(ea) {
+                            return {
+                                caption: ea.word,
+                                value: ea.word,
+                                meta: ea.value
+                            }
+                        }));
+                    }
+                });
+            }
+        };
+
+        return [smartyCompleter];
     }
 });
 //{/block}

@@ -179,7 +179,7 @@
 {include file='backend/base/component/Shopware.grid.HeaderToolTip.js'}
 {include file='backend/base/component/Shopware.Notification.js'}
 {include file='backend/base/component/Shopware.form.PasswordStrengthMeter.js'}
-{include file='backend/base/component/Shopware.form.field.CodeMirror.js'}
+{include file='backend/base/component/Shopware.form.field.AceEditor.js'}
 {include file='backend/base/component/Shopware.form.field.ArticleSearch.js'}
 {include file='backend/base/component/Shopware.form.field.PagingComboBox.js'}
 {include file='backend/base/component/Shopware.container.Viewport.js'}

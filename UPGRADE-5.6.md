@@ -240,3 +240,22 @@ class MyPaymentController extends Controller {
     }
 }
 ```
+
+### Replaced Codemirror with Ace-Editor
+
+Codemirror has been replaced with Ace-Editor. For compatibility reason, Ace-Editor supports all xtypes / classes from Codemirror.
+Following modes are available
+    * css
+    * html
+    * javascript
+    * json
+    * less
+    * mysql
+    * php
+    * sass
+    * scss
+    * smarty
+    * sql
+    * text
+    * xml
+    * xquery

@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Body', {
     border: 0,
     padding: 10,
     cls: 'shopware-toolbar',
-    layout: 'anchor',
+    layout: 'fit',
     fieldName: 'body',
     /**
      * Initialize the Shopware.apps.ProductFeed.view.feed.tab.Footer and defines the necessary
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Body', {
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
                 anchor:'100%',
-                name: me.fieldName
+                name: me.fieldName,
             }
         ];
     }

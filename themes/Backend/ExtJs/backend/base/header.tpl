@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/ext-all.css'}?{$SHOPWARE_REVISION}" />
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set.css'}?{$SHOPWARE_REVISION}" />
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set-new.css'}?{$SHOPWARE_REVISION}" />
-    <link rel="stylesheet" type="text/css" href="{link file='CodeMirror/lib/codemirror.css'}?{$SHOPWARE_REVISION}" />
 {/block}
 {block name="backend/base/header/favicon"}
     <link rel="icon" href="{link file='backend/_resources/images/index/favicon.ico'}" type="image/x-icon" />
@@ -27,7 +26,8 @@
     <script type="text/javascript" src="{link file='ExtJs/ext-all.js'}?{$SHOPWARE_REVISION}"></script>
     <script type="text/javascript" src="{link file="ExtJs/locale/ext-lang-{s name=script/ext/lang}en_GB{/s}.js"}?{$SHOPWARE_REVISION}"></script>
     <script type="text/javascript" src="{link file='TinyMce/tiny_mce.js'}?{$SHOPWARE_REVISION}"></script>
-    <script type="text/javascript" src="{link file='CodeMirror/lib/codemirror.js'}?{$SHOPWARE_REVISION}"></script>
+    <script type="text/javascript" src="{link file='backend/_resources/ace_editor/ace.js'}?{$SHOPWARE_REVISION}"></script>
+    <script type="text/javascript" src="{link file='backend/_resources/ace_editor/ext-language_tools.js'}?{$SHOPWARE_REVISION}"></script>
 
     {* We need to put the language in there, due to the caching of the bootstrap.js *}
     <script type="text/javascript">

@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
                 fieldLabel:'{s name=tab/filter/field/own_filter}Own filters{/s}',
                 mode: 'sql',
                 anchor:'100%',
-                height: '80px',
+                height: 80,
                 name: 'ownFilter',
                 /*{if !{acl_is_allowed privilege=sqli}}*/
                 readOnly: true,
