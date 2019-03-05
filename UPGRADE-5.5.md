@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added new config `alwaysShowMainFeatures` to show the template from `mainfeatures` in the whole checkout process
 * Added configuration for displaying shipping costs pre calculation in off canvas shopping cart
+* Added wrapping smarty blocks to Themes/Frontend/Bare/documents/index.tpl
 
 ### Changes
 
