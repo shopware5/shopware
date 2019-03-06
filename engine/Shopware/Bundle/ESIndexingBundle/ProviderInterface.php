@@ -22,13 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ESIndexingBundle\Product;
+namespace Shopware\Bundle\ESIndexingBundle;
 
-use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-/**
- * @deprecated 5.7 Use ProviderInterface
- */
-interface ProductProviderInterface extends ProviderInterface
+interface ProviderInterface
 {
+    /**
+     * @param array $identifiers
+     *
+     * @return array
+     */
+    public function get(Shop $shop, $identifiers);
 }
