@@ -96,6 +96,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
 
         $media->setExtension($this->getExtension($file));
         $media->setFileSize(filesize($file->getRealPath()));
+        $media->setCreated(new \DateTime());
 
         if ($media->getType() === Media::TYPE_IMAGE) {
             $imageSize = getimagesize($file->getRealPath());

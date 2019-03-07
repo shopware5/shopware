@@ -182,8 +182,9 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
     previewRenderer: function(value, tdStyle, record) {
         var me = this,
             type = record.get('type').toLowerCase(),
-            value = value + '?' + new Date().getTime(),
             result;
+
+        value += '?' + record.data.created.getTime();
 
         switch(type) {
            case 'video':
