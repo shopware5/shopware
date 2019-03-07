@@ -25,11 +25,8 @@
 /**
  * Sitemap controller
  *
- * @category Shopware
  *
  * @deprecated Will be removed in Shopware 6.0
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 {

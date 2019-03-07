@@ -29,11 +29,6 @@ use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ResourceSubscriber implements SubscriberInterface
 {
     /**

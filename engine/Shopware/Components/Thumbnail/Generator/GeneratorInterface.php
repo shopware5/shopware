@@ -33,10 +33,6 @@ namespace Shopware\Components\Thumbnail\Generator;
  * To create a new thumbnail you have to implement
  * and call the createThumbnail function which takes
  * the image path, destination and size of the thumbnail
- *
- * @category    Shopware
- *
- * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface GeneratorInterface
 {

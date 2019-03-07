@@ -28,11 +28,6 @@ use Shopware\Bundle\AttributeBundle\Service\TableMapping;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\ModelManager;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backend_ExtJs
 {
     public function getTablesAction()

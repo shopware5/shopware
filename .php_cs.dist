@@ -49,6 +49,10 @@ return PhpCsFixer\Config::create()
         'concat_space' => ['spacing' => 'one'],
         'array_syntax' => ['syntax' => 'short'],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'general_phpdoc_annotation_remove' => [
+            'annotations' => ['copyright', 'category'],
+        ],
+
         PhpCsFixerCustomFixers\Fixer\NoUselessClassCommentFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\NoUselessConstructorCommentFixer::name() => true,
     ])

@@ -28,11 +28,6 @@ use Enlight_Components_Snippet_Namespace as SnippetNamespace;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class PHPExtensionCheck implements CheckInterface
 {
     const CHECK_TYPE = 'phpextension';

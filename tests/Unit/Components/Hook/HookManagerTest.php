@@ -28,9 +28,6 @@ use Enlight_Hook_HookExecutionContext as HookExecutionContext;
 use Enlight_Hook_HookHandler as HookHandler;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class HookManagerTest extends TestCase
 {
     const TEST_NAME_ARG = 'Test Name';

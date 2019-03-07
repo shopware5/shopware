@@ -29,11 +29,6 @@ use Doctrine\DBAL\Schema\Column;
 use Shopware\Components\Model\DBAL\Types\DateStringType;
 use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class DataPersister
 {
     /**

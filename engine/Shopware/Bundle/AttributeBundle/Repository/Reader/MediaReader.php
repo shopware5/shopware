@@ -27,11 +27,6 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class MediaReader extends GenericReader
 {
     /**

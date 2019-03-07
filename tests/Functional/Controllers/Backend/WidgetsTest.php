@@ -24,11 +24,6 @@
 
 use Doctrine\DBAL\Connection;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**

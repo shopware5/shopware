@@ -27,10 +27,6 @@ use Shopware\Models\Banner\Banner;
 
 /**
  * Deprecated Shopware Class that handles marketing related functions
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sMarketing
 {

@@ -28,10 +28,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @category   Shopware
- *
- * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
- *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_element_viewports")
  */

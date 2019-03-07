@@ -26,11 +26,6 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Shopware\Models\Blog\Blog;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class BlogReader extends GenericReader
 {
     protected function createListQuery()

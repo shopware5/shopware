@@ -26,11 +26,6 @@ namespace Shopware\Bundle\AttributeBundle\DependencyInjection\EventListener;
 
 use Enlight\Event\SubscriberInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ControllerSubscriber implements SubscriberInterface
 {
     public static function getSubscribedEvents()

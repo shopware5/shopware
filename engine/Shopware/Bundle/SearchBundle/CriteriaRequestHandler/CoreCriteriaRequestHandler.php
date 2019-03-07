@@ -43,9 +43,6 @@ use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
     /**

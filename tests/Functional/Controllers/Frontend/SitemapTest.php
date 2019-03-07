@@ -24,11 +24,6 @@
 
 use Shopware\Models\Shop\Shop;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components_Test_Controller_TestCase
 {
     public static function tearDownAfterClass()

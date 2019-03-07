@@ -31,9 +31,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Emotion Model - Template
  *
- * @category   Shopware
  *
- * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_templates")

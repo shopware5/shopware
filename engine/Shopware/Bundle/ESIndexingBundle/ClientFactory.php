@@ -28,11 +28,6 @@ use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 use Psr\Log\LoggerInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ClientFactory
 {
     public static function createClient(array $config, LoggerInterface $eslogger): Client

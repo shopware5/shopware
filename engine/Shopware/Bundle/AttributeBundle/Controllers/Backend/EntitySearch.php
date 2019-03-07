@@ -26,11 +26,6 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\AttributeBundle\Repository\RegistryInterface;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Backend_ExtJs
 {
     public function searchAction()

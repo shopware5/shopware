@@ -31,11 +31,6 @@ use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 use Shopware\Components\Model\ModelManager;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ProductRepository extends GenericRepository implements EsAwareRepository
 {
     /**

@@ -28,10 +28,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
 
 /**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles_prices")
  */

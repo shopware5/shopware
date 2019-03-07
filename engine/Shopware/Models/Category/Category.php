@@ -33,9 +33,7 @@ use Shopware\Models\Shop\Shop;
 /**
  * Shopware Categories
  *
- * @category Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Table(name="s_categories")
  * @ORM\Entity(repositoryClass="Repository")

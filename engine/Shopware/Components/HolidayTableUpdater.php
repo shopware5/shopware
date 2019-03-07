@@ -26,11 +26,6 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright © shopware AG (http://www.shopware.de)
- */
 class HolidayTableUpdater
 {
     /**
