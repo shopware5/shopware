@@ -57,6 +57,7 @@ return PhpCsFixer\Config::create()
         PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer::name() => true,
     ])
     ->setFinder($finder)
 ;
