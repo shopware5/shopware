@@ -68,6 +68,8 @@ class ModelRepository extends EntityRepository
      * @param int $offset start value for the limitation
      *
      * @return \Doctrine\ORM\Query
+     *
+     * @deprecated since 5.6, to be removed in 5.7. Use findBy([], null, $limit, $offset) instead
      */
     public function queryAll($limit = null, $offset = null)
     {
@@ -84,10 +86,12 @@ class ModelRepository extends EntityRepository
      * @param int   $offset   start value for the limitation
      *
      * @return \Doctrine\ORM\Query
+     *
+     * @deprecated since 5.6, to be removed in 5.7. Use findBy instead
      */
     public function queryBy(array $criteria, array $orderBy = [], $limit = null, $offset = null)
     {
-        $builder = $this->createQueryBuilder($this->getEntityName());
+        $builder = $this->createQueryBuilder('entity');
 
         $builder->addFilter($criteria);
         $builder->addOrderBy($orderBy);

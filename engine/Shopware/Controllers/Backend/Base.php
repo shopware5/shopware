@@ -27,6 +27,7 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Document\Document;
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\Tax\Tax;
 
 /**
  * Backend Controller for the Shopware global configured stores.
@@ -98,10 +99,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getTaxesAction()
     {
-        /** @var Shopware\Components\Model\ModelRepository $repository */
-        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Tax\Tax::class);
+        /** @var \Shopware\Models\Tax\Repository $repository */
+        $repository = Shopware()->Models()->getRepository(Tax::class);
 
-        $query = $repository->queryBy(
+        $query = $repository->getTaxQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit'),
