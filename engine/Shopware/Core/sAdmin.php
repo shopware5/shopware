@@ -2187,8 +2187,7 @@ class sAdmin
     {
         // Compare street and zipcode.
         // Return true if any of them doesn't match.
-        return
-            (
+        return (
                 strtolower(
                     trim($user['shippingaddress']['street'])
                 ) != strtolower(
@@ -2227,8 +2226,7 @@ class sAdmin
     {
         $value = strtolower($value);
 
-        return
-            preg_match("/$value/", strtolower($user['shippingaddress']['lastname']))
+        return preg_match("/$value/", strtolower($user['shippingaddress']['lastname']))
             || preg_match("/$value/", strtolower($user['billingaddress']['lastname']));
     }
 

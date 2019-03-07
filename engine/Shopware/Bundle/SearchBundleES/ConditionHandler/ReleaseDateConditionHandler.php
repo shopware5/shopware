@@ -82,7 +82,7 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
         $date = new \DateTime();
         $intervalSpec = 'P' . $criteriaPart->getDays() . 'D';
         $interval = new \DateInterval($intervalSpec);
-        $dateNow = new\DateTime();
+        $dateNow = new \DateTime();
 
         switch ($criteriaPart->getDirection()) {
             case ReleaseDateCondition::DIRECTION_FUTURE:

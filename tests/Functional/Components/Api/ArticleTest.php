@@ -371,7 +371,7 @@ class ArticleTest extends TestCase
                     'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
                 ],
                 [
-                    'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'),
+                    'link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php'),
                 ],
                 [
                     'link' => 'file://' . __DIR__ . '/fixtures/variant-image.png',
@@ -1951,7 +1951,7 @@ class ArticleTest extends TestCase
 
         $data['images'] = [
             [
-                'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'),
+                'link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php'),
             ],
         ];
 
@@ -2464,7 +2464,7 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
 
         $data['downloads'] = [
-            ['link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')],
+            ['link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php')],
         ];
 
         $article = $this->resource->create($data);

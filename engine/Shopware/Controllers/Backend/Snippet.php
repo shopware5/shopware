@@ -607,7 +607,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $result = Shopware()->Db()->query($sql);
             $rows = null;
 
-            echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
+            echo "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
                 $value = Shopware()->Db()->quote($row['value']);
                 $value = str_replace("\n", '\\n', $value);

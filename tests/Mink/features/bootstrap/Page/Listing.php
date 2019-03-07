@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace  Shopware\Tests\Mink\Page;
+namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;

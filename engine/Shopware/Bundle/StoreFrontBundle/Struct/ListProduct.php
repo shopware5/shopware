@@ -1147,8 +1147,7 @@ class ListProduct extends BaseProduct
      */
     public function hasDifferentPrices()
     {
-        return
-            $this->getCustomerPriceCount() > 1
+        return $this->getCustomerPriceCount() > 1
             ||
             $this->getFallbackPriceCount() > 1
         ;

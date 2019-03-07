@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace  Shopware\Tests\Mink\Page;
+namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\WebAssert;

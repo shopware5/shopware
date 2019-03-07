@@ -443,8 +443,7 @@ class Account extends Page implements HelperSelectorInterface
      */
     protected function verifyPageLogin()
     {
-        return
-            $this->hasField('email') &&
+        return $this->hasField('email') &&
             $this->hasField('password') &&
             Helper::hasNamedLink($this, 'forgotPasswordLink') &&
             Helper::hasNamedButton($this, 'loginButton') &&
@@ -459,8 +458,7 @@ class Account extends Page implements HelperSelectorInterface
      */
     protected function verifyPageRegister()
     {
-        return
-            $this->hasSelect('register[personal][customer_type]') &&
+        return $this->hasSelect('register[personal][customer_type]') &&
             $this->hasSelect('register[personal][salutation]') &&
             $this->hasField('register[personal][firstname]') &&
             $this->hasField('register[personal][lastname]') &&

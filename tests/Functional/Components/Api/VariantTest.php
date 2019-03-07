@@ -508,7 +508,7 @@ class VariantTest extends TestCase
         $create['articleId'] = $article->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $create['images'] = [
-            ['link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')],
+            ['link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php')],
             ['link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'],
         ];
 

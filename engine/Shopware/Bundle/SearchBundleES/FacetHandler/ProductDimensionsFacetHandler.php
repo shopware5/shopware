@@ -47,8 +47,7 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
 {
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return
-            $criteriaPart instanceof WeightFacet
+        return $criteriaPart instanceof WeightFacet
             ||
             $criteriaPart instanceof WidthFacet
             ||
