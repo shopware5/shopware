@@ -396,7 +396,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             return;
         }
 
-        $destPath = Shopware()->DocPath('media_' . 'temp');
+        $destPath = Shopware()->DocPath('media_temp');
         if (!is_dir($destPath)) {
             // Try to create directory with write permissions
             mkdir($destPath, 0777, true);

@@ -192,7 +192,7 @@ class Manager
                 'maxWidth' => $size['width'],
                 'maxHeight' => $size['height'],
                 'source' => $path . $name . '_' . $suffix . '.' . $extension,
-                'retinaSource' => $path . $name . '_' . $suffix . '@2x' . '.' . $extension,
+                'retinaSource' => $path . $name . '_' . $suffix . '@2x.' . $extension,
             ];
         }
 
@@ -236,7 +236,7 @@ class Manager
 
         $fileName = str_replace(
             '.' . $media->getExtension(),
-            '_' . $suffix . '.' . 'jpg',
+            '_' . $suffix . '.jpg',
             $media->getFileName()
         );
 

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-$lockFile = __DIR__ . '/data/' . 'install.lock';
+$lockFile = __DIR__ . '/data/install.lock';
 if (is_file($lockFile)) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     echo '<br /><h4>Der Installer wurde bereits ausgeführt.</h4>Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie die Datei recovery/install/data/install.lock!<br /><br /><br />';
