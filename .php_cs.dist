@@ -54,8 +54,7 @@ return PhpCsFixer\Config::create()
         ],
         'phpdoc_var_annotation_correct_order' => true,
 
-        PhpCsFixerCustomFixers\Fixer\NoUselessClassCommentFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\NoUselessConstructorCommentFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer::name() => true
     ])
     ->setFinder($finder)
 ;
