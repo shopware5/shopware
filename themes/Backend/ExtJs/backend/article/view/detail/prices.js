@@ -70,9 +70,10 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
             columns: {
                 from: '{s name=detail/price/from}From{/s}',
                 to: '{s name=detail/price/to}To{/s}',
-                price: '{s name=detail/price/price}Price{/s}',
                 percent: '{s name=detail/price/percent}Percent discount{/s}',
-                pseudoPrice: '{s name=detail/price/pseudo_price}Pseudo price{/s}'
+                price: '{s name=detail/price/price}Price{/s}',
+                pseudoPrice: '{s name=detail/price/pseudo_price}Pseudo price{/s}',
+                percentPseudo: '{s name=detail/price/percent_pseudo_price}Saving against Pseudo price{/s}'
             },
             any:'{s name=detail/price/any}Arbitrary{/s}'
         }
@@ -163,6 +164,19 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
     preparePriceStore: function() {
         var me = this, firstGroup = me.customerGroupStore.first();
 
+        /**
+         * we have to calculate the percentPseudo, data is not saved in database
+         */
+        me.priceStore.data.each(function(item) {
+            var percentPseudo = 0,
+                pseudoPrice = item.get('pseudoPrice'),
+                price = item.get('price');
+
+            percentPseudo = 100 - 100 / pseudoPrice * price;
+            percentPseudo = percentPseudo.toFixed(2);
+            item.set('percentPseudo', percentPseudo);
+        });
+
         me.priceStore.clearFilter();
         me.priceStore.filter({
             filterFn: function(item) {
@@ -231,7 +245,8 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
         return [
             {
                 header: me.snippets.grid.columns.from,
-                dataIndex: 'from'
+                dataIndex: 'from',
+                flex: 1
             }, {
                 xtype: 'numbercolumn',
                 header: me.snippets.grid.columns.to,
@@ -252,15 +267,6 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
 
             }, {
                 xtype: 'numbercolumn',
-                header: me.snippets.grid.columns.price,
-                dataIndex: 'price',
-                editor: {
-                    xtype: 'numberfield',
-                    decimalPrecision: 2,
-                    minValue: 0
-                }
-            }, {
-                xtype: 'numbercolumn',
                 header: me.snippets.grid.columns.percent,
                 dataIndex: 'percent',
                 editor: {
@@ -270,10 +276,19 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                     maxValue: 100
                 },
                 renderer: function(v) {
-                    if (!Ext.isNumeric(v)) {
+                    if (!Ext.isNumeric(v) || v === 0) {
                         return ''
                     }
                     return Ext.util.Format.number(v) + ' %'
+                }
+            }, {
+                xtype: 'numbercolumn',
+                header: me.snippets.grid.columns.price,
+                dataIndex: 'price',
+                editor: {
+                    xtype: 'numberfield',
+                    decimalPrecision: 2,
+                    minValue: 0
                 }
             }, {
                 xtype: 'numbercolumn',
@@ -283,6 +298,29 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                     xtype: 'numberfield',
                     decimalPrecision: 2,
                     minValue: 0
+                },
+                renderer: function(v) {
+                    if (!Ext.isNumeric(v) || v === 0) {
+                        return ''
+                    }
+                    return Ext.util.Format.number(v)
+                }
+            }, {
+                xtype: 'numbercolumn',
+                header: me.snippets.grid.columns.percentPseudo,
+                dataIndex: 'percentPseudo',
+                width: 150,
+                editor: {
+                    xtype: 'numberfield',
+                    minValue: 0,
+                    decimalPrecision: 2,
+                    maxValue: 100
+                },
+                renderer: function(v) {
+                    if (!Ext.isNumeric(v) || v === 0) {
+                        return '';
+                    }
+                    return Ext.util.Format.number(v) + ' %';
                 }
             }, {
                 xtype: 'actioncolumn',
