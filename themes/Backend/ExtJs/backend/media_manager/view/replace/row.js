@@ -204,7 +204,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
         var me = this;
 
         if (data && !data.isRaw) {
-            data.thumbnail += '?' + new Date().getTime();
+            data.thumbnail += '?' + data.created.getTime();
         }
 
         return Ext.create('Ext.container.Container', {
